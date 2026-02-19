@@ -5,17 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lumecon — We luminate economies</title>
 <meta name="description" content="Lumecon — Economic and policy analysis anyone can act on.">
-<meta property="og:title" content="Lumecon — We luminate economies">
-<meta property="og:description" content="Economic and policy analysis anyone can act on.">
-<meta property="og:url" content="https://lumecon.ai">
-<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --white:#FFFCF7;--cream:#F6F1E9;--navy:#2D2D3F;--navy2:#3E3E54;
-  --green:#2D6A4F;--terra:#B85C38;--gold:#C49A3C;--blue:#6B7FA3;
+  --green:#2D6A4F;--terra:#B85C38;--gold:#C49A3C;--goldbar:#F2E6C5;
+  --blue:#6B7FA3;--purple:#7B6B9B;
   --gray:#5A5A5A;--graylt:#908D85;--ease:cubic-bezier(.22,1,.36,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -25,104 +22,137 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:10000;
 a{color:inherit;text-decoration:none}
 h1,h2,h3{font-weight:800;line-height:1.08}
 
-/* NAV */
 nav{position:fixed;top:0;width:100%;z-index:100;padding:1.15rem 0;transition:all .4s var(--ease)}
 nav.scrolled{background:rgba(255,252,247,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:.75rem 0}
 .nav-w{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:800;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--green);transition:opacity .25s}
+.logo{font-weight:800;font-size:1.1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--green);transition:opacity .25s}
 .logo:hover{opacity:.65}
-.nav-links{display:flex;gap:2rem;align-items:center}
-.nav-links a{font-size:.84rem;font-weight:600;color:var(--gray);position:relative;transition:color .25s}
-.nav-links a:not(.nav-cta):hover{color:var(--navy)}
-.nav-links a:not(.nav-cta)::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--terra);transition:width .4s var(--ease)}
-.nav-links a:not(.nav-cta):hover::after{width:100%}
-.nav-cta{padding:.4rem 1rem !important;background:var(--navy);color:var(--white) !important;font-size:.76rem !important;font-weight:700;border-radius:3px;transition:all .25s var(--ease)}
-.nav-cta:hover{background:var(--navy2);transform:translateY(-1px)}
-.nav-cta::after{display:none !important}
+.home-page .logo{opacity:0;pointer-events:none}
+nav.scrolled .logo{opacity:1 !important;pointer-events:auto !important}
+.nav-links{display:flex;gap:.5rem;align-items:center}
+.nav-links a{font-size:.8rem;font-weight:700;color:var(--navy);padding:.35rem .8rem;border:1.5px solid transparent;border-radius:3px;transition:all .25s var(--ease)}
+.nav-links a:hover{border-color:var(--navy);background:var(--navy);color:var(--white)}
 .hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;z-index:110}
 .hamburger span{display:block;width:20px;height:1.5px;background:var(--navy);margin:5px 0;transition:.3s var(--ease)}
 .hamburger.on span:nth-child(1){transform:rotate(45deg) translate(4px,5px)}
 .hamburger.on span:nth-child(2){opacity:0}
 .hamburger.on span:nth-child(3){transform:rotate(-45deg) translate(4px,-5px)}
 
-/* REVEALS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes scaleIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes panelIn{from{opacity:0;clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}to{opacity:1;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%)}}
 .r{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .r.seen{opacity:1;transform:none}
-.r.d1{transition-delay:.07s}.r.d2{transition-delay:.14s}.r.d3{transition-delay:.21s}.r.d4{transition-delay:.28s}
+.sl{opacity:0;transform:translateX(-60px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.sl.seen{opacity:1;transform:none}
+.sr{opacity:0;transform:translateX(60px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.sr.seen{opacity:1;transform:none}
+.sd{opacity:0;transform:translate(30px,-20px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.sd.seen{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
 /* HERO */
 .hero{display:grid;grid-template-columns:55% 45%;min-height:100vh;min-height:100dvh}
-.hero-text{display:flex;flex-direction:column;justify-content:center;padding:8rem clamp(2rem,5vw,4rem) 5rem clamp(1.5rem,4vw,3rem)}
-.hero-tagline{font-style:italic;font-weight:600;color:var(--terra);font-size:clamp(.88rem,1.4vw,1.12rem);margin-bottom:.4rem;animation:fadeUp .75s var(--ease) both}
-.hero h1{font-size:clamp(2rem,4.3vw,3.1rem);letter-spacing:-.01em;margin-bottom:.9rem;animation:fadeUp .75s var(--ease) .05s both}
-.hero-accent{width:44px;height:2.5px;background:var(--terra);margin-bottom:1.2rem;transform-origin:left;animation:scaleIn .5s var(--ease) .18s both}
-.hero-body{font-size:.93rem;font-weight:500;color:var(--gray);line-height:1.78;max-width:400px;margin-bottom:2rem;animation:fadeUp .75s var(--ease) .1s both}
-.hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;animation:fadeUp .75s var(--ease) .16s both}
-.hero-panel{background:var(--green);position:relative;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%);display:flex;align-items:flex-end;padding:2.5rem}
-.hero-panel-text{font-size:.76rem;font-weight:600;line-height:1.5;color:rgba(255,252,247,.4);text-align:center;width:100%}
-@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@keyframes scaleIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero-text{display:flex;flex-direction:column;justify-content:center;padding:6rem clamp(2rem,5vw,4rem) 4rem clamp(1.5rem,4vw,3rem)}
+.hero-brand{font-weight:800;font-size:clamp(3rem,6vw,4.5rem);letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:1.2rem;animation:fadeUp .8s var(--ease) both}
+.hero-tagline{font-style:italic;font-weight:600;color:var(--terra);font-size:clamp(.88rem,1.4vw,1.12rem);margin-bottom:.4rem;animation:fadeUp .75s var(--ease) .06s both}
+.hero h1{font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.01em;margin-bottom:.9rem;animation:fadeUp .75s var(--ease) .1s both}
+.hero-accent{width:44px;height:2.5px;background:var(--terra);margin-bottom:1.2rem;transform-origin:left;animation:scaleIn .5s var(--ease) .2s both}
+.hero-body{font-size:.92rem;font-weight:500;color:var(--gray);line-height:1.78;max-width:420px;margin-bottom:2rem;animation:fadeUp .75s var(--ease) .14s both}
+.hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;animation:fadeUp .75s var(--ease) .2s both}
+.hero-panel{background:var(--purple);position:relative;overflow:hidden;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%);animation:panelIn 1s var(--ease) .15s both}
 
-/* BUTTONS */
-.btn{display:inline-block;padding:.62rem 1.35rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;border-radius:3px;border:1.5px solid transparent;cursor:pointer;transition:all .28s var(--ease)}
-.btn-dark{background:var(--navy);color:var(--white);border-color:var(--navy)}
-.btn-dark:hover{background:var(--navy2);border-color:var(--navy2);transform:translateY(-2px);box-shadow:0 4px 12px rgba(45,45,63,.12)}
-.btn-ghost{background:none;color:var(--navy);border-color:var(--navy)}
-.btn-ghost:hover{background:var(--navy);color:var(--white);transform:translateY(-2px)}
-.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold)}
-.btn-gold:hover{background:#d4ad55;border-color:#d4ad55;transform:translateY(-2px);box-shadow:0 4px 12px rgba(196,154,60,.2)}
+.btn{display:inline-block;padding:.62rem 1.35rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;border-radius:3px;border:1.5px solid var(--navy);cursor:pointer;transition:all .28s var(--ease);background:transparent;color:var(--navy)}
+.btn:hover{background:var(--navy);color:var(--white);transform:translateY(-2px);box-shadow:0 4px 12px rgba(45,45,63,.12)}
 
-/* PRODUCTS — full-bleed blocks */
+/* PLATFORMS BAR — lighter warm gold */
+.platforms-bar{background:var(--goldbar);padding:.9rem 0}
+.platforms-bar-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.platforms-bar h2{font-size:clamp(1rem,1.8vw,1.3rem);color:var(--navy);white-space:nowrap;flex-shrink:0}
+.platforms-slogan{display:flex;align-items:baseline;gap:0;font-size:clamp(.85rem,1.3vw,1rem);color:var(--gray);justify-content:center}
+.platforms-slogan .static{font-style:italic;font-weight:600}
+.platforms-slogan .cycle{font-style:italic;font-weight:700;height:1.4em;overflow:hidden;position:relative;display:inline-block;vertical-align:baseline;margin:0 .25em;transition:width .4s var(--ease)}
+.cycle-inner{animation:rotCycle 8s var(--ease) infinite}
+.cycle-inner span{display:block;height:1.4em;line-height:1.4em;white-space:nowrap;text-align:center}
+.cycle-inner .c-default{color:var(--gray)}
+.cycle-inner .c-local{color:var(--blue)}
+.cycle-inner .c-tribal{color:var(--terra)}
+.cycle-inner .c-global{color:var(--green)}
+@keyframes rotCycle{0%,20%{transform:translateY(0)}25%,45%{transform:translateY(-1.4em)}50%,70%{transform:translateY(-2.8em)}75%,95%{transform:translateY(-4.2em)}100%{transform:translateY(0)}}
+
+/* PRODUCTS */
 .products{display:grid;grid-template-columns:1fr 1fr 1fr}
-.product-block{padding:clamp(2rem,4vw,3rem) clamp(1.5rem,3vw,2.2rem);color:var(--white);display:flex;flex-direction:column;min-height:340px;cursor:pointer;position:relative;transition:filter .35s var(--ease);overflow:hidden}
-.product-block:hover{filter:brightness(1.08)}
-.product-block::after{content:'→';position:absolute;top:clamp(1.5rem,3vw,2.2rem);right:clamp(1.5rem,3vw,2.2rem);font-size:1.2rem;font-weight:700;color:rgba(255,255,255,.2);transition:all .35s var(--ease)}
-.product-block:hover::after{color:rgba(255,255,255,.6);transform:translateX(4px)}
+.product-block{padding:clamp(2rem,4vw,3rem) clamp(1.5rem,3vw,2.2rem);color:var(--white);display:flex;flex-direction:column;min-height:300px;cursor:pointer;position:relative;transition:filter .35s var(--ease);overflow:hidden}
+.product-block:hover{filter:brightness(1.1)}
+.product-block::after{content:'→';position:absolute;top:clamp(1.5rem,3vw,2.2rem);right:clamp(1.5rem,3vw,2.2rem);font-size:1.2rem;font-weight:700;color:rgba(255,255,255,.15);transition:all .35s var(--ease)}
+.product-block:hover::after{color:rgba(255,255,255,.55);transform:translateX(4px)}
 .product-block--local{background:var(--blue)}
 .product-block--tribal{background:var(--terra)}
 .product-block--global{background:var(--green)}
-.product-label{font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;opacity:.5;margin-bottom:1.5rem}
-.product-block h2{font-size:clamp(1.3rem,2.4vw,1.7rem);color:#fff;margin-bottom:.2rem}
-.product-url{font-style:italic;font-size:.78rem;font-weight:500;opacity:.55;margin-bottom:1rem}
-.product-desc{font-size:.86rem;font-weight:500;line-height:1.6;opacity:.82;flex-grow:1}
-.product-status{font-size:.66rem;font-weight:700;letter-spacing:.05em;opacity:.4;margin-top:1.5rem}
+.product-block h3{font-size:clamp(1.3rem,2.4vw,1.7rem);color:#fff;margin-bottom:.2rem}
+.product-url{font-style:italic;font-size:.78rem;font-weight:500;opacity:.5;margin-bottom:1rem}
+.product-desc{font-size:.86rem;font-weight:500;line-height:1.6;opacity:.8;flex-grow:1}
+.product-status{font-size:.66rem;font-weight:700;letter-spacing:.05em;opacity:.35;margin-top:1.5rem}
 
-/* CEDAR — asymmetric split with chat demo */
-.cedar{display:grid;grid-template-columns:34% 66%}
-.cedar-panel{background:var(--navy);color:var(--white);padding:clamp(2.5rem,5vw,4.5rem) clamp(1.5rem,3vw,2.5rem);display:flex;flex-direction:column;justify-content:center}
+/* CEDAR — 3 col */
+.cedar{display:grid;grid-template-columns:30% 35% 35%}
+.cedar-panel{background:var(--navy);color:var(--white);padding:clamp(2.5rem,5vw,4rem) clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;justify-content:center}
 .cedar-panel h2{color:var(--white);font-size:clamp(2rem,4vw,3.2rem);margin-bottom:.4rem}
 .cedar-subtitle{font-style:italic;font-weight:600;color:var(--gold);font-size:clamp(.85rem,1.3vw,1rem);line-height:1.4;margin-bottom:1.2rem}
 .cedar-motto{font-size:.84rem;font-weight:600;color:rgba(255,252,247,.35);line-height:1.5}
-.cedar-content{background:var(--cream);padding:clamp(2.5rem,5vw,4.5rem) clamp(2rem,4vw,3.5rem);display:flex;flex-direction:column;justify-content:center}
-.cedar-content>p{font-size:.93rem;font-weight:500;color:var(--gray);line-height:1.78;max-width:480px;margin-bottom:1.5rem}
-
-/* Chat demo widget */
-.chat-demo{max-width:440px;border-radius:8px;overflow:hidden;background:var(--white);box-shadow:0 2px 24px rgba(45,45,63,.06)}
-.chat-header{background:var(--navy);padding:.65rem 1rem;display:flex;align-items:center;gap:.55rem}
+.cedar-text{background:var(--cream);padding:clamp(2rem,4vw,3.5rem) clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;justify-content:center}
+.cedar-text p{font-size:.88rem;font-weight:500;color:var(--gray);line-height:1.78}
+.cedar-chat{background:var(--cream);padding:clamp(1.5rem,3vw,2rem) clamp(1rem,2vw,1.2rem);display:flex;align-items:center;justify-content:center}
+.chat-demo{width:100%;max-width:400px;border-radius:8px;overflow:hidden;background:var(--white);box-shadow:0 2px 24px rgba(45,45,63,.06)}
+.chat-header{background:var(--navy);padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem}
 .chat-dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
-.chat-title{font-size:.68rem;font-weight:700;color:rgba(255,252,247,.55);letter-spacing:.1em;text-transform:uppercase}
-.chat-body{padding:1rem;min-height:220px;display:flex;flex-direction:column;gap:.55rem;overflow-y:auto}
-.chat-msg{max-width:85%;padding:.5rem .85rem;border-radius:10px;font-size:.78rem;font-weight:500;line-height:1.5;opacity:0;transform:translateY(6px);transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.chat-title{font-size:.66rem;font-weight:700;color:rgba(255,252,247,.5);letter-spacing:.1em;text-transform:uppercase}
+.chat-body{padding:.8rem;height:350px;display:flex;flex-direction:column;gap:.4rem;overflow-y:auto;scroll-behavior:smooth}
+.chat-msg{max-width:88%;padding:.42rem .72rem;border-radius:10px;font-size:.72rem;font-weight:500;line-height:1.5;opacity:0;transform:translateY(6px);transition:opacity .35s var(--ease),transform .35s var(--ease)}
 .chat-msg.show{opacity:1;transform:none}
 .chat-msg--cedar{background:var(--navy);color:var(--white);align-self:flex-start;border-bottom-left-radius:3px}
 .chat-msg--user{background:var(--cream);color:var(--navy);align-self:flex-end;border-bottom-right-radius:3px}
-.chat-msg .sender{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.45;margin-bottom:.1rem}
-.chat-typing{align-self:flex-start;display:flex;gap:4px;padding:.5rem .85rem}
+.chat-msg--system{background:var(--cream);color:var(--graylt);align-self:center;font-size:.64rem;font-style:italic;text-align:center;border-radius:6px;max-width:95%}
+.chat-msg .sender{font-size:.52rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.4;margin-bottom:.06rem}
+.chat-table{margin:.3rem 0;font-family:'Nunito',monospace;font-size:.62rem;line-height:1.6;opacity:.85;border-left:2px solid var(--gold);padding-left:.5rem}
+.chat-typing{align-self:flex-start;display:flex;gap:4px;padding:.4rem .7rem}
 .chat-typing span{width:5px;height:5px;border-radius:50%;background:var(--graylt);animation:blink .9s infinite}
 .chat-typing span:nth-child(2){animation-delay:.15s}
 .chat-typing span:nth-child(3){animation-delay:.3s}
 @keyframes blink{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
-.chat-footer{font-size:.65rem;font-weight:600;color:var(--graylt);text-align:center;padding:.55rem;border-top:1px solid rgba(45,45,63,.04);font-style:italic}
+.chat-footer{font-size:.58rem;font-weight:600;color:var(--graylt);text-align:center;padding:.45rem;border-top:1px solid rgba(45,45,63,.04);font-style:italic}
 
-/* CTA */
-.cta{background:var(--green);color:var(--white);padding:clamp(3.5rem,7vw,5.5rem) 0}
-.cta-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem)}
-.cta h2{color:var(--white);font-size:clamp(1.4rem,2.6vw,2rem);margin-bottom:.7rem}
-.cta p{color:rgba(255,252,247,.58);max-width:500px;margin-bottom:1.3rem;font-size:.92rem;font-weight:500;line-height:1.78}
+/* CTA — split layout with form */
+.cta{background:var(--green);color:var(--white);padding:clamp(3.5rem,7vw,5rem) 0}
+.cta-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+.cta-left h2{color:var(--white);font-size:clamp(1.4rem,2.6vw,2rem);margin-bottom:.7rem}
+.cta-left p{color:rgba(255,252,247,.58);max-width:400px;margin-bottom:1.3rem;font-size:.92rem;font-weight:500;line-height:1.78}
 .cta-email{display:inline-block;font-size:.94rem;font-weight:700;color:var(--gold);position:relative;transition:color .25s}
 .cta-email::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:var(--gold);transition:width .4s var(--ease)}
 .cta-email:hover{color:#e0be6a}
 .cta-email:hover::after{width:100%}
+
+/* FORM */
+.cta-form{background:rgba(255,252,247,.06);border:1px solid rgba(255,252,247,.1);border-radius:6px;padding:1.5rem}
+.cta-form label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,252,247,.5);margin-bottom:.3rem}
+.cta-form input,.cta-form select,.cta-form textarea{
+  width:100%;padding:.5rem .7rem;margin-bottom:.8rem;
+  font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:500;
+  background:rgba(255,252,247,.08);border:1px solid rgba(255,252,247,.15);
+  border-radius:3px;color:var(--white);outline:none;
+  transition:border-color .25s;
+}
+.cta-form input::placeholder,.cta-form textarea::placeholder{color:rgba(255,252,247,.3)}
+.cta-form input:focus,.cta-form select:focus,.cta-form textarea:focus{border-color:var(--gold)}
+.cta-form select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,252,247,.3)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .7rem center;padding-right:2rem}
+.cta-form select option{background:var(--navy);color:var(--white)}
+.cta-form textarea{resize:vertical;min-height:70px}
+.cta-form button{
+  width:100%;padding:.6rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;
+  background:var(--gold);color:#fff;border:none;border-radius:3px;cursor:pointer;
+  transition:all .25s var(--ease);
+}
+.cta-form button:hover{background:#d4ad55;transform:translateY(-1px)}
 
 /* FOOTER */
 footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem}
@@ -138,98 +168,85 @@ footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem}
 .footer-email{font-size:.68rem;color:rgba(255,252,247,.18);transition:color .25s}
 .footer-email:hover{color:var(--gold)}
 
-/* RESPONSIVE */
 @media(max-width:960px){
   .hero{grid-template-columns:1fr;min-height:auto}
-  .hero-text{padding:7rem 2.5rem 3rem}
-  .hero-panel{clip-path:none;min-height:80px;padding:1.5rem}
-  .products{grid-template-columns:1fr}
-  .product-block{min-height:auto}
-  .cedar{grid-template-columns:1fr}
-  .cedar-panel{padding:3rem 2.5rem}
-  .cedar-content{padding:3rem 2.5rem}
+  .hero-text{padding:6rem 2.5rem 3rem}
+  .hero-panel{clip-path:none;min-height:60px;padding:2rem}
+  .hero-brand{font-size:2.5rem}
+  .products{grid-template-columns:1fr}.product-block{min-height:auto}
+  .cedar{grid-template-columns:1fr}.cedar-chat{min-height:420px}
+  .platforms-bar-inner{flex-direction:column;gap:.3rem;text-align:center}
+  .platforms-slogan{justify-content:center}
+  .cta-inner{grid-template-columns:1fr}
 }
 @media(max-width:600px){
-  .nav-links{display:none;position:fixed;inset:0;background:var(--white);flex-direction:column;justify-content:center;align-items:center;gap:2.2rem;z-index:105}
-  .nav-links.open{display:flex}
-  .nav-links.open a{font-size:1.15rem}
-  .nav-links.open a::after{display:none}
+  .nav-links{display:none;position:fixed;inset:0;background:var(--white);flex-direction:column;justify-content:center;align-items:center;gap:1.8rem;z-index:105}
+  .nav-links.open{display:flex}.nav-links.open a{font-size:1.1rem;padding:.5rem 1.2rem}
   .hamburger{display:block}
-  .hero-text{padding:6rem 1.8rem 2.5rem}
-  .hero h1{font-size:1.85rem}
-  .cedar-panel{padding:2.5rem 1.8rem}
-  .cedar-content{padding:2.5rem 1.8rem}
-  .cta-inner{padding:0 1.8rem}
-  .footer-w{padding:0 1.8rem}
-  .footer-top{flex-direction:column}
-  .footer-bottom{flex-direction:column;text-align:center}
-  .chat-demo{max-width:100%}
+  .hero-text{padding:5rem 1.8rem 2.5rem}
+  .hero h1{font-size:1.6rem}.hero-brand{font-size:2.2rem;letter-spacing:.06em}
+  .home-page .logo{opacity:1 !important;pointer-events:auto !important}
+  .cedar-text{padding:2rem 1.8rem}.cedar-panel{padding:2.5rem 1.8rem}.cedar-chat{padding:1.5rem 1.8rem}
+  .cta-inner{padding:0 1.8rem}.footer-w{padding:0 1.8rem}
+  .footer-top{flex-direction:column}.footer-bottom{flex-direction:column;text-align:center}
 }
-@media(max-width:380px){
-  .hero h1{font-size:1.55rem}
-  .hero-actions{flex-direction:column}
-  .btn{width:100%;text-align:center}
-}
+@media(max-width:380px){.hero h1{font-size:1.4rem}.hero-actions{flex-direction:column}.btn{width:100%;text-align:center}}
 </style>
 </head>
-<body>
+<body class="home-page">
 
 <nav id="nav"><div class="nav-w">
-  <a href="index.html" class="logo">LUMECON</a>
+  <a href="index.html" class="logo">Lumecon</a>
   <div class="nav-links" id="navLinks">
     <a href="#products">Products</a>
     <a href="#cedar">Cedar</a>
     <a href="#contact">Partnerships</a>
-    <a href="mailto:elijah@lumecon.ai" class="nav-cta">Get in Touch</a>
+    <a href="mailto:elijah@lumecon.ai">Get in Touch</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </div></nav>
 
 <section class="hero" id="top">
   <div class="hero-text">
+    <div class="hero-brand">Lumecon</div>
     <div class="hero-tagline">We luminate economies.™</div>
     <h1>Economic and policy analysis anyone can act on</h1>
     <div class="hero-accent"></div>
-    <p class="hero-body">Lumecon™ is an economic and policy analysis platform. We make economies more visible and policy more actionable. Built by social scientists, government professionals, and software engineers. Patent pending.</p>
+    <p class="hero-body">Lumecon™ is an economic and policy analysis platform. We deliver modern theory, novel models, and real data through affordable, web-based annual subscriptions — so organizations of any size can access the same caliber of analysis that used to require expensive consultants. Built by social scientists, government professionals, and software engineers. We make economies more visible and policy more actionable. Patent pending.</p>
     <div class="hero-actions">
-      <a href="#products" class="btn btn-dark">Our Products</a>
-      <a href="#contact" class="btn btn-ghost">Partner With Us</a>
+      <a href="#products" class="btn">Our Products</a>
+      <a href="#contact" class="btn">Partner With Us</a>
     </div>
   </div>
-  <div class="hero-panel">
-    <div class="hero-panel-text">Counsel: Cornell Law<br>Entrepreneurship Law Clinic</div>
-  </div>
+  <div class="hero-panel"></div>
 </section>
 
-<section id="products"><div class="products">
-  <a href="https://localeconomicimpact.com" class="product-block product-block--local r">
-    <div class="product-label">TIER 1</div>
-    <div>
-      <h2>Local Economic Impact</h2>
-      <div class="product-url">localeconomicimpact.com</div>
-      <div class="product-desc">Standard methods. Lower cost. Easier access. Economic and policy analysis for US municipalities, nonprofits, and local organizations.</div>
+<section id="products">
+  <div class="platforms-bar">
+    <div class="platforms-bar-inner">
+      <h2>Lumecon Platforms</h2>
+      <div class="platforms-slogan">
+        <span class="static">Making</span>
+        <div class="cycle"><div class="cycle-inner"><span class="c-default">economies</span><span class="c-local">local economies</span><span class="c-tribal">tribal economies</span><span class="c-global">global economies</span></div></div>
+        <span class="static">visible™</span>
+      </div>
     </div>
-    <div class="product-status">In active development</div>
-  </a>
-  <a href="https://tribaleconomicimpact.com" class="product-block product-block--tribal r d1">
-    <div class="product-label">TIER 2</div>
-    <div>
-      <h2>Tribal Economic Impact</h2>
-      <div class="product-url">tribaleconomicimpact.com</div>
-      <div class="product-desc">Built for economies that don't fit standard assumptions. Sovereign-aligned economic and policy analysis for US tribal governments and enterprises.</div>
-    </div>
-    <div class="product-status">Patent pending · In active development</div>
-  </a>
-  <a href="https://globaleconomicimpact.com" class="product-block product-block--global r d2">
-    <div class="product-label">TIER 3</div>
-    <div>
-      <h2>Global Economic Impact</h2>
-      <div class="product-url">globaleconomicimpact.com</div>
-      <div class="product-desc">Same logic. Any geography. Cross-border and multiregional analytics for multinationals, NGOs, and governments.</div>
-    </div>
-    <div class="product-status">Patent pending · Future</div>
-  </a>
-</div></section>
+  </div>
+  <div class="products">
+    <a href="https://localeconomicimpact.com" class="product-block product-block--local sl">
+      <div><h3>Local Economic Impact</h3><div class="product-url">localeconomicimpact.com</div><div class="product-desc">Standard methods. Lower cost. Easier access. Economic and policy analysis for US municipalities, nonprofits, and local organizations.</div></div>
+      <div class="product-status">In active development</div>
+    </a>
+    <a href="https://tribaleconomicimpact.com" class="product-block product-block--tribal r d1">
+      <div><h3>Tribal Economic Impact</h3><div class="product-url">tribaleconomicimpact.com</div><div class="product-desc">Built for economies that don't fit standard assumptions. Sovereign-aligned economic and policy analysis for US tribal governments and enterprises.</div></div>
+      <div class="product-status">Patent pending · In active development</div>
+    </a>
+    <a href="https://globaleconomicimpact.com" class="product-block product-block--global sr">
+      <div><h3>Global Economic Impact</h3><div class="product-url">globaleconomicimpact.com</div><div class="product-desc">Same logic. Any geography. Cross-border and multiregional analytics for multinationals, NGOs, and governments.</div></div>
+      <div class="product-status">Future development</div>
+    </a>
+  </div>
+</section>
 
 <section class="cedar" id="cedar">
   <div class="cedar-panel">
@@ -238,37 +255,51 @@ footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem}
     <div class="cedar-subtitle r d2">Your AI thought partner for economic and policy analysis.</div>
     <div class="cedar-motto r d3">We won't think for you.<br>We think with you.</div>
   </div>
-  <div class="cedar-content">
-    <p class="r">Cedar™ is Lumecon's AI-powered assistant. It works with messy, real-world data — tells you exactly what it needs and why — and walks you through every step so you can tell your own story without hiring a consultant. Cedar extracts, confirms, and explains, but never writes for you. Your data stays secure in isolated containers and Cedar only knows what you give it. RAG-based retrieval, not generation. No hallucinations. Liability-safe by design.</p>
-    <div class="chat-demo r d1" id="chatDemo">
-      <div class="chat-header">
-        <div class="chat-dot"></div>
-        <div class="chat-title">Cedar</div>
-      </div>
+  <div class="cedar-text">
+    <p class="r">Cedar™ is Lumecon's AI-powered assistant. It works with messy, real-world data — tells you exactly what it needs and why — and walks you through every step so you can tell your own story. No consultant. No overpriced software. Just you, your data, and a thought partner that never hallucinates. Your data stays secure in isolated containers and Cedar only knows what you provide. RAG-based retrieval, not generation. Liability-safe by design.</p>
+  </div>
+  <div class="cedar-chat">
+    <div class="chat-demo sd" id="chatDemo">
+      <div class="chat-header"><div class="chat-dot"></div><div class="chat-title">Cedar</div></div>
       <div class="chat-body" id="chatBody"></div>
       <div class="chat-footer">Demo reflects current training and testing as of February 2026</div>
     </div>
   </div>
 </section>
 
-<section class="cta" id="contact"><div class="cta-inner">
-  <div style="font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem" class="r">PARTNERSHIPS</div>
-  <h2 class="r d1">Build with us</h2>
-  <p class="r d2">Lumecon is in active development. If you're interested in learning more, investing, piloting, or helping build the future of economic and policy analysis — we'd like to hear from you.</p>
-  <a href="mailto:elijah@lumecon.ai" class="cta-email r d3">elijah@lumecon.ai</a><br>
-  <a href="mailto:elijah@lumecon.ai?subject=Lumecon Inquiry" class="btn btn-gold r d4" style="margin-top:.6rem">Get in Touch</a>
-</div></section>
+<section class="cta" id="contact">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div style="font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem" class="r">PARTNERSHIPS</div>
+      <h2 class="r d1">Build with us</h2>
+      <p class="r d2">Lumecon is in active development. If you're interested in learning more, investing, piloting, or helping build the future of economic and policy analysis — we'd like to hear from you.</p>
+      <a href="mailto:elijah@lumecon.ai" class="cta-email r d3">elijah@lumecon.ai</a>
+    </div>
+    <div class="cta-form r d2">
+      <label for="fname">Name</label>
+      <input type="text" id="fname" name="name" placeholder="Your name">
+      <label for="femail">Email</label>
+      <input type="email" id="femail" name="email" placeholder="you@organization.com">
+      <label for="fint">I'm interested in</label>
+      <select id="fint" name="interest">
+        <option value="" disabled selected>Select one</option>
+        <option value="pilot">Piloting a Lumecon product</option>
+        <option value="invest">Investing</option>
+        <option value="partner">Strategic partnership</option>
+        <option value="advise">Advisory or board role</option>
+        <option value="learn">Just learning more</option>
+      </select>
+      <label for="fmsg">Message</label>
+      <textarea id="fmsg" name="message" placeholder="Tell us a bit about yourself and what brought you here."></textarea>
+      <button type="button" id="formSend">Send Message</button>
+    </div>
+  </div>
+</section>
 
 <footer><div class="footer-w">
   <div class="footer-top">
     <div><div class="footer-brand-name">LUMECON</div><div class="footer-brand-tag">We luminate economies.</div></div>
-    <div class="footer-links">
-      <a href="#products">Products</a>
-      <a href="#cedar">Cedar</a>
-      <a href="#contact">Partnerships</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-    </div>
+    <div class="footer-links"><a href="#products">Products</a><a href="#cedar">Cedar</a><a href="#contact">Partnerships</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div>
   </div>
   <div class="footer-bottom">
     <div class="footer-legal">© 2026 Moreno Ventures LLC d/b/a Lumecon. All rights reserved. Patent pending. Counsel: Cornell Law Entrepreneurship Law Clinic.</div>
@@ -277,57 +308,65 @@ footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem}
 </div></footer>
 
 <script>
-// Nav
 var nav=document.getElementById('nav');
 window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>40)},{passive:true});
-
-// Hamburger
 var hb=document.getElementById('hamburger'),nl=document.getElementById('navLinks');
 hb.addEventListener('click',function(){nl.classList.toggle('open');hb.classList.toggle('on')});
 nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nl.classList.remove('open');hb.classList.remove('on')})});
-
-// Scroll reveal
 var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('seen');obs.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.r').forEach(function(el){obs.observe(el)});
+document.querySelectorAll('.r,.sl,.sr,.sd').forEach(function(el){obs.observe(el)});
 
-// ========== CEDAR CHAT DEMO ==========
+// Form → mailto
+document.getElementById('formSend').addEventListener('click',function(){
+  var n=document.getElementById('fname').value;
+  var e=document.getElementById('femail').value;
+  var i=document.getElementById('fint').value;
+  var m=document.getElementById('fmsg').value;
+  var subj=encodeURIComponent('Lumecon Inquiry'+(i?' — '+i:''));
+  var body=encodeURIComponent('Name: '+n+'\nEmail: '+e+'\nInterest: '+i+'\n\n'+m);
+  window.location.href='mailto:elijah@lumecon.ai?subject='+subj+'&body='+body;
+});
+
+// CEDAR CHAT
 var conversations=[
+  // 1: Upload docs → Cedar extracts → explains direct/indirect/induced
   [
-    {from:'cedar',text:"I found three enterprises in your uploaded financials. Here's what I'm seeing — can you confirm?"},
-    {from:'cedar',text:"Enterprise 1: Gaming operations — $8.2M revenue, 94 employees. Enterprise 2: Hotel — $3.1M revenue, 41 employees. Enterprise 3: Gas station — $1.1M, 12 employees. Per your FY2025 CSV headers."},
-    {from:'user',text:"That's right, but the gas station has a separate EIN — it should be modeled as its own entity."},
-    {from:'cedar',text:"Got it. I'll keep it as a distinct enterprise with its own industry sector. Your adjusted total is $12.4M across three enterprises. Ready to confirm and run the model?"}
+    {from:'system',text:'📄 AuditedFinancials_FY2025.pdf uploaded\n📄 Payroll_Summary_Q4.xlsx uploaded'},
+    {from:'cedar',text:"Reading your files now. I found $9.7M total operating revenue (income statement, p. 12) and $6.4M payroll (Q4 spreadsheet). 218 FTE. Can you confirm?"},
+    {from:'user',text:"Revenue is right but payroll should be $6.8M — the file doesn't include benefits."},
+    {from:'cedar',text:"Updated. Here are your results:\n\nDirect: 218 jobs, $6.8M labor income — your organization's footprint.\nIndirect: 74 jobs, $2.9M — your suppliers and vendors.\nInduced: 51 jobs, $1.8M — household spending rippling through the economy.\n\nTotal: 343 jobs and $11.5M in labor income supported across the region."}
   ],
+  // 2: Historic data — yearly impact table, only Lumecon can do
   [
-    {from:'cedar',text:"Your results are in. Here's the headline: for every dollar your organization spent, it generated $2.30 in total economic activity across the region."},
-    {from:'user',text:"That's great but how do I explain that to our board? They're not economists."},
-    {from:'cedar',text:"Think of it this way: your 147 employees spend wages locally — groceries, rent, childcare. Those businesses hire too. That ripple is what the $2.30 captures. Want me to walk you through how to frame this in your executive summary?"},
-    {from:'user',text:"Yes, that would help a lot."},
-    {from:'cedar',text:"I can't write it for you — the best version will be in your voice. But here's what the strongest executive summaries lead with: community impact first, then the numbers. Start with who benefits, then show how much. Want to see an example sentence to build from?"}
+    {from:'user',text:"We've uploaded our financials from 2019 through 2025. Can Cedar compare impact over time?"},
+    {from:'cedar',text:"Absolutely. I've run each year through the model with inflation-adjusted dollars (2025 base). Here's your total economic impact by year:"},
+    {from:'cedar',html:'<div class="chat-table">2019 — $8.1M · 247 jobs<br>2020 — $6.3M · 198 jobs<br>2021 — $7.9M · 231 jobs<br>2022 — $9.4M · 274 jobs<br>2023 — $10.1M · 289 jobs<br>2024 — $10.8M · 312 jobs<br>2025 — $11.5M · 343 jobs</div>'},
+    {from:'cedar',text:"Your impact didn't happen once — it compounds year after year. Over seven years, your organization has supported over $64M in cumulative regional economic activity. That's a story worth telling."},
+    {from:'user',text:"Nobody's ever shown us this before."},
+    {from:'cedar',text:"That's because most studies are one-time snapshots. Lumecon stores your models so you can track impact over time — and see the trajectory, not just a single number."}
   ],
+  // 3: Messy data + security
   [
-    {from:'cedar',text:"Welcome back. What would you like to work on today?"},
-    {from:'cedar',text:"Options: 1) Review your results  2) Work on your report  3) Explore assumptions  4) Something else"},
-    {from:'user',text:"I want to work on the report. I'm stuck on the methodology section."},
-    {from:'cedar',text:"The methodology section typically runs 3–5 pages. Its job is to make your reader trust the numbers. Here's the structure most published studies follow — want me to walk through each part one at a time?"},
-    {from:'user',text:"Yes please, one at a time."},
-    {from:'cedar',text:"Let's start with the first part: data sources. What data did you use, and where did it come from? Write a sentence or two and I'll give you feedback on clarity and completeness."}
+    {from:'system',text:'📄 PayrollSummary.pdf uploaded\n📄 AnnualReport_2024.pdf uploaded\n📷 Revenue_Printout.jpg uploaded'},
+    {from:'cedar',text:"Two files are readable. The third is a photo — I can't auto-extract from it. I need two numbers: total gross revenue and FTE count. You can type them in."},
+    {from:'user',text:"$4.6M revenue, 38 FTEs. Is this secure? It's sensitive financial data."},
+    {from:'cedar',text:"Your data runs in an isolated container. Nothing is shared across sessions or users. Cedar only sees files you upload in this session and retains nothing after. Ready to confirm the values I extracted from your other files?"}
   ],
+  // 4: Report writing — user-driven, Cedar as guide
   [
-    {from:'cedar',text:"I see you uploaded three files. Two are readable — a payroll summary and an annual report PDF. The third file looks like a scanned image — I can't extract numbers from it automatically."},
-    {from:'user',text:"That's our revenue breakdown but it's just a photo of a printout. Is that a problem?"},
-    {from:'cedar',text:"Not a dealbreaker. I just need two numbers from it: total gross revenue and number of FTE employees. You can type those in manually and I'll note the source as user-reported. Everything else I can pull from your other files."},
-    {from:'user',text:"Ok — $4.6M gross revenue, 38 FTEs. Also, is this data secure? This is sensitive financial information."},
-    {from:'cedar',text:"Your data runs in an isolated container — nothing is shared across sessions or users, and Cedar only has access to files you upload in this session. I don't retain anything after you're done. Ready to confirm the values I've extracted from your other two files?"}
+    {from:'cedar',text:"Welcome back. What would you like to work on?"},
+    {from:'cedar',text:"Options:\n1) Review your results\n2) Work on your report\n3) Explore your assumptions"},
+    {from:'user',text:"Report. I need help with the executive summary."},
+    {from:'cedar',text:"The strongest summaries lead with community impact — who benefits and how — then back it up with numbers. Write a draft sentence and I'll give you feedback."},
+    {from:'user',text:"Our operations supported over 340 jobs and $11M in economic activity in 2025."},
+    {from:'cedar',text:"Good start. I'd lead with the people: \"In 2025, our operations sustained livelihoods for over 340 families across the region.\" Then follow with the $11M. Funders and councils respond to people first, numbers second. Want to keep refining?"}
   ]
 ];
 
 var chatBody=document.getElementById('chatBody');
 var chatDemo=document.getElementById('chatDemo');
 var convIdx=0,chatRunning=false;
-
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
-
 function showTyping(from){
   var t=document.createElement('div');
   t.className='chat-typing';
@@ -337,35 +376,63 @@ function showTyping(from){
   chatBody.scrollTop=chatBody.scrollHeight;
   return t;
 }
-
 async function playConversation(){
   chatBody.innerHTML='';
   var conv=conversations[convIdx];
   for(var i=0;i<conv.length;i++){
     var m=conv[i];
+    if(m.from==='system'){
+      var el=document.createElement('div');
+      el.className='chat-msg chat-msg--system';
+      el.style.whiteSpace='pre-line';
+      el.textContent=m.text;
+      chatBody.appendChild(el);
+      requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('show')})});
+      chatBody.scrollTop=chatBody.scrollHeight;
+      await sleep(800);continue;
+    }
     var typing=showTyping(m.from);
-    await sleep(m.from==='cedar'?1300:800);
+    await sleep(m.from==='cedar'?1500:900);
     typing.remove();
     var el=document.createElement('div');
     el.className='chat-msg chat-msg--'+m.from;
     var label=m.from==='cedar'?'Cedar':'You';
-    el.innerHTML='<div class="sender">'+label+'</div>'+m.text;
+    var content='<div class="sender">'+label+'</div>';
+    if(m.html){content+=m.html}else{content+=m.text.replace(/\n/g,'<br>')}
+    el.innerHTML=content;
     chatBody.appendChild(el);
-    // trigger transition
     requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('show')})});
     chatBody.scrollTop=chatBody.scrollHeight;
-    await sleep(700);
+    await sleep(900);
   }
-  await sleep(3500);
+  await sleep(6000);
   convIdx=(convIdx+1)%conversations.length;
   playConversation();
 }
-
-// Start when visible
 var chatObs=new IntersectionObserver(function(es){es.forEach(function(e){
-  if(e.isIntersecting&&!chatRunning){chatRunning=true;setTimeout(playConversation,500);chatObs.unobserve(e.target)}
-})},{threshold:.25});
+  if(e.isIntersecting&&!chatRunning){chatRunning=true;setTimeout(playConversation,600);chatObs.unobserve(e.target)}
+})},{threshold:.2});
 chatObs.observe(chatDemo);
+
+// Dynamic cycle width — measure spans in place, resize container
+(function(){
+  var cycle=document.querySelector('.cycle');
+  if(!cycle)return;
+  var spans=cycle.querySelectorAll('.cycle-inner span');
+  if(!spans.length)return;
+  // Create hidden measurer with same styles
+  var measurer=document.createElement('span');
+  measurer.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font-style:italic;font-weight:700;font-size:'+getComputedStyle(cycle).fontSize+';font-family:'+getComputedStyle(cycle).fontFamily;
+  document.body.appendChild(measurer);
+  var widths=[];
+  spans.forEach(function(s){measurer.textContent=s.textContent;widths.push(measurer.offsetWidth+2)});
+  document.body.removeChild(measurer);
+  // Set initial width
+  cycle.style.width=widths[0]+'px';
+  // Cycle through widths synced with CSS animation (8s total, 4 items = 2s each)
+  var idx=0;
+  setInterval(function(){idx=(idx+1)%widths.length;cycle.style.width=widths[idx]+'px'},2000);
+})();
 </script>
 </body>
 </html>
