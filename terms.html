@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — Lumecon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--white:#FFFCF7;--cream:#F6F1E9;--navy:#2D2D3F;--navy2:#3E3E54;--green:#2D6A4F;--terra:#B85C38;--gold:#C49A3C;--gray:#5A5A5A;--graylt:#908D85;--ease:cubic-bezier(.22,1,.36,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--navy);background:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:10000;mix-blend-mode:multiply;opacity:.035;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}
+h1{font-weight:800;line-height:1.08}
+nav{background:rgba(255,252,247,.92);backdrop-filter:blur(12px);padding:.75rem 0}
+.nav-w{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-size:1.1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--green);transition:opacity .25s}
+.logo:hover{opacity:.65}
+.nav-links{display:flex;gap:.5rem;align-items:center}
+.nav-links a{font-size:.8rem;font-weight:700;color:var(--navy);padding:.35rem .8rem;border:1.5px solid transparent;border-radius:3px;transition:all .25s var(--ease)}
+.nav-links a:hover{border-color:var(--navy);background:var(--navy);color:var(--white)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;z-index:110}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--navy);margin:5px 0;transition:.3s var(--ease)}
+.hamburger.on span:nth-child(1){transform:rotate(45deg) translate(4px,5px)}
+.hamburger.on span:nth-child(2){opacity:0}
+.hamburger.on span:nth-child(3){transform:rotate(-45deg) translate(4px,-5px)}
+main{max-width:620px;margin:0 auto;padding:4.5rem clamp(1.5rem,4vw,2.5rem) 4rem;flex:1}
+h1{font-size:1.65rem;margin-bottom:.3rem}
+.date{font-size:.82rem;font-weight:600;color:var(--graylt);margin-bottom:2.5rem}
+p{font-size:.92rem;line-height:1.82;color:var(--gray);margin-bottom:.8rem;font-weight:500}
+.note{margin-top:2rem;padding:1.3rem;background:var(--cream);border-left:2.5px solid var(--green);font-size:.88rem;color:var(--gray);line-height:1.65;font-weight:500}
+.note strong{color:var(--navy)}
+footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem;margin-top:auto}
+.footer-w{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem)}
+.footer-top{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:1.5rem}
+.footer-brand-name{font-size:.68rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--white);margin-bottom:.15rem}
+.footer-brand-tag{font-style:italic;font-size:.76rem;font-weight:600;color:rgba(255,252,247,.22)}
+.footer-links{display:flex;gap:1.4rem;flex-wrap:wrap}
+.footer-links a{font-size:.74rem;font-weight:600;transition:color .25s}
+.footer-links a:hover{color:var(--white)}
+.footer-bottom{margin-top:1.2rem;padding-top:.8rem;border-top:1px solid rgba(255,252,247,.04);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.footer-legal{font-size:.6rem;color:rgba(255,252,247,.15);max-width:620px;line-height:1.5}
+.footer-email{font-size:.68rem;color:rgba(255,252,247,.18);transition:color .25s}
+.footer-email:hover{color:var(--gold)}
+@media(max-width:600px){
+  .nav-links{display:none;position:fixed;inset:0;background:var(--white);flex-direction:column;justify-content:center;align-items:center;gap:1.8rem;z-index:105}
+  .nav-links.open{display:flex}.nav-links.open a{font-size:1.1rem;padding:.5rem 1.2rem}
+  .hamburger{display:block}
+  .footer-top{flex-direction:column}.footer-bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+<nav><div class="nav-w">
+  <a href="index.html" class="logo">Lumecon</a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html#products">Products</a>
+    <a href="index.html#cedar">Cedar</a>
+    <a href="index.html#contact">Partnerships</a>
+    <a href="mailto:elijah@lumecon.ai">Get in Touch</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+<main>
+<h1>Terms of Service</h1>
+<div class="date">Being prepared by legal counsel</div>
+<p>The Terms of Service for Lumecon and its family of products — Tribal Economic Impact, Local Economic Impact, and Global Economic Impact — are being prepared.</p>
+<p>These terms will govern use of all Lumecon services, software, annual subscriptions, bespoke advisory, and associated websites, including the Cedar™ AI assistant.</p>
+<p>Lumecon, We luminate economies, Cedar, Tribal Economic Impact, Local Economic Impact, and Global Economic Impact are trademarks of Moreno Ventures LLC d/b/a Lumecon. All patent-pending methodologies remain the exclusive intellectual property of the company.</p>
+<div class="note"><strong>Counsel:</strong> Cornell Law School Entrepreneurship Law Clinic<br>Contact: <a href="mailto:elijah@lumecon.ai" style="color:var(--gold);font-weight:700">elijah@lumecon.ai</a></div>
+</main>
+<footer><div class="footer-w">
+  <div class="footer-top">
+    <div><div class="footer-brand-name">LUMECON</div><div class="footer-brand-tag">We luminate economies.</div></div>
+    <div class="footer-links"><a href="index.html#products">Products</a><a href="index.html#cedar">Cedar</a><a href="index.html#contact">Partnerships</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">© 2026 Moreno Ventures LLC d/b/a Lumecon. All rights reserved. Patent pending. Counsel: Cornell Law Entrepreneurship Law Clinic.</div>
+    <a href="mailto:elijah@lumecon.ai" class="footer-email">elijah@lumecon.ai</a>
+  </div>
+</div></footer>
+<script>
+var hb=document.getElementById('hamburger'),nl=document.getElementById('navLinks');
+hb.addEventListener('click',function(){nl.classList.toggle('open');hb.classList.toggle('on')});
+nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nl.classList.remove('open');hb.classList.remove('on')})});
+</script>
+</body>
+</html>
