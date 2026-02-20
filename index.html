@@ -52,19 +52,18 @@ nav.scrolled .logo{opacity:1 !important;pointer-events:auto !important}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
 /* HERO */
+.hero{display:grid;grid-template-columns:55% 45%;min-height:100vh;min-height:100dvh}
+.hero-text{display:flex;flex-direction:column;justify-content:center;padding:6rem clamp(2rem,5vw,4rem) 4rem clamp(1.5rem,4vw,3rem)}
 .hero-brand{font-weight:800;font-size:clamp(3rem,6vw,4.5rem);letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:1.2rem;animation:fadeUp .8s var(--ease) both}
+.hero-tagline{font-style:italic;font-weight:600;color:var(--terra);font-size:clamp(.88rem,1.4vw,1.12rem);margin-bottom:.4rem;animation:fadeUp .75s var(--ease) .06s both}
+.hero h1{font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.01em;margin-bottom:.9rem;animation:fadeUp .75s var(--ease) .1s both}
+.hero-accent{width:44px;height:2.5px;background:var(--terra);margin-bottom:1.2rem;transform-origin:left;animation:scaleIn .5s var(--ease) .2s both}
+.hero-body{font-size:.92rem;font-weight:500;color:var(--gray);line-height:1.78;max-width:420px;margin-bottom:2rem;animation:fadeUp .75s var(--ease) .14s both}
+.hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;animation:fadeUp .75s var(--ease) .2s both}
+.hero-panel{background:var(--purple);position:relative;overflow:hidden;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%);animation:panelIn 1s var(--ease) .15s both}
 
-/* ✅ ADD: “hovering” / floating effect (safe minimal) */
-.floating-brand{
-  display:inline-block;
-  transform:translateY(-2px);
-  text-shadow:0 10px 25px rgba(0,0,0,0.12);
-  transition:transform 220ms var(--ease), text-shadow 220ms var(--ease);
-}
-.floating-brand:hover{
-  transform:translateY(-5px);
-  text-shadow:0 16px 38px rgba(0,0,0,0.16);
-}
+.btn{display:inline-block;padding:.62rem 1.35rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;border-radius:3px;border:1.5px solid var(--navy);cursor:pointer;transition:all .28s var(--ease);background:transparent;color:var(--navy)}
+.btn:hover{background:var(--navy);color:var(--white);transform:translateY(-2px);box-shadow:0 4px 12px rgba(45,45,63,.12)}
 
 /* PLATFORMS BAR — lighter warm gold */
 .platforms-bar{background:var(--goldbar);padding:.9rem 0}
@@ -209,8 +208,7 @@ footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem}
 
 <section class="hero" id="top">
   <div class="hero-text">
-    <!-- ✅ CHANGE: add floating-brand class -->
-    <div class="hero-brand floating-brand">Lumecon</div>
+    <div class="hero-brand">Lumecon</div>
     <div class="hero-tagline">We luminate economies™</div>
     <h1>Economic and policy analysis anyone can act on</h1>
     <div class="hero-accent"></div>
@@ -346,12 +344,14 @@ document.getElementById('formSend').addEventListener('click',function(){
 
 // CEDAR CHAT
 var conversations=[
+  // 1: Upload docs → Cedar extracts → explains direct/indirect/induced
   [
     {from:'system',text:'📄 AuditedFinancials_FY2025.pdf uploaded\n📄 Payroll_Summary_Q4.xlsx uploaded'},
     {from:'cedar',text:"Reading your files now. I found $9.7M total operating revenue (income statement, p. 12) and $6.4M payroll (Q4 spreadsheet). 218 FTE. Can you confirm?"},
     {from:'user',text:"Revenue is right but payroll should be $6.8M — the file doesn't include benefits."},
     {from:'cedar',text:"Updated. Here are your results:\n\nDirect: 218 jobs, $6.8M labor income — your organization's footprint.\nIndirect: 74 jobs, $2.9M — your suppliers and vendors.\nInduced: 51 jobs, $1.8M — household spending rippling through the economy.\n\nTotal: 343 jobs and $11.5M in labor income supported across the region."}
   ],
+  // 2: Historic data — yearly impact table, only Lumecon can do
   [
     {from:'user',text:"We've uploaded our financials from 2019 through 2025. Can Cedar compare impact over time?"},
     {from:'cedar',text:"Absolutely. I've run each year through the model with inflation-adjusted dollars (2025 base). Here's your total economic impact by year:"},
@@ -360,12 +360,14 @@ var conversations=[
     {from:'user',text:"Nobody's ever shown us this before."},
     {from:'cedar',text:"That's because most studies are one-time snapshots. Lumecon stores your models so you can track impact over time — and see the trajectory, not just a single number."}
   ],
+  // 3: Messy data + security
   [
     {from:'system',text:'📄 PayrollSummary.pdf uploaded\n📄 AnnualReport_2024.pdf uploaded\n📷 Revenue_Printout.jpg uploaded'},
     {from:'cedar',text:"Two files are readable. The third is a photo — I can't auto-extract from it. I need two numbers: total gross revenue and FTE count. You can type them in."},
     {from:'user',text:"$4.6M revenue, 38 FTEs. Is this secure? It's sensitive financial data."},
     {from:'cedar',text:"Your data runs in an isolated container. Nothing is shared across sessions or users. Cedar only sees files you upload in this session and retains nothing after. Ready to confirm the values I extracted from your other files?"}
   ],
+  // 4: Report writing — user-driven, Cedar as guide
   [
     {from:'cedar',text:"Welcome back. What would you like to work on?"},
     {from:'cedar',text:"Options:\n1) Review your results\n2) Work on your report\n3) Explore your assumptions"},
@@ -427,18 +429,22 @@ var chatObs=new IntersectionObserver(function(es){es.forEach(function(e){
 })},{threshold:.2});
 chatObs.observe(chatDemo);
 
+// Dynamic cycle width — measure spans in place, resize container
 (function(){
   var cycle=document.querySelector('.cycle');
   if(!cycle)return;
   var spans=cycle.querySelectorAll('.cycle-inner span');
   if(!spans.length)return;
+  // Create hidden measurer with same styles
   var measurer=document.createElement('span');
   measurer.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font-style:italic;font-weight:700;font-size:'+getComputedStyle(cycle).fontSize+';font-family:'+getComputedStyle(cycle).fontFamily;
   document.body.appendChild(measurer);
   var widths=[];
   spans.forEach(function(s){measurer.textContent=s.textContent;widths.push(measurer.offsetWidth+2)});
   document.body.removeChild(measurer);
+  // Set initial width
   cycle.style.width=widths[0]+'px';
+  // Cycle through widths synced with CSS animation (8s total, 4 items = 2s each)
   var idx=0;
   setInterval(function(){idx=(idx+1)%widths.length;cycle.style.width=widths[idx]+'px'},2000);
 })();
