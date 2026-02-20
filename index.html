@@ -52,43 +52,7 @@ nav.scrolled .logo{opacity:1 !important;pointer-events:auto !important}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
 /* HERO */
-.hero-brand{
-  font-weight:800;
-  font-size:clamp(3rem,6vw,4.5rem);
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:var(--green);
-  margin-bottom:1.2rem;
-  animation:fadeUp .8s var(--ease) both;
-}
-
-/* Floating / hovering effect */
-.floating-brand{
-  display:inline-block;
-  transform:translateY(-2px);
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.35),
-    0 10px 25px rgba(0,0,0,0.12);
-  transition:transform 220ms var(--ease), text-shadow 220ms var(--ease);
-}
-
-.floating-brand:hover{
-  transform:translateY(-5px);
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.40),
-    0 16px 38px rgba(0,0,0,0.16);
-}
-
-/* Optional: gentle “float” loop (respects reduced motion) */
-@media (prefers-reduced-motion: no-preference){
-  .floating-brand{
-    animation: fadeUp .8s var(--ease) both, floaty 6s ease-in-out infinite;
-  }
-  @keyframes floaty{
-    0%,100%{ transform:translateY(-2px); }
-    50%{ transform:translateY(-5px); }
-  }
-}
+.hero-brand{font-weight:800;font-size:clamp(3rem,6vw,4.5rem);letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:1.2rem;animation:fadeUp .8s var(--ease) both}
 /* PLATFORMS BAR — lighter warm gold */
 .platforms-bar{background:var(--goldbar);padding:.9rem 0}
 .platforms-bar-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:1rem}
@@ -232,7 +196,7 @@ footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem}
 
 <section class="hero" id="top">
   <div class="hero-text">
-    <div class="hero-brand floating-brand">Lumecon</div>
+    <div class="hero-brand">Lumecon</div>
     <div class="hero-tagline">We luminate economies™</div>
     <h1>Economic and policy analysis anyone can act on</h1>
     <div class="hero-accent"></div>
