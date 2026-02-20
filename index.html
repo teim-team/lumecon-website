@@ -52,19 +52,43 @@ nav.scrolled .logo{opacity:1 !important;pointer-events:auto !important}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
 /* HERO */
-.hero{display:grid;grid-template-columns:55% 45%;min-height:100vh;min-height:100dvh}
-.hero-text{display:flex;flex-direction:column;justify-content:center;padding:6rem clamp(2rem,5vw,4rem) 4rem clamp(1.5rem,4vw,3rem)}
-.hero-brand{font-weight:800;font-size:clamp(3rem,6vw,4.5rem);letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:1.2rem;animation:fadeUp .8s var(--ease) both}
-.hero-tagline{font-style:italic;font-weight:600;color:var(--terra);font-size:clamp(.88rem,1.4vw,1.12rem);margin-bottom:.4rem;animation:fadeUp .75s var(--ease) .06s both}
-.hero h1{font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.01em;margin-bottom:.9rem;animation:fadeUp .75s var(--ease) .1s both}
-.hero-accent{width:44px;height:2.5px;background:var(--terra);margin-bottom:1.2rem;transform-origin:left;animation:scaleIn .5s var(--ease) .2s both}
-.hero-body{font-size:.92rem;font-weight:500;color:var(--gray);line-height:1.78;max-width:420px;margin-bottom:2rem;animation:fadeUp .75s var(--ease) .14s both}
-.hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;animation:fadeUp .75s var(--ease) .2s both}
-.hero-panel{background:var(--purple);position:relative;overflow:hidden;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%);animation:panelIn 1s var(--ease) .15s both}
+.hero-brand{
+  font-weight:800;
+  font-size:clamp(3rem,6vw,4.5rem);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--green);
+  margin-bottom:1.2rem;
+  animation:fadeUp .8s var(--ease) both;
+}
 
-.btn{display:inline-block;padding:.62rem 1.35rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;border-radius:3px;border:1.5px solid var(--navy);cursor:pointer;transition:all .28s var(--ease);background:transparent;color:var(--navy)}
-.btn:hover{background:var(--navy);color:var(--white);transform:translateY(-2px);box-shadow:0 4px 12px rgba(45,45,63,.12)}
+/* Floating / hovering effect */
+.floating-brand{
+  display:inline-block;
+  transform:translateY(-2px);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.35),
+    0 10px 25px rgba(0,0,0,0.12);
+  transition:transform 220ms var(--ease), text-shadow 220ms var(--ease);
+}
 
+.floating-brand:hover{
+  transform:translateY(-5px);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.40),
+    0 16px 38px rgba(0,0,0,0.16);
+}
+
+/* Optional: gentle “float” loop (respects reduced motion) */
+@media (prefers-reduced-motion: no-preference){
+  .floating-brand{
+    animation: fadeUp .8s var(--ease) both, floaty 6s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{ transform:translateY(-2px); }
+    50%{ transform:translateY(-5px); }
+  }
+}
 /* PLATFORMS BAR — lighter warm gold */
 .platforms-bar{background:var(--goldbar);padding:.9rem 0}
 .platforms-bar-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:1rem}
@@ -208,7 +232,7 @@ footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem}
 
 <section class="hero" id="top">
   <div class="hero-text">
-    <div class="hero-brand">Lumecon</div>
+    <div class="hero-brand floating-brand">Lumecon</div>
     <div class="hero-tagline">We luminate economies™</div>
     <h1>Economic and policy analysis anyone can act on</h1>
     <div class="hero-accent"></div>
