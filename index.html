@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumecon — We luminate economies</title>
+<meta name="description" content="Lumecon — Economic and policy analysis anyone can act on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--white:#FFFCF7;--cream:#F6F1E9;--navy:#2D2D3F;--navy2:#3E3E54;--green:#2D6A4F;--terra:#B85C38;--gold:#C49A3C;--goldbar:#F2E6C5;--blue:#6B7FA3;--purple:#7B6B9B;--gray:#5A5A5A;--graylt:#908D85;--blush:#F3EAE6;--ease:cubic-bezier(.22,1,.36,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--navy);background:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:10000;mix-blend-mode:multiply;opacity:.035;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+.paper-tex{position:relative;overflow:hidden}
+.paper-tex::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;mix-blend-mode:soft-light;opacity:.22;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
+.paper-tex-dark::before{mix-blend-mode:overlay;opacity:.1}
+.paper-tex-warm::before{mix-blend-mode:multiply;opacity:.07}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-weight:800;line-height:1.08}
+nav{position:fixed;top:0;width:100%;z-index:100;padding:1.15rem 0;transition:all .4s var(--ease)}
+nav.scrolled{background:rgba(255,252,247,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:.75rem 0}
+.nav-w{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-size:1.1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--green);transition:opacity .25s}
+.logo:hover{opacity:.65}
+.home-page .logo{opacity:0;pointer-events:none}
+nav.scrolled .logo{opacity:1!important;pointer-events:auto!important}
+.nav-links{display:none;position:fixed;inset:0;background:var(--white);flex-direction:column;justify-content:center;align-items:center;gap:1.8rem;z-index:105}
+.nav-links.open{display:flex}
+.nav-links.open a{font-size:1.1rem;padding:.5rem 1.2rem}
+.nav-links a{font-size:.8rem;font-weight:700;color:var(--navy);padding:.35rem .8rem;border:1.5px solid transparent;border-radius:3px;transition:all .25s var(--ease)}
+.nav-links a:hover{border-color:var(--navy);background:var(--navy);color:var(--white)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;z-index:110}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--navy);margin:5px 0;transition:.3s var(--ease)}
+.hamburger.on span:nth-child(1){transform:rotate(45deg) translate(4px,5px)}
+.hamburger.on span:nth-child(2){opacity:0}
+.hamburger.on span:nth-child(3){transform:rotate(-45deg) translate(4px,-5px)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes scaleIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes panelIn{from{opacity:0;clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}to{opacity:1;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%)}}
+.r{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.r.seen{opacity:1;transform:none}
+.sl{opacity:0;transform:translateX(-60px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.sl.seen{opacity:1;transform:none}
+.sr{opacity:0;transform:translateX(60px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.sr.seen{opacity:1;transform:none}
+.sd{opacity:0;transform:translate(30px,-20px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.sd.seen{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+.hero{display:grid;grid-template-columns:55% 45%;min-height:100vh;min-height:100dvh}
+.hero-text{display:flex;flex-direction:column;justify-content:center;padding:6rem clamp(2rem,5vw,4rem) 4rem clamp(3rem,8vw,6rem)}
+.hero-brand{font-weight:800;font-size:clamp(3rem,6vw,4.5rem);letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:1.2rem;display:flex;align-items:baseline}
+.hero-brand .fl{display:inline-block;animation:flIn .55s var(--ease) var(--d,.05s) both}
+.hero-brand .fl.go{animation:flPulse 3.8s ease-in-out infinite;animation-delay:var(--pd,0s)}
+@keyframes flIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes flPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.72;transform:scale(.97)}}
+.hero-tagline{font-style:italic;font-weight:600;color:var(--terra);font-size:clamp(.88rem,1.4vw,1.12rem);margin-bottom:.4rem;animation:fadeUp .75s var(--ease) .06s both}
+.hero h1{font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.01em;margin-bottom:.9rem;animation:fadeUp .75s var(--ease) .1s both}
+.hero-accent{width:44px;height:2.5px;background:var(--terra);margin-bottom:1.2rem;transform-origin:left;animation:scaleIn .5s var(--ease) .2s both}
+.hero-body{font-size:.92rem;font-weight:500;color:var(--gray);line-height:1.78;max-width:420px;margin-bottom:2rem;animation:fadeUp .75s var(--ease) .14s both}
+.hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;animation:fadeUp .75s var(--ease) .2s both}
+.hero-panel{background:var(--purple);position:relative;overflow:hidden;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%);animation:panelIn 1s var(--ease) .15s both;cursor:pointer}
+.hero-panel canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-panel-hint{position:absolute;bottom:1.2rem;right:1.5rem;font-size:.58rem;font-weight:600;color:rgba(255,252,247,.18);z-index:2;pointer-events:none;transition:opacity .3s}
+.hero-panel:hover .hero-panel-hint{opacity:1}
+.btn{display:inline-block;padding:.62rem 1.35rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;border-radius:3px;border:1.5px solid var(--navy);cursor:pointer;transition:all .28s var(--ease);background:transparent;color:var(--navy)}
+.btn:hover{background:var(--navy);color:var(--white);transform:translateY(-2px);box-shadow:0 4px 12px rgba(45,45,63,.12)}
+
+/* WHY */
+.why{background:var(--blush);padding:clamp(3rem,6vw,4.5rem) 0}
+.why-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem)}
+.why-top{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.5rem);margin-bottom:clamp(2rem,4vw,3rem)}
+.why-top h2{font-size:clamp(1.4rem,2.8vw,2.1rem);color:var(--navy);line-height:1.15}
+.why-top-right p{font-size:.88rem;font-weight:500;color:var(--gray);line-height:1.78;margin-bottom:.8rem}
+.why-top-right .why-diff{font-size:.82rem;font-weight:600;color:var(--green);font-style:italic;line-height:1.6;padding-left:.9rem;border-left:2.5px solid var(--green)}
+.why-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.why-card{position:relative;background:var(--white);padding:clamp(1.2rem,2vw,1.8rem);aspect-ratio:1/1;cursor:pointer;overflow:hidden;clip-path:polygon(5% 0,100% 0,95% 100%,0 100%);transition:background .3s var(--ease)}
+.why-card-front,.why-card-back{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(1.2rem,2vw,1.8rem);transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.why-card-front{gap:.7rem}
+.why-card-back{opacity:0;transform:translateY(6px)}
+.why-card:hover{background:var(--navy)}
+.why-card:hover .why-card-front{opacity:0;transform:translateY(-6px)}
+.why-card:hover .why-card-back{opacity:1;transform:none}
+.why-card-geo{width:44px;height:44px}
+.why-card-geo svg{width:100%;height:100%}
+.why-card h3{font-size:.92rem;font-weight:800;color:var(--navy)}
+.why-card:hover h3{color:var(--white)}
+.why-card-back p{font-size:.8rem;font-weight:500;color:rgba(255,252,247,.8);line-height:1.6}
+
+/* PLATFORMS */
+.platforms-bar{background:var(--goldbar);padding:.9rem 0}
+.platforms-bar-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.platforms-bar h2{font-size:clamp(1rem,1.8vw,1.3rem);color:var(--navy);white-space:nowrap;flex-shrink:0}
+.platforms-slogan{display:flex;align-items:baseline;font-size:clamp(.85rem,1.3vw,1rem);color:var(--gray)}
+.platforms-slogan .static{font-style:italic;font-weight:600}
+.cycle-wrap{display:inline-flex;font-style:italic;font-weight:700;overflow:hidden;height:1.4em;position:relative;vertical-align:baseline;margin:0 .25em}
+.cycle-track{display:flex;flex-direction:column;transition:transform .5s var(--ease)}
+.cycle-track span{display:block;height:1.4em;line-height:1.4em;white-space:nowrap}
+.c-default{color:var(--gray)}.c-local{color:var(--blue)}.c-tribal{color:var(--terra)}.c-global{color:var(--green)}
+
+/* PRODUCTS */
+.products{display:grid;grid-template-columns:1fr 1fr 1fr}
+.product-block{padding:clamp(2rem,4vw,3rem) clamp(1.5rem,3vw,2.2rem);color:var(--white);display:flex;flex-direction:column;min-height:300px;cursor:pointer;position:relative;transition:filter .35s var(--ease);overflow:hidden}
+.product-block>*{position:relative;z-index:2}
+.product-block:hover{filter:brightness(1.1)}
+.product-block::after{content:'\2192';position:absolute;top:clamp(1.5rem,3vw,2.2rem);right:clamp(1.5rem,3vw,2.2rem);font-size:1.2rem;font-weight:700;color:rgba(255,255,255,.15);transition:all .35s var(--ease);z-index:2}
+.product-block:hover::after{color:rgba(255,255,255,.55);transform:translateX(4px)}
+.product-block--local{background:var(--blue)}.product-block--tribal{background:var(--terra)}.product-block--global{background:var(--green)}
+.product-block h3{font-size:clamp(1.3rem,2.4vw,1.7rem);color:#fff;margin-bottom:.2rem}
+.product-url{font-style:italic;font-size:.78rem;font-weight:500;opacity:.5;margin-bottom:1rem}
+.product-desc{font-size:.86rem;font-weight:500;line-height:1.6;opacity:.8;flex-grow:1}
+.product-status{font-size:.66rem;font-weight:700;letter-spacing:.05em;opacity:.35;margin-top:1.5rem}
+
+/* CEDAR */
+.cedar{display:grid;grid-template-columns:30% 35% 35%}
+.cedar-panel{background:var(--navy);color:var(--white);padding:clamp(2.5rem,5vw,4rem) clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.cedar-panel>*{position:relative;z-index:2}
+.cedar-panel h2{color:var(--white);font-size:clamp(2rem,4vw,3.2rem);margin-bottom:.4rem}
+.cedar-subtitle{font-style:italic;font-weight:600;color:var(--gold);font-size:clamp(.85rem,1.3vw,1rem);line-height:1.4;margin-bottom:1.2rem}
+.cedar-motto{font-size:.84rem;font-weight:600;color:rgba(255,252,247,.35);line-height:1.5}
+.cedar-text{background:var(--cream);padding:clamp(2rem,4vw,3.5rem) clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;justify-content:center}
+.cedar-text p{font-size:.88rem;font-weight:500;color:var(--gray);line-height:1.78}
+.cedar-chat{background:var(--cream);padding:clamp(1.5rem,3vw,2rem) clamp(1rem,2vw,1.2rem);display:flex;align-items:center;justify-content:center}
+.chat-demo{width:100%;max-width:400px;border-radius:8px;overflow:hidden;background:var(--white);box-shadow:0 2px 24px rgba(45,45,63,.06)}
+.chat-header{background:var(--navy);padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem}
+.chat-dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.chat-title{font-size:.66rem;font-weight:700;color:rgba(255,252,247,.5);letter-spacing:.1em;text-transform:uppercase}
+.chat-body{padding:.8rem;height:350px;display:flex;flex-direction:column;gap:.4rem;overflow-y:auto;scroll-behavior:smooth}
+.chat-msg{max-width:88%;padding:.42rem .72rem;border-radius:10px;font-size:.72rem;font-weight:500;line-height:1.5;opacity:0;transform:translateY(6px);transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.chat-msg.show{opacity:1;transform:none}
+.chat-msg--cedar{background:var(--navy);color:var(--white);align-self:flex-start;border-bottom-left-radius:3px}
+.chat-msg--user{background:var(--cream);color:var(--navy);align-self:flex-end;border-bottom-right-radius:3px}
+.chat-msg--system{background:var(--cream);color:var(--graylt);align-self:center;font-size:.64rem;font-style:italic;text-align:center;border-radius:6px;max-width:95%}
+.chat-msg .sender{font-size:.52rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.4;margin-bottom:.06rem}
+.chat-table{margin:.3rem 0;font-family:'Nunito',monospace;font-size:.62rem;line-height:1.6;opacity:.85;border-left:2px solid var(--gold);padding-left:.5rem}
+.chat-typing{align-self:flex-start;display:flex;gap:4px;padding:.4rem .7rem}
+.chat-typing span{width:5px;height:5px;border-radius:50%;background:var(--graylt);animation:tblink .9s infinite}
+.chat-typing span:nth-child(2){animation-delay:.15s}
+.chat-typing span:nth-child(3){animation-delay:.3s}
+@keyframes tblink{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.chat-footer{font-size:.58rem;font-weight:600;color:var(--graylt);text-align:center;padding:.45rem;border-top:1px solid rgba(45,45,63,.04);font-style:italic}
+
+/* CTA */
+.cta{background:var(--green);color:var(--white);padding:clamp(3.5rem,7vw,5rem) 0;position:relative;overflow:hidden}
+.cta>*{position:relative;z-index:2}
+.cta-inner{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem);display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+.cta-left h2{color:var(--white);font-size:clamp(1.4rem,2.6vw,2rem);margin-bottom:.7rem}
+.cta-left p{color:rgba(255,252,247,.58);max-width:400px;margin-bottom:1.3rem;font-size:.92rem;font-weight:500;line-height:1.78}
+.cta-email{display:inline-block;font-size:.94rem;font-weight:700;color:var(--gold);position:relative;transition:color .25s}
+.cta-email::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:var(--gold);transition:width .4s var(--ease)}
+.cta-email:hover{color:#e0be6a}.cta-email:hover::after{width:100%}
+.cta-form{background:rgba(255,252,247,.06);border:1px solid rgba(255,252,247,.1);border-radius:6px;padding:1.5rem}
+.cta-form label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,252,247,.5);margin-bottom:.3rem}
+.cta-form input,.cta-form select,.cta-form textarea{width:100%;padding:.5rem .7rem;margin-bottom:.8rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:500;background:rgba(255,252,247,.08);border:1px solid rgba(255,252,247,.15);border-radius:3px;color:var(--white);outline:none;transition:border-color .25s}
+.cta-form input::placeholder,.cta-form textarea::placeholder{color:rgba(255,252,247,.3)}
+.cta-form input:focus,.cta-form select:focus,.cta-form textarea:focus{border-color:var(--gold)}
+.cta-form select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,252,247,.3)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .7rem center;padding-right:2rem}
+.cta-form select option{background:var(--navy);color:var(--white)}
+.cta-form textarea{resize:vertical;min-height:70px}
+.cta-form button{width:100%;padding:.6rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;background:var(--gold);color:#fff;border:none;border-radius:3px;cursor:pointer;transition:all .25s var(--ease)}
+.cta-form button:hover{background:#d4ad55;transform:translateY(-1px)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,252,247,.38);padding:2rem 0 1.3rem;position:relative;overflow:hidden}
+footer>*{position:relative;z-index:2}
+.footer-w{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem)}
+.footer-top{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:1.5rem}
+.footer-brand-name{font-size:.68rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--white);margin-bottom:.15rem}
+.footer-brand-tag{font-style:italic;font-size:.76rem;font-weight:600;color:rgba(255,252,247,.22)}
+.footer-links{display:flex;gap:1.4rem;flex-wrap:wrap}
+.footer-links a{font-size:.74rem;font-weight:600;transition:color .25s}
+.footer-links a:hover{color:var(--white)}
+.footer-bottom{margin-top:1.2rem;padding-top:.8rem;border-top:1px solid rgba(255,252,247,.04);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.footer-legal{font-size:.6rem;color:rgba(255,252,247,.15);max-width:680px;line-height:1.5}
+.footer-email{font-size:.68rem;color:rgba(255,252,247,.18);transition:color .25s}
+.footer-email:hover{color:var(--gold)}
+@media(max-width:960px){.hero{grid-template-columns:1fr;min-height:auto}.hero-text{padding:6rem 2.5rem 3rem}.hero-panel{clip-path:none;min-height:260px;padding:2rem}.hero-brand{font-size:2.5rem}.why-top{grid-template-columns:1fr}.why-cards{grid-template-columns:repeat(2,1fr)}.why-card{aspect-ratio:1/1}.products{grid-template-columns:1fr}.product-block{min-height:auto}.cedar{grid-template-columns:1fr}.cedar-chat{min-height:420px}.platforms-bar-inner{flex-direction:column;gap:.3rem;text-align:center}.cta-inner{grid-template-columns:1fr}}
+@media(max-width:600px){.hamburger{display:block}.hero-text{padding:5rem 1.8rem 2.5rem}.hero h1{font-size:1.6rem}.hero-brand{font-size:2.2rem;letter-spacing:.06em}.home-page .logo{opacity:1!important;pointer-events:auto!important}.why-inner{padding:0 1.8rem}.why-cards{grid-template-columns:1fr 1fr;gap:2px}.why-card{aspect-ratio:auto;min-height:140px;clip-path:none}.why-card-front{position:relative;padding:.8rem}.why-card-back{padding:.8rem}.why-card-geo{width:32px;height:32px}.why-card h3{font-size:.8rem}.why-card-back p{font-size:.72rem}.cedar-text{padding:2rem 1.8rem}.cedar-panel{padding:2.5rem 1.8rem}.cedar-chat{padding:1.5rem 1.8rem}.cta-inner{padding:0 1.8rem}.footer-w{padding:0 1.8rem}.footer-top{flex-direction:column}.footer-bottom{flex-direction:column;text-align:center}}
+@media(max-width:380px){.hero h1{font-size:1.4rem}.hero-actions{flex-direction:column}.btn{width:100%;text-align:center}}
+</style>
+</head>
+<body class="home-page">
+<nav id="nav"><div class="nav-w">
+  <a href="index.html" class="logo">Lumecon</a>
+  <div class="nav-links" id="navLinks"><a href="#products">Products</a><a href="#cedar">Cedar</a><a href="#contact">Partnerships</a><a href="mailto:elijah@lumecon.ai">Get in Touch</a></div>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+
+<section class="hero" id="top">
+  <div class="hero-text">
+    <div class="hero-brand" id="heroBrand">Lumecon</div>
+    <div class="hero-tagline">We luminate economies™</div>
+    <h1>Economic and policy analysis anyone can act on</h1>
+    <div class="hero-accent"></div>
+    <p class="hero-body"><strong>Lumecon™ is an economic and policy analysis platform, offering specialized products for local, tribal, and global economic impact.</strong></p>
+    <p class="hero-body">We deliver modern economic theory and novel modeling methods through affordable, web-based annual subscriptions so organizations of any size can access the caliber of analysis that once required expensive consultants. Built by social scientists, government professionals, and software engineers, Lumecon applies rigorous models to administrative and high-frequency data to make economies more visible and policy more actionable. <em>Patent pending.</em></p>
+    <div class="hero-actions"><a href="#products" class="btn">Our Products</a><a href="#cedar" class="btn">Cedar</a><a href="#contact" class="btn">Partner With Us</a></div>
+  </div>
+  <div class="hero-panel" id="heroPanel"><canvas id="topoCanvas"></canvas><div class="hero-panel-hint">Click to regenerate</div></div>
+</section>
+
+<section class="why paper-tex paper-tex-warm" id="why">
+  <div class="why-inner">
+    <div class="why-top">
+      <h2 class="r">Economic impact and policy analysis is a strategic tool that pays for itself</h2>
+      <div class="why-top-right">
+        <p class="r d1">Economic impact analysis measures how an organization's spending, hiring, and operations ripple through a regional economy — and how policy decisions shape who benefits. It turns budgets, programs, and policy alternatives into a clear map of consequences.</p>
+        <div class="why-diff r d2">Traditional tools rely on modeled estimates and outdated national averages that are only updated every few years. Lumecon applies rigorous methods to actual administrative and high-frequency data — so your results reflect your economy, not a generic assumption.</div>
+      </div>
+    </div>
+    <div class="why-cards r d2">
+      <div class="why-card">
+        <div class="why-card-front">
+          <div class="why-card-geo"><svg viewBox="0 0 44 44" fill="none"><path d="M12 34L22 10L32 34" stroke="#C49A3C" stroke-width="1.3" fill="none"/><path d="M8 38L22 14L36 38" stroke="#2D6A4F" stroke-width=".8" opacity=".35" fill="none"/><line x1="16" y1="26" x2="28" y2="26" stroke="#B85C38" stroke-width="1.2"/><line x1="14" y1="30" x2="30" y2="30" stroke="#B85C38" stroke-width=".8" opacity=".5"/><circle cx="22" cy="10" r="3" stroke="#C49A3C" stroke-width="1.2" fill="none"/><circle cx="22" cy="10" r="1.2" fill="#C49A3C"/></svg></div>
+          <h3>Secure funding</h3>
+        </div>
+        <div class="why-card-back"><p>Show funders, councils, and legislators exactly what your organization contributes. Impact numbers turn budget conversations into investment conversations.</p></div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-front">
+          <div class="why-card-geo"><svg viewBox="0 0 44 44" fill="none"><rect x="5" y="5" width="34" height="34" stroke="#C49A3C" stroke-width="1" rx="1"/><path d="M5 22h34" stroke="#2D6A4F" stroke-width=".7" opacity=".4"/><path d="M22 5v34" stroke="#2D6A4F" stroke-width=".7" opacity=".4"/><path d="M10 34L17 22 24 28 36 12" stroke="#B85C38" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 10L17 28 24 20 36 34" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/></svg></div>
+          <h3>Compare scenarios</h3>
+        </div>
+        <div class="why-card-back"><p>What happens if you cut a program? Change a policy? Add 20 positions? Test the economic consequences of strategic and policy decisions before you make them.</p></div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-front">
+          <div class="why-card-geo"><svg viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="4" fill="#C49A3C" opacity=".5"/><circle cx="22" cy="22" r="4" stroke="#C49A3C" stroke-width="1.2"/><circle cx="22" cy="22" r="10" stroke="#2D6A4F" stroke-width="1" opacity=".6"/><circle cx="22" cy="22" r="17" stroke="#B85C38" stroke-width=".8" opacity=".35"/><line x1="22" y1="5" x2="22" y2="12" stroke="#2D6A4F" stroke-width="1" stroke-linecap="round"/><line x1="22" y1="32" x2="22" y2="39" stroke="#2D6A4F" stroke-width="1" stroke-linecap="round"/><line x1="5" y1="22" x2="12" y2="22" stroke="#2D6A4F" stroke-width="1" stroke-linecap="round"/><line x1="32" y1="22" x2="39" y2="22" stroke="#2D6A4F" stroke-width="1" stroke-linecap="round"/><line x1="10" y1="10" x2="14.5" y2="14.5" stroke="#B85C38" stroke-width=".8" stroke-linecap="round"/><line x1="29.5" y1="29.5" x2="34" y2="34" stroke="#B85C38" stroke-width=".8" stroke-linecap="round"/></svg></div>
+          <h3>Justify expansion</h3>
+        </div>
+        <div class="why-card-back"><p>Before you hire, build, or launch a new program, model what that growth means for the surrounding economy. Make the case before you commit the capital.</p></div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-front">
+          <div class="why-card-geo"><svg viewBox="0 0 44 44" fill="none"><rect x="10" y="14" width="20" height="24" rx="1.5" stroke="#2D6A4F" stroke-width=".8" opacity=".3"/><rect x="8" y="10" width="20" height="24" rx="1.5" stroke="#B85C38" stroke-width=".8" opacity=".5"/><rect x="6" y="6" width="20" height="24" rx="1.5" stroke="#C49A3C" stroke-width="1.2" fill="var(--white)" fill-opacity=".4"/><line x1="10" y1="13" x2="22" y2="13" stroke="#2D6A4F" stroke-width="1" stroke-linecap="round"/><line x1="10" y1="17" x2="19" y2="17" stroke="#2D6A4F" stroke-width=".8" stroke-linecap="round" opacity=".5"/><line x1="10" y1="21" x2="21" y2="21" stroke="#B85C38" stroke-width=".8" stroke-linecap="round" opacity=".4"/></svg></div>
+          <h3>Tell your story</h3>
+        </div>
+        <div class="why-card-back"><p>Annual reports, press releases, community presentations. Impact data makes the case in language stakeholders understand — people supported, dollars circulated.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="products">
+  <div class="platforms-bar paper-tex paper-tex-warm"><div class="platforms-bar-inner">
+    <h2>Lumecon Products</h2>
+    <div class="platforms-slogan"><span class="static">Making&nbsp;</span><div class="cycle-wrap" id="cycleWrap"><div class="cycle-track" id="cycleTrack"><span class="c-default">economies</span><span class="c-local">local economies</span><span class="c-tribal">tribal economies</span><span class="c-global">global economies</span></div></div><span class="static">&nbsp;visible™</span></div>
+  </div></div>
+  <div class="products">
+    <a href="https://localeconomicimpact.com" class="product-block product-block--local paper-tex sl"><div><h3>Local Economic Impact</h3><div class="product-url">localeconomicimpact.com</div><div class="product-desc">Rigorous economic and policy analysis for US municipal governments, nonprofits, and economic development organizations without the cost or complexity of traditional tools.</div></div><div class="product-status">In active development</div></a>
+    <a href="https://tribaleconomicimpact.com" class="product-block product-block--tribal paper-tex r d1"><div><h3>Tribal Economic Impact</h3><div class="product-url">tribaleconomicimpact.com</div><div class="product-desc">Built for economies that don't fit standard assumptions. Economic and policy analysis designed for US tribal governments, enterprises, and reservation economies.</div></div><div class="product-status">Patent pending · In active development</div></a>
+    <a href="https://globaleconomicimpact.com" class="product-block product-block--global paper-tex sr"><div><h3>Global Economic Impact</h3><div class="product-url">globaleconomicimpact.com</div><div class="product-desc">The same core modeling framework, applied globally—supporting cross-border and multiregional analysis for multinationals, NGOs, and governments.</div></div><div class="product-status">Future development</div></a>
+  </div>
+</section>
+
+<section class="cedar" id="cedar">
+  <div class="cedar-panel paper-tex paper-tex-dark">
+    <div style="font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem" class="r">THE EXPERIENCE</div>
+    <h2 class="r d1">Cedar</h2>
+    <div class="cedar-subtitle r d2">Your AI thought partner for economic and policy analysis.</div>
+    <div class="cedar-motto r d3">We won't think for you.<br>We think with you.</div>
+  </div>
+  <div class="cedar-text"><p class="r">Cedar™ is Lumecon's AI-powered assistant for economic and policy analysis. It works with messy, real-world data, clearly telling you what it needs and why, and walks you through each step so you can understand economic impact, test assumptions, and make informed strategic decisions. No consultant or overpriced software. Just you, your data, and a thought partner designed to support rigorous analysis without fabricating results. Cedar operates in secure, isolated environments, working only with the data you provide and preserving context across analyses.</p></div>
+  <div class="cedar-chat"><div class="chat-demo sd" id="chatDemo"><div class="chat-header"><div class="chat-dot"></div><div class="chat-title">Cedar</div></div><div class="chat-body" id="chatBody"></div><div class="chat-footer">Demo reflects current training and testing as of February 2026</div></div></div>
+</section>
+
+<section class="cta paper-tex" id="contact">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div style="font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem" class="r">PARTNERSHIPS</div>
+      <h2 class="r d1">Build with us</h2>
+      <p class="r d2">Lumecon is in active development. If you're interested in learning more, investing, piloting, or helping build the future of economic and policy analysis we'd like to hear from you.</p>
+      <a href="mailto:elijah@lumecon.ai" class="cta-email r d3">elijah@lumecon.ai</a>
+    </div>
+    <div class="cta-form r d2">
+      <label for="fname">Name</label><input type="text" id="fname" name="name" placeholder="Your name">
+      <label for="femail">Email</label><input type="email" id="femail" name="email" placeholder="you@organization.com">
+      <label for="fint">I'm interested in</label>
+      <select id="fint" name="interest"><option value="" disabled selected>Select one</option><option value="pilot">Piloting a Lumecon product</option><option value="invest">Investing</option><option value="partner">Strategic partnership</option><option value="advise">Advisory or board role</option><option value="learn">Just learning more</option></select>
+      <label for="fmsg">Message</label><textarea id="fmsg" name="message" placeholder="Tell us a bit about yourself and what brought you here."></textarea>
+      <button type="button" id="formSend">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<footer class="paper-tex paper-tex-dark"><div class="footer-w">
+  <div class="footer-top">
+    <div><div class="footer-brand-name">LUMECON</div><div class="footer-brand-tag">We luminate economies</div></div>
+    <div class="footer-links"><a href="#products">Products</a><a href="#cedar">Cedar</a><a href="#contact">Partnerships</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">© 2026 Moreno Ventures LLC d/b/a Lumecon. All rights reserved. Patent pending. Built at Cornell University. Counsel: Cornell Law Entrepreneurship Law Clinic.</div>
+    <a href="mailto:elijah@lumecon.ai" class="footer-email">elijah@lumecon.ai</a>
+  </div>
+</div></footer>
+
+<script>
+(function(){var c=document.getElementById('topoCanvas');if(!c)return;var x=c.getContext('2d'),dp=window.devicePixelRatio||1,W,H,t=0,R=[],B=[],D=[],rp=[];function rs(){var r=c.parentElement.getBoundingClientRect();W=r.width;H=r.height;c.width=W*dp;c.height=H*dp;c.style.width=W+'px';c.style.height=H+'px';x.setTransform(dp,0,0,dp,0,0);bM()}function pS(s){var p=-20;switch(s){case 0:return{x:Math.random()*W,y:p};case 1:return{x:W-p,y:Math.random()*H};case 2:return{x:Math.random()*W,y:H-p};case 3:return{x:p,y:Math.random()*H}}}function cR(ax,ay,bx,by,w,sg){var p=[];sg=sg||(6+~~(Math.random()*4));var dx=bx-ax,dy=by-ay,l=Math.sqrt(dx*dx+dy*dy)||1,nx=-dy/l,ny=dx/l,dr=0;for(var i=0;i<=sg;i++){var tt=i/sg,xx=ax+dx*tt,yy=ay+dy*tt;if(i>0&&i<sg){dr+=(Math.random()-.5)*w*.35;dr*=.8;var o=dr+Math.sin(tt*Math.PI*.8)*w*.25;xx+=nx*o;yy+=ny*o}p.push({x:xx,y:yy})}return p}function dS(p){if(p.length<2)return;x.beginPath();x.moveTo(p[0].x,p[0].y);if(p.length===2){x.lineTo(p[1].x,p[1].y);x.stroke();return}for(var i=1;i<p.length-1;i++){var xc=(p[i].x+p[i+1].x)/2,yc=(p[i].y+p[i+1].y)/2;x.quadraticCurveTo(p[i].x,p[i].y,xc,yc)}x.lineTo(p[p.length-1].x,p[p.length-1].y);x.stroke()}function sP(p,tt){if(p.length<2)return p[0];var tl=0,sl=[];for(var i=1;i<p.length;i++){var dx=p[i].x-p[i-1].x,dy=p[i].y-p[i-1].y;sl.push(Math.sqrt(dx*dx+dy*dy));tl+=sl[sl.length-1]}var tg=tt*tl,ac=0;for(var i=0;i<sl.length;i++){if(ac+sl[i]>=tg){var lt=(tg-ac)/sl[i];return{x:p[i].x+(p[i+1].x-p[i].x)*lt,y:p[i].y+(p[i+1].y-p[i].y)*lt}}ac+=sl[i]}return p[p.length-1]}function sA(p,tt){var a=sP(p,Math.max(0,tt-.02)),b=sP(p,Math.min(1,tt+.02));return Math.atan2(b.y-a.y,b.x-a.x)}function nR(xx,yy,m){var b=null,bd=m*m;for(var i=0;i<R.length;i++){var p=R[i].pts;for(var j=0;j<p.length;j++){var dx=p[j].x-xx,dy=p[j].y-yy,d=dx*dx+dy*dy;if(d<bd){bd=d;b=p[j]}}}return b}
+function bM(){R=[];B=[];D=[];rp=[];for(var i=0;i<12+~~(Math.random()*5);i++){var s1=~~(Math.random()*4),s2=(s1+1+~~(Math.random()*2))%4,a=pS(s1),b=pS(s2);R.push({pts:cR(a.x,a.y,b.x,b.y,70+Math.random()*110),w:1.8+Math.random()*1.6,o:.13+Math.random()*.06,la:1})}var mc=R.length;for(var i=0;i<30+~~(Math.random()*15);i++){var mr=R[~~(Math.random()*mc)],tt=.05+Math.random()*.9,p=sP(mr.pts,tt),ag=sA(mr.pts,tt)+(.3+Math.random()*1.1)*(Math.random()<.5?1:-1),bl=50+Math.random()*150,ex=p.x+Math.cos(ag)*bl,ey=p.y+Math.sin(ag)*bl,sn=nR(ex,ey,60);if(sn){ex=sn.x;ey=sn.y}R.push({pts:cR(p.x,p.y,ex,ey,20+Math.random()*45,4+~~(Math.random()*3)),w:.7+Math.random()*.8,o:.055+Math.random()*.04,la:2})}var l2=R.length;for(var i=0;i<60+~~(Math.random()*30);i++){var sr=R[~~(Math.random()*l2)],tt=Math.random(),p=sP(sr.pts,tt),ag=sA(sr.pts,tt)+(.3+Math.random()*1.2)*(Math.random()<.5?1:-1),ln=18+Math.random()*70,ex=p.x+Math.cos(ag)*ln,ey=p.y+Math.sin(ag)*ln,sn=nR(ex,ey,35);if(sn){ex=sn.x;ey=sn.y}R.push({pts:cR(p.x,p.y,ex,ey,8+Math.random()*20,3+~~(Math.random()*2)),w:.3+Math.random()*.4,o:.03+Math.random()*.03,la:3})}var l3=R.length;for(var i=0;i<110+~~(Math.random()*60);i++){var sr=R[~~(Math.random()*l3)],tt=Math.random(),p=sP(sr.pts,tt),ag=Math.random()*Math.PI*2,ln=5+Math.random()*25,ex=p.x+Math.cos(ag)*ln,ey=p.y+Math.sin(ag)*ln,sn=nR(ex,ey,20);if(sn){ex=sn.x;ey=sn.y}var md={x:(p.x+ex)/2+(Math.random()-.5)*4,y:(p.y+ey)/2+(Math.random()-.5)*4};R.push({pts:[{x:p.x,y:p.y},md,{x:ex,y:ey}],w:.2+Math.random()*.2,o:.02+Math.random()*.018,la:4})}for(var i=0;i<180+~~(Math.random()*100);i++){var sr=R[~~(Math.random()*R.length)],tt=Math.random(),p=sP(sr.pts,tt),ag=Math.random()*Math.PI*2,ln=3+Math.random()*14,ex=p.x+Math.cos(ag)*ln,ey=p.y+Math.sin(ag)*ln,sn=nR(ex,ey,12);if(sn){ex=sn.x;ey=sn.y}R.push({pts:[{x:p.x,y:p.y},{x:ex,y:ey}],w:.1+Math.random()*.12,o:.012+Math.random()*.012,la:5})}var cX=6,cY=5,cW=W/cX,cH=H/cY;for(var gy=0;gy<cY;gy++)for(var gx=0;gx<cX;gx++){var nc=1+~~(Math.random()*2.5);for(var cc=0;cc<nc;cc++){var cx=gx*cW+Math.random()*cW,cy=gy*cH+Math.random()*cH,rr=nR(cx,cy,80);if(rr){cx=rr.x+(Math.random()-.5)*25;cy=rr.y+(Math.random()-.5)*25}var ca=Math.random()*Math.PI,nb=4+~~(Math.random()*12),ux=cx,uy=cy;for(var bb=0;bb<nb;bb++){var bw=3+Math.random()*16,bh=2+Math.random()*11,ba=ca+(Math.random()-.5)*.4,cs=Math.cos(ba),sn2=Math.sin(ba),j=function(){return(Math.random()-.5)*1.2},sh=Math.random(),pts;if(sh<.22){pts=[{x:ux+j(),y:uy+j()},{x:ux+cs*bw+j(),y:uy+sn2*bw+j()},{x:ux+cs*bw-sn2*bh+j(),y:uy+sn2*bw+cs*bh+j()},{x:ux-sn2*bh+j(),y:uy+cs*bh+j()}]}else{pts=[{x:ux+j(),y:uy+j()},{x:ux+cs*bw+j(),y:uy+sn2*bw+j()},{x:ux+cs*bw-sn2*bh+j(),y:uy+sn2*bw+cs*bh+j()},{x:ux-sn2*bh+j(),y:uy+cs*bh+j()}]}var bx2=ux+cs*bw*.5-sn2*bh*.5,by2=uy+sn2*bw*.5+cs*bh*.5;B.push({pts:pts,cx:bx2,cy:by2});var r2=Math.random();if(r2<.4){ux+=cs*(bw+1)+(Math.random()-.5)*2;uy+=sn2*(bw+1)+(Math.random()-.5)*2}else if(r2<.7){ux+=-sn2*(bh+1)+(Math.random()-.5)*2;uy+=cs*(bh+1)+(Math.random()-.5)*2}else{ux+=cs*bw*.5-sn2*(bh+1)+(Math.random()-.5)*3;uy+=sn2*bw*.5+cs*(bh+1)+(Math.random()-.5)*3}}}}for(var i=0;i<B.length;i++){var bl=B[i],dn=Math.random(),n;if(dn>.87)n=12+~~(Math.random()*20);else if(dn>.5)n=3+~~(Math.random()*7);else if(dn>.2)n=1+~~(Math.random()*2);else n=0;for(var d=0;d<n;d++){var sp=dn>.87?1.5+Math.random()*3:1+Math.random()*5;D.push({x:bl.cx+(Math.random()-.5)*sp*2,y:bl.cy+(Math.random()-.5)*sp*2,sz:.3+Math.random()*1.1,ph:Math.random()*Math.PI*2,bs:.3+Math.random()*2.5,sh:.8+Math.random()*2,it:.4+Math.random()*.6,lp:Math.random()*Math.PI*2,ls:.03+Math.random()*.12,cr:dn>.87&&Math.random()<.1})}}for(var i=0;i<25;i++)D.push({x:Math.random()*W,y:Math.random()*H,sz:.2+Math.random()*.5,ph:Math.random()*Math.PI*2,bs:.2+Math.random(),sh:1,it:.1+Math.random()*.2,lp:Math.random()*Math.PI*2,ls:.02+Math.random()*.06,cr:false})}
+function spRp(xx,yy){rp.push({x:xx,y:yy,r:0,mr:10+Math.random()*22,sp:14+Math.random()*22,op:.2+Math.random()*.2})}
+function dr(){t+=.016;x.clearRect(0,0,W,H);for(var i=0;i<B.length;i++){var bl=B[i].pts;x.beginPath();x.moveTo(bl[0].x,bl[0].y);for(var j=1;j<bl.length;j++)x.lineTo(bl[j].x,bl[j].y);x.closePath();x.fillStyle='rgba(255,252,247,0.022)';x.fill();x.strokeStyle='rgba(255,252,247,0.042)';x.lineWidth=.3;x.stroke()}x.lineCap='round';x.lineJoin='round';for(var la=5;la>=1;la--)for(var i=0;i<R.length;i++){var r=R[i];if(r.la!==la)continue;x.lineWidth=r.w;x.strokeStyle='rgba(255,252,247,'+r.o+')';dS(r.pts)}for(var i=rp.length-1;i>=0;i--){var r=rp[i];r.r+=r.sp*.016;var lf=r.r/r.mr;if(lf>1){rp.splice(i,1);continue}x.beginPath();x.arc(r.x,r.y,r.r,0,Math.PI*2);x.strokeStyle='rgba(196,154,60,'+(r.op*(1-lf)*(1-lf))+')';x.lineWidth=.8*(1-lf*.5);x.stroke()}for(var i=0;i<D.length;i++){var d=D[i],lf=Math.sin(t*d.ls+d.lp);if(lf<0)continue;var raw=(Math.sin(t*d.bs+d.ph)+1)*.5,bk=Math.pow(raw,d.sh),br=d.it*bk*lf;if(br<.01)continue;var sz=d.sz*(.7+bk*.3);if(d.cr&&bk>.9&&Math.random()<.003)spRp(d.x,d.y);if(br>.3&&sz>.6){var gr=sz*5,gd=x.createRadialGradient(d.x,d.y,0,d.x,d.y,gr);gd.addColorStop(0,'rgba(196,154,60,'+(br*.12)+')');gd.addColorStop(1,'rgba(196,154,60,0)');x.beginPath();x.arc(d.x,d.y,gr,0,Math.PI*2);x.fillStyle=gd;x.fill()}x.beginPath();x.arc(d.x,d.y,sz,0,Math.PI*2);x.fillStyle='rgba(196,154,60,'+br+')';x.fill();if(br>.5){x.beginPath();x.arc(d.x,d.y,sz*.3,0,Math.PI*2);x.fillStyle='rgba(255,245,220,'+(br*.5)+')';x.fill()}}requestAnimationFrame(dr)}
+window.addEventListener('resize',rs);rs();dr();document.getElementById('heroPanel').addEventListener('click',function(){bM()})})();
+</script>
+
+<script>
+var nav=document.getElementById('nav');window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>40)},{passive:true});
+var hb=document.getElementById('hamburger'),nl=document.getElementById('navLinks');hb.addEventListener('click',function(){nl.classList.toggle('open');hb.classList.toggle('on')});nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nl.classList.remove('open');hb.classList.remove('on')})});
+var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('seen');obs.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});document.querySelectorAll('.r,.sl,.sr,.sd').forEach(function(el){obs.observe(el)});
+
+// PULSE LETTERS
+(function(){var b=document.getElementById('heroBrand');if(!b)return;var t=b.textContent.trim();b.textContent='';var L=[];for(var i=0;i<t.length;i++){var s=document.createElement('span');s.className='fl';s.textContent=t[i];s.style.setProperty('--d',(.05+i*.065)+'s');b.appendChild(s);L.push(s)}setTimeout(function(){L.forEach(function(s,i){s.style.setProperty('--pd',(i*.35)+'s');s.classList.add('go')})},(.05+t.length*.065+.55)*1000)})();
+
+// FORM
+document.getElementById('formSend').addEventListener('click',function(){var n=document.getElementById('fname').value,e=document.getElementById('femail').value,i=document.getElementById('fint').value,m=document.getElementById('fmsg').value;window.location.href='mailto:elijah@lumecon.ai?subject='+encodeURIComponent('Lumecon Inquiry'+(i?' \u2014 '+i:''))+'&body='+encodeURIComponent('Name: '+n+'\nEmail: '+e+'\nInterest: '+i+'\n\n'+m)});
+
+// CYCLE — proper width measurement and animation
+(function(){
+  var wrap=document.getElementById('cycleWrap'),track=document.getElementById('cycleTrack');
+  if(!wrap||!track)return;
+  var spans=track.querySelectorAll('span');if(!spans.length)return;
+  // Measure each span
+  var widths=[];
+  var ruler=document.createElement('span');
+  ruler.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font:'+getComputedStyle(spans[0]).font;
+  document.body.appendChild(ruler);
+  spans.forEach(function(s){ruler.textContent=s.textContent;widths.push(ruler.offsetWidth+20)});
+  document.body.removeChild(ruler);
+  wrap.style.width=widths[0]+'px';
+  var idx=0,total=spans.length;
+  setInterval(function(){
+    idx=(idx+1)%total;
+    track.style.transform='translateY(-'+(idx*1.4)+'em)';
+    wrap.style.width=widths[idx]+'px';
+  },2000);
+})();
+
+// CEDAR CHAT
+var conversations=[
+[{from:'system',text:'\u{1F4C4} AuditedFinancials_FY2025.pdf uploaded\n\u{1F4C4} Payroll_Summary_Q4.xlsx uploaded'},{from:'cedar',text:"Reading your files now. I found $9.7M total operating revenue (income statement, p. 12) and $6.4M payroll (Q4 spreadsheet). 218 FTE. Can you confirm?"},{from:'user',text:"Revenue is right but payroll should be $6.8M \u2014 the file doesn\u2019t include benefits."},{from:'cedar',text:"Updated. Here are your results:\n\nDirect: 218 jobs, $6.8M labor income \u2014 your organization\u2019s footprint.\nIndirect: 74 jobs, $2.9M \u2014 your suppliers and vendors.\nInduced: 51 jobs, $1.8M \u2014 household spending rippling through the economy.\n\nTotal: 343 jobs and $11.5M in labor income supported across the region."}],
+[{from:'user',text:"We\u2019ve uploaded our financials from 2019 through 2025. Can Cedar compare impact over time?"},{from:'cedar',text:"Absolutely. I\u2019ve run each year through the model with inflation-adjusted dollars (2025 base):"},{from:'cedar',html:'<div class="chat-table">2019 \u2014 $8.1M \u00b7 247 jobs<br>2020 \u2014 $6.3M \u00b7 198 jobs<br>2021 \u2014 $7.9M \u00b7 231 jobs<br>2022 \u2014 $9.4M \u00b7 274 jobs<br>2023 \u2014 $10.1M \u00b7 289 jobs<br>2024 \u2014 $10.8M \u00b7 312 jobs<br>2025 \u2014 $11.5M \u00b7 343 jobs</div>'},{from:'cedar',text:"Over seven years, your organization has supported over $64M in cumulative regional economic activity."},{from:'user',text:"Nobody\u2019s ever shown us this before."},{from:'cedar',text:"Most studies are one-time snapshots. Lumecon stores your models so you can track impact over time \u2014 the trajectory, not just a single number."}],
+[{from:'system',text:'\u{1F4C4} PayrollSummary.pdf uploaded\n\u{1F4C4} AnnualReport_2024.pdf uploaded\n\u{1F4F7} Revenue_Printout.jpg uploaded'},{from:'cedar',text:"Two files are readable. The third is a photo \u2014 I can\u2019t auto-extract from it. I need two numbers: total gross revenue and FTE count."},{from:'user',text:"$4.6M revenue, 38 FTEs. Is this secure? It\u2019s sensitive financial data."},{from:'cedar',text:"Your data is processed in a secure environment. No inputted data is shared across users, and your account maintains its own context so you can continue your analysis across sessions. Ready to confirm the values I extracted from your other files?"}],
+[{from:'cedar',text:"Welcome back. What would you like to work on?"},{from:'cedar',text:"Options:\n1) Review your results\n2) Work on your report\n3) Explore your assumptions"},{from:'user',text:"Report. I need help with the executive summary."},{from:'cedar',text:"The strongest summaries lead with community impact \u2014 who benefits and how \u2014 then back it up with numbers. Write a draft sentence and I\u2019ll give you feedback."},{from:'user',text:"Our operations supported over 340 jobs and $11M in economic activity in 2025."},{from:'cedar',text:"Good start. I\u2019d lead with the people: \"In 2025, our operations sustained livelihoods for over 340 families across the region.\" Then follow with the $11M. Funders and councils respond to people first, numbers second. Want to keep refining?"}],
+[{from:'user',text:"We\u2019re presenting to tribal council next week to request continued funding. Can you help me frame the results?"},{from:'cedar',text:"Lumecon is the only economic impact tool that models the unique structures of tribal governments, enterprises, and reservation economies \u2014 so these numbers actually reflect how your nation\u2019s economy works, not a generic US county model. For a council audience, I\u2019d frame it around three things:"},{from:'cedar',text:"1) Sovereignty \u2014 your enterprise keeps $6.8M circulating within the nation rather than leaving.\n2) Livelihoods \u2014 343 families depend on the economic activity your operations generate.\n3) Leverage \u2014 every $1 the nation invests generates $1.69 in total regional impact."},{from:'user',text:"That leverage number is powerful. Where does it come from?"},{from:'cedar',text:"It\u2019s your fiscal multiplier \u2014 total impact ($11.5M) divided by direct labor income ($6.8M). Your spending doesn\u2019t stop at payroll. It ripples through suppliers, households, and local businesses."}],
+[{from:'user',text:"We\u2019re thinking about expanding \u2014 adding a new facility and about 20 FTE. Can Cedar model that?"},{from:'cedar',text:"I can run a scenario analysis. I\u2019ll need:\n\n\u2022 Estimated annual payroll for the 20 new positions\n\u2022 Estimated construction or capital expenditure\n\u2022 Any new supplier contracts"},{from:'user',text:"About $1.4M in new payroll, $3.2M construction over two years, and maybe $400K in new vendor contracts annually."},{from:'cedar',html:'<div class="chat-table">Current baseline \u2014 343 jobs \u00b7 $11.5M<br>+ Expansion (steady state) \u2014 +38 jobs \u00b7 +$2.1M<br>+ Construction phase \u2014 +27 temp jobs \u00b7 +$1.6M/yr<br><br>Projected total \u2014 381 jobs \u00b7 $13.6M</div>'},{from:'cedar',text:"The 20 direct hires generate 18 additional indirect and induced jobs. During the two-year build, you\u2019d temporarily support another 27. That\u2019s the kind of number that justifies the capital ask."}],
+[{from:'user',text:"I\u2019m writing the economic impact section of our annual report. Here\u2019s my draft: \u201CIn 2025, our organization supported 343 jobs and $11.5M in economic activity across the region.\u201D"},{from:'cedar',text:"Solid foundation. Two things worth considering:\n\nFirst, leading with people tends to land better with mixed audiences \u2014 \"sustained livelihoods for over 340 families\" hits differently than a jobs number.\n\nSecond, your year-over-year growth is significant \u2014 39% since 2019, through a pandemic. That trajectory can strengthen the narrative. Would you like to include it?"},{from:'user',text:"Yeah, I think the growth angle is strong. Should I?"},{from:'cedar',text:"I\u2019d recommend it. Something like: \"reflecting sustained growth even through the disruptions of 2020\" gives readers the recovery arc without belaboring it. Write a next draft with those and I\u2019ll refine."}],
+[{from:'user',text:"The board is considering cutting our community outreach program to save $800K. Can we model what that would cost the region?"},{from:'cedar',text:"I have your current analysis on file. Based on that data, I can model the outreach program as a standalone component. Running two scenarios side by side:"},{from:'cedar',html:'<div class="chat-table">Keep program \u2014 12 direct jobs \u00b7 $800K payroll<br>\u2003Total impact \u2014 19 jobs \u00b7 $1.3M<br><br>Cut program \u2014 \u221212 direct jobs \u00b7 \u2212$800K payroll<br>\u2003Total loss \u2014 \u221219 jobs \u00b7 \u2212$1.3M</div>'},{from:'user',text:"So we\u2019d save $800K but lose $1.3M in regional impact?"},{from:'cedar',text:"Exactly. The $800K in direct savings costs the region $1.3M in total economic activity and eliminates 19 jobs \u2014 not just the 12 on your payroll, but 7 more through supplier and household spending. Whether to cut is your board\u2019s call, but now they can see the tradeoff clearly."}]
+];
+var chatBody=document.getElementById('chatBody'),chatDemo=document.getElementById('chatDemo');var convIdx=0,chatRunning=false;
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function showTyping(from){var t=document.createElement('div');t.className='chat-typing';t.style.alignSelf=from==='user'?'flex-end':'flex-start';t.innerHTML='<span></span><span></span><span></span>';chatBody.appendChild(t);chatBody.scrollTop=chatBody.scrollHeight;return t}
+async function playConversation(){chatBody.innerHTML='';var conv=conversations[convIdx];for(var i=0;i<conv.length;i++){var m=conv[i];if(m.from==='system'){var el=document.createElement('div');el.className='chat-msg chat-msg--system';el.style.whiteSpace='pre-line';el.textContent=m.text;chatBody.appendChild(el);requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('show')})});chatBody.scrollTop=chatBody.scrollHeight;await sleep(800);continue}var typing=showTyping(m.from);await sleep(m.from==='cedar'?1800:1100);typing.remove();var el=document.createElement('div');el.className='chat-msg chat-msg--'+m.from;var label=m.from==='cedar'?'Cedar':'You';var content='<div class="sender">'+label+'</div>';if(m.html){content+=m.html}else{content+=m.text.replace(/\n/g,'<br>')}el.innerHTML=content;chatBody.appendChild(el);requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('show')})});chatBody.scrollTop=chatBody.scrollHeight;await sleep(1100)}await sleep(9000);convIdx=(convIdx+1)%conversations.length;playConversation()}
+var chatObs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!chatRunning){chatRunning=true;setTimeout(playConversation,600);chatObs.unobserve(e.target)}})},{threshold:.2});chatObs.observe(chatDemo);
+</script>
+</body>
+</html>
