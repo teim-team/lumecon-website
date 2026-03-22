@@ -62,10 +62,14 @@
 }
 .why-card-front { gap: .7rem; }
 .why-card-back { opacity: 0; transform: translateY(6px); }
-.why-card:hover { background: var(--navy); }
-.why-card:hover .why-card-front { opacity: 0; transform: translateY(-6px); }
-.why-card:hover .why-card-back { opacity: 1; transform: none; }
-/* Mobile touch-to-flip */
+/* Hover flip only on devices with a real pointer (not touch) */
+@media (hover: hover) and (pointer: fine) {
+  .why-card:hover { background: var(--navy); }
+  .why-card:hover .why-card-front { opacity: 0; transform: translateY(-6px); }
+  .why-card:hover .why-card-back { opacity: 1; transform: none; }
+  .why-card:hover h3 { color: var(--white); }
+}
+/* Touch tap-to-flip via JS .flipped class */
 .why-card.flipped { background: var(--navy); }
 .why-card.flipped .why-card-front { opacity: 0; transform: translateY(-6px); }
 .why-card.flipped .why-card-back { opacity: 1; transform: none; }
@@ -76,7 +80,7 @@
   font-weight: 800;
   color: var(--navy);
 }
-.why-card:hover h3, .why-card.flipped h3 { color: var(--white); }
+.why-card.flipped h3 { color: var(--white); }
 .why-card-back p {
   font-size: .8rem;
   font-weight: 500;

@@ -4,7 +4,7 @@ interface Props {
   isHome?: boolean;
 }
 const { isHome = false } = Astro.props;
-const prefix = isHome ? '' : 'index.html';
+const prefix = isHome ? '' : '/';
 ---
 <footer class={isHome ? 'paper-tex paper-tex-dark' : ''}>
   <div class="footer-w">
@@ -17,8 +17,8 @@ const prefix = isHome ? '' : 'index.html';
         <a href={`${prefix}#products`}>Products</a>
         <a href={`${prefix}#cedar`}>Cedar</a>
         <a href={`${prefix}#contact`}>Partnerships</a>
-        <a href="terms.html">Terms</a>
-        <a href="privacy.html">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
       </div>
     </div>
     <div class="footer-bottom">
