@@ -37,5 +37,7 @@ body.legal-page p {
   font-weight: 500;
 }
 .note strong { color: var(--navy); }
+.note-link { color: var(--gold); font-weight: 700; transition: opacity .25s; }
+.note-link:hover { opacity: .7; }
 
 body.legal-page footer { margin-top: auto; }

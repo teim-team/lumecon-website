@@ -1,6 +1,6 @@
 footer {
   background: var(--navy);
-  color: rgba(255, 252, 247, .38);
+  color: rgba(255, 252, 247, .55);
   padding: 2rem 0 1.3rem;
   position: relative;
   overflow: hidden;
@@ -8,9 +8,9 @@ footer {
 footer > * { position: relative; z-index: 2; }
 
 .footer-w {
-  max-width: 1100px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  padding: 0 var(--container-pad);
 }
 .footer-top {
   display: flex;
@@ -31,7 +31,7 @@ footer > * { position: relative; z-index: 2; }
   font-style: italic;
   font-size: .76rem;
   font-weight: 600;
-  color: rgba(255, 252, 247, .22);
+  color: rgba(255, 252, 247, .4);
 }
 .footer-links {
   display: flex;
@@ -47,21 +47,21 @@ footer > * { position: relative; z-index: 2; }
 .footer-bottom {
   margin-top: 1.2rem;
   padding-top: .8rem;
-  border-top: 1px solid rgba(255, 252, 247, .04);
+  border-top: 1px solid rgba(255, 252, 247, .06);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: .5rem;
 }
 .footer-legal {
-  font-size: .6rem;
-  color: rgba(255, 252, 247, .15);
+  font-size: .65rem;
+  color: rgba(255, 252, 247, .35);
   max-width: 680px;
   line-height: 1.5;
 }
 .footer-email {
-  font-size: .68rem;
-  color: rgba(255, 252, 247, .18);
+  font-size: .7rem;
+  color: rgba(255, 252, 247, .4);
   transition: color .25s;
 }
 .footer-email:hover { color: var(--gold); }

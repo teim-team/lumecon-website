@@ -7,13 +7,21 @@
 }
 .cta > * { position: relative; z-index: 2; }
 .cta-inner {
-  max-width: 1100px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  padding: 0 var(--container-pad);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 5vw, 4rem);
   align-items: start;
+}
+.cta-label {
+  font-size: .58rem;
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
 }
 .cta-left h2 {
   color: var(--white);
@@ -21,7 +29,7 @@
   margin-bottom: .7rem;
 }
 .cta-left p {
-  color: rgba(255, 252, 247, .58);
+  color: rgba(255, 252, 247, .65);
   max-width: 400px;
   margin-bottom: 1.3rem;
   font-size: .92rem;
@@ -53,6 +61,7 @@
   border: 1px solid rgba(255, 252, 247, .1);
   border-radius: 6px;
   padding: 1.5rem;
+  position: relative;
 }
 .cta-form label {
   display: block;
@@ -65,7 +74,7 @@
 }
 .cta-form input, .cta-form select, .cta-form textarea {
   width: 100%;
-  padding: .5rem .7rem;
+  padding: .55rem .7rem;
   margin-bottom: .8rem;
   font-family: 'Nunito', sans-serif;
   font-size: .82rem;
@@ -114,6 +123,11 @@
 .cta-form button:hover {
   background: #d4ad55;
   transform: translateY(-1px);
+}
+.cta-form button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 @media (max-width: 960px) {
