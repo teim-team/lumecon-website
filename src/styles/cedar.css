@@ -1,0 +1,180 @@
+.cedar {
+  display: grid;
+  grid-template-columns: 30% 35% 35%;
+}
+.cedar-panel {
+  background: var(--navy);
+  color: var(--white);
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.cedar-panel > * { position: relative; z-index: 2; }
+.cedar-panel h2 {
+  color: var(--white);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: .4rem;
+}
+.cedar-subtitle {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--gold);
+  font-size: clamp(.85rem, 1.3vw, 1rem);
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+}
+.cedar-motto {
+  font-size: .84rem;
+  font-weight: 600;
+  color: rgba(255, 252, 247, .35);
+  line-height: 1.5;
+}
+.cedar-text {
+  background: var(--cream);
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cedar-text p {
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--gray);
+  line-height: 1.78;
+}
+.cedar-chat {
+  background: var(--cream);
+  padding: clamp(1.5rem, 3vw, 2rem) clamp(1rem, 2vw, 1.2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chat-demo {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: 0 2px 24px rgba(45, 45, 63, .06);
+}
+.chat-header {
+  background: var(--navy);
+  padding: .6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.chat-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.chat-title {
+  font-size: .66rem;
+  font-weight: 700;
+  color: rgba(255, 252, 247, .5);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.chat-body {
+  padding: .8rem;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.chat-msg {
+  max-width: 88%;
+  padding: .42rem .72rem;
+  border-radius: 10px;
+  font-size: .72rem;
+  font-weight: 500;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+}
+.chat-msg.show { opacity: 1; transform: none; }
+.chat-msg--cedar {
+  background: var(--navy);
+  color: var(--white);
+  align-self: flex-start;
+  border-bottom-left-radius: 3px;
+}
+.chat-msg--user {
+  background: var(--cream);
+  color: var(--navy);
+  align-self: flex-end;
+  border-bottom-right-radius: 3px;
+}
+.chat-msg--system {
+  background: var(--cream);
+  color: var(--graylt);
+  align-self: center;
+  font-size: .64rem;
+  font-style: italic;
+  text-align: center;
+  border-radius: 6px;
+  max-width: 95%;
+}
+.chat-msg .sender {
+  font-size: .52rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  opacity: .4;
+  margin-bottom: .06rem;
+}
+.chat-table {
+  margin: .3rem 0;
+  font-family: 'Nunito', monospace;
+  font-size: .62rem;
+  line-height: 1.6;
+  opacity: .85;
+  border-left: 2px solid var(--gold);
+  padding-left: .5rem;
+}
+.chat-typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: .4rem .7rem;
+}
+.chat-typing span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--graylt);
+  animation: tblink .9s infinite;
+}
+.chat-typing span:nth-child(2) { animation-delay: .15s; }
+.chat-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes tblink {
+  0%, 60%, 100% { opacity: .25; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+.chat-footer {
+  font-size: .58rem;
+  font-weight: 600;
+  color: var(--graylt);
+  text-align: center;
+  padding: .45rem;
+  border-top: 1px solid rgba(45, 45, 63, .04);
+  font-style: italic;
+}
+
+@media (max-width: 960px) {
+  .cedar { grid-template-columns: 1fr; }
+  .cedar-chat { min-height: 420px; }
+}
+@media (max-width: 600px) {
+  .cedar-text { padding: 2rem 1.8rem; }
+  .cedar-panel { padding: 2.5rem 1.8rem; }
+  .cedar-chat { padding: 1.5rem 1.8rem; }
+}
