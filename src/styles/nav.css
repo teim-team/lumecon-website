@@ -1,0 +1,99 @@
+nav { padding: .75rem 0; }
+nav.nav--fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 1.15rem 0;
+  transition: all .4s var(--ease);
+}
+nav.nav--fixed.scrolled {
+  background: rgba(255, 252, 247, .88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: .75rem 0;
+}
+nav.nav--static {
+  background: rgba(255, 252, 247, .92);
+  backdrop-filter: blur(12px);
+}
+
+.nav-w {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--green);
+  transition: opacity .25s;
+}
+.logo:hover { opacity: .65; }
+
+.home-page .logo { opacity: 0; pointer-events: none; }
+nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
+
+.nav-links {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+.nav-links a {
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--navy);
+  padding: .35rem .8rem;
+  border: 1.5px solid transparent;
+  border-radius: 3px;
+  transition: all .25s var(--ease);
+}
+.nav-links a:hover {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: var(--white);
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 110;
+}
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--navy);
+  margin: 5px 0;
+  transition: .3s var(--ease);
+}
+.hamburger.on span:nth-child(1) { transform: rotate(45deg) translate(4px, 5px); }
+.hamburger.on span:nth-child(2) { opacity: 0; }
+.hamburger.on span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
+
+@media (max-width: 600px) {
+  .nav-links {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--white);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.8rem;
+    z-index: 105;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links.open a { font-size: 1.1rem; padding: .5rem 1.2rem; }
+  .hamburger { display: block; }
+  .home-page .logo { opacity: 1 !important; pointer-events: auto !important; }
+}

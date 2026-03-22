@@ -1,0 +1,43 @@
+---
+import '../styles/cta.css';
+---
+<section class="cta paper-tex" id="contact">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div style="font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem" class="r">PARTNERSHIPS</div>
+      <h2 class="r d1">Build with us</h2>
+      <p class="r d2">Lumecon is in active development. If you're interested in learning more, investing, piloting, or helping build the future of economic and policy analysis we'd like to hear from you.</p>
+      <a href="mailto:contact@lumecon.ai" class="cta-email r d3">contact@lumecon.ai</a>
+    </div>
+    <div class="cta-form r d2">
+      <label for="fname">Name</label>
+      <input type="text" id="fname" name="name" placeholder="Your name">
+      <label for="femail">Email</label>
+      <input type="email" id="femail" name="email" placeholder="you@organization.com">
+      <label for="fint">I'm interested in</label>
+      <select id="fint" name="interest">
+        <option value="" disabled selected>Select one</option>
+        <option value="pilot">Piloting a Lumecon product</option>
+        <option value="invest">Investing</option>
+        <option value="partner">Strategic partnership</option>
+        <option value="advise">Advisory or board role</option>
+        <option value="learn">Just learning more</option>
+      </select>
+      <label for="fmsg">Message</label>
+      <textarea id="fmsg" name="message" placeholder="Tell us a bit about yourself and what brought you here."></textarea>
+      <button type="button" id="formSend">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('formSend')!.addEventListener('click', () => {
+    const n = (document.getElementById('fname') as HTMLInputElement).value;
+    const e = (document.getElementById('femail') as HTMLInputElement).value;
+    const i = (document.getElementById('fint') as HTMLSelectElement).value;
+    const m = (document.getElementById('fmsg') as HTMLTextAreaElement).value;
+    window.location.href = 'mailto:contact@lumecon.ai?subject=' +
+      encodeURIComponent('Lumecon Inquiry' + (i ? ' \u2014 ' + i : '')) +
+      '&body=' + encodeURIComponent('Name: ' + n + '\nEmail: ' + e + '\nInterest: ' + i + '\n\n' + m);
+  });
+</script>

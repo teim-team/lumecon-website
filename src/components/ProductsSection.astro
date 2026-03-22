@@ -1,0 +1,73 @@
+---
+import '../styles/products.css';
+---
+<section id="products">
+  <div class="platforms-bar paper-tex paper-tex-warm">
+    <div class="platforms-bar-inner">
+      <h2>Lumecon Products</h2>
+      <div class="platforms-slogan">
+        <span class="static">Making&nbsp;</span>
+        <div class="cycle-wrap" id="cycleWrap">
+          <div class="cycle-track" id="cycleTrack">
+            <span class="c-default">economies</span>
+            <span class="c-local">local economies</span>
+            <span class="c-tribal">tribal economies</span>
+            <span class="c-global">global economies</span>
+          </div>
+        </div>
+        <span class="static">&nbsp;visible&trade;</span>
+      </div>
+    </div>
+  </div>
+  <div class="products">
+    <div class="product-block product-block--local paper-tex sl">
+      <div>
+        <h3><a href="https://localeconomicimpact.com">Local Economic Impact</a></h3>
+        <div class="product-url">localeconomicimpact.com</div>
+        <div class="product-desc">Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations without the cost or complexity of traditional tools.</div>
+      </div>
+      <div class="product-status">In active development</div>
+    </div>
+    <div class="product-block product-block--tribal paper-tex r d1">
+      <div>
+        <h3><a href="https://tribaleconomicimpact.com">Tribal Economic Impact</a></h3>
+        <div class="product-url">tribaleconomicimpact.com</div>
+        <div class="product-desc">Built for economies that don't fit standard assumptions. Economic and policy analysis designed for US tribal governments, enterprises, and reservation economies.</div>
+      </div>
+      <div class="product-status">Patent pending &middot; In active development</div>
+    </div>
+    <div class="product-block product-block--global paper-tex sr">
+      <div>
+        <h3><a href="https://globaleconomicimpact.com">Global Economic Impact</a></h3>
+        <div class="product-url">globaleconomicimpact.com</div>
+        <div class="product-desc">The same core modeling framework, applied globally—supporting cross-border and multiregional analysis for multinationals, NGOs, and governments.</div>
+      </div>
+      <div class="product-status">Future development</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Cycle animation
+  (function() {
+    const wrap = document.getElementById('cycleWrap');
+    const track = document.getElementById('cycleTrack');
+    if (!wrap || !track) return;
+    const spans = track.querySelectorAll('span');
+    if (!spans.length) return;
+    const widths: number[] = [];
+    const ruler = document.createElement('span');
+    ruler.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:' + getComputedStyle(spans[0]).font;
+    document.body.appendChild(ruler);
+    spans.forEach(s => { ruler.textContent = s.textContent; widths.push(ruler.offsetWidth + 20); });
+    document.body.removeChild(ruler);
+    wrap.style.width = widths[0] + 'px';
+    let idx = 0;
+    const total = spans.length;
+    setInterval(() => {
+      idx = (idx + 1) % total;
+      track.style.transform = 'translateY(-' + (idx * 1.4) + 'em)';
+      wrap.style.width = widths[idx] + 'px';
+    }, 2000);
+  })();
+</script>

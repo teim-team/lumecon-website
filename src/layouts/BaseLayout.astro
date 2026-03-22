@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  keywords: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  bodyClass?: string;
+  jsonLd?: object;
+}
+
+const { title, description, canonical, keywords, ogTitle, ogDescription, bodyClass, jsonLd } = Astro.props;
+const ogT = ogTitle || title;
+const ogD = ogDescription || description;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content={description}>
+<meta name="keywords" content={keywords}>
+<meta name="robots" content="index, follow">
+<link rel="canonical" href={canonical}>
+<meta property="og:type" content="website">
+<meta property="og:url" content={canonical}>
+<meta property="og:title" content={ogT}>
+<meta property="og:description" content={ogD}>
+<meta property="og:site_name" content="Lumecon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content={ogT}>
+<meta name="twitter:description" content={ogD}>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}
+</head>
+<body class={bodyClass}>
+<slot />
+</body>
+</html>

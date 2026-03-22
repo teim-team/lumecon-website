@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import WhySection from '../components/WhySection.astro';
+import ProductsSection from '../components/ProductsSection.astro';
+import CedarSection from '../components/CedarSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Lumecon",
+  "url": "https://lumecon.ai",
+  "description": "Economic and policy analysis platform offering affordable, web-based tools for local, tribal, and global economic impact and policy analysis.",
+  "email": "contact@lumecon.ai",
+  "slogan": "We luminate economies",
+  "foundingLocation": { "@type": "Place", "name": "Cornell University" }
+};
+---
+<BaseLayout
+  title="Lumecon — We luminate economies"
+  description="Lumecon is an economic and policy analysis platform offering affordable, web-based tools for local, tribal, and global economic impact and policy analysis. Built by social scientists and engineers at Cornell University."
+  canonical="https://lumecon.ai/"
+  keywords="economic impact analysis, policy analysis, local economic impact, tribal economic impact, global economic impact, economic development, fiscal multiplier, economic modeling, Cedar AI, Lumecon"
+  ogTitle="Lumecon — Economic and policy analysis anyone can act on"
+  ogDescription="Affordable, web-based economic impact and policy analysis for local, tribal, and global economies. Built by social scientists and engineers at Cornell University."
+  bodyClass="home-page"
+  jsonLd={jsonLd}
+>
+  <Nav isHome={true} />
+  <main>
+    <Hero />
+    <WhySection />
+    <ProductsSection />
+    <CedarSection />
+    <ContactSection />
+  </main>
+  <Footer isHome={true} />
+</BaseLayout>
+
+<style is:global>
+  html { scroll-behavior: smooth; }
+</style>
+
+<script>
+  // Scroll nav
+  const nav = document.getElementById('nav')!;
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', scrollY > 40);
+  }, { passive: true });
+
+  // Intersection observer for reveal animations
+  const obs = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('seen');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.r,.sl,.sr,.sd').forEach(el => obs.observe(el));
+</script>

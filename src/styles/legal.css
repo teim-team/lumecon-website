@@ -1,0 +1,41 @@
+body.legal-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+body.legal-page main {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 4.5rem clamp(1.5rem, 4vw, 2.5rem) 4rem;
+  flex: 1;
+}
+body.legal-page h1 {
+  font-size: 1.65rem;
+  margin-bottom: .3rem;
+}
+.date {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--graylt);
+  margin-bottom: 2.5rem;
+}
+body.legal-page p {
+  font-size: .92rem;
+  line-height: 1.82;
+  color: var(--gray);
+  margin-bottom: .8rem;
+  font-weight: 500;
+}
+.note {
+  margin-top: 2rem;
+  padding: 1.3rem;
+  background: var(--cream);
+  border-left: 2.5px solid var(--green);
+  font-size: .88rem;
+  color: var(--gray);
+  line-height: 1.65;
+  font-weight: 500;
+}
+.note strong { color: var(--navy); }
+
+body.legal-page footer { margin-top: auto; }

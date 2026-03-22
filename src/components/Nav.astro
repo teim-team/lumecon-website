@@ -1,0 +1,38 @@
+---
+interface Props {
+  isHome?: boolean;
+}
+const { isHome = false } = Astro.props;
+const prefix = isHome ? '' : 'index.html';
+---
+<nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
+  <div class="nav-w">
+    <a href="index.html" class="logo">Lumecon</a>
+    <div class="nav-links" id="navLinks">
+      <a href={`${prefix}#products`}>Products</a>
+      <a href={`${prefix}#cedar`}>Cedar</a>
+      <a href={`${prefix}#contact`}>Partnerships</a>
+      <a href="mailto:contact@lumecon.ai">Get in Touch</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<script>
+  const hb = document.getElementById('hamburger')!;
+  const nl = document.getElementById('navLinks')!;
+  hb.addEventListener('click', () => {
+    nl.classList.toggle('open');
+    hb.classList.toggle('on');
+    hb.setAttribute('aria-expanded', String(nl.classList.contains('open')));
+  });
+  nl.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      nl.classList.remove('open');
+      hb.classList.remove('on');
+      hb.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
