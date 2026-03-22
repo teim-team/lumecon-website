@@ -1,5 +1,7 @@
 ---
+import { site } from '../config';
 import '../styles/products.css';
+const { local, tribal, global: globalProduct } = site.products;
 ---
 <section id="products">
   <div class="platforms-bar paper-tex paper-tex-warm">
@@ -20,29 +22,29 @@ import '../styles/products.css';
     </div>
   </div>
   <div class="products">
-    <div class="product-block product-block--local paper-tex sl">
+    <div class="product-block product-block--local paper-tex reveal-left" data-stagger="0">
       <div>
-        <h3><a href="https://localeconomicimpact.com">Local Economic Impact</a></h3>
-        <div class="product-url">localeconomicimpact.com</div>
+        <h3><a href={local.url}>{local.name}</a></h3>
+        <div class="product-url">{local.domain}</div>
         <div class="product-desc">Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations without the cost or complexity of traditional tools.</div>
       </div>
-      <div class="product-status">In active development</div>
+      <div class="product-status">{local.status}</div>
     </div>
-    <div class="product-block product-block--tribal paper-tex r d1">
+    <div class="product-block product-block--tribal paper-tex reveal delay-1" data-stagger="1">
       <div>
-        <h3><a href="https://tribaleconomicimpact.com">Tribal Economic Impact</a></h3>
-        <div class="product-url">tribaleconomicimpact.com</div>
+        <h3><a href={tribal.url}>{tribal.name}</a></h3>
+        <div class="product-url">{tribal.domain}</div>
         <div class="product-desc">Built for economies that don't fit standard assumptions. Economic and policy analysis designed for US tribal governments, enterprises, and reservation economies.</div>
       </div>
-      <div class="product-status">Patent pending &middot; In active development</div>
+      <div class="product-status">{tribal.status}</div>
     </div>
-    <div class="product-block product-block--global paper-tex sr">
+    <div class="product-block product-block--global paper-tex reveal-right" data-stagger="2">
       <div>
-        <h3><a href="https://globaleconomicimpact.com">Global Economic Impact</a></h3>
-        <div class="product-url">globaleconomicimpact.com</div>
+        <h3><a href={globalProduct.url}>{globalProduct.name}</a></h3>
+        <div class="product-url">{globalProduct.domain}</div>
         <div class="product-desc">The same core modeling framework, applied globally—supporting cross-border and multiregional analysis for multinationals, NGOs, and governments.</div>
       </div>
-      <div class="product-status">Future development</div>
+      <div class="product-status">{globalProduct.status}</div>
     </div>
   </div>
 </section>
@@ -70,4 +72,28 @@ import '../styles/products.css';
       wrap.style.width = widths[idx] + 'px';
     }, 2000);
   })();
+
+  // Product card 3D tilt on hover (parallax depth)
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (!isTouchDevice) {
+    document.querySelectorAll('.product-block').forEach(block => {
+      const el = block as HTMLElement;
+      el.addEventListener('mousemove', (e: MouseEvent) => {
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        const rotateX = y * -8;
+        const rotateY = x * 8;
+        el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = '';
+        el.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1)';
+        setTimeout(() => { el.style.transition = ''; }, 500);
+      });
+      el.addEventListener('mouseenter', () => {
+        el.style.transition = 'none';
+      });
+    });
+  }
 </script>

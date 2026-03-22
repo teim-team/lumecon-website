@@ -19,9 +19,9 @@ nav.nav--static {
 }
 
 .nav-w {
-  max-width: 1100px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  padding: 0 var(--container-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,6 +58,10 @@ nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
   border-color: var(--navy);
   background: var(--navy);
   color: var(--white);
+}
+.nav-links a.nav-active {
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 .hamburger {

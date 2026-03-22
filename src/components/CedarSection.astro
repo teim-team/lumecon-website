@@ -3,28 +3,42 @@ import '../styles/cedar.css';
 ---
 <section class="cedar" id="cedar">
   <div class="cedar-panel paper-tex paper-tex-dark">
-    <div style="font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem" class="r">THE EXPERIENCE</div>
-    <h2 class="r d1">Cedar</h2>
-    <div class="cedar-subtitle r d2">Your AI thought partner for economic and policy analysis.</div>
-    <div class="cedar-motto r d3">We won't think for you.<br>We think with you.</div>
+    <div class="cedar-label reveal">THE EXPERIENCE</div>
+    <h2 class="reveal delay-1">Cedar</h2>
+    <div class="cedar-subtitle reveal delay-2">Your AI thought partner for economic and policy analysis.</div>
+    <div class="cedar-motto reveal delay-3">We won't think for you.<br>We think with you.</div>
   </div>
   <div class="cedar-text">
-    <p class="r">Cedar&trade; is Lumecon's AI-powered assistant for economic and policy analysis. It works with messy, real-world data, clearly telling you what it needs and why, and walks you through each step so you can understand economic impact, test assumptions, and make informed strategic decisions. No consultant or overpriced legacy software. Just you, your data, and a thought partner designed to support rigorous analysis without fabricating results. Cedar operates in secure, isolated environments, working only with the data you provide and preserving context across analyses.</p>
+    <p class="reveal">Cedar&trade; is Lumecon's AI-powered assistant for economic and policy analysis. It works with messy, real-world data, clearly telling you what it needs and why, and walks you through each step so you can understand economic impact, test assumptions, and make informed strategic decisions. No consultant or overpriced legacy software. Just you, your data, and a thought partner designed to support rigorous analysis without fabricating results. Cedar operates in secure, isolated environments, working only with the data you provide and preserving context across analyses.</p>
   </div>
   <div class="cedar-chat">
-    <div class="chat-demo sd" id="chatDemo">
+    <div class="chat-demo reveal-diagonal" id="chatDemo">
       <div class="chat-header">
         <div class="chat-dot"></div>
         <div class="chat-title">Cedar</div>
       </div>
-      <div class="chat-body" id="chatBody"></div>
+      <div class="chat-body" id="chatBody">
+        <div class="chat-skeleton" id="chatSkeleton">
+          <div class="chat-skeleton-line"></div>
+          <div class="chat-skeleton-line"></div>
+          <div class="chat-skeleton-line"></div>
+          <div class="chat-skeleton-line"></div>
+          <div class="chat-skeleton-line"></div>
+        </div>
+      </div>
+      <div class="chat-controls" id="chatControls">
+        <button class="chat-ctrl-btn" id="chatPrev" aria-label="Previous conversation">&#9664; Prev</button>
+        <span class="chat-conv-indicator" id="chatIndicator">1 / 7</span>
+        <button class="chat-ctrl-btn" id="chatNext" aria-label="Next conversation">Next &#9654;</button>
+        <button class="chat-ctrl-btn" id="chatPause" aria-label="Pause demo">Pause</button>
+      </div>
       <div class="chat-footer">Demo reflects current training and testing as of March 2026</div>
     </div>
   </div>
 </section>
 
 <script>
-  // Cedar chat demo
+  // Cedar chat demo with controls
   const conversations = [
     [{from:'system',text:'\u{1F4C4} AuditedFinancials_FY2025.pdf uploaded\n\u{1F4C4} Payroll_Summary_Q4.xlsx uploaded'},{from:'cedar',text:"Reading your files now. I found $9.7M total operating revenue (income statement, p. 12) and $6.4M payroll (Q4 spreadsheet). 218 FTE. Can you confirm?"},{from:'user',text:"Revenue is right but payroll should be $6.8M \u2014 the file doesn\u2019t include benefits."},{from:'cedar',text:"Updated. Here are your results:\n\nDirect: 218 jobs, $6.8M labor income \u2014 your organization\u2019s footprint.\nIndirect: 74 jobs, $2.9M \u2014 your suppliers and vendors.\nInduced: 51 jobs, $1.8M \u2014 household spending rippling through the economy.\n\nTotal: 343 jobs and $11.5M in labor income supported across the region."}],
     [{from:'user',text:"We\u2019ve uploaded our financials from 2019 through 2025. Can Cedar compare impact over time?"},{from:'cedar',text:"Absolutely. I\u2019ve run each year through the model with inflation-adjusted dollars (2025 base):"},{from:'cedar',html:'<div class="chat-table">2019 \u2014 $8.1M \u00b7 247 jobs<br>2020 \u2014 $6.3M \u00b7 198 jobs<br>2021 \u2014 $7.9M \u00b7 231 jobs<br>2022 \u2014 $9.4M \u00b7 274 jobs<br>2023 \u2014 $10.1M \u00b7 289 jobs<br>2024 \u2014 $10.8M \u00b7 312 jobs<br>2025 \u2014 $11.5M \u00b7 343 jobs</div>'},{from:'cedar',text:"Over seven years, your organization has supported over $64M in cumulative regional economic activity."},{from:'user',text:"Nobody\u2019s ever shown us this before."},{from:'cedar',text:"Most studies are one-time snapshots. Lumecon stores your models so you can track impact over time \u2014 the trajectory, not just a single number."}],
@@ -38,10 +52,28 @@ import '../styles/cedar.css';
 
   const chatBody = document.getElementById('chatBody')!;
   const chatDemo = document.getElementById('chatDemo')!;
+  const chatPause = document.getElementById('chatPause')!;
+  const chatPrev = document.getElementById('chatPrev')!;
+  const chatNext = document.getElementById('chatNext')!;
+  const chatIndicator = document.getElementById('chatIndicator')!;
+  const chatSkeleton = document.getElementById('chatSkeleton')!;
   let convIdx = 0;
   let chatRunning = false;
+  let paused = false;
+  let abortController: AbortController | null = null;
 
-  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+  function updateIndicator() {
+    chatIndicator.textContent = (convIdx + 1) + ' / ' + conversations.length;
+  }
+
+  function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(resolve, ms);
+      if (signal) {
+        signal.addEventListener('abort', () => { clearTimeout(timer); reject(new DOMException('Aborted', 'AbortError')); });
+      }
+    });
+  }
 
   function showTyping(from: string) {
     const t = document.createElement('div');
@@ -54,39 +86,65 @@ import '../styles/cedar.css';
   }
 
   async function playConversation() {
+    abortController = new AbortController();
+    const signal = abortController.signal;
+    chatSkeleton.style.display = 'none';
     chatBody.innerHTML = '';
+    updateIndicator();
     const conv = conversations[convIdx];
-    for (let i = 0; i < conv.length; i++) {
-      const m = conv[i] as any;
-      if (m.from === 'system') {
+    try {
+      for (let i = 0; i < conv.length; i++) {
+        while (paused) { await sleep(200, signal); }
+        const m = conv[i] as any;
+        if (m.from === 'system') {
+          const el = document.createElement('div');
+          el.className = 'chat-msg chat-msg--system';
+          el.style.whiteSpace = 'pre-line';
+          el.textContent = m.text;
+          chatBody.appendChild(el);
+          requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
+          chatBody.scrollTop = chatBody.scrollHeight;
+          await sleep(800, signal);
+          continue;
+        }
+        const typing = showTyping(m.from);
+        await sleep(m.from === 'cedar' ? 1800 : 1100, signal);
+        typing.remove();
         const el = document.createElement('div');
-        el.className = 'chat-msg chat-msg--system';
-        el.style.whiteSpace = 'pre-line';
-        el.textContent = m.text;
+        el.className = 'chat-msg chat-msg--' + m.from;
+        const label = m.from === 'cedar' ? 'Cedar' : 'You';
+        let content = '<div class="sender">' + label + '</div>';
+        if (m.html) { content += m.html; } else { content += m.text.replace(/\n/g, '<br>'); }
+        el.innerHTML = content;
         chatBody.appendChild(el);
         requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
         chatBody.scrollTop = chatBody.scrollHeight;
-        await sleep(800);
-        continue;
+        await sleep(1100, signal);
       }
-      const typing = showTyping(m.from);
-      await sleep(m.from === 'cedar' ? 1800 : 1100);
-      typing.remove();
-      const el = document.createElement('div');
-      el.className = 'chat-msg chat-msg--' + m.from;
-      const label = m.from === 'cedar' ? 'Cedar' : 'You';
-      let content = '<div class="sender">' + label + '</div>';
-      if (m.html) { content += m.html; } else { content += m.text.replace(/\n/g, '<br>'); }
-      el.innerHTML = content;
-      chatBody.appendChild(el);
-      requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
-      chatBody.scrollTop = chatBody.scrollHeight;
-      await sleep(1100);
+      await sleep(9000, signal);
+      convIdx = (convIdx + 1) % conversations.length;
+      playConversation();
+    } catch (e: any) {
+      if (e.name !== 'AbortError') throw e;
     }
-    await sleep(9000);
-    convIdx = (convIdx + 1) % conversations.length;
+  }
+
+  function jumpTo(idx: number) {
+    convIdx = ((idx % conversations.length) + conversations.length) % conversations.length;
+    if (abortController) abortController.abort();
+    paused = false;
+    chatPause.textContent = 'Pause';
+    chatPause.classList.remove('active');
     playConversation();
   }
+
+  chatPrev.addEventListener('click', () => jumpTo(convIdx - 1));
+  chatNext.addEventListener('click', () => jumpTo(convIdx + 1));
+  chatPause.addEventListener('click', () => {
+    paused = !paused;
+    chatPause.textContent = paused ? 'Play' : 'Pause';
+    chatPause.classList.toggle('active', paused);
+  });
 
   const chatObs = new IntersectionObserver(es => {
     es.forEach(e => {

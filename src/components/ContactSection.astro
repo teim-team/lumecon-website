@@ -1,21 +1,24 @@
 ---
+import { site } from '../config';
 import '../styles/cta.css';
 ---
 <section class="cta paper-tex" id="contact">
   <div class="cta-inner">
     <div class="cta-left">
-      <div style="font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem" class="r">PARTNERSHIPS</div>
-      <h2 class="r d1">Build with us</h2>
-      <p class="r d2">Lumecon is in active development. If you're interested in learning more, investing, piloting, or helping build the future of economic and policy analysis we'd like to hear from you.</p>
-      <a href="mailto:contact@lumecon.ai" class="cta-email r d3">contact@lumecon.ai</a>
+      <div class="cta-label reveal">PARTNERSHIPS</div>
+      <h2 class="reveal delay-1">Build with us</h2>
+      <p class="reveal delay-2">Lumecon is in active development. If you're interested in learning more, investing, piloting, or helping build the future of economic and policy analysis we'd like to hear from you.</p>
+      <a href={`mailto:${site.email}`} class="cta-email reveal delay-3">{site.email}</a>
     </div>
-    <div class="cta-form r d2">
+    <div class="cta-form reveal delay-2">
       <label for="fname">Name</label>
-      <input type="text" id="fname" name="name" placeholder="Your name">
+      <input type="text" id="fname" name="name" placeholder="Your name" required>
+      <div class="form-validation-error" id="fnameError">Please enter your name</div>
       <label for="femail">Email</label>
-      <input type="email" id="femail" name="email" placeholder="you@organization.com">
+      <input type="email" id="femail" name="email" placeholder="you@organization.com" required>
+      <div class="form-validation-error" id="femailError">Please enter a valid email</div>
       <label for="fint">I'm interested in</label>
-      <select id="fint" name="interest">
+      <select id="fint" name="interest" aria-label="Select your interest">
         <option value="" disabled selected>Select one</option>
         <option value="pilot">Piloting a Lumecon product</option>
         <option value="invest">Investing</option>
@@ -26,18 +29,80 @@ import '../styles/cta.css';
       <label for="fmsg">Message</label>
       <textarea id="fmsg" name="message" placeholder="Tell us a bit about yourself and what brought you here."></textarea>
       <button type="button" id="formSend">Send Message</button>
+
+      <div class="form-success-overlay" id="formSuccess">
+        <div class="form-success-check">
+          <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
+        </div>
+        <div class="form-success-text">Message sent!</div>
+        <div class="form-success-sub">We'll be in touch soon.</div>
+      </div>
     </div>
   </div>
 </section>
 
 <script>
-  document.getElementById('formSend')!.addEventListener('click', () => {
-    const n = (document.getElementById('fname') as HTMLInputElement).value;
-    const e = (document.getElementById('femail') as HTMLInputElement).value;
+  const sendBtn = document.getElementById('formSend') as HTMLButtonElement;
+  const formSuccess = document.getElementById('formSuccess')!;
+  const nameInput = document.getElementById('fname') as HTMLInputElement;
+  const emailInput = document.getElementById('femail') as HTMLInputElement;
+  const nameError = document.getElementById('fnameError')!;
+  const emailError = document.getElementById('femailError')!;
+
+  function validateEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function clearErrors() {
+    nameInput.classList.remove('error');
+    emailInput.classList.remove('error');
+    nameError.classList.remove('show');
+    emailError.classList.remove('show');
+  }
+
+  sendBtn.addEventListener('click', () => {
+    clearErrors();
+    const n = nameInput.value.trim();
+    const e = emailInput.value.trim();
     const i = (document.getElementById('fint') as HTMLSelectElement).value;
     const m = (document.getElementById('fmsg') as HTMLTextAreaElement).value;
+    let valid = true;
+
+    if (!n) {
+      nameInput.classList.add('error');
+      nameError.classList.add('show');
+      valid = false;
+    }
+    if (!e || !validateEmail(e)) {
+      emailInput.classList.add('error');
+      emailError.classList.add('show');
+      valid = false;
+    }
+    if (!valid) return;
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Opening email...';
+
     window.location.href = 'mailto:contact@lumecon.ai?subject=' +
       encodeURIComponent('Lumecon Inquiry' + (i ? ' \u2014 ' + i : '')) +
       '&body=' + encodeURIComponent('Name: ' + n + '\nEmail: ' + e + '\nInterest: ' + i + '\n\n' + m);
+
+    setTimeout(() => {
+      formSuccess.classList.add('show');
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'Send Message';
+    }, 800);
+
+    // Allow resend after 6 seconds
+    setTimeout(() => {
+      formSuccess.classList.remove('show');
+      nameInput.value = '';
+      emailInput.value = '';
+      (document.getElementById('fmsg') as HTMLTextAreaElement).value = '';
+    }, 6000);
   });
+
+  // Clear errors on input
+  nameInput.addEventListener('input', () => { nameInput.classList.remove('error'); nameError.classList.remove('show'); });
+  emailInput.addEventListener('input', () => { emailInput.classList.remove('error'); emailError.classList.remove('show'); });
 </script>

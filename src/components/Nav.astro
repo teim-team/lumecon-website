@@ -1,4 +1,5 @@
 ---
+import { site } from '../config';
 interface Props {
   isHome?: boolean;
 }
@@ -7,12 +8,12 @@ const prefix = isHome ? '' : 'index.html';
 ---
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
-    <a href="index.html" class="logo">Lumecon</a>
+    <a href="index.html" class="logo">{site.name}</a>
     <div class="nav-links" id="navLinks">
       <a href={`${prefix}#products`}>Products</a>
       <a href={`${prefix}#cedar`}>Cedar</a>
       <a href={`${prefix}#contact`}>Partnerships</a>
-      <a href="mailto:contact@lumecon.ai">Get in Touch</a>
+      <a href={`mailto:${site.email}`}>Get in Touch</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>

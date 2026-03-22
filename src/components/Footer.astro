@@ -1,4 +1,5 @@
 ---
+import { site } from '../config';
 interface Props {
   isHome?: boolean;
 }
@@ -9,8 +10,8 @@ const prefix = isHome ? '' : 'index.html';
   <div class="footer-w">
     <div class="footer-top">
       <div>
-        <div class="footer-brand-name">LUMECON</div>
-        <div class="footer-brand-tag">We luminate economies</div>
+        <div class="footer-brand-name">{site.name.toUpperCase()}</div>
+        <div class="footer-brand-tag">{site.tagline}</div>
       </div>
       <div class="footer-links">
         <a href={`${prefix}#products`}>Products</a>
@@ -21,8 +22,8 @@ const prefix = isHome ? '' : 'index.html';
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="footer-legal">&copy; 2026 Moreno Ventures LLC d/b/a Lumecon. All rights reserved. Patent pending. Built at Cornell University. Counsel: Cornell Law Entrepreneurship Law Clinic.</div>
-      <a href="mailto:contact@lumecon.ai" class="footer-email">contact@lumecon.ai</a>
+      <div class="footer-legal">&copy; {site.copyrightYear} {site.legalEntity}. All rights reserved. Patent pending. Built at {site.builtAt}. Counsel: {site.counsel}.</div>
+      <a href={`mailto:${site.email}`} class="footer-email">{site.email}</a>
     </div>
   </div>
 </footer>

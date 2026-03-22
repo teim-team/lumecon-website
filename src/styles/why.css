@@ -3,9 +3,9 @@
   padding: clamp(3rem, 6vw, 4.5rem) 0;
 }
 .why-inner {
-  max-width: 1100px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  padding: 0 var(--container-pad);
 }
 .why-top {
   display: grid;
@@ -65,6 +65,10 @@
 .why-card:hover { background: var(--navy); }
 .why-card:hover .why-card-front { opacity: 0; transform: translateY(-6px); }
 .why-card:hover .why-card-back { opacity: 1; transform: none; }
+/* Mobile touch-to-flip */
+.why-card.flipped { background: var(--navy); }
+.why-card.flipped .why-card-front { opacity: 0; transform: translateY(-6px); }
+.why-card.flipped .why-card-back { opacity: 1; transform: none; }
 .why-card-geo { width: 44px; height: 44px; }
 .why-card-geo svg { width: 100%; height: 100%; }
 .why-card h3 {
@@ -72,7 +76,7 @@
   font-weight: 800;
   color: var(--navy);
 }
-.why-card:hover h3 { color: var(--white); }
+.why-card:hover h3, .why-card.flipped h3 { color: var(--white); }
 .why-card-back p {
   font-size: .8rem;
   font-weight: 500;
