@@ -76,6 +76,7 @@
   clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
   animation: panelIn 1s var(--ease) .15s both;
   cursor: pointer;
+  min-height: 0;
 }
 .hero-panel canvas {
   position: absolute;
@@ -96,10 +97,17 @@
 }
 .hero-panel:hover .hero-panel-hint { opacity: 1; }
 
+/* Short viewports (landscape laptops, 1024x600 etc) — let hero grow beyond viewport */
+@media (max-height: 700px) and (min-width: 961px) {
+  .hero { min-height: auto; }
+  .hero-text { padding-top: 5rem; padding-bottom: 3rem; }
+  .hero-panel { min-height: 100%; }
+}
+
 @media (max-width: 960px) {
   .hero { grid-template-columns: 1fr; min-height: auto; }
   .hero-text { padding: 6rem 2.5rem 3rem; }
-  .hero-panel { clip-path: none; min-height: 260px; padding: 2rem; }
+  .hero-panel { clip-path: none; min-height: 300px; }
   .hero-brand { font-size: 2.5rem; }
 }
 @media (max-width: 600px) {
