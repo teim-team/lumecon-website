@@ -48,6 +48,10 @@ import '../styles/hero.css';
 
 <script>
   // Magnetic cursor effect on hero buttons
+  const MAGNETIC_STRENGTH = 0.15;
+  const MAGNETIC_RESET_DURATION = 400; // ms
+  const MAGNETIC_EASING = 'cubic-bezier(.22,1,.36,1)';
+
   (function() {
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice) return;
@@ -59,14 +63,14 @@ import '../styles/hero.css';
         const rect = el.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
-        const dx = (e.clientX - cx) * 0.15;
-        const dy = (e.clientY - cy) * 0.15;
+        const dx = (e.clientX - cx) * MAGNETIC_STRENGTH;
+        const dy = (e.clientY - cy) * MAGNETIC_STRENGTH;
         el.style.transform = `translate(${dx}px, ${dy}px)`;
       });
       el.addEventListener('mouseleave', () => {
         el.style.transform = '';
-        el.style.transition = 'transform .4s cubic-bezier(.22,1,.36,1)';
-        setTimeout(() => { el.style.transition = ''; }, 400);
+        el.style.transition = `transform ${MAGNETIC_RESET_DURATION / 1000}s ${MAGNETIC_EASING}`;
+        setTimeout(() => { el.style.transition = ''; }, MAGNETIC_RESET_DURATION);
       });
       el.addEventListener('mouseenter', () => {
         el.style.transition = 'none';
@@ -76,244 +80,6 @@ import '../styles/hero.css';
 </script>
 
 <script>
-  // Canvas topographic animation with performance optimization
-  (function(){
-    var c = document.getElementById('topoCanvas') as HTMLCanvasElement;
-    if (!c) return;
-    var ctx = c.getContext('2d')!;
-    var dp = window.devicePixelRatio || 1;
-    var W: number, H: number, t = 0;
-    var roads: any[] = [], buildings: any[] = [], dust: any[] = [], ripples: any[] = [];
-    var isMobile = window.innerWidth < 768;
-    var animId: number;
-    var isVisible = true;
-
-    // Pause when tab hidden
-    document.addEventListener('visibilitychange', function() {
-      isVisible = !document.hidden;
-      if (isVisible && animId) draw();
-    });
-
-    function resize() {
-      var r = c.parentElement!.getBoundingClientRect();
-      W = r.width; H = r.height;
-      c.width = W * dp; c.height = H * dp;
-      c.style.width = W + 'px'; c.style.height = H + 'px';
-      ctx.setTransform(dp, 0, 0, dp, 0, 0);
-      buildMap();
-    }
-
-    function pointOnSide(s: number) {
-      var p = -20;
-      switch(s) {
-        case 0: return {x: Math.random()*W, y: p};
-        case 1: return {x: W-p, y: Math.random()*H};
-        case 2: return {x: Math.random()*W, y: H-p};
-        case 3: return {x: p, y: Math.random()*H};
-      }
-      return {x:0,y:0};
-    }
-
-    function createRoad(ax:number,ay:number,bx:number,by:number,w:number,sg?:number) {
-      var pts = [];
-      sg = sg || (6 + ~~(Math.random()*4));
-      var dx=bx-ax, dy=by-ay, l=Math.sqrt(dx*dx+dy*dy)||1, nx=-dy/l, ny=dx/l, dr=0;
-      for(var i=0; i<=sg; i++) {
-        var tt=i/sg, xx=ax+dx*tt, yy=ay+dy*tt;
-        if(i>0 && i<sg) { dr+=(Math.random()-.5)*w*.35; dr*=.8; var o=dr+Math.sin(tt*Math.PI*.8)*w*.25; xx+=nx*o; yy+=ny*o; }
-        pts.push({x:xx,y:yy});
-      }
-      return pts;
-    }
-
-    function drawSpline(pts: any[]) {
-      if(pts.length<2) return;
-      ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
-      if(pts.length===2) { ctx.lineTo(pts[1].x, pts[1].y); ctx.stroke(); return; }
-      for(var i=1; i<pts.length-1; i++) {
-        var xc=(pts[i].x+pts[i+1].x)/2, yc=(pts[i].y+pts[i+1].y)/2;
-        ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
-      }
-      ctx.lineTo(pts[pts.length-1].x, pts[pts.length-1].y); ctx.stroke();
-    }
-
-    function samplePoint(pts: any[], tt: number) {
-      if(pts.length<2) return pts[0];
-      var tl=0, sl: number[] = [];
-      for(var i=1; i<pts.length; i++) { var dx=pts[i].x-pts[i-1].x, dy=pts[i].y-pts[i-1].y; sl.push(Math.sqrt(dx*dx+dy*dy)); tl+=sl[sl.length-1]; }
-      var tg=tt*tl, ac=0;
-      for(var i=0; i<sl.length; i++) { if(ac+sl[i]>=tg) { var lt=(tg-ac)/sl[i]; return {x:pts[i].x+(pts[i+1].x-pts[i].x)*lt, y:pts[i].y+(pts[i+1].y-pts[i].y)*lt}; } ac+=sl[i]; }
-      return pts[pts.length-1];
-    }
-
-    function sampleAngle(pts: any[], tt: number) {
-      var a = samplePoint(pts, Math.max(0,tt-.02)), b = samplePoint(pts, Math.min(1,tt+.02));
-      return Math.atan2(b.y-a.y, b.x-a.x);
-    }
-
-    function nearestRoad(xx: number, yy: number, maxDist: number) {
-      var best: any = null, bd = maxDist*maxDist;
-      for(var i=0; i<roads.length; i++) { var pts=roads[i].pts; for(var j=0; j<pts.length; j++) { var dx=pts[j].x-xx, dy=pts[j].y-yy, d=dx*dx+dy*dy; if(d<bd) { bd=d; best=pts[j]; } } }
-      return best;
-    }
-
-    // Reduce complexity on mobile
-    var roadCount = isMobile ? 8 : 14;
-    var branchCount = isMobile ? 18 : 38;
-    var twig1Count = isMobile ? 25 : 75;
-    var twig2Count = isMobile ? 40 : 140;
-    var twig3Count = isMobile ? 60 : 230;
-    var dustBase = isMobile ? 80 : 180;
-    var gridX = isMobile ? 4 : 6;
-    var gridY = isMobile ? 3 : 5;
-
-    function buildMap() {
-      roads=[]; buildings=[]; dust=[]; ripples=[];
-      for(var i=0; i<roadCount; i++) {
-        var s1=~~(Math.random()*4), s2=(s1+1+~~(Math.random()*2))%4;
-        var a=pointOnSide(s1), b=pointOnSide(s2);
-        roads.push({pts:createRoad(a.x,a.y,b.x,b.y,70+Math.random()*110), w:1.8+Math.random()*1.6, o:.13+Math.random()*.06, la:1});
-      }
-      var mc=roads.length;
-      for(var i=0; i<branchCount; i++) {
-        var mr=roads[~~(Math.random()*mc)], tt=.05+Math.random()*.9, p=samplePoint(mr.pts,tt);
-        var ag=sampleAngle(mr.pts,tt)+(.3+Math.random()*1.1)*(Math.random()<.5?1:-1);
-        var bl=50+Math.random()*150, ex=p.x+Math.cos(ag)*bl, ey=p.y+Math.sin(ag)*bl;
-        var sn=nearestRoad(ex,ey,60); if(sn){ex=sn.x;ey=sn.y;}
-        roads.push({pts:createRoad(p.x,p.y,ex,ey,20+Math.random()*45,4+~~(Math.random()*3)), w:.7+Math.random()*.8, o:.055+Math.random()*.04, la:2});
-      }
-      var l2=roads.length;
-      for(var i=0; i<twig1Count; i++) {
-        var sr=roads[~~(Math.random()*l2)], tt=Math.random(), p=samplePoint(sr.pts,tt);
-        var ag=sampleAngle(sr.pts,tt)+(.3+Math.random()*1.2)*(Math.random()<.5?1:-1);
-        var ln=18+Math.random()*70, ex=p.x+Math.cos(ag)*ln, ey=p.y+Math.sin(ag)*ln;
-        var sn=nearestRoad(ex,ey,35); if(sn){ex=sn.x;ey=sn.y;}
-        roads.push({pts:createRoad(p.x,p.y,ex,ey,8+Math.random()*20,3+~~(Math.random()*2)), w:.3+Math.random()*.4, o:.03+Math.random()*.03, la:3});
-      }
-      var l3=roads.length;
-      for(var i=0; i<twig2Count; i++) {
-        var sr=roads[~~(Math.random()*l3)], tt=Math.random(), p=samplePoint(sr.pts,tt);
-        var ag=Math.random()*Math.PI*2, ln=5+Math.random()*25, ex=p.x+Math.cos(ag)*ln, ey=p.y+Math.sin(ag)*ln;
-        var sn=nearestRoad(ex,ey,20); if(sn){ex=sn.x;ey=sn.y;}
-        var md={x:(p.x+ex)/2+(Math.random()-.5)*4, y:(p.y+ey)/2+(Math.random()-.5)*4};
-        roads.push({pts:[{x:p.x,y:p.y},md,{x:ex,y:ey}], w:.2+Math.random()*.2, o:.02+Math.random()*.018, la:4});
-      }
-      for(var i=0; i<twig3Count; i++) {
-        var sr=roads[~~(Math.random()*roads.length)], tt=Math.random(), p=samplePoint(sr.pts,tt);
-        var ag=Math.random()*Math.PI*2, ln=3+Math.random()*14, ex=p.x+Math.cos(ag)*ln, ey=p.y+Math.sin(ag)*ln;
-        var sn=nearestRoad(ex,ey,12); if(sn){ex=sn.x;ey=sn.y;}
-        roads.push({pts:[{x:p.x,y:p.y},{x:ex,y:ey}], w:.1+Math.random()*.12, o:.012+Math.random()*.012, la:5});
-      }
-
-      var cW=W/gridX, cH=H/gridY;
-      for(var gy=0; gy<gridY; gy++) for(var gx=0; gx<gridX; gx++) {
-        var nc=1+~~(Math.random()*2.5);
-        for(var cc=0; cc<nc; cc++) {
-          var cx=gx*cW+Math.random()*cW, cy=gy*cH+Math.random()*cH;
-          var rr=nearestRoad(cx,cy,80);
-          if(rr){cx=rr.x+(Math.random()-.5)*25; cy=rr.y+(Math.random()-.5)*25;}
-          var ca=Math.random()*Math.PI, nb=4+~~(Math.random()*12), ux=cx, uy=cy;
-          for(var bb=0; bb<nb; bb++) {
-            var bw=3+Math.random()*16, bh=2+Math.random()*11, ba=ca+(Math.random()-.5)*.4;
-            var cs2=Math.cos(ba), sn2=Math.sin(ba);
-            var j=function(){return(Math.random()-.5)*1.2};
-            var pts = [{x:ux+j(),y:uy+j()},{x:ux+cs2*bw+j(),y:uy+sn2*bw+j()},{x:ux+cs2*bw-sn2*bh+j(),y:uy+sn2*bw+cs2*bh+j()},{x:ux-sn2*bh+j(),y:uy+cs2*bh+j()}];
-            var bx2=ux+cs2*bw*.5-sn2*bh*.5, by2=uy+sn2*bw*.5+cs2*bh*.5;
-            buildings.push({pts:pts,cx:bx2,cy:by2});
-            var r2=Math.random();
-            if(r2<.4){ux+=cs2*(bw+1)+(Math.random()-.5)*2;uy+=sn2*(bw+1)+(Math.random()-.5)*2;}
-            else if(r2<.7){ux+=-sn2*(bh+1)+(Math.random()-.5)*2;uy+=cs2*(bh+1)+(Math.random()-.5)*2;}
-            else{ux+=cs2*bw*.5-sn2*(bh+1)+(Math.random()-.5)*3;uy+=sn2*bw*.5+cs2*(bh+1)+(Math.random()-.5)*3;}
-          }
-        }
-      }
-
-      for(var i=0; i<buildings.length; i++) {
-        var bl=buildings[i], dn=Math.random(), n: number;
-        if(dn>.87) n=12+~~(Math.random()*20);
-        else if(dn>.5) n=3+~~(Math.random()*7);
-        else if(dn>.2) n=1+~~(Math.random()*2);
-        else n=0;
-        for(var d=0; d<n; d++) {
-          var sp=dn>.87?1.5+Math.random()*3:1+Math.random()*5;
-          dust.push({x:bl.cx+(Math.random()-.5)*sp*2, y:bl.cy+(Math.random()-.5)*sp*2, sz:.3+Math.random()*1.1, ph:Math.random()*Math.PI*2, bs:.3+Math.random()*2.5, sh:.8+Math.random()*2, it:.4+Math.random()*.6, lp:Math.random()*Math.PI*2, ls:.03+Math.random()*.12, cr:dn>.87&&Math.random()<.1});
-        }
-      }
-      var freeDust = isMobile ? 12 : 25;
-      for(var i=0; i<freeDust; i++) dust.push({x:Math.random()*W, y:Math.random()*H, sz:.2+Math.random()*.5, ph:Math.random()*Math.PI*2, bs:.2+Math.random(), sh:1, it:.1+Math.random()*.2, lp:Math.random()*Math.PI*2, ls:.02+Math.random()*.06, cr:false});
-    }
-
-    function spawnRipple(xx: number, yy: number) {
-      ripples.push({x:xx, y:yy, r:0, mr:10+Math.random()*22, sp:14+Math.random()*22, op:.2+Math.random()*.2});
-    }
-
-    var lastFrame = 0;
-    var targetInterval = isMobile ? 33 : 16; // 30fps on mobile, 60fps on desktop
-
-    function draw(timestamp?: number) {
-      if (!isVisible) return;
-      animId = requestAnimationFrame(draw);
-      if (timestamp && timestamp - lastFrame < targetInterval) return;
-      lastFrame = timestamp || 0;
-
-      t += .016;
-      ctx.clearRect(0, 0, W, H);
-
-      for(var i=0; i<buildings.length; i++) {
-        var bl=buildings[i].pts;
-        ctx.beginPath(); ctx.moveTo(bl[0].x, bl[0].y);
-        for(var j=1; j<bl.length; j++) ctx.lineTo(bl[j].x, bl[j].y);
-        ctx.closePath();
-        ctx.fillStyle='rgba(255,252,247,0.022)'; ctx.fill();
-        ctx.strokeStyle='rgba(255,252,247,0.042)'; ctx.lineWidth=.3; ctx.stroke();
-      }
-
-      ctx.lineCap='round'; ctx.lineJoin='round';
-      for(var la=5; la>=1; la--) for(var i=0; i<roads.length; i++) {
-        var r=roads[i]; if(r.la!==la) continue;
-        ctx.lineWidth=r.w; ctx.strokeStyle='rgba(255,252,247,'+r.o+')';
-        drawSpline(r.pts);
-      }
-
-      for(var i=ripples.length-1; i>=0; i--) {
-        var rp=ripples[i]; rp.r+=rp.sp*.016;
-        var lf=rp.r/rp.mr;
-        if(lf>1){ripples.splice(i,1);continue;}
-        ctx.beginPath(); ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
-        ctx.strokeStyle='rgba(196,154,60,'+(rp.op*(1-lf)*(1-lf))+')';
-        ctx.lineWidth=.8*(1-lf*.5); ctx.stroke();
-      }
-
-      for(var i=0; i<dust.length; i++) {
-        var d=dust[i], lf2=Math.sin(t*d.ls+d.lp);
-        if(lf2<0) continue;
-        var raw=(Math.sin(t*d.bs+d.ph)+1)*.5, bk=Math.pow(raw,d.sh), br=d.it*bk*lf2;
-        if(br<.01) continue;
-        var sz=d.sz*(.7+bk*.3);
-        if(d.cr && bk>.9 && Math.random()<.003) spawnRipple(d.x, d.y);
-        if(br>.3 && sz>.6) {
-          var gr=sz*5, gd=ctx.createRadialGradient(d.x,d.y,0,d.x,d.y,gr);
-          gd.addColorStop(0,'rgba(196,154,60,'+(br*.12)+')');
-          gd.addColorStop(1,'rgba(196,154,60,0)');
-          ctx.beginPath(); ctx.arc(d.x,d.y,gr,0,Math.PI*2);
-          ctx.fillStyle=gd; ctx.fill();
-        }
-        ctx.beginPath(); ctx.arc(d.x,d.y,sz,0,Math.PI*2);
-        ctx.fillStyle='rgba(196,154,60,'+br+')'; ctx.fill();
-        if(br>.5) {
-          ctx.beginPath(); ctx.arc(d.x,d.y,sz*.3,0,Math.PI*2);
-          ctx.fillStyle='rgba(255,245,220,'+(br*.5)+')'; ctx.fill();
-        }
-      }
-    }
-
-    window.addEventListener('resize', function() {
-      isMobile = window.innerWidth < 768;
-      targetInterval = isMobile ? 33 : 16;
-      resize();
-    });
-    resize();
-    draw();
-    document.getElementById('heroPanel')!.addEventListener('click', function() { buildMap(); });
-  })();
+  import { initTopoCanvas } from '../scripts/topo-canvas';
+  initTopoCanvas();
 </script>

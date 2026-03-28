@@ -51,6 +51,17 @@ const { local, tribal, global: globalProduct } = site.products;
 
 <script>
   // Cycle animation
+  const CYCLE_INTERVAL = 2000;
+  const CYCLE_WIDTH_PADDING = 20;
+  const CYCLE_LINE_HEIGHT = 1.4; // em per step
+
+  // 3D tilt constants
+  const TILT_MAX_DEGREES = 8;
+  const TILT_PERSPECTIVE = 800; // px
+  const TILT_HOVER_SCALE = 1.02;
+  const TILT_RESET_DURATION = 500; // ms
+  const TILT_EASING = 'cubic-bezier(.22,1,.36,1)';
+
   (function() {
     const wrap = document.getElementById('cycleWrap');
     const track = document.getElementById('cycleTrack');
@@ -61,16 +72,16 @@ const { local, tribal, global: globalProduct } = site.products;
     const ruler = document.createElement('span');
     ruler.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:' + getComputedStyle(spans[0]).font;
     document.body.appendChild(ruler);
-    spans.forEach(s => { ruler.textContent = s.textContent; widths.push(ruler.offsetWidth + 20); });
+    spans.forEach(s => { ruler.textContent = s.textContent; widths.push(ruler.offsetWidth + CYCLE_WIDTH_PADDING); });
     document.body.removeChild(ruler);
     wrap.style.width = widths[0] + 'px';
     let idx = 0;
     const total = spans.length;
     setInterval(() => {
       idx = (idx + 1) % total;
-      track.style.transform = 'translateY(-' + (idx * 1.4) + 'em)';
+      track.style.transform = 'translateY(-' + (idx * CYCLE_LINE_HEIGHT) + 'em)';
       wrap.style.width = widths[idx] + 'px';
-    }, 2000);
+    }, CYCLE_INTERVAL);
   })();
 
   // Product card 3D tilt on hover (parallax depth)
@@ -82,14 +93,14 @@ const { local, tribal, global: globalProduct } = site.products;
         const rect = el.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-        const rotateX = y * -8;
-        const rotateY = x * 8;
-        el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        const rotateX = y * -TILT_MAX_DEGREES;
+        const rotateY = x * TILT_MAX_DEGREES;
+        el.style.transform = `perspective(${TILT_PERSPECTIVE}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${TILT_HOVER_SCALE})`;
       });
       el.addEventListener('mouseleave', () => {
         el.style.transform = '';
-        el.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1)';
-        setTimeout(() => { el.style.transition = ''; }, 500);
+        el.style.transition = `transform ${TILT_RESET_DURATION / 1000}s ${TILT_EASING}`;
+        setTimeout(() => { el.style.transition = ''; }, TILT_RESET_DURATION);
       });
       el.addEventListener('mouseenter', () => {
         el.style.transition = 'none';

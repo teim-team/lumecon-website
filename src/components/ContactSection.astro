@@ -42,6 +42,9 @@ import '../styles/cta.css';
 </section>
 
 <script>
+  const SUCCESS_SHOW_DELAY = 800; // ms after mailto opens
+  const FORM_RESET_DELAY = 6000; // ms before form clears
+
   const sendBtn = document.getElementById('formSend') as HTMLButtonElement;
   const formSuccess = document.getElementById('formSuccess')!;
   const nameInput = document.getElementById('fname') as HTMLInputElement;
@@ -91,15 +94,15 @@ import '../styles/cta.css';
       formSuccess.classList.add('show');
       sendBtn.disabled = false;
       sendBtn.textContent = 'Send Message';
-    }, 800);
+    }, SUCCESS_SHOW_DELAY);
 
-    // Allow resend after 6 seconds
+    // Allow resend after delay
     setTimeout(() => {
       formSuccess.classList.remove('show');
       nameInput.value = '';
       emailInput.value = '';
       (document.getElementById('fmsg') as HTMLTextAreaElement).value = '';
-    }, 6000);
+    }, FORM_RESET_DELAY);
   });
 
   // Clear errors on input
