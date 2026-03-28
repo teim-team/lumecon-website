@@ -82,32 +82,35 @@ const jsonLd = {
   const SECTION_ACTIVE_ROOT_MARGIN = '-40% 0px -55% 0px';
 
   // Scroll progress indicator + nav scroll state
-  const nav = document.getElementById('nav')!;
-  const progressBar = document.getElementById('scrollProgress')!;
-  const backToTop = document.getElementById('backToTop')!;
-  let ticking = false;
+  (function() {
+    const nav = document.getElementById('nav');
+    const progressBar = document.getElementById('scrollProgress');
+    const backToTop = document.getElementById('backToTop');
+    if (!nav || !progressBar || !backToTop) return;
+    let ticking = false;
 
-  function onScroll() {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
 
-    progressBar.style.width = progress + '%';
-    nav.classList.toggle('scrolled', scrollTop > NAV_SCROLL_THRESHOLD);
-    backToTop.classList.toggle('visible', scrollTop > window.innerHeight);
-    ticking = false;
-  }
+      progressBar.style.width = progress + '%';
+      nav.classList.toggle('scrolled', scrollTop > NAV_SCROLL_THRESHOLD);
+      backToTop.classList.toggle('visible', scrollTop > window.innerHeight);
+      ticking = false;
+    };
 
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(onScroll);
-      ticking = true;
-    }
-  }, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }, { passive: true });
 
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
 
   // Intersection observer for reveal animations (staggered product blocks)
   const obs = new IntersectionObserver(es => {

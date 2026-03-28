@@ -28,7 +28,7 @@ import '../styles/cta.css';
       </select>
       <label for="fmsg">Message</label>
       <textarea id="fmsg" name="message" placeholder="Tell us a bit about yourself and what brought you here."></textarea>
-      <button type="button" id="formSend">Send Message</button>
+      <button type="button" id="formSend">Open in Email</button>
 
       <div class="form-success-overlay" id="formSuccess">
         <div class="form-success-check">
@@ -45,67 +45,67 @@ import '../styles/cta.css';
   const SUCCESS_SHOW_DELAY = 800; // ms after mailto opens
   const FORM_RESET_DELAY = 6000; // ms before form clears
 
-  const sendBtn = document.getElementById('formSend') as HTMLButtonElement;
-  const formSuccess = document.getElementById('formSuccess')!;
-  const nameInput = document.getElementById('fname') as HTMLInputElement;
-  const emailInput = document.getElementById('femail') as HTMLInputElement;
-  const nameError = document.getElementById('fnameError')!;
-  const emailError = document.getElementById('femailError')!;
+  (function() {
+    const sendBtn = document.getElementById('formSend') as HTMLButtonElement | null;
+    const formSuccess = document.getElementById('formSuccess');
+    const nameInput = document.getElementById('fname') as HTMLInputElement | null;
+    const emailInput = document.getElementById('femail') as HTMLInputElement | null;
+    const nameError = document.getElementById('fnameError');
+    const emailError = document.getElementById('femailError');
+    if (!sendBtn || !formSuccess || !nameInput || !emailInput || !nameError || !emailError) return;
 
-  function validateEmail(email: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
+    const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  function clearErrors() {
-    nameInput.classList.remove('error');
-    emailInput.classList.remove('error');
-    nameError.classList.remove('show');
-    emailError.classList.remove('show');
-  }
+    const clearErrors = () => {
+      nameInput.classList.remove('error');
+      emailInput.classList.remove('error');
+      nameError.classList.remove('show');
+      emailError.classList.remove('show');
+    };
 
-  sendBtn.addEventListener('click', () => {
-    clearErrors();
-    const n = nameInput.value.trim();
-    const e = emailInput.value.trim();
-    const i = (document.getElementById('fint') as HTMLSelectElement).value;
-    const m = (document.getElementById('fmsg') as HTMLTextAreaElement).value;
-    let valid = true;
+    sendBtn.addEventListener('click', () => {
+      clearErrors();
+      const n = nameInput.value.trim();
+      const e = emailInput.value.trim();
+      const i = (document.getElementById('fint') as HTMLSelectElement | null)?.value ?? '';
+      const m = (document.getElementById('fmsg') as HTMLTextAreaElement | null)?.value ?? '';
+      let valid = true;
 
-    if (!n) {
-      nameInput.classList.add('error');
-      nameError.classList.add('show');
-      valid = false;
-    }
-    if (!e || !validateEmail(e)) {
-      emailInput.classList.add('error');
-      emailError.classList.add('show');
-      valid = false;
-    }
-    if (!valid) return;
+      if (!n) {
+        nameInput.classList.add('error');
+        nameError.classList.add('show');
+        valid = false;
+      }
+      if (!e || !validateEmail(e)) {
+        emailInput.classList.add('error');
+        emailError.classList.add('show');
+        valid = false;
+      }
+      if (!valid) return;
 
-    sendBtn.disabled = true;
-    sendBtn.textContent = 'Opening email...';
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Opening...';
 
-    window.location.href = 'mailto:contact@lumecon.ai?subject=' +
-      encodeURIComponent('Lumecon Inquiry' + (i ? ' \u2014 ' + i : '')) +
-      '&body=' + encodeURIComponent('Name: ' + n + '\nEmail: ' + e + '\nInterest: ' + i + '\n\n' + m);
+      window.location.href = 'mailto:' + encodeURIComponent('contact@lumecon.ai') + '?subject=' +
+        encodeURIComponent('Lumecon Inquiry' + (i ? ' \u2014 ' + i : '')) +
+        '&body=' + encodeURIComponent('Name: ' + n + '\nEmail: ' + e + '\nInterest: ' + i + '\n\n' + m);
 
-    setTimeout(() => {
-      formSuccess.classList.add('show');
-      sendBtn.disabled = false;
-      sendBtn.textContent = 'Send Message';
-    }, SUCCESS_SHOW_DELAY);
+      setTimeout(() => {
+        formSuccess.classList.add('show');
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Open in Email';
+      }, SUCCESS_SHOW_DELAY);
 
-    // Allow resend after delay
-    setTimeout(() => {
-      formSuccess.classList.remove('show');
-      nameInput.value = '';
-      emailInput.value = '';
-      (document.getElementById('fmsg') as HTMLTextAreaElement).value = '';
-    }, FORM_RESET_DELAY);
-  });
+      setTimeout(() => {
+        formSuccess.classList.remove('show');
+        nameInput.value = '';
+        emailInput.value = '';
+        const msgEl = document.getElementById('fmsg') as HTMLTextAreaElement | null;
+        if (msgEl) msgEl.value = '';
+      }, FORM_RESET_DELAY);
+    });
 
-  // Clear errors on input
-  nameInput.addEventListener('input', () => { nameInput.classList.remove('error'); nameError.classList.remove('show'); });
-  emailInput.addEventListener('input', () => { emailInput.classList.remove('error'); emailError.classList.remove('show'); });
+    nameInput.addEventListener('input', () => { nameInput.classList.remove('error'); nameError.classList.remove('show'); });
+    emailInput.addEventListener('input', () => { emailInput.classList.remove('error'); emailError.classList.remove('show'); });
+  })();
 </script>

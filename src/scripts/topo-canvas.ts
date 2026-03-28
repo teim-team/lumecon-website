@@ -174,7 +174,6 @@ export function initTopoCanvas() {
   const twig1Count = isMobile ? TWIG1_COUNTS.mobile : TWIG1_COUNTS.desktop;
   const twig2Count = isMobile ? TWIG2_COUNTS.mobile : TWIG2_COUNTS.desktop;
   const twig3Count = isMobile ? TWIG3_COUNTS.mobile : TWIG3_COUNTS.desktop;
-  const dustBase = isMobile ? 80 : 180;
   const gridX = isMobile ? GRID.mobile.x : GRID.desktop.x;
   const gridY = isMobile ? GRID.mobile.y : GRID.desktop.y;
 

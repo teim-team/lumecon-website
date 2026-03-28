@@ -25,7 +25,7 @@ import '../styles/hero.css';
   // Hero brand letter animation
   (function() {
     const b = document.getElementById('heroBrand');
-    if (!b) return;
+    if (!b || b.querySelector('.fl')) return;
     const t = (b.textContent || '').trim();
     b.textContent = '';
     const L: HTMLSpanElement[] = [];

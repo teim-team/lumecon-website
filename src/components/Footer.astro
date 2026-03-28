@@ -1,5 +1,5 @@
 ---
-import { site } from '../config';
+import { site, navLinks } from '../config';
 interface Props {
   isHome?: boolean;
 }
@@ -14,9 +14,9 @@ const prefix = isHome ? '' : '/';
         <div class="footer-brand-tag">{site.tagline}</div>
       </div>
       <div class="footer-links">
-        <a href={`${prefix}#products`}>Products</a>
-        <a href={`${prefix}#cedar`}>Cedar</a>
-        <a href={`${prefix}#contact`}>Partnerships</a>
+        {navLinks.map(link => (
+          <a href={`${prefix}${link.href}`}>{link.label}</a>
+        ))}
         <a href="/terms">Terms</a>
         <a href="/privacy">Privacy</a>
       </div>

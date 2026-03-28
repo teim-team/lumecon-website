@@ -17,8 +17,9 @@ import '../styles/cedar.css';
         <div class="chat-dot"></div>
         <div class="chat-title">Cedar</div>
       </div>
-      <div class="chat-body" id="chatBody">
+      <div class="chat-body" id="chatBody" aria-live="polite" aria-label="Cedar AI demo conversation">
         <div class="chat-skeleton" id="chatSkeleton">
+          <div class="chat-skeleton-hint">Demo will play automatically</div>
           <div class="chat-skeleton-line"></div>
           <div class="chat-skeleton-line"></div>
           <div class="chat-skeleton-line"></div>
@@ -39,7 +40,6 @@ import '../styles/cedar.css';
 
 <script>
   import { conversations } from '../data/cedar-conversations';
-  import type { ChatMessage } from '../data/cedar-conversations';
 
   // Chat demo timing constants
   const TYPING_DELAY_CEDAR = 1800;
@@ -51,110 +51,114 @@ import '../styles/cedar.css';
   const INITIAL_PLAY_DELAY = 600;
   const INTERSECTION_THRESHOLD = 0.2;
 
-  const chatBody = document.getElementById('chatBody')!
-  const chatDemo = document.getElementById('chatDemo')!;
-  const chatPause = document.getElementById('chatPause')!;
-  const chatPrev = document.getElementById('chatPrev')!;
-  const chatNext = document.getElementById('chatNext')!;
-  const chatIndicator = document.getElementById('chatIndicator')!;
-  const chatSkeleton = document.getElementById('chatSkeleton')!;
-  let convIdx = 0;
-  let chatRunning = false;
-  let paused = false;
-  let abortController: AbortController | null = null;
+  (function() {
+    const chatBody = document.getElementById('chatBody');
+    const chatDemo = document.getElementById('chatDemo');
+    const chatPause = document.getElementById('chatPause');
+    const chatPrev = document.getElementById('chatPrev');
+    const chatNext = document.getElementById('chatNext');
+    const chatIndicator = document.getElementById('chatIndicator');
+    const chatSkeleton = document.getElementById('chatSkeleton');
+    if (!chatBody || !chatDemo || !chatPause || !chatPrev || !chatNext || !chatIndicator || !chatSkeleton) return;
 
-  function updateIndicator() {
-    chatIndicator.textContent = (convIdx + 1) + ' / ' + conversations.length;
-  }
+    let convIdx = Math.floor(Math.random() * conversations.length);
+    let chatRunning = false;
+    let paused = false;
+    let abortController: AbortController | null = null;
 
-  function sleep(ms: number, signal?: AbortSignal): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(resolve, ms);
-      if (signal) {
-        signal.addEventListener('abort', () => { clearTimeout(timer); reject(new DOMException('Aborted', 'AbortError')); });
-      }
-    });
-  }
+    const updateIndicator = () => {
+      chatIndicator.textContent = (convIdx + 1) + ' / ' + conversations.length;
+    };
 
-  function showTyping(from: string) {
-    const t = document.createElement('div');
-    t.className = 'chat-typing';
-    t.style.alignSelf = from === 'user' ? 'flex-end' : 'flex-start';
-    t.innerHTML = '<span></span><span></span><span></span>';
-    chatBody.appendChild(t);
-    chatBody.scrollTop = chatBody.scrollHeight;
-    return t;
-  }
+    const sleep = (ms: number, signal?: AbortSignal): Promise<void> => {
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(resolve, ms);
+        if (signal) {
+          signal.addEventListener('abort', () => { clearTimeout(timer); reject(new DOMException('Aborted', 'AbortError')); });
+        }
+      });
+    };
 
-  async function playConversation() {
-    abortController = new AbortController();
-    const signal = abortController.signal;
-    chatSkeleton.style.display = 'none';
-    chatBody.innerHTML = '';
-    updateIndicator();
-    const conv = conversations[convIdx];
-    try {
-      for (let i = 0; i < conv.length; i++) {
-        while (paused) { await sleep(PAUSE_CHECK_INTERVAL, signal); }
-        const m = conv[i];
-        if (m.from === 'system') {
+    const showTyping = (from: string) => {
+      const t = document.createElement('div');
+      t.className = 'chat-typing';
+      t.style.alignSelf = from === 'user' ? 'flex-end' : 'flex-start';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      chatBody.appendChild(t);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      return t;
+    };
+
+    const playConversation = async () => {
+      abortController = new AbortController();
+      const signal = abortController.signal;
+      chatSkeleton.style.display = 'none';
+      chatBody.innerHTML = '';
+      updateIndicator();
+      const conv = conversations[convIdx];
+      try {
+        for (let i = 0; i < conv.length; i++) {
+          while (paused) { await sleep(PAUSE_CHECK_INTERVAL, signal); }
+          const m = conv[i];
+          if (m.from === 'system') {
+            const el = document.createElement('div');
+            el.className = 'chat-msg chat-msg--system';
+            el.style.whiteSpace = 'pre-line';
+            el.textContent = m.text ?? '';
+            chatBody.appendChild(el);
+            requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
+            chatBody.scrollTop = chatBody.scrollHeight;
+            await sleep(SYSTEM_MESSAGE_PAUSE, signal);
+            continue;
+          }
+          const typing = showTyping(m.from);
+          await sleep(m.from === 'cedar' ? TYPING_DELAY_CEDAR : TYPING_DELAY_USER, signal);
+          typing.remove();
           const el = document.createElement('div');
-          el.className = 'chat-msg chat-msg--system';
-          el.style.whiteSpace = 'pre-line';
-          el.textContent = m.text;
+          el.className = 'chat-msg chat-msg--' + m.from;
+          const label = m.from === 'cedar' ? 'Cedar' : 'You';
+          let content = '<div class="sender">' + label + '</div>';
+          if (m.html) { content += m.html; } else { content += (m.text ?? '').replace(/\n/g, '<br>'); }
+          el.innerHTML = content;
           chatBody.appendChild(el);
           requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
           chatBody.scrollTop = chatBody.scrollHeight;
-          await sleep(SYSTEM_MESSAGE_PAUSE, signal);
-          continue;
+          await sleep(MESSAGE_PAUSE, signal);
         }
-        const typing = showTyping(m.from);
-        await sleep(m.from === 'cedar' ? TYPING_DELAY_CEDAR : TYPING_DELAY_USER, signal);
-        typing.remove();
-        const el = document.createElement('div');
-        el.className = 'chat-msg chat-msg--' + m.from;
-        const label = m.from === 'cedar' ? 'Cedar' : 'You';
-        let content = '<div class="sender">' + label + '</div>';
-        if (m.html) { content += m.html; } else { content += m.text.replace(/\n/g, '<br>'); }
-        el.innerHTML = content;
-        chatBody.appendChild(el);
-        requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
-        chatBody.scrollTop = chatBody.scrollHeight;
-        await sleep(MESSAGE_PAUSE, signal);
+        await sleep(AUTO_ADVANCE_DELAY, signal);
+        convIdx = (convIdx + 1) % conversations.length;
+        playConversation();
+      } catch (e: any) {
+        if (e.name !== 'AbortError') throw e;
       }
-      await sleep(AUTO_ADVANCE_DELAY, signal);
-      convIdx = (convIdx + 1) % conversations.length;
+    };
+
+    const jumpTo = (idx: number) => {
+      convIdx = ((idx % conversations.length) + conversations.length) % conversations.length;
+      if (abortController) abortController.abort();
+      paused = false;
+      chatPause.textContent = 'Pause';
+      chatPause.classList.remove('active');
       playConversation();
-    } catch (e: any) {
-      if (e.name !== 'AbortError') throw e;
-    }
-  }
+    };
 
-  function jumpTo(idx: number) {
-    convIdx = ((idx % conversations.length) + conversations.length) % conversations.length;
-    if (abortController) abortController.abort();
-    paused = false;
-    chatPause.textContent = 'Pause';
-    chatPause.classList.remove('active');
-    playConversation();
-  }
-
-  chatPrev.addEventListener('click', () => jumpTo(convIdx - 1));
-  chatNext.addEventListener('click', () => jumpTo(convIdx + 1));
-  chatPause.addEventListener('click', () => {
-    paused = !paused;
-    chatPause.textContent = paused ? 'Play' : 'Pause';
-    chatPause.classList.toggle('active', paused);
-  });
-
-  const chatObs = new IntersectionObserver(es => {
-    es.forEach(e => {
-      if (e.isIntersecting && !chatRunning) {
-        chatRunning = true;
-        setTimeout(playConversation, INITIAL_PLAY_DELAY);
-        chatObs.unobserve(e.target);
-      }
+    chatPrev.addEventListener('click', () => jumpTo(convIdx - 1));
+    chatNext.addEventListener('click', () => jumpTo(convIdx + 1));
+    chatPause.addEventListener('click', () => {
+      paused = !paused;
+      chatPause.textContent = paused ? 'Play' : 'Pause';
+      chatPause.classList.toggle('active', paused);
     });
-  }, { threshold: INTERSECTION_THRESHOLD });
-  chatObs.observe(chatDemo);
+
+    const chatObs = new IntersectionObserver(es => {
+      es.forEach(e => {
+        if (e.isIntersecting && !chatRunning) {
+          chatRunning = true;
+          setTimeout(playConversation, INITIAL_PLAY_DELAY);
+          chatObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: INTERSECTION_THRESHOLD });
+    chatObs.observe(chatDemo);
+  })();
 </script>

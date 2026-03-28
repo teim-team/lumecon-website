@@ -67,7 +67,7 @@ footer > * { position: relative; z-index: 2; }
 .footer-email:hover { color: var(--gold); }
 
 @media (max-width: 600px) {
-  .footer-w { padding: 0 1.8rem; }
+  .footer-w { padding: 0 var(--mobile-pad); }
   .footer-top { flex-direction: column; }
   .footer-bottom { flex-direction: column; text-align: center; }
 }

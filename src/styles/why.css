@@ -94,7 +94,7 @@
   .why-card { aspect-ratio: 1/1; }
 }
 @media (max-width: 600px) {
-  .why-inner { padding: 0 1.8rem; }
+  .why-inner { padding: 0 var(--mobile-pad); }
   .why-cards { grid-template-columns: 1fr 1fr; gap: 2px; }
   .why-card { aspect-ratio: auto; min-height: 140px; clip-path: none; }
   .why-card-front { position: relative; padding: .8rem; }

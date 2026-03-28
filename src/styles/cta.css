@@ -54,7 +54,7 @@
   background: var(--gold);
   transition: width .4s var(--ease);
 }
-.cta-email:hover { color: #e0be6a; }
+.cta-email:hover { color: var(--gold-hover); }
 .cta-email:hover::after { width: 100%; }
 .cta-form {
   background: rgba(255, 252, 247, .06);
@@ -121,7 +121,7 @@
   transition: all .25s var(--ease);
 }
 .cta-form button:hover {
-  background: #d4ad55;
+  background: var(--gold-btn-hover);
   transform: translateY(-1px);
 }
 .cta-form button:disabled {
@@ -134,5 +134,5 @@
   .cta-inner { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .cta-inner { padding: 0 1.8rem; }
+  .cta-inner { padding: 0 var(--mobile-pad); }
 }
