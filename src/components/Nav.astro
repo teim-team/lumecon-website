@@ -1,5 +1,5 @@
 ---
-import { site } from '../config';
+import { site, navLinks } from '../config';
 interface Props {
   isHome?: boolean;
 }
@@ -10,9 +10,9 @@ const prefix = isHome ? '' : '/';
   <div class="nav-w">
     <a href="/" class="logo">{site.name}</a>
     <div class="nav-links" id="navLinks">
-      <a href={`${prefix}#products`}>Products</a>
-      <a href={`${prefix}#cedar`}>Cedar</a>
-      <a href={`${prefix}#contact`}>Partnerships</a>
+      {navLinks.map(link => (
+        <a href={`${prefix}${link.href}`}>{link.label}</a>
+      ))}
       <a href={`mailto:${site.email}`}>Get in Touch</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
@@ -22,18 +22,50 @@ const prefix = isHome ? '' : '/';
 </nav>
 
 <script>
-  const hb = document.getElementById('hamburger')!;
-  const nl = document.getElementById('navLinks')!;
-  hb.addEventListener('click', () => {
-    nl.classList.toggle('open');
-    hb.classList.toggle('on');
-    hb.setAttribute('aria-expanded', String(nl.classList.contains('open')));
-  });
-  nl.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
+  (function() {
+    const hb = document.getElementById('hamburger');
+    const nl = document.getElementById('navLinks');
+    if (!hb || !nl) return;
+
+    const openMenu = () => {
+      nl.classList.add('open');
+      hb.classList.add('on');
+      hb.setAttribute('aria-expanded', 'true');
+      const firstLink = nl.querySelector('a');
+      if (firstLink) (firstLink as HTMLElement).focus();
+    };
+
+    const closeMenu = () => {
       nl.classList.remove('open');
       hb.classList.remove('on');
       hb.setAttribute('aria-expanded', 'false');
+      hb.focus();
+    };
+
+    hb.addEventListener('click', () => {
+      nl.classList.contains('open') ? closeMenu() : openMenu();
     });
-  });
+
+    nl.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nl.classList.contains('open')) closeMenu();
+    });
+
+    nl.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || !nl.classList.contains('open')) return;
+      const focusable = nl.querySelectorAll('a');
+      const first = focusable[0] as HTMLElement;
+      const last = focusable[focusable.length - 1] as HTMLElement;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+  })();
 </script>

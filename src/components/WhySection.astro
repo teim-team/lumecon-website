@@ -47,7 +47,7 @@ import '../styles/why.css';
   // Mobile touch-to-flip for why cards
   if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
     document.querySelectorAll('.why-card').forEach(card => {
-      card.addEventListener('click', (e) => {
+      card.addEventListener('click', () => {
         const target = card as HTMLElement;
         const wasFlipped = target.classList.contains('flipped');
         // Close all other cards first

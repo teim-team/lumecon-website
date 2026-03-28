@@ -74,33 +74,43 @@ const jsonLd = {
 </style>
 
 <script>
+  // Scroll & reveal constants
+  const NAV_SCROLL_THRESHOLD = 40; // px before nav gets 'scrolled' class
+  const STAGGER_DELAY_PER_ITEM = 150; // ms between staggered reveals
+  const REVEAL_THRESHOLD = 0.08;
+  const REVEAL_ROOT_MARGIN = '0px 0px -30px 0px';
+  const SECTION_ACTIVE_ROOT_MARGIN = '-40% 0px -55% 0px';
+
   // Scroll progress indicator + nav scroll state
-  const nav = document.getElementById('nav')!;
-  const progressBar = document.getElementById('scrollProgress')!;
-  const backToTop = document.getElementById('backToTop')!;
-  let ticking = false;
+  (function() {
+    const nav = document.getElementById('nav');
+    const progressBar = document.getElementById('scrollProgress');
+    const backToTop = document.getElementById('backToTop');
+    if (!nav || !progressBar || !backToTop) return;
+    let ticking = false;
 
-  function onScroll() {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
 
-    progressBar.style.width = progress + '%';
-    nav.classList.toggle('scrolled', scrollTop > 40);
-    backToTop.classList.toggle('visible', scrollTop > window.innerHeight);
-    ticking = false;
-  }
+      progressBar.style.width = progress + '%';
+      nav.classList.toggle('scrolled', scrollTop > NAV_SCROLL_THRESHOLD);
+      backToTop.classList.toggle('visible', scrollTop > window.innerHeight);
+      ticking = false;
+    };
 
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(onScroll);
-      ticking = true;
-    }
-  }, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }, { passive: true });
 
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
 
   // Intersection observer for reveal animations (staggered product blocks)
   const obs = new IntersectionObserver(es => {
@@ -109,14 +119,14 @@ const jsonLd = {
         const el = e.target as HTMLElement;
         const stagger = el.dataset.stagger;
         if (stagger) {
-          setTimeout(() => el.classList.add('seen'), parseInt(stagger) * 150);
+          setTimeout(() => el.classList.add('seen'), parseInt(stagger) * STAGGER_DELAY_PER_ITEM);
         } else {
           el.classList.add('seen');
         }
         obs.unobserve(e.target);
       }
     });
-  }, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
+  }, { threshold: REVEAL_THRESHOLD, rootMargin: REVEAL_ROOT_MARGIN });
   document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-diagonal').forEach(el => obs.observe(el));
 
   // Active section highlighting in nav
@@ -132,6 +142,6 @@ const jsonLd = {
         });
       }
     });
-  }, { threshold: 0, rootMargin: '-40% 0px -55% 0px' });
+  }, { threshold: 0, rootMargin: SECTION_ACTIVE_ROOT_MARGIN });
   sections.forEach(s => sectionObs.observe(s));
 </script>

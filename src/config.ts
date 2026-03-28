@@ -1,4 +1,11 @@
 // Site-wide configuration — single source of truth
+
+export const navLinks = [
+  { label: 'Products', href: '#products' },
+  { label: 'Cedar', href: '#cedar' },
+  { label: 'Partnerships', href: '#contact' },
+] as const;
+
 export const site = {
   name: 'Lumecon',
   tagline: 'We luminate economies',

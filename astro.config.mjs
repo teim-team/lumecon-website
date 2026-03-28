@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://lumecon.ai',
@@ -6,5 +7,6 @@ export default defineConfig({
   build: {
     format: 'directory'
   },
-  trailingSlash: 'never'
+  trailingSlash: 'never',
+  integrations: [sitemap()]
 });
