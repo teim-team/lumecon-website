@@ -1,28 +1,26 @@
 ---
 /**
- * Hero — LUMECON brand mark + a single live impact study.
+ * Hero — Lumecon brand + interactive Cedar workshop.
  *
- * Cedar narrates one line at a time, the map plays one study at a
- * time, the numbers sit in the margin. No chips, no wizard, no
- * buttons besides the two CTAs. The map cycles between three real
- * example regions automatically; clicking any state in the map
- * also starts a study from that state. Everything else is type and
- * whitespace.
+ * One canvas: the live impact study, with Cedar as a real chatbot
+ * paired beside it. The visitor can type free-form, ask what each
+ * ring means, or click any state on the map to run a fresh study.
+ * The map also carries AIANNH (American Indian / Alaska Native /
+ * Native Hawaiian) boundaries from Census TIGER/Line so the parent
+ * brand's tribal-economies platform shows up visually, not just in
+ * footer text.
  */
 import { geoPath } from 'd3-geo';
 import { mesh, feature } from 'topojson-client';
 // @ts-ignore — us-atlas ships JSON, not TS
 import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
+// @ts-ignore — generated data, no .d.ts
+import { CENSUS_TRIBAL_LANDS } from '../data/tribalLands.generated.js';
 import '../styles/hero.css';
 
-/* Tightened viewBox: crops the extra blank Atlantic/Pacific space
-   around the albers-USA projection while keeping the AK/HI insets
-   visible at lower-left. The full us-atlas canvas is 0 0 975 610;
-   the country itself occupies roughly 70 60 850 510. */
-const VIEWBOX_X = 70;
-const VIEWBOX_Y = 60;
-const VIEWBOX_W = 850;
-const VIEWBOX_H = 510;
+/* Tightened viewBox crops the empty Atlantic/Pacific around the
+   albers-USA projection while keeping the AK/HI insets visible. */
+const VBX = 70, VBY = 60, VBW = 850, VBH = 510;
 const path = geoPath();
 // @ts-ignore
 const statesFC: any = feature(usAtlas, usAtlas.objects.states);
@@ -31,15 +29,12 @@ const stateBordersD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any
 // @ts-ignore
 const nationOutlineD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a === b));
 
-/* Centroids for the click-on-any-state path. We pre-project each
-   state's centroid so the client doesn't need d3 at runtime. */
 const stateData = statesFC.features.map((f: any) => {
   const [cx, cy] = path.centroid(f);
   return { id: f.id, name: f.properties.name, d: path(f), cx: +cx.toFixed(1), cy: +cy.toFixed(1) };
 });
 
-/* FIPS state-id → 2-letter postal code, so the client can look up
-   the visitor's state from an IP-geolocation response. */
+/* FIPS state-id → 2-letter postal code, for IP-geolocation lookup. */
 const STATE_CODES: Record<string, string> = {
   '01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','11':'DC',
   '12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY',
@@ -50,77 +45,130 @@ const STATE_CODES: Record<string, string> = {
 };
 const CODE_TO_ID = Object.fromEntries(Object.entries(STATE_CODES).map(([id, code]) => [code, id]));
 
-/* Three default examples that cycle automatically. Deliberately NOT
-   Mecklenburg County — IMPLAN used that. These span Pacific NW,
-   South Central, and an Indigenous-economy example so the parent
-   brand reads as covering all three platform geographies. */
-const examples = [
-  { state: '53', name: 'Pierce County, WA',           activity: 'a $5M capital build',         tone: 'A municipality recapitalizes its water plant.' },
-  { state: '48', name: 'Travis County, TX',           activity: 'a $20M operations payroll',  tone: 'A university expands its workforce.' },
-  { state: '41', name: 'Umatilla Reservation, OR',    activity: 'a $1M grant pass-through',   tone: 'A tribal government runs a workforce program.' },
-];
+/* AIANNH polygons. Filter to ones with a usable path. They render as
+   a quiet terra layer beneath the state shading so the parent brand's
+   tribal-economies geography is visible at a glance without screaming. */
+const aiannh = (CENSUS_TRIBAL_LANDS as any[]).filter(l => l.pathD && l.x != null && l.y != null);
 
-const examplesJson = JSON.stringify(examples);
 const statesJson = JSON.stringify(
   stateData.reduce((acc: any, s: any) => { acc[s.id] = { name: s.name, cx: s.cx, cy: s.cy, code: STATE_CODES[s.id] || '' }; return acc; }, {})
 );
 const codeMapJson = JSON.stringify(CODE_TO_ID);
 ---
 <section class="hero" id="top">
-  <!-- Brand block, top-left -->
+  <!-- Brand block - the wordmark + key info, then the map shines below -->
   <div class="hero-brand">
-    <h1 class="hero-wordmark">Lumecon</h1>
-    <p class="hero-tagline">Economic &amp; policy analysis software for governments.</p>
-    <hr class="hero-rule" />
+    <a href="/" class="hero-mark" aria-label="Lumecon Inc.">
+      <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="320" height="56" />
+    </a>
+    <p class="hero-pitch">
+      Economic and policy analysis software for governments. Parent of three platforms &mdash;
+      <a href="#products" class="platform-pill platform-pill--local"><span class="platform-pill__dot"></span>Local</a>
+      <a href="#products" class="platform-pill platform-pill--tribal"><span class="platform-pill__dot"></span>Tribal</a>
+      <a href="#products" class="platform-pill platform-pill--global"><span class="platform-pill__dot"></span>Global</a>.
+    </p>
   </div>
 
-  <!-- Stage: the live map -->
-  <figure class="hero-stage" id="heroStage" aria-label="A live economic impact study playing on a US map">
-    <svg class="hero-map" id="heroMap" viewBox={`${VIEWBOX_X} ${VIEWBOX_Y} ${VIEWBOX_W} ${VIEWBOX_H}`} preserveAspectRatio="xMidYMid meet" role="img">
-      <defs>
-        <radialGradient id="hGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
-          <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
-          <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <path class="hero-map__fill" d={nationOutlineD} />
-      <g class="hero-map__states">
-        {stateData.map((s: any) => (
-          <path
-            class="hero-state"
-            d={s.d}
-            data-id={s.id}
-            data-cx={s.cx}
-            data-cy={s.cy}
-            tabindex="0"
-            role="button"
-            aria-label={s.name}
-          />
-        ))}
-      </g>
-      <path class="hero-map__borders" d={stateBordersD} />
-      <path class="hero-map__outline" d={nationOutlineD} />
+  <!-- The live workshop: map (dominant) + Cedar (paired chatbot) -->
+  <div class="hero-workshop">
 
-      <!-- the active source: one point at a time -->
-      <g class="hero-source" id="heroSource">
-        <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
-        <circle class="hero-ring"  data-ring="1" cx="0" cy="0" r="14" />
-        <circle class="hero-ring"  data-ring="2" cx="0" cy="0" r="14" />
-        <circle class="hero-ring"  data-ring="3" cx="0" cy="0" r="14" />
-        <circle class="hero-spark"      cx="0" cy="0" r="6" />
-        <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
-      </g>
-    </svg>
-  </figure>
+    <!-- Stage -->
+    <figure class="hero-stage" id="heroStage" aria-label="Interactive map. Hover any state to inspect it; click to run a study there.">
+      <svg class="hero-map" id="heroMap" viewBox={`${VBX} ${VBY} ${VBW} ${VBH}`} preserveAspectRatio="xMidYMid meet" role="img">
+        <defs>
+          <radialGradient id="hGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
+            <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
+            <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
 
-  <!-- Cedar narrates, one line at a time -->
-  <p class="hero-cedar" id="heroCedar" aria-live="polite">
-    <span class="hero-cedar__from">Cedar &mdash;</span>
-    <span class="hero-cedar__line" id="heroLine">An impact study is a dollar tracing its own ripples. Watch.</span>
-  </p>
+        <path class="hero-map__fill" d={nationOutlineD} />
 
-  <!-- Numbers as margin notes, not a panel -->
+        <g class="hero-map__states">
+          {stateData.map((s: any) => (
+            <path
+              class="hero-state"
+              d={s.d}
+              data-id={s.id}
+              data-cx={s.cx}
+              data-cy={s.cy}
+              tabindex="0"
+              role="button"
+              aria-label={s.name}
+            ></path>
+          ))}
+        </g>
+
+        <!-- AIANNH layer: subtle terra-tinted polygons, beneath ripples -->
+        <g class="hero-map__aiannh" aria-hidden="true">
+          {aiannh.map((land: any) => (
+            <path class={`hero-aiannh hero-aiannh--${land.category}`} d={land.pathD} data-name={land.name} />
+          ))}
+        </g>
+
+        <path class="hero-map__borders" d={stateBordersD} />
+        <path class="hero-map__outline" d={nationOutlineD} />
+
+        <!-- One source point at a time -->
+        <g class="hero-source" id="heroSource">
+          <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
+          <circle class="hero-ring"  data-ring="1" cx="0" cy="0" r="14" />
+          <circle class="hero-ring"  data-ring="2" cx="0" cy="0" r="14" />
+          <circle class="hero-ring"  data-ring="3" cx="0" cy="0" r="14" />
+          <circle class="hero-spark"      cx="0" cy="0" r="6" />
+          <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
+        </g>
+      </svg>
+
+      <!-- Hover tooltip rendered in HTML so we get rich type + arrow -->
+      <div class="hero-tooltip" id="heroTooltip" role="tooltip" aria-hidden="true">
+        <span class="hero-tooltip__name" id="ttName">&mdash;</span>
+        <span class="hero-tooltip__hint">click to run a study here</span>
+      </div>
+    </figure>
+
+    <!-- Cedar chatbot rail -->
+    <aside class="hero-cedar" aria-label="Cedar — Lumecon's AI assistant">
+      <header class="hero-cedar__head">
+        <span class="hero-cedar__dot"></span>
+        <span class="hero-cedar__name">Cedar</span>
+        <span class="hero-cedar__status" id="cedarStatus">ready when you are</span>
+      </header>
+
+      <ol class="hero-cedar__log" id="cedarLog" aria-live="polite">
+        <li class="cmsg cmsg--cedar is-in">
+          <span class="cmsg__from">Cedar</span>
+          Hi. I&rsquo;m Cedar, Lumecon&rsquo;s assistant. Click any state to run an impact study there, or ask me what a <em>direct,</em> <em>indirect,</em> or <em>induced</em> effect is.
+        </li>
+      </ol>
+
+      <form class="hero-cedar__form" id="cedarForm" autocomplete="off">
+        <input
+          type="text"
+          class="hero-cedar__input"
+          id="cedarInput"
+          placeholder="Ask Cedar, or click a state →"
+          aria-label="Message Cedar"
+        />
+        <button type="submit" class="hero-cedar__send" aria-label="Send">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+
+      <div class="hero-cedar__chips" aria-label="Quick prompts">
+        <button type="button" class="ccchip" data-ask="cedar">Who are you?</button>
+        <button type="button" class="ccchip" data-ask="what">What&rsquo;s an impact study?</button>
+        <button type="button" class="ccchip" data-ask="direct">Direct?</button>
+        <button type="button" class="ccchip" data-ask="indirect">Indirect?</button>
+        <button type="button" class="ccchip" data-ask="induced">Induced?</button>
+        <button type="button" class="ccchip" data-ask="ledger">Ledger?</button>
+        <button type="button" class="ccchip" data-ask="privacy">Data &amp; privacy?</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Number marginalia. Live values left, derived right (dim until filled). -->
   <dl class="hero-figs" aria-label="Result of the running impact study">
     <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
     <div class="hero-fig"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
@@ -129,100 +177,112 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     <div class="hero-fig hero-fig--derived" id="figJobsCell"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
   </dl>
 
-  <footer class="hero-cta">
-    <a href="#products" class="btn">See the three platforms</a>
-    <a href="#contact" class="btn btn--ghost">Want to hear more?</a>
-    <span class="hero-cta__note">Illustrative multipliers. Real runs cite every number.</span>
-  </footer>
+  <p class="hero-foot">
+    <span class="hero-foot__l">Illustrative multipliers &middot; real platform runs cite every number.</span>
+    <span class="hero-foot__r">AIANNH boundaries: Census TIGER/Line 2018.</span>
+  </p>
 
-  <script type="application/json" id="heroExamples" set:html={examplesJson}></script>
-  <script type="application/json" id="heroStates"   set:html={statesJson}></script>
-  <script type="application/json" id="heroCodeMap"  set:html={codeMapJson}></script>
+  <script type="application/json" id="heroStates"  set:html={statesJson}></script>
+  <script type="application/json" id="heroCodeMap" set:html={codeMapJson}></script>
 </section>
 
 <script>
-  /* Hero auto-play. Cycles through three default example regions
-     every ~13s. Clicking any state in the map starts a fresh study
-     from that state instead. The narration is one line — replaced,
-     not appended — so the hero stays calm. Number marginalia tick
-     up as the rings complete. */
-  type Ex = { state: string; name: string; activity: string; tone: string };
-  type StateInfo = { name: string; cx: number; cy: number };
+  /* Hero workshop.
+     - Click any state to start a study from there.
+     - Hover any state to see its name in a follow-mouse tooltip.
+     - Cedar accepts free-form input plus quick-ask chips. Responses
+       are local pattern-matching (no AI call from a marketing page);
+       sensible canned answers for the four common questions, with a
+       graceful fallback that nudges the visitor to click the map.
+     - Numbers tick up smoothly to their target.
+     - Auto-cycle through three example regions on first load, with
+       different activity + amount each pass so repeated views never
+       show the same study twice. */
 
-  (function () {
-    const stage  = document.getElementById('heroStage');
-    const source = document.getElementById('heroSource');
-    const line   = document.getElementById('heroLine');
-    const figD   = document.getElementById('figDirect');
-    const figI   = document.getElementById('figIndirect');
-    const figU   = document.getElementById('figInduced');
-    const figT   = document.getElementById('figTotal');
-    const figJ   = document.getElementById('figJobs');
-    if (!stage || !source || !line || !figD || !figI || !figU || !figT || !figJ) return;
+  type StateInfo = { name: string; cx: number; cy: number; code: string };
+  const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
+  const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
 
-    const examples: Ex[] = JSON.parse((document.getElementById('heroExamples') as HTMLScriptElement).textContent || '[]');
-    const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
-    const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
+  /* Activity catalog. Each ships with a sentence Cedar uses to frame
+     the study, an indirect/induced multiplier pair, and a jobs/M
+     coefficient. None of these are sourced; the hero footer says so. */
+  const ACTIVITIES = [
+    { id: 'build',    label: 'capital construction', verb: 'breaks ground on',     indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
+    { id: 'payroll',  label: 'operations payroll',   verb: 'expands the payroll of', indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
+    { id: 'grant',    label: 'grant pass-through',   verb: 'disburses',            indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
+    { id: 'tourism',  label: 'visitor spending',     verb: 'welcomes tourist dollars into', indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
+    { id: 'energy',   label: 'energy project',       verb: 'commissions a clean-energy project in', indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
+  ] as const;
+  const AMOUNTS = [
+    { v: 1_000_000,  label: '$1M'  },
+    { v: 5_000_000,  label: '$5M'  },
+    { v: 12_000_000, label: '$12M' },
+    { v: 20_000_000, label: '$20M' },
+    { v: 50_000_000, label: '$50M' },
+  ] as const;
 
-    /* IP-based geolocation. We try a free lookup (ipapi.co), cache
-       the resulting state code in localStorage for 30 days, and use
-       it to lead the cycle with the visitor's own state. Failures
-       (offline, blocked, opaque CSP) just fall through to the default
-       three-region rotation — no spinner, no error message. The data
-       leaves the browser only on the first visit, and only the
-       returned state code is stored. */
-    const GEO_KEY = 'lumecon:geo';
-    const GEO_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+  /* Default cycle — three real example regions, each with a fixed
+     "story" sentence. The activity + amount are randomized on each
+     cycle pass so the visitor never sees the same study twice. */
+  const SCENES = [
+    { state: '53', name: 'Pierce County, WA',           story: 'A Pacific-Northwest municipality' },
+    { state: '48', name: 'Travis County, TX',           story: 'A growth-metro university' },
+    { state: '41', name: 'Umatilla Reservation, OR',    story: 'A tribal government' },
+  ];
 
-    const readCachedState = (): string | null => {
-      try {
-        const raw = localStorage.getItem(GEO_KEY); if (!raw) return null;
-        const { code, at } = JSON.parse(raw) as { code: string; at: number };
-        if (!code || Date.now() - at > GEO_TTL_MS) return null;
-        return codeMap[code] || null;
-      } catch { return null; }
-    };
+  const ADJ_RADIUS = { indirect: 220, induced: 480 };
 
-    const detectStateId = async (): Promise<string | null> => {
-      const cached = readCachedState();
-      if (cached) return cached;
-      try {
-        const ctrl = new AbortController();
-        const t = window.setTimeout(() => ctrl.abort(), 2200);
-        const r = await fetch('https://ipapi.co/json/', { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
-        window.clearTimeout(t);
-        if (!r.ok) return null;
-        const j = await r.json();
-        const code: string | undefined = (j && (j.region_code || j.region_code_iso3166_2));
-        const country: string | undefined = j && (j.country_code || j.country);
-        if (country !== 'US' || !code) return null;
-        try { localStorage.setItem(GEO_KEY, JSON.stringify({ code, at: Date.now() })); } catch {}
-        return codeMap[code] || null;
-      } catch { return null; }
-    };
+  const stage   = document.getElementById('heroStage') as HTMLElement | null;
+  const tooltip = document.getElementById('heroTooltip') as HTMLElement | null;
+  const ttName  = document.getElementById('ttName');
+  const source  = document.getElementById('heroSource');
+  const figD    = document.getElementById('figDirect');
+  const figI    = document.getElementById('figIndirect');
+  const figU    = document.getElementById('figInduced');
+  const figT    = document.getElementById('figTotal');
+  const figJ    = document.getElementById('figJobs');
+  const figTotalCell = document.getElementById('figTotalCell');
+  const figJobsCell  = document.getElementById('figJobsCell');
+  const log     = document.getElementById('cedarLog');
+  const form    = document.getElementById('cedarForm') as HTMLFormElement | null;
+  const input   = document.getElementById('cedarInput') as HTMLInputElement | null;
+  const status  = document.getElementById('cedarStatus');
 
-    /* Adjacency table for the three example states only — that's all
-       we need for default-cycle runs. For free-click runs we compute
-       adjacency on the fly from centroid distance, so any state the
-       user clicks lights up a believable Indirect/Induced spread. */
-    const ADJ_RADIUS = { indirect: 220, induced: 480 };
+  if (stage && source && figD && figI && figU && figT && figJ && log && form && input && tooltip && ttName && status) {
 
-    const MULT = { indirect: 0.55, induced: 0.45, jobsPerM: 9.2 };
+    const wait = (ms: number) => new Promise<void>(r => window.setTimeout(r, ms));
 
+    /* ---------- helpers ---------- */
     const fmt = (n: number) =>
       n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.0$/, '') + 'M'
       : n >= 1_000   ? '$' + Math.round(n / 1_000) + 'K'
       :                '$' + Math.round(n);
 
-    const parseAmount = (activity: string): number => {
-      const m = activity.match(/\$([0-9.]+)([MK]?)/i);
-      if (!m) return 5_000_000;
-      const v = parseFloat(m[1]);
-      return m[2].toUpperCase() === 'M' ? v * 1_000_000 : m[2].toUpperCase() === 'K' ? v * 1_000 : v;
-    };
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
-    let timer: number | undefined;
-    let runId = 0;
+    /* Number ticker — animates from 0 → target over `dur` ms,
+       formatting the running value with the same fmt() as the final
+       so the column doesn't reshape mid-tick. */
+    const tickTo = (el: HTMLElement, target: number, prefix = '', dur = 1100) => {
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / dur);
+        const v = target * ease(t);
+        el.textContent = prefix + fmt(v);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    const tickInt = (el: HTMLElement, target: number, prefix = '', dur = 1100) => {
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / dur);
+        const v = Math.round(target * ease(t));
+        el.textContent = prefix + v.toLocaleString();
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
 
     const clearShading = () => {
       stage.querySelectorAll<HTMLElement>('.hero-state[data-ring]')
@@ -250,123 +310,245 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       });
     };
 
-    const setLine = (text: string) => {
-      line.classList.remove('is-in');
-      void (line as HTMLElement).offsetWidth;
-      line.textContent = text;
-      line.classList.add('is-in');
+    /* ---------- Cedar chat helpers ---------- */
+    const addMsg = (from: 'cedar' | 'you', html: string) => {
+      const li = document.createElement('li');
+      li.className = 'cmsg cmsg--' + from;
+      const sender = document.createElement('span');
+      sender.className = 'cmsg__from';
+      sender.textContent = from === 'cedar' ? 'Cedar' : 'You';
+      li.appendChild(sender);
+      const body = document.createElement('span');
+      body.innerHTML = html;
+      li.appendChild(body);
+      log.appendChild(li);
+      requestAnimationFrame(() => { requestAnimationFrame(() => li.classList.add('is-in')); });
+      log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
     };
-    const setNum = (el: HTMLElement, v: string) => {
-      el.classList.remove('is-pop');
-      void el.offsetWidth;
-      el.textContent = v;
-      el.classList.add('is-pop');
+
+    const typing = async (ms = 700) => {
+      status.textContent = 'Cedar is typing…';
+      status.classList.add('is-typing');
+      await wait(ms);
+      status.classList.remove('is-typing');
+      status.textContent = 'ready when you are';
     };
-    const resetNums = () => [figD, figI, figU, figT, figJ].forEach(el => setNum(el as HTMLElement, '—'));
 
-    const wait = (ms: number, id: number) =>
-      new Promise<void>((resolve, reject) => {
-        const t = window.setTimeout(() => (runId === id ? resolve() : reject('cancelled')), ms);
-        // if cancelled mid-flight, the next run will re-init runId
-        timer = t;
-      });
+    const cedarSay = async (html: string, typingMs = 700) => {
+      await typing(typingMs);
+      addMsg('cedar', html);
+    };
 
-    const runStudy = async (stateId: string, label: string, narrate: string, amount: number) => {
+    /* ---------- canned-answer chatbot ---------- */
+    const ANSWERS: Record<string, string> = {
+      what: `An <em>economic impact study</em> traces a dollar after it's spent. The activity itself, the suppliers and contractors that activity buys from, and the wages those workers spend on rent, groceries, and the rest. The map is one playing in real time &mdash; click any state and watch it run.`,
+      direct: `The <em>direct</em> effect is the activity itself &mdash; payroll, contracts, the build-out. The gold ring on the map. It's the simplest number and the only one that doesn't need a multiplier.`,
+      indirect: `The <em>indirect</em> effect follows the supply chain. The contractors, vendors, and consultants the activity pays &mdash; and the firms <em>they</em> pay. That's the second ring out. Terra on the map.`,
+      induced: `The <em>induced</em> effect is what happens when wages get spent. Households buy rent, groceries, kids' shoes, a movie ticket. Those receipts ripple too. The widest ring &mdash; cedar green.`,
+      ledger: `The <em>ledger</em> is every assumption, source, and multiplier behind the numbers. Lumecon's platforms ship one with every run so a reviewer can audit the result. The figures here are illustrative; the platforms cite theirs.`,
+      run: `Pick any state on the map and I'll run a study from there. Or just watch the cycle &mdash; it's already running.`,
+      hello: `Hi. Want to see how an impact study works? Click any state on the map, or use one of the quick prompts below.`,
+      cedar: `I'm <em>Cedar</em> &mdash; Lumecon's AI thought partner for economic and policy analysis. On the real platforms I sit beside your data: I read the messy uploads, name the assumptions, ask the question the model is about to assume an answer to, and write the ledger as we go. I won't think <em>for</em> you. I think <em>with</em> you. Here on the marketing page I'm scoped down: I narrate the demo and answer the obvious questions.`,
+      privacy: `On the platforms I run inside a per-project sandbox. Your data doesn't leave it. Provider calls are pseudonymized &mdash; I never see your real user ID, and project + file names get hashed before they cross the network. Here on the marketing site I'm a pattern-matcher with no upstream call.`,
+      platforms: `Lumecon is the parent. Three platforms inherit the same modeling backbone: <strong>Local</strong> (municipal), <strong>Tribal</strong> (Indigenous economies, with AIANNH geography baked in), <strong>Global</strong> (cross-border). The pills next to the wordmark scroll you to each.`,
+      help: `Things I can answer: what's an impact study, what each ring means, what the ledger is, who I am, how I handle data, what the three platforms cover. Anything else, point me at a state on the map.`,
+    };
+
+    const route = (q: string): string => {
+      const t = q.toLowerCase();
+      if (/\b(hi|hey|hello|yo)\b/.test(t)) return ANSWERS.hello;
+      if (/\b(who.*you|what.*you|tell.*about.*you|cedar)\b/.test(t)) return ANSWERS.cedar;
+      if (/\b(privacy|safe|secure|data|leak|train|provider)\b/.test(t)) return ANSWERS.privacy;
+      if (/\b(help|what.*can.*you|options|menu)\b/.test(t)) return ANSWERS.help;
+      if (/\b(what.*(impact|study)|how.*work|explain.*study|what.*do)\b/.test(t)) return ANSWERS.what;
+      if (/\bdirect\b/.test(t)) return ANSWERS.direct;
+      if (/\bindirect\b/.test(t)) return ANSWERS.indirect;
+      if (/\binduced\b/.test(t)) return ANSWERS.induced;
+      if (/\b(ledger|source|cite|assumption|method)\b/.test(t)) return ANSWERS.ledger;
+      if (/\b(run|start|try|demo|show)\b/.test(t)) return ANSWERS.run;
+      if (/\b(platform|product|local|tribal|global|brand|company)\b/.test(t)) return ANSWERS.platforms;
+      return `I'm a marketing-page assistant, not the full model. Try asking <em>what's a direct effect</em>, <em>who are you</em>, or click a state to run a study.`;
+    };
+
+    /* ---------- running a study ---------- */
+    let runId = 0;
+    let cycleTimer: number | undefined;
+
+    const runStudy = async (stateId: string, opts?: { activity?: typeof ACTIVITIES[number]; amount?: typeof AMOUNTS[number]; framing?: string }) => {
       runId += 1; const me = runId;
-      try {
-        resetNums();
-        stage.dataset.ring = '';
-        document.getElementById('figTotalCell')?.classList.remove('is-filled');
-        document.getElementById('figJobsCell')?.classList.remove('is-filled');
-        shadeNeighbors(stateId);
-        const s = states[stateId]; if (!s) return;
-        moveSource(s.cx, s.cy);
-        stage.dataset.run = '1';
+      const s = states[stateId]; if (!s) return;
 
-        setLine(narrate);
+      const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+      const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+      const framing  = opts?.framing  ?? `Someone ${activity.verb} ${s.name}`;
 
-        // ring 1 — Direct
-        stage.dataset.ring = '1';
-        await wait(900, me);
-        setNum(figD as HTMLElement, fmt(amount));
+      // reset
+      stage.dataset.run = '';
+      stage.dataset.ring = '';
+      figTotalCell?.classList.remove('is-filled');
+      figJobsCell?.classList.remove('is-filled');
+      [figD, figI, figU, figT, figJ].forEach(el => { if (el) el.textContent = '—'; });
 
-        // ring 2 — Indirect
-        await wait(1800, me);
-        stage.dataset.ring = '2';
-        setLine(`Suppliers and contractors near ${label} pick up the work.`);
-        const indirect = amount * MULT.indirect;
-        await wait(900, me);
-        setNum(figI as HTMLElement, '+ ' + fmt(indirect));
+      shadeNeighbors(stateId);
+      moveSource(s.cx, s.cy);
+      stage.dataset.run = '1';
 
-        // ring 3 — Induced
-        await wait(1900, me);
-        stage.dataset.ring = '3';
-        setLine(`Households spend those wages on rent, groceries, kids’ shoes.`);
-        const induced = amount * MULT.induced;
-        await wait(900, me);
-        setNum(figU as HTMLElement, '+ ' + fmt(induced));
+      await cedarSay(`${framing}. A ${activity.label} of <strong>${amount.label}</strong>. Watch the rings.`, 500);
+      if (runId !== me) return;
 
-        // total + jobs
-        await wait(1700, me);
-        stage.dataset.ring = '4';
-        const total = amount + indirect + induced;
-        const jobs = Math.round((total / 1_000_000) * MULT.jobsPerM);
-        setNum(figT as HTMLElement, fmt(total));
-        setNum(figJ as HTMLElement, '≈ ' + jobs.toLocaleString());
-        document.getElementById('figTotalCell')?.classList.add('is-filled');
-        document.getElementById('figJobsCell')?.classList.add('is-filled');
-        setLine(`That sum, with its assumption ledger, is your impact study.`);
-      } catch { /* cancelled */ }
+      // Direct
+      stage.dataset.ring = '1';
+      await wait(600);
+      tickTo(figD as HTMLElement, amount.v, '', 1000);
+
+      // Indirect
+      await wait(1900);
+      if (runId !== me) return;
+      stage.dataset.ring = '2';
+      await cedarSay(`Suppliers near ${s.name} pick up the work.`, 500);
+      const indirect = amount.v * activity.indirect;
+      tickTo(figI as HTMLElement, indirect, '+ ', 1000);
+
+      // Induced
+      await wait(1900);
+      if (runId !== me) return;
+      stage.dataset.ring = '3';
+      await cedarSay(`Wages from rings one and two land in households. The widest ring.`, 500);
+      const induced = amount.v * activity.induced;
+      tickTo(figU as HTMLElement, induced, '+ ', 1000);
+
+      // Total + jobs
+      await wait(1900);
+      if (runId !== me) return;
+      stage.dataset.ring = '4';
+      const total = amount.v + indirect + induced;
+      const jobs = Math.round((total / 1_000_000) * activity.jobsPerM);
+      figTotalCell?.classList.add('is-filled');
+      figJobsCell?.classList.add('is-filled');
+      tickTo(figT as HTMLElement, total, '', 1200);
+      tickInt(figJ as HTMLElement, jobs, '≈ ', 1000);
+      await cedarSay(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`, 500);
     };
 
-    const cycle = async (i: number) => {
-      const ex = examples[i % examples.length];
-      const amount = parseAmount(ex.activity);
-      await runStudy(ex.state, ex.name, `${ex.tone} ${ex.activity} in ${ex.name}.`, amount);
-      timer = window.setTimeout(() => cycle(i + 1), 4200);
+    /* ---------- auto-cycle (different activity each pass) ---------- */
+    let sceneIdx = 0;
+    const cycle = async () => {
+      const scene = SCENES[sceneIdx % SCENES.length];
+      const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+      const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+      const framing  = `${scene.story} ${activity.verb} ${scene.name}`;
+      await runStudy(scene.state, { activity, amount, framing });
+      sceneIdx += 1;
+      cycleTimer = window.setTimeout(cycle, 5200);
     };
 
-    // Click any state to start a custom run from there.
+    /* ---------- hover tooltip ---------- */
+    const placeTooltip = (e: MouseEvent | FocusEvent, el: HTMLElement) => {
+      const rect = stage.getBoundingClientRect();
+      let x: number, y: number;
+      if ('clientX' in e && (e as MouseEvent).clientX) {
+        x = (e as MouseEvent).clientX - rect.left;
+        y = (e as MouseEvent).clientY - rect.top;
+      } else {
+        const b = (el as any).getBoundingClientRect();
+        x = (b.left + b.width / 2) - rect.left;
+        y = (b.top + b.height / 2) - rect.top;
+      }
+      tooltip.style.transform = `translate(${x}px, ${y}px)`;
+    };
+
     stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
-      const handler = () => {
+      el.addEventListener('mouseenter', (e) => {
         const id = el.dataset.id; if (!id) return;
-        if (timer) window.clearTimeout(timer);
-        const name = states[id]?.name || 'that region';
-        runStudy(id, name, `A $5M program in ${name}. Watch the rings.`, 5_000_000)
-          .then(() => { timer = window.setTimeout(() => cycle(0), 5200); });
+        ttName.textContent = states[id]?.name || '';
+        tooltip.classList.add('is-on');
+        placeTooltip(e, el);
+      });
+      el.addEventListener('mousemove', (e) => placeTooltip(e, el));
+      el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
+      el.addEventListener('focus', (e) => {
+        const id = el.dataset.id; if (!id) return;
+        ttName.textContent = states[id]?.name || '';
+        tooltip.classList.add('is-on');
+        placeTooltip(e, el);
+      });
+      el.addEventListener('blur', () => tooltip.classList.remove('is-on'));
+
+      const start = async () => {
+        const id = el.dataset.id; if (!id) return;
+        if (cycleTimer) window.clearTimeout(cycleTimer);
+        await runStudy(id);
+        cycleTimer = window.setTimeout(cycle, 5800);
       };
-      el.addEventListener('click', handler);
+      el.addEventListener('click', start);
       el.addEventListener('keydown', (e) => {
         const k = (e as KeyboardEvent).key;
-        if (k === 'Enter' || k === ' ') { e.preventDefault(); handler(); }
+        if (k === 'Enter' || k === ' ') { e.preventDefault(); start(); }
       });
     });
 
-    /* Personal cycle: if we can detect a US state, run a study there
-       first ("An impact study right where you are — Texas."), then
-       fall into the default cycle of three example regions. */
-    const personalCycle = async (id: string) => {
-      const s = states[id]; if (!s) { cycle(0); return; }
-      const name = s.name;
-      const here = name; // state-level for now; the platforms localize to county/region
-      const narrate = `An impact study right where you are — ${here}. A $5M program ripples outward.`;
-      await runStudy(id, here, narrate, 5_000_000);
-      timer = window.setTimeout(() => cycle(0), 4600);
+    /* ---------- Cedar input + chips ---------- */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const q = input.value.trim(); if (!q) return;
+      addMsg('you', q);
+      input.value = '';
+      await cedarSay(route(q), 650);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.ccchip').forEach(c => {
+      c.addEventListener('click', async () => {
+        const k = c.dataset.ask || '';
+        addMsg('you', c.textContent || '');
+        const ans = (ANSWERS as any)[k] || ANSWERS.what;
+        await cedarSay(ans, 650);
+      });
+    });
+
+    /* ---------- IP-personalized kickoff ---------- */
+    const GEO_KEY = 'lumecon:geo';
+    const GEO_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+    const readCachedState = (): string | null => {
+      try {
+        const raw = localStorage.getItem(GEO_KEY); if (!raw) return null;
+        const { code, at } = JSON.parse(raw) as { code: string; at: number };
+        if (!code || Date.now() - at > GEO_TTL_MS) return null;
+        return codeMap[code] || null;
+      } catch { return null; }
+    };
+    const detectStateId = async (): Promise<string | null> => {
+      const cached = readCachedState(); if (cached) return cached;
+      try {
+        const ctrl = new AbortController();
+        const t = window.setTimeout(() => ctrl.abort(), 2200);
+        const r = await fetch('https://ipapi.co/json/', { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
+        window.clearTimeout(t);
+        if (!r.ok) return null;
+        const j = await r.json();
+        const code: string | undefined = j && (j.region_code || j.region_code_iso3166_2);
+        const country: string | undefined = j && (j.country_code || j.country);
+        if (country !== 'US' || !code) return null;
+        try { localStorage.setItem(GEO_KEY, JSON.stringify({ code, at: Date.now() })); } catch {}
+        return codeMap[code] || null;
+      } catch { return null; }
     };
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const ex = examples[0]; const s = states[ex.state]; if (s) { moveSource(s.cx, s.cy); shadeNeighbors(ex.state); }
-      setNum(figD as HTMLElement, fmt(5_000_000));
-      setLine('An impact study traces a dollar through the economy. Click any state to run one.');
-      return;
+      const s = states['53']; if (s) { moveSource(s.cx, s.cy); shadeNeighbors('53'); }
+      figD!.textContent = fmt(5_000_000);
+    } else {
+      detectStateId().then(async (sid) => {
+        if (sid && states[sid]) {
+          // Personalize the first study: real state, randomized activity + amount.
+          const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+          const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+          const framing  = `An impact study right where you are &mdash; ${states[sid].name}. Someone ${activity.verb} the area`;
+          await runStudy(sid, { activity, amount, framing });
+          cycleTimer = window.setTimeout(cycle, 5600);
+        } else {
+          cycleTimer = window.setTimeout(cycle, 900);
+        }
+      });
     }
-
-    detectStateId().then(stateId => {
-      if (stateId && states[stateId]) {
-        timer = window.setTimeout(() => personalCycle(stateId), 700);
-      } else {
-        timer = window.setTimeout(() => cycle(0), 900);
-      }
-    });
-  })();
+  }
 </script>

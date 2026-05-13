@@ -128,5 +128,7 @@ nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
   .nav-links.open { display: flex; }
   .nav-links.open a { font-size: 1.1rem; padding: .5rem 1.2rem; }
   .hamburger { display: block; }
-  .home-page .logo { opacity: 1 !important; pointer-events: auto !important; }
+  /* On the home page the hero carries the wordmark — don't double up. */
+  .home-page .logo { opacity: 0 !important; pointer-events: none !important; }
+  .home-page nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
 }
