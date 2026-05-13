@@ -1,8 +1,11 @@
+/* What you can use this for — four-item editorial list.
+   No cards, no icons. Roman numerals + Fraunces names + tight
+   description, hairlines between. */
+
 .why {
-  background: var(--paper);
-  padding: clamp(4rem, 8vw, 7rem) 0;
+  background: var(--cream);
+  padding: clamp(5rem, 10vw, 8.5rem) 0;
   position: relative;
-  border-top: 1px solid var(--rule);
 }
 .why::before {
   content: '';
@@ -10,121 +13,86 @@
   inset: 0;
   background: url('/textures/paper-grain.svg');
   background-size: 380px;
-  opacity: .25;
+  opacity: .2;
   mix-blend-mode: multiply;
   pointer-events: none;
 }
 .why-inner {
   position: relative;
-  max-width: var(--container-max);
+  max-width: 1080px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
-.why-top {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: clamp(2rem, 5vw, 4rem);
-  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
-}
-.why-top__left { display: flex; flex-direction: column; }
-.why-display {
-  font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+
+.why-eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
   color: var(--navy);
+  opacity: .58;
+  margin: 0 0 1.2rem;
+}
+
+.why-lead {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -.022em;
+  color: var(--navy);
+  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
   max-width: 22ch;
 }
-.why-display em { color: var(--gold); font-style: italic; font-weight: 400; }
-.why-top-right p {
-  margin-bottom: 1rem;
-  color: var(--navy);
-  opacity: .82;
-}
-.why-top-right .why-diff {
-  font-size: .98rem;
-  font-weight: 500;
-  font-style: italic;
-  color: var(--navy);
-  line-height: 1.6;
-  padding-left: 1.1rem;
-  border-left: 2px solid var(--gold);
-}
-.why-top-right .why-diff em { color: var(--gold); font-style: italic; font-weight: 600; }
+.why-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
 
-/* Card grid — square corners, sharing borders so the four cards
-   read as one editorial table, not separate floating cards. */
-.why-cards {
+.why-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.why-item {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule);
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: baseline;
+  padding: clamp(1.4rem, 3vw, 2rem) 0;
+  border-top: 1px solid var(--rule);
 }
-.why-card {
-  position: relative;
-  background: var(--white);
-  padding: clamp(1.2rem, 2vw, 1.6rem);
-  min-height: 230px;
-  cursor: pointer;
-  overflow: hidden;
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  transition: background .3s var(--ease);
-}
-.why-card-front, .why-card-back {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
-  text-align: left;
-  padding: clamp(1.2rem, 2vw, 1.6rem);
-  transition: opacity .35s var(--ease), transform .35s var(--ease);
-}
-.why-card-front { gap: .8rem; }
-.why-card-back { opacity: 0; transform: translateY(6px); justify-content: flex-end; }
-@media (hover: hover) and (pointer: fine) {
-  .why-card:hover { background: var(--navy); }
-  .why-card:hover .why-card-front { opacity: 0; transform: translateY(-6px); }
-  .why-card:hover .why-card-back { opacity: 1; transform: none; }
-  .why-card:hover h3 { color: var(--cream); }
-  .why-card:hover .why-card-geo svg path,
-  .why-card:hover .why-card-geo svg line,
-  .why-card:hover .why-card-geo svg rect,
-  .why-card:hover .why-card-geo svg circle { stroke: var(--gold); }
-}
-.why-card.flipped { background: var(--navy); }
-.why-card.flipped .why-card-front { opacity: 0; transform: translateY(-6px); }
-.why-card.flipped .why-card-back { opacity: 1; transform: none; }
-.why-card-geo {
-  width: 44px;
-  height: 44px;
-  margin-bottom: auto;
-  margin-top: .2rem;
-}
-.why-card-geo svg { width: 100%; height: 100%; }
-.why-card h3 {
+.why-item:last-child { border-bottom: 1px solid var(--rule); }
+
+.why-item__num {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
-  font-size: 1.4rem;
-  font-weight: 500;
-  line-height: 1.05;
-  color: var(--navy);
-  letter-spacing: -.01em;
-}
-.why-card.flipped h3 { color: var(--cream); }
-.why-card-back p {
-  font-size: .88rem;
-  color: rgba(246, 241, 233, .88);
-  line-height: 1.55;
+  font-style: italic;
+  font-variation-settings: "opsz" 60;
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--gold);
+  line-height: 1;
+  text-align: right;
 }
 
-@media (max-width: 960px) {
-  .why-top { grid-template-columns: 1fr; }
-  .why-cards { grid-template-columns: repeat(2, 1fr); }
+.why-item__name {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 96;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  color: var(--navy);
+  margin: 0 0 .35rem;
 }
+
+.why-item__desc {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--navy);
+  opacity: .8;
+  margin: 0;
+  max-width: 56ch;
+}
+
 @media (max-width: 600px) {
-  .why-inner { padding: 0 var(--mobile-pad); }
-  .why-card { min-height: 180px; }
-  .why-card-geo { width: 32px; height: 32px; }
-  .why-card h3 { font-size: 1.15rem; }
-  .why-card-back p { font-size: .8rem; }
+  .why-item { grid-template-columns: 2rem 1fr; gap: 1rem; }
+  .why-item__num { font-size: 1.2rem; }
 }

@@ -2,66 +2,36 @@
 import { site } from '../config';
 import '../styles/products.css';
 const { local, tribal, global: globalProduct } = site.products;
+const platforms = [local, tribal, globalProduct];
 ---
 <section class="platforms" id="products">
-  <div class="platforms-head">
-    <span class="kicker">§ 02 &nbsp;·&nbsp; The three platforms</span>
-    <h2 class="display platforms-display">One parent.<br>Three economies. <em>One method.</em></h2>
-    <p class="lede platforms-lede">
-      Lumecon Inc. is the parent brand. Each platform inherits the same modeling backbone &mdash; transparent multipliers, auditable assumptions, exportable provenance &mdash; and then bends the intake, the geography, and the language to the economy it serves.
-    </p>
-  </div>
+  <div class="platforms-inner">
+    <header class="platforms-head">
+      <p class="platforms-eyebrow">Where this lives.</p>
+      <h2 class="platforms-lead">
+        One method. <em>Three economies.</em>
+      </h2>
+    </header>
 
-  <div class="platforms-grid">
-    <a class="platform platform--local" href={local.url}>
-      <header class="platform__head">
-        <span class="platform__num mono">01</span>
-        <span class="platform__tag mono">Local</span>
-      </header>
-      <h3 class="platform__name">Local Economic<br>Impact</h3>
-      <div class="platform__url mono">{local.domain}</div>
-      <p class="platform__desc">Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations &mdash; without the cost or complexity of traditional tools.</p>
-      <footer class="platform__foot">
-        <span class="platform__status mono">{local.status}</span>
-        <span class="platform__arrow" aria-hidden="true">→</span>
-      </footer>
-      <svg class="platform__line" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 60 C 60 30, 120 70, 180 40 S 280 30, 320 50" />
-      </svg>
-    </a>
-
-    <a class="platform platform--tribal" href={tribal.url}>
-      <header class="platform__head">
-        <span class="platform__num mono">02</span>
-        <span class="platform__tag mono">Tribal</span>
-      </header>
-      <h3 class="platform__name">Tribal Economic<br>Impact</h3>
-      <div class="platform__url mono">{tribal.domain}</div>
-      <p class="platform__desc">Built for economies that don&rsquo;t fit standard assumptions. Designed from day one for tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies &mdash; with Indigenous data sovereignty baked in.</p>
-      <footer class="platform__foot">
-        <span class="platform__status mono">{tribal.status}</span>
-        <span class="platform__arrow" aria-hidden="true">→</span>
-      </footer>
-      <svg class="platform__line" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 50 C 80 70, 140 20, 200 50 S 280 60, 320 30" />
-      </svg>
-    </a>
-
-    <a class="platform platform--global" href={globalProduct.url}>
-      <header class="platform__head">
-        <span class="platform__num mono">03</span>
-        <span class="platform__tag mono">Global</span>
-      </header>
-      <h3 class="platform__name">Global Economic<br>Impact</h3>
-      <div class="platform__url mono">{globalProduct.domain}</div>
-      <p class="platform__desc">The same core modeling framework, applied across borders &mdash; supporting cross-border and multiregional analysis for multinationals, NGOs, and governments. Comparable methods, comparable results.</p>
-      <footer class="platform__foot">
-        <span class="platform__status mono">{globalProduct.status}</span>
-        <span class="platform__arrow" aria-hidden="true">→</span>
-      </footer>
-      <svg class="platform__line" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 40 C 70 60, 130 20, 200 35 S 280 70, 320 40" />
-      </svg>
-    </a>
+    {platforms.map((p, i) => (
+      <a class={`platform platform--${i === 0 ? 'local' : i === 1 ? 'tribal' : 'global'}`} href={p.url}>
+        <div class="platform__name-wrap">
+          <h3 class="platform__name">{p.name}</h3>
+          <span class="platform__url">{p.domain}</span>
+        </div>
+        <p class="platform__desc">
+          {i === 0 && (
+            <>Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations &mdash; without the cost or complexity of traditional tools.</>
+          )}
+          {i === 1 && (
+            <>Built for economies that don&rsquo;t fit standard assumptions. Designed from day one for tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies, with Indigenous data sovereignty in the foundation.</>
+          )}
+          {i === 2 && (
+            <>The same modeling backbone, applied across borders. Cross-border and multiregional analysis for multinationals, NGOs, and governments &mdash; comparable methods, comparable results.</>
+          )}
+        </p>
+        <span class="platform__status">{p.status}</span>
+      </a>
+    ))}
   </div>
 </section>

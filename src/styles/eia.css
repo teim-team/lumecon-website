@@ -1,0 +1,183 @@
+/* "What is economic impact analysis?" explainer.
+   A schematic US map with two spending sources emitting three rounds
+   of ripples on a slow loop. Beside it: the four-stage explanation
+   in editorial roman-numeral type. Adapted from the Tribal product's
+   hero map approach (us-atlas + d3-geo, mesh outlines, content-hash
+   delay staggering) but simplified for a parent-brand explainer:
+   we're showing how the analysis works, not which lands it covers. */
+
+.eia {
+  background: var(--white);
+  padding: clamp(5rem, 10vw, 9rem) 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.eia-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+.eia-head { margin-bottom: clamp(3rem, 6vw, 4.5rem); max-width: 56rem; }
+.eia-eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--navy);
+  opacity: .55;
+  margin: 0 0 1.2rem;
+}
+.eia-lead {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(2rem, 5.2vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -.022em;
+  color: var(--navy);
+  margin: 0;
+  max-width: 18ch;
+}
+.eia-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
+
+.eia-body {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+/* ---------- map ---------- */
+.eia-map { margin: 0; position: relative; }
+.eia-map__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.eia-map__fill {
+  fill: var(--cream);
+}
+.eia-map__borders {
+  fill: none;
+  stroke: rgba(45, 45, 63, .22);
+  stroke-width: .8;
+  vector-effect: non-scaling-stroke;
+}
+.eia-map__outline {
+  fill: none;
+  stroke: var(--navy);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+.eia-map__cap {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .04em;
+  color: var(--navy);
+  opacity: .55;
+  max-width: 48ch;
+  line-height: 1.5;
+}
+
+.eia-source__dot {
+  fill: var(--gold);
+  stroke: var(--navy);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 0 8px rgba(196, 154, 60, .55));
+}
+
+/* Three ripples per source emanate Direct → Indirect → Induced.
+   We restart the cycle every 6.4s, with each ring offset by 1.2s
+   so the page reads as a steady metronome rather than a chaotic
+   burst. East and west sources are offset by 600ms (--src-delay)
+   so they don't pulse in lockstep — that's what made the original
+   TEIM map "alive" instead of mechanical. */
+@keyframes eiaRipple {
+  0%   { r: 12; opacity: .9; stroke-width: 2.2; }
+  85%  { r: 110; opacity: 0;  stroke-width: .4; }
+  100% { r: 110; opacity: 0;  stroke-width: .4; }
+}
+.eia-ring {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2.2;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: eiaRipple 6.4s var(--ease) infinite;
+  animation-delay: calc(var(--src-delay, 0ms) + var(--ring-delay, 0ms));
+  vector-effect: non-scaling-stroke;
+}
+.eia-ring--direct    { stroke: var(--gold);  --ring-delay: 0ms; }
+.eia-ring--indirect  { stroke: var(--terra); --ring-delay: 1200ms; }
+.eia-ring--induced   { stroke: var(--cedar); --ring-delay: 2400ms; }
+.eia-ring--echo      { animation-delay: calc(var(--src-delay, 0ms) + var(--ring-delay, 0ms) + 3200ms); }
+
+/* ---------- rounds list ---------- */
+.eia-rounds {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.eia-round {
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  gap: 1.2rem;
+  align-items: baseline;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--rule);
+}
+.eia-round:last-child { border-bottom: 1px solid var(--rule); }
+
+.eia-round__num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 60;
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--round-c, var(--navy));
+  line-height: 1;
+  text-align: right;
+}
+.eia-round--direct   { --round-c: var(--gold); }
+.eia-round--indirect { --round-c: var(--terra); }
+.eia-round--induced  { --round-c: var(--cedar); }
+.eia-round--total .eia-round__num {
+  font-style: normal;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.eia-round__name {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 60;
+  font-weight: 500;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  color: var(--navy);
+  margin: 0 0 .25rem;
+  letter-spacing: -.01em;
+}
+.eia-round__desc {
+  font-size: .98rem;
+  line-height: 1.55;
+  color: var(--navy);
+  opacity: .8;
+  margin: 0;
+  max-width: 38ch;
+}
+.eia-round__desc em { font-style: italic; color: var(--navy); opacity: .9; }
+
+@media (max-width: 880px) {
+  .eia-body { grid-template-columns: 1fr; }
+  .eia-map { max-width: 640px; margin: 0 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eia-ring { animation: none; opacity: .35; r: 60; }
+  .eia-ring--echo { display: none; }
+}

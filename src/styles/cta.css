@@ -1,19 +1,15 @@
 .cta {
   background: var(--navy);
   color: var(--cream);
-  padding: clamp(4rem, 8vw, 7rem) 0;
-  position: relative;
-  overflow: hidden;
+  padding: clamp(5rem, 9vw, 8rem) 0;
   border-top: 1px solid var(--rule);
 }
-.cta::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 0% 100%, rgba(196, 154, 60, .1), transparent 50%),
-    radial-gradient(ellipse at 100% 0%, rgba(139, 125, 168, .1), transparent 45%);
-  pointer-events: none;
+.cta-eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(246, 241, 233, .58);
+  margin: 0 0 1.2rem;
 }
 .cta > * { position: relative; z-index: 2; }
 .cta-inner {
@@ -26,14 +22,21 @@
   align-items: start;
 }
 .cta-display {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -.022em;
   color: var(--cream);
-  font-size: clamp(2.2rem, 5vw, 4rem);
-  margin: 0 0 1rem;
+  margin: 0 0 1.2rem;
 }
 .cta-lede {
-  color: rgba(246, 241, 233, .85);
-  max-width: 38ch;
-  margin-bottom: 1.6rem;
+  font-size: 1.06rem;
+  line-height: 1.6;
+  color: rgba(246, 241, 233, .82);
+  max-width: 40ch;
+  margin: 0 0 1.8rem;
 }
 .cta-email {
   display: inline-block;

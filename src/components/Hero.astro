@@ -1,115 +1,140 @@
 ---
-import { site } from '../config';
+/**
+ * Lumecon Inc. hero — the luminating map.
+ *
+ * This page exists to answer one question: what is economic impact
+ * analysis? The hero answers it by *showing* one. A live US map sits
+ * full-bleed behind the wordmark. Two spending sources emit ripples
+ * — Direct, Indirect, Induced. As each ripple expands, the states
+ * it crosses *luminate*: a gold wash blooms across them, then fades.
+ * The brand promise — "we luminate economies" — is the demo.
+ */
+import { geoPath, geoCentroid } from 'd3-geo';
+import { mesh, feature } from 'topojson-client';
+// @ts-ignore — us-atlas ships JSON, not TS
+import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 import '../styles/hero.css';
-const { local, tribal, global: globalProduct } = site.products;
+
+const VIEWBOX_W = 975;
+const VIEWBOX_H = 610;
+
+const path = geoPath();
+// @ts-ignore
+const statesFC: any = feature(usAtlas, usAtlas.objects.states);
+// @ts-ignore
+const stateBordersD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a !== b));
+// @ts-ignore
+const nationOutlineD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a === b));
+
+/* Two spending sources anchor the ripple animation. Coordinates are
+   in the projected albers-USA viewbox so they line up with the state
+   mesh without us projecting anything ourselves. */
+const sources = [
+  { id: 's-east', cx: 760, cy: 250 },
+  { id: 's-west', cx: 240, cy: 330 },
+];
+
+/* For each state, compute distance from its centroid to the nearest
+   spending source and bucket it into one of three rings. The CSS
+   animation steps states through gold-luminance in three waves —
+   close states light first (Direct), mid next (Indirect), far last
+   (Induced). The whole sequence is one editorial cycle. */
+const RING_RADII = [180, 360, 560];
+const stateFeatures = statesFC.features.map((f: any) => {
+  const c = geoCentroid(f);
+  const projected = path.centroid(f);
+  const [cx, cy] = projected;
+  const dist = Math.min(...sources.map(s => Math.hypot(s.cx - cx, s.cy - cy)));
+  const ring = dist < RING_RADII[0] ? 0 : dist < RING_RADII[1] ? 1 : 2;
+  const d = path(f);
+  return { id: f.id, name: f.properties.name, d, ring, dist };
+});
 ---
 <section class="hero" id="top">
-  <div class="hero-grid">
+  <figure class="hero-map" aria-label="Animated map of the United States demonstrating how an economic impact study ripples outward from spending sources">
+    <svg
+      class="hero-map__svg"
+      viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
+      preserveAspectRatio="xMidYMid slice"
+      role="img"
+    >
+      <defs>
+        <radialGradient id="lumGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
+          <stop offset="55%" stop-color="#C49A3C" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2.2" />
+        </filter>
+      </defs>
+
+      <path class="hero-map__fill" d={nationOutlineD} />
+
+      <g class="hero-map__states" aria-hidden="true">
+        {stateFeatures.map((s: any, i: number) => (
+          <path
+            class={`hero-map__state hero-map__state--ring-${s.ring}`}
+            d={s.d}
+            style={`--lum-delay:${(s.dist / 4 + (i % 7) * 80).toFixed(0)}ms`}
+            data-state={s.id}
+          />
+        ))}
+      </g>
+
+      <path class="hero-map__borders" d={stateBordersD} />
+      <path class="hero-map__outline" d={nationOutlineD} />
+
+      {sources.map((s, i) => (
+        <g class={`hero-source hero-source--${s.id}`} style={`--src-delay:${i * 600}ms`}>
+          <circle class="hero-glow"     cx={s.cx} cy={s.cy} r="120" fill="url(#lumGlow)" />
+          <circle class="hero-ring hero-ring--r1" cx={s.cx} cy={s.cy} r="14" />
+          <circle class="hero-ring hero-ring--r2" cx={s.cx} cy={s.cy} r="14" />
+          <circle class="hero-ring hero-ring--r3" cx={s.cx} cy={s.cy} r="14" />
+          <circle class="hero-spark"    cx={s.cx} cy={s.cy} r="5" filter="url(#softGlow)" />
+          <circle class="hero-spark__core" cx={s.cx} cy={s.cy} r="2.2" />
+        </g>
+      ))}
+    </svg>
+  </figure>
+
+  <div class="hero-overlay">
     <div class="hero-text">
-      <span class="kicker">Lumecon Inc. &nbsp;·&nbsp; Parent brand</span>
-      <h1 class="display hero-display">
-        Economic and policy<br>
-        analysis software<br>
-        <em>for governments.</em>
+      <h1 class="hero-wordmark" id="heroWordmark" aria-label="Lumecon — a portmanteau of luminate and economies">
+        <span class="hw-cap">L</span><span class="hw-cap">U</span><span class="hw-cap">M</span><span class="hw-tail hw-tail--inate">inate</span><span class="hw-gap" aria-hidden="true"> </span><span class="hw-cap">E</span><span class="hw-cap">C</span><span class="hw-cap">O</span><span class="hw-cap">N</span><span class="hw-tail hw-tail--omies">omies</span>
       </h1>
-      <hr class="rule-h" />
-      <p class="lede hero-lede">
-        Lumecon is the parent brand for three specialized platforms &mdash; serving local, tribal, and global economies through affordable, web-based modeling that organizations of any size can act on.
+      <p class="hero-tagline">We <em>luminate</em> economies<sup>&trade;</sup></p>
+      <hr class="hero-rule" />
+      <p class="hero-pitch">
+        Watch a dollar move. A spending source emits a wave; supplier purchases follow; household wages follow them. That sum &mdash; the shaded swath &mdash; is an economic impact study.
       </p>
-      <p class="hero-sub">
-        Built by social scientists, government professionals, and software engineers. <span class="mono hero-pp">Patent pending.</span>
-      </p>
-      <div class="hero-actions" id="heroActions">
-        <a href="#products" class="btn">See the three platforms</a>
-        <a href="#cedar" class="btn btn--ghost">Meet Cedar</a>
-      </div>
-      <div class="hero-platforms" aria-label="Lumecon platforms">
-        <a href={local.url} class="hero-platform hero-platform--local">
-          <span class="hero-platform__dot" aria-hidden="true"></span>
-          <span class="hero-platform__name">Local Economic Impact</span>
-        </a>
-        <a href={tribal.url} class="hero-platform hero-platform--tribal">
-          <span class="hero-platform__dot" aria-hidden="true"></span>
-          <span class="hero-platform__name">Tribal Economic Impact</span>
-        </a>
-        <a href={globalProduct.url} class="hero-platform hero-platform--global">
-          <span class="hero-platform__dot" aria-hidden="true"></span>
-          <span class="hero-platform__name">Global Economic Impact</span>
-        </a>
+      <div class="hero-actions">
+        <a href="#how" class="btn">Read the rings</a>
+        <a href="#products" class="btn btn--ghost">See the platforms</a>
       </div>
     </div>
-    <figure class="hero-mark" aria-hidden="true">
-      <svg class="hero-lines" viewBox="0 0 720 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <defs>
-          <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#F2D67A" stop-opacity=".9"/>
-            <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
-            <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#8B7DA8" stop-opacity="0"/>
-            <stop offset="50%" stop-color="#8B7DA8" stop-opacity=".85"/>
-            <stop offset="100%" stop-color="#8B7DA8" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <path class="hero-line hero-line--d1" d="M-60 140 C 120 60, 240 240, 380 160 S 620 320, 800 220" />
-        <path class="hero-line hero-line--d2" d="M-60 280 C 100 220, 220 380, 360 290 S 600 460, 780 360" />
-        <path class="hero-line hero-line--d3" d="M-60 460 C 140 420, 240 580, 380 470 S 620 640, 800 540" />
-        <path class="hero-line hero-line--d4" d="M-60 640 C 100 600, 260 760, 400 660 S 640 820, 820 720" />
-        <path class="hero-line hero-line--solid" d="M-80 820 Q 140 600, 320 560 T 720 380" />
-        <circle class="hero-glow" cx="320" cy="500" r="120" fill="url(#heroGlow)" />
-        <circle class="hero-glow hero-glow--inner" cx="320" cy="500" r="56" fill="url(#heroGlow)" />
-        <circle class="hero-spark" cx="320" cy="500" r="4.5" />
-        <line class="hero-spark-arm" x1="298" y1="500" x2="342" y2="500" />
-        <line class="hero-spark-arm" x1="320" y1="478" x2="320" y2="522" />
-        <line class="hero-spark-arm hero-spark-arm--soft" x1="285" y1="500" x2="355" y2="500" />
-        <line class="hero-spark-arm hero-spark-arm--soft" x1="320" y1="465" x2="320" y2="535" />
-      </svg>
-      <img class="hero-mark__img" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="320" height="220" />
-      <figcaption class="hero-mark__cap mono">
-        <span>luminate</span>
-        <span class="hero-mark__cap-rule" aria-hidden="true"></span>
-        <span>verb · to make visible</span>
-      </figcaption>
-    </figure>
-  </div>
-  <div class="hero-strip" aria-label="Coverage">
-    <span class="mono">Reservation</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">Municipal</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">State</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">National</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">Cross-border</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">Multiregional</span>
   </div>
 </section>
 
 <script>
-  (function() {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) return;
-    const actions = document.getElementById('heroActions');
-    if (!actions) return;
-    const STRENGTH = 0.12;
-    const RESET_MS = 380;
-    const EASE = 'cubic-bezier(.22,1,.36,1)';
-    actions.querySelectorAll<HTMLElement>('.btn').forEach(btn => {
-      btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const dx = (e.clientX - (r.left + r.width / 2)) * STRENGTH;
-        const dy = (e.clientY - (r.top + r.height / 2)) * STRENGTH;
-        btn.style.transform = `translate(${dx}px, ${dy}px)`;
-      });
-      btn.addEventListener('mouseleave', () => {
-        btn.style.transform = '';
-        btn.style.transition = `transform ${RESET_MS / 1000}s ${EASE}`;
-        setTimeout(() => { btn.style.transition = ''; }, RESET_MS);
-      });
-      btn.addEventListener('mouseenter', () => { btn.style.transition = 'none'; });
-    });
+  /* Portmanteau loop. After ~2s, ease LUMECON open into
+     LUMinate eCONomies. Hold, ease shut, hold longer, repeat —
+     editorial pacing, not a marquee. Pauses on hover. */
+  (function () {
+    const mark = document.getElementById('heroWordmark');
+    if (!mark) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      mark.classList.add('is-open');
+      return;
+    }
+    const OPEN_HOLD = 3800;
+    const CLOSE_HOLD = 5400;
+    const FIRST_DELAY = 2100;
+    let timer: number | undefined;
+    const open  = () => { mark.classList.add('is-open');    timer = window.setTimeout(close, OPEN_HOLD); };
+    const close = () => { mark.classList.remove('is-open'); timer = window.setTimeout(open,  CLOSE_HOLD); };
+    timer = window.setTimeout(open, FIRST_DELAY);
+    mark.addEventListener('pointerenter', () => { if (timer) window.clearTimeout(timer); mark.classList.add('is-open'); });
+    mark.addEventListener('pointerleave', () => { timer = window.setTimeout(close, OPEN_HOLD); });
   })();
 </script>
