@@ -1,73 +1,113 @@
-footer {
+.footer {
   background: var(--navy);
-  color: rgba(255, 252, 247, .55);
-  padding: 2rem 0 1.3rem;
+  color: var(--cream);
+  padding: clamp(3rem, 6vw, 5rem) 0 1.6rem;
   position: relative;
   overflow: hidden;
 }
-footer > * { position: relative; z-index: 2; }
-
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 90% 0%, rgba(196, 154, 60, .08), transparent 45%),
+    radial-gradient(circle at 0% 100%, rgba(139, 125, 168, .08), transparent 40%);
+  pointer-events: none;
+}
+.footer > * { position: relative; z-index: 2; }
 .footer-w {
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
 .footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+  border-bottom: 1px solid rgba(246, 241, 233, .12);
 }
-.footer-brand { display: flex; flex-direction: column; gap: .5rem; }
+.footer-brand { display: flex; flex-direction: column; gap: .55rem; align-items: flex-start; }
 .footer-brand-img {
-  height: 30px;
+  height: 38px;
   width: auto;
   display: block;
-  filter: brightness(0) invert(1) brightness(0.95);
-  opacity: .9;
+  /* Logo PNG is dark-on-transparent; invert to read on navy. Gold
+     accent in the wordmark will read warm-white in this state. */
+  filter: brightness(0) invert(1);
+  opacity: .95;
 }
 .footer-brand-tag {
+  font-family: var(--font-display);
   font-style: italic;
-  font-size: .76rem;
-  font-weight: 600;
-  color: rgba(255, 252, 247, .4);
+  font-size: 1.1rem;
+  color: rgba(246, 241, 233, .82);
+  font-variation-settings: "opsz" 60;
 }
-.footer-links {
-  display: flex;
-  gap: 1.4rem;
-  flex-wrap: wrap;
+.footer-brand-tag em { color: var(--gold); font-style: italic; }
+.footer-brand-rule {
+  width: 64px;
+  height: 1.5px;
+  background: var(--purple-rule);
+  margin-top: .4rem;
+  margin-bottom: .2rem;
 }
-.footer-links a {
-  font-size: .74rem;
-  font-weight: 600;
-  transition: color .25s;
+.footer-brand-pitch {
+  font-size: .9rem;
+  color: rgba(246, 241, 233, .65);
+  max-width: 24rem;
+  line-height: 1.5;
 }
-.footer-links a:hover { color: var(--white); }
+.footer-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+}
+.footer-col { display: flex; flex-direction: column; gap: .55rem; }
+.footer-col__head {
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: .35rem;
+  opacity: .9;
+}
+.footer-col a {
+  font-size: .9rem;
+  font-weight: 500;
+  color: rgba(246, 241, 233, .78);
+  transition: color .2s var(--ease);
+}
+.footer-col a:hover { color: var(--cream); }
+
 .footer-bottom {
-  margin-top: 1.2rem;
-  padding-top: .8rem;
-  border-top: 1px solid rgba(255, 252, 247, .06);
+  margin-top: 1.4rem;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: .5rem;
 }
 .footer-legal {
-  font-size: .65rem;
-  color: rgba(255, 252, 247, .35);
-  max-width: 680px;
-  line-height: 1.5;
+  font-size: .7rem;
+  color: rgba(246, 241, 233, .45);
+  max-width: 760px;
+  line-height: 1.55;
+  letter-spacing: .005em;
 }
 .footer-email {
-  font-size: .7rem;
-  color: rgba(255, 252, 247, .4);
-  transition: color .25s;
+  font-size: .72rem;
+  letter-spacing: .04em;
+  color: rgba(246, 241, 233, .6);
+  transition: color .2s var(--ease);
 }
 .footer-email:hover { color: var(--gold); }
 
+@media (max-width: 900px) {
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-cols { grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+}
 @media (max-width: 600px) {
   .footer-w { padding: 0 var(--mobile-pad); }
-  .footer-top { flex-direction: column; }
-  .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-cols { grid-template-columns: 1fr 1fr; }
+  .footer-bottom { flex-direction: column; text-align: left; }
 }
