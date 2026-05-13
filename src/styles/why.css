@@ -1,11 +1,10 @@
-/* Why — one editorial spread, no cards, no icons, no flip animation.
-   A single bold pull-quote-as-H2 in Fraunces does the work; the
-   eyebrow + two paragraphs sit beneath in tight measure. The page
-   should breathe here. */
+/* What you can use this for — four-item editorial list.
+   No cards, no icons. Roman numerals + Fraunces names + tight
+   description, hairlines between. */
 
 .why {
   background: var(--cream);
-  padding: clamp(5rem, 12vw, 10rem) 0;
+  padding: clamp(5rem, 10vw, 8.5rem) 0;
   position: relative;
 }
 .why::before {
@@ -14,13 +13,13 @@
   inset: 0;
   background: url('/textures/paper-grain.svg');
   background-size: 380px;
-  opacity: .22;
+  opacity: .2;
   mix-blend-mode: multiply;
   pointer-events: none;
 }
 .why-inner {
   position: relative;
-  max-width: 980px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
@@ -30,57 +29,70 @@
   font-style: italic;
   font-size: 1rem;
   color: var(--navy);
-  opacity: .62;
-  margin: 0 0 1.5rem;
+  opacity: .58;
+  margin: 0 0 1.2rem;
 }
 
 .why-lead {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 144;
   font-weight: 400;
-  font-size: clamp(2rem, 5.2vw, 4.4rem);
+  font-size: clamp(2rem, 5vw, 4rem);
   line-height: 1.04;
   letter-spacing: -.022em;
   color: var(--navy);
-  margin: 0 0 3rem;
+  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
   max-width: 22ch;
 }
-.why-lead em {
-  font-style: italic;
-  font-weight: 400;
-  color: var(--gold);
-}
+.why-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
 
-.why-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-  max-width: 56rem;
-  margin-left: auto;
-}
-.why-graf {
-  font-size: 1.06rem;
-  line-height: 1.65;
-  color: var(--navy);
-  opacity: .82;
+.why-list {
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
-.why-graf--diff {
+.why-item {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: baseline;
+  padding: clamp(1.4rem, 3vw, 2rem) 0;
+  border-top: 1px solid var(--rule);
+}
+.why-item:last-child { border-bottom: 1px solid var(--rule); }
+
+.why-item__num {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.18rem;
+  font-variation-settings: "opsz" 60;
   font-weight: 400;
-  font-variation-settings: "opsz" 36;
-  color: var(--navy);
-  opacity: .92;
-  line-height: 1.5;
-}
-.why-graf--diff em {
-  font-style: italic;
+  font-size: 1.6rem;
   color: var(--gold);
-  font-weight: 500;
+  line-height: 1;
+  text-align: right;
 }
 
-@media (max-width: 760px) {
-  .why-body { grid-template-columns: 1fr; }
+.why-item__name {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 96;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  color: var(--navy);
+  margin: 0 0 .35rem;
+}
+
+.why-item__desc {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--navy);
+  opacity: .8;
+  margin: 0;
+  max-width: 56ch;
+}
+
+@media (max-width: 600px) {
+  .why-item { grid-template-columns: 2rem 1fr; gap: 1rem; }
+  .why-item__num { font-size: 1.2rem; }
 }
