@@ -1,15 +1,15 @@
 ---
 /**
- * Lumecon Inc. hero — the luminating map.
+ * Hero — LUMECON brand mark + a single live impact study.
  *
- * This page exists to answer one question: what is economic impact
- * analysis? The hero answers it by *showing* one. A live US map sits
- * full-bleed behind the wordmark. Two spending sources emit ripples
- * — Direct, Indirect, Induced. As each ripple expands, the states
- * it crosses *luminate*: a gold wash blooms across them, then fades.
- * The brand promise — "we luminate economies" — is the demo.
+ * Cedar narrates one line at a time, the map plays one study at a
+ * time, the numbers sit in the margin. No chips, no wizard, no
+ * buttons besides the two CTAs. The map cycles between three real
+ * example regions automatically; clicking any state in the map
+ * also starts a study from that state. Everything else is type and
+ * whitespace.
  */
-import { geoPath, geoCentroid } from 'd3-geo';
+import { geoPath } from 'd3-geo';
 import { mesh, feature } from 'topojson-client';
 // @ts-ignore — us-atlas ships JSON, not TS
 import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
@@ -17,7 +17,6 @@ import '../styles/hero.css';
 
 const VIEWBOX_W = 975;
 const VIEWBOX_H = 610;
-
 const path = geoPath();
 // @ts-ignore
 const statesFC: any = feature(usAtlas, usAtlas.objects.states);
@@ -26,115 +25,338 @@ const stateBordersD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any
 // @ts-ignore
 const nationOutlineD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a === b));
 
-/* Two spending sources anchor the ripple animation. Coordinates are
-   in the projected albers-USA viewbox so they line up with the state
-   mesh without us projecting anything ourselves. */
-const sources = [
-  { id: 's-east', cx: 760, cy: 250 },
-  { id: 's-west', cx: 240, cy: 330 },
+/* Centroids for the click-on-any-state path. We pre-project each
+   state's centroid so the client doesn't need d3 at runtime. */
+const stateData = statesFC.features.map((f: any) => {
+  const [cx, cy] = path.centroid(f);
+  return { id: f.id, name: f.properties.name, d: path(f), cx: +cx.toFixed(1), cy: +cy.toFixed(1) };
+});
+
+/* FIPS state-id → 2-letter postal code, so the client can look up
+   the visitor's state from an IP-geolocation response. */
+const STATE_CODES: Record<string, string> = {
+  '01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','11':'DC',
+  '12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY',
+  '22':'LA','23':'ME','24':'MD','25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT',
+  '31':'NE','32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH',
+  '40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT',
+  '50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY',
+};
+const CODE_TO_ID = Object.fromEntries(Object.entries(STATE_CODES).map(([id, code]) => [code, id]));
+
+/* Three default examples that cycle automatically. Deliberately NOT
+   Mecklenburg County — IMPLAN used that. These span Pacific NW,
+   South Central, and an Indigenous-economy example so the parent
+   brand reads as covering all three platform geographies. */
+const examples = [
+  { state: '53', name: 'Pierce County, WA',           activity: 'a $5M capital build',         tone: 'A municipality recapitalizes its water plant.' },
+  { state: '48', name: 'Travis County, TX',           activity: 'a $20M operations payroll',  tone: 'A university expands its workforce.' },
+  { state: '41', name: 'Umatilla Reservation, OR',    activity: 'a $1M grant pass-through',   tone: 'A tribal government runs a workforce program.' },
 ];
 
-/* For each state, compute distance from its centroid to the nearest
-   spending source and bucket it into one of three rings. The CSS
-   animation steps states through gold-luminance in three waves —
-   close states light first (Direct), mid next (Indirect), far last
-   (Induced). The whole sequence is one editorial cycle. */
-const RING_RADII = [180, 360, 560];
-const stateFeatures = statesFC.features.map((f: any) => {
-  const c = geoCentroid(f);
-  const projected = path.centroid(f);
-  const [cx, cy] = projected;
-  const dist = Math.min(...sources.map(s => Math.hypot(s.cx - cx, s.cy - cy)));
-  const ring = dist < RING_RADII[0] ? 0 : dist < RING_RADII[1] ? 1 : 2;
-  const d = path(f);
-  return { id: f.id, name: f.properties.name, d, ring, dist };
-});
+const examplesJson = JSON.stringify(examples);
+const statesJson = JSON.stringify(
+  stateData.reduce((acc: any, s: any) => { acc[s.id] = { name: s.name, cx: s.cx, cy: s.cy, code: STATE_CODES[s.id] || '' }; return acc; }, {})
+);
+const codeMapJson = JSON.stringify(CODE_TO_ID);
 ---
 <section class="hero" id="top">
-  <figure class="hero-map" aria-label="Animated map of the United States demonstrating how an economic impact study ripples outward from spending sources">
-    <svg
-      class="hero-map__svg"
-      viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
-      preserveAspectRatio="xMidYMid slice"
-      role="img"
-    >
+  <!-- Brand block, top-left -->
+  <div class="hero-brand">
+    <h1 class="hero-wordmark">Lumecon</h1>
+    <p class="hero-tagline">Economic &amp; policy analysis software for governments.</p>
+    <hr class="hero-rule" />
+  </div>
+
+  <!-- Stage: the live map -->
+  <figure class="hero-stage" id="heroStage" aria-label="A live economic impact study playing on a US map">
+    <svg class="hero-map" id="heroMap" viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`} preserveAspectRatio="xMidYMid meet" role="img">
       <defs>
-        <radialGradient id="lumGlow" cx="50%" cy="50%" r="50%">
+        <radialGradient id="hGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
-          <stop offset="55%" stop-color="#C49A3C" stop-opacity=".22"/>
+          <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
           <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
         </radialGradient>
-        <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="2.2" />
-        </filter>
       </defs>
-
       <path class="hero-map__fill" d={nationOutlineD} />
-
-      <g class="hero-map__states" aria-hidden="true">
-        {stateFeatures.map((s: any, i: number) => (
+      <g class="hero-map__states">
+        {stateData.map((s: any) => (
           <path
-            class={`hero-map__state hero-map__state--ring-${s.ring}`}
+            class="hero-state"
             d={s.d}
-            style={`--lum-delay:${(s.dist / 4 + (i % 7) * 80).toFixed(0)}ms`}
-            data-state={s.id}
+            data-id={s.id}
+            data-cx={s.cx}
+            data-cy={s.cy}
+            tabindex="0"
+            role="button"
+            aria-label={s.name}
           />
         ))}
       </g>
-
       <path class="hero-map__borders" d={stateBordersD} />
       <path class="hero-map__outline" d={nationOutlineD} />
 
-      {sources.map((s, i) => (
-        <g class={`hero-source hero-source--${s.id}`} style={`--src-delay:${i * 600}ms`}>
-          <circle class="hero-glow"     cx={s.cx} cy={s.cy} r="120" fill="url(#lumGlow)" />
-          <circle class="hero-ring hero-ring--r1" cx={s.cx} cy={s.cy} r="14" />
-          <circle class="hero-ring hero-ring--r2" cx={s.cx} cy={s.cy} r="14" />
-          <circle class="hero-ring hero-ring--r3" cx={s.cx} cy={s.cy} r="14" />
-          <circle class="hero-spark"    cx={s.cx} cy={s.cy} r="5" filter="url(#softGlow)" />
-          <circle class="hero-spark__core" cx={s.cx} cy={s.cy} r="2.2" />
-        </g>
-      ))}
+      <!-- the active source: one point at a time -->
+      <g class="hero-source" id="heroSource">
+        <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
+        <circle class="hero-ring"  data-ring="1" cx="0" cy="0" r="14" />
+        <circle class="hero-ring"  data-ring="2" cx="0" cy="0" r="14" />
+        <circle class="hero-ring"  data-ring="3" cx="0" cy="0" r="14" />
+        <circle class="hero-spark"      cx="0" cy="0" r="6" />
+        <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
+      </g>
     </svg>
   </figure>
 
-  <div class="hero-overlay">
-    <div class="hero-text">
-      <h1 class="hero-wordmark" id="heroWordmark" aria-label="Lumecon — a portmanteau of luminate and economies">
-        <span class="hw-cap">L</span><span class="hw-cap">U</span><span class="hw-cap">M</span><span class="hw-tail hw-tail--inate">inate</span><span class="hw-gap" aria-hidden="true"> </span><span class="hw-cap">E</span><span class="hw-cap">C</span><span class="hw-cap">O</span><span class="hw-cap">N</span><span class="hw-tail hw-tail--omies">omies</span>
-      </h1>
-      <p class="hero-tagline">We <em>luminate</em> economies<sup>&trade;</sup></p>
-      <hr class="hero-rule" />
-      <p class="hero-pitch">
-        Watch a dollar move. A spending source emits a wave; supplier purchases follow; household wages follow them. That sum &mdash; the shaded swath &mdash; is an economic impact study.
-      </p>
-      <div class="hero-actions">
-        <a href="#how" class="btn">Read the rings</a>
-        <a href="#products" class="btn btn--ghost">See the platforms</a>
-      </div>
-    </div>
-  </div>
+  <!-- Cedar narrates, one line at a time -->
+  <p class="hero-cedar" id="heroCedar" aria-live="polite">
+    <span class="hero-cedar__from">Cedar &mdash;</span>
+    <span class="hero-cedar__line" id="heroLine">An impact study is a dollar tracing its own ripples. Watch.</span>
+  </p>
+
+  <!-- Numbers as margin notes, not a panel -->
+  <dl class="hero-figs" aria-label="Result of the running impact study">
+    <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
+    <div class="hero-fig"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
+    <div class="hero-fig"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
+    <div class="hero-fig hero-fig--total"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
+    <div class="hero-fig"><dt>Jobs supported</dt> <dd id="figJobs">&mdash;</dd></div>
+  </dl>
+
+  <footer class="hero-cta">
+    <a href="#products" class="btn">See the three platforms</a>
+    <a href="#contact" class="btn btn--ghost">Want to hear more?</a>
+    <span class="hero-cta__note">Illustrative multipliers. Real runs cite every number.</span>
+  </footer>
+
+  <script type="application/json" id="heroExamples" set:html={examplesJson}></script>
+  <script type="application/json" id="heroStates"   set:html={statesJson}></script>
+  <script type="application/json" id="heroCodeMap"  set:html={codeMapJson}></script>
 </section>
 
 <script>
-  /* Portmanteau loop. After ~2s, ease LUMECON open into
-     LUMinate eCONomies. Hold, ease shut, hold longer, repeat —
-     editorial pacing, not a marquee. Pauses on hover. */
+  /* Hero auto-play. Cycles through three default example regions
+     every ~13s. Clicking any state in the map starts a fresh study
+     from that state instead. The narration is one line — replaced,
+     not appended — so the hero stays calm. Number marginalia tick
+     up as the rings complete. */
+  type Ex = { state: string; name: string; activity: string; tone: string };
+  type StateInfo = { name: string; cx: number; cy: number };
+
   (function () {
-    const mark = document.getElementById('heroWordmark');
-    if (!mark) return;
+    const stage  = document.getElementById('heroStage');
+    const source = document.getElementById('heroSource');
+    const line   = document.getElementById('heroLine');
+    const figD   = document.getElementById('figDirect');
+    const figI   = document.getElementById('figIndirect');
+    const figU   = document.getElementById('figInduced');
+    const figT   = document.getElementById('figTotal');
+    const figJ   = document.getElementById('figJobs');
+    if (!stage || !source || !line || !figD || !figI || !figU || !figT || !figJ) return;
+
+    const examples: Ex[] = JSON.parse((document.getElementById('heroExamples') as HTMLScriptElement).textContent || '[]');
+    const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
+    const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
+
+    /* IP-based geolocation. We try a free lookup (ipapi.co), cache
+       the resulting state code in localStorage for 30 days, and use
+       it to lead the cycle with the visitor's own state. Failures
+       (offline, blocked, opaque CSP) just fall through to the default
+       three-region rotation — no spinner, no error message. The data
+       leaves the browser only on the first visit, and only the
+       returned state code is stored. */
+    const GEO_KEY = 'lumecon:geo';
+    const GEO_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+    const readCachedState = (): string | null => {
+      try {
+        const raw = localStorage.getItem(GEO_KEY); if (!raw) return null;
+        const { code, at } = JSON.parse(raw) as { code: string; at: number };
+        if (!code || Date.now() - at > GEO_TTL_MS) return null;
+        return codeMap[code] || null;
+      } catch { return null; }
+    };
+
+    const detectStateId = async (): Promise<string | null> => {
+      const cached = readCachedState();
+      if (cached) return cached;
+      try {
+        const ctrl = new AbortController();
+        const t = window.setTimeout(() => ctrl.abort(), 2200);
+        const r = await fetch('https://ipapi.co/json/', { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
+        window.clearTimeout(t);
+        if (!r.ok) return null;
+        const j = await r.json();
+        const code: string | undefined = (j && (j.region_code || j.region_code_iso3166_2));
+        const country: string | undefined = j && (j.country_code || j.country);
+        if (country !== 'US' || !code) return null;
+        try { localStorage.setItem(GEO_KEY, JSON.stringify({ code, at: Date.now() })); } catch {}
+        return codeMap[code] || null;
+      } catch { return null; }
+    };
+
+    /* Adjacency table for the three example states only — that's all
+       we need for default-cycle runs. For free-click runs we compute
+       adjacency on the fly from centroid distance, so any state the
+       user clicks lights up a believable Indirect/Induced spread. */
+    const ADJ_RADIUS = { indirect: 220, induced: 480 };
+
+    const MULT = { indirect: 0.55, induced: 0.45, jobsPerM: 9.2 };
+
+    const fmt = (n: number) =>
+      n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.0$/, '') + 'M'
+      : n >= 1_000   ? '$' + Math.round(n / 1_000) + 'K'
+      :                '$' + Math.round(n);
+
+    const parseAmount = (activity: string): number => {
+      const m = activity.match(/\$([0-9.]+)([MK]?)/i);
+      if (!m) return 5_000_000;
+      const v = parseFloat(m[1]);
+      return m[2].toUpperCase() === 'M' ? v * 1_000_000 : m[2].toUpperCase() === 'K' ? v * 1_000 : v;
+    };
+
+    let timer: number | undefined;
+    let runId = 0;
+
+    const clearShading = () => {
+      stage.querySelectorAll<HTMLElement>('.hero-state[data-ring]')
+        .forEach(s => s.removeAttribute('data-ring'));
+    };
+
+    const shadeNeighbors = (id: string) => {
+      const me = states[id]; if (!me) return;
+      stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+        const sid = el.dataset.id; if (!sid || sid === id) { el.removeAttribute('data-ring'); return; }
+        const s = states[sid]; if (!s) return;
+        const d = Math.hypot(s.cx - me.cx, s.cy - me.cy);
+        if      (d < ADJ_RADIUS.indirect) el.dataset.ring = '1';
+        else if (d < ADJ_RADIUS.induced)  el.dataset.ring = '2';
+        else el.removeAttribute('data-ring');
+      });
+      const meEl = stage.querySelector<HTMLElement>(`.hero-state[data-id="${id}"]`);
+      if (meEl) meEl.dataset.ring = '0';
+    };
+
+    const moveSource = (cx: number, cy: number) => {
+      source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
+        c.setAttribute('cx', String(cx));
+        c.setAttribute('cy', String(cy));
+      });
+    };
+
+    const setLine = (text: string) => {
+      line.classList.remove('is-in');
+      void (line as HTMLElement).offsetWidth;
+      line.textContent = text;
+      line.classList.add('is-in');
+    };
+    const setNum = (el: HTMLElement, v: string) => {
+      el.classList.remove('is-pop');
+      void el.offsetWidth;
+      el.textContent = v;
+      el.classList.add('is-pop');
+    };
+    const resetNums = () => [figD, figI, figU, figT, figJ].forEach(el => setNum(el as HTMLElement, '—'));
+
+    const wait = (ms: number, id: number) =>
+      new Promise<void>((resolve, reject) => {
+        const t = window.setTimeout(() => (runId === id ? resolve() : reject('cancelled')), ms);
+        // if cancelled mid-flight, the next run will re-init runId
+        timer = t;
+      });
+
+    const runStudy = async (stateId: string, label: string, narrate: string, amount: number) => {
+      runId += 1; const me = runId;
+      try {
+        resetNums();
+        stage.dataset.ring = '';
+        shadeNeighbors(stateId);
+        const s = states[stateId]; if (!s) return;
+        moveSource(s.cx, s.cy);
+        stage.dataset.run = '1';
+
+        setLine(narrate);
+
+        // ring 1 — Direct
+        stage.dataset.ring = '1';
+        await wait(900, me);
+        setNum(figD as HTMLElement, fmt(amount));
+
+        // ring 2 — Indirect
+        await wait(1800, me);
+        stage.dataset.ring = '2';
+        setLine(`Suppliers and contractors near ${label} pick up the work.`);
+        const indirect = amount * MULT.indirect;
+        await wait(900, me);
+        setNum(figI as HTMLElement, '+ ' + fmt(indirect));
+
+        // ring 3 — Induced
+        await wait(1900, me);
+        stage.dataset.ring = '3';
+        setLine(`Households spend those wages on rent, groceries, kids’ shoes.`);
+        const induced = amount * MULT.induced;
+        await wait(900, me);
+        setNum(figU as HTMLElement, '+ ' + fmt(induced));
+
+        // total + jobs
+        await wait(1700, me);
+        stage.dataset.ring = '4';
+        const total = amount + indirect + induced;
+        const jobs = Math.round((total / 1_000_000) * MULT.jobsPerM);
+        setNum(figT as HTMLElement, fmt(total));
+        setNum(figJ as HTMLElement, '≈ ' + jobs.toLocaleString());
+        setLine(`That sum, with its assumption ledger, is your impact study.`);
+      } catch { /* cancelled */ }
+    };
+
+    const cycle = async (i: number) => {
+      const ex = examples[i % examples.length];
+      const amount = parseAmount(ex.activity);
+      await runStudy(ex.state, ex.name, `${ex.tone} ${ex.activity} in ${ex.name}.`, amount);
+      timer = window.setTimeout(() => cycle(i + 1), 4200);
+    };
+
+    // Click any state to start a custom run from there.
+    stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+      const handler = () => {
+        const id = el.dataset.id; if (!id) return;
+        if (timer) window.clearTimeout(timer);
+        const name = states[id]?.name || 'that region';
+        runStudy(id, name, `A $5M program in ${name}. Watch the rings.`, 5_000_000)
+          .then(() => { timer = window.setTimeout(() => cycle(0), 5200); });
+      };
+      el.addEventListener('click', handler);
+      el.addEventListener('keydown', (e) => {
+        const k = (e as KeyboardEvent).key;
+        if (k === 'Enter' || k === ' ') { e.preventDefault(); handler(); }
+      });
+    });
+
+    /* Personal cycle: if we can detect a US state, run a study there
+       first ("An impact study right where you are — Texas."), then
+       fall into the default cycle of three example regions. */
+    const personalCycle = async (id: string) => {
+      const s = states[id]; if (!s) { cycle(0); return; }
+      const name = s.name;
+      const here = name; // state-level for now; the platforms localize to county/region
+      const narrate = `An impact study right where you are — ${here}. A $5M program ripples outward.`;
+      await runStudy(id, here, narrate, 5_000_000);
+      timer = window.setTimeout(() => cycle(0), 4600);
+    };
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      mark.classList.add('is-open');
+      const ex = examples[0]; const s = states[ex.state]; if (s) { moveSource(s.cx, s.cy); shadeNeighbors(ex.state); }
+      setNum(figD as HTMLElement, fmt(5_000_000));
+      setLine('An impact study traces a dollar through the economy. Click any state to run one.');
       return;
     }
-    const OPEN_HOLD = 3800;
-    const CLOSE_HOLD = 5400;
-    const FIRST_DELAY = 2100;
-    let timer: number | undefined;
-    const open  = () => { mark.classList.add('is-open');    timer = window.setTimeout(close, OPEN_HOLD); };
-    const close = () => { mark.classList.remove('is-open'); timer = window.setTimeout(open,  CLOSE_HOLD); };
-    timer = window.setTimeout(open, FIRST_DELAY);
-    mark.addEventListener('pointerenter', () => { if (timer) window.clearTimeout(timer); mark.classList.add('is-open'); });
-    mark.addEventListener('pointerleave', () => { timer = window.setTimeout(close, OPEN_HOLD); });
+
+    detectStateId().then(stateId => {
+      if (stateId && states[stateId]) {
+        timer = window.setTimeout(() => personalCycle(stateId), 700);
+      } else {
+        timer = window.setTimeout(() => cycle(0), 900);
+      }
+    });
   })();
 </script>

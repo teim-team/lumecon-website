@@ -1,213 +1,252 @@
-/* Lumecon Inc. hero — the luminating map demo.
-   Full-bleed US map sits behind everything. Two spending sources
-   emit three rounds of ripples — Direct, Indirect, Induced —
-   while states bloom in gold as the rings cross them. The wordmark
-   sits over the map with a soft cream-to-transparent wash beneath
-   it so the type stays readable without us muddying the map. */
-
-@keyframes lumFadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+/* Hero — one focal point, lots of whitespace, no chrome.
+   Top: LUMECON wordmark + tagline.
+   Middle: a single live impact study, autoplaying on the map.
+   Bottom: Cedar narration line + figure marginalia + two CTAs.
+   No chips, no wizard, no dotted-tooltip callouts. */
 
 .hero {
-  position: relative;
   background: var(--cream);
   border-bottom: 1px solid var(--rule);
-  overflow: hidden;
-  min-height: clamp(680px, 90vh, 880px);
-  display: flex;
-  align-items: flex-end;
+  position: relative;
+  padding: clamp(7rem, 13vh, 10rem) var(--container-pad) clamp(3rem, 6vh, 4.5rem);
+  min-height: clamp(720px, 95vh, 940px);
 }
-
-/* ---------- map ---------- */
-.hero-map {
+.hero::before {
+  content: '';
   position: absolute;
   inset: 0;
-  margin: 0;
   pointer-events: none;
+  background: url('/textures/paper-grain.svg');
+  background-size: 380px;
+  opacity: .18;
+  mix-blend-mode: multiply;
 }
-.hero-map__svg {
+.hero > * { position: relative; z-index: 1; }
+
+/* Inner grid does the editorial layout; the section is full-bleed cream. */
+.hero-brand,
+.hero-stage,
+.hero-cedar,
+.hero-figs,
+.hero-cta {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
-  height: 100%;
-  display: block;
 }
-.hero-map__fill   { fill: var(--cream); }
+
+.hero {
+  display: grid;
+  grid-template-rows: auto 1fr auto auto auto;
+  gap: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+/* ---------- brand ---------- */
+.hero-brand { grid-area: brand; }
+.hero-wordmark {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(3.4rem, 9vw, 6.4rem);
+  line-height: 1;
+  color: var(--navy);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  margin: 0 0 .5rem;
+}
+.hero-tagline {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 60;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.05rem, 1.65vw, 1.4rem);
+  line-height: 1.25;
+  color: var(--navy);
+  opacity: .88;
+  margin: 0 0 1rem;
+  letter-spacing: .005em;
+  max-width: 32ch;
+}
+.hero-rule {
+  border: 0;
+  width: 120px;
+  height: 1.5px;
+  background: var(--purple-rule);
+  margin: 0;
+}
+
+/* ---------- stage / map ---------- */
+.hero-stage {
+  grid-area: stage;
+  margin: 0;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+.hero-map { width: 100%; height: 100%; max-height: 64vh; display: block; }
+.hero-map__fill { fill: transparent; }
 .hero-map__borders {
   fill: none;
-  stroke: rgba(45, 45, 63, .18);
-  stroke-width: .7;
+  stroke: rgba(45, 45, 63, .14);
+  stroke-width: .6;
   vector-effect: non-scaling-stroke;
 }
 .hero-map__outline {
   fill: none;
   stroke: var(--navy);
-  stroke-width: 1.4;
+  stroke-width: 1.2;
   vector-effect: non-scaling-stroke;
-  opacity: .82;
+  opacity: .75;
 }
 
-/* Each state breathes gold on a slow cycle. The --lum-delay var is
-   set per-state in the Astro frontmatter (based on distance from
-   nearest spending source) so the bloom radiates outward from
-   the source instead of all-at-once. Three rings (close/mid/far)
-   light up in sequence — Direct → Indirect → Induced. */
-@keyframes lumBloom {
-  0%, 92%, 100% { fill-opacity: 0; }
-  12%, 28%      { fill-opacity: .26; }
-  55%           { fill-opacity: 0; }
-}
-.hero-map__state {
-  fill: var(--gold);
+/* State paths. Default = transparent. Three rings (0/1/2) map to
+   Direct/Indirect/Induced via data-ring set by JS. Hovering a state
+   gives a quiet hint that it's clickable. */
+.hero-state {
+  fill: transparent;
   fill-opacity: 0;
-  animation: lumBloom 11.6s ease-in-out infinite;
-  animation-delay: var(--lum-delay, 0ms);
-  pointer-events: none;
+  cursor: pointer;
+  transition: fill-opacity .6s var(--ease), fill .6s var(--ease);
+  outline: none;
 }
-.hero-map__state--ring-0 { fill: var(--gold);  }
-.hero-map__state--ring-1 { fill: var(--terra); }
-.hero-map__state--ring-2 { fill: var(--cedar); }
+.hero-state:hover { fill: var(--navy); fill-opacity: .04; }
+.hero-state:focus-visible { fill: var(--gold); fill-opacity: .12; }
+.hero-state[data-ring="0"] { fill: var(--gold);  fill-opacity: .42; }
+.hero-state[data-ring="1"] { fill: var(--gold);  fill-opacity: .22; }
+.hero-state[data-ring="2"] { fill: var(--gold);  fill-opacity: .10; }
 
-/* ---------- ripples + sources ---------- */
-@keyframes lumRing {
-  0%   { r: 14; opacity: .95; stroke-width: 2.6; }
-  85%  { r: 220; opacity: 0;  stroke-width: .4; }
-  100% { r: 220; opacity: 0;  stroke-width: .4; }
-}
+/* Source point: hidden until a run starts. */
+.hero-source { opacity: 0; transition: opacity .5s var(--ease); }
+.hero-stage[data-run="1"] .hero-source { opacity: 1; }
+.hero-glow { opacity: 0; transition: opacity .6s var(--ease); }
+.hero-stage[data-run="1"] .hero-glow { opacity: .55; }
+.hero-spark        { fill: var(--gold); filter: drop-shadow(0 0 10px rgba(196, 154, 60, .6)); }
+.hero-spark__core  { fill: var(--white); stroke: var(--navy); stroke-width: .8; }
+
+/* Ripples — re-fire when data-ring on the stage changes. Each
+   ring is keyed to its data-ring number; the active stage class
+   triggers the keyframe by replaying the animation. */
+@keyframes heroRippleA { 0% { r: 14; opacity: .9; stroke-width: 2.6; } 90% { r: 320; opacity: 0; stroke-width: .4; } 100% { r: 320; opacity: 0; } }
 .hero-ring {
   fill: none;
-  stroke: var(--gold);
   stroke-width: 2.6;
-  opacity: 0;
   vector-effect: non-scaling-stroke;
-  animation: lumRing 11.6s ease-out infinite;
-  animation-delay: calc(var(--src-delay, 0ms) + var(--ring-delay, 0ms));
-}
-.hero-ring--r1 { stroke: var(--gold);  --ring-delay: 0ms;    }
-.hero-ring--r2 { stroke: var(--terra); --ring-delay: 1600ms; }
-.hero-ring--r3 { stroke: var(--cedar); --ring-delay: 3200ms; }
-
-.hero-glow {
-  opacity: .55;
-  transform-origin: center;
-  animation: lumGlowPulse 11.6s ease-in-out infinite;
-  animation-delay: var(--src-delay, 0ms);
-}
-@keyframes lumGlowPulse {
-  0%, 100% { opacity: .35; transform-origin: var(--cx) var(--cy); }
-  25%      { opacity: .75; }
-  60%      { opacity: .35; }
-}
-.hero-spark {
-  fill: var(--gold);
-  opacity: .6;
-}
-.hero-spark__core {
-  fill: var(--white);
-  stroke: var(--navy);
-  stroke-width: .8;
-}
-
-/* ---------- overlay typography ---------- */
-.hero-overlay {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  padding: clamp(8rem, 14vh, 11rem) var(--container-pad) clamp(2.5rem, 6vh, 4rem);
-  background: linear-gradient(180deg, rgba(246, 241, 233, 0) 0%, rgba(246, 241, 233, .82) 55%, rgba(246, 241, 233, .96) 100%);
-}
-.hero-text {
-  max-width: 720px;
-  margin: 0 auto 0 0;
-}
-
-/* Portmanteau wordmark — the brand etymology, on a slow loop. */
-.hero-wordmark {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 144;
-  font-weight: 400;
-  font-size: clamp(3rem, 8.4vw, 6rem);
-  line-height: 1;
-  color: var(--navy);
-  margin: 0 0 .4rem;
-  display: inline-flex;
-  flex-wrap: nowrap;
-  align-items: baseline;
-  white-space: nowrap;
-  cursor: default;
   opacity: 0;
-  animation: lumFadeUp .8s var(--ease) .15s both;
 }
-.hw-cap   { display: inline-block; text-transform: uppercase; letter-spacing: .04em; }
-.hw-gap   { display: inline-block; width: 0; overflow: hidden; transition: width .9s var(--ease) .15s; }
-.hw-tail {
-  display: inline-block;
-  max-width: 0;
-  overflow: hidden;
+.hero-ring[data-ring="1"] { stroke: var(--gold);  }
+.hero-ring[data-ring="2"] { stroke: var(--terra); }
+.hero-ring[data-ring="3"] { stroke: var(--cedar); }
+.hero-stage[data-ring="1"] .hero-ring[data-ring="1"] { animation: heroRippleA 3.4s var(--ease) 0s 1 both; }
+.hero-stage[data-ring="2"] .hero-ring[data-ring="1"] { animation: heroRippleA 3.4s var(--ease) 0s 1 both; }
+.hero-stage[data-ring="2"] .hero-ring[data-ring="2"] { animation: heroRippleA 3.4s var(--ease) 0s 1 both; }
+.hero-stage[data-ring="3"] .hero-ring[data-ring="1"] { animation: heroRippleA 3.4s var(--ease) 0s 1 both; }
+.hero-stage[data-ring="3"] .hero-ring[data-ring="2"] { animation: heroRippleA 3.4s var(--ease) 0s 1 both; }
+.hero-stage[data-ring="3"] .hero-ring[data-ring="3"] { animation: heroRippleA 3.4s var(--ease) 0s 1 both; }
+.hero-stage[data-ring="4"] .hero-ring                 { opacity: 0; }
+
+/* Inside Indirect/Induced state shading by ring. Override base
+   gold with terra/cedar when the stage advances. */
+.hero-stage[data-ring="2"] .hero-state[data-ring="1"] { fill: var(--terra); fill-opacity: .25; }
+.hero-stage[data-ring="3"] .hero-state[data-ring="1"] { fill: var(--terra); fill-opacity: .25; }
+.hero-stage[data-ring="4"] .hero-state[data-ring="1"] { fill: var(--terra); fill-opacity: .25; }
+.hero-stage[data-ring="3"] .hero-state[data-ring="2"] { fill: var(--cedar); fill-opacity: .18; }
+.hero-stage[data-ring="4"] .hero-state[data-ring="2"] { fill: var(--cedar); fill-opacity: .18; }
+
+/* ---------- Cedar narration line ---------- */
+.hero-cedar {
+  grid-area: cedar;
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
-  font-variation-settings: "opsz" 96;
+  font-variation-settings: "opsz" 36;
+  font-size: clamp(1.05rem, 1.6vw, 1.32rem);
+  line-height: 1.45;
+  color: var(--navy);
+  margin: 0;
+  max-width: 60ch;
+}
+.hero-cedar__from {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
   color: var(--gold);
-  letter-spacing: 0;
-  text-transform: lowercase;
-  opacity: 0;
-  transform: translateY(.05em);
-  transition: max-width .9s var(--ease), opacity .6s var(--ease), transform .6s var(--ease);
+  margin-right: .55rem;
+  vertical-align: .14em;
 }
-.hero-wordmark.is-open .hw-tail { max-width: 8ch; opacity: 1; transform: none; }
-.hero-wordmark.is-open .hw-tail--inate { transition-delay: 0s, .1s, .1s; }
-.hero-wordmark.is-open .hw-tail--omies { transition-delay: .25s, .35s, .35s; }
-.hero-wordmark.is-open .hw-gap { width: .35em; transition-delay: .25s; }
+.hero-cedar__line { opacity: 0; transition: opacity .55s var(--ease); }
+.hero-cedar__line.is-in { opacity: 1; }
 
-.hero-tagline {
+/* ---------- figure marginalia ---------- */
+.hero-figs {
+  grid-area: figs;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+.hero-fig {
+  padding: 1rem 1.2rem 1rem 0;
+  border-right: 1px solid var(--rule);
+}
+.hero-fig:last-child { border-right: 0; padding-right: 0; }
+.hero-fig dt {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--navy);
+  opacity: .55;
+  margin-bottom: .35rem;
+}
+.hero-fig dd {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
-  font-style: italic;
+  font-variation-settings: "opsz" 96;
   font-weight: 400;
-  font-size: clamp(1.2rem, 2.1vw, 1.7rem);
-  line-height: 1.2;
+  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
   color: var(--navy);
-  margin: 0 0 1.2rem;
-  letter-spacing: .015em;
-  opacity: .9;
-  animation: lumFadeUp .7s var(--ease) .3s both;
+  letter-spacing: -.012em;
+  line-height: 1;
+  margin: 0;
 }
-.hero-tagline em { color: var(--gold); font-style: italic; font-weight: 500; }
-.hero-tagline sup { font-size: .4em; vertical-align: super; opacity: .55; }
+.hero-fig--total dd { color: var(--gold); }
+.hero-fig dd.is-pop { animation: figPop .55s var(--ease) both; }
+@keyframes figPop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-.hero-rule {
-  border: 0;
-  width: clamp(160px, 24vw, 280px);
-  height: 1.5px;
-  background: var(--purple-rule);
-  margin: 0 0 1.4rem;
-  animation: lumFadeUp .6s var(--ease) .4s both;
-}
-
-.hero-pitch {
-  font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.45vw, 1.18rem);
-  font-weight: 500;
-  line-height: 1.55;
-  color: var(--navy);
-  margin: 0 0 1.8rem;
-  max-width: 48ch;
-  animation: lumFadeUp .7s var(--ease) .5s both;
-}
-
-.hero-actions {
+/* ---------- CTAs at the bottom ---------- */
+.hero-cta {
+  grid-area: cta;
   display: flex;
-  gap: .8rem;
   flex-wrap: wrap;
-  animation: lumFadeUp .7s var(--ease) .6s both;
+  align-items: center;
+  gap: 1rem 1.4rem;
+}
+.hero-cta__note {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  letter-spacing: .08em;
+  color: var(--navy);
+  opacity: .5;
 }
 
-@media (max-width: 760px) {
-  .hero { min-height: 720px; }
-  .hero-overlay { padding-top: 7rem; }
-  .hero-wordmark { font-size: clamp(2.6rem, 12vw, 4.4rem); }
+/* ---------- responsive ---------- */
+@media (max-width: 880px) {
+  .hero { padding-top: 6.5rem; min-height: 0; gap: 1.6rem; }
+  .hero-figs { grid-template-columns: repeat(2, 1fr); }
+  .hero-fig { border-bottom: 1px solid var(--rule); padding: .8rem 1rem .8rem 0; }
+  .hero-fig:nth-child(2) { border-right: 0; padding-right: 0; }
+  .hero-cta__note { margin-left: 0; flex-basis: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-map__state, .hero-ring, .hero-glow { animation: none; }
-  .hero-map__state { fill-opacity: .12; }
-  .hero-ring { opacity: 0; }
-  .hero-wordmark, .hero-tagline, .hero-rule, .hero-pitch, .hero-actions { animation: none; opacity: 1; transform: none; }
+  .hero-state, .hero-source, .hero-glow { transition: none; }
+  .hero-ring { animation: none !important; opacity: 0; }
+  .hero-cedar__line { opacity: 1; }
+  .hero-fig dd.is-pop { animation: none; }
 }
