@@ -169,43 +169,52 @@
 .hero-cedar__from {
   font-family: var(--font-mono);
   font-style: normal;
-  font-size: .68rem;
-  letter-spacing: .12em;
+  font-size: .58rem;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--gold);
-  margin-right: .55rem;
-  vertical-align: .14em;
+  color: var(--navy);
+  opacity: .42;
+  margin-right: .7rem;
+  vertical-align: .22em;
 }
 .hero-cedar__line { opacity: 0; transition: opacity .55s var(--ease); }
 .hero-cedar__line.is-in { opacity: 1; }
 
-/* ---------- figure marginalia ---------- */
+/* ---------- figure marginalia ----------
+   Live values (Direct / Indirect / Induced) get full weight columns.
+   Derived values (Total / Jobs) get narrower columns and start dim;
+   they fade in once a number lands so the row doesn't read as half-
+   blank during a study. */
 .hero-figs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 1.15fr 1.15fr 1.15fr .9fr .8fr;
   gap: 0;
   margin: 0;
+  padding-top: .6rem;
   border-top: 1px solid var(--rule);
 }
 .hero-fig {
-  padding: 1rem 1.2rem 1rem 0;
+  padding: 1rem 1.4rem 1rem 0;
   border-right: 1px solid var(--rule);
+  transition: opacity .5s var(--ease);
 }
 .hero-fig:last-child { border-right: 0; padding-right: 0; }
+.hero-fig--derived { opacity: .38; }
+.hero-fig--derived.is-filled { opacity: 1; }
 .hero-fig dt {
   font-family: var(--font-mono);
-  font-size: .62rem;
-  letter-spacing: .14em;
+  font-size: .58rem;
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--navy);
   opacity: .55;
-  margin-bottom: .35rem;
+  margin-bottom: .45rem;
 }
 .hero-fig dd {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 96;
   font-weight: 400;
-  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+  font-size: clamp(1.2rem, 2vw, 1.7rem);
   color: var(--navy);
   letter-spacing: -.012em;
   line-height: 1;
@@ -232,12 +241,33 @@
 }
 
 /* ---------- responsive ---------- */
-@media (max-width: 880px) {
-  .hero { padding-top: 6.5rem; min-height: 0; gap: 1.6rem; }
-  .hero-figs { grid-template-columns: repeat(2, 1fr); }
-  .hero-fig { border-bottom: 1px solid var(--rule); padding: .8rem 1rem .8rem 0; }
-  .hero-fig:nth-child(2) { border-right: 0; padding-right: 0; }
+@media (max-width: 1100px) {
+  .hero-wordmark { font-size: clamp(3rem, 11vw, 5.4rem); }
+  .hero-figs { grid-template-columns: 1fr 1fr 1fr; }
+  .hero-fig { padding: .8rem 1rem .8rem 0; }
+  .hero-fig:nth-child(3) { border-right: 0; padding-right: 0; }
+  .hero-fig--total, .hero-fig--derived {
+    border-top: 1px solid var(--rule);
+    margin-top: -1px;
+  }
+}
+@media (max-width: 760px) {
+  .hero { padding-top: 6rem; min-height: 0; gap: 1.4rem; }
+  .hero-wordmark { font-size: clamp(2.6rem, 13vw, 4.2rem); letter-spacing: .02em; }
+  .hero-tagline { font-size: 1rem; }
+  .hero-cedar { font-size: 1rem; }
+  .hero-figs { grid-template-columns: 1fr 1fr; }
+  .hero-fig { padding: .7rem .8rem .7rem 0; }
+  .hero-fig:nth-child(odd) { border-right: 1px solid var(--rule); }
+  .hero-fig:nth-child(even) { border-right: 0; padding-right: 0; }
+  .hero-fig dd { font-size: 1.05rem; }
+  .hero-cta { gap: .7rem; }
   .hero-cta__note { margin-left: 0; flex-basis: 100%; }
+  .btn { padding: .8rem 1.2rem; font-size: .92rem; }
+}
+@media (max-width: 420px) {
+  .hero-figs { grid-template-columns: 1fr; }
+  .hero-fig { border-right: 0 !important; padding-right: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
