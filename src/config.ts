@@ -8,10 +8,12 @@ export const navLinks = [
 
 export const site = {
   name: 'Lumecon',
+  legalName: 'Lumecon Inc.',
   tagline: 'We luminate economies',
+  pitch: 'Economic and policy analysis software for governments',
   url: 'https://lumecon.ai',
   email: 'contact@lumecon.ai',
-  legalEntity: 'Moreno Ventures LLC d/b/a Lumecon',
+  legalEntity: 'Lumecon Inc.',
   counsel: 'Cornell Law Entrepreneurship Law Clinic',
   builtAt: 'Cornell University',
   copyrightYear: 2026,

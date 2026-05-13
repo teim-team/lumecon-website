@@ -15,11 +15,17 @@ import '../styles/footer.css';
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": site.name,
+  "name": site.legalName,
+  "legalName": site.legalName,
+  "alternateName": site.name,
   "url": site.url,
-  "description": "Economic and policy analysis platform offering affordable, web-based tools for local, tribal, and global economic impact and policy analysis.",
+  "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
+  "description": "Lumecon Inc. — economic and policy analysis software for governments. Parent brand of Local, Tribal, and Global Economic Impact platforms.",
   "email": site.email,
   "slogan": site.tagline,
+  "sameAs": [
+    "https://www.linkedin.com/company/lumecon-ai"
+  ],
   "foundingLocation": { "@type": "Place", "name": site.builtAt },
   "founder": {
     "@type": "Person",

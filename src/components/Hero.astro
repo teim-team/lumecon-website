@@ -4,19 +4,36 @@ import '../styles/hero.css';
 <section class="hero" id="top">
   <div class="hero-text">
     <div class="hero-brand" id="heroBrand">Lumecon</div>
-    <div class="hero-tagline">We luminate economies&trade;</div>
-    <h1>Economic and policy analysis anyone can act on</h1>
-    <div class="hero-accent"></div>
-    <p class="hero-body"><strong>Lumecon&trade; is an economic and policy analysis platform, offering specialized products for local, tribal, and global economic impact and policy analysis.</strong></p>
-    <p class="hero-body">We deliver novel modeling methods through affordable, web-based annual subscriptions so organizations of any size can access the caliber of analysis that once required expensive consultants and legacy software. Built by social scientists, government professionals, and software engineers, Lumecon makes economies more visible and policy more actionable. <em>Patent pending.</em></p>
+    <div class="hero-tagline">We&nbsp;<em>luminate</em>&nbsp;economies&trade;</div>
+    <div class="hero-rule" aria-hidden="true"></div>
+    <h1>Economic and policy analysis software for governments</h1>
+    <p class="hero-body"><strong>Lumecon Inc. is the parent brand for three specialized platforms</strong> &mdash; serving local, tribal, and global economies through affordable, web-based modeling that organizations of any size can act on.</p>
+    <p class="hero-body">Built by social scientists, government professionals, and software engineers, Lumecon delivers the caliber of analysis that once required expensive consultants and legacy software. <em>Patent pending.</em></p>
     <div class="hero-actions" id="heroActions">
-      <a href="#products" class="btn">Our Products</a>
-      <a href="#cedar" class="btn">Cedar</a>
+      <a href="#products" class="btn btn--primary">Our Three Platforms</a>
+      <a href="#cedar" class="btn">Meet Cedar</a>
       <a href="#contact" class="btn">Partner With Us</a>
     </div>
   </div>
   <div class="hero-panel" id="heroPanel">
     <canvas id="topoCanvas" aria-label="Animated topographic map visualization"></canvas>
+    <svg class="hero-lines" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F2D67A" stop-opacity=".85"/>
+          <stop offset="60%" stop-color="#C49A3C" stop-opacity=".15"/>
+          <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path class="hero-line hero-line--dash-1" d="M-40 180 C 120 120, 220 260, 360 200 S 560 320, 660 240" />
+      <path class="hero-line hero-line--dash-2" d="M-40 360 C 160 300, 240 460, 380 380 S 580 520, 680 420" />
+      <path class="hero-line hero-line--dash-3" d="M-40 560 C 100 520, 260 640, 380 560 S 620 700, 720 600" />
+      <path class="hero-line hero-line--solid" d="M-40 700 Q 140 540, 320 520 T 660 380" />
+      <circle class="hero-glow" cx="300" cy="430" r="80" fill="url(#heroGlow)" />
+      <circle class="hero-spark" cx="300" cy="430" r="3.5" />
+      <line class="hero-spark-x" x1="288" y1="430" x2="312" y2="430" />
+      <line class="hero-spark-y" x1="300" y1="418" x2="300" y2="442" />
+    </svg>
     <div class="hero-panel-hint">Click to regenerate</div>
   </div>
 </section>

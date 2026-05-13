@@ -1,6 +1,9 @@
 @keyframes panelIn { from { opacity: 0; clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); } to { opacity: 1; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%); } }
 @keyframes flIn { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
 @keyframes flPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .72; transform: scale(.97); } }
+@keyframes lineDraw { from { stroke-dashoffset: var(--line-len, 1800); } to { stroke-dashoffset: 0; } }
+@keyframes glowPulse { 0%, 100% { opacity: .55; transform: scale(1); } 50% { opacity: .9; transform: scale(1.05); } }
+@keyframes sparkPulse { 0%, 100% { opacity: .9; r: 3.5; } 50% { opacity: 1; r: 4.5; } }
 
 .hero {
   display: grid;
@@ -33,26 +36,41 @@
   animation-delay: var(--pd, 0s);
 }
 .hero-tagline {
+  font-weight: 600;
+  color: var(--navy);
+  font-size: clamp(.95rem, 1.5vw, 1.2rem);
+  letter-spacing: .02em;
+  margin-bottom: .9rem;
+  animation: fadeUp .75s var(--ease) .06s both;
+}
+.hero-tagline em {
   font-style: italic;
   font-weight: 600;
-  color: var(--terra);
-  font-size: clamp(.88rem, 1.4vw, 1.12rem);
-  margin-bottom: .4rem;
-  animation: fadeUp .75s var(--ease) .06s both;
+  color: var(--gold);
+}
+.hero-rule {
+  width: clamp(160px, 22vw, 280px);
+  height: 1.5px;
+  background: var(--purple);
+  margin-bottom: 1.3rem;
+  transform-origin: left;
+  animation: scaleIn .55s var(--ease) .18s both;
 }
 .hero h1 {
   font-size: clamp(1.8rem, 3.6vw, 2.6rem);
   letter-spacing: -.01em;
-  margin-bottom: .9rem;
+  margin-bottom: 1.1rem;
   animation: fadeUp .75s var(--ease) .1s both;
 }
-.hero-accent {
-  width: 44px;
-  height: 2.5px;
-  background: var(--terra);
-  margin-bottom: 1.2rem;
-  transform-origin: left;
-  animation: scaleIn .5s var(--ease) .2s both;
+.btn--primary {
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
+}
+.btn--primary:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
 }
 .hero-body {
   font-size: .92rem;
@@ -70,7 +88,7 @@
   animation: fadeUp .75s var(--ease) .2s both;
 }
 .hero-panel {
-  background: var(--purple);
+  background: var(--cream);
   position: relative;
   overflow: hidden;
   clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
@@ -78,11 +96,72 @@
   cursor: pointer;
   min-height: 0;
 }
+.hero-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 55%, rgba(196, 154, 60, .08) 0%, transparent 60%);
+  z-index: 1;
+}
 .hero-panel canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  opacity: .42;
+  mix-blend-mode: screen;
+}
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.hero-line {
+  fill: none;
+  stroke: #0E3A2E;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 8 7;
+  opacity: .85;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, .15));
+  --line-len: 1800;
+  stroke-dashoffset: var(--line-len);
+  animation: lineDraw 2.4s var(--ease) .35s both, none;
+}
+.hero-line--dash-1 { animation-delay: .35s; opacity: .75; }
+.hero-line--dash-2 { animation-delay: .6s;  opacity: .55; stroke-width: 1.3; }
+.hero-line--dash-3 { animation-delay: .85s; opacity: .65; }
+.hero-line--solid {
+  stroke: var(--gold);
+  stroke-dasharray: none;
+  stroke-width: 2;
+  opacity: 0;
+  animation: fadeUp 1.2s var(--ease) 1.1s both;
+}
+.hero-glow {
+  opacity: 0;
+  transform-origin: 300px 430px;
+  animation: glowPulse 4.5s ease-in-out 1.5s infinite, fadeUp .8s var(--ease) 1.3s both;
+}
+.hero-spark {
+  fill: var(--gold);
+  opacity: 0;
+  animation: sparkPulse 2.6s ease-in-out 1.6s infinite, fadeUp .6s var(--ease) 1.5s both;
+}
+.hero-spark-x, .hero-spark-y {
+  stroke: var(--gold);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: fadeUp .6s var(--ease) 1.55s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-line { animation: none; stroke-dashoffset: 0; }
+  .hero-glow, .hero-spark, .hero-spark-x, .hero-spark-y { animation: none; opacity: 1; }
+  .hero-line--solid { animation: none; opacity: 1; }
 }
 .hero-panel-hint {
   position: absolute;

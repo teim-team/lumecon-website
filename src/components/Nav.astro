@@ -8,7 +8,9 @@ const prefix = isHome ? '' : '/';
 ---
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
-    <a href="/" class="logo">{site.name}</a>
+    <a href="/" class="logo" aria-label={`${site.legalName} home`}>
+      <img src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.name} width="160" height="36" />
+    </a>
     <div class="nav-links" id="navLinks">
       {navLinks.map(link => (
         <a href={`${prefix}${link.href}`}>{link.label}</a>

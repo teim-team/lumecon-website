@@ -28,14 +28,17 @@ nav.nav--static {
 }
 
 .logo {
-  font-weight: 800;
-  font-size: 1.1rem;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--green);
+  display: flex;
+  align-items: center;
   transition: opacity .25s;
 }
-.logo:hover { opacity: .65; }
+.logo img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+nav.nav--fixed:not(.scrolled) .logo img { height: 36px; }
+.logo:hover { opacity: .7; }
 
 .home-page .logo { opacity: 0; pointer-events: none; }
 nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
