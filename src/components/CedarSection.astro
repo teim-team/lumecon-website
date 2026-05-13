@@ -1,164 +1,223 @@
 ---
+/**
+ * Cedar + Map — the combined demo.
+ *
+ * IMPLAN's marketing is a screenshot of their dashboard and a
+ * "Take a Tour" tooltip. Ours is the analysis happening live. Cedar
+ * sits beside a stripped-down Lumecon map and walks a first-time
+ * visitor through what economic impact analysis looks like: invite,
+ * pick a source, light up the rings, name what each ring means,
+ * and offer the door. No promises about button-counts. No fake
+ * "5 clicks". Just Cedar guiding and the map answering.
+ */
+import { geoPath } from 'd3-geo';
+import { mesh, feature } from 'topojson-client';
+// @ts-ignore — us-atlas ships JSON, not TS
+import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 import '../styles/cedar.css';
+
+const VIEWBOX_W = 975;
+const VIEWBOX_H = 610;
+
+const path = geoPath();
+// @ts-ignore
+const statesFC: any = feature(usAtlas, usAtlas.objects.states);
+// @ts-ignore
+const stateBordersD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a !== b));
+// @ts-ignore
+const nationOutlineD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a === b));
+
+/* Mecklenburg County, NC is the source. The albers-USA projection
+   coordinates were sampled from us-atlas; close enough for a
+   schematic. Three rings of distance (close / mid / far) drive
+   which states light up on Direct vs Indirect vs Induced. */
+const SRC = { cx: 740, cy: 350 };
+const DIRECT_STATES   = new Set(['37']); // NC
+const INDIRECT_STATES = new Set(['45', '51', '47', '13', '21']); // SC, VA, TN, GA, KY
+const INDUCED_STATES  = new Set(['54', '24', '01', '12', '11', '42', '39']); // WV, MD, AL, FL, DC, PA, OH
+
+const stateFeatures = statesFC.features.map((f: any) => {
+  let ring = -1;
+  if (DIRECT_STATES.has(f.id))   ring = 0;
+  else if (INDIRECT_STATES.has(f.id)) ring = 1;
+  else if (INDUCED_STATES.has(f.id))  ring = 2;
+  return { id: f.id, name: f.properties.name, d: path(f), ring };
+});
 ---
 <section class="cedar" id="cedar">
-  <div class="cedar-panel">
-    <p class="cedar-eyebrow">How Cedar can help.</p>
-    <h2 class="cedar-display reveal">Cedar.</h2>
-    <p class="cedar-subtitle reveal delay-2">An AI thought partner for the work.</p>
-    <p class="cedar-motto reveal delay-3">We won&rsquo;t think for you.<br><em>We think with you.</em></p>
-  </div>
-  <div class="cedar-text">
-    <p class="cedar-body reveal">Cedar&trade; is Lumecon&rsquo;s AI assistant for economic and policy analysis. It works with messy, real-world data, clearly telling you what it needs and why, and walks you through each step so you can understand economic impact, test assumptions, and make informed strategic decisions. No consultant or overpriced legacy software &mdash; just you, your data, and a thought partner designed to support rigorous analysis without fabricating results. Cedar operates in secure, isolated environments, working only with the data you provide and preserving context across analyses.</p>
-  </div>
-  <div class="cedar-chat">
-    <div class="chat-demo reveal-diagonal" id="chatDemo">
-      <div class="chat-header">
-        <div class="chat-dot"></div>
-        <div class="chat-title">Cedar</div>
-      </div>
-      <div class="chat-body" id="chatBody" aria-live="polite" aria-label="Cedar AI demo conversation">
-        <div class="chat-skeleton" id="chatSkeleton">
-          <div class="chat-skeleton-hint">Demo will play automatically</div>
-          <div class="chat-skeleton-line"></div>
-          <div class="chat-skeleton-line"></div>
-          <div class="chat-skeleton-line"></div>
-          <div class="chat-skeleton-line"></div>
-          <div class="chat-skeleton-line"></div>
+  <div class="cedar-inner">
+    <header class="cedar-head">
+      <p class="cedar-eyebrow">How Cedar can help.</p>
+      <h2 class="cedar-lead">
+        Cedar runs the analysis <em>with you,</em><br>not for you.
+      </h2>
+    </header>
+
+    <div class="cedar-lab" id="cedarLab">
+      <!-- Cedar conversation -->
+      <div class="cedar-chat" aria-live="polite">
+        <div class="cedar-chat__head">
+          <span class="cedar-chat__dot" aria-hidden="true"></span>
+          <span class="cedar-chat__name">Cedar</span>
+          <span class="cedar-chat__status" id="cedarStatus">Online</span>
+        </div>
+        <ul class="cedar-msgs" id="cedarMsgs">
+          <li class="cedar-msg cedar-msg--cedar" data-step="0">
+            <span class="cedar-msg__from">Cedar</span>
+            Welcome. Want to run your first economic impact analysis &mdash; right here, on this page?
+          </li>
+        </ul>
+        <div class="cedar-actions" id="cedarActions">
+          <button type="button" class="cedar-btn" id="cedarRun">Run the demo</button>
+          <button type="button" class="cedar-btn cedar-btn--ghost" id="cedarRestart" hidden>Run it again</button>
         </div>
       </div>
-      <div class="chat-controls" id="chatControls">
-        <button class="chat-ctrl-btn" id="chatPrev" aria-label="Previous conversation">Prev</button>
-        <span class="chat-conv-indicator" id="chatIndicator">1 / 7</span>
-        <button class="chat-ctrl-btn" id="chatNext" aria-label="Next conversation">Next</button>
-        <button class="chat-ctrl-btn" id="chatPause" aria-label="Pause demo">Pause</button>
-      </div>
-      <div class="chat-footer">Demo reflects current training and testing as of May 2026</div>
+
+      <!-- Map vignette -->
+      <figure class="cedar-map" aria-label="A live demonstration: spending in Mecklenburg County, NC ripples outward through neighboring states">
+        <svg class="cedar-map__svg" viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`} preserveAspectRatio="xMidYMid slice" role="img">
+          <defs>
+            <radialGradient id="cedarLumGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
+              <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <path class="cedar-map__fill" d={nationOutlineD} />
+          <g class="cedar-map__states" aria-hidden="true">
+            {stateFeatures.map((s: any) => (
+              <path
+                class={`cedar-map__state${s.ring >= 0 ? ` cedar-map__state--ring-${s.ring}` : ''}`}
+                d={s.d}
+                data-state={s.id}
+              />
+            ))}
+          </g>
+          <path class="cedar-map__borders" d={stateBordersD} />
+          <path class="cedar-map__outline" d={nationOutlineD} />
+
+          <!-- Spending source + ripples -->
+          <g class="cedar-source">
+            <circle class="cedar-glow" cx={SRC.cx} cy={SRC.cy} r="100" fill="url(#cedarLumGlow)" />
+            <circle class="cedar-ring cedar-ring--direct"   cx={SRC.cx} cy={SRC.cy} r="14" />
+            <circle class="cedar-ring cedar-ring--indirect" cx={SRC.cx} cy={SRC.cy} r="14" />
+            <circle class="cedar-ring cedar-ring--induced"  cx={SRC.cx} cy={SRC.cy} r="14" />
+            <circle class="cedar-spark" cx={SRC.cx} cy={SRC.cy} r="6" />
+            <circle class="cedar-spark__core" cx={SRC.cx} cy={SRC.cy} r="2.4" />
+          </g>
+        </svg>
+
+        <!-- Readout overlay: numbers populate as rings expand -->
+        <aside class="cedar-readout" aria-hidden="true">
+          <div class="cedar-readout__row" data-row="src">
+            <span class="cedar-readout__label">Source</span>
+            <span class="cedar-readout__val">Mecklenburg Co., NC</span>
+          </div>
+          <div class="cedar-readout__row" data-row="direct">
+            <span class="cedar-readout__label"><span class="cedar-dot cedar-dot--direct"></span>Direct</span>
+            <span class="cedar-readout__val">spending source</span>
+          </div>
+          <div class="cedar-readout__row" data-row="indirect">
+            <span class="cedar-readout__label"><span class="cedar-dot cedar-dot--indirect"></span>Indirect</span>
+            <span class="cedar-readout__val">supplier purchases</span>
+          </div>
+          <div class="cedar-readout__row" data-row="induced">
+            <span class="cedar-readout__label"><span class="cedar-dot cedar-dot--induced"></span>Induced</span>
+            <span class="cedar-readout__val">household spending</span>
+          </div>
+          <div class="cedar-readout__row cedar-readout__row--total" data-row="total">
+            <span class="cedar-readout__label">&sum;&nbsp;Total impact</span>
+            <span class="cedar-readout__val">with the full ledger</span>
+          </div>
+        </aside>
+      </figure>
     </div>
+
+    <footer class="cedar-foot">
+      <p class="cedar-foot__copy">
+        That&rsquo;s what an economic impact study looks like &mdash; the spending source, three rounds of ripples, and the ledger of where every number came from. Cedar walks you through it every step of the way, with your data, on a region you actually care about.
+      </p>
+      <a href="#contact" class="btn">Try this with your data</a>
+    </footer>
   </div>
 </section>
 
 <script>
-  import { conversations } from '../data/cedar-conversations';
+  /* Cedar + Map timeline.
+     The script doesn't pretend the analysis is happening — it stages
+     the *explanation* of one. Each step adds a Cedar message and
+     advances a stage class on .cedar-lab that the CSS reads to
+     animate the map (which ring is active, which states are lit,
+     which readout row is filled in). After the run completes, the
+     "Run it again" button is offered. Honest: nothing here is a
+     real impact run; we're demonstrating the experience. */
+  (function () {
+    const lab     = document.getElementById('cedarLab');
+    const msgs    = document.getElementById('cedarMsgs');
+    const run     = document.getElementById('cedarRun') as HTMLButtonElement | null;
+    const restart = document.getElementById('cedarRestart') as HTMLButtonElement | null;
+    const status  = document.getElementById('cedarStatus');
+    if (!lab || !msgs || !run || !restart || !status) return;
 
-  // Chat demo timing constants
-  const TYPING_DELAY_CEDAR = 1800;
-  const TYPING_DELAY_USER = 1100;
-  const MESSAGE_PAUSE = 1100;
-  const SYSTEM_MESSAGE_PAUSE = 800;
-  const AUTO_ADVANCE_DELAY = 9000;
-  const PAUSE_CHECK_INTERVAL = 200;
-  const INITIAL_PLAY_DELAY = 600;
-  const INTERSECTION_THRESHOLD = 0.2;
+    type Step = { from: 'cedar' | 'you'; text: string; stage: number; hold: number };
+    const steps: Step[] = [
+      { from: 'you',   text: 'Yes — let’s go.',                                                                  stage: 1, hold: 900 },
+      { from: 'cedar', text: 'I’ll pick a spending source you’ll recognize: $9M of construction in Mecklenburg County, North Carolina.', stage: 2, hold: 2400 },
+      { from: 'cedar', text: 'Direct effect first — the activity itself. Watch North Carolina light up.',         stage: 3, hold: 2600 },
+      { from: 'cedar', text: 'Now the indirect: the suppliers and contractors that work crew buys from. The ring widens.', stage: 4, hold: 3000 },
+      { from: 'cedar', text: 'And the induced: the wages from rings one and two get spent on rent, groceries, kids’ shoes — spreading farther still.', stage: 5, hold: 3200 },
+      { from: 'cedar', text: 'That sum, with every multiplier sourced and every assumption written down, is your impact study. Want to run a real one on your data?', stage: 6, hold: 4200 },
+    ];
 
-  (function() {
-    const chatBody = document.getElementById('chatBody');
-    const chatDemo = document.getElementById('chatDemo');
-    const chatPause = document.getElementById('chatPause');
-    const chatPrev = document.getElementById('chatPrev');
-    const chatNext = document.getElementById('chatNext');
-    const chatIndicator = document.getElementById('chatIndicator');
-    const chatSkeleton = document.getElementById('chatSkeleton');
-    if (!chatBody || !chatDemo || !chatPause || !chatPrev || !chatNext || !chatIndicator || !chatSkeleton) return;
-
-    let convIdx = Math.floor(Math.random() * conversations.length);
-    let chatRunning = false;
-    let paused = false;
-    let abortController: AbortController | null = null;
-
-    const updateIndicator = () => {
-      chatIndicator.textContent = (convIdx + 1) + ' / ' + conversations.length;
+    const addMsg = (s: Step) => {
+      const li = document.createElement('li');
+      li.className = 'cedar-msg cedar-msg--' + s.from;
+      const from = document.createElement('span');
+      from.className = 'cedar-msg__from';
+      from.textContent = s.from === 'cedar' ? 'Cedar' : 'You';
+      li.appendChild(from);
+      li.append(document.createTextNode(s.text));
+      msgs.appendChild(li);
+      requestAnimationFrame(() => { requestAnimationFrame(() => li.classList.add('is-in')); });
+      msgs.scrollTo({ top: msgs.scrollHeight, behavior: 'smooth' });
     };
 
-    const sleep = (ms: number, signal?: AbortSignal): Promise<void> => {
-      return new Promise((resolve, reject) => {
-        const timer = setTimeout(resolve, ms);
-        if (signal) {
-          signal.addEventListener('abort', () => { clearTimeout(timer); reject(new DOMException('Aborted', 'AbortError')); });
+    const setStage = (n: number) => {
+      lab.classList.remove('stage-1','stage-2','stage-3','stage-4','stage-5','stage-6');
+      lab.classList.add('stage-' + n);
+    };
+
+    const typing = (on: boolean) => {
+      status!.textContent = on ? 'Cedar is typing…' : 'Online';
+      status!.classList.toggle('is-typing', on);
+    };
+
+    const runDemo = async () => {
+      run.disabled = true; run.hidden = true;
+      restart.hidden = true;
+      // remove prior messages except the opening invitation
+      [...msgs.querySelectorAll('.cedar-msg')].slice(1).forEach(n => n.remove());
+      setStage(0);
+
+      for (const s of steps) {
+        if (s.from === 'cedar') {
+          typing(true);
+          await sleep(700);
+          typing(false);
+        } else {
+          await sleep(450);
         }
-      });
-    };
-
-    const showTyping = (from: string) => {
-      const t = document.createElement('div');
-      t.className = 'chat-typing';
-      t.style.alignSelf = from === 'user' ? 'flex-end' : 'flex-start';
-      t.innerHTML = '<span></span><span></span><span></span>';
-      chatBody.appendChild(t);
-      chatBody.scrollTop = chatBody.scrollHeight;
-      return t;
-    };
-
-    const playConversation = async () => {
-      abortController = new AbortController();
-      const signal = abortController.signal;
-      chatSkeleton.style.display = 'none';
-      chatBody.innerHTML = '';
-      updateIndicator();
-      const conv = conversations[convIdx];
-      try {
-        for (let i = 0; i < conv.length; i++) {
-          while (paused) { await sleep(PAUSE_CHECK_INTERVAL, signal); }
-          const m = conv[i];
-          if (m.from === 'system') {
-            const el = document.createElement('div');
-            el.className = 'chat-msg chat-msg--system';
-            el.style.whiteSpace = 'pre-line';
-            el.textContent = m.text ?? '';
-            chatBody.appendChild(el);
-            requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
-            chatBody.scrollTop = chatBody.scrollHeight;
-            await sleep(SYSTEM_MESSAGE_PAUSE, signal);
-            continue;
-          }
-          const typing = showTyping(m.from);
-          await sleep(m.from === 'cedar' ? TYPING_DELAY_CEDAR : TYPING_DELAY_USER, signal);
-          typing.remove();
-          const el = document.createElement('div');
-          el.className = 'chat-msg chat-msg--' + m.from;
-          const label = m.from === 'cedar' ? 'Cedar' : 'You';
-          let content = '<div class="sender">' + label + '</div>';
-          if (m.html) { content += m.html; } else { content += (m.text ?? '').replace(/\n/g, '<br>'); }
-          el.innerHTML = content;
-          chatBody.appendChild(el);
-          requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
-          chatBody.scrollTop = chatBody.scrollHeight;
-          await sleep(MESSAGE_PAUSE, signal);
-        }
-        await sleep(AUTO_ADVANCE_DELAY, signal);
-        convIdx = (convIdx + 1) % conversations.length;
-        playConversation();
-      } catch (e: any) {
-        if (e.name !== 'AbortError') throw e;
+        addMsg(s);
+        setStage(s.stage);
+        await sleep(s.hold);
       }
+      restart.hidden = false;
     };
 
-    const jumpTo = (idx: number) => {
-      convIdx = ((idx % conversations.length) + conversations.length) % conversations.length;
-      if (abortController) abortController.abort();
-      paused = false;
-      chatPause.textContent = 'Pause';
-      chatPause.classList.remove('active');
-      playConversation();
-    };
+    const sleep = (ms: number) => new Promise<void>(r => window.setTimeout(r, ms));
 
-    chatPrev.addEventListener('click', () => jumpTo(convIdx - 1));
-    chatNext.addEventListener('click', () => jumpTo(convIdx + 1));
-    chatPause.addEventListener('click', () => {
-      paused = !paused;
-      chatPause.textContent = paused ? 'Play' : 'Pause';
-      chatPause.classList.toggle('active', paused);
-    });
-
-    const chatObs = new IntersectionObserver(es => {
-      es.forEach(e => {
-        if (e.isIntersecting && !chatRunning) {
-          chatRunning = true;
-          setTimeout(playConversation, INITIAL_PLAY_DELAY);
-          chatObs.unobserve(e.target);
-        }
-      });
-    }, { threshold: INTERSECTION_THRESHOLD });
-    chatObs.observe(chatDemo);
+    run.addEventListener('click', runDemo);
+    restart.addEventListener('click', runDemo);
   })();
 </script>
