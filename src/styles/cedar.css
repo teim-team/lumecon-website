@@ -1,213 +1,386 @@
+/* Cedar + Map combined demo.
+   Two-column lab: scripted Cedar chat on the left, live Lumecon
+   map on the right. The .cedar-lab element carries a stage-N
+   class as the demo progresses; every map element keys off that
+   class. No timers in CSS — JS drives the stage, CSS draws it. */
+
 .cedar {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  background: var(--cream);
+  padding: clamp(5rem, 10vw, 8.5rem) 0;
   border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  position: relative;
 }
-.cedar-panel {
-  background: var(--cedar);
-  color: var(--cream);
-  padding: clamp(4rem, 8vw, 6rem) clamp(2rem, 4vw, 3.5rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.cedar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/textures/paper-grain.svg');
+  background-size: 380px;
+  opacity: .2;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.cedar-inner {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+.cedar-head {
+  max-width: 50rem;
+  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
 }
 .cedar-eyebrow {
   font-family: var(--font-display);
   font-style: italic;
   font-size: 1rem;
-  color: rgba(246, 241, 233, .68);
-  margin: 0 0 1.4rem;
+  color: var(--navy);
+  opacity: .58;
+  margin: 0 0 1.2rem;
 }
-.cedar-display {
+.cedar-lead {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 144;
   font-weight: 400;
-  font-style: italic;
-  color: var(--cream);
-  font-size: clamp(3.4rem, 7vw, 6rem);
-  line-height: 1;
-  margin: 0 0 1rem;
-  letter-spacing: -.02em;
-}
-.cedar-subtitle {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 36;
-  font-weight: 400;
-  color: var(--gold-light);
-  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
-  line-height: 1.35;
-  margin: 0 0 2rem;
-  max-width: 24ch;
-}
-.cedar-motto {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 48;
-  font-weight: 400;
-  font-size: 1.2rem;
-  color: rgba(231, 239, 233, .82);
-  line-height: 1.35;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -.022em;
+  color: var(--navy);
   margin: 0;
   max-width: 22ch;
 }
-.cedar-motto em {
-  color: var(--gold-light);
-  font-style: italic;
-  font-weight: 400;
+.cedar-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
+
+/* ---------- two-column lab ---------- */
+.cedar-lab {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  background: var(--white);
+  min-height: 580px;
+  overflow: hidden;
+  position: relative;
 }
-.cedar-text {
-  background: var(--cream);
-  padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3.5rem);
+
+/* ---------- Cedar chat panel ---------- */
+.cedar-chat {
+  background: var(--cedar);
+  color: var(--cream);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  padding: 1.4rem 1.4rem 1.2rem;
+  border-right: 1px solid var(--rule-strong);
 }
-.cedar-body {
-  color: var(--navy);
-  opacity: .82;
-  font-size: 1.05rem;
-  line-height: 1.65;
-  max-width: 40rem;
-  margin: 0;
-}
-.cedar-chat {
-  background: var(--cream);
-  padding: clamp(1rem, 3vw, 2rem) clamp(2rem, 4vw, 3.5rem) clamp(3rem, 6vw, 5rem);
+.cedar-chat__head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  grid-column: 1 / -1;
-  border-top: 1px solid var(--rule);
+  gap: .6rem;
+  padding-bottom: 1rem;
+  margin-bottom: .8rem;
+  border-bottom: 1px solid rgba(231, 239, 233, .15);
 }
-.cedar-chat {
-  background: var(--cream);
-  padding: clamp(1.5rem, 3vw, 2rem) clamp(1rem, 2vw, 1.2rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.chat-demo {
-  width: 100%;
-  max-width: 540px;
-  border-radius: 0;
-  overflow: hidden;
-  background: var(--white);
-  border: 1px solid var(--rule-strong);
-}
-.chat-header {
-  background: var(--navy);
-  padding: .6rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-}
-.chat-dot {
-  width: 7px;
-  height: 7px;
+.cedar-chat__dot {
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: var(--gold);
+  box-shadow: 0 0 8px rgba(196, 154, 60, .7);
 }
-.chat-title {
-  font-size: .66rem;
-  font-weight: 700;
-  color: rgba(255, 252, 247, .6);
-  letter-spacing: .1em;
+.cedar-chat__name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  font-variation-settings: "opsz" 36;
+  color: var(--cream);
+}
+.cedar-chat__status {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
+  color: rgba(231, 239, 233, .55);
+  transition: color .25s var(--ease);
 }
-.chat-body {
-  padding: .8rem;
-  height: 350px;
+.cedar-chat__status.is-typing { color: var(--gold-light); }
+
+.cedar-msgs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(231, 239, 233, .25) transparent;
+}
+.cedar-msg {
+  background: rgba(231, 239, 233, .08);
+  border-left: 2px solid var(--gold);
+  padding: .7rem .9rem;
+  font-size: .94rem;
+  line-height: 1.5;
+  color: rgba(231, 239, 233, .92);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+  max-width: 90%;
+}
+.cedar-msg.is-in { opacity: 1; transform: none; }
+.cedar-msg--you {
+  align-self: flex-end;
+  background: rgba(246, 241, 233, .12);
+  border-left: 2px solid var(--cream);
+  border-right: 0;
+  color: var(--cream);
+}
+.cedar-msg__from {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(231, 239, 233, .55);
+  margin-bottom: .3rem;
+}
+.cedar-msg--you .cedar-msg__from { color: rgba(246, 241, 233, .7); }
+
+.cedar-actions {
+  display: flex;
+  gap: .6rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(231, 239, 233, .15);
+}
+.cedar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .7rem 1.1rem;
+  font-family: var(--font-sans);
+  font-size: .88rem;
+  font-weight: 700;
+  letter-spacing: .015em;
+  background: var(--gold);
+  color: var(--navy);
+  border: 1.5px solid var(--gold);
+  border-radius: 0;
+  cursor: pointer;
+  transition: background .2s var(--ease), color .2s var(--ease), transform .2s var(--ease);
+}
+.cedar-btn::after {
+  content: '→';
+  font-size: 1em;
+  line-height: 0;
+  transform: translateY(.06em);
+  transition: transform .2s var(--ease);
+}
+.cedar-btn:hover { background: var(--cream); border-color: var(--cream); color: var(--navy); transform: translateY(-1px); }
+.cedar-btn:hover::after { transform: translate(.2em, .06em); }
+.cedar-btn:disabled { opacity: .55; cursor: default; transform: none; }
+.cedar-btn--ghost {
+  background: transparent;
+  color: var(--cream);
+  border-color: rgba(231, 239, 233, .35);
+}
+.cedar-btn--ghost:hover { background: rgba(231, 239, 233, .08); color: var(--cream); border-color: var(--cream); }
+
+/* ---------- Map vignette ---------- */
+.cedar-map {
+  position: relative;
+  margin: 0;
+  background: var(--paper);
+  overflow: hidden;
+}
+.cedar-map__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cedar-map__fill { fill: var(--paper); }
+.cedar-map__borders {
+  fill: none;
+  stroke: rgba(45, 45, 63, .18);
+  stroke-width: .7;
+  vector-effect: non-scaling-stroke;
+}
+.cedar-map__outline {
+  fill: none;
+  stroke: var(--navy);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+  opacity: .82;
+}
+
+/* States start transparent. Each stage class on .cedar-lab lights up
+   one ring's worth of states with a soft fill-opacity transition. */
+.cedar-map__state {
+  fill-opacity: 0;
+  transition: fill-opacity .9s var(--ease);
+  pointer-events: none;
+}
+.cedar-map__state--ring-0 { fill: var(--gold);  }
+.cedar-map__state--ring-1 { fill: var(--terra); }
+.cedar-map__state--ring-2 { fill: var(--cedar); }
+
+.cedar-lab.stage-3 .cedar-map__state--ring-0 { fill-opacity: .42; }
+.cedar-lab.stage-4 .cedar-map__state--ring-0 { fill-opacity: .42; }
+.cedar-lab.stage-4 .cedar-map__state--ring-1 { fill-opacity: .32; }
+.cedar-lab.stage-5 .cedar-map__state--ring-0 { fill-opacity: .42; }
+.cedar-lab.stage-5 .cedar-map__state--ring-1 { fill-opacity: .32; }
+.cedar-lab.stage-5 .cedar-map__state--ring-2 { fill-opacity: .26; }
+.cedar-lab.stage-6 .cedar-map__state--ring-0 { fill-opacity: .42; }
+.cedar-lab.stage-6 .cedar-map__state--ring-1 { fill-opacity: .32; }
+.cedar-lab.stage-6 .cedar-map__state--ring-2 { fill-opacity: .26; }
+
+/* Spending source dot — visible from stage 2 onward. */
+.cedar-source { opacity: 0; transition: opacity .4s var(--ease); }
+.cedar-lab.stage-2 .cedar-source,
+.cedar-lab.stage-3 .cedar-source,
+.cedar-lab.stage-4 .cedar-source,
+.cedar-lab.stage-5 .cedar-source,
+.cedar-lab.stage-6 .cedar-source { opacity: 1; }
+
+.cedar-glow {
+  opacity: 0;
+  transition: opacity .5s var(--ease);
+}
+.cedar-lab.stage-3 .cedar-glow,
+.cedar-lab.stage-4 .cedar-glow,
+.cedar-lab.stage-5 .cedar-glow,
+.cedar-lab.stage-6 .cedar-glow { opacity: .65; }
+
+.cedar-spark        { fill: var(--gold); filter: drop-shadow(0 0 10px rgba(196, 154, 60, .55)); }
+.cedar-spark__core  { fill: var(--white); stroke: var(--navy); stroke-width: .8; }
+
+@keyframes cedarRipple {
+  0%   { r: 14; opacity: .9; stroke-width: 2.4; }
+  90%  { r: 280; opacity: 0; stroke-width: .4; }
+  100% { r: 280; opacity: 0; stroke-width: .4; }
+}
+.cedar-ring {
+  fill: none;
+  stroke-width: 2.4;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  transform-origin: center;
+}
+.cedar-ring--direct   { stroke: var(--gold);  }
+.cedar-ring--indirect { stroke: var(--terra); }
+.cedar-ring--induced  { stroke: var(--cedar); }
+
+/* Each ring is animated when its stage activates. We trigger by
+   re-applying the animation when the parent stage class changes. */
+.cedar-lab.stage-3 .cedar-ring--direct,
+.cedar-lab.stage-4 .cedar-ring--direct,
+.cedar-lab.stage-5 .cedar-ring--direct,
+.cedar-lab.stage-6 .cedar-ring--direct { animation: cedarRipple 3s var(--ease) .1s 1 both; }
+.cedar-lab.stage-4 .cedar-ring--indirect,
+.cedar-lab.stage-5 .cedar-ring--indirect,
+.cedar-lab.stage-6 .cedar-ring--indirect { animation: cedarRipple 3s var(--ease) .1s 1 both; }
+.cedar-lab.stage-5 .cedar-ring--induced,
+.cedar-lab.stage-6 .cedar-ring--induced { animation: cedarRipple 3s var(--ease) .1s 1 both; }
+
+/* ---------- Readout (right edge of map) ---------- */
+.cedar-readout {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: clamp(180px, 26vw, 230px);
+  background: rgba(255, 252, 247, .92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--rule);
+  padding: .9rem 1rem;
+  font-size: .8rem;
   display: flex;
   flex-direction: column;
   gap: .4rem;
-  overflow-y: auto;
-  scroll-behavior: smooth;
 }
-.chat-msg {
-  max-width: 88%;
-  padding: .42rem .72rem;
-  border-radius: 10px;
-  font-size: .72rem;
-  font-weight: 500;
-  line-height: 1.5;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity .35s var(--ease), transform .35s var(--ease);
-}
-.chat-msg.show { opacity: 1; transform: none; }
-.chat-msg--cedar {
-  background: var(--navy);
-  color: var(--white);
-  align-self: flex-start;
-  border-bottom-left-radius: 3px;
-}
-.chat-msg--user {
-  background: var(--cream);
-  color: var(--navy);
-  align-self: flex-end;
-  border-bottom-right-radius: 3px;
-}
-.chat-msg--system {
-  background: var(--cream);
-  color: var(--graylt);
-  align-self: center;
-  font-size: .64rem;
-  font-style: italic;
-  text-align: center;
-  border-radius: 6px;
-  max-width: 95%;
-}
-.chat-msg .sender {
-  font-size: .52rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  opacity: .4;
-  margin-bottom: .06rem;
-}
-.chat-table {
-  margin: .3rem 0;
-  font-family: 'Nunito', monospace;
-  font-size: .62rem;
-  line-height: 1.6;
-  opacity: .85;
-  border-left: 2px solid var(--gold);
-  padding-left: .5rem;
-}
-.chat-typing {
-  align-self: flex-start;
+.cedar-readout__row {
   display: flex;
-  gap: 4px;
-  padding: .4rem .7rem;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .6rem;
+  opacity: .25;
+  transition: opacity .5s var(--ease);
+  padding-bottom: .4rem;
+  border-bottom: 1px solid var(--rule);
 }
-.chat-typing span {
-  width: 5px;
-  height: 5px;
+.cedar-readout__row:last-child { border-bottom: 0; padding-bottom: 0; }
+.cedar-readout__row--total { padding-top: .3rem; margin-top: .15rem; border-top: 1px solid var(--rule-strong); }
+.cedar-readout__label {
+  font-family: var(--font-mono);
+  font-size: .64rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--navy);
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+.cedar-readout__val {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--navy);
+  opacity: .85;
+  text-align: right;
+}
+.cedar-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--graylt);
-  animation: tblink .9s infinite;
+  background: var(--navy);
+  display: inline-block;
 }
-.chat-typing span:nth-child(2) { animation-delay: .15s; }
-.chat-typing span:nth-child(3) { animation-delay: .3s; }
-@keyframes tblink {
-  0%, 60%, 100% { opacity: .35; transform: translateY(0); }
-  30% { opacity: 1; transform: translateY(-3px); }
+.cedar-dot--direct   { background: var(--gold); }
+.cedar-dot--indirect { background: var(--terra); }
+.cedar-dot--induced  { background: var(--cedar); }
+
+.cedar-lab.stage-2 .cedar-readout__row[data-row="src"]      { opacity: 1; }
+.cedar-lab.stage-3 .cedar-readout__row[data-row="src"]      { opacity: 1; }
+.cedar-lab.stage-3 .cedar-readout__row[data-row="direct"]   { opacity: 1; }
+.cedar-lab.stage-4 .cedar-readout__row[data-row="src"]      { opacity: 1; }
+.cedar-lab.stage-4 .cedar-readout__row[data-row="direct"]   { opacity: 1; }
+.cedar-lab.stage-4 .cedar-readout__row[data-row="indirect"] { opacity: 1; }
+.cedar-lab.stage-5 .cedar-readout__row[data-row="src"]      { opacity: 1; }
+.cedar-lab.stage-5 .cedar-readout__row[data-row="direct"]   { opacity: 1; }
+.cedar-lab.stage-5 .cedar-readout__row[data-row="indirect"] { opacity: 1; }
+.cedar-lab.stage-5 .cedar-readout__row[data-row="induced"]  { opacity: 1; }
+.cedar-lab.stage-6 .cedar-readout__row                       { opacity: 1; }
+
+/* ---------- Footer copy under the lab ---------- */
+.cedar-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: end;
+  margin-top: clamp(2rem, 4vw, 3rem);
 }
-.chat-footer {
-  font-size: .58rem;
-  font-weight: 600;
-  color: var(--graylt);
-  text-align: center;
-  padding: .45rem;
-  border-top: 1px solid rgba(45, 45, 63, .04);
-  font-style: italic;
+.cedar-foot__copy {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--navy);
+  opacity: .82;
+  max-width: 58ch;
+  margin: 0;
 }
 
-@media (max-width: 960px) {
-  .cedar { grid-template-columns: 1fr; }
-  .cedar-chat { min-height: 420px; }
+/* ---------- responsive ---------- */
+@media (max-width: 880px) {
+  .cedar-lab { grid-template-columns: 1fr; min-height: 0; }
+  .cedar-chat { border-right: 0; border-bottom: 1px solid var(--rule-strong); }
+  .cedar-msgs { max-height: 260px; }
+  .cedar-map { aspect-ratio: 5 / 4; }
+  .cedar-readout { width: 60%; right: 1rem; top: 1rem; }
+  .cedar-foot { grid-template-columns: 1fr; }
 }
-@media (max-width: 600px) {
-  .cedar-text { padding: 2rem var(--mobile-pad); }
-  .cedar-panel { padding: 2.5rem var(--mobile-pad); }
-  .cedar-chat { padding: 1.5rem var(--mobile-pad); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cedar-msg, .cedar-source, .cedar-glow, .cedar-map__state { transition: none; }
+  .cedar-ring { animation: none; }
 }
