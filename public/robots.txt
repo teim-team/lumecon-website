@@ -1,4 +1,15 @@
 User-agent: *
 Allow: /
+Disallow: /404
 
+# Slow down archive bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Astro sitemap integration emits sitemap-index.xml automatically;
+# the legacy sitemap.xml below is kept for direct submission portals.
+Sitemap: https://lumecon.ai/sitemap-index.xml
 Sitemap: https://lumecon.ai/sitemap.xml

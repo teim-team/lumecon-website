@@ -56,6 +56,19 @@
 }
 .cta-email:hover { color: var(--gold-hover); }
 .cta-email:hover::after { width: 100%; }
+.cta-linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .9rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: rgba(255, 252, 247, .68);
+  transition: color .25s;
+}
+.cta-linkedin svg { opacity: .85; transition: opacity .25s; }
+.cta-linkedin:hover { color: var(--gold); }
+.cta-linkedin:hover svg { opacity: 1; }
 .cta-form {
   background: rgba(255, 252, 247, .06);
   border: 1px solid rgba(255, 252, 247, .1);

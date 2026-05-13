@@ -9,9 +9,9 @@ const prefix = isHome ? '' : '/';
 <footer class={isHome ? 'paper-tex paper-tex-dark' : ''}>
   <div class="footer-w">
     <div class="footer-top">
-      <div>
-        <div class="footer-brand-name">{site.name.toUpperCase()}</div>
-        <div class="footer-brand-tag">{site.tagline}</div>
+      <div class="footer-brand">
+        <img class="footer-brand-img" src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.legalName} width="180" height="40" loading="lazy" />
+        <div class="footer-brand-tag">{site.tagline}&trade;</div>
       </div>
       <div class="footer-links">
         {navLinks.map(link => (
@@ -19,10 +19,11 @@ const prefix = isHome ? '' : '/';
         ))}
         <a href="/terms">Terms</a>
         <a href="/privacy">Privacy</a>
+        <a href="https://www.linkedin.com/company/lumecon-ai" target="_blank" rel="noopener noreferrer" aria-label="Lumecon on LinkedIn">LinkedIn</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="footer-legal">&copy; {site.copyrightYear} {site.legalEntity}. All rights reserved. Patent pending. Built at {site.builtAt}. Counsel: {site.counsel}.</div>
+      <div class="footer-legal">&copy; {site.copyrightYear} {site.legalEntity} All rights reserved. Patent pending. Built at {site.builtAt}. Counsel: {site.counsel}.</div>
       <a href={`mailto:${site.email}`} class="footer-email">{site.email}</a>
     </div>
   </div>

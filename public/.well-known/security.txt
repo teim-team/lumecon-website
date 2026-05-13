@@ -1,0 +1,5 @@
+# Lumecon Inc. responsible disclosure
+Contact: mailto:contact@lumecon.ai
+Preferred-Languages: en
+Canonical: https://lumecon.ai/.well-known/security.txt
+Expires: 2027-05-13T00:00:00.000Z

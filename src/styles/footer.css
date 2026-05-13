@@ -19,13 +19,13 @@ footer > * { position: relative; z-index: 2; }
   flex-wrap: wrap;
   gap: 1.5rem;
 }
-.footer-brand-name {
-  font-size: .68rem;
-  font-weight: 800;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--white);
-  margin-bottom: .15rem;
+.footer-brand { display: flex; flex-direction: column; gap: .5rem; }
+.footer-brand-img {
+  height: 30px;
+  width: auto;
+  display: block;
+  filter: brightness(0) invert(1) brightness(0.95);
+  opacity: .9;
 }
 .footer-brand-tag {
   font-style: italic;
