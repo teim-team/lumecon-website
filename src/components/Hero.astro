@@ -15,8 +15,14 @@ import { mesh, feature } from 'topojson-client';
 import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 import '../styles/hero.css';
 
-const VIEWBOX_W = 975;
-const VIEWBOX_H = 610;
+/* Tightened viewBox: crops the extra blank Atlantic/Pacific space
+   around the albers-USA projection while keeping the AK/HI insets
+   visible at lower-left. The full us-atlas canvas is 0 0 975 610;
+   the country itself occupies roughly 70 60 850 510. */
+const VIEWBOX_X = 70;
+const VIEWBOX_Y = 60;
+const VIEWBOX_W = 850;
+const VIEWBOX_H = 510;
 const path = geoPath();
 // @ts-ignore
 const statesFC: any = feature(usAtlas, usAtlas.objects.states);
@@ -70,7 +76,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
   <!-- Stage: the live map -->
   <figure class="hero-stage" id="heroStage" aria-label="A live economic impact study playing on a US map">
-    <svg class="hero-map" id="heroMap" viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`} preserveAspectRatio="xMidYMid meet" role="img">
+    <svg class="hero-map" id="heroMap" viewBox={`${VIEWBOX_X} ${VIEWBOX_Y} ${VIEWBOX_W} ${VIEWBOX_H}`} preserveAspectRatio="xMidYMid meet" role="img">
       <defs>
         <radialGradient id="hGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
@@ -119,8 +125,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
     <div class="hero-fig"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
     <div class="hero-fig"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
-    <div class="hero-fig hero-fig--total"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
-    <div class="hero-fig"><dt>Jobs supported</dt> <dd id="figJobs">&mdash;</dd></div>
+    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
+    <div class="hero-fig hero-fig--derived" id="figJobsCell"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
   </dl>
 
   <footer class="hero-cta">
@@ -270,6 +276,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       try {
         resetNums();
         stage.dataset.ring = '';
+        document.getElementById('figTotalCell')?.classList.remove('is-filled');
+        document.getElementById('figJobsCell')?.classList.remove('is-filled');
         shadeNeighbors(stateId);
         const s = states[stateId]; if (!s) return;
         moveSource(s.cx, s.cy);
@@ -305,6 +313,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         const jobs = Math.round((total / 1_000_000) * MULT.jobsPerM);
         setNum(figT as HTMLElement, fmt(total));
         setNum(figJ as HTMLElement, '≈ ' + jobs.toLocaleString());
+        document.getElementById('figTotalCell')?.classList.add('is-filled');
+        document.getElementById('figJobsCell')?.classList.add('is-filled');
         setLine(`That sum, with its assumption ledger, is your impact study.`);
       } catch { /* cancelled */ }
     };
