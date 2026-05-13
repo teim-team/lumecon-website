@@ -1,35 +1,130 @@
 :root {
+  /* Lumecon Inc. parent-brand palette.
+     Navy + cream = institutional surface. Gold = punctuation.
+     Each platform owns one secondary color so the parent reads
+     neutral and the tiles read distinct: terra=tribal, cedar=local,
+     blue=global. Purple is the brand-mark rule color. */
   --white: #FFFCF7;
   --cream: #F6F1E9;
+  --paper: #FBF6EC;
   --navy: #2D2D3F;
   --navy2: #3E3E54;
-  --green: #2D6A4F;
+  --navy-soft: rgba(45, 45, 63, .72);
   --terra: #B85C38;
+  --terra-dark: #8A3F24;
+  --terra-light: #D98A6A;
+  --cedar: #2D5A3F;
+  --cedar-light: #4F8866;
+  --cedar-mist: #E7EFE9;
+  --green: #2D6A4F;
+  --green-deep: #0E3A2E;
   --gold: #C49A3C;
+  --gold-light: #F2D67A;
   --goldbar: #F2E6C5;
   --blue: #6B7FA3;
+  --blue-deep: #4D6589;
   --purple: #7B6B9B;
+  --purple-rule: #8B7DA8;
   --gray: #5A5A5A;
-  --graylt: #908D85;
+  --graylt: #6B6A62;
   --blush: #F3EAE6;
+  --rule: rgba(45, 45, 63, .14);
+  --rule-strong: rgba(45, 45, 63, .26);
   --ease: cubic-bezier(.22, 1, .36, 1);
-  --container-max: 1100px;
+  --container-max: 1240px;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
-  --error-color: #ff8a80;
+  --error-color: #C84A2E;
   --gold-hover: #e0be6a;
   --gold-btn-hover: #d4ad55;
+
+  /* Type system — Fraunces display + Nunito body + JetBrains Mono marginalia.
+     Mirrors the spec used on the Tribal product so the parent + platforms
+     share a typographic family without sharing layout. */
+  --font-sans: 'Nunito', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Fraunces', 'Nunito', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --type-xs:        0.75rem;
+  --type-sm:        0.875rem;
+  --type-base:      1rem;
+  --type-md:        1.125rem;
+  --type-lg:        1.375rem;
+  --type-xl:        1.75rem;
+  --type-2xl:       2.25rem;
+  --type-3xl:       3rem;
+  --type-display:   clamp(2.8rem, 7.5vw, 6rem);
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semi:    600;
+  --weight-bold:    700;
+  --weight-black:   800;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Nunito', system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 17px;
   color: var(--navy);
   background: var(--white);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   line-height: 1.6;
+}
+
+/* Editorial primitives — used by Hero, Products, Why, Cedar so the
+   whole homepage reads as one publication, not four pasted-together
+   sections. */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: var(--font-mono);
+  font-size: var(--type-xs);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--navy);
+  opacity: .78;
+  margin-bottom: 1.25rem;
+}
+.kicker::before {
+  content: '§';
+  color: var(--gold);
+  font-weight: 700;
+}
+.kicker--invert { color: var(--cream); opacity: .85; }
+.kicker--invert::before { color: var(--gold-light); }
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 500;
+  letter-spacing: -.022em;
+  line-height: .98;
+}
+.display em { font-style: italic; font-weight: 400; color: var(--gold); }
+.lede {
+  font-size: clamp(1.05rem, 1.6vw, 1.32rem);
+  line-height: 1.55;
+  color: var(--navy);
+  opacity: .88;
+  max-width: 38rem;
+}
+.rule-h {
+  display: block;
+  width: clamp(120px, 18vw, 220px);
+  height: 1.5px;
+  background: var(--purple-rule);
+  border: 0;
+  margin: 1rem 0 1.4rem;
+}
+.rule-full {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--rule);
+  border: 0;
+  margin: 0;
 }
 
 body::after {
@@ -45,6 +140,9 @@ body::after {
 
 a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-weight: 800; line-height: 1.08; }
+h1, h2 { font-family: var(--font-display); font-weight: 500; font-variation-settings: "opsz" 96; letter-spacing: -.018em; line-height: 1.04; }
+h3 { font-family: var(--font-sans); font-weight: 700; letter-spacing: -.005em; }
+.mono { font-family: var(--font-mono); }
 
 /* Container utility */
 .container {
@@ -95,25 +193,36 @@ h1, h2, h3 { font-weight: 800; line-height: 1.08; }
   box-shadow: 0 0 0 4px rgba(196, 154, 60, .2);
 }
 
+/* Editorial CTA — square corners, arrow suffix, no shadow chrome.
+   Lumecon parent default is navy-on-cream; reversed on dark bands. */
 .btn {
-  display: inline-block;
-  padding: .62rem 1.35rem;
-  font-family: 'Nunito', sans-serif;
-  font-size: .82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .95rem 1.6rem;
+  font-family: var(--font-sans);
+  font-size: var(--type-base);
   font-weight: 700;
-  border-radius: 3px;
+  letter-spacing: .015em;
+  border-radius: 0;
   border: 1.5px solid var(--navy);
   cursor: pointer;
-  transition: all .28s var(--ease);
-  background: transparent;
-  color: var(--navy);
-}
-.btn:hover {
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
   background: var(--navy);
   color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 45, 63, .12);
+  text-decoration: none;
 }
+.btn::after { content: '→'; font-size: 1em; line-height: 0; transform: translateY(.06em); transition: transform .2s var(--ease); }
+.btn:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); transform: translateY(-1px); }
+.btn:hover::after { transform: translate(.18em, .06em); }
+.btn--ghost { background: transparent; color: var(--navy); }
+.btn--ghost::after { content: ''; }
+.btn--ghost:hover { background: var(--navy); color: var(--cream); transform: translateY(-1px); }
+.btn--invert { background: var(--cream); color: var(--navy); border-color: var(--cream); }
+.btn--invert:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+.btn--invert-ghost { background: transparent; color: var(--cream); border-color: var(--cream); opacity: .82; }
+.btn--invert-ghost::after { content: ''; }
+.btn--invert-ghost:hover { opacity: 1; background: transparent; color: var(--cream); border-color: var(--cream); transform: translateY(-1px); }
 
 /* Scroll progress indicator */
 .scroll-progress {

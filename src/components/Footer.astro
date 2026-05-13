@@ -6,25 +6,44 @@ interface Props {
 const { isHome = false } = Astro.props;
 const prefix = isHome ? '' : '/';
 ---
-<footer class={isHome ? 'paper-tex paper-tex-dark' : ''}>
+<footer class={isHome ? 'footer footer--home' : 'footer'}>
   <div class="footer-w">
     <div class="footer-top">
       <div class="footer-brand">
-        <img class="footer-brand-img" src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.legalName} width="180" height="40" loading="lazy" />
-        <div class="footer-brand-tag">{site.tagline}&trade;</div>
+        <img class="footer-brand-img" src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.legalName} width="200" height="44" loading="lazy" />
+        <div class="footer-brand-tag">We&nbsp;<em>luminate</em>&nbsp;economies&trade;</div>
+        <div class="footer-brand-rule" aria-hidden="true"></div>
+        <div class="footer-brand-pitch">Economic and policy analysis software for governments.</div>
       </div>
-      <div class="footer-links">
-        {navLinks.map(link => (
-          <a href={`${prefix}${link.href}`}>{link.label}</a>
-        ))}
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="https://www.linkedin.com/company/lumecon-ai" target="_blank" rel="noopener noreferrer" aria-label="Lumecon on LinkedIn">LinkedIn</a>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col__head mono">Platforms</div>
+          <a href={site.products.local.url}>Local Economic Impact</a>
+          <a href={site.products.tribal.url}>Tribal Economic Impact</a>
+          <a href={site.products.global.url}>Global Economic Impact</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col__head mono">Company</div>
+          {navLinks.map(link => (
+            <a href={`${prefix}${link.href}`}>{link.label}</a>
+          ))}
+          <a href="https://www.linkedin.com/company/lumecon-ai" target="_blank" rel="noopener noreferrer" aria-label="Lumecon Inc. on LinkedIn">LinkedIn</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col__head mono">Legal</div>
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/.well-known/security.txt">security.txt</a>
+        </div>
       </div>
     </div>
+
     <div class="footer-bottom">
-      <div class="footer-legal">&copy; {site.copyrightYear} {site.legalEntity} All rights reserved. Patent pending. Built at {site.builtAt}. Counsel: {site.counsel}.</div>
-      <a href={`mailto:${site.email}`} class="footer-email">{site.email}</a>
+      <div class="footer-legal">
+        &copy; {site.copyrightYear} {site.legalEntity} &middot; All rights reserved &middot; Patent pending &middot; Built at {site.builtAt} &middot; Counsel: {site.counsel}.
+      </div>
+      <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
     </div>
   </div>
 </footer>

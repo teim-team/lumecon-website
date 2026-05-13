@@ -15,7 +15,7 @@ const prefix = isHome ? '' : '/';
       {navLinks.map(link => (
         <a href={`${prefix}${link.href}`}>{link.label}</a>
       ))}
-      <a href={`mailto:${site.email}`}>Get in Touch</a>
+      <a class="nav-cta" href={`mailto:${site.email}`}>Get in touch</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>

@@ -1,57 +1,80 @@
 .cedar {
   display: grid;
-  grid-template-columns: 30% 35% 35%;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  border-top: 1px solid var(--rule);
 }
 .cedar-panel {
-  background: var(--navy);
-  color: var(--white);
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 2.2rem);
+  background: var(--cedar);
+  color: var(--cream);
+  padding: clamp(3rem, 6vw, 4.5rem) clamp(1.8rem, 3vw, 2.6rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   overflow: hidden;
 }
-.cedar-panel > * { position: relative; z-index: 2; }
-.cedar-label {
-  font-size: .58rem;
-  font-weight: 800;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1.5rem;
+.cedar-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 80% 20%, rgba(196, 154, 60, .12), transparent 45%),
+    repeating-linear-gradient(115deg, transparent 0 28px, rgba(231, 239, 233, .06) 28px 29px);
+  pointer-events: none;
 }
-.cedar-panel h2 {
-  color: var(--white);
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  margin-bottom: .4rem;
+.cedar-panel > * { position: relative; z-index: 2; }
+.cedar-display {
+  color: var(--cream);
+  font-size: clamp(3rem, 6vw, 5rem);
+  margin: 0 0 .4rem;
+  font-style: italic;
+  font-variation-settings: "opsz" 144;
 }
 .cedar-subtitle {
+  font-family: var(--font-display);
   font-style: italic;
-  font-weight: 600;
-  color: var(--gold);
-  font-size: clamp(.85rem, 1.3vw, 1rem);
+  font-weight: 400;
+  color: var(--gold-light);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
   line-height: 1.4;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.8rem;
+  max-width: 26ch;
 }
 .cedar-motto {
-  font-size: .84rem;
-  font-weight: 600;
-  color: rgba(255, 252, 247, .45);
-  line-height: 1.5;
+  font-size: var(--type-md);
+  font-weight: 500;
+  color: rgba(231, 239, 233, .82);
+  line-height: 1.45;
+  border-top: 1px solid rgba(231, 239, 233, .18);
+  padding-top: 1.2rem;
+  max-width: 22ch;
+}
+.cedar-motto em {
+  color: var(--gold-light);
+  font-style: italic;
+  font-weight: 500;
 }
 .cedar-text {
-  background: var(--cream);
-  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.2rem);
+  background: var(--paper);
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.8rem, 3vw, 2.6rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border-right: 1px solid var(--rule);
 }
 .cedar-text p {
-  font-size: .88rem;
-  font-weight: 500;
-  color: var(--gray);
-  line-height: 1.78;
+  color: var(--navy);
+  opacity: .85;
+  max-width: 36rem;
+}
+.cedar-chat {
+  background: var(--paper);
+  padding: clamp(1.5rem, 3vw, 2rem) clamp(1.8rem, 3vw, 2.6rem) clamp(2rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--rule);
 }
 .cedar-chat {
   background: var(--cream);
@@ -62,11 +85,11 @@
 }
 .chat-demo {
   width: 100%;
-  max-width: 400px;
-  border-radius: 8px;
+  max-width: 540px;
+  border-radius: 0;
   overflow: hidden;
   background: var(--white);
-  box-shadow: 0 2px 24px rgba(45, 45, 63, .06);
+  border: 1px solid var(--rule-strong);
 }
 .chat-header {
   background: var(--navy);

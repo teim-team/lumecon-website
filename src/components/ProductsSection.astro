@@ -3,108 +3,65 @@ import { site } from '../config';
 import '../styles/products.css';
 const { local, tribal, global: globalProduct } = site.products;
 ---
-<section id="products">
-  <div class="platforms-bar paper-tex paper-tex-warm">
-    <div class="platforms-bar-inner">
-      <h2>Lumecon Products</h2>
-      <div class="platforms-slogan">
-        <span class="static">Making&nbsp;</span>
-        <div class="cycle-wrap" id="cycleWrap">
-          <div class="cycle-track" id="cycleTrack">
-            <span class="c-default">economies</span>
-            <span class="c-local">local economies</span>
-            <span class="c-tribal">tribal economies</span>
-            <span class="c-global">global economies</span>
-          </div>
-        </div>
-        <span class="static">&nbsp;visible&trade;</span>
-      </div>
-    </div>
+<section class="platforms" id="products">
+  <div class="platforms-head">
+    <span class="kicker">§ 02 &nbsp;·&nbsp; The three platforms</span>
+    <h2 class="display platforms-display">One parent.<br>Three economies. <em>One method.</em></h2>
+    <p class="lede platforms-lede">
+      Lumecon Inc. is the parent brand. Each platform inherits the same modeling backbone &mdash; transparent multipliers, auditable assumptions, exportable provenance &mdash; and then bends the intake, the geography, and the language to the economy it serves.
+    </p>
   </div>
-  <div class="products">
-    <div class="product-block product-block--local paper-tex reveal-left" data-stagger="0">
-      <div>
-        <h3><a href={local.url}>{local.name}</a></h3>
-        <div class="product-url">{local.domain}</div>
-        <div class="product-desc">Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations without the cost or complexity of traditional tools.</div>
-      </div>
-      <div class="product-status">{local.status}</div>
-    </div>
-    <div class="product-block product-block--tribal paper-tex reveal delay-1" data-stagger="1">
-      <div>
-        <h3><a href={tribal.url}>{tribal.name}</a></h3>
-        <div class="product-url">{tribal.domain}</div>
-        <div class="product-desc">Built for economies that don't fit standard assumptions. Economic and policy analysis designed for US tribal governments, enterprises, and reservation economies.</div>
-      </div>
-      <div class="product-status">{tribal.status}</div>
-    </div>
-    <div class="product-block product-block--global paper-tex reveal-right" data-stagger="2">
-      <div>
-        <h3><a href={globalProduct.url}>{globalProduct.name}</a></h3>
-        <div class="product-url">{globalProduct.domain}</div>
-        <div class="product-desc">The same core modeling framework, applied globally—supporting cross-border and multiregional analysis for multinationals, NGOs, and governments.</div>
-      </div>
-      <div class="product-status">{globalProduct.status}</div>
-    </div>
+
+  <div class="platforms-grid">
+    <a class="platform platform--local" href={local.url}>
+      <header class="platform__head">
+        <span class="platform__num mono">01</span>
+        <span class="platform__tag mono">Local</span>
+      </header>
+      <h3 class="platform__name">Local Economic<br>Impact</h3>
+      <div class="platform__url mono">{local.domain}</div>
+      <p class="platform__desc">Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations &mdash; without the cost or complexity of traditional tools.</p>
+      <footer class="platform__foot">
+        <span class="platform__status mono">{local.status}</span>
+        <span class="platform__arrow" aria-hidden="true">→</span>
+      </footer>
+      <svg class="platform__line" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 60 C 60 30, 120 70, 180 40 S 280 30, 320 50" />
+      </svg>
+    </a>
+
+    <a class="platform platform--tribal" href={tribal.url}>
+      <header class="platform__head">
+        <span class="platform__num mono">02</span>
+        <span class="platform__tag mono">Tribal</span>
+      </header>
+      <h3 class="platform__name">Tribal Economic<br>Impact</h3>
+      <div class="platform__url mono">{tribal.domain}</div>
+      <p class="platform__desc">Built for economies that don&rsquo;t fit standard assumptions. Designed from day one for tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies &mdash; with Indigenous data sovereignty baked in.</p>
+      <footer class="platform__foot">
+        <span class="platform__status mono">{tribal.status}</span>
+        <span class="platform__arrow" aria-hidden="true">→</span>
+      </footer>
+      <svg class="platform__line" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 50 C 80 70, 140 20, 200 50 S 280 60, 320 30" />
+      </svg>
+    </a>
+
+    <a class="platform platform--global" href={globalProduct.url}>
+      <header class="platform__head">
+        <span class="platform__num mono">03</span>
+        <span class="platform__tag mono">Global</span>
+      </header>
+      <h3 class="platform__name">Global Economic<br>Impact</h3>
+      <div class="platform__url mono">{globalProduct.domain}</div>
+      <p class="platform__desc">The same core modeling framework, applied across borders &mdash; supporting cross-border and multiregional analysis for multinationals, NGOs, and governments. Comparable methods, comparable results.</p>
+      <footer class="platform__foot">
+        <span class="platform__status mono">{globalProduct.status}</span>
+        <span class="platform__arrow" aria-hidden="true">→</span>
+      </footer>
+      <svg class="platform__line" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 40 C 70 60, 130 20, 200 35 S 280 70, 320 40" />
+      </svg>
+    </a>
   </div>
 </section>
-
-<script>
-  // Cycle animation
-  const CYCLE_INTERVAL = 2000;
-  const CYCLE_WIDTH_PADDING = 20;
-  const CYCLE_LINE_HEIGHT = 1.4; // em per step
-
-  // 3D tilt constants
-  const TILT_MAX_DEGREES = 8;
-  const TILT_PERSPECTIVE = 800; // px
-  const TILT_HOVER_SCALE = 1.02;
-  const TILT_RESET_DURATION = 500; // ms
-  const TILT_EASING = 'cubic-bezier(.22,1,.36,1)';
-
-  (function() {
-    const wrap = document.getElementById('cycleWrap');
-    const track = document.getElementById('cycleTrack');
-    if (!wrap || !track) return;
-    const spans = track.querySelectorAll('span');
-    if (!spans.length) return;
-    const widths: number[] = [];
-    const ruler = document.createElement('span');
-    ruler.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:' + getComputedStyle(spans[0]).font;
-    document.body.appendChild(ruler);
-    spans.forEach(s => { ruler.textContent = s.textContent; widths.push(ruler.offsetWidth + CYCLE_WIDTH_PADDING); });
-    document.body.removeChild(ruler);
-    wrap.style.width = widths[0] + 'px';
-    let idx = 0;
-    const total = spans.length;
-    setInterval(() => {
-      idx = (idx + 1) % total;
-      track.style.transform = 'translateY(-' + (idx * CYCLE_LINE_HEIGHT) + 'em)';
-      wrap.style.width = widths[idx] + 'px';
-    }, CYCLE_INTERVAL);
-  })();
-
-  // Product card 3D tilt on hover (parallax depth)
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  if (!isTouchDevice) {
-    document.querySelectorAll('.product-block').forEach(block => {
-      const el = block as HTMLElement;
-      el.addEventListener('mousemove', (e: MouseEvent) => {
-        const rect = el.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        const rotateX = y * -TILT_MAX_DEGREES;
-        const rotateY = x * TILT_MAX_DEGREES;
-        el.style.transform = `perspective(${TILT_PERSPECTIVE}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${TILT_HOVER_SCALE})`;
-      });
-      el.addEventListener('mouseleave', () => {
-        el.style.transform = '';
-        el.style.transition = `transform ${TILT_RESET_DURATION / 1000}s ${TILT_EASING}`;
-        setTimeout(() => { el.style.transition = ''; }, TILT_RESET_DURATION);
-      });
-      el.addEventListener('mouseenter', () => {
-        el.style.transition = 'none';
-      });
-    });
-  }
-</script>
