@@ -5,111 +5,68 @@ const { local, tribal, global: globalProduct } = site.products;
 ---
 <section class="hero" id="top">
   <div class="hero-grid">
-    <div class="hero-text">
-      <span class="kicker">Lumecon Inc. &nbsp;·&nbsp; Parent brand</span>
-      <h1 class="display hero-display">
-        Economic and policy<br>
-        analysis software<br>
-        <em>for governments.</em>
-      </h1>
-      <hr class="rule-h" />
-      <p class="lede hero-lede">
-        Lumecon is the parent brand for three specialized platforms &mdash; serving local, tribal, and global economies through affordable, web-based modeling that organizations of any size can act on.
-      </p>
-      <p class="hero-sub">
-        Built by social scientists, government professionals, and software engineers. <span class="mono hero-pp">Patent pending.</span>
-      </p>
-      <div class="hero-actions" id="heroActions">
-        <a href="#products" class="btn">See the three platforms</a>
-        <a href="#cedar" class="btn btn--ghost">Meet Cedar</a>
-      </div>
-      <div class="hero-platforms" aria-label="Lumecon platforms">
-        <a href={local.url} class="hero-platform hero-platform--local">
-          <span class="hero-platform__dot" aria-hidden="true"></span>
-          <span class="hero-platform__name">Local Economic Impact</span>
-        </a>
-        <a href={tribal.url} class="hero-platform hero-platform--tribal">
-          <span class="hero-platform__dot" aria-hidden="true"></span>
-          <span class="hero-platform__name">Tribal Economic Impact</span>
-        </a>
-        <a href={globalProduct.url} class="hero-platform hero-platform--global">
-          <span class="hero-platform__dot" aria-hidden="true"></span>
-          <span class="hero-platform__name">Global Economic Impact</span>
-        </a>
-      </div>
-    </div>
     <figure class="hero-mark" aria-hidden="true">
       <svg class="hero-lines" viewBox="0 0 720 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
           <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#F2D67A" stop-opacity=".9"/>
-            <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
+            <stop offset="0%" stop-color="#F2D67A" stop-opacity=".85"/>
+            <stop offset="55%" stop-color="#C49A3C" stop-opacity=".14"/>
             <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
           </radialGradient>
-          <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#8B7DA8" stop-opacity="0"/>
-            <stop offset="50%" stop-color="#8B7DA8" stop-opacity=".85"/>
-            <stop offset="100%" stop-color="#8B7DA8" stop-opacity="0"/>
-          </linearGradient>
         </defs>
-        <path class="hero-line hero-line--d1" d="M-60 140 C 120 60, 240 240, 380 160 S 620 320, 800 220" />
-        <path class="hero-line hero-line--d2" d="M-60 280 C 100 220, 220 380, 360 290 S 600 460, 780 360" />
-        <path class="hero-line hero-line--d3" d="M-60 460 C 140 420, 240 580, 380 470 S 620 640, 800 540" />
-        <path class="hero-line hero-line--d4" d="M-60 640 C 100 600, 260 760, 400 660 S 640 820, 820 720" />
-        <path class="hero-line hero-line--solid" d="M-80 820 Q 140 600, 320 560 T 720 380" />
-        <circle class="hero-glow" cx="320" cy="500" r="120" fill="url(#heroGlow)" />
-        <circle class="hero-glow hero-glow--inner" cx="320" cy="500" r="56" fill="url(#heroGlow)" />
-        <circle class="hero-spark" cx="320" cy="500" r="4.5" />
-        <line class="hero-spark-arm" x1="298" y1="500" x2="342" y2="500" />
-        <line class="hero-spark-arm" x1="320" y1="478" x2="320" y2="522" />
-        <line class="hero-spark-arm hero-spark-arm--soft" x1="285" y1="500" x2="355" y2="500" />
-        <line class="hero-spark-arm hero-spark-arm--soft" x1="320" y1="465" x2="320" y2="535" />
+        <path class="hero-line hero-line--d1" d="M-60 200 C 140 130, 260 280, 420 210 S 660 340, 820 250" />
+        <path class="hero-line hero-line--d2" d="M-60 480 C 120 430, 260 600, 420 490 S 660 660, 820 560" />
+        <path class="hero-line hero-line--solid" d="M-80 800 Q 160 600, 340 560 T 760 380" />
+        <circle class="hero-glow" cx="340" cy="500" r="140" fill="url(#heroGlow)" />
+        <circle class="hero-spark" cx="340" cy="500" r="4" />
       </svg>
-      <img class="hero-mark__img" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="320" height="220" />
-      <figcaption class="hero-mark__cap mono">
-        <span>luminate</span>
-        <span class="hero-mark__cap-rule" aria-hidden="true"></span>
-        <span>verb · to make visible</span>
-      </figcaption>
+      <img class="hero-mark__img" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="380" height="260" />
     </figure>
-  </div>
-  <div class="hero-strip" aria-label="Coverage">
-    <span class="mono">Reservation</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">Municipal</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">State</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">National</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">Cross-border</span>
-    <span class="hero-strip__sep" aria-hidden="true"></span>
-    <span class="mono">Multiregional</span>
+
+    <div class="hero-text">
+      <h1 class="hero-wordmark" id="heroWordmark" aria-label="Lumecon — a portmanteau of luminate and economies">
+        <span class="hw-cap">L</span><span class="hw-cap">U</span><span class="hw-cap">M</span><span class="hw-tail hw-tail--inate">inate</span><span class="hw-gap" aria-hidden="true"> </span><span class="hw-cap">E</span><span class="hw-cap">C</span><span class="hw-cap">O</span><span class="hw-cap">N</span><span class="hw-tail hw-tail--omies">omies</span>
+      </h1>
+      <p class="hero-tagline">portmanteau &middot; <em>luminate</em> + <em>economies</em></p>
+      <hr class="hero-rule" />
+      <p class="hero-pitch">Economic and policy analysis software for governments.</p>
+      <p class="hero-lede">
+        Lumecon Inc. is the parent brand for three platforms &mdash; serving local, tribal, and global economies through affordable, web-based modeling that organizations of any size can act on.
+      </p>
+      <div class="hero-actions">
+        <a href="#products" class="btn">See the platforms</a>
+        <a href="#contact" class="btn btn--ghost">Partner with us</a>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
-  (function() {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) return;
-    const actions = document.getElementById('heroActions');
-    if (!actions) return;
-    const STRENGTH = 0.12;
-    const RESET_MS = 380;
-    const EASE = 'cubic-bezier(.22,1,.36,1)';
-    actions.querySelectorAll<HTMLElement>('.btn').forEach(btn => {
-      btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const dx = (e.clientX - (r.left + r.width / 2)) * STRENGTH;
-        const dy = (e.clientY - (r.top + r.height / 2)) * STRENGTH;
-        btn.style.transform = `translate(${dx}px, ${dy}px)`;
-      });
-      btn.addEventListener('mouseleave', () => {
-        btn.style.transform = '';
-        btn.style.transition = `transform ${RESET_MS / 1000}s ${EASE}`;
-        setTimeout(() => { btn.style.transition = ''; }, RESET_MS);
-      });
-      btn.addEventListener('mouseenter', () => { btn.style.transition = 'none'; });
-    });
+  /* Portmanteau loop. After the hero has settled, ease LUMECON open
+     into LUMinate eCONomies, hold, ease shut, hold longer, repeat.
+     Slower than a typical UI animation — this is editorial pacing,
+     not a marquee. Disabled under prefers-reduced-motion. */
+  (function () {
+    const mark = document.getElementById('heroWordmark');
+    if (!mark) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      mark.classList.add('is-open');
+      return;
+    }
+    const OPEN_HOLD = 3600;
+    const CLOSE_HOLD = 5200;
+    const FIRST_DELAY = 1900;
+    let timer: number | undefined;
+    const open = () => {
+      mark.classList.add('is-open');
+      timer = window.setTimeout(close, OPEN_HOLD);
+    };
+    const close = () => {
+      mark.classList.remove('is-open');
+      timer = window.setTimeout(open, CLOSE_HOLD);
+    };
+    timer = window.setTimeout(open, FIRST_DELAY);
+    mark.addEventListener('pointerenter', () => { if (timer) window.clearTimeout(timer); });
+    mark.addEventListener('pointerleave', () => { timer = window.setTimeout(close, OPEN_HOLD); });
   })();
 </script>

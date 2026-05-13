@@ -1,0 +1,108 @@
+---
+/**
+ * "What is economic impact analysis?" — Lumecon parent explainer.
+ *
+ * Borrows the rendering approach from the Tribal Economic Impact
+ * platform's hero map: us-atlas state outlines projected via
+ * d3-geo at build time (no client-side topojson cost), state
+ * borders drawn as a mesh, and animated impact ripples emanating
+ * from a "spending source" to communicate the three rounds an
+ * economist measures — Direct, Indirect, Induced.
+ */
+import { geoPath } from 'd3-geo';
+import { mesh } from 'topojson-client';
+// @ts-ignore — us-atlas ships JSON, not TS
+import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
+import '../styles/eia.css';
+
+const VIEWBOX_WIDTH = 975;
+const VIEWBOX_HEIGHT = 610;
+
+const path = geoPath();
+// @ts-ignore
+const stateBordersD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a !== b));
+// @ts-ignore
+const nationOutlineD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a === b));
+
+/* Two "spending sources" anchor the animation: one east, one west.
+   Each emits three rounds of ripples — Direct, Indirect, Induced —
+   labelled on the right column. Coordinates are in the projected
+   albers-USA viewbox (which us-atlas/states-albers-10m.json already
+   provides), so they line up with the state mesh without us calling
+   the projection ourselves. */
+const sources = [
+  { id: 'east', cx: 760, cy: 250 },
+  { id: 'west', cx: 240, cy: 320 },
+];
+---
+<section class="eia" id="how-it-works">
+  <div class="eia-inner">
+    <header class="eia-head">
+      <p class="eia-eyebrow">What is economic impact analysis?</p>
+      <h2 class="eia-lead">
+        A dollar spent doesn&rsquo;t stop where it lands. It
+        <em>moves</em>.
+      </h2>
+    </header>
+
+    <div class="eia-body">
+      <figure class="eia-map" aria-label="A schematic of the United States showing how spending ripples outward from local sources">
+        <svg
+          class="eia-map__svg"
+          viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
+          role="img"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <path class="eia-map__fill" d={nationOutlineD} />
+          <path class="eia-map__borders" d={stateBordersD} />
+          <path class="eia-map__outline" d={nationOutlineD} />
+          {sources.map((s, i) => (
+            <g class={`eia-source eia-source--${s.id}`} style={`--src-delay:${i * 600}ms`}>
+              <circle class="eia-ring eia-ring--direct"  cx={s.cx} cy={s.cy} r="12" />
+              <circle class="eia-ring eia-ring--indirect" cx={s.cx} cy={s.cy} r="12" />
+              <circle class="eia-ring eia-ring--induced" cx={s.cx} cy={s.cy} r="12" />
+              <circle class="eia-ring eia-ring--direct  eia-ring--echo" cx={s.cx} cy={s.cy} r="12" />
+              <circle class="eia-ring eia-ring--indirect eia-ring--echo" cx={s.cx} cy={s.cy} r="12" />
+              <circle class="eia-ring eia-ring--induced eia-ring--echo" cx={s.cx} cy={s.cy} r="12" />
+              <circle class="eia-source__dot" cx={s.cx} cy={s.cy} r="5" />
+            </g>
+          ))}
+        </svg>
+        <figcaption class="eia-map__cap">
+          A schematic, not a finding. Each platform produces real, sourced multipliers for the geography you ask it about.
+        </figcaption>
+      </figure>
+
+      <ol class="eia-rounds">
+        <li class="eia-round eia-round--direct">
+          <span class="eia-round__num">i.</span>
+          <div>
+            <h3 class="eia-round__name">Direct effect</h3>
+            <p class="eia-round__desc">The initial activity itself &mdash; an agency&rsquo;s payroll, a tribe&rsquo;s capital project, a city&rsquo;s grant.</p>
+          </div>
+        </li>
+        <li class="eia-round eia-round--indirect">
+          <span class="eia-round__num">ii.</span>
+          <div>
+            <h3 class="eia-round__name">Indirect effect</h3>
+            <p class="eia-round__desc">Purchases from suppliers and contractors, and <em>their</em> purchases &mdash; the next ring outward.</p>
+          </div>
+        </li>
+        <li class="eia-round eia-round--induced">
+          <span class="eia-round__num">iii.</span>
+          <div>
+            <h3 class="eia-round__name">Induced effect</h3>
+            <p class="eia-round__desc">Household spending from the wages paid by everyone in rings one and two.</p>
+          </div>
+        </li>
+        <li class="eia-round eia-round--total">
+          <span class="eia-round__num">&sum;</span>
+          <div>
+            <h3 class="eia-round__name">Total economic impact</h3>
+            <p class="eia-round__desc">The sum, in jobs, output, and earnings &mdash; with the assumption ledger that produced it.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>

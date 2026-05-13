@@ -6,70 +6,72 @@
 .cedar-panel {
   background: var(--cedar);
   color: var(--cream);
-  padding: clamp(3rem, 6vw, 4.5rem) clamp(1.8rem, 3vw, 2.6rem);
+  padding: clamp(4rem, 8vw, 6rem) clamp(2rem, 4vw, 3.5rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: relative;
-  overflow: hidden;
 }
-.cedar-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 80% 20%, rgba(196, 154, 60, .12), transparent 45%),
-    repeating-linear-gradient(115deg, transparent 0 28px, rgba(231, 239, 233, .06) 28px 29px);
-  pointer-events: none;
-}
-.cedar-panel > * { position: relative; z-index: 2; }
-.cedar-display {
-  color: var(--cream);
-  font-size: clamp(3rem, 6vw, 5rem);
-  margin: 0 0 .4rem;
+.cedar-eyebrow {
+  font-family: var(--font-display);
   font-style: italic;
+  font-size: 1rem;
+  color: rgba(246, 241, 233, .68);
+  margin: 0 0 1.4rem;
+}
+.cedar-display {
+  font-family: var(--font-display);
   font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--cream);
+  font-size: clamp(3.4rem, 7vw, 6rem);
+  line-height: 1;
+  margin: 0 0 1rem;
+  letter-spacing: -.02em;
 }
 .cedar-subtitle {
   font-family: var(--font-display);
-  font-style: italic;
+  font-variation-settings: "opsz" 36;
   font-weight: 400;
   color: var(--gold-light);
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.4;
-  margin-bottom: 1.8rem;
-  max-width: 26ch;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.35;
+  margin: 0 0 2rem;
+  max-width: 24ch;
 }
 .cedar-motto {
-  font-size: var(--type-md);
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 48;
+  font-weight: 400;
+  font-size: 1.2rem;
   color: rgba(231, 239, 233, .82);
-  line-height: 1.45;
-  border-top: 1px solid rgba(231, 239, 233, .18);
-  padding-top: 1.2rem;
+  line-height: 1.35;
+  margin: 0;
   max-width: 22ch;
 }
 .cedar-motto em {
   color: var(--gold-light);
   font-style: italic;
-  font-weight: 500;
+  font-weight: 400;
 }
 .cedar-text {
-  background: var(--paper);
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.8rem, 3vw, 2.6rem);
+  background: var(--cream);
+  padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3.5rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-right: 1px solid var(--rule);
 }
-.cedar-text p {
+.cedar-body {
   color: var(--navy);
-  opacity: .85;
-  max-width: 36rem;
+  opacity: .82;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  max-width: 40rem;
+  margin: 0;
 }
 .cedar-chat {
-  background: var(--paper);
-  padding: clamp(1.5rem, 3vw, 2rem) clamp(1.8rem, 3vw, 2.6rem) clamp(2rem, 4vw, 3rem);
+  background: var(--cream);
+  padding: clamp(1rem, 3vw, 2rem) clamp(2rem, 4vw, 3.5rem) clamp(3rem, 6vw, 5rem);
   display: flex;
   align-items: center;
   justify-content: center;

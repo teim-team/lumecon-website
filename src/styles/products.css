@@ -1,153 +1,106 @@
-/* Lumecon Inc. — Three Platforms.
-   Editorial section: angled top border, mono-tagged numbered tiles,
-   each tile carrying its platform's accent color. */
+/* Platforms — three full-width magazine spreads, not tiles.
+   Each platform is a horizontal row: oversized Fraunces name on
+   the left, a single tight paragraph on the right, a status line
+   beneath. Hairline rule between rows; no card chrome, no icons,
+   no numbered pills, no decorative SVG. */
 
 .platforms {
   background: var(--white);
-  padding: clamp(4rem, 8vw, 7rem) 0;
-  position: relative;
-  border-top: 1px solid var(--rule);
+  padding: clamp(5rem, 10vw, 9rem) 0;
+}
+.platforms-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
 }
 
-.platforms-head {
-  max-width: var(--container-max);
-  margin: 0 auto clamp(2rem, 5vw, 3.5rem);
-  padding: 0 var(--container-pad);
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  align-items: end;
+.platforms-head { margin-bottom: clamp(3rem, 6vw, 5rem); max-width: 50rem; }
+.platforms-eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--navy);
+  opacity: .55;
+  margin: 0 0 1.2rem;
 }
-.platforms-display {
-  font-size: clamp(2rem, 5vw, 3.8rem);
+.platforms-lead {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -.022em;
   color: var(--navy);
   margin: 0;
 }
-.platforms-display em { color: var(--gold); font-style: italic; font-weight: 400; }
-.platforms-lede { margin: 0; color: var(--navy); opacity: .82; }
+.platforms-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
 
-.platforms-grid {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 var(--container-pad);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--rule-strong);
-}
-
+/* A spread per platform. Hairline above, generous vertical breathing,
+   nothing decorative. The platform's accent color appears once — on
+   the URL — and the hover state lifts the name slightly in that color. */
 .platform {
-  position: relative;
-  padding: 1.6rem 1.5rem 1.4rem;
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
   display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  gap: .6rem;
-  min-height: 360px;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: baseline;
+  padding: clamp(2rem, 4vw, 3rem) 0;
+  border-top: 1px solid var(--rule);
   color: var(--navy);
-  background: var(--white);
-  transition: background .25s var(--ease), padding-left .25s var(--ease);
-  overflow: hidden;
+  transition: color .25s var(--ease);
+  position: relative;
 }
-.platform:last-child { border-right: 0; }
-.platform::before {
-  content: '';
+.platform:last-child { border-bottom: 1px solid var(--rule); }
+
+.platform__name-wrap { display: flex; flex-direction: column; }
+.platform__name {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4.5vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -.018em;
+  color: var(--navy);
+  margin: 0 0 .55rem;
+  transition: color .25s var(--ease), transform .25s var(--ease);
+  max-width: 13ch;
+}
+.platform__url {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  letter-spacing: .02em;
+  color: var(--p-color, var(--navy));
+  opacity: .85;
+}
+
+.platform__desc {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--navy);
+  opacity: .82;
+  margin: 0;
+  max-width: 44ch;
+}
+
+.platform__status {
   position: absolute;
-  top: 0; left: 0;
-  height: 4px;
-  width: 100%;
-  background: var(--p-color, var(--navy));
-  transform-origin: left;
-  transform: scaleX(.18);
-  transition: transform .35s var(--ease);
+  right: 0;
+  top: clamp(2rem, 4vw, 3rem);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  opacity: .45;
 }
-.platform:hover { background: var(--paper); padding-left: 1.85rem; }
-.platform:hover::before { transform: scaleX(1); }
-.platform:hover .platform__arrow { transform: translateX(.35em); color: var(--p-color); }
 
 .platform--local  { --p-color: var(--blue); }
 .platform--tribal { --p-color: var(--terra); }
 .platform--global { --p-color: var(--cedar); }
 
-.platform__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  font-size: .68rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  margin-bottom: .3rem;
-}
-.platform__num { color: var(--p-color); opacity: .9; font-weight: 700; }
-.platform__tag { color: var(--navy); opacity: .65; }
+.platform:hover .platform__name { color: var(--p-color); transform: translateX(.15em); }
 
-.platform__name {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 96;
-  font-weight: 500;
-  font-size: clamp(1.55rem, 2.2vw, 2rem);
-  line-height: 1.02;
-  letter-spacing: -.015em;
-  color: var(--navy);
-  margin: .15rem 0 .2rem;
-}
-
-.platform__url {
-  font-size: .72rem;
-  color: var(--p-color);
-  opacity: .9;
-  letter-spacing: .04em;
-  margin-bottom: .35rem;
-}
-
-.platform__desc {
-  font-size: .95rem;
-  line-height: 1.55;
-  color: var(--navy);
-  opacity: .78;
-  margin: 0;
-}
-
-.platform__foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: .9rem;
-  margin-top: .4rem;
-  border-top: 1px solid var(--rule);
-  font-size: .68rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-.platform__status { color: var(--navy); opacity: .55; }
-.platform__arrow {
-  font-size: 1.2rem;
-  color: var(--navy-soft);
-  transition: transform .25s var(--ease), color .25s var(--ease);
-}
-
-.platform__line {
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 60px;
-  pointer-events: none;
-  opacity: .14;
-}
-.platform__line path {
-  fill: none;
-  stroke: var(--p-color);
-  stroke-width: 1.6;
-  stroke-dasharray: 8 6;
-}
-.platform:hover .platform__line { opacity: .32; }
-
-@media (max-width: 980px) {
-  .platforms-head { grid-template-columns: 1fr; gap: 1rem; }
-  .platforms-grid { grid-template-columns: 1fr; }
-  .platform { border-right: 0; min-height: auto; }
-  .platform:last-child { border-bottom: 0; }
+@media (max-width: 760px) {
+  .platform { grid-template-columns: 1fr; gap: 1rem; padding: 2rem 0; }
+  .platform__status { position: static; margin-top: .8rem; }
+  .platform__name { font-size: clamp(1.8rem, 9vw, 2.6rem); max-width: none; }
 }
