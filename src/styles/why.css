@@ -1,10 +1,10 @@
-/* What you can use this for — four-item editorial list.
-   No cards, no icons. Roman numerals + Fraunces names + tight
-   description, hairlines between. */
+/* Why — one editorial column + two breakout cards.
+   Not a four-item parallel list. The breakouts are visually
+   secondary; the prose carries the argument. */
 
 .why {
   background: var(--cream);
-  padding: clamp(5rem, 10vw, 8.5rem) 0;
+  padding: clamp(5rem, 10vw, 8rem) 0;
   position: relative;
 }
 .why::before {
@@ -19,80 +19,73 @@
 }
 .why-inner {
   position: relative;
-  max-width: 1080px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
 }
 
-.why-eyebrow {
+.why-col { color: var(--navy); }
+.why-stamp {
   font-family: var(--font-display);
   font-style: italic;
   font-size: 1rem;
-  color: var(--navy);
-  opacity: .58;
+  color: var(--gold);
+  opacity: .92;
   margin: 0 0 1.2rem;
 }
-
-.why-lead {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 144;
-  font-weight: 400;
-  font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 1.04;
-  letter-spacing: -.022em;
-  color: var(--navy);
-  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
-  max-width: 22ch;
-}
-.why-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
-
-.why-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.why-item {
-  display: grid;
-  grid-template-columns: 3.2rem minmax(0, 1fr);
-  gap: clamp(1rem, 3vw, 2.5rem);
-  align-items: baseline;
-  padding: clamp(1.4rem, 3vw, 2rem) 0;
-  border-top: 1px solid var(--rule);
-}
-.why-item:last-child { border-bottom: 1px solid var(--rule); }
-
-.why-item__num {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-variation-settings: "opsz" 60;
-  font-weight: 400;
-  font-size: 1.6rem;
-  color: var(--gold);
-  line-height: 1;
-  text-align: right;
-}
-
-.why-item__name {
+.why-lede {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 96;
-  font-weight: 500;
-  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
-  line-height: 1.05;
-  letter-spacing: -.015em;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  line-height: 1.18;
+  letter-spacing: -.012em;
   color: var(--navy);
-  margin: 0 0 .35rem;
+  margin: 0 0 1.4rem;
+}
+.why-lede em { font-style: italic; color: var(--terra-dark); font-weight: 400; }
+.why-body {
+  font-size: 1.04rem;
+  line-height: 1.7;
+  color: var(--navy);
+  opacity: .82;
+  margin: 0;
+  max-width: 36em;
 }
 
-.why-item__desc {
-  font-size: 1.02rem;
-  line-height: 1.6;
+.why-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.why-card {
+  background: var(--white);
+  border-top: 3px solid var(--gold);
+  padding: clamp(1.2rem, 2.2vw, 1.6rem);
+}
+.why-card--alt { border-top-color: var(--cedar); }
+.why-card__head {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 60;
+  font-weight: 500;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  color: var(--navy);
+  margin: 0 0 .7rem;
+}
+.why-card__body {
+  font-size: .94rem;
+  line-height: 1.55;
   color: var(--navy);
   opacity: .8;
   margin: 0;
-  max-width: 56ch;
 }
 
-@media (max-width: 600px) {
-  .why-item { grid-template-columns: 2rem 1fr; gap: 1rem; }
-  .why-item__num { font-size: 1.2rem; }
+@media (max-width: 880px) {
+  .why-inner { grid-template-columns: 1fr; }
 }
