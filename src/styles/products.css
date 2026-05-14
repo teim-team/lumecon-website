@@ -1,107 +1,81 @@
-/* Platforms — modern software product tiles.
-   Three rows on a white surface. Each row is a real product card with
-   a name in big sans, a description, and a hover state that lifts. */
-
 .platforms {
-  background: var(--cream);
-  padding: clamp(5rem, 10vw, 9rem) 0;
+  background: var(--white);
+  padding: clamp(5rem, 9vw, 7rem) 0;
   border-bottom: 1px solid var(--rule);
 }
 .platforms-inner {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
-
 .platforms-head { margin-bottom: clamp(2.5rem, 5vw, 4rem); max-width: 60rem; }
 .platforms-eyebrow {
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .12em;
-  color: var(--navy);
+  font-size: .7rem;
+  letter-spacing: .14em;
+  color: var(--ink-3);
   margin: 0 0 1.2rem;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
 }
 .platforms-lead {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1.9rem, 4.4vw, 3.6rem);
-  line-height: 1.04;
-  letter-spacing: -.03em;
-  color: var(--ink);
+  font-size: clamp(1.8rem, 3.8vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--navy);
   margin: 0;
 }
 .platforms-lead em { font-style: italic; color: inherit; font-weight: inherit; }
-
 .platform {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) auto;
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
-  padding: clamp(1.8rem, 3vw, 2.4rem);
+  padding: clamp(1.6rem, 2.6vw, 2rem);
   background: var(--white);
-  border-radius: 12px;
+  border-radius: 6px;
   border: 1px solid var(--rule);
   color: var(--ink);
-  transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
-  position: relative;
-  margin-bottom: .9rem;
+  transition: border-color .15s var(--ease), background .15s var(--ease);
+  margin-bottom: .75rem;
 }
 .platform:last-child { margin-bottom: 0; }
-.platform::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--p-color, var(--navy));
-  border-radius: 12px 0 0 12px;
-}
-.platform:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(14, 21, 48, .12);
-  border-color: var(--p-color);
-}
-
-.platform__name-wrap { display: flex; flex-direction: column; padding-left: .4rem; }
+.platform:hover { border-color: var(--navy); }
+.platform__name-wrap { display: flex; flex-direction: column; }
 .platform__name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1.5rem, 2.6vw, 2.05rem);
-  line-height: 1.05;
-  letter-spacing: -.025em;
-  color: var(--ink);
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  line-height: 1.1;
+  letter-spacing: -.018em;
+  color: var(--navy);
   margin: 0 0 .35rem;
 }
 .platform__url {
   font-family: var(--font-mono);
-  font-size: .78rem;
-  letter-spacing: .02em;
-  color: var(--p-color, var(--navy));
-  font-weight: 500;
+  font-size: .8rem;
+  letter-spacing: -.005em;
+  color: var(--ink-3);
+  font-weight: 400;
 }
 .platform__desc {
-  font-size: 1rem;
+  font-size: .98rem;
   line-height: 1.55;
   color: var(--ink-2);
   margin: 0;
+  font-weight: 400;
 }
 .platform__status {
   font-family: var(--font-mono);
-  font-size: .66rem;
-  letter-spacing: .1em;
+  font-size: .65rem;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-4);
   font-weight: 500;
   white-space: nowrap;
 }
-
-.platform--local  { --p-color: var(--blue);  }
-.platform--tribal { --p-color: var(--terra); }
-.platform--global { --p-color: var(--cedar); }
-
 @media (max-width: 880px) {
   .platform { grid-template-columns: 1fr; gap: 1rem; padding: 1.4rem; }
-  .platform__status { font-size: .6rem; }
 }
