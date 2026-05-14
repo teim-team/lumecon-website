@@ -54,8 +54,11 @@
 .workspace {
   background: var(--white);
   border: 1px solid var(--rule);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(14, 21, 48, .04),
+    0 8px 24px -8px rgba(14, 21, 48, .08);
 }
 .workspace__bar {
   display: flex;
@@ -326,8 +329,15 @@
 .hero-stage[data-run="1"] .hero-source { opacity: 1; }
 .hero-glow { opacity: 0; transition: opacity .4s var(--ease); }
 .hero-stage[data-run="1"] .hero-glow { opacity: .55; }
-.hero-spark        { fill: var(--navy); }
-.hero-spark__core  { fill: var(--gold); stroke: var(--white); stroke-width: 1; }
+.hero-spark {
+  fill: var(--navy);
+  filter: drop-shadow(0 0 4px rgba(212, 165, 46, .8));
+}
+.hero-spark__core {
+  fill: var(--gold-light);
+  stroke: var(--navy);
+  stroke-width: .8;
+}
 
 @keyframes heroRippleA { 0% { r: 14; opacity: 1; stroke-width: 2.4; } 90% { r: 320; opacity: 0; stroke-width: .4; } 100% { r: 320; opacity: 0; } }
 .hero-ring {
@@ -554,12 +564,27 @@
   .hero-fig:nth-child(odd) { border-right: 1px solid var(--rule); }
   .hero-fig:nth-child(even) { border-right: 0; padding-right: 0; }
   .hero-fig dd { font-size: 1.1rem; }
-  .workspace__bar { padding: .65rem .9rem; }
-  .workspace__title { font-size: .82rem; }
+  .workspace__bar { padding: .65rem .8rem; flex-wrap: wrap; gap: .5rem; }
+  .workspace__title { font-size: .82rem; min-width: 0; flex: 1 1 auto; }
+  .workspace__title-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .workspace__divider { display: none; }
+  .workspace__region { display: none; }
+  .workspace__sub { font-size: .68rem; gap: .35rem; flex-shrink: 0; }
+  .workspace__sub-divider { display: none; }
+  .workspace__again { font-size: .55rem; padding: .2rem .3rem; }
+  .workspace__sub-text { font-size: .58rem; }
+  .workspace__body { padding: .8rem; }
+  .hero-map { max-height: 50vh; }
+  .workspace__foot { padding: .55rem .8rem; font-size: .58rem; }
+  .workspace-legend { max-width: 100%; font-size: .68rem; }
+  .workspace-attr { display: none; }
+  .workspace-filters { width: 100%; justify-content: center; }
 }
 @media (max-width: 420px) {
   .hero-figs { grid-template-columns: 1fr; }
   .hero-fig { border-right: 0 !important; padding-right: 0; }
+  .workspace-legend__note { display: block; margin-top: .25rem; margin-left: 0; }
+  .workspace-legend__key { flex-wrap: wrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
