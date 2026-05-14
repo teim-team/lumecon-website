@@ -40,6 +40,7 @@
   --error-color: #B83214;
   --gold-hover: #cc9f3f;
   --gold-btn-hover: #a07a25;
+  color-scheme: light dark;
 
   /* Type system — Inter for everything except mono marginalia.
      A modern software brand uses one sans aggressively across all
@@ -66,6 +67,25 @@
   --weight-black:   800;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --white: #0E1530;
+    --cream: #181E3A;
+    --paper: #1F2548;
+    --navy: #FCFAF3;
+    --navy2: #E5E7EE;
+    --navy-soft: rgba(252, 250, 243, .78);
+    --ink: #FCFAF3;
+    --ink-2: #C2C7DA;
+    --ink-3: #8B91A8;
+    --ink-4: #5D627A;
+    --rule: rgba(252, 250, 243, .12);
+    --rule-strong: rgba(252, 250, 243, .24);
+    --gold: #E8C661;
+    --gold-light: #F4DC8C;
+  }
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -76,6 +96,14 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Gold focus ring — brand-consistent, replaces default browser blue. */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* Editorial primitives — used by Hero, Products, Why, Cedar so the

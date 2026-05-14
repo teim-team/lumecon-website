@@ -14,25 +14,32 @@ const platforms = [local, tribal, globalProduct];
       </p>
     </header>
 
-    {platforms.map((p, i) => (
-      <a class={`platform platform--${i === 0 ? 'local' : i === 1 ? 'tribal' : 'global'}`} href={p.url}>
-        <div class="platform__name-wrap">
-          <h3 class="platform__name">{p.name}</h3>
-          <span class="platform__url">{p.domain}</span>
-        </div>
-        <p class="platform__desc">
-          {i === 0 && (
-            <>Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations &mdash; without the cost or complexity of traditional tools.</>
-          )}
-          {i === 1 && (
-            <>Built for economies that don&rsquo;t fit standard assumptions. Designed from day one for tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies, with Indigenous data sovereignty in the foundation.</>
-          )}
-          {i === 2 && (
-            <>The same modeling backbone, applied across borders. Cross-border and multiregional analysis for multinationals, NGOs, and governments &mdash; comparable methods, comparable results.</>
-          )}
-        </p>
-        <span class="platform__status">{p.status}</span>
-      </a>
-    ))}
+    {platforms.map((p, i) => {
+      const slug = i === 0 ? 'local' : i === 1 ? 'tribal' : 'global';
+      const badge = i === 0 ? 'In active development'
+                  : i === 1 ? 'Patent pending'
+                  : 'Future development';
+      const badgeKind = i === 0 ? 'active' : i === 1 ? 'patent' : 'future';
+      return (
+        <a class={`platform platform--${slug}`} href={p.url}>
+          <div class="platform__name-wrap">
+            <h3 class="platform__name">{p.name}</h3>
+            <span class="platform__url">{p.domain}</span>
+          </div>
+          <p class="platform__desc">
+            {i === 0 && (
+              <>Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations &mdash; without the cost or complexity of traditional tools.</>
+            )}
+            {i === 1 && (
+              <>Built for economies that don&rsquo;t fit standard assumptions. Designed from day one for tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies, with Indigenous data sovereignty in the foundation.</>
+            )}
+            {i === 2 && (
+              <>The same modeling backbone, applied across borders. Cross-border and multiregional analysis for multinationals, NGOs, and governments &mdash; comparable methods, comparable results.</>
+            )}
+          </p>
+          <span class={`platform__badge platform__badge--${badgeKind}`}>{badge}</span>
+        </a>
+      );
+    })}
   </div>
 </section>

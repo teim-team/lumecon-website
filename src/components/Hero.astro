@@ -69,11 +69,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="560" height="98" />
     </a>
     <h1 class="hero-statement">
-      Economic and policy analysis software for governments.
+      Economic and policy analysis software for governments and mission-driven organizations.
     </h1>
+    <p class="hero-sub">
+      Replacing the consultant. Real-time data. Novel methods. Results you can trust.
+    </p>
     <div class="hero-cta">
-      <a href="#workspace" class="btn">See an impact study</a>
-      <a href="#contact" class="btn btn--ghost">Talk to us</a>
+      <a href="#workspace" class="btn">See it run</a>
+      <a href="#contact" class="btn btn--ghost">Request a demo</a>
     </div>
   </div>
 
@@ -82,8 +85,12 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       <span class="workspace__title">
         <img class="workspace__mark" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="22" height="22" aria-hidden="true" />
         <span class="workspace__title-text">Live impact study</span>
+        <span class="workspace__divider" aria-hidden="true"></span>
+        <span class="workspace__region" id="workspaceRegion" aria-live="polite">Hover any state</span>
       </span>
       <span class="workspace__sub">
+        <button type="button" class="workspace__again" id="workspaceAgain" aria-label="Run another study">Run again</button>
+        <span class="workspace__sub-divider" aria-hidden="true"></span>
         <span class="workspace__dot" id="workspaceStatus" aria-hidden="true"></span>
         <span class="workspace__sub-text" id="workspaceStatusLabel">Idle</span>
       </span>
@@ -158,6 +165,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     </div>
   </figure>
 
+  <!-- Activity chip — names what's running -->
+  <p class="workspace-activity" id="workspaceActivity" aria-live="polite">&nbsp;</p>
+
   <!-- Live figures — the only text inside the workspace -->
   <dl class="hero-figs" aria-label="Result of the running impact study">
     <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
@@ -168,13 +178,17 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   </dl>
 
     </div>
+
+    <footer class="workspace__foot">
+      <span class="workspace-legend">
+        <span class="workspace-legend__sw" style="--lg:0.85"></span> Direct
+        <span class="workspace-legend__sw" style="--lg:0.42"></span> Indirect
+        <span class="workspace-legend__sw" style="--lg:0.18"></span> Induced
+      </span>
+      <span class="workspace-attr">Geography: Census TIGER/Line. Multipliers illustrative.</span>
+    </footer>
   </div>
 
-  <!-- Hidden but kept for the JS that animates the narration so we don't break the script -->
-  <span hidden id="heroLine"></span>
-  <span hidden id="askInput"></span>
-  <span hidden id="askCedarForm"></span>
-  <span hidden id="askAnswer"></span>
 
   <script type="application/json" id="heroStates"  set:html={statesJson}></script>
   <script type="application/json" id="heroCodeMap" set:html={codeMapJson}></script>
@@ -223,7 +237,6 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   const ttName  = document.getElementById('ttName');
   const ttHint  = document.getElementById('ttHint');
   const source  = document.getElementById('heroSource');
-  const line    = document.getElementById('heroLine');
   const figD    = document.getElementById('figDirect');
   const figI    = document.getElementById('figIndirect');
   const figU    = document.getElementById('figInduced');
@@ -231,11 +244,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   const figJ    = document.getElementById('figJobs');
   const figTotalCell = document.getElementById('figTotalCell');
   const figJobsCell  = document.getElementById('figJobsCell');
-  const askForm  = document.getElementById('askCedarForm') as HTMLFormElement | null;
-  const askInput = document.getElementById('askInput') as HTMLInputElement | null;
-  const askAnswer = document.getElementById('askAnswer');
 
-  if (stage && source && line && figD && figI && figU && figT && figJ && tooltip && ttName && askForm && askInput && askAnswer) {
+  if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName) {
 
     const wait = (ms: number) => new Promise<void>(r => window.setTimeout(r, ms));
     const ease = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -264,12 +274,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       requestAnimationFrame(step);
     };
 
-    const setLine = (text: string) => {
-      line.classList.remove('is-in');
-      void (line as HTMLElement).offsetWidth;
-      line.innerHTML = text;
-      line.classList.add('is-in');
-    };
+    // setLine: no-op now that the narration line is removed; kept so
+    // existing call sites compile and silently do nothing.
+    const setLine = (_text: string) => { /* no narration line in DOM */ };
 
     const shadeNeighbors = (id: string) => {
       const me = states[id]; if (!me) return;
@@ -324,8 +331,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
       const wsStatus = document.getElementById('workspaceStatus');
       const wsLabel = document.getElementById('workspaceStatusLabel');
+      const wsRegion = document.getElementById('workspaceRegion');
+      const wsActivity = document.getElementById('workspaceActivity');
       if (wsStatus) wsStatus.dataset.state = 'running';
       if (wsLabel) wsLabel.textContent = 'Running';
+      if (wsRegion) wsRegion.textContent = framing.includes('(') ? framing : s.name;
+      if (wsActivity) {
+        wsActivity.innerHTML = `<strong>${amount.label}</strong> &middot; ${activity.label} &middot; ${s.name}`;
+      }
 
       setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
@@ -395,6 +408,18 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       if (ttHint) ttHint.textContent = hint;
     };
 
+    /* ---------- "Run again" button ---------- */
+    const wsAgain = document.getElementById('workspaceAgain');
+    if (wsAgain) {
+      wsAgain.addEventListener('click', async () => {
+        if (cycleTimer) window.clearTimeout(cycleTimer);
+        const ids = Object.keys(states);
+        const pick = ids[Math.floor(Math.random() * ids.length)];
+        await runStudy(pick);
+        cycleTimer = window.setTimeout(cycle, 6800);
+      });
+    }
+
     /* ---------- state click + hover ---------- */
     stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
       el.addEventListener('mouseenter', (e) => {
@@ -402,6 +427,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         setTooltip(states[id]?.name || '', 'click to run a study here');
         tooltip.classList.add('is-on');
         placeTooltip(e);
+        const wsRegion = document.getElementById('workspaceRegion');
+        if (wsRegion && stage.dataset.run !== '1') wsRegion.textContent = states[id]?.name || '';
       });
       el.addEventListener('mousemove', (e) => placeTooltip(e));
       el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
@@ -461,45 +488,6 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         const k = (e as KeyboardEvent).key;
         if (k === 'Enter' || k === ' ') { e.preventDefault(); start(); }
       });
-    });
-
-    /* ---------- Ask Cedar (one-shot Q + A) ---------- */
-    const ANSWERS: Record<string, string> = {
-      what: `An <em>economic impact study</em> traces a dollar after it&rsquo;s spent &mdash; the activity itself, the suppliers it buys from, and the wages those workers spend on rent, groceries, the rest. The map is one playing in real time.`,
-      direct: `The <em>direct</em> effect is the activity itself &mdash; payroll, contracts, the build-out. The gold ring on the map. The only number that doesn&rsquo;t need a multiplier.`,
-      indirect: `The <em>indirect</em> effect follows the supply chain &mdash; the contractors, vendors, and consultants the activity pays, and the firms they pay. Second ring out. Terra.`,
-      induced: `The <em>induced</em> effect is what happens when wages get spent &mdash; rent, groceries, kids&rsquo; shoes. The widest ring, cedar green.`,
-      ledger: `The <em>ledger</em> is every assumption, source, and multiplier behind the numbers. Lumecon&rsquo;s platforms ship one with every run so a reviewer can audit the result.`,
-      cedar: `I&rsquo;m <em>Cedar</em> &mdash; Lumecon&rsquo;s AI thought partner. On the real platforms I sit beside your data: read the uploads, name every assumption, ask the question the model is about to assume an answer to. I won&rsquo;t think <em>for</em> you. I think <em>with</em> you.`,
-      privacy: `On the platforms I run inside a per-project sandbox. Provider calls are pseudonymized &mdash; project and file names get hashed before they leave; your real user ID never appears upstream. Here on the marketing page I&rsquo;m a pattern-matcher with no upstream call.`,
-      platforms: `Lumecon is the parent. Three platforms inherit the same modeling backbone: <strong>Local</strong> (municipal), <strong>Tribal</strong> (Indigenous economies, with AIANNH geography baked in), <strong>Global</strong> (cross-border).`,
-    };
-    const route = (q: string): string => {
-      const t = q.toLowerCase();
-      if (/\b(hi|hey|hello)\b/.test(t))                            return ANSWERS.cedar;
-      if (/\b(who.*you|tell.*about.*you|are you|cedar)\b/.test(t)) return ANSWERS.cedar;
-      if (/\b(privacy|safe|secure|data|leak|train|provider)\b/.test(t)) return ANSWERS.privacy;
-      if (/\b(what.*(impact|study)|how.*work|explain.*study)\b/.test(t)) return ANSWERS.what;
-      if (/\bdirect\b/.test(t)) return ANSWERS.direct;
-      if (/\bindirect\b/.test(t)) return ANSWERS.indirect;
-      if (/\binduced\b/.test(t)) return ANSWERS.induced;
-      if (/\b(ledger|source|cite|assumption|method)\b/.test(t)) return ANSWERS.ledger;
-      if (/\b(platform|product|local|tribal|global|brand|company)\b/.test(t)) return ANSWERS.platforms;
-      return `I&rsquo;m a marketing-page assistant, scoped to the basics. Try <em>what&rsquo;s a direct effect</em>, <em>who are you</em>, or click any state or reservation to run a study.`;
-    };
-
-    askForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const q = askInput.value.trim(); if (!q) return;
-      askAnswer.classList.remove('is-in');
-      askAnswer.innerHTML = '';
-      void (askAnswer as HTMLElement).offsetWidth;
-      askInput.disabled = true;
-      await wait(400);
-      askAnswer.innerHTML = route(q);
-      askAnswer.classList.add('is-in');
-      askInput.disabled = false;
-      askInput.value = '';
     });
 
     /* ---------- IP geolocation kickoff ---------- */

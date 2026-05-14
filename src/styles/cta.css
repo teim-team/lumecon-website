@@ -39,37 +39,27 @@
   margin: 0 0 1.4rem;
   font-weight: 400;
 }
-.cta-credit {
-  font-size: .88rem;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, .5);
-  margin: 0 0 1.4rem;
-  max-width: 40ch;
-  padding-left: .9rem;
-  border-left: 1px solid rgba(255, 255, 255, .2);
-}
 .cta-email {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: .9rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, .82);
+  font-size: .92rem;
+  font-weight: 500;
+  color: var(--gold-light);
   transition: color .15s;
 }
 .cta-email:hover { color: var(--white); }
-.cta-linkedin {
+
+.cta-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: .5rem;
-  margin-top: 1rem;
-  font-size: .85rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, .55);
-  transition: color .15s;
+  gap: .55rem;
 }
-.cta-linkedin svg { opacity: .7; }
-.cta-linkedin:hover { color: var(--white); }
-.cta-linkedin:hover svg { opacity: 1; }
+.cta-eyebrow__dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--cedar-light);
+  box-shadow: 0 0 0 3px rgba(63, 136, 102, .2);
+}
 
 .cta-form {
   background: rgba(255, 255, 255, .04);
@@ -115,20 +105,22 @@
 }
 .cta-form select option { background: var(--navy); color: var(--white); }
 .cta-form textarea { resize: vertical; min-height: 84px; }
-.cta-form button {
+.cta-form a#formSend {
+  display: block;
+  text-align: center;
   width: 100%;
-  padding: .8rem;
+  padding: .85rem;
   font-family: var(--font-sans);
   font-size: .95rem;
   font-weight: 500;
   letter-spacing: -.005em;
   background: var(--white);
   color: var(--navy);
-  border: 0;
   border-radius: 4px;
   cursor: pointer;
   transition: background .15s var(--ease);
+  text-decoration: none;
 }
-.cta-form button:hover { background: rgba(255, 255, 255, .9); }
-.cta-form button:disabled { opacity: .55; cursor: not-allowed; }
+.cta-form a#formSend:hover { background: var(--cream); }
+.cta-form a#formSend[aria-busy="true"] { opacity: .65; pointer-events: none; }
 @media (max-width: 880px) { .cta-inner { grid-template-columns: 1fr; } }

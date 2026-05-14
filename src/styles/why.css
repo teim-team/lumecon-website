@@ -1,41 +1,33 @@
 .why {
-  background: var(--white);
-  padding: clamp(5rem, 9vw, 7rem) 0;
+  background: var(--cream);
+  padding: clamp(4rem, 8vw, 6rem) 0;
   border-bottom: 1px solid var(--rule);
 }
 .why-inner {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 3rem);
 }
-.why-stamp {
-  font-family: var(--font-mono);
-  font-size: .7rem;
-  letter-spacing: .14em;
-  color: var(--ink-3);
-  font-weight: 500;
-  text-transform: uppercase;
-  margin: 0;
-}
-.why-lede {
+.why-stat { display: flex; flex-direction: column; gap: .55rem; }
+.why-stat__k {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  line-height: 1.08;
-  letter-spacing: -.025em;
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  line-height: 1.15;
+  letter-spacing: -.018em;
   color: var(--navy);
   margin: 0;
-  max-width: 22ch;
 }
-.why-body {
-  font-size: 1.06rem;
+.why-stat__v {
+  font-size: .98rem;
   line-height: 1.55;
   color: var(--ink-2);
   margin: 0;
-  max-width: 56ch;
   font-weight: 400;
+}
+@media (max-width: 880px) {
+  .why-inner { grid-template-columns: 1fr; gap: 1.6rem; }
 }

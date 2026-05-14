@@ -1,20 +1,20 @@
-nav { padding: 1.1rem 0; }
+nav { padding: .85rem 0; }
 nav.nav--fixed {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 100;
-  padding: 1.3rem 0;
-  background: linear-gradient(180deg, rgba(246, 241, 233, .92), rgba(246, 241, 233, 0));
-  transition: background .4s var(--ease), padding .3s var(--ease), border-bottom-color .3s var(--ease);
+  padding: 1rem 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(255, 255, 255, 0));
+  transition: background .25s var(--ease), padding .25s var(--ease), border-bottom-color .25s var(--ease);
   border-bottom: 1px solid transparent;
 }
 nav.nav--fixed.scrolled {
-  background: rgba(251, 246, 236, .92);
+  background: rgba(255, 255, 255, .94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  padding: .7rem 0;
-  border-bottom-color: var(--rule);
+  padding: .6rem 0;
+  border-bottom-color: var(--rule-strong);
 }
 nav.nav--static {
   background: rgba(251, 246, 236, .94);
@@ -140,7 +140,7 @@ nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  min-width: 380px;
+  min-width: 440px;
   background: var(--white);
   border: 1px solid var(--rule);
   border-radius: 10px;

@@ -10,7 +10,7 @@ export const site = {
   name: 'Lumecon',
   legalName: 'Lumecon Inc.',
   tagline: 'We luminate economies',
-  pitch: 'Economic and policy analysis software for governments',
+  pitch: 'Economic and policy analysis software for governments and mission-driven organizations.',
   url: 'https://lumecon.ai',
   email: 'contact@lumecon.ai',
   legalEntity: 'Lumecon Inc.',
