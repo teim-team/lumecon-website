@@ -1,45 +1,43 @@
 :root {
-  /* Lumecon Inc. — modern software-company palette.
-     Clean white surface, deep navy ink, one bold accent color per
-     section when needed. No paper-craft texture. Platform colors
-     stay as the data-viz language. */
+  /* Lumecon Inc. — bold, modern govt-software palette.
+     Pure white surfaces, saturated brand accents, no muddy mid-tones. */
   --white: #FFFFFF;
-  --cream: #F5F6F8;          /* very light cool blue-gray, used for section variation */
-  --paper: #EFF1F4;
-  --navy: #0E1530;           /* deeper, more saturated; reads as a "primary brand" navy */
-  --navy2: #1B2447;
-  --navy-soft: rgba(14, 21, 48, .68);
-  --ink: #0E1530;
-  --ink-2: #3A405A;
-  --ink-3: #6C7187;
-  --ink-4: #9BA0B3;
-  --terra: #C44A2E;       /* brighter coral-orange, less brick-brown */
-  --terra-dark: #8A2E15;
-  --terra-light: #E27A52;
-  --cedar: #1F7A52;       /* fresher green, less mossy */
-  --cedar-light: #3FA372;
-  --cedar-mist: #E7EFE9;
-  --green: #1F7A52;
-  --green-deep: #0E3A2E;
-  --gold: #D4A52E;        /* more saturated, modern marigold */
-  --gold-light: #F4C94B;
-  --goldbar: #F2E6C5;
-  --blue: #2F4A78;           /* deeper, more confident blue */
-  --blue-deep: #1F345A;
-  --purple: #4B4170;
-  --purple-rule: #4B4170;
-  --gray: #4F4F4F;
-  --graylt: #6C7187;
-  --blush: #F3EAE6;
-  --rule: rgba(14, 21, 48, .1);
-  --rule-strong: rgba(14, 21, 48, .22);
+  --cream: #FFFFFF;          /* same as white; sections separate via hairlines, not tint */
+  --paper: #F7F7F8;          /* one rare softer surface (forms, panels), barely off-white */
+  --navy: #0A0F26;           /* deeper, more saturated near-black-navy */
+  --navy2: #1A2046;
+  --navy-soft: rgba(10, 15, 38, .68);
+  --ink: #0A0F26;
+  --ink-2: #353B5C;
+  --ink-3: #6B6F8A;
+  --ink-4: #9DA1B5;
+  --terra: #E04A2A;          /* bold coral-orange */
+  --terra-dark: #B33013;
+  --terra-light: #F58057;
+  --cedar: #0E8B4F;          /* saturated forest green */
+  --cedar-light: #1BB66A;
+  --cedar-mist: #E0F2E7;
+  --green: #0E8B4F;
+  --green-deep: #0B5E36;
+  --gold: #F0A91A;           /* vibrant marigold */
+  --gold-light: #FFD24B;
+  --goldbar: #FFE7A0;
+  --blue: #2E5BD6;           /* bold electric-leaning navy-blue */
+  --blue-deep: #1E40A6;
+  --purple: #6E3DD8;
+  --purple-rule: #6E3DD8;
+  --gray: #353B5C;
+  --graylt: #6B6F8A;
+  --blush: #FFF1ED;
+  --rule: rgba(10, 15, 38, .12);
+  --rule-strong: rgba(10, 15, 38, .24);
   --ease: cubic-bezier(.22, 1, .36, 1);
   --container-max: 1240px;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
-  --error-color: #B83214;
-  --gold-hover: #cc9f3f;
-  --gold-btn-hover: #a07a25;
+  --error-color: #DC2626;
+  --gold-hover: #FFC83D;
+  --gold-btn-hover: #C98906;
   color-scheme: light dark;
 
   /* Type system — Inter for everything except mono marginalia.
@@ -161,17 +159,6 @@ body {
   margin: 0;
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 10000;
-  mix-blend-mode: multiply;
-  opacity: .035;
-  background: url('/textures/paper-grain.svg');
-}
-
 a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-family: var(--font-display); line-height: 1.08; }
 h1, h2 { font-weight: 600; letter-spacing: -.02em; color: var(--navy); }
@@ -187,19 +174,6 @@ strong { font-weight: 600; color: inherit; }
   padding: 0 var(--container-pad);
 }
 
-.paper-tex { position: relative; overflow: hidden; }
-.paper-tex::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  mix-blend-mode: soft-light;
-  opacity: .22;
-  background: url('/textures/paper-soft.svg');
-}
-.paper-tex-dark::before { mix-blend-mode: overlay; opacity: .1; }
-.paper-tex-warm::before { mix-blend-mode: multiply; opacity: .07; }
 
 /* Reveal animations */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
