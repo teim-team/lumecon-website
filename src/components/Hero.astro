@@ -80,7 +80,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       Your work changes the economy around it. We make that change measurable.
     </h1>
     <p class="hero-sub">
-      Lumecon turns budgets, programs, and policies into the jobs they support, the dollars they circulate, and the second-order consequences your council, board, and funders need to see. Built for governments and mission-driven organizations, in software they can run themselves.
+      Most teams can&rsquo;t run an impact study because they&rsquo;re priced out of the software, waiting on a consultant, or stuck on data trapped across departments. Lumecon replaces the first two. Cedar, our built-in AI, helps with the third. We use AI to reduce the infrastructure that slows analysis down, not as a marketing gimmick.
     </p>
     <div class="hero-cta">
       <a href="#workspace" class="btn">See it run</a>
@@ -280,46 +280,78 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     activity: typeof ACTIVITIES[number];
   };
   const SCENES: Scene[] = [
-    {
-      state: '53',
-      project: 'A new community health clinic',
-      location: 'Pierce County, WA',
+    { state: '53', project: 'A new community health clinic', location: 'Pierce County, WA',
       chip: 'Community health clinic · Pierce County, WA · $5M operations',
       sentence: 'A new community health clinic opens in Pierce County, WA, supported by $5M of operating funds.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[1],
-    },
-    {
-      state: '48',
-      project: 'A workforce expansion at a state university',
-      location: 'Travis County, TX',
+      amount: AMOUNTS[1], activity: ACTIVITIES[1] },
+    { state: '48', project: 'University workforce expansion', location: 'Travis County, TX',
       chip: 'University workforce expansion · Travis County, TX · $20M payroll',
       sentence: 'A state university expands its workforce in Travis County, TX, with $20M of new operating payroll.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[1],
-    },
-    {
-      state: '41',
-      project: 'A solar array on tribal lands',
-      location: 'Umatilla Reservation, OR',
+      amount: AMOUNTS[3], activity: ACTIVITIES[1] },
+    { state: '41', project: 'Tribal solar array', location: 'Umatilla Reservation, OR',
       chip: 'Tribal solar array · Umatilla Reservation, OR · $12M energy project',
-      sentence: 'A tribal government commissions a solar array on the Umatilla Reservation in Oregon, a $12M energy project.',
-      amount: AMOUNTS[2], activity: ACTIVITIES[4],
-    },
-    {
-      state: '27',
-      project: 'A casino and lodging expansion',
-      location: 'Mille Lacs, MN',
+      sentence: 'A tribal government commissions a solar array on the Umatilla Reservation, a $12M clean-energy project.',
+      amount: AMOUNTS[2], activity: ACTIVITIES[4] },
+    { state: '27', project: 'Casino and lodging expansion', location: 'Mille Lacs, MN',
       chip: 'Casino expansion · Mille Lacs, MN · $50M capital build',
       sentence: 'A tribal enterprise breaks ground on a $50M casino and lodging expansion in Mille Lacs, MN.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0],
-    },
-    {
-      state: '39',
-      project: 'A federal grant to a regional CDFI',
-      location: 'Cuyahoga County, OH',
+      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
+    { state: '39', project: 'Federal grant to a regional CDFI', location: 'Cuyahoga County, OH',
       chip: 'Federal grant pass-through · Cuyahoga County, OH · $5M',
-      sentence: 'A federal grant of $5M passes through to a regional CDFI serving Cuyahoga County, OH.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[2],
-    },
+      sentence: 'A $5M federal grant passes through to a regional CDFI serving Cuyahoga County, OH.',
+      amount: AMOUNTS[1], activity: ACTIVITIES[2] },
+    { state: '53', project: 'Light rail line extension', location: 'King County, WA',
+      chip: 'Light rail extension · King County, WA · $50M build',
+      sentence: 'A regional transit authority extends a light rail line through King County, WA, a $50M capital build.',
+      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
+    { state: '47', project: 'Music tourism program', location: 'Davidson County, TN',
+      chip: 'Music tourism program · Davidson County, TN · $5M',
+      sentence: 'Davidson County, TN expands a music tourism program, generating $5M in visitor spending across local businesses.',
+      amount: AMOUNTS[1], activity: ACTIVITIES[3] },
+    { state: '02', project: 'Fish processing facility', location: 'Aleutians East Borough, AK',
+      chip: 'Fish processing facility · Aleutians East, AK · $12M',
+      sentence: 'A new fish processing facility opens in the Aleutians East Borough, Alaska, a $12M capital build.',
+      amount: AMOUNTS[2], activity: ACTIVITIES[0] },
+    { state: '42', project: 'Workforce training program', location: 'Allegheny County, PA',
+      chip: 'Workforce training program · Allegheny County, PA · $1M',
+      sentence: 'Allegheny County, PA launches a $1M workforce training program targeting advanced manufacturing.',
+      amount: AMOUNTS[0], activity: ACTIVITIES[1] },
+    { state: '31', project: 'Wind farm', location: 'Cherry County, NE',
+      chip: 'Wind farm · Cherry County, NE · $20M energy project',
+      sentence: 'A $20M wind farm comes online in Cherry County, NE, with construction and operations spread across the county.',
+      amount: AMOUNTS[3], activity: ACTIVITIES[4] },
+    { state: '04', project: 'County library system expansion', location: 'Maricopa County, AZ',
+      chip: 'Library system expansion · Maricopa County, AZ · $5M',
+      sentence: 'Maricopa County, AZ funds a $5M expansion of its public library system.',
+      amount: AMOUNTS[1], activity: ACTIVITIES[1] },
+    { state: '36', project: 'Affordable housing development', location: 'Bronx County, NY',
+      chip: 'Affordable housing · Bronx County, NY · $20M build',
+      sentence: 'A $20M affordable housing development breaks ground in the Bronx, NY.',
+      amount: AMOUNTS[3], activity: ACTIVITIES[0] },
+    { state: '22', project: 'Convention center renovation', location: 'Orleans Parish, LA',
+      chip: 'Convention center · Orleans Parish, LA · $50M',
+      sentence: 'Orleans Parish renovates its convention center, a $50M capital project tied to the regional tourism economy.',
+      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
+    { state: '37', project: 'Community college campus', location: 'Mecklenburg County, NC',
+      chip: 'Community college campus · Mecklenburg County, NC · $20M',
+      sentence: 'Mecklenburg County, NC builds a new community college campus, a $20M capital investment.',
+      amount: AMOUNTS[3], activity: ACTIVITIES[0] },
+    { state: '04', project: 'Tribal health clinic', location: 'Navajo Nation, AZ',
+      chip: 'Tribal health clinic · Navajo Nation, AZ · $12M operations',
+      sentence: 'A new health clinic opens on the Navajo Nation, with $12M in annual operating funds.',
+      amount: AMOUNTS[2], activity: ACTIVITIES[1] },
+    { state: '22', project: 'Coastal restoration project', location: 'Plaquemines Parish, LA',
+      chip: 'Coastal restoration · Plaquemines Parish, LA · $5M',
+      sentence: 'A $5M coastal restoration project moves forward in Plaquemines Parish, LA.',
+      amount: AMOUNTS[1], activity: ACTIVITIES[0] },
+    { state: '26', project: 'Manufacturing reshoring', location: 'Wayne County, MI',
+      chip: 'Manufacturing reshoring · Wayne County, MI · $50M',
+      sentence: 'A manufacturer reshores production to Wayne County, MI, with a $50M capital build.',
+      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
+    { state: '06', project: 'Public transit electrification', location: 'San Francisco County, CA',
+      chip: 'Transit electrification · San Francisco, CA · $20M',
+      sentence: 'San Francisco County converts a public bus fleet to electric, a $20M energy project.',
+      amount: AMOUNTS[3], activity: ACTIVITIES[4] },
   ];
 
   const ADJ_RADIUS = { indirect: 220, induced: 480 };
@@ -659,16 +691,27 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       await zoomOut();
     };
 
-    let sceneIdx = 0;
+    /* Shuffled scene queue. We exhaust the deck before reshuffling so
+       every scene plays once before any repeats. Fisher-Yates on the
+       index array. */
+    const sceneOrder: number[] = [];
+    const reshuffle = () => {
+      const arr = SCENES.map((_, i) => i);
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      sceneOrder.push(...arr);
+    };
     const cycle = async () => {
-      const scene = SCENES[sceneIdx % SCENES.length];
+      if (sceneOrder.length === 0) reshuffle();
+      const scene = SCENES[sceneOrder.shift() as number];
       await runStudy(scene.state, {
         activity: scene.activity,
         amount: scene.amount,
         framing: scene.sentence,
         chip: scene.chip,
       });
-      sceneIdx += 1;
       cycleTimer = window.setTimeout(cycle, 6800);
     };
 

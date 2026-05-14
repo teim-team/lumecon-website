@@ -16,11 +16,12 @@
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(1.15rem, 1.7vw, 1.4rem);
-  line-height: 1.15;
+  line-height: 1.2;
   letter-spacing: -.018em;
   color: var(--navy);
   margin: 0;
 }
+.why-stat__amp { font-style: italic; color: var(--gold); font-weight: 500; }
 .why-stat__v {
   font-size: .98rem;
   line-height: 1.55;

@@ -13,16 +13,16 @@
   --ink-2: #3A405A;
   --ink-3: #6C7187;
   --ink-4: #9BA0B3;
-  --terra: #B85C38;
-  --terra-dark: #7A3215;
-  --terra-light: #D98A6A;
-  --cedar: #1E5A3F;
-  --cedar-light: #3F8866;
+  --terra: #C44A2E;       /* brighter coral-orange, less brick-brown */
+  --terra-dark: #8A2E15;
+  --terra-light: #E27A52;
+  --cedar: #1F7A52;       /* fresher green, less mossy */
+  --cedar-light: #3FA372;
   --cedar-mist: #E7EFE9;
-  --green: #1E5A3F;
+  --green: #1F7A52;
   --green-deep: #0E3A2E;
-  --gold: #B68A2E;
-  --gold-light: #E8C661;
+  --gold: #D4A52E;        /* more saturated, modern marigold */
+  --gold-light: #F4C94B;
   --goldbar: #F2E6C5;
   --blue: #2F4A78;           /* deeper, more confident blue */
   --blue-deep: #1F345A;
