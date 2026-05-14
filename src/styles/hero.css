@@ -151,15 +151,31 @@
   max-width: 70%;
 }
 .workspace-legend__sw { margin-top: .35rem; }
-.workspace-legend__sw {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: var(--gold);
-  margin-right: .35rem;
-  flex-shrink: 0;
+.workspace-legend__key {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  flex-wrap: wrap;
 }
-.workspace-legend__sw--source { background: var(--gold); }
+.workspace-legend__note {
+  margin-left: .25rem;
+  font-style: italic;
+  color: var(--ink-3);
+}
+.workspace-legend__sw {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-right: .15rem;
+  margin-left: .55rem;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.workspace-legend__sw:first-child { margin-left: 0; }
+.workspace-legend__sw--source    { background: var(--gold); border-radius: 2px; width: 10px; height: 10px; }
+.workspace-legend__sw--supplier  { background: var(--terra); }
+.workspace-legend__sw--household { background: var(--cedar); }
 .workspace-attr { letter-spacing: .04em; text-transform: none; }
 .workspace-activity {
   font-family: var(--font-sans);
@@ -409,6 +425,71 @@
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------- Detail layers: supplier + household clouds + flow lines ---------- */
+
+@keyframes ddIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+@keyframes flowIn { from { stroke-dashoffset: 80; opacity: 0; } 30% { opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
+
+.hero-supplier {
+  fill: var(--terra);
+  stroke: var(--white);
+  stroke-width: .35;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: ddIn .45s var(--ease) var(--dd, 0ms) both;
+  pointer-events: none;
+}
+.hero-household {
+  fill: var(--cedar);
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: ddIn .35s var(--ease) var(--dd, 0ms) both;
+  pointer-events: none;
+}
+.hero-flow {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: .8;
+  stroke-linecap: round;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  animation: flowIn 1s var(--ease) var(--dd, 0ms) both;
+  pointer-events: none;
+}
+
+/* Overview button — visible only while zoomed in */
+.hero-zoomout {
+  position: absolute;
+  top: .8rem;
+  left: .8rem;
+  background: var(--navy);
+  color: var(--white);
+  border: 0;
+  padding: .4rem .7rem;
+  font-family: var(--font-sans);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: -.005em;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s var(--ease);
+  z-index: 8;
+}
+.hero-stage[data-zoom="1"] .hero-zoomout { opacity: 1; pointer-events: auto; }
+.hero-zoomout:hover { background: var(--navy2); }
+
+/* When zoomed in, hide the AIANNH overlay's hover behavior so it
+   doesn't trigger from background polygons that happen to fall under
+   the zoomed view. */
+.hero-stage[data-zoom="1"] .hero-aiannh { pointer-events: none; }
 
 /* ---------- Floating value labels on lit states ---------- */
 @keyframes vlIn { from { opacity: 0; } to { opacity: 1; } }

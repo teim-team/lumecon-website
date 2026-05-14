@@ -129,7 +129,6 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
       <!-- Cartographic graticule under everything -->
       <rect class="hero-map__grid" x={VBX} y={VBY} width={VBW} height={VBH} fill="url(#hGrid)" />
-      </defs>
 
       <path class="hero-map__fill" d={nationOutlineD} />
 
@@ -181,6 +180,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
       </g>
 
+      <!-- Detail layers: synthesized supplier + household point clouds
+           rendered around the source when the map is zoomed in.
+           Populated by JS; cleared between runs. The flow lines fade
+           in as thin paths from source to a subset of nearby points. -->
+      <g class="hero-flow-layer" id="heroFlowLayer" aria-hidden="true"></g>
+      <g class="hero-supplier-layer" id="heroSupplierLayer" aria-hidden="true"></g>
+      <g class="hero-household-layer" id="heroHouseholdLayer" aria-hidden="true"></g>
+
       <!-- Floating value labels populated by JS over each lit state -->
       <g class="hero-value-layer" id="heroValueLayer" aria-hidden="true"></g>
 
@@ -193,6 +200,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         </g>
       </g>
     </svg>
+
+    <button type="button" class="hero-zoomout" id="heroZoomOut" aria-label="Back to overview">← Overview</button>
 
     <div class="hero-tooltip" id="heroTooltip" role="tooltip" aria-hidden="true">
       <span class="hero-tooltip__name" id="ttName">&mdash;</span>
@@ -216,8 +225,12 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
     <footer class="workspace__foot">
       <span class="workspace-legend">
-        <span class="workspace-legend__sw workspace-legend__sw--source"></span>
-        Lit area is where the activity happens. The expanding rings are a visual ripple, not a literal map of indirect or induced effects, which the table below quantifies.
+        <span class="workspace-legend__key">
+          <span class="workspace-legend__sw workspace-legend__sw--source"></span>Activity
+          <span class="workspace-legend__sw workspace-legend__sw--supplier"></span>Suppliers
+          <span class="workspace-legend__sw workspace-legend__sw--household"></span>Households
+        </span>
+        <span class="workspace-legend__note">Detail dots are an illustrative distribution. The table to the right is the full breakdown.</span>
       </span>
       <span class="workspace-attr">Geography: Census TIGER/Line. Multipliers illustrative.</span>
     </footer>
@@ -383,6 +396,133 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       // other state into ring 1 / ring 2; intentionally removed.
     };
 
+    /* ---------- viewBox zoom tween ---------- */
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const svgEl = document.getElementById('heroMap') as unknown as SVGSVGElement | null;
+    // The frontmatter VBX/VBY/VBW/VBH constants are baked into the
+    // initial viewBox attribute; we read them back here at runtime
+    // so the client doesn't need the server constants.
+    const initialVB = (svgEl?.getAttribute('viewBox') || '70 60 850 510').split(/\s+/).map(Number);
+    const overviewVB = [initialVB[0], initialVB[1], initialVB[2], initialVB[3]] as [number, number, number, number];
+    let zoomFrame: number | undefined;
+    const setVB = (vb: [number, number, number, number]) => {
+      svgEl?.setAttribute('viewBox', vb.join(' '));
+    };
+    const easeInOut = (t: number) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const tweenVB = (target: [number, number, number, number], dur = 700) => {
+      if (!svgEl) return Promise.resolve();
+      const cur = (svgEl.getAttribute('viewBox') || overviewVB.join(' ')).split(/\s+/).map(Number) as [number, number, number, number];
+      const t0 = performance.now();
+      return new Promise<void>(resolve => {
+        const step = (now: number) => {
+          const t = Math.min(1, (now - t0) / dur);
+          const e = easeInOut(t);
+          const next: [number, number, number, number] = [
+            cur[0] + (target[0] - cur[0]) * e,
+            cur[1] + (target[1] - cur[1]) * e,
+            cur[2] + (target[2] - cur[2]) * e,
+            cur[3] + (target[3] - cur[3]) * e,
+          ];
+          setVB(next);
+          if (t < 1) zoomFrame = requestAnimationFrame(step);
+          else resolve();
+        };
+        if (zoomFrame) cancelAnimationFrame(zoomFrame);
+        zoomFrame = requestAnimationFrame(step);
+      });
+    };
+
+    /* Zoom into a source point. The detail viewBox is centered on the
+       source with a small margin. Zoom level depends on the geography
+       size — tribal-land detail wants tighter zoom than state-level. */
+    const zoomTo = (cx: number, cy: number, span = 200) => {
+      const w = span;
+      const h = span * (overviewVB[3] / overviewVB[2]);
+      return tweenVB([cx - w / 2, cy - h / 2, w, h], 800);
+    };
+    const zoomOut = () => tweenVB(overviewVB, 700);
+
+    /* ---------- deterministic point cloud generators ----------
+       Suppliers: ~30 dots scattered with distance decay (some leak
+       far). Households: ~80 dots clustered tight to the source
+       (workers live near jobs). Seed comes from source coords so the
+       same study always shows the same dots. */
+    const seededRandom = (seed: number) => {
+      let s = seed;
+      return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    };
+    const makePointCloud = (cx: number, cy: number, count: number, maxRadius: number, decay: number, seedSalt: number) => {
+      const rand = seededRandom(Math.floor(cx * 1000 + cy * 7 + seedSalt));
+      const points: { x: number; y: number }[] = [];
+      for (let i = 0; i < count; i++) {
+        const r = rand();
+        const a = rand() * Math.PI * 2;
+        const dist = Math.pow(r, decay) * maxRadius;
+        points.push({ x: cx + Math.cos(a) * dist, y: cy + Math.sin(a) * dist });
+      }
+      return points;
+    };
+
+    const drawDetail = (cx: number, cy: number, radius: number) => {
+      const supplierLayer  = document.getElementById('heroSupplierLayer');
+      const householdLayer = document.getElementById('heroHouseholdLayer');
+      const flowLayer      = document.getElementById('heroFlowLayer');
+      if (!supplierLayer || !householdLayer || !flowLayer) return;
+      supplierLayer.innerHTML = '';
+      householdLayer.innerHTML = '';
+      flowLayer.innerHTML = '';
+
+      // Suppliers: spread (decay .8 — some leak far)
+      const suppliers = makePointCloud(cx, cy, 26, radius * 1.4, .8, 1);
+      suppliers.forEach((p, i) => {
+        const c = document.createElementNS(SVG_NS, 'circle');
+        c.setAttribute('class', 'hero-supplier');
+        c.setAttribute('cx', String(p.x));
+        c.setAttribute('cy', String(p.y));
+        c.setAttribute('r', '1.6');
+        c.style.setProperty('--dd', `${i * 35}ms`);
+        supplierLayer.appendChild(c);
+      });
+
+      // Households: tight cluster (decay 2.4 — clearly local)
+      const households = makePointCloud(cx, cy, 70, radius * .85, 2.4, 7);
+      households.forEach((p, i) => {
+        const c = document.createElementNS(SVG_NS, 'circle');
+        c.setAttribute('class', 'hero-household');
+        c.setAttribute('cx', String(p.x));
+        c.setAttribute('cy', String(p.y));
+        c.setAttribute('r', '1.2');
+        c.style.setProperty('--dd', `${i * 14 + 200}ms`);
+        householdLayer.appendChild(c);
+      });
+
+      // Flow lines: 6 thin curves from source to nearest suppliers
+      const nearest = [...suppliers]
+        .map(p => ({ p, d: Math.hypot(p.x - cx, p.y - cy) }))
+        .sort((a, b) => a.d - b.d)
+        .slice(0, 6);
+      nearest.forEach(({ p }, i) => {
+        const path = document.createElementNS(SVG_NS, 'path');
+        path.setAttribute('class', 'hero-flow');
+        // Quadratic bezier with a slight perpendicular offset for an arc
+        const mx = (cx + p.x) / 2;
+        const my = (cy + p.y) / 2;
+        const dx = p.x - cx, dy = p.y - cy;
+        const offset = 4;
+        const ox = -dy / Math.hypot(dx, dy) * offset;
+        const oy =  dx / Math.hypot(dx, dy) * offset;
+        path.setAttribute('d', `M ${cx} ${cy} Q ${mx + ox} ${my + oy} ${p.x} ${p.y}`);
+        path.style.setProperty('--dd', `${i * 80 + 400}ms`);
+        flowLayer.appendChild(path);
+      });
+    };
+
+    const clearDetail = () => {
+      ['heroSupplierLayer', 'heroHouseholdLayer', 'heroFlowLayer'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.innerHTML = '';
+      });
+    };
+
     const moveSource = (cx: number, cy: number) => {
       source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
         c.setAttribute('cx', String(cx));
@@ -425,7 +565,22 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
       shadeNeighbors(stateId);
       moveSource(src.cx, src.cy);
+      clearDetail();
       stage.dataset.run = '1';
+      stage.dataset.zoom = '1';
+
+      // Zoom into the source. Tighter for tribal-land sources (where
+      // the polygon is small), wider for state-level (where the
+      // source is the state centroid). Span values are in viewBox units.
+      const zoomSpan = opts?.sourcePoint ? 90 : 200;
+      const dotRadius = opts?.sourcePoint ? 30 : 70;
+      zoomTo(src.cx, src.cy, zoomSpan);
+      // Render the detail dots after the zoom starts so they appear
+      // already in the zoomed frame.
+      window.setTimeout(() => {
+        if (runId !== me) return;
+        drawDetail(src.cx, src.cy, dotRadius);
+      }, 250);
 
       const wsStatus = document.getElementById('workspaceStatus');
       const wsLabel = document.getElementById('workspaceStatusLabel');
@@ -494,6 +649,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       const wsLabelDone = document.getElementById('workspaceStatusLabel');
       if (wsStatusDone) wsStatusDone.dataset.state = 'complete';
       if (wsLabelDone) wsLabelDone.textContent = 'Complete';
+
+      // After a beat in the detail view, return to overview so the
+      // visitor sees the full map again before the next study fires.
+      await wait(2400);
+      if (runId !== me) return;
+      stage.dataset.zoom = '';
+      clearDetail();
+      await zoomOut();
     };
 
     let sceneIdx = 0;
@@ -541,6 +704,16 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         if (stage) stage.dataset.layer = layer;
       });
     });
+
+    /* ---------- "Overview" zoom-out button ---------- */
+    const zoomOutBtn = document.getElementById('heroZoomOut');
+    if (zoomOutBtn) {
+      zoomOutBtn.addEventListener('click', async () => {
+        stage.dataset.zoom = '';
+        clearDetail();
+        await zoomOut();
+      });
+    }
 
     /* ---------- "Run again" button ---------- */
     const wsAgain = document.getElementById('workspaceAgain');
