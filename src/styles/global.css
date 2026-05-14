@@ -38,7 +38,7 @@
   --error-color: #DC2626;
   --gold-hover: #FFC83D;
   --gold-btn-hover: #C98906;
-  color-scheme: light dark;
+  color-scheme: light;
 
   /* Type system — Inter for everything except mono marginalia.
      A modern software brand uses one sans aggressively across all
@@ -65,24 +65,12 @@
   --weight-black:   800;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --white: #0E1530;
-    --cream: #181E3A;
-    --paper: #1F2548;
-    --navy: #FCFAF3;
-    --navy2: #E5E7EE;
-    --navy-soft: rgba(252, 250, 243, .78);
-    --ink: #FCFAF3;
-    --ink-2: #C2C7DA;
-    --ink-3: #8B91A8;
-    --ink-4: #5D627A;
-    --rule: rgba(252, 250, 243, .12);
-    --rule-strong: rgba(252, 250, 243, .24);
-    --gold: #E8C661;
-    --gold-light: #F4DC8C;
-  }
-}
+/* Dark-mode flip removed. We intentionally lock to the light palette
+   so the marketing site renders the same regardless of OS theme.
+   The previous prefers-color-scheme rule swapped --white and --navy
+   tokens, but many components carry hard-coded rgba(255,255,255,X)
+   text colors that expect a navy surface — when the tokens flipped,
+   those texts went white-on-white on iOS dark mode. */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
