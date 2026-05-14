@@ -1,13 +1,10 @@
-/* Why this matters — modern software section.
-   White background, big sans display, two product-style cards. */
-
 .why {
-  background: var(--cream);
-  padding: clamp(5rem, 10vw, 8rem) 0;
+  background: var(--white);
+  padding: clamp(5rem, 9vw, 7rem) 0;
   border-bottom: 1px solid var(--rule);
 }
 .why-inner {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
   display: grid;
@@ -15,76 +12,55 @@
   gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
 }
-
-.why-col { color: var(--ink); }
 .why-stamp {
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .12em;
-  color: var(--navy);
-  margin: 0 0 1.2rem;
+  font-size: .7rem;
+  letter-spacing: .14em;
+  color: var(--ink-3);
+  font-weight: 500;
   text-transform: uppercase;
-  font-weight: 600;
+  margin: 0 0 1.2rem;
 }
 .why-lede {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(1.85rem, 4vw, 3.4rem);
-  line-height: 1.05;
-  letter-spacing: -.03em;
-  color: var(--ink);
-  margin: 0 0 1.6rem;
-  max-width: 20ch;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  color: var(--navy);
+  margin: 0 0 1.4rem;
+  max-width: 22ch;
 }
-.why-lede em { font-style: normal; color: var(--terra-dark); font-weight: 800; }
+.why-lede em { font-style: italic; color: inherit; font-weight: inherit; }
 .why-body {
-  font-size: 1.06rem;
+  font-size: 1.02rem;
   line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
-  max-width: 36em;
+  max-width: 38em;
+  font-weight: 400;
 }
-
-.why-aside {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+.why-aside { display: flex; flex-direction: column; gap: 1rem; }
 .why-card {
   background: var(--white);
-  padding: clamp(1.2rem, 2.2vw, 1.6rem);
-  border-radius: 10px;
+  padding: 1.4rem 1.4rem;
+  border-radius: 6px;
   border: 1px solid var(--rule);
-  position: relative;
-  overflow: hidden;
 }
-.why-card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--gold);
-}
-.why-card--alt::before { background: var(--cedar); }
 .why-card__head {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.15rem;
-  line-height: 1.25;
-  letter-spacing: -.015em;
-  color: var(--ink);
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  letter-spacing: -.012em;
+  color: var(--navy);
   margin: 0 0 .55rem;
-  padding-left: .5rem;
 }
 .why-card__body {
   font-size: .94rem;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  padding-left: .5rem;
+  font-weight: 400;
 }
-
-@media (max-width: 880px) {
-  .why-inner { grid-template-columns: 1fr; }
-}
+@media (max-width: 880px) { .why-inner { grid-template-columns: 1fr; } }

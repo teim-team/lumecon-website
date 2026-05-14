@@ -26,10 +26,9 @@
    an embedded mini-product, not as a marketing illustration. */
 .workspace {
   background: var(--white);
-  border: 1px solid var(--rule-strong);
-  border-radius: 12px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 1px 2px rgba(14, 21, 48, .04), 0 8px 24px rgba(14, 21, 48, .06);
 }
 .workspace__bar {
   display: flex;
@@ -144,28 +143,20 @@
 /* AIANNH overlay: interactive now. Quiet by default; lights up on
    hover/focus so a visitor sees they can click it. */
 .hero-aiannh {
-  fill: var(--terra);
-  fill-opacity: .32;
-  stroke: var(--terra-dark);
-  stroke-width: .35;
+  fill: var(--ink-3);
+  fill-opacity: .22;
+  stroke: var(--navy);
+  stroke-width: .3;
   vector-effect: non-scaling-stroke;
   cursor: pointer;
-  transition: fill-opacity .25s var(--ease), stroke-width .25s var(--ease);
+  transition: fill-opacity .15s var(--ease), fill .15s var(--ease);
   outline: none;
 }
 .hero-aiannh:hover, .hero-aiannh:focus-visible {
-  fill-opacity: .72;
-  stroke-width: .9;
+  fill: var(--terra);
+  fill-opacity: .65;
 }
-.hero-aiannh--anvsa,
-.hero-aiannh--nhhl {
-  fill: var(--gold);
-  fill-opacity: .55;
-  stroke: var(--terra-dark);
-}
-.hero-aiannh--anvsa:hover, .hero-aiannh--anvsa:focus-visible,
-.hero-aiannh--nhhl:hover,  .hero-aiannh--nhhl:focus-visible { fill-opacity: .92; }
-.hero-aiannh--otsa { fill-opacity: .22; }
+.hero-aiannh--otsa { fill-opacity: .16; }
 
 /* State paths */
 .hero-state {
@@ -263,8 +254,8 @@
   margin: 0;
   max-width: 64ch;
 }
-.hero-narration em { font-style: normal; color: var(--navy); font-weight: 700; }
-.hero-narration strong { font-weight: 700; color: var(--navy); }
+.hero-narration em { font-style: italic; color: inherit; font-weight: inherit; }
+.hero-narration strong { font-weight: 600; }
 .hero-narration__line { opacity: 0; transition: opacity .5s var(--ease); }
 .hero-narration__line.is-in { opacity: 1; }
 
@@ -304,7 +295,7 @@
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
-.hero-fig--total dd { color: var(--gold); font-weight: 800; }
+.hero-fig--total dd { color: var(--navy); }
 
 /* ---------- Ask Cedar (one-shot Q + A; closed by default) ---------- */
 .ask-cedar {
@@ -397,8 +388,8 @@
   transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
 .ask-cedar__answer.is-in { opacity: 1; transform: none; }
-.ask-cedar__answer em { font-style: normal; color: var(--navy); font-weight: 700; }
-.ask-cedar__answer strong { font-weight: 700; color: var(--navy); }
+.ask-cedar__answer em { font-style: italic; color: inherit; font-weight: inherit; }
+.ask-cedar__answer strong { font-weight: 600; }
 .ask-cedar__answer:empty { display: none; }
 
 /* ---------- footer marginalia ---------- */

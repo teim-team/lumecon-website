@@ -145,9 +145,11 @@ body::after {
 }
 
 a { color: inherit; text-decoration: none; }
-h1, h2, h3 { font-family: var(--font-display); line-height: 1.06; }
-h1, h2 { font-weight: 800; letter-spacing: -.025em; }
-h3 { font-weight: 700; letter-spacing: -.015em; line-height: 1.15; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.08; }
+h1, h2 { font-weight: 600; letter-spacing: -.02em; color: var(--navy); }
+h3 { font-weight: 600; letter-spacing: -.012em; line-height: 1.2; color: var(--navy); }
+em { font-style: italic; color: inherit; font-weight: inherit; }
+strong { font-weight: 600; color: inherit; }
 .mono { font-family: var(--font-mono); }
 
 /* Container utility */
@@ -204,32 +206,27 @@ h3 { font-weight: 700; letter-spacing: -.015em; line-height: 1.15; }
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: .55rem;
-  padding: .85rem 1.4rem;
+  gap: .5rem;
+  padding: .8rem 1.3rem;
   font-family: var(--font-sans);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -.008em;
-  border-radius: 6px;
-  border: 1.5px solid var(--navy);
+  font-size: .95rem;
+  font-weight: 500;
+  letter-spacing: -.005em;
+  border-radius: 4px;
+  border: 1px solid var(--navy);
   cursor: pointer;
-  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease), transform .15s var(--ease), box-shadow .15s var(--ease);
+  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
   background: var(--navy);
   color: var(--white);
   text-decoration: none;
-  box-shadow: 0 1px 2px rgba(14, 21, 48, .08);
 }
-.btn::after { content: '→'; font-size: 1em; line-height: 0; transform: translateY(.06em); transition: transform .15s var(--ease); }
-.btn:hover { background: var(--navy2); border-color: var(--navy2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14, 21, 48, .14); }
-.btn:hover::after { transform: translate(.18em, .06em); }
-.btn--ghost { background: transparent; color: var(--navy); box-shadow: none; border-color: var(--rule-strong); }
-.btn--ghost::after { content: ''; }
-.btn--ghost:hover { background: var(--cream); color: var(--navy); border-color: var(--navy); }
+.btn:hover { background: var(--navy2); border-color: var(--navy2); }
+.btn--ghost { background: transparent; color: var(--navy); border-color: var(--rule-strong); }
+.btn--ghost:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
 .btn--invert { background: var(--white); color: var(--navy); border-color: var(--white); }
-.btn--invert:hover { background: var(--cream); border-color: var(--cream); color: var(--navy); }
+.btn--invert:hover { background: rgba(255,255,255,.9); }
 .btn--invert-ghost { background: transparent; color: var(--white); border-color: rgba(255, 255, 255, .35); }
-.btn--invert-ghost::after { content: ''; }
-.btn--invert-ghost:hover { background: rgba(255, 255, 255, .08); color: var(--white); border-color: var(--white); }
+.btn--invert-ghost:hover { background: rgba(255, 255, 255, .08); border-color: var(--white); }
 
 /* Scroll progress indicator */
 .scroll-progress {
