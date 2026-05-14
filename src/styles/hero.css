@@ -5,31 +5,118 @@
    permanent chat panel; no stacking message log. */
 
 .hero {
-  background: var(--cream);
+  background: var(--white);
   border-bottom: 1px solid var(--rule);
   position: relative;
   padding: clamp(6rem, 11vh, 9rem) var(--container-pad) clamp(2.6rem, 5vh, 4rem);
   display: grid;
   gap: clamp(1.1rem, 2vw, 1.7rem);
 }
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: url('/textures/paper-grain.svg');
-  background-size: 380px;
-  opacity: .15;
-  mix-blend-mode: multiply;
-}
 .hero > * { position: relative; z-index: 1; }
 
 .hero-brand,
-.hero-stage,
-.hero-narration,
-.hero-figs,
-.ask-cedar,
+.workspace,
 .hero-foot { max-width: 1240px; margin-left: auto; margin-right: auto; width: 100%; }
+
+/* ---------- workspace panel ----------
+   Frames the map + result + Cedar as one credible product UI block.
+   Header bar with mode + engine + status fields; body holds the
+   map and figures and the Ask Cedar expander; footer carries the
+   methodology line. This is the move that makes the hero read as
+   an embedded mini-product, not as a marketing illustration. */
+.workspace {
+  background: var(--white);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(14, 21, 48, .04), 0 8px 24px rgba(14, 21, 48, .06);
+}
+.workspace__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem 1.1rem;
+  background: var(--cream);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--ink-2);
+  letter-spacing: -.005em;
+  flex-wrap: wrap;
+}
+.workspace__title {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 600;
+  color: var(--navy);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.workspace__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--cedar-light);
+  box-shadow: 0 0 6px rgba(63, 136, 102, .55);
+}
+.workspace__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.workspace__meta-k {
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .58rem;
+  font-weight: 600;
+}
+.workspace__meta-v {
+  color: var(--ink);
+  font-weight: 500;
+}
+.workspace__meta-v--ok { color: var(--cedar); }
+.workspace__meta-v--run { color: var(--gold); }
+.workspace__sep {
+  width: 1px;
+  height: 12px;
+  background: var(--rule-strong);
+  margin: 0 .25rem;
+}
+.workspace__body {
+  padding: clamp(1.2rem, 2vw, 1.8rem);
+  display: grid;
+  gap: clamp(1rem, 1.6vw, 1.4rem);
+}
+.workspace__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem 1.1rem;
+  border-top: 1px solid var(--rule);
+  background: var(--cream);
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  color: var(--ink-3);
+  letter-spacing: -.002em;
+  flex-wrap: wrap;
+}
+.workspace__foot-l { max-width: 80%; line-height: 1.5; }
+.workspace__foot-r {
+  white-space: nowrap;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+@media (max-width: 720px) {
+  .workspace__bar, .workspace__foot { font-size: .6rem; gap: .5rem; padding: .55rem .8rem; }
+  .workspace__meta-k { font-size: .54rem; }
+  .workspace__foot-l { max-width: 100%; }
+  .workspace__sep { display: none; }
+}
 
 /* ---------- brand: logo + pitch + platform pills ---------- */
 .hero-brand {
@@ -140,13 +227,13 @@
 .hero-state[data-ring="1"] { fill: var(--gold);  fill-opacity: .22; }
 .hero-state[data-ring="2"] { fill: var(--gold);  fill-opacity: .10; }
 
-/* Source point */
-.hero-source { opacity: 0; transition: opacity .5s var(--ease); }
+/* Source point — restrained, not a decorative glow. */
+.hero-source { opacity: 0; transition: opacity .4s var(--ease); }
 .hero-stage[data-run="1"] .hero-source { opacity: 1; }
-.hero-glow { opacity: 0; transition: opacity .6s var(--ease); }
-.hero-stage[data-run="1"] .hero-glow { opacity: .55; }
-.hero-spark        { fill: var(--gold); filter: drop-shadow(0 0 10px rgba(196, 154, 60, .6)); }
-.hero-spark__core  { fill: var(--white); stroke: var(--navy); stroke-width: .8; }
+.hero-glow { opacity: 0; transition: opacity .5s var(--ease); }
+.hero-stage[data-run="1"] .hero-glow { opacity: .35; }
+.hero-spark        { fill: var(--navy); }
+.hero-spark__core  { fill: var(--gold); stroke: var(--navy); stroke-width: .8; }
 
 @keyframes heroRippleA { 0% { r: 14; opacity: .9; stroke-width: 2.6; } 90% { r: 320; opacity: 0; stroke-width: .4; } 100% { r: 320; opacity: 0; } }
 .hero-ring {
@@ -214,27 +301,25 @@
 /* ---------- result narration (replaces persistent chat) ---------- */
 .hero-narration {
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  font-variation-settings: "opsz" 36;
-  font-size: clamp(1.05rem, 1.65vw, 1.4rem);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.55vw, 1.32rem);
   line-height: 1.45;
-  color: var(--navy);
+  letter-spacing: -.012em;
+  color: var(--ink);
   margin: 0;
   max-width: 64ch;
 }
-.hero-narration em { font-style: italic; color: var(--gold); font-weight: 500; }
-.hero-narration strong { font-style: normal; font-weight: 700; }
+.hero-narration em { font-style: normal; color: var(--navy); font-weight: 700; }
+.hero-narration strong { font-weight: 700; color: var(--navy); }
 .hero-narration__from {
   font-family: var(--font-mono);
-  font-style: normal;
-  font-size: .56rem;
-  letter-spacing: .18em;
+  font-size: .62rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--navy);
-  opacity: .42;
-  margin-right: .7rem;
-  vertical-align: .22em;
+  color: var(--ink-3);
+  margin-right: .8rem;
+  vertical-align: .18em;
+  font-weight: 500;
 }
 .hero-narration__line { opacity: 0; transition: opacity .5s var(--ease); }
 .hero-narration__line.is-in { opacity: 1; }
@@ -267,16 +352,15 @@
 }
 .hero-fig dd {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(1.2rem, 2vw, 1.7rem);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2.1vw, 1.85rem);
   color: var(--navy);
-  letter-spacing: -.012em;
+  letter-spacing: -.025em;
   line-height: 1;
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
-.hero-fig--total dd { color: var(--gold); }
+.hero-fig--total dd { color: var(--gold); font-weight: 800; }
 
 /* ---------- Ask Cedar (one-shot Q + A; closed by default) ---------- */
 .ask-cedar {
@@ -298,9 +382,10 @@
 .ask-cedar__summary::-webkit-details-marker { display: none; }
 .ask-cedar__lead {
   font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.05rem;
-  color: var(--cedar);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--navy);
+  letter-spacing: -.01em;
 }
 .ask-cedar__hint {
   font-family: var(--font-mono);
@@ -353,23 +438,23 @@
 .ask-cedar__send:hover { background: var(--gold); color: var(--navy); }
 
 .ask-cedar__answer {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-variation-settings: "opsz" 36;
-  font-size: clamp(.98rem, 1.5vw, 1.18rem);
-  line-height: 1.5;
-  color: var(--navy);
+  font-family: var(--font-sans);
+  font-size: clamp(.98rem, 1.4vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--ink-2);
   margin: 0 0 1.2rem;
-  padding-left: 1rem;
-  border-left: 2px solid var(--cedar);
+  padding: 1rem 1.2rem;
+  background: var(--cream);
+  border-left: 3px solid var(--cedar);
+  border-radius: 0 6px 6px 0;
   max-width: 64ch;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
 .ask-cedar__answer.is-in { opacity: 1; transform: none; }
-.ask-cedar__answer em { font-style: italic; color: var(--gold); font-weight: 500; }
-.ask-cedar__answer strong { font-style: normal; font-weight: 700; }
+.ask-cedar__answer em { font-style: normal; color: var(--navy); font-weight: 700; }
+.ask-cedar__answer strong { font-weight: 700; color: var(--navy); }
 .ask-cedar__answer:empty { display: none; }
 
 /* ---------- footer marginalia ---------- */

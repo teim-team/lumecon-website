@@ -1,106 +1,107 @@
-/* Platforms — three full-width magazine spreads, not tiles.
-   Each platform is a horizontal row: oversized Fraunces name on
-   the left, a single tight paragraph on the right, a status line
-   beneath. Hairline rule between rows; no card chrome, no icons,
-   no numbered pills, no decorative SVG. */
+/* Platforms — modern software product tiles.
+   Three rows on a white surface. Each row is a real product card with
+   a name in big sans, a description, and a hover state that lifts. */
 
 .platforms {
-  background: var(--white);
+  background: var(--cream);
   padding: clamp(5rem, 10vw, 9rem) 0;
+  border-bottom: 1px solid var(--rule);
 }
 .platforms-inner {
-  max-width: 1140px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
 
-.platforms-head { margin-bottom: clamp(3rem, 6vw, 5rem); max-width: 50rem; }
+.platforms-head { margin-bottom: clamp(2.5rem, 5vw, 4rem); max-width: 60rem; }
 .platforms-eyebrow {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
   color: var(--navy);
-  opacity: .55;
   margin: 0 0 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 .platforms-lead {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 144;
-  font-weight: 400;
-  font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 1.02;
-  letter-spacing: -.022em;
-  color: var(--navy);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 4.4vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -.03em;
+  color: var(--ink);
   margin: 0;
 }
-.platforms-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
+.platforms-lead em { font-style: normal; color: var(--gold); font-weight: 800; }
 
-/* A spread per platform. Hairline above, generous vertical breathing,
-   nothing decorative. The platform's accent color appears once — on
-   the URL — and the hover state lifts the name slightly in that color. */
 .platform {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(1.5rem, 5vw, 4rem);
-  align-items: baseline;
-  padding: clamp(2rem, 4vw, 3rem) 0;
-  border-top: 1px solid var(--rule);
-  color: var(--navy);
-  transition: color .25s var(--ease);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) auto;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  padding: clamp(1.8rem, 3vw, 2.4rem);
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
   position: relative;
+  margin-bottom: .9rem;
 }
-.platform:last-child { border-bottom: 1px solid var(--rule); }
+.platform:last-child { margin-bottom: 0; }
+.platform::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--p-color, var(--navy));
+  border-radius: 12px 0 0 12px;
+}
+.platform:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(14, 21, 48, .12);
+  border-color: var(--p-color);
+}
 
-.platform__name-wrap { display: flex; flex-direction: column; }
+.platform__name-wrap { display: flex; flex-direction: column; padding-left: .4rem; }
 .platform__name {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 144;
-  font-weight: 400;
-  font-size: clamp(1.9rem, 4.5vw, 3.4rem);
-  line-height: 1;
-  letter-spacing: -.018em;
-  color: var(--navy);
-  margin: 0 0 .55rem;
-  transition: color .25s var(--ease), transform .25s var(--ease);
-  max-width: 13ch;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.6vw, 2.05rem);
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  color: var(--ink);
+  margin: 0 0 .35rem;
 }
 .platform__url {
   font-family: var(--font-mono);
-  font-size: .82rem;
+  font-size: .78rem;
   letter-spacing: .02em;
   color: var(--p-color, var(--navy));
-  opacity: .85;
+  font-weight: 500;
 }
-
 .platform__desc {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: var(--navy);
-  opacity: .82;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink-2);
   margin: 0;
-  max-width: 44ch;
 }
-
 .platform__status {
-  position: absolute;
-  right: 0;
-  top: clamp(2rem, 4vw, 3rem);
   font-family: var(--font-mono);
-  font-size: .68rem;
-  letter-spacing: .12em;
+  font-size: .66rem;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--navy);
-  opacity: .45;
+  color: var(--ink-3);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-.platform--local  { --p-color: var(--blue); }
+.platform--local  { --p-color: var(--blue);  }
 .platform--tribal { --p-color: var(--terra); }
 .platform--global { --p-color: var(--cedar); }
 
-.platform:hover .platform__name { color: var(--p-color); transform: translateX(.15em); }
-
-@media (max-width: 760px) {
-  .platform { grid-template-columns: 1fr; gap: 1rem; padding: 2rem 0; }
-  .platform__status { position: static; margin-top: .8rem; }
-  .platform__name { font-size: clamp(1.8rem, 9vw, 2.6rem); max-width: none; }
+@media (max-width: 880px) {
+  .platform { grid-template-columns: 1fr; gap: 1rem; padding: 1.4rem; }
+  .platform__status { font-size: .6rem; }
 }
