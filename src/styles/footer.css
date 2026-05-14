@@ -59,8 +59,14 @@
 }
 .footer-cols {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1.2rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(1.2rem, 2.4vw, 2rem);
+}
+.footer-static {
+  font-size: .9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, .55);
+  line-height: 1.45;
 }
 .footer-col { display: flex; flex-direction: column; gap: .55rem; }
 .footer-col__head {
@@ -101,6 +107,9 @@
 }
 .footer-email:hover { color: var(--gold); }
 
+@media (max-width: 1100px) {
+  .footer-cols { grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+}
 @media (max-width: 900px) {
   .footer-top { grid-template-columns: 1fr; }
   .footer-cols { grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
