@@ -63,36 +63,20 @@ const statesJson = JSON.stringify(
 const codeMapJson = JSON.stringify(CODE_TO_ID);
 ---
 <section class="hero" id="top">
-  <!-- Brand block — wordmark + pitch + platform pills -->
   <div class="hero-brand">
     <a href="/" class="hero-mark" aria-label="Lumecon Inc.">
       <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="320" height="56" />
     </a>
     <p class="hero-pitch">
-      Economic and policy analysis software for governments. Parent of three platforms &mdash;
-      <a href="#products" class="platform-pill platform-pill--local"><span class="platform-pill__dot"></span>Local</a>
-      <a href="#products" class="platform-pill platform-pill--tribal"><span class="platform-pill__dot"></span>Tribal</a>
-      <a href="#products" class="platform-pill platform-pill--global"><span class="platform-pill__dot"></span>Global</a>.
+      Economic and policy analysis software for governments.
     </p>
   </div>
 
-  <!-- Workspace — frames the map + study + assistant as one product-style panel.
-       Header bar gives it a credible "tool" reading, not a decorative demo. -->
   <div class="workspace" id="heroWorkspace">
     <header class="workspace__bar">
       <span class="workspace__title">
-        <span class="workspace__dot" aria-hidden="true"></span>
-        Economic impact workspace
-      </span>
-      <span class="workspace__meta">
-        <span class="workspace__meta-k">Mode</span>
-        <span class="workspace__meta-v">Live study</span>
-        <span class="workspace__sep" aria-hidden="true"></span>
-        <span class="workspace__meta-k">Engine</span>
-        <span class="workspace__meta-v">Lumecon &middot; mock multipliers</span>
-        <span class="workspace__sep" aria-hidden="true"></span>
-        <span class="workspace__meta-k">Status</span>
-        <span class="workspace__meta-v workspace__meta-v--ok" id="workspaceStatus">Ready</span>
+        <span class="workspace__dot" id="workspaceStatus" aria-hidden="true"></span>
+        Impact study
       </span>
     </header>
 
@@ -165,10 +149,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     </div>
   </figure>
 
-  <!-- Result text — one editorial narration line, single source of truth. -->
   <p class="hero-narration">
-    <span class="hero-narration__from">Cedar</span>
-    <span class="hero-narration__line" id="heroLine">An impact study traces a dollar through the economy. Click any state &mdash; or any tribal land &mdash; and watch it run.</span>
+    <span class="hero-narration__line" id="heroLine">Click any state or reservation to run an impact study there.</span>
   </p>
 
   <!-- Live figures -->
@@ -180,12 +162,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     <div class="hero-fig hero-fig--derived" id="figJobsCell"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
   </dl>
 
-  <!-- Ask Cedar — quiet expander. Single Q + single A. No chat log.
-       Closed by default; visitor opens it only if they have a question. -->
   <details class="ask-cedar" id="askCedar">
     <summary class="ask-cedar__summary">
       <span class="ask-cedar__lead">Ask Cedar</span>
-      <span class="ask-cedar__hint">what&rsquo;s a direct effect, who is Cedar, what&rsquo;s a ledger&hellip;</span>
       <span class="ask-cedar__chev" aria-hidden="true">+</span>
     </summary>
     <form class="ask-cedar__form" id="askCedarForm" autocomplete="off">
@@ -204,16 +183,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   </details>
 
     </div>
-
-    <footer class="workspace__foot">
-      <span class="workspace__foot-l">Methodology &middot; mock IO multipliers, three-round Direct/Indirect/Induced decomposition. Real platforms use sourced multipliers (RIMS II, IMPLAN, BEA RIMS &middot; tribal economy adapter in development).</span>
-      <span class="workspace__foot-r">v 0.7.0 &middot; preview</span>
-    </footer>
   </div>
-
-  <p class="hero-foot">
-    Illustrative multipliers; the real platform runs cite every number. Tribal-land geography from Census TIGER/Line &mdash; click any reservation.
-  </p>
 
   <script type="application/json" id="heroStates"  set:html={statesJson}></script>
   <script type="application/json" id="heroCodeMap" set:html={codeMapJson}></script>
@@ -361,9 +331,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       moveSource(src.cx, src.cy);
       stage.dataset.run = '1';
 
-      // Workspace status: Running
       const wsStatus = document.getElementById('workspaceStatus');
-      if (wsStatus) { wsStatus.textContent = 'Running'; wsStatus.classList.remove('workspace__meta-v--ok'); wsStatus.classList.add('workspace__meta-v--run'); }
+      if (wsStatus) wsStatus.dataset.state = 'running';
 
       setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
@@ -396,9 +365,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       tickInt(figJ as HTMLElement, jobs, '≈ ', 950);
       setLine(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`);
 
-      // Workspace status: Complete
       const wsStatusDone = document.getElementById('workspaceStatus');
-      if (wsStatusDone) { wsStatusDone.textContent = 'Complete'; wsStatusDone.classList.remove('workspace__meta-v--run'); wsStatusDone.classList.add('workspace__meta-v--ok'); }
+      if (wsStatusDone) wsStatusDone.dataset.state = 'complete';
     };
 
     let sceneIdx = 0;
