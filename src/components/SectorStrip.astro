@@ -1,0 +1,47 @@
+---
+/**
+ * Sector strip — "Built for" + "Built at" below the hero.
+ *
+ * The pattern ESRI, IBM, Microsoft Industry pages use: a horizontal
+ * strip immediately under the hero that names the sectors served +
+ * the institutions backing the work. Communicates scope + credibility
+ * in one band, before any other section opens.
+ */
+import '../styles/sector.css';
+---
+<section class="sector" aria-label="Who Lumecon is built for, and who's building it">
+  <div class="sector__inner">
+
+    <div class="sector__col sector__col--for">
+      <p class="sector__head">Built for</p>
+      <ul class="sector__list">
+        <li>Municipal governments</li>
+        <li>Tribal nations &amp; tribal enterprises</li>
+        <li>State agencies</li>
+        <li>Federal programs</li>
+        <li>Universities &amp; research labs</li>
+        <li>Foundations &amp; CDFIs</li>
+        <li>Economic development organizations</li>
+      </ul>
+    </div>
+
+    <div class="sector__col sector__col--at">
+      <p class="sector__head">Built at</p>
+      <ul class="sector__list sector__list--inst">
+        <li>
+          <span class="sector__inst">Cornell University</span>
+          <span class="sector__sub">Brooks School of Public Policy</span>
+        </li>
+        <li>
+          <span class="sector__inst">Cornell Law</span>
+          <span class="sector__sub">Entrepreneurship Law Clinic, counsel</span>
+        </li>
+        <li>
+          <span class="sector__inst">Dartmouth College</span>
+          <span class="sector__sub">Founder's alma mater</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>

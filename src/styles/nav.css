@@ -85,13 +85,113 @@ nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
 .nav-links .nav-cta {
   padding: .5rem 1rem;
   background: var(--navy);
-  color: var(--cream);
+  color: var(--white);
   margin-left: .5rem;
-  font-weight: 700;
-  letter-spacing: .02em;
+  font-weight: 600;
+  letter-spacing: -.008em;
+  border-radius: 6px;
 }
 .nav-links .nav-cta::after { content: none; }
-.nav-links .nav-cta:hover { background: var(--gold); color: var(--navy); }
+.nav-links .nav-cta:hover { background: var(--navy2); }
+
+/* Platforms dropdown — modern enterprise nav.
+   Hover or click to open. Each item carries its platform color dot
+   and a one-line description. Like Microsoft surfacing Surface /
+   Windows / Xbox at first paint. */
+.nav-dd { position: relative; }
+.nav-dd__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--font-sans);
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: -.008em;
+  color: var(--navy);
+  background: transparent;
+  border: 0;
+  padding: .45rem .85rem;
+  cursor: pointer;
+  border-radius: 6px;
+  position: relative;
+}
+.nav-dd__toggle::after {
+  content: '';
+  position: absolute;
+  left: .85rem;
+  right: .85rem;
+  bottom: .25rem;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s var(--ease);
+}
+.nav-dd__toggle:hover::after,
+.nav-dd.is-open .nav-dd__toggle::after { transform: scaleX(1); }
+.nav-dd__chev {
+  font-size: .65em;
+  transition: transform .2s var(--ease);
+  opacity: .7;
+}
+.nav-dd.is-open .nav-dd__chev { transform: rotate(-180deg); }
+
+.nav-dd__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 380px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(14, 21, 48, .06), 0 16px 40px rgba(14, 21, 48, .14);
+  padding: .6rem;
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity .15s var(--ease), transform .15s var(--ease), visibility .15s;
+  z-index: 200;
+}
+.nav-dd.is-open .nav-dd__panel { opacity: 1; visibility: visible; transform: none; }
+.nav-dd__item {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: .65rem .75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background .12s var(--ease);
+}
+.nav-dd__item:hover, .nav-dd__item:focus-visible { background: var(--cream); outline: none; }
+.nav-dd__dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: .55rem;
+  flex: 0 0 auto;
+}
+.nav-dd__dot[data-c="local"]  { background: var(--blue);  }
+.nav-dd__dot[data-c="tribal"] { background: var(--terra); }
+.nav-dd__dot[data-c="global"] { background: var(--cedar); }
+.nav-dd__body { display: flex; flex-direction: column; min-width: 0; }
+.nav-dd__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .96rem;
+  color: var(--navy);
+  letter-spacing: -.01em;
+  line-height: 1.25;
+}
+.nav-dd__desc {
+  font-family: var(--font-sans);
+  font-size: .8rem;
+  color: var(--ink-3);
+  line-height: 1.45;
+  margin-top: .12rem;
+}
 
 .hamburger {
   display: none;

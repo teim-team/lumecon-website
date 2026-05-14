@@ -1,10 +1,11 @@
 ---
-import { site, navLinks } from '../config';
+import { site } from '../config';
 interface Props {
   isHome?: boolean;
 }
 const { isHome = false } = Astro.props;
 const prefix = isHome ? '' : '/';
+const { local, tribal, global: globalProduct } = site.products;
 ---
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
@@ -12,9 +13,37 @@ const prefix = isHome ? '' : '/';
       <img src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.name} width="160" height="36" />
     </a>
     <div class="nav-links" id="navLinks">
-      {navLinks.map(link => (
-        <a href={`${prefix}${link.href}`}>{link.label}</a>
-      ))}
+      <div class="nav-dd">
+        <button type="button" class="nav-dd__toggle" aria-haspopup="true" aria-expanded="false">
+          Platforms <span class="nav-dd__chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="nav-dd__panel" role="menu">
+          <a class="nav-dd__item" href={local.url} role="menuitem">
+            <span class="nav-dd__dot" data-c="local"></span>
+            <span class="nav-dd__body">
+              <span class="nav-dd__name">{local.name}</span>
+              <span class="nav-dd__desc">For municipalities, EDOs, and enterprises.</span>
+            </span>
+          </a>
+          <a class="nav-dd__item" href={tribal.url} role="menuitem">
+            <span class="nav-dd__dot" data-c="tribal"></span>
+            <span class="nav-dd__body">
+              <span class="nav-dd__name">{tribal.name}</span>
+              <span class="nav-dd__desc">For tribes, ANCs, NHOs, and reservation economies.</span>
+            </span>
+          </a>
+          <a class="nav-dd__item" href={globalProduct.url} role="menuitem">
+            <span class="nav-dd__dot" data-c="global"></span>
+            <span class="nav-dd__body">
+              <span class="nav-dd__name">{globalProduct.name}</span>
+              <span class="nav-dd__desc">For multinationals, NGOs, and cross-border programs.</span>
+            </span>
+          </a>
+        </div>
+      </div>
+      <a href={`${prefix}#cedar`}>Cedar</a>
+      <a href={`${prefix}#how`}>Why this matters</a>
+      <a href={`${prefix}#contact`}>Contact</a>
       <a class="nav-cta" href={`mailto:${site.email}`}>Get in touch</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
@@ -25,6 +54,28 @@ const prefix = isHome ? '' : '/';
 
 <script>
   (function() {
+    // Platforms dropdown (hover + click + keyboard)
+    document.querySelectorAll<HTMLElement>('.nav-dd').forEach(dd => {
+      const toggle = dd.querySelector<HTMLButtonElement>('.nav-dd__toggle');
+      const panel  = dd.querySelector<HTMLElement>('.nav-dd__panel');
+      if (!toggle || !panel) return;
+      let openTimer: number | undefined;
+      let closeTimer: number | undefined;
+      const open = () => { dd.classList.add('is-open'); toggle.setAttribute('aria-expanded', 'true'); };
+      const close = () => { dd.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); };
+      dd.addEventListener('mouseenter', () => { if (closeTimer) window.clearTimeout(closeTimer); openTimer = window.setTimeout(open, 80); });
+      dd.addEventListener('mouseleave', () => { if (openTimer) window.clearTimeout(openTimer); closeTimer = window.setTimeout(close, 180); });
+      toggle.addEventListener('click', (e) => { e.preventDefault(); dd.classList.contains('is-open') ? close() : open(); });
+      toggle.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); panel.querySelector<HTMLElement>('a')?.focus(); }
+        if (e.key === 'Escape') close();
+      });
+      panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { close(); toggle.focus(); } });
+      document.addEventListener('click', (e) => {
+        if (!dd.contains(e.target as Node)) close();
+      });
+    });
+
     const hb = document.getElementById('hamburger');
     const nl = document.getElementById('navLinks');
     if (!hb || !nl) return;
