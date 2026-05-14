@@ -63,20 +63,29 @@ const statesJson = JSON.stringify(
 const codeMapJson = JSON.stringify(CODE_TO_ID);
 ---
 <section class="hero" id="top">
+  <!-- Brand statement: large wordmark, one position, one CTA. -->
   <div class="hero-brand">
     <a href="/" class="hero-mark" aria-label="Lumecon Inc.">
-      <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="320" height="56" />
+      <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="560" height="98" />
     </a>
-    <p class="hero-pitch">
+    <h1 class="hero-statement">
       Economic and policy analysis software for governments.
-    </p>
+    </h1>
+    <div class="hero-cta">
+      <a href="#workspace" class="btn">See an impact study</a>
+      <a href="#contact" class="btn btn--ghost">Talk to us</a>
+    </div>
   </div>
 
-  <div class="workspace" id="heroWorkspace">
+  <div class="workspace" id="workspace">
     <header class="workspace__bar">
       <span class="workspace__title">
+        <img class="workspace__mark" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="22" height="22" aria-hidden="true" />
+        <span class="workspace__title-text">Live impact study</span>
+      </span>
+      <span class="workspace__sub">
         <span class="workspace__dot" id="workspaceStatus" aria-hidden="true"></span>
-        Impact study
+        <span class="workspace__sub-text" id="workspaceStatusLabel">Idle</span>
       </span>
     </header>
 
@@ -149,11 +158,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     </div>
   </figure>
 
-  <p class="hero-narration">
-    <span class="hero-narration__line" id="heroLine">Click any state or reservation to run an impact study there.</span>
-  </p>
-
-  <!-- Live figures -->
+  <!-- Live figures — the only text inside the workspace -->
   <dl class="hero-figs" aria-label="Result of the running impact study">
     <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
     <div class="hero-fig"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
@@ -162,28 +167,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     <div class="hero-fig hero-fig--derived" id="figJobsCell"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
   </dl>
 
-  <details class="ask-cedar" id="askCedar">
-    <summary class="ask-cedar__summary">
-      <span class="ask-cedar__lead">Ask Cedar</span>
-      <span class="ask-cedar__chev" aria-hidden="true">+</span>
-    </summary>
-    <form class="ask-cedar__form" id="askCedarForm" autocomplete="off">
-      <input
-        type="text"
-        class="ask-cedar__input"
-        id="askInput"
-        placeholder="Ask anything about economic impact analysis…"
-        aria-label="Message Cedar"
-      />
-      <button type="submit" class="ask-cedar__send" aria-label="Send">
-        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-    </form>
-    <p class="ask-cedar__answer" id="askAnswer" aria-live="polite"></p>
-  </details>
-
     </div>
   </div>
+
+  <!-- Hidden but kept for the JS that animates the narration so we don't break the script -->
+  <span hidden id="heroLine"></span>
+  <span hidden id="askInput"></span>
+  <span hidden id="askCedarForm"></span>
+  <span hidden id="askAnswer"></span>
 
   <script type="application/json" id="heroStates"  set:html={statesJson}></script>
   <script type="application/json" id="heroCodeMap" set:html={codeMapJson}></script>
@@ -332,7 +323,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       stage.dataset.run = '1';
 
       const wsStatus = document.getElementById('workspaceStatus');
+      const wsLabel = document.getElementById('workspaceStatusLabel');
       if (wsStatus) wsStatus.dataset.state = 'running';
+      if (wsLabel) wsLabel.textContent = 'Running';
 
       setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
@@ -366,7 +359,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       setLine(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`);
 
       const wsStatusDone = document.getElementById('workspaceStatus');
+      const wsLabelDone = document.getElementById('workspaceStatusLabel');
       if (wsStatusDone) wsStatusDone.dataset.state = 'complete';
+      if (wsLabelDone) wsLabelDone.textContent = 'Complete';
     };
 
     let sceneIdx = 0;
