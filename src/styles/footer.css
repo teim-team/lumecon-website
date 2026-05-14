@@ -38,13 +38,12 @@
   opacity: .95;
 }
 .footer-brand-tag {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: rgba(246, 241, 233, .82);
-  font-variation-settings: "opsz" 60;
+  font-family: var(--font-sans);
+  font-size: .95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, .65);
 }
-.footer-brand-tag em { color: var(--gold); font-style: italic; }
+.footer-brand-tag em { color: var(--gold-light); font-style: normal; font-weight: 600; }
 .footer-brand-rule {
   width: 64px;
   height: 1.5px;

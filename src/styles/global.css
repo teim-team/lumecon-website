@@ -1,34 +1,38 @@
 :root {
-  /* Lumecon Inc. parent-brand palette.
-     Cooler ivory paper (not the AI-startup warm cream) + navy +
-     dimensional gold. Platform accents: blue=Local, terra=Tribal,
-     cedar=Global. Purple is the brand-mark rule color. */
-  --white: #FCFAF3;
-  --cream: #F1ECD9;
-  --paper: #EEE7CF;
-  --navy: #1F2238;
-  --navy2: #2E3151;
-  --navy-soft: rgba(31, 34, 56, .72);
+  /* Lumecon Inc. — modern software-company palette.
+     Clean white surface, deep navy ink, one bold accent color per
+     section when needed. No paper-craft texture. Platform colors
+     stay as the data-viz language. */
+  --white: #FFFFFF;
+  --cream: #F5F6F8;          /* very light cool blue-gray, used for section variation */
+  --paper: #EFF1F4;
+  --navy: #0E1530;           /* deeper, more saturated; reads as a "primary brand" navy */
+  --navy2: #1B2447;
+  --navy-soft: rgba(14, 21, 48, .68);
+  --ink: #0E1530;
+  --ink-2: #3A405A;
+  --ink-3: #6C7187;
+  --ink-4: #9BA0B3;
   --terra: #B85C38;
   --terra-dark: #7A3215;
   --terra-light: #D98A6A;
-  --cedar: #2D5A3F;
-  --cedar-light: #4F8866;
+  --cedar: #1E5A3F;
+  --cedar-light: #3F8866;
   --cedar-mist: #E7EFE9;
-  --green: #2D6A4F;
+  --green: #1E5A3F;
   --green-deep: #0E3A2E;
   --gold: #B68A2E;
   --gold-light: #E8C661;
   --goldbar: #F2E6C5;
-  --blue: #4A6080;
-  --blue-deep: #324760;
-  --purple: #5B4E73;
-  --purple-rule: #5B4E73;
+  --blue: #2F4A78;           /* deeper, more confident blue */
+  --blue-deep: #1F345A;
+  --purple: #4B4170;
+  --purple-rule: #4B4170;
   --gray: #4F4F4F;
-  --graylt: #635F50;
+  --graylt: #6C7187;
   --blush: #F3EAE6;
-  --rule: rgba(31, 34, 56, .16);
-  --rule-strong: rgba(31, 34, 56, .3);
+  --rule: rgba(14, 21, 48, .1);
+  --rule-strong: rgba(14, 21, 48, .22);
   --ease: cubic-bezier(.22, 1, .36, 1);
   --container-max: 1240px;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
@@ -37,12 +41,14 @@
   --gold-hover: #cc9f3f;
   --gold-btn-hover: #a07a25;
 
-  /* Type system — Spectral display (institutional newspaper serif) +
-     Inter body + JetBrains Mono marginalia. Picked specifically to
-     move away from Fraunces + Nunito which read as the standard
-     AI-startup pairing. */
+  /* Type system — Inter for everything except mono marginalia.
+     A modern software brand uses one sans aggressively across all
+     scales; weight + scale carry the hierarchy, not a serif/sans
+     pairing. Spectral retained only as a fallback for the brand
+     wordmark fragments since the logo PNG is the brand mark. */
   --font-sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
-  --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Spectral', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --type-xs:        0.75rem;
   --type-sm:        0.875rem;
@@ -139,9 +145,9 @@ body::after {
 }
 
 a { color: inherit; text-decoration: none; }
-h1, h2, h3 { font-weight: 800; line-height: 1.08; }
-h1, h2 { font-family: var(--font-display); font-weight: 500; font-variation-settings: "opsz" 96; letter-spacing: -.018em; line-height: 1.04; }
-h3 { font-family: var(--font-sans); font-weight: 700; letter-spacing: -.005em; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.06; }
+h1, h2 { font-weight: 800; letter-spacing: -.025em; }
+h3 { font-weight: 700; letter-spacing: -.015em; line-height: 1.15; }
 .mono { font-family: var(--font-mono); }
 
 /* Container utility */
@@ -193,36 +199,37 @@ h3 { font-family: var(--font-sans); font-weight: 700; letter-spacing: -.005em; }
   box-shadow: 0 0 0 4px rgba(196, 154, 60, .2);
 }
 
-/* Editorial CTA — square corners, arrow suffix, no shadow chrome.
-   Lumecon parent default is navy-on-cream; reversed on dark bands. */
+/* Modern software CTAs — solid pills, weight + scale, no editorial
+   chrome. Primary = saturated navy; ghost = bordered. */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: .7rem;
-  padding: .95rem 1.6rem;
+  gap: .55rem;
+  padding: .85rem 1.4rem;
   font-family: var(--font-sans);
-  font-size: var(--type-base);
-  font-weight: 700;
-  letter-spacing: .015em;
-  border-radius: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -.008em;
+  border-radius: 6px;
   border: 1.5px solid var(--navy);
   cursor: pointer;
-  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease), transform .15s var(--ease), box-shadow .15s var(--ease);
   background: var(--navy);
   color: var(--white);
   text-decoration: none;
+  box-shadow: 0 1px 2px rgba(14, 21, 48, .08);
 }
-.btn::after { content: '→'; font-size: 1em; line-height: 0; transform: translateY(.06em); transition: transform .2s var(--ease); }
-.btn:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); transform: translateY(-1px); }
+.btn::after { content: '→'; font-size: 1em; line-height: 0; transform: translateY(.06em); transition: transform .15s var(--ease); }
+.btn:hover { background: var(--navy2); border-color: var(--navy2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14, 21, 48, .14); }
 .btn:hover::after { transform: translate(.18em, .06em); }
-.btn--ghost { background: transparent; color: var(--navy); }
+.btn--ghost { background: transparent; color: var(--navy); box-shadow: none; border-color: var(--rule-strong); }
 .btn--ghost::after { content: ''; }
-.btn--ghost:hover { background: var(--navy); color: var(--cream); transform: translateY(-1px); }
-.btn--invert { background: var(--cream); color: var(--navy); border-color: var(--cream); }
-.btn--invert:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); }
-.btn--invert-ghost { background: transparent; color: var(--cream); border-color: var(--cream); opacity: .82; }
+.btn--ghost:hover { background: var(--cream); color: var(--navy); border-color: var(--navy); }
+.btn--invert { background: var(--white); color: var(--navy); border-color: var(--white); }
+.btn--invert:hover { background: var(--cream); border-color: var(--cream); color: var(--navy); }
+.btn--invert-ghost { background: transparent; color: var(--white); border-color: rgba(255, 255, 255, .35); }
 .btn--invert-ghost::after { content: ''; }
-.btn--invert-ghost:hover { opacity: 1; background: transparent; color: var(--cream); border-color: var(--cream); transform: translateY(-1px); }
+.btn--invert-ghost:hover { background: rgba(255, 255, 255, .08); color: var(--white); border-color: var(--white); }
 
 /* Scroll progress indicator */
 .scroll-progress {

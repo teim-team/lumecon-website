@@ -1,14 +1,13 @@
-/* About Cedar — one asymmetric editorial spread. */
+/* About Cedar — modern software section.
+   White background, big sans display, real product mock to the right. */
 
 .cedar-about {
   background: var(--white);
   padding: clamp(5rem, 10vw, 8rem) 0;
-  border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
-  position: relative;
 }
 .cedar-about__inner {
-  max-width: 1180px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
   display: grid;
@@ -18,98 +17,100 @@
   align-items: start;
 }
 
-/* The prose: not eyebrow + H2 + body. Just a byline and four
-   paragraphs reading top-to-bottom. */
 .cedar-about__prose {
   grid-row: span 2;
-  font-family: var(--font-sans);
-  color: var(--navy);
+  color: var(--ink);
 }
 .cedar-about__byline {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.15rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
   color: var(--cedar);
-  margin: 0 0 1.4rem;
+  margin: 0 0 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 .cedar-about__lede {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 60;
-  font-weight: 400;
-  font-size: clamp(1.4rem, 2.6vw, 1.95rem);
-  line-height: 1.25;
-  letter-spacing: -.012em;
-  color: var(--navy);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  color: var(--ink);
   margin: 0 0 1.6rem;
 }
 .cedar-about__prose p:not(.cedar-about__byline):not(.cedar-about__lede) {
   font-size: 1.04rem;
   line-height: 1.7;
-  color: var(--navy);
-  opacity: .82;
+  color: var(--ink-2);
   margin: 0 0 1.2rem;
   max-width: 38em;
 }
 
-/* The pull-quote: a real exchange, treated as a magazine sidebar. */
+/* The pull-quote becomes more of a product moment — looks like a real
+   chat thread, not a magazine sidebar. */
 .cedar-about__pull {
   background: var(--cream);
-  padding: clamp(1.6rem, 3vw, 2.4rem);
+  padding: clamp(1.4rem, 2.6vw, 2rem);
+  border-radius: 10px;
   position: relative;
-  border-left: 3px solid var(--cedar);
+  border: 1px solid var(--rule);
 }
-.cedar-about__pull-mark {
-  font-family: var(--font-display);
-  font-size: 5rem;
-  line-height: .7;
-  color: var(--cedar);
-  opacity: .35;
-  margin-bottom: -.4em;
-}
+.cedar-about__pull-mark { display: none; }
 .cedar-about__pull-q {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-variation-settings: "opsz" 60;
-  font-weight: 400;
-  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
-  line-height: 1.45;
-  color: var(--navy);
+  font-family: var(--font-sans);
+  font-size: clamp(.98rem, 1.5vw, 1.1rem);
+  line-height: 1.55;
+  color: var(--ink);
   margin: 0 0 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--cedar);
+  position: relative;
+}
+.cedar-about__pull-q::before {
+  content: 'CEDAR';
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  letter-spacing: .14em;
+  color: var(--cedar);
+  font-weight: 600;
+  display: block;
+  margin-bottom: .35rem;
+  margin-left: -1rem;
 }
 .cedar-about__pull-a {
-  font-family: var(--font-mono);
-  font-size: .92rem;
-  color: var(--terra-dark);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--ink);
   margin: 0 0 1.2rem;
-  letter-spacing: .01em;
   padding-left: 1rem;
+  border-left: 3px solid var(--terra);
   position: relative;
 }
 .cedar-about__pull-a::before {
-  content: '— You ';
+  content: 'YOU';
   font-family: var(--font-mono);
   font-size: .58rem;
   letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--navy);
-  opacity: .45;
-  position: absolute;
-  left: -3.6rem;
-  top: .25rem;
+  color: var(--terra);
+  font-weight: 600;
+  display: block;
+  margin-bottom: .35rem;
+  margin-left: -1rem;
+  top: auto;
+  position: static;
 }
 .cedar-about__pull-tag {
   font-family: var(--font-mono);
-  font-size: .58rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--navy);
-  opacity: .42;
+  font-size: .62rem;
+  letter-spacing: .1em;
+  color: var(--ink-3);
   margin: 0;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(45, 45, 63, .12);
+  padding-top: .9rem;
+  border-top: 1px solid var(--rule);
+  text-transform: uppercase;
 }
 
-/* Footer: motto + CTA across the right column */
 .cedar-about__foot {
   display: flex;
   flex-direction: column;
@@ -118,16 +119,15 @@
 }
 .cedar-about__motto {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 2.4vw, 1.95rem);
   line-height: 1.15;
-  letter-spacing: -.01em;
-  color: var(--navy);
+  letter-spacing: -.025em;
+  color: var(--ink);
   margin: 0;
   max-width: 16ch;
 }
-.cedar-about__motto em { font-style: italic; color: var(--gold); font-weight: 400; }
+.cedar-about__motto em { font-style: normal; color: var(--terra-dark); font-weight: 800; }
 
 @media (max-width: 880px) {
   .cedar-about__inner { grid-template-columns: 1fr; grid-template-rows: auto; }
