@@ -26,6 +26,14 @@ const stateBordersD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any
 // @ts-ignore
 const nationOutlineD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a === b));
 
+// County border mesh — a single path of every county boundary.
+// Loaded from us-atlas/counties-albers-10m.json (separate import keeps
+// the heavier file out of the bundle when only states are visible).
+// @ts-ignore
+import countiesAtlas from 'us-atlas/counties-albers-10m.json' with { type: 'json' };
+// @ts-ignore
+const countyBordersD = path(mesh(countiesAtlas, countiesAtlas.objects.counties, (a: any, b: any) => a !== b));
+
 const stateData = statesFC.features.map((f: any) => {
   const [cx, cy] = path.centroid(f);
   return { id: f.id, name: f.properties.name, d: path(f), cx: +cx.toFixed(1), cy: +cy.toFixed(1) };
@@ -69,10 +77,10 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="560" height="98" />
     </a>
     <h1 class="hero-statement">
-      Economic and policy analysis software for governments and mission-driven organizations.
+      Your work changes the economy around it. We make that change measurable.
     </h1>
     <p class="hero-sub">
-      Lumecon replaces the consultant in your budget process, using real-time data and current methods that produce results your council, board, and funders can verify.
+      Lumecon turns budgets, programs, and policies into the jobs they support, the dollars they circulate, and the second-order consequences your council, board, and funders need to see. Built for governments and mission-driven organizations, in software they can run themselves.
     </p>
     <div class="hero-cta">
       <a href="#workspace" class="btn">See it run</a>
@@ -97,6 +105,13 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     </header>
 
     <div class="workspace__body">
+
+  <!-- Layer filters — control which geography is visible/clickable -->
+  <div class="workspace-filters" role="tablist" aria-label="Map layer">
+    <button type="button" class="wfilter is-active" data-layer="states"  role="tab" aria-selected="true">States</button>
+    <button type="button" class="wfilter"           data-layer="counties" role="tab" aria-selected="false">Counties</button>
+    <button type="button" class="wfilter"           data-layer="tribal"   role="tab" aria-selected="false">Tribal lands</button>
+  </div>
 
   <!-- Map: dominant, full-width. AIANNH polygons are clickable. -->
   <figure class="hero-stage" id="heroStage" aria-label="Interactive map. Hover any state or tribal land to inspect; click to run a study there.">
@@ -153,6 +168,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         ))}
       </g>
 
+      <path class="hero-map__county-borders" d={countyBordersD} />
       <path class="hero-map__borders" d={stateBordersD} />
       <path class="hero-map__outline" d={nationOutlineD} />
 
@@ -200,9 +216,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
     <footer class="workspace__foot">
       <span class="workspace-legend">
-        <span class="workspace-legend__sw" style="--lg:0.85"></span> Direct
-        <span class="workspace-legend__sw" style="--lg:0.42"></span> Indirect
-        <span class="workspace-legend__sw" style="--lg:0.18"></span> Induced
+        <span class="workspace-legend__sw workspace-legend__sw--source"></span>
+        Lit area is where the activity happens. The expanding rings are a visual ripple, not a literal map of indirect or induced effects, which the table below quantifies.
       </span>
       <span class="workspace-attr">Geography: Census TIGER/Line. Multipliers illustrative.</span>
     </footer>
@@ -221,20 +236,15 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   /* Activities + amounts: 5 × 5 = 25 combinations per region, plus a
      tribal-specific catalog of verbs Cedar uses when an AIANNH polygon
      is the source. */
+  /* Multipliers per activity type, used both by the named SCENES
+     and the click-on-state generic runs. */
   const ACTIVITIES = [
-    { id: 'build',   label: 'capital construction', verb: 'breaks ground on',                  indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
-    { id: 'payroll', label: 'operations payroll',   verb: 'expands the payroll of',            indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
-    { id: 'grant',   label: 'grant pass-through',   verb: 'disburses',                          indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
-    { id: 'tourism', label: 'visitor spending',     verb: 'welcomes tourist dollars into',      indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
-    { id: 'energy',  label: 'energy project',       verb: 'commissions a clean-energy project in', indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
+    { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
+    { id: 'payroll', label: 'operations payroll',   indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
+    { id: 'grant',   label: 'grant pass-through',   indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
+    { id: 'tourism', label: 'visitor spending',     indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
+    { id: 'energy',  label: 'energy project',       indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
   ] as const;
-  const TRIBAL_VERBS = [
-    'opens a new tribal enterprise on',
-    'breaks ground on a casino expansion at',
-    'launches a workforce program across',
-    'commissions a solar array on',
-    'restarts a community-health clinic on',
-  ];
   const AMOUNTS = [
     { v: 1_000_000,  label: '$1M'  },
     { v: 5_000_000,  label: '$5M'  },
@@ -243,10 +253,60 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     { v: 50_000_000, label: '$50M' },
   ] as const;
 
-  const SCENES = [
-    { state: '53', name: 'Pierce County, WA',           story: 'A Pacific-Northwest municipality' },
-    { state: '48', name: 'Travis County, TX',           story: 'A growth-metro university' },
-    { state: '41', name: 'Umatilla Reservation, OR',    story: 'A tribal government' },
+  /* Named example impact studies. Each one is a real-feeling project
+     with location, sentence form, and the activity profile baked in.
+     The auto-cycle plays through these so a visitor sees concrete
+     examples instead of abstract verb + region tokens. */
+  type Scene = {
+    state: string;
+    project: string;
+    location: string;
+    chip: string;
+    sentence: string;
+    amount: typeof AMOUNTS[number];
+    activity: typeof ACTIVITIES[number];
+  };
+  const SCENES: Scene[] = [
+    {
+      state: '53',
+      project: 'A new community health clinic',
+      location: 'Pierce County, WA',
+      chip: 'Community health clinic · Pierce County, WA · $5M operations',
+      sentence: 'A new community health clinic opens in Pierce County, WA, supported by $5M of operating funds.',
+      amount: AMOUNTS[1], activity: ACTIVITIES[1],
+    },
+    {
+      state: '48',
+      project: 'A workforce expansion at a state university',
+      location: 'Travis County, TX',
+      chip: 'University workforce expansion · Travis County, TX · $20M payroll',
+      sentence: 'A state university expands its workforce in Travis County, TX, with $20M of new operating payroll.',
+      amount: AMOUNTS[3], activity: ACTIVITIES[1],
+    },
+    {
+      state: '41',
+      project: 'A solar array on tribal lands',
+      location: 'Umatilla Reservation, OR',
+      chip: 'Tribal solar array · Umatilla Reservation, OR · $12M energy project',
+      sentence: 'A tribal government commissions a solar array on the Umatilla Reservation in Oregon, a $12M energy project.',
+      amount: AMOUNTS[2], activity: ACTIVITIES[4],
+    },
+    {
+      state: '27',
+      project: 'A casino and lodging expansion',
+      location: 'Mille Lacs, MN',
+      chip: 'Casino expansion · Mille Lacs, MN · $50M capital build',
+      sentence: 'A tribal enterprise breaks ground on a $50M casino and lodging expansion in Mille Lacs, MN.',
+      amount: AMOUNTS[4], activity: ACTIVITIES[0],
+    },
+    {
+      state: '39',
+      project: 'A federal grant to a regional CDFI',
+      location: 'Cuyahoga County, OH',
+      chip: 'Federal grant pass-through · Cuyahoga County, OH · $5M',
+      sentence: 'A federal grant of $5M passes through to a regional CDFI serving Cuyahoga County, OH.',
+      amount: AMOUNTS[1], activity: ACTIVITIES[2],
+    },
   ];
 
   const ADJ_RADIUS = { indirect: 220, induced: 480 };
@@ -301,49 +361,26 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
        Picks up to 4 states by largest centroid-distance-from-source
        so the labels don't all stack in one corner. Each label gets
        its own SVG <g> appended to the value layer. */
-    const drawValueLabels = (sourceId: string, ringClass: '1' | '2', perStateValue: number) => {
-      const vlayer = document.getElementById('heroValueLayer');
-      if (!vlayer) return;
-      const lit = stage.querySelectorAll<HTMLElement>(`.hero-state[data-ring="${ringClass}"]`);
-      const points: { x: number; y: number }[] = [];
-      lit.forEach(el => {
-        const id = el.dataset.id; if (!id) return;
-        const s = states[id]; if (!s) return;
-        points.push({ x: s.cx, y: s.cy });
-      });
-      // Pick up to 4 evenly-spread points
-      const max = Math.min(4, points.length);
-      const stride = Math.max(1, Math.floor(points.length / max));
-      const picked = [] as { x: number; y: number }[];
-      for (let i = 0; i < points.length && picked.length < max; i += stride) picked.push(points[i]);
-      const valueText = '+' + (perStateValue >= 1e6
-        ? '$' + (perStateValue / 1e6).toFixed(perStateValue >= 1e7 ? 0 : 1).replace(/\.0$/, '') + 'M'
-        : '$' + Math.round(perStateValue / 1e3) + 'K');
-      picked.forEach((p, idx) => {
-        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        g.setAttribute('class', `hero-vlabel hero-vlabel--r${ringClass}`);
-        g.style.setProperty('--vd', `${idx * 90}ms`);
-        const w = valueText.length * 7 + 10;
-        const rx = p.x - w / 2;
-        const ry = p.y - 9;
-        g.innerHTML = `<rect x="${rx}" y="${ry}" rx="3" ry="3" width="${w}" height="18"/>` +
-                      `<text x="${p.x}" y="${p.y + 1}" text-anchor="middle" dominant-baseline="middle">${valueText}</text>`;
-        vlayer.appendChild(g);
+    /* Light only the source state. Indirect (supply chain) and induced
+       (household) effects don't have a clean geographic story at this
+       resolution: indirect spreads to wherever suppliers are, induced
+       is mostly local where workers live. The expanding ripple circles
+       below are an abstract metaphor; the table beneath the map is
+       where the actual breakdown lives. */
+    const lightSource = (id: string) => {
+      stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+        if (el.dataset.id === id) el.dataset.ring = '0';
+        else el.removeAttribute('data-ring');
       });
     };
 
+    // Kept for backward-compat with other call sites; now a no-op-ish
+    // wrapper that just lights the source. The neighbor-distance pass
+    // is gone.
     const shadeNeighbors = (id: string) => {
-      const me = states[id]; if (!me) return;
-      stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
-        const sid = el.dataset.id; if (!sid || sid === id) { el.removeAttribute('data-ring'); return; }
-        const s = states[sid]; if (!s) return;
-        const d = Math.hypot(s.cx - me.cx, s.cy - me.cy);
-        if      (d < ADJ_RADIUS.indirect) el.dataset.ring = '1';
-        else if (d < ADJ_RADIUS.induced)  el.dataset.ring = '2';
-        else el.removeAttribute('data-ring');
-      });
-      const meEl = stage.querySelector<HTMLElement>(`.hero-state[data-id="${id}"]`);
-      if (meEl) meEl.dataset.ring = '0';
+      lightSource(id);
+      // The original implementation also distance-bucketed every
+      // other state into ring 1 / ring 2; intentionally removed.
     };
 
     const moveSource = (cx: number, cy: number) => {
@@ -361,6 +398,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       activity?: typeof ACTIVITIES[number];
       amount?: typeof AMOUNTS[number];
       framing?: string;
+      chip?: string;
       sourcePoint?: { cx: number; cy: number };
     };
 
@@ -370,7 +408,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
       const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
       const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-      const framing  = opts?.framing  ?? `Someone ${activity.verb} ${s.name}`;
+      const framing  = opts?.framing  ?? `A ${amount.label} ${activity.label} in ${s.name}.`;
       const src      = opts?.sourcePoint ?? { cx: s.cx, cy: s.cy };
 
       stage.dataset.run = '';
@@ -397,7 +435,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       if (wsLabel) wsLabel.textContent = 'Running';
       if (wsRegion) wsRegion.textContent = framing.includes('(') ? framing : s.name;
       if (wsActivity) {
-        wsActivity.innerHTML = `<strong>${amount.label}</strong> &middot; ${activity.label} &middot; ${s.name}`;
+        wsActivity.textContent = opts?.chip ?? `${amount.label} ${activity.label} in ${s.name}`;
       }
 
       // Source callout: pin the region name next to the source dot
@@ -434,15 +472,12 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       stage.dataset.ring = '2';
       const indirect = amount.v * activity.indirect;
       tickTo(figI as HTMLElement, indirect, '+ ', 950);
-      // Spread the indirect total across up to 4 visible neighbor labels
-      drawValueLabels(stateId, '1', indirect / 4);
 
       await wait(2000);
       if (runId !== me) return;
       stage.dataset.ring = '3';
       const induced = amount.v * activity.induced;
       tickTo(figU as HTMLElement, induced, '+ ', 950);
-      drawValueLabels(stateId, '2', induced / 5);
 
       await wait(2000);
       if (runId !== me) return;
@@ -464,12 +499,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     let sceneIdx = 0;
     const cycle = async () => {
       const scene = SCENES[sceneIdx % SCENES.length];
-      const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-      const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-      const framing  = `${scene.story} ${activity.verb} ${scene.name}`;
-      await runStudy(scene.state, { activity, amount, framing });
+      await runStudy(scene.state, {
+        activity: scene.activity,
+        amount: scene.amount,
+        framing: scene.sentence,
+        chip: scene.chip,
+      });
       sceneIdx += 1;
-      cycleTimer = window.setTimeout(cycle, 6200);
+      cycleTimer = window.setTimeout(cycle, 6800);
     };
 
     /* ---------- Hover tooltip ---------- */
@@ -491,6 +528,19 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       ttName.textContent = name;
       if (ttHint) ttHint.textContent = hint;
     };
+
+    /* ---------- Layer filters (States / Counties / Tribal) ---------- */
+    document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const layer = btn.dataset.layer || 'states';
+        document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(b => {
+          const on = b === btn;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        if (stage) stage.dataset.layer = layer;
+      });
+    });
 
     /* ---------- "Run again" button ---------- */
     const wsAgain = document.getElementById('workspaceAgain');
@@ -559,12 +609,11 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         const cy = parseFloat(el.dataset.cy || '0');
         const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
         if (cycleTimer) window.clearTimeout(cycleTimer);
-        // Pick a tribal-flavored verb + an activity (use payroll for plausibility).
-        const verb = TRIBAL_VERBS[Math.floor(Math.random() * TRIBAL_VERBS.length)];
         const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
         const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-        const framing  = `A tribal government ${verb} ${tribalName}`;
-        await runStudy(fips, { activity, amount, framing, sourcePoint: { cx, cy } });
+        const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
+        const chip = `${tribalName} · ${amount.label} ${activity.label}`;
+        await runStudy(fips, { activity, amount, framing, chip, sourcePoint: { cx, cy } });
         cycleTimer = window.setTimeout(cycle, 6800);
       };
       el.addEventListener('click', start);
@@ -610,8 +659,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         if (sid && states[sid]) {
           const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
           const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-          const framing  = `Right where you are in ${states[sid].name}, someone ${activity.verb} the area`;
-          await runStudy(sid, { activity, amount, framing });
+          const framing  = `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`;
+          const chip = `${amount.label} ${activity.label} in ${states[sid].name}`;
+          await runStudy(sid, { activity, amount, framing, chip });
           cycleTimer = window.setTimeout(cycle, 6800);
         } else {
           cycleTimer = window.setTimeout(cycle, 900);

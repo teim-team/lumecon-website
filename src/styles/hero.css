@@ -138,22 +138,28 @@
 }
 .workspace-legend {
   display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  flex-wrap: wrap;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  font-weight: 500;
+  align-items: flex-start;
+  gap: .4rem;
+  flex-wrap: nowrap;
+  font-family: var(--font-sans);
+  font-size: .76rem;
+  line-height: 1.45;
+  text-transform: none;
+  letter-spacing: -.005em;
+  font-weight: 400;
+  color: var(--ink-2);
+  max-width: 70%;
 }
+.workspace-legend__sw { margin-top: .35rem; }
 .workspace-legend__sw {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 2px;
   background: var(--gold);
-  opacity: var(--lg, 1);
-  margin: 0 .15rem 0 .65rem;
+  margin-right: .35rem;
+  flex-shrink: 0;
 }
-.workspace-legend__sw:first-of-type { margin-left: .25rem; }
+.workspace-legend__sw--source { background: var(--gold); }
 .workspace-attr { letter-spacing: .04em; text-transform: none; }
 .workspace-activity {
   font-family: var(--font-sans);
@@ -194,6 +200,58 @@
 .hero-map { width: 100%; height: auto; display: block; max-height: 56vh; }
 .hero-map__fill { fill: var(--white); }
 .hero-map__grid { opacity: .7; pointer-events: none; }
+.hero-map__county-borders {
+  fill: none;
+  stroke: var(--navy);
+  stroke-width: .35;
+  stroke-opacity: .25;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  display: none;
+}
+.hero-stage[data-layer="counties"] .hero-map__county-borders { display: block; }
+
+/* Filter chips above the map */
+.workspace-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .35rem;
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  width: fit-content;
+}
+.wfilter {
+  background: transparent;
+  border: 0;
+  padding: .4rem .85rem;
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 500;
+  letter-spacing: -.005em;
+  color: var(--ink-3);
+  cursor: pointer;
+  border-radius: 999px;
+  transition: background .15s var(--ease), color .15s var(--ease);
+}
+.wfilter:hover { color: var(--navy); }
+.wfilter.is-active {
+  background: var(--white);
+  color: var(--navy);
+  box-shadow: 0 1px 2px rgba(14, 21, 48, .08);
+}
+
+/* Tribal layer: surface AIANNH polygons more prominently */
+.hero-stage[data-layer="tribal"] .hero-aiannh { fill-opacity: .35; stroke-width: .6; }
+.hero-stage[data-layer="tribal"] .hero-state { cursor: default; pointer-events: none; }
+.hero-stage[data-layer="tribal"] .hero-aiannh { pointer-events: auto; }
+
+/* Counties layer: state click still works (county-level click would
+   require 3000+ paths; we surface the county MESH as visual context
+   and keep state-level click as the action). */
+.hero-stage[data-layer="counties"] .hero-aiannh { fill-opacity: 0; pointer-events: none; }
+.hero-stage:not([data-layer="tribal"]) .hero-aiannh { pointer-events: auto; }
 .hero-map__borders {
   fill: none;
   stroke: var(--navy);
@@ -228,7 +286,14 @@
 }
 .hero-aiannh--otsa { /* same default */ }
 
-/* State paths — saturated navy on white */
+/* State paths — only the SOURCE state (data-ring="0") is lit gold.
+   Neighboring states are not shaded by "ring" because indirect
+   (supply-chain) effects scatter to wherever suppliers are, and
+   induced (household) effects are mostly local where workers live.
+   Shading them by distance would imply a geographic spread the
+   analysis doesn't actually compute. The expanding ripple circles
+   below are a visual metaphor; the table beneath the map is the
+   real breakdown. */
 .hero-state {
   fill: transparent;
   fill-opacity: 0;
@@ -239,8 +304,6 @@
 .hero-state:hover { fill: var(--navy); fill-opacity: .08; }
 .hero-state:focus-visible { fill: var(--gold); fill-opacity: .2; }
 .hero-state[data-ring="0"] { fill: var(--gold); fill-opacity: .85; }
-.hero-state[data-ring="1"] { fill: var(--gold); fill-opacity: .42; }
-.hero-state[data-ring="2"] { fill: var(--gold); fill-opacity: .18; }
 
 /* Source point — a real product pin */
 .hero-source { opacity: 0; transition: opacity .35s var(--ease); }
@@ -258,9 +321,9 @@
   vector-effect: non-scaling-stroke;
   opacity: 0;
 }
-.hero-ring[data-ring="1"] { stroke: var(--navy); }
-.hero-ring[data-ring="2"] { stroke: var(--navy); stroke-opacity: .55; }
-.hero-ring[data-ring="3"] { stroke: var(--navy); stroke-opacity: .3; }
+.hero-ring[data-ring="1"] { stroke: var(--gold); }
+.hero-ring[data-ring="2"] { stroke: var(--terra); }
+.hero-ring[data-ring="3"] { stroke: var(--cedar); }
 .hero-stage[data-ring="1"] .hero-ring[data-ring="1"],
 .hero-stage[data-ring="2"] .hero-ring[data-ring="1"],
 .hero-stage[data-ring="2"] .hero-ring[data-ring="2"],
