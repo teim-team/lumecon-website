@@ -35,8 +35,20 @@
   font-size: 1.06rem;
   line-height: 1.6;
   color: rgba(246, 241, 233, .82);
+  max-width: 44ch;
+  margin: 0 0 1.4rem;
+}
+.cta-display em { font-style: italic; color: var(--gold); font-weight: 400; }
+.cta-credit {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: .95rem;
+  line-height: 1.5;
+  color: rgba(246, 241, 233, .58);
+  margin: 0 0 1.6rem;
   max-width: 40ch;
-  margin: 0 0 1.8rem;
+  border-left: 2px solid rgba(196, 154, 60, .4);
+  padding-left: 1rem;
 }
 .cta-email {
   display: inline-block;

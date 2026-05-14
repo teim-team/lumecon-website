@@ -1,50 +1,34 @@
 ---
 /**
- * "What you can use this for" — the editorial use-case list.
+ * Why this matters — single dense block, two breakout concepts.
  *
- * Sits directly under the luminating hero so the visitor's
- * first question after "what is this?" gets answered: "what
- * is this for?" Four short items, no cards, no icons. Type
- * does the work.
+ * Replaced the four-item roman-numeral list with one editorial
+ * paragraph that opens the case, plus two breakout call-outs. Reads
+ * as a magazine column, not a feature checklist.
  */
 import '../styles/why.css';
 ---
 <section class="why" id="how">
   <div class="why-inner">
-    <p class="why-eyebrow">What you can use this for.</p>
-    <h2 class="why-lead">
-      The four conversations an impact study turns into <em>investment conversations.</em>
-    </h2>
+    <div class="why-col">
+      <p class="why-stamp">Why an impact study at all</p>
+      <p class="why-lede">
+        Most of what a government, a tribal council, or a board cares about &mdash; <em>can we keep this clinic open, will the bond pass, what happens if the federal program disappears</em> &mdash; lives downstream of one number. An economic impact study is the work of finding that number, and the assumption ledger behind it, before the question gets asked.
+      </p>
+      <p class="why-body">
+        Without one, the conversation is in raw payroll and the loudest voice wins. With one, it&rsquo;s in jobs, output, and earnings &mdash; and a council member can quote the line with a source attached. The platforms aren&rsquo;t there to replace a consultant&rsquo;s judgment. They&rsquo;re there to make the consultant&rsquo;s judgment auditable, cheaper, and rerunnable when the council agenda changes next month.
+      </p>
+    </div>
 
-    <ol class="why-list">
-      <li class="why-item">
-        <span class="why-item__num">i.</span>
-        <div>
-          <h3 class="why-item__name">Secure funding</h3>
-          <p class="why-item__desc">Show funders, councils, and legislators exactly what your organization contributes. Impact numbers turn budget conversations into investment conversations.</p>
-        </div>
-      </li>
-      <li class="why-item">
-        <span class="why-item__num">ii.</span>
-        <div>
-          <h3 class="why-item__name">Compare scenarios</h3>
-          <p class="why-item__desc">What happens if you cut a program, add twenty positions, expand operations, or change a policy? Model the economic consequences before you commit the resources.</p>
-        </div>
-      </li>
-      <li class="why-item">
-        <span class="why-item__num">iii.</span>
-        <div>
-          <h3 class="why-item__name">Streamline compliance</h3>
-          <p class="why-item__desc">Federal grants, foundation reporting, and regulatory reviews keep asking for the same economic data. Generate compliance-ready outputs from the analysis you&rsquo;re already running.</p>
-        </div>
-      </li>
-      <li class="why-item">
-        <span class="why-item__num">iv.</span>
-        <div>
-          <h3 class="why-item__name">Tell your story</h3>
-          <p class="why-item__desc">Annual reports, press releases, community presentations. Impact data makes the case in language stakeholders understand &mdash; people supported, dollars circulated.</p>
-        </div>
-      </li>
-    </ol>
+    <aside class="why-aside">
+      <div class="why-card">
+        <p class="why-card__head">A budget conversation becomes an investment conversation.</p>
+        <p class="why-card__body">A water-system bond stops being a $9M expense and starts being $9M of direct payroll, supplier work, and household wages across the county. The case changes shape.</p>
+      </div>
+      <div class="why-card why-card--alt">
+        <p class="why-card__head">A scenario before a commitment.</p>
+        <p class="why-card__body">Cut a program, add twenty positions, expand operations, change a policy &mdash; model the second-order consequences with the assumption ledger attached, before the council votes.</p>
+      </div>
+    </aside>
   </div>
 </section>

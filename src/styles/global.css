@@ -1,48 +1,48 @@
 :root {
   /* Lumecon Inc. parent-brand palette.
-     Navy + cream = institutional surface. Gold = punctuation.
-     Each platform owns one secondary color so the parent reads
-     neutral and the tiles read distinct: terra=tribal, cedar=local,
-     blue=global. Purple is the brand-mark rule color. */
-  --white: #FFFCF7;
-  --cream: #F6F1E9;
-  --paper: #FBF6EC;
-  --navy: #2D2D3F;
-  --navy2: #3E3E54;
-  --navy-soft: rgba(45, 45, 63, .72);
+     Cooler ivory paper (not the AI-startup warm cream) + navy +
+     dimensional gold. Platform accents: blue=Local, terra=Tribal,
+     cedar=Global. Purple is the brand-mark rule color. */
+  --white: #FCFAF3;
+  --cream: #F1ECD9;
+  --paper: #EEE7CF;
+  --navy: #1F2238;
+  --navy2: #2E3151;
+  --navy-soft: rgba(31, 34, 56, .72);
   --terra: #B85C38;
-  --terra-dark: #8A3F24;
+  --terra-dark: #7A3215;
   --terra-light: #D98A6A;
   --cedar: #2D5A3F;
   --cedar-light: #4F8866;
   --cedar-mist: #E7EFE9;
   --green: #2D6A4F;
   --green-deep: #0E3A2E;
-  --gold: #C49A3C;
-  --gold-light: #F2D67A;
+  --gold: #B68A2E;
+  --gold-light: #E8C661;
   --goldbar: #F2E6C5;
-  --blue: #6B7FA3;
-  --blue-deep: #4D6589;
-  --purple: #7B6B9B;
-  --purple-rule: #8B7DA8;
-  --gray: #5A5A5A;
-  --graylt: #6B6A62;
+  --blue: #4A6080;
+  --blue-deep: #324760;
+  --purple: #5B4E73;
+  --purple-rule: #5B4E73;
+  --gray: #4F4F4F;
+  --graylt: #635F50;
   --blush: #F3EAE6;
-  --rule: rgba(45, 45, 63, .14);
-  --rule-strong: rgba(45, 45, 63, .26);
+  --rule: rgba(31, 34, 56, .16);
+  --rule-strong: rgba(31, 34, 56, .3);
   --ease: cubic-bezier(.22, 1, .36, 1);
   --container-max: 1240px;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
-  --error-color: #C84A2E;
-  --gold-hover: #e0be6a;
-  --gold-btn-hover: #d4ad55;
+  --error-color: #B83214;
+  --gold-hover: #cc9f3f;
+  --gold-btn-hover: #a07a25;
 
-  /* Type system — Fraunces display + Nunito body + JetBrains Mono marginalia.
-     Mirrors the spec used on the Tribal product so the parent + platforms
-     share a typographic family without sharing layout. */
-  --font-sans: 'Nunito', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
-  --font-display: 'Fraunces', 'Nunito', Georgia, serif;
+  /* Type system — Spectral display (institutional newspaper serif) +
+     Inter body + JetBrains Mono marginalia. Picked specifically to
+     move away from Fraunces + Nunito which read as the standard
+     AI-startup pairing. */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --type-xs:        0.75rem;
   --type-sm:        0.875rem;
