@@ -7,12 +7,11 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.2rem;
 }
-.cedar-about__prose { grid-row: span 2; }
 .cedar-about__byline {
   font-family: var(--font-mono);
   font-size: .7rem;
@@ -20,93 +19,23 @@
   color: var(--ink-3);
   font-weight: 500;
   text-transform: uppercase;
-  margin: 0 0 1.2rem;
+  margin: 0;
 }
 .cedar-about__lede {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-  line-height: 1.18;
-  letter-spacing: -.018em;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -.025em;
   color: var(--navy);
-  margin: 0 0 1.4rem;
-  max-width: 26ch;
+  margin: 0;
+  max-width: 22ch;
 }
-.cedar-about__prose p:not(.cedar-about__byline):not(.cedar-about__lede) {
-  font-size: 1.02rem;
-  line-height: 1.65;
-  color: var(--ink-2);
-  margin: 0 0 1rem;
-  max-width: 38em;
-  font-weight: 400;
-}
-.cedar-about__pull {
-  background: var(--cream);
-  padding: 1.4rem 1.4rem;
-  border-radius: 6px;
-  border: 1px solid var(--rule);
-}
-.cedar-about__pull-mark { display: none; }
-.cedar-about__pull-q {
-  font-size: .98rem;
+.cedar-about__body {
+  font-size: 1.06rem;
   line-height: 1.55;
-  color: var(--ink);
-  margin: 0 0 1rem;
-  font-weight: 400;
-}
-.cedar-about__pull-q::before {
-  content: 'Cedar';
-  font-family: var(--font-mono);
-  font-size: .62rem;
-  letter-spacing: .14em;
-  color: var(--ink-3);
-  font-weight: 500;
-  display: block;
-  margin-bottom: .25rem;
-  text-transform: uppercase;
-}
-.cedar-about__pull-a {
-  font-size: .98rem;
-  color: var(--ink);
-  margin: 0 0 1.1rem;
-  font-weight: 400;
-}
-.cedar-about__pull-a::before {
-  content: 'You';
-  font-family: var(--font-mono);
-  font-size: .62rem;
-  letter-spacing: .14em;
-  color: var(--ink-3);
-  font-weight: 500;
-  display: block;
-  margin-bottom: .25rem;
-  text-transform: uppercase;
-  position: static;
-}
-.cedar-about__pull-tag {
-  font-family: var(--font-mono);
-  font-size: .6rem;
-  letter-spacing: .14em;
-  color: var(--ink-4);
+  color: var(--ink-2);
   margin: 0;
-  padding-top: .9rem;
-  border-top: 1px solid var(--rule);
-  text-transform: uppercase;
-  font-weight: 500;
-}
-.cedar-about__foot { display: flex; flex-direction: column; gap: 1.2rem; align-items: flex-start; }
-.cedar-about__motto {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-  line-height: 1.25;
-  letter-spacing: -.015em;
-  color: var(--navy);
-  margin: 0;
-  max-width: 16ch;
-}
-.cedar-about__motto em { font-style: italic; color: inherit; font-weight: inherit; }
-@media (max-width: 880px) {
-  .cedar-about__inner { grid-template-columns: 1fr; grid-template-rows: auto; }
-  .cedar-about__prose { grid-row: auto; }
+  max-width: 56ch;
+  font-weight: 400;
 }

@@ -1,53 +1,18 @@
 ---
 /**
- * About Cedar — single editorial spread.
- *
- * No three-up card grid. No i/ii/iii numbering. One asymmetric
- * layout: a long block of editorial prose on the left, one
- * featured transcript fragment treated as the pull-quote on the
- * right. Reads like a magazine sidebar, not a feature-list.
+ * Cedar — one statement, one supporting line, one CTA.
  */
 import '../styles/cedar.css';
 ---
 <section class="cedar-about" id="cedar">
   <div class="cedar-about__inner">
-
-    <div class="cedar-about__prose">
-      <p class="cedar-about__byline">On Cedar &mdash;</p>
-
-      <p class="cedar-about__lede">
-        Most economic models are confident about the wrong things. They&rsquo;ll print a 3-decimal multiplier for a tribal economy whose supply chain has never been observed, and they&rsquo;ll do it in the same font as the multiplier for an interstate manufacturing corridor that&rsquo;s been studied to death.
-      </p>
-
-      <p>
-        Cedar is the part of every Lumecon platform that refuses to pretend. It reads what you upload &mdash; a payroll detail, a council agenda, a chapter audit &mdash; and asks you to confirm the assumption the model is about to use, before the model uses it. If your last year&rsquo;s study said supply-chain leakage was 48%, and the default is 38%, Cedar surfaces that &mdash; not as an alert dialog, as a sentence in the run.
-      </p>
-
-      <p>
-        It writes the assumption ledger as you work. By the time the export lands, the ledger is at the top of the file: every source, every vintage, every override you made, in plain language a council member or grant reviewer can read without opening the spreadsheet.
-      </p>
-
-      <p>
-        Cedar runs in a per-project sandbox. Project and file names are hashed before any provider call leaves the platform; your real user ID never appears upstream. The version you&rsquo;ve been talking to in the hero is scoped to questions about the demo &mdash; no upstream call, no memory between sessions.
-      </p>
-    </div>
-
-    <aside class="cedar-about__pull">
-      <div class="cedar-about__pull-mark" aria-hidden="true">&ldquo;</div>
-      <p class="cedar-about__pull-q">
-        I&rsquo;ll model the supply chain as 38% in-region. Your call &mdash; the audit you ran last spring used 52%.
-      </p>
-      <p class="cedar-about__pull-a">
-        Use 52.
-      </p>
-      <p class="cedar-about__pull-tag">A real exchange, on a draft run.</p>
-    </aside>
-
-    <footer class="cedar-about__foot">
-      <p class="cedar-about__motto">
-        Cedar won&rsquo;t think <em>for</em> you. It thinks <em>with</em> you.
-      </p>
-      <a href="#contact" class="btn">Ask us about Cedar</a>
-    </footer>
+    <p class="cedar-about__byline">Cedar</p>
+    <h2 class="cedar-about__lede">
+      An AI assistant that names the assumption before the model uses it.
+    </h2>
+    <p class="cedar-about__body">
+      Cedar reads what you upload, surfaces each assumption the model is about to use, and writes the ledger as the run completes. It thinks with you, not for you.
+    </p>
+    <a href="#contact" class="btn btn--ghost">Ask us about Cedar</a>
   </div>
 </section>
