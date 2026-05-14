@@ -138,22 +138,28 @@
 }
 .workspace-legend {
   display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  flex-wrap: wrap;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  font-weight: 500;
+  align-items: flex-start;
+  gap: .4rem;
+  flex-wrap: nowrap;
+  font-family: var(--font-sans);
+  font-size: .76rem;
+  line-height: 1.45;
+  text-transform: none;
+  letter-spacing: -.005em;
+  font-weight: 400;
+  color: var(--ink-2);
+  max-width: 70%;
 }
+.workspace-legend__sw { margin-top: .35rem; }
 .workspace-legend__sw {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 2px;
   background: var(--gold);
-  opacity: var(--lg, 1);
-  margin: 0 .15rem 0 .65rem;
+  margin-right: .35rem;
+  flex-shrink: 0;
 }
-.workspace-legend__sw:first-of-type { margin-left: .25rem; }
+.workspace-legend__sw--source { background: var(--gold); }
 .workspace-attr { letter-spacing: .04em; text-transform: none; }
 .workspace-activity {
   font-family: var(--font-sans);
@@ -280,8 +286,14 @@
 }
 .hero-aiannh--otsa { /* same default */ }
 
-/* State paths — three distinct colors so direct/indirect/induced
-   are visually distinguishable, not three opacities of one color. */
+/* State paths — only the SOURCE state (data-ring="0") is lit gold.
+   Neighboring states are not shaded by "ring" because indirect
+   (supply-chain) effects scatter to wherever suppliers are, and
+   induced (household) effects are mostly local where workers live.
+   Shading them by distance would imply a geographic spread the
+   analysis doesn't actually compute. The expanding ripple circles
+   below are a visual metaphor; the table beneath the map is the
+   real breakdown. */
 .hero-state {
   fill: transparent;
   fill-opacity: 0;
@@ -291,9 +303,7 @@
 }
 .hero-state:hover { fill: var(--navy); fill-opacity: .08; }
 .hero-state:focus-visible { fill: var(--gold); fill-opacity: .2; }
-.hero-state[data-ring="0"] { fill: var(--gold);  fill-opacity: .82; }
-.hero-state[data-ring="1"] { fill: var(--terra); fill-opacity: .55; }
-.hero-state[data-ring="2"] { fill: var(--cedar); fill-opacity: .35; }
+.hero-state[data-ring="0"] { fill: var(--gold); fill-opacity: .85; }
 
 /* Source point — a real product pin */
 .hero-source { opacity: 0; transition: opacity .35s var(--ease); }

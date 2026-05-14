@@ -216,9 +216,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
     <footer class="workspace__foot">
       <span class="workspace-legend">
-        <span class="workspace-legend__sw workspace-legend__sw--direct"></span> Direct
-        <span class="workspace-legend__sw workspace-legend__sw--indirect"></span> Indirect
-        <span class="workspace-legend__sw workspace-legend__sw--induced"></span> Induced
+        <span class="workspace-legend__sw workspace-legend__sw--source"></span>
+        Lit area is where the activity happens. The expanding rings are a visual ripple, not a literal map of indirect or induced effects, which the table below quantifies.
       </span>
       <span class="workspace-attr">Geography: Census TIGER/Line. Multipliers illustrative.</span>
     </footer>
@@ -362,49 +361,26 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
        Picks up to 4 states by largest centroid-distance-from-source
        so the labels don't all stack in one corner. Each label gets
        its own SVG <g> appended to the value layer. */
-    const drawValueLabels = (sourceId: string, ringClass: '1' | '2', perStateValue: number) => {
-      const vlayer = document.getElementById('heroValueLayer');
-      if (!vlayer) return;
-      const lit = stage.querySelectorAll<HTMLElement>(`.hero-state[data-ring="${ringClass}"]`);
-      const points: { x: number; y: number }[] = [];
-      lit.forEach(el => {
-        const id = el.dataset.id; if (!id) return;
-        const s = states[id]; if (!s) return;
-        points.push({ x: s.cx, y: s.cy });
-      });
-      // Pick up to 4 evenly-spread points
-      const max = Math.min(4, points.length);
-      const stride = Math.max(1, Math.floor(points.length / max));
-      const picked = [] as { x: number; y: number }[];
-      for (let i = 0; i < points.length && picked.length < max; i += stride) picked.push(points[i]);
-      const valueText = '+' + (perStateValue >= 1e6
-        ? '$' + (perStateValue / 1e6).toFixed(perStateValue >= 1e7 ? 0 : 1).replace(/\.0$/, '') + 'M'
-        : '$' + Math.round(perStateValue / 1e3) + 'K');
-      picked.forEach((p, idx) => {
-        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        g.setAttribute('class', `hero-vlabel hero-vlabel--r${ringClass}`);
-        g.style.setProperty('--vd', `${idx * 90}ms`);
-        const w = valueText.length * 7 + 10;
-        const rx = p.x - w / 2;
-        const ry = p.y - 9;
-        g.innerHTML = `<rect x="${rx}" y="${ry}" rx="3" ry="3" width="${w}" height="18"/>` +
-                      `<text x="${p.x}" y="${p.y + 1}" text-anchor="middle" dominant-baseline="middle">${valueText}</text>`;
-        vlayer.appendChild(g);
+    /* Light only the source state. Indirect (supply chain) and induced
+       (household) effects don't have a clean geographic story at this
+       resolution: indirect spreads to wherever suppliers are, induced
+       is mostly local where workers live. The expanding ripple circles
+       below are an abstract metaphor; the table beneath the map is
+       where the actual breakdown lives. */
+    const lightSource = (id: string) => {
+      stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+        if (el.dataset.id === id) el.dataset.ring = '0';
+        else el.removeAttribute('data-ring');
       });
     };
 
+    // Kept for backward-compat with other call sites; now a no-op-ish
+    // wrapper that just lights the source. The neighbor-distance pass
+    // is gone.
     const shadeNeighbors = (id: string) => {
-      const me = states[id]; if (!me) return;
-      stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
-        const sid = el.dataset.id; if (!sid || sid === id) { el.removeAttribute('data-ring'); return; }
-        const s = states[sid]; if (!s) return;
-        const d = Math.hypot(s.cx - me.cx, s.cy - me.cy);
-        if      (d < ADJ_RADIUS.indirect) el.dataset.ring = '1';
-        else if (d < ADJ_RADIUS.induced)  el.dataset.ring = '2';
-        else el.removeAttribute('data-ring');
-      });
-      const meEl = stage.querySelector<HTMLElement>(`.hero-state[data-id="${id}"]`);
-      if (meEl) meEl.dataset.ring = '0';
+      lightSource(id);
+      // The original implementation also distance-bucketed every
+      // other state into ring 1 / ring 2; intentionally removed.
     };
 
     const moveSource = (cx: number, cy: number) => {
@@ -496,15 +472,12 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       stage.dataset.ring = '2';
       const indirect = amount.v * activity.indirect;
       tickTo(figI as HTMLElement, indirect, '+ ', 950);
-      // Spread the indirect total across up to 4 visible neighbor labels
-      drawValueLabels(stateId, '1', indirect / 4);
 
       await wait(2000);
       if (runId !== me) return;
       stage.dataset.ring = '3';
       const induced = amount.v * activity.induced;
       tickTo(figU as HTMLElement, induced, '+ ', 950);
-      drawValueLabels(stateId, '2', induced / 5);
 
       await wait(2000);
       if (runId !== me) return;
