@@ -15,13 +15,17 @@ import '../styles/footer.css';
 const jsonLd = [
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "SoftwareApplication"],
     "name": site.legalName,
     "legalName": site.legalName,
     "alternateName": site.name,
+    "applicationCategory": "BusinessApplication",
+    "applicationSubCategory": "Economic Impact Analysis Software",
+    "operatingSystem": "Web",
     "url": site.url,
     "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
-    "description": "Lumecon Inc. builds economic and policy analysis software for governments and mission-driven organizations. It is the parent brand of three specialized platforms: Local Economic Impact, Tribal Economic Impact, and Global Economic Impact.",
+    "image": `${site.url}/lumecon-og-image-1200x630.png`,
+    "description": "Lumecon Inc. builds economic and policy analysis software for governments and mission-driven organizations. A modern, web-based alternative to IMPLAN, RIMS II, REMI, and BEA RIMS workflows, with Cedar AI to handle messy data across departments.",
     "email": site.email,
     "slogan": site.tagline,
     "sameAs": ["https://www.linkedin.com/company/lumecon-ai"],
@@ -29,12 +33,43 @@ const jsonLd = [
     "knowsAbout": [
       "Economic Impact Analysis",
       "Policy Analysis",
-      "RIMS II",
+      "Input-Output Modeling",
       "IMPLAN",
-      "Tribal Economics",
+      "IMPLAN alternative",
+      "RIMS II",
+      "RIMS II alternative",
+      "BEA RIMS II",
+      "REMI",
+      "REMI Policy Insight alternative",
+      "Bureau of Economic Analysis multipliers",
       "Fiscal Multiplier",
-      "Input-Output Modeling"
-    ]
+      "Economic Multipliers",
+      "Tribal Economics",
+      "Indigenous Economic Development",
+      "Reservation Economics",
+      "Alaska Native Corporations",
+      "Native Hawaiian Organizations",
+      "AIANNH geography",
+      "Direct, Indirect, and Induced Effects",
+      "Jobs, Output, and Earnings",
+      "Economic Development Organizations",
+      "Municipal Finance",
+      "State and Local Government Software",
+      "Public Sector Analytics",
+      "Mission-Driven Organizations",
+      "CDFIs",
+      "Foundation Reporting",
+      "Cornell University",
+      "Cornell Brooks School of Public Policy",
+      "Ivy League research",
+      "Cornell Law Entrepreneurship Law Clinic",
+      "Dartmouth College"
+    ],
+    "keywords": "economic impact analysis, IMPLAN alternative, RIMS II alternative, REMI alternative, BEA multipliers, input-output modeling, tribal economic impact, policy analysis software, government analytics, Cornell, Ivy League",
+    "potentialAction": {
+      "@type": "ContactAction",
+      "target": `mailto:${site.email}`
+    }
   },
   {
     "@context": "https://schema.org",
@@ -78,12 +113,13 @@ const jsonLd = [
 ];
 ---
 <BaseLayout
-  title="Lumecon Inc.: Economic and policy analysis software for governments"
-  description="Lumecon Inc. builds economic and policy analysis software for governments and mission-driven organizations. The parent brand of three specialized platforms covering local, tribal, and global economies, with Cedar AI assistance and an alternative to RIMS II and IMPLAN."
+  title="Lumecon: Economic impact analysis software | IMPLAN, RIMS II, REMI alternative"
+  description="Lumecon Inc. is economic and policy analysis software for governments and mission-driven organizations. A modern alternative to IMPLAN, RIMS II, REMI, and BEA RIMS multipliers, with built-in Cedar AI to read messy data across departments. Built at Cornell."
   canonical="https://lumecon.ai/"
-  keywords="Lumecon Inc, economic impact analysis, policy analysis, local economic impact, tribal economic impact, global economic impact, economic development, fiscal multiplier, economic modeling, Cedar AI, RIMS II alternative, IMPLAN alternative, tribal economics, input-output analysis, economic multiplier, reservation economics, tribal government, economic development organizations, mission-driven organizations, government software, public-sector analytics"
-  ogTitle="Lumecon Inc.: Economic and policy analysis software for governments"
-  ogDescription="The parent brand of three specialized platforms for local, tribal, and global economies. Affordable, web-based modeling that any government or mission-driven team can run in-house."
+  keywords="economic impact analysis, IMPLAN, IMPLAN alternative, RIMS II, RIMS II alternative, BEA RIMS, REMI, REMI Policy Insight, input-output modeling, fiscal multiplier, economic multipliers, tribal economic impact, reservation economics, Alaska Native Corporations, Native Hawaiian Organizations, AIANNH, Cedar AI, policy analysis software, government software, public-sector analytics, mission-driven organizations, CDFI, economic development organizations, Bureau of Economic Analysis, direct indirect induced effects, jobs output earnings, Cornell University, Cornell Brooks School, Ivy League, Cornell Law, Dartmouth"
+  ogTitle="Lumecon: Economic impact analysis software for governments"
+  ogDescription="A modern alternative to IMPLAN, RIMS II, and REMI. Run impact studies in-house, on your own data, with Cedar AI handling the messy parts. Built at Cornell, designed for governments and mission-driven organizations."
+  ogImageAlt="Lumecon: economic and policy analysis software for governments and mission-driven organizations. An alternative to IMPLAN, RIMS II, REMI, and BEA RIMS multipliers, built at Cornell University."
   bodyClass="home-page"
   jsonLd={jsonLd}
 >

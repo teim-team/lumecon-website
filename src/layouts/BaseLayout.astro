@@ -8,13 +8,21 @@ interface Props {
   keywords: string;
   ogTitle?: string;
   ogDescription?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
   bodyClass?: string;
   jsonLd?: object;
 }
 
-const { title, description, canonical, keywords, ogTitle, ogDescription, bodyClass, jsonLd } = Astro.props;
+const {
+  title, description, canonical, keywords,
+  ogTitle, ogDescription, ogImage, ogImageAlt,
+  bodyClass, jsonLd,
+} = Astro.props;
 const ogT = ogTitle || title;
 const ogD = ogDescription || description;
+const ogI = ogImage || 'https://lumecon.ai/lumecon-og-image-1200x630.png';
+const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for governments and mission-driven organizations. An alternative to IMPLAN, RIMS II, and REMI.';
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -24,12 +32,15 @@ const ogD = ogDescription || description;
 <title>{title}</title>
 <meta name="description" content={description}>
 <meta name="keywords" content={keywords}>
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="author" content="Lumecon Inc.">
+<meta name="publisher" content="Lumecon Inc.">
+<meta name="copyright" content="Lumecon Inc.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="format-detection" content="telephone=no">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="light dark">
 <link rel="canonical" href={canonical}>
 <!-- Content Security Policy. Static-host friendly (meta-tag enforced).
      'unsafe-inline' on script/style is required because Astro inlines
@@ -39,26 +50,46 @@ const ogD = ogDescription || description;
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://ipapi.co; upgrade-insecure-requests">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta name="format-detection" content="telephone=no">
+
+<!-- Favicons + app icons -->
 <link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#064D3B">
+<meta name="theme-color" content="#0A0F26">
+<meta name="msapplication-TileColor" content="#0A0F26">
+<meta name="msapplication-TileImage" content="/android-chrome-192x192.png">
+<meta name="apple-mobile-web-app-title" content="Lumecon">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="application-name" content="Lumecon">
+
+<!-- Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews -->
 <meta property="og:type" content="website">
 <meta property="og:url" content={canonical}>
 <meta property="og:title" content={ogT}>
 <meta property="og:description" content={ogD}>
 <meta property="og:site_name" content="Lumecon Inc.">
-<meta property="og:image" content="https://lumecon.ai/lumecon-og-image-1200x630.png">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content={ogI}>
+<meta property="og:image:secure_url" content={ogI}>
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content={ogIA}>
+
+<!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content={ogT}>
 <meta name="twitter:description" content={ogD}>
-<meta name="twitter:image" content="https://lumecon.ai/lumecon-twitter-card-1200x630.png">
+<meta name="twitter:image" content={ogI}>
+<meta name="twitter:image:alt" content={ogIA}>
+<meta name="twitter:domain" content="lumecon.ai">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
