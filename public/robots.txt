@@ -1,15 +1,61 @@
+# Lumecon Inc. — robots policy
+# Search engines and well-behaved crawlers welcome.
+
 User-agent: *
 Allow: /
 Disallow: /404
+Disallow: /404/
 
-# Slow down archive bots
+# Slow down high-volume crawlers
 User-agent: AhrefsBot
 Crawl-delay: 10
 
 User-agent: SemrushBot
 Crawl-delay: 10
 
-# Astro sitemap integration emits sitemap-index.xml automatically;
-# the legacy sitemap.xml below is kept for direct submission portals.
+User-agent: MJ12bot
+Crawl-delay: 10
+
+User-agent: DotBot
+Crawl-delay: 10
+
+# AI training crawlers: opt out by default. Lumecon Inc. does not
+# grant permission to use this site for model training without
+# written agreement. Contact: contact@lumecon.ai.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+# AI-readable site summary
+# https://llmstxt.org/
+# (informational; standard robots clients ignore the comment)
+
+# Sitemaps
 Sitemap: https://lumecon.ai/sitemap-index.xml
 Sitemap: https://lumecon.ai/sitemap.xml

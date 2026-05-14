@@ -72,7 +72,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       Economic and policy analysis software for governments and mission-driven organizations.
     </h1>
     <p class="hero-sub">
-      Replacing the consultant. Real-time data. Novel methods. Results you can trust.
+      Lumecon replaces the consultant in your budget process, using real-time data and current methods that produce results your council, board, and funders can verify.
     </p>
     <div class="hero-cta">
       <a href="#workspace" class="btn">See it run</a>
@@ -107,6 +107,13 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
           <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
           <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
         </radialGradient>
+        <pattern id="hGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0E1530" stroke-width=".4" stroke-opacity=".07" />
+        </pattern>
+      </defs>
+
+      <!-- Cartographic graticule under everything -->
+      <rect class="hero-map__grid" x={VBX} y={VBY} width={VBW} height={VBH} fill="url(#hGrid)" />
       </defs>
 
       <path class="hero-map__fill" d={nationOutlineD} />
@@ -156,6 +163,18 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         <circle class="hero-ring"  data-ring="3" cx="0" cy="0" r="14" />
         <circle class="hero-spark"      cx="0" cy="0" r="6" />
         <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
+      </g>
+
+      <!-- Floating value labels populated by JS over each lit state -->
+      <g class="hero-value-layer" id="heroValueLayer" aria-hidden="true"></g>
+
+      <!-- Source callout: name pinned next to the source dot -->
+      <g class="hero-source-callout" id="heroSourceCallout" aria-hidden="true">
+        <line class="hero-callout__leader" x1="0" y1="0" x2="0" y2="0" />
+        <g class="hero-callout__plate">
+          <rect class="hero-callout__bg" x="0" y="0" rx="3" ry="3" width="0" height="22" />
+          <text class="hero-callout__txt" x="0" y="0" dominant-baseline="middle"></text>
+        </g>
       </g>
     </svg>
 
@@ -278,6 +297,41 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     // existing call sites compile and silently do nothing.
     const setLine = (_text: string) => { /* no narration line in DOM */ };
 
+    /* Draw +value labels on the lit states of a given ring (0/1/2).
+       Picks up to 4 states by largest centroid-distance-from-source
+       so the labels don't all stack in one corner. Each label gets
+       its own SVG <g> appended to the value layer. */
+    const drawValueLabels = (sourceId: string, ringClass: '1' | '2', perStateValue: number) => {
+      const vlayer = document.getElementById('heroValueLayer');
+      if (!vlayer) return;
+      const lit = stage.querySelectorAll<HTMLElement>(`.hero-state[data-ring="${ringClass}"]`);
+      const points: { x: number; y: number }[] = [];
+      lit.forEach(el => {
+        const id = el.dataset.id; if (!id) return;
+        const s = states[id]; if (!s) return;
+        points.push({ x: s.cx, y: s.cy });
+      });
+      // Pick up to 4 evenly-spread points
+      const max = Math.min(4, points.length);
+      const stride = Math.max(1, Math.floor(points.length / max));
+      const picked = [] as { x: number; y: number }[];
+      for (let i = 0; i < points.length && picked.length < max; i += stride) picked.push(points[i]);
+      const valueText = '+' + (perStateValue >= 1e6
+        ? '$' + (perStateValue / 1e6).toFixed(perStateValue >= 1e7 ? 0 : 1).replace(/\.0$/, '') + 'M'
+        : '$' + Math.round(perStateValue / 1e3) + 'K');
+      picked.forEach((p, idx) => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', `hero-vlabel hero-vlabel--r${ringClass}`);
+        g.style.setProperty('--vd', `${idx * 90}ms`);
+        const w = valueText.length * 7 + 10;
+        const rx = p.x - w / 2;
+        const ry = p.y - 9;
+        g.innerHTML = `<rect x="${rx}" y="${ry}" rx="3" ry="3" width="${w}" height="18"/>` +
+                      `<text x="${p.x}" y="${p.y + 1}" text-anchor="middle" dominant-baseline="middle">${valueText}</text>`;
+        vlayer.appendChild(g);
+      });
+    };
+
     const shadeNeighbors = (id: string) => {
       const me = states[id]; if (!me) return;
       stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
@@ -325,6 +379,12 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       figJobsCell?.classList.remove('is-filled');
       [figD, figI, figU, figT, figJ].forEach(el => { if (el) el.textContent = '—'; });
 
+      // Clear any prior value labels + callout
+      const vlayer = document.getElementById('heroValueLayer');
+      if (vlayer) vlayer.innerHTML = '';
+      const callout = document.getElementById('heroSourceCallout');
+      if (callout) callout.classList.remove('is-on');
+
       shadeNeighbors(stateId);
       moveSource(src.cx, src.cy);
       stage.dataset.run = '1';
@@ -340,6 +400,29 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         wsActivity.innerHTML = `<strong>${amount.label}</strong> &middot; ${activity.label} &middot; ${s.name}`;
       }
 
+      // Source callout: pin the region name next to the source dot
+      const calloutEl = document.getElementById('heroSourceCallout');
+      if (calloutEl) {
+        const leader = calloutEl.querySelector<SVGLineElement>('.hero-callout__leader');
+        const bg = calloutEl.querySelector<SVGRectElement>('.hero-callout__bg');
+        const txt = calloutEl.querySelector<SVGTextElement>('.hero-callout__txt');
+        if (leader && bg && txt) {
+          txt.textContent = s.name;
+          const tx = src.cx + 18;
+          const ty = src.cy - 18;
+          const w = (s.name.length * 6.6) + 16;
+          bg.setAttribute('x', String(tx)); bg.setAttribute('y', String(ty - 11));
+          bg.setAttribute('width', String(w));
+          txt.setAttribute('x', String(tx + 8));
+          txt.setAttribute('y', String(ty));
+          leader.setAttribute('x1', String(src.cx));
+          leader.setAttribute('y1', String(src.cy));
+          leader.setAttribute('x2', String(tx));
+          leader.setAttribute('y2', String(ty));
+          calloutEl.classList.add('is-on');
+        }
+      }
+
       setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
 
@@ -351,14 +434,15 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       stage.dataset.ring = '2';
       const indirect = amount.v * activity.indirect;
       tickTo(figI as HTMLElement, indirect, '+ ', 950);
-      setLine(`Suppliers and contractors near ${s.name} pick up the work.`);
+      // Spread the indirect total across up to 4 visible neighbor labels
+      drawValueLabels(stateId, '1', indirect / 4);
 
       await wait(2000);
       if (runId !== me) return;
       stage.dataset.ring = '3';
       const induced = amount.v * activity.induced;
       tickTo(figU as HTMLElement, induced, '+ ', 950);
-      setLine(`Wages land in households &mdash; rent, groceries, kids&rsquo; shoes. The widest ring.`);
+      drawValueLabels(stateId, '2', induced / 5);
 
       await wait(2000);
       if (runId !== me) return;
@@ -369,7 +453,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       figJobsCell?.classList.add('is-filled');
       tickTo(figT as HTMLElement, total, '', 1150);
       tickInt(figJ as HTMLElement, jobs, '≈ ', 950);
-      setLine(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`);
+      setLine(`That sum, with every multiplier sourced and the assumption ledger attached, is your study.`);
 
       const wsStatusDone = document.getElementById('workspaceStatus');
       const wsLabelDone = document.getElementById('workspaceStatusLabel');
@@ -526,7 +610,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         if (sid && states[sid]) {
           const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
           const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-          const framing  = `An impact study right where you are &mdash; ${states[sid].name}. Someone ${activity.verb} the area`;
+          const framing  = `Right where you are in ${states[sid].name}, someone ${activity.verb} the area`;
           await runStudy(sid, { activity, amount, framing });
           cycleTimer = window.setTimeout(cycle, 6800);
         } else {

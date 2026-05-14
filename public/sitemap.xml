@@ -2,20 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lumecon.ai/</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://lumecon.ai/privacy</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-14</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://lumecon.ai/terms</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-14</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://lumecon.ai/status</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset>

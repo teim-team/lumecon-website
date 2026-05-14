@@ -193,6 +193,7 @@
 }
 .hero-map { width: 100%; height: auto; display: block; max-height: 56vh; }
 .hero-map__fill { fill: var(--white); }
+.hero-map__grid { opacity: .7; pointer-events: none; }
 .hero-map__borders {
   fill: none;
   stroke: var(--navy);
@@ -344,6 +345,58 @@
   line-height: 1;
   margin: 0;
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Floating value labels on lit states ---------- */
+@keyframes vlIn { from { opacity: 0; } to { opacity: 1; } }
+.hero-vlabel {
+  opacity: 0;
+  animation: vlIn .5s var(--ease) var(--vd, 0ms) both;
+  pointer-events: none;
+}
+.hero-vlabel rect {
+  fill: var(--navy);
+  stroke: var(--white);
+  stroke-width: .8;
+  vector-effect: non-scaling-stroke;
+}
+.hero-vlabel text {
+  fill: var(--white);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  pointer-events: none;
+}
+.hero-vlabel--r2 rect { fill: var(--terra-dark); }
+
+/* ---------- Source callout — region name pinned to source ---------- */
+.hero-source-callout {
+  opacity: 0;
+  transition: opacity .3s var(--ease);
+  pointer-events: none;
+}
+.hero-source-callout.is-on { opacity: 1; }
+.hero-callout__leader {
+  stroke: var(--navy);
+  stroke-width: .9;
+  stroke-dasharray: 2 2;
+  vector-effect: non-scaling-stroke;
+  opacity: .55;
+}
+.hero-callout__bg {
+  fill: var(--navy);
+  stroke: var(--white);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.hero-callout__txt {
+  fill: var(--white);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  pointer-events: none;
 }
 
 /* Hidden Ask-Cedar — keep DOM ids the JS expects, but invisible */
