@@ -12,31 +12,70 @@ import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": site.legalName,
-  "legalName": site.legalName,
-  "alternateName": site.name,
-  "url": site.url,
-  "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
-  "description": "Lumecon Inc. — economic and policy analysis software for governments. Parent brand of Local, Tribal, and Global Economic Impact platforms.",
-  "email": site.email,
-  "slogan": site.tagline,
-  "sameAs": [
-    "https://www.linkedin.com/company/lumecon-ai"
-  ],
-  "foundingLocation": { "@type": "Place", "name": site.builtAt },
-  "knowsAbout": [
-    "Economic Impact Analysis",
-    "Policy Analysis",
-    "RIMS II",
-    "IMPLAN",
-    "Tribal Economics",
-    "Fiscal Multiplier",
-    "Input-Output Modeling"
-  ]
-};
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": site.legalName,
+    "legalName": site.legalName,
+    "alternateName": site.name,
+    "url": site.url,
+    "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
+    "description": "Lumecon Inc. — economic and policy analysis software for governments and mission-driven organizations. Parent brand of Local, Tribal, and Global Economic Impact platforms.",
+    "email": site.email,
+    "slogan": site.tagline,
+    "sameAs": ["https://www.linkedin.com/company/lumecon-ai"],
+    "foundingLocation": { "@type": "Place", "name": site.builtAt },
+    "knowsAbout": [
+      "Economic Impact Analysis",
+      "Policy Analysis",
+      "RIMS II",
+      "IMPLAN",
+      "Tribal Economics",
+      "Fiscal Multiplier",
+      "Input-Output Modeling"
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Economic impact analysis software",
+    "name": site.products.local.name,
+    "url": site.products.local.url,
+    "provider": { "@type": "Organization", "name": site.legalName },
+    "areaServed": { "@type": "Country", "name": "United States" },
+    "audience": { "@type": "Audience", "audienceType": "Municipal governments, EDOs, enterprises" }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Economic impact analysis software",
+    "name": site.products.tribal.name,
+    "url": site.products.tribal.url,
+    "provider": { "@type": "Organization", "name": site.legalName },
+    "areaServed": { "@type": "Country", "name": "United States" },
+    "audience": { "@type": "Audience", "audienceType": "Tribes, ANCs, NHOs, reservation economies" }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Economic impact analysis software",
+    "name": site.products.global.name,
+    "url": site.products.global.url,
+    "provider": { "@type": "Organization", "name": site.legalName },
+    "audience": { "@type": "Audience", "audienceType": "Multinationals, NGOs, cross-border programs" }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": site.url },
+      { "@type": "ListItem", "position": 2, "name": "Platforms", "item": `${site.url}/#products` },
+      { "@type": "ListItem", "position": 3, "name": "Cedar", "item": `${site.url}/#cedar` },
+      { "@type": "ListItem", "position": 4, "name": "Contact", "item": `${site.url}/#contact` }
+    ]
+  }
+];
 ---
 <BaseLayout
   title="Lumecon Inc. — Economic and policy analysis software for governments"
@@ -58,13 +97,6 @@ const jsonLd = {
     <ContactSection />
   </main>
   <Footer isHome={true} />
-
-  <!-- Back to top button -->
-  <button class="back-to-top" id="backToTop" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M18 15l-6-6-6 6"/>
-    </svg>
-  </button>
 </BaseLayout>
 
 <style is:global>
@@ -83,31 +115,20 @@ const jsonLd = {
   (function() {
     const nav = document.getElementById('nav');
     const progressBar = document.getElementById('scrollProgress');
-    const backToTop = document.getElementById('backToTop');
-    if (!nav || !progressBar || !backToTop) return;
+    if (!nav || !progressBar) return;
     let ticking = false;
 
     const onScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-
       progressBar.style.width = progress + '%';
       nav.classList.toggle('scrolled', scrollTop > NAV_SCROLL_THRESHOLD);
-      backToTop.classList.toggle('visible', scrollTop > window.innerHeight);
       ticking = false;
     };
-
     window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(onScroll);
-        ticking = true;
-      }
+      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
     }, { passive: true });
-
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
   })();
 
   // Intersection observer for reveal animations (staggered product blocks)
@@ -136,7 +157,10 @@ const jsonLd = {
         const id = entry.target.id;
         navLinks.forEach(link => {
           const href = link.getAttribute('href') || '';
-          link.classList.toggle('nav-active', href === '#' + id || href === '/#' + id);
+          const match = href === '#' + id || href === '/#' + id;
+          link.classList.toggle('nav-active', match);
+          if (match) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
         });
       }
     });

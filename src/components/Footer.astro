@@ -11,9 +11,7 @@ const prefix = isHome ? '' : '/';
     <div class="footer-top">
       <div class="footer-brand">
         <img class="footer-brand-img" src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.legalName} width="200" height="44" loading="lazy" />
-        <div class="footer-brand-tag">We&nbsp;<em>luminate</em>&nbsp;economies&trade;</div>
-        <div class="footer-brand-rule" aria-hidden="true"></div>
-        <div class="footer-brand-pitch">Economic and policy analysis software for governments.</div>
+        <div class="footer-brand-pitch">{site.pitch}</div>
       </div>
 
       <div class="footer-cols">
@@ -38,7 +36,7 @@ const prefix = isHome ? '' : '/';
           <a href={`${prefix}#contact`}>Partnerships</a>
           <a href={`mailto:${site.email}?subject=Press`}>Press</a>
           <a href={`mailto:${site.email}?subject=Careers`}>Careers</a>
-          <a href="https://www.linkedin.com/company/lumecon-ai" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://www.linkedin.com/company/lumecon-ai" target="_blank" rel="noopener noreferrer me">LinkedIn</a>
         </div>
         <div class="footer-col">
           <div class="footer-col__head mono">Institutional</div>
@@ -59,7 +57,7 @@ const prefix = isHome ? '' : '/';
 
     <div class="footer-bottom">
       <div class="footer-legal">
-        &copy; {site.copyrightYear} {site.legalEntity} &middot; All rights reserved &middot; Patent pending &middot; Built at {site.builtAt} &middot; Counsel: {site.counsel}.
+        &copy; {site.copyrightYear} {site.legalEntity} &middot; All rights reserved.
       </div>
       <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
     </div>
