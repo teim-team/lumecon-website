@@ -1,14 +1,13 @@
 ---
 /**
- * Hero — Lumecon brand + interactive Cedar workshop.
+ * Hero — Lumecon brand + live impact study with Cedar in the margin.
  *
- * One canvas: the live impact study, with Cedar as a real chatbot
- * paired beside it. The visitor can type free-form, ask what each
- * ring means, or click any state on the map to run a fresh study.
- * The map also carries AIANNH (American Indian / Alaska Native /
- * Native Hawaiian) boundaries from Census TIGER/Line so the parent
- * brand's tribal-economies platform shows up visually, not just in
- * footer text.
+ * Hybrid layout: the map dominates, the result text sits in clean
+ * editorial type beneath it, and Cedar is a quiet expander you can
+ * open to ask a follow-up question. AIANNH boundaries from Census
+ * TIGER/Line are clickable — picking one runs a tribal-economy
+ * study with framing tailored to the tribal land, while clicking
+ * any state runs a state-level study with randomized activity.
  */
 import { geoPath } from 'd3-geo';
 import { mesh, feature } from 'topojson-client';
@@ -18,8 +17,6 @@ import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 import { CENSUS_TRIBAL_LANDS } from '../data/tribalLands.generated.js';
 import '../styles/hero.css';
 
-/* Tightened viewBox crops the empty Atlantic/Pacific around the
-   albers-USA projection while keeping the AK/HI insets visible. */
 const VBX = 70, VBY = 60, VBW = 850, VBH = 510;
 const path = geoPath();
 // @ts-ignore
@@ -34,7 +31,6 @@ const stateData = statesFC.features.map((f: any) => {
   return { id: f.id, name: f.properties.name, d: path(f), cx: +cx.toFixed(1), cy: +cy.toFixed(1) };
 });
 
-/* FIPS state-id → 2-letter postal code, for IP-geolocation lookup. */
 const STATE_CODES: Record<string, string> = {
   '01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','11':'DC',
   '12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY',
@@ -45,10 +41,21 @@ const STATE_CODES: Record<string, string> = {
 };
 const CODE_TO_ID = Object.fromEntries(Object.entries(STATE_CODES).map(([id, code]) => [code, id]));
 
-/* AIANNH polygons. Filter to ones with a usable path. They render as
-   a quiet terra layer beneath the state shading so the parent brand's
-   tribal-economies geography is visible at a glance without screaming. */
-const aiannh = (CENSUS_TRIBAL_LANDS as any[]).filter(l => l.pathD && l.x != null && l.y != null);
+/* AIANNH polygons — clickable now (used to be decorative). Filter to
+   ones with a usable path + centroid. Each one gets the FIPS state-id
+   of its containing state so the ring shading targets the right state. */
+const aiannh = (CENSUS_TRIBAL_LANDS as any[])
+  .filter(l => l.pathD && l.x != null && l.y != null && l.fips)
+  .map((l: any) => ({
+    id: l.id,
+    name: l.name,
+    shortName: l.shortName || l.name,
+    fips: l.fips,
+    category: l.category,
+    pathD: l.pathD,
+    x: l.x,
+    y: l.y,
+  }));
 
 const statesJson = JSON.stringify(
   stateData.reduce((acc: any, s: any) => { acc[s.id] = { name: s.name, cx: s.cx, cy: s.cy, code: STATE_CODES[s.id] || '' }; return acc; }, {})
@@ -56,7 +63,7 @@ const statesJson = JSON.stringify(
 const codeMapJson = JSON.stringify(CODE_TO_ID);
 ---
 <section class="hero" id="top">
-  <!-- Brand block - the wordmark + key info, then the map shines below -->
+  <!-- Brand block — wordmark + pitch + platform pills -->
   <div class="hero-brand">
     <a href="/" class="hero-mark" aria-label="Lumecon Inc.">
       <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="320" height="56" />
@@ -69,106 +76,80 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     </p>
   </div>
 
-  <!-- The live workshop: map (dominant) + Cedar (paired chatbot) -->
-  <div class="hero-workshop">
+  <!-- Map: dominant, full-width. AIANNH polygons are clickable. -->
+  <figure class="hero-stage" id="heroStage" aria-label="Interactive map. Hover any state or tribal land to inspect; click to run a study there.">
+    <svg class="hero-map" id="heroMap" viewBox={`${VBX} ${VBY} ${VBW} ${VBH}`} preserveAspectRatio="xMidYMid meet" role="img">
+      <defs>
+        <radialGradient id="hGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
+          <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
 
-    <!-- Stage -->
-    <figure class="hero-stage" id="heroStage" aria-label="Interactive map. Hover any state to inspect it; click to run a study there.">
-      <svg class="hero-map" id="heroMap" viewBox={`${VBX} ${VBY} ${VBW} ${VBH}`} preserveAspectRatio="xMidYMid meet" role="img">
-        <defs>
-          <radialGradient id="hGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
-            <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
-            <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
+      <path class="hero-map__fill" d={nationOutlineD} />
 
-        <path class="hero-map__fill" d={nationOutlineD} />
+      <g class="hero-map__states">
+        {stateData.map((s: any) => (
+          <path
+            class="hero-state"
+            d={s.d}
+            data-id={s.id}
+            data-cx={s.cx}
+            data-cy={s.cy}
+            tabindex="0"
+            role="button"
+            aria-label={s.name}
+          ></path>
+        ))}
+      </g>
 
-        <g class="hero-map__states">
-          {stateData.map((s: any) => (
-            <path
-              class="hero-state"
-              d={s.d}
-              data-id={s.id}
-              data-cx={s.cx}
-              data-cy={s.cy}
-              tabindex="0"
-              role="button"
-              aria-label={s.name}
-            ></path>
-          ))}
-        </g>
+      <!-- AIANNH overlay: interactive. Clicking one runs a tribal-economy
+           study; hovering shows the tribal-land name in the tooltip. -->
+      <g class="hero-map__aiannh">
+        {aiannh.map((land: any) => (
+          <path
+            class={`hero-aiannh hero-aiannh--${land.category}`}
+            d={land.pathD}
+            data-name={land.name}
+            data-short={land.shortName}
+            data-fips={land.fips}
+            data-cx={land.x}
+            data-cy={land.y}
+            data-category={land.category}
+            tabindex="0"
+            role="button"
+            aria-label={`Tribal land: ${land.name}`}
+          ></path>
+        ))}
+      </g>
 
-        <!-- AIANNH layer: subtle terra-tinted polygons, beneath ripples -->
-        <g class="hero-map__aiannh" aria-hidden="true">
-          {aiannh.map((land: any) => (
-            <path class={`hero-aiannh hero-aiannh--${land.category}`} d={land.pathD} data-name={land.name} />
-          ))}
-        </g>
+      <path class="hero-map__borders" d={stateBordersD} />
+      <path class="hero-map__outline" d={nationOutlineD} />
 
-        <path class="hero-map__borders" d={stateBordersD} />
-        <path class="hero-map__outline" d={nationOutlineD} />
+      <g class="hero-source" id="heroSource">
+        <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
+        <circle class="hero-ring"  data-ring="1" cx="0" cy="0" r="14" />
+        <circle class="hero-ring"  data-ring="2" cx="0" cy="0" r="14" />
+        <circle class="hero-ring"  data-ring="3" cx="0" cy="0" r="14" />
+        <circle class="hero-spark"      cx="0" cy="0" r="6" />
+        <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
+      </g>
+    </svg>
 
-        <!-- One source point at a time -->
-        <g class="hero-source" id="heroSource">
-          <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
-          <circle class="hero-ring"  data-ring="1" cx="0" cy="0" r="14" />
-          <circle class="hero-ring"  data-ring="2" cx="0" cy="0" r="14" />
-          <circle class="hero-ring"  data-ring="3" cx="0" cy="0" r="14" />
-          <circle class="hero-spark"      cx="0" cy="0" r="6" />
-          <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
-        </g>
-      </svg>
+    <div class="hero-tooltip" id="heroTooltip" role="tooltip" aria-hidden="true">
+      <span class="hero-tooltip__name" id="ttName">&mdash;</span>
+      <span class="hero-tooltip__hint" id="ttHint">click to run a study here</span>
+    </div>
+  </figure>
 
-      <!-- Hover tooltip rendered in HTML so we get rich type + arrow -->
-      <div class="hero-tooltip" id="heroTooltip" role="tooltip" aria-hidden="true">
-        <span class="hero-tooltip__name" id="ttName">&mdash;</span>
-        <span class="hero-tooltip__hint">click to run a study here</span>
-      </div>
-    </figure>
+  <!-- Result text — one editorial narration line, single source of truth. -->
+  <p class="hero-narration">
+    <span class="hero-narration__from">Cedar</span>
+    <span class="hero-narration__line" id="heroLine">An impact study traces a dollar through the economy. Click any state &mdash; or any tribal land &mdash; and watch it run.</span>
+  </p>
 
-    <!-- Cedar chatbot rail -->
-    <aside class="hero-cedar" aria-label="Cedar — Lumecon's AI assistant">
-      <header class="hero-cedar__head">
-        <span class="hero-cedar__dot"></span>
-        <span class="hero-cedar__name">Cedar</span>
-        <span class="hero-cedar__status" id="cedarStatus">ready when you are</span>
-      </header>
-
-      <ol class="hero-cedar__log" id="cedarLog" aria-live="polite">
-        <li class="cmsg cmsg--cedar is-in">
-          <span class="cmsg__from">Cedar</span>
-          Hi. I&rsquo;m Cedar, Lumecon&rsquo;s assistant. Click any state to run an impact study there, or ask me what a <em>direct,</em> <em>indirect,</em> or <em>induced</em> effect is.
-        </li>
-      </ol>
-
-      <form class="hero-cedar__form" id="cedarForm" autocomplete="off">
-        <input
-          type="text"
-          class="hero-cedar__input"
-          id="cedarInput"
-          placeholder="Ask Cedar, or click a state →"
-          aria-label="Message Cedar"
-        />
-        <button type="submit" class="hero-cedar__send" aria-label="Send">
-          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </form>
-
-      <div class="hero-cedar__chips" aria-label="Quick prompts">
-        <button type="button" class="ccchip" data-ask="cedar">Who are you?</button>
-        <button type="button" class="ccchip" data-ask="what">What&rsquo;s an impact study?</button>
-        <button type="button" class="ccchip" data-ask="direct">Direct?</button>
-        <button type="button" class="ccchip" data-ask="indirect">Indirect?</button>
-        <button type="button" class="ccchip" data-ask="induced">Induced?</button>
-        <button type="button" class="ccchip" data-ask="ledger">Ledger?</button>
-        <button type="button" class="ccchip" data-ask="privacy">Data &amp; privacy?</button>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Number marginalia. Live values left, derived right (dim until filled). -->
+  <!-- Live figures -->
   <dl class="hero-figs" aria-label="Result of the running impact study">
     <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
     <div class="hero-fig"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
@@ -177,9 +158,32 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     <div class="hero-fig hero-fig--derived" id="figJobsCell"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
   </dl>
 
+  <!-- Ask Cedar — quiet expander. Single Q + single A. No chat log.
+       Closed by default; visitor opens it only if they have a question. -->
+  <details class="ask-cedar" id="askCedar">
+    <summary class="ask-cedar__summary">
+      <span class="ask-cedar__lead">Ask Cedar</span>
+      <span class="ask-cedar__hint">what&rsquo;s a direct effect, who is Cedar, what&rsquo;s a ledger&hellip;</span>
+      <span class="ask-cedar__chev" aria-hidden="true">+</span>
+    </summary>
+    <form class="ask-cedar__form" id="askCedarForm" autocomplete="off">
+      <input
+        type="text"
+        class="ask-cedar__input"
+        id="askInput"
+        placeholder="Ask anything about economic impact analysis…"
+        aria-label="Message Cedar"
+      />
+      <button type="submit" class="ask-cedar__send" aria-label="Send">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+    <p class="ask-cedar__answer" id="askAnswer" aria-live="polite"></p>
+  </details>
+
   <p class="hero-foot">
     <span class="hero-foot__l">Illustrative multipliers &middot; real platform runs cite every number.</span>
-    <span class="hero-foot__r">AIANNH boundaries: Census TIGER/Line 2018.</span>
+    <span class="hero-foot__r">AIANNH boundaries: Census TIGER/Line 2018 &middot; click any reservation.</span>
   </p>
 
   <script type="application/json" id="heroStates"  set:html={statesJson}></script>
@@ -187,32 +191,27 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 </section>
 
 <script>
-  /* Hero workshop.
-     - Click any state to start a study from there.
-     - Hover any state to see its name in a follow-mouse tooltip.
-     - Cedar accepts free-form input plus quick-ask chips. Responses
-       are local pattern-matching (no AI call from a marketing page);
-       sensible canned answers for the four common questions, with a
-       graceful fallback that nudges the visitor to click the map.
-     - Numbers tick up smoothly to their target.
-     - Auto-cycle through three example regions on first load, with
-       different activity + amount each pass so repeated views never
-       show the same study twice. */
-
   type StateInfo = { name: string; cx: number; cy: number; code: string };
   const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
   const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
 
-  /* Activity catalog. Each ships with a sentence Cedar uses to frame
-     the study, an indirect/induced multiplier pair, and a jobs/M
-     coefficient. None of these are sourced; the hero footer says so. */
+  /* Activities + amounts: 5 × 5 = 25 combinations per region, plus a
+     tribal-specific catalog of verbs Cedar uses when an AIANNH polygon
+     is the source. */
   const ACTIVITIES = [
-    { id: 'build',    label: 'capital construction', verb: 'breaks ground on',     indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
-    { id: 'payroll',  label: 'operations payroll',   verb: 'expands the payroll of', indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
-    { id: 'grant',    label: 'grant pass-through',   verb: 'disburses',            indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
-    { id: 'tourism',  label: 'visitor spending',     verb: 'welcomes tourist dollars into', indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
-    { id: 'energy',   label: 'energy project',       verb: 'commissions a clean-energy project in', indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
+    { id: 'build',   label: 'capital construction', verb: 'breaks ground on',                  indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
+    { id: 'payroll', label: 'operations payroll',   verb: 'expands the payroll of',            indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
+    { id: 'grant',   label: 'grant pass-through',   verb: 'disburses',                          indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
+    { id: 'tourism', label: 'visitor spending',     verb: 'welcomes tourist dollars into',      indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
+    { id: 'energy',  label: 'energy project',       verb: 'commissions a clean-energy project in', indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
   ] as const;
+  const TRIBAL_VERBS = [
+    'opens a new tribal enterprise on',
+    'breaks ground on a casino expansion at',
+    'launches a workforce program across',
+    'commissions a solar array on',
+    'restarts a community-health clinic on',
+  ];
   const AMOUNTS = [
     { v: 1_000_000,  label: '$1M'  },
     { v: 5_000_000,  label: '$5M'  },
@@ -221,9 +220,6 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     { v: 50_000_000, label: '$50M' },
   ] as const;
 
-  /* Default cycle — three real example regions, each with a fixed
-     "story" sentence. The activity + amount are randomized on each
-     cycle pass so the visitor never sees the same study twice. */
   const SCENES = [
     { state: '53', name: 'Pierce County, WA',           story: 'A Pacific-Northwest municipality' },
     { state: '48', name: 'Travis County, TX',           story: 'A growth-metro university' },
@@ -235,7 +231,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   const stage   = document.getElementById('heroStage') as HTMLElement | null;
   const tooltip = document.getElementById('heroTooltip') as HTMLElement | null;
   const ttName  = document.getElementById('ttName');
+  const ttHint  = document.getElementById('ttHint');
   const source  = document.getElementById('heroSource');
+  const line    = document.getElementById('heroLine');
   const figD    = document.getElementById('figDirect');
   const figI    = document.getElementById('figIndirect');
   const figU    = document.getElementById('figInduced');
@@ -243,32 +241,25 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   const figJ    = document.getElementById('figJobs');
   const figTotalCell = document.getElementById('figTotalCell');
   const figJobsCell  = document.getElementById('figJobsCell');
-  const log     = document.getElementById('cedarLog');
-  const form    = document.getElementById('cedarForm') as HTMLFormElement | null;
-  const input   = document.getElementById('cedarInput') as HTMLInputElement | null;
-  const status  = document.getElementById('cedarStatus');
+  const askForm  = document.getElementById('askCedarForm') as HTMLFormElement | null;
+  const askInput = document.getElementById('askInput') as HTMLInputElement | null;
+  const askAnswer = document.getElementById('askAnswer');
 
-  if (stage && source && figD && figI && figU && figT && figJ && log && form && input && tooltip && ttName && status) {
+  if (stage && source && line && figD && figI && figU && figT && figJ && tooltip && ttName && askForm && askInput && askAnswer) {
 
     const wait = (ms: number) => new Promise<void>(r => window.setTimeout(r, ms));
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
-    /* ---------- helpers ---------- */
     const fmt = (n: number) =>
       n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.0$/, '') + 'M'
       : n >= 1_000   ? '$' + Math.round(n / 1_000) + 'K'
       :                '$' + Math.round(n);
 
-    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
-
-    /* Number ticker — animates from 0 → target over `dur` ms,
-       formatting the running value with the same fmt() as the final
-       so the column doesn't reshape mid-tick. */
     const tickTo = (el: HTMLElement, target: number, prefix = '', dur = 1100) => {
       const start = performance.now();
       const step = (now: number) => {
         const t = Math.min(1, (now - start) / dur);
-        const v = target * ease(t);
-        el.textContent = prefix + fmt(v);
+        el.textContent = prefix + fmt(target * ease(t));
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
@@ -277,16 +268,17 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       const start = performance.now();
       const step = (now: number) => {
         const t = Math.min(1, (now - start) / dur);
-        const v = Math.round(target * ease(t));
-        el.textContent = prefix + v.toLocaleString();
+        el.textContent = prefix + Math.round(target * ease(t)).toLocaleString();
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
     };
 
-    const clearShading = () => {
-      stage.querySelectorAll<HTMLElement>('.hero-state[data-ring]')
-        .forEach(s => s.removeAttribute('data-ring'));
+    const setLine = (text: string) => {
+      line.classList.remove('is-in');
+      void (line as HTMLElement).offsetWidth;
+      line.innerHTML = text;
+      line.classList.add('is-in');
     };
 
     const shadeNeighbors = (id: string) => {
@@ -310,79 +302,26 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       });
     };
 
-    /* ---------- Cedar chat helpers ---------- */
-    const addMsg = (from: 'cedar' | 'you', html: string) => {
-      const li = document.createElement('li');
-      li.className = 'cmsg cmsg--' + from;
-      const sender = document.createElement('span');
-      sender.className = 'cmsg__from';
-      sender.textContent = from === 'cedar' ? 'Cedar' : 'You';
-      li.appendChild(sender);
-      const body = document.createElement('span');
-      body.innerHTML = html;
-      li.appendChild(body);
-      log.appendChild(li);
-      requestAnimationFrame(() => { requestAnimationFrame(() => li.classList.add('is-in')); });
-      log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
-    };
-
-    const typing = async (ms = 700) => {
-      status.textContent = 'Cedar is typing…';
-      status.classList.add('is-typing');
-      await wait(ms);
-      status.classList.remove('is-typing');
-      status.textContent = 'ready when you are';
-    };
-
-    const cedarSay = async (html: string, typingMs = 700) => {
-      await typing(typingMs);
-      addMsg('cedar', html);
-    };
-
-    /* ---------- canned-answer chatbot ---------- */
-    const ANSWERS: Record<string, string> = {
-      what: `An <em>economic impact study</em> traces a dollar after it's spent. The activity itself, the suppliers and contractors that activity buys from, and the wages those workers spend on rent, groceries, and the rest. The map is one playing in real time &mdash; click any state and watch it run.`,
-      direct: `The <em>direct</em> effect is the activity itself &mdash; payroll, contracts, the build-out. The gold ring on the map. It's the simplest number and the only one that doesn't need a multiplier.`,
-      indirect: `The <em>indirect</em> effect follows the supply chain. The contractors, vendors, and consultants the activity pays &mdash; and the firms <em>they</em> pay. That's the second ring out. Terra on the map.`,
-      induced: `The <em>induced</em> effect is what happens when wages get spent. Households buy rent, groceries, kids' shoes, a movie ticket. Those receipts ripple too. The widest ring &mdash; cedar green.`,
-      ledger: `The <em>ledger</em> is every assumption, source, and multiplier behind the numbers. Lumecon's platforms ship one with every run so a reviewer can audit the result. The figures here are illustrative; the platforms cite theirs.`,
-      run: `Pick any state on the map and I'll run a study from there. Or just watch the cycle &mdash; it's already running.`,
-      hello: `Hi. Want to see how an impact study works? Click any state on the map, or use one of the quick prompts below.`,
-      cedar: `I'm <em>Cedar</em> &mdash; Lumecon's AI thought partner for economic and policy analysis. On the real platforms I sit beside your data: I read the messy uploads, name the assumptions, ask the question the model is about to assume an answer to, and write the ledger as we go. I won't think <em>for</em> you. I think <em>with</em> you. Here on the marketing page I'm scoped down: I narrate the demo and answer the obvious questions.`,
-      privacy: `On the platforms I run inside a per-project sandbox. Your data doesn't leave it. Provider calls are pseudonymized &mdash; I never see your real user ID, and project + file names get hashed before they cross the network. Here on the marketing site I'm a pattern-matcher with no upstream call.`,
-      platforms: `Lumecon is the parent. Three platforms inherit the same modeling backbone: <strong>Local</strong> (municipal), <strong>Tribal</strong> (Indigenous economies, with AIANNH geography baked in), <strong>Global</strong> (cross-border). The pills next to the wordmark scroll you to each.`,
-      help: `Things I can answer: what's an impact study, what each ring means, what the ledger is, who I am, how I handle data, what the three platforms cover. Anything else, point me at a state on the map.`,
-    };
-
-    const route = (q: string): string => {
-      const t = q.toLowerCase();
-      if (/\b(hi|hey|hello|yo)\b/.test(t)) return ANSWERS.hello;
-      if (/\b(who.*you|what.*you|tell.*about.*you|cedar)\b/.test(t)) return ANSWERS.cedar;
-      if (/\b(privacy|safe|secure|data|leak|train|provider)\b/.test(t)) return ANSWERS.privacy;
-      if (/\b(help|what.*can.*you|options|menu)\b/.test(t)) return ANSWERS.help;
-      if (/\b(what.*(impact|study)|how.*work|explain.*study|what.*do)\b/.test(t)) return ANSWERS.what;
-      if (/\bdirect\b/.test(t)) return ANSWERS.direct;
-      if (/\bindirect\b/.test(t)) return ANSWERS.indirect;
-      if (/\binduced\b/.test(t)) return ANSWERS.induced;
-      if (/\b(ledger|source|cite|assumption|method)\b/.test(t)) return ANSWERS.ledger;
-      if (/\b(run|start|try|demo|show)\b/.test(t)) return ANSWERS.run;
-      if (/\b(platform|product|local|tribal|global|brand|company)\b/.test(t)) return ANSWERS.platforms;
-      return `I'm a marketing-page assistant, not the full model. Try asking <em>what's a direct effect</em>, <em>who are you</em>, or click a state to run a study.`;
-    };
-
-    /* ---------- running a study ---------- */
+    /* ---------- run a study ---------- */
     let runId = 0;
     let cycleTimer: number | undefined;
 
-    const runStudy = async (stateId: string, opts?: { activity?: typeof ACTIVITIES[number]; amount?: typeof AMOUNTS[number]; framing?: string }) => {
+    type RunOpts = {
+      activity?: typeof ACTIVITIES[number];
+      amount?: typeof AMOUNTS[number];
+      framing?: string;
+      sourcePoint?: { cx: number; cy: number };
+    };
+
+    const runStudy = async (stateId: string, opts?: RunOpts) => {
       runId += 1; const me = runId;
       const s = states[stateId]; if (!s) return;
 
       const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
       const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
       const framing  = opts?.framing  ?? `Someone ${activity.verb} ${s.name}`;
+      const src      = opts?.sourcePoint ?? { cx: s.cx, cy: s.cy };
 
-      // reset
       stage.dataset.run = '';
       stage.dataset.ring = '';
       figTotalCell?.classList.remove('is-filled');
@@ -390,47 +329,41 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       [figD, figI, figU, figT, figJ].forEach(el => { if (el) el.textContent = '—'; });
 
       shadeNeighbors(stateId);
-      moveSource(s.cx, s.cy);
+      moveSource(src.cx, src.cy);
       stage.dataset.run = '1';
 
-      await cedarSay(`${framing}. A ${activity.label} of <strong>${amount.label}</strong>. Watch the rings.`, 500);
+      setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
 
-      // Direct
       stage.dataset.ring = '1';
-      await wait(600);
-      tickTo(figD as HTMLElement, amount.v, '', 1000);
-
-      // Indirect
+      await wait(550);
+      tickTo(figD as HTMLElement, amount.v, '', 950);
       await wait(1900);
       if (runId !== me) return;
       stage.dataset.ring = '2';
-      await cedarSay(`Suppliers near ${s.name} pick up the work.`, 500);
       const indirect = amount.v * activity.indirect;
-      tickTo(figI as HTMLElement, indirect, '+ ', 1000);
+      tickTo(figI as HTMLElement, indirect, '+ ', 950);
+      setLine(`Suppliers and contractors near ${s.name} pick up the work.`);
 
-      // Induced
-      await wait(1900);
+      await wait(2000);
       if (runId !== me) return;
       stage.dataset.ring = '3';
-      await cedarSay(`Wages from rings one and two land in households. The widest ring.`, 500);
       const induced = amount.v * activity.induced;
-      tickTo(figU as HTMLElement, induced, '+ ', 1000);
+      tickTo(figU as HTMLElement, induced, '+ ', 950);
+      setLine(`Wages land in households &mdash; rent, groceries, kids&rsquo; shoes. The widest ring.`);
 
-      // Total + jobs
-      await wait(1900);
+      await wait(2000);
       if (runId !== me) return;
       stage.dataset.ring = '4';
       const total = amount.v + indirect + induced;
       const jobs = Math.round((total / 1_000_000) * activity.jobsPerM);
       figTotalCell?.classList.add('is-filled');
       figJobsCell?.classList.add('is-filled');
-      tickTo(figT as HTMLElement, total, '', 1200);
-      tickInt(figJ as HTMLElement, jobs, '≈ ', 1000);
-      await cedarSay(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`, 500);
+      tickTo(figT as HTMLElement, total, '', 1150);
+      tickInt(figJ as HTMLElement, jobs, '≈ ', 950);
+      setLine(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`);
     };
 
-    /* ---------- auto-cycle (different activity each pass) ---------- */
     let sceneIdx = 0;
     const cycle = async () => {
       const scene = SCENES[sceneIdx % SCENES.length];
@@ -439,38 +372,44 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       const framing  = `${scene.story} ${activity.verb} ${scene.name}`;
       await runStudy(scene.state, { activity, amount, framing });
       sceneIdx += 1;
-      cycleTimer = window.setTimeout(cycle, 5200);
+      cycleTimer = window.setTimeout(cycle, 6200);
     };
 
-    /* ---------- hover tooltip ---------- */
-    const placeTooltip = (e: MouseEvent | FocusEvent, el: HTMLElement) => {
+    /* ---------- Hover tooltip ---------- */
+    const placeTooltip = (e: MouseEvent | FocusEvent) => {
       const rect = stage.getBoundingClientRect();
       let x: number, y: number;
-      if ('clientX' in e && (e as MouseEvent).clientX) {
+      if ('clientX' in e) {
         x = (e as MouseEvent).clientX - rect.left;
         y = (e as MouseEvent).clientY - rect.top;
       } else {
-        const b = (el as any).getBoundingClientRect();
-        x = (b.left + b.width / 2) - rect.left;
-        y = (b.top + b.height / 2) - rect.top;
+        const t = (e.target as Element).getBoundingClientRect();
+        x = (t.left + t.width / 2) - rect.left;
+        y = (t.top + t.height / 2) - rect.top;
       }
       tooltip.style.transform = `translate(${x}px, ${y}px)`;
     };
 
+    const setTooltip = (name: string, hint: string) => {
+      ttName.textContent = name;
+      if (ttHint) ttHint.textContent = hint;
+    };
+
+    /* ---------- state click + hover ---------- */
     stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
       el.addEventListener('mouseenter', (e) => {
         const id = el.dataset.id; if (!id) return;
-        ttName.textContent = states[id]?.name || '';
+        setTooltip(states[id]?.name || '', 'click to run a study here');
         tooltip.classList.add('is-on');
-        placeTooltip(e, el);
+        placeTooltip(e);
       });
-      el.addEventListener('mousemove', (e) => placeTooltip(e, el));
+      el.addEventListener('mousemove', (e) => placeTooltip(e));
       el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
       el.addEventListener('focus', (e) => {
         const id = el.dataset.id; if (!id) return;
-        ttName.textContent = states[id]?.name || '';
+        setTooltip(states[id]?.name || '', 'press Enter to run a study here');
         tooltip.classList.add('is-on');
-        placeTooltip(e, el);
+        placeTooltip(e);
       });
       el.addEventListener('blur', () => tooltip.classList.remove('is-on'));
 
@@ -478,7 +417,7 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         const id = el.dataset.id; if (!id) return;
         if (cycleTimer) window.clearTimeout(cycleTimer);
         await runStudy(id);
-        cycleTimer = window.setTimeout(cycle, 5800);
+        cycleTimer = window.setTimeout(cycle, 6800);
       };
       el.addEventListener('click', start);
       el.addEventListener('keydown', (e) => {
@@ -487,27 +426,85 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       });
     });
 
-    /* ---------- Cedar input + chips ---------- */
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const q = input.value.trim(); if (!q) return;
-      addMsg('you', q);
-      input.value = '';
-      await cedarSay(route(q), 650);
-    });
-    document.querySelectorAll<HTMLButtonElement>('.ccchip').forEach(c => {
-      c.addEventListener('click', async () => {
-        const k = c.dataset.ask || '';
-        addMsg('you', c.textContent || '');
-        const ans = (ANSWERS as any)[k] || ANSWERS.what;
-        await cedarSay(ans, 650);
+    /* ---------- AIANNH click + hover ---------- */
+    stage.querySelectorAll<HTMLElement>('.hero-aiannh').forEach(el => {
+      el.addEventListener('mouseenter', (e) => {
+        setTooltip(el.dataset.name || 'Tribal land', 'click to run a tribal-economy study');
+        tooltip.classList.add('is-on');
+        placeTooltip(e);
+      });
+      el.addEventListener('mousemove', (e) => placeTooltip(e));
+      el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
+      el.addEventListener('focus', (e) => {
+        setTooltip(el.dataset.name || 'Tribal land', 'press Enter to run a tribal-economy study');
+        tooltip.classList.add('is-on');
+        placeTooltip(e);
+      });
+      el.addEventListener('blur', () => tooltip.classList.remove('is-on'));
+
+      const start = async () => {
+        const fips = el.dataset.fips; if (!fips) return;
+        const cx = parseFloat(el.dataset.cx || '0');
+        const cy = parseFloat(el.dataset.cy || '0');
+        const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
+        if (cycleTimer) window.clearTimeout(cycleTimer);
+        // Pick a tribal-flavored verb + an activity (use payroll for plausibility).
+        const verb = TRIBAL_VERBS[Math.floor(Math.random() * TRIBAL_VERBS.length)];
+        const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+        const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+        const framing  = `A tribal government ${verb} ${tribalName}`;
+        await runStudy(fips, { activity, amount, framing, sourcePoint: { cx, cy } });
+        cycleTimer = window.setTimeout(cycle, 6800);
+      };
+      el.addEventListener('click', start);
+      el.addEventListener('keydown', (e) => {
+        const k = (e as KeyboardEvent).key;
+        if (k === 'Enter' || k === ' ') { e.preventDefault(); start(); }
       });
     });
 
-    /* ---------- IP-personalized kickoff ---------- */
+    /* ---------- Ask Cedar (one-shot Q + A) ---------- */
+    const ANSWERS: Record<string, string> = {
+      what: `An <em>economic impact study</em> traces a dollar after it&rsquo;s spent &mdash; the activity itself, the suppliers it buys from, and the wages those workers spend on rent, groceries, the rest. The map is one playing in real time.`,
+      direct: `The <em>direct</em> effect is the activity itself &mdash; payroll, contracts, the build-out. The gold ring on the map. The only number that doesn&rsquo;t need a multiplier.`,
+      indirect: `The <em>indirect</em> effect follows the supply chain &mdash; the contractors, vendors, and consultants the activity pays, and the firms they pay. Second ring out. Terra.`,
+      induced: `The <em>induced</em> effect is what happens when wages get spent &mdash; rent, groceries, kids&rsquo; shoes. The widest ring, cedar green.`,
+      ledger: `The <em>ledger</em> is every assumption, source, and multiplier behind the numbers. Lumecon&rsquo;s platforms ship one with every run so a reviewer can audit the result.`,
+      cedar: `I&rsquo;m <em>Cedar</em> &mdash; Lumecon&rsquo;s AI thought partner. On the real platforms I sit beside your data: read the uploads, name every assumption, ask the question the model is about to assume an answer to. I won&rsquo;t think <em>for</em> you. I think <em>with</em> you.`,
+      privacy: `On the platforms I run inside a per-project sandbox. Provider calls are pseudonymized &mdash; project and file names get hashed before they leave; your real user ID never appears upstream. Here on the marketing page I&rsquo;m a pattern-matcher with no upstream call.`,
+      platforms: `Lumecon is the parent. Three platforms inherit the same modeling backbone: <strong>Local</strong> (municipal), <strong>Tribal</strong> (Indigenous economies, with AIANNH geography baked in), <strong>Global</strong> (cross-border).`,
+    };
+    const route = (q: string): string => {
+      const t = q.toLowerCase();
+      if (/\b(hi|hey|hello)\b/.test(t))                            return ANSWERS.cedar;
+      if (/\b(who.*you|tell.*about.*you|are you|cedar)\b/.test(t)) return ANSWERS.cedar;
+      if (/\b(privacy|safe|secure|data|leak|train|provider)\b/.test(t)) return ANSWERS.privacy;
+      if (/\b(what.*(impact|study)|how.*work|explain.*study)\b/.test(t)) return ANSWERS.what;
+      if (/\bdirect\b/.test(t)) return ANSWERS.direct;
+      if (/\bindirect\b/.test(t)) return ANSWERS.indirect;
+      if (/\binduced\b/.test(t)) return ANSWERS.induced;
+      if (/\b(ledger|source|cite|assumption|method)\b/.test(t)) return ANSWERS.ledger;
+      if (/\b(platform|product|local|tribal|global|brand|company)\b/.test(t)) return ANSWERS.platforms;
+      return `I&rsquo;m a marketing-page assistant, scoped to the basics. Try <em>what&rsquo;s a direct effect</em>, <em>who are you</em>, or click any state or reservation to run a study.`;
+    };
+
+    askForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const q = askInput.value.trim(); if (!q) return;
+      askAnswer.classList.remove('is-in');
+      askAnswer.innerHTML = '';
+      void (askAnswer as HTMLElement).offsetWidth;
+      askInput.disabled = true;
+      await wait(400);
+      askAnswer.innerHTML = route(q);
+      askAnswer.classList.add('is-in');
+      askInput.disabled = false;
+      askInput.value = '';
+    });
+
+    /* ---------- IP geolocation kickoff ---------- */
     const GEO_KEY = 'lumecon:geo';
     const GEO_TTL_MS = 30 * 24 * 60 * 60 * 1000;
-
     const readCachedState = (): string | null => {
       try {
         const raw = localStorage.getItem(GEO_KEY); if (!raw) return null;
@@ -539,12 +536,11 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     } else {
       detectStateId().then(async (sid) => {
         if (sid && states[sid]) {
-          // Personalize the first study: real state, randomized activity + amount.
           const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
           const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
           const framing  = `An impact study right where you are &mdash; ${states[sid].name}. Someone ${activity.verb} the area`;
           await runStudy(sid, { activity, amount, framing });
-          cycleTimer = window.setTimeout(cycle, 5600);
+          cycleTimer = window.setTimeout(cycle, 6800);
         } else {
           cycleTimer = window.setTimeout(cycle, 900);
         }
