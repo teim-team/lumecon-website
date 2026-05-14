@@ -1,0 +1,32 @@
+# Lumecon Inc.
+
+> Economic and policy analysis software for governments and mission-driven organizations. Lumecon Inc. is the parent brand of three specialized platforms: Local Economic Impact, Tribal Economic Impact, and Global Economic Impact. Cedar is the in-product AI assistant that reads files, surfaces assumptions, and documents methods so a reviewer can verify the work.
+
+Lumecon replaces the consultant in your budget process. It runs impact studies in-house using real-time administrative data and current modeling methods, and ships each run with the assumption ledger, sources, and method so a council member or grant reviewer can verify the result.
+
+## Platforms
+
+- [Local Economic Impact](https://localeconomicimpact.com/): For municipal governments, EDOs, enterprises, and nonprofits. In active development.
+- [Tribal Economic Impact](https://tribaleconomicimpact.com/): For tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies, with Indigenous data sovereignty in the foundation. Patent pending.
+- [Global Economic Impact](https://globaleconomicimpact.com/): For multinationals, NGOs, and governments. Cross-border and multiregional analysis using comparable methods. Future development.
+
+## Cedar
+
+Cedar is an AI assistant inside every Lumecon platform. It reads what users upload (budgets, payroll detail, council agendas, chapter audits), surfaces each assumption the model is about to use, asks the user to confirm or override, and writes a record of every source and method as the run completes. The marketing-page Cedar is scoped to questions about the demo and does not call any upstream provider.
+
+## Audience
+
+Governments and mission-driven organizations: municipal governments, tribal nations and tribal enterprises, state agencies, federal programs, universities and research labs, foundations, CDFIs, and economic development organizations.
+
+## Contact
+
+- Email: contact@lumecon.ai
+- LinkedIn: https://www.linkedin.com/company/lumecon-ai
+- Web: https://lumecon.ai
+
+## Optional
+
+- [Privacy policy](https://lumecon.ai/privacy/)
+- [Terms of service](https://lumecon.ai/terms/)
+- [Status](https://lumecon.ai/status/)
+- [Security disclosure](https://lumecon.ai/.well-known/security.txt)
