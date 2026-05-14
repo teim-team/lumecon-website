@@ -76,6 +76,28 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     </p>
   </div>
 
+  <!-- Workspace — frames the map + study + assistant as one product-style panel.
+       Header bar gives it a credible "tool" reading, not a decorative demo. -->
+  <div class="workspace" id="heroWorkspace">
+    <header class="workspace__bar">
+      <span class="workspace__title">
+        <span class="workspace__dot" aria-hidden="true"></span>
+        Economic impact workspace
+      </span>
+      <span class="workspace__meta">
+        <span class="workspace__meta-k">Mode</span>
+        <span class="workspace__meta-v">Live study</span>
+        <span class="workspace__sep" aria-hidden="true"></span>
+        <span class="workspace__meta-k">Engine</span>
+        <span class="workspace__meta-v">Lumecon &middot; mock multipliers</span>
+        <span class="workspace__sep" aria-hidden="true"></span>
+        <span class="workspace__meta-k">Status</span>
+        <span class="workspace__meta-v workspace__meta-v--ok" id="workspaceStatus">Ready</span>
+      </span>
+    </header>
+
+    <div class="workspace__body">
+
   <!-- Map: dominant, full-width. AIANNH polygons are clickable. -->
   <figure class="hero-stage" id="heroStage" aria-label="Interactive map. Hover any state or tribal land to inspect; click to run a study there.">
     <svg class="hero-map" id="heroMap" viewBox={`${VBX} ${VBY} ${VBW} ${VBH}`} preserveAspectRatio="xMidYMid meet" role="img">
@@ -180,6 +202,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     </form>
     <p class="ask-cedar__answer" id="askAnswer" aria-live="polite"></p>
   </details>
+
+    </div>
+
+    <footer class="workspace__foot">
+      <span class="workspace__foot-l">Methodology &middot; mock IO multipliers, three-round Direct/Indirect/Induced decomposition. Real platforms use sourced multipliers (RIMS II, IMPLAN, BEA RIMS &middot; tribal economy adapter in development).</span>
+      <span class="workspace__foot-r">v 0.7.0 &middot; preview</span>
+    </footer>
+  </div>
 
   <p class="hero-foot">
     Illustrative multipliers; the real platform runs cite every number. Tribal-land geography from Census TIGER/Line &mdash; click any reservation.
@@ -331,6 +361,10 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       moveSource(src.cx, src.cy);
       stage.dataset.run = '1';
 
+      // Workspace status: Running
+      const wsStatus = document.getElementById('workspaceStatus');
+      if (wsStatus) { wsStatus.textContent = 'Running'; wsStatus.classList.remove('workspace__meta-v--ok'); wsStatus.classList.add('workspace__meta-v--run'); }
+
       setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
 
@@ -361,6 +395,10 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       tickTo(figT as HTMLElement, total, '', 1150);
       tickInt(figJ as HTMLElement, jobs, '≈ ', 950);
       setLine(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`);
+
+      // Workspace status: Complete
+      const wsStatusDone = document.getElementById('workspaceStatus');
+      if (wsStatusDone) { wsStatusDone.textContent = 'Complete'; wsStatusDone.classList.remove('workspace__meta-v--run'); wsStatusDone.classList.add('workspace__meta-v--ok'); }
     };
 
     let sceneIdx = 0;

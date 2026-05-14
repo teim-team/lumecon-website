@@ -15,11 +15,108 @@
 .hero > * { position: relative; z-index: 1; }
 
 .hero-brand,
-.hero-stage,
-.hero-narration,
-.hero-figs,
-.ask-cedar,
+.workspace,
 .hero-foot { max-width: 1240px; margin-left: auto; margin-right: auto; width: 100%; }
+
+/* ---------- workspace panel ----------
+   Frames the map + result + Cedar as one credible product UI block.
+   Header bar with mode + engine + status fields; body holds the
+   map and figures and the Ask Cedar expander; footer carries the
+   methodology line. This is the move that makes the hero read as
+   an embedded mini-product, not as a marketing illustration. */
+.workspace {
+  background: var(--white);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(14, 21, 48, .04), 0 8px 24px rgba(14, 21, 48, .06);
+}
+.workspace__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem 1.1rem;
+  background: var(--cream);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--ink-2);
+  letter-spacing: -.005em;
+  flex-wrap: wrap;
+}
+.workspace__title {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 600;
+  color: var(--navy);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.workspace__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--cedar-light);
+  box-shadow: 0 0 6px rgba(63, 136, 102, .55);
+}
+.workspace__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.workspace__meta-k {
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .58rem;
+  font-weight: 600;
+}
+.workspace__meta-v {
+  color: var(--ink);
+  font-weight: 500;
+}
+.workspace__meta-v--ok { color: var(--cedar); }
+.workspace__meta-v--run { color: var(--gold); }
+.workspace__sep {
+  width: 1px;
+  height: 12px;
+  background: var(--rule-strong);
+  margin: 0 .25rem;
+}
+.workspace__body {
+  padding: clamp(1.2rem, 2vw, 1.8rem);
+  display: grid;
+  gap: clamp(1rem, 1.6vw, 1.4rem);
+}
+.workspace__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem 1.1rem;
+  border-top: 1px solid var(--rule);
+  background: var(--cream);
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  color: var(--ink-3);
+  letter-spacing: -.002em;
+  flex-wrap: wrap;
+}
+.workspace__foot-l { max-width: 80%; line-height: 1.5; }
+.workspace__foot-r {
+  white-space: nowrap;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+@media (max-width: 720px) {
+  .workspace__bar, .workspace__foot { font-size: .6rem; gap: .5rem; padding: .55rem .8rem; }
+  .workspace__meta-k { font-size: .54rem; }
+  .workspace__foot-l { max-width: 100%; }
+  .workspace__sep { display: none; }
+}
 
 /* ---------- brand: logo + pitch + platform pills ---------- */
 .hero-brand {
@@ -130,13 +227,13 @@
 .hero-state[data-ring="1"] { fill: var(--gold);  fill-opacity: .22; }
 .hero-state[data-ring="2"] { fill: var(--gold);  fill-opacity: .10; }
 
-/* Source point */
-.hero-source { opacity: 0; transition: opacity .5s var(--ease); }
+/* Source point — restrained, not a decorative glow. */
+.hero-source { opacity: 0; transition: opacity .4s var(--ease); }
 .hero-stage[data-run="1"] .hero-source { opacity: 1; }
-.hero-glow { opacity: 0; transition: opacity .6s var(--ease); }
-.hero-stage[data-run="1"] .hero-glow { opacity: .55; }
-.hero-spark        { fill: var(--gold); filter: drop-shadow(0 0 10px rgba(196, 154, 60, .6)); }
-.hero-spark__core  { fill: var(--white); stroke: var(--navy); stroke-width: .8; }
+.hero-glow { opacity: 0; transition: opacity .5s var(--ease); }
+.hero-stage[data-run="1"] .hero-glow { opacity: .35; }
+.hero-spark        { fill: var(--navy); }
+.hero-spark__core  { fill: var(--gold); stroke: var(--navy); stroke-width: .8; }
 
 @keyframes heroRippleA { 0% { r: 14; opacity: .9; stroke-width: 2.6; } 90% { r: 320; opacity: 0; stroke-width: .4; } 100% { r: 320; opacity: 0; } }
 .hero-ring {
