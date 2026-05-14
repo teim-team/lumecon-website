@@ -1,22 +1,26 @@
 {
   "name": "Lumecon Inc.",
   "short_name": "Lumecon",
-  "description": "Economic and policy analysis software for governments.",
+  "description": "Economic and policy analysis software for governments and mission-driven organizations. An alternative to IMPLAN, RIMS II, and REMI.",
   "start_url": "/",
   "scope": "/",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "theme_color": "#064D3B",
+  "theme_color": "#0A0F26",
   "background_color": "#FFFFFF",
-  "display": "standalone"
+  "display": "standalone",
+  "categories": ["productivity", "business", "government"],
+  "lang": "en-US"
 }
