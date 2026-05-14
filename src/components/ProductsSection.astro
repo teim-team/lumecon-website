@@ -26,17 +26,18 @@ const platforms = [local, tribal, globalProduct];
             <h3 class="platform__name">{p.name}</h3>
             <span class="platform__url">{p.domain}</span>
           </div>
-          <p class="platform__desc">
-            {i === 0 && (
-              <>Rigorous economic and policy analysis for US municipal governments, enterprises, nonprofits, and economic development organizations without the cost or complexity of traditional tools.</>
-            )}
-            {i === 1 && (
-              <>Built for the economies that fall outside standard modeling assumptions. Designed from day one for tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies, with Indigenous data sovereignty in the foundation.</>
-            )}
-            {i === 2 && (
-              <>The same modeling backbone applied across borders, producing cross-border and multiregional analysis for multinationals, NGOs, and governments using comparable methods that yield comparable results.</>
-            )}
-          </p>
+          <div class="platform__copy">
+            <p class="platform__tag">
+              {i === 0 && 'From line items to a council-ready impact study.'}
+              {i === 1 && 'Modeled on tribal terms, not adapted from a state model.'}
+              {i === 2 && 'Cross-border programs in one comparable model.'}
+            </p>
+            <p class="platform__desc">
+              {i === 0 && 'For US municipal governments, EDOs, enterprises, and nonprofits. Built to replace both the consultant and the six-figure software.'}
+              {i === 1 && 'For tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies, with Indigenous data sovereignty in the foundation.'}
+              {i === 2 && 'For multinationals, NGOs, and governments. The same modeling backbone, applied across borders, with results that compare apples to apples.'}
+            </p>
+          </div>
           <span class={`platform__badge platform__badge--${badgeKind}`}>{badge}</span>
         </a>
       );

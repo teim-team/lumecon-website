@@ -80,8 +80,13 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       Your work changes the economy around it. We make that change measurable.
     </h1>
     <p class="hero-sub">
-      Most teams can&rsquo;t run an impact study because they&rsquo;re priced out of the software, waiting on a consultant, or stuck on data trapped across departments. Lumecon replaces the first two. Cedar, our built-in AI, helps with the third. We use AI to reduce the infrastructure that slows analysis down, not as a marketing gimmick.
+      Economic impact analysis software for governments and mission-driven organizations. We replace the consultant, the overpriced legacy software, and the data silos that block impact studies.
     </p>
+    <ul class="hero-proof" aria-label="Proof points">
+      <li>Built at Cornell</li>
+      <li>Patent-pending tribal model</li>
+      <li>Alternative to IMPLAN, RIMS II, REMI</li>
+    </ul>
     <div class="hero-cta">
       <a href="#workspace" class="btn">See it run</a>
       <a href="#contact" class="btn btn--ghost">Request a demo</a>
@@ -97,7 +102,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         <span class="workspace__region" id="workspaceRegion" aria-live="polite">Hover any state</span>
       </span>
       <span class="workspace__sub">
-        <button type="button" class="workspace__again" id="workspaceAgain" aria-label="Run another study">Run again</button>
+        <span class="workspace__study-id" id="workspaceStudyId" aria-label="Study identifier">STUDY 001</span>
+        <span class="workspace__sub-divider" aria-hidden="true"></span>
+        <button type="button" class="workspace__again" id="workspaceAgain" aria-label="Run a new study">New study</button>
         <span class="workspace__sub-divider" aria-hidden="true"></span>
         <span class="workspace__dot" id="workspaceStatus" aria-hidden="true"></span>
         <span class="workspace__sub-text" id="workspaceStatusLabel">Idle</span>
@@ -577,6 +584,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     const runStudy = async (stateId: string, opts?: RunOpts) => {
       runId += 1; const me = runId;
       const s = states[stateId]; if (!s) return;
+
+      const studyIdEl = document.getElementById('workspaceStudyId');
+      if (studyIdEl) studyIdEl.textContent = `STUDY ${String(runId).padStart(3, '0')}`;
 
       const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
       const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];

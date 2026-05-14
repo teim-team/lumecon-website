@@ -92,6 +92,25 @@ body {
   border-radius: 2px;
 }
 
+/* Skip-to-content link — visible only on keyboard focus, jumps past nav. */
+.skip-link {
+  position: fixed;
+  top: .5rem;
+  left: .5rem;
+  z-index: 10000;
+  padding: .55rem .9rem;
+  background: var(--navy);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-size: .88rem;
+  font-weight: 600;
+  border-radius: 4px;
+  text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform .18s var(--ease);
+}
+.skip-link:focus { transform: none; }
+
 /* Editorial primitives — used by Hero, Products, Why, Cedar so the
    whole homepage reads as one publication, not four pasted-together
    sections. */
@@ -133,8 +152,8 @@ body {
 .rule-h {
   display: block;
   width: clamp(120px, 18vw, 220px);
-  height: 1.5px;
-  background: var(--purple-rule);
+  height: 1px;
+  background: var(--rule-strong);
   border: 0;
   margin: 1rem 0 1.4rem;
 }
@@ -224,8 +243,8 @@ strong { font-weight: 600; color: inherit; }
   top: 0;
   left: 0;
   width: 0%;
-  height: 2.5px;
-  background: linear-gradient(90deg, var(--gold), var(--terra));
+  height: 2px;
+  background: var(--gold);
   z-index: 9999;
   pointer-events: none;
   transition: width .1s linear;

@@ -39,3 +39,55 @@
   max-width: 56ch;
   font-weight: 400;
 }
+.cedar-steps {
+  list-style: none;
+  padding: 0;
+  margin: 1.4rem 0 .4rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.cedar-step {
+  padding: 1.4rem 1.4rem 1.4rem 0;
+  border-right: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  position: relative;
+}
+.cedar-step:not(:first-child) { padding-left: 1.4rem; }
+.cedar-step:last-child { border-right: 0; padding-right: 0; }
+.cedar-step__num {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.cedar-step__head {
+  font-family: var(--font-display);
+  font-size: clamp(1.02rem, 1.5vw, 1.16rem);
+  font-weight: 600;
+  letter-spacing: -.012em;
+  line-height: 1.25;
+  color: var(--navy);
+  margin: 0;
+}
+.cedar-step__body {
+  font-size: .92rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+  font-weight: 400;
+}
+@media (max-width: 720px) {
+  .cedar-steps { grid-template-columns: 1fr; }
+  .cedar-step { padding: 1.1rem 0 1.1rem 0; border-right: 0; border-bottom: 1px solid var(--rule); }
+  .cedar-step:not(:first-child) { padding-left: 0; }
+  .cedar-step:last-child { border-bottom: 0; padding-bottom: 0; }
+}
