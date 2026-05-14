@@ -1,29 +1,47 @@
-/* Hero — Lumecon brand + live impact study with Cedar in the margin.
-   Hybrid layout: the map is the centerpiece, the result narrates in
-   one editorial line + a five-cell figures row beneath, and Cedar is
-   a quiet expander you open only if you have a question. No
-   permanent chat panel; no stacking message log. */
+/* Hero — brand statement, then a saturated product workspace below. */
 
 .hero {
   background: var(--white);
-  border-bottom: 1px solid var(--rule);
-  position: relative;
-  padding: clamp(6rem, 11vh, 9rem) var(--container-pad) clamp(2.6rem, 5vh, 4rem);
+  padding: clamp(7rem, 14vh, 11rem) var(--container-pad) clamp(3rem, 6vh, 5rem);
   display: grid;
-  gap: clamp(1.1rem, 2vw, 1.7rem);
+  gap: clamp(2rem, 5vw, 4rem);
 }
 .hero > * { position: relative; z-index: 1; }
-
 .hero-brand,
-.workspace,
-.hero-foot { max-width: 1240px; margin-left: auto; margin-right: auto; width: 100%; }
+.workspace { max-width: 1200px; margin-left: auto; margin-right: auto; width: 100%; }
 
-/* ---------- workspace panel ----------
-   Frames the map + result + Cedar as one credible product UI block.
-   Header bar with mode + engine + status fields; body holds the
-   map and figures and the Ask Cedar expander; footer carries the
-   methodology line. This is the move that makes the hero read as
-   an embedded mini-product, not as a marketing illustration. */
+/* ---------- brand statement ---------- */
+.hero-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  align-items: flex-start;
+  padding-bottom: clamp(1rem, 2vw, 2rem);
+  border-bottom: 1px solid var(--rule);
+}
+.hero-mark img {
+  height: clamp(56px, 7vw, 84px);
+  width: auto;
+  display: block;
+}
+.hero-statement {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  color: var(--navy);
+  margin: 0;
+  max-width: 22ch;
+}
+.hero-cta {
+  display: flex;
+  gap: .7rem;
+  flex-wrap: wrap;
+  margin-top: .4rem;
+}
+
+/* ---------- workspace panel (product UI) ---------- */
 .workspace {
   background: var(--white);
   border: 1px solid var(--rule);
@@ -61,161 +79,105 @@
   box-shadow: 0 0 0 3px rgba(63, 136, 102, .18);
 }
 .workspace__body {
-  padding: clamp(1.2rem, 2vw, 1.8rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
   display: grid;
   gap: clamp(.9rem, 1.4vw, 1.3rem);
 }
 
-@media (max-width: 720px) {
-  .workspace__bar { padding: .65rem .9rem; }
-  .workspace__title { font-size: .82rem; }
-}
-
-/* ---------- brand: logo + pitch + platform pills ---------- */
-.hero-brand {
-  display: flex;
-  flex-direction: column;
-  gap: .55rem;
-}
-.hero-mark img {
-  height: clamp(44px, 5vw, 60px);
-  width: auto;
-  display: block;
-}
-.hero-pitch {
-  font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.3vw, 1.18rem);
-  font-weight: 500;
-  line-height: 1.45;
-  color: var(--navy);
-  margin: 0;
-  max-width: 64ch;
-}
-.platform-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  padding: .08rem .5rem .12rem .4rem;
-  margin: 0 .1rem;
-  border: 1px solid var(--p-c, var(--rule-strong));
-  font-family: var(--font-mono);
-  font-size: .68rem;
-  letter-spacing: .04em;
-  color: var(--navy);
-  text-transform: uppercase;
-  transition: background .2s var(--ease), color .2s var(--ease);
-  vertical-align: .08em;
-}
-.platform-pill__dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--p-c, var(--navy));
-  display: inline-block;
-}
-.platform-pill--local  { --p-c: var(--blue);  }
-.platform-pill--tribal { --p-c: var(--terra); }
-.platform-pill--global { --p-c: var(--cedar); }
-.platform-pill:hover { background: var(--p-c); color: var(--cream); }
-.platform-pill:hover .platform-pill__dot { background: var(--cream); }
-
-/* ---------- stage / map (dominant element) ---------- */
+/* ---------- stage / map — saturated, product-grade ---------- */
 .hero-stage {
   margin: 0;
   position: relative;
   min-height: 0;
 }
 .hero-map { width: 100%; height: auto; display: block; max-height: 56vh; }
-.hero-map__fill { fill: transparent; }
+.hero-map__fill { fill: var(--white); }
 .hero-map__borders {
   fill: none;
-  stroke: rgba(45, 45, 63, .14);
-  stroke-width: .6;
+  stroke: var(--navy);
+  stroke-width: .8;
+  stroke-opacity: .42;
   vector-effect: non-scaling-stroke;
 }
 .hero-map__outline {
   fill: none;
   stroke: var(--navy);
-  stroke-width: 1.2;
+  stroke-width: 1.4;
   vector-effect: non-scaling-stroke;
-  opacity: .75;
 }
 
-/* AIANNH overlay: interactive now. Quiet by default; lights up on
-   hover/focus so a visitor sees they can click it. */
+/* AIANNH overlay: hidden by default, surfaces only on hover so the
+   map reads as clean by default and discovers the tribal-economy
+   layer only on interaction. */
 .hero-aiannh {
-  fill: var(--ink-3);
-  fill-opacity: .22;
+  fill: var(--navy);
+  fill-opacity: 0;
   stroke: var(--navy);
-  stroke-width: .3;
+  stroke-width: 0;
   vector-effect: non-scaling-stroke;
   cursor: pointer;
-  transition: fill-opacity .15s var(--ease), fill .15s var(--ease);
+  transition: fill-opacity .15s var(--ease), stroke-width .15s var(--ease);
   outline: none;
 }
+.hero-stage:hover .hero-aiannh { fill-opacity: .14; }
 .hero-aiannh:hover, .hero-aiannh:focus-visible {
-  fill: var(--terra);
-  fill-opacity: .65;
+  fill-opacity: .85 !important;
+  fill: var(--gold);
 }
-.hero-aiannh--otsa { fill-opacity: .16; }
+.hero-aiannh--otsa { /* same default */ }
 
-/* State paths */
+/* State paths — saturated navy on white */
 .hero-state {
   fill: transparent;
   fill-opacity: 0;
   cursor: pointer;
-  transition: fill-opacity .55s var(--ease), fill .55s var(--ease);
+  transition: fill-opacity .35s var(--ease), fill .35s var(--ease);
   outline: none;
 }
-.hero-state:hover { fill: var(--navy); fill-opacity: .05; }
-.hero-state:focus-visible { fill: var(--gold); fill-opacity: .12; }
-.hero-state[data-ring="0"] { fill: var(--gold);  fill-opacity: .42; }
-.hero-state[data-ring="1"] { fill: var(--gold);  fill-opacity: .22; }
-.hero-state[data-ring="2"] { fill: var(--gold);  fill-opacity: .10; }
+.hero-state:hover { fill: var(--navy); fill-opacity: .08; }
+.hero-state:focus-visible { fill: var(--gold); fill-opacity: .2; }
+.hero-state[data-ring="0"] { fill: var(--gold); fill-opacity: .85; }
+.hero-state[data-ring="1"] { fill: var(--gold); fill-opacity: .42; }
+.hero-state[data-ring="2"] { fill: var(--gold); fill-opacity: .18; }
 
-/* Source point — restrained, not a decorative glow. */
-.hero-source { opacity: 0; transition: opacity .4s var(--ease); }
+/* Source point — a real product pin */
+.hero-source { opacity: 0; transition: opacity .35s var(--ease); }
 .hero-stage[data-run="1"] .hero-source { opacity: 1; }
-.hero-glow { opacity: 0; transition: opacity .5s var(--ease); }
-.hero-stage[data-run="1"] .hero-glow { opacity: .35; }
+.hero-glow { opacity: 0; transition: opacity .4s var(--ease); }
+.hero-stage[data-run="1"] .hero-glow { opacity: .55; }
 .hero-spark        { fill: var(--navy); }
-.hero-spark__core  { fill: var(--gold); stroke: var(--navy); stroke-width: .8; }
+.hero-spark__core  { fill: var(--gold); stroke: var(--white); stroke-width: 1; }
 
-@keyframes heroRippleA { 0% { r: 14; opacity: .9; stroke-width: 2.6; } 90% { r: 320; opacity: 0; stroke-width: .4; } 100% { r: 320; opacity: 0; } }
+@keyframes heroRippleA { 0% { r: 14; opacity: 1; stroke-width: 2.4; } 90% { r: 320; opacity: 0; stroke-width: .4; } 100% { r: 320; opacity: 0; } }
 .hero-ring {
   fill: none;
-  stroke-width: 2.6;
+  stroke: var(--navy);
+  stroke-width: 2.4;
   vector-effect: non-scaling-stroke;
   opacity: 0;
 }
-.hero-ring[data-ring="1"] { stroke: var(--gold);  }
-.hero-ring[data-ring="2"] { stroke: var(--terra); }
-.hero-ring[data-ring="3"] { stroke: var(--cedar); }
+.hero-ring[data-ring="1"] { stroke: var(--navy); }
+.hero-ring[data-ring="2"] { stroke: var(--navy); stroke-opacity: .55; }
+.hero-ring[data-ring="3"] { stroke: var(--navy); stroke-opacity: .3; }
 .hero-stage[data-ring="1"] .hero-ring[data-ring="1"],
 .hero-stage[data-ring="2"] .hero-ring[data-ring="1"],
 .hero-stage[data-ring="2"] .hero-ring[data-ring="2"],
 .hero-stage[data-ring="3"] .hero-ring[data-ring="1"],
 .hero-stage[data-ring="3"] .hero-ring[data-ring="2"],
-.hero-stage[data-ring="3"] .hero-ring[data-ring="3"] { animation: heroRippleA 3.4s var(--ease) 0s 1 both; }
+.hero-stage[data-ring="3"] .hero-ring[data-ring="3"] { animation: heroRippleA 3s var(--ease) 0s 1 both; }
 .hero-stage[data-ring="4"] .hero-ring { opacity: 0; }
 
-.hero-stage[data-ring="2"] .hero-state[data-ring="1"],
-.hero-stage[data-ring="3"] .hero-state[data-ring="1"],
-.hero-stage[data-ring="4"] .hero-state[data-ring="1"] { fill: var(--terra); fill-opacity: .25; }
-.hero-stage[data-ring="3"] .hero-state[data-ring="2"],
-.hero-stage[data-ring="4"] .hero-state[data-ring="2"] { fill: var(--cedar); fill-opacity: .18; }
-
-/* ---------- hover tooltip ---------- */
+/* Hover tooltip — the same product-styling */
 .hero-tooltip {
   position: absolute;
   top: 0; left: 0;
   pointer-events: none;
   background: var(--navy);
-  color: var(--cream);
+  color: var(--white);
   padding: .4rem .65rem .5rem;
   font-family: var(--font-sans);
   font-size: .82rem;
   line-height: 1.25;
-  white-space: nowrap;
   transform: translate(-9999px, -9999px);
   opacity: 0;
   transition: opacity .15s var(--ease);
@@ -223,13 +185,13 @@
   margin-left: 14px;
   margin-top: 14px;
   max-width: 240px;
-  white-space: normal;
+  border-radius: 4px;
 }
 .hero-tooltip.is-on { opacity: 1; }
 .hero-tooltip__name {
   display: block;
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   font-size: .92rem;
   line-height: 1.2;
 }
@@ -237,35 +199,23 @@
   display: block;
   font-family: var(--font-mono);
   font-size: .56rem;
-  color: var(--gold);
+  color: rgba(255, 255, 255, .55);
   letter-spacing: .12em;
   margin-top: .25rem;
   text-transform: uppercase;
+  font-weight: 500;
 }
 
-/* ---------- result narration (replaces persistent chat) ---------- */
-.hero-narration {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.05rem, 1.55vw, 1.32rem);
-  line-height: 1.45;
-  letter-spacing: -.012em;
-  color: var(--ink);
-  margin: 0;
-  max-width: 64ch;
-}
-.hero-narration em { font-style: italic; color: inherit; font-weight: inherit; }
-.hero-narration strong { font-weight: 600; }
-.hero-narration__line { opacity: 0; transition: opacity .5s var(--ease); }
-.hero-narration__line.is-in { opacity: 1; }
+/* Hidden narration line (kept for JS compatibility, never shown) */
+.hero-narration { display: none; }
 
 /* ---------- figure marginalia ---------- */
 .hero-figs {
   display: grid;
-  grid-template-columns: 1.15fr 1.15fr 1.15fr .9fr .8fr;
+  grid-template-columns: 1.15fr 1.15fr 1.15fr .95fr .8fr;
   gap: 0;
   margin: 0;
-  padding-top: .6rem;
+  padding-top: .8rem;
   border-top: 1px solid var(--rule);
 }
 .hero-fig {
@@ -278,148 +228,37 @@
 .hero-fig--derived.is-filled { opacity: 1; }
 .hero-fig dt {
   font-family: var(--font-mono);
-  font-size: .58rem;
-  letter-spacing: .16em;
+  font-size: .6rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--navy);
-  opacity: .55;
+  color: var(--ink-3);
+  font-weight: 500;
   margin-bottom: .45rem;
 }
 .hero-fig dd {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   font-size: clamp(1.3rem, 2.1vw, 1.85rem);
   color: var(--navy);
-  letter-spacing: -.025em;
+  letter-spacing: -.022em;
   line-height: 1;
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
-.hero-fig--total dd { color: var(--navy); }
 
-/* ---------- Ask Cedar (one-shot Q + A; closed by default) ---------- */
-.ask-cedar {
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  padding: 0;
-  background: transparent;
-}
-.ask-cedar__summary {
-  list-style: none;
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: .8rem;
-  align-items: baseline;
-  padding: .9rem .2rem;
-  user-select: none;
-}
-.ask-cedar__summary::-webkit-details-marker { display: none; }
-.ask-cedar__lead {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--navy);
-  letter-spacing: -.01em;
-}
-.ask-cedar__hint {
-  font-family: var(--font-mono);
-  font-size: .62rem;
-  letter-spacing: .12em;
-  color: var(--navy);
-  opacity: .55;
-  text-transform: uppercase;
-}
-.ask-cedar__chev {
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  color: var(--navy);
-  opacity: .55;
-  transition: transform .25s var(--ease);
-}
-.ask-cedar[open] .ask-cedar__chev { transform: rotate(45deg); color: var(--gold); opacity: .9; }
+/* Hidden Ask-Cedar — keep DOM ids the JS expects, but invisible */
+.ask-cedar { display: none; }
 
-.ask-cedar__form {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  padding: 0 0 .8rem;
-}
-.ask-cedar__input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  border-bottom: 1px solid var(--rule-strong);
-  background: transparent;
-  outline: none;
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  color: var(--navy);
-  padding: .55rem 0;
-}
-.ask-cedar__input:focus { border-bottom-color: var(--gold); }
-.ask-cedar__input::placeholder { color: var(--navy); opacity: .42; }
-.ask-cedar__send {
-  width: 32px; height: 32px;
-  background: var(--navy);
-  color: var(--cream);
-  border: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .2s var(--ease);
-}
-.ask-cedar__send:hover { background: var(--gold); color: var(--navy); }
-
-.ask-cedar__answer {
-  font-family: var(--font-sans);
-  font-size: clamp(.98rem, 1.4vw, 1.1rem);
-  line-height: 1.6;
-  color: var(--ink-2);
-  margin: 0 0 1.2rem;
-  padding: 1rem 1.2rem;
-  background: var(--cream);
-  border-left: 3px solid var(--cedar);
-  border-radius: 0 6px 6px 0;
-  max-width: 64ch;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity .35s var(--ease), transform .35s var(--ease);
-}
-.ask-cedar__answer.is-in { opacity: 1; transform: none; }
-.ask-cedar__answer em { font-style: italic; color: inherit; font-weight: inherit; }
-.ask-cedar__answer strong { font-weight: 600; }
-.ask-cedar__answer:empty { display: none; }
-
-/* ---------- footer marginalia ---------- */
-.hero-foot { display: none; }
-
-/* ---------- responsive ---------- */
-@media (max-width: 1100px) {
-  .hero-figs { grid-template-columns: 1fr 1fr 1fr; }
-  .hero-fig { padding: .8rem 1rem .8rem 0; }
-  .hero-fig:nth-child(3) { border-right: 0; padding-right: 0; }
-  .hero-fig--total, .hero-fig--derived {
-    border-top: 1px solid var(--rule);
-    margin-top: -1px;
-  }
-}
-@media (max-width: 760px) {
-  .hero { padding-top: 5.5rem; gap: 1rem; }
-  .hero-mark img { height: 38px; }
-  .hero-pitch { font-size: .94rem; }
-  .platform-pill { font-size: .62rem; padding: .08rem .42rem; }
-  .hero-narration { font-size: 1rem; line-height: 1.5; }
+/* responsive */
+@media (max-width: 880px) {
+  .hero-statement { font-size: clamp(2rem, 8vw, 2.8rem); }
   .hero-figs { grid-template-columns: 1fr 1fr; }
   .hero-fig { padding: .7rem .8rem .7rem 0; }
   .hero-fig:nth-child(odd) { border-right: 1px solid var(--rule); }
   .hero-fig:nth-child(even) { border-right: 0; padding-right: 0; }
-  .hero-fig dd { font-size: 1.05rem; }
-  .ask-cedar__hint { display: none; }
-  .ask-cedar__summary { grid-template-columns: auto 1fr; }
-  .hero-tooltip { font-size: .74rem; max-width: 200px; }
-  .hero-tooltip__name { font-size: .84rem; }
+  .hero-fig dd { font-size: 1.1rem; }
+  .workspace__bar { padding: .65rem .9rem; }
+  .workspace__title { font-size: .82rem; }
 }
 @media (max-width: 420px) {
   .hero-figs { grid-template-columns: 1fr; }
@@ -429,6 +268,5 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-state, .hero-source, .hero-glow, .hero-aiannh { transition: none; }
   .hero-ring { animation: none !important; opacity: 0; }
-  .hero-narration__line, .ask-cedar__answer { opacity: 1; transform: none; transition: none; }
   .hero-tooltip { transition: none; }
 }
