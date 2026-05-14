@@ -32,7 +32,7 @@
 }
 .cedar-about__lede {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 600;
   font-size: clamp(1.6rem, 3.2vw, 2.6rem);
   line-height: 1.12;
   letter-spacing: -.025em;
@@ -119,7 +119,7 @@
 }
 .cedar-about__motto {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 600;
   font-size: clamp(1.4rem, 2.4vw, 1.95rem);
   line-height: 1.15;
   letter-spacing: -.025em;
@@ -127,7 +127,7 @@
   margin: 0;
   max-width: 16ch;
 }
-.cedar-about__motto em { font-style: normal; color: var(--terra-dark); font-weight: 800; }
+.cedar-about__motto em { font-style: italic; color: inherit; font-weight: inherit; }
 
 @media (max-width: 880px) {
   .cedar-about__inner { grid-template-columns: 1fr; grid-template-rows: auto; }

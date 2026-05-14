@@ -26,14 +26,14 @@
 }
 .cta-display {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 600;
   font-size: clamp(2.2rem, 5vw, 3.8rem);
   line-height: 1.04;
   letter-spacing: -.03em;
   color: var(--white);
   margin: 0 0 1.2rem;
 }
-.cta-display em { font-style: normal; color: var(--gold-light); font-weight: 800; }
+.cta-display em { font-style: italic; color: inherit; font-weight: inherit; }
 .cta-lede {
   font-size: 1.06rem;
   line-height: 1.6;

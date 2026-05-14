@@ -263,8 +263,8 @@
   margin: 0;
   max-width: 64ch;
 }
-.hero-narration em { font-style: normal; color: var(--navy); font-weight: 700; }
-.hero-narration strong { font-weight: 700; color: var(--navy); }
+.hero-narration em { font-style: italic; color: inherit; font-weight: inherit; }
+.hero-narration strong { font-weight: 600; }
 .hero-narration__line { opacity: 0; transition: opacity .5s var(--ease); }
 .hero-narration__line.is-in { opacity: 1; }
 
@@ -304,7 +304,7 @@
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
-.hero-fig--total dd { color: var(--gold); font-weight: 800; }
+.hero-fig--total dd { color: var(--navy); }
 
 /* ---------- Ask Cedar (one-shot Q + A; closed by default) ---------- */
 .ask-cedar {
@@ -397,8 +397,8 @@
   transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
 .ask-cedar__answer.is-in { opacity: 1; transform: none; }
-.ask-cedar__answer em { font-style: normal; color: var(--navy); font-weight: 700; }
-.ask-cedar__answer strong { font-weight: 700; color: var(--navy); }
+.ask-cedar__answer em { font-style: italic; color: inherit; font-weight: inherit; }
+.ask-cedar__answer strong { font-weight: 600; }
 .ask-cedar__answer:empty { display: none; }
 
 /* ---------- footer marginalia ---------- */

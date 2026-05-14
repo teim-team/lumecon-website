@@ -28,7 +28,7 @@
 }
 .why-lede {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 600;
   font-size: clamp(1.85rem, 4vw, 3.4rem);
   line-height: 1.05;
   letter-spacing: -.03em;
@@ -36,7 +36,7 @@
   margin: 0 0 1.6rem;
   max-width: 20ch;
 }
-.why-lede em { font-style: normal; color: var(--terra-dark); font-weight: 800; }
+.why-lede em { font-style: italic; color: inherit; font-weight: inherit; }
 .why-body {
   font-size: 1.06rem;
   line-height: 1.65;
