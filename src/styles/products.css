@@ -28,6 +28,14 @@
   margin: 0;
 }
 .platforms-lead em { font-style: italic; color: inherit; font-weight: inherit; }
+.platforms-body {
+  font-size: 1.04rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 60ch;
+  margin: 1rem 0 0;
+  font-weight: 400;
+}
 .platform {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) auto;

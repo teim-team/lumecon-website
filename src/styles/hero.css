@@ -51,21 +51,42 @@
 .workspace__bar {
   display: flex;
   align-items: center;
-  padding: .8rem 1.2rem;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem 1rem .7rem 1rem;
   border-bottom: 1px solid var(--rule);
+  background: var(--cream);
 }
 .workspace__title {
   display: inline-flex;
   align-items: center;
-  gap: .6rem;
+  gap: .55rem;
   font-family: var(--font-sans);
   font-weight: 600;
   color: var(--navy);
-  font-size: .92rem;
+  font-size: .9rem;
   letter-spacing: -.01em;
 }
+.workspace__mark {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+.workspace__sub {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+.workspace__sub-text {
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
 .workspace__dot {
-  width: 8px; height: 8px;
+  width: 7px; height: 7px;
   border-radius: 50%;
   background: var(--ink-4);
   transition: background .25s var(--ease), box-shadow .25s var(--ease);
@@ -95,14 +116,14 @@
 .hero-map__borders {
   fill: none;
   stroke: var(--navy);
-  stroke-width: .8;
-  stroke-opacity: .42;
+  stroke-width: 1;
+  stroke-opacity: .6;
   vector-effect: non-scaling-stroke;
 }
 .hero-map__outline {
   fill: none;
   stroke: var(--navy);
-  stroke-width: 1.4;
+  stroke-width: 1.6;
   vector-effect: non-scaling-stroke;
 }
 

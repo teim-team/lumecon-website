@@ -80,8 +80,12 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   <div class="workspace" id="workspace">
     <header class="workspace__bar">
       <span class="workspace__title">
+        <img class="workspace__mark" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="22" height="22" aria-hidden="true" />
+        <span class="workspace__title-text">Live impact study</span>
+      </span>
+      <span class="workspace__sub">
         <span class="workspace__dot" id="workspaceStatus" aria-hidden="true"></span>
-        Impact study
+        <span class="workspace__sub-text" id="workspaceStatusLabel">Idle</span>
       </span>
     </header>
 
@@ -319,7 +323,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       stage.dataset.run = '1';
 
       const wsStatus = document.getElementById('workspaceStatus');
+      const wsLabel = document.getElementById('workspaceStatusLabel');
       if (wsStatus) wsStatus.dataset.state = 'running';
+      if (wsLabel) wsLabel.textContent = 'Running';
 
       setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
@@ -353,7 +359,9 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       setLine(`That sum &mdash; with every multiplier sourced and the assumption ledger attached &mdash; is your study.`);
 
       const wsStatusDone = document.getElementById('workspaceStatus');
+      const wsLabelDone = document.getElementById('workspaceStatusLabel');
       if (wsStatusDone) wsStatusDone.dataset.state = 'complete';
+      if (wsLabelDone) wsLabelDone.textContent = 'Complete';
     };
 
     let sceneIdx = 0;
