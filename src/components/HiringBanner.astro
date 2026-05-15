@@ -22,42 +22,44 @@
       </div>
     </div>
     <div class="hiring-graph" aria-hidden="true">
-      <svg viewBox="0 0 240 200" preserveAspectRatio="xMidYMid meet">
-        <!-- Edges. Each is drawn (stroke-dashoffset) in time with its
-             two endpoint nodes appearing. -->
+      <svg viewBox="0 0 240 220" preserveAspectRatio="xMidYMid meet">
+        <!-- Asymmetric team graph. The root is off-center; three tier-2
+             branches grow at uneven angles and distances, with uneven
+             child counts (2 / 4 / 2) so the shape reads as an organic
+             network instead of a symmetric mandala. -->
         <g class="hg-edges" stroke="currentColor" fill="none" stroke-width="1" stroke-linecap="butt">
-          <!-- Tier 1: center node only (no edges yet) -->
-          <!-- Tier 2: 4 edges from center to the inner ring -->
-          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="70"  y2="65"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="170" y2="65"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="70"  y2="135" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="170" y2="135" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <!-- Tier 3: 8 edges from inner ring out to the outer ring -->
-          <line class="hg-edge hg-edge--t3" x1="70"  y1="65"  x2="30"  y2="40"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="70"  y1="65"  x2="40"  y2="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="170" y1="65"  x2="210" y2="40"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="170" y1="65"  x2="200" y2="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="70"  y1="135" x2="40"  y2="170" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="70"  y1="135" x2="100" y2="180" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="170" y1="135" x2="200" y2="170" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="170" y1="135" x2="140" y2="180" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <!-- Center → inner ring (3 edges, uneven angles) -->
+          <line class="hg-edge hg-edge--t2" x1="115" y1="100" x2="60"  y2="55"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t2" x1="115" y1="100" x2="175" y2="85"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t2" x1="115" y1="100" x2="92"  y2="158" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <!-- A branch (upper-left tier-2): 2 children -->
+          <line class="hg-edge hg-edge--t3" x1="60"  y1="55"  x2="18"  y2="30"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="60"  y1="55"  x2="22"  y2="98"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <!-- B branch (right tier-2, the hub): 4 children -->
+          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="222" y2="38"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="228" y2="92"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="212" y2="142" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="160" y2="172" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <!-- C branch (lower tier-2): 2 children -->
+          <line class="hg-edge hg-edge--t3" x1="92"  y1="158" x2="45"  y2="195" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="92"  y1="158" x2="120" y2="202" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
         </g>
-        <!-- Nodes. Tier 1 = center (always on). Tier 2 = inner ring.
-             Tier 3 = outer ring. Each fades + scales in on its tier. -->
         <g class="hg-nodes">
-          <circle class="hg-node hg-node--center" cx="120" cy="100" r="6.5" fill="#F0A91A"/>
-          <circle class="hg-node hg-node--t2" cx="70"  cy="65"  r="5" fill="currentColor"/>
-          <circle class="hg-node hg-node--t2" cx="170" cy="65"  r="5" fill="currentColor"/>
-          <circle class="hg-node hg-node--t2" cx="70"  cy="135" r="5" fill="currentColor"/>
-          <circle class="hg-node hg-node--t2" cx="170" cy="135" r="5" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="30"  cy="40"  r="3.8" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="40"  cy="100" r="3.8" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="210" cy="40"  r="3.8" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="200" cy="100" r="3.8" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="40"  cy="170" r="3.8" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="100" cy="180" r="3.8" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="200" cy="170" r="3.8" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="140" cy="180" r="3.8" fill="currentColor"/>
+          <!-- Root (always on, off-center to lean into the asymmetry) -->
+          <circle class="hg-node hg-node--center" cx="115" cy="100" r="7" fill="#F0A91A"/>
+          <!-- Tier 2: 3 inner-ring nodes, varied radii -->
+          <circle class="hg-node hg-node--t2" cx="60"  cy="55"  r="5"   fill="currentColor"/>
+          <circle class="hg-node hg-node--t2" cx="175" cy="85"  r="5.4" fill="currentColor"/>
+          <circle class="hg-node hg-node--t2" cx="92"  cy="158" r="4.6" fill="currentColor"/>
+          <!-- Tier 3: 8 outer nodes (A:2 / B:4 / C:2), varied radii -->
+          <circle class="hg-node hg-node--t3" cx="18"  cy="30"  r="3.6" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="22"  cy="98"  r="3.2" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="222" cy="38"  r="4"   fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="228" cy="92"  r="3.4" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="212" cy="142" r="3"   fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="160" cy="172" r="3.6" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="45"  cy="195" r="3.2" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="120" cy="202" r="3.8" fill="currentColor"/>
         </g>
       </svg>
     </div>
@@ -165,18 +167,19 @@
   .hg-node--t2 { animation-delay: 1.0s; }
   .hg-node--t3 { animation-delay: 2.5s; }
   /* Stagger within each tier so individual nodes don't pop together. */
-  .hg-node--t2:nth-of-type(2)  { animation-delay: 1.0s; }
-  .hg-node--t2:nth-of-type(3)  { animation-delay: 1.15s; }
-  .hg-node--t2:nth-of-type(4)  { animation-delay: 1.3s; }
-  .hg-node--t2:nth-of-type(5)  { animation-delay: 1.45s; }
-  .hg-node--t3:nth-of-type(6)  { animation-delay: 2.6s; }
-  .hg-node--t3:nth-of-type(7)  { animation-delay: 2.75s; }
-  .hg-node--t3:nth-of-type(8)  { animation-delay: 2.9s; }
-  .hg-node--t3:nth-of-type(9)  { animation-delay: 3.05s; }
-  .hg-node--t3:nth-of-type(10) { animation-delay: 3.2s; }
+  /* :nth-of-type counts all <circle> elements (the tag, not the class).
+     Layout: 1 center + 3 tier-2 + 8 tier-3 = circles 1..12. */
+  .hg-node--t2:nth-of-type(2)  { animation-delay: 1.00s; }
+  .hg-node--t2:nth-of-type(3)  { animation-delay: 1.18s; }
+  .hg-node--t2:nth-of-type(4)  { animation-delay: 1.36s; }
+  .hg-node--t3:nth-of-type(5)  { animation-delay: 2.55s; }
+  .hg-node--t3:nth-of-type(6)  { animation-delay: 2.68s; }
+  .hg-node--t3:nth-of-type(7)  { animation-delay: 2.78s; }
+  .hg-node--t3:nth-of-type(8)  { animation-delay: 2.92s; }
+  .hg-node--t3:nth-of-type(9)  { animation-delay: 3.08s; }
+  .hg-node--t3:nth-of-type(10) { animation-delay: 3.20s; }
   .hg-node--t3:nth-of-type(11) { animation-delay: 3.35s; }
-  .hg-node--t3:nth-of-type(12) { animation-delay: 3.5s; }
-  .hg-node--t3:nth-of-type(13) { animation-delay: 3.65s; }
+  .hg-node--t3:nth-of-type(12) { animation-delay: 3.48s; }
   @keyframes hg-spawn {
     0%      { opacity: 0; transform: scale(.3); }
     15%     { opacity: 1; transform: scale(1.25); }
@@ -190,17 +193,19 @@
   .hg-edge { animation: hg-draw 6s ease-out infinite; }
   .hg-edge--t2 { animation-delay: .9s; }
   .hg-edge--t3 { animation-delay: 2.4s; }
-  .hg-edges line:nth-of-type(2)  { animation-delay: 1.0s; }
-  .hg-edges line:nth-of-type(3)  { animation-delay: 1.1s; }
-  .hg-edges line:nth-of-type(4)  { animation-delay: 1.2s; }
-  .hg-edges line:nth-of-type(5)  { animation-delay: 2.5s; }
-  .hg-edges line:nth-of-type(6)  { animation-delay: 2.6s; }
-  .hg-edges line:nth-of-type(7)  { animation-delay: 2.7s; }
-  .hg-edges line:nth-of-type(8)  { animation-delay: 2.8s; }
-  .hg-edges line:nth-of-type(9)  { animation-delay: 2.9s; }
-  .hg-edges line:nth-of-type(10) { animation-delay: 3.0s; }
-  .hg-edges line:nth-of-type(11) { animation-delay: 3.1s; }
-  .hg-edges line:nth-of-type(12) { animation-delay: 3.2s; }
+  /* Edge layout: 3 tier-2 edges + 8 tier-3 edges = 11 lines. The
+     tier-3 group is split 2 / 4 / 2 across the three branches, so
+     stagger times mirror that asymmetric branching. */
+  .hg-edges line:nth-of-type(2)  { animation-delay: 1.10s; }
+  .hg-edges line:nth-of-type(3)  { animation-delay: 1.22s; }
+  .hg-edges line:nth-of-type(4)  { animation-delay: 2.45s; }
+  .hg-edges line:nth-of-type(5)  { animation-delay: 2.55s; }
+  .hg-edges line:nth-of-type(6)  { animation-delay: 2.62s; }
+  .hg-edges line:nth-of-type(7)  { animation-delay: 2.72s; }
+  .hg-edges line:nth-of-type(8)  { animation-delay: 2.82s; }
+  .hg-edges line:nth-of-type(9)  { animation-delay: 2.92s; }
+  .hg-edges line:nth-of-type(10) { animation-delay: 3.05s; }
+  .hg-edges line:nth-of-type(11) { animation-delay: 3.18s; }
   @keyframes hg-draw {
     0%      { stroke-dashoffset: 100; opacity: .9; }
     14%     { stroke-dashoffset: 0;   opacity: .9; }
