@@ -1,0 +1,9 @@
+---
+const { class: className = '' } = Astro.props as { class?: string };
+---
+<svg class={`icon ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <path d="M12 3L13.6 9.4L20 11L13.6 12.6L12 19L10.4 12.6L4 11L10.4 9.4L12 3Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
+  <circle cx="12" cy="11" r="1.5" fill="#F0A91A"/>
+  <circle cx="19" cy="5" r="0.9" fill="currentColor"/>
+  <circle cx="5" cy="19" r="0.7" fill="currentColor"/>
+</svg>

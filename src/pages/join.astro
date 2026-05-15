@@ -1,0 +1,333 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config';
+import IconCode from '../components/icons/IconCode.astro';
+import IconML from '../components/icons/IconML.astro';
+import IconData from '../components/icons/IconData.astro';
+import IconMegaphone from '../components/icons/IconMegaphone.astro';
+import IconChat from '../components/icons/IconChat.astro';
+import IconAcademic from '../components/icons/IconAcademic.astro';
+import IconRemote from '../components/icons/IconRemote.astro';
+import IconImpact from '../components/icons/IconImpact.astro';
+
+/**
+ * Join-the-team recruiting page. Sits above /internships in the funnel
+ * — broad invitation to send a resume even without a specific role
+ * open, with role icons + value-prop icons. Specific role descriptions
+ * with JobPosting schema live on /internships.
+ */
+
+const ROLES = [
+  { Icon: IconCode,       title: 'Software Engineering',    blurb: 'TypeScript, Python, Astro, d3-geo. Product surface across Local, Tribal, and Global Economic Impact.' },
+  { Icon: IconML,         title: 'Machine Learning / AI',   blurb: 'Build Cedar. LLM evaluation, document understanding, structured extraction, RAG, evals.' },
+  { Icon: IconData,       title: 'Data Analytics',          blurb: 'Source, clean, and construct the high-frequency public + private datasets driving every multiplier.' },
+  { Icon: IconMegaphone,  title: 'Marketing & Growth',      blurb: 'SEO, content, government outreach, tribal-nation engagement, university and CDFI partnerships.' },
+  { Icon: IconChat,       title: 'Sales & Business Dev',    blurb: 'Pilot enrollment with municipal, tribal, and mission-driven organizations. Build the procurement playbook.' },
+];
+
+const VALUES = [
+  { Icon: IconAcademic, title: 'Cornell-built',             blurb: 'Built at Cornell with counsel from the Cornell Law Entrepreneurship Law Clinic. Cornell, Dartmouth, Stanford, MIT, and Ivy League peers get a fast-track review.' },
+  { Icon: IconImpact,   title: 'Real impact, real users',   blurb: 'Your work lands in front of council members, tribal leaders, foundation officers, and federal grant reviewers — not in a demo or a deck. Five-person team, no intern queue.' },
+  { Icon: IconRemote,   title: 'Remote-friendly',           blurb: 'Distributed across the US. Bias toward async work, with synchronous time reserved for product reviews and government calls.' },
+  { Icon: IconData,     title: 'Be early',                  blurb: 'These are unpaid roles right now. What you get is operating experience at what we think can become the next big government-technology company — instead of being employee #500 elsewhere.' },
+];
+
+const today = new Date().toISOString().slice(0, 10);
+const oneYear = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+const mailto = (subject: string, body = '') =>
+  `mailto:${site.email}?subject=${encodeURIComponent(subject)}` + (body ? `&body=${encodeURIComponent(body)}` : '');
+
+const generalApplyBody = `Hi Lumecon team,
+
+I'd like to be considered for a role at Lumecon Inc.
+
+Name:
+School / program (if a student):
+Year:
+LinkedIn:
+Resume: (paste a public URL or attach the file)
+
+What draws me to Lumecon's mission:
+
+Track I'm most interested in (Engineering / ML / Data / Marketing / Sales / Other):
+
+Anything else you should know:
+`;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Join the Lumecon team",
+    "url": `${site.url}/join`,
+    "description": "Lumecon Inc. is hiring. Send a resume even if you don't see a posted role — we maintain a talent network for students and full-time hires in software engineering, machine learning, data analytics, marketing, and sales.",
+    "publisher": { "@id": `${site.url}#org` },
+  },
+  // A general "ongoing" JobPosting so Google for Jobs picks the page up.
+  {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": "Open call — software engineering, ML / AI, data, marketing, sales",
+    "description": "Lumecon Inc. is hiring across software engineering, machine learning / AI, data analytics, marketing, and sales. Cornell-built economic impact analysis software for governments and mission-driven organizations. Send a resume even if you don't see a specific role posted — we keep a talent network and reach back when a fit opens.",
+    "datePosted": today,
+    "validThrough": oneYear,
+    "employmentType": ["FULL_TIME", "INTERN"],
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": site.legalName,
+      "sameAs": site.url,
+      "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
+    },
+    "applicantLocationRequirements": { "@type": "Country", "name": "United States" },
+    "jobLocationType": "TELECOMMUTE",
+    "url": `${site.url}/join`,
+    "skills": "TypeScript, Python, Astro, d3, machine learning, LLM evaluation, SQL, geospatial data, government procurement, B2B sales, SEO",
+  },
+];
+---
+<BaseLayout
+  title="Join Lumecon | Send a resume — engineering, ML, data, marketing, sales"
+  description="Lumecon Inc. is a Cornell-built economic impact analysis software company hiring across software engineering, machine learning, data analytics, marketing, and sales. Send a resume even without a posted role. Remote-friendly. Cornell, Dartmouth, and Ivy League students welcome."
+  canonical="https://lumecon.ai/join"
+  keywords="join Lumecon, Lumecon careers, Lumecon team, Lumecon hiring, Lumecon jobs, Cornell startup hiring, Cornell startup jobs, Ivy League startup careers, software engineering jobs Cornell, machine learning jobs Cornell, AI startup jobs Cornell, data analytics jobs Cornell, marketing jobs Cornell, sales jobs Cornell, send resume Lumecon, Cornell entrepreneurship jobs, Dartmouth startup jobs, Cornell Brooks School jobs, Cornell Dyson jobs, Cornell ILR jobs, Cornell ORIE jobs, mission-driven startup, government technology jobs, tribal economic impact jobs, public sector software jobs"
+  ogTitle="Join the Lumecon team"
+  ogDescription="Cornell-built economic impact analysis software hiring across engineering, ML, data, marketing, and sales. Send a resume — we'll reach back when there's a fit."
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="join">
+    <header class="join-hero">
+      <p class="join-eyebrow">Join Lumecon Inc. · five-person team</p>
+      <h1 class="join-title">Be early at a Cornell-built startup for governments and tribal nations.</h1>
+      <p class="join-lede">
+        The job market for undergrads and grads is rough right now. Lumecon is hiring across software engineering, machine learning, data analytics, marketing, and sales — <strong>unpaid early-stage roles</strong> with the trade-off being that you'll be early at what we think can become the next big company in government and tribal-economy technology. <strong>Don't see a posted role? Send a résumé anyway</strong> — we keep an active talent network and reach back when a fit opens.
+      </p>
+      <p class="join-lede join-lede--sub">
+        Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent program students get a fast-track review.
+      </p>
+      <div class="join-cta">
+        <a href={mailto('Lumecon resume submission', generalApplyBody)} class="btn">Send a resume</a>
+        <a href="/internships" class="btn btn--ghost">Open intern roles →</a>
+      </div>
+      <p class="join-cta-note">
+        Or email <a href={`mailto:${site.email}`} class="join-cta-email">{site.email}</a> directly with your resume, school, and a one-paragraph note on what draws you to the mission.
+      </p>
+    </header>
+
+    <section class="join-roles" aria-labelledby="roles-title">
+      <h2 class="join-section-title" id="roles-title">What we hire for</h2>
+      <div class="role-grid">
+        {ROLES.map(({ Icon, title, blurb }) => (
+          <article class="role-card">
+            <span class="role-card__icon" aria-hidden="true"><Icon /></span>
+            <h3 class="role-card__title">{title}</h3>
+            <p class="role-card__blurb">{blurb}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="join-values" aria-labelledby="values-title">
+      <h2 class="join-section-title" id="values-title">What it's like to work at Lumecon</h2>
+      <div class="value-grid">
+        {VALUES.map(({ Icon, title, blurb }) => (
+          <article class="value-card">
+            <span class="value-card__icon" aria-hidden="true"><Icon /></span>
+            <h3 class="value-card__title">{title}</h3>
+            <p class="value-card__blurb">{blurb}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="join-cohort" aria-labelledby="cohort-title">
+      <h2 class="join-section-title" id="cohort-title">Who we work with</h2>
+      <p class="join-cohort-body">
+        Lumecon's economic impact analysis software is used by US municipal governments, federally recognized tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, federal programs, universities and research labs, foundations, Community Development Financial Institutions (CDFIs), and economic development organizations. The work you ship shows up in their budgets, grant proposals, and capital plans.
+      </p>
+      <p class="join-cohort-body">
+        We're targeting students from Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn (Wharton), Brown, Columbia, Berkeley, and Carnegie Mellon — plus equivalent programs at other top US research universities. Cornell CS, Operations Research (ORIE), Brooks School of Public Policy, Dyson Applied Economics & Management, ILR School, Information Science, Engineering Physics, Statistics, Applied Math, and Communication students get a fast track. Stanford CS / Symbolic Systems / MS&E, MIT EECS / Sloan, Harvard CS / Kennedy School, Princeton ORFE / SPIA, Wharton, Berkeley EECS / Goldman, and CMU SCS / Tepper applicants similarly.
+      </p>
+      <p class="join-cohort-body">
+        Plain-spoken on compensation: <strong>these are unpaid roles right now.</strong> We're a five-person team building toward the next big company in government and tribal-economy technology. The trade is operating experience and a Cornell-built reference in a job market where most other internships are filler. If that trade isn't right for you, we get it — keep an eye out as we grow.
+      </p>
+    </section>
+
+    <section class="join-final" aria-labelledby="final-title">
+      <h2 class="join-section-title" id="final-title">Ready to send your resume?</h2>
+      <p class="join-final-body">
+        We read every submission. Include a school, a track of interest (engineering / ML / data / marketing / sales), and one paragraph on what draws you to the mission. We reach back when there's a fit.
+      </p>
+      <div class="join-cta">
+        <a href={mailto('Lumecon resume submission', generalApplyBody)} class="btn">Send a resume</a>
+        <a href="/internships" class="btn btn--ghost">See open intern roles</a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .join {
+    background: var(--white);
+    padding: clamp(6rem, 11vw, 8rem) 0 clamp(4rem, 8vw, 6rem);
+  }
+  .join-hero, .join-roles, .join-values, .join-cohort, .join-final {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 var(--container-pad);
+  }
+  .join-eyebrow {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
+  .join-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -.025em;
+    color: var(--navy);
+    margin: 0;
+    max-width: 24ch;
+  }
+  .join-lede {
+    font-family: var(--font-sans);
+    font-size: 1.12rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 1.4rem 0 0;
+    max-width: 64ch;
+  }
+  .join-lede strong { color: var(--navy); font-weight: 600; }
+  .join-lede--sub { margin-top: .8rem; font-size: 1rem; color: var(--ink-3); }
+  .join-cta { display: flex; gap: .8rem; flex-wrap: wrap; margin: 2rem 0 0; }
+  .join-cta-note {
+    font-family: var(--font-sans);
+    font-size: .92rem;
+    color: var(--ink-3);
+    margin: 1rem 0 0;
+  }
+  .join-cta-email {
+    font-family: var(--font-mono);
+    color: var(--navy);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .join-section-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    color: var(--navy);
+    letter-spacing: -.02em;
+    margin: 0 0 1.6rem;
+    padding-bottom: .8rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .join-roles { margin-top: clamp(3rem, 6vw, 5rem); }
+  .role-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.6rem 2rem;
+  }
+  .role-card {
+    padding: 1.4rem;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    transition: border-color .18s var(--ease), transform .18s var(--ease);
+  }
+  .role-card:hover {
+    border-color: var(--navy);
+    transform: translateY(-2px);
+  }
+  .role-card__icon {
+    display: inline-flex;
+    color: var(--navy);
+    margin-bottom: 1rem;
+  }
+  .role-card__icon svg { width: 32px; height: 32px; display: block; }
+  .role-card__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.12rem;
+    color: var(--navy);
+    letter-spacing: -.012em;
+    margin: 0 0 .5rem;
+  }
+  .role-card__blurb {
+    font-family: var(--font-sans);
+    font-size: .92rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .join-values { margin-top: clamp(3rem, 6vw, 5rem); }
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.6rem 2rem;
+  }
+  .value-card {
+    padding: 0;
+    border-left: 2px solid var(--gold);
+    padding-left: 1.2rem;
+  }
+  .value-card__icon {
+    display: inline-flex;
+    color: var(--navy);
+    margin-bottom: .8rem;
+  }
+  .value-card__icon svg { width: 28px; height: 28px; display: block; }
+  .value-card__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.08rem;
+    color: var(--navy);
+    letter-spacing: -.012em;
+    margin: 0 0 .5rem;
+  }
+  .value-card__blurb {
+    font-family: var(--font-sans);
+    font-size: .92rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .join-cohort { margin-top: clamp(3rem, 6vw, 5rem); }
+  .join-cohort-body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 1rem;
+    max-width: 70ch;
+  }
+
+  .join-final {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--rule);
+  }
+  .join-final-body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0 0 1.4rem;
+    max-width: 64ch;
+  }
+</style>

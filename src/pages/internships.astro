@@ -12,51 +12,53 @@ import { site } from '../config';
  * picks them up in Google for Jobs and student-targeted SERPs.
  */
 
+const EDUCATION_TARGETS = 'Currently enrolled at Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, or an equivalent program.';
+
 const ROLES = [
   {
     slug: 'software-engineering-intern',
     title: 'Software Engineering Intern',
     short: 'Full-stack TypeScript, geographic visualization, and economic-modeling backend.',
-    description: 'Build product surface across Lumecon\'s Local, Tribal, and Global Economic Impact platforms. Work in TypeScript with Astro, d3-geo, and a Python/Postgres modeling backend. Ship features that municipal governments, tribal nations, and federal grant programs use to run economic impact studies in-house. Strong fit for Cornell CS, Information Science, Operations Research, and Engineering Physics majors.',
+    description: 'Build product surface across Lumecon\'s Local, Tribal, and Global Economic Impact platforms. Work in TypeScript with Astro, d3-geo, and a Python/Postgres modeling backend. Ship features that municipal governments, tribal nations, and federal grant programs use to run economic impact studies in-house. Five-person team — you\'ll work directly with the founder and ship code that real users rely on within your first month.',
     skills: 'TypeScript, JavaScript, Python, Astro, React, d3, SVG, Postgres, Git',
     employmentType: 'INTERN',
-    educationRequirements: 'Currently enrolled at Cornell University, Dartmouth, or another Ivy League / top US research university. CS, Operations Research, Information Science, Engineering Physics, Statistics, or related majors preferred.',
+    educationRequirements: `${EDUCATION_TARGETS} CS, Operations Research, Information Science, Engineering Physics, or Statistics majors preferred.`,
   },
   {
     slug: 'machine-learning-intern',
     title: 'Machine Learning / AI Intern',
     short: 'Build Cedar — the AI assistant inside every Lumecon platform.',
-    description: 'Work on Cedar, Lumecon\'s built-in AI assistant. Help Cedar read messy administrative uploads (budgets, payroll detail, council agendas, chapter audits, grant filings), surface each modeling assumption for human confirmation, and write a source record for every economic impact study. LLM evaluation, prompt engineering, document understanding, and structured-extraction pipelines. Strong fit for Cornell CS, Statistics, Applied Math, and Brooks School data-science majors.',
+    description: 'Work on Cedar, Lumecon\'s built-in AI assistant. Help Cedar read messy administrative uploads (budgets, payroll detail, council agendas, chapter audits, grant filings), surface each modeling assumption for human confirmation, and write a source record for every economic impact study. LLM evaluation, prompt engineering, document understanding, and structured-extraction pipelines. Direct collaboration with the founding team.',
     skills: 'Python, PyTorch, LLM evaluation, prompt engineering, document extraction, vector search, RAG, evals',
     employmentType: 'INTERN',
-    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. CS, Statistics, Applied Math, Information Science, or interdisciplinary AI majors preferred.',
+    educationRequirements: `${EDUCATION_TARGETS} CS, Statistics, Applied Math, Information Science, or AI / ML majors preferred.`,
   },
   {
     slug: 'data-analytics-intern',
     title: 'Data Analytics Intern',
     short: 'Economic data engineering — input-output modeling, IMPLAN/RIMS multipliers, tribal economies.',
-    description: 'Work on the data backbone that drives every Lumecon impact study. Source, clean, and version the high-frequency public and private datasets that power our multipliers. Construct the proprietary regional bridges that handle small regions and tribal economies underserved by IMPLAN, RIMS II, and REMI. Strong fit for Cornell Dyson, Brooks School of Public Policy, Economics, ORIE, and ILR School students.',
+    description: 'Work on the data backbone that drives every Lumecon impact study. Source, clean, and version the high-frequency public and private datasets that power our multipliers. Construct the proprietary regional bridges that handle small regions and tribal economies underserved by IMPLAN, RIMS II, and REMI. Work directly with the founder on what becomes the reference dataset for tribal-economy modeling.',
     skills: 'SQL, Python, pandas, geopandas, R, Stata, BEA / Census / BLS data sources, input-output modeling',
     employmentType: 'INTERN',
-    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. Economics, Public Policy, Statistics, ORIE, ILR, or Applied Economics & Management (Dyson) preferred.',
+    educationRequirements: `${EDUCATION_TARGETS} Economics, Public Policy, Statistics, ORIE, ILR, Dyson Applied Economics & Management, or similar preferred.`,
   },
   {
     slug: 'marketing-growth-intern',
     title: 'Marketing & Growth Intern',
     short: 'Government outreach, tribal-nation engagement, SEO, and content for an Ivy-built startup.',
-    description: 'Own marketing surface across content, SEO, and outreach to municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, and economic development organizations. Write long-form pieces on input-output modeling, tribal economics, and policy analysis. Run search, partnerships with universities and CDFIs, and grant-funder pipelines. Strong fit for Cornell Dyson, Brooks School, Communication, and ILR School students.',
+    description: 'Own marketing surface across content, SEO, and outreach to municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, and economic development organizations. Write long-form pieces on input-output modeling, tribal economics, and policy analysis. Run search, university and CDFI partnerships, and grant-funder pipelines. Co-author the playbook for marketing a Cornell-built public-sector software startup.',
     skills: 'Writing, SEO, content strategy, partnerships, CRM, public-sector outreach, brand',
     employmentType: 'INTERN',
-    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. Marketing, Communication, Public Policy, ILR, or interdisciplinary majors preferred.',
+    educationRequirements: `${EDUCATION_TARGETS} Marketing, Communication, Public Policy, ILR, Dyson, or interdisciplinary majors preferred.`,
   },
   {
     slug: 'sales-business-development-intern',
     title: 'Sales & Business Development Intern',
     short: 'Pilot enrollment with governments, tribes, and mission-driven organizations.',
-    description: 'Lead pilot enrollment with municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, universities, foundations, and CDFIs. Build the playbook for government and tribal procurement. Help structure annual subscription deals and federal grant-funded engagements. Strong fit for Cornell Dyson, ILR, Brooks School, and Engineering students who want operating experience at a Cornell-built startup.',
+    description: 'Lead pilot enrollment with municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, universities, foundations, and CDFIs. Build the playbook for government and tribal procurement. Help structure annual subscription deals and federal grant-funded engagements. Operating experience that compounds — at a five-person team where every conversation matters.',
     skills: 'B2B sales, government procurement, RFP response, tribal sovereignty awareness, account management, CRM',
     employmentType: 'INTERN',
-    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. Applied Economics & Management (Dyson), ILR, Public Policy, or Engineering majors preferred.',
+    educationRequirements: `${EDUCATION_TARGETS} Dyson Applied Economics & Management, ILR, Public Policy, Economics, or Engineering majors preferred.`,
   },
 ];
 
@@ -94,25 +96,25 @@ const jsonLd = ROLES.map(role => ({
 }));
 ---
 <BaseLayout
-  title="Internships at Lumecon | Cornell + Ivy League — coding, ML, data, marketing, sales"
-  description="Cornell-built economic impact analysis software hiring student interns in software engineering, machine learning / AI, data analytics, marketing, and sales. For Cornell, Dartmouth, and Ivy League / top US research university students. Remote-friendly, mission-driven, Cornell Brooks + Dyson + CS + ILR alignment."
+  title="Internships at Lumecon | Get in early — Cornell, Stanford, MIT, Ivy League students"
+  description="Cornell-built economic impact analysis software hiring student interns in software engineering, machine learning, data analytics, marketing, and sales. Unpaid early-stage roles — operating experience at a five-person team that compounds in a tough job market. Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, CMU students."
   canonical="https://lumecon.ai/internships"
-  keywords="Cornell internship, Cornell software engineering internship, Cornell machine learning internship, Ivy League AI internship, Cornell startup internship, Cornell economics internship, Cornell Brooks School internship, Cornell Dyson internship, Cornell ILR internship, Cornell ORIE internship, Cornell CS internship, Dartmouth internship, Cornell Operations Research internship, tribal economics internship, public policy internship, Cornell Information Science internship, data analytics internship Cornell, Cornell economic impact internship, machine learning startup internship, AI internship Ivy League, Cornell sales internship, Cornell marketing internship, Lumecon internship, Cornell entrepreneurship internship"
-  ogTitle="Internships at Lumecon — Cornell + Ivy League"
-  ogDescription="Software engineering, machine learning, data analytics, marketing, and sales internships at a Cornell-built economic impact analysis software company. Remote-friendly. For Cornell, Dartmouth, and Ivy League students."
+  keywords="Cornell internship, Cornell software engineering internship, Cornell machine learning internship, Ivy League AI internship, Cornell startup internship, Cornell economics internship, Cornell Brooks School internship, Cornell Dyson internship, Cornell ILR internship, Cornell ORIE internship, Cornell CS internship, Dartmouth internship, Stanford internship, MIT internship, Harvard internship, Princeton internship, Yale internship, UPenn Wharton internship, Brown internship, Columbia internship, Berkeley internship, Carnegie Mellon internship, Cornell Operations Research internship, tribal economics internship, public policy internship, Cornell Information Science internship, data analytics internship Cornell, Cornell economic impact internship, machine learning startup internship, AI internship Ivy League, Cornell sales internship, Cornell marketing internship, Lumecon internship, Cornell entrepreneurship internship, early stage startup internship, equity startup internship"
+  ogTitle="Internships at Lumecon — get in early at a Cornell-built startup"
+  ogDescription="Software engineering, machine learning, data analytics, marketing, and sales internships at a five-person Cornell-built economic impact analysis startup. Unpaid early-stage roles, real product surface from week one. Cornell, Dartmouth, Stanford, MIT, Ivy League students."
   jsonLd={jsonLd}
 >
   <Nav />
 
   <main class="careers">
     <header class="careers-head">
-      <p class="careers-eyebrow">Internships</p>
-      <h1 class="careers-title">Build a Cornell-born startup that serves governments and tribal nations.</h1>
+      <p class="careers-eyebrow">Internships · five-person team</p>
+      <h1 class="careers-title">Get in early at a Cornell-born startup serving governments and tribal nations.</h1>
       <p class="careers-lede">
-        Lumecon Inc. is hiring student interns in software engineering, machine learning, data analytics, marketing, and sales. Built at Cornell with counsel from the Cornell Law Entrepreneurship Law Clinic. Open to current undergraduate and graduate students at Cornell, Dartmouth, and other Ivy League / top US research universities.
+        The job market for undergrads and grads is tight right now. Operating experience compounds — and the right early-stage team is where you actually own product surface instead of being employee #500. Lumecon Inc. is a five-person, Cornell-built economic impact analysis software company hiring student interns in software engineering, machine learning, data analytics, marketing, and sales.
       </p>
       <p class="careers-lede careers-lede--sub">
-        Our work touches every U.S. county, every federally recognized tribal nation, every Alaska Native Corporation region, every Native Hawaiian Home Land, and the whole country. We need teammates who care about that mission and want operating experience while they study.
+        These are <strong>unpaid roles</strong>. What you get instead: real product surface in front of council members, tribal leaders, and federal grant reviewers; a Cornell-built reference on your résumé; and the chance to be early at what we think can be the next big company in government technology. Open to current undergrad and graduate students at Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent programs.
       </p>
       <p class="careers-cta">
         <a href={`mailto:${site.email}?subject=Internship%20application%20—%20${encodeURIComponent('Lumecon')}&body=${encodeURIComponent('Hi Lumecon team,\n\nI am a [Cornell / Dartmouth / Ivy League] student interested in the [role] internship.\n\nMy academic program: \nMy resume: (attach or paste URL)\nLinkedIn: \n\nWhy Lumecon: \n')}`} class="btn">Apply via email</a>
@@ -138,7 +140,7 @@ const jsonLd = ROLES.map(role => ({
             </div>
             <div class="role__meta-row">
               <dt>Logistics</dt>
-              <dd>Remote-friendly. Paid or for-credit, depending on your program. Quarterly cohorts. Send a resume and a one-paragraph note on what draws you to Lumecon\'s mission.</dd>
+              <dd>Unpaid early-stage role. Remote-friendly. Five-person team — you work directly with the founder. Quarterly cohorts. Send a résumé and a one-paragraph note on what draws you to Lumecon\'s mission.</dd>
             </div>
           </dl>
           <p class="role__apply">
@@ -150,10 +152,9 @@ const jsonLd = ROLES.map(role => ({
 
     <section class="careers-about" aria-labelledby="about-title">
       <h2 id="about-title">About working at Lumecon</h2>
-      <p>Lumecon Inc. is an early-stage, Cornell-built economic impact analysis software company. We replace the overpriced consultant and software stack that governments and mission-driven organizations have historically depended on for input-output modeling, fiscal multiplier analysis, and economic development reporting.</p>
-      <p>Our team is small. Interns own real product surface — Cedar AI features, geographic visualizations, multiplier-data pipelines, government and tribal outreach, pilot deals — and ship work that ends up in front of council members, tribal leaders, foundation officers, and federal grant reviewers.</p>
-      <p>If you're a Cornell CS, Operations Research (ORIE), Brooks School of Public Policy, Dyson Applied Economics & Management, ILR School, Information Science, Statistics, Engineering, or interdisciplinary student, this is operating experience that compounds into real impact across the country.</p>
-      <p>Cornell alumni and current students get a fast track in our review process. Dartmouth and other Ivy League / top US research university students are equally welcome.</p>
+      <p>Lumecon Inc. is an early-stage, Cornell-built economic impact analysis software company. We replace the overpriced consultant and software stack that governments and mission-driven organizations have historically depended on for input-output modeling, fiscal multiplier analysis, and economic development reporting. The market we're going after is large, fragmented, and underserved — and we think Lumecon can be the next big company in government and tribal-economy technology.</p>
+      <p>Our team is five people. Interns own real product surface — Cedar AI features, geographic visualizations, multiplier-data pipelines, government and tribal outreach, pilot deals — and ship work that ends up in front of council members, tribal leaders, foundation officers, and federal grant reviewers. There's no "intern queue." You work directly with the founder.</p>
+      <p>Be honest with yourself on the trade: these are <strong>unpaid internships</strong>. What you get is the operating experience of being early at something that matters, in a job market where most internships are bullshit or canceled. Cornell CS, ORIE, Brooks School, Dyson, ILR, Information Science, Statistics, and Engineering students get a fast track in our review. Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, and Carnegie Mellon students are equally welcome.</p>
     </section>
   </main>
 
