@@ -89,6 +89,19 @@ const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
   tohono:           ["Tohono O'odham", 'Tohono'],
   fort_peck:        ['Fort Peck'],
   oneida_ny:        ['Oneida'],
+  // Wealthy / well-known gaming + enterprise tribes
+  suquamish:        ['Port Madison'],
+  pechanga:         ['Pechanga'],
+  seminole_fl:      ['Big Cypress'],
+  shakopee:         ['Shakopee'],
+  seneca_ny:        ['Cattaraugus'],
+  winnebago_ne:     ['Winnebago'],
+  mashantucket:     ['Mashantucket'],
+  morongo:          ['Morongo'],
+  agua_caliente:    ['Agua Caliente'],
+  muckleshoot:      ['Muckleshoot'],
+  tulalip:          ['Tulalip Reservation'],
+  ms_choctaw:       ['Mississippi Choctaw'],
 };
 const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
