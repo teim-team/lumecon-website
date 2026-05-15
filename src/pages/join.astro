@@ -17,26 +17,29 @@ import IconImpact from '../components/icons/IconImpact.astro';
 import IconEconomist from '../components/icons/IconEconomist.astro';
 
 /**
- * Join-the-team recruiting page. Sits above /internships in the funnel
- * — broad invitation to send a resume even without a specific role
- * open, with role icons + value-prop icons. Specific role descriptions
- * with JobPosting schema live on /internships.
+ * Join-the-team page. Single recruiting surface. Folds in what /interns
+ * used to do (specific role list + JobPosting schema) so we don't have
+ * two pages doing the same job.
+ *
+ * Tone: honest and short. The roles are unpaid; we say that plainly
+ * once and don't dwell on it. The schools list lives in meta keywords
+ * for SEO, not in visible copy — we don't want to read like we're
+ * making a case from desperation.
  */
 
 const ROLES = [
-  { Icon: IconCode,       title: 'Software Engineering',           blurb: 'TypeScript, Python, Astro, d3-geo. Product surface across Local, Tribal, and Global Economic Impact.' },
-  { Icon: IconML,         title: 'Machine Learning / AI',          blurb: 'Build Cedar. LLM evaluation, document understanding, structured extraction, RAG, evals.' },
-  { Icon: IconData,       title: 'Data Analytics',                 blurb: 'Source, clean, and construct the high-frequency public + private datasets driving every multiplier.' },
-  { Icon: IconEconomist,  title: 'Economist / Impact Modeling',    blurb: 'Input-output modeling, IMPLAN / RIMS II / REMI multipliers, regional bridges, and small-region econometrics. Econ undergrad, master\'s, and PhD candidates welcome.' },
-  { Icon: IconMegaphone,  title: 'Marketing & Growth',             blurb: 'SEO, content, government outreach, tribal-nation engagement, university and CDFI partnerships.' },
-  { Icon: IconChat,       title: 'Sales & Business Dev',           blurb: 'Pilot enrollment with municipal, tribal, and mission-driven organizations. Build the procurement playbook.' },
+  { Icon: IconCode,       title: 'Software Engineering',           blurb: 'TypeScript, Python, Astro, d3-geo. Product surface across the Local, Tribal, and Global Economic Impact platforms.' },
+  { Icon: IconML,         title: 'Machine Learning / AI',          blurb: 'Build Cedar — the AI assistant that reads messy administrative uploads, surfaces each modeling assumption, and writes the source record.' },
+  { Icon: IconData,       title: 'Data Analytics',                 blurb: 'Source and version the high-frequency public and private datasets that drive every multiplier.' },
+  { Icon: IconEconomist,  title: 'Economist / Impact Modeling',    blurb: 'Input-output modeling, IMPLAN / RIMS II / REMI multipliers, regional bridges, and small-region econometrics. Undergrad, master\'s, and PhD candidates welcome.' },
+  { Icon: IconMegaphone,  title: 'Marketing & Growth',             blurb: 'SEO, content, government outreach, tribal-nation engagement, and partnerships with universities and CDFIs.' },
+  { Icon: IconChat,       title: 'Sales & Business Development',   blurb: 'Pilot enrollment with municipal, tribal, and mission-driven organizations. Build the procurement playbook.' },
 ];
 
 const VALUES = [
-  { Icon: IconAcademic, title: 'Cornell + Ivy League background', blurb: 'Built at Cornell with counsel from the Cornell Law Entrepreneurship Law Clinic. The team\'s academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior work experience includes the Federal Reserve Banks of Minneapolis, Philadelphia, and the Board of Governors in Washington, DC.' },
-  { Icon: IconImpact,   title: 'Real impact, real users',         blurb: 'Your work lands in front of council members, tribal leaders, foundation officers, and federal grant reviewers — not in a demo or a deck. Five-person team, no intern queue.' },
-  { Icon: IconRemote,   title: 'Remote-friendly',                 blurb: 'Distributed across the US. Bias toward async work, with synchronous time reserved for product reviews and government calls.' },
-  { Icon: IconData,     title: 'Be early',                        blurb: 'These are unpaid roles right now. What you get is operating experience at what we think can become the next big government-technology company — instead of being employee #500 elsewhere.' },
+  { Icon: IconAcademic, title: 'Cornell-built',          blurb: 'Built at Cornell, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team\'s academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.' },
+  { Icon: IconImpact,   title: 'Real users, real work',  blurb: 'Your work lands in front of council members, tribal leaders, foundation officers, and federal grant reviewers — not in a demo or a deck.' },
+  { Icon: IconRemote,   title: 'Remote-friendly',        blurb: 'Distributed team. Async by default, with synchronous time reserved for product reviews and government calls.' },
 ];
 
 const today = new Date().toISOString().slice(0, 10);
@@ -45,21 +48,18 @@ const oneYear = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().s
 const mailto = (subject: string, body = '') =>
   `mailto:${site.email}?subject=${encodeURIComponent(subject)}` + (body ? `&body=${encodeURIComponent(body)}` : '');
 
-const generalApplyBody = `Hi Lumecon team,
+const applyBody = `Hi Lumecon team,
 
-I'd like to be considered for a role at Lumecon Inc.
+I'd like to be considered for an early-teammate role at Lumecon Inc.
 
 Name:
-School / program (if a student):
+School / program:
 Year:
+Track of interest (Engineering / ML / Data / Economist / Marketing / Sales):
 LinkedIn:
-Resume: (paste a public URL or attach the file)
+Résumé: (paste a public URL or attach the file)
 
-What draws me to Lumecon's mission:
-
-Track I'm most interested in (Engineering / ML / Data / Marketing / Sales / Other):
-
-Anything else you should know:
+One paragraph on what draws me to the work:
 `;
 
 const jsonLd = [
@@ -68,15 +68,15 @@ const jsonLd = [
     "@type": "WebPage",
     "name": "Join the Lumecon team",
     "url": `${site.url}/join`,
-    "description": "Lumecon Inc. is hiring. Send a resume even if you don't see a posted role — we maintain a talent network for students and full-time hires in software engineering, machine learning, data analytics, marketing, and sales.",
+    "description": "Lumecon Inc. is looking for early teammates. Send a résumé even without a posted role — we maintain a talent network for students and full-time hires in software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales.",
     "publisher": { "@id": `${site.url}#org` },
   },
-  // A general "ongoing" JobPosting so Google for Jobs picks the page up.
+  // A general open-call JobPosting so Google for Jobs picks the page up.
   {
     "@context": "https://schema.org",
     "@type": "JobPosting",
-    "title": "Open call — software engineering, ML / AI, data, marketing, sales",
-    "description": "Lumecon Inc. is hiring across software engineering, machine learning / AI, data analytics, marketing, and sales. Cornell-built economic impact analysis software for governments and mission-driven organizations. Send a resume even if you don't see a specific role posted — we keep a talent network and reach back when a fit opens.",
+    "title": "Early teammate — software engineering, ML, data, economist, marketing, sales",
+    "description": "Lumecon Inc. is looking for early teammates across software engineering, machine learning / AI, data analytics, economic impact modeling, marketing, and sales. Built for governments and mission-driven organizations. Send a résumé and we'll reach back when a fit opens.",
     "datePosted": today,
     "validThrough": oneYear,
     "employmentType": ["FULL_TIME", "INTERN"],
@@ -89,17 +89,17 @@ const jsonLd = [
     "applicantLocationRequirements": { "@type": "Country", "name": "United States" },
     "jobLocationType": "TELECOMMUTE",
     "url": `${site.url}/join`,
-    "skills": "TypeScript, Python, Astro, d3, machine learning, LLM evaluation, SQL, geospatial data, government procurement, B2B sales, SEO",
+    "skills": "TypeScript, Python, Astro, d3, machine learning, LLM evaluation, SQL, geospatial data, input-output modeling, IMPLAN, RIMS II, REMI, government procurement, B2B sales, SEO",
   },
 ];
 ---
 <BaseLayout
-  title="Join Lumecon | Undergrad + grad — engineering, ML, data, economists, marketing, sales"
-  description="Lumecon Inc. is a Cornell-built economic impact analysis software company hiring undergrad and graduate students across software engineering, machine learning, data analytics, marketing, sales, and economic impact modeling. Send a résumé even without a posted role. Remote-friendly. Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, CMU students. Econ PhDs especially welcome."
+  title="Join the Lumecon team | Build economic impact analysis software for governments and mission-driven organizations"
+  description="Lumecon Inc. is a Cornell-built, five-person economic impact analysis software company. We're looking for early teammates across software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales. Open to undergraduate and graduate students. Unpaid early-stage roles."
   canonical="https://lumecon.ai/join"
-  keywords="join Lumecon, Lumecon careers, Lumecon team, Lumecon hiring, Lumecon jobs, Cornell startup hiring, Cornell startup jobs, Cornell PhD jobs, Cornell graduate student jobs, economics PhD jobs, economic impact modeling jobs, input-output modeling jobs, IMPLAN jobs, RIMS II jobs, REMI jobs, regional economics PhD jobs, Ivy League startup careers, software engineering jobs Cornell, machine learning jobs Cornell, AI startup jobs Cornell, data analytics jobs Cornell, marketing jobs Cornell, sales jobs Cornell, send resume Lumecon, Cornell entrepreneurship jobs, Dartmouth startup jobs, Stanford startup jobs, MIT startup jobs, Harvard startup jobs, Princeton ORFE jobs, Wharton jobs, Berkeley ARE jobs, CMU startup jobs, Cornell Brooks School jobs, Cornell Dyson jobs, Cornell ILR jobs, Cornell ORIE jobs, mission-driven startup, government technology jobs, tribal economic impact jobs, public sector software jobs, applied economics PhD jobs, regional science PhD jobs"
+  keywords="join Lumecon, Lumecon careers, Lumecon team, Lumecon early team, Cornell startup, Cornell entrepreneurship, software engineering Cornell, machine learning Cornell, AI startup Cornell, data analytics Cornell, economic impact modeling Cornell, input-output modeling internship, IMPLAN internship, RIMS II internship, REMI internship, regional economics PhD, applied economics PhD, Cornell PhD, Cornell graduate student, Cornell Brooks School, Cornell Dyson, Cornell ILR, Cornell ORIE, Cornell CS, Cornell Information Science, Cornell economics, Dartmouth, Oxford, Stanford, MIT, Harvard, Princeton, Yale, UPenn Wharton, Brown, Columbia, Berkeley, Carnegie Mellon, Princeton ORFE, Berkeley ARE, Yale SOM, Oxford PPE, Federal Reserve, mission-driven startup, government technology, tribal economic impact, public sector software, send resume Lumecon"
   ogTitle="Join the Lumecon team"
-  ogDescription="Cornell-built economic impact analysis software hiring across engineering, ML, data, marketing, and sales. Send a resume — we'll reach back when there's a fit."
+  ogDescription="Cornell-built, five-person economic impact analysis software company looking for early teammates across engineering, ML, data, economist, marketing, and sales. Send a résumé."
   jsonLd={jsonLd}
 >
   <Nav />
@@ -107,24 +107,21 @@ const jsonLd = [
   <main class="join">
     <header class="join-hero">
       <p class="join-eyebrow">Looking for early teammates · five-person team</p>
-      <h1 class="join-title">Be early at a Cornell-built startup for governments and tribal nations.</h1>
+      <h1 class="join-title">Build economic impact analysis software for governments and mission-driven organizations.</h1>
       <p class="join-lede">
-        The job market for undergrads and graduate students is rough right now. Lumecon is looking for early teammates across software engineering, machine learning, data analytics, marketing, sales, and economic impact modeling — <strong>unpaid early-stage roles</strong> with the trade-off being that you'll be early at what we think can become the next big company in government and tribal-economy technology. <strong>Don't see a posted role? Send a résumé anyway</strong> — we keep an active talent network and reach back when a fit opens.
-      </p>
-      <p class="join-lede join-lede--sub">
-        Open to undergrad, master's, and PhD candidates at Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent programs. Economists, applied-economics PhDs, regional-science researchers — you're encouraged to apply specifically.
+        Lumecon Inc. is a Cornell-built, five-person team. We're looking for early teammates across software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales. Open to undergraduate and graduate students. <strong>These are unpaid early-stage roles.</strong> Send a résumé and a one-paragraph note on what draws you to the work.
       </p>
       <div class="join-cta">
-        <a href={mailto('Lumecon resume submission', generalApplyBody)} class="btn">Send a resume</a>
-        <a href="/internships" class="btn btn--ghost">Open intern roles →</a>
+        <a href={mailto('Lumecon early-teammate application', applyBody)} class="btn">Send a résumé</a>
+        <a href="#roles" class="btn btn--ghost">See the roles ↓</a>
       </div>
       <p class="join-cta-note">
-        Or email <a href={`mailto:${site.email}`} class="join-cta-email">{site.email}</a> directly with your resume, school, and a one-paragraph note on what draws you to the mission.
+        Or email <a href={`mailto:${site.email}`} class="join-cta-email">{site.email}</a> directly with your résumé and a short note.
       </p>
     </header>
 
-    <section class="join-roles" aria-labelledby="roles-title">
-      <h2 class="join-section-title" id="roles-title">What we hire for</h2>
+    <section class="join-roles" id="roles" aria-labelledby="roles-title">
+      <h2 class="join-section-title" id="roles-title">Roles</h2>
       <div class="role-grid">
         {ROLES.map(({ Icon, title, blurb }) => (
           <article class="role-card">
@@ -137,7 +134,7 @@ const jsonLd = [
     </section>
 
     <section class="join-values" aria-labelledby="values-title">
-      <h2 class="join-section-title" id="values-title">What it's like to work at Lumecon</h2>
+      <h2 class="join-section-title" id="values-title">About the team</h2>
       <div class="value-grid">
         {VALUES.map(({ Icon, title, blurb }) => (
           <article class="value-card">
@@ -159,30 +156,14 @@ const jsonLd = [
       </p>
     </section>
 
-    <section class="join-cohort" aria-labelledby="cohort-title">
-      <h2 class="join-section-title" id="cohort-title">Who we work with</h2>
-      <p class="join-cohort-body">
-        Lumecon's economic impact analysis software is used by US municipal governments, federally recognized tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, federal programs, universities and research labs, foundations, Community Development Financial Institutions (CDFIs), and economic development organizations. The work you ship shows up in their budgets, grant proposals, and capital plans.
-      </p>
-      <p class="join-cohort-body">
-        We're targeting students from Cornell, Dartmouth, Oxford, Stanford, MIT, Harvard, Princeton, Yale, UPenn (Wharton), Brown, Columbia, Berkeley, and Carnegie Mellon — plus equivalent programs at other top US and international research universities. Cornell CS, Operations Research (ORIE), Brooks School of Public Policy, Dyson Applied Economics & Management, ILR School, Information Science, Engineering Physics, Statistics, Applied Math, and Communication students get a fast track. Stanford CS / Symbolic Systems / MS&E, MIT EECS / Sloan, Harvard CS / Kennedy School, Princeton ORFE / SPIA, Yale Economics / SOM, Wharton, Berkeley EECS / Goldman, Oxford PPE / Economics, and CMU SCS / Tepper applicants similarly.
-      </p>
-      <p class="join-cohort-body">
-        Team background: Cornell, Dartmouth, Oxford, MIT, and Yale academic training, plus prior experience at the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC. If you'd be working on the modeling side, you'll be paired with people who understand input-output methodology from the inside.
-      </p>
-      <p class="join-cohort-body">
-        Plain-spoken on compensation: <strong>these are unpaid roles right now.</strong> We're a five-person team building toward the next big company in government and tribal-economy technology. The trade is operating experience and a Cornell-built reference in a job market where most other internships are filler. If that trade isn't right for you, we get it — keep an eye out as we grow.
-      </p>
-    </section>
-
     <section class="join-final" aria-labelledby="final-title">
-      <h2 class="join-section-title" id="final-title">Ready to send your resume?</h2>
+      <h2 class="join-section-title" id="final-title">Send a résumé</h2>
       <p class="join-final-body">
-        We read every submission. Include a school, a track of interest (engineering / ML / data / marketing / sales), and one paragraph on what draws you to the mission. We reach back when there's a fit.
+        We read every submission. Include your school, the track you're interested in, and one paragraph on what draws you to the work.
       </p>
       <div class="join-cta">
-        <a href={mailto('Lumecon resume submission', generalApplyBody)} class="btn">Send a resume</a>
-        <a href="/internships" class="btn btn--ghost">See open intern roles</a>
+        <a href={mailto('Lumecon early-teammate application', applyBody)} class="btn">Send a résumé</a>
+        <a href={`mailto:${site.email}`} class="btn btn--ghost">Email directly</a>
       </div>
     </section>
   </main>
@@ -195,7 +176,7 @@ const jsonLd = [
     background: var(--white);
     padding: clamp(6rem, 11vw, 8rem) 0 clamp(4rem, 8vw, 6rem);
   }
-  .join-hero, .join-roles, .join-values, .join-cohort, .join-final {
+  .join-hero, .join-roles, .join-values, .join-manifesto, .join-final {
     max-width: 1040px;
     margin: 0 auto;
     padding: 0 var(--container-pad);
@@ -228,7 +209,6 @@ const jsonLd = [
     max-width: 64ch;
   }
   .join-lede strong { color: var(--navy); font-weight: 600; }
-  .join-lede--sub { margin-top: .8rem; font-size: 1rem; color: var(--ink-3); }
   .join-cta { display: flex; gap: .8rem; flex-wrap: wrap; margin: 2rem 0 0; }
   .join-cta-note {
     font-family: var(--font-sans);
@@ -254,7 +234,7 @@ const jsonLd = [
   .join-roles { margin-top: clamp(3rem, 6vw, 5rem); }
   .role-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.6rem 2rem;
   }
   .role-card {
@@ -284,7 +264,7 @@ const jsonLd = [
   }
   .role-card__blurb {
     font-family: var(--font-sans);
-    font-size: .92rem;
+    font-size: .94rem;
     line-height: 1.55;
     color: var(--ink-2);
     margin: 0;
@@ -294,7 +274,7 @@ const jsonLd = [
   .join-values { margin-top: clamp(3rem, 6vw, 5rem); }
   .value-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.6rem 2rem;
   }
   .value-card {
@@ -318,7 +298,7 @@ const jsonLd = [
   }
   .value-card__blurb {
     font-family: var(--font-sans);
-    font-size: .92rem;
+    font-size: .94rem;
     line-height: 1.55;
     color: var(--ink-2);
     margin: 0;
@@ -359,15 +339,6 @@ const jsonLd = [
     color: rgba(255, 255, 255, .82);
     margin-bottom: 0;
   }
-  .join-cohort { margin-top: clamp(3rem, 6vw, 5rem); }
-  .join-cohort-body {
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--ink-2);
-    margin: 0 0 1rem;
-    max-width: 70ch;
-  }
 
   .join-final {
     margin-top: clamp(3rem, 6vw, 5rem);
@@ -380,6 +351,6 @@ const jsonLd = [
     line-height: 1.55;
     color: var(--ink-2);
     margin: 0 0 1.4rem;
-    max-width: 64ch;
+    max-width: 60ch;
   }
 </style>
