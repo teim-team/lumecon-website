@@ -9,7 +9,7 @@ export const navLinks = [
 export const site = {
   name: 'Lumecon',
   legalName: 'Lumecon Inc.',
-  tagline: 'We luminate economies',
+  tagline: 'We illuminate economies',
   pitch: 'Economic and policy analysis software for governments and mission-driven organizations.',
   url: 'https://lumecon.ai',
   email: 'contact@lumecon.ai',
