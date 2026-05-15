@@ -115,7 +115,157 @@ const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
   grand_ronde:      ['Grand Ronde Community', 'Grand Ronde'],
   mha:              ['Fort Berthold'],
   forest_potawatomi:['Forest County Potawatomi'],
+  // California (~12)
+  pala:             ['Pala Reservation', 'Pala'],
+  rincon:           ['Rincon Reservation', 'Rincon'],
+  sycuan:           ['Sycuan'],
+  viejas:           ['Viejas'],
+  soboba:           ['Soboba'],
+  tule_river:       ['Tule River'],
+  hoopa:            ['Hoopa Valley'],
+  yurok:            ['Yurok'],
+  cabazon:          ['Cabazon'],
+  san_pasqual:      ['San Pasqual'],
+  bishop_paiute:    ['Bishop Reservation', 'Bishop'],
+  chemehuevi:       ['Chemehuevi'],
+  // Arizona (~10)
+  gila_river:       ['Gila River'],
+  salt_river:       ['Salt River'],
+  ak_chin:          ['Maricopa (Ak Chin)', 'Ak Chin', 'Ak-Chin'],
+  pascua_yaqui:     ['Pascua Pueblo Yaqui', 'Pascua Yaqui'],
+  hualapai:         ['Hualapai'],
+  havasupai:        ['Havasupai'],
+  san_carlos:       ['San Carlos'],
+  white_mountain_apache: ['Fort Apache'],
+  fort_mcdowell:    ['Fort McDowell'],
+  yavapai_prescott: ['Yavapai-Prescott'],
+  // New Mexico Pueblos + Apaches
+  acoma:            ['Acoma Pueblo', 'Acoma'],
+  isleta:           ['Isleta Pueblo', 'Isleta'],
+  sandia:           ['Sandia Pueblo', 'Sandia'],
+  santa_ana:        ['Santa Ana Pueblo', 'Santa Ana'],
+  pojoaque:         ['Pojoaque Pueblo', 'Pojoaque'],
+  san_felipe:       ['San Felipe Pueblo', 'San Felipe'],
+  taos:             ['Taos Pueblo', 'Taos'],
+  zuni:             ['Zuni'],
+  mescalero:        ['Mescalero'],
+  jicarilla:        ['Jicarilla Apache'],
+  laguna:           ['Laguna Pueblo', 'Laguna'],
+  ohkay_owingeh:    ['Ohkay Owingeh'],
+  cochiti:          ['Cochiti'],
+  // Nevada
+  pyramid_lake:     ['Pyramid Lake'],
+  moapa:            ['Moapa River', 'Moapa'],
+  las_vegas_paiute: ['Las Vegas'],
+  walker_river:     ['Walker River'],
+  reno_sparks:      ['Reno-Sparks'],
+  fallon:           ['Fallon Paiute-Shoshone'],
+  duck_valley:      ['Duck Valley'],
+  // Washington (more)
+  lummi:            ['Lummi'],
+  quinault:         ['Quinault'],
+  makah:            ['Makah'],
+  puyallup:         ['Puyallup'],
+  squaxin:          ['Squaxin Island', 'Squaxin'],
+  swinomish:        ['Swinomish'],
+  kalispel:         ['Kalispel'],
+  colville:         ['Colville'],
+  spokane:          ['Spokane Reservation', 'Spokane'],
+  nisqually:        ['Nisqually'],
+  port_gamble:      ['Port Gamble'],
+  chehalis:         ['Chehalis'],
+  // Oregon
+  warm_springs:     ['Warm Springs'],
+  klamath_tribes:   ['Klamath'],
+  coquille:         ['Coquille'],
+  cow_creek:        ['Cow Creek'],
+  siletz:           ['Siletz'],
+  // Minnesota
+  white_earth:      ['White Earth'],
+  leech_lake:       ['Leech Lake'],
+  bois_forte:       ['Bois Forte'],
+  grand_portage:    ['Grand Portage'],
+  fond_du_lac:      ['Fond du Lac'],
+  red_lake:         ['Red Lake'],
+  prairie_island:   ['Prairie Island'],
+  lower_sioux:      ['Lower Sioux'],
+  // Wisconsin
+  menominee:        ['Menominee'],
+  lac_du_flambeau:  ['Lac du Flambeau'],
+  lac_courte_oreilles:['Lac Courte Oreilles'],
+  bad_river:        ['Bad River'],
+  red_cliff:        ['Red Cliff'],
+  st_croix:         ['St. Croix'],
+  stockbridge_munsee:['Stockbridge Munsee'],
+  // Michigan
+  saginaw_chippewa: ['Isabella'],
+  sault_tribe:      ['Sault Ste. Marie'],
+  bay_mills:        ['Bay Mills'],
+  little_traverse:  ['Little Traverse'],
+  hannahville:      ['Hannahville'],
+  // New York Haudenosaunee
+  st_regis_mohawk:  ['St. Regis Mohawk'],
+  cayuga_ny:        ['Cayuga Nation'],
+  onondaga:         ['Onondaga Nation'],
+  tonawanda:        ['Tonawanda'],
+  // Maine Wabanaki
+  penobscot:        ['Penobscot'],
+  passamaquoddy:    ['Passamaquoddy', 'Pleasant Point', 'Indian Township'],
+  aroostook_micmac: ['Aroostook Band of Micmac'],
+  // Montana
+  crow:             ['Crow Reservation', 'Crow'],
+  blackfeet:        ['Blackfeet'],
+  northern_cheyenne:['Northern Cheyenne'],
+  rocky_boys:       ["Rocky Boy"],
+  // SD Oceti Sakowin (fort_belknap already declared above as Fort Belknap is MT, keep here)
+  rosebud:          ['Rosebud'],
+  cheyenne_river:   ['Cheyenne River'],
+  lower_brule:      ['Lower Brule'],
+  yankton_sioux:    ['Yankton'],
+  sisseton_wahpeton:['Lake Traverse'],
+  // ND
+  turtle_mountain:  ['Turtle Mountain'],
+  spirit_lake:      ['Spirit Lake'],
+  // Oklahoma
+  osage:            ['Osage'],
+  muscogee:         ['Creek OTSA', 'Creek/Seminole'],
+  citizen_potawatomi:['Citizen Potawatomi'],
+  quapaw:           ['Quapaw OTSA', 'Quapaw'],
+  comanche:         ['Kiowa-Comanche-Apache', 'Comanche'],
+  kiowa:            ['Kiowa-Comanche-Apache'],
+  otoe_missouria:   ['Otoe-Missouria', 'Otoe'],
+  kaw:              ['Kaw OTSA', 'Kaw'],
+  absentee_shawnee: ['Citizen Potawatomi Nation-Absentee Shawnee', 'Absentee'],
+  cheyenne_arapaho: ['Cheyenne-Arapaho', 'Cheyenne and Arapaho'],
+  // Idaho
+  coeur_dalene:     ["Coeur d'Alene"],
+  nez_perce:        ['Nez Perce'],
+  fort_hall:        ['Fort Hall'],
+  // WY + CO + UT
+  wind_river:       ['Wind River'],
+  uintah_ouray:     ['Uintah and Ouray'],
+  // NE + KS + IA
+  omaha:            ['Omaha Reservation', 'Omaha'],
+  santee_ne:        ['Santee Reservation', 'Santee'],
+  ponca_ne:         ['Ponca (NE)'],
+  prairie_potawatomi:['Prairie Band of Potawatomi'],
+  iowa_kansas:      ['Iowa (KS-NE)'],
+  kickapoo_ks:      ['Kickapoo (KS)'],
+  meskwaki:         ['Sac and Fox/Meskwaki'],
+  // LA / TX / MS / AL
+  coushatta_la:     ['Coushatta'],
+  chitimacha:       ['Chitimacha'],
+  jena_choctaw:     ['Jena Band of Choctaw'],
+  ysleta_del_sur:   ['Ysleta del Sur'],
+  alabama_coushatta:['Alabama-Coushatta'],
+  // New England + FL
+  aquinnah:         ['Wampanoag-Aquinnah', 'Aquinnah'],
+  narragansett:     ['Narragansett'],
+  miccosukee:       ['Miccosukee'],
 };
+// Add an alias for the Crow Nation in MT (37 also has 'Crow' counties — disambiguate via the AIANNH 'Crow Reservation' which only appears at fips 30).
+// fort_belknap was previously declared; re-declare via the canonical key.
+TRIBAL_SCENE_KEYS.fort_belknap = ['Fort Belknap'];
 /* Hand-anchored centroids for federally recognized tribes whose lands
    are NOT present in Census TIGER/Line 2018 AIANNH (newly recognized,
    newly placed-into-trust, or otherwise absent). Coordinates are in
@@ -1119,11 +1269,11 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
        a button. Activating it expands a tiny info block with a
        one-sentence definition + the live multiplier used in this run. */
     const FIG_DEFS: Record<string, string> = {
-      direct:   'First-round spending. The dollars actually disbursed: wages, contracts, grant payments.',
-      indirect: 'Supplier spending. Money the direct recipients spend with vendors, contractors, and suppliers.',
+      direct:   'First-round spending that lands in the analysis region. Capital expenditure (construction, equipment), operating payroll, and contracts paid to local vendors all count. Taxes paid out to federal or non-local governments do not (they leak out of the region; fiscal impact is a separate analysis).',
+      indirect: 'Supplier spending. Money the direct recipients spend with vendors, contractors, and suppliers inside the region.',
       induced:  'Household spending. Wages earned by direct and indirect workers, spent locally on rent, groceries, services.',
       total:    'Direct + Indirect + Induced. The full economic impact across the region.',
-      jobs:     'Estimated jobs supported across direct, indirect, and induced activity, derived from a per-million-dollars factor.',
+      jobs:     'Estimated jobs supported across direct, indirect, and induced activity, derived from a per-million-dollars factor for the scenario\'s activity type.',
     };
     const figureButtons = document.querySelectorAll<HTMLElement>('.hero-fig');
     figureButtons.forEach(cell => {
