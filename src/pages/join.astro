@@ -21,10 +21,10 @@ import IconChat from '../components/icons/IconChat.astro';
  */
 
 const ROLES = [
-  { Icon: IconCode,      title: 'Software engineering',          blurb: 'TypeScript, Python, Astro, d3-geo. Build the product surface across the Local, Tribal, and Global Economic Impact platforms.' },
-  { Icon: IconML,        title: 'Machine learning and AI',       blurb: 'Build Cedar. The assistant that reads messy administrative uploads, surfaces every modeling assumption, and writes the source record.' },
-  { Icon: IconData,      title: 'Data analytics',                blurb: 'Source and version the high-frequency public and private datasets that drive every multiplier.' },
-  { Icon: IconEconomist, title: 'Economist and impact modeling', blurb: 'Input-output modeling, IMPLAN / RIMS II / REMI multipliers, regional bridges, small-region econometrics. Undergrad, master\'s, and PhD candidates welcome.' },
+  { Icon: IconCode,      title: 'Software engineering',          blurb: 'Python, TypeScript, AWS, Astro, d3-geo. Build the product surface across the Local, Tribal, and Global Economic Impact platforms.' },
+  { Icon: IconML,        title: 'Machine learning and AI',       blurb: 'Build Cedar, the assistant that reads messy administrative uploads, surfaces every modeling assumption, and writes the source record.' },
+  { Icon: IconData,      title: 'Data analytics',                blurb: 'Source and version the high-frequency public and private datasets that feed Lumecon\'s economic impact studies.' },
+  { Icon: IconEconomist, title: 'Economist and impact modeling', blurb: 'Design the methodology behind Lumecon\'s multipliers. Input-output modeling, regional bridges, and small-region econometrics for the geographies the legacy tools struggle with. Undergrad, master\'s, and PhD candidates welcome.' },
   { Icon: IconMegaphone, title: 'Marketing and growth',          blurb: 'SEO, content, government outreach, tribal-nation engagement, partnerships with universities and CDFIs.' },
   { Icon: IconChat,      title: 'Sales and business development', blurb: 'Pilot enrollment with municipal, tribal, and mission-driven organizations. Build the procurement playbook.' },
 ];
@@ -95,14 +95,23 @@ const jsonLd = [
     <!-- WHY: open with what Lumecon does in the world. -->
     <header class="join-hero">
       <p class="join-eyebrow">Why we're building this</p>
-      <h1 class="join-title">We illuminate economies.</h1>
+      <h1 class="join-title">We <em>illuminate</em> economies.</h1>
       <div class="join-why">
-        <p>A lot of people have real impact, and can't show it.</p>
-        <p>That matters because money is on the line. Money that houses people, feeds people, creates jobs. Money that flows from grant programs, foundations, federal agencies, banks, and budget committees to the organizations that put it to work on the ground.</p>
-        <p>When impact gets measured, the next round of capital follows it. That's the feedback loop. We build the software that closes it.</p>
-        <p class="join-why__list">Lumecon's work shows up in front of <strong>governments</strong>, <strong>tribal nations</strong>, <strong>foundations</strong>, <strong>banks</strong>, <strong>universities</strong>, and the <strong>people</strong> those institutions serve.</p>
+        <p>A lot of organizations have real economic impact, and no way to show it.</p>
+        <p>That matters because the next round of capital follows the evidence. When economic impact gets measured, budgets get approved, foundations write the check, councils pass the bill, banks underwrite the loan, communities support the project. When it doesn't get measured, none of that happens.</p>
+        <p>Lumecon's work shows up in front of <strong>governments</strong>, <strong>tribal nations</strong>, <strong>foundations</strong>, <strong>banks</strong>, <strong>universities</strong>, and the communities those institutions serve. We build the software that makes the economic impact legible, so the dollars that house, feed, and employ people keep moving.</p>
       </div>
     </header>
+
+    <!-- The world is changing. -->
+    <section class="join-transition" aria-labelledby="transition-title">
+      <p class="join-section-kicker">The moment</p>
+      <h2 class="join-section-title" id="transition-title">The world is changing fast. Most organizations are still figuring out the transition.</h2>
+      <div class="join-team-body">
+        <p>Public agencies, tribal governments, foundations, and universities are being asked to do more with the same headcount, on shorter cycles, against tougher questions about value and return. The legacy tools weren't built for that.</p>
+        <p>We're using AI to make the work easier, not to replace people. The aim is to <strong>create</strong> jobs by helping the organizations that fund them tell a stronger economic story, not to automate anyone out of one.</p>
+      </div>
+    </section>
 
     <!-- WHO we hire and HOW we work. Persistence over perfection. -->
     <section class="join-team" aria-labelledby="team-title">
@@ -110,19 +119,19 @@ const jsonLd = [
       <h2 class="join-section-title" id="team-title">We mentor people who are persistent.</h2>
       <div class="join-team-body">
         <p>Lumecon Inc. is a five-person team, built at Cornell University. We're looking for early teammates across engineering, ML, data, economic impact modeling, marketing, and sales.</p>
-        <p>If you don't have every skill on a role description, apply anyway. We're early enough that everyone is wearing several hats, and we'd rather hire someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
-        <p>What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. The roles are <strong>unpaid early-stage roles</strong>, open to undergraduate and graduate students. If that doesn't work for you right now, we understand, and we keep résumés on file for when we can pay.</p>
+        <p>If you don't have every skill on a role description, apply anyway. We're early enough that everyone is wearing several hats, and we'd rather work with someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
+        <p>What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. The roles are <strong>unpaid early-stage roles</strong>, open to undergraduate and graduate students.</p>
+        <p>We're looking for people who want to stick around and help build a strong team. We can't make any promises, but the early teammates who put in the work are the ones we'd want with us when Lumecon raises capital and starts generating revenue.</p>
       </div>
     </section>
 
-    <!-- Roles. Editorial list, no cards. Animated icons per role. -->
+    <!-- Roles. Editorial list, no numbers — icons + title + blurb. -->
     <section class="join-roles" id="roles" aria-labelledby="roles-title">
       <p class="join-section-kicker">Open tracks</p>
       <h2 class="join-section-title" id="roles-title">Where you might fit.</h2>
-      <ol class="role-list">
-        {ROLES.map(({ Icon, title, blurb }, i) => (
+      <ul class="role-list">
+        {ROLES.map(({ Icon, title, blurb }) => (
           <li class="role-row">
-            <span class="role-row__num">{String(i + 1).padStart(2, '0')}</span>
             <span class="role-row__icon" aria-hidden="true"><Icon /></span>
             <div class="role-row__body">
               <h3 class="role-row__title">{title}</h3>
@@ -130,7 +139,7 @@ const jsonLd = [
             </div>
           </li>
         ))}
-      </ol>
+      </ul>
     </section>
 
     <!-- Apply. -->
@@ -160,12 +169,18 @@ const jsonLd = [
     padding: clamp(6rem, 11vw, 8rem) 0 clamp(4rem, 8vw, 6rem);
   }
   .join-hero,
+  .join-transition,
   .join-team,
   .join-roles,
   .join-apply {
     max-width: 880px;
     margin: 0 auto;
     padding: 0 var(--container-pad);
+  }
+  .join-title em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 600;
   }
 
   /* ---------- Hero: WHY ---------- */
@@ -214,6 +229,7 @@ const jsonLd = [
   }
 
   /* ---------- Section frame (no cards) ---------- */
+  .join-transition,
   .join-team,
   .join-roles,
   .join-apply { margin-top: clamp(4rem, 7vw, 6rem); }
@@ -251,7 +267,7 @@ const jsonLd = [
   }
   .join-team-body strong { color: var(--navy); font-weight: 600; }
 
-  /* ---------- Roles list (editorial, no cards) ---------- */
+  /* ---------- Roles list (editorial, no cards, no numbers) ---------- */
   .role-list {
     list-style: none;
     margin: 0;
@@ -259,35 +275,28 @@ const jsonLd = [
   }
   .role-row {
     display: grid;
-    grid-template-columns: 2.4rem 3rem 1fr;
-    gap: 1rem 1.4rem;
+    grid-template-columns: 64px 1fr;
+    gap: 1rem 1.6rem;
     align-items: start;
-    padding: 1.4rem 0;
+    padding: 1.7rem 0;
     border-top: 1px solid var(--rule);
   }
   .role-row:last-child { border-bottom: 1px solid var(--rule); }
-  .role-row__num {
-    font-family: var(--font-mono);
-    font-size: .82rem;
-    color: var(--ink-3);
-    letter-spacing: .04em;
-    padding-top: .35rem;
-  }
   .role-row__icon {
     display: inline-flex;
     color: var(--navy);
     align-items: center;
     justify-content: center;
-    padding-top: .15rem;
+    padding-top: .25rem;
   }
-  .role-row__icon svg { width: 36px; height: 36px; display: block; }
+  .role-row__icon svg { width: 52px; height: 52px; display: block; }
   .role-row__title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    font-size: clamp(1.15rem, 1.9vw, 1.35rem);
     color: var(--navy);
     letter-spacing: -.014em;
-    margin: 0 0 .35rem;
+    margin: 0 0 .4rem;
   }
   .role-row__blurb {
     font-family: var(--font-sans);
@@ -295,7 +304,7 @@ const jsonLd = [
     line-height: 1.55;
     color: var(--ink-2);
     margin: 0;
-    max-width: 56ch;
+    max-width: 60ch;
     font-weight: 400;
   }
 
@@ -324,15 +333,14 @@ const jsonLd = [
 
   @media (max-width: 600px) {
     .role-row {
-      grid-template-columns: 1.9rem 2.2rem 1fr;
-      gap: 0 .75rem;
-      padding: 1.2rem 0;
+      grid-template-columns: 48px 1fr;
+      gap: 0 .9rem;
+      padding: 1.3rem 0;
       align-items: start;
     }
-    .role-row__num { font-size: .76rem; padding-top: .4rem; }
+    .role-row__icon svg { width: 40px; height: 40px; }
     .role-row__icon { padding-top: .15rem; }
-    .role-row__icon svg { width: 26px; height: 26px; }
-    .role-row__title { font-size: 1.05rem; }
-    .role-row__blurb { font-size: .92rem; }
+    .role-row__title { font-size: 1.08rem; }
+    .role-row__blurb { font-size: .94rem; }
   }
 </style>
