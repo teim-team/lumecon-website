@@ -12,13 +12,18 @@ interface Props {
   ogImageAlt?: string;
   bodyClass?: string;
   jsonLd?: object;
+  /** Set true on admin/info/error pages we don't want in search. */
+  noindex?: boolean;
 }
 
 const {
   title, description, canonical, keywords,
   ogTitle, ogDescription, ogImage, ogImageAlt,
-  bodyClass, jsonLd,
+  bodyClass, jsonLd, noindex = false,
 } = Astro.props;
+const robotsValue = noindex
+  ? 'noindex, nofollow'
+  : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 const ogT = ogTitle || title;
 const ogD = ogDescription || description;
 const ogI = ogImage || 'https://lumecon.ai/lumecon-og-image-1200x630.png';
@@ -32,9 +37,9 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
 <title>{title}</title>
 <meta name="description" content={description}>
 <meta name="keywords" content={keywords}>
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="robots" content={robotsValue}>
+<meta name="googlebot" content={robotsValue}>
+<meta name="bingbot" content={robotsValue}>
 <meta name="author" content="Lumecon Inc.">
 <meta name="publisher" content="Lumecon Inc.">
 <meta name="copyright" content="Lumecon Inc.">
