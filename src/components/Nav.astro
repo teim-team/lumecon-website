@@ -1,5 +1,8 @@
 ---
 import { site } from '../config';
+import IconLocal from './icons/IconLocal.astro';
+import IconTribal from './icons/IconTribal.astro';
+import IconGlobal from './icons/IconGlobal.astro';
 interface Props {
   isHome?: boolean;
 }
@@ -19,21 +22,21 @@ const { local, tribal, global: globalProduct } = site.products;
         </button>
         <div class="nav-dd__panel" role="menu">
           <a class="nav-dd__item" href={local.url} role="menuitem">
-            <span class="nav-dd__dot" data-c="local"></span>
+            <span class="nav-dd__icon"><IconLocal /></span>
             <span class="nav-dd__body">
               <span class="nav-dd__name">{local.name}</span>
               <span class="nav-dd__desc">For municipalities, EDOs, and enterprises.</span>
             </span>
           </a>
           <a class="nav-dd__item" href={tribal.url} role="menuitem">
-            <span class="nav-dd__dot" data-c="tribal"></span>
+            <span class="nav-dd__icon"><IconTribal /></span>
             <span class="nav-dd__body">
               <span class="nav-dd__name">{tribal.name}</span>
               <span class="nav-dd__desc">For tribes, ANCs, NHOs, and reservation economies.</span>
             </span>
           </a>
           <a class="nav-dd__item" href={globalProduct.url} role="menuitem">
-            <span class="nav-dd__dot" data-c="global"></span>
+            <span class="nav-dd__icon"><IconGlobal /></span>
             <span class="nav-dd__body">
               <span class="nav-dd__name">{globalProduct.name}</span>
               <span class="nav-dd__desc">For multinationals, NGOs, and cross-border programs.</span>
