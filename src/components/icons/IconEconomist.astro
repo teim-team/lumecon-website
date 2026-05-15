@@ -2,6 +2,13 @@
 const { class: className = '' } = Astro.props as { class?: string };
 ---
 <svg class={`icon icon--economist ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-  <path class="icon-econ__sigma" d="M16.5 5H8L13 12L8 19H16.5" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" stroke-linecap="butt"/>
-  <circle class="icon-econ__hub" cx="13" cy="12" r="1.4" fill="#F0A91A"/>
+  <!-- Capital Σ (sigma), fold on the left like the Greek letter
+       actually faces: top bar, diagonal down-left to the fold,
+       diagonal down-right to the bottom-right, bottom bar back to
+       the bottom-left. The gold hub at the fold marks the
+       multiplier center. -->
+  <path class="icon-econ__sigma"
+        d="M7 4 H17 L11 12 L17 20 H7"
+        stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt"/>
+  <circle class="icon-econ__hub" cx="11" cy="12" r="1.5" fill="#F0A91A"/>
 </svg>
