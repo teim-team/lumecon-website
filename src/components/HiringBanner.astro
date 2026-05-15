@@ -5,6 +5,10 @@
  * the page or competing with the primary "Request a demo" CTA.
  * Framed as 'Looking for early teammates' (not 'We're hiring') so we
  * don't imply paid roles where there aren't any.
+ *
+ * Right side carries a small animated network graph that grows from
+ * a single node to a team of nodes-with-edges, visualizing the team
+ * expansion the banner is asking the visitor to help build.
  */
 ---
 <aside class="hiring" aria-labelledby="hiring-title">
@@ -13,9 +17,49 @@
       <p class="hiring-eyebrow reveal-soft">Looking for early teammates · five-person team</p>
       <p class="hiring-title reveal-soft" id="hiring-title" data-stagger="1">Help us <em>luminate</em> economies.</p>
       <p class="hiring-sub reveal-soft" data-stagger="2">Undergrad and graduate students across engineering, ML, data, economic impact modeling, marketing, and sales. We mentor people who are persistent. Unpaid early-stage roles.</p>
+      <div class="hiring-ctas reveal-soft" data-stagger="3">
+        <a href="/join" class="btn">See roles + apply</a>
+      </div>
     </div>
-    <div class="hiring-ctas">
-      <a href="/join" class="btn">See roles + apply</a>
+    <div class="hiring-graph" aria-hidden="true">
+      <svg viewBox="0 0 240 200" preserveAspectRatio="xMidYMid meet">
+        <!-- Edges. Each is drawn (stroke-dashoffset) in time with its
+             two endpoint nodes appearing. -->
+        <g class="hg-edges" stroke="currentColor" fill="none" stroke-width="1" stroke-linecap="butt">
+          <!-- Tier 1: center node only (no edges yet) -->
+          <!-- Tier 2: 4 edges from center to the inner ring -->
+          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="70"  y2="65"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="170" y2="65"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="70"  y2="135" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t2" x1="120" y1="100" x2="170" y2="135" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <!-- Tier 3: 8 edges from inner ring out to the outer ring -->
+          <line class="hg-edge hg-edge--t3" x1="70"  y1="65"  x2="30"  y2="40"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="70"  y1="65"  x2="40"  y2="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="170" y1="65"  x2="210" y2="40"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="170" y1="65"  x2="200" y2="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="70"  y1="135" x2="40"  y2="170" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="70"  y1="135" x2="100" y2="180" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="170" y1="135" x2="200" y2="170" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+          <line class="hg-edge hg-edge--t3" x1="170" y1="135" x2="140" y2="180" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+        </g>
+        <!-- Nodes. Tier 1 = center (always on). Tier 2 = inner ring.
+             Tier 3 = outer ring. Each fades + scales in on its tier. -->
+        <g class="hg-nodes">
+          <circle class="hg-node hg-node--center" cx="120" cy="100" r="6.5" fill="#F0A91A"/>
+          <circle class="hg-node hg-node--t2" cx="70"  cy="65"  r="5" fill="currentColor"/>
+          <circle class="hg-node hg-node--t2" cx="170" cy="65"  r="5" fill="currentColor"/>
+          <circle class="hg-node hg-node--t2" cx="70"  cy="135" r="5" fill="currentColor"/>
+          <circle class="hg-node hg-node--t2" cx="170" cy="135" r="5" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="30"  cy="40"  r="3.8" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="40"  cy="100" r="3.8" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="210" cy="40"  r="3.8" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="200" cy="100" r="3.8" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="40"  cy="170" r="3.8" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="100" cy="180" r="3.8" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="200" cy="170" r="3.8" fill="currentColor"/>
+          <circle class="hg-node hg-node--t3" cx="140" cy="180" r="3.8" fill="currentColor"/>
+        </g>
+      </svg>
     </div>
   </div>
 </aside>
@@ -30,8 +74,8 @@
     margin: 0 auto;
     padding: 0 var(--container-pad);
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1.6rem 3rem;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2rem clamp(2rem, 5vw, 4rem);
     align-items: center;
   }
   .hiring-eyebrow {
@@ -46,11 +90,11 @@
   .hiring-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
     line-height: 1.2;
     letter-spacing: -.018em;
     color: var(--navy);
-    margin: 0 0 .5rem;
+    margin: 0 0 .6rem;
     max-width: 32ch;
   }
   .hiring-title em {
@@ -63,7 +107,7 @@
     font-size: .94rem;
     line-height: 1.5;
     color: var(--ink-2);
-    margin: 0;
+    margin: 0 0 1.2rem;
     max-width: 60ch;
     font-weight: 400;
   }
@@ -71,9 +115,91 @@
     display: flex;
     gap: .6rem;
     flex-wrap: wrap;
+    margin-top: .25rem;
   }
+
+  /* ---------- Network graph ---------- */
+  .hiring-graph {
+    color: var(--navy);
+    width: 100%;
+    max-width: 340px;
+    justify-self: end;
+  }
+  .hiring-graph svg { width: 100%; height: auto; display: block; }
+
+  /* Center node: gentle pulse so the focal point breathes. */
+  .hg-node--center {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hg-pulse 6s ease-in-out infinite;
+  }
+  @keyframes hg-pulse {
+    0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(240, 169, 26, 0)); }
+    50%      { transform: scale(1.15); filter: drop-shadow(0 0 4px rgba(240, 169, 26, .55)); }
+  }
+
+  /* Tier 2 nodes fade in around 1s; tier 3 around 2.5s. The cycle
+     restarts at 6s, so the graph "grows" repeatedly. */
+  .hg-node--t2, .hg-node--t3 {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: hg-spawn 6s ease-out infinite;
+  }
+  .hg-node--t2 { animation-delay: 1.0s; }
+  .hg-node--t3 { animation-delay: 2.5s; }
+  /* Stagger within each tier so individual nodes don't pop together. */
+  .hg-node--t2:nth-of-type(2)  { animation-delay: 1.0s; }
+  .hg-node--t2:nth-of-type(3)  { animation-delay: 1.15s; }
+  .hg-node--t2:nth-of-type(4)  { animation-delay: 1.3s; }
+  .hg-node--t2:nth-of-type(5)  { animation-delay: 1.45s; }
+  .hg-node--t3:nth-of-type(6)  { animation-delay: 2.6s; }
+  .hg-node--t3:nth-of-type(7)  { animation-delay: 2.75s; }
+  .hg-node--t3:nth-of-type(8)  { animation-delay: 2.9s; }
+  .hg-node--t3:nth-of-type(9)  { animation-delay: 3.05s; }
+  .hg-node--t3:nth-of-type(10) { animation-delay: 3.2s; }
+  .hg-node--t3:nth-of-type(11) { animation-delay: 3.35s; }
+  .hg-node--t3:nth-of-type(12) { animation-delay: 3.5s; }
+  .hg-node--t3:nth-of-type(13) { animation-delay: 3.65s; }
+  @keyframes hg-spawn {
+    0%      { opacity: 0; transform: scale(.3); }
+    15%     { opacity: 1; transform: scale(1.25); }
+    25%     { opacity: 1; transform: scale(1);    fill: #F0A91A; }
+    35%     { opacity: 1; transform: scale(1);    fill: currentColor; }
+    90%     { opacity: 1; }
+    100%    { opacity: 0; }
+  }
+
+  /* Edges draw in just before their target node spawns. */
+  .hg-edge { animation: hg-draw 6s ease-out infinite; }
+  .hg-edge--t2 { animation-delay: .9s; }
+  .hg-edge--t3 { animation-delay: 2.4s; }
+  .hg-edges line:nth-of-type(2)  { animation-delay: 1.0s; }
+  .hg-edges line:nth-of-type(3)  { animation-delay: 1.1s; }
+  .hg-edges line:nth-of-type(4)  { animation-delay: 1.2s; }
+  .hg-edges line:nth-of-type(5)  { animation-delay: 2.5s; }
+  .hg-edges line:nth-of-type(6)  { animation-delay: 2.6s; }
+  .hg-edges line:nth-of-type(7)  { animation-delay: 2.7s; }
+  .hg-edges line:nth-of-type(8)  { animation-delay: 2.8s; }
+  .hg-edges line:nth-of-type(9)  { animation-delay: 2.9s; }
+  .hg-edges line:nth-of-type(10) { animation-delay: 3.0s; }
+  .hg-edges line:nth-of-type(11) { animation-delay: 3.1s; }
+  .hg-edges line:nth-of-type(12) { animation-delay: 3.2s; }
+  @keyframes hg-draw {
+    0%      { stroke-dashoffset: 100; opacity: .9; }
+    14%     { stroke-dashoffset: 0;   opacity: .9; }
+    90%     { stroke-dashoffset: 0;   opacity: .9; }
+    100%    { stroke-dashoffset: 0;   opacity: 0;  }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hg-node--center, .hg-node--t2, .hg-node--t3, .hg-edge { animation: none !important; }
+    .hg-node--t2, .hg-node--t3 { opacity: 1; transform: none; }
+    .hg-edge { stroke-dashoffset: 0; }
+  }
+
   @media (max-width: 720px) {
     .hiring-inner { grid-template-columns: 1fr; }
-    .hiring-ctas { margin-top: .4rem; }
+    .hiring-graph { max-width: 260px; margin: 0 auto; justify-self: center; }
   }
 </style>
