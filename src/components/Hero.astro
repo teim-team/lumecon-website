@@ -1251,11 +1251,20 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       } else {
         detectStateId().then(async (sid) => {
           if (sid && states[sid]) {
+            // Build a synthesized STATE-level scene for the geo-detected
+            // region so it carries the same chip prefix + URL hash as the
+            // catalog scenes (smoke test asserts this consistency).
             const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
             const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-            const framing  = `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`;
-            const chip = `${amount.label} ${activity.label} in ${states[sid].name}`;
-            await runStudy(sid, { activity, amount, framing, chip });
+            const geoScene: Scene = {
+              level: 'state',
+              state: sid,
+              amount,
+              activity,
+              chip:     `STATE · ${activity.label} · ${states[sid].name} (near you)`,
+              sentence: `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`,
+            };
+            await runScene(geoScene);
             scheduleNext();
           } else {
             scheduleNext(900);
