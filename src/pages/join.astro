@@ -132,11 +132,14 @@ const jsonLd = [
       <ul class="role-list">
         {ROLES.map(({ Icon, title, blurb }, i) => (
           <li class="role-row reveal-soft" data-stagger={i + 1}>
-            <span class="role-row__icon" aria-hidden="true"><Icon /></span>
-            <div class="role-row__body">
-              <h3 class="role-row__title">{title}</h3>
+            <details class="role-row__details">
+              <summary class="role-row__head">
+                <span class="role-row__icon" aria-hidden="true"><Icon /></span>
+                <h3 class="role-row__title">{title}</h3>
+                <span class="role-row__chev" aria-hidden="true"></span>
+              </summary>
               <p class="role-row__blurb">{blurb}</p>
-            </div>
+            </details>
           </li>
         ))}
       </ul>
@@ -293,11 +296,7 @@ const jsonLd = [
     padding: 0;
   }
   .role-row {
-    display: grid;
-    grid-template-columns: 64px 1fr;
-    gap: 1rem 1.6rem;
-    align-items: start;
-    padding: 1.7rem 1.2rem;
+    padding: 0;
     margin: 0 -1.2rem;
     border-top: 1px solid var(--rule);
     border-radius: 8px;
@@ -307,12 +306,25 @@ const jsonLd = [
   .role-row:hover { background: var(--paper, #fbf6ec); }
   .role-row:hover .role-row__title { color: var(--gold); }
   .role-row__title { transition: color .2s var(--ease); }
+
+  /* Each row is a <details>; its summary is the always-visible card
+     head (icon + title + chevron). Body is just the blurb. */
+  .role-row__details { width: 100%; }
+  .role-row__head {
+    display: grid;
+    grid-template-columns: 64px 1fr 28px;
+    gap: 1rem 1.6rem;
+    align-items: center;
+    padding: 1.5rem 1.2rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .role-row__head::-webkit-details-marker { display: none; }
   .role-row__icon {
     display: inline-flex;
     color: var(--navy);
     align-items: center;
     justify-content: center;
-    padding-top: .25rem;
   }
   /* Icon components render their SVG without this page's scope attr,
      so :global(svg) is required for the size rule to bind. */
@@ -323,7 +335,31 @@ const jsonLd = [
     font-size: clamp(1.15rem, 1.9vw, 1.35rem);
     color: var(--navy);
     letter-spacing: -.014em;
-    margin: 0 0 .4rem;
+    margin: 0;
+  }
+  .role-row__chev {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s var(--ease), border-color .2s var(--ease);
+    justify-self: end;
+  }
+  .role-row__chev::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--navy);
+    border-bottom: 1.5px solid var(--navy);
+    transform: rotate(45deg) translate(-1px, -1px);
+    transition: transform .25s var(--ease), border-color .2s var(--ease);
+  }
+  .role-row:hover .role-row__chev { background: var(--gold); border-color: var(--gold); }
+  .role-row__details[open] .role-row__chev::before {
+    transform: rotate(225deg) translate(-1px, -1px);
   }
   .role-row__blurb {
     font-family: var(--font-sans);
@@ -331,8 +367,17 @@ const jsonLd = [
     line-height: 1.55;
     color: var(--ink-2);
     margin: 0;
-    max-width: 60ch;
+    padding: 0 1.2rem 1.5rem calc(64px + 1.6rem + 1.2rem);
+    max-width: 70ch;
     font-weight: 400;
+    animation: role-row-body-in .25s var(--ease);
+  }
+  @keyframes role-row-body-in {
+    from { opacity: 0; transform: translateY(-3px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .role-row__blurb { animation: none; }
   }
 
   /* ---------- Apply ---------- */
@@ -359,15 +404,17 @@ const jsonLd = [
   }
 
   @media (max-width: 600px) {
-    .role-row {
-      grid-template-columns: 48px 1fr;
+    .role-row__head {
+      grid-template-columns: 44px 1fr 24px;
       gap: 0 .9rem;
-      padding: 1.3rem 0;
-      align-items: start;
+      padding: 1.1rem .8rem;
     }
-    .role-row__icon :global(svg) { width: 40px; height: 40px; }
-    .role-row__icon { padding-top: .15rem; }
-    .role-row__title { font-size: 1.08rem; }
-    .role-row__blurb { font-size: .94rem; }
+    .role-row__icon :global(svg) { width: 36px; height: 36px; }
+    .role-row__title { font-size: 1.05rem; }
+    .role-row__chev { width: 24px; height: 24px; }
+    .role-row__blurb {
+      font-size: .92rem;
+      padding: 0 .8rem 1.2rem calc(44px + .9rem + .8rem);
+    }
   }
 </style>
