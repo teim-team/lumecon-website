@@ -763,10 +763,10 @@ export const RESERVATION_SCENES: Scene[] = [
     chip: 'RESERVATION · Tribal lands + Malheur stewardship · Burns Paiute Tribe',
     sentence: 'The Burns Paiute Tribe funds a $9.4M tribal lands acquisition and Malheur basin stewardship program in southeastern Oregon.' },
 
-  // ---------- Pamunkey (VA — newly federally recognized 2015; HeadWaters Resort) ----------
+  // ---------- Pamunkey (VA — newly federally recognized 2015) ----------
   { level: 'reservation', tribalKey: 'pamunkey', amount: { v: 215_000_000, label: '$215M' }, activity: ACT.build,
-    chip: 'RESERVATION · HeadWaters Resort + Casino Norfolk · Pamunkey Indian Tribe',
-    sentence: 'The Pamunkey Indian Tribe, federally recognized in 2015, advances a $215M HeadWaters Resort and Casino development in Norfolk, Virginia, anchored from the Pamunkey Reservation in King William County.' },
+    chip: 'RESERVATION · Tribal resort + gaming concept · Pamunkey Indian Tribe',
+    sentence: 'The Pamunkey Indian Tribe, federally recognized in 2015, evaluates a $215M tribal resort and gaming development concept anchored from the Pamunkey Reservation in King William County, Virginia.' },
 
   // ---------- Alaska Native Regional Corporations (ANCSA, the major regional corps) ----------
   { level: 'reservation', tribalKey: 'sealaska', amount: { v: 124_000_000, label: '$124M' }, activity: ACT.agriculture,
@@ -774,7 +774,7 @@ export const RESERVATION_SCENES: Scene[] = [
     sentence: 'Sealaska Corporation, the Native regional corporation for Southeast Alaska, funds $124M of sustainable Tongass timber, seafood, and global investment-portfolio operations serving its Tlingit, Haida, and Tsimshian shareholders.' },
   { level: 'reservation', tribalKey: 'ciri', amount: { v: 186_000_000, label: '$186M' }, activity: ACT.build,
     chip: 'RESERVATION · Real estate + energy + tourism · Cook Inlet Region Inc.',
-    sentence: 'Cook Inlet Region Inc. (CIRI), the Native regional corporation for the Cook Inlet area centered on Anchorage, funds $186M of real estate, energy, and tourism (including Alyeska Resort) expansion serving its Athabascan, Yup\'ik, Iñupiaq, Alutiiq, and Aleut shareholders.' },
+    sentence: 'Cook Inlet Region Inc. (CIRI), the Native regional corporation for the Cook Inlet area centered on Anchorage, funds $186M of real estate, energy, government-services, and tourism expansion serving its Athabascan, Yup\'ik, Iñupiaq, Alutiiq, and Aleut shareholders.' },
   { level: 'reservation', tribalKey: 'doyon', amount: { v: 134_000_000, label: '$134M' }, activity: ACT.energy,
     chip: 'RESERVATION · Oilfield services + government contracting · Doyon, Limited',
     sentence: 'Doyon, Limited, the Native regional corporation for Interior Alaska, funds $134M of oilfield-services and federal-contracting expansion serving its Athabascan shareholders across the largest Native land area in the United States.' },
@@ -790,6 +790,14 @@ export const RESERVATION_SCENES: Scene[] = [
   { level: 'reservation', tribalKey: 'chugach', amount: { v: 112_000_000, label: '$112M' }, activity: ACT.ops,
     chip: 'RESERVATION · Federal services + Prince William Sound · Chugach Alaska Corporation',
     sentence: 'Chugach Alaska Corporation, the Native regional corporation for Prince William Sound, funds $112M of federal-services contracting and PWS economic development serving its Sugpiaq, Eyak, and Athabascan shareholders.' },
+
+  // ---------- Native Hawaiian Organizations (NHOs) ----------
+  { level: 'reservation', tribalKey: 'nakupuna', amount: { v: 96_000_000, label: '$96M' }, activity: ACT.ops,
+    chip: 'RESERVATION · Federal contracting + IT services · Nakupuna Companies',
+    sentence: 'Nakupuna Companies, a Native Hawaiian Organization-owned federal contractor headquartered in Honolulu, funds $96M of professional services, IT, and management consulting expansion serving its Native Hawaiian beneficiaries.' },
+  { level: 'reservation', tribalKey: 'kamehameha_schools', amount: { v: 245_000_000, label: '$245M' }, activity: ACT.research,
+    chip: 'RESERVATION · Education + Native Hawaiian land stewardship · Kamehameha Schools',
+    sentence: 'Kamehameha Schools, the educational trust of Princess Bernice Pauahi Bishop and the largest private landowner in Hawaii, funds a $245M expansion of Native Hawaiian preK-12 education programs and stewardship of its 365,000-acre land portfolio.' },
 ];
 
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];

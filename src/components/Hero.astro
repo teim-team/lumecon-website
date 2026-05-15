@@ -321,6 +321,10 @@ const MANUAL_TRIBES: Record<string, { name: string; cx: number; cy: number; fips
   calista:        { name: 'Calista Corporation',                       cx:  69.5, cy: 549.0, fips: '02' },
   ahtna:          { name: 'Ahtna Incorporated',                        cx: 128.1, cy: 535.7, fips: '02' },
   chugach:        { name: 'Chugach Alaska Corporation',                cx: 117.9, cy: 544.6, fips: '02' },
+
+  // Native Hawaiian Organizations (NHOs) — Honolulu, Oahu.
+  nakupuna:           { name: 'Nakupuna Companies',  cx: 266.9, cy: 549.1, fips: '15' },
+  kamehameha_schools: { name: 'Kamehameha Schools',  cx: 266.9, cy: 549.1, fips: '15' },
 };
 const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
@@ -347,7 +351,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       Your work changes the economy around it. We make that change measurable.
     </h1>
     <p class="hero-sub">
-      Economic impact analysis software for governments and mission-driven organizations. We replace the consultant, the overpriced legacy software, and the data silos that block impact studies.
+      Economic impact analysis software for governments and mission-driven organizations. We replace the consultant, the overpriced legacy software, and the data silos that block economic impact studies. Look back historically for longitudinal analysis, or model forward to plan a budget or capital project.
     </p>
     <ul class="hero-proof" aria-label="Proof points">
       <li>Built at Cornell</li>
@@ -364,7 +368,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     <header class="workspace__bar">
       <span class="workspace__title">
         <img class="workspace__mark" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="22" height="22" aria-hidden="true" />
-        <span class="workspace__title-text">Live impact study</span>
+        <span class="workspace__title-text">Live economic impact study</span>
         <span class="workspace__divider" aria-hidden="true"></span>
         <span class="workspace__region" id="workspaceRegion" aria-live="polite">Hover any state</span>
       </span>
@@ -473,7 +477,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   <p class="workspace-activity" id="workspaceActivity" aria-live="polite">&nbsp;</p>
 
   <!-- Live figures — the only text inside the workspace -->
-  <dl class="hero-figs" aria-label="Result of the running impact study">
+  <dl class="hero-figs" aria-label="Result of the running economic impact study">
     <div class="hero-fig" data-k="direct"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
     <div class="hero-fig" data-k="indirect"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
     <div class="hero-fig" data-k="induced"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
