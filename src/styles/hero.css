@@ -226,9 +226,13 @@
   display: inline-block;
 }
 .workspace-legend__sw:first-child { margin-left: 0; }
+/* Legend swatches mirror the map shapes:
+   - Activity: gold square (the project itself)
+   - Suppliers: terra diamond (rotated square — firms in the chain)
+   - Households: cedar circle (people who spend wages locally) */
 .workspace-legend__sw--source    { background: var(--gold); border-radius: 2px; width: 10px; height: 10px; }
-.workspace-legend__sw--supplier  { background: var(--terra); }
-.workspace-legend__sw--household { background: var(--cedar); }
+.workspace-legend__sw--supplier  { background: var(--terra); transform: rotate(45deg); border-radius: 1px; width: 9px; height: 9px; }
+.workspace-legend__sw--household { background: var(--cedar); border-radius: 50%; }
 .workspace-attr { letter-spacing: .04em; text-transform: none; }
 .workspace-activity {
   font-family: var(--font-sans);
@@ -573,10 +577,14 @@
 @keyframes ddIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
 @keyframes flowIn { from { stroke-dashoffset: 80; opacity: 0; } 30% { opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
 
+/* Suppliers render as terra diamonds so the shape (rotated square)
+   distinguishes them from household circles even before color reads.
+   Fewer in count than households; pairs with a wider spatial decay
+   so indirect effects look like they leak across regions. */
 .hero-supplier {
   fill: var(--terra);
   stroke: var(--white);
-  stroke-width: .35;
+  stroke-width: .25;
   vector-effect: non-scaling-stroke;
   opacity: 0;
   transform-origin: center;
