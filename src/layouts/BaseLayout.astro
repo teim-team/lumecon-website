@@ -147,6 +147,28 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
     }
     document.addEventListener('astro:page-load', bind);
   })();
+
+  /* The homepage Hero encodes the live demo state in the URL hash
+     as `#study=<slug>` so a copied URL replays the same scene.
+     Astro's ClientRouter preserves the existing hash across in-site
+     link clicks, which produced URLs like `/join/#study=...` after
+     a visitor jumped from the homepage. This sweeper strips that
+     hash on any non-home route (and at every page transition) so
+     subpages always have clean URLs. */
+  (function () {
+    function sweepStudyHash() {
+      if (typeof location === 'undefined') return;
+      if (location.pathname === '/' || location.pathname === '') return;
+      if (/^#study=/.test(location.hash || '')) {
+        try {
+          history.replaceState(null, '', location.pathname + location.search);
+        } catch (_) {}
+      }
+    }
+    sweepStudyHash();
+    document.addEventListener('astro:page-load', sweepStudyHash);
+    document.addEventListener('astro:after-swap', sweepStudyHash);
+  })();
 </script>
 </body>
 </html>
