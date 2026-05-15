@@ -4,13 +4,27 @@
   border-bottom: 1px solid var(--rule);
 }
 .cedar-about__inner {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+.cedar-about__left {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1.2rem;
+}
+.cedar-about__right {
+  position: sticky;
+  top: clamp(5rem, 8vw, 7rem);
+}
+@media (max-width: 960px) {
+  .cedar-about__inner { grid-template-columns: 1fr; }
+  .cedar-about__right { position: static; }
 }
 .cedar-about__byline {
   font-family: var(--font-mono);
@@ -58,7 +72,11 @@
   gap: .55rem;
   position: relative;
   color: var(--navy);
+  transition: background .2s var(--ease);
 }
+.cedar-step:hover { background: var(--paper, #fbf6ec); }
+.cedar-step:hover .cedar-step__head { color: var(--gold); }
+.cedar-step__head { transition: color .2s var(--ease); }
 .cedar-step:not(:first-child) { padding-left: 1.4rem; }
 .cedar-step:last-child { border-right: 0; padding-right: 0; }
 .cedar-step__icon {

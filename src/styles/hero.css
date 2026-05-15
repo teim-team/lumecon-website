@@ -194,8 +194,17 @@
 .workspace-legend__key {
   display: inline-flex;
   align-items: center;
+  gap: .75rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+/* Keep each swatch+label glued together so 'Households' never wraps
+   to its own line. */
+.workspace-legend__item {
+  display: inline-flex;
+  align-items: center;
   gap: .35rem;
-  flex-wrap: wrap;
+  white-space: nowrap;
 }
 .workspace-legend__note {
   margin-left: .25rem;

@@ -17,7 +17,10 @@ import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 import { CENSUS_TRIBAL_LANDS } from '../data/tribalLands.generated.js';
 import '../styles/hero.css';
 
-const VBX = 70, VBY = 60, VBW = 850, VBH = 510;
+// viewBox tight-fits the full us-atlas albers-USA projection bbox
+// (-58, 12, 957, 606), with a tiny margin so northern Washington, the
+// Maine coast, and the Alaska inset all stay visible at the edges.
+const VBX = -60, VBY = 5, VBW = 1020, VBH = 610;
 const path = geoPath();
 // @ts-ignore
 const statesFC: any = feature(usAtlas, usAtlas.objects.states);
@@ -523,9 +526,9 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     <footer class="workspace__foot">
       <span class="workspace-legend">
         <span class="workspace-legend__key">
-          <span class="workspace-legend__sw workspace-legend__sw--source"></span>Activity
-          <span class="workspace-legend__sw workspace-legend__sw--supplier"></span>Suppliers
-          <span class="workspace-legend__sw workspace-legend__sw--household"></span>Households
+          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--source"></span>Activity</span>
+          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--supplier"></span>Suppliers</span>
+          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--household"></span>Households</span>
         </span>
         <span class="workspace-legend__note">Detail dots are an illustrative distribution. The table to the right is the full breakdown.</span>
       </span>
@@ -662,7 +665,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     // The frontmatter VBX/VBY/VBW/VBH constants are baked into the
     // initial viewBox attribute; we read them back here at runtime
     // so the client doesn't need the server constants.
-    const initialVB = (svgEl?.getAttribute('viewBox') || '70 60 850 510').split(/\s+/).map(Number);
+    const initialVB = (svgEl?.getAttribute('viewBox') || '-60 5 1020 610').split(/\s+/).map(Number);
     const overviewVB = [initialVB[0], initialVB[1], initialVB[2], initialVB[3]] as [number, number, number, number];
     let zoomFrame: number | undefined;
     const setVB = (vb: [number, number, number, number]) => {
