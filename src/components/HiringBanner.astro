@@ -1,0 +1,73 @@
+---
+/**
+ * Compact hiring strip — sits between FAQ and Contact on the homepage,
+ * giving the /join page a contextual entry point without bloating the
+ * page or competing with the primary "Request a demo" CTA.
+ */
+---
+<aside class="hiring" aria-labelledby="hiring-title">
+  <div class="hiring-inner">
+    <div class="hiring-text">
+      <p class="hiring-eyebrow">We're hiring · five-person team</p>
+      <p class="hiring-title" id="hiring-title">Build for governments and tribal nations from inside a Cornell-built startup.</p>
+      <p class="hiring-sub">Undergrad and graduate students across software engineering, ML, data, economic impact modeling, marketing, and sales. Unpaid early-stage roles. Cornell + Ivy League peers welcome.</p>
+    </div>
+    <div class="hiring-ctas">
+      <a href="/join" class="btn">Join the team</a>
+      <a href="/internships" class="btn btn--ghost">Open intern roles</a>
+    </div>
+  </div>
+</aside>
+<style>
+  .hiring {
+    background: var(--cream);
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hiring-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--container-pad);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.6rem 3rem;
+    align-items: center;
+  }
+  .hiring-eyebrow {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin: 0 0 .55rem;
+  }
+  .hiring-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+    line-height: 1.2;
+    letter-spacing: -.018em;
+    color: var(--navy);
+    margin: 0 0 .5rem;
+    max-width: 32ch;
+  }
+  .hiring-sub {
+    font-family: var(--font-sans);
+    font-size: .94rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 60ch;
+    font-weight: 400;
+  }
+  .hiring-ctas {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 720px) {
+    .hiring-inner { grid-template-columns: 1fr; }
+    .hiring-ctas { margin-top: .4rem; }
+  }
+</style>
