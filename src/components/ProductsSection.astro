@@ -24,30 +24,34 @@ const platforms = [local, tribal, globalProduct];
                   : 'Future development';
       const badgeKind = i === 0 ? 'active' : i === 1 ? 'patent' : 'future';
       return (
-        <a class={`platform platform--${slug}`} href={p.url}>
-          <div class="platform__name-wrap">
-            <span class="platform__icon">
-              {i === 0 && <IconLocal />}
-              {i === 1 && <IconTribal />}
-              {i === 2 && <IconGlobal />}
-            </span>
-            <h3 class="platform__name">{p.name}</h3>
-            <span class="platform__url">{p.domain}</span>
-          </div>
-          <div class="platform__copy">
+        <details class={`platform platform--${slug}`}>
+          <summary class="platform__summary">
+            <div class="platform__name-wrap">
+              <span class="platform__icon">
+                {i === 0 && <IconLocal />}
+                {i === 1 && <IconTribal />}
+                {i === 2 && <IconGlobal />}
+              </span>
+              <h3 class="platform__name">{p.name}</h3>
+              <span class="platform__url">{p.domain}</span>
+            </div>
             <p class="platform__tag">
               {i === 0 && 'Turn your budget data into an economic impact study you can present.'}
               {i === 1 && 'Modeled on tribal terms, not adapted from a state model.'}
               {i === 2 && 'Cross-border programs measured against one shared baseline.'}
             </p>
+            <span class={`platform__badge platform__badge--${badgeKind}`}>{badge}</span>
+            <span class="platform__chev" aria-hidden="true"></span>
+          </summary>
+          <div class="platform__body">
             <p class="platform__desc">
               {i === 0 && 'For cities, counties, state agencies, economic development organizations, and the nonprofits and enterprises that work with them. Run the study in-house, on your own data, without paying six figures for a consultant plus a software license.'}
               {i === 1 && 'For tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies. Indigenous data sovereignty is built in, not added on.'}
               {i === 2 && 'For multinationals, NGOs, and governments. The same modeling backbone applied across borders, so impact in one country is directly comparable to impact in another.'}
             </p>
+            <a class="platform__visit" href={p.url}>Visit {p.domain} →</a>
           </div>
-          <span class={`platform__badge platform__badge--${badgeKind}`}>{badge}</span>
-        </a>
+        </details>
       );
     })}
   </div>

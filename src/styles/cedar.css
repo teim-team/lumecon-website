@@ -65,11 +65,8 @@
   border-bottom: 1px solid var(--rule);
 }
 .cedar-step {
-  padding: 1.4rem 1.4rem 1.4rem 0;
+  padding: 1.2rem 1.2rem 1.2rem 0;
   border-right: 1px solid var(--rule);
-  display: flex;
-  flex-direction: column;
-  gap: .55rem;
   position: relative;
   color: var(--navy);
   transition: background .2s var(--ease);
@@ -77,8 +74,55 @@
 .cedar-step:hover { background: var(--paper, #fbf6ec); }
 .cedar-step:hover .cedar-step__head { color: var(--gold); }
 .cedar-step__head { transition: color .2s var(--ease); }
-.cedar-step:not(:first-child) { padding-left: 1.4rem; }
+.cedar-step:not(:first-child) { padding-left: 1.2rem; }
 .cedar-step:last-child { border-right: 0; padding-right: 0; }
+.cedar-step__details { display: block; }
+.cedar-step__summary {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  padding-right: 1.6rem;
+}
+.cedar-step__summary::-webkit-details-marker { display: none; }
+.cedar-step__chev {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.cedar-step__chev::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.4px solid var(--navy);
+  border-bottom: 1.4px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease);
+}
+.cedar-step:hover .cedar-step__chev { background: var(--gold); border-color: var(--gold); }
+.cedar-step__details[open] .cedar-step__chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+.cedar-step__details[open] .cedar-step__body {
+  animation: cedar-step-body-in .25s var(--ease);
+}
+@keyframes cedar-step-body-in {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cedar-step__details[open] .cedar-step__body { animation: none; }
+}
 .cedar-step__icon {
   display: inline-flex;
   color: var(--navy);
@@ -111,7 +155,7 @@
   font-size: .92rem;
   line-height: 1.5;
   color: var(--ink-2);
-  margin: 0;
+  margin: .7rem 0 0;
   font-weight: 400;
 }
 @media (max-width: 720px) {

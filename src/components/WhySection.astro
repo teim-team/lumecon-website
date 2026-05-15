@@ -1,8 +1,15 @@
 ---
 /**
- * Why this matters — three positions reflecting the new framing:
- * replacing both the consultant and the overpriced legacy software,
- * with AI used to clear infrastructure friction (not as marketing).
+ * Why Lumecon — three positions reflecting the framing: replacing
+ * both the consultant and the overpriced legacy software, the
+ * high-frequency data canon + beyond, and AI for small / messy
+ * regions.
+ *
+ * Each position is a <details> element so the section reads as a
+ * progressive-disclosure rail: the headline + animated icon are
+ * always visible, and a click expands the longer body. Cuts the
+ * visible word count on the homepage by roughly half while keeping
+ * the depth for visitors who want it.
  */
 import '../styles/why.css';
 ---
@@ -11,91 +18,99 @@ import '../styles/why.css';
     <header class="why-header">
       <p class="why-header__kicker reveal-soft">Why Lumecon?</p>
       <h2 class="why-header__title reveal-soft" id="why-title" data-stagger="1">Lumecon provides the platform the work has been missing.</h2>
-      <p class="why-header__lede reveal-soft" data-stagger="2">Economic impact analysis built for the organizations that need it: governments, tribal nations, foundations, universities, and mission-driven institutions. The legacy combo of a consultant plus a software license runs six figures a year. Lumecon stays five. A platform you run yourself.</p>
+      <p class="why-header__lede reveal-soft" data-stagger="2">Economic impact analysis built for the organizations that need it. The legacy combo of a consultant plus a software license runs six figures a year. Lumecon stays five.</p>
     </header>
 
     <div class="why-grid">
-    <div class="why-stat">
-      <!-- 01: A consultant-invoice and a software-box, with a gold
-           strike that sweeps through both. -->
-      <span class="why-stat__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" class="why-icon why-icon--replace">
-          <!-- Consultant invoice (left, taller) -->
-          <rect x="3" y="3.5" width="7.5" height="14" rx=".4" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
-          <line x1="4.7" y1="6.4" x2="8.8" y2="6.4" stroke="currentColor" stroke-width=".85"/>
-          <line x1="4.7" y1="8.6" x2="8.8" y2="8.6" stroke="currentColor" stroke-width=".85"/>
-          <line x1="4.7" y1="10.8" x2="7.6" y2="10.8" stroke="currentColor" stroke-width=".85"/>
-          <line x1="4.7" y1="14.5" x2="8.8" y2="14.5" stroke="currentColor" stroke-width="1"/>
-          <!-- Software box (right, with little chrome dots) -->
-          <rect x="12.5" y="7" width="8.5" height="11" rx=".4" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
-          <line x1="12.5" y1="9.7" x2="21" y2="9.7" stroke="currentColor" stroke-width=".9"/>
-          <circle cx="13.7" cy="8.4" r=".4" fill="currentColor"/>
-          <circle cx="15" cy="8.4" r=".4" fill="currentColor"/>
-          <rect x="14" y="11.5" width="5.5" height="4.5" stroke="currentColor" stroke-width=".85"/>
-          <!-- Gold strike sweeping bottom-left → top-right -->
-          <line class="why-icon-replace__strike" x1="2" y1="21" x2="22" y2="3" stroke="#F0A91A" stroke-width="1.8" stroke-linecap="butt"/>
-        </svg>
-      </span>
-      <p class="why-stat__num">01</p>
-      <p class="why-stat__k"><strong>Lumecon provides</strong> the platform that replaces the consultant <span class="why-stat__amp">and</span> the legacy software.</p>
-      <p class="why-stat__v">Run an economic impact study yourself, on your own data, when the question gets asked. Look back historically for a longitudinal analysis, or model forward to plan a budget, grant, or capital project. One annual subscription, unlimited runs, every geography included: reservation, county, state, or the full country.</p>
-    </div>
+      <details class="why-stat">
+        <summary class="why-stat__head">
+          <span class="why-stat__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" class="why-icon why-icon--replace">
+              <!-- Consultant invoice (left, taller) -->
+              <rect x="3" y="3.5" width="7.5" height="14" rx=".4" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
+              <line x1="4.7" y1="6.4" x2="8.8" y2="6.4" stroke="currentColor" stroke-width=".85"/>
+              <line x1="4.7" y1="8.6" x2="8.8" y2="8.6" stroke="currentColor" stroke-width=".85"/>
+              <line x1="4.7" y1="10.8" x2="7.6" y2="10.8" stroke="currentColor" stroke-width=".85"/>
+              <line x1="4.7" y1="14.5" x2="8.8" y2="14.5" stroke="currentColor" stroke-width="1"/>
+              <!-- Software box (right, with little chrome dots) -->
+              <rect x="12.5" y="7" width="8.5" height="11" rx=".4" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
+              <line x1="12.5" y1="9.7" x2="21" y2="9.7" stroke="currentColor" stroke-width=".9"/>
+              <circle cx="13.7" cy="8.4" r=".4" fill="currentColor"/>
+              <circle cx="15" cy="8.4" r=".4" fill="currentColor"/>
+              <rect x="14" y="11.5" width="5.5" height="4.5" stroke="currentColor" stroke-width=".85"/>
+              <!-- Gold strike sweeping bottom-left → top-right -->
+              <line class="why-icon-replace__strike" x1="2" y1="21" x2="22" y2="3" stroke="#F0A91A" stroke-width="1.8" stroke-linecap="butt"/>
+            </svg>
+          </span>
+          <p class="why-stat__num">01</p>
+          <p class="why-stat__k"><strong>Lumecon provides</strong> the platform that replaces the consultant <span class="why-stat__amp">and</span> the legacy software.</p>
+          <span class="why-stat__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="why-stat__body">
+          <p class="why-stat__v">Run an economic impact study yourself, on your own data, when the question gets asked. Look back historically for a longitudinal analysis, or model forward to plan a budget, grant, or capital project. One annual subscription, unlimited runs, every geography included: reservation, county, state, or the full country.</p>
+        </div>
+      </details>
 
-    <div class="why-stat">
-      <!-- 02: A folder with rows of data; a gold key turns inside
-           the lock and the folder opens to release a gold spark. -->
-      <span class="why-stat__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" class="why-icon why-icon--unlock">
-          <!-- Folder back (tab) -->
-          <path d="M3 7 L9 7 L11 5 L21 5 L21 9.5 L3 9.5 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
-          <!-- Folder front (slightly tilted at the top for the open hinge) -->
-          <g class="why-icon-unlock__lid">
-            <path d="M3 9.5 L21 9.5 L21 20 L3 20 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" fill="var(--white, #fff)"/>
-            <!-- Data rows inside -->
-            <line x1="6" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width=".9"/>
-            <line x1="6" y1="15.6" x2="14" y2="15.6" stroke="currentColor" stroke-width=".9"/>
-            <line x1="6" y1="18.2" x2="17" y2="18.2" stroke="currentColor" stroke-width=".9"/>
-          </g>
-          <!-- Gold spark rising from inside the folder -->
-          <g class="why-icon-unlock__spark">
-            <path d="M18.5 6.4 L18.5 1.6 M16.1 4 L20.9 4 M16.8 2.3 L20.2 5.7 M20.2 2.3 L16.8 5.7" stroke="#F0A91A" stroke-width="1.25" stroke-linecap="butt"/>
-          </g>
-        </svg>
-      </span>
-      <p class="why-stat__num">02</p>
-      <p class="why-stat__k"><strong>Lumecon provides</strong> the high-frequency data your studies have been missing.</p>
-      <p class="why-stat__v">Bring your administrative records, payroll detail, and budget data. We pair it with the same canonical sources every serious model uses, then go further:</p>
-      <ul class="why-sources">
-        <li class="why-sources__group">
-          <span class="why-sources__label">Canonical</span>
-          <span class="why-sources__items">ACS, County Business Patterns, BEA regional accounts, LODES, QCEW</span>
-        </li>
-        <li class="why-sources__group">
-          <span class="why-sources__label">Beyond</span>
-          <span class="why-sources__items">USASpending, the regional Federal Reserve Banks, mobility from anonymized cell-phone signals, land-use from satellite imagery, plus the proprietary sets we collect ourselves</span>
-        </li>
-      </ul>
-    </div>
+      <details class="why-stat">
+        <summary class="why-stat__head">
+          <span class="why-stat__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" class="why-icon why-icon--unlock">
+              <!-- Folder back (tab) -->
+              <path d="M3 7 L9 7 L11 5 L21 5 L21 9.5 L3 9.5 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
+              <!-- Folder front (slightly tilted at the top for the open hinge) -->
+              <g class="why-icon-unlock__lid">
+                <path d="M3 9.5 L21 9.5 L21 20 L3 20 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" fill="var(--white, #fff)"/>
+                <!-- Data rows inside -->
+                <line x1="6" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width=".9"/>
+                <line x1="6" y1="15.6" x2="14" y2="15.6" stroke="currentColor" stroke-width=".9"/>
+                <line x1="6" y1="18.2" x2="17" y2="18.2" stroke="currentColor" stroke-width=".9"/>
+              </g>
+              <!-- Gold spark rising from inside the folder -->
+              <g class="why-icon-unlock__spark">
+                <path d="M18.5 6.4 L18.5 1.6 M16.1 4 L20.9 4 M16.8 2.3 L20.2 5.7 M20.2 2.3 L16.8 5.7" stroke="#F0A91A" stroke-width="1.25" stroke-linecap="butt"/>
+              </g>
+            </svg>
+          </span>
+          <p class="why-stat__num">02</p>
+          <p class="why-stat__k"><strong>Lumecon provides</strong> the high-frequency data your studies have been missing.</p>
+          <span class="why-stat__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="why-stat__body">
+          <p class="why-stat__v">Bring your administrative records, payroll detail, and budget data. We pair it with the same canonical sources every serious model uses, then go further:</p>
+          <ul class="why-sources">
+            <li class="why-sources__group">
+              <span class="why-sources__label">Canonical</span>
+              <span class="why-sources__items">ACS, County Business Patterns, BEA regional accounts, LODES, QCEW</span>
+            </li>
+            <li class="why-sources__group">
+              <span class="why-sources__label">Beyond</span>
+              <span class="why-sources__items">USASpending, the regional Federal Reserve Banks, mobility from anonymized cell-phone signals, land-use from satellite imagery, plus the proprietary sets we collect ourselves</span>
+            </li>
+          </ul>
+        </div>
+      </details>
 
-    <div class="why-stat">
-      <!-- 03: An irregular small-region polygon (like a tribal-land /
-           rural-county outline); a gold light pulses inside as AI
-           "illuminates" the small region. -->
-      <span class="why-stat__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" class="why-icon why-icon--region">
-          <!-- Outer rough region -->
-          <path class="why-icon-region__outline" d="M5 7.5 L8.5 3.5 L15 4.8 L19.5 8 L18.8 14.4 L14 19 L7.3 17.5 L4 13.2 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <!-- Inner sub-boundary (sub-region) -->
-          <path class="why-icon-region__inner" d="M9 10 L13.5 9 L14.5 13 L11 14.5 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <!-- Gold "light" pulse inside -->
-          <circle class="why-icon-region__pulse" cx="11.7" cy="11.6" r="2.4" fill="#F0A91A" opacity="0.18"/>
-          <circle class="why-icon-region__dot" cx="11.7" cy="11.6" r="1.2" fill="#F0A91A"/>
-        </svg>
-      </span>
-      <p class="why-stat__num">03</p>
-      <p class="why-stat__k"><strong>Lumecon provides</strong> AI built for messy data and small regions.</p>
-      <p class="why-stat__v">Cedar reads uploads from any department, flags every assumption the model is about to use, and writes the source record. Trained specifically for economic impact studies, including the small regions and tribal governments that off-the-shelf models can't handle.</p>
-    </div>
+      <details class="why-stat">
+        <summary class="why-stat__head">
+          <span class="why-stat__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" class="why-icon why-icon--region">
+              <!-- Outer rough region -->
+              <path class="why-icon-region__outline" d="M5 7.5 L8.5 3.5 L15 4.8 L19.5 8 L18.8 14.4 L14 19 L7.3 17.5 L4 13.2 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+              <!-- Inner sub-boundary (sub-region) -->
+              <path class="why-icon-region__inner" d="M9 10 L13.5 9 L14.5 13 L11 14.5 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+              <!-- Gold "light" pulse inside -->
+              <circle class="why-icon-region__pulse" cx="11.7" cy="11.6" r="2.4" fill="#F0A91A" opacity="0.18"/>
+              <circle class="why-icon-region__dot" cx="11.7" cy="11.6" r="1.2" fill="#F0A91A"/>
+            </svg>
+          </span>
+          <p class="why-stat__num">03</p>
+          <p class="why-stat__k"><strong>Lumecon provides</strong> AI built for messy data and small regions.</p>
+          <span class="why-stat__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="why-stat__body">
+          <p class="why-stat__v">Cedar reads uploads from any department, flags every assumption the model is about to use, and writes the source record. Trained specifically for economic impact studies, including the small regions and tribal governments that off-the-shelf models can't handle.</p>
+        </div>
+      </details>
     </div>
   </div>
 </section>

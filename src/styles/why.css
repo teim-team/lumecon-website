@@ -48,16 +48,13 @@
   gap: clamp(2rem, 4vw, 3rem);
 }
 .why-stat {
-  display: flex;
-  flex-direction: column;
-  gap: .55rem;
   color: var(--navy);
   padding: 1.25rem 1.25rem 1.5rem;
   margin: -1.25rem;
   border: 1px solid transparent;
   border-radius: 10px;
   transition: background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
-  cursor: default;
+  cursor: pointer;
 }
 .why-stat:hover {
   background: var(--white, #fff);
@@ -67,6 +64,66 @@
 }
 .why-stat:hover .why-stat__k { color: var(--gold); }
 .why-stat__k { transition: color .25s var(--ease); }
+
+/* Summary acts as the always-visible card head: icon + num + key
+   + a chevron that rotates open when the <details> is expanded.
+   list-style: none kills the native disclosure triangle so we own
+   the affordance fully. */
+.why-stat__head {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  padding-right: 2rem;
+}
+.why-stat__head::-webkit-details-marker { display: none; }
+.why-stat__chev {
+  position: absolute;
+  top: 0;
+  right: .1rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+  background: transparent;
+  transition: background .2s var(--ease), border-color .2s var(--ease), transform .25s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.why-stat__chev::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--navy);
+  border-bottom: 1.5px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease), border-color .2s var(--ease);
+}
+.why-stat:hover .why-stat__chev {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.why-stat:hover .why-stat__chev::before { border-color: var(--navy); }
+.why-stat[open] .why-stat__chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+/* Expandable body. Native <details> shows/hides instantly; the
+   inner div lets us fade content in for visual softness. */
+.why-stat__body {
+  margin-top: .8rem;
+  animation: why-stat-body-in .25s var(--ease);
+}
+@keyframes why-stat-body-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .why-stat__body { animation: none; }
+}
 .why-stat__icon {
   display: inline-flex;
   color: var(--navy);
