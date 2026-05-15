@@ -7,6 +7,42 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--container-pad);
+}
+.why-header {
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  max-width: 800px;
+  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
+}
+.why-header__kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin: 0;
+}
+.why-header__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3.8vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: -.022em;
+  color: var(--navy);
+  margin: 0;
+  max-width: 26ch;
+}
+.why-header__lede {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 62ch;
+}
+.why-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(2rem, 4vw, 3rem);
@@ -16,12 +52,21 @@
   flex-direction: column;
   gap: .55rem;
   color: var(--navy);
-  padding: 1rem;
-  margin: -1rem;
-  border-radius: 8px;
-  transition: background .2s var(--ease), transform .2s var(--ease);
+  padding: 1.25rem 1.25rem 1.5rem;
+  margin: -1.25rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  transition: background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+  cursor: default;
 }
-.why-stat:hover { background: var(--paper, #fbf6ec); transform: translateY(-2px); }
+.why-stat:hover {
+  background: var(--white, #fff);
+  border-color: var(--rule-strong, rgba(14,21,48,.16));
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -16px rgba(14, 21, 48, .18);
+}
+.why-stat:hover .why-stat__k { color: var(--gold); }
+.why-stat__k { transition: color .25s var(--ease); }
 .why-stat__icon {
   display: inline-flex;
   color: var(--navy);
@@ -145,5 +190,6 @@
   font-weight: 400;
 }
 @media (max-width: 880px) {
-  .why-inner { grid-template-columns: 1fr; gap: 1.6rem; }
+  .why-grid { grid-template-columns: 1fr; gap: 1.6rem; }
+  .why-header__title { font-size: clamp(1.8rem, 6vw, 2.2rem); }
 }
