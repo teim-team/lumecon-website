@@ -513,7 +513,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       return out;
     };
 
-    const drawDetail = (cx: number, cy: number, radius: number) => {
+    const drawDetail = (cx: number, cy: number, radius: number, dotScale: number = 1) => {
       const supplierLayer  = document.getElementById('heroSupplierLayer');
       const householdLayer = document.getElementById('heroHouseholdLayer');
       const flowLayer      = document.getElementById('heroFlowLayer');
@@ -522,6 +522,12 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       householdLayer.innerHTML = '';
       flowLayer.innerHTML = '';
 
+      // Scatter dot radii scale with the level (state ≈ 1, county
+      // ≈ .55, reservation ≈ .4) so dots don't dominate when the
+      // map zooms in on a small region.
+      const supplierR  = +(1.6 * dotScale).toFixed(2);
+      const householdR = +(1.2 * dotScale).toFixed(2);
+
       // Suppliers: spread (decay .8 — some leak far)
       const suppliers = cloudOnLand(cx, cy, 26, radius * 1.4, .8, 1);
       suppliers.forEach((p, i) => {
@@ -529,7 +535,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         c.setAttribute('class', 'hero-supplier');
         c.setAttribute('cx', String(p.x));
         c.setAttribute('cy', String(p.y));
-        c.setAttribute('r', '1.6');
+        c.setAttribute('r', String(supplierR));
         c.style.setProperty('--dd', `${i * 35}ms`);
         supplierLayer.appendChild(c);
       });
@@ -541,7 +547,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         c.setAttribute('class', 'hero-household');
         c.setAttribute('cx', String(p.x));
         c.setAttribute('cy', String(p.y));
-        c.setAttribute('r', '1.2');
+        c.setAttribute('r', String(householdR));
         c.style.setProperty('--dd', `${i * 14 + 200}ms`);
         householdLayer.appendChild(c);
       });
@@ -668,7 +674,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       // already in the zoomed frame.
       window.setTimeout(() => {
         if (runId !== me) return;
-        drawDetail(src.cx, src.cy, dotRadius);
+        drawDetail(src.cx, src.cy, dotRadius, srcScale);
       }, 250);
 
       const wsStatus = document.getElementById('workspaceStatus');
@@ -899,7 +905,11 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       }
       autoCycleOrders[idx].push(...arr);
     };
-    const scheduleNext = (delay = 6800) => {
+    // Auto-cycle interval. Each run takes ~3s to land all the live
+     // figures + scatter dots; the rest of the delay is "breathing
+     // room" so the result sticks long enough to read before the
+     // next study fires.
+    const scheduleNext = (delay = 10000) => {
       if (pausedByHover) return;
       cycleTimer = window.setTimeout(cycle, delay);
     };
