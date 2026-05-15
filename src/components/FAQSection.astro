@@ -1,53 +1,296 @@
 ---
 /**
- * Ask Cedar — the FAQ surface restyled as a Cedar chat so the section
+ * Ask Cedar. The FAQ surface restyled as a Cedar chat so the section
  * demos the product narrative instead of being a generic FAQ list.
  *
- * Honest framing: marketing-page Cedar runs from a fixed Q&A set (no
- * upstream LLM call). We say so plainly in the section subtitle and
- * in llms.txt. The Q&As pair with FAQPage JSON-LD on the homepage so
- * search + AI crawlers see the same content.
- *
- * No-JS fallback: the static <details> FAQ list ships in the DOM and
- * is the visible state when JS doesn't hydrate. JS swaps to the chat
- * UI once it loads.
+ * Cedar here is hard-coded. The user can type free-form questions; a
+ * keyword-classifier maps the input to one of ~25 intent buckets and
+ * replies with the matching scripted answer. We're upfront about this
+ * in the section subtitle and in llms.txt. The static <details>
+ * fallback below ships a curated subset for no-JS visitors and as the
+ * source of truth for the FAQPage JSON-LD on the homepage.
  */
-const faqs = [
+
+// Intent bank. Each entry: a chip label (used as a clickable starter
+// + as the user-echo text when matched from a chip), trigger phrases
+// for free-text classification (lowercased, substring match), and the
+// scripted answer. Order matters as a tiebreaker (earlier wins).
+const INTENTS = [
   {
-    q: 'What is Lumecon?',
-    a: 'Lumecon Inc. is economic impact analysis software for governments and mission-driven organizations. A modern alternative to IMPLAN, RIMS II, and REMI. Built at Cornell University. Use Cedar AI to read messy administrative data and run impact studies in-house.',
+    id: 'company_overview',
+    chip: 'What is Lumecon?',
+    triggers: [
+      'what is lumecon', 'what does lumecon do', 'what does lumecon', 'explain lumecon', 'what is this company', 'what are you building', 'what is the platform', 'what is lumecon for', 'what problem', 'why does lumecon', 'what is the point of this site', 'this site', 'tell me about lumecon', 'about lumecon', 'overview', 'what do you do', 'lumecon do',
+    ],
+    answer: 'Lumecon helps organizations understand and communicate their economic impact. Our platform turns complex data into clear, credible reports that show how spending, investment, employment, and community activity ripple through local economies. In plain English: we help people explain the value they create.',
   },
   {
-    q: 'Who uses Lumecon?',
-    a: 'Municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, federal programs, universities and research labs, foundations, CDFIs, and economic development organizations.',
+    id: 'cedar_identity',
+    chip: 'What is Cedar?',
+    triggers: [
+      'what is cedar', 'who are you', 'are you the chatbot', 'are you a chatbot', 'are you a bot', 'what can cedar help', 'why are you called cedar', 'what does this assistant do', 'can you answer', 'are you ai', 'are you a real person', 'who is cedar', 'how can i use this chatbot', 'about cedar', 'what does cedar do', 'tell me about cedar',
+    ],
+    answer: "I'm Cedar, Lumecon's site assistant. I can help explain what Lumecon does, who the platform is for, how economic impact reporting works, and how to get in touch with the team. I'm here to point you in the right direction, not replace a conversation with the Lumecon team.",
   },
   {
-    q: 'Is Lumecon an IMPLAN / RIMS II / REMI alternative?',
-    a: 'Yes. Lumecon was built as a modern, AI-assisted alternative to IMPLAN, RIMS II, REMI Policy Insight, and BEA RIMS II multipliers for organizations that need to run economic impact studies in-house, on their own data, without per-region licensing fees.',
+    id: 'audience',
+    chip: 'Who is Lumecon for?',
+    triggers: [
+      'who uses lumecon', 'who uses this', 'who uses it', 'who is this for', 'who is this platform for', 'who is lumecon for', 'who is the platform made for', 'what kinds of clients', 'what kind of clients', 'what types of clients', 'clients do you serve', 'who do you serve', 'who do you work with', 'is this for nonprofits', 'is this for universities', 'is this for foundations', 'is this for developers', 'is this for community', 'is this for me', 'target audience', 'who are your customers', 'who buys this',
+    ],
+    answer: "Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits, and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue, or local development, Lumecon can help make that impact easier to understand.",
   },
   {
-    q: 'What geographies does Lumecon cover?',
-    a: 'All federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country, all in one annual subscription, not priced per geography.',
+    id: 'tribal_platform',
+    chip: 'Does this work for tribal nations?',
+    triggers: [
+      'tribal economic impact', 'tribal platform', 'tribal government', 'tribal nation', 'native nation', 'tribal enterprise', 'tribal gaming', 'tribes use this', 'is this made for native', 'help tribal', 'help tribes', 'help native', 'measure tribal', 'tribal grant', 'why do tribes need this', 'tribal',
+    ],
+    answer: "Lumecon's Tribal Economic Impact Platform helps tribal governments and tribal enterprises communicate their economic contributions with clear, data-backed reports. That can include jobs supported, wages generated, business activity, local spending, and broader regional impacts. The goal is to help Native nations tell a stronger economic story while respecting the distinct governance context of tribal economies.",
   },
   {
-    q: 'What is Cedar?',
-    a: 'Cedar is the AI assistant built into every Lumecon platform. Cedar reads the files your departments already share, surfaces each assumption the model is about to use, asks you to confirm or override, and writes a record of every source and method so the work is traceable end to end.',
+    id: 'local_platform',
+    chip: 'Can cities and counties use this?',
+    triggers: [
+      'local economic impact', 'local platform', 'cities use', 'counties use', 'city use', 'county use', 'local government', 'municipal', 'state agency', 'state agencies', 'public agency', 'public agencies', 'measure a project', "project's impact", 'project impact', 'local development', 'public investment', "i'm not a tribal", 'non-tribal', 'non tribal',
+    ],
+    answer: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers, and other organizations. The platform can help explain how a project, institution, investment, or program affects a local or regional economy.',
   },
   {
-    q: 'Can Lumecon run historical or forward-looking analyses?',
-    a: 'Yes. Look back historically for a longitudinal analysis, or model forward to plan a budget, grant proposal, or capital project. Studies improve over time as more of your data accumulates in the system.',
+    id: 'reports_outputs',
+    chip: 'What kind of reports does it produce?',
+    triggers: [
+      'what reports', 'what report', 'pdf report', 'final output', 'output look like', 'create dashboards', 'dashboard', 'export the results', 'export', 'presentations', 'public meetings', 'board materials', 'economic impact report', 'deliverables', 'what do you produce', 'what does it produce', 'report do you',
+    ],
+    answer: 'Lumecon is designed to help users create clear economic impact outputs, including reports, summaries, charts, tables, and presentation-ready materials. The goal is to make complex analysis easier to explain to councils, boards, funders, partners, community members, and the public.',
   },
   {
-    q: 'Where was Lumecon built?',
-    a: 'Lumecon Inc. was built at Cornell University, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team\'s academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.',
+    id: 'data_inputs',
+    chip: 'What data does it use?',
+    triggers: [
+      'what data', 'where does the data come', 'users upload data', 'upload my data', 'bring my own data', 'bring your own data', 'what inputs', 'what input', 'government data', 'public data', 'is the data credible', 'how do you calculate', 'what data sources', 'data sources', 'real economic data',
+    ],
+    answer: 'Lumecon can work with user-provided information, public economic data, and structured assumptions about spending, employment, wages, and regional activity. Economic impact analysis often uses multipliers to estimate how direct activity supports additional jobs, income, and business activity in the surrounding economy. The exact inputs depend on the project, organization, and geography.',
+  },
+  {
+    id: 'multipliers',
+    chip: 'What are multipliers?',
+    triggers: [
+      'what is a multiplier', 'what are multipliers', 'what are economic multipliers', 'explain multipliers', 'how do multipliers', 'indirect impact', 'induced impact', 'direct impact', 'total economic impact', 'ripple effect', 'ripple through', 'why does spending create', 'multiplier effect', 'multiplier',
+    ],
+    answer: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies, or funds construction, that activity directly supports jobs and spending. Then suppliers, workers, and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.',
+  },
+  {
+    id: 'software_vs_consulting',
+    chip: 'Is this software or consulting?',
+    triggers: [
+      'is lumecon software', 'is this consulting', 'are you a saas', 'is this saas', 'saas company', 'sell reports', 'platform or a service', 'platform or service', 'hire you to do the analysis', 'is this self-service', 'is this self service', 'need an economist', 'turbotax for impact', 'is this automated', 'software or service',
+    ],
+    answer: 'Lumecon is building software to make economic impact reporting more guided, scalable, and accessible. The vision is a platform that walks users through the process instead of requiring them to start from scratch. Some projects may still involve support from the Lumecon team, especially for custom analysis, complex organizations, or early pilot partners.',
+  },
+  {
+    id: 'pricing',
+    chip: 'How much does it cost?',
+    triggers: [
+      'how much', 'what is the price', 'pricing', 'what does it cost', 'cost of lumecon', 'subscription', 'do you have subscriptions', 'can i buy', 'how do i get access', 'become a customer', 'become a client', 'price',
+    ],
+    answer: 'Pricing depends on the organization, use case, and level of support needed. Lumecon is still developing its platform and may work with selected pilot partners or early users. The best next step is to contact the Lumecon team so we can understand what you are trying to measure and whether the platform is a good fit.',
+  },
+  {
+    id: 'demo',
+    chip: 'Can I see a demo?',
+    triggers: [
+      'schedule a demo', 'want a demo', 'see a demo', 'see the demo', 'get a demo', 'demo of', 'a demo', 'see the product', 'see the platform', 'show me the platform', 'show me the product', 'is there a demo', 'can i try', 'try the platform', 'try lumecon', 'accepting pilots', 'pilot program', 'pilot partner', 'walkthrough', 'book a call', 'set up a call',
+    ],
+    answer: 'The best way to see whether Lumecon fits your needs is to request a demo or contact the team directly. Share a little about your organization, what kind of impact you want to measure, and any timeline you are working with. That will help the team follow up with the right context.',
+  },
+  {
+    id: 'contact',
+    chip: 'How do I contact you?',
+    triggers: [
+      'how do i contact', 'contact you', 'who should i email', 'i want to talk', 'speak with the founder', 'speak to the founder', 'reach lumecon', 'reach the team', 'reach out', 'get in touch', 'send an email', 'email lumecon', 'phone number',
+    ],
+    answer: 'You can reach out through the contact form on this site, or email contact@lumecon.ai. Include your name, organization, and a brief note about what you are hoping to measure or understand. That will help the Lumecon team route your message and follow up with the right context.',
+  },
+  {
+    id: 'partnerships',
+    chip: "I'm an investor or partner",
+    triggers: [
+      "i'm an investor", 'an investor', 'are you raising', 'raising money', 'raising capital', 'want to partner', 'partnership', 'work with consultants', 'collaborate', 'strategic partner', 'aligned partner', 'invest in lumecon',
+    ],
+    answer: 'Thanks for your interest. Lumecon is open to conversations with aligned partners, advisors, funders, and collaborators. The best next step is to contact the team directly with a short note about who you are, what kind of partnership you have in mind, and why you think there may be a fit.',
+  },
+  {
+    id: 'hiring',
+    chip: 'Are you hiring?',
+    triggers: [
+      'are you hiring', 'work for lumecon', 'have internships', 'internship', "i'm a developer", "i'm a designer", "i'm an engineer", 'join the team', 'open roles', 'open role', 'careers', 'apply for a job', 'job opening', 'join lumecon',
+    ],
+    answer: "Lumecon is a five-person team and is looking for early teammates across software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales. These are unpaid early-stage roles, open to undergraduate and graduate students. We mentor people who are persistent. See the /join page for details, or email contact@lumecon.ai with a résumé and a short note.",
+  },
+  {
+    id: 'technical',
+    chip: 'Tech stack and integrations?',
+    triggers: [
+      'tech stack', 'technology stack', 'do you have an api', 'have an api', 'api access', 'integrate with my system', 'integration', 'upload spreadsheet', 'upload spreadsheets', 'connect to external', 'external database', 'multiple people', 'support teams', 'team account', 'sso', 'single sign on',
+    ],
+    answer: 'Lumecon is being designed as a modern web platform with support for structured data, guided workflows, and organization-level use. Some technical features may depend on the stage of the product and the needs of pilot users. For integrations, team access, uploads, or API questions, the best next step is to contact the Lumecon team directly.',
+  },
+  {
+    id: 'security',
+    chip: 'Is my data safe?',
+    triggers: [
+      'is my data safe', 'data privacy', 'data security', 'happens to uploaded data', 'do you sell data', 'is this confidential', 'confidential', 'upload sensitive', 'sensitive information', 'protect client data', 'protect data', 'secure enough for governments', 'data sovereignty', 'tribal data', 'how do you protect',
+    ],
+    answer: 'Lumecon takes data privacy seriously, especially when working with governments, tribal nations, and organizations handling sensitive information. For sensitive projects, the team can discuss data handling, confidentiality, and access controls before any information is shared. Tribal data sovereignty and responsible data use are especially important to the platform design.',
+  },
+  {
+    id: 'accuracy',
+    chip: 'How credible are the numbers?',
+    triggers: [
+      'how accurate', 'can i trust the numbers', 'trust the numbers', 'peer reviewed', 'peer review', 'defensible', 'someone challenges', 'used publicly', 'used for grants', 'use for grants', 'with policymakers', 'credibility', 'how credible', 'are the numbers',
+    ],
+    answer: 'Economic impact estimates are only as credible as the data, assumptions, and methods behind them. Lumecon is designed to make those pieces clearer, more organized, and easier to explain. The goal is not just to produce numbers, but to help users understand where those numbers come from and how to communicate them responsibly.',
+  },
+  {
+    id: 'calculate_now',
+    chip: null,
+    triggers: [
+      'calculate my', 'estimate my impact', 'what is the impact', '$10 million project', '$1 million', '$5 million', 'how many jobs would', 'how many jobs will', 'how many jobs does', 'multiplier for my county', 'multiplier for my', 'run the numbers', 'give me an estimate', 'compute my', 'compute the impact',
+    ],
+    answer: 'I can explain how impact analysis works, but I cannot calculate a reliable estimate directly in this chat. To estimate impact responsibly, Lumecon would need details like the project location, spending categories, employment, wages, timeline, and relevant industry or sector. The platform is designed to guide users through that process more carefully. If you want a real estimate, contact contact@lumecon.ai.',
+  },
+  {
+    id: 'competitors',
+    chip: 'How is this different from IMPLAN / RIMS / Lightcast?',
+    triggers: [
+      'is this like implan', 'compete with implan', 'better than implan', 'like rims', 'rims ii', 'rims 2', 'is this like lightcast', 'like emsi', 'like remi', 'replacing economists', 'why not just use implan', 'makes this different', 'how is this different', 'implan alternative', 'compared to implan',
+    ],
+    answer: "Lumecon is focused on making economic impact reporting easier to use, explain, and communicate. Traditional tools like IMPLAN, RIMS II, REMI, and Lightcast can be powerful, but they often require technical expertise and can be difficult for non-specialists to navigate. Lumecon's goal is to create a more guided, user-friendly experience while still treating the underlying analysis seriously.",
+  },
+  {
+    id: 'explain_simple',
+    chip: 'Explain economic impact like I am five',
+    triggers: [
+      'explain like', 'eli5', "i'm five", 'like i am five', 'what is economic impact', 'why does economic impact matter', 'what does this actually mean', 'why should i care', "what's an example", 'whats an example', 'give me an example', 'in simple terms', 'in plain english',
+    ],
+    answer: 'Economic impact is a way of showing how an organization, project, or investment affects a community economy. If a new facility is built, it may create construction jobs, buy materials from suppliers, hire permanent staff, and bring more spending into nearby businesses. Economic impact analysis organizes those effects into a clear story.',
+  },
+  {
+    id: 'geographies',
+    chip: 'What geographies are covered?',
+    triggers: [
+      'what geographies', 'which geographies', 'what regions', 'which regions', 'coverage', 'what areas does it cover', 'rural counties', 'small region', 'small regions', 'native hawaiian', 'alaska native', 'ancsa', 'reservations', 'reservation level',
+    ],
+    answer: 'Lumecon covers all federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country. All of it is included in one annual subscription, not priced per geography.',
+  },
+  {
+    id: 'historical_forward',
+    chip: 'Historical or forward-looking?',
+    triggers: [
+      'historical', 'longitudinal', 'forward looking', 'forward-looking', 'project forward', 'plan a budget', 'capital project', 'grant proposal', 'budget proposal', 'over time', 'past impact', 'future impact',
+    ],
+    answer: 'Yes to both. Look back historically for a longitudinal analysis, or model forward to plan a budget, grant proposal, or capital project. Studies improve over time as more of your data accumulates in the system.',
+  },
+  {
+    id: 'where_built',
+    chip: 'Where was Lumecon built?',
+    triggers: [
+      'where was lumecon built', 'where is lumecon based', 'where is lumecon from', "lumecon's background", 'team background', 'who built lumecon', 'who founded', 'founded by', 'cornell', 'team experience', 'who is on the team', 'who is behind',
+    ],
+    answer: "Lumecon Inc. was built at Cornell University, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team's academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.",
+  },
+  {
+    id: 'confused',
+    chip: null,
+    triggers: [
+      'help', "i'm confused", 'what should i ask', "i don't know where to start", 'guide me', 'not sure what i need', 'i just want to know more', 'where do i start',
+    ],
+    answer: 'No problem. A few good places to start: ask what Lumecon does, who the platform is for, how economic impact analysis works, or how to contact the team. If you have a specific project or organization in mind, you can also describe what you are trying to measure.',
+  },
+  {
+    id: 'rude',
+    chip: null,
+    triggers: [
+      'this is stupid', 'this makes no sense', 'your site is bad', 'this chatbot is useless', 'i hate this', "you're wrong", 'youre wrong', 'this is confusing', 'this sucks', 'you suck',
+    ],
+    answer: "Sorry this was frustrating. I may not have understood what you were looking for. Lumecon's team can give a clearer answer if you reach out through the contact form, or email contact@lumecon.ai. You can also try asking me directly about the platform, pricing, demos, economic impact reports, or who Lumecon serves.",
+  },
+  {
+    id: 'greeting',
+    chip: null,
+    triggers: [
+      'hi', 'hello', 'hey', 'yo', 'sup', 'howdy', 'good morning', 'good afternoon', 'good evening', 'cedar',
+    ],
+    answer: "Hi, I'm Cedar. I can help with questions about Lumecon, economic impact reporting, the Tribal and Local Economic Impact platforms, demos, partnerships, and how to contact the team. What would you like to know?",
   },
 ];
+
+// Out-of-scope and fallback responses are handled by id so we can also
+// expose them to the classifier without polluting the chip rail.
+const OUT_OF_SCOPE = "I'm Cedar, Lumecon's site assistant, so I'm best at answering questions about Lumecon, economic impact reporting, and how to connect with the team. Try asking me what Lumecon does, who the platform is for, or how economic impact analysis works.";
+const FALLBACK = "I didn't catch that. Try asking what Lumecon does, who it's for, how impact analysis works, how to see a demo, or how to contact the team. You can also email contact@lumecon.ai for anything specific.";
+
+// Triggers that flip an unmatched message into OUT_OF_SCOPE rather than
+// FALLBACK. Pure-spam strings (asdfasdf, !!!) fall through to FALLBACK.
+const OUT_OF_SCOPE_TRIGGERS = [
+  'weather', 'write my essay', 'tell me a joke', 'who won', 'bitcoin', 'crypto', 'capital of france', 'dating advice', 'homework', 'who is the president', 'meaning of life', 'sports score',
+];
+
+// Curated subset for the static <details> fallback + the FAQPage
+// JSON-LD on the homepage. Question wording optimized for search.
+const STATIC_FAQ_IDS = [
+  'company_overview',
+  'audience',
+  'tribal_platform',
+  'local_platform',
+  'multipliers',
+  'geographies',
+  'cedar_identity',
+  'where_built',
+];
+const staticQuestions = {
+  company_overview: 'What is Lumecon?',
+  audience: 'Who uses Lumecon?',
+  tribal_platform: 'How does Lumecon support tribal nations?',
+  local_platform: 'Can cities, counties, and other organizations use Lumecon?',
+  multipliers: 'What are economic multipliers?',
+  geographies: 'What geographies does Lumecon cover?',
+  cedar_identity: 'What is Cedar?',
+  where_built: 'Where was Lumecon built?',
+};
+const staticFaqs = STATIC_FAQ_IDS.map((id) => {
+  const intent = INTENTS.find((i) => i.id === id)!;
+  return { q: staticQuestions[id as keyof typeof staticQuestions], a: intent.answer };
+});
+
+// Chips visible by default. Picks the most actionable starter prompts;
+// the full intent bank is still reachable via free-text input.
+const CHIP_IDS = [
+  'company_overview',
+  'audience',
+  'cedar_identity',
+  'tribal_platform',
+  'local_platform',
+  'multipliers',
+  'demo',
+  'pricing',
+  'competitors',
+  'where_built',
+];
+const chips = CHIP_IDS.map((id) => INTENTS.find((i) => i.id === id)!).filter(Boolean);
+
+const cedarData = {
+  intents: INTENTS,
+  outOfScope: { answer: OUT_OF_SCOPE, triggers: OUT_OF_SCOPE_TRIGGERS },
+  fallback: { answer: FALLBACK },
+};
 ---
 <section class="ask-cedar" id="faq" aria-labelledby="faq-title">
   <div class="ask-cedar__inner">
-    <p class="ask-cedar__eyebrow">Frequently asked</p>
-    <h2 class="ask-cedar__title" id="faq-title">Ask Cedar.</h2>
-    <p class="ask-cedar__note">Cedar is the AI assistant inside every Lumecon platform. This marketing-page Cedar runs from a fixed answer set. Live reasoning over your data lives in the product.</p>
+    <p class="ask-cedar__eyebrow">Ask Cedar</p>
+    <h2 class="ask-cedar__title" id="faq-title">Ask Cedar anything.</h2>
+    <p class="ask-cedar__note">Cedar is the AI assistant inside every Lumecon platform. This marketing-page Cedar runs from a fixed set of answers tuned for common questions. Live reasoning over your data lives in the product.</p>
 
     <!-- Cedar chat (JS-hydrated). Hidden until script reveals it so a
          no-JS visitor goes straight to the <details> fallback below. -->
@@ -55,21 +298,45 @@ const faqs = [
       <div class="cedar-chat__transcript" id="cedarTranscript" role="log" aria-live="polite" aria-label="Cedar conversation">
         <div class="cedar-msg cedar-msg--bot">
           <span class="cedar-msg__avatar" aria-hidden="true">C</span>
-          <div class="cedar-msg__bubble">Hi, I'm Cedar, Lumecon's AI assistant. Pick a question and I'll answer.</div>
+          <div class="cedar-msg__bubble">Hi, I'm Cedar, Lumecon's site assistant. Ask me what Lumecon does, who it's for, or how economic impact analysis works. Pick a starter or type a question.</div>
         </div>
       </div>
+
       <div class="cedar-chat__chips" id="cedarChips">
-        {faqs.map((f, i) => <button class="cedar-chip" type="button" data-q={i}>{f.q}</button>)}
+        {chips.map((intent) => (
+          <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+        ))}
       </div>
+
+      <form class="cedar-chat__form" id="cedarForm" autocomplete="off">
+        <label class="cedar-chat__inputwrap">
+          <span class="visually-hidden">Ask Cedar</span>
+          <input
+            id="cedarInput"
+            class="cedar-chat__input"
+            type="text"
+            name="q"
+            placeholder="Ask Cedar a question..."
+            maxlength="280"
+            aria-label="Ask Cedar a question"
+          />
+        </label>
+        <button class="cedar-chat__send" type="submit" aria-label="Send">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+            <path d="M4 12L20 4L16 20L12 13L4 12Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="miter"/>
+          </svg>
+        </button>
+      </form>
+
       <p class="cedar-chat__email">
-        Question not here? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a>. A human reads every one.
+        Need a human? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a>. We read every one.
       </p>
     </div>
 
     <!-- No-JS fallback + SEO-readable static FAQ. JS hides this once
          it hydrates the chat UI above. -->
     <div class="faq-list" id="cedarFallback">
-      {faqs.map((item, i) => (
+      {staticFaqs.map((item, i) => (
         <details class="faq-item" open={i === 0}>
           <summary class="faq-q">{item.q}</summary>
           <p class="faq-a">{item.a}</p>
@@ -78,7 +345,7 @@ const faqs = [
     </div>
   </div>
 
-  <script type="application/json" id="cedarFaqData" set:html={JSON.stringify(faqs)}></script>
+  <script type="application/json" id="cedarFaqData" set:html={JSON.stringify(cedarData)}></script>
 </section>
 
 <script is:inline>
@@ -88,11 +355,13 @@ const faqs = [
   const fallback = document.getElementById('cedarFallback');
   const transcript = document.getElementById('cedarTranscript');
   const chipsEl = document.getElementById('cedarChips');
+  const form = document.getElementById('cedarForm');
+  const input = document.getElementById('cedarInput');
 
-  if (!(dataEl && chat && fallback && transcript && chipsEl)) return;
-  const FAQS = JSON.parse(dataEl.textContent || '[]');
+  if (!(dataEl && chat && fallback && transcript && chipsEl && form && input)) return;
+  const BANK = JSON.parse(dataEl.textContent || '{}');
+  const INTENTS = BANK.intents || [];
 
-  // Hydrate: hide static FAQ, show chat
   chat.removeAttribute('hidden');
   fallback.setAttribute('hidden', '');
 
@@ -116,23 +385,85 @@ const faqs = [
     return wrap;
   }
 
-  chipsEl.addEventListener('click', function (e) {
-    const btn = e.target.closest('.cedar-chip');
-    if (!btn) return;
-    const idx = parseInt(btn.dataset.q || '-1', 10);
-    const item = FAQS[idx];
-    if (!item) return;
-    btn.disabled = true;
-    btn.classList.add('cedar-chip--used');
-    appendMessage('user', item.q);
+  // Normalize a string: lowercase, collapse whitespace, strip punctuation
+  // we don't care about. Wrap with spaces so word-boundary checks work
+  // ('this'.includes('hi') is true; ' this '.includes(' hi ') is false).
+  function normalize(s) {
+    return ' ' + (s || '').toLowerCase()
+      .replace(/[?!.,;:"'`()\[\]]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim() + ' ';
+  }
+
+  function classify(rawText) {
+    const text = normalize(rawText);
+    if (text.trim() === '') return { intent: null, score: 0 };
+    let best = null;
+    let bestScore = 0;
+    for (let i = 0; i < INTENTS.length; i++) {
+      const intent = INTENTS[i];
+      let score = 0;
+      for (let t = 0; t < intent.triggers.length; t++) {
+        const trig = normalize(intent.triggers[t]);
+        if (trig.trim() === '') continue;
+        if (text.indexOf(trig) !== -1) {
+          // Longer phrases are worth more; "who are you" beats a single
+          // -word "cedar" hit when scoring against the same intent.
+          score += Math.max(1, trig.trim().split(' ').length);
+        }
+      }
+      if (score > bestScore) { bestScore = score; best = intent; }
+    }
+    return { intent: best, score: bestScore };
+  }
+
+  function isOutOfScope(rawText) {
+    const text = normalize(rawText);
+    const trigs = (BANK.outOfScope && BANK.outOfScope.triggers) || [];
+    for (let i = 0; i < trigs.length; i++) {
+      const t = normalize(trigs[i]);
+      if (t.trim() === '') continue;
+      if (text.indexOf(t) !== -1) return true;
+    }
+    return false;
+  }
+
+  function answerFor(rawText) {
+    const c = classify(rawText);
+    if (c.intent && c.score >= 1) return c.intent.answer;
+    if (isOutOfScope(rawText)) return BANK.outOfScope.answer;
+    return BANK.fallback.answer;
+  }
+
+  function reply(rawText, echoText) {
+    appendMessage('user', echoText != null ? echoText : rawText);
     const dots = document.createElement('span');
     dots.className = 'cedar-typing';
     dots.innerHTML = '<span></span><span></span><span></span>';
     const typing = appendMessage('bot', dots);
     window.setTimeout(function () {
       const bubble = typing.querySelector('.cedar-msg__bubble');
-      if (bubble) bubble.textContent = item.a;
+      if (bubble) bubble.textContent = answerFor(rawText);
     }, 650);
+  }
+
+  chipsEl.addEventListener('click', function (e) {
+    const btn = e.target.closest('.cedar-chip');
+    if (!btn) return;
+    const id = btn.dataset.intent;
+    const intent = INTENTS.find(function (x) { return x.id === id; });
+    if (!intent) return;
+    btn.disabled = true;
+    btn.classList.add('cedar-chip--used');
+    reply(intent.chip, intent.chip);
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const q = (input.value || '').trim();
+    if (!q) return;
+    input.value = '';
+    reply(q, q);
   });
   })();
 </script>
@@ -296,6 +627,65 @@ const faqs = [
     opacity: .35;
     cursor: default;
   }
+
+  /* ---------- Free-text input row ---------- */
+  .cedar-chat__form {
+    display: flex;
+    gap: .55rem;
+    margin-top: 1rem;
+    align-items: stretch;
+  }
+  .cedar-chat__inputwrap {
+    flex: 1;
+    display: flex;
+  }
+  .cedar-chat__input {
+    flex: 1;
+    width: 100%;
+    padding: .7rem 1rem;
+    background: var(--white);
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: .94rem;
+    color: var(--ink-1);
+    transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+  }
+  .cedar-chat__input::placeholder { color: var(--ink-3); }
+  .cedar-chat__input:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(14, 21, 48, .08);
+  }
+  .cedar-chat__send {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    flex-shrink: 0;
+    background: var(--navy);
+    color: var(--white);
+    border: 1px solid var(--navy);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .15s var(--ease), transform .15s var(--ease);
+  }
+  .cedar-chat__send:hover { background: var(--ink-1); transform: translateY(-1px); }
+  .cedar-chat__send:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .cedar-chat__send svg { display: block; }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .cedar-chat__email {
     margin: 1.2rem 0 0;
     font-family: var(--font-sans);
@@ -314,8 +704,6 @@ const faqs = [
     flex-direction: column;
     border-top: 1px solid var(--rule);
   }
-  /* [hidden] needs to win over display:flex above so JS-hydration
-     actually removes the static FAQ list from view. */
   .faq-list[hidden] { display: none; }
   .faq-item {
     border-bottom: 1px solid var(--rule);
@@ -359,5 +747,8 @@ const faqs = [
     :global(.cedar-msg) { max-width: 92%; }
     :global(.cedar-chat__transcript) { max-height: 360px; }
     .ask-cedar__title { font-size: 1.8rem; }
+    .cedar-chat__form { gap: .4rem; }
+    .cedar-chat__input { padding: .65rem .9rem; font-size: .92rem; }
+    .cedar-chat__send { width: 40px; height: 40px; }
   }
 </style>
