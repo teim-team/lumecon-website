@@ -49,9 +49,11 @@ const STATE_CODES: Record<string, string> = {
 };
 const CODE_TO_ID = Object.fromEntries(Object.entries(STATE_CODES).map(([id, code]) => [code, id]));
 
-/* AIANNH polygons — clickable now (used to be decorative). Filter to
-   ones with a usable path + centroid. Each one gets the FIPS state-id
-   of its containing state so the ring shading targets the right state. */
+/* AIANNH polygons. Built at SSR for the tribal lookup table (so
+   reservation scenes can resolve to a real centroid), but NOT inlined
+   into the page SVG — the full set is served as a JSON endpoint at
+   /data/aiannh.json and lazy-loaded by the client on first map
+   interaction. That keeps the initial HTML from ballooning to 1MB. */
 const aiannh = (CENSUS_TRIBAL_LANDS as any[])
   .filter(l => l.pathD && l.x != null && l.y != null && l.fips)
   .map((l: any) => ({
@@ -184,25 +186,11 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         ))}
       </g>
 
-      <!-- AIANNH overlay: interactive. Clicking one runs a tribal-economy
-           study; hovering shows the tribal-land name in the tooltip. -->
-      <g class="hero-map__aiannh">
-        {aiannh.map((land: any) => (
-          <path
-            class={`hero-aiannh hero-aiannh--${land.category}`}
-            d={land.pathD}
-            data-name={land.name}
-            data-short={land.shortName}
-            data-fips={land.fips}
-            data-cx={land.x}
-            data-cy={land.y}
-            data-category={land.category}
-            tabindex="0"
-            role="button"
-            aria-label={`Tribal land: ${land.name}`}
-          ></path>
-        ))}
-      </g>
+      <!-- AIANNH overlay: lazy-injected. The full polygon set is fetched
+           from /data/aiannh.json on first map interaction (or idle, whichever
+           comes first) and appended here. Events use delegation on this
+           group so we don't have to re-wire handlers after injection. -->
+      <g class="hero-map__aiannh" id="heroAiannhLayer" data-loaded="0"></g>
 
       <path class="hero-map__county-borders" d={countyBordersD} />
       <path class="hero-map__borders" d={stateBordersD} />
@@ -1085,41 +1073,105 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       });
     });
 
-    /* ---------- AIANNH click + hover ---------- */
-    stage.querySelectorAll<HTMLElement>('.hero-aiannh').forEach(el => {
-      el.addEventListener('mouseenter', (e) => {
-        setTooltip(el.dataset.name || 'Tribal land', 'click to run a tribal-economy study');
-        tooltip.classList.add('is-on');
-        placeTooltip(e);
-      });
-      el.addEventListener('mousemove', (e) => placeTooltip(e));
-      el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
-      el.addEventListener('focus', (e) => {
-        setTooltip(el.dataset.name || 'Tribal land', 'press Enter to run a tribal-economy study');
-        tooltip.classList.add('is-on');
-        placeTooltip(e);
-      });
-      el.addEventListener('blur', () => tooltip.classList.remove('is-on'));
+    /* ---------- AIANNH lazy-load + event delegation ----------
+       The 485 tribal-land polygons used to be inlined into the SSR HTML
+       (~1MB). They are now fetched from /data/aiannh.json on the first
+       useful map interaction OR after an idle window, whichever comes
+       first. Hover/click/keydown are delegated on the parent group so
+       handlers don't need to be rewired after injection. */
+    const aiannhLayer = document.getElementById('heroAiannhLayer');
+    let aiannhLoading: Promise<void> | null = null;
+    const loadAiannh = (): Promise<void> => {
+      if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return Promise.resolve();
+      if (aiannhLoading) return aiannhLoading;
+      aiannhLoading = fetch('/data/aiannh.json', { credentials: 'same-origin' })
+        .then(r => r.ok ? r.json() : [])
+        .then((polys: any[]) => {
+          if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return;
+          const SVG_NS = 'http://www.w3.org/2000/svg';
+          const frag = document.createDocumentFragment();
+          for (const p of polys) {
+            const el = document.createElementNS(SVG_NS, 'path');
+            el.setAttribute('class', `hero-aiannh hero-aiannh--${p.category || 'reservation'}`);
+            el.setAttribute('d', p.pathD);
+            el.setAttribute('data-name', p.name);
+            el.setAttribute('data-short', p.shortName);
+            el.setAttribute('data-fips', p.fips);
+            el.setAttribute('data-cx', String(p.x));
+            el.setAttribute('data-cy', String(p.y));
+            el.setAttribute('data-category', p.category || '');
+            el.setAttribute('tabindex', '0');
+            el.setAttribute('role', 'button');
+            el.setAttribute('aria-label', `Tribal land: ${p.name}`);
+            frag.appendChild(el);
+          }
+          aiannhLayer.appendChild(frag);
+          aiannhLayer.dataset.loaded = '1';
+        })
+        .catch(() => { /* swallow — non-essential overlay */ });
+      return aiannhLoading;
+    };
 
-      const start = async () => {
-        const fips = el.dataset.fips; if (!fips) return;
-        const cx = parseFloat(el.dataset.cx || '0');
-        const cy = parseFloat(el.dataset.cy || '0');
-        const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
-        if (cycleTimer) window.clearTimeout(cycleTimer);
-        const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-        const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-        const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
-        const chip = `${tribalName} · ${amount.label} ${activity.label}`;
-        await runStudy(fips, { activity, amount, framing, chip, sourcePoint: { cx, cy } });
-        cycleTimer = window.setTimeout(cycle, 6800);
-      };
-      el.addEventListener('click', start);
-      el.addEventListener('keydown', (e) => {
-        const k = (e as KeyboardEvent).key;
-        if (k === 'Enter' || k === ' ') { e.preventDefault(); start(); }
-      });
+    // Trigger lazy-load on first stage interaction or after idle.
+    const triggerLoadOnce = () => loadAiannh();
+    stage.addEventListener('pointerenter', triggerLoadOnce, { once: true });
+    stage.addEventListener('focusin', triggerLoadOnce, { once: true });
+    // Also kick off after the first auto-cycle scene completes so even
+    // visitors who never touch the map get the layer ready.
+    const w = window as unknown as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void };
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(() => loadAiannh(), { timeout: 4000 });
+    } else {
+      w.setTimeout(() => loadAiannh(), 2500);
+    }
+
+    // Delegated handlers — work whether the polygons are injected or not.
+    const aiannhFromEvent = (e: Event): HTMLElement | null => {
+      const t = e.target as Element | null;
+      if (!t) return null;
+      const el = (t as Element).closest('.hero-aiannh') as HTMLElement | null;
+      return el;
+    };
+    aiannhLayer?.addEventListener('pointerover', (e) => {
+      const el = aiannhFromEvent(e); if (!el) return;
+      setTooltip(el.dataset.name || 'Tribal land', 'click to run a tribal-economy study');
+      tooltip.classList.add('is-on');
+      placeTooltip(e as MouseEvent);
     });
+    aiannhLayer?.addEventListener('pointermove', (e) => {
+      if (aiannhFromEvent(e)) placeTooltip(e as MouseEvent);
+    });
+    aiannhLayer?.addEventListener('pointerout', () => tooltip.classList.remove('is-on'));
+    aiannhLayer?.addEventListener('focusin', (e) => {
+      const el = aiannhFromEvent(e); if (!el) return;
+      setTooltip(el.dataset.name || 'Tribal land', 'press Enter to run a tribal-economy study');
+      tooltip.classList.add('is-on');
+      placeTooltip(e as FocusEvent);
+    });
+    aiannhLayer?.addEventListener('focusout', () => tooltip.classList.remove('is-on'));
+    const startTribal = async (el: HTMLElement) => {
+      const fips = el.dataset.fips; if (!fips) return;
+      const cx = parseFloat(el.dataset.cx || '0');
+      const cy = parseFloat(el.dataset.cy || '0');
+      const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
+      if (cycleTimer) window.clearTimeout(cycleTimer);
+      const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+      const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+      const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
+      const chip = `${tribalName} · ${amount.label} ${activity.label}`;
+      await runStudy(fips, { activity, amount, framing, chip, sourcePoint: { cx, cy } });
+      scheduleNext();
+    };
+    aiannhLayer?.addEventListener('click', (e) => {
+      const el = aiannhFromEvent(e); if (el) startTribal(el);
+    });
+    aiannhLayer?.addEventListener('keydown', (e) => {
+      const el = aiannhFromEvent(e); if (!el) return;
+      const k = (e as KeyboardEvent).key;
+      if (k === 'Enter' || k === ' ') { e.preventDefault(); startTribal(el); }
+    });
+    // Also load eagerly when the Tribal lands filter chip activates.
+    document.querySelector('.wfilter[data-layer="tribal"]')?.addEventListener('click', () => loadAiannh(), { once: true });
 
     /* ---------- IP geolocation kickoff ---------- */
     const GEO_KEY = 'lumecon:geo';
