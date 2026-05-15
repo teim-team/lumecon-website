@@ -171,25 +171,30 @@ body {
   100%    { transform: translateY(0); opacity: 1; }
 }
 
-/* Surface Assumption: the curve draws in, then the gold dot flags up. */
-.icon--surface .icon-surface__arc {
-  stroke-dashoffset: 100;
-  animation: icon-surface-draw 3s ease-out infinite;
-}
-.icon--surface .icon-surface__dot {
+/* Surface Assumption: a magnifying glass sweeps left-to-right across
+   the text lines; a gold dot pulses under the lens when it lands on
+   an "assumption" (the second line). */
+.icon--surface .icon-surface__lens {
   transform-box: fill-box;
   transform-origin: center;
-  animation: icon-surface-flag 3s ease-in-out infinite;
+  animation: icon-surface-sweep 3.8s ease-in-out infinite;
 }
-@keyframes icon-surface-draw {
-  0%   { stroke-dashoffset: 100; }
-  35%  { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 0; }
+.icon--surface .icon-surface__hit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-surface-hit 3.8s ease-in-out infinite;
 }
-@keyframes icon-surface-flag {
-  0%, 30% { transform: scale(1); }
-  50%     { transform: scale(1.45); }
-  70%     { transform: scale(1); }
+@keyframes icon-surface-sweep {
+  0%       { transform: translate(-3px, -2px); }
+  25%      { transform: translate(-3px, -2px); }
+  45%      { transform: translate(0, 0); }
+  70%      { transform: translate(3.5px, 2.5px); }
+  100%     { transform: translate(-3px, -2px); }
+}
+@keyframes icon-surface-hit {
+  0%, 35%      { transform: scale(.4); opacity: 0; }
+  45%, 70%     { transform: scale(1);  opacity: 1; }
+  85%, 100%    { transform: scale(.4); opacity: 0; }
 }
 
 /* Source record: each line draws in, then the gold check completes. */
@@ -215,15 +220,31 @@ body {
   100%    { transform: scale(1);   opacity: 1;   }
 }
 
-/* Code: the caret blinks at the I-beam. */
-.icon--code .icon-code__caret {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-code-blink 1.6s steps(2, end) infinite;
+/* Code: each bracket / slash draws in sequence as if being typed, then
+   the gold caret blinks at the cursor. */
+.icon--code .icon-code__glyph {
+  stroke-dasharray: 28;
+  stroke-dashoffset: 28;
+  animation: icon-code-draw 3.6s ease-in-out infinite;
 }
-@keyframes icon-code-blink {
-  0%, 50%  { opacity: 1; }
-  51%, 100% { opacity: .25; }
+.icon--code .icon-code__glyph--a { animation-delay: 0s; }
+.icon--code .icon-code__glyph--b { animation-delay: .35s; }
+.icon--code .icon-code__glyph--c { animation-delay: .7s; }
+.icon--code .icon-code__caret {
+  opacity: 0;
+  animation: icon-code-caret 3.6s ease-out infinite;
+}
+@keyframes icon-code-draw {
+  0%       { stroke-dashoffset: 28; }
+  30%, 85% { stroke-dashoffset: 0;  }
+  100%     { stroke-dashoffset: 28; }
+}
+@keyframes icon-code-caret {
+  0%, 38%   { opacity: 0; }
+  42%, 50%  { opacity: 1; }
+  54%, 62%  { opacity: 0; }
+  66%, 74%  { opacity: 1; }
+  78%, 100% { opacity: 0; }
 }
 
 /* ML: the three "code lines" type out in sequence; the gold caret
@@ -328,10 +349,11 @@ body {
   .icon--global .icon-global__dot,
   .icon--upload .icon-upload__dot,
   .icon--upload .icon-upload__arrow,
-  .icon--surface .icon-surface__arc,
-  .icon--surface .icon-surface__dot,
+  .icon--surface .icon-surface__lens,
+  .icon--surface .icon-surface__hit,
   .icon--source-record .icon-record__line,
   .icon--source-record .icon-record__check,
+  .icon--code .icon-code__glyph,
   .icon--code .icon-code__caret,
   .icon--ml .icon-ml__line,
   .icon--ml .icon-ml__caret,
@@ -344,10 +366,12 @@ body {
     animation: none !important;
   }
   .icon--source-record .icon-record__line,
-  .icon--ml .icon-ml__line { stroke-dashoffset: 0; }
+  .icon--ml .icon-ml__line,
+  .icon--code .icon-code__glyph { stroke-dashoffset: 0; }
   .icon--global .icon-global__arc,
-  .icon--surface .icon-surface__arc,
   .icon--economist .icon-econ__sigma { stroke-dashoffset: 0; }
+  .icon--code .icon-code__caret { opacity: 1; }
+  .icon--surface .icon-surface__hit { opacity: 1; transform: none; }
   .icon--data .icon-data__bar { fill: #F0A91A; }
 }
 
