@@ -17,7 +17,7 @@ nav.nav--fixed.scrolled {
   border-bottom-color: var(--rule-strong);
 }
 nav.nav--static {
-  background: rgba(251, 246, 236, .94);
+  background: rgba(255, 255, 255, .94);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--rule);
 }

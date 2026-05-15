@@ -226,50 +226,41 @@ body {
   51%, 100% { opacity: .25; }
 }
 
-/* ML: the gold core pulses while the two outer sparks light up in turn. */
-.icon--ml .icon-ml__core {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-ml-core 2.6s ease-in-out infinite;
+/* ML: the three "code lines" type out in sequence; the gold caret
+   blinks on the active line. */
+.icon--ml .icon-ml__line {
+  stroke-dasharray: 12;
+  stroke-dashoffset: 12;
+  animation: icon-ml-type 3.6s ease-in-out infinite;
 }
-.icon--ml .icon-ml__spark {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-ml-spark 2.6s ease-in-out infinite;
+.icon--ml .icon-ml__line--a { animation-delay: 0s; }
+.icon--ml .icon-ml__line--b { animation-delay: .25s; }
+.icon--ml .icon-ml__line--c { animation-delay: .5s; }
+.icon--ml .icon-ml__caret {
+  animation: icon-ml-blink .9s steps(2, end) infinite;
 }
-.icon--ml .icon-ml__spark--b { animation-delay: 1.3s; }
-@keyframes icon-ml-core {
-  0%, 100% { transform: scale(1);    opacity: 1;  }
-  50%      { transform: scale(1.35); opacity: .9; }
+@keyframes icon-ml-type {
+  0%       { stroke-dashoffset: 12; }
+  35%, 90% { stroke-dashoffset: 0;  }
+  100%     { stroke-dashoffset: 12; }
 }
-@keyframes icon-ml-spark {
-  0%, 60%, 100% { transform: scale(1);    opacity: .55; }
-  70%           { transform: scale(1.6); opacity: 1;   }
+@keyframes icon-ml-blink {
+  0%, 50%   { opacity: 1;   }
+  51%, 100% { opacity: .25; }
 }
 
-/* Data: the four bars grow in sequence from their baseline. */
+/* Data: bars stay still; gold fill sweeps across them in sequence. */
 .icon--data .icon-data__bar {
-  transform-box: fill-box;
-  transform-origin: bottom;
-  animation: icon-data-grow 3.2s ease-in-out infinite;
+  fill: transparent;
+  animation: icon-data-sweep 3.2s ease-in-out infinite;
 }
 .icon--data .icon-data__bar--a { animation-delay: 0s; }
-.icon--data .icon-data__bar--b { animation-delay: .15s; }
-.icon--data .icon-data__bar--c { animation-delay: .3s; }
-.icon--data .icon-data__bar--d { animation-delay: .45s; }
-.icon--data .icon-data__peak {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-data-peak 3.2s ease-in-out infinite .3s;
-}
-@keyframes icon-data-grow {
-  0%       { transform: scaleY(.25); }
-  35%, 70% { transform: scaleY(1);   }
-  100%     { transform: scaleY(.25); }
-}
-@keyframes icon-data-peak {
-  0%, 30%, 100% { transform: scale(.6);  opacity: .4; }
-  45%, 70%      { transform: scale(1);   opacity: 1;  }
+.icon--data .icon-data__bar--b { animation-delay: .4s; }
+.icon--data .icon-data__bar--c { animation-delay: .8s; }
+.icon--data .icon-data__bar--d { animation-delay: 1.2s; }
+@keyframes icon-data-sweep {
+  0%, 70%, 100% { fill: transparent; }
+  15%, 45%      { fill: #F0A91A; }
 }
 
 /* Economist: the sigma draws from open to close, then the multiplier
@@ -342,10 +333,9 @@ body {
   .icon--source-record .icon-record__line,
   .icon--source-record .icon-record__check,
   .icon--code .icon-code__caret,
-  .icon--ml .icon-ml__core,
-  .icon--ml .icon-ml__spark,
+  .icon--ml .icon-ml__line,
+  .icon--ml .icon-ml__caret,
   .icon--data .icon-data__bar,
-  .icon--data .icon-data__peak,
   .icon--economist .icon-econ__sigma,
   .icon--economist .icon-econ__hub,
   .icon--megaphone .icon-mega__wave,
@@ -353,10 +343,12 @@ body {
   .icon--chat-role .icon-chat__dot {
     animation: none !important;
   }
-  .icon--source-record .icon-record__line { stroke-dashoffset: 0; }
+  .icon--source-record .icon-record__line,
+  .icon--ml .icon-ml__line { stroke-dashoffset: 0; }
   .icon--global .icon-global__arc,
   .icon--surface .icon-surface__arc,
   .icon--economist .icon-econ__sigma { stroke-dashoffset: 0; }
+  .icon--data .icon-data__bar { fill: #F0A91A; }
 }
 
 /* Keyboard-shortcut help overlay, summoned with `?` and dismissed with
