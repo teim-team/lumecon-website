@@ -92,6 +92,77 @@ body {
   border-radius: 2px;
 }
 
+/* Keyboard-shortcut help overlay, summoned with `?` and dismissed with
+   `?` or Esc. Fixed bottom-right; small product-style affordance. */
+.kb-hint {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 9000;
+  min-width: 220px;
+  background: var(--navy);
+  color: var(--white);
+  border-radius: 6px;
+  padding: .8rem 1rem;
+  box-shadow: 0 6px 24px rgba(14, 21, 48, .22);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .18s var(--ease), transform .18s var(--ease);
+}
+.kb-hint.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.kb-hint__head {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: .55rem;
+  font-weight: 600;
+}
+.kb-hint__list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .4rem .8rem;
+  margin: 0;
+  font-size: .82rem;
+  line-height: 1.3;
+}
+.kb-hint__list dt { margin: 0; }
+.kb-hint__list dd { margin: 0; color: rgba(255, 255, 255, .82); }
+.kb-hint kbd {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  background: rgba(255, 255, 255, .12);
+  color: var(--white);
+  padding: .1rem .35rem;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  font-weight: 600;
+}
+
+/* Print stylesheet — produce a clean one-page result document of the
+   running study. Hides nav, hero brand, sections below the workspace,
+   etc., leaving just the workspace card with figures + attribution. */
+@media print {
+  nav, .hero-brand, .platforms, .why, .cedar-about, .cta, .footer,
+  .back-to-top, .scroll-progress, .kb-hint, .skip-link,
+  .hero-zoomout, .workspace-filters, .workspace__again {
+    display: none !important;
+  }
+  body, html { background: #fff !important; color: #000 !important; }
+  .hero { padding: 1rem !important; }
+  .workspace {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+    page-break-inside: avoid;
+  }
+  .workspace__bar { background: #fff !important; }
+  .hero-fig--derived { opacity: 1 !important; }
+  .hero-map { max-height: 4in !important; }
+  .hero-supplier, .hero-household { opacity: 1 !important; }
+}
+
 /* Skip-to-content link — visible only on keyboard focus, jumps past nav. */
 .skip-link {
   position: absolute;

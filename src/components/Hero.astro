@@ -251,11 +251,11 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
   <!-- Live figures — the only text inside the workspace -->
   <dl class="hero-figs" aria-label="Result of the running impact study">
-    <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
-    <div class="hero-fig"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
-    <div class="hero-fig"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
-    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
-    <div class="hero-fig hero-fig--derived" id="figJobsCell"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
+    <div class="hero-fig" data-k="direct"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
+    <div class="hero-fig" data-k="indirect"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
+    <div class="hero-fig" data-k="induced"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
+    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell" data-k="total"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
+    <div class="hero-fig hero-fig--derived" id="figJobsCell" data-k="jobs"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
   </dl>
 
     </div>
@@ -480,6 +480,21 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   ];
   const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
   const LEVEL_POOLS = [STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES];
+
+  /* Deterministic slug per scene, derived from the chip. Used to encode
+     the current study in the URL hash so a shareable link replays the
+     exact same scene. Stable across builds since chip text is stable. */
+  const slugify = (s: string) => s
+    .toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
+  const sceneBySlug = new Map<string, Scene>();
+  SCENES.forEach(sc => {
+    const slug = slugify(sc.chip);
+    if (!sceneBySlug.has(slug)) sceneBySlug.set(slug, sc);
+  });
 
   const ADJ_RADIUS = { indirect: 220, induced: 480 };
 
@@ -708,6 +723,15 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       const studyIdEl = document.getElementById('workspaceStudyId');
       if (studyIdEl) studyIdEl.textContent = `STUDY ${String(runId).padStart(3, '0')}`;
 
+      // Expose this run's multipliers on the stage so the per-figure
+      // explanations can read them without re-deriving anything.
+      if (opts?.activity) {
+        stage.dataset.actIndirect = String(opts.activity.indirect);
+        stage.dataset.actInduced = String(opts.activity.induced);
+        stage.dataset.actJobspm = String(opts.activity.jobsPerM);
+        stage.dataset.actLabel = opts.activity.label;
+      }
+
       const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
       const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
       const framing  = opts?.framing  ?? `A ${amount.label} ${activity.label} in ${s.name}.`;
@@ -823,8 +847,22 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
     /* Run a single scene. State and county scenes use the state centroid;
        reservation scenes resolve to a tribal-land centroid pulled from
-       the AIANNH lookup so the source point lands on the actual polygon. */
+       the AIANNH lookup so the source point lands on the actual polygon.
+       Also encodes the scene's slug in the URL hash so shared links
+       replay the exact same study. */
+    const updateUrlForScene = (scene: Scene) => {
+      const slug = slugify(scene.chip);
+      try {
+        const u = new URL(window.location.href);
+        const next = `study=${slug}`;
+        if (u.hash.replace(/^#/, '') === next) return;
+        u.hash = next;
+        suppressHashChange = true;
+        window.history.replaceState(null, '', u.toString());
+      } catch {}
+    };
     const runScene = async (scene: typeof SCENES[number]) => {
+      updateUrlForScene(scene);
       if (scene.level === 'reservation' && scene.tribalKey) {
         const t = tribalLookup[scene.tribalKey];
         if (t) {
@@ -860,11 +898,17 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       }
       sceneOrder.push(...arr);
     };
+    let pausedByHover = false;
+    const scheduleNext = (delay = 6800) => {
+      if (pausedByHover) return;
+      cycleTimer = window.setTimeout(cycle, delay);
+    };
     const cycle = async () => {
+      if (pausedByHover) return;
       if (sceneOrder.length === 0) reshuffle();
       const scene = SCENES[sceneOrder.shift() as number];
       await runScene(scene);
-      cycleTimer = window.setTimeout(cycle, 6800);
+      scheduleNext();
     };
 
     /* Per-level shuffled pools, used by the "New study" button so a
@@ -935,9 +979,78 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         const scene = pickLevel(buttonLevelIdx);
         buttonLevelIdx = (buttonLevelIdx + 1) % LEVEL_POOLS.length;
         await runScene(scene);
-        cycleTimer = window.setTimeout(cycle, 6800);
+        scheduleNext();
       });
     }
+
+    /* ---------- Pause auto-cycle while the workspace is hovered ----------
+       Respects the visitor's attention. The current study is allowed to
+       finish; the next one waits until hover ends. */
+    const workspaceEl = document.getElementById('workspace');
+    if (workspaceEl) {
+      const enter = () => {
+        pausedByHover = true;
+        if (cycleTimer) { window.clearTimeout(cycleTimer); cycleTimer = undefined; }
+      };
+      const leave = () => {
+        if (!pausedByHover) return;
+        pausedByHover = false;
+        if (!cycleTimer) scheduleNext(1200);
+      };
+      workspaceEl.addEventListener('mouseenter', enter);
+      workspaceEl.addEventListener('mouseleave', leave);
+      // Pause on focus-within too so keyboard users get the same behavior.
+      workspaceEl.addEventListener('focusin', enter);
+      workspaceEl.addEventListener('focusout', (e) => {
+        // Only resume when focus leaves the workspace entirely.
+        const next = (e as FocusEvent).relatedTarget as Node | null;
+        if (!next || !workspaceEl.contains(next)) leave();
+      });
+    }
+
+    /* ---------- Keyboard shortcuts: S = new study, ? = help ----------
+       Skipped while focus is inside an input/textarea so we don't hijack
+       typing in the contact form. */
+    const isTypingTarget = (t: EventTarget | null) => {
+      if (!t || !(t instanceof HTMLElement)) return false;
+      const tag = t.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || t.isContentEditable;
+    };
+    let kbHintEl: HTMLDivElement | null = null;
+    const toggleKbHint = (force?: boolean) => {
+      if (!kbHintEl) {
+        kbHintEl = document.createElement('div');
+        kbHintEl.className = 'kb-hint';
+        kbHintEl.setAttribute('role', 'dialog');
+        kbHintEl.setAttribute('aria-label', 'Keyboard shortcuts');
+        kbHintEl.innerHTML = `
+          <div class="kb-hint__head">Keyboard</div>
+          <dl class="kb-hint__list">
+            <dt><kbd>S</kbd></dt><dd>Run a new study</dd>
+            <dt><kbd>?</kbd></dt><dd>Toggle this help</dd>
+            <dt><kbd>Esc</kbd></dt><dd>Close</dd>
+          </dl>
+        `;
+        document.body.appendChild(kbHintEl);
+      }
+      const next = typeof force === 'boolean' ? force : !kbHintEl.classList.contains('is-on');
+      kbHintEl.classList.toggle('is-on', next);
+    };
+    window.addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (isTypingTarget(e.target)) return;
+      const k = e.key;
+      if (k === 's' || k === 'S') {
+        e.preventDefault();
+        wsAgain?.click();
+      } else if (k === '?' || (e.shiftKey && k === '/')) {
+        e.preventDefault();
+        toggleKbHint();
+      } else if (k === 'Escape' && kbHintEl?.classList.contains('is-on')) {
+        e.preventDefault();
+        toggleKbHint(false);
+      }
+    });
 
     /* ---------- state click + hover ---------- */
     stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
@@ -1036,22 +1149,120 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       } catch { return null; }
     };
 
+    /* Honor a #study=<slug> hash if present so shared links replay
+       a specific scene. Falls back to IP-geolocation, then to the
+       auto-cycle. */
+    const hashScene = (): Scene | null => {
+      const h = window.location.hash || '';
+      const m = h.match(/study=([a-z0-9-]+)/i);
+      if (!m) return null;
+      return sceneBySlug.get(m[1]) || null;
+    };
+
+    // Back/forward + in-page hash edits also replay the corresponding
+    // scene. We guard with a flag so our own replaceState calls inside
+    // runScene don't recurse.
+    let suppressHashChange = false;
+    window.addEventListener('hashchange', () => {
+      if (suppressHashChange) { suppressHashChange = false; return; }
+      const sc = hashScene();
+      if (sc) {
+        if (cycleTimer) window.clearTimeout(cycleTimer);
+        runScene(sc).then(() => scheduleNext());
+      }
+    });
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const s = states['53']; if (s) { moveSource(s.cx, s.cy); shadeNeighbors('53'); }
       figD!.textContent = fmt(5_000_000);
     } else {
-      detectStateId().then(async (sid) => {
-        if (sid && states[sid]) {
-          const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-          const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-          const framing  = `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`;
-          const chip = `${amount.label} ${activity.label} in ${states[sid].name}`;
-          await runStudy(sid, { activity, amount, framing, chip });
-          cycleTimer = window.setTimeout(cycle, 6800);
-        } else {
-          cycleTimer = window.setTimeout(cycle, 900);
-        }
-      });
+      const initial = hashScene();
+      if (initial) {
+        runScene(initial).then(() => scheduleNext());
+      } else {
+        detectStateId().then(async (sid) => {
+          if (sid && states[sid]) {
+            const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+            const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+            const framing  = `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`;
+            const chip = `${amount.label} ${activity.label} in ${states[sid].name}`;
+            await runStudy(sid, { activity, amount, framing, chip });
+            scheduleNext();
+          } else {
+            scheduleNext(900);
+          }
+        });
+      }
     }
+
+    /* ---------- Per-figure metric explanations ----------
+       Each figure (Direct / Indirect / Induced / Total / Jobs) becomes
+       a button. Activating it expands a tiny info block with a
+       one-sentence definition + the live multiplier used in this run. */
+    const FIG_DEFS: Record<string, string> = {
+      direct:   'First-round spending. The dollars actually disbursed: wages, contracts, grant payments.',
+      indirect: 'Supplier spending. Money the direct recipients spend with vendors, contractors, and suppliers.',
+      induced:  'Household spending. Wages earned by direct and indirect workers, spent locally on rent, groceries, services.',
+      total:    'Direct + Indirect + Induced. The full economic impact across the region.',
+      jobs:     'Estimated jobs supported across direct, indirect, and induced activity, derived from a per-million-dollars factor.',
+    };
+    const figureButtons = document.querySelectorAll<HTMLElement>('.hero-fig');
+    figureButtons.forEach(cell => {
+      const key = cell.dataset.k;
+      if (!key || !FIG_DEFS[key]) return;
+      const dt = cell.querySelector('dt');
+      if (!dt) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'hero-fig__info';
+      btn.setAttribute('aria-label', `What is ${dt.textContent}?`);
+      btn.setAttribute('aria-expanded', 'false');
+      btn.textContent = 'i';
+      dt.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className = 'hero-fig__expl';
+      panel.setAttribute('role', 'region');
+      panel.hidden = true;
+      cell.appendChild(panel);
+
+      const renderPanel = () => {
+        const def = FIG_DEFS[key];
+        let mult = '';
+        const ai = stage.dataset.actIndirect, au = stage.dataset.actInduced, aj = stage.dataset.actJobspm, al = stage.dataset.actLabel;
+        if (key === 'indirect' && ai)      mult = `Multiplier this run: <strong>${ai}</strong> (${al}).`;
+        else if (key === 'induced' && au)  mult = `Multiplier this run: <strong>${au}</strong> (${al}).`;
+        else if (key === 'jobs' && aj)     mult = `Per-million factor this run: <strong>${aj}</strong> jobs / $M (${al}).`;
+        else if (key === 'total' && ai && au) mult = `Composed from indirect <strong>${ai}</strong> + induced <strong>${au}</strong> (${al}).`;
+        panel.innerHTML = `<p>${def}</p>` + (mult ? `<p class="hero-fig__mult">${mult}</p>` : '');
+      };
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = panel.hidden;
+        // Close any other open panels.
+        figureButtons.forEach(other => {
+          if (other === cell) return;
+          const p = other.querySelector<HTMLElement>('.hero-fig__expl');
+          const b = other.querySelector<HTMLButtonElement>('.hero-fig__info');
+          if (p) p.hidden = true;
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (open) renderPanel();
+        panel.hidden = !open;
+        btn.setAttribute('aria-expanded', String(open));
+      });
+    });
+    document.addEventListener('click', (e) => {
+      // Close all panels when clicking outside.
+      const t = e.target as Element | null;
+      if (t && t.closest('.hero-fig')) return;
+      figureButtons.forEach(cell => {
+        const p = cell.querySelector<HTMLElement>('.hero-fig__expl');
+        const b = cell.querySelector<HTMLButtonElement>('.hero-fig__info');
+        if (p) p.hidden = true;
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    });
   }
 </script>
