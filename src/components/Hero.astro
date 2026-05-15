@@ -326,7 +326,8 @@ const MANUAL_TRIBES: Record<string, { name: string; cx: number; cy: number; fips
   nakupuna:           { name: 'Nakupuna Companies',  cx: 266.9, cy: 549.1, fips: '15' },
   kamehameha_schools: { name: 'Kamehameha Schools',  cx: 266.9, cy: 549.1, fips: '15' },
 };
-const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
+type TribalEntry = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
+const tribalLookup: Record<string, TribalEntry> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
   for (const c of candidates) {
     const found = aiannh.find((t: any) => t.name && t.name.toLowerCase().includes(c.toLowerCase()));
@@ -336,9 +337,19 @@ for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
     }
   }
 }
-// Manual entries take precedence over Census matches with the same key
-// (none currently overlap; this is a safety net for hand-tuned anchors).
+// Manual entries take precedence over Census matches with the same key.
 Object.assign(tribalLookup, MANUAL_TRIBES);
+
+// Enrich each entry with the FIPS of the county containing its centroid.
+// Computed at build time so the runtime can highlight state + county +
+// reservation as a nested hierarchy when a reservation scene fires.
+// @ts-ignore — module path resolved at SSR
+import { findContainingCounty } from '../data/countyMatch';
+for (const key of Object.keys(tribalLookup)) {
+  const t = tribalLookup[key];
+  const cf = findContainingCounty(t.cx, t.cy);
+  if (cf) t.countyFips = cf;
+}
 const tribalLookupJson = JSON.stringify(tribalLookup);
 ---
 <section class="hero" id="top">
@@ -514,7 +525,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
 <script>
   type StateInfo = { name: string; cx: number; cy: number; code: string };
-  type TribalLand = { name: string; cx: number; cy: number; fips: string };
+  type TribalLand = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
   const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
   const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
   const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
@@ -951,11 +962,14 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     const runScene = async (scene: typeof SCENES[number]) => {
       updateUrlForScene(scene);
       // Apply layered highlights for this scene before runStudy fires.
-      highlightCounty(scene.countyFips);
+      // For county scenes, scene.countyFips. For reservation scenes,
+      // pull the precomputed containing-county FIPS from tribalLookup
+      // so we get state + county + reservation as a nested hierarchy.
       clearReservationHighlight();
       if (scene.level === 'reservation' && scene.tribalKey) {
         const t = tribalLookup[scene.tribalKey];
         if (t) {
+          highlightCounty(t.countyFips);
           highlightReservationByTribalKey(scene.tribalKey);
           await runStudy(t.fips, {
             activity: scene.activity,
@@ -967,6 +981,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           return;
         }
       }
+      highlightCounty(scene.countyFips);
       if (scene.state) {
         await runStudy(scene.state, {
           activity: scene.activity,
