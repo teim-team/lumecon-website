@@ -22,8 +22,11 @@ const jobs = Math.round((total / 1_000_000) * scene.activity.jobsPerM);
 
 function fmt(n: number): string {
   if (n >= 1_000_000) {
-    const s = (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2);
-    return '$' + (s.endsWith('.0') ? s.slice(0, -2) : s) + 'M';
+    let s = (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2);
+    // Strip trailing zeros after the decimal, and the decimal itself
+    // if no fraction remains: "5.00" -> "5", "4.50" -> "4.5", "12.0" -> "12".
+    if (s.includes('.')) s = s.replace(/\.?0+$/, '');
+    return '$' + s + 'M';
   }
   if (n >= 1_000) return '$' + Math.round(n / 1_000) + 'K';
   return '$' + Math.round(n);
