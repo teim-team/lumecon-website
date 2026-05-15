@@ -11,6 +11,7 @@ import IconChat from '../components/icons/IconChat.astro';
 import IconAcademic from '../components/icons/IconAcademic.astro';
 import IconRemote from '../components/icons/IconRemote.astro';
 import IconImpact from '../components/icons/IconImpact.astro';
+import IconEconomist from '../components/icons/IconEconomist.astro';
 
 /**
  * Join-the-team recruiting page. Sits above /internships in the funnel
@@ -20,11 +21,12 @@ import IconImpact from '../components/icons/IconImpact.astro';
  */
 
 const ROLES = [
-  { Icon: IconCode,       title: 'Software Engineering',    blurb: 'TypeScript, Python, Astro, d3-geo. Product surface across Local, Tribal, and Global Economic Impact.' },
-  { Icon: IconML,         title: 'Machine Learning / AI',   blurb: 'Build Cedar. LLM evaluation, document understanding, structured extraction, RAG, evals.' },
-  { Icon: IconData,       title: 'Data Analytics',          blurb: 'Source, clean, and construct the high-frequency public + private datasets driving every multiplier.' },
-  { Icon: IconMegaphone,  title: 'Marketing & Growth',      blurb: 'SEO, content, government outreach, tribal-nation engagement, university and CDFI partnerships.' },
-  { Icon: IconChat,       title: 'Sales & Business Dev',    blurb: 'Pilot enrollment with municipal, tribal, and mission-driven organizations. Build the procurement playbook.' },
+  { Icon: IconCode,       title: 'Software Engineering',           blurb: 'TypeScript, Python, Astro, d3-geo. Product surface across Local, Tribal, and Global Economic Impact.' },
+  { Icon: IconML,         title: 'Machine Learning / AI',          blurb: 'Build Cedar. LLM evaluation, document understanding, structured extraction, RAG, evals.' },
+  { Icon: IconData,       title: 'Data Analytics',                 blurb: 'Source, clean, and construct the high-frequency public + private datasets driving every multiplier.' },
+  { Icon: IconEconomist,  title: 'Economist / Impact Modeling',    blurb: 'Input-output modeling, IMPLAN / RIMS II / REMI multipliers, regional bridges, and small-region econometrics. Econ undergrad, master\'s, and PhD candidates welcome.' },
+  { Icon: IconMegaphone,  title: 'Marketing & Growth',             blurb: 'SEO, content, government outreach, tribal-nation engagement, university and CDFI partnerships.' },
+  { Icon: IconChat,       title: 'Sales & Business Dev',           blurb: 'Pilot enrollment with municipal, tribal, and mission-driven organizations. Build the procurement playbook.' },
 ];
 
 const VALUES = [
@@ -89,10 +91,10 @@ const jsonLd = [
 ];
 ---
 <BaseLayout
-  title="Join Lumecon | Send a resume — engineering, ML, data, marketing, sales"
-  description="Lumecon Inc. is a Cornell-built economic impact analysis software company hiring across software engineering, machine learning, data analytics, marketing, and sales. Send a resume even without a posted role. Remote-friendly. Cornell, Dartmouth, and Ivy League students welcome."
+  title="Join Lumecon | Undergrad + grad — engineering, ML, data, economists, marketing, sales"
+  description="Lumecon Inc. is a Cornell-built economic impact analysis software company hiring undergrad and graduate students across software engineering, machine learning, data analytics, marketing, sales, and economic impact modeling. Send a résumé even without a posted role. Remote-friendly. Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, CMU students. Econ PhDs especially welcome."
   canonical="https://lumecon.ai/join"
-  keywords="join Lumecon, Lumecon careers, Lumecon team, Lumecon hiring, Lumecon jobs, Cornell startup hiring, Cornell startup jobs, Ivy League startup careers, software engineering jobs Cornell, machine learning jobs Cornell, AI startup jobs Cornell, data analytics jobs Cornell, marketing jobs Cornell, sales jobs Cornell, send resume Lumecon, Cornell entrepreneurship jobs, Dartmouth startup jobs, Cornell Brooks School jobs, Cornell Dyson jobs, Cornell ILR jobs, Cornell ORIE jobs, mission-driven startup, government technology jobs, tribal economic impact jobs, public sector software jobs"
+  keywords="join Lumecon, Lumecon careers, Lumecon team, Lumecon hiring, Lumecon jobs, Cornell startup hiring, Cornell startup jobs, Cornell PhD jobs, Cornell graduate student jobs, economics PhD jobs, economic impact modeling jobs, input-output modeling jobs, IMPLAN jobs, RIMS II jobs, REMI jobs, regional economics PhD jobs, Ivy League startup careers, software engineering jobs Cornell, machine learning jobs Cornell, AI startup jobs Cornell, data analytics jobs Cornell, marketing jobs Cornell, sales jobs Cornell, send resume Lumecon, Cornell entrepreneurship jobs, Dartmouth startup jobs, Stanford startup jobs, MIT startup jobs, Harvard startup jobs, Princeton ORFE jobs, Wharton jobs, Berkeley ARE jobs, CMU startup jobs, Cornell Brooks School jobs, Cornell Dyson jobs, Cornell ILR jobs, Cornell ORIE jobs, mission-driven startup, government technology jobs, tribal economic impact jobs, public sector software jobs, applied economics PhD jobs, regional science PhD jobs"
   ogTitle="Join the Lumecon team"
   ogDescription="Cornell-built economic impact analysis software hiring across engineering, ML, data, marketing, and sales. Send a resume — we'll reach back when there's a fit."
   jsonLd={jsonLd}
@@ -104,10 +106,10 @@ const jsonLd = [
       <p class="join-eyebrow">Join Lumecon Inc. · five-person team</p>
       <h1 class="join-title">Be early at a Cornell-built startup for governments and tribal nations.</h1>
       <p class="join-lede">
-        The job market for undergrads and grads is rough right now. Lumecon is hiring across software engineering, machine learning, data analytics, marketing, and sales — <strong>unpaid early-stage roles</strong> with the trade-off being that you'll be early at what we think can become the next big company in government and tribal-economy technology. <strong>Don't see a posted role? Send a résumé anyway</strong> — we keep an active talent network and reach back when a fit opens.
+        The job market for undergrads and graduate students is rough right now. Lumecon is hiring across software engineering, machine learning, data analytics, marketing, sales, and economic impact modeling — <strong>unpaid early-stage roles</strong> with the trade-off being that you'll be early at what we think can become the next big company in government and tribal-economy technology. <strong>Don't see a posted role? Send a résumé anyway</strong> — we keep an active talent network and reach back when a fit opens.
       </p>
       <p class="join-lede join-lede--sub">
-        Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent program students get a fast-track review.
+        Open to undergrad, master's, and PhD candidates at Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent programs. Economists, applied-economics PhDs, regional-science researchers — you're encouraged to apply specifically.
       </p>
       <div class="join-cta">
         <a href={mailto('Lumecon resume submission', generalApplyBody)} class="btn">Send a resume</a>
@@ -142,6 +144,16 @@ const jsonLd = [
           </article>
         ))}
       </div>
+    </section>
+
+    <section class="join-manifesto" aria-labelledby="manifesto-title">
+      <h2 class="join-section-title join-section-title--manifesto" id="manifesto-title">Who we work with</h2>
+      <p class="join-manifesto-body">
+        People who are <strong>kind</strong>, <strong>creative</strong>, and <strong>care</strong>. People who <strong>question assumptions</strong> and <strong>take ownership</strong>.
+      </p>
+      <p class="join-manifesto-body join-manifesto-body--quiet">
+        Not buzzwords. The world is changing fast — help us change it, or get left behind.
+      </p>
     </section>
 
     <section class="join-cohort" aria-labelledby="cohort-title">
@@ -307,6 +319,40 @@ const jsonLd = [
     font-weight: 400;
   }
 
+  .join-manifesto {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding: clamp(2rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem);
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 8px;
+    max-width: calc(1040px - 2 * var(--container-pad));
+  }
+  .join-manifesto .join-section-title--manifesto {
+    color: var(--white);
+    border-bottom-color: rgba(255, 255, 255, .14);
+    margin-bottom: 1.4rem;
+  }
+  .join-manifesto-body {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+    line-height: 1.35;
+    letter-spacing: -.012em;
+    color: var(--white);
+    margin: 0 0 1.2rem;
+    max-width: 64ch;
+  }
+  .join-manifesto-body strong {
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .join-manifesto-body--quiet {
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, .82);
+    margin-bottom: 0;
+  }
   .join-cohort { margin-top: clamp(3rem, 6vw, 5rem); }
   .join-cohort-body {
     font-family: var(--font-sans);
