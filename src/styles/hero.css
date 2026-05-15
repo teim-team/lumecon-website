@@ -226,7 +226,7 @@
   letter-spacing: -.005em;
 }
 .workspace-activity strong { color: var(--navy); font-weight: 600; }
-.workspace-activity:empty::before, .workspace-activity:has(&nbsp;)::before { content: ''; }
+.workspace-activity:empty::before { content: ''; }
 .workspace__dot {
   width: 7px; height: 7px;
   border-radius: 50%;
