@@ -18,9 +18,94 @@
   margin-bottom: .25rem;
 }
 .why-stat__icon svg {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   display: block;
+}
+
+/* ---------- 01: replace consultant + software ----------
+   The gold strike sweeps diagonally across both objects. */
+.why-icon--replace .why-icon-replace__strike {
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: why-icon-strike 3.4s ease-in-out infinite;
+}
+@keyframes why-icon-strike {
+  0%       { stroke-dashoffset: 32; }
+  35%, 80% { stroke-dashoffset: 0;  }
+  100%     { stroke-dashoffset: 32; }
+}
+
+/* ---------- 02: unlock value ----------
+   Lid tips open briefly; a gold spark rises out, scaling and fading. */
+.why-icon--unlock .why-icon-unlock__lid {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: why-icon-lid 3.6s ease-in-out infinite;
+}
+.why-icon--unlock .why-icon-unlock__spark {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: why-icon-spark 3.6s ease-in-out infinite;
+}
+@keyframes why-icon-lid {
+  0%, 18%, 80%, 100% { transform: none; }
+  30%, 60%           { transform: skewX(-6deg) translateY(-.5px); }
+}
+@keyframes why-icon-spark {
+  0%, 22%   { opacity: 0; transform: translateY(2px) scale(.6); }
+  35%, 60%  { opacity: 1; transform: translateY(0) scale(1); }
+  72%, 100% { opacity: 0; transform: translateY(-2px) scale(.8); }
+}
+
+/* ---------- 03: AI on messy data + small regions ----------
+   Outer + inner boundaries draw in, then a gold pulse breathes. */
+.why-icon--region .why-icon-region__outline {
+  animation: why-icon-region-draw 4.4s ease-out infinite;
+}
+.why-icon--region .why-icon-region__inner {
+  animation: why-icon-region-draw 4.4s ease-out infinite;
+  animation-delay: .5s;
+}
+.why-icon--region .why-icon-region__pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: why-icon-region-pulse 2.2s ease-in-out infinite;
+}
+.why-icon--region .why-icon-region__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: why-icon-region-dot 2.2s ease-in-out infinite;
+}
+@keyframes why-icon-region-draw {
+  0%       { stroke-dashoffset: 100; }
+  35%, 90% { stroke-dashoffset: 0;   }
+  100%     { stroke-dashoffset: 100; }
+}
+@keyframes why-icon-region-pulse {
+  0%, 100% { transform: scale(.7); opacity: .12; }
+  50%      { transform: scale(1.25); opacity: .35; }
+}
+@keyframes why-icon-region-dot {
+  0%, 100% { transform: scale(1);    opacity: 1;  }
+  50%      { transform: scale(1.25); opacity: .85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-icon--replace .why-icon-replace__strike,
+  .why-icon--unlock .why-icon-unlock__lid,
+  .why-icon--unlock .why-icon-unlock__spark,
+  .why-icon--region .why-icon-region__outline,
+  .why-icon--region .why-icon-region__inner,
+  .why-icon--region .why-icon-region__pulse,
+  .why-icon--region .why-icon-region__dot {
+    animation: none !important;
+  }
+  .why-icon--replace .why-icon-replace__strike,
+  .why-icon--region .why-icon-region__outline,
+  .why-icon--region .why-icon-region__inner { stroke-dashoffset: 0; }
+  .why-icon--unlock .why-icon-unlock__spark { opacity: 1; transform: none; }
 }
 .why-stat__num {
   font-family: var(--font-mono);
