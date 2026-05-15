@@ -11,7 +11,27 @@
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(2rem, 4vw, 3rem);
 }
-.why-stat { display: flex; flex-direction: column; gap: .55rem; }
+.why-stat { display: flex; flex-direction: column; gap: .55rem; color: var(--navy); }
+.why-stat__icon {
+  display: inline-flex;
+  color: var(--navy);
+  margin-bottom: .25rem;
+}
+.why-stat__icon svg {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+.why-stat__num {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
 .why-stat__k {
   font-family: var(--font-display);
   font-weight: 600;

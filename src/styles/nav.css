@@ -167,15 +167,17 @@ nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
   transition: background .12s var(--ease);
 }
 .nav-dd__item:hover, .nav-dd__item:focus-visible { background: var(--cream); outline: none; }
-.nav-dd__dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  margin-top: .55rem;
+.nav-dd__icon {
   flex: 0 0 auto;
+  margin-top: .15rem;
+  color: var(--navy);
+  display: inline-flex;
 }
-.nav-dd__dot[data-c="local"]  { background: var(--blue);  }
-.nav-dd__dot[data-c="tribal"] { background: var(--terra); }
-.nav-dd__dot[data-c="global"] { background: var(--cedar); }
+.nav-dd__icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
 .nav-dd__body { display: flex; flex-direction: column; min-width: 0; }
 .nav-dd__name {
   font-family: var(--font-display);
