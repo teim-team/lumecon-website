@@ -1017,20 +1017,62 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         el.removeAttribute('data-active');
       });
     };
+    /* Pick the AIANNH polygon that best represents this reservation
+       scene. Loose name match is the first signal (multiple polygons
+       can share fragments like "Choctaw"), then break ties by
+       distance to the tribalLookup centroid — the polygon physically
+       closest to where the source dot lives. If nothing name-matches,
+       fall back to the nearest polygon within a sane radius. */
     const applyReservationHighlight = () => {
       if (!pendingReservationTribalKey) return false;
       const t = tribalLookup[pendingReservationTribalKey];
       if (!t) return false;
       const short = t.name.toLowerCase();
-      const candidates = stage.querySelectorAll<HTMLElement>('.hero-aiannh');
-      for (const el of Array.from(candidates)) {
+      const candidates = Array.from(stage.querySelectorAll<SVGGraphicsElement>('.hero-aiannh'));
+      if (!candidates.length) return false;
+
+      const dist = (el: SVGGraphicsElement) => {
+        try {
+          const bb = el.getBBox();
+          const cx = bb.x + bb.width / 2;
+          const cy = bb.y + bb.height / 2;
+          return Math.hypot(cx - t.cx, cy - t.cy);
+        } catch { return Infinity; }
+      };
+
+      const nameMatches: SVGGraphicsElement[] = [];
+      for (const el of candidates) {
         const dname = (el.dataset.name || '').toLowerCase();
         const dshort = (el.dataset.short || '').toLowerCase();
         if (!dshort && !dname) continue;
         if (dshort.includes(short) || dname.includes(short) || short.includes(dshort || '___')) {
-          el.setAttribute('data-active', '1');
-          return true;
+          nameMatches.push(el);
         }
+      }
+
+      // Highlight is only meaningful if the chosen polygon is close to
+      // where the source dot lives. Some small rancherias aren't in
+      // the AIANNH dataset; we'd rather leave the highlight off than
+      // light up a far-away polygon that shares a name fragment.
+      const HIGHLIGHT_MAX_DIST = 35;
+      let best: SVGGraphicsElement | null = null;
+      let bestDist = Infinity;
+      if (nameMatches.length) {
+        // Among name matches, pick the one closest to the source.
+        for (const el of nameMatches) {
+          const d = dist(el);
+          if (d < bestDist) { bestDist = d; best = el; }
+        }
+      } else {
+        // No name match — accept the nearest polygon if it's close.
+        for (const el of candidates) {
+          const d = dist(el);
+          if (d < bestDist) { bestDist = d; best = el; }
+        }
+      }
+      if (best && bestDist <= HIGHLIGHT_MAX_DIST) {
+        best.setAttribute('data-active', '1');
+        return true;
       }
       return false;
     };
