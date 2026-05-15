@@ -359,6 +359,102 @@ body {
   30%           { transform: translateY(-2px); opacity: 1;   }
 }
 
+/* Ripple (Join hero): three rings expand outward from a gold center.
+   Staggered delays so a new ring is launching every ~1s. */
+.icon--ripple .icon-ripple__ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-ripple-out 3.6s ease-out infinite;
+}
+.icon--ripple .icon-ripple__ring--a { animation-delay: 0s; }
+.icon--ripple .icon-ripple__ring--b { animation-delay: 1.2s; }
+.icon--ripple .icon-ripple__ring--c { animation-delay: 2.4s; }
+.icon--ripple .icon-ripple__core {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-ripple-core 3.6s ease-in-out infinite;
+}
+@keyframes icon-ripple-out {
+  0%   { transform: scale(.15); opacity: 1;  stroke-width: 2; }
+  100% { transform: scale(1.6); opacity: 0;  stroke-width: .6; }
+}
+@keyframes icon-ripple-core {
+  0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(240, 169, 26, 0)); }
+  50%      { transform: scale(1.18); filter: drop-shadow(0 0 6px rgba(240, 169, 26, .55)); }
+}
+
+/* Shift (Join transition): legacy lines pulse then fade as ascending
+   bars rise on the right and a gold trajectory arrow sweeps across. */
+.icon--shift .icon-shift__legacy {
+  animation: icon-shift-legacy 4.8s ease-in-out infinite;
+}
+.icon--shift .icon-shift__bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: icon-shift-bar 4.8s ease-out infinite;
+}
+.icon--shift .icon-shift__bar--a { animation-delay: 0s; }
+.icon--shift .icon-shift__bar--b { animation-delay: .15s; }
+.icon--shift .icon-shift__bar--c { animation-delay: .30s; }
+.icon--shift .icon-shift__arrow line {
+  animation: icon-shift-arrow 4.8s ease-out infinite;
+}
+.icon--shift .icon-shift__arrow polyline {
+  animation: icon-shift-arrowhead 4.8s ease-out infinite;
+}
+@keyframes icon-shift-legacy {
+  0%, 15%   { opacity: .85; transform: translateX(0); }
+  45%, 90%  { opacity: .25; transform: translateX(-4px); }
+  100%      { opacity: .85; transform: translateX(0); }
+}
+@keyframes icon-shift-bar {
+  0%, 25%   { transform: scaleY(0); }
+  45%, 85%  { transform: scaleY(1); }
+  100%      { transform: scaleY(0); }
+}
+@keyframes icon-shift-arrow {
+  0%, 30%   { stroke-dashoffset: 100; }
+  55%, 85%  { stroke-dashoffset: 0; }
+  100%      { stroke-dashoffset: 100; }
+}
+@keyframes icon-shift-arrowhead {
+  0%, 50%   { opacity: 0; }
+  60%, 85%  { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+/* Mentor (Join team): a large gold mentor node is anchored on the
+   left; the line draws toward the mentee on the right; the mentee
+   scales in with a brief gold flash and then both pulse together. */
+.icon--mentor .icon-mentor__mentor {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-mentor-mentor 4s ease-in-out infinite;
+}
+.icon--mentor .icon-mentor__line {
+  animation: icon-mentor-line 4s ease-out infinite;
+}
+.icon--mentor .icon-mentor__mentee {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-mentor-mentee 4s ease-out infinite;
+}
+@keyframes icon-mentor-mentor {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(240, 169, 26, 0)); }
+  50%      { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(240, 169, 26, .55)); }
+}
+@keyframes icon-mentor-line {
+  0%, 12%   { stroke-dashoffset: 100; }
+  40%, 90%  { stroke-dashoffset: 0; }
+  100%      { stroke-dashoffset: 100; }
+}
+@keyframes icon-mentor-mentee {
+  0%, 18%   { transform: scale(.2); opacity: 0; fill: #F0A91A; }
+  38%       { transform: scale(1.15); opacity: 1; fill: #F0A91A; }
+  50%, 88%  { transform: scale(1); opacity: 1; fill: currentColor; }
+  100%      { transform: scale(.2); opacity: 0; fill: currentColor; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .icon--local .icon-local__dot,
   .icon--tribal .icon-tribal__dot,
@@ -379,9 +475,21 @@ body {
   .icon--economist .icon-econ__fit,
   .icon--megaphone .icon-mega__wave,
   .icon--megaphone .icon-mega__dot,
-  .icon--chat-role .icon-chat__dot {
+  .icon--chat-role .icon-chat__dot,
+  .icon--ripple .icon-ripple__ring,
+  .icon--ripple .icon-ripple__core,
+  .icon--shift .icon-shift__legacy,
+  .icon--shift .icon-shift__bar,
+  .icon--shift .icon-shift__arrow line,
+  .icon--shift .icon-shift__arrow polyline,
+  .icon--mentor .icon-mentor__mentor,
+  .icon--mentor .icon-mentor__line,
+  .icon--mentor .icon-mentor__mentee {
     animation: none !important;
   }
+  .icon--ripple .icon-ripple__ring { opacity: .35; }
+  .icon--shift .icon-shift__arrow line { stroke-dashoffset: 0; }
+  .icon--mentor .icon-mentor__line { stroke-dashoffset: 0; }
   .icon--source-record .icon-record__line,
   .icon--ml .icon-ml__line,
   .icon--code .icon-code__glyph,

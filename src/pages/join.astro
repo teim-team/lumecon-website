@@ -12,6 +12,10 @@ import IconData from '../components/icons/IconData.astro';
 import IconEconomist from '../components/icons/IconEconomist.astro';
 import IconMegaphone from '../components/icons/IconMegaphone.astro';
 import IconChat from '../components/icons/IconChat.astro';
+// Section-header icons (one per narrative section on this page)
+import IconRipple from '../components/icons/IconRipple.astro';
+import IconShift from '../components/icons/IconShift.astro';
+import IconMentor from '../components/icons/IconMentor.astro';
 
 /**
  * Join-the-team page. WHY-first layout: open with what Lumecon does
@@ -95,6 +99,7 @@ const jsonLd = [
     <!-- WHY: open with what Lumecon does in the world. The lede
          quote stays always visible; the rest collapses. -->
     <header class="join-hero">
+      <div class="join-section-icon" aria-hidden="true"><IconRipple /></div>
       <p class="join-eyebrow reveal-soft">Why we're building this</p>
       <h1 class="join-title reveal-soft" data-stagger="1">We <em>luminate</em> economies.</h1>
       <div class="join-why">
@@ -116,6 +121,7 @@ const jsonLd = [
     <!-- The world is changing. Headline carries the message; body
          is opt-in. -->
     <section class="join-transition" aria-labelledby="transition-title">
+      <div class="join-section-icon" aria-hidden="true"><IconShift /></div>
       <p class="join-section-kicker reveal-soft">The moment</p>
       <h2 class="join-section-title reveal" id="transition-title">The world is changing fast. Most organizations are still figuring out the transition.</h2>
       <details class="join-collapse">
@@ -133,6 +139,7 @@ const jsonLd = [
 
     <!-- WHO we hire and HOW we work. Persistence over perfection. -->
     <section class="join-team" aria-labelledby="team-title">
+      <div class="join-section-icon" aria-hidden="true"><IconMentor /></div>
       <p class="join-section-kicker reveal-soft">The team</p>
       <h2 class="join-section-title reveal" id="team-title">We mentor people who are persistent.</h2>
       <details class="join-collapse">
@@ -204,6 +211,34 @@ const jsonLd = [
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--container-pad);
+    position: relative;
+  }
+  /* Section-header icon floats top-right on desktop. Mobile stacks. */
+  .join-section-icon {
+    position: absolute;
+    top: 0;
+    right: var(--container-pad);
+    width: 120px;
+    height: 120px;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .join-section-icon :global(svg) { width: 100%; height: 100%; display: block; }
+  .join-hero .join-section-icon { top: -10px; }
+  .join-transition .join-section-icon,
+  .join-team .join-section-icon { top: -8px; }
+  @media (max-width: 880px) {
+    .join-section-icon {
+      position: static;
+      width: 76px;
+      height: 76px;
+      margin-bottom: 1.2rem;
+    }
+    .join-hero .join-section-icon,
+    .join-transition .join-section-icon,
+    .join-team .join-section-icon { top: auto; }
   }
   .join-title em {
     font-style: italic;
@@ -249,6 +284,16 @@ const jsonLd = [
     color: var(--navy);
     margin: 0 0 1.8rem;
     max-width: 22ch;
+    /* Reserve space on desktop so the title doesn't run under the
+       absolutely-positioned section icon. */
+    padding-right: 0;
+  }
+  @media (min-width: 881px) {
+    .join-hero,
+    .join-transition,
+    .join-team {
+      padding-right: calc(var(--container-pad) + 150px);
+    }
   }
   .join-why__lede {
     font-family: var(--font-display);

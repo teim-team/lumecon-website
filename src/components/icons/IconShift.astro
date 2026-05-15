@@ -1,0 +1,32 @@
+---
+const { class: className = '' } = Astro.props as { class?: string };
+---
+<svg class={`icon icon--shift ${className}`} viewBox="0 0 100 100" fill="none" aria-hidden="true">
+  <!-- A static "page of horizontal lines" (the legacy report) at left
+       fades back as ascending bars (the new way) rise on the right;
+       a gold arrow draws diagonally across them to read as 'fast
+       trajectory change'. The headline is 'the world is changing
+       fast', so the icon is literally an old format being overtaken
+       by a new one. -->
+  <!-- Legacy stack on the left (faintly visible, fades out and back) -->
+  <g class="icon-shift__legacy">
+    <line x1="14" y1="32" x2="42" y2="32" stroke="currentColor" stroke-width="1.4" stroke-linecap="butt"/>
+    <line x1="14" y1="44" x2="38" y2="44" stroke="currentColor" stroke-width="1.4" stroke-linecap="butt"/>
+    <line x1="14" y1="56" x2="42" y2="56" stroke="currentColor" stroke-width="1.4" stroke-linecap="butt"/>
+    <line x1="14" y1="68" x2="36" y2="68" stroke="currentColor" stroke-width="1.4" stroke-linecap="butt"/>
+  </g>
+  <!-- Ascending bars on the right (fade in) -->
+  <g class="icon-shift__bars">
+    <rect class="icon-shift__bar icon-shift__bar--a" x="56" y="62" width="6" height="22" fill="currentColor"/>
+    <rect class="icon-shift__bar icon-shift__bar--b" x="68" y="50" width="6" height="34" fill="currentColor"/>
+    <rect class="icon-shift__bar icon-shift__bar--c" x="80" y="36" width="6" height="48" fill="currentColor"/>
+  </g>
+  <!-- Gold diagonal trajectory arrow sweeping across both halves -->
+  <g class="icon-shift__arrow">
+    <line x1="12" y1="78" x2="86" y2="22" stroke="#F0A91A" stroke-width="2" stroke-linecap="butt"
+          pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+    <polyline points="86 22 78 22 86 22 86 30" stroke="#F0A91A" stroke-width="2" stroke-linejoin="miter" stroke-linecap="butt" fill="none"/>
+  </g>
+  <!-- Baseline -->
+  <line x1="10" y1="84" x2="92" y2="84" stroke="currentColor" stroke-width="1" stroke-linecap="butt" opacity=".35"/>
+</svg>
