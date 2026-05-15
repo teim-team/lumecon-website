@@ -239,7 +239,7 @@ const jsonLd = [
       }
     });
   }, { threshold: REVEAL_THRESHOLD, rootMargin: REVEAL_ROOT_MARGIN });
-  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-diagonal').forEach(el => obs.observe(el));
+  document.querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal').forEach(el => obs.observe(el));
 
   // Active section highlighting in nav
   const sections = document.querySelectorAll('section[id]');

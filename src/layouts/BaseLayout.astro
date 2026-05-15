@@ -102,5 +102,46 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
 <body class={bodyClass}>
 <a href="#top" class="skip-link">Skip to main content</a>
 <slot />
+
+<script is:inline>
+  // Scroll-reveal: anything with class="reveal" (or reveal-left/right/
+  // diagonal) fades + slides into place the first time it crosses
+  // into the viewport. Optional data-stagger='N' delays by N * 90ms.
+  // Respects prefers-reduced-motion. Re-binds on Astro view transitions.
+  (function () {
+    var STAGGER_STEP = 90;
+    function bind() {
+      var selector = '.reveal:not(.seen),.reveal-soft:not(.seen),.reveal-left:not(.seen),.reveal-right:not(.seen),.reveal-diagonal:not(.seen)';
+      var els = document.querySelectorAll(selector);
+      if (!els.length) return;
+      var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced || !('IntersectionObserver' in window)) {
+        for (var i = 0; i < els.length; i++) els[i].classList.add('seen');
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          var entry = entries[i];
+          if (!entry.isIntersecting) continue;
+          var el = entry.target;
+          var stagger = parseInt(el.getAttribute('data-stagger') || '0', 10);
+          if (stagger > 0) {
+            setTimeout(function (n) { return function () { n.classList.add('seen'); }; }(el), stagger * STAGGER_STEP);
+          } else {
+            el.classList.add('seen');
+          }
+          io.unobserve(el);
+        }
+      }, { rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
+      for (var j = 0; j < els.length; j++) io.observe(els[j]);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bind);
+    } else {
+      bind();
+    }
+    document.addEventListener('astro:page-load', bind);
+  })();
+</script>
 </body>
 </html>
