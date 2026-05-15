@@ -561,13 +561,13 @@
 }
 .hero-vlabel--r2 rect { fill: var(--terra-dark); }
 
-/* ---------- Source callout — region name pinned to source ---------- */
+/* ---------- Source callout — disabled. The workspace bar region and
+   the activity chip already name the location; the on-map pill was
+   redundant and scaled poorly at tight reservation zooms. The DOM
+   still builds (JS untouched) but it never renders. ---------- */
 .hero-source-callout {
-  opacity: 0;
-  transition: opacity .3s var(--ease);
-  pointer-events: none;
+  display: none;
 }
-.hero-source-callout.is-on { opacity: 1; }
 .hero-callout__leader {
   stroke: var(--navy);
   stroke-width: .9;

@@ -69,6 +69,36 @@ const statesJson = JSON.stringify(
   stateData.reduce((acc: any, s: any) => { acc[s.id] = { name: s.name, cx: s.cx, cy: s.cy, code: STATE_CODES[s.id] || '' }; return acc; }, {})
 );
 const codeMapJson = JSON.stringify(CODE_TO_ID);
+
+/* Tribal lookup — a curated subset of AIANNH features keyed by a
+   short slug, so client-side reservation scenes can resolve to a
+   real centroid pulled from Census TIGER/Line. The candidates list
+   per slug uses includes() matching so name variations work. */
+const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
+  navajo:           ['Navajo Nation'],
+  mille_lacs:       ['Mille Lacs'],
+  umatilla:         ['Umatilla'],
+  cherokee_ok:      ['Cherokee Nation', 'Cherokee'],
+  yakama:           ['Yakama'],
+  standing_rock:    ['Standing Rock'],
+  pine_ridge:       ['Pine Ridge', 'Oglala'],
+  eastern_cherokee: ['Eastern Band', 'Cherokee Indian Reservation'],
+  hopi:             ['Hopi'],
+  tohono:           ["Tohono O'odham", 'Tohono'],
+  fort_peck:        ['Fort Peck'],
+  oneida_ny:        ['Oneida'],
+};
+const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
+for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
+  for (const c of candidates) {
+    const found = aiannh.find((t: any) => t.name && t.name.toLowerCase().includes(c.toLowerCase()));
+    if (found) {
+      tribalLookup[slug] = { name: found.shortName || found.name, cx: found.x, cy: found.y, fips: found.fips };
+      break;
+    }
+  }
+}
+const tribalLookupJson = JSON.stringify(tribalLookup);
 ---
 <section class="hero" id="top">
   <!-- Brand statement: large wordmark, one position, one CTA. -->
@@ -244,20 +274,21 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   </div>
 
 
-  <script type="application/json" id="heroStates"  set:html={statesJson}></script>
-  <script type="application/json" id="heroCodeMap" set:html={codeMapJson}></script>
+  <script type="application/json" id="heroStates"   set:html={statesJson}></script>
+  <script type="application/json" id="heroCodeMap"  set:html={codeMapJson}></script>
+  <script type="application/json" id="heroTribal"   set:html={tribalLookupJson}></script>
 </section>
 
 <script>
   type StateInfo = { name: string; cx: number; cy: number; code: string };
+  type TribalLand = { name: string; cx: number; cy: number; fips: string };
   const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
   const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
+  const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
 
-  /* Activities + amounts: 5 × 5 = 25 combinations per region, plus a
-     tribal-specific catalog of verbs Cedar uses when an AIANNH polygon
-     is the source. */
-  /* Multipliers per activity type, used both by the named SCENES
-     and the click-on-state generic runs. */
+  /* Activity multipliers. The click-on-state fallback picks from
+     ACTIVITIES at random; the named SCENES below reference individual
+     activity records directly via ACT for richer-feeling variety. */
   const ACTIVITIES = [
     { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
     { id: 'payroll', label: 'operations payroll',   indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
@@ -272,94 +303,183 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     { v: 20_000_000, label: '$20M' },
     { v: 50_000_000, label: '$50M' },
   ] as const;
+  /* Extended activity catalog. Each profile carries its own indirect /
+     induced / jobsPerM coefficients so two construction projects don't
+     produce identical totals. Used only by the named scenes. */
+  const ACT = {
+    build:       { id: 'build',       label: 'capital construction',      indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
+    ops:         { id: 'payroll',     label: 'operations payroll',        indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
+    grant:       { id: 'grant',       label: 'grant pass-through',        indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
+    tourism:     { id: 'tourism',     label: 'visitor spending',          indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
+    energy:      { id: 'energy',      label: 'energy project',            indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
+    broadband:   { id: 'broadband',   label: 'broadband buildout',        indirect: 0.54, induced: 0.46, jobsPerM: 8.2  },
+    workforce:   { id: 'workforce',   label: 'workforce training',        indirect: 0.30, induced: 0.62, jobsPerM: 10.8 },
+    housing:     { id: 'housing',     label: 'housing development',       indirect: 0.61, induced: 0.43, jobsPerM: 9.4  },
+    health:      { id: 'health',      label: 'health operations',         indirect: 0.46, induced: 0.73, jobsPerM: 12.6 },
+    transit:     { id: 'transit',     label: 'transit capital project',   indirect: 0.59, induced: 0.41, jobsPerM: 8.1  },
+    culture:     { id: 'culture',     label: 'cultural facility',         indirect: 0.43, induced: 0.55, jobsPerM: 9.8  },
+    agriculture: { id: 'agriculture', label: 'agricultural development',  indirect: 0.52, induced: 0.51, jobsPerM: 10.5 },
+    ports:       { id: 'ports',       label: 'port modernization',        indirect: 0.57, induced: 0.45, jobsPerM: 8.4  },
+    water:       { id: 'water',       label: 'water infrastructure',      indirect: 0.60, induced: 0.40, jobsPerM: 7.8  },
+    coastal:     { id: 'coastal',     label: 'coastal restoration',       indirect: 0.55, induced: 0.42, jobsPerM: 9.1  },
+    research:    { id: 'research',    label: 'research operations',       indirect: 0.42, induced: 0.69, jobsPerM: 11.9 },
+  } as const;
+  type Amount = { v: number; label: string };
+  type Activity = typeof ACT[keyof typeof ACT];
 
-  /* Named example impact studies. Each one is a real-feeling project
-     with location, sentence form, and the activity profile baked in.
-     The auto-cycle plays through these so a visitor sees concrete
-     examples instead of abstract verb + region tokens. */
+  /* Named example impact studies grouped by level. The auto-cycle
+     plays through all of them shuffled; the "New study" button rotates
+     through the levels deliberately (state → county → reservation) so
+     a clicker sees the system handles every scope. */
   type Scene = {
-    state: string;
-    project: string;
-    location: string;
+    level: 'state' | 'county' | 'reservation';
+    state?: string;      // FIPS, for state/county scenes
+    tribalKey?: string;  // lookup key, for reservation scenes
     chip: string;
     sentence: string;
-    amount: typeof AMOUNTS[number];
-    activity: typeof ACTIVITIES[number];
+    amount: Amount;
+    activity: Activity;
   };
-  const SCENES: Scene[] = [
-    { state: '53', project: 'A new community health clinic', location: 'Pierce County, WA',
-      chip: 'Community health clinic · Pierce County, WA · $5M operations',
-      sentence: 'A new community health clinic opens in Pierce County, WA, supported by $5M of operating funds.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[1] },
-    { state: '48', project: 'University workforce expansion', location: 'Travis County, TX',
-      chip: 'University workforce expansion · Travis County, TX · $20M payroll',
-      sentence: 'A state university expands its workforce in Travis County, TX, with $20M of new operating payroll.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[1] },
-    { state: '41', project: 'Tribal solar array', location: 'Umatilla Reservation, OR',
-      chip: 'Tribal solar array · Umatilla Reservation, OR · $12M energy project',
-      sentence: 'A tribal government commissions a solar array on the Umatilla Reservation, a $12M clean-energy project.',
-      amount: AMOUNTS[2], activity: ACTIVITIES[4] },
-    { state: '27', project: 'Casino and lodging expansion', location: 'Mille Lacs, MN',
-      chip: 'Casino expansion · Mille Lacs, MN · $50M capital build',
-      sentence: 'A tribal enterprise breaks ground on a $50M casino and lodging expansion in Mille Lacs, MN.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '39', project: 'Federal grant to a regional CDFI', location: 'Cuyahoga County, OH',
-      chip: 'Federal grant pass-through · Cuyahoga County, OH · $5M',
-      sentence: 'A $5M federal grant passes through to a regional CDFI serving Cuyahoga County, OH.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[2] },
-    { state: '53', project: 'Light rail line extension', location: 'King County, WA',
-      chip: 'Light rail extension · King County, WA · $50M build',
-      sentence: 'A regional transit authority extends a light rail line through King County, WA, a $50M capital build.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '47', project: 'Music tourism program', location: 'Davidson County, TN',
-      chip: 'Music tourism program · Davidson County, TN · $5M',
-      sentence: 'Davidson County, TN expands a music tourism program, generating $5M in visitor spending across local businesses.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[3] },
-    { state: '02', project: 'Fish processing facility', location: 'Aleutians East Borough, AK',
-      chip: 'Fish processing facility · Aleutians East, AK · $12M',
-      sentence: 'A new fish processing facility opens in the Aleutians East Borough, Alaska, a $12M capital build.',
-      amount: AMOUNTS[2], activity: ACTIVITIES[0] },
-    { state: '42', project: 'Workforce training program', location: 'Allegheny County, PA',
-      chip: 'Workforce training program · Allegheny County, PA · $1M',
-      sentence: 'Allegheny County, PA launches a $1M workforce training program targeting advanced manufacturing.',
-      amount: AMOUNTS[0], activity: ACTIVITIES[1] },
-    { state: '31', project: 'Wind farm', location: 'Cherry County, NE',
-      chip: 'Wind farm · Cherry County, NE · $20M energy project',
-      sentence: 'A $20M wind farm comes online in Cherry County, NE, with construction and operations spread across the county.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[4] },
-    { state: '04', project: 'County library system expansion', location: 'Maricopa County, AZ',
-      chip: 'Library system expansion · Maricopa County, AZ · $5M',
-      sentence: 'Maricopa County, AZ funds a $5M expansion of its public library system.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[1] },
-    { state: '36', project: 'Affordable housing development', location: 'Bronx County, NY',
-      chip: 'Affordable housing · Bronx County, NY · $20M build',
-      sentence: 'A $20M affordable housing development breaks ground in the Bronx, NY.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[0] },
-    { state: '22', project: 'Convention center renovation', location: 'Orleans Parish, LA',
-      chip: 'Convention center · Orleans Parish, LA · $50M',
-      sentence: 'Orleans Parish renovates its convention center, a $50M capital project tied to the regional tourism economy.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '37', project: 'Community college campus', location: 'Mecklenburg County, NC',
-      chip: 'Community college campus · Mecklenburg County, NC · $20M',
-      sentence: 'Mecklenburg County, NC builds a new community college campus, a $20M capital investment.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[0] },
-    { state: '04', project: 'Tribal health clinic', location: 'Navajo Nation, AZ',
-      chip: 'Tribal health clinic · Navajo Nation, AZ · $12M operations',
-      sentence: 'A new health clinic opens on the Navajo Nation, with $12M in annual operating funds.',
-      amount: AMOUNTS[2], activity: ACTIVITIES[1] },
-    { state: '22', project: 'Coastal restoration project', location: 'Plaquemines Parish, LA',
-      chip: 'Coastal restoration · Plaquemines Parish, LA · $5M',
-      sentence: 'A $5M coastal restoration project moves forward in Plaquemines Parish, LA.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[0] },
-    { state: '26', project: 'Manufacturing reshoring', location: 'Wayne County, MI',
-      chip: 'Manufacturing reshoring · Wayne County, MI · $50M',
-      sentence: 'A manufacturer reshores production to Wayne County, MI, with a $50M capital build.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '06', project: 'Public transit electrification', location: 'San Francisco County, CA',
-      chip: 'Transit electrification · San Francisco, CA · $20M',
-      sentence: 'San Francisco County converts a public bus fleet to electric, a $20M energy project.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[4] },
+  const STATE_SCENES: Scene[] = [
+    { level: 'state', state: '48', amount: { v: 47_600_000, label: '$47.6M' }, activity: ACT.build,
+      chip: 'STATE · Highway expansion · Texas',
+      sentence: 'Texas advances a $47.6M state highway expansion across three corridors.' },
+    { level: 'state', state: '06', amount: { v: 215_400_000, label: '$215.4M' }, activity: ACT.energy,
+      chip: 'STATE · Climate resilience bond · California',
+      sentence: 'California issues a $215.4M climate resilience bond, distributing capital to county-level mitigation projects.' },
+    { level: 'state', state: '36', amount: { v: 87_300_000, label: '$87.3M' }, activity: ACT.health,
+      chip: 'STATE · Mental health infrastructure · New York',
+      sentence: 'New York funds an $87.3M expansion of state-run mental health facilities.' },
+    { level: 'state', state: '12', amount: { v: 34_100_000, label: '$34.1M' }, activity: ACT.ops,
+      chip: 'STATE · Hurricane preparedness · Florida',
+      sentence: 'Florida appropriates $34.1M to its state hurricane preparedness program.' },
+    { level: 'state', state: '17', amount: { v: 23_400_000, label: '$23.4M' }, activity: ACT.grant,
+      chip: 'STATE · Pension stabilization · Illinois',
+      sentence: 'Illinois directs $23.4M to a state pension stabilization plan, with downstream spending flowing through retiree households.' },
+    { level: 'state', state: '39', amount: { v: 11_500_000, label: '$11.5M' }, activity: ACT.health,
+      chip: 'STATE · Opioid response program · Ohio',
+      sentence: 'Ohio launches an $11.5M state opioid response program.' },
+    { level: 'state', state: '26', amount: { v: 63_700_000, label: '$63.7M' }, activity: ACT.water,
+      chip: 'STATE · Water infrastructure · Michigan',
+      sentence: 'Michigan funds $63.7M of state water infrastructure upgrades.' },
+    { level: 'state', state: '42', amount: { v: 7_400_000, label: '$7.4M' }, activity: ACT.workforce,
+      chip: 'STATE · Apprenticeship program · Pennsylvania',
+      sentence: 'Pennsylvania expands a $7.4M state higher-ed apprenticeship program.' },
+    { level: 'state', state: '37', amount: { v: 19_100_000, label: '$19.1M' }, activity: ACT.broadband,
+      chip: 'STATE · Rural broadband · North Carolina',
+      sentence: 'North Carolina rolls out $19.1M of state rural broadband investment.' },
+    { level: 'state', state: '41', amount: { v: 4_200_000, label: '$4.2M' }, activity: ACT.build,
+      chip: 'STATE · Seismic retrofit · Oregon',
+      sentence: 'Oregon funds a $4.2M state seismic retrofit program for public buildings.' },
+    { level: 'state', state: '08', amount: { v: 26_000_000, label: '$26M' }, activity: ACT.build,
+      chip: 'STATE · Wildfire mitigation · Colorado',
+      sentence: 'Colorado commits $26M to a state wildfire mitigation program.' },
+    { level: 'state', state: '53', amount: { v: 14_600_000, label: '$14.6M' }, activity: ACT.ports,
+      chip: 'STATE · Ferry capital plan · Washington',
+      sentence: 'Washington advances a $14.6M state ferry capital plan.' },
   ];
+  const COUNTY_SCENES: Scene[] = [
+    { level: 'county', state: '53', amount: { v: 5_000_000, label: '$5M' }, activity: ACT.health,
+      chip: 'COUNTY · Community health clinic · Pierce County, WA',
+      sentence: 'A new community health clinic opens in Pierce County, WA, supported by $5M of operating funds.' },
+    { level: 'county', state: '48', amount: { v: 20_300_000, label: '$20.3M' }, activity: ACT.ops,
+      chip: 'COUNTY · University workforce expansion · Travis County, TX',
+      sentence: 'A state university expands its workforce in Travis County, TX, with $20.3M of new operating payroll.' },
+    { level: 'county', state: '39', amount: { v: 4_800_000, label: '$4.8M' }, activity: ACT.grant,
+      chip: 'COUNTY · Federal grant pass-through · Cuyahoga County, OH',
+      sentence: 'A $4.8M federal grant passes through to a regional CDFI serving Cuyahoga County, OH.' },
+    { level: 'county', state: '53', amount: { v: 52_400_000, label: '$52.4M' }, activity: ACT.transit,
+      chip: 'COUNTY · Light rail extension · King County, WA',
+      sentence: 'A regional transit authority extends a light rail line through King County, WA, a $52.4M capital project.' },
+    { level: 'county', state: '47', amount: { v: 3_500_000, label: '$3.5M' }, activity: ACT.tourism,
+      chip: 'COUNTY · Music tourism program · Davidson County, TN',
+      sentence: 'Davidson County, TN expands a music tourism program, generating $3.5M in visitor spending across local businesses.' },
+    { level: 'county', state: '02', amount: { v: 11_800_000, label: '$11.8M' }, activity: ACT.build,
+      chip: 'COUNTY · Fish processing facility · Aleutians East, AK',
+      sentence: 'A new fish processing facility opens in the Aleutians East Borough, Alaska, an $11.8M capital build.' },
+    { level: 'county', state: '42', amount: { v: 1_200_000, label: '$1.2M' }, activity: ACT.workforce,
+      chip: 'COUNTY · Workforce training · Allegheny County, PA',
+      sentence: 'Allegheny County, PA launches a $1.2M workforce training program targeting advanced manufacturing.' },
+    { level: 'county', state: '31', amount: { v: 18_700_000, label: '$18.7M' }, activity: ACT.energy,
+      chip: 'COUNTY · Wind farm · Cherry County, NE',
+      sentence: 'An $18.7M wind farm comes online in Cherry County, NE, with construction and operations spread across the county.' },
+    { level: 'county', state: '04', amount: { v: 4_500_000, label: '$4.5M' }, activity: ACT.culture,
+      chip: 'COUNTY · Library system expansion · Maricopa County, AZ',
+      sentence: 'Maricopa County, AZ funds a $4.5M expansion of its public library system.' },
+    { level: 'county', state: '36', amount: { v: 24_000_000, label: '$24M' }, activity: ACT.housing,
+      chip: 'COUNTY · Affordable housing · Bronx County, NY',
+      sentence: 'A $24M affordable housing development breaks ground in the Bronx, NY.' },
+    { level: 'county', state: '22', amount: { v: 51_000_000, label: '$51M' }, activity: ACT.tourism,
+      chip: 'COUNTY · Convention center · Orleans Parish, LA',
+      sentence: 'Orleans Parish renovates its convention center, a $51M capital project tied to the regional tourism economy.' },
+    { level: 'county', state: '37', amount: { v: 19_300_000, label: '$19.3M' }, activity: ACT.build,
+      chip: 'COUNTY · Community college campus · Mecklenburg County, NC',
+      sentence: 'Mecklenburg County, NC builds a new community college campus, a $19.3M capital investment.' },
+    { level: 'county', state: '22', amount: { v: 5_200_000, label: '$5.2M' }, activity: ACT.coastal,
+      chip: 'COUNTY · Coastal restoration · Plaquemines Parish, LA',
+      sentence: 'A $5.2M coastal restoration project moves forward in Plaquemines Parish, LA.' },
+    { level: 'county', state: '26', amount: { v: 44_000_000, label: '$44M' }, activity: ACT.build,
+      chip: 'COUNTY · Manufacturing reshoring · Wayne County, MI',
+      sentence: 'A manufacturer reshores production to Wayne County, MI, with a $44M capital build.' },
+    { level: 'county', state: '06', amount: { v: 21_600_000, label: '$21.6M' }, activity: ACT.transit,
+      chip: 'COUNTY · Transit electrification · San Francisco, CA',
+      sentence: 'San Francisco County converts a public bus fleet to electric, a $21.6M transit capital project.' },
+    { level: 'county', state: '41', amount: { v: 7_800_000, label: '$7.8M' }, activity: ACT.ops,
+      chip: 'COUNTY · Homelessness response · Multnomah County, OR',
+      sentence: 'Multnomah County, OR funds a $7.8M homelessness response program.' },
+    { level: 'county', state: '27', amount: { v: 12_400_000, label: '$12.4M' }, activity: ACT.build,
+      chip: 'COUNTY · Parks bond · Hennepin County, MN',
+      sentence: 'Hennepin County, MN passes a $12.4M parks bond for trail and facility upgrades.' },
+    { level: 'county', state: '21', amount: { v: 8_600_000, label: '$8.6M' }, activity: ACT.ports,
+      chip: 'COUNTY · Port modernization · Jefferson County, KY',
+      sentence: 'Jefferson County, KY modernizes its inland port with $8.6M in capital improvements.' },
+    { level: 'county', state: '13', amount: { v: 3_900_000, label: '$3.9M' }, activity: ACT.research,
+      chip: 'COUNTY · University research center · Clarke County, GA',
+      sentence: 'A university research center in Clarke County, GA receives $3.9M in new operating funds.' },
+    { level: 'county', state: '49', amount: { v: 16_400_000, label: '$16.4M' }, activity: ACT.energy,
+      chip: 'COUNTY · Battery storage facility · Tooele County, UT',
+      sentence: 'A $16.4M battery storage facility comes online in Tooele County, UT.' },
+  ];
+  const RESERVATION_SCENES: Scene[] = [
+    { level: 'reservation', tribalKey: 'navajo', amount: { v: 12_000_000, label: '$12M' }, activity: ACT.health,
+      chip: 'RESERVATION · Tribal health clinic · Navajo Nation',
+      sentence: 'A new health clinic opens on the Navajo Nation, with $12M in annual operating funds.' },
+    { level: 'reservation', tribalKey: 'mille_lacs', amount: { v: 42_500_000, label: '$42.5M' }, activity: ACT.build,
+      chip: 'RESERVATION · Casino and lodging expansion · Mille Lacs',
+      sentence: 'A tribal enterprise breaks ground on a $42.5M casino and lodging expansion in Mille Lacs, MN.' },
+    { level: 'reservation', tribalKey: 'umatilla', amount: { v: 11_200_000, label: '$11.2M' }, activity: ACT.energy,
+      chip: 'RESERVATION · Tribal solar array · Umatilla',
+      sentence: 'A tribal government commissions an $11.2M solar array on the Umatilla Reservation.' },
+    { level: 'reservation', tribalKey: 'cherokee_ok', amount: { v: 6_800_000, label: '$6.8M' }, activity: ACT.culture,
+      chip: 'RESERVATION · Language preservation · Cherokee Nation',
+      sentence: 'Cherokee Nation funds a $6.8M expansion of its language preservation program.' },
+    { level: 'reservation', tribalKey: 'yakama', amount: { v: 3_600_000, label: '$3.6M' }, activity: ACT.ops,
+      chip: 'RESERVATION · Tribal courts modernization · Yakama',
+      sentence: 'A $3.6M tribal courts modernization moves forward on the Yakama Reservation.' },
+    { level: 'reservation', tribalKey: 'standing_rock', amount: { v: 8_500_000, label: '$8.5M' }, activity: ACT.broadband,
+      chip: 'RESERVATION · Broadband network · Standing Rock',
+      sentence: 'Standing Rock builds an $8.5M tribal broadband network across the reservation.' },
+    { level: 'reservation', tribalKey: 'pine_ridge', amount: { v: 2_300_000, label: '$2.3M' }, activity: ACT.grant,
+      chip: 'RESERVATION · Grocery initiative · Pine Ridge',
+      sentence: 'A $2.3M federal grant funds a tribal grocery initiative on Pine Ridge.' },
+    { level: 'reservation', tribalKey: 'eastern_cherokee', amount: { v: 4_100_000, label: '$4.1M' }, activity: ACT.culture,
+      chip: 'RESERVATION · Museum expansion · Eastern Cherokee',
+      sentence: 'Eastern Band of Cherokee Indians expands its tribal museum with $4.1M in capital.' },
+    { level: 'reservation', tribalKey: 'hopi', amount: { v: 1_900_000, label: '$1.9M' }, activity: ACT.agriculture,
+      chip: 'RESERVATION · Agriculture program · Hopi',
+      sentence: 'The Hopi Tribe expands a $1.9M dry-farming program on the reservation.' },
+    { level: 'reservation', tribalKey: 'tohono', amount: { v: 14_000_000, label: '$14M' }, activity: ACT.energy,
+      chip: 'RESERVATION · Renewable energy · Tohono O’odham',
+      sentence: 'A $14M tribal renewable energy project moves forward on the Tohono O’odham Nation.' },
+    { level: 'reservation', tribalKey: 'fort_peck', amount: { v: 5_700_000, label: '$5.7M' }, activity: ACT.ops,
+      chip: 'RESERVATION · Health operations · Fort Peck',
+      sentence: 'Fort Peck Tribes fund $5.7M in expanded tribal health operations.' },
+    { level: 'reservation', tribalKey: 'oneida_ny', amount: { v: 18_900_000, label: '$18.9M' }, activity: ACT.build,
+      chip: 'RESERVATION · Cultural center · Oneida',
+      sentence: 'Oneida Indian Nation breaks ground on an $18.9M cultural and economic center.' },
+  ];
+  const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
+  const LEVEL_POOLS = [STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES];
 
   const ADJ_RADIUS = { indirect: 220, induced: 480 };
 
@@ -574,8 +694,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     let cycleTimer: number | undefined;
 
     type RunOpts = {
-      activity?: typeof ACTIVITIES[number];
-      amount?: typeof AMOUNTS[number];
+      activity?: { id: string; label: string; indirect: number; induced: number; jobsPerM: number };
+      amount?: { v: number; label: string };
       framing?: string;
       chip?: string;
       sourcePoint?: { cx: number; cy: number };
@@ -701,6 +821,33 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       await zoomOut();
     };
 
+    /* Run a single scene. State and county scenes use the state centroid;
+       reservation scenes resolve to a tribal-land centroid pulled from
+       the AIANNH lookup so the source point lands on the actual polygon. */
+    const runScene = async (scene: typeof SCENES[number]) => {
+      if (scene.level === 'reservation' && scene.tribalKey) {
+        const t = tribalLookup[scene.tribalKey];
+        if (t) {
+          await runStudy(t.fips, {
+            activity: scene.activity,
+            amount: scene.amount,
+            framing: scene.sentence,
+            chip: scene.chip,
+            sourcePoint: { cx: t.cx, cy: t.cy },
+          });
+          return;
+        }
+      }
+      if (scene.state) {
+        await runStudy(scene.state, {
+          activity: scene.activity,
+          amount: scene.amount,
+          framing: scene.sentence,
+          chip: scene.chip,
+        });
+      }
+    };
+
     /* Shuffled scene queue. We exhaust the deck before reshuffling so
        every scene plays once before any repeats. Fisher-Yates on the
        index array. */
@@ -716,14 +863,26 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     const cycle = async () => {
       if (sceneOrder.length === 0) reshuffle();
       const scene = SCENES[sceneOrder.shift() as number];
-      await runStudy(scene.state, {
-        activity: scene.activity,
-        amount: scene.amount,
-        framing: scene.sentence,
-        chip: scene.chip,
-      });
+      await runScene(scene);
       cycleTimer = window.setTimeout(cycle, 6800);
     };
+
+    /* Per-level shuffled pools, used by the "New study" button so a
+       click deliberately rotates state → county → reservation → state
+       → ... regardless of where the auto-cycle is. */
+    const levelOrders: number[][] = LEVEL_POOLS.map(() => []);
+    const pickLevel = (idx: number) => {
+      if (levelOrders[idx].length === 0) {
+        const arr = LEVEL_POOLS[idx].map((_, i) => i);
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        levelOrders[idx].push(...arr);
+      }
+      return LEVEL_POOLS[idx][levelOrders[idx].shift() as number];
+    };
+    let buttonLevelIdx = 0;
 
     /* ---------- Hover tooltip ---------- */
     const placeTooltip = (e: MouseEvent | FocusEvent) => {
@@ -768,14 +927,14 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       });
     }
 
-    /* ---------- "Run again" button ---------- */
+    /* ---------- "New study" button: rotates through levels ---------- */
     const wsAgain = document.getElementById('workspaceAgain');
     if (wsAgain) {
       wsAgain.addEventListener('click', async () => {
         if (cycleTimer) window.clearTimeout(cycleTimer);
-        const ids = Object.keys(states);
-        const pick = ids[Math.floor(Math.random() * ids.length)];
-        await runStudy(pick);
+        const scene = pickLevel(buttonLevelIdx);
+        buttonLevelIdx = (buttonLevelIdx + 1) % LEVEL_POOLS.length;
+        await runScene(scene);
         cycleTimer = window.setTimeout(cycle, 6800);
       });
     }
