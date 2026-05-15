@@ -95,7 +95,7 @@ const jsonLd = [
     <!-- WHY: open with what Lumecon does in the world. -->
     <header class="join-hero">
       <p class="join-eyebrow">Why we're building this</p>
-      <h1 class="join-title">We <em>illuminate</em> economies.</h1>
+      <h1 class="join-title">We <em>luminate</em> economies.</h1>
       <div class="join-why">
         <p>A lot of organizations have real economic impact, and no way to show it.</p>
         <p>That matters because the next round of capital follows the evidence. When economic impact gets measured, budgets get approved, foundations write the check, councils pass the bill, banks underwrite the loan, communities support the project. When it doesn't get measured, none of that happens.</p>
@@ -289,7 +289,9 @@ const jsonLd = [
     justify-content: center;
     padding-top: .25rem;
   }
-  .role-row__icon svg { width: 52px; height: 52px; display: block; }
+  /* Icon components render their SVG without this page's scope attr,
+     so :global(svg) is required for the size rule to bind. */
+  .role-row__icon :global(svg) { width: 52px; height: 52px; display: block; }
   .role-row__title {
     font-family: var(--font-display);
     font-weight: 600;
@@ -338,7 +340,7 @@ const jsonLd = [
       padding: 1.3rem 0;
       align-items: start;
     }
-    .role-row__icon svg { width: 40px; height: 40px; }
+    .role-row__icon :global(svg) { width: 40px; height: 40px; }
     .role-row__icon { padding-top: .15rem; }
     .role-row__title { font-size: 1.08rem; }
     .role-row__blurb { font-size: .94rem; }
