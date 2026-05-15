@@ -1,6 +1,9 @@
 ---
 import { site } from '../config';
 import '../styles/products.css';
+import IconLocal from './icons/IconLocal.astro';
+import IconTribal from './icons/IconTribal.astro';
+import IconGlobal from './icons/IconGlobal.astro';
 const { local, tribal, global: globalProduct } = site.products;
 const platforms = [local, tribal, globalProduct];
 ---
@@ -23,6 +26,11 @@ const platforms = [local, tribal, globalProduct];
       return (
         <a class={`platform platform--${slug}`} href={p.url}>
           <div class="platform__name-wrap">
+            <span class="platform__icon">
+              {i === 0 && <IconLocal />}
+              {i === 1 && <IconTribal />}
+              {i === 2 && <IconGlobal />}
+            </span>
             <h3 class="platform__name">{p.name}</h3>
             <span class="platform__url">{p.domain}</span>
           </div>
