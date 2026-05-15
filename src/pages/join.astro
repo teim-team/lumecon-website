@@ -3,6 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../config';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
 import IconCode from '../components/icons/IconCode.astro';
 import IconML from '../components/icons/IconML.astro';
 import IconData from '../components/icons/IconData.astro';
@@ -30,10 +33,10 @@ const ROLES = [
 ];
 
 const VALUES = [
-  { Icon: IconAcademic, title: 'Cornell-built',             blurb: 'Built at Cornell with counsel from the Cornell Law Entrepreneurship Law Clinic. Cornell, Dartmouth, Stanford, MIT, and Ivy League peers get a fast-track review.' },
-  { Icon: IconImpact,   title: 'Real impact, real users',   blurb: 'Your work lands in front of council members, tribal leaders, foundation officers, and federal grant reviewers — not in a demo or a deck. Five-person team, no intern queue.' },
-  { Icon: IconRemote,   title: 'Remote-friendly',           blurb: 'Distributed across the US. Bias toward async work, with synchronous time reserved for product reviews and government calls.' },
-  { Icon: IconData,     title: 'Be early',                  blurb: 'These are unpaid roles right now. What you get is operating experience at what we think can become the next big government-technology company — instead of being employee #500 elsewhere.' },
+  { Icon: IconAcademic, title: 'Cornell + Ivy League background', blurb: 'Built at Cornell with counsel from the Cornell Law Entrepreneurship Law Clinic. The team\'s academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior work experience includes the Federal Reserve Banks of Minneapolis, Philadelphia, and the Board of Governors in Washington, DC.' },
+  { Icon: IconImpact,   title: 'Real impact, real users',         blurb: 'Your work lands in front of council members, tribal leaders, foundation officers, and federal grant reviewers — not in a demo or a deck. Five-person team, no intern queue.' },
+  { Icon: IconRemote,   title: 'Remote-friendly',                 blurb: 'Distributed across the US. Bias toward async work, with synchronous time reserved for product reviews and government calls.' },
+  { Icon: IconData,     title: 'Be early',                        blurb: 'These are unpaid roles right now. What you get is operating experience at what we think can become the next big government-technology company — instead of being employee #500 elsewhere.' },
 ];
 
 const today = new Date().toISOString().slice(0, 10);
@@ -103,10 +106,10 @@ const jsonLd = [
 
   <main class="join">
     <header class="join-hero">
-      <p class="join-eyebrow">Join Lumecon Inc. · five-person team</p>
+      <p class="join-eyebrow">Looking for early teammates · five-person team</p>
       <h1 class="join-title">Be early at a Cornell-built startup for governments and tribal nations.</h1>
       <p class="join-lede">
-        The job market for undergrads and graduate students is rough right now. Lumecon is hiring across software engineering, machine learning, data analytics, marketing, sales, and economic impact modeling — <strong>unpaid early-stage roles</strong> with the trade-off being that you'll be early at what we think can become the next big company in government and tribal-economy technology. <strong>Don't see a posted role? Send a résumé anyway</strong> — we keep an active talent network and reach back when a fit opens.
+        The job market for undergrads and graduate students is rough right now. Lumecon is looking for early teammates across software engineering, machine learning, data analytics, marketing, sales, and economic impact modeling — <strong>unpaid early-stage roles</strong> with the trade-off being that you'll be early at what we think can become the next big company in government and tribal-economy technology. <strong>Don't see a posted role? Send a résumé anyway</strong> — we keep an active talent network and reach back when a fit opens.
       </p>
       <p class="join-lede join-lede--sub">
         Open to undergrad, master's, and PhD candidates at Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent programs. Economists, applied-economics PhDs, regional-science researchers — you're encouraged to apply specifically.
@@ -162,7 +165,10 @@ const jsonLd = [
         Lumecon's economic impact analysis software is used by US municipal governments, federally recognized tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, federal programs, universities and research labs, foundations, Community Development Financial Institutions (CDFIs), and economic development organizations. The work you ship shows up in their budgets, grant proposals, and capital plans.
       </p>
       <p class="join-cohort-body">
-        We're targeting students from Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn (Wharton), Brown, Columbia, Berkeley, and Carnegie Mellon — plus equivalent programs at other top US research universities. Cornell CS, Operations Research (ORIE), Brooks School of Public Policy, Dyson Applied Economics & Management, ILR School, Information Science, Engineering Physics, Statistics, Applied Math, and Communication students get a fast track. Stanford CS / Symbolic Systems / MS&E, MIT EECS / Sloan, Harvard CS / Kennedy School, Princeton ORFE / SPIA, Wharton, Berkeley EECS / Goldman, and CMU SCS / Tepper applicants similarly.
+        We're targeting students from Cornell, Dartmouth, Oxford, Stanford, MIT, Harvard, Princeton, Yale, UPenn (Wharton), Brown, Columbia, Berkeley, and Carnegie Mellon — plus equivalent programs at other top US and international research universities. Cornell CS, Operations Research (ORIE), Brooks School of Public Policy, Dyson Applied Economics & Management, ILR School, Information Science, Engineering Physics, Statistics, Applied Math, and Communication students get a fast track. Stanford CS / Symbolic Systems / MS&E, MIT EECS / Sloan, Harvard CS / Kennedy School, Princeton ORFE / SPIA, Yale Economics / SOM, Wharton, Berkeley EECS / Goldman, Oxford PPE / Economics, and CMU SCS / Tepper applicants similarly.
+      </p>
+      <p class="join-cohort-body">
+        Team background: Cornell, Dartmouth, Oxford, MIT, and Yale academic training, plus prior experience at the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC. If you'd be working on the modeling side, you'll be paired with people who understand input-output methodology from the inside.
       </p>
       <p class="join-cohort-body">
         Plain-spoken on compensation: <strong>these are unpaid roles right now.</strong> We're a five-person team building toward the next big company in government and tribal-economy technology. The trade is operating experience and a Cornell-built reference in a job market where most other internships are filler. If that trade isn't right for you, we get it — keep an eye out as we grow.
