@@ -473,6 +473,55 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Per-figure info button: small "i" affordance next to the label that
+   reveals a one-sentence definition + the multiplier used in this run. */
+.hero-fig dt {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.hero-fig__info {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  color: var(--ink-3);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+  font-style: italic;
+}
+.hero-fig__info:hover, .hero-fig__info[aria-expanded="true"] {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
+.hero-fig__expl {
+  margin-top: .65rem;
+  padding: .55rem .7rem;
+  background: var(--paper);
+  border-left: 2px solid var(--gold);
+  font-family: var(--font-sans);
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 400;
+  letter-spacing: -.002em;
+}
+.hero-fig__expl p { margin: 0; }
+.hero-fig__expl p + p { margin-top: .35rem; }
+.hero-fig__mult { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
+.hero-fig__mult strong { color: var(--navy); }
+
 /* ---------- Detail layers: supplier + household clouds + flow lines ---------- */
 
 @keyframes ddIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
@@ -561,13 +610,13 @@
 }
 .hero-vlabel--r2 rect { fill: var(--terra-dark); }
 
-/* ---------- Source callout — region name pinned to source ---------- */
+/* ---------- Source callout — disabled. The workspace bar region and
+   the activity chip already name the location; the on-map pill was
+   redundant and scaled poorly at tight reservation zooms. The DOM
+   still builds (JS untouched) but it never renders. ---------- */
 .hero-source-callout {
-  opacity: 0;
-  transition: opacity .3s var(--ease);
-  pointer-events: none;
+  display: none;
 }
-.hero-source-callout.is-on { opacity: 1; }
 .hero-callout__leader {
   stroke: var(--navy);
   stroke-width: .9;

@@ -49,9 +49,11 @@ const STATE_CODES: Record<string, string> = {
 };
 const CODE_TO_ID = Object.fromEntries(Object.entries(STATE_CODES).map(([id, code]) => [code, id]));
 
-/* AIANNH polygons — clickable now (used to be decorative). Filter to
-   ones with a usable path + centroid. Each one gets the FIPS state-id
-   of its containing state so the ring shading targets the right state. */
+/* AIANNH polygons. Built at SSR for the tribal lookup table (so
+   reservation scenes can resolve to a real centroid), but NOT inlined
+   into the page SVG — the full set is served as a JSON endpoint at
+   /data/aiannh.json and lazy-loaded by the client on first map
+   interaction. That keeps the initial HTML from ballooning to 1MB. */
 const aiannh = (CENSUS_TRIBAL_LANDS as any[])
   .filter(l => l.pathD && l.x != null && l.y != null && l.fips)
   .map((l: any) => ({
@@ -69,6 +71,36 @@ const statesJson = JSON.stringify(
   stateData.reduce((acc: any, s: any) => { acc[s.id] = { name: s.name, cx: s.cx, cy: s.cy, code: STATE_CODES[s.id] || '' }; return acc; }, {})
 );
 const codeMapJson = JSON.stringify(CODE_TO_ID);
+
+/* Tribal lookup — a curated subset of AIANNH features keyed by a
+   short slug, so client-side reservation scenes can resolve to a
+   real centroid pulled from Census TIGER/Line. The candidates list
+   per slug uses includes() matching so name variations work. */
+const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
+  navajo:           ['Navajo Nation'],
+  mille_lacs:       ['Mille Lacs'],
+  umatilla:         ['Umatilla'],
+  cherokee_ok:      ['Cherokee Nation', 'Cherokee'],
+  yakama:           ['Yakama'],
+  standing_rock:    ['Standing Rock'],
+  pine_ridge:       ['Pine Ridge', 'Oglala'],
+  eastern_cherokee: ['Eastern Band', 'Cherokee Indian Reservation'],
+  hopi:             ['Hopi'],
+  tohono:           ["Tohono O'odham", 'Tohono'],
+  fort_peck:        ['Fort Peck'],
+  oneida_ny:        ['Oneida'],
+};
+const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
+for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
+  for (const c of candidates) {
+    const found = aiannh.find((t: any) => t.name && t.name.toLowerCase().includes(c.toLowerCase()));
+    if (found) {
+      tribalLookup[slug] = { name: found.shortName || found.name, cx: found.x, cy: found.y, fips: found.fips };
+      break;
+    }
+  }
+}
+const tribalLookupJson = JSON.stringify(tribalLookup);
 ---
 <section class="hero" id="top">
   <!-- Brand statement: large wordmark, one position, one CTA. -->
@@ -154,25 +186,11 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
         ))}
       </g>
 
-      <!-- AIANNH overlay: interactive. Clicking one runs a tribal-economy
-           study; hovering shows the tribal-land name in the tooltip. -->
-      <g class="hero-map__aiannh">
-        {aiannh.map((land: any) => (
-          <path
-            class={`hero-aiannh hero-aiannh--${land.category}`}
-            d={land.pathD}
-            data-name={land.name}
-            data-short={land.shortName}
-            data-fips={land.fips}
-            data-cx={land.x}
-            data-cy={land.y}
-            data-category={land.category}
-            tabindex="0"
-            role="button"
-            aria-label={`Tribal land: ${land.name}`}
-          ></path>
-        ))}
-      </g>
+      <!-- AIANNH overlay: lazy-injected. The full polygon set is fetched
+           from /data/aiannh.json on first map interaction (or idle, whichever
+           comes first) and appended here. Events use delegation on this
+           group so we don't have to re-wire handlers after injection. -->
+      <g class="hero-map__aiannh" id="heroAiannhLayer" data-loaded="0"></g>
 
       <path class="hero-map__county-borders" d={countyBordersD} />
       <path class="hero-map__borders" d={stateBordersD} />
@@ -221,11 +239,11 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
   <!-- Live figures — the only text inside the workspace -->
   <dl class="hero-figs" aria-label="Result of the running impact study">
-    <div class="hero-fig"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
-    <div class="hero-fig"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
-    <div class="hero-fig"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
-    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
-    <div class="hero-fig hero-fig--derived" id="figJobsCell"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
+    <div class="hero-fig" data-k="direct"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
+    <div class="hero-fig" data-k="indirect"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
+    <div class="hero-fig" data-k="induced"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
+    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell" data-k="total"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
+    <div class="hero-fig hero-fig--derived" id="figJobsCell" data-k="jobs"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
   </dl>
 
     </div>
@@ -244,20 +262,26 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
   </div>
 
 
-  <script type="application/json" id="heroStates"  set:html={statesJson}></script>
-  <script type="application/json" id="heroCodeMap" set:html={codeMapJson}></script>
+  <script type="application/json" id="heroStates"   set:html={statesJson}></script>
+  <script type="application/json" id="heroCodeMap"  set:html={codeMapJson}></script>
+  <script type="application/json" id="heroTribal"   set:html={tribalLookupJson}></script>
 </section>
 
 <script>
   type StateInfo = { name: string; cx: number; cy: number; code: string };
+  type TribalLand = { name: string; cx: number; cy: number; fips: string };
   const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
   const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
+  const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
 
-  /* Activities + amounts: 5 × 5 = 25 combinations per region, plus a
-     tribal-specific catalog of verbs Cedar uses when an AIANNH polygon
-     is the source. */
-  /* Multipliers per activity type, used both by the named SCENES
-     and the click-on-state generic runs. */
+  // Shared scene catalog + slug helper imported from src/data/scenes.ts
+  // so the homepage demo and the static /demo/[slug] pages stay in sync.
+  // ACTIVITIES + AMOUNTS arrays stay local — they're the click-on-state
+  // generic fallback (not used by the named scenes).
+  // @ts-ignore — Vite resolves at bundle time
+  import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES, slugify, sceneSlug } from '../data/scenes';
+  type Scene = (typeof SCENES)[number];
+
   const ACTIVITIES = [
     { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
     { id: 'payroll', label: 'operations payroll',   indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
@@ -272,95 +296,15 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     { v: 20_000_000, label: '$20M' },
     { v: 50_000_000, label: '$50M' },
   ] as const;
+  const LEVEL_POOLS = [STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES];
 
-  /* Named example impact studies. Each one is a real-feeling project
-     with location, sentence form, and the activity profile baked in.
-     The auto-cycle plays through these so a visitor sees concrete
-     examples instead of abstract verb + region tokens. */
-  type Scene = {
-    state: string;
-    project: string;
-    location: string;
-    chip: string;
-    sentence: string;
-    amount: typeof AMOUNTS[number];
-    activity: typeof ACTIVITIES[number];
-  };
-  const SCENES: Scene[] = [
-    { state: '53', project: 'A new community health clinic', location: 'Pierce County, WA',
-      chip: 'Community health clinic · Pierce County, WA · $5M operations',
-      sentence: 'A new community health clinic opens in Pierce County, WA, supported by $5M of operating funds.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[1] },
-    { state: '48', project: 'University workforce expansion', location: 'Travis County, TX',
-      chip: 'University workforce expansion · Travis County, TX · $20M payroll',
-      sentence: 'A state university expands its workforce in Travis County, TX, with $20M of new operating payroll.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[1] },
-    { state: '41', project: 'Tribal solar array', location: 'Umatilla Reservation, OR',
-      chip: 'Tribal solar array · Umatilla Reservation, OR · $12M energy project',
-      sentence: 'A tribal government commissions a solar array on the Umatilla Reservation, a $12M clean-energy project.',
-      amount: AMOUNTS[2], activity: ACTIVITIES[4] },
-    { state: '27', project: 'Casino and lodging expansion', location: 'Mille Lacs, MN',
-      chip: 'Casino expansion · Mille Lacs, MN · $50M capital build',
-      sentence: 'A tribal enterprise breaks ground on a $50M casino and lodging expansion in Mille Lacs, MN.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '39', project: 'Federal grant to a regional CDFI', location: 'Cuyahoga County, OH',
-      chip: 'Federal grant pass-through · Cuyahoga County, OH · $5M',
-      sentence: 'A $5M federal grant passes through to a regional CDFI serving Cuyahoga County, OH.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[2] },
-    { state: '53', project: 'Light rail line extension', location: 'King County, WA',
-      chip: 'Light rail extension · King County, WA · $50M build',
-      sentence: 'A regional transit authority extends a light rail line through King County, WA, a $50M capital build.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '47', project: 'Music tourism program', location: 'Davidson County, TN',
-      chip: 'Music tourism program · Davidson County, TN · $5M',
-      sentence: 'Davidson County, TN expands a music tourism program, generating $5M in visitor spending across local businesses.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[3] },
-    { state: '02', project: 'Fish processing facility', location: 'Aleutians East Borough, AK',
-      chip: 'Fish processing facility · Aleutians East, AK · $12M',
-      sentence: 'A new fish processing facility opens in the Aleutians East Borough, Alaska, a $12M capital build.',
-      amount: AMOUNTS[2], activity: ACTIVITIES[0] },
-    { state: '42', project: 'Workforce training program', location: 'Allegheny County, PA',
-      chip: 'Workforce training program · Allegheny County, PA · $1M',
-      sentence: 'Allegheny County, PA launches a $1M workforce training program targeting advanced manufacturing.',
-      amount: AMOUNTS[0], activity: ACTIVITIES[1] },
-    { state: '31', project: 'Wind farm', location: 'Cherry County, NE',
-      chip: 'Wind farm · Cherry County, NE · $20M energy project',
-      sentence: 'A $20M wind farm comes online in Cherry County, NE, with construction and operations spread across the county.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[4] },
-    { state: '04', project: 'County library system expansion', location: 'Maricopa County, AZ',
-      chip: 'Library system expansion · Maricopa County, AZ · $5M',
-      sentence: 'Maricopa County, AZ funds a $5M expansion of its public library system.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[1] },
-    { state: '36', project: 'Affordable housing development', location: 'Bronx County, NY',
-      chip: 'Affordable housing · Bronx County, NY · $20M build',
-      sentence: 'A $20M affordable housing development breaks ground in the Bronx, NY.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[0] },
-    { state: '22', project: 'Convention center renovation', location: 'Orleans Parish, LA',
-      chip: 'Convention center · Orleans Parish, LA · $50M',
-      sentence: 'Orleans Parish renovates its convention center, a $50M capital project tied to the regional tourism economy.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '37', project: 'Community college campus', location: 'Mecklenburg County, NC',
-      chip: 'Community college campus · Mecklenburg County, NC · $20M',
-      sentence: 'Mecklenburg County, NC builds a new community college campus, a $20M capital investment.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[0] },
-    { state: '04', project: 'Tribal health clinic', location: 'Navajo Nation, AZ',
-      chip: 'Tribal health clinic · Navajo Nation, AZ · $12M operations',
-      sentence: 'A new health clinic opens on the Navajo Nation, with $12M in annual operating funds.',
-      amount: AMOUNTS[2], activity: ACTIVITIES[1] },
-    { state: '22', project: 'Coastal restoration project', location: 'Plaquemines Parish, LA',
-      chip: 'Coastal restoration · Plaquemines Parish, LA · $5M',
-      sentence: 'A $5M coastal restoration project moves forward in Plaquemines Parish, LA.',
-      amount: AMOUNTS[1], activity: ACTIVITIES[0] },
-    { state: '26', project: 'Manufacturing reshoring', location: 'Wayne County, MI',
-      chip: 'Manufacturing reshoring · Wayne County, MI · $50M',
-      sentence: 'A manufacturer reshores production to Wayne County, MI, with a $50M capital build.',
-      amount: AMOUNTS[4], activity: ACTIVITIES[0] },
-    { state: '06', project: 'Public transit electrification', location: 'San Francisco County, CA',
-      chip: 'Transit electrification · San Francisco, CA · $20M',
-      sentence: 'San Francisco County converts a public bus fleet to electric, a $20M energy project.',
-      amount: AMOUNTS[3], activity: ACTIVITIES[4] },
-  ];
-
+  // Slug → scene map for URL-hash routing. Built once from the shared
+  // scene catalog so the hero and the static /demo/[slug] pages agree.
+  const sceneBySlug = new Map<string, Scene>();
+  SCENES.forEach((sc: Scene) => {
+    const slug = sceneSlug(sc);
+    if (!sceneBySlug.has(slug)) sceneBySlug.set(slug, sc);
+  });
   const ADJ_RADIUS = { indirect: 220, induced: 480 };
 
   const stage   = document.getElementById('heroStage') as HTMLElement | null;
@@ -574,8 +518,8 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
     let cycleTimer: number | undefined;
 
     type RunOpts = {
-      activity?: typeof ACTIVITIES[number];
-      amount?: typeof AMOUNTS[number];
+      activity?: { id: string; label: string; indirect: number; induced: number; jobsPerM: number };
+      amount?: { v: number; label: string };
       framing?: string;
       chip?: string;
       sourcePoint?: { cx: number; cy: number };
@@ -587,6 +531,15 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
 
       const studyIdEl = document.getElementById('workspaceStudyId');
       if (studyIdEl) studyIdEl.textContent = `STUDY ${String(runId).padStart(3, '0')}`;
+
+      // Expose this run's multipliers on the stage so the per-figure
+      // explanations can read them without re-deriving anything.
+      if (opts?.activity) {
+        stage.dataset.actIndirect = String(opts.activity.indirect);
+        stage.dataset.actInduced = String(opts.activity.induced);
+        stage.dataset.actJobspm = String(opts.activity.jobsPerM);
+        stage.dataset.actLabel = opts.activity.label;
+      }
 
       const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
       const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
@@ -701,6 +654,47 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       await zoomOut();
     };
 
+    /* Run a single scene. State and county scenes use the state centroid;
+       reservation scenes resolve to a tribal-land centroid pulled from
+       the AIANNH lookup so the source point lands on the actual polygon.
+       Also encodes the scene's slug in the URL hash so shared links
+       replay the exact same study. */
+    const updateUrlForScene = (scene: Scene) => {
+      const slug = slugify(scene.chip);
+      try {
+        const u = new URL(window.location.href);
+        const next = `study=${slug}`;
+        if (u.hash.replace(/^#/, '') === next) return;
+        u.hash = next;
+        suppressHashChange = true;
+        window.history.replaceState(null, '', u.toString());
+      } catch {}
+    };
+    const runScene = async (scene: typeof SCENES[number]) => {
+      updateUrlForScene(scene);
+      if (scene.level === 'reservation' && scene.tribalKey) {
+        const t = tribalLookup[scene.tribalKey];
+        if (t) {
+          await runStudy(t.fips, {
+            activity: scene.activity,
+            amount: scene.amount,
+            framing: scene.sentence,
+            chip: scene.chip,
+            sourcePoint: { cx: t.cx, cy: t.cy },
+          });
+          return;
+        }
+      }
+      if (scene.state) {
+        await runStudy(scene.state, {
+          activity: scene.activity,
+          amount: scene.amount,
+          framing: scene.sentence,
+          chip: scene.chip,
+        });
+      }
+    };
+
     /* Shuffled scene queue. We exhaust the deck before reshuffling so
        every scene plays once before any repeats. Fisher-Yates on the
        index array. */
@@ -713,17 +707,35 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       }
       sceneOrder.push(...arr);
     };
+    let pausedByHover = false;
+    const scheduleNext = (delay = 6800) => {
+      if (pausedByHover) return;
+      cycleTimer = window.setTimeout(cycle, delay);
+    };
     const cycle = async () => {
+      if (pausedByHover) return;
       if (sceneOrder.length === 0) reshuffle();
       const scene = SCENES[sceneOrder.shift() as number];
-      await runStudy(scene.state, {
-        activity: scene.activity,
-        amount: scene.amount,
-        framing: scene.sentence,
-        chip: scene.chip,
-      });
-      cycleTimer = window.setTimeout(cycle, 6800);
+      await runScene(scene);
+      scheduleNext();
     };
+
+    /* Per-level shuffled pools, used by the "New study" button so a
+       click deliberately rotates state → county → reservation → state
+       → ... regardless of where the auto-cycle is. */
+    const levelOrders: number[][] = LEVEL_POOLS.map(() => []);
+    const pickLevel = (idx: number) => {
+      if (levelOrders[idx].length === 0) {
+        const arr = LEVEL_POOLS[idx].map((_, i) => i);
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        levelOrders[idx].push(...arr);
+      }
+      return LEVEL_POOLS[idx][levelOrders[idx].shift() as number];
+    };
+    let buttonLevelIdx = 0;
 
     /* ---------- Hover tooltip ---------- */
     const placeTooltip = (e: MouseEvent | FocusEvent) => {
@@ -768,17 +780,86 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       });
     }
 
-    /* ---------- "Run again" button ---------- */
+    /* ---------- "New study" button: rotates through levels ---------- */
     const wsAgain = document.getElementById('workspaceAgain');
     if (wsAgain) {
       wsAgain.addEventListener('click', async () => {
         if (cycleTimer) window.clearTimeout(cycleTimer);
-        const ids = Object.keys(states);
-        const pick = ids[Math.floor(Math.random() * ids.length)];
-        await runStudy(pick);
-        cycleTimer = window.setTimeout(cycle, 6800);
+        const scene = pickLevel(buttonLevelIdx);
+        buttonLevelIdx = (buttonLevelIdx + 1) % LEVEL_POOLS.length;
+        await runScene(scene);
+        scheduleNext();
       });
     }
+
+    /* ---------- Pause auto-cycle while the workspace is hovered ----------
+       Respects the visitor's attention. The current study is allowed to
+       finish; the next one waits until hover ends. */
+    const workspaceEl = document.getElementById('workspace');
+    if (workspaceEl) {
+      const enter = () => {
+        pausedByHover = true;
+        if (cycleTimer) { window.clearTimeout(cycleTimer); cycleTimer = undefined; }
+      };
+      const leave = () => {
+        if (!pausedByHover) return;
+        pausedByHover = false;
+        if (!cycleTimer) scheduleNext(1200);
+      };
+      workspaceEl.addEventListener('mouseenter', enter);
+      workspaceEl.addEventListener('mouseleave', leave);
+      // Pause on focus-within too so keyboard users get the same behavior.
+      workspaceEl.addEventListener('focusin', enter);
+      workspaceEl.addEventListener('focusout', (e) => {
+        // Only resume when focus leaves the workspace entirely.
+        const next = (e as FocusEvent).relatedTarget as Node | null;
+        if (!next || !workspaceEl.contains(next)) leave();
+      });
+    }
+
+    /* ---------- Keyboard shortcuts: S = new study, ? = help ----------
+       Skipped while focus is inside an input/textarea so we don't hijack
+       typing in the contact form. */
+    const isTypingTarget = (t: EventTarget | null) => {
+      if (!t || !(t instanceof HTMLElement)) return false;
+      const tag = t.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || t.isContentEditable;
+    };
+    let kbHintEl: HTMLDivElement | null = null;
+    const toggleKbHint = (force?: boolean) => {
+      if (!kbHintEl) {
+        kbHintEl = document.createElement('div');
+        kbHintEl.className = 'kb-hint';
+        kbHintEl.setAttribute('role', 'dialog');
+        kbHintEl.setAttribute('aria-label', 'Keyboard shortcuts');
+        kbHintEl.innerHTML = `
+          <div class="kb-hint__head">Keyboard</div>
+          <dl class="kb-hint__list">
+            <dt><kbd>S</kbd></dt><dd>Run a new study</dd>
+            <dt><kbd>?</kbd></dt><dd>Toggle this help</dd>
+            <dt><kbd>Esc</kbd></dt><dd>Close</dd>
+          </dl>
+        `;
+        document.body.appendChild(kbHintEl);
+      }
+      const next = typeof force === 'boolean' ? force : !kbHintEl.classList.contains('is-on');
+      kbHintEl.classList.toggle('is-on', next);
+    };
+    window.addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (isTypingTarget(e.target)) return;
+      const k = e.key;
+      if (k === 's' || k === 'S') {
+        e.preventDefault();
+        wsAgain?.click();
+      } else if (k === '?' || (e.shiftKey && k === '/')) {
+        e.preventDefault();
+        toggleKbHint();
+      } else if (k === 'Escape' && kbHintEl?.classList.contains('is-on')) {
+        e.preventDefault();
+        toggleKbHint(false);
+      }
+    });
 
     /* ---------- state click + hover ---------- */
     stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
@@ -813,41 +894,105 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       });
     });
 
-    /* ---------- AIANNH click + hover ---------- */
-    stage.querySelectorAll<HTMLElement>('.hero-aiannh').forEach(el => {
-      el.addEventListener('mouseenter', (e) => {
-        setTooltip(el.dataset.name || 'Tribal land', 'click to run a tribal-economy study');
-        tooltip.classList.add('is-on');
-        placeTooltip(e);
-      });
-      el.addEventListener('mousemove', (e) => placeTooltip(e));
-      el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
-      el.addEventListener('focus', (e) => {
-        setTooltip(el.dataset.name || 'Tribal land', 'press Enter to run a tribal-economy study');
-        tooltip.classList.add('is-on');
-        placeTooltip(e);
-      });
-      el.addEventListener('blur', () => tooltip.classList.remove('is-on'));
+    /* ---------- AIANNH lazy-load + event delegation ----------
+       The 485 tribal-land polygons used to be inlined into the SSR HTML
+       (~1MB). They are now fetched from /data/aiannh.json on the first
+       useful map interaction OR after an idle window, whichever comes
+       first. Hover/click/keydown are delegated on the parent group so
+       handlers don't need to be rewired after injection. */
+    const aiannhLayer = document.getElementById('heroAiannhLayer');
+    let aiannhLoading: Promise<void> | null = null;
+    const loadAiannh = (): Promise<void> => {
+      if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return Promise.resolve();
+      if (aiannhLoading) return aiannhLoading;
+      aiannhLoading = fetch('/data/aiannh.json', { credentials: 'same-origin' })
+        .then(r => r.ok ? r.json() : [])
+        .then((polys: any[]) => {
+          if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return;
+          const SVG_NS = 'http://www.w3.org/2000/svg';
+          const frag = document.createDocumentFragment();
+          for (const p of polys) {
+            const el = document.createElementNS(SVG_NS, 'path');
+            el.setAttribute('class', `hero-aiannh hero-aiannh--${p.category || 'reservation'}`);
+            el.setAttribute('d', p.pathD);
+            el.setAttribute('data-name', p.name);
+            el.setAttribute('data-short', p.shortName);
+            el.setAttribute('data-fips', p.fips);
+            el.setAttribute('data-cx', String(p.x));
+            el.setAttribute('data-cy', String(p.y));
+            el.setAttribute('data-category', p.category || '');
+            el.setAttribute('tabindex', '0');
+            el.setAttribute('role', 'button');
+            el.setAttribute('aria-label', `Tribal land: ${p.name}`);
+            frag.appendChild(el);
+          }
+          aiannhLayer.appendChild(frag);
+          aiannhLayer.dataset.loaded = '1';
+        })
+        .catch(() => { /* swallow — non-essential overlay */ });
+      return aiannhLoading;
+    };
 
-      const start = async () => {
-        const fips = el.dataset.fips; if (!fips) return;
-        const cx = parseFloat(el.dataset.cx || '0');
-        const cy = parseFloat(el.dataset.cy || '0');
-        const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
-        if (cycleTimer) window.clearTimeout(cycleTimer);
-        const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-        const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-        const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
-        const chip = `${tribalName} · ${amount.label} ${activity.label}`;
-        await runStudy(fips, { activity, amount, framing, chip, sourcePoint: { cx, cy } });
-        cycleTimer = window.setTimeout(cycle, 6800);
-      };
-      el.addEventListener('click', start);
-      el.addEventListener('keydown', (e) => {
-        const k = (e as KeyboardEvent).key;
-        if (k === 'Enter' || k === ' ') { e.preventDefault(); start(); }
-      });
+    // Trigger lazy-load on first stage interaction or after idle.
+    const triggerLoadOnce = () => loadAiannh();
+    stage.addEventListener('pointerenter', triggerLoadOnce, { once: true });
+    stage.addEventListener('focusin', triggerLoadOnce, { once: true });
+    // Also kick off after the first auto-cycle scene completes so even
+    // visitors who never touch the map get the layer ready.
+    const w = window as unknown as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void };
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(() => loadAiannh(), { timeout: 4000 });
+    } else {
+      w.setTimeout(() => loadAiannh(), 2500);
+    }
+
+    // Delegated handlers — work whether the polygons are injected or not.
+    const aiannhFromEvent = (e: Event): HTMLElement | null => {
+      const t = e.target as Element | null;
+      if (!t) return null;
+      const el = (t as Element).closest('.hero-aiannh') as HTMLElement | null;
+      return el;
+    };
+    aiannhLayer?.addEventListener('pointerover', (e) => {
+      const el = aiannhFromEvent(e); if (!el) return;
+      setTooltip(el.dataset.name || 'Tribal land', 'click to run a tribal-economy study');
+      tooltip.classList.add('is-on');
+      placeTooltip(e as MouseEvent);
     });
+    aiannhLayer?.addEventListener('pointermove', (e) => {
+      if (aiannhFromEvent(e)) placeTooltip(e as MouseEvent);
+    });
+    aiannhLayer?.addEventListener('pointerout', () => tooltip.classList.remove('is-on'));
+    aiannhLayer?.addEventListener('focusin', (e) => {
+      const el = aiannhFromEvent(e); if (!el) return;
+      setTooltip(el.dataset.name || 'Tribal land', 'press Enter to run a tribal-economy study');
+      tooltip.classList.add('is-on');
+      placeTooltip(e as FocusEvent);
+    });
+    aiannhLayer?.addEventListener('focusout', () => tooltip.classList.remove('is-on'));
+    const startTribal = async (el: HTMLElement) => {
+      const fips = el.dataset.fips; if (!fips) return;
+      const cx = parseFloat(el.dataset.cx || '0');
+      const cy = parseFloat(el.dataset.cy || '0');
+      const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
+      if (cycleTimer) window.clearTimeout(cycleTimer);
+      const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+      const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+      const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
+      const chip = `${tribalName} · ${amount.label} ${activity.label}`;
+      await runStudy(fips, { activity, amount, framing, chip, sourcePoint: { cx, cy } });
+      scheduleNext();
+    };
+    aiannhLayer?.addEventListener('click', (e) => {
+      const el = aiannhFromEvent(e); if (el) startTribal(el);
+    });
+    aiannhLayer?.addEventListener('keydown', (e) => {
+      const el = aiannhFromEvent(e); if (!el) return;
+      const k = (e as KeyboardEvent).key;
+      if (k === 'Enter' || k === ' ') { e.preventDefault(); startTribal(el); }
+    });
+    // Also load eagerly when the Tribal lands filter chip activates.
+    document.querySelector('.wfilter[data-layer="tribal"]')?.addEventListener('click', () => loadAiannh(), { once: true });
 
     /* ---------- IP geolocation kickoff ---------- */
     const GEO_KEY = 'lumecon:geo';
@@ -877,22 +1022,120 @@ const codeMapJson = JSON.stringify(CODE_TO_ID);
       } catch { return null; }
     };
 
+    /* Honor a #study=<slug> hash if present so shared links replay
+       a specific scene. Falls back to IP-geolocation, then to the
+       auto-cycle. */
+    const hashScene = (): Scene | null => {
+      const h = window.location.hash || '';
+      const m = h.match(/study=([a-z0-9-]+)/i);
+      if (!m) return null;
+      return sceneBySlug.get(m[1]) || null;
+    };
+
+    // Back/forward + in-page hash edits also replay the corresponding
+    // scene. We guard with a flag so our own replaceState calls inside
+    // runScene don't recurse.
+    let suppressHashChange = false;
+    window.addEventListener('hashchange', () => {
+      if (suppressHashChange) { suppressHashChange = false; return; }
+      const sc = hashScene();
+      if (sc) {
+        if (cycleTimer) window.clearTimeout(cycleTimer);
+        runScene(sc).then(() => scheduleNext());
+      }
+    });
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const s = states['53']; if (s) { moveSource(s.cx, s.cy); shadeNeighbors('53'); }
       figD!.textContent = fmt(5_000_000);
     } else {
-      detectStateId().then(async (sid) => {
-        if (sid && states[sid]) {
-          const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-          const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-          const framing  = `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`;
-          const chip = `${amount.label} ${activity.label} in ${states[sid].name}`;
-          await runStudy(sid, { activity, amount, framing, chip });
-          cycleTimer = window.setTimeout(cycle, 6800);
-        } else {
-          cycleTimer = window.setTimeout(cycle, 900);
-        }
-      });
+      const initial = hashScene();
+      if (initial) {
+        runScene(initial).then(() => scheduleNext());
+      } else {
+        detectStateId().then(async (sid) => {
+          if (sid && states[sid]) {
+            const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+            const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+            const framing  = `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`;
+            const chip = `${amount.label} ${activity.label} in ${states[sid].name}`;
+            await runStudy(sid, { activity, amount, framing, chip });
+            scheduleNext();
+          } else {
+            scheduleNext(900);
+          }
+        });
+      }
     }
+
+    /* ---------- Per-figure metric explanations ----------
+       Each figure (Direct / Indirect / Induced / Total / Jobs) becomes
+       a button. Activating it expands a tiny info block with a
+       one-sentence definition + the live multiplier used in this run. */
+    const FIG_DEFS: Record<string, string> = {
+      direct:   'First-round spending. The dollars actually disbursed: wages, contracts, grant payments.',
+      indirect: 'Supplier spending. Money the direct recipients spend with vendors, contractors, and suppliers.',
+      induced:  'Household spending. Wages earned by direct and indirect workers, spent locally on rent, groceries, services.',
+      total:    'Direct + Indirect + Induced. The full economic impact across the region.',
+      jobs:     'Estimated jobs supported across direct, indirect, and induced activity, derived from a per-million-dollars factor.',
+    };
+    const figureButtons = document.querySelectorAll<HTMLElement>('.hero-fig');
+    figureButtons.forEach(cell => {
+      const key = cell.dataset.k;
+      if (!key || !FIG_DEFS[key]) return;
+      const dt = cell.querySelector('dt');
+      if (!dt) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'hero-fig__info';
+      btn.setAttribute('aria-label', `What is ${dt.textContent}?`);
+      btn.setAttribute('aria-expanded', 'false');
+      btn.textContent = 'i';
+      dt.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className = 'hero-fig__expl';
+      panel.setAttribute('role', 'region');
+      panel.hidden = true;
+      cell.appendChild(panel);
+
+      const renderPanel = () => {
+        const def = FIG_DEFS[key];
+        let mult = '';
+        const ai = stage.dataset.actIndirect, au = stage.dataset.actInduced, aj = stage.dataset.actJobspm, al = stage.dataset.actLabel;
+        if (key === 'indirect' && ai)      mult = `Multiplier this run: <strong>${ai}</strong> (${al}).`;
+        else if (key === 'induced' && au)  mult = `Multiplier this run: <strong>${au}</strong> (${al}).`;
+        else if (key === 'jobs' && aj)     mult = `Per-million factor this run: <strong>${aj}</strong> jobs / $M (${al}).`;
+        else if (key === 'total' && ai && au) mult = `Composed from indirect <strong>${ai}</strong> + induced <strong>${au}</strong> (${al}).`;
+        panel.innerHTML = `<p>${def}</p>` + (mult ? `<p class="hero-fig__mult">${mult}</p>` : '');
+      };
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = panel.hidden;
+        // Close any other open panels.
+        figureButtons.forEach(other => {
+          if (other === cell) return;
+          const p = other.querySelector<HTMLElement>('.hero-fig__expl');
+          const b = other.querySelector<HTMLButtonElement>('.hero-fig__info');
+          if (p) p.hidden = true;
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (open) renderPanel();
+        panel.hidden = !open;
+        btn.setAttribute('aria-expanded', String(open));
+      });
+    });
+    document.addEventListener('click', (e) => {
+      // Close all panels when clicking outside.
+      const t = e.target as Element | null;
+      if (t && t.closest('.hero-fig')) return;
+      figureButtons.forEach(cell => {
+        const p = cell.querySelector<HTMLElement>('.hero-fig__expl');
+        const b = cell.querySelector<HTMLButtonElement>('.hero-fig__info');
+        if (p) p.hidden = true;
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    });
   }
 </script>
