@@ -148,6 +148,80 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
     document.addEventListener('astro:page-load', bind);
   })();
 
+  /* Clean-URL anchor handler. The site uses in-page anchors for
+     navigation (#cedar, #contact, #workspace, #how, etc.). Search
+     engines don't index URL fragments as separate pages, and the
+     trailing "#section" in the address bar reads as URL clutter,
+     so this handler intercepts in-page anchor clicks: it smooth-
+     scrolls to the target without writing the hash into the URL.
+     On initial page load (or hash navigation from another page),
+     it scrolls to the target if present, then strips the hash
+     via replaceState so the URL ends up clean. */
+  (function () {
+    function smoothScrollTo(el) {
+      const prefersReduced = window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({
+        behavior: prefersReduced ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    }
+    function stripHash() {
+      try {
+        history.replaceState(null, '', location.pathname + location.search);
+      } catch (_) {}
+    }
+    function handleLandingHash() {
+      const h = location.hash;
+      if (!h || h.length < 2) return;
+      // Only attempt to scroll to safe id selectors (no special chars).
+      if (!/^#[A-Za-z][\w-]*$/.test(h)) { stripHash(); return; }
+      const target = document.querySelector(h);
+      if (target) {
+        // Defer one frame so layout is settled before scroll-to.
+        requestAnimationFrame(() => {
+          smoothScrollTo(target);
+          stripHash();
+        });
+      } else {
+        stripHash();
+      }
+    }
+    document.addEventListener('click', function (e) {
+      // Skip if a modifier key is held (user wants to open in new tab/etc).
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      const a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      if (!href.includes('#')) return;
+      let url;
+      try { url = new URL(href, location.href); } catch (_) { return; }
+      // Only intercept SAME-page anchor clicks. Cross-path hashes
+      // (e.g., '/#contact' from /join) still navigate normally;
+      // handleLandingHash() will clean the URL on arrival.
+      if (url.origin !== location.origin) return;
+      if (url.pathname !== location.pathname) return;
+      if (!url.hash || url.hash.length < 2) return;
+      if (!/^#[A-Za-z][\w-]*$/.test(url.hash)) return;
+      const target = document.querySelector(url.hash);
+      if (!target) return;
+      e.preventDefault();
+      smoothScrollTo(target);
+      // Don't pushState — the URL stays as-is, no fragment added.
+    });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', handleLandingHash);
+    } else {
+      handleLandingHash();
+    }
+    document.addEventListener('astro:page-load', handleLandingHash);
+    document.addEventListener('astro:after-swap', handleLandingHash);
+    // Catch any hash that gets added later (e.g., browser back/forward,
+    // a third-party script, or an Astro view transition that preserves
+    // the hash from the previous URL).
+    window.addEventListener('hashchange', handleLandingHash);
+  })();
+
 </script>
 </body>
 </html>
