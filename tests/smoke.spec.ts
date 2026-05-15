@@ -68,11 +68,14 @@ test('demo page renders with real figures', async ({ page }) => {
   await expect(page.locator('.demo-fig dd')).toContainText(['$12M', /\$5\.5/, /\$8\.7/, /\$26\./, /≈\s*\d/]);
 });
 
-test('lazy-loaded aiannh layer is empty in initial HTML, populates after idle', async ({ page }) => {
-  // domcontentloaded so we measure BEFORE the /data/aiannh.json fetch completes.
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-  expect(await page.locator('.hero-aiannh').count()).toBeLessThan(50);
-  // Wait for requestIdleCallback or the 2.5s setTimeout fallback to inject.
+test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({ request, page }) => {
+  // Grep the raw HTML response to confirm the polygons aren't inlined.
+  const r = await request.get('/');
+  const html = await r.text();
+  const inlined = (html.match(/class="hero-aiannh/g) || []).length;
+  expect(inlined).toBe(0);
+  // Then verify they populate at runtime.
+  await page.goto('/');
   await page.waitForFunction(
     () => (document.querySelectorAll('.hero-aiannh').length || 0) > 100,
     null,

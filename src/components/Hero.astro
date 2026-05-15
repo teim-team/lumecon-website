@@ -89,6 +89,45 @@ const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
   tohono:           ["Tohono O'odham", 'Tohono'],
   fort_peck:        ['Fort Peck'],
   oneida_ny:        ['Oneida'],
+  // Wealthy / well-known gaming + enterprise tribes
+  suquamish:        ['Port Madison'],
+  pechanga:         ['Pechanga'],
+  seminole_fl:      ['Big Cypress'],
+  shakopee:         ['Shakopee'],
+  seneca_ny:        ['Cattaraugus'],
+  winnebago_ne:     ['Winnebago'],
+  mashantucket:     ['Mashantucket'],
+  morongo:          ['Morongo'],
+  agua_caliente:    ['Agua Caliente'],
+  muckleshoot:      ['Muckleshoot'],
+  tulalip:          ['Tulalip Reservation'],
+  ms_choctaw:       ['Mississippi Choctaw'],
+  // Newly recognized + large enterprise nations
+  lumbee:           ['Lumbee'],
+  poarch:           ['Poarch'],
+  southern_ute:     ['Southern Ute'],
+  colorado_river:   ['Colorado River'],
+  mashpee:          ['Mashpee'],
+  flathead:         ['Flathead'],
+  ho_chunk_wi:      ['Ho-Chunk'],
+  chickasaw:        ['Chickasaw'],
+  choctaw_ok:       ['Choctaw OTSA'],
+  grand_ronde:      ['Grand Ronde Community', 'Grand Ronde'],
+  mha:              ['Fort Berthold'],
+  forest_potawatomi:['Forest County Potawatomi'],
+};
+/* Hand-anchored centroids for federally recognized tribes whose lands
+   are NOT present in Census TIGER/Line 2018 AIANNH (newly recognized,
+   newly placed-into-trust, or otherwise absent). Coordinates are in
+   the same d3 albers-equal-area projection used by us-atlas. Estimated
+   from state centroids + approximate lat/lon of the reservation. */
+const MANUAL_TRIBES: Record<string, { name: string; cx: number; cy: number; fips: string }> = {
+  // York County, SC. Projected via d3.geoAlbersUsa().scale(1300).translate([487.5,305]).
+  catawba: { name: 'Catawba Nation',  cx: 775,   cy: 380,   fips: '45' },
+  // Uncasville, CT (Mohegan Sun).
+  mohegan: { name: 'Mohegan Tribe',   cx: 896.7, cy: 192.2, fips: '09' },
+  // Longview, WA (Cowlitz tribal homeland; headquarters area).
+  cowlitz: { name: 'Cowlitz Tribe',   cx: 79.4,  cy: 75.5,  fips: '53' },
 };
 const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
@@ -100,6 +139,9 @@ for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
     }
   }
 }
+// Manual entries take precedence over Census matches with the same key
+// (none currently overlap; this is a safety net for hand-tuned anchors).
+Object.assign(tribalLookup, MANUAL_TRIBES);
 const tribalLookupJson = JSON.stringify(tribalLookup);
 ---
 <section class="hero" id="top">
