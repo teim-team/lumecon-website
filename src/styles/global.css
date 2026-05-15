@@ -127,8 +127,10 @@ body {
 .icon--tribal .icon-tribal__dot--b { animation-delay: .25s; }
 .icon--tribal .icon-tribal__dot--c { animation-delay: .5s; }
 @keyframes icon-tribal-pulse {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.35); }
+  0%, 100% { transform: scale(1);    fill: currentColor; }
+  45%      { transform: scale(1.35); fill: #F0A91A; }
+  60%      { transform: scale(1.15); fill: #F0A91A; }
+  80%      { transform: scale(1);    fill: currentColor; }
 }
 
 /* Global: the inner arc draws in, then the two endpoint dots pulse
@@ -292,27 +294,16 @@ body {
   15%, 45%      { fill: #F0A91A; }
 }
 
-/* Economist: the sigma draws from open to close, then the multiplier
-   hub pulses. */
-.icon--economist .icon-econ__sigma {
-  stroke-dasharray: 38;
-  stroke-dashoffset: 38;
-  animation: icon-econ-draw 3.4s ease-in-out infinite;
-}
+/* Economist: the sigma stays visible; the gold "multiplier hub" at
+   the fold pulses to read as a summation happening in real time. */
 .icon--economist .icon-econ__hub {
   transform-box: fill-box;
   transform-origin: center;
-  animation: icon-econ-hub 3.4s ease-in-out infinite;
-}
-@keyframes icon-econ-draw {
-  0%       { stroke-dashoffset: 38; }
-  50%, 80% { stroke-dashoffset: 0;  }
-  100%     { stroke-dashoffset: 38; }
+  animation: icon-econ-hub 2.6s ease-in-out infinite;
 }
 @keyframes icon-econ-hub {
-  0%, 45%, 100% { transform: scale(.6); opacity: .35; }
-  60%           { transform: scale(1.4); opacity: 1;  }
-  75%           { transform: scale(1);   opacity: 1;  }
+  0%, 100% { transform: scale(.85); opacity: .75; }
+  50%      { transform: scale(1.35); opacity: 1;  }
 }
 
 /* Megaphone: two ripples travel outward; the gold dot pulses at the bell. */
@@ -366,7 +357,6 @@ body {
   .icon--ml .icon-ml__line,
   .icon--ml .icon-ml__caret,
   .icon--data .icon-data__bar,
-  .icon--economist .icon-econ__sigma,
   .icon--economist .icon-econ__hub,
   .icon--megaphone .icon-mega__wave,
   .icon--megaphone .icon-mega__dot,
@@ -377,7 +367,6 @@ body {
   .icon--ml .icon-ml__line,
   .icon--code .icon-code__glyph { stroke-dashoffset: 0; }
   .icon--global .icon-global__arc,
-  .icon--economist .icon-econ__sigma { stroke-dashoffset: 0; }
   .icon--code .icon-code__caret { opacity: 1; }
   .icon--surface .icon-surface__hit { opacity: 1; transform: none; }
   .icon--data .icon-data__bar { fill: #F0A91A; }
