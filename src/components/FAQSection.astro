@@ -1,12 +1,16 @@
 ---
 /**
- * FAQ section — disambiguation + canonical answers to common queries
- * about Lumecon Inc. Pairs with the FAQPage JSON-LD on the homepage so
- * Google + AI search read the same content from both surfaces.
+ * Ask Cedar — the FAQ surface restyled as a Cedar chat so the section
+ * demos the product narrative instead of being a generic FAQ list.
  *
- * Disambiguation note: we focus on what Lumecon IS (AI economic impact
- * analysis software for governments) rather than calling out unrelated
- * trademark-similar businesses by name.
+ * Honest framing: marketing-page Cedar runs from a fixed Q&A set (no
+ * upstream LLM call). We say so plainly in the section subtitle and
+ * in llms.txt. The Q&As pair with FAQPage JSON-LD on the homepage so
+ * search + AI crawlers see the same content.
+ *
+ * No-JS fallback: the static <details> FAQ list ships in the DOM and
+ * is the visible state when JS doesn't hydrate. JS swaps to the chat
+ * UI once it loads.
  */
 const faqs = [
   {
@@ -27,7 +31,7 @@ const faqs = [
   },
   {
     q: 'What is Cedar?',
-    a: 'Cedar is the AI assistant built into every Lumecon platform. Cedar reads the files your departments already share (budgets, payroll detail, council agendas, chapter audits, grant filings), surfaces each assumption the model is about to use, asks you to confirm or override, and writes a record of every source and method so the work is traceable end to end.',
+    a: 'Cedar is the AI assistant built into every Lumecon platform. Cedar reads the files your departments already share, surfaces each assumption the model is about to use, asks you to confirm or override, and writes a record of every source and method so the work is traceable end to end.',
   },
   {
     q: 'Can Lumecon run historical or forward-looking analyses?',
@@ -39,11 +43,32 @@ const faqs = [
   },
 ];
 ---
-<section class="faq" id="faq" aria-labelledby="faq-title">
-  <div class="faq-inner">
-    <p class="faq-eyebrow">Frequently asked</p>
-    <h2 class="faq-title" id="faq-title">About Lumecon Inc.</h2>
-    <div class="faq-list">
+<section class="ask-cedar" id="faq" aria-labelledby="faq-title">
+  <div class="ask-cedar__inner">
+    <p class="ask-cedar__eyebrow">Frequently asked</p>
+    <h2 class="ask-cedar__title" id="faq-title">Ask Cedar.</h2>
+    <p class="ask-cedar__note">Cedar is the AI assistant inside every Lumecon platform. This marketing-page Cedar runs from a fixed answer set — for live reasoning over your data, that lives in the product.</p>
+
+    <!-- Cedar chat (JS-hydrated). Hidden until script reveals it so a
+         no-JS visitor goes straight to the <details> fallback below. -->
+    <div class="cedar-chat" id="cedarChat" hidden>
+      <div class="cedar-chat__transcript" id="cedarTranscript" role="log" aria-live="polite" aria-label="Cedar conversation">
+        <div class="cedar-msg cedar-msg--bot">
+          <span class="cedar-msg__avatar" aria-hidden="true">C</span>
+          <div class="cedar-msg__bubble">Hi — I'm Cedar, Lumecon's AI assistant. Pick a question and I'll answer.</div>
+        </div>
+      </div>
+      <div class="cedar-chat__chips" id="cedarChips">
+        {faqs.map((f, i) => <button class="cedar-chip" type="button" data-q={i}>{f.q}</button>)}
+      </div>
+      <p class="cedar-chat__email">
+        Question not here? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a> — a human reads every one.
+      </p>
+    </div>
+
+    <!-- No-JS fallback + SEO-readable static FAQ. JS hides this once
+         it hydrates the chat UI above. -->
+    <div class="faq-list" id="cedarFallback">
       {faqs.map((item, i) => (
         <details class="faq-item" open={i === 0}>
           <summary class="faq-q">{item.q}</summary>
@@ -52,19 +77,86 @@ const faqs = [
       ))}
     </div>
   </div>
+
+  <script type="application/json" id="cedarFaqData" set:html={JSON.stringify(faqs)}></script>
 </section>
+
+<script>
+  type FAQ = { q: string; a: string };
+  const dataEl = document.getElementById('cedarFaqData') as HTMLScriptElement | null;
+  const chat = document.getElementById('cedarChat');
+  const fallback = document.getElementById('cedarFallback');
+  const transcript = document.getElementById('cedarTranscript');
+  const chipsEl = document.getElementById('cedarChips');
+
+  if (dataEl && chat && fallback && transcript && chipsEl) {
+    const FAQS: FAQ[] = JSON.parse(dataEl.textContent || '[]');
+
+    // Hydrate: hide static FAQ, show chat
+    chat.removeAttribute('hidden');
+    fallback.setAttribute('hidden', '');
+
+    const appendMessage = (variant: 'bot' | 'user', body: string | HTMLElement) => {
+      const wrap = document.createElement('div');
+      wrap.className = `cedar-msg cedar-msg--${variant}`;
+      if (variant === 'bot') {
+        const av = document.createElement('span');
+        av.className = 'cedar-msg__avatar';
+        av.setAttribute('aria-hidden', 'true');
+        av.textContent = 'C';
+        wrap.appendChild(av);
+      }
+      const bubble = document.createElement('div');
+      bubble.className = 'cedar-msg__bubble';
+      if (typeof body === 'string') bubble.textContent = body;
+      else bubble.appendChild(body);
+      wrap.appendChild(bubble);
+      transcript.appendChild(wrap);
+      // Smooth-scroll inside the transcript so new messages stay visible.
+      transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
+      return wrap;
+    };
+
+    chipsEl.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.cedar-chip') as HTMLButtonElement | null;
+      if (!btn) return;
+      const idx = parseInt(btn.dataset.q || '-1', 10);
+      const item = FAQS[idx];
+      if (!item) return;
+
+      // Remove chip so it can't be asked twice.
+      btn.disabled = true;
+      btn.classList.add('cedar-chip--used');
+
+      // User echo bubble.
+      appendMessage('user', item.q);
+
+      // Cedar typing indicator → replaced with the answer after a beat.
+      const dots = document.createElement('span');
+      dots.className = 'cedar-typing';
+      dots.innerHTML = '<span></span><span></span><span></span>';
+      const typing = appendMessage('bot', dots);
+
+      window.setTimeout(() => {
+        const bubble = typing.querySelector('.cedar-msg__bubble');
+        if (bubble) bubble.textContent = item.a;
+      }, 650);
+    });
+  }
+</script>
+
 <style>
-  .faq {
+  .ask-cedar {
     background: var(--white);
     padding: clamp(4rem, 8vw, 6rem) 0;
     border-bottom: 1px solid var(--rule);
   }
-  .faq-inner {
+  .ask-cedar__inner {
     max-width: 880px;
     margin: 0 auto;
     padding: 0 var(--container-pad);
   }
-  .faq-eyebrow {
+  .ask-cedar__eyebrow {
     font-family: var(--font-mono);
     font-size: .7rem;
     letter-spacing: .14em;
@@ -73,15 +165,156 @@ const faqs = [
     text-transform: uppercase;
     font-weight: 500;
   }
-  .faq-title {
+  .ask-cedar__title {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: clamp(1.8rem, 3.5vw, 2.6rem);
     line-height: 1.1;
     letter-spacing: -.02em;
     color: var(--navy);
-    margin: 0 0 2rem;
+    margin: 0 0 .8rem;
   }
+  .ask-cedar__note {
+    font-family: var(--font-sans);
+    font-size: .92rem;
+    line-height: 1.55;
+    color: var(--ink-3);
+    margin: 0 0 2rem;
+    max-width: 60ch;
+  }
+
+  /* ---------- Cedar chat surface ---------- */
+  .cedar-chat {
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--paper);
+    padding: 1.5rem;
+    box-shadow:
+      0 1px 2px rgba(14, 21, 48, .04),
+      0 8px 24px -8px rgba(14, 21, 48, .08);
+  }
+  .cedar-chat__transcript {
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: .25rem;
+    scroll-behavior: smooth;
+  }
+  .cedar-msg {
+    display: flex;
+    gap: .7rem;
+    align-items: flex-start;
+    max-width: 86%;
+    animation: cedar-fade-in .25s var(--ease) both;
+  }
+  .cedar-msg--user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+  .cedar-msg__avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--cedar);
+    color: var(--white);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: -.01em;
+  }
+  .cedar-msg__bubble {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    padding: .75rem .95rem;
+    border-radius: 12px;
+    font-family: var(--font-sans);
+    font-size: .94rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .cedar-msg--bot .cedar-msg__bubble { border-top-left-radius: 4px; }
+  .cedar-msg--user .cedar-msg__bubble {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+    border-top-right-radius: 4px;
+  }
+  @keyframes cedar-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Typing dots inside a Cedar bubble */
+  .cedar-typing {
+    display: inline-flex;
+    gap: .3rem;
+    padding: .15rem 0;
+  }
+  .cedar-typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ink-3);
+    animation: cedar-bounce 1.2s ease-in-out infinite;
+  }
+  .cedar-typing span:nth-child(2) { animation-delay: .15s; }
+  .cedar-typing span:nth-child(3) { animation-delay: .3s; }
+  @keyframes cedar-bounce {
+    0%, 100% { transform: translateY(0);    opacity: .5; }
+    50%      { transform: translateY(-4px); opacity: 1;  }
+  }
+
+  .cedar-chat__chips {
+    margin-top: 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+  }
+  .cedar-chip {
+    padding: .5rem .9rem;
+    background: var(--white);
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--navy);
+    cursor: pointer;
+    transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+    letter-spacing: -.005em;
+  }
+  .cedar-chip:hover:not(:disabled) {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+  .cedar-chip:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .cedar-chip--used {
+    opacity: .35;
+    cursor: default;
+  }
+  .cedar-chat__email {
+    margin: 1.2rem 0 0;
+    font-family: var(--font-sans);
+    font-size: .85rem;
+    color: var(--ink-3);
+  }
+  .cedar-chat__email a {
+    font-family: var(--font-mono);
+    color: var(--navy);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  /* ---------- No-JS / SEO-readable fallback ---------- */
   .faq-list {
     display: flex;
     flex-direction: column;
@@ -122,5 +355,11 @@ const faqs = [
     margin: 0 0 1.2rem;
     max-width: 64ch;
     font-weight: 400;
+  }
+
+  @media (max-width: 600px) {
+    .cedar-chat { padding: 1.1rem; }
+    .cedar-msg { max-width: 92%; }
+    .cedar-chat__transcript { max-height: 360px; }
   }
 </style>
