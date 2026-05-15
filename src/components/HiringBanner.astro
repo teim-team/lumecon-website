@@ -33,13 +33,14 @@
 </aside>
 
 <script is:inline>
-  /* Procedural team-graph generator. Builds a random asymmetric tree
-     (1 root + 2-4 inner branches + 1-4 children per branch) directly
-     in SVG, animates the spawn over ~5s, holds briefly, then fades
-     out and regenerates a fresh tree. Every cycle is a different
-     shape, so visitors who linger don't loop the same image.
-     Respects prefers-reduced-motion: paints one static tree, no
-     cycle, no animation. */
+  /* Procedural team-graph generator. Continuous growth rather than
+     cycle-and-reset: starts with a small seed of branches, then
+     spawns one new node every ~1s from a random existing branch with
+     a random angle + distance. When live nodes exceed a soft cap,
+     the oldest non-root node and its edge fade out quietly so the
+     perimeter keeps evolving without crowding. Honors
+     prefers-reduced-motion by drawing a single static seed and
+     stopping the spawn loop. */
   (function () {
     const svg = document.getElementById('hgSvg');
     if (!svg) return;
@@ -49,51 +50,31 @@
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const rand = (a, b) => a + Math.random() * (b - a);
-    const randInt = (a, b) => Math.floor(rand(a, b + 1));
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
-    function generate() {
-      const root = { x: rand(105, 135), y: rand(95, 115) };
-      const branchCount = randInt(2, 4);
-      // Spread branches around the root in random angle buckets so
-      // they don't bunch up.
-      const baseAngle = rand(0, Math.PI * 2);
-      const bucket = (Math.PI * 2) / branchCount;
-      const branches = [];
-      for (let i = 0; i < branchCount; i++) {
-        const ang = baseAngle + bucket * i + rand(-0.45, 0.45);
-        const dist = rand(48, 75);
-        const bx = clamp(root.x + Math.cos(ang) * dist, 22, W - 22);
-        const by = clamp(root.y + Math.sin(ang) * dist, 22, H - 22);
-        const childCount = randInt(1, 4);
-        const children = [];
-        const childBase = ang;
-        const childBucket = Math.PI / Math.max(childCount, 1);
-        for (let j = 0; j < childCount; j++) {
-          const cAng = childBase + childBucket * (j - (childCount - 1) / 2) + rand(-0.4, 0.4);
-          const cDist = rand(36, 58);
-          children.push({
-            x: clamp(bx + Math.cos(cAng) * cDist, 10, W - 10),
-            y: clamp(by + Math.sin(cAng) * cDist, 10, H - 10),
-            r: rand(2.8, 4.2),
-          });
-        }
-        branches.push({ x: bx, y: by, r: rand(4.4, 5.6), children });
-      }
-      return { root, branches };
-    }
+    // nodes[i] is either an entry or null (slot freed by pruning).
+    // We don't splice because parent indices would shift.
+    const nodes = [];
+    let generation = 0;
+    const SOFT_CAP = 22;
 
-    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    const layerEdges = document.createElementNS(SVG_NS, 'g');
+    const layerNodes = document.createElementNS(SVG_NS, 'g');
+    svg.appendChild(layerEdges);
+    svg.appendChild(layerNodes);
 
-    function mkCircle(cx, cy, r, fill, className) {
+    function mkNode(x, y, r, fill, className) {
       const c = document.createElementNS(SVG_NS, 'circle');
-      c.setAttribute('cx', String(cx));
-      c.setAttribute('cy', String(cy));
+      c.setAttribute('cx', String(x));
+      c.setAttribute('cy', String(y));
       c.setAttribute('r', String(r));
       c.setAttribute('fill', fill);
       if (className) c.setAttribute('class', className);
+      layerNodes.appendChild(c);
       return c;
     }
-    function mkLine(x1, y1, x2, y2) {
+    function mkEdge(x1, y1, x2, y2) {
       const l = document.createElementNS(SVG_NS, 'line');
       l.setAttribute('x1', String(x1));
       l.setAttribute('y1', String(y1));
@@ -103,118 +84,163 @@
       l.setAttribute('stroke-width', '1');
       l.setAttribute('stroke-linecap', 'butt');
       l.setAttribute('fill', 'none');
+      layerEdges.appendChild(l);
       return l;
     }
 
-    function render(graph) {
-      // Clear
-      while (svg.firstChild) svg.removeChild(svg.firstChild);
-      const edges = document.createElementNS(SVG_NS, 'g');
-      const nodes = document.createElementNS(SVG_NS, 'g');
-      svg.appendChild(edges);
-      svg.appendChild(nodes);
+    function spawnNode(parentIdx, x, y, r) {
+      const parent = parentIdx >= 0 ? nodes[parentIdx] : null;
+      const edge = parent ? mkEdge(parent.x, parent.y, x, y) : null;
+      const node = mkNode(x, y, r, 'currentColor', 'hg-node hg-node--leaf');
+      node.style.opacity = '0';
+      const entry = { node, edge, parent: parentIdx, x, y, r, gen: ++generation };
+      nodes.push(entry);
 
-      // Root: always visible immediately
-      nodes.appendChild(mkCircle(graph.root.x, graph.root.y, 6.5, '#F0A91A', 'hg-node hg-node--center'));
-
-      // Build animation timeline. The Web Animations API gives us
-      // per-element control without hand-rolling CSS keyframes for
-      // a variable number of nodes.
-      const T = reducedMotion ? 0 : 1; // 0 disables transitions
-
-      // Tier 2: inner branches
-      graph.branches.forEach((b, i) => {
-        const edge = mkLine(graph.root.x, graph.root.y, b.x, b.y);
-        const len = Math.hypot(b.x - graph.root.x, b.y - graph.root.y);
-        edge.setAttribute('stroke-dasharray', String(len));
-        edge.setAttribute('stroke-dashoffset', String(reducedMotion ? 0 : len));
-        edges.appendChild(edge);
-        const node = mkCircle(b.x, b.y, b.r, 'currentColor', 'hg-node hg-node--t2');
-        node.style.opacity = reducedMotion ? '1' : '0';
-        nodes.appendChild(node);
-        if (!reducedMotion) {
-          const delay = 700 + i * 180;
-          edge.animate(
-            [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
-            { duration: 500 * T, delay, fill: 'forwards', easing: 'ease-out' }
-          );
-          spawn(node, delay + 350);
-        }
-      });
-
-      // Tier 3: children
-      graph.branches.forEach((b, i) => {
-        b.children.forEach((c, j) => {
-          const edge = mkLine(b.x, b.y, c.x, c.y);
-          const len = Math.hypot(c.x - b.x, c.y - b.y);
-          edge.setAttribute('stroke-dasharray', String(len));
-          edge.setAttribute('stroke-dashoffset', String(reducedMotion ? 0 : len));
-          edges.appendChild(edge);
-          const node = mkCircle(c.x, c.y, c.r, 'currentColor', 'hg-node hg-node--t3');
-          node.style.opacity = reducedMotion ? '1' : '0';
-          nodes.appendChild(node);
-          if (!reducedMotion) {
-            const delay = 2000 + i * 240 + j * 130;
-            edge.animate(
-              [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
-              { duration: 420 * T, delay, fill: 'forwards', easing: 'ease-out' }
-            );
-            spawn(node, delay + 300);
-          }
-        });
-      });
-
-      // Fade everything out at the end of the cycle, then regenerate.
-      if (!reducedMotion) {
-        const fadeDelay = 5200;
-        const fadeDur = 600;
-        Array.from(edges.children).forEach(el => {
-          el.animate(
-            [{ opacity: 1 }, { opacity: 0 }],
-            { duration: fadeDur, delay: fadeDelay, fill: 'forwards', easing: 'ease-in' }
-          );
-        });
-        // Skip the center node so the focal point persists between cycles.
-        Array.from(nodes.children).slice(1).forEach(el => {
-          el.animate(
-            [{ opacity: 1 }, { opacity: 0 }],
-            { duration: fadeDur, delay: fadeDelay, fill: 'forwards', easing: 'ease-in' }
-          );
-        });
+      if (reducedMotion) {
+        node.style.opacity = '1';
+        return entry;
       }
-    }
-
-    function spawn(el, delay) {
-      // Scale in + brief gold flash, then settle to navy.
-      el.animate(
+      if (edge) {
+        const len = Math.hypot(x - parent.x, y - parent.y);
+        edge.setAttribute('stroke-dasharray', String(len));
+        edge.setAttribute('stroke-dashoffset', String(len));
+        edge.animate(
+          [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+          { duration: 420, fill: 'forwards', easing: 'ease-out' }
+        );
+      }
+      node.animate(
         [
           { opacity: 0, transform: 'scale(.3)' },
-          { opacity: 1, transform: 'scale(1.25)', offset: .35 },
+          { opacity: 1, transform: 'scale(1.3)', offset: .55 },
           { opacity: 1, transform: 'scale(1)' },
         ],
-        { duration: 520, delay, fill: 'forwards', easing: 'ease-out' }
+        { duration: 560, delay: edge ? 200 : 0, fill: 'forwards', easing: 'ease-out' }
       );
-      el.animate(
+      node.animate(
         [
           { fill: '#F0A91A', offset: 0 },
           { fill: '#F0A91A', offset: .5 },
           { fill: 'currentColor', offset: 1 },
         ],
-        { duration: 900, delay, fill: 'forwards' }
+        { duration: 1000, delay: edge ? 200 : 0, fill: 'forwards' }
       );
+      return entry;
     }
 
-    function cycle() {
-      render(generate());
+    function fadeOutNode(idx) {
+      const entry = nodes[idx];
+      if (!entry) return;
+      const cleanup = () => {
+        if (entry.edge && entry.edge.parentNode) entry.edge.parentNode.removeChild(entry.edge);
+        if (entry.node.parentNode) entry.node.parentNode.removeChild(entry.node);
+        nodes[idx] = null;
+      };
+      if (reducedMotion) { cleanup(); return; }
+      entry.node.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards', easing: 'ease-in' });
+      if (entry.edge) entry.edge.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards', easing: 'ease-in' });
+      setTimeout(cleanup, 620);
     }
-    cycle();
+
+    function liveCount() {
+      let n = 0;
+      for (const e of nodes) if (e) n++;
+      return n;
+    }
+
+    // Seed: root at the center, always persistent.
+    spawnNode(-1, 120, 110, 6.5);
+    nodes[0].node.setAttribute('class', 'hg-node hg-node--center');
+    nodes[0].node.setAttribute('fill', '#F0A91A');
+    nodes[0].node.style.opacity = '1';
+    // Override the center spawn animations (set fill to gold forever).
+    nodes[0].node.getAnimations && nodes[0].node.getAnimations().forEach(a => a.cancel());
+    nodes[0].node.setAttribute('fill', '#F0A91A');
+
+    function pickParent() {
+      // Weight toward newer / outer nodes, skip nodes that already
+      // have >=3 immediate children so growth keeps pushing outward.
+      const childCounts = new Map();
+      for (const e of nodes) {
+        if (!e) continue;
+        childCounts.set(e.parent, (childCounts.get(e.parent) || 0) + 1);
+      }
+      const candidates = [];
+      for (let i = 0; i < nodes.length; i++) {
+        const e = nodes[i];
+        if (!e) continue;
+        const kids = childCounts.get(i) || 0;
+        if (kids >= 3) continue;
+        const w = i === 0 ? 1 : 3 + Math.max(0, e.gen);
+        candidates.push({ i, w });
+      }
+      if (!candidates.length) return 0;
+      const total = candidates.reduce((s, c) => s + c.w, 0);
+      let r = Math.random() * total;
+      for (const c of candidates) {
+        r -= c.w;
+        if (r <= 0) return c.i;
+      }
+      return candidates[candidates.length - 1].i;
+    }
+
+    function tryPosition(parent) {
+      const grandparent = parent.parent >= 0 ? nodes[parent.parent] : null;
+      const baseAngle = grandparent
+        ? Math.atan2(parent.y - grandparent.y, parent.x - grandparent.x)
+        : Math.random() * Math.PI * 2;
+      for (let attempt = 0; attempt < 14; attempt++) {
+        const ang = baseAngle + rand(-1.0, 1.0);
+        const d = rand(28, 52);
+        const x = clamp(parent.x + Math.cos(ang) * d, 10, W - 10);
+        const y = clamp(parent.y + Math.sin(ang) * d, 10, H - 10);
+        let tooClose = false;
+        for (const e of nodes) {
+          if (!e) continue;
+          if (dist({ x, y }, e) < 18) { tooClose = true; break; }
+        }
+        if (!tooClose) return { x, y };
+      }
+      return null;
+    }
+
+    function tick() {
+      const parentIdx = pickParent();
+      const parent = nodes[parentIdx];
+      if (!parent) return;
+      const pos = tryPosition(parent);
+      if (!pos) return;
+      const r = rand(2.7, 4.4);
+      spawnNode(parentIdx, pos.x, pos.y, r);
+      if (liveCount() > SOFT_CAP) {
+        let oldestIdx = -1;
+        let oldestGen = Infinity;
+        for (let i = 1; i < nodes.length; i++) {
+          const e = nodes[i];
+          if (!e) continue;
+          if (e.gen < oldestGen) { oldestGen = e.gen; oldestIdx = i; }
+        }
+        if (oldestIdx !== -1) fadeOutNode(oldestIdx);
+      }
+    }
+
+    // Seed a few initial branches so the first frame isn't a lone dot.
+    const seedBranches = 2 + Math.floor(Math.random() * 2);
+    for (let i = 0; i < seedBranches; i++) {
+      const pos = tryPosition(nodes[0]);
+      if (pos) spawnNode(0, pos.x, pos.y, rand(4.2, 5.4));
+    }
+
     if (!reducedMotion) {
-      // Match render()'s fade-out timing: 5200ms delay + 600ms fade
-      // = ~5800ms; regenerate ~6000ms in for a clean handoff.
-      setInterval(cycle, 6000);
+      // Slight jitter on the interval so spawns don't feel metronomic.
+      function schedule() {
+        setTimeout(() => { tick(); schedule(); }, 700 + Math.random() * 600);
+      }
+      schedule();
     }
   })();
 </script>
+
 <style>
   .hiring {
     background: var(--cream);

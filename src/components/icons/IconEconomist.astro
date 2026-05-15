@@ -2,13 +2,21 @@
 const { class: className = '' } = Astro.props as { class?: string };
 ---
 <svg class={`icon icon--economist ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-  <!-- Capital Σ (sigma), fold on the left like the Greek letter
-       actually faces: top bar, diagonal down-left to the fold,
-       diagonal down-right to the bottom-right, bottom bar back to
-       the bottom-left. The gold hub at the fold marks the
-       multiplier center. -->
-  <path class="icon-econ__sigma"
-        d="M7 4 H17 L11 12 L17 20 H7"
-        stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt"/>
-  <circle class="icon-econ__hub" cx="11" cy="12" r="1.5" fill="#F0A91A"/>
+  <!-- X/Y axes (small serifs at the origin corner) -->
+  <line x1="4" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.25" stroke-linecap="butt"/>
+  <line x1="4" y1="20" x2="22" y2="20" stroke="currentColor" stroke-width="1.25" stroke-linecap="butt"/>
+  <!-- Scatter points. The dots flicker in over time so the chart
+       reads as data being collected before the regression draws. -->
+  <circle class="icon-econ__pt icon-econ__pt--a" cx="7.5"  cy="16.5" r=".95" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--b" cx="9.5"  cy="14"   r=".95" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--c" cx="11"   cy="15.5" r=".95" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--d" cx="13"   cy="12"   r=".95" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--e" cx="15"   cy="10.5" r=".95" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--f" cx="17"   cy="9"    r=".95" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--g" cx="19"   cy="7"    r=".95" fill="currentColor"/>
+  <!-- Regression line — drawn after the dots appear. Gold accent so
+       the "fitted line" is the focal point. -->
+  <line class="icon-econ__fit" x1="6" y1="18" x2="20" y2="6"
+        stroke="#F0A91A" stroke-width="1.5" stroke-linecap="butt"
+        pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
 </svg>

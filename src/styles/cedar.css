@@ -30,8 +30,8 @@
   font-family: var(--font-mono);
   font-size: .7rem;
   letter-spacing: .14em;
-  color: var(--ink-3);
-  font-weight: 500;
+  color: var(--gold);
+  font-weight: 600;
   text-transform: uppercase;
   margin: 0;
 }

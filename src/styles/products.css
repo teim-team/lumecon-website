@@ -13,7 +13,8 @@
   font-family: var(--font-mono);
   font-size: .7rem;
   letter-spacing: .14em;
-  color: var(--ink-3);
+  color: var(--gold);
+  font-weight: 600;
   margin: 0 0 1.2rem;
   text-transform: uppercase;
   font-weight: 500;
