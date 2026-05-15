@@ -293,6 +293,34 @@ const MANUAL_TRIBES: Record<string, { name: string; cx: number; cy: number; fips
   // from Afognak Island to Port Lions on Kodiak after the 1964 quake.
   // Anchored at the Kodiak ANVSA centroid.
   afognak:    { name: 'Afognak Native Corporation', cx: 102.7, cy: 571.5, fips: '02' },
+
+  // Michigan + Indiana gaming tribes (Four Winds, Gun Lake, FireKeepers).
+  pokagon:        { name: 'Pokagon Band of Potawatomi',                cx: 653.3, cy: 226.7, fips: '26' },
+  gun_lake:       { name: 'Match-E-Be-Nash-She-Wish Band (Gun Lake)',  cx: 669.8, cy: 205.3, fips: '26' },
+  firekeepers:    { name: 'Nottawaseppi Huron Band (FireKeepers)',     cx: 677.9, cy: 211.9, fips: '26' },
+  // Pacific Northwest tribes.
+  snoqualmie:     { name: 'Snoqualmie Indian Tribe',                   cx: 104.2, cy:  49.9, fips: '53' },
+  jamestown:      { name: 'Jamestown S’Klallam Tribe',             cx:  89.3, cy:  32.8, fips: '53' },
+  quileute:       { name: 'Quileute Tribe',                            cx:  65.6, cy:  29.6, fips: '53' },
+  lower_elwha:    { name: 'Lower Elwha Klallam Tribe',                 cx:  83.0, cy:  29.8, fips: '53' },
+  // Arizona / California gaming tribes.
+  yavapai_apache: { name: 'Yavapai-Apache Nation',                     cx: 205.6, cy: 375.4, fips: '04' },
+  tachi_yokut:    { name: 'Tachi-Yokut (Santa Rosa Rancheria)',        cx:  71.7, cy: 306.4, fips: '06' },
+  chukchansi:     { name: 'Picayune Rancheria of Chukchansi Indians',  cx:  78.6, cy: 285.5, fips: '06' },
+  twentynine:     { name: 'Twenty-Nine Palms Band of Mission Indians', cx: 122.7, cy: 380.0, fips: '06' },
+  karuk:          { name: 'Karuk Tribe',                               cx:  44.6, cy: 168.5, fips: '06' },
+  wiyot:          { name: 'Wiyot Tribe',                               cx:  25.0, cy: 186.5, fips: '06' },
+  burns_paiute:   { name: 'Burns Paiute Tribe',                        cx: 124.4, cy: 147.7, fips: '41' },
+  // Pamunkey — VA, newly federally recognized in 2015.
+  pamunkey:       { name: 'Pamunkey Indian Tribe',                     cx: 835.0, cy: 298.7, fips: '51' },
+  // Alaska Native Regional Corporations (ANCSA).
+  sealaska:       { name: 'Sealaska Corporation',                      cx: 176.9, cy: 556.1, fips: '02' },
+  ciri:           { name: 'Cook Inlet Region Inc. (CIRI)',             cx: 112.3, cy: 544.3, fips: '02' },
+  doyon:          { name: 'Doyon, Limited',                            cx: 117.8, cy: 514.9, fips: '02' },
+  bristol_bay:    { name: 'Bristol Bay Native Corporation',            cx:  86.2, cy: 570.2, fips: '02' },
+  calista:        { name: 'Calista Corporation',                       cx:  69.5, cy: 549.0, fips: '02' },
+  ahtna:          { name: 'Ahtna Incorporated',                        cx: 128.1, cy: 535.7, fips: '02' },
+  chugach:        { name: 'Chugach Alaska Corporation',                cx: 117.9, cy: 544.6, fips: '02' },
 };
 const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
