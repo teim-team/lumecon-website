@@ -1,9 +1,9 @@
 ---
 const { class: className = '' } = Astro.props as { class?: string };
 ---
-<svg class={`icon ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+<svg class={`icon icon--tribal ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
   <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
-  <circle cx="12" cy="9" r="1.25" fill="currentColor"/>
-  <circle cx="9.4" cy="14" r="1.25" fill="currentColor"/>
-  <circle cx="14.6" cy="14" r="1.25" fill="currentColor"/>
+  <circle class="icon-tribal__dot icon-tribal__dot--a" cx="12" cy="9" r="1.25" fill="currentColor"/>
+  <circle class="icon-tribal__dot icon-tribal__dot--b" cx="9.4" cy="14" r="1.25" fill="currentColor"/>
+  <circle class="icon-tribal__dot icon-tribal__dot--c" cx="14.6" cy="14" r="1.25" fill="currentColor"/>
 </svg>
