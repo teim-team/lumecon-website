@@ -223,6 +223,15 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       <path class="hero-map__borders" d={stateBordersD} />
       <path class="hero-map__outline" d={nationOutlineD} />
 
+      <!-- Detail layers: synthesized supplier + household point clouds
+           rendered around the source when the map is zoomed in.
+           Populated by JS; cleared between runs. Rendered BEFORE the
+           source group so the central black dot always sits on top of
+           the scatter (suppliers, households, flow lines). -->
+      <g class="hero-flow-layer" id="heroFlowLayer" aria-hidden="true"></g>
+      <g class="hero-supplier-layer" id="heroSupplierLayer" aria-hidden="true"></g>
+      <g class="hero-household-layer" id="heroHouseholdLayer" aria-hidden="true"></g>
+
       <g class="hero-source" id="heroSource">
         <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
         <circle class="hero-ring"  data-ring="1" cx="0" cy="0" r="14" />
@@ -231,14 +240,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         <circle class="hero-spark"      cx="0" cy="0" r="6" />
         <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
       </g>
-
-      <!-- Detail layers: synthesized supplier + household point clouds
-           rendered around the source when the map is zoomed in.
-           Populated by JS; cleared between runs. The flow lines fade
-           in as thin paths from source to a subset of nearby points. -->
-      <g class="hero-flow-layer" id="heroFlowLayer" aria-hidden="true"></g>
-      <g class="hero-supplier-layer" id="heroSupplierLayer" aria-hidden="true"></g>
-      <g class="hero-household-layer" id="heroHouseholdLayer" aria-hidden="true"></g>
 
       <!-- Floating value labels populated by JS over each lit state -->
       <g class="hero-value-layer" id="heroValueLayer" aria-hidden="true"></g>
