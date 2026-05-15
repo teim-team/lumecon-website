@@ -295,6 +295,14 @@ const cedarData = {
     <!-- Cedar chat (JS-hydrated). Hidden until script reveals it so a
          no-JS visitor goes straight to the <details> fallback below. -->
     <div class="cedar-chat" id="cedarChat" hidden>
+      <div class="cedar-chat__header">
+        <span class="cedar-chat__avatar" aria-hidden="true">C</span>
+        <div class="cedar-chat__id">
+          <span class="cedar-chat__name">Cedar</span>
+          <span class="cedar-chat__status"><span class="cedar-chat__dot" aria-hidden="true"></span> Lumecon AI assistant</span>
+        </div>
+      </div>
+
       <div class="cedar-chat__transcript" id="cedarTranscript" role="log" aria-live="polite" aria-label="Cedar conversation">
         <div class="cedar-msg cedar-msg--bot">
           <span class="cedar-msg__avatar" aria-hidden="true">C</span>
@@ -302,12 +310,8 @@ const cedarData = {
         </div>
       </div>
 
-      <div class="cedar-chat__chips" id="cedarChips">
-        {chips.map((intent) => (
-          <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
-        ))}
-      </div>
-
+      <!-- Input docked directly under the transcript so it's visible
+           on mobile without scrolling past the chips. -->
       <form class="cedar-chat__form" id="cedarForm" autocomplete="off">
         <label class="cedar-chat__inputwrap">
           <span class="visually-hidden">Ask Cedar</span>
@@ -318,6 +322,12 @@ const cedarData = {
             name="q"
             placeholder="Ask Cedar a question..."
             maxlength="280"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="sentences"
+            spellcheck="true"
+            enterkeyhint="send"
+            inputmode="text"
             aria-label="Ask Cedar a question"
           />
         </label>
@@ -328,9 +338,20 @@ const cedarData = {
         </button>
       </form>
 
-      <p class="cedar-chat__email">
-        Need a human? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a>. We read every one.
-      </p>
+      <div class="cedar-chat__suggest">
+        <span class="cedar-chat__suggest-label">Try asking:</span>
+        <div class="cedar-chat__chips" id="cedarChips">
+          {chips.map((intent) => (
+            <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="cedar-chat__foot">
+        <p class="cedar-chat__email">
+          Need a human? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a>. We read every one.
+        </p>
+      </div>
     </div>
 
     <!-- No-JS fallback + SEO-readable static FAQ. JS hides this once
@@ -511,21 +532,78 @@ const cedarData = {
      scope attr) still get styled. */
   :global(.cedar-chat) {
     border: 1px solid var(--rule);
-    border-radius: 12px;
-    background: var(--paper);
-    padding: 1.5rem;
+    border-radius: 14px;
+    background: var(--white);
+    padding: 0;
+    overflow: hidden;
     box-shadow:
       0 1px 2px rgba(14, 21, 48, .04),
-      0 8px 24px -8px rgba(14, 21, 48, .08);
+      0 14px 40px -16px rgba(14, 21, 48, .14);
   }
+
+  /* Chat header bar */
+  :global(.cedar-chat__header) {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .9rem 1.2rem;
+    background: linear-gradient(180deg, rgba(244, 240, 230, .55), rgba(244, 240, 230, 0));
+    border-bottom: 1px solid var(--rule);
+  }
+  :global(.cedar-chat__avatar) {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--cedar);
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: -.01em;
+    flex-shrink: 0;
+  }
+  :global(.cedar-chat__id) {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  :global(.cedar-chat__name) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: .98rem;
+    color: var(--navy);
+    letter-spacing: -.012em;
+  }
+  :global(.cedar-chat__status) {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .04em;
+    color: var(--ink-3);
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .15rem;
+  }
+  :global(.cedar-chat__dot) {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cedar);
+    box-shadow: 0 0 0 3px rgba(58, 124, 89, .18);
+  }
+
   :global(.cedar-chat__transcript) {
     display: flex;
     flex-direction: column;
     gap: .9rem;
-    max-height: 420px;
+    max-height: 360px;
     overflow-y: auto;
-    padding-right: .25rem;
+    padding: 1.2rem 1.2rem .4rem;
     scroll-behavior: smooth;
+    background: var(--paper);
   }
   :global(.cedar-msg) {
     display: flex;
@@ -595,45 +673,14 @@ const cedarData = {
     50%      { transform: translateY(-4px); opacity: 1;  }
   }
 
-  .cedar-chat__chips {
-    margin-top: 1.2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .45rem;
-  }
-  .cedar-chip {
-    padding: .5rem .9rem;
-    background: var(--white);
-    border: 1px solid var(--rule-strong);
-    border-radius: 999px;
-    font-family: var(--font-sans);
-    font-size: .85rem;
-    font-weight: 500;
-    color: var(--navy);
-    cursor: pointer;
-    transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
-    letter-spacing: -.005em;
-  }
-  .cedar-chip:hover:not(:disabled) {
-    background: var(--navy);
-    color: var(--white);
-    border-color: var(--navy);
-  }
-  .cedar-chip:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 2px;
-  }
-  .cedar-chip--used {
-    opacity: .35;
-    cursor: default;
-  }
-
-  /* ---------- Free-text input row ---------- */
+  /* ---------- Free-text input row (docked under transcript) ---------- */
   .cedar-chat__form {
     display: flex;
     gap: .55rem;
-    margin-top: 1rem;
     align-items: stretch;
+    padding: .85rem 1.2rem;
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
   }
   .cedar-chat__inputwrap {
     flex: 1;
@@ -642,20 +689,24 @@ const cedarData = {
   .cedar-chat__input {
     flex: 1;
     width: 100%;
-    padding: .7rem 1rem;
+    padding: .75rem 1.05rem;
     background: var(--white);
     border: 1px solid var(--rule-strong);
     border-radius: 999px;
     font-family: var(--font-sans);
-    font-size: .94rem;
+    /* 16px floor on font-size prevents iOS Safari zoom on focus, which
+       was making the input feel "broken" on mobile. */
+    font-size: 16px;
     color: var(--ink-1);
     transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+    -webkit-appearance: none;
+    appearance: none;
   }
   .cedar-chat__input::placeholder { color: var(--ink-3); }
   .cedar-chat__input:focus {
     outline: none;
     border-color: var(--navy);
-    box-shadow: 0 0 0 3px rgba(14, 21, 48, .08);
+    box-shadow: 0 0 0 3px rgba(14, 21, 48, .1);
   }
   .cedar-chat__send {
     width: 44px;
@@ -671,6 +722,7 @@ const cedarData = {
     justify-content: center;
     cursor: pointer;
     transition: background .15s var(--ease), transform .15s var(--ease);
+    touch-action: manipulation;
   }
   .cedar-chat__send:hover { background: var(--ink-1); transform: translateY(-1px); }
   .cedar-chat__send:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
@@ -686,11 +738,65 @@ const cedarData = {
     border: 0;
   }
 
+  /* ---------- Suggested-question chips (below input) ---------- */
+  .cedar-chat__suggest {
+    padding: .9rem 1.2rem 1rem;
+    background: var(--white);
+    border-top: 1px solid var(--rule);
+  }
+  .cedar-chat__suggest-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: .55rem;
+  }
+  .cedar-chat__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+  .cedar-chip {
+    padding: .45rem .8rem;
+    background: var(--white);
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--navy);
+    cursor: pointer;
+    transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+    letter-spacing: -.005em;
+    touch-action: manipulation;
+  }
+  .cedar-chip:hover:not(:disabled) {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+  .cedar-chip:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .cedar-chip--used {
+    opacity: .35;
+    cursor: default;
+  }
+
+  .cedar-chat__foot {
+    padding: .85rem 1.2rem;
+    border-top: 1px solid var(--rule);
+    background: var(--paper);
+  }
   .cedar-chat__email {
-    margin: 1.2rem 0 0;
+    margin: 0;
     font-family: var(--font-sans);
     font-size: .85rem;
     color: var(--ink-3);
+    text-align: center;
   }
   .cedar-chat__email a {
     font-family: var(--font-mono);
@@ -743,12 +849,15 @@ const cedarData = {
   }
 
   @media (max-width: 600px) {
-    :global(.cedar-chat) { padding: 1.1rem; }
+    :global(.cedar-chat) { border-radius: 12px; }
+    :global(.cedar-chat__header) { padding: .75rem 1rem; }
     :global(.cedar-msg) { max-width: 92%; }
-    :global(.cedar-chat__transcript) { max-height: 360px; }
+    :global(.cedar-chat__transcript) { max-height: 300px; padding: 1rem 1rem .3rem; }
     .ask-cedar__title { font-size: 1.8rem; }
-    .cedar-chat__form { gap: .4rem; }
-    .cedar-chat__input { padding: .65rem .9rem; font-size: .92rem; }
-    .cedar-chat__send { width: 40px; height: 40px; }
+    .cedar-chat__form { padding: .7rem 1rem; gap: .45rem; }
+    /* Keep font-size 16px to block iOS Safari focus-zoom on the input. */
+    .cedar-chat__input { padding: .7rem .95rem; font-size: 16px; }
+    .cedar-chat__send { width: 42px; height: 42px; }
+    .cedar-chat__suggest { padding: .8rem 1rem .9rem; }
   }
 </style>
