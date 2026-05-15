@@ -14,21 +14,26 @@ import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 
+// Curated FAQ subset, kept in sync with FAQSection's static fallback.
+// Powers the FAQPage JSON-LD only — the visible chat now runs from a
+// larger intent bank inside FAQSection.astro.
 const FAQ_ITEMS = [
   { q: 'What is Lumecon?',
-    a: 'Lumecon Inc. is economic impact analysis software for governments and mission-driven organizations. A modern alternative to IMPLAN, RIMS II, and REMI. Built at Cornell University. Use Cedar AI to read messy administrative data and run impact studies in-house.' },
+    a: 'Lumecon helps organizations understand and communicate their economic impact. Our platform turns complex data into clear, credible reports that show how spending, investment, employment, and community activity ripple through local economies. In plain English: we help people explain the value they create.' },
   { q: 'Who uses Lumecon?',
-    a: 'Municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, federal programs, universities and research labs, foundations, CDFIs, and economic development organizations.' },
-  { q: 'Is Lumecon an IMPLAN / RIMS II / REMI alternative?',
-    a: 'Yes. Lumecon was built as a modern, AI-assisted alternative to IMPLAN, RIMS II, REMI Policy Insight, and BEA RIMS II multipliers for organizations that need to run economic impact studies in-house, on their own data, without per-region licensing fees.' },
+    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits, and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue, or local development, Lumecon can help make that impact easier to understand.' },
+  { q: 'How does Lumecon support tribal nations?',
+    a: "Lumecon's Tribal Economic Impact Platform helps tribal governments and tribal enterprises communicate their economic contributions with clear, data-backed reports. That can include jobs supported, wages generated, business activity, local spending, and broader regional impacts. The goal is to help Native nations tell a stronger economic story while respecting the distinct governance context of tribal economies." },
+  { q: 'Can cities, counties, and other organizations use Lumecon?',
+    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers, and other organizations. The platform can help explain how a project, institution, investment, or program affects a local or regional economy.' },
+  { q: 'What are economic multipliers?',
+    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies, or funds construction, that activity directly supports jobs and spending. Then suppliers, workers, and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.' },
   { q: 'What geographies does Lumecon cover?',
-    a: 'All federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country, all in one annual subscription, not priced per geography.' },
+    a: 'Lumecon covers all federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country. All of it is included in one annual subscription, not priced per geography.' },
   { q: 'What is Cedar?',
-    a: 'Cedar is the AI assistant built into every Lumecon platform. Cedar reads the files your departments already share, surfaces each assumption the model is about to use, asks you to confirm or override, and writes a record of every source and method so the work is traceable end to end.' },
-  { q: 'Can Lumecon run historical or forward-looking analyses?',
-    a: 'Yes. Look back historically for a longitudinal analysis, or model forward to plan a budget, grant proposal, or capital project. Studies improve over time as more of your data accumulates in the system.' },
+    a: "I'm Cedar, Lumecon's site assistant. I can help explain what Lumecon does, who the platform is for, how economic impact reporting works, and how to get in touch with the team. I'm here to point you in the right direction, not replace a conversation with the Lumecon team." },
   { q: 'Where was Lumecon built?',
-    a: 'Lumecon Inc. was built at Cornell University, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team\'s academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.' },
+    a: "Lumecon Inc. was built at Cornell University, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team's academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC." },
 ];
 
 const jsonLd = [
