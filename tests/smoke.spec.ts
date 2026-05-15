@@ -61,11 +61,13 @@ test('skip-link is hidden until focused', async ({ page }) => {
 });
 
 test('demo page renders with real figures', async ({ page }) => {
-  await page.goto('/demo/reservation-tribal-health-clinic-navajo-nation', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('h1')).toContainText('Tribal health clinic');
+  // Use a stable county-level scene whose chip / slug isn't likely to
+  // change in copy-tightening passes.
+  await page.goto('/demo/county-community-health-clinic-pierce-county-wa', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('Community health clinic');
   await expect(page.locator('.demo-fig dt').first()).toHaveText('Direct');
   await expect(page.locator('.demo-fig--total dt')).toHaveText('Total impact');
-  await expect(page.locator('.demo-fig dd')).toContainText(['$12M', /\$5\.5/, /\$8\.7/, /\$26\./, /≈\s*\d/]);
+  await expect(page.locator('.demo-fig dd')).toContainText([/\$5M/, /\$2\.3M/, /\$3\.6/, /\$10\.9/, /≈\s*\d/]);
 });
 
 test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({ request, page }) => {

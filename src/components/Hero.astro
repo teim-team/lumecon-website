@@ -565,7 +565,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
     const fmt = (n: number) =>
-      n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.0$/, '') + 'M'
+      n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.?0+$/, '') + 'M'
       : n >= 1_000   ? '$' + Math.round(n / 1_000) + 'K'
       :                '$' + Math.round(n);
 
@@ -934,27 +934,33 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       }
     };
 
-    /* Shuffled scene queue. We exhaust the deck before reshuffling so
-       every scene plays once before any repeats. Fisher-Yates on the
-       index array. */
-    const sceneOrder: number[] = [];
-    const reshuffle = () => {
-      const arr = SCENES.map((_, i) => i);
+    /* Level-rotating scene cycle. The previous design pulled from one
+       shuffled deck of all scenes, but reservation (~200 scenes) was
+       so much larger than state (12) and county (20) that the cycle
+       felt reservation-heavy. Now each level has its own shuffled
+       deck and we rotate state → county → reservation → state → ...
+       so the visual variety stays balanced. */
+    let pausedByHover = false;
+    let autoCycleLevelIdx = 0;
+    const autoCycleOrders: number[][] = LEVEL_POOLS.map(() => []);
+    const reshuffleLevel = (idx: number) => {
+      const arr = LEVEL_POOLS[idx].map((_, i) => i);
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
-      sceneOrder.push(...arr);
+      autoCycleOrders[idx].push(...arr);
     };
-    let pausedByHover = false;
     const scheduleNext = (delay = 6800) => {
       if (pausedByHover) return;
       cycleTimer = window.setTimeout(cycle, delay);
     };
     const cycle = async () => {
       if (pausedByHover) return;
-      if (sceneOrder.length === 0) reshuffle();
-      const scene = SCENES[sceneOrder.shift() as number];
+      const idx = autoCycleLevelIdx;
+      if (autoCycleOrders[idx].length === 0) reshuffleLevel(idx);
+      const scene = LEVEL_POOLS[idx][autoCycleOrders[idx].shift() as number];
+      autoCycleLevelIdx = (autoCycleLevelIdx + 1) % LEVEL_POOLS.length;
       await runScene(scene);
       scheduleNext();
     };
