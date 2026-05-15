@@ -262,6 +262,12 @@ export const RESERVATION_SCENES: Scene[] = [
   { level: 'reservation', tribalKey: 'forest_potawatomi', amount: { v: 31_500_000, label: '$31.5M' }, activity: ACT.build,
     chip: 'RESERVATION · Casino and lodging expansion · Forest County Potawatomi',
     sentence: 'The Forest County Potawatomi Community funds a $31.5M casino and lodging expansion on the Forest County Potawatomi Reservation in Wisconsin.' },
+  { level: 'reservation', tribalKey: 'mohegan', amount: { v: 134_000_000, label: '$134M' }, activity: ACT.build,
+    chip: 'RESERVATION · Mohegan Sun resort modernization · Mohegan Tribe',
+    sentence: 'The Mohegan Tribe funds a $134M Mohegan Sun resort modernization in Uncasville, Connecticut.' },
+  { level: 'reservation', tribalKey: 'cowlitz', amount: { v: 26_000_000, label: '$26M' }, activity: ACT.health,
+    chip: 'RESERVATION · Tribal community and health center · Cowlitz Tribe',
+    sentence: 'The Cowlitz Indian Tribe funds a $26M tribal community and health center in Longview, Washington.' },
 ];
 
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
