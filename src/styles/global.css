@@ -94,9 +94,22 @@ body {
 
 /* Skip-to-content link — visible only on keyboard focus, jumps past nav. */
 .skip-link {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.skip-link:focus {
   position: fixed;
   top: .5rem;
   left: .5rem;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
   z-index: 10000;
   padding: .55rem .9rem;
   background: var(--navy);
@@ -106,10 +119,7 @@ body {
   font-weight: 600;
   border-radius: 4px;
   text-decoration: none;
-  transform: translateY(-150%);
-  transition: transform .18s var(--ease);
 }
-.skip-link:focus { transform: none; }
 
 /* Editorial primitives — used by Hero, Products, Why, Cedar so the
    whole homepage reads as one publication, not four pasted-together
