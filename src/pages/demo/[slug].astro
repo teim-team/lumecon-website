@@ -37,7 +37,7 @@ const parts = scene.chip.split(' · ');
 const projectName = parts[1] || scene.chip;
 const region = parts[2] || '';
 
-const title = projectName + (region ? ' - ' + region : '') + ' | Lumecon impact study example';
+const title = projectName + (region ? ' - ' + region : '') + ' | Lumecon economic impact study example';
 const description = scene.sentence + ' Lumecon shows direct, indirect, and induced effects with every multiplier sourced.';
 const slug = sceneSlug(scene);
 const canonical = 'https://lumecon.ai/demo/' + slug;
@@ -74,7 +74,7 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
       <p class="demo-sentence">{scene.sentence}</p>
 
       <section class="demo-figures" aria-label="Impact study result">
-        <header class="demo-figures__head">Example impact study result</header>
+        <header class="demo-figures__head">Example economic impact study result</header>
         <dl class="demo-figs">
           <div class="demo-fig">
             <dt>Direct</dt>
