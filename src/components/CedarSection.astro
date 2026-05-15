@@ -1,41 +1,50 @@
 ---
 /**
- * Cedar — one statement, one supporting line, one CTA.
+ * Cedar — combined explainer (left) + live "Ask Cedar" chat (right).
+ * The chat sits where empty space used to be on this section so a
+ * visitor reading about Cedar can immediately try it without scrolling
+ * to a separate Q&A surface.
  */
 import '../styles/cedar.css';
 import IconUpload from './icons/IconUpload.astro';
 import IconSurfaceAssumption from './icons/IconSurfaceAssumption.astro';
 import IconSourceRecord from './icons/IconSourceRecord.astro';
+import FAQSection from './FAQSection.astro';
 ---
 <section class="cedar-about" id="cedar">
   <div class="cedar-about__inner">
-    <p class="cedar-about__byline">Cedar</p>
-    <h2 class="cedar-about__lede">
-      AI for the unglamorous parts of economic impact analysis.
-    </h2>
-    <p class="cedar-about__body">
-      Cedar reads the files your departments actually share, surfaces each assumption the model is about to use, and writes the source record as the study runs. We use AI to clear the infrastructure and analysis constraints organizations have, not as a marketing badge.
-    </p>
-    <ol class="cedar-steps" aria-label="How Cedar works">
-      <li class="cedar-step">
-        <span class="cedar-step__icon"><IconUpload /></span>
-        <span class="cedar-step__num">01</span>
-        <h3 class="cedar-step__head">You upload the files</h3>
-        <p class="cedar-step__body">Budgets, payroll detail, council agendas, chapter audits, grant filings. Cedar reads what your departments already have.</p>
-      </li>
-      <li class="cedar-step">
-        <span class="cedar-step__icon"><IconSurfaceAssumption /></span>
-        <span class="cedar-step__num">02</span>
-        <h3 class="cedar-step__head">Cedar surfaces each assumption</h3>
-        <p class="cedar-step__body">Multipliers, regional bridges, and the base year are flagged before they're used. You confirm or override.</p>
-      </li>
-      <li class="cedar-step">
-        <span class="cedar-step__icon"><IconSourceRecord /></span>
-        <span class="cedar-step__num">03</span>
-        <h3 class="cedar-step__head">The source record writes itself</h3>
-        <p class="cedar-step__body">Every method, multiplier, and override is logged with the run. A council member or grant reviewer can verify the result.</p>
-      </li>
-    </ol>
-    <a href="#contact" class="btn btn--ghost">Ask us about Cedar</a>
+    <div class="cedar-about__left">
+      <p class="cedar-about__byline">Cedar</p>
+      <h2 class="cedar-about__lede">
+        AI for the unglamorous parts of economic impact analysis.
+      </h2>
+      <p class="cedar-about__body">
+        Cedar reads the files your departments actually share, surfaces each assumption the model is about to use, and writes the source record as the study runs. We use AI to clear the infrastructure and analysis constraints organizations have, not as a marketing badge.
+      </p>
+      <ol class="cedar-steps" aria-label="How Cedar works">
+        <li class="cedar-step">
+          <span class="cedar-step__icon"><IconUpload /></span>
+          <span class="cedar-step__num">01</span>
+          <h3 class="cedar-step__head">You upload the files</h3>
+          <p class="cedar-step__body">Budgets, payroll detail, council agendas, chapter audits, grant filings. Cedar reads what your departments already have.</p>
+        </li>
+        <li class="cedar-step">
+          <span class="cedar-step__icon"><IconSurfaceAssumption /></span>
+          <span class="cedar-step__num">02</span>
+          <h3 class="cedar-step__head">Cedar surfaces each assumption</h3>
+          <p class="cedar-step__body">Multipliers, regional bridges, and the base year are flagged before they're used. You confirm or override.</p>
+        </li>
+        <li class="cedar-step">
+          <span class="cedar-step__icon"><IconSourceRecord /></span>
+          <span class="cedar-step__num">03</span>
+          <h3 class="cedar-step__head">The source record writes itself</h3>
+          <p class="cedar-step__body">Every method, multiplier, and override is logged with the run. A council member or grant reviewer can verify the result.</p>
+        </li>
+      </ol>
+      <a href="#contact" class="btn btn--ghost">Ask us about Cedar</a>
+    </div>
+    <aside class="cedar-about__right" aria-label="Ask Cedar">
+      <FAQSection compact={true} />
+    </aside>
   </div>
 </section>

@@ -278,10 +278,16 @@ const jsonLd = [
     grid-template-columns: 64px 1fr;
     gap: 1rem 1.6rem;
     align-items: start;
-    padding: 1.7rem 0;
+    padding: 1.7rem 1.2rem;
+    margin: 0 -1.2rem;
     border-top: 1px solid var(--rule);
+    border-radius: 8px;
+    transition: background .2s var(--ease);
   }
   .role-row:last-child { border-bottom: 1px solid var(--rule); }
+  .role-row:hover { background: var(--paper, #fbf6ec); }
+  .role-row:hover .role-row__title { color: var(--gold); }
+  .role-row__title { transition: color .2s var(--ease); }
   .role-row__icon {
     display: inline-flex;
     color: var(--navy);

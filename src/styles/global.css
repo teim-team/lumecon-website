@@ -96,11 +96,14 @@ body {
    Subtle, thematic motion so each icon hints at what its section is
    about. Disabled under prefers-reduced-motion. */
 
-/* Local: dot walks the inner cells of the 3×3 grid. */
+/* Local: dot walks the inner cells of the 3×3 grid; pulses to the
+   brand gold each time it lands on a new cell, so each step reads
+   as "another locality lighting up". */
 .icon--local .icon-local__dot {
   transform-box: fill-box;
   transform-origin: center;
-  animation: icon-local-scan 8s ease-in-out infinite;
+  animation: icon-local-scan 8s ease-in-out infinite,
+             icon-local-tint 8s ease-in-out infinite;
 }
 @keyframes icon-local-scan {
   0%   { transform: translate(0, 0); }
@@ -109,6 +112,10 @@ body {
   60%  { transform: translate(0, 4.3px); }
   80%  { transform: translate(-4.3px, 0); }
   100% { transform: translate(0, 0); }
+}
+@keyframes icon-local-tint {
+  0%, 18%, 38%, 58%, 78%, 100% { fill: currentColor; }
+  20%, 40%, 60%, 80%           { fill: #F0A91A; }
 }
 
 /* Tribal: three inner nodes pulse in a wave (community heartbeat). */
@@ -142,8 +149,9 @@ body {
   100% { stroke-dashoffset: 0; }
 }
 @keyframes icon-global-pulse {
-  0%, 60%, 100% { transform: scale(1); }
-  70%           { transform: scale(1.4); }
+  0%, 60%, 100% { transform: scale(1); fill: currentColor; }
+  65%, 80%      { transform: scale(1.4); fill: #F0A91A; }
+  85%           { transform: scale(1); fill: currentColor; }
 }
 
 /* Upload: the dot moves up into the document (uploading). */

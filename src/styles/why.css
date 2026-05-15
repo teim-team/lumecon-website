@@ -11,7 +11,17 @@
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(2rem, 4vw, 3rem);
 }
-.why-stat { display: flex; flex-direction: column; gap: .55rem; color: var(--navy); }
+.why-stat {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  color: var(--navy);
+  padding: 1rem;
+  margin: -1rem;
+  border-radius: 8px;
+  transition: background .2s var(--ease), transform .2s var(--ease);
+}
+.why-stat:hover { background: var(--paper, #fbf6ec); transform: translateY(-2px); }
 .why-stat__icon {
   display: inline-flex;
   color: var(--navy);

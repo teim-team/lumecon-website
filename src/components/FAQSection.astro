@@ -285,12 +285,24 @@ const cedarData = {
   outOfScope: { answer: OUT_OF_SCOPE, triggers: OUT_OF_SCOPE_TRIGGERS },
   fallback: { answer: FALLBACK },
 };
+interface Props {
+  /** When true, render only the chat panel (no section wrapper,
+      no title / byline / note). Used when embedding inside the
+      Cedar section. */
+  compact?: boolean;
+}
+const { compact = false } = Astro.props as Props;
+const Wrapper = compact ? 'div' : 'section';
+const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
 ---
-<section class="ask-cedar" id="faq" aria-labelledby="faq-title">
+<Wrapper class={wrapperClass} id="faq" aria-labelledby={compact ? undefined : 'faq-title'}>
   <div class="ask-cedar__inner">
-    <p class="ask-cedar__eyebrow reveal-soft">Ask Cedar</p>
-    <h2 class="ask-cedar__title reveal-soft" id="faq-title" data-stagger="1">Ask Cedar anything.</h2>
-    <p class="ask-cedar__note reveal-soft" data-stagger="2">Cedar is the AI assistant inside every Lumecon platform. This marketing-page Cedar runs from a fixed set of answers tuned for common questions. Live reasoning over your data lives in the product.</p>
+    {!compact && (
+      <>
+        <p class="ask-cedar__eyebrow reveal-soft">Ask Cedar</p>
+        <h2 class="ask-cedar__title reveal-soft" id="faq-title" data-stagger="1">Ask Cedar anything.</h2>
+      </>
+    )}
 
     <!-- Cedar chat (JS-hydrated). Hidden until script reveals it so a
          no-JS visitor goes straight to the <details> fallback below.
@@ -302,7 +314,7 @@ const cedarData = {
         <div class="cedar-msg cedar-msg--bot">
           <span class="cedar-msg__avatar" aria-hidden="true">C</span>
           <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
-            <p class="cedar-msg__line">Hi, I'm Cedar, Lumecon's site assistant. Pick a question or type your own.</p>
+            <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
             <div class="cedar-quickreply" id="cedarChips">
               {chips.slice(0, 5).map((intent) => (
                 <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
@@ -340,7 +352,7 @@ const cedarData = {
     </div>
 
     <p class="cedar-foot">
-      Cedar runs from a fixed answer set. Need a human? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a>.
+      Need a human? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a>.
     </p>
 
     <!-- No-JS fallback + SEO-readable static FAQ. JS hides this once
@@ -356,7 +368,7 @@ const cedarData = {
   </div>
 
   <script type="application/json" id="cedarFaqData" set:html={JSON.stringify(cedarData)}></script>
-</section>
+</Wrapper>
 
 <script is:inline>
   (function () {
@@ -494,6 +506,19 @@ const cedarData = {
     max-width: 880px;
     margin: 0 auto;
     padding: 0 var(--container-pad);
+  }
+  /* Compact form: drop the section-level chrome so the chat sits
+     cleanly inside another container (the Cedar section's right col). */
+  .ask-cedar--compact {
+    background: none;
+    padding: 0;
+    border-bottom: 0;
+    width: 100%;
+  }
+  .ask-cedar--compact .ask-cedar__inner {
+    max-width: none;
+    padding: 0;
+    margin: 0;
   }
   .ask-cedar__eyebrow {
     font-family: var(--font-mono);
