@@ -94,44 +94,44 @@ const jsonLd = [
 
     <!-- WHY: open with what Lumecon does in the world. -->
     <header class="join-hero">
-      <p class="join-eyebrow">Why we're building this</p>
-      <h1 class="join-title">We <em>luminate</em> economies.</h1>
+      <p class="join-eyebrow reveal-soft">Why we're building this</p>
+      <h1 class="join-title reveal-soft" data-stagger="1">We <em>luminate</em> economies.</h1>
       <div class="join-why">
-        <p>A lot of organizations have real economic impact, and no way to show it.</p>
-        <p>That matters because the next round of capital follows the evidence. When economic impact gets measured, budgets get approved, foundations write the check, councils pass the bill, banks underwrite the loan, communities support the project. When it doesn't get measured, none of that happens.</p>
-        <p>Lumecon's work shows up in front of <strong>governments</strong>, <strong>tribal nations</strong>, <strong>foundations</strong>, <strong>banks</strong>, <strong>universities</strong>, and the communities those institutions serve. We build the software that makes the economic impact legible, so the dollars that house, feed, and employ people keep moving.</p>
+        <p class="reveal-soft" data-stagger="2">A lot of organizations have real economic impact, and no way to show it.</p>
+        <p class="reveal-soft" data-stagger="3">That matters because the next round of capital follows the evidence. When economic impact gets measured, budgets get approved, foundations write the check, councils pass the bill, banks underwrite the loan, communities support the project. When it doesn't get measured, none of that happens.</p>
+        <p class="reveal-soft" data-stagger="4">Lumecon's work shows up in front of <strong>governments</strong>, <strong>tribal nations</strong>, <strong>foundations</strong>, <strong>banks</strong>, <strong>universities</strong>, and the communities those institutions serve. We build the software that makes the economic impact legible, so the dollars that house, feed, and employ people keep moving.</p>
       </div>
     </header>
 
     <!-- The world is changing. -->
     <section class="join-transition" aria-labelledby="transition-title">
-      <p class="join-section-kicker">The moment</p>
-      <h2 class="join-section-title" id="transition-title">The world is changing fast. Most organizations are still figuring out the transition.</h2>
+      <p class="join-section-kicker reveal-soft">The moment</p>
+      <h2 class="join-section-title reveal" id="transition-title">The world is changing fast. Most organizations are still figuring out the transition.</h2>
       <div class="join-team-body">
-        <p>Public agencies, tribal governments, foundations, and universities are being asked to do more with the same headcount, on shorter cycles, against tougher questions about value and return. The legacy tools weren't built for that.</p>
-        <p>We're using AI to make the work easier, not to replace people. The aim is to <strong>create</strong> jobs by helping the organizations that fund them tell a stronger economic story, not to automate anyone out of one.</p>
+        <p class="reveal-soft" data-stagger="1">Public agencies, tribal governments, foundations, and universities are being asked to do more with the same headcount, on shorter cycles, against tougher questions about value and return. The legacy tools weren't built for that.</p>
+        <p class="reveal-soft" data-stagger="2">We're using AI to make the work easier, not to replace people. The aim is to <strong>create</strong> jobs by helping the organizations that fund them tell a stronger economic story, not to automate anyone out of one.</p>
       </div>
     </section>
 
     <!-- WHO we hire and HOW we work. Persistence over perfection. -->
     <section class="join-team" aria-labelledby="team-title">
-      <p class="join-section-kicker">The team</p>
-      <h2 class="join-section-title" id="team-title">We mentor people who are persistent.</h2>
+      <p class="join-section-kicker reveal-soft">The team</p>
+      <h2 class="join-section-title reveal" id="team-title">We mentor people who are persistent.</h2>
       <div class="join-team-body">
-        <p>Lumecon Inc. is a five-person team, built at Cornell University. We're looking for early teammates across engineering, ML, data, economic impact modeling, marketing, and sales.</p>
-        <p>If you don't have every skill on a role description, apply anyway. We're early enough that everyone is wearing several hats, and we'd rather work with someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
-        <p>What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. The roles are <strong>unpaid early-stage roles</strong>, open to undergraduate and graduate students.</p>
-        <p>We're looking for people who want to stick around and help build a strong team. We can't make any promises, but the early teammates who put in the work are the ones we'd want with us when Lumecon raises capital and starts generating revenue.</p>
+        <p class="reveal-soft" data-stagger="1">Lumecon Inc. is a five-person team, built at Cornell University. We're looking for early teammates across engineering, ML, data, economic impact modeling, marketing, and sales.</p>
+        <p class="reveal-soft" data-stagger="2">If you don't have every skill on a role description, apply anyway. We're early enough that everyone is wearing several hats, and we'd rather work with someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
+        <p class="reveal-soft" data-stagger="3">What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. The roles are <strong>unpaid early-stage roles</strong>, open to undergraduate and graduate students.</p>
+        <p class="reveal-soft" data-stagger="4">We're looking for people who want to stick around and help build a strong team. We can't make any promises, but the early teammates who put in the work are the ones we'd want with us when Lumecon raises capital and starts generating revenue.</p>
       </div>
     </section>
 
     <!-- Roles. Editorial list, no numbers — icons + title + blurb. -->
     <section class="join-roles" id="roles" aria-labelledby="roles-title">
-      <p class="join-section-kicker">Open tracks</p>
-      <h2 class="join-section-title" id="roles-title">Where you might fit.</h2>
+      <p class="join-section-kicker reveal-soft">Open tracks</p>
+      <h2 class="join-section-title reveal" id="roles-title">Where you might fit.</h2>
       <ul class="role-list">
-        {ROLES.map(({ Icon, title, blurb }) => (
-          <li class="role-row">
+        {ROLES.map(({ Icon, title, blurb }, i) => (
+          <li class="role-row reveal-soft" data-stagger={i + 1}>
             <span class="role-row__icon" aria-hidden="true"><Icon /></span>
             <div class="role-row__body">
               <h3 class="role-row__title">{title}</h3>
@@ -144,16 +144,16 @@ const jsonLd = [
 
     <!-- Apply. -->
     <section class="join-apply" aria-labelledby="apply-title">
-      <p class="join-section-kicker">Send a résumé</p>
-      <h2 class="join-section-title" id="apply-title">Tell us what draws you to the work.</h2>
-      <p class="join-apply-body">
+      <p class="join-section-kicker reveal-soft">Send a résumé</p>
+      <h2 class="join-section-title reveal" id="apply-title">Tell us what draws you to the work.</h2>
+      <p class="join-apply-body reveal-soft" data-stagger="1">
         A résumé, the track you're interested in, and one paragraph on what draws you to the work. That's the whole application. We read every submission.
       </p>
-      <div class="join-cta">
+      <div class="join-cta reveal-soft" data-stagger="2">
         <a href={mailto('Lumecon early-teammate application', applyBody)} class="btn">Send a résumé</a>
         <a href={`mailto:${site.email}`} class="btn btn--ghost">Email directly</a>
       </div>
-      <p class="join-apply-note">
+      <p class="join-apply-note reveal-soft" data-stagger="3">
         Or email <a href={`mailto:${site.email}`} class="join-apply-email">{site.email}</a> with your résumé and a short note.
       </p>
     </section>

@@ -526,8 +526,14 @@ strong { font-weight: 600; color: inherit; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
 @keyframes scaleIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); will-change: opacity, transform; }
 .reveal.seen { opacity: 1; transform: none; }
+/* A softer reveal for inline body text — smaller travel, faster. */
+.reveal-soft { opacity: 0; transform: translateY(10px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+.reveal-soft.seen { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-soft, .reveal-left, .reveal-right, .reveal-diagonal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
 .reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 .reveal-left.seen { opacity: 1; transform: none; }
 .reveal-right { opacity: 0; transform: translateX(60px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
