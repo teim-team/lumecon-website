@@ -371,22 +371,26 @@
 /* Tiered highlight: state is the BASE tint of the layered hierarchy
    (state → county → reservation). Lighter than the active county or
    reservation polygon so they read on top. */
-.hero-state[data-ring="0"] { fill: var(--gold); fill-opacity: .42; }
+/* Tiered highlight palette: state (lightest, broad backdrop) →
+   county (saturated, with a visible navy outline) → reservation
+   (terra, brightest). Each tier reads as a distinct shade so a
+   reservation-inside-county-inside-state scene shows all three
+   nested layers clearly. */
+.hero-state[data-ring="0"] { fill: var(--goldbar); fill-opacity: .85; }
 
-/* Active county polygon, layered on top of the state. */
 .hero-county {
   fill: var(--gold);
   fill-opacity: 0;
   stroke: var(--navy);
-  stroke-width: .35;
+  stroke-width: .8;
   stroke-opacity: 0;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
   transition: fill-opacity .35s var(--ease), stroke-opacity .35s var(--ease);
 }
 .hero-county[data-active="1"] {
-  fill-opacity: .78;
-  stroke-opacity: .55;
+  fill-opacity: .9;
+  stroke-opacity: .85;
 }
 
 /* Active reservation polygon, the brightest layer (terra so it

@@ -294,16 +294,34 @@ body {
   15%, 45%      { fill: #F0A91A; }
 }
 
-/* Economist: the sigma stays visible; the gold "multiplier hub" at
-   the fold pulses to read as a summation happening in real time. */
-.icon--economist .icon-econ__hub {
+/* Economist: scatter points flicker in over time (data getting
+   collected), then the gold regression line draws across them. */
+.icon--economist .icon-econ__pt {
   transform-box: fill-box;
   transform-origin: center;
-  animation: icon-econ-hub 2.6s ease-in-out infinite;
+  opacity: 0;
+  animation: icon-econ-pt 4s ease-out infinite;
 }
-@keyframes icon-econ-hub {
-  0%, 100% { transform: scale(.85); opacity: .75; }
-  50%      { transform: scale(1.35); opacity: 1;  }
+.icon--economist .icon-econ__pt--a { animation-delay: 0.00s; }
+.icon--economist .icon-econ__pt--b { animation-delay: 0.18s; }
+.icon--economist .icon-econ__pt--c { animation-delay: 0.34s; }
+.icon--economist .icon-econ__pt--d { animation-delay: 0.50s; }
+.icon--economist .icon-econ__pt--e { animation-delay: 0.66s; }
+.icon--economist .icon-econ__pt--f { animation-delay: 0.82s; }
+.icon--economist .icon-econ__pt--g { animation-delay: 0.98s; }
+.icon--economist .icon-econ__fit {
+  animation: icon-econ-fit 4s ease-out infinite;
+}
+@keyframes icon-econ-pt {
+  0%       { opacity: 0; transform: scale(.4); }
+  18%      { opacity: 1; transform: scale(1.15); }
+  28%, 95% { opacity: 1; transform: scale(1); }
+  100%     { opacity: 1; transform: scale(1); }
+}
+@keyframes icon-econ-fit {
+  0%, 35% { stroke-dashoffset: 100; }
+  60%, 95% { stroke-dashoffset: 0; }
+  100%    { stroke-dashoffset: 100; }
 }
 
 /* Megaphone: two ripples travel outward; the gold dot pulses at the bell. */
@@ -357,7 +375,8 @@ body {
   .icon--ml .icon-ml__line,
   .icon--ml .icon-ml__caret,
   .icon--data .icon-data__bar,
-  .icon--economist .icon-econ__hub,
+  .icon--economist .icon-econ__pt,
+  .icon--economist .icon-econ__fit,
   .icon--megaphone .icon-mega__wave,
   .icon--megaphone .icon-mega__dot,
   .icon--chat-role .icon-chat__dot {
@@ -365,9 +384,11 @@ body {
   }
   .icon--source-record .icon-record__line,
   .icon--ml .icon-ml__line,
-  .icon--code .icon-code__glyph { stroke-dashoffset: 0; }
+  .icon--code .icon-code__glyph,
+  .icon--economist .icon-econ__fit { stroke-dashoffset: 0; }
   .icon--global .icon-global__arc,
-  .icon--code .icon-code__caret { opacity: 1; }
+  .icon--code .icon-code__caret,
+  .icon--economist .icon-econ__pt { opacity: 1; }
   .icon--surface .icon-surface__hit { opacity: 1; transform: none; }
   .icon--data .icon-data__bar { fill: #F0A91A; }
 }
