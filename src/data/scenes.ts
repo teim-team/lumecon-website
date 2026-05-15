@@ -804,9 +804,13 @@ export const RESERVATION_SCENES: Scene[] = [
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
 
 /* Deterministic slug per scene, derived from the chip. Used by the
-   hero (URL hash) and by the static demo pages (route param). The
-   trailing year (` · 2026`) is stripped before slugifying so chips
-   can show the year without breaking previously-shared demo URLs. */
+   static demo pages (route param).
+   - The trailing year (` · 2026`) is stripped before slugifying so
+     chips can show the year without breaking previously-shared URLs.
+   - The leading level word is normalized: 'ANCSA REGION' and 'NHO'
+     both fold to 'reservation' so the recent relabel of Alaska
+     Native Corp + Native Hawaiian Organization chips doesn't change
+     any /demo/... URLs that were already indexed or shared. */
 export const slugify = (s: string): string => s
   .toLowerCase()
   .replace(/['’]/g, '')
@@ -814,5 +818,9 @@ export const slugify = (s: string): string => s
   .replace(/^-+|-+$/g, '')
   .slice(0, 60);
 
-export const sceneSlug = (s: Scene): string =>
-  slugify(s.chip.replace(/\s*·\s*\d{4}\s*$/, ''));
+export const sceneSlug = (s: Scene): string => {
+  let chip = s.chip.replace(/\s*·\s*\d{4}\s*$/, '');
+  // Fold ANCSA REGION / NHO back to RESERVATION for URL stability.
+  chip = chip.replace(/^(ANCSA REGION|NHO)\s*·/, 'RESERVATION ·');
+  return slugify(chip);
+};

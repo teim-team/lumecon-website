@@ -383,49 +383,10 @@ body {
   50%      { transform: scale(1.18); filter: drop-shadow(0 0 6px rgba(240, 169, 26, .55)); }
 }
 
-/* Shift (Join transition): a small network. Gold root pulses; edges
-   stroke-draw outward in sequence; leaves spawn at the end of each
-   edge with a brief gold flash. Same visual language as the hiring
-   banner team graph. Loops every 5s. */
-.icon--shift .icon-shift__root {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-shift-root 5s ease-in-out infinite;
-}
-.icon--shift .icon-shift__edge {
-  animation: icon-shift-edge 5s ease-out infinite;
-}
-.icon--shift .icon-shift__edge--a { animation-delay: 0.10s; }
-.icon--shift .icon-shift__edge--b { animation-delay: 0.30s; }
-.icon--shift .icon-shift__edge--c { animation-delay: 0.50s; }
-.icon--shift .icon-shift__edge--d { animation-delay: 1.10s; }
-.icon--shift .icon-shift__edge--e { animation-delay: 1.30s; }
-.icon--shift .icon-shift__leaf {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
-  animation: icon-shift-leaf 5s ease-out infinite;
-}
-.icon--shift .icon-shift__leaf--a { animation-delay: 0.40s; }
-.icon--shift .icon-shift__leaf--b { animation-delay: 0.60s; }
-.icon--shift .icon-shift__leaf--c { animation-delay: 0.80s; }
-.icon--shift .icon-shift__leaf--d { animation-delay: 1.40s; }
-.icon--shift .icon-shift__leaf--e { animation-delay: 1.60s; }
-@keyframes icon-shift-root {
-  0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(240, 169, 26, 0)); }
-  50%      { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(240, 169, 26, .6)); }
-}
-@keyframes icon-shift-edge {
-  0%       { stroke-dashoffset: 100; }
-  10%, 80% { stroke-dashoffset: 0;   }
-  90%, 100% { stroke-dashoffset: 0;  opacity: 0; }
-}
-@keyframes icon-shift-leaf {
-  0%       { opacity: 0; transform: scale(.2); fill: #F0A91A; }
-  8%       { opacity: 1; transform: scale(1.25); fill: #F0A91A; }
-  18%, 80% { opacity: 1; transform: scale(1); fill: currentColor; }
-  92%, 100% { opacity: 0; transform: scale(.6); }
-}
+/* Shift (Join transition): the bouncer + box + path animations all
+   live inside IconShift.astro itself now (a self-contained
+   requestAnimationFrame loop) so nothing is needed at the global
+   level. */
 
 /* Mentor (Join team): a large gold mentor node is anchored on the
    left; the line draws toward the mentee on the right; the mentee
@@ -482,17 +443,12 @@ body {
   .icon--chat-role .icon-chat__dot,
   .icon--ripple .icon-ripple__ring,
   .icon--ripple .icon-ripple__core,
-  .icon--shift .icon-shift__root,
-  .icon--shift .icon-shift__edge,
-  .icon--shift .icon-shift__leaf,
   .icon--mentor .icon-mentor__mentor,
   .icon--mentor .icon-mentor__line,
   .icon--mentor .icon-mentor__mentee {
     animation: none !important;
   }
   .icon--ripple .icon-ripple__ring { opacity: .35; }
-  .icon--shift .icon-shift__edge { stroke-dashoffset: 0; }
-  .icon--shift .icon-shift__leaf { opacity: 1; transform: none; }
   .icon--mentor .icon-mentor__line { stroke-dashoffset: 0; }
   .icon--source-record .icon-record__line,
   .icon--ml .icon-ml__line,

@@ -28,13 +28,12 @@ test('home page loads and renders the hero map', async ({ page }) => {
 
 test('auto-cycle fires a study within 10s', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
-  // The chip text gets populated when a scene starts running.
-  await expect(page.locator('#workspaceActivity'))
-    .toContainText(/STATE|COUNTY|RESERVATION/, { timeout: 10_000 });
-  // The URL hash should also reflect the scene.
-  await page.waitForTimeout(1500);
-  const hash = await page.evaluate(() => location.hash);
-  expect(hash).toMatch(/^#study=/);
+  // The header region gets populated with the full chip when a scene
+  // starts running. Levels: STATE / COUNTY / RESERVATION / ANCSA
+  // REGION / NHO. (URL hash is no longer used — /demo/<slug> pages
+  // are the canonical shareable paths.)
+  await expect(page.locator('#workspaceRegion'))
+    .toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, { timeout: 10_000 });
 });
 
 test('"New study" button cycles through levels', async ({ page }) => {
@@ -44,8 +43,12 @@ test('"New study" button cycles through levels', async ({ page }) => {
   for (let i = 0; i < 3; i++) {
     await page.locator('#workspaceAgain').click();
     await page.waitForTimeout(1200);
-    const chip = await page.locator('#workspaceActivity').textContent();
-    const level = chip?.trim().split(' ·')[0];
+    const chip = await page.locator('#workspaceRegion').textContent();
+    // First chip token before the bullet is the level. The reservation
+    // pool now includes ANCSA REGION and NHO entries; normalize those
+    // to RESERVATION so the rotating-pool assertion stays stable.
+    let level = chip?.trim().split(' ·')[0] || '';
+    if (level === 'ANCSA REGION' || level === 'NHO') level = 'RESERVATION';
     if (level) observedLevels.push(level);
   }
   expect(observedLevels).toEqual(['STATE', 'COUNTY', 'RESERVATION']);
@@ -87,11 +90,10 @@ test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async (
 
 test('keyboard shortcut S triggers a new study', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
-  await page.waitForTimeout(1500);
-  const before = await page.evaluate(() => location.hash);
+  await page.waitForTimeout(2000);
+  const before = await page.locator('#workspaceRegion').textContent();
   await page.keyboard.press('s');
-  await page.waitForTimeout(800);
-  const after = await page.evaluate(() => location.hash);
+  await page.waitForTimeout(1200);
+  const after = await page.locator('#workspaceRegion').textContent();
   expect(after).not.toBe(before);
-  expect(after).toMatch(/^#study=/);
 });

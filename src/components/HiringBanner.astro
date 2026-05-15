@@ -450,12 +450,17 @@
   /* Nodes + edges are positioned and animated entirely from JS now
      (see the inline script at the bottom of this file). CSS only
      supplies the gentle center-pulse and a transform-box hint so
-     each circle scales around its own center. */
-  .hg-node {
+     each circle scales around its own center.
+     :global() is required because the circles are created with
+     document.createElementNS() and don't receive Astro's scoped
+     data-astro-cid attribute; without it the transform rules never
+     bind and the spawn() scale animations origin at the SVG origin
+     instead of the node center. */
+  :global(.hg-node) {
     transform-box: fill-box;
     transform-origin: center;
   }
-  .hg-node--center {
+  :global(.hg-node--center) {
     animation: hg-pulse 6s ease-in-out infinite;
   }
   @keyframes hg-pulse {
@@ -463,7 +468,7 @@
     50%      { transform: scale(1.15); filter: drop-shadow(0 0 4px rgba(240, 169, 26, .55)); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hg-node--center { animation: none !important; }
+    :global(.hg-node--center) { animation: none !important; }
   }
 
   @media (max-width: 720px) {

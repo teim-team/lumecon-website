@@ -850,6 +850,17 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       }
       if (best && bestDist <= HIGHLIGHT_MAX_DIST) {
         best.setAttribute('data-active', '1');
+        // Recenter the source dot on the polygon's actual bbox center.
+        // The tribalLookup centroid is from Census TIGER/Line interior
+        // points and can drift a few units off the visual center of
+        // the us-atlas polygon; this snaps the dot onto the polygon
+        // the viewer is actually looking at.
+        try {
+          const bb = best.getBBox();
+          const px = bb.x + bb.width / 2;
+          const py = bb.y + bb.height / 2;
+          moveSource(px, py);
+        } catch {}
         return true;
       }
       return false;
