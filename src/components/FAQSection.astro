@@ -15,7 +15,7 @@
 const faqs = [
   {
     q: 'What is Lumecon?',
-    a: 'Lumecon Inc. is economic impact analysis software for governments and mission-driven organizations — a modern alternative to IMPLAN, RIMS II, and REMI. Built at Cornell University. Use Cedar AI to read messy administrative data and run impact studies in-house.',
+    a: 'Lumecon Inc. is economic impact analysis software for governments and mission-driven organizations. A modern alternative to IMPLAN, RIMS II, and REMI. Built at Cornell University. Use Cedar AI to read messy administrative data and run impact studies in-house.',
   },
   {
     q: 'Who uses Lumecon?',
@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: 'What geographies does Lumecon cover?',
-    a: 'All federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country — all in one annual subscription, not priced per geography.',
+    a: 'All federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country, all in one annual subscription, not priced per geography.',
   },
   {
     q: 'What is Cedar?',
@@ -47,7 +47,7 @@ const faqs = [
   <div class="ask-cedar__inner">
     <p class="ask-cedar__eyebrow">Frequently asked</p>
     <h2 class="ask-cedar__title" id="faq-title">Ask Cedar.</h2>
-    <p class="ask-cedar__note">Cedar is the AI assistant inside every Lumecon platform. This marketing-page Cedar runs from a fixed answer set — for live reasoning over your data, that lives in the product.</p>
+    <p class="ask-cedar__note">Cedar is the AI assistant inside every Lumecon platform. This marketing-page Cedar runs from a fixed answer set. Live reasoning over your data lives in the product.</p>
 
     <!-- Cedar chat (JS-hydrated). Hidden until script reveals it so a
          no-JS visitor goes straight to the <details> fallback below. -->
@@ -55,14 +55,14 @@ const faqs = [
       <div class="cedar-chat__transcript" id="cedarTranscript" role="log" aria-live="polite" aria-label="Cedar conversation">
         <div class="cedar-msg cedar-msg--bot">
           <span class="cedar-msg__avatar" aria-hidden="true">C</span>
-          <div class="cedar-msg__bubble">Hi — I'm Cedar, Lumecon's AI assistant. Pick a question and I'll answer.</div>
+          <div class="cedar-msg__bubble">Hi, I'm Cedar, Lumecon's AI assistant. Pick a question and I'll answer.</div>
         </div>
       </div>
       <div class="cedar-chat__chips" id="cedarChips">
         {faqs.map((f, i) => <button class="cedar-chip" type="button" data-q={i}>{f.q}</button>)}
       </div>
       <p class="cedar-chat__email">
-        Question not here? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a> — a human reads every one.
+        Question not here? <a href="mailto:contact@lumecon.ai?subject=Cedar%20question">Email contact@lumecon.ai</a>. A human reads every one.
       </p>
     </div>
 
@@ -81,68 +81,60 @@ const faqs = [
   <script type="application/json" id="cedarFaqData" set:html={JSON.stringify(faqs)}></script>
 </section>
 
-<script>
-  type FAQ = { q: string; a: string };
-  const dataEl = document.getElementById('cedarFaqData') as HTMLScriptElement | null;
+<script is:inline>
+  (function () {
+  const dataEl = document.getElementById('cedarFaqData');
   const chat = document.getElementById('cedarChat');
   const fallback = document.getElementById('cedarFallback');
   const transcript = document.getElementById('cedarTranscript');
   const chipsEl = document.getElementById('cedarChips');
 
-  if (dataEl && chat && fallback && transcript && chipsEl) {
-    const FAQS: FAQ[] = JSON.parse(dataEl.textContent || '[]');
+  if (!(dataEl && chat && fallback && transcript && chipsEl)) return;
+  const FAQS = JSON.parse(dataEl.textContent || '[]');
 
-    // Hydrate: hide static FAQ, show chat
-    chat.removeAttribute('hidden');
-    fallback.setAttribute('hidden', '');
+  // Hydrate: hide static FAQ, show chat
+  chat.removeAttribute('hidden');
+  fallback.setAttribute('hidden', '');
 
-    const appendMessage = (variant: 'bot' | 'user', body: string | HTMLElement) => {
-      const wrap = document.createElement('div');
-      wrap.className = `cedar-msg cedar-msg--${variant}`;
-      if (variant === 'bot') {
-        const av = document.createElement('span');
-        av.className = 'cedar-msg__avatar';
-        av.setAttribute('aria-hidden', 'true');
-        av.textContent = 'C';
-        wrap.appendChild(av);
-      }
-      const bubble = document.createElement('div');
-      bubble.className = 'cedar-msg__bubble';
-      if (typeof body === 'string') bubble.textContent = body;
-      else bubble.appendChild(body);
-      wrap.appendChild(bubble);
-      transcript.appendChild(wrap);
-      // Smooth-scroll inside the transcript so new messages stay visible.
-      transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
-      return wrap;
-    };
-
-    chipsEl.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest('.cedar-chip') as HTMLButtonElement | null;
-      if (!btn) return;
-      const idx = parseInt(btn.dataset.q || '-1', 10);
-      const item = FAQS[idx];
-      if (!item) return;
-
-      // Remove chip so it can't be asked twice.
-      btn.disabled = true;
-      btn.classList.add('cedar-chip--used');
-
-      // User echo bubble.
-      appendMessage('user', item.q);
-
-      // Cedar typing indicator → replaced with the answer after a beat.
-      const dots = document.createElement('span');
-      dots.className = 'cedar-typing';
-      dots.innerHTML = '<span></span><span></span><span></span>';
-      const typing = appendMessage('bot', dots);
-
-      window.setTimeout(() => {
-        const bubble = typing.querySelector('.cedar-msg__bubble');
-        if (bubble) bubble.textContent = item.a;
-      }, 650);
-    });
+  function appendMessage(variant, body) {
+    const wrap = document.createElement('div');
+    wrap.className = 'cedar-msg cedar-msg--' + variant;
+    if (variant === 'bot') {
+      const av = document.createElement('span');
+      av.className = 'cedar-msg__avatar';
+      av.setAttribute('aria-hidden', 'true');
+      av.textContent = 'C';
+      wrap.appendChild(av);
+    }
+    const bubble = document.createElement('div');
+    bubble.className = 'cedar-msg__bubble';
+    if (typeof body === 'string') bubble.textContent = body;
+    else bubble.appendChild(body);
+    wrap.appendChild(bubble);
+    transcript.appendChild(wrap);
+    transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
+    return wrap;
   }
+
+  chipsEl.addEventListener('click', function (e) {
+    const btn = e.target.closest('.cedar-chip');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.q || '-1', 10);
+    const item = FAQS[idx];
+    if (!item) return;
+    btn.disabled = true;
+    btn.classList.add('cedar-chip--used');
+    appendMessage('user', item.q);
+    const dots = document.createElement('span');
+    dots.className = 'cedar-typing';
+    dots.innerHTML = '<span></span><span></span><span></span>';
+    const typing = appendMessage('bot', dots);
+    window.setTimeout(function () {
+      const bubble = typing.querySelector('.cedar-msg__bubble');
+      if (bubble) bubble.textContent = item.a;
+    }, 650);
+  });
+  })();
 </script>
 
 <style>
@@ -184,7 +176,9 @@ const faqs = [
   }
 
   /* ---------- Cedar chat surface ---------- */
-  .cedar-chat {
+  /* :global() so dynamically-created bubbles (added by JS, no Astro
+     scope attr) still get styled. */
+  :global(.cedar-chat) {
     border: 1px solid var(--rule);
     border-radius: 12px;
     background: var(--paper);
@@ -193,7 +187,7 @@ const faqs = [
       0 1px 2px rgba(14, 21, 48, .04),
       0 8px 24px -8px rgba(14, 21, 48, .08);
   }
-  .cedar-chat__transcript {
+  :global(.cedar-chat__transcript) {
     display: flex;
     flex-direction: column;
     gap: .9rem;
@@ -202,18 +196,18 @@ const faqs = [
     padding-right: .25rem;
     scroll-behavior: smooth;
   }
-  .cedar-msg {
+  :global(.cedar-msg) {
     display: flex;
     gap: .7rem;
     align-items: flex-start;
     max-width: 86%;
     animation: cedar-fade-in .25s var(--ease) both;
   }
-  .cedar-msg--user {
+  :global(.cedar-msg--user) {
     align-self: flex-end;
     flex-direction: row-reverse;
   }
-  .cedar-msg__avatar {
+  :global(.cedar-msg__avatar) {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -228,7 +222,7 @@ const faqs = [
     font-size: .85rem;
     letter-spacing: -.01em;
   }
-  .cedar-msg__bubble {
+  :global(.cedar-msg__bubble) {
     background: var(--white);
     border: 1px solid var(--rule);
     padding: .75rem .95rem;
@@ -238,8 +232,8 @@ const faqs = [
     line-height: 1.5;
     color: var(--ink-2);
   }
-  .cedar-msg--bot .cedar-msg__bubble { border-top-left-radius: 4px; }
-  .cedar-msg--user .cedar-msg__bubble {
+  :global(.cedar-msg--bot .cedar-msg__bubble) { border-top-left-radius: 4px; }
+  :global(.cedar-msg--user .cedar-msg__bubble) {
     background: var(--navy);
     color: var(--white);
     border-color: var(--navy);
@@ -250,21 +244,21 @@ const faqs = [
     to   { opacity: 1; transform: none; }
   }
 
-  /* Typing dots inside a Cedar bubble */
-  .cedar-typing {
+  /* Typing dots inside a Cedar bubble (JS-created, so :global). */
+  :global(.cedar-typing) {
     display: inline-flex;
     gap: .3rem;
     padding: .15rem 0;
   }
-  .cedar-typing span {
+  :global(.cedar-typing span) {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: var(--ink-3);
     animation: cedar-bounce 1.2s ease-in-out infinite;
   }
-  .cedar-typing span:nth-child(2) { animation-delay: .15s; }
-  .cedar-typing span:nth-child(3) { animation-delay: .3s; }
+  :global(.cedar-typing span:nth-child(2)) { animation-delay: .15s; }
+  :global(.cedar-typing span:nth-child(3)) { animation-delay: .3s; }
   @keyframes cedar-bounce {
     0%, 100% { transform: translateY(0);    opacity: .5; }
     50%      { transform: translateY(-4px); opacity: 1;  }
@@ -320,6 +314,9 @@ const faqs = [
     flex-direction: column;
     border-top: 1px solid var(--rule);
   }
+  /* [hidden] needs to win over display:flex above so JS-hydration
+     actually removes the static FAQ list from view. */
+  .faq-list[hidden] { display: none; }
   .faq-item {
     border-bottom: 1px solid var(--rule);
   }
@@ -358,8 +355,9 @@ const faqs = [
   }
 
   @media (max-width: 600px) {
-    .cedar-chat { padding: 1.1rem; }
-    .cedar-msg { max-width: 92%; }
-    .cedar-chat__transcript { max-height: 360px; }
+    :global(.cedar-chat) { padding: 1.1rem; }
+    :global(.cedar-msg) { max-width: 92%; }
+    :global(.cedar-chat__transcript) { max-height: 360px; }
+    .ask-cedar__title { font-size: 1.8rem; }
   }
 </style>

@@ -668,9 +668,6 @@
   pointer-events: none;
 }
 
-/* Hidden Ask-Cedar — keep DOM ids the JS expects, but invisible */
-.ask-cedar { display: none; }
-
 /* responsive */
 @media (max-width: 880px) {
   .hero-statement { font-size: clamp(2rem, 8vw, 2.8rem); }
