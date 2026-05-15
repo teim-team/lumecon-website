@@ -205,8 +205,8 @@ export const RESERVATION_SCENES: Scene[] = [
     chip: 'RESERVATION · Gaming property renovation · Seneca Nation',
     sentence: 'The Seneca Nation modernizes a tribal gaming property on the Cattaraugus Reservation, a $63.4M capital project.' },
   { level: 'reservation', tribalKey: 'winnebago_ne', amount: { v: 38_500_000, label: '$38.5M' }, activity: ACT.ops,
-    chip: 'RESERVATION · Tribal enterprise expansion · Winnebago of Nebraska',
-    sentence: 'The Winnebago Tribe of Nebraska expands its tribally-owned diversified enterprise with $38.5M in new operating capital and reinvestment.' },
+    chip: 'RESERVATION · Ho-Chunk Inc. tribal enterprise expansion · Winnebago Tribe of Nebraska',
+    sentence: 'The Winnebago Tribe of Nebraska expands Ho-Chunk Inc., its tribally-owned diversified holding company, with $38.5M in new operating capital across construction, government services, and real-estate subsidiaries.' },
   { level: 'reservation', tribalKey: 'mashantucket', amount: { v: 112_000_000, label: '$112M' }, activity: ACT.build,
     chip: 'RESERVATION · Resort modernization · Mashantucket Pequot',
     sentence: 'The Mashantucket Pequot Tribal Nation funds a $112M Foxwoods-area resort modernization on the Mashantucket Pequot Reservation.' },
@@ -698,6 +698,22 @@ export const RESERVATION_SCENES: Scene[] = [
   { level: 'reservation', tribalKey: 'miccosukee', amount: { v: 94_000_000, label: '$94M' }, activity: ACT.tourism,
     chip: 'RESERVATION · Miccosukee Resort + Everglades stewardship · Miccosukee Tribe',
     sentence: 'The Miccosukee Tribe of Indians of Florida funds a $94M Miccosukee Resort & Gaming expansion and Everglades stewardship program in south Florida.' },
+
+  // ---------- WarHorse Casino (Ho-Chunk Inc. subsidiary, Winnebago Tribe NE) ----------
+  { level: 'reservation', tribalKey: 'warhorse', amount: { v: 128_000_000, label: '$128M' }, activity: ACT.build,
+    chip: 'RESERVATION · WarHorse Gaming Nebraska expansion · Ho-Chunk Inc.',
+    sentence: 'Ho-Chunk Inc., the Winnebago Tribe of Nebraska\'s tribal corporation, funds a $128M WarHorse Gaming expansion across its WarHorse Lincoln, Omaha, and South Sioux City racino properties.' },
+
+  // ---------- Alaska Native Corporations (ANCSA, 1971) ----------
+  { level: 'reservation', tribalKey: 'asrc', amount: { v: 245_000_000, label: '$245M' }, activity: ACT.energy,
+    chip: 'RESERVATION · Tribal oil + government services · Arctic Slope Regional Corporation',
+    sentence: 'Arctic Slope Regional Corporation, the Native regional corporation for the North Slope, funds $245M of oil-and-gas, refining (Petro Star), and federal-services expansion serving its Iñupiaq shareholders.' },
+  { level: 'reservation', tribalKey: 'nana', amount: { v: 185_000_000, label: '$185M' }, activity: ACT.energy,
+    chip: 'RESERVATION · Red Dog Mine + Northwest Alaska enterprise · NANA Regional Corporation',
+    sentence: 'NANA Regional Corporation, the Native regional corporation for Northwest Alaska, funds $185M of Red Dog Mine zinc-and-lead operations and Iñupiaq economic development across the Northwest Arctic Borough.' },
+  { level: 'reservation', tribalKey: 'afognak', amount: { v: 98_000_000, label: '$98M' }, activity: ACT.ops,
+    chip: 'RESERVATION · Federal services + Alaska tourism · Afognak Native Corporation',
+    sentence: 'Afognak Native Corporation, the Native village corporation for Afognak Island in the Kodiak Archipelago, funds $98M of federal-services contracting and Alaska tourism expansion serving its Alutiiq shareholders.' },
 ];
 
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];

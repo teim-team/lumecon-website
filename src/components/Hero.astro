@@ -282,6 +282,15 @@ const MANUAL_TRIBES: Record<string, { name: string; cx: number; cy: number; fips
   // Hollywood, FL (Seminole Hard Rock Guitar Hotel — Hollywood Reservation).
   // Separate from the Big Cypress Reservation centroid in the Census data.
   seminole_hw:{ name: 'Seminole Tribe (Hollywood)',cx: 822.6, cy: 566.9, fips: '12' },
+  // Lincoln, NE (WarHorse Casino — Ho-Chunk Inc. subsidiary, Winnebago Tribe NE).
+  warhorse:   { name: 'WarHorse Gaming (Ho-Chunk Inc.)', cx: 459, cy: 358, fips: '31' },
+  // Utqiagvik / Barrow, AK (ASRC HQ — Arctic Slope Regional Corporation).
+  // Anchored to the Barrow ANVSA centroid in the Census dataset.
+  asrc:       { name: 'Arctic Slope Regional Corporation', cx: 89.3, cy: 465.3, fips: '02' },
+  // Kotzebue, AK (NANA Regional Corporation HQ).
+  nana:       { name: 'NANA Regional Corporation', cx: 70.1, cy: 498.1, fips: '02' },
+  // Afognak Island, AK — anchored near Ouzinkie ANVSA centroid.
+  afognak:    { name: 'Afognak Native Corporation', cx: 103.5, cy: 571.0, fips: '02' },
 };
 const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
