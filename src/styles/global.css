@@ -92,6 +92,147 @@ body {
   border-radius: 2px;
 }
 
+/* ---------- Icon animations ----------
+   Subtle, thematic motion so each icon hints at what its section is
+   about. Disabled under prefers-reduced-motion. */
+
+/* Local: dot walks the inner cells of the 3×3 grid. */
+.icon--local .icon-local__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-local-scan 8s ease-in-out infinite;
+}
+@keyframes icon-local-scan {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(4.3px, 0); }
+  40%  { transform: translate(4.3px, 4.3px); }
+  60%  { transform: translate(0, 4.3px); }
+  80%  { transform: translate(-4.3px, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Tribal: three inner nodes pulse in a wave (community heartbeat). */
+.icon--tribal .icon-tribal__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-tribal-pulse 2.8s ease-in-out infinite;
+}
+.icon--tribal .icon-tribal__dot--b { animation-delay: .25s; }
+.icon--tribal .icon-tribal__dot--c { animation-delay: .5s; }
+@keyframes icon-tribal-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.35); }
+}
+
+/* Global: the inner arc draws in, then the two endpoint dots pulse
+   (cross-border flow). */
+.icon--global .icon-global__arc {
+  stroke-dashoffset: 100;
+  animation: icon-global-draw 3.6s ease-out infinite;
+}
+.icon--global .icon-global__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-global-pulse 3.6s ease-in-out infinite;
+}
+.icon--global .icon-global__dot--right { animation-delay: 1.8s; }
+@keyframes icon-global-draw {
+  0%   { stroke-dashoffset: 100; }
+  40%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes icon-global-pulse {
+  0%, 60%, 100% { transform: scale(1); }
+  70%           { transform: scale(1.4); }
+}
+
+/* Upload: the dot moves up into the document (uploading). */
+.icon--upload .icon-upload__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-upload-rise 2.6s ease-in-out infinite;
+}
+.icon--upload .icon-upload__arrow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-upload-arrow 2.6s ease-in-out infinite;
+}
+@keyframes icon-upload-rise {
+  0%   { transform: translateY(0); opacity: 1; }
+  50%  { transform: translateY(-3.5px); opacity: 1; }
+  60%  { transform: translateY(-3.5px); opacity: 0; }
+  61%  { transform: translateY(2px);    opacity: 0; }
+  75%  { transform: translateY(0);      opacity: 1; }
+  100% { transform: translateY(0);      opacity: 1; }
+}
+@keyframes icon-upload-arrow {
+  0%, 40% { transform: translateY(0); opacity: 1; }
+  60%     { transform: translateY(-1.5px); opacity: .6; }
+  100%    { transform: translateY(0); opacity: 1; }
+}
+
+/* Surface Assumption: the curve draws in, then the gold dot flags up. */
+.icon--surface .icon-surface__arc {
+  stroke-dashoffset: 100;
+  animation: icon-surface-draw 3s ease-out infinite;
+}
+.icon--surface .icon-surface__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-surface-flag 3s ease-in-out infinite;
+}
+@keyframes icon-surface-draw {
+  0%   { stroke-dashoffset: 100; }
+  35%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes icon-surface-flag {
+  0%, 30% { transform: scale(1); }
+  50%     { transform: scale(1.45); }
+  70%     { transform: scale(1); }
+}
+
+/* Source record: each line draws in, then the gold check completes. */
+.icon--source-record .icon-record__line {
+  stroke-dashoffset: 100;
+}
+.icon--source-record .icon-record__line--a { animation: icon-record-line 3.6s ease-out infinite; }
+.icon--source-record .icon-record__line--b { animation: icon-record-line 3.6s ease-out infinite .25s; }
+.icon--source-record .icon-record__check {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-record-check 3.6s ease-in-out infinite;
+}
+@keyframes icon-record-line {
+  0%   { stroke-dashoffset: 100; }
+  40%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes icon-record-check {
+  0%, 55% { transform: scale(.65); opacity: .35; }
+  70%     { transform: scale(1.2); opacity: 1;   }
+  85%     { transform: scale(1);   opacity: 1;   }
+  100%    { transform: scale(1);   opacity: 1;   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon--local .icon-local__dot,
+  .icon--tribal .icon-tribal__dot,
+  .icon--global .icon-global__arc,
+  .icon--global .icon-global__dot,
+  .icon--upload .icon-upload__dot,
+  .icon--upload .icon-upload__arrow,
+  .icon--surface .icon-surface__arc,
+  .icon--surface .icon-surface__dot,
+  .icon--source-record .icon-record__line,
+  .icon--source-record .icon-record__check {
+    animation: none !important;
+  }
+  .icon--source-record .icon-record__line { stroke-dashoffset: 0; }
+  .icon--global .icon-global__arc,
+  .icon--surface .icon-surface__arc { stroke-dashoffset: 0; }
+}
+
 /* Keyboard-shortcut help overlay, summoned with `?` and dismissed with
    `?` or Esc. Fixed bottom-right; small product-style affordance. */
 .kb-hint {

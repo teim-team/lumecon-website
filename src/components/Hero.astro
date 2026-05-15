@@ -326,7 +326,8 @@ const MANUAL_TRIBES: Record<string, { name: string; cx: number; cy: number; fips
   nakupuna:           { name: 'Nakupuna Companies',  cx: 266.9, cy: 549.1, fips: '15' },
   kamehameha_schools: { name: 'Kamehameha Schools',  cx: 266.9, cy: 549.1, fips: '15' },
 };
-const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
+type TribalEntry = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
+const tribalLookup: Record<string, TribalEntry> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
   for (const c of candidates) {
     const found = aiannh.find((t: any) => t.name && t.name.toLowerCase().includes(c.toLowerCase()));
@@ -336,9 +337,19 @@ for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
     }
   }
 }
-// Manual entries take precedence over Census matches with the same key
-// (none currently overlap; this is a safety net for hand-tuned anchors).
+// Manual entries take precedence over Census matches with the same key.
 Object.assign(tribalLookup, MANUAL_TRIBES);
+
+// Enrich each entry with the FIPS of the county containing its centroid.
+// Computed at build time so the runtime can highlight state + county +
+// reservation as a nested hierarchy when a reservation scene fires.
+// @ts-ignore — module path resolved at SSR
+import { findContainingCounty } from '../data/countyMatch';
+for (const key of Object.keys(tribalLookup)) {
+  const t = tribalLookup[key];
+  const cf = findContainingCounty(t.cx, t.cy);
+  if (cf) t.countyFips = cf;
+}
 const tribalLookupJson = JSON.stringify(tribalLookup);
 ---
 <section class="hero" id="top">
@@ -425,6 +436,12 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         ))}
       </g>
 
+      <!-- County-fill layer: lazy-injected. Only the counties referenced
+           by named scenes are loaded (from /data/counties.json) so the
+           payload stays small. Renders BETWEEN states and AIANNH so the
+           visual hierarchy is state → county → reservation. -->
+      <g class="hero-map__counties-fill" id="heroCountyLayer" data-loaded="0"></g>
+
       <!-- AIANNH overlay: lazy-injected. The full polygon set is fetched
            from /data/aiannh.json on first map interaction (or idle, whichever
            comes first) and appended here. Events use delegation on this
@@ -508,7 +525,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
 <script>
   type StateInfo = { name: string; cx: number; cy: number; code: string };
-  type TribalLand = { name: string; cx: number; cy: number; fips: string };
+  type TribalLand = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
   const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
   const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
   const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
@@ -897,7 +914,10 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
        reservation scenes resolve to a tribal-land centroid pulled from
        the AIANNH lookup so the source point lands on the actual polygon.
        Also encodes the scene's slug in the URL hash so shared links
-       replay the exact same study. */
+       replay the exact same study. Multi-region highlight: state always
+       lights up (via runStudy's shadeNeighbors), county lights up when
+       scene.countyFips is set, reservation polygon lights up by tribal
+       name match. */
     const updateUrlForScene = (scene: Scene) => {
       const slug = slugify(scene.chip);
       try {
@@ -909,11 +929,48 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         window.history.replaceState(null, '', u.toString());
       } catch {}
     };
+    let pendingReservationTribalKey: string | undefined;
+    const clearReservationHighlight = () => {
+      stage.querySelectorAll<HTMLElement>('.hero-aiannh[data-active="1"]').forEach(el => {
+        el.removeAttribute('data-active');
+      });
+    };
+    const applyReservationHighlight = () => {
+      if (!pendingReservationTribalKey) return false;
+      const t = tribalLookup[pendingReservationTribalKey];
+      if (!t) return false;
+      const short = t.name.toLowerCase();
+      const candidates = stage.querySelectorAll<HTMLElement>('.hero-aiannh');
+      for (const el of Array.from(candidates)) {
+        const dname = (el.dataset.name || '').toLowerCase();
+        const dshort = (el.dataset.short || '').toLowerCase();
+        if (!dshort && !dname) continue;
+        if (dshort.includes(short) || dname.includes(short) || short.includes(dshort || '___')) {
+          el.setAttribute('data-active', '1');
+          return true;
+        }
+      }
+      return false;
+    };
+    const highlightReservationByTribalKey = (tribalKey: string) => {
+      clearReservationHighlight();
+      pendingReservationTribalKey = tribalKey;
+      // Kick off lazy-load if not already in flight.
+      loadAiannh();
+      applyReservationHighlight();
+    };
     const runScene = async (scene: typeof SCENES[number]) => {
       updateUrlForScene(scene);
+      // Apply layered highlights for this scene before runStudy fires.
+      // For county scenes, scene.countyFips. For reservation scenes,
+      // pull the precomputed containing-county FIPS from tribalLookup
+      // so we get state + county + reservation as a nested hierarchy.
+      clearReservationHighlight();
       if (scene.level === 'reservation' && scene.tribalKey) {
         const t = tribalLookup[scene.tribalKey];
         if (t) {
+          highlightCounty(t.countyFips);
+          highlightReservationByTribalKey(scene.tribalKey);
           await runStudy(t.fips, {
             activity: scene.activity,
             amount: scene.amount,
@@ -924,6 +981,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           return;
         }
       }
+      highlightCounty(scene.countyFips);
       if (scene.state) {
         await runStudy(scene.state, {
           activity: scene.activity,
@@ -1139,6 +1197,59 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       });
     });
 
+    /* ---------- County polygon lazy-load + per-scene highlight ----------
+       Fetches only the counties referenced by named scenes (filtered
+       /data/counties.json endpoint). Injected once on idle. When a
+       scene fires with scene.countyFips set, we add data-active="1"
+       on the matching county polygon for the tiered highlight. */
+    const countyLayer = document.getElementById('heroCountyLayer');
+    let countyLoading: Promise<void> | null = null;
+    const countyByFips = new Map<string, SVGPathElement>();
+    let pendingCountyFips: string | undefined;
+    const loadCounties = (): Promise<void> => {
+      if (!countyLayer || countyLayer.dataset.loaded === '1') return Promise.resolve();
+      if (countyLoading) return countyLoading;
+      countyLoading = fetch('/data/counties.json', { credentials: 'same-origin' })
+        .then(r => r.ok ? r.json() : [])
+        .then((polys: any[]) => {
+          if (!countyLayer || countyLayer.dataset.loaded === '1') return;
+          const SVG_NS = 'http://www.w3.org/2000/svg';
+          const frag = document.createDocumentFragment();
+          for (const p of polys) {
+            const el = document.createElementNS(SVG_NS, 'path');
+            el.setAttribute('class', 'hero-county');
+            el.setAttribute('d', p.pathD);
+            el.setAttribute('data-fips', p.id);
+            el.setAttribute('data-name', p.name);
+            frag.appendChild(el);
+            countyByFips.set(p.id, el);
+          }
+          countyLayer.appendChild(frag);
+          countyLayer.dataset.loaded = '1';
+          // Re-apply any pending county highlight that was requested
+          // before the polygons finished loading.
+          if (pendingCountyFips) {
+            const target = countyByFips.get(pendingCountyFips);
+            if (target) target.setAttribute('data-active', '1');
+          }
+        })
+        .catch(() => {});
+      return countyLoading;
+    };
+    const clearCountyHighlight = () => {
+      countyByFips.forEach(el => el.removeAttribute('data-active'));
+    };
+    const highlightCounty = (fips: string | undefined) => {
+      clearCountyHighlight();
+      pendingCountyFips = fips;
+      if (!fips) return;
+      // Kick off the lazy-load if it hasn't started yet — we need the
+      // polygons to be in the DOM to highlight them.
+      loadCounties();
+      const el = countyByFips.get(fips);
+      if (el) el.setAttribute('data-active', '1');
+    };
+
     /* ---------- AIANNH lazy-load + event delegation ----------
        The 485 tribal-land polygons used to be inlined into the SSR HTML
        (~1MB). They are now fetched from /data/aiannh.json on the first
@@ -1173,22 +1284,25 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           }
           aiannhLayer.appendChild(frag);
           aiannhLayer.dataset.loaded = '1';
+          // Re-apply any pending reservation highlight requested before
+          // the polygons finished loading.
+          applyReservationHighlight();
         })
         .catch(() => { /* swallow — non-essential overlay */ });
       return aiannhLoading;
     };
 
     // Trigger lazy-load on first stage interaction or after idle.
-    const triggerLoadOnce = () => loadAiannh();
+    const triggerLoadOnce = () => { loadAiannh(); loadCounties(); };
     stage.addEventListener('pointerenter', triggerLoadOnce, { once: true });
     stage.addEventListener('focusin', triggerLoadOnce, { once: true });
     // Also kick off after the first auto-cycle scene completes so even
-    // visitors who never touch the map get the layer ready.
+    // visitors who never touch the map get the layers ready.
     const w = window as unknown as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void };
     if (typeof w.requestIdleCallback === 'function') {
-      w.requestIdleCallback(() => loadAiannh(), { timeout: 4000 });
+      w.requestIdleCallback(() => { loadAiannh(); loadCounties(); }, { timeout: 4000 });
     } else {
-      w.setTimeout(() => loadAiannh(), 2500);
+      w.setTimeout(() => { loadAiannh(); loadCounties(); }, 2500);
     }
 
     // Delegated handlers — work whether the polygons are injected or not.

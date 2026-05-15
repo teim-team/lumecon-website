@@ -7,18 +7,38 @@ import Hero from '../components/Hero.astro';
 import WhySection from '../components/WhySection.astro';
 import ProductsSection from '../components/ProductsSection.astro';
 import CedarSection from '../components/CedarSection.astro';
+import FAQSection from '../components/FAQSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 
+const FAQ_ITEMS = [
+  { q: 'What is Lumecon?',
+    a: 'Lumecon Inc. is economic impact analysis software for governments and mission-driven organizations — a modern alternative to IMPLAN, RIMS II, and REMI. Built at Cornell University. Use Cedar AI to read messy administrative data and run impact studies in-house.' },
+  { q: 'Who uses Lumecon?',
+    a: 'Municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, federal programs, universities and research labs, foundations, CDFIs, and economic development organizations.' },
+  { q: 'Is Lumecon an IMPLAN / RIMS II / REMI alternative?',
+    a: 'Yes. Lumecon was built as a modern, AI-assisted alternative to IMPLAN, RIMS II, REMI Policy Insight, and BEA RIMS II multipliers for organizations that need to run economic impact studies in-house, on their own data, without per-region licensing fees.' },
+  { q: 'What geographies does Lumecon cover?',
+    a: 'All federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country — all in one annual subscription, not priced per geography.' },
+  { q: 'What is Cedar?',
+    a: 'Cedar is the AI assistant built into every Lumecon platform. Cedar reads the files your departments already share, surfaces each assumption the model is about to use, asks you to confirm or override, and writes a record of every source and method so the work is traceable end to end.' },
+  { q: 'Can Lumecon run historical or forward-looking analyses?',
+    a: 'Yes. Look back historically for a longitudinal analysis, or model forward to plan a budget, grant proposal, or capital project. Studies improve over time as more of your data accumulates in the system.' },
+  { q: 'Where was Lumecon built?',
+    a: 'Lumecon Inc. was built at Cornell University, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team\'s academic background spans Cornell and Dartmouth.' },
+];
+
 const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": ["Organization", "SoftwareApplication"],
+    "@id": `${site.url}#org`,
     "name": site.legalName,
     "legalName": site.legalName,
-    "alternateName": site.name,
+    "alternateName": ["Lumecon", "Lumecon.ai", site.name],
+    "disambiguatingDescription": "Lumecon Inc. is an AI-assisted economic impact analysis software company, headquartered online at lumecon.ai. Not affiliated with any unrelated trademark-similar businesses in other industries.",
     "applicationCategory": "BusinessApplication",
     "applicationSubCategory": "Economic Impact Analysis Software",
     "operatingSystem": "Web",
@@ -28,7 +48,15 @@ const jsonLd = [
     "description": "Lumecon Inc. builds economic and policy analysis software for governments and mission-driven organizations. A modern, web-based alternative to IMPLAN, RIMS II, REMI, and BEA RIMS workflows, with Cedar AI to handle messy data across departments.",
     "email": site.email,
     "slogan": site.tagline,
-    "sameAs": ["https://www.linkedin.com/company/lumecon-ai"],
+    "naics": "541512",
+    "industry": "Economic Impact Analysis Software",
+    "sameAs": [
+      "https://www.linkedin.com/company/lumecon-ai",
+      "https://lumecon.ai",
+      "https://localeconomicimpact.com",
+      "https://tribaleconomicimpact.com",
+      "https://globaleconomicimpact.com"
+    ],
     "foundingLocation": { "@type": "Place", "name": site.builtAt },
     "knowsAbout": [
       "Economic Impact Analysis",
@@ -107,8 +135,29 @@ const jsonLd = [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": site.url },
       { "@type": "ListItem", "position": 2, "name": "Platforms", "item": `${site.url}/#products` },
       { "@type": "ListItem", "position": 3, "name": "Cedar", "item": `${site.url}/#cedar` },
-      { "@type": "ListItem", "position": 4, "name": "Contact", "item": `${site.url}/#contact` }
+      { "@type": "ListItem", "position": 4, "name": "FAQ", "item": `${site.url}/#faq` },
+      { "@type": "ListItem", "position": 5, "name": "Contact", "item": `${site.url}/#contact` }
     ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${site.url}#faq`,
+    "mainEntity": FAQ_ITEMS.map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a }
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${site.url}#website`,
+    "url": site.url,
+    "name": "Lumecon Inc.",
+    "alternateName": "Lumecon",
+    "publisher": { "@id": `${site.url}#org` },
+    "inLanguage": "en-US"
   }
 ];
 ---
@@ -130,6 +179,7 @@ const jsonLd = [
     <WhySection />
     <ProductsSection />
     <CedarSection />
+    <FAQSection />
     <ContactSection />
   </main>
   <Footer isHome={true} />
