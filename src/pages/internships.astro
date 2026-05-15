@@ -60,6 +60,15 @@ const ROLES = [
     employmentType: 'INTERN',
     educationRequirements: `${EDUCATION_TARGETS} Dyson Applied Economics & Management, ILR, Public Policy, Economics, or Engineering majors preferred.`,
   },
+  {
+    slug: 'economist-impact-modeling-intern',
+    title: 'Economist / Economic Impact Modeling Intern',
+    short: 'Input-output modeling, IMPLAN/RIMS/REMI multipliers, and small-region econometrics.',
+    description: 'Work on the modeling core that drives every Lumecon impact study. Help construct the proprietary multipliers and regional bridges that handle small regions, tribal economies, and rural counties underserved by IMPLAN, RIMS II, and REMI. Co-author the methodology that becomes the reference for tribal-economy and small-region modeling. Strong fit for economics undergrads, master\'s, and PhD candidates who want to publish work AND ship product at the same time.',
+    skills: 'Input-output modeling, IMPLAN, RIMS II, REMI, regional CGE, econometrics, Python / R / Stata, BEA / Census / BLS data sources, social accounting matrices',
+    employmentType: 'INTERN',
+    educationRequirements: `${EDUCATION_TARGETS} Economics, Applied Economics & Management (Dyson), Public Policy, Regional Science, or Agricultural & Resource Economics undergrad, master\'s, or PhD candidates preferred.`,
+  },
 ];
 
 const today = new Date().toISOString().slice(0, 10);
@@ -96,25 +105,25 @@ const jsonLd = ROLES.map(role => ({
 }));
 ---
 <BaseLayout
-  title="Internships at Lumecon | Get in early — Cornell, Stanford, MIT, Ivy League students"
-  description="Cornell-built economic impact analysis software hiring student interns in software engineering, machine learning, data analytics, marketing, and sales. Unpaid early-stage roles — operating experience at a five-person team that compounds in a tough job market. Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, CMU students."
+  title="Internships at Lumecon | Undergrad + grad — Cornell, Stanford, MIT, Ivy League"
+  description="Cornell-built economic impact analysis software hiring undergrad and graduate interns: software engineering, machine learning, data analytics, marketing, sales, and economic impact modeling. Unpaid early-stage roles at a five-person team. Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, CMU students. Econ undergrads, master's, and PhDs welcome."
   canonical="https://lumecon.ai/internships"
-  keywords="Cornell internship, Cornell software engineering internship, Cornell machine learning internship, Ivy League AI internship, Cornell startup internship, Cornell economics internship, Cornell Brooks School internship, Cornell Dyson internship, Cornell ILR internship, Cornell ORIE internship, Cornell CS internship, Dartmouth internship, Stanford internship, MIT internship, Harvard internship, Princeton internship, Yale internship, UPenn Wharton internship, Brown internship, Columbia internship, Berkeley internship, Carnegie Mellon internship, Cornell Operations Research internship, tribal economics internship, public policy internship, Cornell Information Science internship, data analytics internship Cornell, Cornell economic impact internship, machine learning startup internship, AI internship Ivy League, Cornell sales internship, Cornell marketing internship, Lumecon internship, Cornell entrepreneurship internship, early stage startup internship, equity startup internship"
-  ogTitle="Internships at Lumecon — get in early at a Cornell-built startup"
-  ogDescription="Software engineering, machine learning, data analytics, marketing, and sales internships at a five-person Cornell-built economic impact analysis startup. Unpaid early-stage roles, real product surface from week one. Cornell, Dartmouth, Stanford, MIT, Ivy League students."
+  keywords="Cornell internship, Cornell software engineering internship, Cornell machine learning internship, Cornell economics internship, Cornell PhD internship, Cornell graduate student internship, economics PhD internship, economic impact modeling internship, input-output modeling internship, IMPLAN internship, RIMS II internship, REMI internship, regional economics PhD internship, Ivy League AI internship, Cornell startup internship, Cornell Brooks School internship, Cornell Dyson internship, Cornell ILR internship, Cornell ORIE internship, Cornell CS internship, Dartmouth internship, Stanford internship, Stanford PhD internship, MIT internship, Harvard internship, Princeton internship, Princeton ORFE internship, Yale internship, UPenn Wharton internship, Brown internship, Columbia internship, Berkeley internship, Berkeley ARE internship, Carnegie Mellon internship, Cornell Operations Research internship, tribal economics internship, public policy internship, regional science internship, applied economics PhD internship, Cornell Information Science internship, data analytics internship Cornell, Cornell economic impact internship, machine learning startup internship, AI internship Ivy League, Cornell sales internship, Cornell marketing internship, Lumecon internship, Cornell entrepreneurship internship, early stage startup internship"
+  ogTitle="Internships at Lumecon — undergrad + grad, Cornell + Ivy League peers"
+  ogDescription="Software engineering, ML, data, marketing, sales, and economic impact modeling internships at a five-person Cornell-built startup. Undergrad, master's, and PhD candidates. Unpaid, real product surface from week one."
   jsonLd={jsonLd}
 >
   <Nav />
 
   <main class="careers">
     <header class="careers-head">
-      <p class="careers-eyebrow">Internships · five-person team</p>
+      <p class="careers-eyebrow">Internships · undergrad + grad · five-person team</p>
       <h1 class="careers-title">Get in early at a Cornell-born startup serving governments and tribal nations.</h1>
       <p class="careers-lede">
-        The job market for undergrads and grads is tight right now. Operating experience compounds — and the right early-stage team is where you actually own product surface instead of being employee #500. Lumecon Inc. is a five-person, Cornell-built economic impact analysis software company hiring student interns in software engineering, machine learning, data analytics, marketing, and sales.
+        The job market for undergrads and graduate students is tight right now. Operating experience compounds — and the right early-stage team is where you actually own product surface instead of being employee #500. Lumecon Inc. is a five-person, Cornell-built economic impact analysis software company hiring across software engineering, machine learning / AI, data analytics, marketing, sales, and economic impact modeling. Open to undergrads, master's, and PhD candidates.
       </p>
       <p class="careers-lede careers-lede--sub">
-        These are <strong>unpaid roles</strong>. What you get instead: real product surface in front of council members, tribal leaders, and federal grant reviewers; a Cornell-built reference on your résumé; and the chance to be early at what we think can be the next big company in government technology. Open to current undergrad and graduate students at Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent programs.
+        These are <strong>unpaid roles</strong>. What you get instead: real product surface in front of council members, tribal leaders, and federal grant reviewers; a Cornell-built reference on your résumé; and the chance to be early at what we think can be the next big company in government technology. Open to current students at Cornell, Dartmouth, Stanford, MIT, Harvard, Princeton, Yale, UPenn, Brown, Columbia, Berkeley, Carnegie Mellon, and equivalent programs.
       </p>
       <p class="careers-cta">
         <a href={`mailto:${site.email}?subject=Internship%20application%20—%20${encodeURIComponent('Lumecon')}&body=${encodeURIComponent('Hi Lumecon team,\n\nI am a [Cornell / Dartmouth / Ivy League] student interested in the [role] internship.\n\nMy academic program: \nMy resume: (attach or paste URL)\nLinkedIn: \n\nWhy Lumecon: \n')}`} class="btn">Apply via email</a>
