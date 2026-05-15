@@ -256,6 +256,12 @@ export const RESERVATION_SCENES: Scene[] = [
   { level: 'reservation', tribalKey: 'mha', amount: { v: 128_000_000, label: '$128M' }, activity: ACT.energy,
     chip: 'RESERVATION · Tribal energy infrastructure · MHA Nation (Fort Berthold)',
     sentence: 'The Mandan, Hidatsa, and Arikara Nation funds $128M of tribal energy infrastructure on the Fort Berthold Reservation.' },
+  { level: 'reservation', tribalKey: 'catawba', amount: { v: 38_000_000, label: '$38M' }, activity: ACT.build,
+    chip: 'RESERVATION · Two Kings Casino expansion · Catawba Nation',
+    sentence: 'The Catawba Nation funds a $38M Two Kings Casino expansion at the tribe’s Kings Mountain trust land near the North Carolina–South Carolina border.' },
+  { level: 'reservation', tribalKey: 'forest_potawatomi', amount: { v: 31_500_000, label: '$31.5M' }, activity: ACT.build,
+    chip: 'RESERVATION · Casino and lodging expansion · Forest County Potawatomi',
+    sentence: 'The Forest County Potawatomi Community funds a $31.5M casino and lodging expansion on the Forest County Potawatomi Reservation in Wisconsin.' },
 ];
 
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
