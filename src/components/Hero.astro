@@ -102,6 +102,18 @@ const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
   muckleshoot:      ['Muckleshoot'],
   tulalip:          ['Tulalip Reservation'],
   ms_choctaw:       ['Mississippi Choctaw'],
+  // Newly recognized + large enterprise nations
+  lumbee:           ['Lumbee'],
+  poarch:           ['Poarch'],
+  southern_ute:     ['Southern Ute'],
+  colorado_river:   ['Colorado River'],
+  mashpee:          ['Mashpee'],
+  flathead:         ['Flathead'],
+  ho_chunk_wi:      ['Ho-Chunk'],
+  chickasaw:        ['Chickasaw'],
+  choctaw_ok:       ['Choctaw OTSA'],
+  grand_ronde:      ['Grand Ronde Community', 'Grand Ronde'],
+  mha:              ['Fort Berthold'],
 };
 const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
