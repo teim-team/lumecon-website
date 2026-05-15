@@ -92,37 +92,62 @@ const jsonLd = [
 
   <main class="join">
 
-    <!-- WHY: open with what Lumecon does in the world. -->
+    <!-- WHY: open with what Lumecon does in the world. The lede
+         quote stays always visible; the rest collapses. -->
     <header class="join-hero">
       <p class="join-eyebrow reveal-soft">Why we're building this</p>
       <h1 class="join-title reveal-soft" data-stagger="1">We <em>luminate</em> economies.</h1>
       <div class="join-why">
-        <p class="reveal-soft" data-stagger="2">A lot of organizations have real economic impact, and no way to show it.</p>
-        <p class="reveal-soft" data-stagger="3">That matters because the next round of capital follows the evidence. When economic impact gets measured, budgets get approved, foundations write the check, councils pass the bill, banks underwrite the loan, communities support the project. When it doesn't get measured, none of that happens.</p>
-        <p class="reveal-soft" data-stagger="4">Lumecon's work shows up in front of <strong>governments</strong>, <strong>tribal nations</strong>, <strong>foundations</strong>, <strong>banks</strong>, <strong>universities</strong>, and the communities those institutions serve. We build the software that makes the economic impact legible, so the dollars that house, feed, and employ people keep moving.</p>
+        <p class="join-why__lede reveal-soft" data-stagger="2">A lot of organizations have real economic impact, and no way to show it.</p>
+        <details class="join-collapse">
+          <summary class="join-collapse__toggle">
+            <span class="join-collapse__label join-collapse__label--closed">Why that matters</span>
+            <span class="join-collapse__label join-collapse__label--open">Less</span>
+            <span class="join-collapse__chev" aria-hidden="true"></span>
+          </summary>
+          <div class="join-collapse__body">
+            <p>That matters because the next round of capital follows the evidence. When economic impact gets measured, budgets get approved, foundations write the check, councils pass the bill, banks underwrite the loan, communities support the project. When it doesn't get measured, none of that happens.</p>
+            <p>Lumecon's work shows up in front of <strong>governments</strong>, <strong>tribal nations</strong>, <strong>foundations</strong>, <strong>banks</strong>, <strong>universities</strong>, and the communities those institutions serve. We build the software that makes the economic impact legible, so the dollars that house, feed, and employ people keep moving.</p>
+          </div>
+        </details>
       </div>
     </header>
 
-    <!-- The world is changing. -->
+    <!-- The world is changing. Headline carries the message; body
+         is opt-in. -->
     <section class="join-transition" aria-labelledby="transition-title">
       <p class="join-section-kicker reveal-soft">The moment</p>
       <h2 class="join-section-title reveal" id="transition-title">The world is changing fast. Most organizations are still figuring out the transition.</h2>
-      <div class="join-team-body">
-        <p class="reveal-soft" data-stagger="1">Public agencies, tribal governments, foundations, and universities are being asked to do more with the same headcount, on shorter cycles, against tougher questions about value and return. The legacy tools weren't built for that.</p>
-        <p class="reveal-soft" data-stagger="2">We're using AI to make the work easier, not to replace people. The aim is to <strong>create</strong> jobs by helping the organizations that fund them tell a stronger economic story, not to automate anyone out of one.</p>
-      </div>
+      <details class="join-collapse">
+        <summary class="join-collapse__toggle">
+          <span class="join-collapse__label join-collapse__label--closed">Read the full picture</span>
+          <span class="join-collapse__label join-collapse__label--open">Less</span>
+          <span class="join-collapse__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="join-collapse__body">
+          <p>Public agencies, tribal governments, foundations, and universities are being asked to do more with the same headcount, on shorter cycles, against tougher questions about value and return. The legacy tools weren't built for that.</p>
+          <p>We're using AI to make the work easier, not to replace people. The aim is to <strong>create</strong> jobs by helping the organizations that fund them tell a stronger economic story, not to automate anyone out of one.</p>
+        </div>
+      </details>
     </section>
 
     <!-- WHO we hire and HOW we work. Persistence over perfection. -->
     <section class="join-team" aria-labelledby="team-title">
       <p class="join-section-kicker reveal-soft">The team</p>
       <h2 class="join-section-title reveal" id="team-title">We mentor people who are persistent.</h2>
-      <div class="join-team-body">
-        <p class="reveal-soft" data-stagger="1">Lumecon Inc. is a five-person team, built at Cornell University. We're looking for early teammates across engineering, ML, data, economic impact modeling, marketing, and sales.</p>
-        <p class="reveal-soft" data-stagger="2">If you don't have every skill on a role description, apply anyway. We're early enough that everyone is wearing several hats, and we'd rather work with someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
-        <p class="reveal-soft" data-stagger="3">What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. The roles are <strong>unpaid early-stage roles</strong>, open to undergraduate and graduate students.</p>
-        <p class="reveal-soft" data-stagger="4">We're looking for people who want to stick around and help build a strong team. We can't make any promises, but the early teammates who put in the work are the ones we'd want with us when Lumecon raises capital and starts generating revenue.</p>
-      </div>
+      <details class="join-collapse">
+        <summary class="join-collapse__toggle">
+          <span class="join-collapse__label join-collapse__label--closed">What that means in practice</span>
+          <span class="join-collapse__label join-collapse__label--open">Less</span>
+          <span class="join-collapse__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="join-collapse__body">
+          <p>Lumecon Inc. is a five-person team, built at Cornell University. We're looking for early teammates across engineering, ML, data, economic impact modeling, marketing, and sales.</p>
+          <p>If you don't have every skill on a role description, apply anyway. We're early enough that everyone is wearing several hats, and we'd rather work with someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
+          <p>What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. The roles are <strong>unpaid early-stage roles</strong>, open to undergraduate and graduate students.</p>
+          <p>We're looking for people who want to stick around and help build a strong team. We can't make any promises, but the early teammates who put in the work are the ones we'd want with us when Lumecon raises capital and starts generating revenue.</p>
+        </div>
+      </details>
     </section>
 
     <!-- Roles. Editorial list, no numbers — icons + title + blurb. -->
@@ -225,16 +250,7 @@ const jsonLd = [
     margin: 0 0 1.8rem;
     max-width: 22ch;
   }
-  .join-why p {
-    font-family: var(--font-sans);
-    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
-    line-height: 1.6;
-    color: var(--ink-2);
-    margin: 0 0 1rem;
-    max-width: 60ch;
-    font-weight: 400;
-  }
-  .join-why p:first-child {
+  .join-why__lede {
     font-family: var(--font-display);
     font-weight: 500;
     font-size: clamp(1.25rem, 2.2vw, 1.55rem);
@@ -243,11 +259,88 @@ const jsonLd = [
     letter-spacing: -.012em;
     border-left: 2px solid var(--gold);
     padding-left: 1.1rem;
-    margin-bottom: 1.6rem;
+    margin: 0 0 1.4rem;
+    max-width: 60ch;
   }
-  .join-why__list strong {
+
+  /* ---------- Collapsible narrative blocks ----------
+     'Why that matters', 'The moment', 'The team' bodies all sit
+     behind a small toggle so the page reads as headlines first,
+     detail-on-demand. */
+  .join-collapse { margin: 0; }
+  .join-collapse__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
     color: var(--navy);
-    font-weight: 600;
+    padding: .55rem .85rem .55rem 1rem;
+    border: 1px solid var(--rule-strong, rgba(14,21,48,.18));
+    border-radius: 999px;
+    transition: background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease);
+  }
+  .join-collapse__toggle::-webkit-details-marker { display: none; }
+  .join-collapse__toggle:hover {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+  .join-collapse__toggle:hover .join-collapse__chev { border-color: var(--white); }
+  .join-collapse__toggle:hover .join-collapse__chev::before {
+    border-right-color: var(--white);
+    border-bottom-color: var(--white);
+  }
+  .join-collapse__label--open { display: none; }
+  .join-collapse[open] .join-collapse__label--closed { display: none; }
+  .join-collapse[open] .join-collapse__label--open { display: inline; }
+  .join-collapse__chev {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--rule-strong, rgba(14,21,48,.18));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .2s var(--ease);
+  }
+  .join-collapse__chev::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-right: 1.4px solid var(--navy);
+    border-bottom: 1.4px solid var(--navy);
+    transform: rotate(45deg) translate(-1px, -1px);
+    transition: transform .25s var(--ease), border-color .2s var(--ease);
+  }
+  .join-collapse[open] .join-collapse__chev::before {
+    transform: rotate(225deg) translate(-1px, -1px);
+  }
+  .join-collapse__body {
+    margin-top: 1.2rem;
+    animation: join-collapse-in .25s var(--ease);
+  }
+  .join-collapse__body p {
+    font-family: var(--font-sans);
+    font-size: clamp(1.02rem, 1.5vw, 1.12rem);
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 1rem;
+    max-width: 62ch;
+    font-weight: 400;
+  }
+  .join-collapse__body p:last-child { margin-bottom: 0; }
+  .join-collapse__body strong { color: var(--navy); font-weight: 600; }
+  @keyframes join-collapse-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .join-collapse__body { animation: none; }
   }
 
   /* ---------- Section frame (no cards) ---------- */

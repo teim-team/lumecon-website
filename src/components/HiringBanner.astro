@@ -22,49 +22,199 @@
       </div>
     </div>
     <div class="hiring-graph" aria-hidden="true">
-      <svg viewBox="0 0 240 220" preserveAspectRatio="xMidYMid meet">
-        <!-- Asymmetric team graph. The root is off-center; three tier-2
-             branches grow at uneven angles and distances, with uneven
-             child counts (2 / 4 / 2) so the shape reads as an organic
-             network instead of a symmetric mandala. -->
-        <g class="hg-edges" stroke="currentColor" fill="none" stroke-width="1" stroke-linecap="butt">
-          <!-- Center → inner ring (3 edges, uneven angles) -->
-          <line class="hg-edge hg-edge--t2" x1="115" y1="100" x2="60"  y2="55"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t2" x1="115" y1="100" x2="175" y2="85"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t2" x1="115" y1="100" x2="92"  y2="158" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <!-- A branch (upper-left tier-2): 2 children -->
-          <line class="hg-edge hg-edge--t3" x1="60"  y1="55"  x2="18"  y2="30"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="60"  y1="55"  x2="22"  y2="98"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <!-- B branch (right tier-2, the hub): 4 children -->
-          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="222" y2="38"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="228" y2="92"  pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="212" y2="142" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="175" y1="85"  x2="160" y2="172" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <!-- C branch (lower tier-2): 2 children -->
-          <line class="hg-edge hg-edge--t3" x1="92"  y1="158" x2="45"  y2="195" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-          <line class="hg-edge hg-edge--t3" x1="92"  y1="158" x2="120" y2="202" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-        </g>
-        <g class="hg-nodes">
-          <!-- Root (always on, off-center to lean into the asymmetry) -->
-          <circle class="hg-node hg-node--center" cx="115" cy="100" r="7" fill="#F0A91A"/>
-          <!-- Tier 2: 3 inner-ring nodes, varied radii -->
-          <circle class="hg-node hg-node--t2" cx="60"  cy="55"  r="5"   fill="currentColor"/>
-          <circle class="hg-node hg-node--t2" cx="175" cy="85"  r="5.4" fill="currentColor"/>
-          <circle class="hg-node hg-node--t2" cx="92"  cy="158" r="4.6" fill="currentColor"/>
-          <!-- Tier 3: 8 outer nodes (A:2 / B:4 / C:2), varied radii -->
-          <circle class="hg-node hg-node--t3" cx="18"  cy="30"  r="3.6" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="22"  cy="98"  r="3.2" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="222" cy="38"  r="4"   fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="228" cy="92"  r="3.4" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="212" cy="142" r="3"   fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="160" cy="172" r="3.6" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="45"  cy="195" r="3.2" fill="currentColor"/>
-          <circle class="hg-node hg-node--t3" cx="120" cy="202" r="3.8" fill="currentColor"/>
-        </g>
-      </svg>
+      <!-- Procedurally generated each cycle by the script below.
+           The viewBox is fixed; the contents (root, 2-4 inner
+           branches, 1-4 children per branch) regenerate every ~7s
+           so visitors who linger see the team graph evolve
+           rather than loop the same shape. -->
+      <svg id="hgSvg" viewBox="0 0 240 220" preserveAspectRatio="xMidYMid meet"></svg>
     </div>
   </div>
 </aside>
+
+<script is:inline>
+  /* Procedural team-graph generator. Builds a random asymmetric tree
+     (1 root + 2-4 inner branches + 1-4 children per branch) directly
+     in SVG, animates the spawn over ~5s, holds briefly, then fades
+     out and regenerates a fresh tree. Every cycle is a different
+     shape, so visitors who linger don't loop the same image.
+     Respects prefers-reduced-motion: paints one static tree, no
+     cycle, no animation. */
+  (function () {
+    const svg = document.getElementById('hgSvg');
+    if (!svg) return;
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const W = 240, H = 220;
+    const reducedMotion = window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const randInt = (a, b) => Math.floor(rand(a, b + 1));
+
+    function generate() {
+      const root = { x: rand(105, 135), y: rand(95, 115) };
+      const branchCount = randInt(2, 4);
+      // Spread branches around the root in random angle buckets so
+      // they don't bunch up.
+      const baseAngle = rand(0, Math.PI * 2);
+      const bucket = (Math.PI * 2) / branchCount;
+      const branches = [];
+      for (let i = 0; i < branchCount; i++) {
+        const ang = baseAngle + bucket * i + rand(-0.45, 0.45);
+        const dist = rand(48, 75);
+        const bx = clamp(root.x + Math.cos(ang) * dist, 22, W - 22);
+        const by = clamp(root.y + Math.sin(ang) * dist, 22, H - 22);
+        const childCount = randInt(1, 4);
+        const children = [];
+        const childBase = ang;
+        const childBucket = Math.PI / Math.max(childCount, 1);
+        for (let j = 0; j < childCount; j++) {
+          const cAng = childBase + childBucket * (j - (childCount - 1) / 2) + rand(-0.4, 0.4);
+          const cDist = rand(36, 58);
+          children.push({
+            x: clamp(bx + Math.cos(cAng) * cDist, 10, W - 10),
+            y: clamp(by + Math.sin(cAng) * cDist, 10, H - 10),
+            r: rand(2.8, 4.2),
+          });
+        }
+        branches.push({ x: bx, y: by, r: rand(4.4, 5.6), children });
+      }
+      return { root, branches };
+    }
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    function mkCircle(cx, cy, r, fill, className) {
+      const c = document.createElementNS(SVG_NS, 'circle');
+      c.setAttribute('cx', String(cx));
+      c.setAttribute('cy', String(cy));
+      c.setAttribute('r', String(r));
+      c.setAttribute('fill', fill);
+      if (className) c.setAttribute('class', className);
+      return c;
+    }
+    function mkLine(x1, y1, x2, y2) {
+      const l = document.createElementNS(SVG_NS, 'line');
+      l.setAttribute('x1', String(x1));
+      l.setAttribute('y1', String(y1));
+      l.setAttribute('x2', String(x2));
+      l.setAttribute('y2', String(y2));
+      l.setAttribute('stroke', 'currentColor');
+      l.setAttribute('stroke-width', '1');
+      l.setAttribute('stroke-linecap', 'butt');
+      l.setAttribute('fill', 'none');
+      return l;
+    }
+
+    function render(graph) {
+      // Clear
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      const edges = document.createElementNS(SVG_NS, 'g');
+      const nodes = document.createElementNS(SVG_NS, 'g');
+      svg.appendChild(edges);
+      svg.appendChild(nodes);
+
+      // Root: always visible immediately
+      nodes.appendChild(mkCircle(graph.root.x, graph.root.y, 6.5, '#F0A91A', 'hg-node hg-node--center'));
+
+      // Build animation timeline. The Web Animations API gives us
+      // per-element control without hand-rolling CSS keyframes for
+      // a variable number of nodes.
+      const T = reducedMotion ? 0 : 1; // 0 disables transitions
+
+      // Tier 2: inner branches
+      graph.branches.forEach((b, i) => {
+        const edge = mkLine(graph.root.x, graph.root.y, b.x, b.y);
+        const len = Math.hypot(b.x - graph.root.x, b.y - graph.root.y);
+        edge.setAttribute('stroke-dasharray', String(len));
+        edge.setAttribute('stroke-dashoffset', String(reducedMotion ? 0 : len));
+        edges.appendChild(edge);
+        const node = mkCircle(b.x, b.y, b.r, 'currentColor', 'hg-node hg-node--t2');
+        node.style.opacity = reducedMotion ? '1' : '0';
+        nodes.appendChild(node);
+        if (!reducedMotion) {
+          const delay = 700 + i * 180;
+          edge.animate(
+            [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+            { duration: 500 * T, delay, fill: 'forwards', easing: 'ease-out' }
+          );
+          spawn(node, delay + 350);
+        }
+      });
+
+      // Tier 3: children
+      graph.branches.forEach((b, i) => {
+        b.children.forEach((c, j) => {
+          const edge = mkLine(b.x, b.y, c.x, c.y);
+          const len = Math.hypot(c.x - b.x, c.y - b.y);
+          edge.setAttribute('stroke-dasharray', String(len));
+          edge.setAttribute('stroke-dashoffset', String(reducedMotion ? 0 : len));
+          edges.appendChild(edge);
+          const node = mkCircle(c.x, c.y, c.r, 'currentColor', 'hg-node hg-node--t3');
+          node.style.opacity = reducedMotion ? '1' : '0';
+          nodes.appendChild(node);
+          if (!reducedMotion) {
+            const delay = 2000 + i * 240 + j * 130;
+            edge.animate(
+              [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+              { duration: 420 * T, delay, fill: 'forwards', easing: 'ease-out' }
+            );
+            spawn(node, delay + 300);
+          }
+        });
+      });
+
+      // Fade everything out at the end of the cycle, then regenerate.
+      if (!reducedMotion) {
+        const fadeDelay = 5200;
+        const fadeDur = 600;
+        Array.from(edges.children).forEach(el => {
+          el.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: fadeDur, delay: fadeDelay, fill: 'forwards', easing: 'ease-in' }
+          );
+        });
+        // Skip the center node so the focal point persists between cycles.
+        Array.from(nodes.children).slice(1).forEach(el => {
+          el.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: fadeDur, delay: fadeDelay, fill: 'forwards', easing: 'ease-in' }
+          );
+        });
+      }
+    }
+
+    function spawn(el, delay) {
+      // Scale in + brief gold flash, then settle to navy.
+      el.animate(
+        [
+          { opacity: 0, transform: 'scale(.3)' },
+          { opacity: 1, transform: 'scale(1.25)', offset: .35 },
+          { opacity: 1, transform: 'scale(1)' },
+        ],
+        { duration: 520, delay, fill: 'forwards', easing: 'ease-out' }
+      );
+      el.animate(
+        [
+          { fill: '#F0A91A', offset: 0 },
+          { fill: '#F0A91A', offset: .5 },
+          { fill: 'currentColor', offset: 1 },
+        ],
+        { duration: 900, delay, fill: 'forwards' }
+      );
+    }
+
+    function cycle() {
+      render(generate());
+    }
+    cycle();
+    if (!reducedMotion) {
+      // Match render()'s fade-out timing: 5200ms delay + 600ms fade
+      // = ~5800ms; regenerate ~6000ms in for a clean handoff.
+      setInterval(cycle, 6000);
+    }
+  })();
+</script>
 <style>
   .hiring {
     background: var(--cream);
@@ -145,78 +295,23 @@
   }
   .hiring-graph svg { width: 100%; height: auto; display: block; }
 
-  /* Center node: gentle pulse so the focal point breathes. */
-  .hg-node--center {
+  /* Nodes + edges are positioned and animated entirely from JS now
+     (see the inline script at the bottom of this file). CSS only
+     supplies the gentle center-pulse and a transform-box hint so
+     each circle scales around its own center. */
+  .hg-node {
     transform-box: fill-box;
     transform-origin: center;
+  }
+  .hg-node--center {
     animation: hg-pulse 6s ease-in-out infinite;
   }
   @keyframes hg-pulse {
     0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(240, 169, 26, 0)); }
     50%      { transform: scale(1.15); filter: drop-shadow(0 0 4px rgba(240, 169, 26, .55)); }
   }
-
-  /* Tier 2 nodes fade in around 1s; tier 3 around 2.5s. The cycle
-     restarts at 6s, so the graph "grows" repeatedly. */
-  .hg-node--t2, .hg-node--t3 {
-    transform-box: fill-box;
-    transform-origin: center;
-    opacity: 0;
-    animation: hg-spawn 6s ease-out infinite;
-  }
-  .hg-node--t2 { animation-delay: 1.0s; }
-  .hg-node--t3 { animation-delay: 2.5s; }
-  /* Stagger within each tier so individual nodes don't pop together. */
-  /* :nth-of-type counts all <circle> elements (the tag, not the class).
-     Layout: 1 center + 3 tier-2 + 8 tier-3 = circles 1..12. */
-  .hg-node--t2:nth-of-type(2)  { animation-delay: 1.00s; }
-  .hg-node--t2:nth-of-type(3)  { animation-delay: 1.18s; }
-  .hg-node--t2:nth-of-type(4)  { animation-delay: 1.36s; }
-  .hg-node--t3:nth-of-type(5)  { animation-delay: 2.55s; }
-  .hg-node--t3:nth-of-type(6)  { animation-delay: 2.68s; }
-  .hg-node--t3:nth-of-type(7)  { animation-delay: 2.78s; }
-  .hg-node--t3:nth-of-type(8)  { animation-delay: 2.92s; }
-  .hg-node--t3:nth-of-type(9)  { animation-delay: 3.08s; }
-  .hg-node--t3:nth-of-type(10) { animation-delay: 3.20s; }
-  .hg-node--t3:nth-of-type(11) { animation-delay: 3.35s; }
-  .hg-node--t3:nth-of-type(12) { animation-delay: 3.48s; }
-  @keyframes hg-spawn {
-    0%      { opacity: 0; transform: scale(.3); }
-    15%     { opacity: 1; transform: scale(1.25); }
-    25%     { opacity: 1; transform: scale(1);    fill: #F0A91A; }
-    35%     { opacity: 1; transform: scale(1);    fill: currentColor; }
-    90%     { opacity: 1; }
-    100%    { opacity: 0; }
-  }
-
-  /* Edges draw in just before their target node spawns. */
-  .hg-edge { animation: hg-draw 6s ease-out infinite; }
-  .hg-edge--t2 { animation-delay: .9s; }
-  .hg-edge--t3 { animation-delay: 2.4s; }
-  /* Edge layout: 3 tier-2 edges + 8 tier-3 edges = 11 lines. The
-     tier-3 group is split 2 / 4 / 2 across the three branches, so
-     stagger times mirror that asymmetric branching. */
-  .hg-edges line:nth-of-type(2)  { animation-delay: 1.10s; }
-  .hg-edges line:nth-of-type(3)  { animation-delay: 1.22s; }
-  .hg-edges line:nth-of-type(4)  { animation-delay: 2.45s; }
-  .hg-edges line:nth-of-type(5)  { animation-delay: 2.55s; }
-  .hg-edges line:nth-of-type(6)  { animation-delay: 2.62s; }
-  .hg-edges line:nth-of-type(7)  { animation-delay: 2.72s; }
-  .hg-edges line:nth-of-type(8)  { animation-delay: 2.82s; }
-  .hg-edges line:nth-of-type(9)  { animation-delay: 2.92s; }
-  .hg-edges line:nth-of-type(10) { animation-delay: 3.05s; }
-  .hg-edges line:nth-of-type(11) { animation-delay: 3.18s; }
-  @keyframes hg-draw {
-    0%      { stroke-dashoffset: 100; opacity: .9; }
-    14%     { stroke-dashoffset: 0;   opacity: .9; }
-    90%     { stroke-dashoffset: 0;   opacity: .9; }
-    100%    { stroke-dashoffset: 0;   opacity: 0;  }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .hg-node--center, .hg-node--t2, .hg-node--t3, .hg-edge { animation: none !important; }
-    .hg-node--t2, .hg-node--t3 { opacity: 1; transform: none; }
-    .hg-edge { stroke-dashoffset: 0; }
+    .hg-node--center { animation: none !important; }
   }
 
   @media (max-width: 720px) {
