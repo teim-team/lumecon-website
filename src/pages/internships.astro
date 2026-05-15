@@ -1,0 +1,303 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config';
+
+/**
+ * Internships page — targeted SEO surface for Cornell + Ivy League
+ * students searching for internships in software engineering, machine
+ * learning, data analytics, marketing, and sales at an early-stage
+ * Ivy-built startup. Each role carries JobPosting JSON-LD so Google
+ * picks them up in Google for Jobs and student-targeted SERPs.
+ */
+
+const ROLES = [
+  {
+    slug: 'software-engineering-intern',
+    title: 'Software Engineering Intern',
+    short: 'Full-stack TypeScript, geographic visualization, and economic-modeling backend.',
+    description: 'Build product surface across Lumecon\'s Local, Tribal, and Global Economic Impact platforms. Work in TypeScript with Astro, d3-geo, and a Python/Postgres modeling backend. Ship features that municipal governments, tribal nations, and federal grant programs use to run economic impact studies in-house. Strong fit for Cornell CS, Information Science, Operations Research, and Engineering Physics majors.',
+    skills: 'TypeScript, JavaScript, Python, Astro, React, d3, SVG, Postgres, Git',
+    employmentType: 'INTERN',
+    educationRequirements: 'Currently enrolled at Cornell University, Dartmouth, or another Ivy League / top US research university. CS, Operations Research, Information Science, Engineering Physics, Statistics, or related majors preferred.',
+  },
+  {
+    slug: 'machine-learning-intern',
+    title: 'Machine Learning / AI Intern',
+    short: 'Build Cedar — the AI assistant inside every Lumecon platform.',
+    description: 'Work on Cedar, Lumecon\'s built-in AI assistant. Help Cedar read messy administrative uploads (budgets, payroll detail, council agendas, chapter audits, grant filings), surface each modeling assumption for human confirmation, and write a source record for every economic impact study. LLM evaluation, prompt engineering, document understanding, and structured-extraction pipelines. Strong fit for Cornell CS, Statistics, Applied Math, and Brooks School data-science majors.',
+    skills: 'Python, PyTorch, LLM evaluation, prompt engineering, document extraction, vector search, RAG, evals',
+    employmentType: 'INTERN',
+    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. CS, Statistics, Applied Math, Information Science, or interdisciplinary AI majors preferred.',
+  },
+  {
+    slug: 'data-analytics-intern',
+    title: 'Data Analytics Intern',
+    short: 'Economic data engineering — input-output modeling, IMPLAN/RIMS multipliers, tribal economies.',
+    description: 'Work on the data backbone that drives every Lumecon impact study. Source, clean, and version the high-frequency public and private datasets that power our multipliers. Construct the proprietary regional bridges that handle small regions and tribal economies underserved by IMPLAN, RIMS II, and REMI. Strong fit for Cornell Dyson, Brooks School of Public Policy, Economics, ORIE, and ILR School students.',
+    skills: 'SQL, Python, pandas, geopandas, R, Stata, BEA / Census / BLS data sources, input-output modeling',
+    employmentType: 'INTERN',
+    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. Economics, Public Policy, Statistics, ORIE, ILR, or Applied Economics & Management (Dyson) preferred.',
+  },
+  {
+    slug: 'marketing-growth-intern',
+    title: 'Marketing & Growth Intern',
+    short: 'Government outreach, tribal-nation engagement, SEO, and content for an Ivy-built startup.',
+    description: 'Own marketing surface across content, SEO, and outreach to municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, and economic development organizations. Write long-form pieces on input-output modeling, tribal economics, and policy analysis. Run search, partnerships with universities and CDFIs, and grant-funder pipelines. Strong fit for Cornell Dyson, Brooks School, Communication, and ILR School students.',
+    skills: 'Writing, SEO, content strategy, partnerships, CRM, public-sector outreach, brand',
+    employmentType: 'INTERN',
+    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. Marketing, Communication, Public Policy, ILR, or interdisciplinary majors preferred.',
+  },
+  {
+    slug: 'sales-business-development-intern',
+    title: 'Sales & Business Development Intern',
+    short: 'Pilot enrollment with governments, tribes, and mission-driven organizations.',
+    description: 'Lead pilot enrollment with municipal governments, tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, state agencies, universities, foundations, and CDFIs. Build the playbook for government and tribal procurement. Help structure annual subscription deals and federal grant-funded engagements. Strong fit for Cornell Dyson, ILR, Brooks School, and Engineering students who want operating experience at a Cornell-built startup.',
+    skills: 'B2B sales, government procurement, RFP response, tribal sovereignty awareness, account management, CRM',
+    employmentType: 'INTERN',
+    educationRequirements: 'Currently enrolled at Cornell University or another Ivy League / top US research university. Applied Economics & Management (Dyson), ILR, Public Policy, or Engineering majors preferred.',
+  },
+];
+
+const today = new Date().toISOString().slice(0, 10);
+const oneYear = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+const jsonLd = ROLES.map(role => ({
+  "@context": "https://schema.org",
+  "@type": "JobPosting",
+  "title": role.title,
+  "description": role.description,
+  "datePosted": today,
+  "validThrough": oneYear,
+  "employmentType": role.employmentType,
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": site.legalName,
+    "sameAs": site.url,
+    "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
+  },
+  "applicantLocationRequirements": {
+    "@type": "Country",
+    "name": "United States",
+  },
+  "jobLocationType": "TELECOMMUTE",
+  "directApply": false,
+  "url": `${site.url}/internships#${role.slug}`,
+  "skills": role.skills,
+  "educationRequirements": {
+    "@type": "EducationalOccupationalCredential",
+    "credentialCategory": "Currently enrolled undergraduate or graduate student",
+    "description": role.educationRequirements,
+  },
+  "qualifications": role.educationRequirements,
+}));
+---
+<BaseLayout
+  title="Internships at Lumecon | Cornell + Ivy League — coding, ML, data, marketing, sales"
+  description="Cornell-built economic impact analysis software hiring student interns in software engineering, machine learning / AI, data analytics, marketing, and sales. For Cornell, Dartmouth, and Ivy League / top US research university students. Remote-friendly, mission-driven, Cornell Brooks + Dyson + CS + ILR alignment."
+  canonical="https://lumecon.ai/internships"
+  keywords="Cornell internship, Cornell software engineering internship, Cornell machine learning internship, Ivy League AI internship, Cornell startup internship, Cornell economics internship, Cornell Brooks School internship, Cornell Dyson internship, Cornell ILR internship, Cornell ORIE internship, Cornell CS internship, Dartmouth internship, Cornell Operations Research internship, tribal economics internship, public policy internship, Cornell Information Science internship, data analytics internship Cornell, Cornell economic impact internship, machine learning startup internship, AI internship Ivy League, Cornell sales internship, Cornell marketing internship, Lumecon internship, Cornell entrepreneurship internship"
+  ogTitle="Internships at Lumecon — Cornell + Ivy League"
+  ogDescription="Software engineering, machine learning, data analytics, marketing, and sales internships at a Cornell-built economic impact analysis software company. Remote-friendly. For Cornell, Dartmouth, and Ivy League students."
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="careers">
+    <header class="careers-head">
+      <p class="careers-eyebrow">Internships</p>
+      <h1 class="careers-title">Build a Cornell-born startup that serves governments and tribal nations.</h1>
+      <p class="careers-lede">
+        Lumecon Inc. is hiring student interns in software engineering, machine learning, data analytics, marketing, and sales. Built at Cornell with counsel from the Cornell Law Entrepreneurship Law Clinic. Open to current undergraduate and graduate students at Cornell, Dartmouth, and other Ivy League / top US research universities.
+      </p>
+      <p class="careers-lede careers-lede--sub">
+        Our work touches every U.S. county, every federally recognized tribal nation, every Alaska Native Corporation region, every Native Hawaiian Home Land, and the whole country. We need teammates who care about that mission and want operating experience while they study.
+      </p>
+      <p class="careers-cta">
+        <a href={`mailto:${site.email}?subject=Internship%20application%20—%20${encodeURIComponent('Lumecon')}&body=${encodeURIComponent('Hi Lumecon team,\n\nI am a [Cornell / Dartmouth / Ivy League] student interested in the [role] internship.\n\nMy academic program: \nMy resume: (attach or paste URL)\nLinkedIn: \n\nWhy Lumecon: \n')}`} class="btn">Apply via email</a>
+        <a href="#open-roles" class="btn btn--ghost">See open roles ↓</a>
+      </p>
+    </header>
+
+    <section class="careers-grid" id="open-roles" aria-labelledby="open-roles-title">
+      <h2 class="careers-grid__title" id="open-roles-title">Open intern roles</h2>
+      {ROLES.map(role => (
+        <article class="role" id={role.slug}>
+          <h3 class="role__title">{role.title}</h3>
+          <p class="role__short">{role.short}</p>
+          <p class="role__desc">{role.description}</p>
+          <dl class="role__meta">
+            <div class="role__meta-row">
+              <dt>Skills</dt>
+              <dd>{role.skills}</dd>
+            </div>
+            <div class="role__meta-row">
+              <dt>Who fits</dt>
+              <dd>{role.educationRequirements}</dd>
+            </div>
+            <div class="role__meta-row">
+              <dt>Logistics</dt>
+              <dd>Remote-friendly. Paid or for-credit, depending on your program. Quarterly cohorts. Send a resume and a one-paragraph note on what draws you to Lumecon\'s mission.</dd>
+            </div>
+          </dl>
+          <p class="role__apply">
+            <a href={`mailto:${site.email}?subject=${encodeURIComponent('Internship — ' + role.title)}`} class="btn btn--ghost">Apply for {role.title}</a>
+          </p>
+        </article>
+      ))}
+    </section>
+
+    <section class="careers-about" aria-labelledby="about-title">
+      <h2 id="about-title">About working at Lumecon</h2>
+      <p>Lumecon Inc. is an early-stage, Cornell-built economic impact analysis software company. We replace the overpriced consultant and software stack that governments and mission-driven organizations have historically depended on for input-output modeling, fiscal multiplier analysis, and economic development reporting.</p>
+      <p>Our team is small. Interns own real product surface — Cedar AI features, geographic visualizations, multiplier-data pipelines, government and tribal outreach, pilot deals — and ship work that ends up in front of council members, tribal leaders, foundation officers, and federal grant reviewers.</p>
+      <p>If you're a Cornell CS, Operations Research (ORIE), Brooks School of Public Policy, Dyson Applied Economics & Management, ILR School, Information Science, Statistics, Engineering, or interdisciplinary student, this is operating experience that compounds into real impact across the country.</p>
+      <p>Cornell alumni and current students get a fast track in our review process. Dartmouth and other Ivy League / top US research university students are equally welcome.</p>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .careers {
+    background: var(--white);
+    padding: clamp(6rem, 11vw, 8rem) 0 clamp(4rem, 8vw, 6rem);
+  }
+  .careers-head {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 var(--container-pad);
+  }
+  .careers-eyebrow {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
+  .careers-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    line-height: 1.08;
+    letter-spacing: -.025em;
+    color: var(--navy);
+    margin: 0;
+    max-width: 22ch;
+  }
+  .careers-lede {
+    font-family: var(--font-sans);
+    font-size: 1.12rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 1.4rem 0 0;
+    max-width: 60ch;
+  }
+  .careers-lede--sub { margin-top: .8rem; }
+  .careers-cta {
+    margin: 2rem 0 0;
+    display: flex;
+    gap: .8rem;
+    flex-wrap: wrap;
+  }
+  .careers-grid {
+    max-width: 880px;
+    margin: clamp(3rem, 6vw, 5rem) auto 0;
+    padding: 0 var(--container-pad);
+  }
+  .careers-grid__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    color: var(--navy);
+    letter-spacing: -.018em;
+    margin: 0 0 1.6rem;
+    padding-bottom: .8rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .role {
+    padding: 1.6rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .role:last-child { border-bottom: 0; }
+  .role__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    color: var(--navy);
+    letter-spacing: -.018em;
+    margin: 0 0 .4rem;
+  }
+  .role__short {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+    margin: 0 0 1rem;
+    font-weight: 500;
+  }
+  .role__desc {
+    font-family: var(--font-sans);
+    font-size: .96rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 1.2rem;
+    max-width: 64ch;
+    font-weight: 400;
+  }
+  .role__meta {
+    margin: 0 0 1.2rem;
+    display: grid;
+    gap: .6rem;
+  }
+  .role__meta-row {
+    display: grid;
+    grid-template-columns: minmax(110px, 130px) 1fr;
+    gap: .6rem 1.2rem;
+    align-items: baseline;
+  }
+  .role__meta-row dt {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .role__meta-row dd {
+    font-family: var(--font-sans);
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0;
+  }
+  .role__apply { margin: 0; }
+  .careers-about {
+    max-width: 880px;
+    margin: clamp(3rem, 6vw, 5rem) auto 0;
+    padding: 0 var(--container-pad);
+  }
+  .careers-about h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    color: var(--navy);
+    letter-spacing: -.018em;
+    margin: 0 0 1.4rem;
+  }
+  .careers-about p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 1rem;
+    max-width: 64ch;
+  }
+  @media (max-width: 640px) {
+    .role__meta-row { grid-template-columns: 1fr; gap: .3rem; }
+  }
+</style>
