@@ -274,9 +274,14 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
   const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
 
-  /* Activity multipliers. The click-on-state fallback picks from
-     ACTIVITIES at random; the named SCENES below reference individual
-     activity records directly via ACT for richer-feeling variety. */
+  // Shared scene catalog + slug helper imported from src/data/scenes.ts
+  // so the homepage demo and the static /demo/[slug] pages stay in sync.
+  // ACTIVITIES + AMOUNTS arrays stay local — they're the click-on-state
+  // generic fallback (not used by the named scenes).
+  // @ts-ignore — Vite resolves at bundle time
+  import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES, slugify, sceneSlug } from '../data/scenes';
+  type Scene = (typeof SCENES)[number];
+
   const ACTIVITIES = [
     { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
     { id: 'payroll', label: 'operations payroll',   indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
@@ -291,199 +296,15 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     { v: 20_000_000, label: '$20M' },
     { v: 50_000_000, label: '$50M' },
   ] as const;
-  /* Extended activity catalog. Each profile carries its own indirect /
-     induced / jobsPerM coefficients so two construction projects don't
-     produce identical totals. Used only by the named scenes. */
-  const ACT = {
-    build:       { id: 'build',       label: 'capital construction',      indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
-    ops:         { id: 'payroll',     label: 'operations payroll',        indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
-    grant:       { id: 'grant',       label: 'grant pass-through',        indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
-    tourism:     { id: 'tourism',     label: 'visitor spending',          indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
-    energy:      { id: 'energy',      label: 'energy project',            indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
-    broadband:   { id: 'broadband',   label: 'broadband buildout',        indirect: 0.54, induced: 0.46, jobsPerM: 8.2  },
-    workforce:   { id: 'workforce',   label: 'workforce training',        indirect: 0.30, induced: 0.62, jobsPerM: 10.8 },
-    housing:     { id: 'housing',     label: 'housing development',       indirect: 0.61, induced: 0.43, jobsPerM: 9.4  },
-    health:      { id: 'health',      label: 'health operations',         indirect: 0.46, induced: 0.73, jobsPerM: 12.6 },
-    transit:     { id: 'transit',     label: 'transit capital project',   indirect: 0.59, induced: 0.41, jobsPerM: 8.1  },
-    culture:     { id: 'culture',     label: 'cultural facility',         indirect: 0.43, induced: 0.55, jobsPerM: 9.8  },
-    agriculture: { id: 'agriculture', label: 'agricultural development',  indirect: 0.52, induced: 0.51, jobsPerM: 10.5 },
-    ports:       { id: 'ports',       label: 'port modernization',        indirect: 0.57, induced: 0.45, jobsPerM: 8.4  },
-    water:       { id: 'water',       label: 'water infrastructure',      indirect: 0.60, induced: 0.40, jobsPerM: 7.8  },
-    coastal:     { id: 'coastal',     label: 'coastal restoration',       indirect: 0.55, induced: 0.42, jobsPerM: 9.1  },
-    research:    { id: 'research',    label: 'research operations',       indirect: 0.42, induced: 0.69, jobsPerM: 11.9 },
-  } as const;
-  type Amount = { v: number; label: string };
-  type Activity = typeof ACT[keyof typeof ACT];
-
-  /* Named example impact studies grouped by level. The auto-cycle
-     plays through all of them shuffled; the "New study" button rotates
-     through the levels deliberately (state → county → reservation) so
-     a clicker sees the system handles every scope. */
-  type Scene = {
-    level: 'state' | 'county' | 'reservation';
-    state?: string;      // FIPS, for state/county scenes
-    tribalKey?: string;  // lookup key, for reservation scenes
-    chip: string;
-    sentence: string;
-    amount: Amount;
-    activity: Activity;
-  };
-  const STATE_SCENES: Scene[] = [
-    { level: 'state', state: '48', amount: { v: 47_600_000, label: '$47.6M' }, activity: ACT.build,
-      chip: 'STATE · Highway expansion · Texas',
-      sentence: 'Texas advances a $47.6M state highway expansion across three corridors.' },
-    { level: 'state', state: '06', amount: { v: 215_400_000, label: '$215.4M' }, activity: ACT.energy,
-      chip: 'STATE · Climate resilience bond · California',
-      sentence: 'California issues a $215.4M climate resilience bond, distributing capital to county-level mitigation projects.' },
-    { level: 'state', state: '36', amount: { v: 87_300_000, label: '$87.3M' }, activity: ACT.health,
-      chip: 'STATE · Mental health infrastructure · New York',
-      sentence: 'New York funds an $87.3M expansion of state-run mental health facilities.' },
-    { level: 'state', state: '12', amount: { v: 34_100_000, label: '$34.1M' }, activity: ACT.ops,
-      chip: 'STATE · Hurricane preparedness · Florida',
-      sentence: 'Florida appropriates $34.1M to its state hurricane preparedness program.' },
-    { level: 'state', state: '17', amount: { v: 23_400_000, label: '$23.4M' }, activity: ACT.grant,
-      chip: 'STATE · Pension stabilization · Illinois',
-      sentence: 'Illinois directs $23.4M to a state pension stabilization plan, with downstream spending flowing through retiree households.' },
-    { level: 'state', state: '39', amount: { v: 11_500_000, label: '$11.5M' }, activity: ACT.health,
-      chip: 'STATE · Opioid response program · Ohio',
-      sentence: 'Ohio launches an $11.5M state opioid response program.' },
-    { level: 'state', state: '26', amount: { v: 63_700_000, label: '$63.7M' }, activity: ACT.water,
-      chip: 'STATE · Water infrastructure · Michigan',
-      sentence: 'Michigan funds $63.7M of state water infrastructure upgrades.' },
-    { level: 'state', state: '42', amount: { v: 7_400_000, label: '$7.4M' }, activity: ACT.workforce,
-      chip: 'STATE · Apprenticeship program · Pennsylvania',
-      sentence: 'Pennsylvania expands a $7.4M state higher-ed apprenticeship program.' },
-    { level: 'state', state: '37', amount: { v: 19_100_000, label: '$19.1M' }, activity: ACT.broadband,
-      chip: 'STATE · Rural broadband · North Carolina',
-      sentence: 'North Carolina rolls out $19.1M of state rural broadband investment.' },
-    { level: 'state', state: '41', amount: { v: 4_200_000, label: '$4.2M' }, activity: ACT.build,
-      chip: 'STATE · Seismic retrofit · Oregon',
-      sentence: 'Oregon funds a $4.2M state seismic retrofit program for public buildings.' },
-    { level: 'state', state: '08', amount: { v: 26_000_000, label: '$26M' }, activity: ACT.build,
-      chip: 'STATE · Wildfire mitigation · Colorado',
-      sentence: 'Colorado commits $26M to a state wildfire mitigation program.' },
-    { level: 'state', state: '53', amount: { v: 14_600_000, label: '$14.6M' }, activity: ACT.ports,
-      chip: 'STATE · Ferry capital plan · Washington',
-      sentence: 'Washington advances a $14.6M state ferry capital plan.' },
-  ];
-  const COUNTY_SCENES: Scene[] = [
-    { level: 'county', state: '53', amount: { v: 5_000_000, label: '$5M' }, activity: ACT.health,
-      chip: 'COUNTY · Community health clinic · Pierce County, WA',
-      sentence: 'A new community health clinic opens in Pierce County, WA, supported by $5M of operating funds.' },
-    { level: 'county', state: '48', amount: { v: 20_300_000, label: '$20.3M' }, activity: ACT.ops,
-      chip: 'COUNTY · University workforce expansion · Travis County, TX',
-      sentence: 'A state university expands its workforce in Travis County, TX, with $20.3M of new operating payroll.' },
-    { level: 'county', state: '39', amount: { v: 4_800_000, label: '$4.8M' }, activity: ACT.grant,
-      chip: 'COUNTY · Federal grant pass-through · Cuyahoga County, OH',
-      sentence: 'A $4.8M federal grant passes through to a regional CDFI serving Cuyahoga County, OH.' },
-    { level: 'county', state: '53', amount: { v: 52_400_000, label: '$52.4M' }, activity: ACT.transit,
-      chip: 'COUNTY · Light rail extension · King County, WA',
-      sentence: 'A regional transit authority extends a light rail line through King County, WA, a $52.4M capital project.' },
-    { level: 'county', state: '47', amount: { v: 3_500_000, label: '$3.5M' }, activity: ACT.tourism,
-      chip: 'COUNTY · Music tourism program · Davidson County, TN',
-      sentence: 'Davidson County, TN expands a music tourism program, generating $3.5M in visitor spending across local businesses.' },
-    { level: 'county', state: '02', amount: { v: 11_800_000, label: '$11.8M' }, activity: ACT.build,
-      chip: 'COUNTY · Fish processing facility · Aleutians East, AK',
-      sentence: 'A new fish processing facility opens in the Aleutians East Borough, Alaska, an $11.8M capital build.' },
-    { level: 'county', state: '42', amount: { v: 1_200_000, label: '$1.2M' }, activity: ACT.workforce,
-      chip: 'COUNTY · Workforce training · Allegheny County, PA',
-      sentence: 'Allegheny County, PA launches a $1.2M workforce training program targeting advanced manufacturing.' },
-    { level: 'county', state: '31', amount: { v: 18_700_000, label: '$18.7M' }, activity: ACT.energy,
-      chip: 'COUNTY · Wind farm · Cherry County, NE',
-      sentence: 'An $18.7M wind farm comes online in Cherry County, NE, with construction and operations spread across the county.' },
-    { level: 'county', state: '04', amount: { v: 4_500_000, label: '$4.5M' }, activity: ACT.culture,
-      chip: 'COUNTY · Library system expansion · Maricopa County, AZ',
-      sentence: 'Maricopa County, AZ funds a $4.5M expansion of its public library system.' },
-    { level: 'county', state: '36', amount: { v: 24_000_000, label: '$24M' }, activity: ACT.housing,
-      chip: 'COUNTY · Affordable housing · Bronx County, NY',
-      sentence: 'A $24M affordable housing development breaks ground in the Bronx, NY.' },
-    { level: 'county', state: '22', amount: { v: 51_000_000, label: '$51M' }, activity: ACT.tourism,
-      chip: 'COUNTY · Convention center · Orleans Parish, LA',
-      sentence: 'Orleans Parish renovates its convention center, a $51M capital project tied to the regional tourism economy.' },
-    { level: 'county', state: '37', amount: { v: 19_300_000, label: '$19.3M' }, activity: ACT.build,
-      chip: 'COUNTY · Community college campus · Mecklenburg County, NC',
-      sentence: 'Mecklenburg County, NC builds a new community college campus, a $19.3M capital investment.' },
-    { level: 'county', state: '22', amount: { v: 5_200_000, label: '$5.2M' }, activity: ACT.coastal,
-      chip: 'COUNTY · Coastal restoration · Plaquemines Parish, LA',
-      sentence: 'A $5.2M coastal restoration project moves forward in Plaquemines Parish, LA.' },
-    { level: 'county', state: '26', amount: { v: 44_000_000, label: '$44M' }, activity: ACT.build,
-      chip: 'COUNTY · Manufacturing reshoring · Wayne County, MI',
-      sentence: 'A manufacturer reshores production to Wayne County, MI, with a $44M capital build.' },
-    { level: 'county', state: '06', amount: { v: 21_600_000, label: '$21.6M' }, activity: ACT.transit,
-      chip: 'COUNTY · Transit electrification · San Francisco, CA',
-      sentence: 'San Francisco County converts a public bus fleet to electric, a $21.6M transit capital project.' },
-    { level: 'county', state: '41', amount: { v: 7_800_000, label: '$7.8M' }, activity: ACT.ops,
-      chip: 'COUNTY · Homelessness response · Multnomah County, OR',
-      sentence: 'Multnomah County, OR funds a $7.8M homelessness response program.' },
-    { level: 'county', state: '27', amount: { v: 12_400_000, label: '$12.4M' }, activity: ACT.build,
-      chip: 'COUNTY · Parks bond · Hennepin County, MN',
-      sentence: 'Hennepin County, MN passes a $12.4M parks bond for trail and facility upgrades.' },
-    { level: 'county', state: '21', amount: { v: 8_600_000, label: '$8.6M' }, activity: ACT.ports,
-      chip: 'COUNTY · Port modernization · Jefferson County, KY',
-      sentence: 'Jefferson County, KY modernizes its inland port with $8.6M in capital improvements.' },
-    { level: 'county', state: '13', amount: { v: 3_900_000, label: '$3.9M' }, activity: ACT.research,
-      chip: 'COUNTY · University research center · Clarke County, GA',
-      sentence: 'A university research center in Clarke County, GA receives $3.9M in new operating funds.' },
-    { level: 'county', state: '49', amount: { v: 16_400_000, label: '$16.4M' }, activity: ACT.energy,
-      chip: 'COUNTY · Battery storage facility · Tooele County, UT',
-      sentence: 'A $16.4M battery storage facility comes online in Tooele County, UT.' },
-  ];
-  const RESERVATION_SCENES: Scene[] = [
-    { level: 'reservation', tribalKey: 'navajo', amount: { v: 12_000_000, label: '$12M' }, activity: ACT.health,
-      chip: 'RESERVATION · Tribal health clinic · Navajo Nation',
-      sentence: 'A new health clinic opens on the Navajo Nation, with $12M in annual operating funds.' },
-    { level: 'reservation', tribalKey: 'mille_lacs', amount: { v: 42_500_000, label: '$42.5M' }, activity: ACT.build,
-      chip: 'RESERVATION · Casino and lodging expansion · Mille Lacs',
-      sentence: 'A tribal enterprise breaks ground on a $42.5M casino and lodging expansion in Mille Lacs, MN.' },
-    { level: 'reservation', tribalKey: 'umatilla', amount: { v: 11_200_000, label: '$11.2M' }, activity: ACT.energy,
-      chip: 'RESERVATION · Tribal solar array · Umatilla',
-      sentence: 'A tribal government commissions an $11.2M solar array on the Umatilla Reservation.' },
-    { level: 'reservation', tribalKey: 'cherokee_ok', amount: { v: 6_800_000, label: '$6.8M' }, activity: ACT.culture,
-      chip: 'RESERVATION · Language preservation · Cherokee Nation',
-      sentence: 'Cherokee Nation funds a $6.8M expansion of its language preservation program.' },
-    { level: 'reservation', tribalKey: 'yakama', amount: { v: 3_600_000, label: '$3.6M' }, activity: ACT.ops,
-      chip: 'RESERVATION · Tribal courts modernization · Yakama',
-      sentence: 'A $3.6M tribal courts modernization moves forward on the Yakama Reservation.' },
-    { level: 'reservation', tribalKey: 'standing_rock', amount: { v: 8_500_000, label: '$8.5M' }, activity: ACT.broadband,
-      chip: 'RESERVATION · Broadband network · Standing Rock',
-      sentence: 'Standing Rock builds an $8.5M tribal broadband network across the reservation.' },
-    { level: 'reservation', tribalKey: 'pine_ridge', amount: { v: 2_300_000, label: '$2.3M' }, activity: ACT.grant,
-      chip: 'RESERVATION · Grocery initiative · Pine Ridge',
-      sentence: 'A $2.3M federal grant funds a tribal grocery initiative on Pine Ridge.' },
-    { level: 'reservation', tribalKey: 'eastern_cherokee', amount: { v: 4_100_000, label: '$4.1M' }, activity: ACT.culture,
-      chip: 'RESERVATION · Museum expansion · Eastern Cherokee',
-      sentence: 'Eastern Band of Cherokee Indians expands its tribal museum with $4.1M in capital.' },
-    { level: 'reservation', tribalKey: 'hopi', amount: { v: 1_900_000, label: '$1.9M' }, activity: ACT.agriculture,
-      chip: 'RESERVATION · Agriculture program · Hopi',
-      sentence: 'The Hopi Tribe expands a $1.9M dry-farming program on the reservation.' },
-    { level: 'reservation', tribalKey: 'tohono', amount: { v: 14_000_000, label: '$14M' }, activity: ACT.energy,
-      chip: 'RESERVATION · Renewable energy · Tohono O’odham',
-      sentence: 'A $14M tribal renewable energy project moves forward on the Tohono O’odham Nation.' },
-    { level: 'reservation', tribalKey: 'fort_peck', amount: { v: 5_700_000, label: '$5.7M' }, activity: ACT.ops,
-      chip: 'RESERVATION · Health operations · Fort Peck',
-      sentence: 'Fort Peck Tribes fund $5.7M in expanded tribal health operations.' },
-    { level: 'reservation', tribalKey: 'oneida_ny', amount: { v: 18_900_000, label: '$18.9M' }, activity: ACT.build,
-      chip: 'RESERVATION · Cultural center · Oneida',
-      sentence: 'Oneida Indian Nation breaks ground on an $18.9M cultural and economic center.' },
-  ];
-  const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
   const LEVEL_POOLS = [STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES];
 
-  /* Deterministic slug per scene, derived from the chip. Used to encode
-     the current study in the URL hash so a shareable link replays the
-     exact same scene. Stable across builds since chip text is stable. */
-  const slugify = (s: string) => s
-    .toLowerCase()
-    .replace(/['']/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 60);
+  // Slug → scene map for URL-hash routing. Built once from the shared
+  // scene catalog so the hero and the static /demo/[slug] pages agree.
   const sceneBySlug = new Map<string, Scene>();
-  SCENES.forEach(sc => {
-    const slug = slugify(sc.chip);
+  SCENES.forEach((sc: Scene) => {
+    const slug = sceneSlug(sc);
     if (!sceneBySlug.has(slug)) sceneBySlug.set(slug, sc);
   });
-
   const ADJ_RADIUS = { indirect: 220, induced: 480 };
 
   const stage   = document.getElementById('heroStage') as HTMLElement | null;

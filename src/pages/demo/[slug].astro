@@ -1,0 +1,255 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { SCENES, sceneSlug } from '../../data/scenes';
+import type { Scene } from '../../data/scenes';
+
+export async function getStaticPaths() {
+  return SCENES.map((scene) => ({
+    params: { slug: sceneSlug(scene) },
+    props: { scene },
+  }));
+}
+
+const { scene } = Astro.props as { scene: Scene };
+
+const direct = scene.amount.v;
+const indirect = Math.round(direct * scene.activity.indirect);
+const induced = Math.round(direct * scene.activity.induced);
+const total = direct + indirect + induced;
+const jobs = Math.round((total / 1_000_000) * scene.activity.jobsPerM);
+
+function fmt(n: number): string {
+  if (n >= 1_000_000) {
+    const s = (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2);
+    return '$' + (s.endsWith('.0') ? s.slice(0, -2) : s) + 'M';
+  }
+  if (n >= 1_000) return '$' + Math.round(n / 1_000) + 'K';
+  return '$' + Math.round(n);
+}
+
+const levelLabel = scene.level === 'state' ? 'State'
+                 : scene.level === 'county' ? 'County'
+                 : 'Reservation';
+
+const parts = scene.chip.split(' · ');
+const projectName = parts[1] || scene.chip;
+const region = parts[2] || '';
+
+const title = projectName + (region ? ' - ' + region : '') + ' | Lumecon impact study example';
+const description = scene.sentence + ' Lumecon shows direct, indirect, and induced effects with every multiplier sourced.';
+const slug = sceneSlug(scene);
+const canonical = 'https://lumecon.ai/demo/' + slug;
+const ogTitle = projectName + (region ? ' - ' + region : '');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  url: canonical,
+  publisher: { '@type': 'Organization', name: 'Lumecon Inc.' },
+  about: { '@type': 'Thing', name: projectName },
+};
+
+const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.activity.label}, IMPLAN, RIMS II, REMI, Lumecon`;
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  keywords={keywords}
+  ogTitle={ogTitle}
+  ogDescription={description}
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="demo">
+    <div class="demo-inner">
+      <p class="demo-eyebrow">{levelLabel} · {scene.activity.label}</p>
+      <h1 class="demo-title">{projectName}</h1>
+      {region && <p class="demo-region">{region}</p>}
+      <p class="demo-sentence">{scene.sentence}</p>
+
+      <section class="demo-figures" aria-label="Impact study result">
+        <header class="demo-figures__head">Example impact study result</header>
+        <dl class="demo-figs">
+          <div class="demo-fig">
+            <dt>Direct</dt>
+            <dd>{fmt(direct)}</dd>
+            <p class="demo-fig__note">First-round spending. The dollars actually disbursed.</p>
+          </div>
+          <div class="demo-fig">
+            <dt>Indirect</dt>
+            <dd>+ {fmt(indirect)}</dd>
+            <p class="demo-fig__note">Supplier spending. Multiplier: <strong>{scene.activity.indirect}</strong> ({scene.activity.label}).</p>
+          </div>
+          <div class="demo-fig">
+            <dt>Induced</dt>
+            <dd>+ {fmt(induced)}</dd>
+            <p class="demo-fig__note">Household spending. Multiplier: <strong>{scene.activity.induced}</strong>.</p>
+          </div>
+          <div class="demo-fig demo-fig--total">
+            <dt>Total impact</dt>
+            <dd>{fmt(total)}</dd>
+            <p class="demo-fig__note">Direct + Indirect + Induced across the region.</p>
+          </div>
+          <div class="demo-fig">
+            <dt>Jobs supported</dt>
+            <dd>≈ {jobs.toLocaleString()}</dd>
+            <p class="demo-fig__note">Estimated at <strong>{scene.activity.jobsPerM}</strong> jobs per $M of activity.</p>
+          </div>
+        </dl>
+      </section>
+
+      <section class="demo-method">
+        <h2>How Lumecon produces this study</h2>
+        <ol>
+          <li>The team uploads source documents to Cedar: budget detail, payroll records, council agendas, grant filings.</li>
+          <li>Cedar reads the files, surfaces every assumption (multipliers, base year, regional bridges), and asks for confirmation or override.</li>
+          <li>Lumecon runs input-output modeling using current methods and the confirmed assumptions.</li>
+          <li>The source record writes itself: every method, every multiplier, every override is logged with the run. A council member or grant reviewer can verify the result.</li>
+        </ol>
+      </section>
+
+      <section class="demo-cta">
+        <a href={'/#study=' + slug} class="btn">See this study run live on the homepage →</a>
+        <a href="/#contact" class="btn btn--ghost">Request a demo</a>
+      </section>
+
+      <p class="demo-disclaimer">Example study, illustrative multipliers. Lumecon configures multipliers using the most current modeling methods for the relevant geography and sector at run time.</p>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .demo {
+    background: var(--white);
+    padding: clamp(5rem, 10vw, 7rem) 0 clamp(4rem, 8vw, 6rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .demo-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 var(--container-pad);
+  }
+  .demo-eyebrow {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
+  .demo-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 4.8vw, 3.6rem);
+    line-height: 1.08;
+    letter-spacing: -.025em;
+    color: var(--navy);
+    margin: 0;
+  }
+  .demo-region {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--ink-3);
+    margin: .35rem 0 0;
+    font-weight: 500;
+  }
+  .demo-sentence {
+    font-family: var(--font-sans);
+    font-size: 1.16rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 1.6rem 0 0;
+    max-width: 56ch;
+  }
+  .demo-figures {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 1.4rem 0;
+  }
+  .demo-figures__head {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .demo-figs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.4rem 2rem;
+    margin: 0;
+  }
+  .demo-fig dt {
+    font-family: var(--font-sans);
+    font-size: .82rem;
+    color: var(--ink-3);
+    font-weight: 500;
+    letter-spacing: -.005em;
+    margin: 0 0 .35rem;
+  }
+  .demo-fig dd {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 2.4vw, 1.95rem);
+    color: var(--navy);
+    letter-spacing: -.022em;
+    line-height: 1;
+    margin: 0 0 .45rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .demo-fig--total dd { color: var(--gold-btn-hover); }
+  .demo-fig__note {
+    font-size: .8rem;
+    line-height: 1.45;
+    color: var(--ink-3);
+    margin: 0;
+    font-weight: 400;
+  }
+  .demo-fig__note strong { color: var(--navy); font-weight: 600; }
+  .demo-method {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .demo-method h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    letter-spacing: -.018em;
+    color: var(--navy);
+    margin: 0 0 1rem;
+  }
+  .demo-method ol {
+    padding-left: 1.2rem;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .demo-method li { margin-bottom: .55rem; }
+  .demo-cta {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    gap: .8rem;
+    flex-wrap: wrap;
+  }
+  .demo-disclaimer {
+    margin-top: 2rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+    font-size: .82rem;
+    color: var(--ink-3);
+    line-height: 1.5;
+    font-style: italic;
+  }
+</style>
