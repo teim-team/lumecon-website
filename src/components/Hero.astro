@@ -289,8 +289,10 @@ const MANUAL_TRIBES: Record<string, { name: string; cx: number; cy: number; fips
   asrc:       { name: 'Arctic Slope Regional Corporation', cx: 89.3, cy: 465.3, fips: '02' },
   // Kotzebue, AK (NANA Regional Corporation HQ).
   nana:       { name: 'NANA Regional Corporation', cx: 70.1, cy: 498.1, fips: '02' },
-  // Afognak Island, AK — anchored near Ouzinkie ANVSA centroid.
-  afognak:    { name: 'Afognak Native Corporation', cx: 103.5, cy: 571.0, fips: '02' },
+  // Kodiak Island, AK — Afognak Native Corp.'s shareholders relocated
+  // from Afognak Island to Port Lions on Kodiak after the 1964 quake.
+  // Anchored at the Kodiak ANVSA centroid.
+  afognak:    { name: 'Afognak Native Corporation', cx: 102.7, cy: 571.5, fips: '02' },
 };
 const tribalLookup: Record<string, { name: string; cx: number; cy: number; fips: string }> = {};
 for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {

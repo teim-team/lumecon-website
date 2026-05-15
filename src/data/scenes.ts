@@ -713,7 +713,7 @@ export const RESERVATION_SCENES: Scene[] = [
     sentence: 'NANA Regional Corporation, the Native regional corporation for Northwest Alaska, funds $185M of Red Dog Mine zinc-and-lead operations and Iñupiaq economic development across the Northwest Arctic Borough.' },
   { level: 'reservation', tribalKey: 'afognak', amount: { v: 98_000_000, label: '$98M' }, activity: ACT.ops,
     chip: 'RESERVATION · Federal services + Alaska tourism · Afognak Native Corporation',
-    sentence: 'Afognak Native Corporation, the Native village corporation for Afognak Island in the Kodiak Archipelago, funds $98M of federal-services contracting and Alaska tourism expansion serving its Alutiiq shareholders.' },
+    sentence: 'Afognak Native Corporation, an ANCSA village corporation in the Kodiak Archipelago whose Alutiiq shareholders relocated from Afognak Island to Port Lions on Kodiak Island after the 1964 earthquake, funds $98M of federal-services contracting and Alaska tourism expansion.' },
 ];
 
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
