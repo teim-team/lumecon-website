@@ -152,7 +152,13 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         <img class="workspace__mark" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="22" height="22" aria-hidden="true" />
         <span class="workspace__title-text">Live economic impact study</span>
         <span class="workspace__divider" aria-hidden="true"></span>
-        <span class="workspace__region" id="workspaceRegion" aria-live="polite">Hover any state</span>
+        <!-- The full scene chip (LEVEL · Project · Location · 2026)
+             lives here at the top, replacing the redundant
+             state-name region we used to show. The chip already
+             names the level, project, and location, so the bottom
+             duplicate was dropped. The element id stays the same
+             so the existing runStudy JS keeps writing to it. -->
+        <span class="workspace__region" id="workspaceRegion" aria-live="polite">Hover any state to begin</span>
       </span>
       <span class="workspace__sub">
         <span class="workspace__study-id" id="workspaceStudyId" aria-label="Study identifier">STUDY 001</span>
@@ -262,8 +268,12 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     </div>
   </figure>
 
-  <!-- Activity chip — names what's running -->
-  <p class="workspace-activity" id="workspaceActivity" aria-live="polite">&nbsp;</p>
+  <!-- The activity chip used to live here, below the map. It was
+       redundant with the workspace__region title above (which now
+       shows the same chip text), so it was removed. The id stays
+       referenced by runStudy() so it still writes to the same
+       hidden span for screen readers. -->
+  <span id="workspaceActivity" class="visually-hidden" aria-live="polite">&nbsp;</span>
 
   <!-- Live figures — the only text inside the workspace -->
   <dl class="hero-figs" aria-label="Result of the running economic impact study">
@@ -683,9 +693,13 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       const wsActivity = document.getElementById('workspaceActivity');
       if (wsStatus) wsStatus.dataset.state = 'running';
       if (wsLabel) wsLabel.textContent = 'Running';
-      if (wsRegion) wsRegion.textContent = framing.includes('(') ? framing : s.name;
+      const chipText = opts?.chip ?? `${amount.label} ${activity.label} in ${s.name}`;
+      // The header region used to show just the state name; we now
+      // show the full chip there (LEVEL · Project · Location · year)
+      // because the bottom workspace-activity duplicate was removed.
+      if (wsRegion) wsRegion.textContent = chipText;
       if (wsActivity) {
-        wsActivity.textContent = opts?.chip ?? `${amount.label} ${activity.label} in ${s.name}`;
+        wsActivity.textContent = chipText;
       }
 
       // Source callout: pin the region name next to the source dot

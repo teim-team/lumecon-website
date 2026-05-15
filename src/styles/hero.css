@@ -143,10 +143,14 @@
 }
 .workspace__region {
   font-family: var(--font-sans);
-  font-size: .82rem;
+  font-size: .85rem;
   color: var(--ink-2);
   font-weight: 500;
   letter-spacing: -.005em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .workspace__again {
   background: transparent;
@@ -691,9 +695,11 @@
   .hero-fig dd { font-size: 1.1rem; }
   .workspace__bar { padding: .65rem .8rem; flex-wrap: wrap; gap: .5rem; }
   .workspace__title { font-size: .82rem; min-width: 0; flex: 1 1 auto; }
-  .workspace__title-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .workspace__title-text { display: none; }
   .workspace__divider { display: none; }
-  .workspace__region { display: none; }
+  /* On mobile the chip text is the focal piece, so keep it visible
+     (the parent 'Live economic impact study' label collapses). */
+  .workspace__region { font-size: .82rem; }
   .workspace__sub { font-size: .68rem; gap: .35rem; flex-shrink: 0; }
   .workspace__sub-divider { display: none; }
   .workspace__study-id { display: none; }
