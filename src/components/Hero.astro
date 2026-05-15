@@ -341,13 +341,8 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   ] as const;
   const LEVEL_POOLS = [STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES];
 
-  // Slug → scene map for URL-hash routing. Built once from the shared
-  // scene catalog so the hero and the static /demo/[slug] pages agree.
-  const sceneBySlug = new Map<string, Scene>();
-  SCENES.forEach((sc: Scene) => {
-    const slug = sceneSlug(sc);
-    if (!sceneBySlug.has(slug)) sceneBySlug.set(slug, sc);
-  });
+  // (slug → scene map removed — no more URL-hash routing. The
+  // /demo/<slug> pages still use sceneSlug() directly.)
   const ADJ_RADIUS = { indirect: 220, induced: 480 };
 
   const stage   = document.getElementById('heroStage') as HTMLElement | null;
@@ -532,26 +527,34 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       householdLayer.innerHTML = '';
       flowLayer.innerHTML = '';
 
-      // Scatter dot radii scale with the level (state ≈ 1, county
-      // ≈ .55, reservation ≈ .4) so dots don't dominate when the
-      // map zooms in on a small region.
-      const supplierR  = +(1.6 * dotScale).toFixed(2);
-      const householdR = +(1.2 * dotScale).toFixed(2);
+      // Detail-dot sizes scale with the level so they don't dominate
+      // when the map zooms in on a small region.
+      const supplierHalf = +(1.5 * dotScale).toFixed(2); // half side-length of the supplier diamond
+      const householdR   = +(1.0 * dotScale).toFixed(2);
 
-      // Suppliers: spread (decay .8 — some leak far)
-      const suppliers = cloudOnLand(cx, cy, 26, radius * 1.4, .8, 1);
+      // Suppliers (firms in the upstream chain): RENDERED AS DIAMONDS
+      // so they're distinguishable from households by shape, not just
+      // color. Count is intentionally lower than households (real
+      // input-output: a handful of upstream firms vs many household
+      // recipients). Decay .65 = wide spread, since indirect effects
+      // routinely leak to neighboring counties/states.
+      const suppliers = cloudOnLand(cx, cy, 18, radius * 1.55, .65, 1);
       suppliers.forEach((p, i) => {
-        const c = document.createElementNS(SVG_NS, 'circle');
-        c.setAttribute('class', 'hero-supplier');
-        c.setAttribute('cx', String(p.x));
-        c.setAttribute('cy', String(p.y));
-        c.setAttribute('r', String(supplierR));
-        c.style.setProperty('--dd', `${i * 35}ms`);
-        supplierLayer.appendChild(c);
+        const r = document.createElementNS(SVG_NS, 'rect');
+        r.setAttribute('class', 'hero-supplier');
+        r.setAttribute('x', String(p.x - supplierHalf));
+        r.setAttribute('y', String(p.y - supplierHalf));
+        r.setAttribute('width', String(supplierHalf * 2));
+        r.setAttribute('height', String(supplierHalf * 2));
+        r.setAttribute('transform', `rotate(45 ${p.x} ${p.y})`);
+        r.style.setProperty('--dd', `${i * 40}ms`);
+        supplierLayer.appendChild(r);
       });
 
-      // Households: tight cluster (decay 2.4 — clearly local)
-      const households = cloudOnLand(cx, cy, 70, radius * .85, 2.4, 7);
+      // Households (induced spending: people who live near the
+      // workplace). Many-to-one ratio against suppliers. Decay 3.2
+      // = clusters very tightly inside the immediate region.
+      const households = cloudOnLand(cx, cy, 100, radius * 0.7, 3.2, 7);
       households.forEach((p, i) => {
         const c = document.createElementNS(SVG_NS, 'circle');
         c.setAttribute('class', 'hero-household');
@@ -675,9 +678,13 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       const level: 'state' | 'county' | 'reservation' =
         opts?.level
         ?? (opts?.sourcePoint ? 'reservation' : 'state');
+      // Each tier zooms tighter and scales the source dot smaller so
+      // the central marker stays proportionate to the visible region.
+      // Reservation is the most aggressive shrink because ANCSA
+      // regions, NHOs, and many reservations are physically small.
       const zoomSpan  = level === 'state' ? 200 : level === 'county' ? 130 : 80;
       const dotRadius = level === 'state' ? 70  : level === 'county' ? 22  : 14;
-      const srcScale  = level === 'state' ? 1   : level === 'county' ? .55 : .4;
+      const srcScale  = level === 'state' ? 1   : level === 'county' ? .42 : .26;
       scaleSource(srcScale);
       zoomTo(src.cx, src.cy, zoomSpan);
       // Render the detail dots after the zoom starts so they appear
@@ -776,17 +783,12 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
        lights up (via runStudy's shadeNeighbors), county lights up when
        scene.countyFips is set, reservation polygon lights up by tribal
        name match. */
-    const updateUrlForScene = (scene: Scene) => {
-      const slug = slugify(scene.chip);
-      try {
-        const u = new URL(window.location.href);
-        const next = `study=${slug}`;
-        if (u.hash.replace(/^#/, '') === next) return;
-        u.hash = next;
-        suppressHashChange = true;
-        window.history.replaceState(null, '', u.toString());
-      } catch {}
-    };
+    // (Live scene state used to be encoded in the URL hash so people
+    // could 'share the exact study they're watching'. That ended up
+    // polluting the URL with a string that search engines don't crawl
+    // anyway. Shareable scenes already live at /demo/<slug> — those
+    // are real, prerendered, SEO-indexed URLs. The homepage URL
+    // stays clean.)
     let pendingReservationTribalKey: string | undefined;
     const clearReservationHighlight = () => {
       stage.querySelectorAll<HTMLElement>('.hero-aiannh[data-active="1"]').forEach(el => {
@@ -848,6 +850,17 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       }
       if (best && bestDist <= HIGHLIGHT_MAX_DIST) {
         best.setAttribute('data-active', '1');
+        // Recenter the source dot on the polygon's actual bbox center.
+        // The tribalLookup centroid is from Census TIGER/Line interior
+        // points and can drift a few units off the visual center of
+        // the us-atlas polygon; this snaps the dot onto the polygon
+        // the viewer is actually looking at.
+        try {
+          const bb = best.getBBox();
+          const px = bb.x + bb.width / 2;
+          const py = bb.y + bb.height / 2;
+          moveSource(px, py);
+        } catch {}
         return true;
       }
       return false;
@@ -860,7 +873,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       applyReservationHighlight();
     };
     const runScene = async (scene: typeof SCENES[number]) => {
-      updateUrlForScene(scene);
       // Apply layered highlights for this scene before runStudy fires.
       // For county scenes, scene.countyFips. For reservation scenes,
       // pull the precomputed containing-county FIPS from tribalLookup
@@ -1295,37 +1307,16 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       } catch { return null; }
     };
 
-    /* Honor a #study=<slug> hash if present so shared links replay
-       a specific scene. Falls back to IP-geolocation, then to the
-       auto-cycle. */
-    const hashScene = (): Scene | null => {
-      const h = window.location.hash || '';
-      const m = h.match(/study=([a-z0-9-]+)/i);
-      if (!m) return null;
-      return sceneBySlug.get(m[1]) || null;
-    };
-
-    // Back/forward + in-page hash edits also replay the corresponding
-    // scene. We guard with a flag so our own replaceState calls inside
-    // runScene don't recurse.
-    let suppressHashChange = false;
-    window.addEventListener('hashchange', () => {
-      if (suppressHashChange) { suppressHashChange = false; return; }
-      const sc = hashScene();
-      if (sc) {
-        if (cycleTimer) window.clearTimeout(cycleTimer);
-        runScene(sc).then(() => scheduleNext());
-      }
-    });
-
+    /* First study: pick something IP-geolocated to the visitor's
+       state when we can, otherwise fall straight into the auto-
+       cycle deck. The URL-hash 'share a specific study' route is
+       gone — for that, /demo/<slug> pages are the real, indexable
+       URLs. */
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const s = states['53']; if (s) { moveSource(s.cx, s.cy); shadeNeighbors('53'); }
       figD!.textContent = fmt(5_000_000);
     } else {
-      const initial = hashScene();
-      if (initial) {
-        runScene(initial).then(() => scheduleNext());
-      } else {
+      {
         detectStateId().then(async (sid) => {
           if (sid && states[sid]) {
             // Build a synthesized STATE-level scene for the geo-detected

@@ -707,13 +707,13 @@ export const RESERVATION_SCENES: Scene[] = [
 
   // ---------- Alaska Native Corporations (ANCSA, 1971) ----------
   { level: 'reservation', tribalKey: 'asrc', amount: { v: 245_000_000, label: '$245M' }, activity: ACT.energy,
-    chip: 'RESERVATION · Tribal oil + government services · Arctic Slope Regional Corporation · 2026',
+    chip: 'ANCSA REGION · Tribal oil + government services · Arctic Slope Regional Corporation · 2026',
     sentence: 'Arctic Slope Regional Corporation, the Native regional corporation for the North Slope, funds $245M of oil-and-gas, refining (Petro Star), and federal-services expansion serving its Iñupiaq shareholders.' },
   { level: 'reservation', tribalKey: 'nana', amount: { v: 185_000_000, label: '$185M' }, activity: ACT.energy,
-    chip: 'RESERVATION · Red Dog Mine + Northwest Alaska enterprise · NANA Regional Corporation · 2026',
+    chip: 'ANCSA REGION · Red Dog Mine + Northwest Alaska enterprise · NANA Regional Corporation · 2026',
     sentence: 'NANA Regional Corporation, the Native regional corporation for Northwest Alaska, funds $185M of Red Dog Mine zinc-and-lead operations and Iñupiaq economic development across the Northwest Arctic Borough.' },
   { level: 'reservation', tribalKey: 'afognak', amount: { v: 98_000_000, label: '$98M' }, activity: ACT.ops,
-    chip: 'RESERVATION · Federal services + Alaska tourism · Afognak Native Corporation · 2026',
+    chip: 'ANCSA REGION · Federal services + Alaska tourism · Afognak Native Corporation · 2026',
     sentence: 'Afognak Native Corporation, an ANCSA village corporation in the Kodiak Archipelago whose Alutiiq shareholders relocated from Afognak Island to Port Lions on Kodiak Island after the 1964 earthquake, funds $98M of federal-services contracting and Alaska tourism expansion.' },
 
   // ---------- Michigan/Indiana gaming tribes (Four Winds, Gun Lake, FireKeepers) ----------
@@ -771,42 +771,46 @@ export const RESERVATION_SCENES: Scene[] = [
 
   // ---------- Alaska Native Regional Corporations (ANCSA, the major regional corps) ----------
   { level: 'reservation', tribalKey: 'sealaska', amount: { v: 124_000_000, label: '$124M' }, activity: ACT.agriculture,
-    chip: 'RESERVATION · Sustainable timber + investments · Sealaska Corporation · 2026',
+    chip: 'ANCSA REGION · Sustainable timber + investments · Sealaska Corporation · 2026',
     sentence: 'Sealaska Corporation, the Native regional corporation for Southeast Alaska, funds $124M of sustainable Tongass timber, seafood, and global investment-portfolio operations serving its Tlingit, Haida, and Tsimshian shareholders.' },
   { level: 'reservation', tribalKey: 'ciri', amount: { v: 186_000_000, label: '$186M' }, activity: ACT.build,
-    chip: 'RESERVATION · Real estate + energy + tourism · Cook Inlet Region Inc. · 2026',
+    chip: 'ANCSA REGION · Real estate + energy + tourism · Cook Inlet Region Inc. · 2026',
     sentence: 'Cook Inlet Region Inc. (CIRI), the Native regional corporation for the Cook Inlet area centered on Anchorage, funds $186M of real estate, energy, government-services, and tourism expansion serving its Athabascan, Yup\'ik, Iñupiaq, Alutiiq, and Aleut shareholders.' },
   { level: 'reservation', tribalKey: 'doyon', amount: { v: 134_000_000, label: '$134M' }, activity: ACT.energy,
-    chip: 'RESERVATION · Oilfield services + government contracting · Doyon, Limited · 2026',
+    chip: 'ANCSA REGION · Oilfield services + government contracting · Doyon, Limited · 2026',
     sentence: 'Doyon, Limited, the Native regional corporation for Interior Alaska, funds $134M of oilfield-services and federal-contracting expansion serving its Athabascan shareholders across the largest Native land area in the United States.' },
   { level: 'reservation', tribalKey: 'bristol_bay', amount: { v: 86_000_000, label: '$86M' }, activity: ACT.coastal,
-    chip: 'RESERVATION · Salmon fisheries + Bristol Bay protection · Bristol Bay Native Corporation · 2026',
+    chip: 'ANCSA REGION · Salmon fisheries + Bristol Bay protection · Bristol Bay Native Corporation · 2026',
     sentence: 'Bristol Bay Native Corporation, the Native regional corporation for the Bristol Bay region, funds $86M of salmon fisheries and Bristol Bay watershed protection serving its Yup\'ik, Aleut, Alutiiq, and Athabascan shareholders.' },
   { level: 'reservation', tribalKey: 'calista', amount: { v: 98_000_000, label: '$98M' }, activity: ACT.build,
-    chip: 'RESERVATION · Construction + Yup\'ik economic development · Calista Corporation',
+    chip: 'ANCSA REGION · Construction + Yup\'ik economic development · Calista Corporation · 2026',
     sentence: 'Calista Corporation, the Native regional corporation for the Yukon-Kuskokwim Delta, funds $98M of construction-services and Yup\'ik village economic development serving 56 villages and 30,000 Yup\'ik, Cup\'ik, and Athabascan shareholders.' },
   { level: 'reservation', tribalKey: 'ahtna', amount: { v: 74_000_000, label: '$74M' }, activity: ACT.energy,
-    chip: 'RESERVATION · Pipeline services + Copper River basin · Ahtna Incorporated · 2026',
+    chip: 'ANCSA REGION · Pipeline services + Copper River basin · Ahtna Incorporated · 2026',
     sentence: 'Ahtna Incorporated, the Native regional corporation for the Copper River basin, funds $74M of pipeline-services and Copper River basin economic development serving its Ahtna Athabascan shareholders.' },
   { level: 'reservation', tribalKey: 'chugach', amount: { v: 112_000_000, label: '$112M' }, activity: ACT.ops,
-    chip: 'RESERVATION · Federal services + Prince William Sound · Chugach Alaska Corporation · 2026',
+    chip: 'ANCSA REGION · Federal services + Prince William Sound · Chugach Alaska Corporation · 2026',
     sentence: 'Chugach Alaska Corporation, the Native regional corporation for Prince William Sound, funds $112M of federal-services contracting and PWS economic development serving its Sugpiaq, Eyak, and Athabascan shareholders.' },
 
   // ---------- Native Hawaiian Organizations (NHOs) ----------
   { level: 'reservation', tribalKey: 'nakupuna', amount: { v: 96_000_000, label: '$96M' }, activity: ACT.ops,
-    chip: 'RESERVATION · Federal contracting + IT services · Nakupuna Companies · 2026',
+    chip: 'NHO · Federal contracting + IT services · Nakupuna Companies · 2026',
     sentence: 'Nakupuna Companies, a Native Hawaiian Organization-owned federal contractor headquartered in Honolulu, funds $96M of professional services, IT, and management consulting expansion serving its Native Hawaiian beneficiaries.' },
   { level: 'reservation', tribalKey: 'kamehameha_schools', amount: { v: 245_000_000, label: '$245M' }, activity: ACT.research,
-    chip: 'RESERVATION · Education + Native Hawaiian land stewardship · Kamehameha Schools · 2026',
+    chip: 'NHO · Education + Native Hawaiian land stewardship · Kamehameha Schools · 2026',
     sentence: 'Kamehameha Schools, the educational trust of Princess Bernice Pauahi Bishop and the largest private landowner in Hawaii, funds a $245M expansion of Native Hawaiian preK-12 education programs and stewardship of its 365,000-acre land portfolio.' },
 ];
 
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];
 
 /* Deterministic slug per scene, derived from the chip. Used by the
-   hero (URL hash) and by the static demo pages (route param). The
-   trailing year (` · 2026`) is stripped before slugifying so chips
-   can show the year without breaking previously-shared demo URLs. */
+   static demo pages (route param).
+   - The trailing year (` · 2026`) is stripped before slugifying so
+     chips can show the year without breaking previously-shared URLs.
+   - The leading level word is normalized: 'ANCSA REGION' and 'NHO'
+     both fold to 'reservation' so the recent relabel of Alaska
+     Native Corp + Native Hawaiian Organization chips doesn't change
+     any /demo/... URLs that were already indexed or shared. */
 export const slugify = (s: string): string => s
   .toLowerCase()
   .replace(/['’]/g, '')
@@ -814,5 +818,9 @@ export const slugify = (s: string): string => s
   .replace(/^-+|-+$/g, '')
   .slice(0, 60);
 
-export const sceneSlug = (s: Scene): string =>
-  slugify(s.chip.replace(/\s*·\s*\d{4}\s*$/, ''));
+export const sceneSlug = (s: Scene): string => {
+  let chip = s.chip.replace(/\s*·\s*\d{4}\s*$/, '');
+  // Fold ANCSA REGION / NHO back to RESERVATION for URL stability.
+  chip = chip.replace(/^(ANCSA REGION|NHO)\s*·/, 'RESERVATION ·');
+  return slugify(chip);
+};

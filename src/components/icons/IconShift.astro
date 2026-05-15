@@ -2,31 +2,84 @@
 const { class: className = '' } = Astro.props as { class?: string };
 ---
 <svg class={`icon icon--shift ${className}`} viewBox="0 0 100 100" fill="none" aria-hidden="true">
-  <!-- A small network — a gold root with three asymmetric branches
-       to navy leaves, two of which fork to a second tier. A gold
-       'pulse' travels outward through the edges in sequence,
-       lighting each leaf as it arrives, then loops. Same visual
-       language as the hiring banner's team graph so the page reads
-       cohesively. -->
-  <!-- Edges (drawn under nodes) -->
-  <line class="icon-shift__edge icon-shift__edge--a" x1="50" y1="50" x2="22" y2="28" stroke="currentColor" stroke-width="1.6" stroke-linecap="butt"
-        pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-  <line class="icon-shift__edge icon-shift__edge--b" x1="50" y1="50" x2="86" y2="32" stroke="currentColor" stroke-width="1.6" stroke-linecap="butt"
-        pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-  <line class="icon-shift__edge icon-shift__edge--c" x1="50" y1="50" x2="56" y2="92" stroke="currentColor" stroke-width="1.6" stroke-linecap="butt"
-        pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-  <line class="icon-shift__edge icon-shift__edge--d" x1="86" y1="32" x2="92" y2="62" stroke="currentColor" stroke-width="1.4" stroke-linecap="butt"
-        pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-  <line class="icon-shift__edge icon-shift__edge--e" x1="22" y1="28" x2="14" y2="58" stroke="currentColor" stroke-width="1.4" stroke-linecap="butt"
-        pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-
-  <!-- Leaves (navy, fade in as their edges arrive) -->
-  <circle class="icon-shift__leaf icon-shift__leaf--a" cx="22" cy="28" r="5"   fill="currentColor"/>
-  <circle class="icon-shift__leaf icon-shift__leaf--b" cx="86" cy="32" r="5.5" fill="currentColor"/>
-  <circle class="icon-shift__leaf icon-shift__leaf--c" cx="56" cy="92" r="4.5" fill="currentColor"/>
-  <circle class="icon-shift__leaf icon-shift__leaf--d" cx="92" cy="62" r="4"   fill="currentColor"/>
-  <circle class="icon-shift__leaf icon-shift__leaf--e" cx="14" cy="58" r="4"   fill="currentColor"/>
-
-  <!-- Gold root, always visible, gently pulses. -->
-  <circle class="icon-shift__root" cx="50" cy="50" r="8" fill="#F0A91A"/>
+  <!-- An enclosed navy box. A gold shape (square / triangle / circle
+       / diamond) bounces inside it; every time it hits a wall it
+       transforms into the next shape and the wall flashes briefly.
+       Reads as 'forms changing on impact' — the literal version of
+       'the world is changing fast'. -->
+  <rect class="icon-shift__box" x="6" y="6" width="88" height="88"
+        rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+  <g id="hgShiftBouncer" transform="translate(50 50)">
+    <path id="hgShiftBouncerPath" d="M -8,-8 H 8 V 8 H -8 Z" fill="#F0A91A"/>
+  </g>
 </svg>
+
+<script is:inline>
+  (function () {
+    const g    = document.getElementById('hgShiftBouncer');
+    const path = document.getElementById('hgShiftBouncerPath');
+    if (!g || !path) return;
+    const prefersReduced = window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    // Shapes the bouncer cycles through. All centered on (0,0) so
+    // we only translate the group, never re-anchor.
+    const shapes = [
+      'M -8,-8 H 8 V 8 H -8 Z',                // square
+      'M 0,-10 L 10,8 L -10,8 Z',              // triangle
+      'M 0,-10 L 10,0 L 0,10 L -10,0 Z',       // diamond
+      'M 9,0 A 9,9 0 1,1 -9,0 A 9,9 0 1,1 9,0',// circle
+      'M -9,-6 L 9,-9 L 8,9 L -8,7 Z',         // tilted quad
+    ];
+    let shapeIdx = 0;
+
+    // Inner play area for the bouncer center (bouncer is ~10px half-size
+    // and the box is x=6..94 with a 1.6 stroke, so center range is
+    // 18..82 to keep the shape fully inside the visible walls).
+    const minX = 18, maxX = 82, minY = 18, maxY = 82;
+    let x = 50 + (Math.random() * 8 - 4);
+    let y = 50 + (Math.random() * 8 - 4);
+    let vx = (Math.random() < .5 ? -1 : 1) * (0.55 + Math.random() * 0.25);
+    let vy = (Math.random() < .5 ? -1 : 1) * (0.45 + Math.random() * 0.25);
+
+    function morph() {
+      shapeIdx = (shapeIdx + 1) % shapes.length;
+      path.setAttribute('d', shapes[shapeIdx]);
+      // Brief scale punch + color flicker on each transformation so
+      // the bounce feels like an impact, not a passive turn.
+      path.animate(
+        [
+          { transform: 'scale(1)', fill: '#F0A91A' },
+          { transform: 'scale(1.25)', fill: '#FFD24B', offset: .35 },
+          { transform: 'scale(1)', fill: '#F0A91A' },
+        ],
+        { duration: 280, easing: 'ease-out' }
+      );
+    }
+
+    let last = 0;
+    function tick(t) {
+      if (!last) last = t;
+      const dt = Math.min(40, t - last);
+      last = t;
+      const step = dt / 16; // normalize to a ~60fps step
+      x += vx * step;
+      y += vy * step;
+      let bounced = false;
+      if (x < minX) { x = minX; vx = Math.abs(vx); bounced = true; }
+      else if (x > maxX) { x = maxX; vx = -Math.abs(vx); bounced = true; }
+      if (y < minY) { y = minY; vy = Math.abs(vy); bounced = true; }
+      else if (y > maxY) { y = maxY; vy = -Math.abs(vy); bounced = true; }
+      if (bounced) morph();
+      g.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
+
+<style>
+  /* Path needs to scale around its own center for the impact punch. */
+  .icon--shift path { transform-box: fill-box; transform-origin: center; }
+</style>
