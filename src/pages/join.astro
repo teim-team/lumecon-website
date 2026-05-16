@@ -249,7 +249,7 @@ const jsonLd = [
   }
   .join-title em {
     font-style: italic;
-    color: var(--gold);
+    color: var(--accent);
     font-weight: 600;
     /* Soft pulsing glow so 'luminate' literally glows. */
     animation: luminate-glow 3.4s ease-in-out infinite;
@@ -278,7 +278,7 @@ const jsonLd = [
     font-size: .72rem;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent);
     font-weight: 600;
     margin: 0 0 1.1rem;
   }
@@ -302,7 +302,7 @@ const jsonLd = [
     line-height: 1.35;
     color: var(--navy);
     letter-spacing: -.012em;
-    border-left: 2px solid var(--gold);
+    border-left: 2px solid var(--accent);
     padding-left: 1.1rem;
     margin: 0 0 1.4rem;
     max-width: 60ch;
@@ -399,7 +399,7 @@ const jsonLd = [
     font-size: .7rem;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent);
     font-weight: 600;
     margin: 0 0 .8rem;
     padding-bottom: .8rem;
@@ -442,7 +442,7 @@ const jsonLd = [
   }
   .role-row:last-child { border-bottom: 1px solid var(--rule); }
   .role-row:hover { background: var(--paper, #fbf6ec); }
-  .role-row:hover .role-row__title { color: var(--gold); }
+  .role-row:hover .role-row__title { color: var(--accent); }
   .role-row__title { transition: color .2s var(--ease); }
 
   /* Each row is a <details>; its summary is the always-visible card
@@ -495,7 +495,7 @@ const jsonLd = [
     transform: rotate(45deg) translate(-1px, -1px);
     transition: transform .25s var(--ease), border-color .2s var(--ease);
   }
-  .role-row:hover .role-row__chev { background: var(--gold); border-color: var(--gold); }
+  .role-row:hover .role-row__chev { background: var(--accent); border-color: var(--accent); }
   .role-row__details[open] .role-row__chev::before {
     transform: rotate(225deg) translate(-1px, -1px);
   }

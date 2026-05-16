@@ -38,7 +38,7 @@
   margin: 0;
   max-width: 18ch;
 }
-.eia-lead em { font-style: italic; color: var(--gold); font-weight: 400; }
+.eia-lead em { font-style: italic; color: var(--accent); font-weight: 400; }
 
 .eia-body {
   display: grid;
@@ -81,10 +81,10 @@
 }
 
 .eia-source__dot {
-  fill: var(--gold);
+  fill: var(--accent);
   stroke: var(--navy);
   stroke-width: 1.2;
-  filter: drop-shadow(0 0 8px rgba(196, 154, 60, .55));
+  filter: drop-shadow(0 0 8px rgba(15, 181, 165, .55));
 }
 
 /* Three ripples per source emanate Direct → Indirect → Induced.
@@ -100,7 +100,7 @@
 }
 .eia-ring {
   fill: none;
-  stroke: var(--gold);
+  stroke: var(--accent);
   stroke-width: 2.2;
   opacity: 0;
   transform-box: fill-box;
@@ -109,7 +109,7 @@
   animation-delay: calc(var(--src-delay, 0ms) + var(--ring-delay, 0ms));
   vector-effect: non-scaling-stroke;
 }
-.eia-ring--direct    { stroke: var(--gold);  --ring-delay: 0ms; }
+.eia-ring--direct    { stroke: var(--accent);  --ring-delay: 0ms; }
 .eia-ring--indirect  { stroke: var(--terra); --ring-delay: 1200ms; }
 .eia-ring--induced   { stroke: var(--cedar); --ring-delay: 2400ms; }
 .eia-ring--echo      { animation-delay: calc(var(--src-delay, 0ms) + var(--ring-delay, 0ms) + 3200ms); }
@@ -142,7 +142,7 @@
   line-height: 1;
   text-align: right;
 }
-.eia-round--direct   { --round-c: var(--gold); }
+.eia-round--direct   { --round-c: var(--accent); }
 .eia-round--indirect { --round-c: var(--terra); }
 .eia-round--induced  { --round-c: var(--cedar); }
 .eia-round--total .eia-round__num {

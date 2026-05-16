@@ -74,7 +74,7 @@ nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
   right: .85rem;
   bottom: .25rem;
   height: 1px;
-  background: var(--gold);
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform .25s var(--ease);
@@ -122,7 +122,7 @@ nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
   right: .85rem;
   bottom: .25rem;
   height: 1px;
-  background: var(--gold);
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform .25s var(--ease);

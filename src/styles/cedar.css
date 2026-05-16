@@ -30,7 +30,7 @@
   font-family: var(--font-mono);
   font-size: .7rem;
   letter-spacing: .14em;
-  color: var(--gold);
+  color: var(--accent);
   font-weight: 600;
   text-transform: uppercase;
   margin: 0;
@@ -72,7 +72,7 @@
   transition: background .2s var(--ease);
 }
 .cedar-step:hover { background: var(--paper, #fbf6ec); }
-.cedar-step:hover .cedar-step__head { color: var(--gold); }
+.cedar-step:hover .cedar-step__head { color: var(--accent); }
 .cedar-step__head { transition: color .2s var(--ease); }
 .cedar-step:not(:first-child) { padding-left: 1.2rem; }
 .cedar-step:last-child { border-right: 0; padding-right: 0; }
@@ -109,7 +109,7 @@
   transform: rotate(45deg) translate(-1px, -1px);
   transition: transform .25s var(--ease);
 }
-.cedar-step:hover .cedar-step__chev { background: var(--gold); border-color: var(--gold); }
+.cedar-step:hover .cedar-step__chev { background: var(--accent); border-color: var(--accent); }
 .cedar-step__details[open] .cedar-step__chev::before {
   transform: rotate(225deg) translate(-1px, -1px);
 }
@@ -138,7 +138,7 @@
   font-size: .68rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
