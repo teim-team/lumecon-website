@@ -20,7 +20,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   font-weight: 600;
   margin: 0;
 }
@@ -62,7 +62,7 @@
   transform: translateY(-3px);
   box-shadow: 0 12px 28px -16px rgba(14, 21, 48, .18);
 }
-.why-stat:hover .why-stat__k { color: var(--gold); }
+.why-stat:hover .why-stat__k { color: var(--accent); }
 .why-stat__k { transition: color .25s var(--ease); }
 
 /* Summary acts as the always-visible card head: icon + num + key
@@ -103,8 +103,8 @@
   transition: transform .25s var(--ease), border-color .2s var(--ease);
 }
 .why-stat:hover .why-stat__chev {
-  background: var(--gold);
-  border-color: var(--gold);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 .why-stat:hover .why-stat__chev::before { border-color: var(--navy); }
 .why-stat[open] .why-stat__chev::before {
@@ -224,7 +224,7 @@
   font-size: .68rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   margin: 0;
@@ -238,7 +238,7 @@
   color: var(--navy);
   margin: 0;
 }
-.why-stat__amp { font-style: italic; color: var(--gold); font-weight: 500; }
+.why-stat__amp { font-style: italic; color: var(--accent); font-weight: 500; }
 .why-stat__v {
   font-size: .98rem;
   line-height: 1.55;
@@ -265,7 +265,7 @@
   border-left: 2px solid var(--rule-strong, rgba(14,21,48,.16));
 }
 .why-sources__group:last-child {
-  border-left-color: var(--gold);
+  border-left-color: var(--accent);
 }
 .why-sources__label {
   font-family: var(--font-mono);
@@ -275,7 +275,7 @@
   color: var(--ink-3);
   font-weight: 600;
 }
-.why-sources__group:last-child .why-sources__label { color: var(--gold); }
+.why-sources__group:last-child .why-sources__label { color: var(--accent); }
 .why-sources__items {
   font-family: var(--font-sans);
   font-size: .9rem;

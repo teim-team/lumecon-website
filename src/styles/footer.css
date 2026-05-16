@@ -10,7 +10,7 @@
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle at 90% 0%, rgba(196, 154, 60, .08), transparent 45%),
+    radial-gradient(circle at 90% 0%, rgba(15, 181, 165, .08), transparent 45%),
     radial-gradient(circle at 0% 100%, rgba(139, 125, 168, .08), transparent 40%);
   pointer-events: none;
 }
@@ -73,7 +73,7 @@
   font-size: .68rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: .35rem;
   opacity: .9;
 }
@@ -105,7 +105,7 @@
   color: rgba(246, 241, 233, .6);
   transition: color .2s var(--ease);
 }
-.footer-email:hover { color: var(--gold); }
+.footer-email:hover { color: var(--accent); }
 
 @media (max-width: 1100px) {
   .footer-cols { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }

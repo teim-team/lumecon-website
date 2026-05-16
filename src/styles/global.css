@@ -19,9 +19,19 @@
   --cedar-mist: #E0F2E7;
   --green: #0E8B4F;
   --green-deep: #0B5E36;
-  --gold: #F0A91A;           /* vibrant marigold */
+  --gold: #F0A91A;           /* brand gold — reserved for the wordmark and the "luminate" emphasis. NOT a UI accent. */
   --gold-light: #FFD24B;
   --goldbar: #FFE7A0;
+  /* UI accent palette — teal. Used for eyebrows, numbers, focus
+     rings, hovers, icon highlights, dividers. Gold is reserved for
+     the brand wordmark "luminate" so it reads as deliberate brand
+     DNA, not a default accent. */
+  --accent: #0FB5A5;
+  --accent-light: #5FD9CC;
+  --accent-bar: #B8EDE6;
+  --accent-hover: #2DC9BA;
+  --accent-btn-hover: #0A8A7E;
+  --accent-deep: #0A8A7E;
   --blue: #2E5BD6;           /* bold electric-leaning navy-blue */
   --blue-deep: #1E40A6;
   --purple: #6E3DD8;
@@ -38,6 +48,8 @@
   --error-color: #DC2626;
   --gold-hover: #FFC83D;
   --gold-btn-hover: #C98906;
+  --accent-rgba-08: rgba(15, 181, 165, .08);
+  --accent-rgba-18: rgba(15, 181, 165, .18);
   color-scheme: light;
 
   /* Type system — Inter for everything except mono marginalia.
@@ -85,9 +97,9 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Gold focus ring — brand-consistent, replaces default browser blue. */
+/* Teal focus ring — UI accent, replaces default browser blue. */
 *:focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -115,7 +127,7 @@ body {
 }
 @keyframes icon-local-tint {
   0%, 18%, 38%, 58%, 78%, 100% { fill: currentColor; }
-  20%, 40%, 60%, 80%           { fill: #F0A91A; }
+  20%, 40%, 60%, 80%           { fill: var(--accent); }
 }
 
 /* Tribal: three inner nodes pulse in a wave (community heartbeat). */
@@ -128,8 +140,8 @@ body {
 .icon--tribal .icon-tribal__dot--c { animation-delay: .5s; }
 @keyframes icon-tribal-pulse {
   0%, 100% { transform: scale(1);    fill: currentColor; }
-  45%      { transform: scale(1.35); fill: #F0A91A; }
-  60%      { transform: scale(1.15); fill: #F0A91A; }
+  45%      { transform: scale(1.35); fill: var(--accent); }
+  60%      { transform: scale(1.15); fill: var(--accent); }
   80%      { transform: scale(1);    fill: currentColor; }
 }
 
@@ -152,7 +164,7 @@ body {
 }
 @keyframes icon-global-pulse {
   0%, 60%, 100% { transform: scale(1); fill: currentColor; }
-  65%, 80%      { transform: scale(1.4); fill: #F0A91A; }
+  65%, 80%      { transform: scale(1.4); fill: var(--accent); }
   85%           { transform: scale(1); fill: currentColor; }
 }
 
@@ -291,7 +303,7 @@ body {
 .icon--data .icon-data__bar--d { animation-delay: 1.2s; }
 @keyframes icon-data-sweep {
   0%, 70%, 100% { fill: transparent; }
-  15%, 45%      { fill: #F0A91A; }
+  15%, 45%      { fill: var(--accent); }
 }
 
 /* Economist: scatter points flicker in over time (data getting
@@ -379,8 +391,8 @@ body {
   100% { transform: scale(1.6); opacity: 0;  stroke-width: .6; }
 }
 @keyframes icon-ripple-core {
-  0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(240, 169, 26, 0)); }
-  50%      { transform: scale(1.18); filter: drop-shadow(0 0 6px rgba(240, 169, 26, .55)); }
+  0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0)); }
+  50%      { transform: scale(1.18); filter: drop-shadow(0 0 6px rgba(15, 181, 165, .55)); }
 }
 
 /* Shift (Join transition): the bouncer + box + path animations all
@@ -405,8 +417,8 @@ body {
   animation: icon-mentor-mentee 4s ease-out infinite;
 }
 @keyframes icon-mentor-mentor {
-  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(240, 169, 26, 0)); }
-  50%      { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(240, 169, 26, .55)); }
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0)); }
+  50%      { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(15, 181, 165, .55)); }
 }
 @keyframes icon-mentor-line {
   0%, 12%   { stroke-dashoffset: 100; }
@@ -414,8 +426,8 @@ body {
   100%      { stroke-dashoffset: 100; }
 }
 @keyframes icon-mentor-mentee {
-  0%, 18%   { transform: scale(.2); opacity: 0; fill: #F0A91A; }
-  38%       { transform: scale(1.15); opacity: 1; fill: #F0A91A; }
+  0%, 18%   { transform: scale(.2); opacity: 0; fill: var(--accent); }
+  38%       { transform: scale(1.15); opacity: 1; fill: var(--accent); }
   50%, 88%  { transform: scale(1); opacity: 1; fill: currentColor; }
   100%      { transform: scale(.2); opacity: 0; fill: currentColor; }
 }
@@ -458,7 +470,7 @@ body {
   .icon--code .icon-code__caret,
   .icon--economist .icon-econ__pt { opacity: 1; }
   .icon--surface .icon-surface__hit { opacity: 1; transform: none; }
-  .icon--data .icon-data__bar { fill: #F0A91A; }
+  .icon--data .icon-data__bar { fill: var(--accent); }
 }
 
 /* Keyboard-shortcut help overlay, summoned with `?` and dismissed with
@@ -485,7 +497,7 @@ body {
   font-size: .62rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: .55rem;
   font-weight: 600;
 }
@@ -579,11 +591,11 @@ body {
 }
 .kicker::before {
   content: '§';
-  color: var(--gold);
+  color: var(--accent);
   font-weight: 700;
 }
 .kicker--invert { color: var(--cream); opacity: .85; }
-.kicker--invert::before { color: var(--gold-light); }
+.kicker--invert::before { color: var(--accent-light); }
 .display {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 144;
@@ -670,13 +682,13 @@ strong { font-weight: 600; color: inherit; }
 
 /* Focus styles for keyboard navigation */
 :focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 .btn:focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(196, 154, 60, .2);
+  box-shadow: 0 0 0 4px var(--accent-rgba-18);
 }
 
 /* Modern software CTAs — solid pills, weight + scale, no editorial
@@ -713,7 +725,7 @@ strong { font-weight: 600; color: inherit; }
   left: 0;
   width: 0%;
   height: 2px;
-  background: var(--gold);
+  background: var(--accent);
   z-index: 9999;
   pointer-events: none;
   transition: width .1s linear;
@@ -729,7 +741,7 @@ strong { font-weight: 600; color: inherit; }
   border-radius: 50%;
   background: var(--navy);
   border: 1.5px solid rgba(255, 252, 247, .12);
-  color: var(--gold);
+  color: var(--accent);
   cursor: pointer;
   z-index: 999;
   display: flex;
@@ -747,10 +759,10 @@ strong { font-weight: 600; color: inherit; }
   pointer-events: auto;
 }
 .back-to-top:hover {
-  background: var(--gold);
+  background: var(--accent);
   color: var(--navy);
   transform: translateY(-3px);
-  box-shadow: 0 6px 24px rgba(196, 154, 60, .25);
+  box-shadow: 0 6px 24px var(--accent-rgba-18);
 }
 .back-to-top svg {
   width: 16px;
@@ -761,7 +773,7 @@ strong { font-weight: 600; color: inherit; }
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  border: 1.5px solid var(--gold);
+  border: 1.5px solid var(--accent);
   opacity: 0;
   animation: btt-pulse 2.5s ease-in-out infinite;
 }
@@ -798,7 +810,7 @@ strong { font-weight: 600; color: inherit; }
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -883,13 +895,13 @@ strong { font-weight: 600; color: inherit; }
   letter-spacing: .05em;
 }
 .chat-ctrl-btn:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 .chat-ctrl-btn.active {
   background: var(--navy);
   border-color: var(--navy);
-  color: var(--gold);
+  color: var(--accent);
 }
 .chat-conv-indicator {
   font-size: .52rem;

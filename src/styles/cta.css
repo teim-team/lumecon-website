@@ -44,7 +44,7 @@
   font-family: var(--font-mono);
   font-size: .92rem;
   font-weight: 500;
-  color: var(--gold-light);
+  color: var(--accent-light);
   transition: color .15s;
 }
 .cta-email:hover { color: var(--white); }

@@ -10,7 +10,7 @@ const { class: className = '' } = Astro.props as { class?: string };
   <rect class="icon-shift__box" x="6" y="6" width="88" height="88"
         rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/>
   <g id="hgShiftBouncer" transform="translate(50 50)">
-    <path id="hgShiftBouncerPath" d="M -8,-8 H 8 V 8 H -8 Z" fill="#F0A91A"/>
+    <path id="hgShiftBouncerPath" d="M -8,-8 H 8 V 8 H -8 Z" fill="#0FB5A5"/>
   </g>
 </svg>
 
@@ -50,9 +50,9 @@ const { class: className = '' } = Astro.props as { class?: string };
       // the bounce feels like an impact, not a passive turn.
       path.animate(
         [
-          { transform: 'scale(1)', fill: '#F0A91A' },
+          { transform: 'scale(1)', fill: '#0FB5A5' },
           { transform: 'scale(1.25)', fill: '#FFD24B', offset: .35 },
-          { transform: 'scale(1)', fill: '#F0A91A' },
+          { transform: 'scale(1)', fill: '#0FB5A5' },
         ],
         { duration: 280, easing: 'ease-out' }
       );
