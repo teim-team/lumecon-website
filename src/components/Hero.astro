@@ -263,7 +263,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     <button type="button" class="hero-zoomout" id="heroZoomOut" aria-label="Back to overview">← Overview</button>
 
     <div class="hero-tooltip" id="heroTooltip" role="tooltip" aria-hidden="true">
-      <span class="hero-tooltip__name" id="ttName">&mdash;</span>
+      <span class="hero-tooltip__name" id="ttName">-</span>
       <span class="hero-tooltip__hint" id="ttHint">click to run a study here</span>
     </div>
   </figure>
@@ -277,11 +277,11 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
   <!-- Live figures — the only text inside the workspace -->
   <dl class="hero-figs" aria-label="Result of the running economic impact study">
-    <div class="hero-fig" data-k="direct"><dt>Direct</dt>   <dd id="figDirect">&mdash;</dd></div>
-    <div class="hero-fig" data-k="indirect"><dt>Indirect</dt> <dd id="figIndirect">&mdash;</dd></div>
-    <div class="hero-fig" data-k="induced"><dt>Induced</dt>  <dd id="figInduced">&mdash;</dd></div>
-    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell" data-k="total"><dt>Total impact</dt> <dd id="figTotal">&mdash;</dd></div>
-    <div class="hero-fig hero-fig--derived" id="figJobsCell" data-k="jobs"><dt>Jobs</dt> <dd id="figJobs">&mdash;</dd></div>
+    <div class="hero-fig" data-k="direct"><dt>Direct</dt>   <dd id="figDirect">-</dd></div>
+    <div class="hero-fig" data-k="indirect"><dt>Indirect</dt> <dd id="figIndirect">-</dd></div>
+    <div class="hero-fig" data-k="induced"><dt>Induced</dt>  <dd id="figInduced">-</dd></div>
+    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell" data-k="total"><dt>Total impact</dt> <dd id="figTotal">-</dd></div>
+    <div class="hero-fig hero-fig--derived" id="figJobsCell" data-k="jobs"><dt>Jobs</dt> <dd id="figJobs">-</dd></div>
   </dl>
 
     </div>
@@ -657,7 +657,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       stage.dataset.ring = '';
       figTotalCell?.classList.remove('is-filled');
       figJobsCell?.classList.remove('is-filled');
-      [figD, figI, figU, figT, figJ].forEach(el => { if (el) el.textContent = '—'; });
+      [figD, figI, figU, figT, figJ].forEach(el => { if (el) el.textContent = '-'; });
 
       // Clear any prior value labels + callout
       const vlayer = document.getElementById('heroValueLayer');
