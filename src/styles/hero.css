@@ -165,7 +165,7 @@
   font-weight: 600;
   transition: color .15s;
 }
-.workspace__again:hover { color: var(--accent); }
+.workspace__again:hover { color: var(--gold); }
 .workspace__foot {
   display: flex;
   justify-content: space-between;
@@ -219,7 +219,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--gold);
   margin-right: .15rem;
   margin-left: .55rem;
   flex-shrink: 0;
@@ -230,7 +230,7 @@
    - Activity: gold square (the project itself)
    - Suppliers: terra diamond (rotated square — firms in the chain)
    - Households: cedar circle (people who spend wages locally) */
-.workspace-legend__sw--source    { background: var(--accent); border-radius: 2px; width: 10px; height: 10px; }
+.workspace-legend__sw--source    { background: var(--gold); border-radius: 2px; width: 10px; height: 10px; }
 .workspace-legend__sw--supplier  { background: var(--terra); transform: rotate(45deg); border-radius: 1px; width: 9px; height: 9px; }
 .workspace-legend__sw--household { background: var(--cedar); border-radius: 50%; }
 .workspace-attr { letter-spacing: .04em; text-transform: none; }
@@ -251,7 +251,7 @@
   transition: background .25s var(--ease), box-shadow .25s var(--ease);
 }
 .workspace__dot[data-state="running"] {
-  background: var(--accent);
+  background: var(--gold);
   box-shadow: 0 0 0 3px rgba(182, 138, 46, .18);
 }
 .workspace__dot[data-state="complete"] {
@@ -355,7 +355,7 @@
 .hero-stage:hover .hero-aiannh { fill-opacity: .14; }
 .hero-aiannh:hover, .hero-aiannh:focus-visible {
   fill-opacity: .85 !important;
-  fill: var(--accent);
+  fill: var(--gold);
 }
 .hero-aiannh--otsa { /* same default */ }
 
@@ -375,7 +375,7 @@
   outline: none;
 }
 .hero-state:hover { fill: var(--navy); fill-opacity: .08; }
-.hero-state:focus-visible { fill: var(--accent); fill-opacity: .2; }
+.hero-state:focus-visible { fill: var(--gold); fill-opacity: .2; }
 /* Tiered highlight: state is the BASE tint of the layered hierarchy
    (state → county → reservation). Lighter than the active county or
    reservation polygon so they read on top. */
@@ -384,10 +384,10 @@
    (terra, brightest). Each tier reads as a distinct shade so a
    reservation-inside-county-inside-state scene shows all three
    nested layers clearly. */
-.hero-state[data-ring="0"] { fill: var(--accent-bar); fill-opacity: .85; }
+.hero-state[data-ring="0"] { fill: var(--goldbar); fill-opacity: .85; }
 
 .hero-county {
-  fill: var(--accent);
+  fill: var(--gold);
   fill-opacity: 0;
   stroke: var(--navy);
   stroke-width: .8;
@@ -421,7 +421,7 @@
   filter: drop-shadow(0 0 4px rgba(212, 165, 46, .8));
 }
 .hero-spark__core {
-  fill: var(--accent-light);
+  fill: var(--gold-light);
   stroke: var(--navy);
   stroke-width: .8;
 }
@@ -434,7 +434,7 @@
   vector-effect: non-scaling-stroke;
   opacity: 0;
 }
-.hero-ring[data-ring="1"] { stroke: var(--accent); }
+.hero-ring[data-ring="1"] { stroke: var(--gold); }
 .hero-ring[data-ring="2"] { stroke: var(--terra); }
 .hero-ring[data-ring="3"] { stroke: var(--cedar); }
 .hero-stage[data-ring="1"] .hero-ring[data-ring="1"],
@@ -559,7 +559,7 @@
   margin-top: .65rem;
   padding: .55rem .7rem;
   background: var(--paper);
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid var(--gold);
   font-family: var(--font-sans);
   font-size: .78rem;
   line-height: 1.5;
@@ -602,7 +602,7 @@
 }
 .hero-flow {
   fill: none;
-  stroke: var(--accent);
+  stroke: var(--gold);
   stroke-width: .8;
   stroke-linecap: round;
   stroke-dasharray: 80;
