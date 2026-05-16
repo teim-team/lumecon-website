@@ -78,7 +78,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what data', 'where does the data come', 'users upload data', 'upload my data', 'bring my own data', 'bring your own data', 'what inputs', 'what input', 'government data', 'public data', 'is the data credible', 'how do you calculate', 'what data sources', 'data sources', 'real economic data',
     ],
-    answer: 'Lumecon pairs your administrative records with the canonical public sources every serious impact model uses (ACS, County Business Patterns, BEA regional accounts, LODES, QCEW) plus higher-frequency signals from USASpending, the regional Federal Reserve Banks, anonymized cell-phone mobility, satellite land-use, and proprietary data we collect ourselves. The exact mix depends on the project, organization, and geography.',
+    answer: 'Lumecon pairs your administrative records with the canonical public sources every serious impact model uses (ACS, County Business Patterns, BEA regional accounts, LODES, QCEW) plus higher-frequency signals from USASpending, the regional Federal Reserve Banks, anonymized cell-phone mobility, satellite land-use, and proprietary data we collect ourselves. If your data is messy or scattered across departments, send what you have and Cedar will harmonize it for you. The exact mix depends on the project, organization, and geography.',
   },
   {
     id: 'multipliers',
@@ -148,17 +148,17 @@ export const INTENTS: CedarIntent[] = [
     id: 'security',
     chip: 'Is my data safe?',
     triggers: [
-      'is my data safe', 'data privacy', 'data security', 'happens to uploaded data', 'do you sell data', 'is this confidential', 'confidential', 'upload sensitive', 'sensitive information', 'protect client data', 'protect data', 'secure enough for governments', 'data sovereignty', 'tribal data', 'how do you protect',
+      'is my data safe', 'data privacy', 'data security', 'happens to uploaded data', 'do you sell data', 'is this confidential', 'confidential', 'upload sensitive', 'sensitive information', 'protect client data', 'protect data', 'secure enough for governments', 'data sovereignty', 'tribal data', 'how do you protect', 'pii', 'personally identifiable', 'handle pii', 'federal reserve experience', 'government data',
     ],
-    answer: 'Lumecon takes data privacy seriously, especially when working with governments, tribal nations, and organizations handling sensitive information. For sensitive projects, the team can discuss data handling, confidentiality, and access controls before any information is shared. Tribal data sovereignty and responsible data use are especially important to the platform design.',
+    answer: 'Lumecon takes data privacy seriously, especially when working with governments, tribal nations, and organizations handling sensitive information. The team handled PII and sensitive government data at the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors, so we know what production-grade data handling looks like. For sensitive projects, the team can walk through data handling, confidentiality, and access controls before any information is shared. Tribal data sovereignty and responsible data use are core to the platform design.',
   },
   {
     id: 'accuracy',
     chip: 'How credible are the numbers?',
     triggers: [
-      'how accurate', 'can i trust the numbers', 'trust the numbers', 'peer reviewed', 'peer review', 'defensible', 'someone challenges', 'used publicly', 'used for grants', 'use for grants', 'with policymakers', 'credibility', 'how credible', 'are the numbers',
+      'how accurate', 'can i trust the numbers', 'trust the numbers', 'peer reviewed', 'peer review', 'defensible', 'someone challenges', 'used publicly', 'used for grants', 'use for grants', 'with policymakers', 'credibility', 'how credible', 'are the numbers', 'does cedar hallucinate', 'hallucinate', 'hallucination', 'rag', 'retrieval augmented', 'make stuff up',
     ],
-    answer: 'Economic impact estimates are only as credible as the data, assumptions, and methods behind them. Lumecon is designed to make those pieces clearer, more organized, and easier to explain. The goal is not just to produce numbers, but to help users understand where those numbers come from and how to communicate them responsibly.',
+    answer: 'Economic impact estimates are only as credible as the data, assumptions, and methods behind them. Cedar is RAG-based, so its answers come from the actual data and source record rather than a model guess, and every assumption (multipliers, regional bridges, base year) is surfaced before it is used. Lumecon is designed to make those pieces clearer, more organized, and easier to explain, so users understand where the numbers come from and how to communicate them responsibly.',
   },
   {
     id: 'calculate_now',
