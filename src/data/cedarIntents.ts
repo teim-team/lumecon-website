@@ -102,7 +102,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how much', 'what is the price', 'pricing', 'what does it cost', 'cost of lumecon', 'subscription', 'do you have subscriptions', 'can i buy', 'how do i get access', 'become a customer', 'become a client', 'price',
     ],
-    answer: 'Pricing depends on the organization, use case, and level of support needed. Lumecon is still developing its platform and may work with selected pilot partners or early users. The best next step is to contact the Lumecon team so we can understand what you are trying to measure and whether the platform is a good fit.',
+    answer: "Lumecon is five figures a year for an annual subscription that covers unlimited studies across every geography (reservation, county, state, and the full country). The legacy stack runs six figures per study and ships months later. We're early enough to work with selected pilot partners; contact the team and we'll match pricing to your use case.",
   },
   {
     id: 'demo',
