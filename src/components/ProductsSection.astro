@@ -20,9 +20,9 @@ const platforms = [local, tribal, globalProduct];
     {platforms.map((p, i) => {
       const slug = i === 0 ? 'local' : i === 1 ? 'tribal' : 'global';
       const badge = i === 0 ? 'In active development'
-                  : i === 1 ? 'Patent pending'
+                  : i === 1 ? 'In active development · Patent pending'
                   : 'Future development';
-      const badgeKind = i === 0 ? 'active' : i === 1 ? 'patent' : 'future';
+      const badgeKind = i === 0 ? 'active' : i === 1 ? 'active' : 'future';
       return (
         <details class={`platform platform--${slug}`}>
           <summary class="platform__summary">

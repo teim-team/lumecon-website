@@ -16,8 +16,8 @@
   font-family: var(--font-mono);
   font-size: .7rem;
   letter-spacing: .14em;
-  color: rgba(255, 255, 255, .45);
-  font-weight: 500;
+  color: var(--accent-light);
+  font-weight: 600;
   text-transform: uppercase;
   margin: 0 0 1.2rem;
 }
@@ -48,18 +48,6 @@
   transition: color .15s;
 }
 .cta-email:hover { color: var(--white); }
-
-.cta-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: .55rem;
-}
-.cta-eyebrow__dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--cedar-light);
-  box-shadow: 0 0 0 3px rgba(63, 136, 102, .2);
-}
 
 .cta-form {
   background: rgba(255, 255, 255, .04);

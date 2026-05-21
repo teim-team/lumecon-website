@@ -134,7 +134,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'are you hiring', 'work for lumecon', 'have internships', 'internship', "i'm a developer", "i'm a designer", "i'm an engineer", 'join the team', 'open roles', 'open role', 'careers', 'apply for a job', 'job opening', 'join lumecon',
     ],
-    answer: "Lumecon is a five-person team and is looking for early teammates across software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales. These are unpaid early-stage roles, open to undergraduate and graduate students. We mentor people who are persistent. See the /join page for details, or email contact@lumecon.ai with a résumé and a short note.",
+    answer: "Lumecon is a six-person team and is looking for early teammates across software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales. These are unpaid early-stage roles, open to undergraduate and graduate students. We mentor people who are persistent. See the /join page for details, or email contact@lumecon.ai with a résumé and a short note.",
   },
   {
     id: 'technical',

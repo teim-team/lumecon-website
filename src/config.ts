@@ -29,7 +29,7 @@ export const site = {
       name: 'Tribal Economic Impact',
       url: 'https://tribaleconomicimpact.com',
       domain: 'tribaleconomicimpact.com',
-      status: 'Patent pending \u00B7 In active development',
+      status: 'In active development \u00B7 Patent pending',
     },
     global: {
       name: 'Global Economic Impact',

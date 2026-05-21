@@ -116,6 +116,14 @@ const classes = [
   .brandmark--sm .brandmark__seal { height: 2em; width: 2em; }
   .brandmark--sm .brandmark__tag { font-size: .38em; }
 
+  /* Mobile: scale the hero variant down so the wordmark fits a 360-
+     400px viewport, and tighten the letter-spacing slightly so
+     "LUMECON" doesn't push out of the line. */
+  @media (max-width: 540px) {
+    .brandmark--lg { font-size: 1.95rem; }
+    .brandmark--lg .brandmark__name { letter-spacing: .14em; }
+  }
+
   .brandmark--no-tag .brandmark__text { gap: 0; }
   .brandmark--no-tag .brandmark__name { font-size: 1em; }
 

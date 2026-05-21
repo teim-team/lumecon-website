@@ -185,7 +185,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     </p>
     <ul class="hero-proof" aria-label="Proof points">
       <li>Built at Cornell</li>
-      <li>Patent-pending tribal model</li>
+      <li>Patent-pending methodology</li>
       <li>Alternative to IMPLAN, RIMS II, REMI</li>
     </ul>
     <div class="hero-cta">
@@ -1659,12 +1659,16 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
       const renderPanel = () => {
         const def = FIG_DEFS[key];
+        // Activity-specific qualifier without the raw multiplier — the
+        // marketing surface should describe the methodology in words,
+        // not hand out the calibration numbers. The real product
+        // exposes them; this is the public hero.
         let mult = '';
-        const ai = stage.dataset.actIndirect, au = stage.dataset.actInduced, aj = stage.dataset.actJobspm, al = stage.dataset.actLabel;
-        if (key === 'indirect' && ai)      mult = `Multiplier this run: <strong>${ai}</strong> (${al}).`;
-        else if (key === 'induced' && au)  mult = `Multiplier this run: <strong>${au}</strong> (${al}).`;
-        else if (key === 'jobs' && aj)     mult = `Per-million factor this run: <strong>${aj}</strong> jobs / $M (${al}).`;
-        else if (key === 'total' && ai && au) mult = `Composed from indirect <strong>${ai}</strong> + induced <strong>${au}</strong> (${al}).`;
+        const al = stage.dataset.actLabel;
+        if (key === 'indirect' && al)     mult = `Calibrated to the supplier mix of a typical <strong>${al}</strong>.`;
+        else if (key === 'induced' && al) mult = `Calibrated to the worker-spending pattern of a typical <strong>${al}</strong>.`;
+        else if (key === 'jobs' && al)    mult = `Employment per dollar of activity is sector-specific; this run uses the <strong>${al}</strong> profile.`;
+        else if (key === 'total' && al)   mult = `Sum of the three rounds for this <strong>${al}</strong>.`;
         // Level-specific note: shows when the current study is at
         // county or reservation level and the figure has a note for
         // that level. State-level studies don't get an addendum
