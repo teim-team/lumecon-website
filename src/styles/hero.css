@@ -286,6 +286,15 @@
 }
 .hero-stage[data-layer="counties"] .hero-map__county-borders { display: block; }
 
+/* Top controls row: layer filters on the left, search on the right. */
+.workspace-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 /* Filter chips above the map */
 .workspace-filters {
   display: inline-flex;
@@ -296,6 +305,131 @@
   border: 1px solid var(--rule);
   border-radius: 999px;
   width: fit-content;
+}
+
+/* Search box — same pill-shape as the filter row, lives next to it. */
+.workspace-search {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 280px;
+  max-width: 100%;
+}
+.workspace-search__icon {
+  position: absolute;
+  left: .8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--ink-3);
+  pointer-events: none;
+}
+.workspace-search__input {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: .88rem;
+  font-weight: 400;
+  color: var(--navy);
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: .55rem 2.2rem .55rem 2rem;
+  letter-spacing: -.005em;
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+}
+.workspace-search__input::placeholder { color: var(--ink-3); }
+.workspace-search__input:hover { border-color: var(--rule-strong); }
+.workspace-search__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-rgba-18);
+  background: var(--white);
+}
+.workspace-search__clear {
+  position: absolute;
+  right: .55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rule);
+  color: var(--navy);
+  border: 0;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: background .15s var(--ease);
+}
+.workspace-search__clear:hover { background: var(--rule-strong); }
+
+.workspace-search__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: .35rem;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(10, 15, 38, .14), 0 2px 6px rgba(10, 15, 38, .06);
+  z-index: 50;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.workspace-search__item {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .12s var(--ease);
+}
+.workspace-search__item.is-active { background: var(--paper); }
+.workspace-search__kind {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+}
+.workspace-search__kind svg { width: 16px; height: 16px; }
+.workspace-search__item.is-active .workspace-search__kind { color: var(--accent); }
+.workspace-search__meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.workspace-search__name {
+  font-family: var(--font-sans);
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -.005em;
+  line-height: 1.2;
+}
+.workspace-search__name mark {
+  background: transparent;
+  color: var(--accent-btn-hover);
+  font-weight: 700;
+}
+.workspace-search__sub {
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  color: var(--ink-3);
+  margin-top: 2px;
+  letter-spacing: .02em;
 }
 .wfilter {
   background: transparent;
@@ -666,6 +800,18 @@
 .hero-fig__expl p + p { margin-top: .35rem; }
 .hero-fig__mult { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
 .hero-fig__mult strong { color: var(--navy); }
+/* Level-specific assumption note — sits between the base definition
+   and the multiplier line. Slightly different background so it reads
+   as "what we changed for this level" without competing with the
+   primary definition above. */
+.hero-fig__note {
+  font-size: .78rem;
+  color: var(--ink-2);
+  padding: .45rem .55rem;
+  background: var(--accent-rgba-08);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 3px 3px 0;
+}
 
 /* ---------- Detail layers: supplier + household clouds + flow lines ---------- */
 
