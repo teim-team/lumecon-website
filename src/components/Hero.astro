@@ -902,6 +902,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         amount: totalLocal,
         label: 'local',
         name: (s.code || s.name).slice(0, 12),
+        kind: 'local' as const,
       };
       renderValueChips([sourceChip, ...chipData], src);
       renderFlowLines(chipData, src, maxChipAmount);
