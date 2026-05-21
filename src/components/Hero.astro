@@ -15,6 +15,7 @@ import { mesh, feature } from 'topojson-client';
 import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 // @ts-ignore — generated data, no .d.ts
 import { CENSUS_TRIBAL_LANDS } from '../data/tribalLands.generated.js';
+import BrandWordmark from './BrandWordmark.astro';
 import '../styles/hero.css';
 
 // viewBox tight-fits the full us-atlas albers-USA projection bbox
@@ -125,9 +126,8 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 <section class="hero" id="top">
   <!-- Brand statement: large wordmark, one position, one CTA. -->
   <div class="hero-brand">
-    <a href="/" class="hero-mark" aria-label="Lumecon Inc.">
-      <img src="/brand/lumecon-logo-horizontal-transparent.png" alt="Lumecon" width="560" height="98" />
-    </a>
+    <BrandWordmark size="lg" ariaLabel="Lumecon Inc." />
+
     <h1 class="hero-statement">
       Your work changes the economy around it. We make that change measurable.
     </h1>
@@ -736,6 +736,11 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       sourcePoint?: { cx: number; cy: number };
       /** 'state' | 'county' | 'reservation' — drives zoom + dot scaling. */
       level?: 'state' | 'county' | 'reservation';
+      /** 5-digit FIPS of the county containing the source. For
+       *  reservation studies, leakage routes preferentially through
+       *  this county (and its state) before any other neighbor — the
+       *  geographic embeddedness MRIO/FLQ models formalize. */
+      containingCountyFips?: string;
     };
 
     const runStudy = async (stateId: string, opts?: RunOpts) => {
@@ -777,27 +782,40 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       stage.dataset.run = '1';
       stage.dataset.zoom = '1';
 
-      /* Distribute the indirect+induced spillover across the surrounding
-         states with regional retention applied. Most of an EI study's
-         multiplier effect stays inside the source region (high Regional
-         Purchase Coefficient / Flegg-adjusted Location Quotient); only
-         the leakage portion lands in other geographies. The leakage rate
-         is a function of source-region size — large regions retain more,
-         small reservations leak the most. We hoist the level decision
-         above the pipeline so retention can read it. */
+      /* Two-tier retention. Most of an EI study's multiplier stays
+         inside the source REGION (high Regional Purchase Coefficient).
+         Of what does leave the source region, the bulk stays in the
+         source STATE (containing-county and containing-state suppliers
+         / workers); only a smaller residual crosses state lines.
+
+         This nests the way real interregional IO models work: an FLQ-
+         adjusted county multiplier is lower than its state multiplier,
+         which is in turn lower than the national multiplier. The
+         delta at each level is "leakage upward".
+
+         The smaller the source region, the more leakage at the first
+         tier (source-region → containing state). Reservations leak
+         the most off-reservation because few have a deep local supply
+         chain or workforce living on-reservation, and the indirect
+         portion (specialized suppliers) often crosses state lines. */
       const _level: 'state' | 'county' | 'reservation' =
         opts?.level
         ?? (opts?.sourcePoint ? 'reservation' : 'state');
-      // Retention rates by level (illustrative but grounded in typical
-      // RPC ranges for U.S. regional IO modeling). State studies keep
-      // most of the multiplier inside the state. Reservations leak the
-      // most because few small reservations have a deep local supply
-      // chain or workforce that lives on-reservation.
-      const RETENTION = { state: 0.82, county: 0.58, reservation: 0.32 } as const;
-      const localShare = RETENTION[_level];
-      const externalSpillover = (amount.v) * (activity.indirect + activity.induced) * (1 - localShare);
-      const localSpilloverAmt = (amount.v) * (activity.indirect + activity.induced) * localShare;
-      const totalLocal = amount.v + localSpilloverAmt;
+      // What fraction of the spillover stays inside the source REGION
+      // (state for state studies, county for county studies, reservation
+      // for reservation studies).
+      const REGION_RETENTION = { state: 0.82, county: 0.58, reservation: 0.32 } as const;
+      // Of what leaves the source region, what fraction stays inside
+      // the source STATE (i.e., other counties / off-reservation in the
+      // same state). For state studies this is 0 by definition.
+      const ESCAPE_TO_STATE = { state: 0, county: 0.72, reservation: 0.62 } as const;
+
+      const spilloverTotal = (amount.v) * (activity.indirect + activity.induced);
+      const localToRegion   = spilloverTotal * REGION_RETENTION[_level];
+      const beyondRegion    = spilloverTotal - localToRegion;
+      const inStateOffRegion = beyondRegion * ESCAPE_TO_STATE[_level];
+      const externalSpillover = beyondRegion - inStateOffRegion;
+      const totalLocal       = amount.v + localToRegion + inStateOffRegion;
 
       // Distance-decay distribution across non-source states. Sharper
       // decay (2.2) than before so leakage concentrates in the
@@ -1052,6 +1070,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
             chip: scene.chip,
             sourcePoint: { cx: t.cx, cy: t.cy },
             level: 'reservation',
+            containingCountyFips: t.countyFips,
           });
           return;
         }
@@ -1072,6 +1091,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           chip: scene.chip,
           level: isCounty ? 'county' : 'state',
           ...(countyCenter ? { sourcePoint: countyCenter } : {}),
+          ...(isCounty && scene.countyFips ? { containingCountyFips: scene.countyFips } : {}),
         });
       }
     };

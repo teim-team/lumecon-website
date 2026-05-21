@@ -1,5 +1,6 @@
 ---
 import { site } from '../config';
+import BrandWordmark from './BrandWordmark.astro';
 interface Props {
   isHome?: boolean;
 }
@@ -10,7 +11,7 @@ const prefix = isHome ? '' : '/';
   <div class="footer-w">
     <div class="footer-top">
       <div class="footer-brand">
-        <img class="footer-brand-img" src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.legalName} width="200" height="44" loading="lazy" />
+        <BrandWordmark size="md" invert={true} ariaLabel={`${site.legalName} home`} />
         <div class="footer-brand-pitch">{site.pitch}</div>
       </div>
 
