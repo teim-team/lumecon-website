@@ -3,6 +3,7 @@ import { site } from '../config';
 import IconLocal from './icons/IconLocal.astro';
 import IconTribal from './icons/IconTribal.astro';
 import IconGlobal from './icons/IconGlobal.astro';
+import BrandWordmark from './BrandWordmark.astro';
 interface Props {
   isHome?: boolean;
 }
@@ -12,9 +13,8 @@ const { local, tribal, global: globalProduct } = site.products;
 ---
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
-    <a href="/" class="logo" aria-label={`${site.legalName} home`}>
-      <img src="/brand/lumecon-logo-horizontal-transparent.png" alt={site.name} width="160" height="36" />
-    </a>
+    <BrandWordmark size="sm" ariaLabel={`${site.legalName} home`} taglineHidden={true} />
+
     <div class="nav-links" id="navLinks">
       <a href={`${prefix}#how`}>Why Lumecon?</a>
       <div class="nav-dd">

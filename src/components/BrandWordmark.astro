@@ -1,0 +1,130 @@
+---
+/**
+ * CSS-rendered logo wordmark. Replaces the legacy PNG wordmark so
+ * the typography sits in the same Inter/Spectral system as the rest
+ * of the site instead of a baked-in transitional serif.
+ *
+ * Brand DNA preserved:
+ *   - Seal mark on the left (kept as PNG asset since it's organic art)
+ *   - "LUMECON" wordmark caps
+ *   - "We luminate economies" tagline with "luminate" emphasized in
+ *     italic gold script (Spectral italic, already in the font stack)
+ *
+ * Use the size prop to render at hero / footer / nav scale; all
+ * children scale relative to the wrapper's font-size.
+ */
+interface Props {
+  /** Visual scale. lg = hero, md = footer, sm = nav. */
+  size?: 'lg' | 'md' | 'sm';
+  /** Wrap in an anchor pointing to href, or use an aria-label for in-flow brand contexts. */
+  href?: string;
+  ariaLabel?: string;
+  /** Hide the tagline (used when space is tight, e.g. nav). */
+  taglineHidden?: boolean;
+  /** Render on a dark surface (footer). Flips the text colors to cream. */
+  invert?: boolean;
+}
+const {
+  size = 'md',
+  href = '/',
+  ariaLabel = 'Lumecon home',
+  taglineHidden = false,
+  invert = false,
+} = Astro.props;
+const classes = [
+  'brandmark',
+  `brandmark--${size}`,
+  invert ? 'brandmark--invert' : '',
+  taglineHidden ? 'brandmark--no-tag' : '',
+].filter(Boolean).join(' ');
+---
+<a class={classes} href={href} aria-label={ariaLabel}>
+  <img class="brandmark__seal" src="/brand/lumecon-logo-mark-transparent.png" alt="" aria-hidden="true" width="64" height="64" />
+  <span class="brandmark__text">
+    <span class="brandmark__name">Lumecon</span>
+    {!taglineHidden && (
+      <span class="brandmark__tag">We <em>luminate</em> economies</span>
+    )}
+  </span>
+</a>
+
+<style>
+  .brandmark {
+    display: inline-flex;
+    align-items: center;
+    gap: .55em;
+    text-decoration: none;
+    color: var(--navy);
+    line-height: 1;
+    font-family: var(--font-sans);
+  }
+  .brandmark__seal {
+    flex: 0 0 auto;
+    height: 2.5em;
+    width: 2.5em;
+    display: block;
+    object-fit: contain;
+  }
+  .brandmark__text {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .22em;
+  }
+  /* LUMECON caps — Inter at heavy weight with airy letter-spacing
+     gives the same "refined institutional" feel the original
+     transitional serif did, but in the brand's living type system. */
+  .brandmark__name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1em;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--navy);
+    line-height: 1;
+    /* Optical correction: uppercase tracking pushes the visible
+       right edge in; pad-right so the seal-to-text gap stays even. */
+    padding-right: .08em;
+  }
+  .brandmark__tag {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: .42em;
+    letter-spacing: .02em;
+    color: var(--navy);
+    opacity: .68;
+    line-height: 1.1;
+  }
+  /* "luminate" — Spectral italic ties the script flourish back into
+     a font already loaded for the rest of the site (display serif
+     fallback). Gold is the brand emphasis color, same as the
+     wordmark "luminate" everywhere else (HiringBanner, JoinHero). */
+  .brandmark__tag em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+    font-size: 1.18em;
+    letter-spacing: -.01em;
+    padding: 0 .12em;
+  }
+
+  /* Size variants — set the parent font-size; everything inside is em. */
+  .brandmark--lg { font-size: clamp(2.8rem, 5.4vw, 3.6rem); }
+  .brandmark--md { font-size: 1.5rem; }
+  .brandmark--sm { font-size: 1.05rem; gap: .45em; }
+  .brandmark--sm .brandmark__seal { height: 2em; width: 2em; }
+  .brandmark--sm .brandmark__tag { font-size: .38em; }
+
+  .brandmark--no-tag .brandmark__text { gap: 0; }
+  .brandmark--no-tag .brandmark__name { font-size: 1em; }
+
+  /* Inverted (dark surface, e.g. footer) */
+  .brandmark--invert { color: var(--cream); }
+  .brandmark--invert .brandmark__name { color: var(--cream); }
+  .brandmark--invert .brandmark__tag { color: var(--cream); opacity: .72; }
+  .brandmark--invert .brandmark__tag em { color: var(--gold-light); }
+
+  .brandmark:hover .brandmark__name { color: var(--navy); }
+  .brandmark:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 2px; }
+</style>
