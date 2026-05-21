@@ -91,12 +91,16 @@ const statesJson = JSON.stringify(
 const codeMapJson = JSON.stringify(CODE_TO_ID);
 const countyCentroidsJson = JSON.stringify(COUNTY_CENTROIDS);
 
-/* Search index for the workspace search box. States + tribal lands
-   are pre-flattened into a single array so the client just filters
-   one list. Categories drive the leading-icon and the subtitle. */
+/* Search index for the workspace search box. States + counties +
+   tribal lands are pre-flattened into a single array so the client
+   just filters one list. The county slice is the biggest piece
+   (~3,000 entries) but each is tiny — name+state-code+centroid —
+   and the JSON compresses well under gzip. Categories drive the
+   leading-icon and the subtitle. */
 const stateNameByFips: Record<string, string> = stateData.reduce((acc: any, s: any) => { acc[s.id] = s.name; return acc; }, {});
 type SearchEntry =
   | { type: 'state'; id: string; name: string; sub: string; cx: number; cy: number }
+  | { type: 'county'; id: string; name: string; sub: string; cx: number; cy: number; stateFips: string }
   | { type: 'tribal'; id: string; name: string; sub: string; cx: number; cy: number; fips: string };
 const searchIndex: SearchEntry[] = [
   ...stateData.map((s: any) => ({
@@ -107,6 +111,23 @@ const searchIndex: SearchEntry[] = [
     cx: s.cx,
     cy: s.cy,
   })),
+  ...countiesFC.features
+    .filter((f: any) => f.properties?.name && Number.isFinite(path.centroid(f)[0]))
+    .map((f: any) => {
+      const fips = String(f.id).padStart(5, '0');
+      const stateFips = fips.slice(0, 2);
+      const stateCode = STATE_CODES[stateFips] || '';
+      const [cx, cy] = path.centroid(f);
+      return {
+        type: 'county' as const,
+        id: fips,
+        name: `${f.properties.name} County`,
+        sub: `County · ${stateCode}`,
+        cx: +cx.toFixed(1),
+        cy: +cy.toFixed(1),
+        stateFips,
+      };
+    }),
   ...aiannh.map((t: any) => ({
     type: 'tribal' as const,
     id: String(t.id),
@@ -217,10 +238,10 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       <input type="text"
              class="workspace-search__input"
              id="workspaceSearchInput"
-             placeholder="Search a state or tribal nation"
+             placeholder="Search a state, county, or tribal nation"
              autocomplete="off"
              spellcheck="false"
-             aria-label="Search a state or tribal nation"
+             aria-label="Search a state, county, or tribal nation"
              aria-autocomplete="list"
              aria-controls="workspaceSearchPanel"
              aria-expanded="false" />
@@ -361,6 +382,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   type TribalLand = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
   type SearchEntry =
     | { type: 'state'; id: string; name: string; sub: string; cx: number; cy: number }
+    | { type: 'county'; id: string; name: string; sub: string; cx: number; cy: number; stateFips: string }
     | { type: 'tribal'; id: string; name: string; sub: string; cx: number; cy: number; fips: string };
   const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
   const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
@@ -1749,8 +1771,11 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
               aria-selected="${i === activeIdx}"
               data-idx="${i}">
             <span class="workspace-search__kind workspace-search__kind--${m.type}" aria-hidden="true">
-              ${m.type === 'state' ? '<svg viewBox="0 0 16 16"><path d="M2 4 L7 2 L12 4 L14 7 L13 12 L8 14 L3 12 L1 8 Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>'
-                                    : '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>'}
+              ${m.type === 'state'
+                ? '<svg viewBox="0 0 16 16"><path d="M2 4 L7 2 L12 4 L14 7 L13 12 L8 14 L3 12 L1 8 Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>'
+                : m.type === 'county'
+                ? '<svg viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2.5" y1="8" x2="13.5" y2="8" stroke="currentColor" stroke-width="1"/><line x1="8" y1="2.5" x2="8" y2="13.5" stroke="currentColor" stroke-width="1"/></svg>'
+                : '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>'}
             </span>
             <span class="workspace-search__meta">
               <span class="workspace-search__name">${highlight(m.name, q)}</span>
@@ -1773,6 +1798,21 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         if (cycleTimer) { window.clearTimeout(cycleTimer); cycleTimer = undefined; }
         if (m.type === 'state') {
           runStudy(m.id, { level: 'state' });
+        } else if (m.type === 'county') {
+          // County selection: fire at county level with the county
+          // centroid as the source point, and pass containingCountyFips
+          // (the same FIPS) so retention applies the county-tier logic.
+          // Custom chip text so the header reads "Travis County, TX"
+          // instead of falling back to the parent state's name.
+          const stateCode = states[m.stateFips]?.code || '';
+          const label = stateCode ? `${m.name}, ${stateCode}` : m.name;
+          runStudy(m.stateFips, {
+            level: 'county',
+            sourcePoint: { cx: m.cx, cy: m.cy },
+            containingCountyFips: m.id,
+            chip: label,
+            framing: `A study in ${label}.`,
+          });
         } else {
           // Tribal selection: resolve the containing county FIPS via
           // the tribalLookup if we have it; otherwise the leakage just
@@ -1787,6 +1827,8 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           runStudy(m.fips, {
             level: 'reservation',
             sourcePoint: { cx: m.cx, cy: m.cy },
+            chip: m.name,
+            framing: `A study on ${m.name}.`,
             ...(containingCountyFips ? { containingCountyFips } : {}),
           });
         }
