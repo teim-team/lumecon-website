@@ -408,12 +408,16 @@
 /* Source region's ring=0 wins over the choropleth tint */
 .hero-state[data-ring="0"][data-impact] { fill: var(--goldbar); fill-opacity: .85; }
 
-/* Value chips — small pills placed on top-N impacted regions */
+/* Value chips — small pills placed on top-N impacted regions.
+   The "local" chip on the source region reveals with the Direct
+   tick (ring=1); the smaller leakage chips reveal with the
+   Indirect+Induced tick (ring=2). */
 .hero-value-chip {
   opacity: 0;
   transition: opacity .35s var(--ease);
   pointer-events: none;
 }
+.hero-stage[data-ring="1"] .hero-value-chip[data-kind="local"],
 .hero-stage[data-ring="2"] .hero-value-chip,
 .hero-stage[data-ring="3"] .hero-value-chip,
 .hero-stage[data-ring="4"] .hero-value-chip { opacity: 1; }
@@ -440,6 +444,24 @@
   letter-spacing: -.01em;
   dominant-baseline: middle;
   text-anchor: middle;
+}
+/* Local-retention chip: the dominant chip on the map. Gold stroke
+   ties it to the source region; larger font; thicker leader. */
+.hero-value-chip[data-kind="local"] .hero-value-chip__bg {
+  stroke: var(--gold);
+  stroke-opacity: .9;
+  stroke-width: 1;
+  fill: var(--white);
+  filter: drop-shadow(0 2px 3px rgba(10, 15, 38, .18));
+}
+.hero-value-chip[data-kind="local"] .hero-value-chip__txt {
+  font-size: 11px;
+  fill: var(--navy);
+}
+.hero-value-chip[data-kind="local"] .hero-value-chip__leader {
+  stroke: var(--gold);
+  stroke-opacity: .7;
+  stroke-width: .9;
 }
 
 /* Flow lines — curved beziers from source to top-impacted regions.

@@ -470,7 +470,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
        leader line back to the centroid. Values shown in $K/M with
        the type-of-effect label so the viewer reads the chip and
        knows what it's measuring. */
-    const renderValueChips = (top: Array<{ id: string; cx: number; cy: number; amount: number; label: string; name: string }>, src: { cx: number; cy: number }) => {
+    const renderValueChips = (top: Array<{ id: string; cx: number; cy: number; amount: number; label: string; name: string; kind?: 'local' | 'leak' }>, src: { cx: number; cy: number }) => {
       const vlayer = document.getElementById('heroValueLayer');
       if (!vlayer) return;
       vlayer.innerHTML = '';
@@ -482,22 +482,26 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       const placed: Array<{ x: number; y: number; w: number; h: number }> = [];
       const collides = (x: number, y: number, w: number, h: number) =>
         placed.some(p => !(x + w < p.x - 4 || x - 4 > p.x + p.w || y + h < p.y - 4 || y - 4 > p.y + p.h));
-      // Cardinal offsets to try (in viewBox units)
       const offsets = [
         [22, -18], [-22, -18], [22, 18], [-22, 18],
         [32, 0], [-32, 0], [0, -24], [0, 24],
       ];
       for (const r of top) {
-        // Pick the first non-colliding offset away from the source
-        const fromSrcX = Math.sign(r.cx - src.cx) || 1;
-        const fromSrcY = Math.sign(r.cy - src.cy) || -1;
+        const isLocal = r.kind === 'local';
+        // Local chip prefers the SW position so it doesn't collide
+        // with the source spark / callout sitting NE of the centroid.
+        const fromSrcX = isLocal ? -1 : (Math.sign(r.cx - src.cx) || 1);
+        const fromSrcY = isLocal ?  1 : (Math.sign(r.cy - src.cy) || -1);
         const sortedOffsets = [...offsets].sort((a, b) =>
           Math.abs(Math.sign(a[0]) - fromSrcX) + Math.abs(Math.sign(a[1]) - fromSrcY) -
           (Math.abs(Math.sign(b[0]) - fromSrcX) + Math.abs(Math.sign(b[1]) - fromSrcY))
         );
-        const labelText = `${r.name} ${fmt(r.amount)}`;
-        const chipW = Math.max(40, labelText.length * 4.2 + 8);
-        const chipH = 12;
+        const labelText = isLocal
+          ? `${r.name} ${fmt(r.amount)} local`
+          : `${r.name} ${fmt(r.amount)}`;
+        const fontPx = isLocal ? 11 : 9.5;
+        const chipH = isLocal ? 14 : 12;
+        const chipW = Math.max(48, labelText.length * (fontPx * 0.55) + 10);
         let cx2 = r.cx + sortedOffsets[0][0];
         let cy2 = r.cy + sortedOffsets[0][1];
         for (const o of sortedOffsets) {
@@ -512,6 +516,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
         const g = document.createElementNS(SVG_NS, 'g');
         g.setAttribute('class', 'hero-value-chip');
+        if (isLocal) g.setAttribute('data-kind', 'local');
         const leader = document.createElementNS(SVG_NS, 'path');
         leader.setAttribute('class', 'hero-value-chip__leader');
         leader.setAttribute('d', `M ${r.cx} ${r.cy} L ${cx2} ${cy2}`);
@@ -772,30 +777,59 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       stage.dataset.run = '1';
       stage.dataset.zoom = '1';
 
-      /* Compute the per-region impact distribution and render the
-         choropleth + value chips + flow lines. The figures below the
-         map (direct/indirect/induced) are the totals; this pipeline
-         distributes the spillover (indirect+induced) across the
-         surrounding states so the map literally shows where the
-         multiplier effect lands. State granularity regardless of
-         study level — at county/reservation zoom you still see the
-         broader regional spillover, which is what an EI study would
-         actually report. */
-      const spilloverTotal = (amount.v) * (activity.indirect + activity.induced);
+      /* Distribute the indirect+induced spillover across the surrounding
+         states with regional retention applied. Most of an EI study's
+         multiplier effect stays inside the source region (high Regional
+         Purchase Coefficient / Flegg-adjusted Location Quotient); only
+         the leakage portion lands in other geographies. The leakage rate
+         is a function of source-region size — large regions retain more,
+         small reservations leak the most. We hoist the level decision
+         above the pipeline so retention can read it. */
+      const _level: 'state' | 'county' | 'reservation' =
+        opts?.level
+        ?? (opts?.sourcePoint ? 'reservation' : 'state');
+      // Retention rates by level (illustrative but grounded in typical
+      // RPC ranges for U.S. regional IO modeling). State studies keep
+      // most of the multiplier inside the state. Reservations leak the
+      // most because few small reservations have a deep local supply
+      // chain or workforce that lives on-reservation.
+      const RETENTION = { state: 0.82, county: 0.58, reservation: 0.32 } as const;
+      const localShare = RETENTION[_level];
+      const externalSpillover = (amount.v) * (activity.indirect + activity.induced) * (1 - localShare);
+      const localSpilloverAmt = (amount.v) * (activity.indirect + activity.induced) * localShare;
+      const totalLocal = amount.v + localSpilloverAmt;
+
+      // Distance-decay distribution across non-source states. Sharper
+      // decay (2.2) than before so leakage concentrates in the
+      // adjacent states instead of dispersing nationally — geographic
+      // embeddedness, the same logic FLQ + interregional IO formalise.
       const statePool = Object.entries(states)
         .filter(([id]) => id !== stateId)
         .map(([id, st]) => ({ id, cx: st.cx, cy: st.cy, name: (st.code || st.name).slice(0, 12) }));
-      const tintShares = computeShares(src.cx, src.cy, statePool, 14, 1.6, runId);
+      const tintN = _level === 'state' ? 6 : _level === 'county' ? 8 : 10;
+      const chipN = _level === 'state' ? 3 : _level === 'county' ? 3 : 4;
+      const tintShares = computeShares(src.cx, src.cy, statePool, tintN, 2.2, runId);
       applyChoropleth(tintShares, '.hero-state');
       const topShares = Array.from(tintShares.entries())
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
+        .slice(0, chipN);
       const chipData = topShares.map(([id, share]) => {
         const region = statePool.find(r => r.id === id)!;
-        return { id, cx: region.cx, cy: region.cy, amount: share * spilloverTotal, label: 'spillover', name: region.name };
+        return { id, cx: region.cx, cy: region.cy, amount: share * externalSpillover, label: 'spillover', name: region.name };
       });
       const maxChipAmount = chipData[0]?.amount ?? 1;
-      renderValueChips(chipData, src);
+      // Inject a "local retention" chip on the source state showing
+      // the bulk-stays-local story. This is the chip a reader sees
+      // first; the smaller neighbor chips represent the leakage.
+      const sourceChip = {
+        id: stateId,
+        cx: s.cx,
+        cy: s.cy,
+        amount: totalLocal,
+        label: 'local',
+        name: (s.code || s.name).slice(0, 12),
+      };
+      renderValueChips([sourceChip, ...chipData], src);
       renderFlowLines(chipData, src, maxChipAmount);
 
       // Zoom strategy per level. State-level studies stay zoomed OUT
@@ -803,9 +837,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       // distribution map (the actual product surface). County and
       // reservation studies zoom in to a regional crop wide enough
       // that the nearest impacted neighbors stay visible.
-      const level: 'state' | 'county' | 'reservation' =
-        opts?.level
-        ?? (opts?.sourcePoint ? 'reservation' : 'state');
+      const level = _level;
       const zoomSpan  = level === 'state' ? 1020 : level === 'county' ? 360 : 220;
       const dotRadius = level === 'state' ? 70  : level === 'county' ? 22  : 14;
       const srcScale  = level === 'state' ? 1   : level === 'county' ? .55 : .35;
