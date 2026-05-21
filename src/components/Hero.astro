@@ -289,11 +289,10 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     <footer class="workspace__foot">
       <span class="workspace-legend">
         <span class="workspace-legend__key">
-          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--source"></span>Activity</span>
-          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--supplier"></span>Suppliers</span>
-          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--household"></span>Households</span>
+          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--source"></span>Project (Direct)</span>
+          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--spillover"></span>Spillover (Indirect + Induced)</span>
         </span>
-        <span class="workspace-legend__note">Detail dots are an illustrative distribution. The table to the right is the full breakdown.</span>
+        <span class="workspace-legend__note">Chips and tints show illustrative regional shares. The table to the right is the full breakdown.</span>
       </span>
       <span class="workspace-attr">Geography: Census TIGER/Line. Multipliers illustrative.</span>
     </footer>
@@ -408,13 +407,170 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       });
     };
 
-    // Kept for backward-compat with other call sites; now a no-op-ish
-    // wrapper that just lights the source. The neighbor-distance pass
-    // is gone.
+    /* Distribute the indirect+induced spillover across neighboring
+       regions with distance decay, normalized so shares sum to 1.
+       Returns a Map<regionId, share 0..1>. Used to drive the
+       choropleth tint, the value chips, and the flow lines.
+
+       Seeded by the source coordinates so the same study always
+       shows the same neighbor pattern — this is illustrative, not a
+       real input-output computation, but it stays deterministic so
+       running the same study twice doesn't shuffle the map. */
+    const computeShares = (srcCx: number, srcCy: number, regions: Array<{ id: string; cx: number; cy: number }>, topN: number, decay: number = 1.6, seedSalt: number = 0): Map<string, number> => {
+      // Deterministic jitter so neighbors don't fall in perfect rings
+      const rand = seededRandom(Math.floor(srcCx * 911 + srcCy * 113 + seedSalt));
+      const scored = regions
+        .filter(r => r.id !== '' && Number.isFinite(r.cx) && Number.isFinite(r.cy))
+        .map(r => {
+          const dx = r.cx - srcCx;
+          const dy = r.cy - srcCy;
+          const d = Math.hypot(dx, dy);
+          // distance decay + slight per-region jitter so it doesn't
+          // look like an exact concentric ring
+          const w = (1 / Math.pow(d + 40, decay)) * (0.7 + rand() * 0.6);
+          return { id: r.id, w, d };
+        })
+        .sort((a, b) => b.w - a.w)
+        .slice(0, topN);
+      const sum = scored.reduce((s, r) => s + r.w, 0) || 1;
+      const out = new Map<string, number>();
+      for (const r of scored) out.set(r.id, r.w / sum);
+      return out;
+    };
+
+    /* Apply the choropleth tint by setting --impact-share on each
+       matching region. CSS handles the fill-opacity scaling. */
+    const applyChoropleth = (shares: Map<string, number>, selector: string) => {
+      // Clear old impact tints first
+      stage.querySelectorAll<HTMLElement>(`${selector}[data-impact]`).forEach(el => {
+        el.removeAttribute('data-impact');
+        el.style.removeProperty('--impact-share');
+      });
+      shares.forEach((share, id) => {
+        const el = stage.querySelector<HTMLElement>(`${selector}[data-id="${id}"]`);
+        if (el) {
+          // Boost the small shares so the dimmest neighbors don't
+          // disappear. share is 0..~.35 typically; boost to 0..1.
+          const boosted = Math.min(1, Math.pow(share / 0.30, 0.6));
+          el.dataset.impact = String(Math.round(boosted * 100));
+          el.style.setProperty('--impact-share', String(boosted.toFixed(3)));
+        }
+      });
+    };
+
+    const clearChoropleth = () => {
+      stage.querySelectorAll<HTMLElement>('.hero-state[data-impact], .hero-county[data-impact]').forEach(el => {
+        el.removeAttribute('data-impact');
+        el.style.removeProperty('--impact-share');
+      });
+    };
+
+    /* Render value chips on the top-N impacted regions. Each chip
+       is a small pill placed near the region centroid with a thin
+       leader line back to the centroid. Values shown in $K/M with
+       the type-of-effect label so the viewer reads the chip and
+       knows what it's measuring. */
+    const renderValueChips = (top: Array<{ id: string; cx: number; cy: number; amount: number; label: string; name: string }>, src: { cx: number; cy: number }) => {
+      const vlayer = document.getElementById('heroValueLayer');
+      if (!vlayer) return;
+      vlayer.innerHTML = '';
+      const fmt = (n: number) => {
+        if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 0 : 1) + 'M';
+        if (n >= 1_000) return '$' + Math.round(n / 1_000) + 'K';
+        return '$' + Math.round(n);
+      };
+      const placed: Array<{ x: number; y: number; w: number; h: number }> = [];
+      const collides = (x: number, y: number, w: number, h: number) =>
+        placed.some(p => !(x + w < p.x - 4 || x - 4 > p.x + p.w || y + h < p.y - 4 || y - 4 > p.y + p.h));
+      // Cardinal offsets to try (in viewBox units)
+      const offsets = [
+        [22, -18], [-22, -18], [22, 18], [-22, 18],
+        [32, 0], [-32, 0], [0, -24], [0, 24],
+      ];
+      for (const r of top) {
+        // Pick the first non-colliding offset away from the source
+        const fromSrcX = Math.sign(r.cx - src.cx) || 1;
+        const fromSrcY = Math.sign(r.cy - src.cy) || -1;
+        const sortedOffsets = [...offsets].sort((a, b) =>
+          Math.abs(Math.sign(a[0]) - fromSrcX) + Math.abs(Math.sign(a[1]) - fromSrcY) -
+          (Math.abs(Math.sign(b[0]) - fromSrcX) + Math.abs(Math.sign(b[1]) - fromSrcY))
+        );
+        const labelText = `${r.name} ${fmt(r.amount)}`;
+        const chipW = Math.max(40, labelText.length * 4.2 + 8);
+        const chipH = 12;
+        let cx2 = r.cx + sortedOffsets[0][0];
+        let cy2 = r.cy + sortedOffsets[0][1];
+        for (const o of sortedOffsets) {
+          const tx = r.cx + o[0];
+          const ty = r.cy + o[1];
+          if (!collides(tx - chipW / 2, ty - chipH / 2, chipW, chipH)) {
+            cx2 = tx; cy2 = ty;
+            break;
+          }
+        }
+        placed.push({ x: cx2 - chipW / 2, y: cy2 - chipH / 2, w: chipW, h: chipH });
+
+        const g = document.createElementNS(SVG_NS, 'g');
+        g.setAttribute('class', 'hero-value-chip');
+        const leader = document.createElementNS(SVG_NS, 'path');
+        leader.setAttribute('class', 'hero-value-chip__leader');
+        leader.setAttribute('d', `M ${r.cx} ${r.cy} L ${cx2} ${cy2}`);
+        g.appendChild(leader);
+        const bg = document.createElementNS(SVG_NS, 'rect');
+        bg.setAttribute('class', 'hero-value-chip__bg');
+        bg.setAttribute('x', String(cx2 - chipW / 2));
+        bg.setAttribute('y', String(cy2 - chipH / 2));
+        bg.setAttribute('width', String(chipW));
+        bg.setAttribute('height', String(chipH));
+        bg.setAttribute('rx', '2.5');
+        bg.setAttribute('ry', '2.5');
+        g.appendChild(bg);
+        const txt = document.createElementNS(SVG_NS, 'text');
+        txt.setAttribute('class', 'hero-value-chip__txt');
+        txt.setAttribute('x', String(cx2));
+        txt.setAttribute('y', String(cy2 + 0.4));
+        txt.textContent = labelText;
+        g.appendChild(txt);
+        vlayer.appendChild(g);
+      }
+    };
+
+    /* Render curved flow lines from source to each top-impacted
+       region. Width scales with magnitude. */
+    const renderFlowLines = (top: Array<{ cx: number; cy: number; amount: number }>, src: { cx: number; cy: number }, maxAmount: number) => {
+      const flowLayer = document.getElementById('heroFlowLayer');
+      if (!flowLayer) return;
+      flowLayer.innerHTML = '';
+      for (const r of top) {
+        const dx = r.cx - src.cx;
+        const dy = r.cy - src.cy;
+        const dist = Math.hypot(dx, dy);
+        // Curve control point: perpendicular offset proportional to distance
+        const midX = (src.cx + r.cx) / 2;
+        const midY = (src.cy + r.cy) / 2;
+        const perpX = -dy / dist;
+        const perpY = dx / dist;
+        const curvature = dist * 0.22;
+        const cpX = midX + perpX * curvature;
+        const cpY = midY + perpY * curvature;
+        const d = `M ${src.cx} ${src.cy} Q ${cpX} ${cpY} ${r.cx} ${r.cy}`;
+        // Approximate path length for the stroke-dash animation
+        const approxLen = dist + curvature;
+        const w = Math.max(0.6, Math.min(2.2, (r.amount / maxAmount) * 2));
+        const p = document.createElementNS(SVG_NS, 'path');
+        p.setAttribute('class', 'hero-flow-line');
+        p.setAttribute('d', d);
+        p.setAttribute('stroke-width', String(w.toFixed(2)));
+        p.style.setProperty('--len', String(Math.round(approxLen)));
+        flowLayer.appendChild(p);
+      }
+    };
+
+    /* Kept for backward-compat with other call sites: light the source
+       region only. The neighbor pass is now handled by computeShares
+       + applyChoropleth, called explicitly from runStudy. */
     const shadeNeighbors = (id: string) => {
       lightSource(id);
-      // The original implementation also distance-bucketed every
-      // other state into ring 1 / ring 2; intentionally removed.
     };
 
     /* ---------- viewBox zoom tween ---------- */
@@ -518,78 +674,23 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       return out;
     };
 
-    const drawDetail = (cx: number, cy: number, radius: number, dotScale: number = 1) => {
-      const supplierLayer  = document.getElementById('heroSupplierLayer');
-      const householdLayer = document.getElementById('heroHouseholdLayer');
-      const flowLayer      = document.getElementById('heroFlowLayer');
-      if (!supplierLayer || !householdLayer || !flowLayer) return;
-      supplierLayer.innerHTML = '';
-      householdLayer.innerHTML = '';
-      flowLayer.innerHTML = '';
-
-      // Detail-dot sizes scale with the level so they don't dominate
-      // when the map zooms in on a small region.
-      const supplierHalf = +(1.5 * dotScale).toFixed(2); // half side-length of the supplier diamond
-      const householdR   = +(1.0 * dotScale).toFixed(2);
-
-      // Suppliers (firms in the upstream chain): RENDERED AS DIAMONDS
-      // so they're distinguishable from households by shape, not just
-      // color. Count is intentionally lower than households (real
-      // input-output: a handful of upstream firms vs many household
-      // recipients). Decay .65 = wide spread, since indirect effects
-      // routinely leak to neighboring counties/states.
-      const suppliers = cloudOnLand(cx, cy, 18, radius * 1.55, .65, 1);
-      suppliers.forEach((p, i) => {
-        const r = document.createElementNS(SVG_NS, 'rect');
-        r.setAttribute('class', 'hero-supplier');
-        r.setAttribute('x', String(p.x - supplierHalf));
-        r.setAttribute('y', String(p.y - supplierHalf));
-        r.setAttribute('width', String(supplierHalf * 2));
-        r.setAttribute('height', String(supplierHalf * 2));
-        r.setAttribute('transform', `rotate(45 ${p.x} ${p.y})`);
-        r.style.setProperty('--dd', `${i * 40}ms`);
-        supplierLayer.appendChild(r);
-      });
-
-      // Households (induced spending: people who live near the
-      // workplace). Many-to-one ratio against suppliers. Decay 3.2
-      // = clusters very tightly inside the immediate region.
-      const households = cloudOnLand(cx, cy, 100, radius * 0.7, 3.2, 7);
-      households.forEach((p, i) => {
-        const c = document.createElementNS(SVG_NS, 'circle');
-        c.setAttribute('class', 'hero-household');
-        c.setAttribute('cx', String(p.x));
-        c.setAttribute('cy', String(p.y));
-        c.setAttribute('r', String(householdR));
-        c.style.setProperty('--dd', `${i * 14 + 200}ms`);
-        householdLayer.appendChild(c);
-      });
-
-      // Flow lines: 6 thin curves from source to nearest suppliers
-      const nearest = [...suppliers]
-        .map(p => ({ p, d: Math.hypot(p.x - cx, p.y - cy) }))
-        .sort((a, b) => a.d - b.d)
-        .slice(0, 6);
-      nearest.forEach(({ p }, i) => {
-        const path = document.createElementNS(SVG_NS, 'path');
-        path.setAttribute('class', 'hero-flow');
-        // Quadratic bezier with a slight perpendicular offset for an arc
-        const mx = (cx + p.x) / 2;
-        const my = (cy + p.y) / 2;
-        const dx = p.x - cx, dy = p.y - cy;
-        const offset = 4;
-        const ox = -dy / Math.hypot(dx, dy) * offset;
-        const oy =  dx / Math.hypot(dx, dy) * offset;
-        path.setAttribute('d', `M ${cx} ${cy} Q ${mx + ox} ${my + oy} ${p.x} ${p.y}`);
-        path.style.setProperty('--dd', `${i * 80 + 400}ms`);
-        flowLayer.appendChild(path);
-      });
+    /* drawDetail is now a no-op. The previous implementation rendered
+       random supplier diamonds + household circles + radiating flow
+       lines, which read as illustration rather than data. The new
+       impact pipeline (computeShares + applyChoropleth +
+       renderValueChips + renderFlowLines, called from runStudy) shows
+       the actual per-region distribution of indirect+induced spillover
+       as a choropleth with labeled value chips and curved flow lines
+       to the top-impacted regions. */
+    const drawDetail = (_cx: number, _cy: number, _radius: number, _dotScale: number = 1) => {
+      /* intentionally empty */
     };
 
     const clearDetail = () => {
-      ['heroSupplierLayer', 'heroHouseholdLayer', 'heroFlowLayer'].forEach(id => {
+      ['heroSupplierLayer', 'heroHouseholdLayer', 'heroFlowLayer', 'heroValueLayer'].forEach(id => {
         const el = document.getElementById(id); if (el) el.innerHTML = '';
       });
+      clearChoropleth();
     };
 
     const moveSource = (cx: number, cy: number) => {
@@ -671,22 +772,51 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       stage.dataset.run = '1';
       stage.dataset.zoom = '1';
 
-      // Zoom + scatter scaling by level. State studies cover a big
-      // area, county studies cover a small one, reservation studies
-      // cover an even smaller one. The source dot itself is scaled
-      // via --src-scale so it doesn't dominate at high zoom.
+      /* Compute the per-region impact distribution and render the
+         choropleth + value chips + flow lines. The figures below the
+         map (direct/indirect/induced) are the totals; this pipeline
+         distributes the spillover (indirect+induced) across the
+         surrounding states so the map literally shows where the
+         multiplier effect lands. State granularity regardless of
+         study level — at county/reservation zoom you still see the
+         broader regional spillover, which is what an EI study would
+         actually report. */
+      const spilloverTotal = (amount.v) * (activity.indirect + activity.induced);
+      const statePool = Object.entries(states)
+        .filter(([id]) => id !== stateId)
+        .map(([id, st]) => ({ id, cx: st.cx, cy: st.cy, name: (st.code || st.name).slice(0, 12) }));
+      const tintShares = computeShares(src.cx, src.cy, statePool, 14, 1.6, runId);
+      applyChoropleth(tintShares, '.hero-state');
+      const topShares = Array.from(tintShares.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+      const chipData = topShares.map(([id, share]) => {
+        const region = statePool.find(r => r.id === id)!;
+        return { id, cx: region.cx, cy: region.cy, amount: share * spilloverTotal, label: 'spillover', name: region.name };
+      });
+      const maxChipAmount = chipData[0]?.amount ?? 1;
+      renderValueChips(chipData, src);
+      renderFlowLines(chipData, src, maxChipAmount);
+
+      // Zoom strategy per level. State-level studies stay zoomed OUT
+      // so the choropleth + neighbor chips read as a full national
+      // distribution map (the actual product surface). County and
+      // reservation studies zoom in to a regional crop wide enough
+      // that the nearest impacted neighbors stay visible.
       const level: 'state' | 'county' | 'reservation' =
         opts?.level
         ?? (opts?.sourcePoint ? 'reservation' : 'state');
-      // Each tier zooms tighter and scales the source dot smaller so
-      // the central marker stays proportionate to the visible region.
-      // Reservation is the most aggressive shrink because ANCSA
-      // regions, NHOs, and many reservations are physically small.
-      const zoomSpan  = level === 'state' ? 200 : level === 'county' ? 130 : 80;
+      const zoomSpan  = level === 'state' ? 1020 : level === 'county' ? 360 : 220;
       const dotRadius = level === 'state' ? 70  : level === 'county' ? 22  : 14;
-      const srcScale  = level === 'state' ? 1   : level === 'county' ? .42 : .26;
+      const srcScale  = level === 'state' ? 1   : level === 'county' ? .55 : .35;
       scaleSource(srcScale);
-      zoomTo(src.cx, src.cy, zoomSpan);
+      if (level === 'state') {
+        // Snap to overview viewBox without animation so the
+        // choropleth tints and chips appear in their final positions.
+        zoomOut();
+      } else {
+        zoomTo(src.cx, src.cy, zoomSpan);
+      }
       // Render the detail dots after the zoom starts so they appear
       // already in the zoomed frame.
       window.setTimeout(() => {

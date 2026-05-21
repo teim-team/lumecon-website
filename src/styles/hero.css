@@ -231,6 +231,8 @@
    - Suppliers: terra diamond (rotated square — firms in the chain)
    - Households: cedar circle (people who spend wages locally) */
 .workspace-legend__sw--source    { background: var(--gold); border-radius: 2px; width: 10px; height: 10px; }
+.workspace-legend__sw--spillover { background: var(--cedar); border-radius: 2px; width: 10px; height: 10px; opacity: .55; }
+/* Legacy swatches retained in case external pages still reference them */
 .workspace-legend__sw--supplier  { background: var(--terra); transform: rotate(45deg); border-radius: 1px; width: 9px; height: 9px; }
 .workspace-legend__sw--household { background: var(--cedar); border-radius: 50%; }
 .workspace-attr { letter-spacing: .04em; text-transform: none; }
@@ -271,8 +273,8 @@
   min-height: 0;
 }
 .hero-map { width: 100%; height: auto; display: block; max-height: 56vh; }
-.hero-map__fill { fill: var(--white); }
-.hero-map__grid { opacity: .7; pointer-events: none; }
+.hero-map__fill { fill: var(--paper); }
+.hero-map__grid { opacity: .55; pointer-events: none; }
 .hero-map__county-borders {
   fill: none;
   stroke: var(--navy);
@@ -315,10 +317,15 @@
   box-shadow: 0 1px 2px rgba(14, 21, 48, .08);
 }
 
-/* Tribal layer: surface AIANNH polygons more prominently */
-.hero-stage[data-layer="tribal"] .hero-aiannh { fill-opacity: .35; stroke-width: .6; }
+/* Tribal layer: reservation polygons are the visual hero. The
+   surrounding state stays faint so the reservation pops; nested
+   highlight order on a tribal study is reservation > county > state. */
+.hero-stage[data-layer="tribal"] .hero-aiannh { fill-opacity: .35; stroke: var(--terra-dark); stroke-opacity: .55; stroke-width: .5; }
 .hero-stage[data-layer="tribal"] .hero-state { cursor: default; pointer-events: none; }
 .hero-stage[data-layer="tribal"] .hero-aiannh { pointer-events: auto; }
+/* In tribal mode the source state tint is muted so the active
+   reservation reads as the strongest layer. */
+.hero-stage[data-layer="tribal"] .hero-state[data-ring="0"] { fill-opacity: .35; }
 
 /* Counties layer: state click still works (county-level click would
    require 3000+ paths; we surface the county MESH as visual context
@@ -328,14 +335,15 @@
 .hero-map__borders {
   fill: none;
   stroke: var(--navy);
-  stroke-width: 1;
-  stroke-opacity: .6;
+  stroke-width: .7;
+  stroke-opacity: .2;
   vector-effect: non-scaling-stroke;
 }
 .hero-map__outline {
   fill: none;
   stroke: var(--navy);
-  stroke-width: 1.6;
+  stroke-width: 1.1;
+  stroke-opacity: .4;
   vector-effect: non-scaling-stroke;
 }
 
@@ -343,19 +351,20 @@
    map reads as clean by default and discovers the tribal-economy
    layer only on interaction. */
 .hero-aiannh {
-  fill: var(--navy);
+  fill: var(--terra);
   fill-opacity: 0;
-  stroke: var(--navy);
+  stroke: var(--terra-dark);
   stroke-width: 0;
+  stroke-opacity: 0;
   vector-effect: non-scaling-stroke;
   cursor: pointer;
-  transition: fill-opacity .15s var(--ease), stroke-width .15s var(--ease);
+  transition: fill-opacity .15s var(--ease), stroke-width .15s var(--ease), stroke-opacity .15s var(--ease);
   outline: none;
 }
-.hero-stage:hover .hero-aiannh { fill-opacity: .14; }
+.hero-stage:hover .hero-aiannh { fill-opacity: .14; stroke-width: .4; stroke-opacity: .35; }
 .hero-aiannh:hover, .hero-aiannh:focus-visible {
-  fill-opacity: .85 !important;
-  fill: var(--gold);
+  fill-opacity: .8 !important;
+  fill: var(--terra);
 }
 .hero-aiannh--otsa { /* same default */ }
 
@@ -385,6 +394,70 @@
    reservation-inside-county-inside-state scene shows all three
    nested layers clearly. */
 .hero-state[data-ring="0"] { fill: var(--goldbar); fill-opacity: .85; }
+
+/* Choropleth tint for the indirect + induced spillover. Each impacted
+   state/county gets --impact-share (0..1) and the CSS multiplies it
+   into the cedar fill. The source region is the gold direct effect;
+   neighbors are cedar — the multiplier color, matching Cedar AI. */
+.hero-state[data-impact],
+.hero-county[data-impact] {
+  fill: var(--cedar);
+  fill-opacity: calc(var(--impact-share, 0) * .55);
+  transition: fill-opacity .5s var(--ease), fill .35s var(--ease);
+}
+/* Source region's ring=0 wins over the choropleth tint */
+.hero-state[data-ring="0"][data-impact] { fill: var(--goldbar); fill-opacity: .85; }
+
+/* Value chips — small pills placed on top-N impacted regions */
+.hero-value-chip {
+  opacity: 0;
+  transition: opacity .35s var(--ease);
+  pointer-events: none;
+}
+.hero-stage[data-ring="2"] .hero-value-chip,
+.hero-stage[data-ring="3"] .hero-value-chip,
+.hero-stage[data-ring="4"] .hero-value-chip { opacity: 1; }
+.hero-value-chip__leader {
+  stroke: var(--navy);
+  stroke-opacity: .35;
+  stroke-width: .6;
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+.hero-value-chip__bg {
+  fill: var(--white);
+  stroke: var(--cedar);
+  stroke-opacity: .55;
+  stroke-width: .6;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 1px 1.5px rgba(10, 15, 38, .12));
+}
+.hero-value-chip__txt {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  fill: var(--navy);
+  letter-spacing: -.01em;
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+
+/* Flow lines — curved beziers from source to top-impacted regions.
+   Stroke-dash animates in as the study runs. */
+.hero-flow-line {
+  fill: none;
+  stroke: var(--cedar);
+  stroke-opacity: .5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: var(--len, 100);
+  stroke-dashoffset: var(--len, 100);
+  transition: stroke-dashoffset 1.2s var(--ease);
+}
+.hero-stage[data-ring="1"] .hero-flow-line,
+.hero-stage[data-ring="2"] .hero-flow-line,
+.hero-stage[data-ring="3"] .hero-flow-line,
+.hero-stage[data-ring="4"] .hero-flow-line { stroke-dashoffset: 0; }
 
 .hero-county {
   fill: var(--gold);
