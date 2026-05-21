@@ -1,15 +1,11 @@
 ---
 import { site } from '../config';
-import IconLocal from './icons/IconLocal.astro';
-import IconTribal from './icons/IconTribal.astro';
-import IconGlobal from './icons/IconGlobal.astro';
 import BrandWordmark from './BrandWordmark.astro';
 interface Props {
   isHome?: boolean;
 }
 const { isHome = false } = Astro.props;
 const prefix = isHome ? '' : '/';
-const { local, tribal, global: globalProduct } = site.products;
 ---
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
@@ -17,37 +13,7 @@ const { local, tribal, global: globalProduct } = site.products;
 
     <div class="nav-links" id="navLinks">
       <a href={`${prefix}#how`}>Why Lumecon?</a>
-      <div class="nav-dd">
-        <button type="button" class="nav-dd__toggle" aria-haspopup="true" aria-expanded="false">
-          Platforms <span class="nav-dd__chev" aria-hidden="true">▾</span>
-        </button>
-        <div class="nav-dd__panel" role="menu">
-          <a class="nav-dd__item" href={local.url} role="menuitem">
-            <span class="nav-dd__icon"><IconLocal /></span>
-            <span class="nav-dd__body">
-              <span class="nav-dd__name">{local.name}</span>
-              <span class="nav-dd__desc">For municipalities, EDOs, and enterprises.</span>
-            </span>
-          </a>
-          <a class="nav-dd__item" href={tribal.url} role="menuitem">
-            <span class="nav-dd__icon"><IconTribal /></span>
-            <span class="nav-dd__body">
-              <span class="nav-dd__name">{tribal.name}</span>
-              <span class="nav-dd__desc">For tribes, ANCs, NHOs, and reservation economies.</span>
-            </span>
-          </a>
-          <a class="nav-dd__item" href={globalProduct.url} role="menuitem">
-            <span class="nav-dd__icon"><IconGlobal /></span>
-            <span class="nav-dd__body">
-              <span class="nav-dd__name">{globalProduct.name}</span>
-              <span class="nav-dd__desc">For multinationals, NGOs, and cross-border programs.</span>
-            </span>
-          </a>
-        </div>
-      </div>
-      <a href={`${prefix}#cedar`}>Cedar</a>
       <a href="/join">Join the team</a>
-      <a href={`${prefix}#contact`}>Contact</a>
       <a class="nav-cta" href={`mailto:${site.email}?subject=Lumecon%20demo%20request`}>Request a demo</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
@@ -58,28 +24,6 @@ const { local, tribal, global: globalProduct } = site.products;
 
 <script>
   (function() {
-    // Platforms dropdown (hover + click + keyboard)
-    document.querySelectorAll<HTMLElement>('.nav-dd').forEach(dd => {
-      const toggle = dd.querySelector<HTMLButtonElement>('.nav-dd__toggle');
-      const panel  = dd.querySelector<HTMLElement>('.nav-dd__panel');
-      if (!toggle || !panel) return;
-      let openTimer: number | undefined;
-      let closeTimer: number | undefined;
-      const open = () => { dd.classList.add('is-open'); toggle.setAttribute('aria-expanded', 'true'); };
-      const close = () => { dd.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); };
-      dd.addEventListener('mouseenter', () => { if (closeTimer) window.clearTimeout(closeTimer); openTimer = window.setTimeout(open, 80); });
-      dd.addEventListener('mouseleave', () => { if (openTimer) window.clearTimeout(openTimer); closeTimer = window.setTimeout(close, 180); });
-      toggle.addEventListener('click', (e) => { e.preventDefault(); dd.classList.contains('is-open') ? close() : open(); });
-      toggle.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); panel.querySelector<HTMLElement>('a')?.focus(); }
-        if (e.key === 'Escape') close();
-      });
-      panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { close(); toggle.focus(); } });
-      document.addEventListener('click', (e) => {
-        if (!dd.contains(e.target as Node)) close();
-      });
-    });
-
     const hb = document.getElementById('hamburger');
     const nl = document.getElementById('navLinks');
     if (!hb || !nl) return;

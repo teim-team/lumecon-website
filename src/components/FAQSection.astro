@@ -60,9 +60,27 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
          suggestions; they collapse the first time the user picks
          one or types a question. -->
     <div class="cedar-chat" id="cedarChat" hidden>
+      <header class="cedar-chat__header">
+        <span class="cedar-chat__brand">
+          <span class="cedar-chat__avatar cedar-chat__avatar--header" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+              <path d="M12 3 L7 9 L9.5 9 L5 15 L9 15 L4 21 L20 21 L15 15 L19 15 L14.5 9 L17 9 Z" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="cedar-chat__name">Cedar</span>
+        </span>
+        <span class="cedar-chat__status" aria-label="Online">
+          <span class="cedar-chat__status-dot" aria-hidden="true"></span>
+          <span class="cedar-chat__status-label">Online</span>
+        </span>
+      </header>
       <div class="cedar-chat__transcript" id="cedarTranscript" role="log" aria-live="polite" aria-label="Cedar conversation">
         <div class="cedar-msg cedar-msg--bot">
-          <span class="cedar-msg__avatar" aria-hidden="true">C</span>
+          <span class="cedar-msg__avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+              <path d="M12 3 L7 9 L9.5 9 L5 15 L9 15 L4 21 L20 21 L15 15 L19 15 L14.5 9 L17 9 Z" fill="currentColor"/>
+            </svg>
+          </span>
           <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
             <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
             <div class="cedar-quickreply" id="cedarChips">
@@ -144,7 +162,7 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
       const av = document.createElement('span');
       av.className = 'cedar-msg__avatar';
       av.setAttribute('aria-hidden', 'true');
-      av.textContent = 'C';
+      av.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 3 L7 9 L9.5 9 L5 15 L9 15 L4 21 L20 21 L15 15 L19 15 L14.5 9 L17 9 Z" fill="currentColor"/></svg>';
       wrap.appendChild(av);
     }
     const bubble = document.createElement('div');
@@ -309,6 +327,61 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
     box-shadow:
       0 1px 2px rgba(14, 21, 48, .04),
       0 14px 40px -16px rgba(14, 21, 48, .14);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header: small Cedar identity bar above the transcript. Frames the
+     widget as a product surface (think Intercom/Drift) instead of an
+     orphaned chat bubble. */
+  :global(.cedar-chat__header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .65rem 1rem;
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+  }
+  :global(.cedar-chat__brand) {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+  }
+  :global(.cedar-chat__avatar--header) {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--cedar);
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  :global(.cedar-chat__name) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: .92rem;
+    letter-spacing: -.01em;
+    color: var(--navy);
+  }
+  :global(.cedar-chat__status) {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  :global(.cedar-chat__status-dot) {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--cedar-light);
+    box-shadow: 0 0 0 3px rgba(27, 182, 106, .18);
   }
 
   :global(.cedar-chat__transcript) {
@@ -334,8 +407,8 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
     flex-direction: row-reverse;
   }
   :global(.cedar-msg__avatar) {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: var(--cedar);
     color: var(--white);
@@ -472,27 +545,33 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
     border: 0;
   }
 
-  /* Quick-reply chip styling. Sits inline within the welcome bubble. */
+  /* Quick-reply chip styling. Sits inline within the welcome bubble.
+     Default is a soft paper pill with a cedar-tinted left edge so the
+     row of chips reads as "ask me about these" without competing with
+     the headline copy above. */
   :global(.cedar-chip) {
-    padding: .42rem .82rem;
+    padding: .42rem .85rem .42rem .95rem;
     background: var(--white);
-    border: 1px solid var(--rule-strong);
+    border: 1px solid var(--rule);
     border-radius: 999px;
     font-family: var(--font-sans);
     font-size: .84rem;
     font-weight: 500;
     color: var(--navy);
     cursor: pointer;
-    transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+    transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease), transform .15s var(--ease);
     letter-spacing: -.005em;
     touch-action: manipulation;
     text-align: left;
     line-height: 1.25;
+    box-shadow: inset 3px 0 0 var(--cedar-light);
   }
   :global(.cedar-chip:hover:not(:disabled)) {
-    background: var(--navy);
+    background: var(--cedar);
     color: var(--white);
-    border-color: var(--navy);
+    border-color: var(--cedar);
+    box-shadow: inset 3px 0 0 var(--white), 0 2px 6px rgba(14, 88, 58, .18);
+    transform: translateY(-1px);
   }
   :global(.cedar-chip:focus-visible) {
     outline: 2px solid var(--accent);
