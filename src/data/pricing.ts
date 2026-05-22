@@ -7,16 +7,22 @@
  * (e.g., `id: 'starter' | 'standard' | 'leader'` token stays stable
  * even though the public name swaps Sprout / Sapling / Tree).
  *
- * v1 launch note: the THIRD tier ("Tree") is NOT shipping at launch.
- * Its data is kept here so the comparison table can preview what is
- * coming, but the tier card renders with the `comingSoon` treatment
- * (no buyable CTA, no price line) and the CTA below the card routes
- * to a notify-me mailto instead of "Request access."
- *
- * Prices below are placeholders. Update PUBLIC_PRICING_TIERS once
- * finance signs off; the meta description in /pricing.astro reads
- * its values from this module, so editing the tier prices is
- * enough — nothing else needs changing.
+ * v1 launch notes:
+ *   - The THIRD tier ("Tree") is NOT shipping at launch. Its data
+ *     stays here so the comparison table previews what is coming,
+ *     but the tier card renders with the `comingSoon` treatment
+ *     (no buyable CTA, no price line) and the CTA below the card
+ *     routes to a notify-me mailto instead of "Request access."
+ *   - The GLOBAL platform is NOT shipping at launch. Its tile on
+ *     the platform picker carries the same `comingSoon` treatment.
+ *   - DOLLAR FIGURES ARE INTENTIONALLY EMPTY. Finance hasn't signed
+ *     off on the numbers yet, and we don't want placeholder numbers
+ *     ($5k / $15k / $25k) showing on the live site. The tier card
+ *     renders "Pricing TBD" instead of a dollar amount; the
+ *     `priceAnnual` numeric field is retained for future discount
+ *     math but is set to 0 until real prices land. When prices do
+ *     land, set the `price` string AND the `priceAnnual` numeric
+ *     and the page will surface them automatically.
  */
 
 export interface PricingTier {
@@ -40,9 +46,9 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
   {
     id: 'starter',
     name: 'Sprout',
-    priceAnnual: 5_000,
-    price: '$5,000',
-    period: '/ year',
+    priceAnnual: 0,
+    price: '',
+    period: '',
     tagline: 'For one person who has the core numbers and needs clear results.',
     ctaSubject: 'Sprout tier',
     highlights: [
@@ -65,9 +71,9 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
   {
     id: 'standard',
     name: 'Sapling',
-    priceAnnual: 15_000,
-    price: '$15,000',
-    period: '/ year',
+    priceAnnual: 0,
+    price: '',
+    period: '',
     tagline: 'For teams that want Cedar — our AI assistant — to turn records into analysis-ready inputs.',
     ctaSubject: 'Sapling tier',
     highlights: [
@@ -89,9 +95,9 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
   {
     id: 'leader',
     name: 'Tree',
-    priceAnnual: 25_000,
-    price: '$25,000',
-    period: '/ year',
+    priceAnnual: 0,
+    price: '',
+    period: '',
     tagline: 'For organizations that need Cedar Grove, reporting workflows, and implementation support.',
     ctaSubject: 'Tree tier',
     featured: true,
@@ -213,32 +219,61 @@ export const applyDiscountToAnnualPrice = (annual: number, code: DiscountCode): 
   return { discount: code, originalAnnual: annual, finalAnnual, savingsAnnual: savings };
 };
 
-/* ---------- Product lines (placeholder for future routing) ---------- */
-
+/* ---------- Product lines / pricing platforms ----------
+ *
+ * Three platforms; the /pricing page renders one tile per platform
+ * at the top of the page and only reveals the tier grid once the
+ * visitor picks one. Tribal + Local are buyable at v1; Global is
+ * gated as "Coming soon."
+ *
+ * The `fitIf` string powers the hover/blurb on each platform tile,
+ * answering "this is the right fit if..." in one sentence so the
+ * visitor self-selects before seeing pricing structure. */
 export interface ProductLine {
   id: 'tribal-economic-impact' | 'local-economic-impact' | 'global-economic-impact';
   name: string;
+  /** Short label used in CTA subjects, e.g. "Tribal". */
+  shortName: string;
+  /** Filename token for the matching homepage icon component:
+   *  'tribal' -> IconTribal, 'local' -> IconLocal, 'global' -> IconGlobal. */
+  iconId: 'tribal' | 'local' | 'global';
+  /** Verbose audience description (used in metadata / fallback). */
   audience: string;
+  /** Short "right fit if..." blurb shown on the platform tile. */
+  fitIf: string;
+  /** Scope of analysis the platform covers. */
   scope: string;
+  /** v1 gating: hides tier reveal + replaces CTA with notify-me. */
+  comingSoon?: boolean;
 }
 
 export const PRODUCT_LINES: ProductLine[] = [
   {
-    id: 'tribal-economic-impact',
-    name: 'Tribal Economic Impact',
-    audience: 'Tribes, state-recognized tribes, ANCs, NHOs, tribal enterprises, chapters, Indigenous CDFIs, Indigenous-led institutions',
-    scope: 'Reservation, state, national economic impact analysis',
-  },
-  {
     id: 'local-economic-impact',
     name: 'Local Economic Impact',
+    shortName: 'Local',
+    iconId: 'local',
     audience: 'Nonprofits, municipalities, foundations, local institutions',
+    fitIf: "You're a municipality, state agency, foundation, university, or nonprofit running local or regional impact analysis.",
     scope: 'Local & regional impact analysis outside Indigenous-economy workflows',
+  },
+  {
+    id: 'tribal-economic-impact',
+    name: 'Tribal Economic Impact',
+    shortName: 'Tribal',
+    iconId: 'tribal',
+    audience: 'Tribes, state-recognized tribes, ANCs, NHOs, tribal enterprises, chapters, Indigenous CDFIs, Indigenous-led institutions',
+    fitIf: "You're a tribe, ANC, NHO, tribal enterprise, or Indigenous CDFI making the case for reservation, state, or federal funding.",
+    scope: 'Reservation, state, national economic impact analysis',
   },
   {
     id: 'global-economic-impact',
     name: 'Global Economic Impact',
+    shortName: 'Global',
+    iconId: 'global',
     audience: 'Organizations needing broader market, supply-chain, or international analysis',
+    fitIf: 'You need national, international, supply-chain, or cross-border analysis. Launching after Local and Tribal stabilize.',
     scope: 'National, international, cross-border analysis',
+    comingSoon: true,
   },
 ];
