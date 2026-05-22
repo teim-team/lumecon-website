@@ -7,10 +7,12 @@
  * where it can fill the viewport without competing for attention.
  * The homepage hero links here via "See the map".
  *
- * Implementation just hosts the shared MapWorkspace component plus
- * the nav and footer chrome. The workspace itself prepares its data
- * in its own frontmatter and pulls in src/scripts/hero.ts for the
- * runtime.
+ * Layout: a slim framing header above the workspace (so a visitor
+ * landing directly on /map knows what they're looking at), the
+ * MapWorkspace itself, then a compact CTA band below that converts
+ * the curiosity the map generates into a Sign-up click. Both the
+ * header and CTA are intentionally low-density so the map remains
+ * the focal point.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -19,18 +21,48 @@ import MapWorkspace from '../components/MapWorkspace.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
+import '../styles/map-page.css';
 ---
 <BaseLayout
   title="Map | Lumecon"
-  description="Run a live economic-impact study on any state, county, or tribal land. Hover any region to inspect; click to run a study with Cedar AI."
+  description="Run a live economic-impact study on any state, county, or tribal land. Hover any region to inspect; click to run a study with Cedar AI. US coverage today, international scope on the roadmap."
   canonical="https://lumecon.ai/map"
   keywords="Lumecon map, interactive economic impact map, state economic impact, county economic impact, tribal economic impact, AIANNH boundaries, IMPLAN alternative, RIMS II alternative, REMI alternative, BEA RIMS"
   ogTitle="Lumecon map: live economic-impact studies on every state, county, and tribal land"
-  ogDescription="Hover or click any region to run an economic impact study in minutes, not months. An AI-assisted alternative to IMPLAN, RIMS II, REMI, and Lightcast."
+  ogDescription="Hover or click any region to run an economic impact study in minutes, not months. An AI-assisted alternative to IMPLAN, RIMS II, REMI, and Lightcast. US today, international on the roadmap."
 >
   <Nav />
-  <main>
+  <main class="map-page">
+
+    <!-- Framing header. Tells a direct-link visitor what they're
+         looking at + how to use it, without taking enough space to
+         push the map below the fold on a typical laptop. -->
+    <header class="map-page__header">
+      <div class="map-page__header-inner">
+        <p class="map-page__kicker">Interactive demo</p>
+        <h1 class="map-page__title">Run a live impact study.</h1>
+        <p class="map-page__sub">Hover any region to inspect. Click to run a study with Cedar &mdash; full reservation, state, and national scope. Minutes, not months.</p>
+        <p class="map-page__roadmap">US coverage today; international scope is on the roadmap.</p>
+      </div>
+    </header>
+
     <MapWorkspace />
+
+    <!-- CTA band below the map. Compact, single-row on desktop, so
+         the visitor who just played with the demo gets a clear
+         next step without scrolling past a wall of marketing. -->
+    <section class="map-page__cta" aria-labelledby="map-cta-text">
+      <div class="map-page__cta-inner">
+        <p class="map-page__cta-text" id="map-cta-text">
+          Like what you see? Sign up to run studies on your own data.
+        </p>
+        <div class="map-page__cta-buttons">
+          <a href="/signup" class="btn">Sign up</a>
+          <a href="/pricing" class="btn btn--ghost">See pricing</a>
+        </div>
+      </div>
+    </section>
+
   </main>
   <Footer />
 </BaseLayout>
