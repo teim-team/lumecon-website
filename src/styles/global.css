@@ -88,13 +88,46 @@
 
 body {
   font-family: var(--font-sans);
-  font-size: 17px;
+  font-size: 18px;
   color: var(--navy);
   background: var(--white);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   line-height: 1.6;
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Section-snap scrolling ----------
+   Marketing pages read as a sequence of self-contained "pages":
+   hero, workspace, why, products, cedar, contact, etc. Setting
+   snap-type on <html> + snap-align on each major section makes the
+   browser gently land on the next section when the visitor scrolls
+   close to a boundary. Proximity (not mandatory) keeps the feel
+   natural — small flicks still scroll freely, but a longer flick
+   snaps to the next page-sized section.
+
+   The min-block-size pairing in each component CSS ensures sections
+   are at least one viewport tall (dvh accounts for mobile URL bars). */
+html {
+  scroll-snap-type: y proximity;
+  /* Reserve room for the nav at the top of every snapped section so
+     snap-align: start doesn't pull the page past a static nav (or
+     hide content under a fixed one). The value needs to be at least
+     the nav's rendered height, which sits around 70–80px after the
+     base font bumped to 18px. */
+  scroll-padding-top: clamp(4.5rem, 8vh, 5.5rem);
+}
+/* Disable snap on small landscape screens — phones in landscape have
+   too little vertical room for 100dvh sections to feel right. */
+@media (max-height: 480px) {
+  html { scroll-snap-type: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-snap-type: none; }
+}
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
 }
 
 /* Teal focus ring — UI accent, replaces default browser blue. */

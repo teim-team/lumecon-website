@@ -2,6 +2,11 @@
   background: var(--white);
   padding: clamp(5rem, 9vw, 7rem) 0;
   border-bottom: 1px solid var(--rule);
+  scroll-snap-align: start;
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .cedar-about__inner {
   max-width: 1280px;
@@ -49,7 +54,7 @@
    first and immediately knows "Cedar" is the AI being described. */
 .cedar-about__intro {
   font-family: var(--font-display);
-  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  font-size: clamp(1.18rem, 1.75vw, 1.35rem);
   font-weight: 500;
   line-height: 1.45;
   letter-spacing: -.008em;
@@ -58,7 +63,7 @@
   max-width: 56ch;
 }
 .cedar-about__body {
-  font-size: 1.02rem;
+  font-size: 1.1rem;
   line-height: 1.55;
   color: var(--ink-2);
   margin: 0;
