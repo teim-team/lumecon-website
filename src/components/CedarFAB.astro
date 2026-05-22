@@ -153,9 +153,14 @@ const chips = CHIP_IDS
     });
     document.addEventListener('click', (e) => {
       if (!document.body.classList.contains('cedar-popped')) return;
-      const t = e.target;
-      if (!(t instanceof Node)) return;
-      if (panel.contains(t) || fab.contains(t)) return;
+      // Use composedPath rather than panel.contains(target): a chip
+      // click handler inside the panel may detach the clicked
+      // element (e.g. the follow-up chip row removes itself before
+      // the click finishes bubbling). composedPath captures the
+      // original ancestor chain at dispatch time, so it still
+      // recognises the click as inside the panel.
+      const path = e.composedPath();
+      if (path.includes(panel) || path.includes(fab)) return;
       close();
     });
   }
