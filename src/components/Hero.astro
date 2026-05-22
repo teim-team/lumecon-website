@@ -185,7 +185,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     </p>
     <ul class="hero-proof" aria-label="Proof points">
       <li>Built at Cornell</li>
-      <li>Patent-pending methodology</li>
+      <li>Patent-pending methodologies</li>
       <li>Alternative to IMPLAN, RIMS II, REMI</li>
     </ul>
     <div class="hero-cta">
@@ -300,14 +300,9 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       <path class="hero-map__borders" d={stateBordersD} />
       <path class="hero-map__outline" d={nationOutlineD} />
 
-      <!-- Detail layers: synthesized supplier + household point clouds
-           rendered around the source when the map is zoomed in.
-           Populated by JS; cleared between runs. Rendered BEFORE the
-           source group so the central black dot always sits on top of
-           the scatter (suppliers, households, flow lines). -->
+      <!-- Curved bezier flow lines from source to top-impacted
+           regions. Populated by renderFlowLines() in runStudy. -->
       <g class="hero-flow-layer" id="heroFlowLayer" aria-hidden="true"></g>
-      <g class="hero-supplier-layer" id="heroSupplierLayer" aria-hidden="true"></g>
-      <g class="hero-household-layer" id="heroHouseholdLayer" aria-hidden="true"></g>
 
       <g class="hero-source" id="heroSource">
         <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
@@ -701,75 +696,16 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     };
     const zoomOut = () => tweenVB(overviewVB, 700);
 
-    /* ---------- deterministic point cloud generators ----------
-       Suppliers: ~30 dots scattered with distance decay (some leak
-       far). Households: ~80 dots clustered tight to the source
-       (workers live near jobs). Seed comes from source coords so the
-       same study always shows the same dots. */
+    /* Tiny LCG for deterministic jitter inside computeShares. Same
+       study coords always produce the same neighbor pattern so a
+       given scene looks identical across reloads. */
     const seededRandom = (seed: number) => {
       let s = seed;
       return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
     };
-    const makePointCloud = (cx: number, cy: number, count: number, maxRadius: number, decay: number, seedSalt: number) => {
-      const rand = seededRandom(Math.floor(cx * 1000 + cy * 7 + seedSalt));
-      const points: { x: number; y: number }[] = [];
-      for (let i = 0; i < count; i++) {
-        const r = rand();
-        const a = rand() * Math.PI * 2;
-        const dist = Math.pow(r, decay) * maxRadius;
-        points.push({ x: cx + Math.cos(a) * dist, y: cy + Math.sin(a) * dist });
-      }
-      return points;
-    };
-
-    /* Reject any synthesized point that doesn't land on U.S. soil so
-       suppliers/households don't end up in the Atlantic, Gulf, or
-       Pacific. Uses the existing nation-outline path as a hit-test
-       region via isPointInFill. Falls back to "accept" if the
-       browser doesn't support the test. */
-    const landMask = document.getElementById('heroLandMask') as unknown as SVGPathElement | null;
-    const svgRoot = stage.querySelector('svg') as SVGSVGElement | null;
-    const onLand = (x: number, y: number): boolean => {
-      if (!landMask || !svgRoot || typeof landMask.isPointInFill !== 'function') return true;
-      try {
-        const pt = svgRoot.createSVGPoint();
-        pt.x = x; pt.y = y;
-        return landMask.isPointInFill(pt);
-      } catch { return true; }
-    };
-    const cloudOnLand = (cx: number, cy: number, count: number, maxRadius: number, decay: number, seed: number) => {
-      // Oversample then filter to keep the requested count. Cap iterations
-      // so a fully-coastal source can't loop forever.
-      const wanted = count;
-      const out: { x: number; y: number }[] = [];
-      let attempts = 0;
-      let salt = seed;
-      while (out.length < wanted && attempts < wanted * 6) {
-        const batch = makePointCloud(cx, cy, wanted, maxRadius, decay, salt);
-        for (const p of batch) {
-          if (out.length >= wanted) break;
-          if (onLand(p.x, p.y)) out.push(p);
-        }
-        salt += 101;
-        attempts += wanted;
-      }
-      return out;
-    };
-
-    /* drawDetail is now a no-op. The previous implementation rendered
-       random supplier diamonds + household circles + radiating flow
-       lines, which read as illustration rather than data. The new
-       impact pipeline (computeShares + applyChoropleth +
-       renderValueChips + renderFlowLines, called from runStudy) shows
-       the actual per-region distribution of indirect+induced spillover
-       as a choropleth with labeled value chips and curved flow lines
-       to the top-impacted regions. */
-    const drawDetail = (_cx: number, _cy: number, _radius: number, _dotScale: number = 1) => {
-      /* intentionally empty */
-    };
 
     const clearDetail = () => {
-      ['heroSupplierLayer', 'heroHouseholdLayer', 'heroFlowLayer', 'heroValueLayer'].forEach(id => {
+      ['heroFlowLayer', 'heroValueLayer'].forEach(id => {
         const el = document.getElementById(id); if (el) el.innerHTML = '';
       });
       clearChoropleth();
@@ -943,16 +879,9 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       // crop on the polygon itself.
       const level = _level;
       const zoomSpan  = level === 'state' ? 700 : level === 'county' ? 320 : 160;
-      const dotRadius = level === 'state' ? 70  : level === 'county' ? 22  : 14;
       const srcScale  = level === 'state' ? .75 : level === 'county' ? .45 : .26;
       scaleSource(srcScale);
       zoomTo(src.cx, src.cy, zoomSpan);
-      // Render the detail dots after the zoom starts so they appear
-      // already in the zoomed frame.
-      window.setTimeout(() => {
-        if (runId !== me) return;
-        drawDetail(src.cx, src.cy, dotRadius, srcScale);
-      }, 250);
 
       const wsStatus = document.getElementById('workspaceStatus');
       const wsLabel = document.getElementById('workspaceStatusLabel');

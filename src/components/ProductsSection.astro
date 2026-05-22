@@ -20,7 +20,7 @@ const platforms = [local, tribal, globalProduct];
     {platforms.map((p, i) => {
       const slug = i === 0 ? 'local' : i === 1 ? 'tribal' : 'global';
       const badge = i === 0 ? 'In active development'
-                  : i === 1 ? 'In active development · Patent pending'
+                  : i === 1 ? 'In active development'
                   : 'Future development';
       const badgeKind = i === 0 ? 'active' : i === 1 ? 'active' : 'future';
       return (
