@@ -130,21 +130,38 @@ async function resolveAnswer(
   message: string,
   surface: CedarSurface,
   conversationId: string,
+  localFallback: string,
 ): Promise<string> {
-  if (!apiConfigured()) return localAnswer(message);
+  if (!apiConfigured()) return localFallback;
   try {
     const result = await cedarChatApi({ message, surface, conversationId });
     if (result.ok) {
       trackEvent('cedar.api.success', { surface });
-      return result.data.answer || localAnswer(message);
+      return result.data.answer || localFallback;
     }
     trackEvent('cedar.api.fallback', { surface, reason: result.reason });
-    return localAnswer(message);
+    return localFallback;
   } catch (err: unknown) {
     trackError(err, { where: 'cedarChat.resolveAnswer', surface });
-    return localAnswer(message);
+    return localFallback;
   }
 }
+
+/* ----- Conversation memory -----------------------------------------
+   IDs of the conversational-filler intents that shouldn't be tracked
+   as the "last topic" — drilling into "tell me more" right after
+   "thanks" is meaningless. Skipping these keeps priorIntent pointing
+   at the most recent substantive topic. */
+const NON_TOPIC_INTENTS = new Set([
+  'tell_me_more',
+  'thanks',
+  'goodbye',
+  'affirmative',
+  'negative',
+  'confused',
+  'rude',
+  'greeting',
+]);
 
 /* ----- DOM bootstrapping -------------------------------------------
    bootChat() finds the four required descendants under `root` and
@@ -257,20 +274,55 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     if (!chips.classList.contains('is-collapsed')) chips.classList.add('is-collapsed');
   };
 
+  /* Per-conversation memory: tracks the last substantive topic so a
+     follow-up like "tell me more" can drill into it instead of hitting
+     a generic answer. Cleared when the user starts a new topic. */
+  let priorIntent: CedarIntent | null = null;
+
   const sendMessage = async (rawText: string, echoText?: string) => {
     appendMessage(transcript, 'user', echoText ?? rawText);
     trackEvent('cedar.message.sent', { surface, length: rawText.length });
     const typing = appendMessage(transcript, 'bot', makeTypingIndicator());
-    const answer = await resolveAnswer(rawText, surface, conversationId);
+
+    // Classify locally up-front so we can wire conversation memory
+    // and follow-ups regardless of whether the API or the local
+    // classifier ends up answering.
+    const matched = classify(rawText);
+    const isDrillDown =
+      matched?.id === 'tell_me_more' &&
+      priorIntent != null &&
+      typeof priorIntent.expanded === 'string';
+
+    let localFallback: string;
+    let followUpSource: CedarIntent | null;
+    if (isDrillDown) {
+      localFallback = priorIntent!.expanded!;
+      followUpSource = priorIntent;
+    } else {
+      localFallback = localAnswer(rawText);
+      followUpSource = matched;
+    }
+
+    const answer = await resolveAnswer(rawText, surface, conversationId, localFallback);
     const bubble = typing.querySelector<HTMLElement>('.cedar-msg__bubble');
     if (bubble) bubble.textContent = answer;
-    // Render follow-up chips inline beneath the bot bubble so the
-    // conversation can keep moving without the visitor having to
-    // think up the next question. Mapping uses the local classifier
-    // even when the API resolved the answer, since the chip rail
-    // mirrors topics the site is opinionated about.
-    const matched = classify(rawText);
-    renderFollowUps(transcript, matched?.followUps, (intent) => {
+
+    // Update conversation memory: substantive topics overwrite
+    // priorIntent; fillers leave it alone so "thanks" → "tell me
+    // more" still drills into the topic before the thanks.
+    if (matched && !NON_TOPIC_INTENTS.has(matched.id)) {
+      priorIntent = matched;
+    }
+
+    // If the responding intent has an `expanded` field (and we
+    // didn't just deliver it via "tell me more"), prepend a
+    // "Tell me more" chip so the visitor can drill in without
+    // having to discover the trigger phrase.
+    let followUpIds = followUpSource?.followUps;
+    if (!isDrillDown && followUpSource?.expanded && followUpIds) {
+      followUpIds = ['tell_me_more', ...followUpIds.filter((id) => id !== 'tell_me_more')];
+    }
+    renderFollowUps(transcript, followUpIds, (intent) => {
       void sendMessage(intent.chip!, intent.chip!);
     });
   };

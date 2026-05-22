@@ -1,0 +1,1594 @@
+/**
+ * Hero map runtime.
+ *
+ * Lives in its own module (rather than inline inside Hero.astro) so the
+ * ~1,500 lines of map logic are grep-able, navigable in IDEs with type-
+ * aware tooling, and easier to refactor without scrolling past the
+ * static markup.
+ *
+ * Loaded from Hero.astro via a one-line bridge:
+ *     <script>import '../scripts/hero.ts';</script>
+ * Astro/Vite picks the import up, bundles it, and emits a single
+ * content-hashed JS file the browser can cache across page loads.
+ *
+ * Data contract: the script reads the four <script type="application/
+ * json"> tags Hero.astro injects in the markup (heroStates, heroTribal,
+ * heroCounties, heroSearch) and binds to the DOM ids that the same
+ * component sets up. Nothing here is server-side.
+ */
+
+type StateInfo = { name: string; cx: number; cy: number; code: string };
+type TribalLand = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
+type SearchEntry =
+  | { type: 'state'; id: string; name: string; sub: string; cx: number; cy: number }
+  | { type: 'county'; id: string; name: string; sub: string; cx: number; cy: number; stateFips: string }
+  | { type: 'tribal'; id: string; name: string; sub: string; cx: number; cy: number; fips: string };
+const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
+const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
+// FIPS → centroid for every U.S. county, computed at build time from
+// the same albers-USA projection the map uses. Lets a county-level
+// study put the source dot on the actual county.
+const countyCentroids: Record<string, { cx: number; cy: number }> = JSON.parse((document.getElementById('heroCounties') as HTMLScriptElement)?.textContent || '{}');
+const searchIndex: SearchEntry[] = JSON.parse((document.getElementById('heroSearch') as HTMLScriptElement)?.textContent || '[]');
+
+// Shared scene catalog imported from src/data/scenes.ts so the
+// homepage demo and the static /demo/[slug] pages stay in sync.
+// ACTIVITIES + AMOUNTS arrays stay local — they're the click-on-state
+// generic fallback (not used by the named scenes). slugify/sceneSlug
+// are only needed by the prerendered /demo/<slug> route, not here.
+// @ts-ignore — Vite resolves at bundle time
+import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES } from '../data/scenes';
+
+const ACTIVITIES = [
+  { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
+  { id: 'payroll', label: 'operations payroll',   indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
+  { id: 'grant',   label: 'grant pass-through',   indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
+  { id: 'tourism', label: 'visitor spending',     indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
+  { id: 'energy',  label: 'energy project',       indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
+] as const;
+const AMOUNTS = [
+  { v: 1_000_000,  label: '$1M'  },
+  { v: 5_000_000,  label: '$5M'  },
+  { v: 12_000_000, label: '$12M' },
+  { v: 20_000_000, label: '$20M' },
+  { v: 50_000_000, label: '$50M' },
+] as const;
+const LEVEL_POOLS = [STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES];
+
+/* ---------- Tuning constants ----------
+   Pulled out of the body of the script so they can be adjusted in
+   one place. Units are SVG viewBox units unless noted. */
+
+/** Distance-decay exponent for the choropleth spillover map.
+ *  Higher = leakage concentrates in the immediately adjacent
+ *  states (more geographic embeddedness, FLQ-like). 2.2 is the
+ *  current sweet spot. */
+const CHOROPLETH_DECAY = 2.2;
+/** Random jitter applied per region in computeShares so neighbors
+ *  don't fall into a perfect concentric ring. The weight is
+ *  multiplied by (JITTER_MIN + rand() * JITTER_RANGE). */
+const JITTER_MIN = 0.7;
+const JITTER_RANGE = 0.6;
+/** Choropleth opacity boost. The raw share is divided by this
+ *  threshold and raised to SHARE_BOOST_POWER, so the dimmest
+ *  neighbors don't fade out entirely. */
+const SHARE_BOOST_THRESHOLD = 0.30;
+const SHARE_BOOST_POWER = 0.6;
+/** Curvature factor for the bezier flow lines from source to
+ *  neighbors. Multiplied by the source-to-neighbor distance to
+ *  set the control-point offset. */
+const FLOW_CURVATURE = 0.22;
+/** Max distance (in viewBox units) between a reservation scene's
+ *  tribalLookup centroid and the nearest AIANNH polygon center
+ *  before we give up trying to highlight the polygon. Some small
+ *  rancherias aren't in the AIANNH dataset; better to leave the
+ *  highlight off than light a far-away polygon that shares a name
+ *  fragment. */
+const RESERVATION_HIGHLIGHT_MAX_DIST = 35;
+/** Bbox inflation when finding counties that overlap a reservation
+ *  polygon. Small positive number so edge-touching counties match. */
+const COUNTY_OVERLAP_PAD = 0.5;
+
+const stage   = document.getElementById('heroStage') as HTMLElement | null;
+const tooltip = document.getElementById('heroTooltip') as HTMLElement | null;
+const ttName  = document.getElementById('ttName');
+const ttHint  = document.getElementById('ttHint');
+const source  = document.getElementById('heroSource');
+const figD    = document.getElementById('figDirect');
+const figI    = document.getElementById('figIndirect');
+const figU    = document.getElementById('figInduced');
+const figT    = document.getElementById('figTotal');
+const figJ    = document.getElementById('figJobs');
+const figTotalCell = document.getElementById('figTotalCell');
+const figJobsCell  = document.getElementById('figJobsCell');
+
+if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName) {
+
+  const wait = (ms: number) => new Promise<void>(r => window.setTimeout(r, ms));
+  const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  /**
+   * Format a dollar amount for display.
+   *  - $12M / $1.5M / $1.25M for millions (1 decimal above $10M, else 2)
+   *  - $850K for thousands
+   *  - $42 for sub-thousand
+   * Trailing zeros after the decimal are stripped so "5.00M" reads as "5M".
+   */
+  const fmt = (n: number) =>
+    n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.?0+$/, '') + 'M'
+    : n >= 1_000   ? '$' + Math.round(n / 1_000) + 'K'
+    :                '$' + Math.round(n);
+
+  /**
+   * Animate a number into an element using the cubic-out ease.
+   * @param el      Element whose textContent receives the running value.
+   * @param target  Final value (in dollars; formatted via fmt()).
+   * @param prefix  Optional prefix prepended to each tick (e.g., '+ ').
+   * @param dur     Total animation duration in ms.
+   */
+  const tickTo = (el: HTMLElement, target: number, prefix = '', dur = 1100) => {
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / dur);
+      el.textContent = prefix + fmt(target * ease(t));
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  /** Same as tickTo() but renders as a localized integer (commas). Used
+   *  for jobs counts. */
+  const tickInt = (el: HTMLElement, target: number, prefix = '', dur = 1100) => {
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / dur);
+      el.textContent = prefix + Math.round(target * ease(t)).toLocaleString();
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  /* Light only the source state. Indirect (supply chain) and induced
+     (household) effects don't have a clean geographic story at this
+     resolution: indirect spreads to wherever suppliers are, induced
+     is mostly local where workers live. The expanding ripple circles
+     below are an abstract metaphor; the table beneath the map is
+     where the actual breakdown lives. */
+  const lightSource = (id: string) => {
+    stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+      if (el.dataset.id === id) el.dataset.ring = '0';
+      else el.removeAttribute('data-ring');
+    });
+  };
+
+  /**
+   * Distribute the indirect+induced spillover across neighboring
+   * regions with distance decay, normalized so shares sum to 1.
+   *
+   * Seeded by the source coordinates so the same study always
+   * shows the same neighbor pattern. This is illustrative, not a
+   * real input-output computation, but it stays deterministic so
+   * running the same study twice doesn't shuffle the map.
+   *
+   * @param srcCx Source X in SVG coords.
+   * @param srcCy Source Y in SVG coords.
+   * @param regions Candidate regions to spread spillover across.
+   * @param topN Keep the top-N strongest neighbors only.
+   * @param decay Distance-decay exponent. Higher = tighter falloff.
+   * @param seedSalt Optional salt for the deterministic jitter.
+   * @returns Map of regionId → share (0..1) summing to 1.
+   */
+  const computeShares = (srcCx: number, srcCy: number, regions: Array<{ id: string; cx: number; cy: number }>, topN: number, decay: number = 1.6, seedSalt: number = 0): Map<string, number> => {
+    // Deterministic jitter so neighbors don't fall in perfect rings
+    const rand = seededRandom(Math.floor(srcCx * 911 + srcCy * 113 + seedSalt));
+    const scored = regions
+      .filter(r => r.id !== '' && Number.isFinite(r.cx) && Number.isFinite(r.cy))
+      .map(r => {
+        const dx = r.cx - srcCx;
+        const dy = r.cy - srcCy;
+        const d = Math.hypot(dx, dy);
+        // distance decay + slight per-region jitter so it doesn't
+        // look like an exact concentric ring
+        const w = (1 / Math.pow(d + 40, decay)) * (JITTER_MIN + rand() * JITTER_RANGE);
+        return { id: r.id, w, d };
+      })
+      .sort((a, b) => b.w - a.w)
+      .slice(0, topN);
+    const sum = scored.reduce((s, r) => s + r.w, 0) || 1;
+    const out = new Map<string, number>();
+    for (const r of scored) out.set(r.id, r.w / sum);
+    return out;
+  };
+
+  /**
+   * Apply a choropleth tint by writing the boosted share value into
+   * `--impact-share` and `data-impact` on each matching region. CSS
+   * handles the fill-opacity scaling.
+   *
+   * @param shares Output of computeShares() (regionId → 0..1).
+   * @param selector CSS selector for the region layer (e.g. `.hero-state`).
+   */
+  const applyChoropleth = (shares: Map<string, number>, selector: string) => {
+    // Clear old impact tints first
+    stage.querySelectorAll<HTMLElement>(`${selector}[data-impact]`).forEach(el => {
+      el.removeAttribute('data-impact');
+      el.style.removeProperty('--impact-share');
+    });
+    shares.forEach((share, id) => {
+      const el = stage.querySelector<HTMLElement>(`${selector}[data-id="${id}"]`);
+      if (el) {
+        // Boost the small shares so the dimmest neighbors don't
+        // disappear. share is 0..~.35 typically; boost to 0..1.
+        const boosted = Math.min(1, Math.pow(share / SHARE_BOOST_THRESHOLD, SHARE_BOOST_POWER));
+        el.dataset.impact = String(Math.round(boosted * 100));
+        el.style.setProperty('--impact-share', String(boosted.toFixed(3)));
+      }
+    });
+  };
+
+  const clearChoropleth = () => {
+    stage.querySelectorAll<HTMLElement>('.hero-state[data-impact], .hero-county[data-impact]').forEach(el => {
+      el.removeAttribute('data-impact');
+      el.style.removeProperty('--impact-share');
+    });
+  };
+
+  /**
+   * Render value chips on the top-N impacted regions. Each chip is
+   * a small pill placed near the region centroid with a thin leader
+   * line back to the centroid. Values render in $K/M with the
+   * type-of-effect label so a viewer reading the chip immediately
+   * knows what it's measuring.
+   *
+   * Collision-aware: tries 8 candidate offsets per chip and picks
+   * the first non-overlapping placement.
+   *
+   * @param top Top-impacted regions plus the source as kind: 'local'.
+   * @param src Source point used to bias chip placement away from
+   *   the source's NE callout.
+   */
+  const renderValueChips = (top: Array<{ id: string; cx: number; cy: number; amount: number; label: string; name: string; kind?: 'local' | 'leak' }>, src: { cx: number; cy: number }) => {
+    const vlayer = document.getElementById('heroValueLayer');
+    if (!vlayer) return;
+    vlayer.innerHTML = '';
+    const fmt = (n: number) => {
+      if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 0 : 1) + 'M';
+      if (n >= 1_000) return '$' + Math.round(n / 1_000) + 'K';
+      return '$' + Math.round(n);
+    };
+    const placed: Array<{ x: number; y: number; w: number; h: number }> = [];
+    const collides = (x: number, y: number, w: number, h: number) =>
+      placed.some(p => !(x + w < p.x - 4 || x - 4 > p.x + p.w || y + h < p.y - 4 || y - 4 > p.y + p.h));
+    const offsets = [
+      [22, -18], [-22, -18], [22, 18], [-22, 18],
+      [32, 0], [-32, 0], [0, -24], [0, 24],
+    ];
+    for (const r of top) {
+      const isLocal = r.kind === 'local';
+      // Local chip prefers the SW position so it doesn't collide
+      // with the source spark / callout sitting NE of the centroid.
+      const fromSrcX = isLocal ? -1 : (Math.sign(r.cx - src.cx) || 1);
+      const fromSrcY = isLocal ?  1 : (Math.sign(r.cy - src.cy) || -1);
+      const sortedOffsets = [...offsets].sort((a, b) =>
+        Math.abs(Math.sign(a[0]) - fromSrcX) + Math.abs(Math.sign(a[1]) - fromSrcY) -
+        (Math.abs(Math.sign(b[0]) - fromSrcX) + Math.abs(Math.sign(b[1]) - fromSrcY))
+      );
+      const labelText = isLocal
+        ? `${r.name} ${fmt(r.amount)} local`
+        : `${r.name} ${fmt(r.amount)}`;
+      const fontPx = isLocal ? 11 : 9.5;
+      const chipH = isLocal ? 14 : 12;
+      const chipW = Math.max(48, labelText.length * (fontPx * 0.55) + 10);
+      let cx2 = r.cx + sortedOffsets[0][0];
+      let cy2 = r.cy + sortedOffsets[0][1];
+      for (const o of sortedOffsets) {
+        const tx = r.cx + o[0];
+        const ty = r.cy + o[1];
+        if (!collides(tx - chipW / 2, ty - chipH / 2, chipW, chipH)) {
+          cx2 = tx; cy2 = ty;
+          break;
+        }
+      }
+      placed.push({ x: cx2 - chipW / 2, y: cy2 - chipH / 2, w: chipW, h: chipH });
+
+      const g = document.createElementNS(SVG_NS, 'g');
+      g.setAttribute('class', 'hero-value-chip');
+      if (isLocal) g.setAttribute('data-kind', 'local');
+      const leader = document.createElementNS(SVG_NS, 'path');
+      leader.setAttribute('class', 'hero-value-chip__leader');
+      leader.setAttribute('d', `M ${r.cx} ${r.cy} L ${cx2} ${cy2}`);
+      g.appendChild(leader);
+      const bg = document.createElementNS(SVG_NS, 'rect');
+      bg.setAttribute('class', 'hero-value-chip__bg');
+      bg.setAttribute('x', String(cx2 - chipW / 2));
+      bg.setAttribute('y', String(cy2 - chipH / 2));
+      bg.setAttribute('width', String(chipW));
+      bg.setAttribute('height', String(chipH));
+      bg.setAttribute('rx', '2.5');
+      bg.setAttribute('ry', '2.5');
+      g.appendChild(bg);
+      const txt = document.createElementNS(SVG_NS, 'text');
+      txt.setAttribute('class', 'hero-value-chip__txt');
+      txt.setAttribute('x', String(cx2));
+      txt.setAttribute('y', String(cy2 + 0.4));
+      txt.textContent = labelText;
+      g.appendChild(txt);
+      vlayer.appendChild(g);
+    }
+  };
+
+  /**
+   * Render curved flow lines from the source to each top-impacted
+   * region. Stroke width scales with magnitude; the curve uses a
+   * perpendicular offset (see FLOW_CURVATURE) so multiple lines
+   * fan out instead of stacking on top of each other.
+   *
+   * @param top Top-impacted regions with target coords + amounts.
+   * @param src Source point — origin of every flow line.
+   * @param maxAmount Used to normalize stroke widths.
+   */
+  const renderFlowLines = (top: Array<{ cx: number; cy: number; amount: number }>, src: { cx: number; cy: number }, maxAmount: number) => {
+    const flowLayer = document.getElementById('heroFlowLayer');
+    if (!flowLayer) return;
+    flowLayer.innerHTML = '';
+    for (const r of top) {
+      const dx = r.cx - src.cx;
+      const dy = r.cy - src.cy;
+      const dist = Math.hypot(dx, dy);
+      // Curve control point: perpendicular offset proportional to distance
+      const midX = (src.cx + r.cx) / 2;
+      const midY = (src.cy + r.cy) / 2;
+      const perpX = -dy / dist;
+      const perpY = dx / dist;
+      const curvature = dist * FLOW_CURVATURE;
+      const cpX = midX + perpX * curvature;
+      const cpY = midY + perpY * curvature;
+      const d = `M ${src.cx} ${src.cy} Q ${cpX} ${cpY} ${r.cx} ${r.cy}`;
+      // Approximate path length for the stroke-dash animation
+      const approxLen = dist + curvature;
+      const w = Math.max(0.6, Math.min(2.2, (r.amount / maxAmount) * 2));
+      const p = document.createElementNS(SVG_NS, 'path');
+      p.setAttribute('class', 'hero-flow-line');
+      p.setAttribute('d', d);
+      p.setAttribute('stroke-width', String(w.toFixed(2)));
+      p.style.setProperty('--len', String(Math.round(approxLen)));
+      flowLayer.appendChild(p);
+    }
+  };
+
+  /* Kept for backward-compat with other call sites: light the source
+     region only. The neighbor pass is now handled by computeShares
+     + applyChoropleth, called explicitly from runStudy. */
+  const shadeNeighbors = (id: string) => {
+    lightSource(id);
+  };
+
+  /* ---------- viewBox zoom tween ---------- */
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svgEl = document.getElementById('heroMap') as unknown as SVGSVGElement | null;
+  // The frontmatter VBX/VBY/VBW/VBH constants are baked into the
+  // initial viewBox attribute; we read them back here at runtime
+  // so the client doesn't need the server constants.
+  const initialVB = (svgEl?.getAttribute('viewBox') || '-60 5 1020 610').split(/\s+/).map(Number);
+  const overviewVB = [initialVB[0], initialVB[1], initialVB[2], initialVB[3]] as [number, number, number, number];
+  let zoomFrame: number | undefined;
+  const setVB = (vb: [number, number, number, number]) => {
+    svgEl?.setAttribute('viewBox', vb.join(' '));
+  };
+  const easeInOut = (t: number) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  /**
+   * Tween the SVG viewBox from its current value to `target` over
+   * `dur` ms with an ease-in-out curve. Cancels any in-flight zoom
+   * so successive calls don't fight each other.
+   *
+   * @param target Final viewBox as [x, y, width, height].
+   * @param dur Duration in milliseconds.
+   * @returns Promise that resolves when the tween completes.
+   */
+  const tweenVB = (target: [number, number, number, number], dur = 700) => {
+    if (!svgEl) return Promise.resolve();
+    const cur = (svgEl.getAttribute('viewBox') || overviewVB.join(' ')).split(/\s+/).map(Number) as [number, number, number, number];
+    const t0 = performance.now();
+    return new Promise<void>(resolve => {
+      const step = (now: number) => {
+        const t = Math.min(1, (now - t0) / dur);
+        const e = easeInOut(t);
+        const next: [number, number, number, number] = [
+          cur[0] + (target[0] - cur[0]) * e,
+          cur[1] + (target[1] - cur[1]) * e,
+          cur[2] + (target[2] - cur[2]) * e,
+          cur[3] + (target[3] - cur[3]) * e,
+        ];
+        setVB(next);
+        if (t < 1) zoomFrame = requestAnimationFrame(step);
+        else resolve();
+      };
+      if (zoomFrame) cancelAnimationFrame(zoomFrame);
+      zoomFrame = requestAnimationFrame(step);
+    });
+  };
+
+  /**
+   * Zoom into a source point. The detail viewBox is centered on the
+   * source with a small margin. Zoom level depends on the geography
+   * size — tribal-land detail wants tighter zoom than state-level.
+   *
+   * @param cx Center X in SVG coords.
+   * @param cy Center Y in SVG coords.
+   * @param span Width of the zoomed viewBox. Smaller = tighter zoom.
+   */
+  const zoomTo = (cx: number, cy: number, span = 200) => {
+    const w = span;
+    const h = span * (overviewVB[3] / overviewVB[2]);
+    return tweenVB([cx - w / 2, cy - h / 2, w, h], 800);
+  };
+  /** Restore the map to its overview viewBox. */
+  const zoomOut = () => tweenVB(overviewVB, 700);
+
+  /**
+   * Tiny LCG for deterministic jitter inside computeShares(). Same
+   * study coords always produce the same neighbor pattern so a
+   * given scene looks identical across reloads.
+   *
+   * @param seed Seed value. Use any integer.
+   * @returns A function that returns the next pseudo-random float in [0, 1).
+   */
+  const seededRandom = (seed: number) => {
+    let s = seed;
+    return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  };
+
+  const clearDetail = () => {
+    ['heroFlowLayer', 'heroValueLayer'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.innerHTML = '';
+    });
+    clearChoropleth();
+  };
+
+  /**
+   * Position the source dot + halo + ring + glow at (cx, cy). All
+   * four circles share the same center so they're moved together.
+   */
+  const moveSource = (cx: number, cy: number) => {
+    source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
+      c.setAttribute('cx', String(cx));
+      c.setAttribute('cy', String(cy));
+    });
+  };
+  // Base radii (state-level study). Per-level study calls scaleSource()
+  // so the dot, halo and rings shrink for county/reservation zooms.
+  const SOURCE_BASE_R: Record<string, number> = {
+    'hero-spark':       6,
+    'hero-spark__core': 2.4,
+    'hero-ring':       14,
+    'hero-glow':      120,
+  };
+  /**
+   * Scale the source dot + halo + ring + glow uniformly. Used to
+   * shrink the source for tighter geographies (county / reservation)
+   * so the dot doesn't swamp the polygon being studied.
+   *
+   * @param scale Multiplier applied to each circle's base radius.
+   */
+  const scaleSource = (scale: number) => {
+    source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
+      for (const cls of Array.from(c.classList)) {
+        const base = SOURCE_BASE_R[cls];
+        if (base != null) {
+          c.setAttribute('r', String(+(base * scale).toFixed(2)));
+          break;
+        }
+      }
+    });
+  };
+
+  /* ---------- run a study ---------- */
+  let runId = 0;
+  let cycleTimer: number | undefined;
+
+  type RunOpts = {
+    activity?: { id: string; label: string; indirect: number; induced: number; jobsPerM: number };
+    amount?: { v: number; label: string };
+    framing?: string;
+    chip?: string;
+    sourcePoint?: { cx: number; cy: number };
+    /** 'state' | 'county' | 'reservation' — drives zoom + dot scaling. */
+    level?: 'state' | 'county' | 'reservation';
+    /** 5-digit FIPS of the county containing the source. For
+     *  reservation studies, leakage routes preferentially through
+     *  this county (and its state) before any other neighbor — the
+     *  geographic embeddedness MRIO/FLQ models formalize. */
+    containingCountyFips?: string;
+  };
+
+  const runStudy = async (stateId: string, opts?: RunOpts) => {
+    runId += 1; const me = runId;
+    const s = states[stateId]; if (!s) return;
+
+    const studyIdEl = document.getElementById('workspaceStudyId');
+    if (studyIdEl) studyIdEl.textContent = `STUDY ${String(runId).padStart(3, '0')}`;
+
+    // Expose this run's multipliers on the stage so the per-figure
+    // explanations can read them without re-deriving anything.
+    if (opts?.activity) {
+      stage.dataset.actIndirect = String(opts.activity.indirect);
+      stage.dataset.actInduced = String(opts.activity.induced);
+      stage.dataset.actJobspm = String(opts.activity.jobsPerM);
+      stage.dataset.actLabel = opts.activity.label;
+    }
+    stage.dataset.studyLevel = opts?.level ?? (opts?.sourcePoint ? 'reservation' : 'state');
+
+    const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+    const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+    const src      = opts?.sourcePoint ?? { cx: s.cx, cy: s.cy };
+
+    stage.dataset.run = '';
+    stage.dataset.ring = '';
+    figTotalCell?.classList.remove('is-filled');
+    figJobsCell?.classList.remove('is-filled');
+    [figD, figI, figU, figT, figJ].forEach(el => { if (el) el.textContent = '-'; });
+
+    // Clear any prior value labels + callout
+    const vlayer = document.getElementById('heroValueLayer');
+    if (vlayer) vlayer.innerHTML = '';
+    const callout = document.getElementById('heroSourceCallout');
+    if (callout) callout.classList.remove('is-on');
+
+    shadeNeighbors(stateId);
+    moveSource(src.cx, src.cy);
+    clearDetail();
+    stage.dataset.run = '1';
+    stage.dataset.zoom = '1';
+
+    /* Two-tier retention. Most of an EI study's multiplier stays
+       inside the source REGION (high Regional Purchase Coefficient).
+       Of what does leave the source region, the bulk stays in the
+       source STATE (containing-county and containing-state suppliers
+       / workers); only a smaller residual crosses state lines.
+
+       This nests the way real interregional IO models work: an FLQ-
+       adjusted county multiplier is lower than its state multiplier,
+       which is in turn lower than the national multiplier. The
+       delta at each level is "leakage upward".
+
+       The smaller the source region, the more leakage at the first
+       tier (source-region → containing state). Reservations leak
+       the most off-reservation because few have a deep local supply
+       chain or workforce living on-reservation, and the indirect
+       portion (specialized suppliers) often crosses state lines. */
+    const _level: 'state' | 'county' | 'reservation' =
+      opts?.level
+      ?? (opts?.sourcePoint ? 'reservation' : 'state');
+    // What fraction of the spillover stays inside the source REGION
+    // (state for state studies, county for county studies, reservation
+    // for reservation studies).
+    const REGION_RETENTION = { state: 0.82, county: 0.58, reservation: 0.32 } as const;
+    // Of what leaves the source region, what fraction stays inside
+    // the source STATE (i.e., other counties / off-reservation in the
+    // same state). For state studies this is 0 by definition.
+    const ESCAPE_TO_STATE = { state: 0, county: 0.72, reservation: 0.62 } as const;
+
+    const spilloverTotal = (amount.v) * (activity.indirect + activity.induced);
+    const localToRegion   = spilloverTotal * REGION_RETENTION[_level];
+    const beyondRegion    = spilloverTotal - localToRegion;
+    const inStateOffRegion = beyondRegion * ESCAPE_TO_STATE[_level];
+    const externalSpillover = beyondRegion - inStateOffRegion;
+    const totalLocal       = amount.v + localToRegion + inStateOffRegion;
+
+    // Distance-decay distribution across non-source states. Sharper
+    // decay (2.2) than before so leakage concentrates in the
+    // adjacent states instead of dispersing nationally — geographic
+    // embeddedness, the same logic FLQ + interregional IO formalise.
+    const statePool = Object.entries(states)
+      .filter(([id]) => id !== stateId)
+      .map(([id, st]) => ({ id, cx: st.cx, cy: st.cy, name: (st.code || st.name).slice(0, 12) }));
+    const tintN = _level === 'state' ? 6 : _level === 'county' ? 8 : 10;
+    const chipN = _level === 'state' ? 3 : _level === 'county' ? 3 : 4;
+    const tintShares = computeShares(src.cx, src.cy, statePool, tintN, CHOROPLETH_DECAY, runId);
+    applyChoropleth(tintShares, '.hero-state');
+    const topShares = Array.from(tintShares.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, chipN);
+    const chipData = topShares.map(([id, share]) => {
+      const region = statePool.find(r => r.id === id)!;
+      return { id, cx: region.cx, cy: region.cy, amount: share * externalSpillover, label: 'spillover', name: region.name };
+    });
+    const maxChipAmount = chipData[0]?.amount ?? 1;
+    // Inject a "local retention" chip on the source state showing
+    // the bulk-stays-local story. This is the chip a reader sees
+    // first; the smaller neighbor chips represent the leakage.
+    const sourceChip = {
+      id: stateId,
+      cx: s.cx,
+      cy: s.cy,
+      amount: totalLocal,
+      label: 'local',
+      name: (s.code || s.name).slice(0, 12),
+      kind: 'local' as const,
+    };
+    renderValueChips([sourceChip, ...chipData], src);
+    renderFlowLines(chipData, src, maxChipAmount);
+
+    // Zoom strategy per level. State-level studies stay zoomed OUT
+    // so the choropleth + neighbor chips read as a full national
+    // distribution map (the actual product surface). County and
+    // reservation studies zoom in to a regional crop wide enough
+    // that the nearest impacted neighbors stay visible.
+    // Zoom strategy per level. Each tier crops to the geography
+    // that's actually being studied, with enough surrounding context
+    // to keep the choropleth + adjacent-state chips visible.
+    // State studies: regional crop showing the source state and a
+    // handful of nearest neighbors. County: smaller crop showing the
+    // source state + edges of adjacent ones. Reservation: tightest
+    // crop on the polygon itself.
+    const level = _level;
+    const zoomSpan  = level === 'state' ? 700 : level === 'county' ? 320 : 160;
+    const srcScale  = level === 'state' ? .75 : level === 'county' ? .45 : .26;
+    scaleSource(srcScale);
+    zoomTo(src.cx, src.cy, zoomSpan);
+
+    const wsStatus = document.getElementById('workspaceStatus');
+    const wsLabel = document.getElementById('workspaceStatusLabel');
+    const wsRegion = document.getElementById('workspaceRegion');
+    const wsActivity = document.getElementById('workspaceActivity');
+    if (wsStatus) wsStatus.dataset.state = 'running';
+    if (wsLabel) wsLabel.textContent = 'Running';
+    const chipText = opts?.chip ?? `${amount.label} ${activity.label} in ${s.name}`;
+    // The header region used to show just the state name; we now
+    // show the full chip there (LEVEL · Project · Location · year)
+    // because the bottom workspace-activity duplicate was removed.
+    if (wsRegion) wsRegion.textContent = chipText;
+    if (wsActivity) {
+      wsActivity.textContent = chipText;
+    }
+
+    // Source callout: pin the region name next to the source dot
+    const calloutEl = document.getElementById('heroSourceCallout');
+    if (calloutEl) {
+      const leader = calloutEl.querySelector<SVGLineElement>('.hero-callout__leader');
+      const bg = calloutEl.querySelector<SVGRectElement>('.hero-callout__bg');
+      const txt = calloutEl.querySelector<SVGTextElement>('.hero-callout__txt');
+      if (leader && bg && txt) {
+        txt.textContent = s.name;
+        const tx = src.cx + 18;
+        const ty = src.cy - 18;
+        const w = (s.name.length * 6.6) + 16;
+        bg.setAttribute('x', String(tx)); bg.setAttribute('y', String(ty - 11));
+        bg.setAttribute('width', String(w));
+        txt.setAttribute('x', String(tx + 8));
+        txt.setAttribute('y', String(ty));
+        leader.setAttribute('x1', String(src.cx));
+        leader.setAttribute('y1', String(src.cy));
+        leader.setAttribute('x2', String(tx));
+        leader.setAttribute('y2', String(ty));
+        calloutEl.classList.add('is-on');
+      }
+    }
+
+    if (runId !== me) return;
+
+    stage.dataset.ring = '1';
+    await wait(550);
+    tickTo(figD as HTMLElement, amount.v, '', 950);
+    await wait(1900);
+    if (runId !== me) return;
+    stage.dataset.ring = '2';
+    const indirect = amount.v * activity.indirect;
+    tickTo(figI as HTMLElement, indirect, '+ ', 950);
+
+    await wait(2000);
+    if (runId !== me) return;
+    stage.dataset.ring = '3';
+    const induced = amount.v * activity.induced;
+    tickTo(figU as HTMLElement, induced, '+ ', 950);
+
+    await wait(2000);
+    if (runId !== me) return;
+    stage.dataset.ring = '4';
+    const total = amount.v + indirect + induced;
+    const jobs = Math.round((total / 1_000_000) * activity.jobsPerM);
+    figTotalCell?.classList.add('is-filled');
+    figJobsCell?.classList.add('is-filled');
+    tickTo(figT as HTMLElement, total, '', 1150);
+    tickInt(figJ as HTMLElement, jobs, '≈ ', 950);
+
+    const wsStatusDone = document.getElementById('workspaceStatus');
+    const wsLabelDone = document.getElementById('workspaceStatusLabel');
+    if (wsStatusDone) wsStatusDone.dataset.state = 'complete';
+    if (wsLabelDone) wsLabelDone.textContent = 'Complete';
+
+    // After a beat in the detail view, return to overview so the
+    // visitor sees the full map again before the next study fires.
+    await wait(2400);
+    if (runId !== me) return;
+    stage.dataset.zoom = '';
+    clearDetail();
+    await zoomOut();
+  };
+
+  /* Run a single scene. State and county scenes use the state centroid;
+     reservation scenes resolve to a tribal-land centroid pulled from
+     the AIANNH lookup so the source point lands on the actual polygon.
+     Also encodes the scene's slug in the URL hash so shared links
+     replay the exact same study. Multi-region highlight: state always
+     lights up (via runStudy's shadeNeighbors), county lights up when
+     scene.countyFips is set, reservation polygon lights up by tribal
+     name match. */
+  // (Live scene state used to be encoded in the URL hash so people
+  // could 'share the exact study they're watching'. That ended up
+  // polluting the URL with a string that search engines don't crawl
+  // anyway. Shareable scenes already live at /demo/<slug> — those
+  // are real, prerendered, SEO-indexed URLs. The homepage URL
+  // stays clean.)
+  let pendingReservationTribalKey: string | undefined;
+  const clearReservationHighlight = () => {
+    stage.querySelectorAll<HTMLElement>('.hero-aiannh[data-active="1"]').forEach(el => {
+      el.removeAttribute('data-active');
+    });
+  };
+  /**
+   * Pick the AIANNH polygon that best represents the currently
+   * pending reservation scene and highlight it (plus any counties
+   * whose bbox overlaps).
+   *
+   * Selection order:
+   *   1. Loose name match (multiple polygons can share fragments
+   *      like "Choctaw"), broken by distance to the tribalLookup
+   *      centroid (closest to the source dot wins).
+   *   2. Fallback: nearest polygon within RESERVATION_HIGHLIGHT_MAX_DIST.
+   *
+   * @returns true if a polygon was highlighted, false otherwise.
+   */
+  const applyReservationHighlight = () => {
+    if (!pendingReservationTribalKey) return false;
+    const t = tribalLookup[pendingReservationTribalKey];
+    if (!t) return false;
+    const short = t.name.toLowerCase();
+    const candidates = Array.from(stage.querySelectorAll<SVGGraphicsElement>('.hero-aiannh'));
+    if (!candidates.length) return false;
+
+    const dist = (el: SVGGraphicsElement) => {
+      try {
+        const bb = el.getBBox();
+        const cx = bb.x + bb.width / 2;
+        const cy = bb.y + bb.height / 2;
+        return Math.hypot(cx - t.cx, cy - t.cy);
+      } catch { return Infinity; }
+    };
+
+    const nameMatches: SVGGraphicsElement[] = [];
+    for (const el of candidates) {
+      const dname = (el.dataset.name || '').toLowerCase();
+      const dshort = (el.dataset.short || '').toLowerCase();
+      if (!dshort && !dname) continue;
+      if (dshort.includes(short) || dname.includes(short) || short.includes(dshort || '___')) {
+        nameMatches.push(el);
+      }
+    }
+
+    // Highlight is only meaningful if the chosen polygon is close
+    // to where the source dot lives — see RESERVATION_HIGHLIGHT_MAX_DIST.
+    let best: SVGGraphicsElement | null = null;
+    let bestDist = Infinity;
+    if (nameMatches.length) {
+      // Among name matches, pick the one closest to the source.
+      for (const el of nameMatches) {
+        const d = dist(el);
+        if (d < bestDist) { bestDist = d; best = el; }
+      }
+    } else {
+      // No name match — accept the nearest polygon if it's close.
+      for (const el of candidates) {
+        const d = dist(el);
+        if (d < bestDist) { bestDist = d; best = el; }
+      }
+    }
+    if (best && bestDist <= RESERVATION_HIGHLIGHT_MAX_DIST) {
+      best.setAttribute('data-active', '1');
+      // Recenter the source dot on the polygon's actual bbox center.
+      // The tribalLookup centroid is from Census TIGER/Line interior
+      // points and can drift a few units off the visual center of
+      // the us-atlas polygon; this snaps the dot onto the polygon
+      // the viewer is actually looking at.
+      try {
+        const bb = best.getBBox();
+        const px = bb.x + bb.width / 2;
+        const py = bb.y + bb.height / 2;
+        moveSource(px, py);
+      } catch {}
+      // Light up every county whose bounding box overlaps the
+      // reservation. Bbox overlap is an over-estimate (it can match
+      // counties whose actual polygon doesn't intersect), but at
+      // this map scale the visual reads cleanly: visitors see all
+      // the counties the reservation crosses, instead of just the
+      // one containing its centroid.
+      highlightCountiesOverlappingAiannh(best);
+      return true;
+    }
+    return false;
+  };
+  /**
+   * Mark every county polygon whose bbox overlaps the given AIANNH
+   * polygon. Bbox overlap is an over-estimate (some matches will
+   * be edge-adjacent rather than truly intersecting) but at this
+   * scale the visual reads cleanly — visitors see all the counties
+   * a reservation crosses, not just the one containing the
+   * centroid.
+   *
+   * Async: county polygons are lazy-loaded; if they haven't been
+   * fetched yet this function kicks off the load and applies the
+   * highlight when polygons arrive.
+   */
+  const highlightCountiesOverlappingAiannh = (aiannhEl: SVGGraphicsElement) => {
+    const apply = () => {
+      let rb: DOMRect | null = null;
+      try { rb = aiannhEl.getBBox(); } catch { return; }
+      if (!rb) return;
+      countyByFips.forEach((countyEl) => {
+        try {
+          const cb = countyEl.getBBox();
+          const overlaps =
+            cb.x < rb.x + rb.width + COUNTY_OVERLAP_PAD &&
+            cb.x + cb.width > rb.x - COUNTY_OVERLAP_PAD &&
+            cb.y < rb.y + rb.height + COUNTY_OVERLAP_PAD &&
+            cb.y + cb.height > rb.y - COUNTY_OVERLAP_PAD;
+          if (overlaps) countyEl.setAttribute('data-active', '1');
+        } catch {}
+      });
+    };
+    if (countyLayer && countyLayer.dataset.loaded === '1') apply();
+    else void loadCounties().then(apply);
+  };
+  const highlightReservationByTribalKey = (tribalKey: string) => {
+    clearReservationHighlight();
+    pendingReservationTribalKey = tribalKey;
+    // Kick off lazy-load if not already in flight.
+    loadAiannh();
+    applyReservationHighlight();
+  };
+  const runScene = async (scene: typeof SCENES[number]) => {
+    // Apply layered highlights for this scene before runStudy fires.
+    // For county scenes, scene.countyFips. For reservation scenes,
+    // pull the precomputed containing-county FIPS from tribalLookup
+    // so we get state + county + reservation as a nested hierarchy.
+    clearReservationHighlight();
+    if (scene.level === 'reservation' && scene.tribalKey) {
+      const t = tribalLookup[scene.tribalKey];
+      if (t) {
+        highlightCounty(t.countyFips);
+        highlightReservationByTribalKey(scene.tribalKey);
+        await runStudy(t.fips, {
+          activity: scene.activity,
+          amount: scene.amount,
+          framing: scene.sentence,
+          chip: scene.chip,
+          sourcePoint: { cx: t.cx, cy: t.cy },
+          level: 'reservation',
+          containingCountyFips: t.countyFips,
+        });
+        return;
+      }
+    }
+    highlightCounty(scene.countyFips);
+    if (scene.state) {
+      // For a county scene, place the source on the actual county
+      // centroid (falling back to the state centroid if we don't
+      // have the FIPS). 'level' drives zoom + dot scaling.
+      const isCounty = scene.level === 'county';
+      const countyCenter = isCounty && scene.countyFips
+        ? countyCentroids[scene.countyFips]
+        : undefined;
+      await runStudy(scene.state, {
+        activity: scene.activity,
+        amount: scene.amount,
+        framing: scene.sentence,
+        chip: scene.chip,
+        level: isCounty ? 'county' : 'state',
+        ...(countyCenter ? { sourcePoint: countyCenter } : {}),
+        ...(isCounty && scene.countyFips ? { containingCountyFips: scene.countyFips } : {}),
+      });
+    }
+  };
+
+  /* Level-rotating scene cycle. The previous design pulled from one
+     shuffled deck of all scenes, but reservation (~200 scenes) was
+     so much larger than state (12) and county (20) that the cycle
+     felt reservation-heavy. Now each level has its own shuffled
+     deck and we rotate state → county → reservation → state → ...
+     so the visual variety stays balanced. */
+  let pausedByHover = false;
+  // Timestamped pause that survives focusin/focusout. Set when the
+  // user explicitly fires a study via search; the auto-cycle should
+  // back off long enough for the visitor to read the result before
+  // we cycle away. Checked alongside pausedByHover.
+  let pausedUntil = 0;
+  let autoCycleLevelIdx = 0;
+  const autoCycleOrders: number[][] = LEVEL_POOLS.map(() => []);
+  const reshuffleLevel = (idx: number) => {
+    const arr = LEVEL_POOLS[idx].map((_, i) => i);
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    autoCycleOrders[idx].push(...arr);
+  };
+  // Auto-cycle interval. Each run takes ~3s to land all the live
+   // figures + scatter dots; the rest of the delay is "breathing
+   // room" so the result sticks long enough to read before the
+   // next study fires.
+  const scheduleNext = (delay = 10000) => {
+    if (pausedByHover) return;
+    if (Date.now() < pausedUntil) return;
+    cycleTimer = window.setTimeout(cycle, delay);
+  };
+  const cycle = async () => {
+    if (pausedByHover) return;
+    if (Date.now() < pausedUntil) return;
+    const idx = autoCycleLevelIdx;
+    if (autoCycleOrders[idx].length === 0) reshuffleLevel(idx);
+    const scene = LEVEL_POOLS[idx][autoCycleOrders[idx].shift() as number];
+    autoCycleLevelIdx = (autoCycleLevelIdx + 1) % LEVEL_POOLS.length;
+    await runScene(scene);
+    scheduleNext();
+  };
+
+  /* Per-level shuffled pools, used by the "New study" button so a
+     click deliberately rotates state → county → reservation → state
+     → ... regardless of where the auto-cycle is. */
+  const levelOrders: number[][] = LEVEL_POOLS.map(() => []);
+  const pickLevel = (idx: number) => {
+    if (levelOrders[idx].length === 0) {
+      const arr = LEVEL_POOLS[idx].map((_, i) => i);
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      levelOrders[idx].push(...arr);
+    }
+    return LEVEL_POOLS[idx][levelOrders[idx].shift() as number];
+  };
+  let buttonLevelIdx = 0;
+
+  /* ---------- Hover tooltip ---------- */
+  const placeTooltip = (e: MouseEvent | FocusEvent) => {
+    const rect = stage.getBoundingClientRect();
+    let x: number, y: number;
+    if ('clientX' in e) {
+      x = (e as MouseEvent).clientX - rect.left;
+      y = (e as MouseEvent).clientY - rect.top;
+    } else {
+      const t = (e.target as Element).getBoundingClientRect();
+      x = (t.left + t.width / 2) - rect.left;
+      y = (t.top + t.height / 2) - rect.top;
+    }
+    tooltip.style.transform = `translate(${x}px, ${y}px)`;
+  };
+
+  const setTooltip = (name: string, hint: string) => {
+    ttName.textContent = name;
+    if (ttHint) ttHint.textContent = hint;
+  };
+
+  /* ---------- Layer filters (States / Counties / Tribal) ---------- */
+  document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const layer = btn.dataset.layer || 'states';
+      document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(b => {
+        const on = b === btn;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      if (stage) stage.dataset.layer = layer;
+    });
+  });
+
+  /* ---------- "Overview" zoom-out button ---------- */
+  const zoomOutBtn = document.getElementById('heroZoomOut');
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', async () => {
+      stage.dataset.zoom = '';
+      clearDetail();
+      await zoomOut();
+    });
+  }
+
+  /* ---------- "New study" button: rotates through levels ---------- */
+  const wsAgain = document.getElementById('workspaceAgain');
+  if (wsAgain) {
+    wsAgain.addEventListener('click', async () => {
+      if (cycleTimer) window.clearTimeout(cycleTimer);
+      const scene = pickLevel(buttonLevelIdx);
+      buttonLevelIdx = (buttonLevelIdx + 1) % LEVEL_POOLS.length;
+      await runScene(scene);
+      scheduleNext();
+    });
+  }
+
+  /* ---------- Pause auto-cycle while the workspace is hovered ----------
+     Respects the visitor's attention. The current study is allowed to
+     finish; the next one waits until hover ends. */
+  const workspaceEl = document.getElementById('workspace');
+  if (workspaceEl) {
+    const enter = () => {
+      pausedByHover = true;
+      if (cycleTimer) { window.clearTimeout(cycleTimer); cycleTimer = undefined; }
+    };
+    const leave = () => {
+      if (!pausedByHover) return;
+      pausedByHover = false;
+      if (!cycleTimer) scheduleNext(1200);
+    };
+    workspaceEl.addEventListener('mouseenter', enter);
+    workspaceEl.addEventListener('mouseleave', leave);
+    // Pause on focus-within too so keyboard users get the same behavior.
+    workspaceEl.addEventListener('focusin', enter);
+    workspaceEl.addEventListener('focusout', (e) => {
+      // Only resume when focus leaves the workspace entirely.
+      const next = (e as FocusEvent).relatedTarget as Node | null;
+      if (!next || !workspaceEl.contains(next)) leave();
+    });
+  }
+
+  /* ---------- Keyboard shortcuts: S = new study, ? = help ----------
+     Skipped while focus is inside an input/textarea so we don't hijack
+     typing in the contact form. */
+  const isTypingTarget = (t: EventTarget | null) => {
+    if (!t || !(t instanceof HTMLElement)) return false;
+    const tag = t.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || t.isContentEditable;
+  };
+  let kbHintEl: HTMLDivElement | null = null;
+  const toggleKbHint = (force?: boolean) => {
+    if (!kbHintEl) {
+      kbHintEl = document.createElement('div');
+      kbHintEl.className = 'kb-hint';
+      kbHintEl.setAttribute('role', 'dialog');
+      kbHintEl.setAttribute('aria-label', 'Keyboard shortcuts');
+      kbHintEl.innerHTML = `
+        <div class="kb-hint__head">Keyboard</div>
+        <dl class="kb-hint__list">
+          <dt><kbd>S</kbd></dt><dd>Run a new study</dd>
+          <dt><kbd>?</kbd></dt><dd>Toggle this help</dd>
+          <dt><kbd>Esc</kbd></dt><dd>Close</dd>
+        </dl>
+      `;
+      document.body.appendChild(kbHintEl);
+    }
+    const next = typeof force === 'boolean' ? force : !kbHintEl.classList.contains('is-on');
+    kbHintEl.classList.toggle('is-on', next);
+  };
+  window.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (isTypingTarget(e.target)) return;
+    const k = e.key;
+    if (k === 's' || k === 'S') {
+      e.preventDefault();
+      wsAgain?.click();
+    } else if (k === '?' || (e.shiftKey && k === '/')) {
+      e.preventDefault();
+      toggleKbHint();
+    } else if (k === 'Escape' && kbHintEl?.classList.contains('is-on')) {
+      e.preventDefault();
+      toggleKbHint(false);
+    }
+  });
+
+  /* ---------- state click + hover ---------- */
+  stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+    el.addEventListener('mouseenter', (e) => {
+      const id = el.dataset.id; if (!id) return;
+      setTooltip(states[id]?.name || '', 'click to run a study here');
+      tooltip.classList.add('is-on');
+      placeTooltip(e);
+      const wsRegion = document.getElementById('workspaceRegion');
+      if (wsRegion && stage.dataset.run !== '1') wsRegion.textContent = states[id]?.name || '';
+    });
+    el.addEventListener('mousemove', (e) => placeTooltip(e));
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
+    el.addEventListener('focus', (e) => {
+      const id = el.dataset.id; if (!id) return;
+      setTooltip(states[id]?.name || '', 'press Enter to run a study here');
+      tooltip.classList.add('is-on');
+      placeTooltip(e);
+    });
+    el.addEventListener('blur', () => tooltip.classList.remove('is-on'));
+
+    const start = async () => {
+      const id = el.dataset.id; if (!id) return;
+      if (cycleTimer) window.clearTimeout(cycleTimer);
+      await runStudy(id);
+      cycleTimer = window.setTimeout(cycle, 6800);
+    };
+    el.addEventListener('click', start);
+    el.addEventListener('keydown', (e) => {
+      const k = (e as KeyboardEvent).key;
+      if (k === 'Enter' || k === ' ') { e.preventDefault(); start(); }
+    });
+  });
+
+  /* ---------- County polygon lazy-load + per-scene highlight ----------
+     Fetches only the counties referenced by named scenes (filtered
+     /data/counties.json endpoint). Injected once on idle. When a
+     scene fires with scene.countyFips set, we add data-active="1"
+     on the matching county polygon for the tiered highlight. */
+  const countyLayer = document.getElementById('heroCountyLayer');
+  let countyLoading: Promise<void> | null = null;
+  const countyByFips = new Map<string, SVGPathElement>();
+  let pendingCountyFips: string | undefined;
+  const loadCounties = (): Promise<void> => {
+    if (!countyLayer || countyLayer.dataset.loaded === '1') return Promise.resolve();
+    if (countyLoading) return countyLoading;
+    countyLoading = fetch('/data/counties.json', { credentials: 'same-origin' })
+      .then(r => r.ok ? r.json() : [])
+      .then((polys: any[]) => {
+        if (!countyLayer || countyLayer.dataset.loaded === '1') return;
+        const SVG_NS = 'http://www.w3.org/2000/svg';
+        const frag = document.createDocumentFragment();
+        for (const p of polys) {
+          const el = document.createElementNS(SVG_NS, 'path');
+          el.setAttribute('class', 'hero-county');
+          el.setAttribute('d', p.pathD);
+          el.setAttribute('data-fips', p.id);
+          el.setAttribute('data-name', p.name);
+          frag.appendChild(el);
+          countyByFips.set(p.id, el);
+        }
+        countyLayer.appendChild(frag);
+        countyLayer.dataset.loaded = '1';
+        // Re-apply any pending county highlight that was requested
+        // before the polygons finished loading.
+        if (pendingCountyFips) {
+          const target = countyByFips.get(pendingCountyFips);
+          if (target) target.setAttribute('data-active', '1');
+        }
+      })
+      .catch(() => {});
+    return countyLoading;
+  };
+  const clearCountyHighlight = () => {
+    countyByFips.forEach(el => el.removeAttribute('data-active'));
+  };
+  const highlightCounty = (fips: string | undefined) => {
+    clearCountyHighlight();
+    pendingCountyFips = fips;
+    if (!fips) return;
+    // Kick off the lazy-load if it hasn't started yet — we need the
+    // polygons to be in the DOM to highlight them.
+    loadCounties();
+    const el = countyByFips.get(fips);
+    if (el) el.setAttribute('data-active', '1');
+  };
+
+  /* ---------- AIANNH lazy-load + event delegation ----------
+     The 485 tribal-land polygons used to be inlined into the SSR HTML
+     (~1MB). They are now fetched from /data/aiannh.json on the first
+     useful map interaction OR after an idle window, whichever comes
+     first. Hover/click/keydown are delegated on the parent group so
+     handlers don't need to be rewired after injection. */
+  const aiannhLayer = document.getElementById('heroAiannhLayer');
+  let aiannhLoading: Promise<void> | null = null;
+  const loadAiannh = (): Promise<void> => {
+    if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return Promise.resolve();
+    if (aiannhLoading) return aiannhLoading;
+    aiannhLoading = fetch('/data/aiannh.json', { credentials: 'same-origin' })
+      .then(r => r.ok ? r.json() : [])
+      .then((polys: any[]) => {
+        if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return;
+        const SVG_NS = 'http://www.w3.org/2000/svg';
+        const frag = document.createDocumentFragment();
+        for (const p of polys) {
+          const el = document.createElementNS(SVG_NS, 'path');
+          el.setAttribute('class', `hero-aiannh hero-aiannh--${p.category || 'reservation'}`);
+          el.setAttribute('d', p.pathD);
+          el.setAttribute('data-name', p.name);
+          el.setAttribute('data-short', p.shortName);
+          el.setAttribute('data-fips', p.fips);
+          el.setAttribute('data-cx', String(p.x));
+          el.setAttribute('data-cy', String(p.y));
+          el.setAttribute('data-category', p.category || '');
+          el.setAttribute('tabindex', '0');
+          el.setAttribute('role', 'button');
+          el.setAttribute('aria-label', `Tribal land: ${p.name}`);
+          frag.appendChild(el);
+        }
+        aiannhLayer.appendChild(frag);
+        aiannhLayer.dataset.loaded = '1';
+        // Re-apply any pending reservation highlight requested before
+        // the polygons finished loading.
+        applyReservationHighlight();
+      })
+      .catch(() => { /* swallow — non-essential overlay */ });
+    return aiannhLoading;
+  };
+
+  // Trigger lazy-load on first stage interaction or after idle.
+  const triggerLoadOnce = () => { loadAiannh(); loadCounties(); };
+  stage.addEventListener('pointerenter', triggerLoadOnce, { once: true });
+  stage.addEventListener('focusin', triggerLoadOnce, { once: true });
+  // Also kick off after the first auto-cycle scene completes so even
+  // visitors who never touch the map get the layers ready.
+  const w = window as unknown as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void };
+  if (typeof w.requestIdleCallback === 'function') {
+    w.requestIdleCallback(() => { loadAiannh(); loadCounties(); }, { timeout: 4000 });
+  } else {
+    w.setTimeout(() => { loadAiannh(); loadCounties(); }, 2500);
+  }
+
+  // Delegated handlers — work whether the polygons are injected or not.
+  const aiannhFromEvent = (e: Event): HTMLElement | null => {
+    const t = e.target as Element | null;
+    if (!t) return null;
+    const el = (t as Element).closest('.hero-aiannh') as HTMLElement | null;
+    return el;
+  };
+  aiannhLayer?.addEventListener('pointerover', (e) => {
+    const el = aiannhFromEvent(e); if (!el) return;
+    setTooltip(el.dataset.name || 'Tribal land', 'click to run a tribal-economy study');
+    tooltip.classList.add('is-on');
+    placeTooltip(e as MouseEvent);
+  });
+  aiannhLayer?.addEventListener('pointermove', (e) => {
+    if (aiannhFromEvent(e)) placeTooltip(e as MouseEvent);
+  });
+  aiannhLayer?.addEventListener('pointerout', () => tooltip.classList.remove('is-on'));
+  aiannhLayer?.addEventListener('focusin', (e) => {
+    const el = aiannhFromEvent(e); if (!el) return;
+    setTooltip(el.dataset.name || 'Tribal land', 'press Enter to run a tribal-economy study');
+    tooltip.classList.add('is-on');
+    placeTooltip(e as FocusEvent);
+  });
+  aiannhLayer?.addEventListener('focusout', () => tooltip.classList.remove('is-on'));
+  const startTribal = async (el: HTMLElement) => {
+    const fips = el.dataset.fips; if (!fips) return;
+    const cx = parseFloat(el.dataset.cx || '0');
+    const cy = parseFloat(el.dataset.cy || '0');
+    const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
+    if (cycleTimer) window.clearTimeout(cycleTimer);
+    const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
+    const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+    const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
+    const chip = `${tribalName} · ${amount.label} ${activity.label}`;
+    // Light the polygon + overlapping counties for the click path too.
+    clearReservationHighlight();
+    el.setAttribute('data-active', '1');
+    highlightCountiesOverlappingAiannh(el as unknown as SVGGraphicsElement);
+    await runStudy(fips, { activity, amount, framing, chip, sourcePoint: { cx, cy } });
+    scheduleNext();
+  };
+  aiannhLayer?.addEventListener('click', (e) => {
+    const el = aiannhFromEvent(e); if (el) startTribal(el);
+  });
+  aiannhLayer?.addEventListener('keydown', (e) => {
+    const el = aiannhFromEvent(e); if (!el) return;
+    const k = (e as KeyboardEvent).key;
+    if (k === 'Enter' || k === ' ') { e.preventDefault(); startTribal(el); }
+  });
+  // Also load eagerly when the Tribal lands filter chip activates.
+  document.querySelector('.wfilter[data-layer="tribal"]')?.addEventListener('click', () => loadAiannh(), { once: true });
+
+  /* First study kickoff.
+
+     Previously this called a third-party IP-geolocation endpoint
+     (ipapi.co) to pick a study near the visitor's state on first
+     load. That was dropped because:
+       - It was the only third-party network call from the homepage,
+         which made the request graph noisier than it needs to be
+         (some network-level security filters scrutinize outbound
+         XHRs to unfamiliar origins).
+       - It sent the visitor's IP to a third party for cosmetic
+         personalization.
+       - The catalog's auto-cycle deck already delivers a varied
+         first impression in <1s.
+
+     If we want to surface a geo-targeted scene later, do it
+     server-side (Cloudflare/AWS edge headers) so no third-party
+     lookup is needed. */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const s = states['53']; if (s) { moveSource(s.cx, s.cy); shadeNeighbors('53'); }
+    figD!.textContent = fmt(5_000_000);
+  } else {
+    scheduleNext(900);
+  }
+
+  /* ---------- Per-figure metric explanations ----------
+     Each figure (Direct / Indirect / Induced / Total / Jobs) becomes
+     a button. Activating it expands a tiny info block with a
+     one-sentence definition + the live multiplier used in this run. */
+  const FIG_DEFS: Record<string, string> = {
+    direct:   'First-round spending that lands in the analysis region. Capital expenditure (construction, equipment), operating payroll, and contracts paid to local vendors all count. Taxes paid out to federal or non-local governments do not (they leak out of the region; fiscal impact is a separate analysis).',
+    indirect: 'Supplier spending. Money the direct recipients spend with vendors, contractors, and suppliers inside the region.',
+    induced:  'Household spending. Wages earned by direct and indirect workers, spent locally on rent, groceries, services.',
+    total:    'Direct + Indirect + Induced. The full economic impact across the region.',
+    jobs:     'Estimated jobs supported across direct, indirect, and induced activity, derived from a per-million-dollars factor for the scenario\'s activity type.',
+  };
+  // Level-specific assumption notes. Hint at how the model adapts
+  // for smaller regions without giving away the full methodology.
+  const LEVEL_NOTES: Record<string, Record<string, string>> = {
+    direct: {
+      county:      'County scope: only spending inside the county counts. Inter-county transfers in the same metro are treated as leakage.',
+      reservation: 'On-reservation only. Federal contracts assigned to a tribal entity count even when executed off-reservation.',
+    },
+    indirect: {
+      county:      'Multipliers are FLQ-adjusted downward for the thinner local supplier base. Out-of-county supplier spend is leakage.',
+      reservation: 'Reservation supply chains are typically shallow, so indirect effects leak heavily to the containing county and across state lines. Adjusted accordingly.',
+    },
+    induced: {
+      county:      'Workers\' household spending inside the county only. Commuter spend in adjacent counties is leakage.',
+      reservation: 'Split between on-reservation households and commuters from off-reservation, weighted by employment patterns for the industry.',
+    },
+  };
+  const figureButtons = document.querySelectorAll<HTMLElement>('.hero-fig');
+  figureButtons.forEach(cell => {
+    const key = cell.dataset.k;
+    if (!key || !FIG_DEFS[key]) return;
+    const dt = cell.querySelector('dt');
+    if (!dt) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'hero-fig__info';
+    btn.setAttribute('aria-label', `What is ${dt.textContent}?`);
+    btn.setAttribute('aria-expanded', 'false');
+    btn.textContent = 'i';
+    dt.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'hero-fig__expl';
+    panel.setAttribute('role', 'region');
+    panel.hidden = true;
+    cell.appendChild(panel);
+
+    const renderPanel = () => {
+      const def = FIG_DEFS[key];
+      // Activity-specific qualifier without the raw multiplier — the
+      // marketing surface should describe the methodology in words,
+      // not hand out the calibration numbers. The real product
+      // exposes them; this is the public hero.
+      let mult = '';
+      const al = stage.dataset.actLabel;
+      if (key === 'indirect' && al)     mult = `Calibrated to the supplier mix of a typical <strong>${al}</strong>.`;
+      else if (key === 'induced' && al) mult = `Calibrated to the worker-spending pattern of a typical <strong>${al}</strong>.`;
+      else if (key === 'jobs' && al)    mult = `Employment per dollar of activity is sector-specific; this run uses the <strong>${al}</strong> profile.`;
+      else if (key === 'total' && al)   mult = `Sum of the three rounds for this <strong>${al}</strong>.`;
+      // Level-specific note: shows when the current study is at
+      // county or reservation level and the figure has a note for
+      // that level. State-level studies don't get an addendum
+      // (the base text is already state-default).
+      const lvl = stage.dataset.studyLevel || 'state';
+      const lvlNote = LEVEL_NOTES[key]?.[lvl] ?? '';
+      panel.innerHTML =
+        `<p>${def}</p>`
+        + (lvlNote ? `<p class="hero-fig__note">${lvlNote}</p>` : '')
+        + (mult ? `<p class="hero-fig__mult">${mult}</p>` : '');
+    };
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = panel.hidden;
+      // Close any other open panels.
+      figureButtons.forEach(other => {
+        if (other === cell) return;
+        const p = other.querySelector<HTMLElement>('.hero-fig__expl');
+        const b = other.querySelector<HTMLButtonElement>('.hero-fig__info');
+        if (p) p.hidden = true;
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+      if (open) renderPanel();
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', (e) => {
+    // Close all panels when clicking outside.
+    const t = e.target as Element | null;
+    if (t && t.closest('.hero-fig')) return;
+    figureButtons.forEach(cell => {
+      const p = cell.querySelector<HTMLElement>('.hero-fig__expl');
+      const b = cell.querySelector<HTMLButtonElement>('.hero-fig__info');
+      if (p) p.hidden = true;
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ---------- Search ----------
+     Autocomplete over the union of 50 states + AIANNH tribal lands.
+     Filters as the user types, ranks by start-of-name first then
+     substring; ↑↓/Enter/Esc keyboard nav; on select, fires the same
+     runStudy a click on that geography would. */
+  const searchEl = document.getElementById('workspaceSearch') as HTMLElement | null;
+  const searchInput = document.getElementById('workspaceSearchInput') as HTMLInputElement | null;
+  const searchPanel = document.getElementById('workspaceSearchPanel') as HTMLUListElement | null;
+  const searchClear = document.getElementById('workspaceSearchClear') as HTMLButtonElement | null;
+  if (searchEl && searchInput && searchPanel && searchClear && searchIndex.length) {
+    let matches: SearchEntry[] = [];
+    let activeIdx = -1;
+
+    const escapeHtml = (s: string) => s.replace(/[&<>"']/g, c => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string
+    ));
+    const highlight = (text: string, q: string) => {
+      if (!q) return escapeHtml(text);
+      const i = text.toLowerCase().indexOf(q.toLowerCase());
+      if (i < 0) return escapeHtml(text);
+      return escapeHtml(text.slice(0, i))
+        + '<mark>' + escapeHtml(text.slice(i, i + q.length)) + '</mark>'
+        + escapeHtml(text.slice(i + q.length));
+    };
+
+    const rank = (q: string): SearchEntry[] => {
+      const ql = q.trim().toLowerCase();
+      if (!ql) return [];
+      const scored: Array<{ s: number; e: SearchEntry }> = [];
+      for (const e of searchIndex) {
+        const nl = e.name.toLowerCase();
+        let s = 0;
+        if (nl === ql) s = 100;
+        else if (nl.startsWith(ql)) s = 60;
+        else if (nl.split(/\s+/).some(w => w.startsWith(ql))) s = 40;
+        else if (nl.includes(ql)) s = 20;
+        else if (e.sub.toLowerCase().includes(ql)) s = 8;
+        if (s > 0) {
+          // States rank slightly above tribal at the same score for
+          // partial matches, since a search for "wa" should surface
+          // Washington before all the AIANNH lands containing "wa".
+          if (e.type === 'state') s += 4;
+          scored.push({ s, e });
+        }
+      }
+      scored.sort((a, b) => b.s - a.s || a.e.name.length - b.e.name.length);
+      return scored.slice(0, 8).map(x => x.e);
+    };
+
+    const closePanel = () => {
+      searchPanel.hidden = true;
+      searchInput.setAttribute('aria-expanded', 'false');
+      activeIdx = -1;
+    };
+    const openPanel = () => {
+      searchPanel.hidden = false;
+      searchInput.setAttribute('aria-expanded', 'true');
+    };
+    const renderPanel = (q: string) => {
+      if (!matches.length) { closePanel(); return; }
+      const html = matches.map((m, i) => `
+        <li class="workspace-search__item ${i === activeIdx ? 'is-active' : ''}"
+            role="option"
+            aria-selected="${i === activeIdx}"
+            data-idx="${i}">
+          <span class="workspace-search__kind workspace-search__kind--${m.type}" aria-hidden="true">
+            ${m.type === 'state'
+              ? '<svg viewBox="0 0 16 16"><path d="M2 4 L7 2 L12 4 L14 7 L13 12 L8 14 L3 12 L1 8 Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>'
+              : m.type === 'county'
+              ? '<svg viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2.5" y1="8" x2="13.5" y2="8" stroke="currentColor" stroke-width="1"/><line x1="8" y1="2.5" x2="8" y2="13.5" stroke="currentColor" stroke-width="1"/></svg>'
+              : '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>'}
+          </span>
+          <span class="workspace-search__meta">
+            <span class="workspace-search__name">${highlight(m.name, q)}</span>
+            <span class="workspace-search__sub">${escapeHtml(m.sub)}</span>
+          </span>
+        </li>`).join('');
+      searchPanel.innerHTML = html;
+      openPanel();
+    };
+
+    const fireMatch = (m: SearchEntry) => {
+      searchInput.value = m.name;
+      closePanel();
+      // Pause the auto-cycle so the user-fired study isn't
+      // overwritten by the next scheduled one. We use a timestamped
+      // pause that survives the focusin/focusout that fires when
+      // the click moves focus out of the search input, plus clear
+      // any pending cycleTimer that was already scheduled.
+      pausedUntil = Date.now() + 25_000;
+      if (cycleTimer) { window.clearTimeout(cycleTimer); cycleTimer = undefined; }
+      if (m.type === 'state') {
+        runStudy(m.id, { level: 'state' });
+      } else if (m.type === 'county') {
+        // County selection: fire at county level with the county
+        // centroid as the source point, and pass containingCountyFips
+        // (the same FIPS) so retention applies the county-tier logic.
+        // Custom chip text so the header reads "Travis County, TX"
+        // instead of falling back to the parent state's name.
+        const stateCode = states[m.stateFips]?.code || '';
+        const label = stateCode ? `${m.name}, ${stateCode}` : m.name;
+        runStudy(m.stateFips, {
+          level: 'county',
+          sourcePoint: { cx: m.cx, cy: m.cy },
+          containingCountyFips: m.id,
+          chip: label,
+          framing: `A study in ${label}.`,
+        });
+      } else {
+        // Tribal selection: resolve the containing county FIPS via
+        // the tribalLookup if we have it; otherwise the leakage just
+        // distributes through the state pool without sub-state hint.
+        let containingCountyFips: string | undefined;
+        for (const t of Object.values(tribalLookup)) {
+          if (Math.hypot(t.cx - m.cx, t.cy - m.cy) < 5) {
+            containingCountyFips = t.countyFips;
+            break;
+          }
+        }
+        // Light the searched reservation + every county it overlaps.
+        // We have to wait until AIANNH polygons are in the DOM, which
+        // happens lazily, so kick off the load and apply once ready.
+        clearReservationHighlight();
+        void loadAiannh().then(() => {
+          const el = stage.querySelector<SVGGraphicsElement>(`.hero-aiannh[data-fips="${m.fips}"]`);
+          if (el) {
+            el.setAttribute('data-active', '1');
+            highlightCountiesOverlappingAiannh(el);
+          }
+        });
+        runStudy(m.fips, {
+          level: 'reservation',
+          sourcePoint: { cx: m.cx, cy: m.cy },
+          chip: m.name,
+          framing: `A study on ${m.name}.`,
+          ...(containingCountyFips ? { containingCountyFips } : {}),
+        });
+      }
+    };
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value;
+      searchClear.hidden = q.length === 0;
+      matches = rank(q);
+      activeIdx = matches.length ? 0 : -1;
+      renderPanel(q);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (searchPanel.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp') && searchInput.value) {
+        matches = rank(searchInput.value);
+        if (matches.length) { activeIdx = 0; renderPanel(searchInput.value); e.preventDefault(); return; }
+      }
+      if (!matches.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIdx = (activeIdx + 1) % matches.length;
+        renderPanel(searchInput.value);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIdx = (activeIdx - 1 + matches.length) % matches.length;
+        renderPanel(searchInput.value);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (activeIdx >= 0 && matches[activeIdx]) fireMatch(matches[activeIdx]);
+      } else if (e.key === 'Escape') {
+        closePanel();
+        searchInput.blur();
+      }
+    });
+
+    searchPanel.addEventListener('mousedown', (e) => {
+      // mousedown not click so we beat the input's blur handler
+      const li = (e.target as Element | null)?.closest('.workspace-search__item') as HTMLElement | null;
+      if (!li) return;
+      const idx = Number(li.dataset.idx);
+      if (Number.isFinite(idx) && matches[idx]) fireMatch(matches[idx]);
+    });
+    searchPanel.addEventListener('mousemove', (e) => {
+      const li = (e.target as Element | null)?.closest('.workspace-search__item') as HTMLElement | null;
+      if (!li) return;
+      const idx = Number(li.dataset.idx);
+      if (Number.isFinite(idx) && idx !== activeIdx) {
+        activeIdx = idx;
+        renderPanel(searchInput.value);
+      }
+    });
+
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchClear.hidden = true;
+      closePanel();
+      searchInput.focus();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!searchEl.contains(e.target as Node)) closePanel();
+    });
+
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value && matches.length) openPanel();
+    });
+  }
+}
