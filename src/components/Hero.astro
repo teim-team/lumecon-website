@@ -1045,9 +1045,41 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           const py = bb.y + bb.height / 2;
           moveSource(px, py);
         } catch {}
+        // Light up every county whose bounding box overlaps the
+        // reservation. Bbox overlap is an over-estimate (it can match
+        // counties whose actual polygon doesn't intersect), but at
+        // this map scale the visual reads cleanly: visitors see all
+        // the counties the reservation crosses, instead of just the
+        // one containing its centroid.
+        highlightCountiesOverlappingAiannh(best);
         return true;
       }
       return false;
+    };
+    /* Find every county polygon whose bbox overlaps the given AIANNH
+       polygon's bbox; mark them data-active so their fill + border
+       show. Loads counties lazily if they haven't been fetched yet
+       — the highlight applies once the polygons are in the DOM. */
+    const highlightCountiesOverlappingAiannh = (aiannhEl: SVGGraphicsElement) => {
+      const apply = () => {
+        let rb: DOMRect | null = null;
+        try { rb = aiannhEl.getBBox(); } catch { return; }
+        if (!rb) return;
+        const PAD = 0.5; // small inflation so edge-touching counties match
+        countyByFips.forEach((countyEl) => {
+          try {
+            const cb = countyEl.getBBox();
+            const overlaps =
+              cb.x < rb.x + rb.width + PAD &&
+              cb.x + cb.width > rb.x - PAD &&
+              cb.y < rb.y + rb.height + PAD &&
+              cb.y + cb.height > rb.y - PAD;
+            if (overlaps) countyEl.setAttribute('data-active', '1');
+          } catch {}
+        });
+      };
+      if (countyLayer && countyLayer.dataset.loaded === '1') apply();
+      else void loadCounties().then(apply);
     };
     const highlightReservationByTribalKey = (tribalKey: string) => {
       clearReservationHighlight();
@@ -1458,6 +1490,10 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
       const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
       const chip = `${tribalName} · ${amount.label} ${activity.label}`;
+      // Light the polygon + overlapping counties for the click path too.
+      clearReservationHighlight();
+      el.setAttribute('data-active', '1');
+      highlightCountiesOverlappingAiannh(el as unknown as SVGGraphicsElement);
       await runStudy(fips, { activity, amount, framing, chip, sourcePoint: { cx, cy } });
       scheduleNext();
     };
@@ -1714,6 +1750,17 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
               break;
             }
           }
+          // Light the searched reservation + every county it overlaps.
+          // We have to wait until AIANNH polygons are in the DOM, which
+          // happens lazily, so kick off the load and apply once ready.
+          clearReservationHighlight();
+          void loadAiannh().then(() => {
+            const el = stage.querySelector<SVGGraphicsElement>(`.hero-aiannh[data-fips="${m.fips}"]`);
+            if (el) {
+              el.setAttribute('data-active', '1');
+              highlightCountiesOverlappingAiannh(el);
+            }
+          });
           runStudy(m.fips, {
             level: 'reservation',
             sourcePoint: { cx: m.cx, cy: m.cy },

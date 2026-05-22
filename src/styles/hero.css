@@ -289,16 +289,28 @@
 .hero-map { width: 100%; height: auto; display: block; max-height: 56vh; }
 .hero-map__fill { fill: var(--paper); }
 .hero-map__grid { opacity: .55; pointer-events: none; }
+/* All-county borders mesh stays hidden by default. The mesh of
+   3,000+ boundaries would dominate the map visually if always shown.
+   It surfaces in three cases:
+     1. Visitor explicitly toggles the Counties layer
+     2. A county-level study is running (relevant context)
+     3. A reservation-level study is running (so the visitor can see
+        which counties the reservation actually crosses)
+   The bbox-intersection JS additionally lights up the specific
+   overlapping county fills when polygons for those counties are
+   loaded. */
 .hero-map__county-borders {
   fill: none;
   stroke: var(--navy);
   stroke-width: .35;
-  stroke-opacity: .25;
+  stroke-opacity: .22;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
   display: none;
 }
-.hero-stage[data-layer="counties"] .hero-map__county-borders { display: block; }
+.hero-stage[data-layer="counties"] .hero-map__county-borders,
+.hero-stage[data-study-level="county"] .hero-map__county-borders,
+.hero-stage[data-study-level="reservation"] .hero-map__county-borders { display: block; }
 
 /* Top controls row: layer filters on the left, search on the right. */
 .workspace-controls {
