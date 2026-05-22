@@ -97,6 +97,105 @@
   margin-top: .4rem;
 }
 
+/* Three substantial "path" tiles replacing the old hero-cta row.
+   Each tile is a link-card: icon, title, one-line subtitle. The
+   tile treatment breaks up the homepage text density — visitors
+   were getting a wall of words before reaching the next-step
+   buttons; the cards give those next steps visual weight. The
+   third tile (Sign up) is filled navy to keep the primary
+   conversion clearly the primary action. */
+.hero-paths {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .8rem;
+  margin: .4rem 0 0;
+  list-style: none;
+  padding: 0;
+  max-width: 880px;
+}
+.hero-path {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  padding: 1.1rem 1.15rem 1.25rem;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  color: var(--navy);
+  text-decoration: none;
+  transition: border-color .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+}
+.hero-path:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -12px rgba(14, 21, 48, .18);
+}
+.hero-path__icon {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  color: var(--navy);
+  margin-bottom: .15rem;
+}
+.hero-path__icon svg { width: 100%; height: 100%; display: block; }
+.hero-path__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: -.012em;
+  color: var(--navy);
+  line-height: 1.15;
+}
+.hero-path__sub {
+  font-family: var(--font-sans);
+  font-size: .85rem;
+  line-height: 1.4;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+/* Sign-up tile: filled navy so the primary conversion still
+   reads as the primary action even within the equal-weight
+   tile grid. */
+.hero-path--primary {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
+.hero-path--primary .hero-path__title,
+.hero-path--primary .hero-path__icon { color: var(--white); }
+.hero-path--primary .hero-path__sub { color: rgba(255, 255, 255, .78); }
+.hero-path--primary:hover {
+  background: var(--navy2);
+  border-color: var(--navy2);
+  box-shadow: 0 8px 24px -10px rgba(14, 21, 48, .35);
+}
+
+@media (max-width: 720px) {
+  .hero-paths { grid-template-columns: 1fr; gap: .55rem; }
+  /* Two-column grid per tile on mobile: icon on the left (rowspan
+     2), title and sub stacked on the right. Keeps the title from
+     fighting the sub for horizontal space when both flex-row. */
+  .hero-path {
+    padding: .9rem 1rem 1rem;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: .85rem;
+    row-gap: .15rem;
+    align-items: start;
+  }
+  .hero-path__icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin-bottom: 0;
+    width: 28px;
+    height: 28px;
+    align-self: center;
+  }
+  .hero-path__title { grid-column: 2; grid-row: 1; font-size: 1rem; }
+  .hero-path__sub   { grid-column: 2; grid-row: 2; font-size: .82rem; }
+}
+
 /* ---------- workspace panel (product UI) ---------- */
 .workspace {
   background: var(--white);

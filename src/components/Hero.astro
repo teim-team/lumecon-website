@@ -32,10 +32,44 @@ import '../styles/hero.css';
       <li>Patent pending</li>
       <li>Alternative to IMPLAN, RIMS II, REMI</li>
     </ul>
-    <div class="hero-cta">
-      <a href="/map" class="btn">See the map</a>
-      <a href="#contact" class="btn btn--ghost">Request a demo</a>
-      <a href="/join" class="btn btn--ghost">Join the team</a>
-    </div>
+    <!-- Three "path" tiles instead of plain buttons. Each is a
+         substantial card with an icon, title, and one-line subtitle
+         so the visitor's next-step options read as visually
+         distinct entries rather than another row of small CTAs.
+         Sign up is the primary (filled navy); See a live study and
+         Meet Cedar are secondary cards. -->
+    <nav class="hero-paths" aria-label="Explore Lumecon">
+      <a class="hero-path" href="/map">
+        <span class="hero-path__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter">
+            <path d="M3 7 L9 4 L15 7 L21 4 L21 17 L15 20 L9 17 L3 20 Z"/>
+            <line x1="9" y1="4" x2="9" y2="17"/>
+            <line x1="15" y1="7" x2="15" y2="20"/>
+          </svg>
+        </span>
+        <span class="hero-path__title">See a live study</span>
+        <span class="hero-path__sub">Click any region. Watch the impact ripple through the economy in seconds.</span>
+      </a>
+      <a class="hero-path" href="/cedar">
+        <span class="hero-path__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z"/>
+            <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="butt"/>
+          </svg>
+        </span>
+        <span class="hero-path__title">Meet Cedar</span>
+        <span class="hero-path__sub">The AI analyst that does the messy data wrangling for you.</span>
+      </a>
+      <a class="hero-path hero-path--primary" href="/signup">
+        <span class="hero-path__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M5 12h12"/>
+            <path d="M13 6l6 6-6 6"/>
+          </svg>
+        </span>
+        <span class="hero-path__title">Sign up</span>
+        <span class="hero-path__sub">Run studies on your own data.</span>
+      </a>
+    </nav>
   </div>
 </section>
