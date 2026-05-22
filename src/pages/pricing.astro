@@ -1,0 +1,333 @@
+---
+/**
+ * /pricing — three-tier annual pricing for Tribal Economic Impact.
+ *
+ * Ported from the spec written against
+ * `src/pages/Pricing.jsx` on branch
+ * `claude/explore-lumecon-foundation-BDWKd`. That branch isn't
+ * fetchable from this isolated working tree, so this is a from-spec
+ * implementation in Astro rather than a JSX-to-Astro port.
+ *
+ * v1 launch behaviour:
+ *   - Two tiers buyable: Sprout ($5k/yr) and Sapling ($15k/yr).
+ *   - Tree ($25k/yr) shows as a dashed "Coming soon" card with a
+ *     notify-me CTA instead of "Request access." Tree-only rows in
+ *     the comparison table render as "Coming soon" (data-value="soon").
+ *
+ * Single source of truth: src/data/pricing.ts. Prices below come
+ * from PUBLIC_PRICING_TIERS at build time; the meta description
+ * interpolates the same values, so updating the data file is enough
+ * once finance signs off.
+ *
+ * Discount-code input lives in the cream band. Codes are recognised
+ * client-side only via PRODUCT_DISCOUNT_CODES — real enforcement
+ * has to move to the billing provider before any code is
+ * publicly distributed.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config';
+import {
+  PUBLIC_PRICING_TIERS,
+  COMPARISON_ROWS,
+  ANNUAL_SUBSCRIPTION_DISCOUNTS,
+} from '../data/pricing';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/pricing.css';
+
+const tiers = PUBLIC_PRICING_TIERS;
+const priceList = tiers.map((t) => t.price).join(', ');
+const description = `Three annual tiers for Tribal Economic Impact by Lumecon: ${priceList} per year.`;
+---
+<BaseLayout
+  title="Pricing | Tribal Economic Impact by Lumecon"
+  description={description}
+  canonical="https://lumecon.ai/pricing"
+  keywords="Lumecon pricing, Tribal Economic Impact pricing, economic impact analysis pricing, IMPLAN alternative pricing, RIMS II alternative pricing, REMI alternative pricing, Cedar AI pricing, tribal economic impact software cost, annual subscription"
+  ogTitle="Lumecon pricing: three tiers, priced annually"
+  ogDescription={description}
+>
+  <Nav />
+  <main class="pricing">
+
+    <!-- 1. Hero band -->
+    <section class="editorial-band editorial-band--white pricing-hero">
+      <div class="editorial-band__inner">
+        <header class="pricing-hero__head">
+          <h1 class="editorial-question">Three tiers. Priced annually.</h1>
+          <p class="pricing-hero__lede">Reservation, state, and national results are included at every tier &mdash; Sprout, Sapling, and Tree. Cedar starts at Sapling. Cedar Grove is part of Tree.</p>
+          <p class="pricing-hero__aside">Model updates, data refreshes, and workflow improvements land on every tier as they ship. You don&rsquo;t pay again to stay current.</p>
+        </header>
+
+        <ul class="pricing-tier-grid" aria-label="Pricing tiers">
+          {tiers.map((t) => {
+            const mailtoBody = `&body=${encodeURIComponent(`Hi Lumecon team,\n\nI'd like to ${t.comingSoon ? 'be notified when' : 'request access to'} the ${t.name} tier of Tribal Economic Impact.\n\nOrganization: \nUse case: \n`)}`;
+            const subject = encodeURIComponent(t.comingSoon ? `Notify me when ${t.name} ships` : t.ctaSubject);
+            return (
+              <li
+                class={`pricing-tier-card${t.featured ? ' pricing-tier-card--featured' : ''}${t.comingSoon ? ' pricing-tier-card--coming-soon' : ''}`}
+                data-tier-id={t.id}
+                data-tier-annual={t.priceAnnual}
+              >
+                <header class="pricing-tier-card__head">
+                  <span class="pricing-tier-card__icon" aria-hidden="true">
+                    {t.id === 'starter' && (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 21V11"/>
+                        <path d="M12 11C12 8 9 6 6 7"/>
+                        <path d="M12 11C12 9 14 7 17 8"/>
+                      </svg>
+                    )}
+                    {t.id === 'standard' && (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 21V8"/>
+                        <path d="M12 8C10 6 6 5 4 7"/>
+                        <path d="M12 8C14 5 18 5 20 7"/>
+                        <path d="M12 14C10 13 8 12 6 13"/>
+                        <path d="M12 14C14 12 16 12 18 13"/>
+                      </svg>
+                    )}
+                    {t.id === 'leader' && (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 21V14"/>
+                        <path d="M12 14C9 14 7 12 7 9C7 7 9 4 12 4C15 4 17 7 17 9C17 12 15 14 12 14Z"/>
+                      </svg>
+                    )}
+                  </span>
+                  <h2 class="pricing-tier-card__name">{t.name}</h2>
+                  {t.comingSoon
+                    ? <span class="pricing-tier-card__tag">Coming soon</span>
+                    : t.featured
+                      ? <span class="pricing-tier-card__tag">Most complete</span>
+                      : <span class="pricing-tier-card__tag">v1</span>}
+                </header>
+
+                <div class="pricing-tier-card__price-row">
+                  <span class="pricing-tier-card__price">{t.price}</span>
+                  <span class="pricing-tier-card__period">{t.period}</span>
+                </div>
+                <p class="pricing-tier-card__discounted" data-discounted-price>&nbsp;</p>
+
+                <p class="pricing-tier-card__tagline">{t.tagline}</p>
+
+                <ul class="pricing-tier-card__highlights" aria-label={`${t.name} highlights`}>
+                  {t.highlights.map((h) => <li>{h}</li>)}
+                </ul>
+
+                <details class="pricing-tier-card__details">
+                  <summary data-analytics={`pricing-${t.name}-details`}>Full capability list</summary>
+                  <ul>
+                    {t.features.map((f) => {
+                      if (typeof f === 'string') return <li>{f}</li>;
+                      return <li class="is-accent-gold">{f.text}</li>;
+                    })}
+                  </ul>
+                </details>
+
+                {t.note && <p class="pricing-tier-card__note">{t.note}</p>}
+
+                <div class="pricing-tier-card__cta">
+                  <a
+                    class={t.comingSoon ? 'btn btn--ghost' : 'btn'}
+                    href={`mailto:${site.email}?subject=${subject}${mailtoBody}`}
+                    data-analytics={`pricing-${t.name}-request-access`}
+                    data-cta-base={`mailto:${site.email}?subject=${subject}`}
+                  >
+                    {t.comingSoon ? 'Notify me' : 'Request access'}
+                  </a>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 2. Comparison band -->
+    <section class="editorial-band editorial-band--white pricing-compare" aria-labelledby="compare-h2">
+      <div class="editorial-band__inner">
+        <p class="pricing-compare__kicker">Compare the tiers</p>
+        <h2 class="pricing-compare__h2" id="compare-h2">The full picture, one row at a time.</h2>
+        <p class="pricing-compare__deck">No clever section names or hidden &ldquo;contact us for details&rdquo; lines. What each tier actually includes.</p>
+
+        <div class="pricing-compare__table-wrap" role="region" tabindex="0" aria-label="Tier comparison table, scroll horizontally on small screens">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Capability</th>
+                <th scope="col">Sprout</th>
+                <th scope="col">Sapling</th>
+                <th scope="col" class="pricing-compare__featured-head">Tree</th>
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARISON_ROWS.map((row) => (
+                <tr>
+                  <th scope="row" class="pricing-compare__row-label">{row.capability}</th>
+                  <td data-value={row.sprout === 'yes' ? 'yes' : row.sprout === 'none' ? 'none' : row.sprout === 'soon' ? 'soon' : 'text'}>
+                    {row.sprout === 'yes' ? 'Included' : row.sprout === 'none' ? '—' : row.sprout === 'soon' ? 'Coming soon' : row.sprout}
+                  </td>
+                  <td data-value={row.sapling === 'yes' ? 'yes' : row.sapling === 'none' ? 'none' : row.sapling === 'soon' ? 'soon' : 'text'}>
+                    {row.sapling === 'yes' ? 'Included' : row.sapling === 'none' ? '—' : row.sapling === 'soon' ? 'Coming soon' : row.sapling}
+                  </td>
+                  <td class="pricing-compare__featured" data-value={row.tree === 'yes' ? 'yes' : row.tree === 'none' ? 'none' : row.tree === 'soon' ? 'soon' : 'text'}>
+                    {row.tree === 'yes' ? 'Included' : row.tree === 'none' ? '—' : row.tree === 'soon' ? 'Coming soon' : row.tree}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Discount-code band -->
+    <section class="editorial-band editorial-band--cream pricing-support" aria-labelledby="support-h2">
+      <div class="editorial-band__inner">
+        <p class="pricing-support__kicker">Discount code</p>
+        <div class="discount-code-panel">
+          <h2 class="discount-code-panel__title" id="support-h2">Met us at an event?</h2>
+          <p class="discount-code-panel__copy">Drop in your conference, pilot, or testing code. We&rsquo;ll apply it when you request access.</p>
+          <form class="discount-code-panel__form" data-discount-form autocomplete="off">
+            <div class="discount-code-panel__field">
+              <input
+                class="discount-code-panel__input"
+                type="text"
+                name="code"
+                inputmode="text"
+                autocapitalize="characters"
+                autocorrect="off"
+                spellcheck="false"
+                maxlength="32"
+                placeholder="e.g. CONF10"
+                aria-describedby="discount-status"
+                data-discount-input
+              />
+              <button type="submit" class="btn discount-code-panel__apply">Apply</button>
+            </div>
+            <p class="discount-code-panel__status" id="discount-status" data-discount-status>Conference, pilot, and testing codes are supported.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Terms band -->
+    <section class="editorial-band editorial-band--navy pricing-terms" aria-labelledby="terms-h2">
+      <div class="editorial-band__inner">
+        <header class="pricing-terms__head">
+          <h2 class="pricing-terms__h2" id="terms-h2">The fine print, unbolded.</h2>
+          <a class="btn" href={`mailto:${site.email}?subject=Walkthrough`} data-analytics="pricing-request-walkthrough">Request a walkthrough</a>
+        </header>
+
+        <div class="pricing-terms__grid">
+          <div class="pricing-terms__block">
+            <h3>Prepay, save.</h3>
+            <ul>
+              {ANNUAL_SUBSCRIPTION_DISCOUNTS.map((d) => (
+                <li>
+                  <strong>{d.label}:</strong>{' '}
+                  {d.discountPct === 0 ? 'standard annual subscription' : `${d.discountPct}% off`}
+                  {d.note ? ` (${d.note})` : ''}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="pricing-terms__block">
+            <h3>You own your exports.</h3>
+            <p>Analyses, assumptions, and tables come out in standard formats. Your data stays yours; Lumecon does not resell, syndicate, or train on it.</p>
+          </div>
+          <div class="pricing-terms__block">
+            <h3>Price changes, with notice.</h3>
+            <p>Rate changes are posted at least 60 days before they take effect. Prepaid subscribers keep their rate through the end of the prepaid term.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  import { getProductDiscountCode, applyDiscountToAnnualPrice, type DiscountCode } from '../data/pricing';
+  import { trackEvent } from '../lib/observability';
+
+  function formatMoney(n: number): string {
+    if (n === 0) return '$0';
+    return '$' + n.toLocaleString('en-US');
+  }
+
+  function setStatus(el: HTMLElement | null, text: string, variant: 'info' | 'valid' | 'error'): void {
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove('discount-code-panel__status--valid', 'discount-code-panel__status--error');
+    if (variant === 'valid') el.classList.add('discount-code-panel__status--valid');
+    if (variant === 'error') el.classList.add('discount-code-panel__status--error');
+  }
+
+  function applyDiscountToCards(code: DiscountCode | null): void {
+    document.querySelectorAll<HTMLElement>('.pricing-tier-card').forEach((card) => {
+      const annualAttr = card.dataset.tierAnnual;
+      const annual = annualAttr ? Number(annualAttr) : NaN;
+      const priceLine = card.querySelector<HTMLElement>('[data-discounted-price]');
+      const cta = card.querySelector<HTMLAnchorElement>('.pricing-tier-card__cta a');
+      const ctaBase = cta?.dataset.ctaBase;
+      if (!code || !Number.isFinite(annual)) {
+        card.classList.remove('has-discount');
+        if (priceLine) priceLine.textContent = '';
+        if (cta && ctaBase) cta.setAttribute('href', ctaBase);
+        return;
+      }
+      const result = applyDiscountToAnnualPrice(annual, code);
+      card.classList.add('has-discount');
+      if (priceLine) {
+        priceLine.textContent = `${formatMoney(result.finalAnnual)} with ${code.code}`;
+      }
+      if (cta && ctaBase) {
+        const body = encodeURIComponent(`Discount code: ${code.code}`);
+        cta.setAttribute('href', `${ctaBase}&body=${body}`);
+      }
+    });
+  }
+
+  function setup(): void {
+    const form = document.querySelector<HTMLFormElement>('[data-discount-form]');
+    if (!form) return;
+    const input = form.querySelector<HTMLInputElement>('[data-discount-input]');
+    const status = form.querySelector<HTMLElement>('[data-discount-status]');
+    if (!input || !status) return;
+
+    const handle = (raw: string): void => {
+      const trimmed = (raw || '').trim();
+      if (!trimmed) {
+        setStatus(status, 'Conference, pilot, and testing codes are supported.', 'info');
+        applyDiscountToCards(null);
+        return;
+      }
+      const match = getProductDiscountCode(trimmed);
+      if (!match) {
+        setStatus(status, 'Code not recognized.', 'error');
+        applyDiscountToCards(null);
+        return;
+      }
+      setStatus(status, `${match.label}: ${match.discountPct}% off annual pricing.`, 'valid');
+      applyDiscountToCards(match);
+      trackEvent('pricing.discount_applied', { code: match.code, discountPct: match.discountPct });
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handle(input.value);
+    });
+    input.addEventListener('input', () => handle(input.value));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+</script>
