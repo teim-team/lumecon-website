@@ -5,24 +5,27 @@ const { class: className = '' } = Astro.props as { class?: string };
   <!-- X/Y axes (small serifs at the origin corner) -->
   <line x1="4" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.25" stroke-linecap="butt"/>
   <line x1="4" y1="20" x2="22" y2="20" stroke="currentColor" stroke-width="1.25" stroke-linecap="butt"/>
-  <!-- Scatter points. Positioned with vertical scatter around the
-       regression line (above + below alternating) so the cloud reads
-       as a real scatter plot, not a single diagonal beam.
-       Dots flicker in over time so the chart reads as data being
-       collected before the regression draws. -->
-  <circle class="icon-econ__pt icon-econ__pt--a" cx="6.5"  cy="17.4" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--b" cx="8"    cy="15.2" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--c" cx="9.6"  cy="17.0" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--d" cx="11"   cy="13.6" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--e" cx="12.5" cy="14.8" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--f" cx="14"   cy="11.4" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--g" cx="15.5" cy="12.6" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--h" cx="17"   cy="9.4"  r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--i" cx="18.4" cy="10.6" r="1" fill="currentColor"/>
-  <circle class="icon-econ__pt icon-econ__pt--j" cx="19.8" cy="7.6"  r="1" fill="currentColor"/>
+  <!-- Scatter points. Dots alternate above and below an imaginary
+       trend line with residuals of roughly +/- 3 units, so the
+       cloud reads as a real scatter even at small icon sizes
+       (where tighter scatter collapses visually into a beam).
+       Dots flicker in over time, then the regression line draws
+       across them. -->
+  <circle class="icon-econ__pt icon-econ__pt--a" cx="6"    cy="18.5" r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--b" cx="7.5"  cy="14.5" r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--c" cx="8.5"  cy="17.5" r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--d" cx="10"   cy="12"   r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--e" cx="11.5" cy="15.5" r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--f" cx="13"   cy="10.5" r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--g" cx="14.5" cy="14"   r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--h" cx="16"   cy="8.5"  r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--i" cx="17.5" cy="11.5" r="1.2" fill="currentColor"/>
+  <circle class="icon-econ__pt icon-econ__pt--j" cx="19"   cy="7.5"  r="1.2" fill="currentColor"/>
   <!-- Regression line — drawn after the dots appear. Teal accent so
-       the "fitted line" is the focal point of the trend. -->
-  <line class="icon-econ__fit" x1="5.5" y1="18" x2="20.5" y2="7"
+       the "fitted line" is the focal point of the trend. The line
+       runs through the middle of the cloud rather than touching
+       any individual dot, which sells "best fit through noise." -->
+  <line class="icon-econ__fit" x1="5" y1="19" x2="20" y2="7"
         stroke="#0FB5A5" stroke-width="1.5" stroke-linecap="butt"
         pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
 </svg>
