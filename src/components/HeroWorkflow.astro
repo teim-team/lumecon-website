@@ -672,125 +672,65 @@
     100% { opacity: 0;   transform: scale(1.6); }
   }
 
-  /* ---------- Station 3: empty parcel → chunky construction ----------
-     The parcel starts blank (just the outline + road). Three clean
-     phases play in sequence; every piece uses
-     animation-fill-mode: backwards so it stays hidden before its
-     delay elapses (otherwise CSS would render it in its final state
-     until the animation kicks in, and the parcel would look
-     pre-built on page load).
+  /* ---------- Station 3: a built parcel with ambient activity ----
+     The casino + parking lot + gas station are rendered visible at
+     all times — visitors who land on the page mid-stories should
+     immediately see what this station depicts, not wait 4 seconds
+     for it to "build." The cycle adds ambient detail: the marquee
+     and windows tick between lit (gold) and dim (ink-3), cars do
+     a drive-in cycle, dollar signs trickle up. No fade-to-empty
+     phase. */
 
-     Master cycle 7s:
-       Phase 1  CASINO BUILDS (3.80s – 4.95s)
-         3.80s  Foundation slab appears
-         3.95s  Body rises into place
-         4.10s  Marquee snaps on + CASINO lettering glows in
-         4.45s  Windows light up one by one across two rows
-         4.80s  Entrance + awning pop
-       Phase 2  PARKING LOT + CARS (4.95s – 5.85s)
-         4.95s  Asphalt pad + painted stripes paint in
-         5.20s  First car drives in from the left
-         5.40s  Second car follows
-         5.60s  Third car follows
-       Phase 3  GAS STATION (5.85s – 6.85s)
-         5.85s  Concrete pad lays down
-         5.95s  Canopy + posts + GAS sign drop in
-         6.15s  Two fuel pumps pop in
-         6.40s  Car drives in from the right and stops at the pump
-       Tail (6.85s – 7.00s)
-         6.85s  Dollar signs trickle up; cycle resets at 7.00s. */
-
-  /* Shared base for every "chunk-in" piece. backwards fill mode is
-     what makes the parcel start empty. */
-  .hf-imp__src,
+  .hf-imp__src { opacity: 1; }
   .hf-casino__base,
   .hf-casino__body,
-  .hf-casino__marquee,
-  .hf-casino__name,
-  .hf-casino__win,
   .hf-casino__door,
   .hf-build,
-  .hf-grow,
+  .hf-grow {
+    opacity: 1;
+  }
+  .hf-casino__name { opacity: 1; }
+
+  /* Marquee stays gold most of the cycle, ticks briefly to ink-3
+     at the cycle reset so there's a subtle "scene change" beat. */
+  .hf-casino__marquee {
+    fill: var(--gold);
+    animation: hf-marquee-tick 8s ease-in-out infinite;
+  }
+  @keyframes hf-marquee-tick {
+    0%, 88%   { fill: var(--gold); }
+    93%       { fill: var(--ink-3); }
+    97%, 100% { fill: var(--gold); }
+  }
+
+  /* Windows hold lit (gold) most of the cycle, blink between
+     gold and ink-3 in a brief stagger during the reset window
+     (88%–96%) so there's still a hint of the "construction"
+     vocabulary without an empty parcel. */
+  .hf-casino__win {
+    fill: var(--gold);
+    animation: hf-window-tick 8s ease-in-out infinite;
+  }
+  .hf-casino__win--1 { animation-delay: 0s;   }
+  .hf-casino__win--2 { animation-delay: .05s; }
+  .hf-casino__win--3 { animation-delay: .10s; }
+  .hf-casino__win--4 { animation-delay: .15s; }
+  .hf-casino__win--5 { animation-delay: .02s; }
+  .hf-casino__win--6 { animation-delay: .07s; }
+  .hf-casino__win--7 { animation-delay: .12s; }
+  .hf-casino__win--8 { animation-delay: .17s; }
+  @keyframes hf-window-tick {
+    0%, 86%   { fill: var(--gold); }
+    91%       { fill: var(--ink-3); }
+    96%, 100% { fill: var(--gold); }
+  }
+
+  /* Cars do a brief leave-then-return cycle at the tail end so
+     there's vehicular motion without an extended empty period. */
   .hf-car {
     transform-box: fill-box;
     transform-origin: center;
-    animation-duration: 8s;
-    animation-iteration-count: infinite;
-    animation-fill-mode: backwards;
-  }
-
-  /* Casino: the outer .hf-imp__src group is always present (its
-     children animate individually). It carries the cycle-out fade
-     so the whole casino disappears together at the end. */
-  .hf-imp__src {
     opacity: 1;
-    animation-name: hf-cycle-out;
-    animation-timing-function: ease-in-out;
-    animation-delay: 0s;
-  }
-
-  /* Casino sub-chunks. Each piece slides up gently into place so
-     the building reads as constructing in stages without a bouncy
-     pop. */
-  .hf-casino__base,
-  .hf-casino__body,
-  .hf-casino__door {
-    opacity: 0;
-    animation-name: hf-chunk;
-    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
-  }
-  .hf-casino__base { animation-delay: 3.80s; }
-  .hf-casino__body { animation-delay: 4.00s; }
-  .hf-casino__door { animation-delay: 4.80s; }
-
-  /* Marquee fills gold once the body is up. Driven separately so the
-     colour change reads as "lights coming on". */
-  .hf-casino__marquee {
-    opacity: 0;
-    fill: var(--ink-3);
-    animation-name: hf-marquee-light;
-    animation-timing-function: ease-out;
-    animation-delay: 4.10s;
-  }
-  @keyframes hf-marquee-light {
-    0%       { opacity: 0; fill: var(--ink-3); }
-    4%       { opacity: 1; fill: var(--ink-3); }
-    8%, 85%  { opacity: 1; fill: var(--gold);  }
-    92%, 100% { opacity: 0; fill: var(--ink-3); }
-  }
-  .hf-casino__name {
-    opacity: 0;
-    animation-name: hf-fade-hold;
-    animation-timing-function: ease-out;
-    animation-delay: 4.20s;
-  }
-  @keyframes hf-fade-hold {
-    0%, 4%   { opacity: 0; }
-    8%, 85%  { opacity: 1; }
-    92%, 100% { opacity: 0; }
-  }
-
-  /* Windows light up in sequence as the casino opens floor by floor.
-     8 windows, staggered. */
-  .hf-casino__win {
-    opacity: 0;
-    fill: var(--ink-3);
-    animation-name: hf-window-light;
-    animation-timing-function: ease-out;
-  }
-  .hf-casino__win--1 { animation-delay: 4.45s; }
-  .hf-casino__win--2 { animation-delay: 4.55s; }
-  .hf-casino__win--3 { animation-delay: 4.65s; }
-  .hf-casino__win--4 { animation-delay: 4.75s; }
-  .hf-casino__win--5 { animation-delay: 4.50s; }
-  .hf-casino__win--6 { animation-delay: 4.60s; }
-  .hf-casino__win--7 { animation-delay: 4.70s; }
-  .hf-casino__win--8 { animation-delay: 4.80s; }
-  @keyframes hf-window-light {
-    0%       { opacity: 0; fill: var(--ink-3); }
-    5%       { opacity: 1; fill: var(--ink-3); }
-    10%, 85% { opacity: 1; fill: var(--gold);  }
-    92%, 100% { opacity: 0; fill: var(--ink-3); }
   }
 
   /* Drive-through gas station chunks: pad, canopy, pumps. Same
@@ -805,90 +745,54 @@
   .hf-build--gas-canopy { animation-delay: 6.00s; }
   .hf-build--gas-pumps  { animation-delay: 6.20s; }
 
-  /* Slabs (the casino parking lot) fade in together. */
-  .hf-grow {
-    opacity: 0;
-    animation-name: hf-slab;
-    animation-timing-function: ease-out;
-  }
-  .hf-grow--lot { animation-delay: 4.95s; }
-
-  /* Cars use a two-group pattern: the OUTER <g> with
-     transform="translate(x y)" pins each car's final position, the
-     INNER .hf-car carries the slide-in animation. CSS transform on
-     the inner group composes with the outer attribute, so the car
-     can slide in from off-parcel without losing its parking spot.
-
-     Casino-lot cars enter from the LEFT (along the road), driving
-     to the right into their spots. Gas-station car enters from the
-     RIGHT (off-parcel) and pulls left into the canopy. */
-  .hf-car {
-    opacity: 0;
-    animation-timing-function: cubic-bezier(.2, .8, .25, 1);
-  }
+  /* Cars: parked at static (visible from page load), brief leave-
+     and-return cycle near the end so there's motion without an
+     extended empty-lot period. Casino-lot cars exit to the left,
+     gas-station car exits to the right. */
   .hf-car--lot-a,
   .hf-car--lot-b,
-  .hf-car--lot-c { animation-name: hf-car-drive-right; }
-  .hf-car--gas { animation-name: hf-car-drive-left; }
-  .hf-car--lot-a { animation-delay: 5.20s; }
-  .hf-car--lot-b { animation-delay: 5.40s; }
-  .hf-car--lot-c { animation-delay: 5.60s; }
-  .hf-car--gas   { animation-delay: 6.40s; }
-  @keyframes hf-car-drive-right {
-    0%        { opacity: 0; transform: translateX(-30px); }
-    4%        { opacity: 1; }
-    14%, 80%  { opacity: 1; transform: translateX(0); }
-    90%, 100% { opacity: 0; transform: translateX(0); }
+  .hf-car--lot-c { animation: hf-car-cycle-right 8s cubic-bezier(.2, .8, .25, 1) infinite; }
+  .hf-car--gas   { animation: hf-car-cycle-left  8s cubic-bezier(.2, .8, .25, 1) infinite; }
+  .hf-car--lot-a { animation-delay: 0s;    }
+  .hf-car--lot-b { animation-delay: -.15s; }
+  .hf-car--lot-c { animation-delay: -.30s; }
+  @keyframes hf-car-cycle-right {
+    0%, 84%   { opacity: 1; transform: translateX(0); }
+    90%       { opacity: 0; transform: translateX(-22px); }
+    93%       { opacity: 0; transform: translateX(-22px); }
+    98%       { opacity: 1; transform: translateX(0); }
+    100%      { opacity: 1; transform: translateX(0); }
   }
-  @keyframes hf-car-drive-left {
-    0%        { opacity: 0; transform: translateX(28px); }
-    4%        { opacity: 1; }
-    14%, 80%  { opacity: 1; transform: translateX(0); }
-    90%, 100% { opacity: 0; transform: translateX(0); }
-  }
-
-  /* ---- Shared keyframes for the chunky construction ----
-     No overshoot — the ease-out timing function already gives the
-     piece a sense of settling. Scale starts at .7 (a gentle grow
-     rather than a pop from nothing). Final fade-out lingers a hair
-     longer so the cycle reset feels less abrupt. */
-  @keyframes hf-chunk {
-    0%        { opacity: 0; transform: scale(.7); }
-    6%        { opacity: 1; transform: scale(1);  }
-    8%, 90%   { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
-  }
-  @keyframes hf-slab {
-    0%        { opacity: 0; }
-    5%, 90%   { opacity: 1; }
-    97%, 100% { opacity: 0; }
-  }
-  @keyframes hf-cycle-out {
-    0%, 90%   { opacity: 1; }
-    97%, 100% { opacity: 0; }
+  @keyframes hf-car-cycle-left {
+    0%, 84%   { opacity: 1; transform: translateX(0); }
+    90%       { opacity: 0; transform: translateX(22px); }
+    93%       { opacity: 0; transform: translateX(22px); }
+    98%       { opacity: 1; transform: translateX(0); }
+    100%      { opacity: 1; transform: translateX(0); }
   }
 
-  /* Dollar signs trickle up from the new development. The stream
-     accelerates toward the end of the cycle as the parcel densifies. */
+  /* Dollar signs trickle continuously, so the parcel always feels
+     economically active. Each $ runs the same rise loop with a
+     stagger of negative delays so all eight are at different phases
+     of the cycle at any given moment, including page load. */
   .hf-dollar {
     transform-box: fill-box;
     transform-origin: center;
-    opacity: 0;
-    animation: hf-dollar-rise 8s ease-out infinite;
+    animation: hf-dollar-rise 4s ease-out infinite;
   }
-  .hf-dollar--1 { animation-delay: 6.35s; }
-  .hf-dollar--2 { animation-delay: 6.45s; }
-  .hf-dollar--3 { animation-delay: 6.55s; }
-  .hf-dollar--4 { animation-delay: 6.65s; }
-  .hf-dollar--5 { animation-delay: 6.75s; }
-  .hf-dollar--6 { animation-delay: 6.85s; }
-  .hf-dollar--7 { animation-delay: 6.95s; }
-  .hf-dollar--8 { animation-delay: 7.00s; }
+  .hf-dollar--1 { animation-delay:  0s;   }
+  .hf-dollar--2 { animation-delay: -.5s;  }
+  .hf-dollar--3 { animation-delay: -1.0s; }
+  .hf-dollar--4 { animation-delay: -1.5s; }
+  .hf-dollar--5 { animation-delay: -2.0s; }
+  .hf-dollar--6 { animation-delay: -2.5s; }
+  .hf-dollar--7 { animation-delay: -3.0s; }
+  .hf-dollar--8 { animation-delay: -3.5s; }
   @keyframes hf-dollar-rise {
-    0%       { opacity: 0; transform: translateY(0)    scale(.4); }
-    8%       { opacity: 1; transform: translateY(-4px) scale(1);  }
-    40%      { opacity: 1; transform: translateY(-12px) scale(1); }
-    65%, 100% { opacity: 0; transform: translateY(-22px) scale(.7); }
+    0%       { opacity: 0; transform: translateY(0)     scale(.4); }
+    20%      { opacity: 1; transform: translateY(-4px)  scale(1);  }
+    60%      { opacity: 1; transform: translateY(-12px) scale(1);  }
+    100%     { opacity: 0; transform: translateY(-22px) scale(.7); }
   }
 
   /* ---------- Station 4: study packaged, then shipped out ----------
@@ -910,19 +814,22 @@
      translates right, so the cards feel sent / thrown rather than
      sliding on a rail. Chunk A drifts up-right, Chunk B nearly
      straight right with a wobble, Chunk C down-right. */
+  /* Main slide is visible at page load. It briefly fades during
+     the chunk fly-off and comes back so the cycle has a moment of
+     "the slide becomes the audience copies" without the slide
+     being absent for any meaningful period. */
   .hf-report__main {
     transform-box: fill-box;
     transform-origin: center;
-    opacity: 0;
+    opacity: 1;
     animation: hf-report-main 8s cubic-bezier(.22, 1, .36, 1) infinite;
-    animation-fill-mode: backwards;
   }
   @keyframes hf-report-main {
-    0%, 74%   { opacity: 0; transform: scale(.78); }
-    78%       { opacity: 1; transform: scale(1); }
-    84%       { opacity: 1; transform: scale(1); }
-    87%       { opacity: .45; transform: scale(.96); }
-    89%, 100% { opacity: 0; transform: scale(.92); }
+    0%, 84%   { opacity: 1; transform: scale(1); }
+    87%       { opacity: .35; transform: scale(.96); }
+    90%, 94%  { opacity: 0; transform: scale(.92); }
+    97%       { opacity: 1; transform: scale(1); }
+    100%      { opacity: 1; transform: scale(1); }
   }
 
   /* Chunks. Shared base — each chunk has its own keyframe with a
