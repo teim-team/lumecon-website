@@ -367,43 +367,55 @@
     <g class="hf-station hf-station--report" transform="translate(880 80)">
       <circle class="hf-station__halo" r="48" fill="var(--accent)" opacity="0"/>
 
-      <!-- Main slide / report. Builds in chunks (frame → title → map
-           → chart) so it reads as "the study being assembled," then
-           three smaller copies cascade out to the right as
-           dissemination cues. -->
-      <g class="hf-report">
-        <g class="hf-report__frame">
-          <rect x="-32" y="-22" width="46" height="34" rx="1.4" fill="var(--white)" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter"/>
-          <rect x="-32" y="-22" width="46" height="5" fill="var(--accent)" opacity=".28"/>
-        </g>
-        <g class="hf-report__title">
-          <rect x="-28" y="-20" width="14" height="1.6" rx=".2" fill="var(--navy)"/>
-          <rect x="-28" y="-17.6" width="22" height="1" rx=".2" fill="var(--ink-3)" opacity=".55"/>
-        </g>
-        <!-- Mini geography (left half of slide) — echoes Station 3. -->
-        <g class="hf-report__map">
-          <path d="M-28 -13 L-21 -14.5 L-15 -13.5 L-12 -10 L-13 -3 L-17 -1 L-22 -2 L-28 -5 Z"
-                fill="var(--paper)" stroke="var(--navy)" stroke-width=".55" stroke-linejoin="miter"/>
-          <rect x="-25" y="-9.5" width="2.5" height="2.2" fill="var(--gold)"/>
-          <line x1="-26" y1="-7" x2="-14" y2="-6.5" stroke="var(--ink-3)" stroke-width=".3" stroke-dasharray="1 1"/>
-        </g>
-        <!-- Mini bar chart (right half of slide) — echoes Cedar's bars. -->
-        <g class="hf-report__chart">
-          <line x1="-8" y1="8" x2="11" y2="8" stroke="var(--navy)" stroke-width=".4" stroke-opacity=".5"/>
-          <rect class="hf-report__bar hf-report__bar--a" x="-7" y="3"   width="3" height="5"  fill="var(--accent)"/>
-          <rect class="hf-report__bar hf-report__bar--b" x="-2.5" y="0"   width="3" height="8"  fill="var(--accent)"/>
-          <rect class="hf-report__bar hf-report__bar--c" x="2"   y="-3"  width="3" height="11" fill="var(--accent)"/>
-          <rect class="hf-report__bar hf-report__bar--d" x="6.5" y="-1"  width="3" height="9"  fill="var(--accent)"/>
-        </g>
+      <!-- The complete report sits on the LEFT of this station with
+           the same row structure (gold / teal / cedar / gold / teal
+           / cedar) as Station 1's harmonized output, so the eye
+           reads the report as the same dataset packaged. -->
+      <g class="hf-report__center">
+        <rect x="-32" y="-26" width="30" height="52" rx="2" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5" stroke-linejoin="miter"/>
+        <rect x="-32" y="-26" width="30" height="6" fill="var(--accent)" opacity=".22" stroke="none"/>
+        <line x1="-22" y1="-20" x2="-22" y2="26" stroke="var(--navy)" stroke-width=".7" stroke-opacity=".35"/>
+        <line x1="-12" y1="-20" x2="-12" y2="26" stroke="var(--navy)" stroke-width=".7" stroke-opacity=".35"/>
+        <rect class="hf-report__row hf-report__row--1" x="-29" y="-17" width="24" height="2.5" rx=".4" fill="var(--gold)"/>
+        <rect class="hf-report__row hf-report__row--2" x="-29" y="-12" width="24" height="2.5" rx=".4" fill="var(--accent)"/>
+        <rect class="hf-report__row hf-report__row--3" x="-29" y="-7"  width="24" height="2.5" rx=".4" fill="var(--cedar)"/>
+        <rect class="hf-report__row hf-report__row--4" x="-29" y="-2"  width="24" height="2.5" rx=".4" fill="var(--gold)"/>
+        <rect class="hf-report__row hf-report__row--5" x="-29" y="3"   width="24" height="2.5" rx=".4" fill="var(--accent)"/>
+        <rect class="hf-report__row hf-report__row--6" x="-29" y="8"   width="24" height="2.5" rx=".4" fill="var(--cedar)"/>
       </g>
 
-      <!-- Dissemination cascade: three smaller "copies" of the slide
-           that animate outward, reading as the report being shared
-           with multiple audiences. -->
-      <g class="hf-report__send">
-        <rect class="hf-report__send-card hf-report__send-card--a" x="18" y="-14" width="14" height="10" rx=".8" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
-        <rect class="hf-report__send-card hf-report__send-card--b" x="22" y="-3"  width="14" height="10" rx=".8" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
-        <rect class="hf-report__send-card hf-report__send-card--c" x="18" y="8"   width="14" height="10" rx=".8" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
+      <!-- Three audience copies extract OUTWARD to the right. Each
+           paper mirrors one of Station 1's three messy input papers
+           in size, tilt, and color, but reversed: where Station 1
+           had three colored sheets converging from the LEFT into
+           one harmonized output, here ONE harmonized report
+           diverges into three colored sheets fanning to the RIGHT.
+           Same visual vocabulary, opposite direction. -->
+      <g transform="rotate(6 22 -20)">
+        <g class="hf-out-paper hf-out-paper--a">
+          <rect x="14" y="-26" width="20" height="11" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <line x1="17" y1="-22.5" x2="31" y2="-22.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="17" y1="-20"   x2="27" y2="-20"   stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="17" y1="-17.5" x2="29" y2="-17.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+      </g>
+      <g transform="rotate(-4 24 0)">
+        <g class="hf-out-paper hf-out-paper--b">
+          <rect x="14" y="-9" width="14" height="14" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <line x1="17" y1="-5" x2="26" y2="-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="17" y1="-2" x2="23" y2="-2" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="17" y1="1"  x2="25" y2="1"  stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+      </g>
+      <g transform="rotate(3 25 18)">
+        <g class="hf-out-paper hf-out-paper--c">
+          <rect x="12" y="9" width="12" height="18" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <line x1="15" y1="12" x2="22" y2="12" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="15" x2="20" y2="15" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="18" x2="22" y2="18" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="21" x2="18" y2="21" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="24" x2="22" y2="24" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
       </g>
     </g>
   </svg>
@@ -885,80 +897,75 @@
     65%, 100% { opacity: 0; transform: translateY(-22px) scale(.7); }
   }
 
-  /* ---------- Station 4: study packaged + shared ----------
-     Builds in chunks at the tail of the 8s master cycle, so the
-     report assembles after Station 3's parcel is fully built. Mirrors
-     the chunky construction language of Station 3, but at this scale
-     the "chunks" are the parts of a deliverable (slide frame → title
-     → mini map → bar chart → dissemination cascade).
+  /* ---------- Station 4: study packaged + sent ----------
+     Reads as the symmetric inverse of Station 1. Same visual
+     vocabulary (multi-colored rows in a frame for the harmonized
+     report; three small gold / teal / cedar sheets at varying
+     tilts and sizes for the output copies), reversed direction:
+     where Station 1 converges three messy inputs into one
+     harmonized output, Station 4 diverges one complete report
+     into three audience-specific copies.
 
      Timing inside the 8s cycle:
-       6.05s  Slide frame appears
-       6.25s  Title bar fills in
-       6.45s  Mini geography appears
-       6.55s  Bar chart bars grow (4 bars, staggered)
-       6.95s  Dissemination cards cascade out (3 cards, staggered) */
-  .hf-report__frame,
-  .hf-report__title,
-  .hf-report__map {
+       6.05s  Report frame appears
+       6.18s  Six colored rows fade in left-to-right (one per .07s)
+       6.5s–7.0s  Complete report holds (visitor sees the deliverable)
+       7.05s  First output paper extracts out to the right
+       7.18s  Second paper
+       7.31s  Third paper */
+  .hf-report__center {
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation-duration: 8s;
-    animation-iteration-count: infinite;
+    animation: hf-report-center 8s ease-in-out infinite;
     animation-fill-mode: backwards;
-    animation-name: hf-chunk;
-    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
-  .hf-report__frame { animation-delay: 6.05s; }
-  .hf-report__title { animation-delay: 6.25s; }
-  .hf-report__map   { animation-delay: 6.45s; }
-
-  /* Report bars grow from baseline. */
-  .hf-report__bar {
+  @keyframes hf-report-center {
+    0%, 74%   { opacity: 0; transform: scale(.85); }
+    78%, 87%  { opacity: 1; transform: scale(1); }
+    96%, 100% { opacity: 0; transform: scale(.92); }
+  }
+  .hf-report__row {
     transform-box: fill-box;
-    transform-origin: center bottom;
+    transform-origin: left center;
     opacity: 0;
-    animation: hf-report-bar 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-report-row 8s ease-in-out infinite;
     animation-fill-mode: backwards;
   }
-  .hf-report__bar--a { animation-delay: 6.55s; }
-  .hf-report__bar--b { animation-delay: 6.62s; }
-  .hf-report__bar--c { animation-delay: 6.70s; }
-  .hf-report__bar--d { animation-delay: 6.78s; }
-  @keyframes hf-report-bar {
-    0%       { opacity: 0; transform: scaleY(.15); }
-    6%       { opacity: 1; transform: scaleY(1);   }
-    14%, 88% { opacity: 1; transform: scaleY(1);   }
-    96%, 100% { opacity: 0; transform: scaleY(.15); }
+  .hf-report__row--1 { animation-delay: 6.18s; }
+  .hf-report__row--2 { animation-delay: 6.25s; }
+  .hf-report__row--3 { animation-delay: 6.32s; }
+  .hf-report__row--4 { animation-delay: 6.39s; }
+  .hf-report__row--5 { animation-delay: 6.46s; }
+  .hf-report__row--6 { animation-delay: 6.53s; }
+  @keyframes hf-report-row {
+    0%       { opacity: 0; transform: scaleX(0); }
+    4%       { opacity: 1; transform: scaleX(1); }
+    16%, 84% { opacity: 1; transform: scaleX(1); }
+    92%, 100% { opacity: 0; transform: scaleX(0); }
   }
 
-  /* Dissemination: the complete report breaks apart into the
-     deliverables that get sent out. Reads as the symmetric inverse
-     of Station 1 (where many messy inputs converged into ONE
-     harmonized output, here ONE complete report fragments into
-     MANY audience-specific copies). Timing: report builds 6.05s–
-     6.78s, holds briefly so the visitor sees a complete deliverable,
-     then 7.2s onward the cards extract outward from the slide
-     center to their final positions on the right. Their starting
-     CSS translateX(-30px) puts them visually overlapping the slide
-     so the "fragmenting out" motion reads clearly. */
-  .hf-report__send-card {
+  /* Three output papers extract outward to the right. Each paper
+     uses the same keyframe (single mirror of Station 1's
+     hf-in-merge) — translates from the report center out to its
+     final position, brief stagger so the trio reads as a fan-out
+     rather than a snap. */
+  .hf-out-paper {
     transform-box: fill-box;
-    transform-origin: center;
+    transform-origin: 0 50%;
     opacity: 0;
-    animation: hf-report-extract 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-out-paper-extract 8s cubic-bezier(.22, 1, .36, 1) infinite;
     animation-fill-mode: backwards;
   }
-  .hf-report__send-card--a { animation-delay: 7.20s; }
-  .hf-report__send-card--b { animation-delay: 7.30s; }
-  .hf-report__send-card--c { animation-delay: 7.40s; }
-  @keyframes hf-report-extract {
-    0%        { opacity: 0; transform: translate(-30px, 0) scale(.5); }
-    4%        { opacity: 1; transform: translate(-30px, 0) scale(.6); }
-    10%       { opacity: 1; transform: translate(0, 0)     scale(1);  }
-    16%, 84%  { opacity: 1; transform: translate(0, 0)     scale(1);  }
-    92%, 100% { opacity: 0; transform: translate(0, 0)     scale(1);  }
+  .hf-out-paper--a { animation-delay: 7.05s; }
+  .hf-out-paper--b { animation-delay: 7.18s; }
+  .hf-out-paper--c { animation-delay: 7.31s; }
+  @keyframes hf-out-paper-extract {
+    0%        { opacity: 0; transform: translate(-22px, 0) scale(.55); }
+    4%        { opacity: 1; transform: translate(-16px, 0) scale(.7);  }
+    10%       { opacity: 1; transform: translate(0, 0)     scale(1);   }
+    72%       { opacity: 1; transform: translate(0, 0)     scale(1);   }
+    82%, 100% { opacity: 0; transform: translate(8px, 0)   scale(.85); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -969,8 +976,7 @@
     .hf-imp__src, .hf-casino__base, .hf-casino__body, .hf-casino__door,
     .hf-casino__marquee, .hf-casino__name, .hf-casino__win,
     .hf-build, .hf-grow, .hf-car, .hf-dollar,
-    .hf-report__frame, .hf-report__title, .hf-report__map,
-    .hf-report__bar, .hf-report__send-card,
+    .hf-report__center, .hf-report__row, .hf-out-paper,
     .hero-flow__label { animation: none; }
     .hf-tick { opacity: 0; }
     .hf-in    { opacity: 1; transform: none; }
@@ -984,8 +990,7 @@
     .hf-casino__name    { opacity: 1; }
     .hf-casino__win { opacity: 1; fill: var(--gold); }
     .hf-dollar { opacity: 0; }
-    .hf-report__frame, .hf-report__title, .hf-report__map,
-    .hf-report__bar, .hf-report__send-card { opacity: 1; transform: none; }
+    .hf-report__center, .hf-report__row, .hf-out-paper { opacity: 1; transform: none; }
     .hero-flow__label { color: var(--ink-3); }
   }
 
