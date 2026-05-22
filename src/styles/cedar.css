@@ -45,14 +45,28 @@
   margin: 0;
   max-width: 22ch;
 }
+/* Lead-in sentence: bolder + slightly larger so the eye reads it
+   first and immediately knows "Cedar" is the AI being described. */
+.cedar-about__intro {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -.008em;
+  color: var(--navy);
+  margin: 0;
+  max-width: 56ch;
+}
 .cedar-about__body {
-  font-size: 1.06rem;
+  font-size: 1.02rem;
   line-height: 1.55;
   color: var(--ink-2);
   margin: 0;
   max-width: 56ch;
   font-weight: 400;
 }
+.cedar-about__body + .cedar-about__body { margin-top: .9rem; }
+.cedar-about__intro + .cedar-about__body { margin-top: 1rem; }
 .cedar-steps {
   list-style: none;
   padding: 0;

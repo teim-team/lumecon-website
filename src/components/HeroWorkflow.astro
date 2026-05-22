@@ -3,142 +3,162 @@
  * Hero workflow — one continuous flowing SVG showing what a Lumecon
  * study looks like, end to end:
  *
- *   sources ──▶ Cedar ──▶ impact map
+ *   harmonize your economic data  ──▶  Cedar runs the economic
+ *   impact analysis  ──▶  See your economic impact
  *
- * Three stations along a single horizontal flow rail. Data ticks
- * travel along the rail continuously, fading in on the left, getting
- * absorbed by Cedar in the middle, and falling out as a lit-up
- * region on the right. Each station pulses subtly as the data
- * arrives. All line-art (stroke-only) to match the rest of the
- * site's icon system; teal flow line ties into the UI accent.
+ * Three stations along a single horizontal flow rail. Each station
+ * has its own self-contained transformation animation that loops on
+ * a 6s cycle, synchronized to traveling ticks along the rail and a
+ * label glow beneath each station.
  *
- * Respects prefers-reduced-motion. CSS-only — no JS.
+ * Station 1: three differently-coloured input spreadsheets shrink
+ * and slide into a single harmonized output with rows of mixed
+ * colours.
+ * Station 2: monitor with the cedar tree on the LEFT and a small
+ * computation panel on the RIGHT — sliding bars and ticking text
+ * suggest active processing.
+ * Station 3: a business marker (the source) sits next to two
+ * houses (neighbours) separated by a diagonal scribble line; waves
+ * radiate from the business and wash over the houses.
+ *
+ * All line-art, all CSS animations, respects prefers-reduced-motion.
  */
 ---
 <figure class="hero-flow" aria-label="How a Lumecon study runs">
   <svg
     class="hero-flow__svg"
-    viewBox="0 0 720 120"
+    viewBox="0 0 720 130"
     preserveAspectRatio="xMidYMid meet"
     role="img"
     aria-hidden="true"
   >
-    <!-- Continuous flow rail. Dashed so the eye reads movement
-         even when the traveling dots aren't visible. -->
-    <line class="hf-rail" x1="60" y1="60" x2="660" y2="60"
+    <line class="hf-rail" x1="60" y1="65" x2="660" y2="65"
           stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"
           stroke-dasharray="3 6" />
 
-    <!-- Three traveling dots staggered around the loop so there's
-         always a tick in flight somewhere along the rail. -->
-    <circle class="hf-tick hf-tick--a" cx="60" cy="60" r="3" fill="var(--accent)"/>
-    <circle class="hf-tick hf-tick--b" cx="60" cy="60" r="3" fill="var(--accent)"/>
-    <circle class="hf-tick hf-tick--c" cx="60" cy="60" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--a" cx="60" cy="65" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--b" cx="60" cy="65" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--c" cx="60" cy="65" r="3" fill="var(--accent)"/>
 
-    <!-- ===== Station 1: sources merge into one harmonized sheet ===== -->
-    <g class="hf-station hf-station--src" transform="translate(60 60)">
-      <circle class="hf-station__halo" r="38" fill="var(--accent)" opacity="0"/>
-      <!-- Three messy inputs on the left (different widths so they
-           read as different datasets) feed into the harmonized
-           spreadsheet on the right. -->
-      <g class="hf-src" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter">
-        <rect class="hf-src__in hf-src__in--a" x="-30" y="-22" width="14" height="11" rx="1.5" fill="var(--white)"/>
-        <line x1="-27" y1="-19" x2="-19" y2="-19" stroke-width=".7" stroke-opacity=".55"/>
-        <line x1="-27" y1="-16" x2="-21" y2="-16" stroke-width=".7" stroke-opacity=".55"/>
-        <rect class="hf-src__in hf-src__in--b" x="-30" y="-6" width="14" height="11" rx="1.5" fill="var(--white)"/>
-        <line x1="-27" y1="-3" x2="-18" y2="-3" stroke-width=".7" stroke-opacity=".55"/>
-        <line x1="-27" y1="0"  x2="-20" y2="0"  stroke-width=".7" stroke-opacity=".55"/>
-        <rect class="hf-src__in hf-src__in--c" x="-30" y="10" width="14" height="11" rx="1.5" fill="var(--white)"/>
-        <line x1="-27" y1="13" x2="-19" y2="13" stroke-width=".7" stroke-opacity=".55"/>
-        <line x1="-27" y1="16" x2="-22" y2="16" stroke-width=".7" stroke-opacity=".55"/>
+    <!-- ===== Station 1: three sheets merge + transform into one ===== -->
+    <g class="hf-station hf-station--src" transform="translate(60 65)">
+      <circle class="hf-station__halo" r="42" fill="var(--accent)" opacity="0"/>
+
+      <g class="hf-in hf-in--a">
+        <rect x="-32" y="-26" width="16" height="14" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+        <line x1="-29" y1="-22" x2="-19" y2="-22" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="-29" y1="-19" x2="-23" y2="-19" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="-29" y1="-16" x2="-19" y2="-16" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round"/>
       </g>
-      <!-- Converging connectors -->
-      <g class="hf-src__rails" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" fill="none">
-        <path class="hf-src__rail hf-src__rail--a" d="M-16 -16 Q-8 -6 -2 0" stroke-dasharray="22" stroke-dashoffset="22"/>
-        <path class="hf-src__rail hf-src__rail--b" d="M-16 0 L-2 0" stroke-dasharray="14" stroke-dashoffset="14"/>
-        <path class="hf-src__rail hf-src__rail--c" d="M-16 16 Q-8 6 -2 0" stroke-dasharray="22" stroke-dashoffset="22"/>
+      <g class="hf-in hf-in--b">
+        <rect x="-32" y="-7" width="16" height="14" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+        <line x1="-29" y1="-3" x2="-17" y2="-3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="-29" y1="0"  x2="-21" y2="0"  stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="-29" y1="3"  x2="-17" y2="3"  stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/>
       </g>
-      <!-- Harmonized output spreadsheet on the right -->
-      <g class="hf-src__out" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter" fill="var(--white)">
-        <rect x="0" y="-20" width="28" height="40" rx="1.5"/>
-        <!-- Header band -->
-        <rect x="0" y="-20" width="28" height="6" fill="var(--accent)" opacity=".18" stroke="none"/>
-        <!-- Column dividers -->
-        <line x1="9" y1="-14" x2="9" y2="20" stroke-width=".8" stroke-opacity=".4"/>
-        <line x1="19" y1="-14" x2="19" y2="20" stroke-width=".8" stroke-opacity=".4"/>
-        <!-- Row dividers -->
-        <line x1="0" y1="-7" x2="28" y2="-7" stroke-width=".8" stroke-opacity=".4"/>
-        <line x1="0" y1="0" x2="28" y2="0" stroke-width=".8" stroke-opacity=".4"/>
-        <line x1="0" y1="7" x2="28" y2="7" stroke-width=".8" stroke-opacity=".4"/>
-        <line x1="0" y1="14" x2="28" y2="14" stroke-width=".8" stroke-opacity=".4"/>
-        <!-- Cell-fill ticks that drop in as data arrives -->
-        <rect class="hf-src__cell hf-src__cell--a" x="2.5" y="-5" width="4" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
-        <rect class="hf-src__cell hf-src__cell--b" x="12.5" y="-5" width="4" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
-        <rect class="hf-src__cell hf-src__cell--c" x="22.5" y="2" width="4" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
-        <rect class="hf-src__cell hf-src__cell--d" x="2.5" y="9" width="4" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
-        <rect class="hf-src__cell hf-src__cell--e" x="12.5" y="9" width="4" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
+      <g class="hf-in hf-in--c">
+        <rect x="-32" y="12" width="16" height="14" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+        <line x1="-29" y1="16" x2="-19" y2="16" stroke="var(--cedar)" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="-29" y1="19" x2="-25" y2="19" stroke="var(--cedar)" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="-29" y1="22" x2="-19" y2="22" stroke="var(--cedar)" stroke-width="1.4" stroke-linecap="round"/>
+      </g>
+
+      <g class="hf-out">
+        <rect x="-4" y="-26" width="36" height="52" rx="2" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5" stroke-linejoin="miter"/>
+        <rect x="-4" y="-26" width="36" height="6" fill="var(--accent)" opacity=".22" stroke="none"/>
+        <line x1="8"  y1="-20" x2="8"  y2="26" stroke="var(--navy)" stroke-width=".7" stroke-opacity=".35"/>
+        <line x1="20" y1="-20" x2="20" y2="26" stroke="var(--navy)" stroke-width=".7" stroke-opacity=".35"/>
+        <rect class="hf-out__row hf-out__row--1" x="-1" y="-17" width="34" height="2.5" rx=".4" fill="var(--gold)" opacity="0"/>
+        <rect class="hf-out__row hf-out__row--2" x="-1" y="-12" width="34" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
+        <rect class="hf-out__row hf-out__row--3" x="-1" y="-7"  width="34" height="2.5" rx=".4" fill="var(--cedar)" opacity="0"/>
+        <rect class="hf-out__row hf-out__row--4" x="-1" y="-2"  width="34" height="2.5" rx=".4" fill="var(--gold)" opacity="0"/>
+        <rect class="hf-out__row hf-out__row--5" x="-1" y="3"   width="34" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
+        <rect class="hf-out__row hf-out__row--6" x="-1" y="8"   width="34" height="2.5" rx=".4" fill="var(--cedar)" opacity="0"/>
       </g>
     </g>
 
-    <!-- ===== Station 2: Cedar inside an AI workstation ===== -->
-    <g class="hf-station hf-station--cedar" transform="translate(360 60)">
-      <circle class="hf-station__halo" r="44" fill="var(--cedar)" opacity="0"/>
-      <!-- Monitor outline so it clearly reads as "software" rather
-           than a freestanding tree. Cedar tree sits on the screen
-           with analysis-line ticks beneath it. -->
+    <!-- ===== Station 2: Cedar processes inside a monitor ===== -->
+    <g class="hf-station hf-station--cedar" transform="translate(360 65)">
+      <circle class="hf-station__halo" r="48" fill="var(--cedar)" opacity="0"/>
+
       <g class="hf-cedar" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter" fill="none">
-        <rect x="-30" y="-28" width="60" height="40" rx="2" fill="var(--white)"/>
-        <!-- Monitor stand -->
-        <line x1="0" y1="12" x2="0" y2="18" stroke-width="2" stroke-linecap="butt"/>
-        <line x1="-10" y1="18" x2="10" y2="18" stroke-width="2" stroke-linecap="round"/>
-        <!-- Title bar -->
-        <line x1="-30" y1="-22" x2="30" y2="-22" stroke-width="1"/>
-        <circle cx="-26" cy="-25" r="1" fill="var(--navy)" stroke="none"/>
-        <circle cx="-22" cy="-25" r="1" fill="var(--navy)" stroke="none"/>
-        <circle cx="-18" cy="-25" r="1" fill="var(--navy)" stroke="none"/>
+        <rect x="-38" y="-30" width="76" height="46" rx="2" fill="var(--white)"/>
+        <line x1="0" y1="16" x2="0" y2="22" stroke-width="2" stroke-linecap="butt"/>
+        <line x1="-12" y1="22" x2="12" y2="22" stroke-width="2" stroke-linecap="round"/>
+        <line x1="-38" y1="-23" x2="38" y2="-23" stroke-width="1"/>
+        <circle cx="-33" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"/>
+        <circle cx="-29" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"/>
+        <circle cx="-25" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"/>
       </g>
-      <!-- Cedar tree on the screen -->
-      <g class="hf-cedar__tree" stroke="var(--cedar)" stroke-width="1.4" stroke-linejoin="miter" fill="var(--cedar)" fill-opacity=".9">
-        <path d="M-12 -16 L-16 -10 L-14 -10 L-17 -5 L-15 -5 L-19 0 L-5 0 L-9 -5 L-7 -5 L-10 -10 L-8 -10 Z"
-              transform="scale(.85) translate(15 0)"/>
-        <rect x="-1.3" y="-1" width="2.6" height="3" fill="var(--cedar)" stroke="none"/>
+
+      <!-- Cedar tree on the LEFT side of the monitor. -->
+      <g class="hf-cedar__tree" fill="var(--cedar)" stroke="var(--cedar)" stroke-width="1.4" stroke-linejoin="miter">
+        <path d="M-22 -16 L-26 -10 L-24 -10 L-27 -5 L-25 -5 L-29 0 L-15 0 L-19 -5 L-17 -5 L-20 -10 L-18 -10 Z"/>
+        <rect x="-23" y="0" width="2" height="3" stroke="none"/>
       </g>
-      <!-- Analysis output lines on the screen, ticking in as Cedar
-           "thinks". -->
-      <g class="hf-cedar__lines" stroke="var(--cedar)" stroke-width="1.2" stroke-linecap="round">
-        <line class="hf-cedar__line hf-cedar__line--a" x1="6"  y1="-12" x2="6"  y2="-12"/>
-        <line class="hf-cedar__line hf-cedar__line--b" x1="6"  y1="-7"  x2="6"  y2="-7"/>
-        <line class="hf-cedar__line hf-cedar__line--c" x1="6"  y1="-2"  x2="6"  y2="-2"/>
-        <line class="hf-cedar__line hf-cedar__line--d" x1="6"  y1="3"   x2="6"  y2="3"/>
+
+      <!-- Computation panel on the RIGHT. -->
+      <g class="hf-compute" stroke="none">
+        <line x1="-8" y1="2" x2="32" y2="2" stroke="var(--navy)" stroke-width=".8" stroke-opacity=".4"/>
+        <rect class="hf-bar hf-bar--a" x="-6"  y="-2" width="5" height="4"  rx=".4" fill="var(--accent)"/>
+        <rect class="hf-bar hf-bar--b" x="2"   y="-6" width="5" height="8"  rx=".4" fill="var(--accent)"/>
+        <rect class="hf-bar hf-bar--c" x="10"  y="-4" width="5" height="6"  rx=".4" fill="var(--accent)"/>
+        <rect class="hf-bar hf-bar--d" x="18"  y="-9" width="5" height="11" rx=".4" fill="var(--accent)"/>
+        <rect class="hf-bar hf-bar--e" x="26"  y="-7" width="5" height="9"  rx=".4" fill="var(--accent)"/>
+        <g stroke="var(--cedar)" stroke-width="1.2" stroke-linecap="round">
+          <line class="hf-line hf-line--a" x1="-6" y1="7"  x2="-6" y2="7"/>
+          <line class="hf-line hf-line--b" x1="-6" y1="11" x2="-6" y2="11"/>
+          <line class="hf-line hf-line--c" x1="-6" y1="15" x2="-6" y2="15"/>
+        </g>
       </g>
     </g>
 
-    <!-- ===== Station 3: impact ripples out from the source ===== -->
-    <g class="hf-station hf-station--map" transform="translate(660 60)">
-      <circle class="hf-station__halo" r="40" fill="var(--gold)" opacity="0"/>
-      <!-- Country fragment as a faint backdrop. -->
-      <path class="hf-map__land"
-            d="M-32 -16 L-22 -22 L-10 -20 L4 -22 L18 -20 L28 -16 L30 -8 L28 4 L22 12 L8 14 L-6 14 L-18 12 L-28 8 L-32 -2 Z"
-            fill="var(--paper)" stroke="var(--navy)" stroke-width="1.3" stroke-opacity=".25" stroke-linejoin="miter"/>
-      <!-- Concentric ripples emanating from the source. -->
-      <g class="hf-map__rings" stroke="var(--accent)" fill="none" stroke-width="1.4">
-        <circle class="hf-map__ring hf-map__ring--3" cx="0" cy="-2" r="6"/>
-        <circle class="hf-map__ring hf-map__ring--2" cx="0" cy="-2" r="6"/>
-        <circle class="hf-map__ring hf-map__ring--1" cx="0" cy="-2" r="6"/>
+    <!-- ===== Station 3: business + houses with waves between ===== -->
+    <g class="hf-station hf-station--map" transform="translate(660 65)">
+      <circle class="hf-station__halo" r="44" fill="var(--gold)" opacity="0"/>
+
+      <line class="hf-imp__divider" x1="-2" y1="22" x2="14" y2="-28"
+            stroke="var(--navy)" stroke-width=".8" stroke-opacity=".18"
+            stroke-dasharray="2 4" stroke-linecap="round"/>
+
+      <!-- Source: a small business / office building on the left. -->
+      <g class="hf-imp__src">
+        <path d="M-28 -12 L-16 -18 L-4 -12 Z" fill="var(--navy)" stroke="var(--navy)" stroke-width="1.2" stroke-linejoin="miter"/>
+        <rect x="-26" y="-12" width="20" height="20" fill="var(--white)" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter"/>
+        <rect x="-23" y="-8" width="3" height="3" fill="var(--gold)" stroke="none"/>
+        <rect x="-18" y="-8" width="3" height="3" fill="var(--gold)" stroke="none"/>
+        <rect x="-13" y="-8" width="3" height="3" fill="var(--gold)" stroke="none"/>
+        <rect x="-23" y="-3" width="3" height="3" fill="var(--gold)" stroke="none"/>
+        <rect x="-18" y="-3" width="3" height="3" fill="var(--gold)" stroke="none"/>
+        <rect x="-13" y="-3" width="3" height="3" fill="var(--gold)" stroke="none"/>
+        <rect x="-19" y="2" width="6" height="6" fill="var(--navy)" stroke="none"/>
       </g>
-      <!-- Source entity glyph (a small building/org marker). -->
-      <g class="hf-map__src">
-        <circle cx="0" cy="-2" r="4" fill="var(--gold)" stroke="var(--navy)" stroke-width="1.2"/>
-        <rect x="-1.5" y="-3.5" width="3" height="3" fill="var(--navy)" stroke="none"/>
+
+      <!-- Three waves radiating from the business to the houses. -->
+      <g class="hf-imp__waves" fill="none" stroke="var(--accent)" stroke-width="1.4">
+        <circle class="hf-wave hf-wave--1" cx="-16" cy="-2" r="8"/>
+        <circle class="hf-wave hf-wave--2" cx="-16" cy="-2" r="8"/>
+        <circle class="hf-wave hf-wave--3" cx="-16" cy="-2" r="8"/>
+      </g>
+
+      <!-- Two houses to the right being washed by the waves. -->
+      <g class="hf-imp__hh">
+        <g class="hf-house hf-house--a">
+          <path d="M10 -4 L16 -10 L22 -4 L22 4 L10 4 Z" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <rect x="14" y="-1" width="4" height="5" fill="var(--navy)" stroke="none"/>
+        </g>
+        <g class="hf-house hf-house--b">
+          <path d="M22 8 L28 2 L34 8 L34 16 L22 16 Z" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <rect x="26" y="11" width="4" height="5" fill="var(--navy)" stroke="none"/>
+        </g>
       </g>
     </g>
   </svg>
 
-  <!-- Labels below the SVG, aligned to each station's x position. -->
   <ol class="hero-flow__labels" aria-label="Study stages">
-    <li class="hero-flow__label">Harmonize your data</li>
-    <li class="hero-flow__label">Cedar runs the analysis</li>
-    <li class="hero-flow__label">See your impact</li>
+    <li class="hero-flow__label">Harmonize your economic data</li>
+    <li class="hero-flow__label">Cedar runs the economic impact analysis</li>
+    <li class="hero-flow__label">See your economic impact</li>
   </ol>
 </figure>
 
@@ -155,11 +175,6 @@
     display: block;
   }
 
-  /* Labels are an editorial row beneath the SVG. They mirror the
-     SVG's three station positions (12% / 50% / 88%) so they line up
-     under the icons even as the figure scales. Each label glows in
-     sync with its station's data-arrival pulse so the eye links
-     copy to motion. */
   .hero-flow__labels {
     list-style: none;
     padding: 0;
@@ -170,19 +185,18 @@
   }
   .hero-flow__label {
     font-family: var(--font-mono);
-    font-size: .68rem;
+    font-size: .66rem;
     letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--ink-3);
     text-align: center;
     line-height: 1.3;
-    animation: hf-label-glow 4.8s ease-in-out infinite;
+    animation: hf-label-glow 6s ease-in-out infinite;
     text-shadow: 0 0 0 transparent;
-    transition: color .3s var(--ease);
   }
   .hero-flow__label:nth-child(1) { animation-delay: 0s; }
-  .hero-flow__label:nth-child(2) { animation-delay: 1.6s; --label-accent: var(--cedar); }
-  .hero-flow__label:nth-child(3) { animation-delay: 3.2s; --label-accent: var(--gold); }
+  .hero-flow__label:nth-child(2) { animation-delay: 2s; --label-accent: var(--cedar); }
+  .hero-flow__label:nth-child(3) { animation-delay: 4s; --label-accent: var(--gold); }
   @keyframes hf-label-glow {
     0%, 25%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
     5%        { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
@@ -190,161 +204,184 @@
     100%      { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
   }
 
-  /* ---------- Continuous flow: traveling ticks along the rail ----------
-     Each tick scrolls left-to-right across the whole 600-unit rail,
-     staggered so a dot is always in flight. Opacity dips at the
-     extremes so the tick "enters" and "exits" gracefully. */
+  /* ---------- Traveling ticks ---------- */
   @keyframes hf-tick-run {
-    0%   { transform: translateX(0);      opacity: 0; r: 2.4; }
+    0%   { transform: translateX(0);     opacity: 0; r: 2.4; }
     8%   { opacity: 1; }
-    50%  {                                 r: 3.4; }
+    50%  {                                r: 3.4; }
     92%  { opacity: 1; }
-    100% { transform: translateX(600px);  opacity: 0; r: 2.4; }
+    100% { transform: translateX(600px); opacity: 0; r: 2.4; }
   }
   .hf-tick {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-tick-run 4.8s linear infinite;
+    animation: hf-tick-run 6s linear infinite;
   }
   .hf-tick--a { animation-delay: 0s; }
-  .hf-tick--b { animation-delay: 1.6s; }
-  .hf-tick--c { animation-delay: 3.2s; }
+  .hf-tick--b { animation-delay: 2s; }
+  .hf-tick--c { animation-delay: 4s; }
 
-  /* ---------- Station halo pulses ---------- */
+  /* ---------- Halo pulses ---------- */
   .hf-station__halo {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-halo 4.8s ease-in-out infinite;
+    animation: hf-halo 6s ease-in-out infinite;
   }
   .hf-station--src   .hf-station__halo { animation-delay: 0s; }
-  .hf-station--cedar .hf-station__halo { animation-delay: 1.6s; }
-  .hf-station--map   .hf-station__halo { animation-delay: 3.2s; }
+  .hf-station--cedar .hf-station__halo { animation-delay: 2s; }
+  .hf-station--map   .hf-station__halo { animation-delay: 4s; }
   @keyframes hf-halo {
-    0%, 25%   { opacity: 0;   transform: scale(.6); }
-    5%        { opacity: .22; transform: scale(1);  }
-    15%       { opacity: 0;   transform: scale(1.15);}
-    100%      { opacity: 0; }
+    0%, 25%  { opacity: 0;   transform: scale(.6); }
+    4%       { opacity: .2;  transform: scale(1);  }
+    14%      { opacity: 0;   transform: scale(1.18);}
+    100%     { opacity: 0; }
   }
 
-  /* ---------- Station 1: three inputs converge into a spreadsheet ---------- */
-  /* Input docs drift slightly toward the merge converging point. */
-  .hf-src__in {
+  /* ---------- Station 1: merge + transform ----------
+     0-25%: three inputs visible on the left.
+     25-45%: they shrink and slide toward center (the merge).
+     50-90%: output spreadsheet expands, rows fill in
+             sequence with mixed colours.
+     90-100%: reset for the next cycle. */
+  .hf-in {
     transform-box: fill-box;
-    transform-origin: right center;
-    animation: hf-src-in 4.8s ease-in-out infinite;
+    transform-origin: 0 50%;
+    animation: hf-in-merge 6s ease-in-out infinite;
   }
-  .hf-src__in--b { animation-delay: .1s; }
-  .hf-src__in--c { animation-delay: .2s; }
-  @keyframes hf-src-in {
-    0%, 100% { transform: translateX(-2px); opacity: .9; }
-    8%, 22%  { transform: translateX(0);    opacity: 1;  }
+  .hf-in--a { animation-delay: 0s; }
+  .hf-in--b { animation-delay: .08s; }
+  .hf-in--c { animation-delay: .16s; }
+  @keyframes hf-in-merge {
+    0%, 25%  { opacity: 1; transform: translate(0, 0)  scale(1); }
+    35%      { opacity: 1; transform: translate(8px, 0) scale(.9); }
+    45%, 92% { opacity: 0; transform: translate(22px, 0) scale(.35); }
+    100%     { opacity: 1; transform: translate(0, 0)  scale(1); }
   }
-  /* Converging rails draw in as the data flows. */
-  .hf-src__rail {
-    animation: hf-src-rail 4.8s ease-in-out infinite;
+  .hf-out {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hf-out-grow 6s ease-in-out infinite;
   }
-  .hf-src__rail--a { animation-delay: 0s; }
-  .hf-src__rail--b { animation-delay: .15s; }
-  .hf-src__rail--c { animation-delay: .3s; }
-  @keyframes hf-src-rail {
-    0%   { stroke-dashoffset: 22; }
-    20%, 65% { stroke-dashoffset: 0;  }
-    80%  { stroke-dashoffset: 22; }
-    100% { stroke-dashoffset: 22; }
+  @keyframes hf-out-grow {
+    0%, 38%  { opacity: 0; transform: scaleY(.4); }
+    52%      { opacity: 1; transform: scaleY(1);  }
+    88%      { opacity: 1; transform: scaleY(1);  }
+    96%, 100% { opacity: 0; transform: scaleY(.4); }
   }
-  /* Output spreadsheet cells fill in sequence. */
-  .hf-src__cell {
+  .hf-out__row {
     transform-box: fill-box;
     transform-origin: left center;
-    animation: hf-src-cell 4.8s ease-in-out infinite;
+    animation: hf-out-row 6s ease-in-out infinite;
   }
-  .hf-src__cell--a { animation-delay: .25s; }
-  .hf-src__cell--b { animation-delay: .35s; }
-  .hf-src__cell--c { animation-delay: .45s; }
-  .hf-src__cell--d { animation-delay: .55s; }
-  .hf-src__cell--e { animation-delay: .65s; }
-  @keyframes hf-src-cell {
-    0%, 15%  { opacity: 0; transform: scaleX(0); }
-    25%, 80% { opacity: 1; transform: scaleX(1); }
+  .hf-out__row--1 { animation-delay: .55s; }
+  .hf-out__row--2 { animation-delay: .65s; }
+  .hf-out__row--3 { animation-delay: .75s; }
+  .hf-out__row--4 { animation-delay: .85s; }
+  .hf-out__row--5 { animation-delay: .95s; }
+  .hf-out__row--6 { animation-delay: 1.05s; }
+  @keyframes hf-out-row {
+    0%, 50%  { opacity: 0; transform: scaleX(0); }
+    60%, 88% { opacity: 1; transform: scaleX(1); }
     100%     { opacity: 0; transform: scaleX(0); }
   }
 
-  /* ---------- Station 2: Cedar inside the monitor "thinks" ---------- */
+  /* ---------- Station 2: Cedar + active computation ---------- */
   .hf-cedar__tree {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-cedar-pulse 4.8s ease-in-out infinite;
-    animation-delay: 1.55s;
+    animation: hf-cedar-pulse 6s ease-in-out infinite;
+    animation-delay: 2s;
   }
   @keyframes hf-cedar-pulse {
     0%, 100% { transform: scale(1);    }
     4%       { transform: scale(1.08); }
-    14%      { transform: scale(1);    }
+    18%      { transform: scale(1);    }
   }
-  /* Analysis lines extend to the right as Cedar processes. */
-  .hf-cedar__line {
-    animation: hf-cedar-line 4.8s ease-in-out infinite;
-    animation-delay: 1.65s;
+  .hf-bar {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: hf-bar-grow 6s ease-in-out infinite;
   }
-  .hf-cedar__line--a { animation-delay: 1.55s; }
-  .hf-cedar__line--b { animation-delay: 1.7s; }
-  .hf-cedar__line--c { animation-delay: 1.85s; }
-  .hf-cedar__line--d { animation-delay: 2s; }
-  @keyframes hf-cedar-line {
-    0%, 12% { x2: 6;  opacity: 0; }
-    22%     { opacity: 1; }
-    35%, 80% { x2: 26; opacity: .9; }
-    100%    { x2: 6;  opacity: 0; }
+  .hf-bar--a { animation-delay: 2s;   }
+  .hf-bar--b { animation-delay: 2.1s; }
+  .hf-bar--c { animation-delay: 2.2s; }
+  .hf-bar--d { animation-delay: 2.3s; }
+  .hf-bar--e { animation-delay: 2.4s; }
+  @keyframes hf-bar-grow {
+    0%, 30%  { transform: scaleY(.15); opacity: .35; }
+    45%, 90% { transform: scaleY(1);   opacity: 1;   }
+    100%     { transform: scaleY(.15); opacity: .35; }
+  }
+  .hf-line {
+    animation: hf-line-out 6s ease-in-out infinite;
+  }
+  .hf-line--a { animation-delay: 2.4s; }
+  .hf-line--b { animation-delay: 2.55s; }
+  .hf-line--c { animation-delay: 2.7s; }
+  @keyframes hf-line-out {
+    0%, 38%  { x2: -6;  opacity: 0; }
+    52%      { opacity: 1; }
+    65%, 90% { x2: 32;  opacity: .9; }
+    100%     { x2: -6;  opacity: 0; }
   }
 
-  /* ---------- Station 3: impact ripples out from the source ---------- */
-  .hf-map__src {
+  /* ---------- Station 3: waves from source to neighbours ---------- */
+  .hf-imp__src {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-map-src 4.8s ease-in-out infinite;
-    animation-delay: 3.15s;
+    animation: hf-imp-src 6s ease-in-out infinite;
+    animation-delay: 4s;
   }
-  @keyframes hf-map-src {
+  @keyframes hf-imp-src {
     0%, 100% { transform: scale(1);    }
-    4%       { transform: scale(1.18); }
+    4%       { transform: scale(1.06); }
     14%      { transform: scale(1);    }
   }
-  .hf-map__ring {
+  .hf-wave {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-map-ring 4.8s ease-out infinite;
+    animation: hf-imp-wave 6s ease-out infinite;
     opacity: 0;
   }
-  .hf-map__ring--1 { animation-delay: 3.2s;  }
-  .hf-map__ring--2 { animation-delay: 3.45s; }
-  .hf-map__ring--3 { animation-delay: 3.7s;  }
-  @keyframes hf-map-ring {
-    0%, 10%  { transform: scale(.35); opacity: 0;   stroke-width: 1.6; }
-    18%      {                         opacity: .85; }
-    55%, 95% { transform: scale(2.5);  opacity: 0;   stroke-width: .4; }
+  .hf-wave--1 { animation-delay: 4s;   }
+  .hf-wave--2 { animation-delay: 4.25s; }
+  .hf-wave--3 { animation-delay: 4.5s; }
+  @keyframes hf-imp-wave {
+    0%, 10%  { transform: scale(.3);  opacity: 0;   stroke-width: 1.6; }
+    18%      {                         opacity: .9; }
+    55%, 95% { transform: scale(2.6); opacity: 0;   stroke-width: .4; }
     100%     {                         opacity: 0; }
+  }
+  .hf-house {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hf-imp-house 6s ease-in-out infinite;
+  }
+  .hf-house--a { animation-delay: 4.4s; }
+  .hf-house--b { animation-delay: 4.55s; }
+  @keyframes hf-imp-house {
+    0%, 40%  { transform: scale(1);    }
+    50%      { transform: scale(1.08); }
+    65%, 100% { transform: scale(1);    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hf-tick, .hf-station__halo,
-    .hf-src__in, .hf-src__rail, .hf-src__cell,
-    .hf-cedar__tree, .hf-cedar__line,
-    .hf-map__src, .hf-map__ring,
+    .hf-in, .hf-out, .hf-out__row,
+    .hf-cedar__tree, .hf-bar, .hf-line,
+    .hf-imp__src, .hf-wave, .hf-house,
     .hero-flow__label { animation: none; }
     .hf-tick { opacity: 0; }
-    .hf-src__rail { stroke-dashoffset: 0; }
-    .hf-src__cell { opacity: 1; transform: none; }
-    .hf-cedar__line { opacity: 1; }
-    .hf-cedar__line--a, .hf-cedar__line--b,
-    .hf-cedar__line--c, .hf-cedar__line--d {
-      stroke-dasharray: 0; /* no animation */
-    }
+    .hf-in   { opacity: 1; transform: none; }
+    .hf-out  { opacity: 0; }
+    .hf-bar  { transform: none; opacity: 1; }
+    .hf-line { opacity: 1; }
+    .hf-wave { opacity: .35; }
     .hero-flow__label { color: var(--ink-3); }
   }
 
-  /* Compact on phones: tighter aspect, smaller labels. */
   @media (max-width: 600px) {
-    .hero-flow__labels { gap: .35rem; margin-top: .25rem; }
-    .hero-flow__label { font-size: .58rem; letter-spacing: .06em; }
+    .hero-flow__labels { gap: .3rem; margin-top: .25rem; }
+    .hero-flow__label { font-size: .56rem; letter-spacing: .05em; }
   }
 </style>
