@@ -11,7 +11,7 @@
   <div class="hiring-inner">
     <div class="hiring-text">
       <p class="hiring-eyebrow reveal-soft">Looking for early teammates · six-person team</p>
-      <p class="hiring-title reveal-soft" id="hiring-title" data-stagger="1">Help us <em>luminate</em> economies.</p>
+      <p class="hiring-title reveal-soft" id="hiring-title" data-stagger="1">Help us <em class="lumin">luminate</em> economies.</p>
       <p class="hiring-sub reveal-soft" data-stagger="2">Undergrad and graduate students across engineering, ML, data, economic impact modeling, marketing, and sales. We mentor people who are persistent. Unpaid early-stage roles.</p>
       <div class="hiring-ctas reveal-soft" data-stagger="3">
         <a href="/join" class="btn">See roles + apply</a>
@@ -53,27 +53,10 @@
     margin: 0 0 .6rem;
     max-width: 32ch;
   }
-  .hiring-title em {
-    font-style: italic;
-    color: var(--gold);
-    font-weight: 600;
-    animation: luminate-glow 3.4s ease-in-out infinite;
-  }
-  @keyframes luminate-glow {
-    0%, 100% {
-      text-shadow: 0 0 0 rgba(240, 169, 26, 0);
-      filter: brightness(1);
-    }
-    50% {
-      text-shadow:
-        0 0 12px rgba(240, 169, 26, .5),
-        0 0 24px rgba(240, 169, 26, .3);
-      filter: brightness(1.08);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hiring-title em { animation: none; }
-  }
+  /* "luminate" picks up font + glow from the shared .lumin class in
+     global.css; this block just sets the visual weight for the
+     headline context. */
+  .hiring-title em.lumin { font-size: 1.05em; padding: 0 .08em; }
   .hiring-sub {
     font-family: var(--font-sans);
     font-size: .94rem;

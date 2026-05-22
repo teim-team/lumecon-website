@@ -604,6 +604,34 @@ body {
   line-height: .98;
 }
 .display em { font-style: italic; font-weight: 400; color: var(--gold); }
+
+/* Brand emphasis — the cursive gold "luminate" wordplay that runs
+   through the site. Spectral italic gives the calligraphic flourish
+   the brand needs; the glow keyframe pulses softly so the word
+   literally luminates. Applied via the .lumin class wherever the
+   emphasis appears (logo wordmark, hero headlines, footer tagline). */
+.lumin {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+  animation: luminate-glow 3.4s ease-in-out infinite;
+}
+@keyframes luminate-glow {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(240, 169, 26, 0);
+    filter: brightness(1);
+  }
+  50% {
+    text-shadow:
+      0 0 10px rgba(240, 169, 26, .5),
+      0 0 22px rgba(240, 169, 26, .28);
+    filter: brightness(1.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lumin { animation: none; }
+}
 .lede {
   font-size: clamp(1.05rem, 1.6vw, 1.32rem);
   line-height: 1.55;

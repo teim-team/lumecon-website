@@ -28,29 +28,6 @@
   border-bottom: 1px solid rgba(246, 241, 233, .12);
 }
 .footer-brand { display: flex; flex-direction: column; gap: .55rem; align-items: flex-start; }
-.footer-brand-img {
-  height: 38px;
-  width: auto;
-  display: block;
-  /* Logo PNG is dark-on-transparent; invert to read on navy. Gold
-     accent in the wordmark will read warm-white in this state. */
-  filter: brightness(0) invert(1);
-  opacity: .95;
-}
-.footer-brand-tag {
-  font-family: var(--font-sans);
-  font-size: .95rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, .65);
-}
-.footer-brand-tag em { color: var(--gold-light); font-style: normal; font-weight: 600; }
-.footer-brand-rule {
-  width: 64px;
-  height: 1.5px;
-  background: var(--purple-rule);
-  margin-top: .4rem;
-  margin-bottom: .2rem;
-}
 .footer-brand-pitch {
   font-size: .9rem;
   color: rgba(246, 241, 233, .65);

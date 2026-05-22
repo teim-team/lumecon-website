@@ -231,10 +231,7 @@
    - Suppliers: terra diamond (rotated square — firms in the chain)
    - Households: cedar circle (people who spend wages locally) */
 .workspace-legend__sw--source    { background: var(--gold); border-radius: 2px; width: 10px; height: 10px; }
-.workspace-legend__sw--spillover { background: var(--cedar); border-radius: 2px; width: 10px; height: 10px; opacity: .55; }
-/* Legacy swatches retained in case external pages still reference them */
-.workspace-legend__sw--supplier  { background: var(--terra); transform: rotate(45deg); border-radius: 1px; width: 9px; height: 9px; }
-.workspace-legend__sw--household { background: var(--cedar); border-radius: 50%; }
+.workspace-legend__sw--spillover { background: var(--accent); border-radius: 2px; width: 10px; height: 10px; opacity: .6; }
 .workspace-attr { letter-spacing: .04em; text-transform: none; }
 .workspace-activity {
   font-family: var(--font-sans);
@@ -531,12 +528,13 @@
 
 /* Choropleth tint for the indirect + induced spillover. Each impacted
    state/county gets --impact-share (0..1) and the CSS multiplies it
-   into the cedar fill. The source region is the gold direct effect;
-   neighbors are cedar — the multiplier color, matching Cedar AI. */
+   into the accent fill. The source region is the gold direct effect;
+   neighbors are the UI accent (teal) so the map's secondary surface
+   ties into the rest of the workspace chrome instead of fighting it. */
 .hero-state[data-impact],
 .hero-county[data-impact] {
-  fill: var(--cedar);
-  fill-opacity: calc(var(--impact-share, 0) * .55);
+  fill: var(--accent);
+  fill-opacity: calc(var(--impact-share, 0) * .6);
   transition: fill-opacity .5s var(--ease), fill .35s var(--ease);
 }
 /* Source region's ring=0 wins over the choropleth tint */
@@ -564,7 +562,7 @@
 }
 .hero-value-chip__bg {
   fill: var(--white);
-  stroke: var(--cedar);
+  stroke: var(--accent);
   stroke-opacity: .55;
   stroke-width: .6;
   vector-effect: non-scaling-stroke;
@@ -602,7 +600,7 @@
    Stroke-dash animates in as the study runs. */
 .hero-flow-line {
   fill: none;
-  stroke: var(--cedar);
+  stroke: var(--accent);
   stroke-opacity: .5;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
@@ -811,47 +809,6 @@
   background: var(--accent-rgba-08);
   border-left: 2px solid var(--accent);
   border-radius: 0 3px 3px 0;
-}
-
-/* ---------- Detail layers: supplier + household clouds + flow lines ---------- */
-
-@keyframes ddIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
-@keyframes flowIn { from { stroke-dashoffset: 80; opacity: 0; } 30% { opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
-
-/* Suppliers render as terra diamonds so the shape (rotated square)
-   distinguishes them from household circles even before color reads.
-   Fewer in count than households; pairs with a wider spatial decay
-   so indirect effects look like they leak across regions. */
-.hero-supplier {
-  fill: var(--terra);
-  stroke: var(--white);
-  stroke-width: .25;
-  vector-effect: non-scaling-stroke;
-  opacity: 0;
-  transform-origin: center;
-  transform-box: fill-box;
-  animation: ddIn .45s var(--ease) var(--dd, 0ms) both;
-  pointer-events: none;
-}
-.hero-household {
-  fill: var(--cedar);
-  opacity: 0;
-  transform-origin: center;
-  transform-box: fill-box;
-  animation: ddIn .35s var(--ease) var(--dd, 0ms) both;
-  pointer-events: none;
-}
-.hero-flow {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: .8;
-  stroke-linecap: round;
-  stroke-dasharray: 80;
-  stroke-dashoffset: 80;
-  vector-effect: non-scaling-stroke;
-  opacity: 0;
-  animation: flowIn 1s var(--ease) var(--dd, 0ms) both;
-  pointer-events: none;
 }
 
 /* Overview button — visible only while zoomed in */

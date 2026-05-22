@@ -43,7 +43,7 @@ const classes = [
   <span class="brandmark__text">
     <span class="brandmark__name">Lumecon</span>
     {!taglineHidden && (
-      <span class="brandmark__tag">We <em>luminate</em> economies</span>
+      <span class="brandmark__tag">We <em class="lumin">luminate</em> economies</span>
     )}
   </span>
 </a>
@@ -95,15 +95,9 @@ const classes = [
     opacity: .68;
     line-height: 1.1;
   }
-  /* "luminate" — Spectral italic ties the script flourish back into
-     a font already loaded for the rest of the site (display serif
-     fallback). Gold is the brand emphasis color, same as the
-     wordmark "luminate" everywhere else (HiringBanner, JoinHero). */
-  .brandmark__tag em {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
-    color: var(--gold);
+  /* "luminate" emphasis. Inherits font + glow from the shared .lumin
+     class in global.css; just adjusts size for the logo context. */
+  .brandmark__tag em.lumin {
     font-size: 1.18em;
     letter-spacing: -.01em;
     padding: 0 .12em;
