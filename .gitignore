@@ -6,3 +6,8 @@ dist/
 test-results/
 playwright-report/
 .lighthouseci/
+
+# Local env (use .env.example as the template)
+.env
+.env.local
+.env.*.local

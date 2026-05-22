@@ -209,6 +209,94 @@ export const INTENTS: CedarIntent[] = [
     answer: "Lumecon Inc. was built at Cornell University, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team's academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.",
   },
   {
+    id: 'grant_applications',
+    chip: 'Can it support grant applications?',
+    triggers: [
+      'grant application', 'grant applications', 'federal grant', 'eda grant', 'hud grant', 'dot grant', 'epa grant', 'usda grant', 'cdbg', 'bil', 'bipartisan infrastructure law', 'rural development grant', 'broadband grant', 'workforce grant', 'arc grant', 'narrative for a grant', 'grant narrative', 'job estimates for a grant', 'private investment estimate', 'show economic benefit',
+    ],
+    answer: 'Yes. A lot of federal and state grant programs (EDA, HUD CDBG, DOT BUILD, USDA Rural Development, EPA, NTIA broadband, ARC) expect applicants to estimate jobs, private investment, or regional economic benefit, and to name a credible source for those numbers. Lumecon produces the jobs, labor income, and tax-impact figures with the methodology behind them, so the same study can drop into the grant narrative, the council packet, and the board memo without rework.',
+  },
+  {
+    id: 'time_to_study',
+    chip: 'How long does a study take?',
+    triggers: [
+      'how long does it take', 'how long to produce', 'how long is a study', 'turnaround', 'turn around time', 'how fast can you', 'study timeline', 'project timeline', 'lead time', 'how quickly', 'in time for our board', 'before our deadline', 'before grant deadline',
+    ],
+    answer: 'Hours to days for a standard study, once the data is in. The legacy consulting path is usually four to twelve weeks because the analyst is harmonizing data by hand and re-running scenarios from scratch each time. Cedar does the harmonization in minutes, so the slow part becomes the judgment calls (which assumptions to surface, which scenario to model), not the spreadsheet work.',
+  },
+  {
+    id: 'no_economist',
+    chip: "We don't have an economist on staff",
+    triggers: [
+      "don't have an economist", 'no economist', 'not an economist', 'not a data scientist', 'not technical', 'we are not analysts', 'we are not analysts', 'small team', 'limited capacity', 'tight staffing', 'capacity constrained', 'who runs the analysis', 'do i need to know economics',
+    ],
+    answer: "You don't need one. Lumecon is built for organizations that need credible impact analysis without hiring a dedicated economist or paying a consultant for every study. Cedar walks the team through the data, picks defaults that match the geography and the project type, and flags every assumption in plain English before the study is finalized. Your team makes the judgment calls; the platform handles the modeling.",
+  },
+  {
+    id: 'state_agency_use',
+    chip: 'How do state agencies use it?',
+    triggers: [
+      'state department of', 'state dot', 'state doc', 'state commerce', 'state treasury', 'state agency use case', 'state agency uses', 'department of commerce', 'department of transportation', 'state legislature', 'state budget office', 'state workforce board', 'state health department', 'how do states use',
+    ],
+    answer: "State DOTs, departments of commerce, workforce boards, treasury offices, and health departments use Lumecon to justify capital programs, score grant rounds, defend budget asks at the legislature, and report annual program impact. Typical artifacts: a defensible jobs / labor income / GDP figure for a capital plan, a multi-year economic impact narrative for a workforce program, or a regional benefit comparison across counties for a competitive grant.",
+  },
+  {
+    id: 'county_city_use',
+    chip: 'How do cities and counties use it?',
+    triggers: [
+      'city manager', 'city use case', 'city uses', 'county use case', 'county uses', 'edo', 'economic development director', 'economic development office', 'chamber of commerce', 'mayor', 'council member', 'school district', 'school bond', 'special district', 'how do cities use', 'how do counties use',
+    ],
+    answer: 'Cities and counties use Lumecon for capital project justification (new fire station, library expansion, transit line), TIF and tax abatement evaluation, school-district bond communication, business attraction packages, and annual community impact reports. EDOs especially use it to compare projects on equal footing and to put concrete numbers behind a recruitment pitch or an incentive ask.',
+  },
+  {
+    id: 'foundation_use',
+    chip: 'How do foundations use it?',
+    triggers: [
+      'foundation use case', 'how do foundations use', 'foundation report', 'philanthropy', 'philanthropic', 'grantmaker', 'grantmaking', 'community foundation', 'private foundation', 'family foundation', 'measure our giving', 'measure grantmaking', 'sroi', 'social return on investment', 'donor report',
+    ],
+    answer: 'Foundations and community grantmakers use Lumecon to show donors and boards what their dollars actually moved: jobs supported, wages generated, local business activity, regional ripple effects. The platform produces a defensible economic story alongside the program-outcome narrative, so the annual report reads as evidence rather than anecdote.',
+  },
+  {
+    id: 'bond_measure',
+    chip: 'Can we use it for a bond measure?',
+    triggers: [
+      'bond measure', 'school bond', 'municipal bond', 'infrastructure bond', 'general obligation bond', 'go bond', 'voter bond', 'capital bond', 'bond campaign', 'bond election', 'parks bond', 'transit bond',
+    ],
+    answer: 'Yes. School districts, transit agencies, parks departments, and municipalities use Lumecon to translate a bond program into the local economic impact voters and oversight boards can recognize: construction jobs, multi-year labor income, supplier spend kept in-region, operating impact once the asset is in service. The output drops into voter information pamphlets, council resolutions, and rating-agency conversations.',
+  },
+  {
+    id: 'compare_implan_workflow',
+    chip: 'How is the workflow different?',
+    triggers: [
+      'workflow', 'day to day', 'in practice', 'what does the work look like', 'what does the workflow', 'how is the workflow', 'how does the work flow', 'replacing my consultant', 'replacing consultants', 'replace consultant',
+    ],
+    answer: "Legacy path: someone (a consultant or an in-house analyst) opens IMPLAN/RIMS/REMI, hand-cleans the data, picks multipliers, writes the report, and comes back weeks later. Lumecon path: drop your administrative data into the workspace, let Cedar harmonize and pre-fit the model, review the assumptions Cedar surfaces, approve or adjust each one, and export the report. The economist's judgment is still in the loop, but the data wrangling and re-runs aren't.",
+  },
+  {
+    id: 'roi_lumecon',
+    chip: 'What does Lumecon cost vs. the alternative?',
+    triggers: [
+      'cost vs', 'vs hiring a consultant', 'cheaper than a consultant', 'roi of', 'return on lumecon', 'is this worth it', 'why pay for this', 'why subscribe', 'cost of doing nothing', 'budget for impact', 'price compared to', 'savings vs',
+    ],
+    answer: 'A single legacy impact study (IMPLAN/RIMS-driven consulting engagement) typically runs $50K to $150K and ships months later. Lumecon is five figures a year for unlimited studies across every geography. The payback is usually one or two studies — after that the subscription is producing analyses the organization couldn\'t have afforded one-off.',
+  },
+  {
+    id: 'data_residency',
+    chip: 'Where is the data hosted?',
+    triggers: [
+      'where is the data hosted', 'data residency', 'data location', 'where do you store', 'aws', 'cloud provider', 'us cloud', 'us only', 'fedramp', 'govcloud', 'hipaa', 'compliance', 'compliant', 'soc 2', 'soc2', 'iso 27001', 'storage location', 'data center',
+    ],
+    answer: 'Lumecon runs on US-region cloud infrastructure with role-based access controls, encryption in transit and at rest, and a single-tenant workspace per organization. For pilots with sensitive procurement or compliance requirements (FedRAMP, HIPAA-adjacent, state PIIA, tribal data sovereignty), the team will walk through the specifics before any data leaves your environment.',
+  },
+  {
+    id: 'onboarding',
+    chip: 'How does onboarding work?',
+    triggers: [
+      'how do i get started', 'how do we get started', 'onboarding', 'onboard', 'getting started', 'first study', 'first project', 'kick off', 'kickoff', 'how does setup work', 'how long is setup', 'training',
+    ],
+    answer: 'Onboarding is a short kick-off call to scope the first study, then your team uploads the data you already have (budgets, payroll, program records). Cedar walks you through harmonization and surfaces every assumption before the first study runs. Most pilot partners produce a first defensible study in their first week.',
+  },
+  {
     id: 'confused',
     chip: null,
     triggers: [
@@ -253,14 +341,14 @@ export const OUT_OF_SCOPE_TRIGGERS = [
 export const CHIP_IDS = [
   'company_overview',
   'audience',
-  'cedar_identity',
-  'tribal_platform',
-  'local_platform',
-  'multipliers',
-  'demo',
+  'county_city_use',
+  'state_agency_use',
+  'grant_applications',
+  'time_to_study',
   'pricing',
+  'demo',
   'competitors',
-  'where_built',
+  'cedar_identity',
 ] as const;
 
 // Curated subset for the static <details> fallback and the FAQPage
