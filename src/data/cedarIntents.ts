@@ -174,7 +174,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'is this like implan', 'compete with implan', 'better than implan', 'like rims', 'rims ii', 'rims 2', 'is this like lightcast', 'like emsi', 'like remi', 'replacing economists', 'why not just use implan', 'makes this different', 'how is this different', 'implan alternative', 'compared to implan',
     ],
-    answer: "The methodology IMPLAN, RIMS II, and REMI use — input-output modeling, regional multipliers, base-year reweighting — is mainstream economics. The BEA accounts behind it are public. What's been missing is software that uses the tools that exist today: cloud infrastructure, modern UIs, RAG-based AI, real-time data feeds, and geographies that aren't trapped inside administrative borders. Lumecon benchmarks every multiplier against those incumbent models, updates the assumptions and data that should be updated, and keeps what shouldn't.",
+    answer: "The methodology the existing platforms use — input-output modeling, regional multipliers, base-year reweighting — is mainstream economics. The BEA accounts behind it are public. What's been missing is software that uses the tools that exist today: cloud infrastructure, modern UIs, RAG-based AI, real-time data feeds, and geographies that aren't trapped inside administrative borders. Lumecon verifies its direct, indirect, induced, and total impact figures against the existing platforms, updates the assumptions and data that should be updated, and keeps what shouldn't.",
   },
   {
     id: 'explain_simple',
@@ -222,7 +222,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how long does it take', 'how long to produce', 'how long is a study', 'turnaround', 'turn around time', 'how fast can you', 'study timeline', 'project timeline', 'lead time', 'how quickly', 'in time for our board', 'before our deadline', 'before grant deadline',
     ],
-    answer: 'Hours to days for a standard study, once the data is in. The legacy consulting path is usually four to twelve weeks because the analyst is harmonizing data by hand and re-running scenarios from scratch each time. Cedar does the harmonization in minutes, so the slow part becomes the judgment calls (which assumptions to surface, which scenario to model), not the spreadsheet work.',
+    answer: 'Minutes for a standard study, once the data is in. The legacy path takes months because the analyst is harmonizing data by hand and re-running scenarios from scratch each time. Cedar does the harmonization in minutes, so the slow part becomes the judgment calls — which assumptions to surface, which scenario to model — not the spreadsheet work. Minutes, not months.',
   },
   {
     id: 'no_economist',
@@ -270,7 +270,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'workflow', 'day to day', 'in practice', 'what does the work look like', 'what does the workflow', 'how is the workflow', 'how does the work flow', 'replacing my consultant', 'replacing consultants', 'replace consultant',
     ],
-    answer: "Legacy path: a consultant or in-house analyst opens IMPLAN, RIMS II, or REMI — software whose workflow predates the internet — hand-cleans the data, picks multipliers, writes the report, and comes back weeks later. Lumecon path: drop your administrative data into the workspace, let Cedar harmonize and pre-fit the model, review the assumptions Cedar surfaces (every multiplier benchmarked against IMPLAN, RIMS II, and REMI), approve or adjust each one, and export the report. The economist's judgment stays in the loop. The data wrangling and re-runs don't.",
+    answer: "Legacy path: a consultant or in-house analyst opens the existing platforms — software whose workflow predates the internet — hand-cleans the data, picks multipliers, writes the report, comes back months later. Lumecon path: drop your administrative data into the workspace, let Cedar harmonize and pre-fit the model, review the assumptions Cedar surfaces (with our direct, indirect, induced, and total impact figures verified against the existing platforms), approve or adjust each one, export the report. The economist's judgment stays in the loop. The data wrangling and re-runs don't. Minutes, not months.",
   },
   {
     id: 'roi_lumecon',
@@ -294,7 +294,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how do i get started', 'how do we get started', 'onboarding', 'onboard', 'getting started', 'first study', 'first project', 'kick off', 'kickoff', 'how does setup work', 'how long is setup', 'training',
     ],
-    answer: 'Onboarding is a short kick-off call to scope the first study, then your team uploads the data you already have (budgets, payroll, program records). Cedar walks you through harmonization and surfaces every assumption before the first study runs. Most pilot partners produce a first defensible study in their first week.',
+    answer: 'Onboarding is a short kick-off call to scope the first study, then your team uploads the data you already have (budgets, payroll, program records). Cedar walks you through harmonization and surfaces every assumption before the first study runs. Once the data is in, the first defensible study comes back in minutes.',
   },
   {
     id: 'confused',
