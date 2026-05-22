@@ -112,7 +112,7 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
     more predictable on mobile, and the visual cost (no fade
     between pages) is negligible on a four-page marketing site. */}
 {jsonLd && (
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 )}
 </head>
 <body class={bodyClass}>
