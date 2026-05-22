@@ -194,9 +194,9 @@
         <rect x="-22" y="1.5" width="4" height="4" fill="var(--navy)"/>
       </g>
 
-      <!-- ===== Parking lot in front of the casino. Asphalt strip
-                with 4 painted stripes carving out 3 spots. Three cars
-                arrive sequentially. ===== -->
+      <!-- ===== Casino parking lot in front of the casino. Asphalt
+                strip with 4 painted stripes carving out 3 spots.
+                Three cars arrive sequentially. ===== -->
       <g class="hf-grow hf-grow--lot">
         <rect x="-32" y="6" width="24" height="4" fill="var(--ink-4, #d6d6d6)" stroke="var(--navy)" stroke-width=".4" stroke-opacity=".4"/>
         <g stroke="var(--white)" stroke-width=".7" stroke-opacity=".9">
@@ -225,27 +225,62 @@
         <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
       </g>
 
-      <!-- ===== Gas station: building + canopy + two pumps. Builds
-                last so the parcel keeps densifying. ===== -->
-      <g class="hf-grow hf-grow--gas">
-        <!-- Convenience-store body. -->
-        <rect x="14" y="14" width="11" height="9" fill="var(--white)" stroke="var(--navy)" stroke-width="1.2" stroke-linejoin="miter"/>
-        <rect x="14" y="12.4" width="11" height="2" fill="var(--accent)" stroke="var(--navy)" stroke-width="1"/>
-        <rect x="19" y="17" width="2.5" height="6" fill="var(--navy)" stroke="none"/>
-        <rect x="15.3" y="16.5" width="2.5" height="2" fill="var(--gold)" stroke="none"/>
-        <!-- Pump canopy on posts. -->
-        <line x1="27" y1="22" x2="27" y2="14" stroke="var(--navy)" stroke-width="1.2"/>
-        <line x1="35" y1="22" x2="35" y2="14" stroke="var(--navy)" stroke-width="1.2"/>
-        <rect x="26" y="12" width="10" height="2.5" fill="var(--gold)" stroke="var(--navy)" stroke-width="1.1"/>
-        <text x="31" y="14" font-family="Inter, sans-serif" font-weight="800" font-size="2.2" letter-spacing=".1em" fill="var(--navy)" text-anchor="middle">GAS</text>
-        <!-- Two pumps. -->
-        <rect x="28" y="18" width="1.8" height="4" fill="var(--ink-3)" stroke="var(--navy)" stroke-width=".7"/>
-        <rect x="32.2" y="18" width="1.8" height="4" fill="var(--ink-3)" stroke="var(--navy)" stroke-width=".7"/>
+      <!-- ===== Drive-through gas station fills the big empty space
+                on the upper-right side of the parcel. Wide gold
+                canopy on two posts, two pumps under the canopy, a
+                convenience store tucked behind the canopy, and a car
+                pulling through. Each piece is its own group so they
+                snap in as construction chunks, not all at once. ===== -->
+      <!-- Convenience store behind the canopy. -->
+      <g class="hf-build hf-build--gas-store">
+        <rect x="8" y="-22" width="14" height="13" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+        <rect x="8" y="-23.6" width="14" height="2" fill="var(--accent)" stroke="var(--navy)" stroke-width="1"/>
+        <rect x="14" y="-15" width="2.5" height="6" fill="var(--navy)" stroke="none"/>
+        <rect x="9.5" y="-19" width="3" height="2.5" fill="var(--gold)" stroke="none"/>
+        <rect x="18" y="-19" width="3" height="2.5" fill="var(--gold)" stroke="none"/>
       </g>
-      <!-- Car pulling into the gas station, arrives last. -->
-      <g class="hf-car hf-car--gas" transform="translate(31 24)">
+      <!-- Canopy: wide flat roof on two posts, GAS sign on the
+           front edge. Cars drive under it to refuel. -->
+      <g class="hf-build hf-build--gas-canopy">
+        <line x1="26" y1="8" x2="26" y2="-4" stroke="var(--navy)" stroke-width="1.3"/>
+        <line x1="38" y1="8" x2="38" y2="-4" stroke="var(--navy)" stroke-width="1.3"/>
+        <rect x="24" y="-6" width="16" height="3" fill="var(--gold)" stroke="var(--navy)" stroke-width="1.2" stroke-linejoin="miter"/>
+        <text x="32" y="-3.8" font-family="Inter, sans-serif" font-weight="800" font-size="2.4" letter-spacing=".12em" fill="var(--navy)" text-anchor="middle">GAS</text>
+      </g>
+      <!-- Two fuel pumps under the canopy. -->
+      <g class="hf-build hf-build--gas-pumps">
+        <rect x="28" y="3" width="1.8" height="5" fill="var(--ink-3)" stroke="var(--navy)" stroke-width=".7"/>
+        <rect x="34.2" y="3" width="1.8" height="5" fill="var(--ink-3)" stroke="var(--navy)" stroke-width=".7"/>
+      </g>
+      <!-- Car driving through the canopy on its way to the pump. -->
+      <g class="hf-car hf-car--gas" transform="translate(32 5.5)">
         <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8"/>
         <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
+        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
+        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
+      </g>
+
+      <!-- ===== Overflow car park where the old gas station used to
+                sit. Asphalt strip below the road on the right with
+                three painted stripes carving out two spots. Two cars
+                park here as the parcel densifies. ===== -->
+      <g class="hf-grow hf-grow--park2">
+        <rect x="16" y="16" width="20" height="4" fill="var(--ink-4, #d6d6d6)" stroke="var(--navy)" stroke-width=".4" stroke-opacity=".4"/>
+        <g stroke="var(--white)" stroke-width=".7" stroke-opacity=".9">
+          <line x1="16" y1="16.3" x2="16" y2="19.7"/>
+          <line x1="26" y1="16.3" x2="26" y2="19.7"/>
+          <line x1="36" y1="16.3" x2="36" y2="19.7"/>
+        </g>
+      </g>
+      <g class="hf-car hf-car--park-a" transform="translate(21 18.5)">
+        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8"/>
+        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
+        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
+        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
+      </g>
+      <g class="hf-car hf-car--park-b" transform="translate(31 18.5)">
+        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8"/>
+        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
         <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
         <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
       </g>
@@ -512,64 +547,111 @@
     55%, 100% { x2: -6;  opacity: 0; }
   }
 
-  /* ---------- Station 3: three clean phases ----------
-     Starts at 3.8s into the 7s cycle. Three things build, in order:
-       3.80s  Casino body rises from the ground.
-       4.20s  Marquee band lights up gold + CASINO text appears.
-       4.45s  Windows light up one by one (slow wave, 1s long).
-       5.10s  Parking lot stripes paint in.
-       5.25s  Three cars arrive at the lot, one after the other.
-       5.95s  Gas station builds.
-       6.20s  Car pulls in at the pump.
-       6.35s  Dollar signs trickle up.
-       7.00s  Cycle resets.
+  /* ---------- Station 3: empty parcel → chunky construction ----------
+     The parcel starts blank (just the outline + road). Buildings,
+     lots, and cars chunk in as construction phases. Every animated
+     piece uses animation-fill-mode: backwards so the element is
+     hidden BEFORE its delay elapses — otherwise CSS would render it
+     in its "final" state until the animation kicks in, making the
+     casino appear pre-built on page load.
 
-     Phase composition is opacity-only on the elements that are
-     positioned by SVG transform attributes (cars, gas station), so
-     CSS doesn't override their position and stack them at origin. */
+     7s master cycle, phases:
+       3.80s  Casino body chunks in
+       4.10s  Marquee + CASINO lettering snap in
+       4.45s  Windows light up one by one
+       5.00s  Casino parking lot snaps in
+       5.15s  Three casino-lot cars arrive
+       5.65s  Convenience store snaps in
+       5.85s  Drive-through canopy snaps in
+       6.05s  Two fuel pumps snap in
+       6.20s  Car pulls through the canopy
+       6.30s  Overflow car park snaps in
+       6.45s  Two overflow-park cars arrive
+       6.55s  Dollar signs trickle up
+       7.00s  Cycle resets — parcel returns to blank */
 
-  /* Casino body rises from its base. */
-  .hf-imp__src {
+  /* Shared base for every "chunk-in" piece. backwards fill mode is
+     what makes the parcel start empty. */
+  .hf-imp__src,
+  .hf-build,
+  .hf-grow,
+  .hf-car {
     transform-box: fill-box;
-    transform-origin: -17px 2px;
-    animation: hf-casino-build 7s cubic-bezier(.22, 1.4, .4, 1) infinite;
+    transform-origin: center;
+    opacity: 0;
+    animation-duration: 7s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: backwards;
+  }
+
+  /* Casino body chunks in with a snappy scale-bounce. */
+  .hf-imp__src {
+    animation-name: hf-chunk;
+    animation-timing-function: cubic-bezier(.22, 1.4, .4, 1);
     animation-delay: 3.8s;
   }
-  @keyframes hf-casino-build {
-    0%       { opacity: 0; transform: scaleY(0)    scaleX(.85); }
-    6%       { opacity: 1; transform: scaleY(1.06) scaleX(1);   }
-    10%      {              transform: scaleY(1)    scaleX(1);   }
-    88%      { opacity: 1; transform: scaleY(1)    scaleX(1);   }
-    96%, 100% { opacity: 0; transform: scaleY(0)    scaleX(.85); }
-  }
 
-  /* Marquee band on top of the body. */
+  /* Drive-through gas station: store / canopy / pumps each snap in
+     as their own construction chunk. */
+  .hf-build {
+    animation-name: hf-chunk;
+    animation-timing-function: cubic-bezier(.22, 1.4, .4, 1);
+  }
+  .hf-build--gas-store  { animation-delay: 5.65s; }
+  .hf-build--gas-canopy { animation-delay: 5.85s; }
+  .hf-build--gas-pumps  { animation-delay: 6.05s; }
+
+  /* Slabs (parking lot asphalt + stripes) fade in together. */
+  .hf-grow {
+    animation-name: hf-slab;
+    animation-timing-function: ease-out;
+  }
+  .hf-grow--lot   { animation-delay: 5.00s; }
+  .hf-grow--park2 { animation-delay: 6.30s; }
+
+  /* Cars: opacity-only fade-in so we don't clobber each car's SVG
+     transform="translate(...)" attribute. */
+  .hf-car {
+    animation-name: hf-car-arrive;
+    animation-timing-function: ease-out;
+  }
+  .hf-car--lot-a  { animation-delay: 5.15s; }
+  .hf-car--lot-b  { animation-delay: 5.30s; }
+  .hf-car--lot-c  { animation-delay: 5.45s; }
+  .hf-car--gas    { animation-delay: 6.20s; }
+  .hf-car--park-a { animation-delay: 6.45s; }
+  .hf-car--park-b { animation-delay: 6.55s; }
+
+  /* Casino marquee fills gold once the body is up. Driven separately
+     from the body so the colour change reads as "lights coming on". */
   .hf-casino__marquee {
     animation: hf-casino-marquee 7s ease-in-out infinite;
-    animation-delay: 4.2s;
+    animation-delay: 4.1s;
+    animation-fill-mode: backwards;
+    fill: var(--ink-3);
   }
   @keyframes hf-casino-marquee {
-    0%, 5%   { fill: var(--ink-3); }
-    9%, 85%  { fill: var(--gold);  }
+    0%, 4%   { fill: var(--ink-3); }
+    8%, 85%  { fill: var(--gold);  }
     92%, 100% { fill: var(--ink-3); }
   }
-  /* CASINO lettering: hidden until the marquee lights up, then
-     reads clearly on the gold band. */
   .hf-casino__name {
     opacity: 0;
     animation: hf-casino-name 7s ease-in-out infinite;
-    animation-delay: 4.2s;
+    animation-delay: 4.1s;
+    animation-fill-mode: backwards;
   }
   @keyframes hf-casino-name {
-    0%, 6%   { opacity: 0; }
+    0%, 5%   { opacity: 0; }
     10%, 85% { opacity: 1; }
     92%, 100% { opacity: 0; }
   }
 
-  /* Windows light up in sequence as the casino opens floor by
-     floor. 8 windows (2 rows of 4). */
+  /* Windows light up in sequence as the casino opens. 8 windows. */
   .hf-casino__win {
     animation: hf-casino-light 7s ease-in-out infinite;
+    animation-fill-mode: backwards;
+    fill: var(--ink-3);
   }
   .hf-casino__win--1 { animation-delay: 4.45s; }
   .hf-casino__win--2 { animation-delay: 4.55s; }
@@ -585,44 +667,23 @@
     92%, 100% { fill: var(--ink-3); }
   }
 
-  /* Parking lot: asphalt + stripes fade in together as Phase 2
-     starts. Opacity-only so it doesn't drag the casino visual. */
-  .hf-grow--lot {
-    animation: hf-grow-fade 7s ease-out infinite;
-    animation-delay: 5.10s;
-    opacity: 0;
+  /* ---- Shared keyframes for the chunky construction ---- */
+  @keyframes hf-chunk {
+    0%       { opacity: 0; transform: scale(.4); }
+    5%       { opacity: 1; transform: scale(1.12); }
+    10%, 88% { opacity: 1; transform: scale(1); }
+    96%, 100% { opacity: 0; transform: scale(.4); }
   }
-  @keyframes hf-grow-fade {
-    0%       { opacity: 0; }
-    7%       { opacity: 1; }
-    55%      { opacity: 1; }
-    65%, 100% { opacity: 0; }
+  @keyframes hf-slab {
+    0%        { opacity: 0; }
+    5%, 88%   { opacity: 1; }
+    96%, 100% { opacity: 0; }
   }
-
-  /* Cars: opacity-only fade-in so we don't override each car's SVG
-     transform="translate(...)" attribute. (A CSS transform here would
-     replace the per-car positioning and stack every car at the
-     station origin.) */
-  .hf-car {
-    opacity: 0;
-    animation: hf-car-arrive 7s ease-out infinite;
-  }
-  .hf-car--lot-a { animation-delay: 5.25s; }
-  .hf-car--lot-b { animation-delay: 5.40s; }
-  .hf-car--lot-c { animation-delay: 5.55s; }
-  .hf-car--gas   { animation-delay: 6.20s; }
   @keyframes hf-car-arrive {
     0%        { opacity: 0; }
-    6%, 78%   { opacity: 1; }
-    88%, 100% { opacity: 0; }
+    6%, 80%   { opacity: 1; }
+    90%, 100% { opacity: 0; }
   }
-
-  /* Gas station fades in late so the parcel keeps densifying. */
-  .hf-grow {
-    animation: hf-grow-fade 7s ease-out infinite;
-    opacity: 0;
-  }
-  .hf-grow--gas { animation-delay: 5.95s; }
 
   /* Dollar signs trickle up from the new development. The stream
      accelerates toward the end of the cycle as the parcel densifies. */
@@ -652,7 +713,7 @@
     .hf-in, .hf-out, .hf-out__row,
     .hf-cedar__tree, .hf-bar, .hf-line,
     .hf-loading, .hf-load-fill, .hf-load-dot, .hf-baseline,
-    .hf-imp__src, .hf-grow, .hf-car, .hf-dollar,
+    .hf-imp__src, .hf-build, .hf-grow, .hf-car, .hf-dollar,
     .hf-casino__marquee, .hf-casino__name, .hf-casino__win,
     .hero-flow__label { animation: none; }
     .hf-tick { opacity: 0; }
@@ -662,7 +723,7 @@
     .hf-line  { opacity: 1; }
     .hf-loading  { opacity: 0; }
     .hf-baseline { opacity: .4; }
-    .hf-imp__src, .hf-grow, .hf-car { opacity: 1; }
+    .hf-imp__src, .hf-build, .hf-grow, .hf-car { opacity: 1; transform: none; }
     .hf-casino__marquee { fill: var(--gold); }
     .hf-casino__name    { opacity: 1; }
     .hf-casino__win { fill: var(--gold); }
