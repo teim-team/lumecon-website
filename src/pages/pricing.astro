@@ -361,7 +361,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
     tiles.forEach((tile) => {
       tile.addEventListener('click', () => {
         if (tile.dataset.platformComingSoon === 'true') {
-          if (prompt) prompt.textContent = "Global is launching after Tribal and Local stabilize. Pick Tribal or Local to see tiers; email contact@lumecon.ai to be notified when Global ships.";
+          if (prompt) prompt.textContent = "Global is launching after Local and Tribal stabilize. Pick Local or Tribal to see tiers; email contact@lumecon.ai to be notified when Global ships.";
           trackEvent('pricing.platform_coming_soon_click', { platformId: tile.dataset.platformId });
           return;
         }

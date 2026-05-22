@@ -249,15 +249,6 @@ export interface ProductLine {
 
 export const PRODUCT_LINES: ProductLine[] = [
   {
-    id: 'tribal-economic-impact',
-    name: 'Tribal Economic Impact',
-    shortName: 'Tribal',
-    iconId: 'tribal',
-    audience: 'Tribes, state-recognized tribes, ANCs, NHOs, tribal enterprises, chapters, Indigenous CDFIs, Indigenous-led institutions',
-    fitIf: "You're a tribe, ANC, NHO, tribal enterprise, or Indigenous CDFI making the case for reservation, state, or federal funding.",
-    scope: 'Reservation, state, national economic impact analysis',
-  },
-  {
     id: 'local-economic-impact',
     name: 'Local Economic Impact',
     shortName: 'Local',
@@ -267,12 +258,21 @@ export const PRODUCT_LINES: ProductLine[] = [
     scope: 'Local & regional impact analysis outside Indigenous-economy workflows',
   },
   {
+    id: 'tribal-economic-impact',
+    name: 'Tribal Economic Impact',
+    shortName: 'Tribal',
+    iconId: 'tribal',
+    audience: 'Tribes, state-recognized tribes, ANCs, NHOs, tribal enterprises, chapters, Indigenous CDFIs, Indigenous-led institutions',
+    fitIf: "You're a tribe, ANC, NHO, tribal enterprise, or Indigenous CDFI making the case for reservation, state, or federal funding.",
+    scope: 'Reservation, state, national economic impact analysis',
+  },
+  {
     id: 'global-economic-impact',
     name: 'Global Economic Impact',
     shortName: 'Global',
     iconId: 'global',
     audience: 'Organizations needing broader market, supply-chain, or international analysis',
-    fitIf: 'You need national, international, supply-chain, or cross-border analysis. Launching after Tribal and Local stabilize.',
+    fitIf: 'You need national, international, supply-chain, or cross-border analysis. Launching after Local and Tribal stabilize.',
     scope: 'National, international, cross-border analysis',
     comingSoon: true,
   },
