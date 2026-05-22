@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Sprout">
+  <!-- Ground ellipse — tan, consistent with the cream page background -->
+  <ellipse cx="100" cy="172" rx="72" ry="9" fill="#E8D9A8" opacity="0.72"/>
+  <path d="M 28 172 Q 100 164 172 172 L 172 180 L 28 180 Z" fill="#C19A3C" opacity="0.32"/>
+
+  <!-- Stem -->
+  <path d="M 100 172 Q 100 140 100 108" stroke="#166D5A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Left leaf (darker forest green) -->
+  <path d="M 100 128 Q 68 118 58 88 Q 75 94 96 114 Z" fill="#38884B"/>
+  <path d="M 100 128 Q 80 120 63 95" stroke="#166D5A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Right leaf (lighter cedar-light) -->
+  <path d="M 100 122 Q 132 108 144 78 Q 128 85 105 108 Z" fill="#459560"/>
+  <path d="M 100 122 Q 126 112 142 82" stroke="#166D5A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Tiny shoot tip -->
+  <circle cx="100" cy="106" r="3" fill="#5EB072"/>
+</svg>
