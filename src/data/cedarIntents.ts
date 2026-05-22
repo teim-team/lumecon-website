@@ -243,7 +243,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'where was lumecon built', 'where is lumecon based', 'where is lumecon from', "lumecon's background", 'team background', 'who built lumecon', 'who founded', 'founded by', 'cornell', 'team experience', 'who is on the team', 'who is behind',
     ],
-    answer: "Cornell University, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team's academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC — which is where we learned what serious data handling and economic analysis are supposed to look like.",
+    answer: "Built at Ivy League and peer schools — Cornell, Dartmouth, Oxford, MIT, and Yale across the team's academic background, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC — which is where we learned what serious data handling and economic analysis are supposed to look like.",
     followUps: ['hiring', 'company_overview', 'partnerships'],
   },
   {
