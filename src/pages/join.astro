@@ -234,6 +234,17 @@ const jsonLd = [
     justify-content: center;
     scroll-snap-align: start;
   }
+  /* Alternate-section backgrounds (cream on the even sections) so
+     the page reads as five distinct "chapters" rather than one
+     undifferentiated wash of text. box-shadow + clip-path extends
+     the chapter's background full-bleed without breaking the
+     1200px max-width content constraint. */
+  .join-transition,
+  .join-roles {
+    background: var(--cream);
+    box-shadow: 0 0 0 50vmax var(--cream);
+    clip-path: inset(0 -50vmax);
+  }
   /* The hero already gets its top-padding from .join. Don't double
      it. */
   .join-hero { padding-top: 0; }
