@@ -43,10 +43,16 @@ import '../styles/hero.css';
     <nav class="hero-paths" aria-label="Explore Lumecon">
       <a class="hero-path" href="/map">
         <span class="hero-path__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter">
-            <path d="M3 7 L9 4 L15 7 L21 4 L21 17 L15 20 L9 17 L3 20 Z"/>
-            <line x1="9" y1="4" x2="9" y2="17"/>
-            <line x1="15" y1="7" x2="15" y2="20"/>
+          <!-- Filled folded-map silhouette so the whole shape
+               (not just an outline) transitions from grey to teal
+               on hover. The three "panel" cutouts use the cream
+               page background so the folded structure reads at
+               icon size, and the dots are coloured locations. -->
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2.6 6.4 L9 4 L15 6.4 L21.4 4 L21.4 17.6 L15 20 L9 17.6 L2.6 20 Z"/>
+            <circle cx="6.6"  cy="11.4" r="1.05" fill="var(--white)"/>
+            <circle cx="13.4" cy="10.4" r="1.05" fill="var(--white)"/>
+            <circle cx="17.4" cy="14.2" r="1.05" fill="var(--white)"/>
           </svg>
         </span>
         <span class="hero-path__title">See a live economic impact study</span>
@@ -64,9 +70,13 @@ import '../styles/hero.css';
       </a>
       <a class="hero-path" href="/pricing">
         <span class="hero-path__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter" stroke-linecap="round">
-            <path d="M4 7h16M4 12h16M4 17h10"/>
-            <circle cx="18" cy="17" r="2.4"/>
+          <!-- Filled price-tag silhouette — bold shape so the
+               whole icon transitions on hover, not just a thin
+               outline. White punch-out is the tag's grommet
+               hole. -->
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3.4 H13 L21 11.4 L13 19.4 H3 Z" stroke="currentColor" stroke-width=".4" stroke-linejoin="miter"/>
+            <circle cx="7.2" cy="7.6" r="1.7" fill="var(--white)"/>
           </svg>
         </span>
         <span class="hero-path__title">See pricing</span>
