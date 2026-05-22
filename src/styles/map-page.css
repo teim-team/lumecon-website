@@ -1,0 +1,94 @@
+/* /map standalone page chrome. Two compact blocks bracket the
+   MapWorkspace: a framing header above (tells direct-link visitors
+   what they're looking at and that the US-only scope is by
+   design, not a limitation), and a CTA band below (Sign up /
+   See pricing once they've poked around the demo). */
+
+.map-page { background: var(--white); }
+
+/* ---------- Framing header ---------- */
+.map-page__header {
+  background: var(--white);
+  padding: clamp(2.4rem, 4.5vw, 3.4rem) 0 clamp(1.2rem, 2.4vw, 1.8rem);
+  border-bottom: 1px solid var(--rule);
+}
+.map-page__header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+.map-page__kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 .85rem;
+}
+.map-page__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.85rem, 3.6vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -.022em;
+  color: var(--navy);
+  margin: 0 0 .6rem;
+}
+.map-page__sub {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0 0 .55rem;
+  max-width: 64ch;
+}
+.map-page__roadmap {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  color: var(--ink-3);
+  margin: 0;
+  /* Italic so the "scope today vs. roadmap" framing reads as
+     forward-looking context rather than a feature claim. */
+  font-style: italic;
+}
+
+/* ---------- CTA band below the map ---------- */
+.map-page__cta {
+  background: var(--cream);
+  padding: clamp(1.8rem, 3.6vw, 2.6rem) 0;
+  border-top: 1px solid var(--rule);
+}
+.map-page__cta-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+.map-page__cta-text {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.7vw, 1.32rem);
+  line-height: 1.3;
+  letter-spacing: -.014em;
+  color: var(--navy);
+  margin: 0;
+  max-width: 52ch;
+}
+.map-page__cta-buttons {
+  display: flex;
+  gap: .55rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .map-page__cta-inner { flex-direction: column; align-items: stretch; }
+  .map-page__cta-text { text-align: center; }
+  .map-page__cta-buttons { justify-content: center; }
+}
