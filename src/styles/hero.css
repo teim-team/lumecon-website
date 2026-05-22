@@ -492,7 +492,7 @@
 /* Tribal layer: reservation polygons are the visual hero. The
    surrounding state stays faint so the reservation pops; nested
    highlight order on a tribal study is reservation > county > state. */
-.hero-stage[data-layer="tribal"] .hero-aiannh { fill-opacity: .35; stroke: var(--terra-dark); stroke-opacity: .55; stroke-width: .5; }
+.hero-stage[data-layer="tribal"] .hero-aiannh { fill-opacity: .35; stroke: var(--map-tribal-deep); stroke-opacity: .55; stroke-width: .5; }
 .hero-stage[data-layer="tribal"] .hero-state { cursor: default; pointer-events: none; }
 .hero-stage[data-layer="tribal"] .hero-aiannh { pointer-events: auto; }
 /* In tribal mode the source state tint is muted so the active
@@ -523,9 +523,9 @@
    map reads as clean by default and discovers the tribal-economy
    layer only on interaction. */
 .hero-aiannh {
-  fill: var(--terra);
+  fill: var(--map-tribal);
   fill-opacity: 0;
-  stroke: var(--terra-dark);
+  stroke: var(--map-tribal-deep);
   stroke-width: 0;
   stroke-opacity: 0;
   vector-effect: non-scaling-stroke;
@@ -536,7 +536,7 @@
 .hero-stage:hover .hero-aiannh { fill-opacity: .14; stroke-width: .4; stroke-opacity: .35; }
 .hero-aiannh:hover, .hero-aiannh:focus-visible {
   fill-opacity: .8 !important;
-  fill: var(--terra);
+  fill: var(--map-tribal);
 }
 .hero-aiannh--otsa { /* same default */ }
 
@@ -669,12 +669,13 @@
   stroke-opacity: .85;
 }
 
-/* Active reservation polygon, the brightest layer (terra so it
-   visually pops against the gold state + county). */
+/* Active reservation polygon, the brightest layer. Amber-gold so it
+   pops against the pale-gold state and the teal spillover while
+   staying in the same warm family as the source. */
 .hero-aiannh[data-active="1"] {
-  fill: var(--terra) !important;
+  fill: var(--map-tribal) !important;
   fill-opacity: .9 !important;
-  stroke: var(--terra-dark);
+  stroke: var(--map-tribal-deep);
   stroke-width: .8;
   stroke-opacity: .9;
 }
