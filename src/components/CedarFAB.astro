@@ -11,10 +11,10 @@
  * shadow, subtle hover lift, accessible label.
  */
 ---
-<a
+<button
+  type="button"
   class="cedar-fab"
   id="cedarFab"
-  href="/#cedar"
   aria-label="Ask Cedar a question"
   aria-expanded="false"
   title="Ask Cedar"
@@ -33,7 +33,7 @@
   </span>
   <span class="cedar-fab__label cedar-fab__label--ask">Ask Cedar</span>
   <span class="cedar-fab__label cedar-fab__label--close">Close</span>
-</a>
+</button>
 
 <script is:inline>
   (function () {
@@ -53,14 +53,13 @@
     };
 
     fab.addEventListener('click', (e) => {
-      // On pages that have the Cedar chat element in the DOM
-      // (currently the homepage), the FAB toggles the chat into a
-      // floating panel via the body.cedar-popped class. On other
-      // pages, fall through to the anchor href so the visitor
-      // lands on the homepage Cedar section.
+      // Only valid when the Cedar chat element is on the page
+      // (homepage). On other pages, do nothing — the FAB stays
+      // visible but inert. A future iteration will inline a
+      // dedicated panel chat so this works everywhere.
       const cedar = document.getElementById('cedar');
       if (!cedar) return;
-      e.preventDefault();
+      e.stopPropagation();
       if (document.body.classList.contains('cedar-popped')) {
         closePop();
       } else {
@@ -68,7 +67,6 @@
       }
     });
 
-    // Escape closes the popped chat.
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closePop();
     });
