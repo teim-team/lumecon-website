@@ -86,7 +86,6 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
                 data-platform-short={p.shortName}
                 data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
                 aria-pressed="false"
-                aria-disabled={p.comingSoon ? 'true' : 'false'}
               >
                 <span class="pricing-platform-tile__icon" aria-hidden="true">
                   {p.iconId === 'tribal' && <IconTribal />}
@@ -124,31 +123,24 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
                 data-tier-id={t.id}
                 data-tier-annual={t.priceAnnual}
               >
+                <!-- Plant illustration. Icon files in /public/tier-icons.
+                     Mapped by stable schema id (starter / standard / leader)
+                     so renames of the user-facing name don't break the
+                     mapping. The grow-out-of-the-ground animation lives
+                     on .pricing-tier-card__icon in pricing.css with
+                     nth-child stagger so the row reads as time-lapse
+                     growth left to right. alt="" because the name <h3>
+                     directly below already labels the tier. -->
+                <img
+                  class="pricing-tier-card__icon"
+                  src={t.id === 'starter' ? '/tier-icons/sprout.svg' : t.id === 'standard' ? '/tier-icons/sapling.svg' : '/tier-icons/tree.svg'}
+                  alt=""
+                  aria-hidden="true"
+                  width="200"
+                  height="200"
+                  loading="lazy"
+                />
                 <header class="pricing-tier-card__head">
-                  <span class="pricing-tier-card__icon" aria-hidden="true">
-                    {t.id === 'starter' && (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 21V11"/>
-                        <path d="M12 11C12 8 9 6 6 7"/>
-                        <path d="M12 11C12 9 14 7 17 8"/>
-                      </svg>
-                    )}
-                    {t.id === 'standard' && (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 21V8"/>
-                        <path d="M12 8C10 6 6 5 4 7"/>
-                        <path d="M12 8C14 5 18 5 20 7"/>
-                        <path d="M12 14C10 13 8 12 6 13"/>
-                        <path d="M12 14C14 12 16 12 18 13"/>
-                      </svg>
-                    )}
-                    {t.id === 'leader' && (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 21V14"/>
-                        <path d="M12 14C9 14 7 12 7 9C7 7 9 4 12 4C15 4 17 7 17 9C17 12 15 14 12 14Z"/>
-                      </svg>
-                    )}
-                  </span>
                   <h3 class="pricing-tier-card__name">{t.name}</h3>
                   {t.comingSoon
                     ? <span class="pricing-tier-card__tag">Coming soon</span>

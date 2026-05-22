@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Sapling">
+  <!-- Ground -->
+  <ellipse cx="100" cy="175" rx="76" ry="9" fill="#E8D9A8" opacity="0.72"/>
+  <path d="M 24 175 Q 100 167 176 175 L 176 183 L 24 183 Z" fill="#C19A3C" opacity="0.32"/>
+
+  <!-- Trunk (warm terra / russet) -->
+  <path d="M 92 175 Q 94 150 96 120 Q 98 110 100 100 Q 102 110 104 120 Q 106 150 108 175 Z" fill="#AE4E2C"/>
+  <!-- Trunk branches (forks near top of canopy) -->
+  <path d="M 96 120 Q 86 114 80 108" stroke="#AE4E2C" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M 104 120 Q 114 114 120 108" stroke="#AE4E2C" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Canopy: back layer (dark forest) -->
+  <circle cx="72"  cy="96" r="22" fill="#2C6239" opacity="0.92"/>
+  <circle cx="128" cy="96" r="22" fill="#2C6239" opacity="0.92"/>
+  <circle cx="100" cy="72" r="26" fill="#2C6239" opacity="0.92"/>
+
+  <!-- Canopy: mid layer (cedar primary) -->
+  <circle cx="80"  cy="94" r="18" fill="#3C8050"/>
+  <circle cx="120" cy="94" r="18" fill="#3C8050"/>
+  <circle cx="100" cy="76" r="22" fill="#3C8050"/>
+
+  <!-- Canopy highlight ovals -->
+  <ellipse cx="90"  cy="82" rx="5" ry="3" fill="#A9D5B5" opacity="0.75"/>
+  <ellipse cx="112" cy="82" rx="5" ry="3" fill="#A9D5B5" opacity="0.75"/>
+</svg>

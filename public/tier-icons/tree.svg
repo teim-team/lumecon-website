@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Tree">
+  <!-- Ground -->
+  <ellipse cx="100" cy="178" rx="86" ry="10" fill="#E8D9A8" opacity="0.72"/>
+  <path d="M 14 178 Q 100 170 186 178 L 186 186 L 14 186 Z" fill="#C19A3C" opacity="0.32"/>
+
+  <!-- Root flare at the base -->
+  <path d="M 82 180 Q 92 172 100 168 Q 108 172 118 180 Z" fill="#8A3A20"/>
+  <path d="M 74 182 Q 88 174 100 170 Q 112 174 126 182 L 126 188 L 74 188 Z" fill="#8A3A20" opacity="0.6"/>
+
+  <!-- Trunk (wider than sapling; warm terra-dark) -->
+  <path d="M 86 180 Q 88 140 92 100 Q 96 82 100 68 Q 104 82 108 100 Q 112 140 114 180 Z" fill="#AE4E2C"/>
+
+  <!-- Canopy: back dark rim (cedar-dark) -->
+  <circle cx="58"  cy="92" r="22" fill="#1E3D2A" opacity="0.95"/>
+  <circle cx="142" cy="92" r="22" fill="#1E3D2A" opacity="0.95"/>
+  <circle cx="100" cy="60" r="30" fill="#1E3D2A" opacity="0.95"/>
+  <circle cx="80"  cy="78" r="24" fill="#1E3D2A" opacity="0.95"/>
+  <circle cx="120" cy="78" r="24" fill="#1E3D2A" opacity="0.95"/>
+
+  <!-- Canopy: mid layer (cedar primary) -->
+  <circle cx="68"  cy="90" r="18" fill="#2D5A3F"/>
+  <circle cx="132" cy="90" r="18" fill="#2D5A3F"/>
+  <circle cx="100" cy="62" r="26" fill="#3C8050"/>
+  <circle cx="84"  cy="80" r="20" fill="#3C8050"/>
+  <circle cx="116" cy="80" r="20" fill="#3C8050"/>
+
+  <!-- Canopy highlight ovals (cedar-light) -->
+  <ellipse cx="92"  cy="66" rx="6" ry="3.5" fill="#A9D5B5" opacity="0.8"/>
+  <ellipse cx="110" cy="70" rx="5" ry="3"  fill="#A9D5B5" opacity="0.75"/>
+  <ellipse cx="74"  cy="78" rx="4" ry="2.5" fill="#A9D5B5" opacity="0.7"/>
+  <ellipse cx="124" cy="78" rx="4" ry="2.5" fill="#A9D5B5" opacity="0.7"/>
+
+  <!-- Fruits (gold accent) -->
+  <circle cx="86"  cy="96" r="3" fill="#E7B23F"/>
+  <circle cx="114" cy="92" r="3" fill="#E7B23F"/>
+  <circle cx="100" cy="78" r="3" fill="#E7B23F"/>
+</svg>

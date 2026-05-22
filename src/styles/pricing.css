@@ -163,6 +163,9 @@
   color: var(--navy);
   margin: 0;
   align-self: end;
+  /* Reserve room on the right so the absolutely-positioned
+     "Coming soon" tag doesn't sit on top of the title text. */
+  padding-right: 5.5rem;
 }
 .pricing-platform-tile__fit {
   grid-column: 2;
@@ -269,18 +272,35 @@
   border-bottom: 1px solid var(--rule);
   padding-bottom: .9rem;
 }
+/* Plant tier icon (sprout / sapling / tree). Rises out of the
+   "ground" at the bottom of its own box when the page mounts, so
+   the three tiers read as the same plant growing through its
+   life stages left to right. Pure CSS animation; the stagger is
+   :nth-child below, no JS. Respects prefers-reduced-motion. */
 .pricing-tier-card__icon {
-  display: inline-flex;
-  width: 44px;
-  height: 44px;
-  align-items: center;
-  justify-content: center;
-  background: var(--cream);
-  border-radius: 10px;
-  color: var(--cedar);
-  flex-shrink: 0;
+  display: block;
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  object-position: center bottom;
+  margin: 0 0 .5rem;
+  animation: pricing-tier-grow 1300ms cubic-bezier(0.22, 0.95, 0.28, 1) 150ms both;
+  transform-origin: bottom center;
 }
-.pricing-tier-card__icon :global(svg) { width: 60%; height: 60%; }
+@keyframes pricing-tier-grow {
+  0%   { clip-path: inset(100% 0 0 0); transform: translateY(6px) scale(.96); opacity: 0; }
+  25%  { opacity: 1; }
+  100% { clip-path: inset(0 0 0 0);    transform: translateY(0)   scale(1);   opacity: 1; }
+}
+/* Stagger: sapling (2nd) starts ~220ms after sprout, tree (3rd)
+   another ~220ms later, so the row reads as time-lapse growth
+   left to right. */
+.pricing-tier-grid > .pricing-tier-card:nth-child(1) .pricing-tier-card__icon { animation-delay: 120ms; }
+.pricing-tier-grid > .pricing-tier-card:nth-child(2) .pricing-tier-card__icon { animation-delay: 340ms; }
+.pricing-tier-grid > .pricing-tier-card:nth-child(3) .pricing-tier-card__icon { animation-delay: 560ms; }
+@media (prefers-reduced-motion: reduce) {
+  .pricing-tier-card__icon { animation: none; opacity: 1; clip-path: none; transform: none; }
+}
 .pricing-tier-card__name {
   font-family: var(--font-display);
   font-weight: 600;
@@ -636,6 +656,12 @@
   padding: 0;
 }
 .pricing-terms__block strong { color: var(--white); font-weight: 600; }
+
+@media (max-width: 980px) {
+  /* Slightly smaller plant icon on tablets / phones so it doesn't
+     dominate the card at narrower widths. */
+  .pricing-tier-card__icon { width: 84px; height: 84px; }
+}
 
 @media (max-width: 600px) {
   .pricing-tier-grid { grid-template-columns: 1fr; }

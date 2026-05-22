@@ -47,49 +47,68 @@
   margin: 0;
   max-width: 62ch;
 }
+/* Accent box that wraps the three lede paragraphs. White card on
+   the cream section background, with a teal rail on the left so
+   the long prose reads as one deliberate block rather than three
+   floating lines. */
+.why-header__lede-box {
+  background: var(--white);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: clamp(1.1rem, 2.2vw, 1.5rem) clamp(1.2rem, 2.6vw, 1.8rem);
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  max-width: 72ch;
+  box-shadow:
+    0 1px 2px rgba(10, 15, 38, .04),
+    0 12px 32px -22px rgba(10, 15, 38, .12);
+}
+.why-header__lede-box .why-header__lede {
+  max-width: none;
+}
+/* Card grid: single column on desktop with each card laid out as a
+   two-column row (text left, icon right). Stacking the cards
+   vertically with icons aligned to the right creates a tidy
+   "icon rail" down the right side of the section rather than a
+   half-empty 3-column grid. */
 .why-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(2rem, 4vw, 3rem);
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 .why-stat {
   color: var(--navy);
-  padding: 1.25rem 1.25rem 1.5rem;
-  margin: -1.25rem;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  transition: background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+  background: var(--white);
+  padding: 1.2rem 1.4rem 1.4rem;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  transition: border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
   cursor: pointer;
 }
 .why-stat:hover {
-  background: var(--white, #fff);
-  border-color: var(--rule-strong, rgba(14,21,48,.16));
-  transform: translateY(-3px);
+  border-color: var(--accent);
+  transform: translateY(-2px);
   box-shadow: 0 12px 28px -16px rgba(14, 21, 48, .18);
 }
 .why-stat:hover .why-stat__k { color: var(--accent); }
 .why-stat__k { transition: color .25s var(--ease); }
 
-/* Summary acts as the always-visible card head: icon + num + key
-   + a chevron that rotates open when the <details> is expanded.
-   list-style: none kills the native disclosure triangle so we own
-   the affordance fully. */
+/* Card head is a flex row: text on the left (flex: 1), icon to its
+   right, chevron at the far right. Stacking the cards vertically
+   plus this row layout produces an "icon rail" effect down the
+   right side of the section. */
 .why-stat__head {
   display: flex;
-  flex-direction: column;
-  gap: .55rem;
+  align-items: center;
+  gap: 1.2rem;
   list-style: none;
   cursor: pointer;
-  position: relative;
-  padding-right: 2rem;
 }
 .why-stat__head::-webkit-details-marker { display: none; }
 .why-stat__chev {
-  position: absolute;
-  top: 0;
-  right: .1rem;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
   background: transparent;
@@ -97,6 +116,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 .why-stat__chev::before {
   content: '';
@@ -129,16 +149,22 @@
 @media (prefers-reduced-motion: reduce) {
   .why-stat__body { animation: none; }
 }
+/* Icon sits to the right of the headline in the row layout. order
+   flips it past the .why-stat__k (which renders before it in the
+   DOM) so the headline reads on the left. */
 .why-stat__icon {
   display: inline-flex;
   color: var(--navy);
-  margin-bottom: .25rem;
+  order: 2;
+  flex-shrink: 0;
 }
 .why-stat__icon svg {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: block;
 }
+.why-stat__k { order: 1; flex: 1; }
+.why-stat__chev { order: 3; }
 
 /* ---------- 01: replace consultant + software ----------
    The gold strike sweeps diagonally across both objects. */
@@ -288,6 +314,9 @@
   color: var(--ink-2);
 }
 @media (max-width: 880px) {
-  .why-grid { grid-template-columns: 1fr; gap: 1.6rem; }
+  .why-grid { gap: .8rem; }
   .why-header__title { font-size: clamp(1.8rem, 6vw, 2.2rem); }
+  /* On phones the row becomes tight; allow the headline to wrap
+     under the icon if needed by shrinking the icon a touch. */
+  .why-stat__icon svg { width: 36px; height: 36px; }
 }

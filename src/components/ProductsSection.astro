@@ -1,11 +1,69 @@
 ---
+/**
+ * Three platforms displayed as a side-by-side card grid on desktop.
+ * Previous version used per-platform <details> elements that hid
+ * the description behind a click — for a marketing page where the
+ * platforms ARE the product, the full pitch is what visitors want
+ * to read. So the disclosure is gone; each card surfaces icon +
+ * name + URL + tagline + description + status badge + a primary
+ * Sign-up CTA and a secondary Visit-site link. Future-development
+ * platforms (Global) swap the Sign-up CTA for a Notify-me mailto.
+ */
 import { site } from '../config';
 import '../styles/products.css';
 import IconLocal from './icons/IconLocal.astro';
 import IconTribal from './icons/IconTribal.astro';
 import IconGlobal from './icons/IconGlobal.astro';
 const { local, tribal, global: globalProduct } = site.products;
-const platforms = [local, tribal, globalProduct];
+
+interface PlatformCard {
+  slug: 'local' | 'tribal' | 'global';
+  name: string;
+  domain: string;
+  url: string;
+  tag: string;
+  desc: string;
+  badge: string;
+  badgeKind: 'active' | 'future';
+  /** Future-development platforms swap the primary CTA for a
+   *  notify-me mailto; Sign up wouldn't gate anything they can use
+   *  yet. */
+  future?: boolean;
+}
+
+const platforms: PlatformCard[] = [
+  {
+    slug: 'local',
+    name: local.name,
+    domain: local.domain,
+    url: local.url,
+    tag: 'Turn your budget data into an economic impact study you can present.',
+    desc: 'For cities, counties, state agencies, and the enterprises and nonprofits that work with them. Run grant, council, and board-ready studies in-house, in minutes instead of months.',
+    badge: 'In active development',
+    badgeKind: 'active',
+  },
+  {
+    slug: 'tribal',
+    name: tribal.name,
+    domain: tribal.domain,
+    url: tribal.url,
+    tag: 'Modeled on tribal terms, not adapted from a state model.',
+    desc: 'For tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies. Indigenous data sovereignty is built in, not added on.',
+    badge: 'In active development',
+    badgeKind: 'active',
+  },
+  {
+    slug: 'global',
+    name: globalProduct.name,
+    domain: globalProduct.domain,
+    url: globalProduct.url,
+    tag: 'For organizations whose work crosses borders.',
+    desc: 'For governments, multinationals, NGOs, and foundations whose work crosses borders. Same modeling backbone, so a project in one country is directly comparable to a project in another.',
+    badge: 'Future development',
+    badgeKind: 'future',
+    future: true,
+  },
+];
 ---
 <section class="platforms" id="products">
   <div class="platforms-inner">
@@ -17,42 +75,29 @@ const platforms = [local, tribal, globalProduct];
       </p>
     </header>
 
-    {platforms.map((p, i) => {
-      const slug = i === 0 ? 'local' : i === 1 ? 'tribal' : 'global';
-      const badge = i === 0 ? 'In active development'
-                  : i === 1 ? 'In active development'
-                  : 'Future development';
-      const badgeKind = i === 0 ? 'active' : i === 1 ? 'active' : 'future';
-      return (
-        <details class={`platform platform--${slug}`}>
-          <summary class="platform__summary">
-            <div class="platform__name-wrap">
-              <span class="platform__icon">
-                {i === 0 && <IconLocal />}
-                {i === 1 && <IconTribal />}
-                {i === 2 && <IconGlobal />}
-              </span>
-              <h3 class="platform__name">{p.name}</h3>
-              <span class="platform__url">{p.domain}</span>
-            </div>
-            <p class="platform__tag">
-              {i === 0 && 'Turn your budget data into an economic impact study you can present.'}
-              {i === 1 && 'Modeled on tribal terms, not adapted from a state model.'}
-              {i === 2 && 'For organizations whose work crosses borders.'}
-            </p>
-            <span class={`platform__badge platform__badge--${badgeKind}`}>{badge}</span>
-            <span class="platform__chev" aria-hidden="true"></span>
-          </summary>
-          <div class="platform__body">
-            <p class="platform__desc">
-              {i === 0 && 'For cities, counties, state agencies, and the enterprises and nonprofits that work with them. Run grant, council, and board-ready studies in-house, in minutes instead of months.'}
-              {i === 1 && 'For tribal nations, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies. Indigenous data sovereignty is built in, not added on.'}
-              {i === 2 && 'For governments, multinationals, NGOs, and foundations whose work crosses borders. Same modeling backbone, so a project in one country is directly comparable to a project in another.'}
-            </p>
-            <a class="platform__visit" href={p.url}>Visit {p.domain} →</a>
+    <div class="platforms-grid">
+      {platforms.map((p) => (
+        <article class={`platform platform--${p.slug}`}>
+          <header class="platform__head">
+            <span class="platform__icon" aria-hidden="true">
+              {p.slug === 'local'  && <IconLocal />}
+              {p.slug === 'tribal' && <IconTribal />}
+              {p.slug === 'global' && <IconGlobal />}
+            </span>
+            <span class={`platform__badge platform__badge--${p.badgeKind}`}>{p.badge}</span>
+          </header>
+          <h3 class="platform__name">{p.name}</h3>
+          <span class="platform__url">{p.domain}</span>
+          <p class="platform__tag">{p.tag}</p>
+          <p class="platform__desc">{p.desc}</p>
+          <div class="platform__cta">
+            {p.future
+              ? <a class="btn" href={`mailto:${site.email}?subject=${encodeURIComponent('Notify me when ' + p.name + ' ships')}`}>Notify me</a>
+              : <a class="btn" href="/signup">Sign up</a>}
+            <a class="btn btn--ghost" href={p.url} target={p.future ? undefined : '_blank'} rel={p.future ? undefined : 'noopener noreferrer'}>Learn more</a>
           </div>
-        </details>
-      );
-    })}
+        </article>
+      ))}
+    </div>
   </div>
 </section>
