@@ -215,6 +215,11 @@ const jsonLd = [
     background: var(--white);
     padding: clamp(6rem, 11vw, 8rem) 0 clamp(4rem, 8vw, 6rem);
   }
+  /* Each major join section reads as a self-contained "page": at
+     least one viewport tall, vertically centered content, snap-
+     aligned so the visitor lands cleanly on the next chunk. The
+     global html scroll-snap-type: y proximity (in global.css) does
+     the snapping; these blocks supply the snap targets. */
   .join-hero,
   .join-transition,
   .join-team,
@@ -222,8 +227,16 @@ const jsonLd = [
   .join-apply {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 var(--container-pad);
+    padding: clamp(3rem, 6vw, 4.5rem) var(--container-pad);
+    min-block-size: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    scroll-snap-align: start;
   }
+  /* The hero already gets its top-padding from .join. Don't double
+     it. */
+  .join-hero { padding-top: 0; }
   /* Section-icon layout: on desktop the section becomes a 2-col
      grid with the icon vertically centered against the headline.
      On mobile the icon stacks above the headline. */
@@ -235,6 +248,10 @@ const jsonLd = [
       grid-template-columns: minmax(0, 1fr) 180px;
       column-gap: clamp(2rem, 4vw, 3rem);
       align-items: center;
+      /* Center the row inside the 100dvh section so the content
+         actually reads as a centered "page" rather than sticking
+         to the top. */
+      align-content: center;
     }
     .join-section-icon {
       grid-column: 2;
@@ -362,7 +379,7 @@ const jsonLd = [
   }
   .join-collapse__body p {
     font-family: var(--font-sans);
-    font-size: clamp(1.02rem, 1.5vw, 1.12rem);
+    font-size: clamp(1.08rem, 1.55vw, 1.2rem);
     line-height: 1.6;
     color: var(--ink-2);
     margin: 0 0 1rem;
@@ -399,7 +416,7 @@ const jsonLd = [
   .join-section-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-size: clamp(2rem, 4vw, 2.8rem);
     color: var(--navy);
     letter-spacing: -.022em;
     line-height: 1.12;

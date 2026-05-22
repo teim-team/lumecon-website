@@ -2,6 +2,11 @@
   background: var(--navy);
   color: var(--white);
   padding: clamp(5rem, 9vw, 7rem) 0;
+  scroll-snap-align: start;
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .cta-inner {
   max-width: 1200px;
@@ -24,7 +29,7 @@
 .cta-display {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
   line-height: 1.1;
   letter-spacing: -.02em;
   color: var(--white);
@@ -32,9 +37,9 @@
 }
 .cta-display em { font-style: italic; color: inherit; font-weight: inherit; }
 .cta-lede {
-  font-size: 1.02rem;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, .72);
+  font-size: clamp(1.08rem, 1.5vw, 1.22rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .78);
   max-width: 44ch;
   margin: 0 0 1.4rem;
   font-weight: 400;

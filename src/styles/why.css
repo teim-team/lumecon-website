@@ -2,6 +2,11 @@
   background: var(--cream);
   padding: clamp(4rem, 8vw, 6rem) 0;
   border-bottom: 1px solid var(--rule);
+  scroll-snap-align: start;
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .why-inner {
   max-width: 1200px;
@@ -27,7 +32,7 @@
 .why-header__title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2rem, 3.8vw, 2.8rem);
+  font-size: clamp(2.2rem, 4.2vw, 3.2rem);
   line-height: 1.1;
   letter-spacing: -.022em;
   color: var(--navy);
@@ -36,7 +41,7 @@
 }
 .why-header__lede {
   font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  font-size: clamp(1.12rem, 1.6vw, 1.28rem);
   line-height: 1.55;
   color: var(--ink-2);
   margin: 0;
@@ -232,7 +237,7 @@
 .why-stat__k {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  font-size: clamp(1.2rem, 1.85vw, 1.5rem);
   line-height: 1.2;
   letter-spacing: -.018em;
   color: var(--navy);
@@ -240,7 +245,7 @@
 }
 .why-stat__amp { font-style: italic; color: var(--accent); font-weight: 500; }
 .why-stat__v {
-  font-size: .98rem;
+  font-size: 1.05rem;
   line-height: 1.55;
   color: var(--ink-2);
   margin: 0;
