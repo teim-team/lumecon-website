@@ -93,6 +93,13 @@ body {
   background: var(--white);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  /* `contain` on the Y axis blocks the iOS Safari pull-to-refresh
+     gesture (a swipe-down at the top of the page used to reload
+     the document and read as a "random page reset"). The X axis
+     gets `none` so horizontal swipes that look like overscroll
+     don't try to navigate back/forward. */
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: none;
   line-height: 1.6;
   font-variant-numeric: tabular-nums;
 }
