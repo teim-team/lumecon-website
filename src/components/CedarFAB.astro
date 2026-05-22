@@ -16,35 +16,61 @@
   id="cedarFab"
   href="/#cedar"
   aria-label="Ask Cedar a question"
+  aria-expanded="false"
   title="Ask Cedar"
 >
-  <span class="cedar-fab__icon" aria-hidden="true">
+  <span class="cedar-fab__icon cedar-fab__icon--tree" aria-hidden="true">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter">
       <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/>
       <line x1="12" y1="20" x2="12" y2="22" stroke-linecap="butt" stroke-width="2"/>
     </svg>
   </span>
-  <span class="cedar-fab__label">Ask Cedar</span>
+  <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="6"  y1="6"  x2="18" y2="18"/>
+      <line x1="18" y1="6"  x2="6"  y2="18"/>
+    </svg>
+  </span>
+  <span class="cedar-fab__label cedar-fab__label--ask">Ask Cedar</span>
+  <span class="cedar-fab__label cedar-fab__label--close">Close</span>
 </a>
 
 <script is:inline>
   (function () {
     const fab = document.getElementById('cedarFab');
     if (!fab) return;
-    fab.addEventListener('click', (e) => {
-      // On the homepage: smooth-scroll to the Cedar section and focus
-      // the input so the visitor can start typing immediately. Skip
-      // the default anchor jump.
-      const cedar = document.getElementById('cedar');
-      if (!cedar) return; // Off-page: let the href take them to /#cedar
-      e.preventDefault();
-      cedar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const closePop = () => {
+      if (!document.body.classList.contains('cedar-popped')) return;
+      document.body.classList.remove('cedar-popped');
+      fab.setAttribute('aria-expanded', 'false');
+    };
+    const openPop = () => {
+      document.body.classList.add('cedar-popped');
+      fab.setAttribute('aria-expanded', 'true');
       const input = document.getElementById('cedarInput');
-      if (input) {
-        // Wait for the scroll to settle before focusing so iOS doesn't
-        // jump the viewport unexpectedly.
-        window.setTimeout(() => input.focus({ preventScroll: true }), 600);
+      if (input) window.setTimeout(() => input.focus({ preventScroll: true }), 200);
+    };
+
+    fab.addEventListener('click', (e) => {
+      // On pages that have the Cedar chat element in the DOM
+      // (currently the homepage), the FAB toggles the chat into a
+      // floating panel via the body.cedar-popped class. On other
+      // pages, fall through to the anchor href so the visitor
+      // lands on the homepage Cedar section.
+      const cedar = document.getElementById('cedar');
+      if (!cedar) return;
+      e.preventDefault();
+      if (document.body.classList.contains('cedar-popped')) {
+        closePop();
+      } else {
+        openPop();
       }
+    });
+
+    // Escape closes the popped chat.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePop();
     });
   })();
 </script>
@@ -96,6 +122,77 @@
   }
   .cedar-fab__icon svg { display: block; }
 
+  /* Open / closed states swap which icon + label is visible so the
+     same FAB does double duty as "Ask Cedar" and "Close". */
+  .cedar-fab__icon--close,
+  .cedar-fab__label--close { display: none; }
+  body.cedar-popped .cedar-fab__icon--tree,
+  body.cedar-popped .cedar-fab__label--ask { display: none; }
+  body.cedar-popped .cedar-fab__icon--close { display: inline-flex; }
+  body.cedar-popped .cedar-fab__label--close { display: inline; }
+
+  /* When the FAB pops the Cedar chat, kill the ambient pulse — the
+     panel is now the focus, not the button. */
+  body.cedar-popped .cedar-fab::before { animation: none; opacity: 0; }
+  body.cedar-popped .cedar-fab { background: var(--navy); }
+  body.cedar-popped .cedar-fab:hover { background: var(--navy2); box-shadow: 0 6px 16px rgba(10, 15, 38, .3); }
+
+  /* ---------- Popped chat panel ----------
+     The Cedar chat normally lives inline in the Cedar section. When
+     body.cedar-popped is set, we yank the existing .cedar-chat
+     element into a fixed-position panel anchored above the FAB. The
+     section's right-column placeholder shows a "popped out" hint so
+     the page layout doesn't collapse around the missing element. */
+  :global(body.cedar-popped #cedar .cedar-chat) {
+    position: fixed;
+    bottom: clamp(4.5rem, 6vw, 5.5rem);
+    right: clamp(.9rem, 2.2vw, 1.5rem);
+    width: min(380px, calc(100vw - 1.8rem));
+    max-height: calc(100vh - 7.5rem);
+    z-index: 85;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+      0 24px 60px -16px rgba(10, 15, 38, .28),
+      0 4px 16px rgba(10, 15, 38, .14);
+    animation: cedar-pop-in .25s var(--ease);
+  }
+  :global(body.cedar-popped #cedar .cedar-chat__transcript) {
+    flex: 1 1 auto;
+    min-height: 180px;
+  }
+  :global(body.cedar-popped #cedar .cedar-about__right)::before {
+    content: 'Chat popped out';
+    display: block;
+    padding: 1.5rem 1rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border: 1px dashed var(--rule);
+    border-radius: 14px;
+    text-align: center;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* .ask-cedar wrapper collapses naturally once its only visible
+     child (.cedar-chat) is lifted via position:fixed. The placeholder
+     ::before above gives the column its size. */
+  :global(body.cedar-popped #cedar .cedar-about__right) > :global(.ask-cedar) {
+    height: 0;
+    overflow: hidden;
+  }
+  @keyframes cedar-pop-in {
+    from { transform: translateY(12px) scale(.97); opacity: 0; }
+    to   { transform: translateY(0)    scale(1);   opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(body.cedar-popped #cedar .cedar-chat) { animation: none; }
+  }
+
   /* Subtle ambient pulse so the FAB feels alive but doesn't beg. */
   .cedar-fab::before {
     content: '';
@@ -121,5 +218,15 @@
     .cedar-fab { padding: .7rem; }
     .cedar-fab__label { display: none; }
     .cedar-fab__icon { background: transparent; }
+    /* Cap the popped panel so it doesn't fill the screen edge to
+       edge on a phone. */
+    :global(body.cedar-popped #cedar .cedar-chat) {
+      bottom: 5rem;
+      max-height: min(calc(100vh - 7rem), 520px);
+      width: calc(100vw - 1.4rem);
+    }
+    :global(body.cedar-popped #cedar .cedar-chat__transcript) {
+      max-height: 260px;
+    }
   }
 </style>
