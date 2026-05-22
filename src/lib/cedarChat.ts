@@ -221,9 +221,14 @@ function renderFollowUps(
     btn.className = 'cedar-chip cedar-chip--followup';
     btn.dataset.intent = intent.id;
     btn.textContent = intent.chip!;
-    btn.addEventListener('click', () => {
-      row.remove();
+    btn.addEventListener('click', (e) => {
+      // Stop the click from reaching any outside-click handlers
+      // (e.g. CedarFAB's panel close), and defer the row removal
+      // until the current event loop finishes so the click target
+      // stays attached for any other listeners walking the DOM.
+      e.stopPropagation();
       onSelect(intent);
+      setTimeout(() => row.remove(), 0);
     });
     row.appendChild(btn);
   }
