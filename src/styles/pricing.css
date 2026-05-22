@@ -70,6 +70,155 @@
   border-left: 2px solid var(--rule-strong, rgba(14, 21, 48, .18));
 }
 
+/* ---------- Platform picker ----------
+   Three tiles use the homepage product icons (IconTribal / IconLocal
+   / IconGlobal). Hover lifts the tile + reveals the right-fit
+   blurb beneath the name. The picked tile gets `.is-active` to lock
+   in the highlighted state until another tile is picked. The
+   coming-soon tile (Global at v1) is dashed and non-buyable. */
+.pricing-platform-grid {
+  list-style: none;
+  margin: 0 0 1.4rem;
+  padding: 0;
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.pricing-platform-tile {
+  width: 100%;
+  text-align: left;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 1.4rem 1.4rem 1.6rem;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 1rem;
+  row-gap: .55rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .18s var(--ease), box-shadow .18s var(--ease), transform .18s var(--ease), background .18s var(--ease);
+  position: relative;
+}
+.pricing-platform-tile:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px -6px rgba(14, 21, 48, .12);
+  transform: translateY(-2px);
+}
+.pricing-platform-tile.is-active {
+  border-color: var(--accent);
+  background: linear-gradient(0deg, var(--accent-rgba-08) 0%, var(--white) 100%);
+  box-shadow:
+    0 1px 1px rgba(10, 15, 38, .04),
+    0 12px 28px -10px rgba(15, 181, 165, .25);
+}
+.pricing-platform-tile.is-active::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border-radius: 14px;
+  border: 2px solid var(--accent);
+  pointer-events: none;
+}
+.pricing-platform-tile--coming-soon {
+  background: var(--cream);
+  border-style: dashed;
+  border-color: var(--rule-strong, rgba(14, 21, 48, .22));
+  cursor: default;
+}
+.pricing-platform-tile--coming-soon:hover {
+  border-color: var(--cedar);
+  background: var(--cedar-mist, #E0F2E7);
+  transform: none;
+  box-shadow: none;
+}
+.pricing-platform-tile__icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: var(--cream);
+  color: var(--navy);
+}
+.pricing-platform-tile--coming-soon .pricing-platform-tile__icon {
+  background: var(--white);
+  color: var(--ink-3);
+}
+.pricing-platform-tile__icon :global(svg) { width: 60%; height: 60%; display: block; }
+.pricing-platform-tile__name {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.18rem;
+  letter-spacing: -.014em;
+  color: var(--navy);
+  margin: 0;
+  align-self: end;
+}
+.pricing-platform-tile__fit {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: var(--font-sans);
+  font-size: .92rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+.pricing-platform-tile__tag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--cedar);
+  padding: .18rem .55rem;
+  border-radius: 3px;
+}
+.pricing-platform-prompt {
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  letter-spacing: .08em;
+  color: var(--ink-3);
+  margin: .6rem 0 0;
+  font-style: italic;
+}
+
+/* Pricing TBD placeholder — replaces the dollar price string when
+   finance hasn't locked numbers yet. Reads as deliberate, not
+   missing-data. */
+.pricing-tier-card__price-tbd {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  letter-spacing: -.018em;
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+/* Tier kicker that names the currently-picked platform. */
+.pricing-tiers__head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.pricing-tiers__kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 .8rem;
+}
+
 /* ---------- Tier grid ---------- */
 .pricing-tier-grid {
   display: grid;

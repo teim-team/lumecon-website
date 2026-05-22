@@ -1,37 +1,45 @@
 ---
 /**
- * /pricing — three-tier annual pricing for Tribal Economic Impact.
+ * /pricing — platform picker first, tiers second.
+ *
+ * The visitor flow:
+ *   1. Land on the page.
+ *   2. Pick the platform that matches their work — Tribal, Local,
+ *      or Global. Global is gated as "Coming soon" at v1.
+ *   3. Tier grid + comparison table + discount band reveal beneath
+ *      the platform picker. The picked platform's name threads
+ *      through tier CTAs and the comparison-table heading so the
+ *      visitor sees their context echoed back to them.
+ *
+ * Why gate the tiers behind a platform pick: the three platforms
+ * serve very different audiences (tribal nations vs. municipalities
+ * vs. cross-border analysis), and showing every tier on every
+ * platform at once would force a tribal-nation buyer to mentally
+ * filter out "this isn't for me" rows. Gating cleans that up.
+ *
+ * Dollar figures are intentionally hidden — finance hasn't locked
+ * prices yet and we don't want placeholder numbers leaking out as
+ * if they were real. Each tier card renders "Pricing TBD" until
+ * src/data/pricing.ts has real prices populated.
  *
  * Ported from the spec written against
  * `src/pages/Pricing.jsx` on branch
  * `claude/explore-lumecon-foundation-BDWKd`. That branch isn't
  * fetchable from this isolated working tree, so this is a from-spec
  * implementation in Astro rather than a JSX-to-Astro port.
- *
- * v1 launch behaviour:
- *   - Two tiers buyable: Sprout ($5k/yr) and Sapling ($15k/yr).
- *   - Tree ($25k/yr) shows as a dashed "Coming soon" card with a
- *     notify-me CTA instead of "Request access." Tree-only rows in
- *     the comparison table render as "Coming soon" (data-value="soon").
- *
- * Single source of truth: src/data/pricing.ts. Prices below come
- * from PUBLIC_PRICING_TIERS at build time; the meta description
- * interpolates the same values, so updating the data file is enough
- * once finance signs off.
- *
- * Discount-code input lives in the cream band. Codes are recognised
- * client-side only via PRODUCT_DISCOUNT_CODES — real enforcement
- * has to move to the billing provider before any code is
- * publicly distributed.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import IconTribal from '../components/icons/IconTribal.astro';
+import IconLocal from '../components/icons/IconLocal.astro';
+import IconGlobal from '../components/icons/IconGlobal.astro';
 import { site } from '../config';
 import {
   PUBLIC_PRICING_TIERS,
   COMPARISON_ROWS,
   ANNUAL_SUBSCRIPTION_DISCOUNTS,
+  PRODUCT_LINES,
 } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -39,32 +47,76 @@ import '../styles/footer.css';
 import '../styles/pricing.css';
 
 const tiers = PUBLIC_PRICING_TIERS;
-const priceList = tiers.map((t) => t.price).join(', ');
-const description = `Three annual tiers for Tribal Economic Impact by Lumecon: ${priceList} per year.`;
+const platforms = PRODUCT_LINES;
+
+const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, Local, or Global — and we will surface the tiers that fit. Annual subscriptions, prepayment options, and discount codes.';
 ---
 <BaseLayout
-  title="Pricing | Tribal Economic Impact by Lumecon"
+  title="Pricing | Lumecon"
   description={description}
   canonical="https://lumecon.ai/pricing"
-  keywords="Lumecon pricing, Tribal Economic Impact pricing, economic impact analysis pricing, IMPLAN alternative pricing, RIMS II alternative pricing, REMI alternative pricing, Cedar AI pricing, tribal economic impact software cost, annual subscription"
-  ogTitle="Lumecon pricing: three tiers, priced annually"
+  keywords="Lumecon pricing, Tribal Economic Impact pricing, Local Economic Impact pricing, Global Economic Impact pricing, economic impact analysis pricing, IMPLAN alternative pricing, RIMS II alternative pricing, REMI alternative pricing, Cedar AI pricing, annual subscription"
+  ogTitle="Lumecon pricing: pick your platform, then your tier"
   ogDescription={description}
 >
   <Nav />
   <main class="pricing">
 
-    <!-- 1. Hero band -->
+    <!-- 1. Hero band — always visible. Frames the pick-your-platform
+              decision the visitor is about to make. -->
     <section class="editorial-band editorial-band--white pricing-hero">
       <div class="editorial-band__inner">
         <header class="pricing-hero__head">
-          <h1 class="editorial-question">Three tiers. Priced annually.</h1>
-          <p class="pricing-hero__lede">Reservation, state, and national results are included at every tier &mdash; Sprout, Sapling, and Tree. Cedar starts at Sapling. Cedar Grove is part of Tree.</p>
-          <p class="pricing-hero__aside">Model updates, data refreshes, and workflow improvements land on every tier as they ship. You don&rsquo;t pay again to stay current.</p>
+          <h1 class="editorial-question">Pick the platform that fits.</h1>
+          <p class="pricing-hero__lede">Lumecon runs as three platforms tuned to different work. Pick the one that matches yours — we&rsquo;ll surface the tiers from there.</p>
+          <p class="pricing-hero__aside">Annual subscriptions across every platform. Model updates, data refreshes, and workflow improvements land on every tier as they ship; you don&rsquo;t pay again to stay current.</p>
+        </header>
+
+        <!-- 2. Platform picker. Three tiles with the same icons the
+                  homepage uses for each product. Tribal + Local are
+                  active; Global is "Coming soon." Picking a tile
+                  reveals the tier section below. -->
+        <ul class="pricing-platform-grid" aria-label="Platform picker">
+          {platforms.map((p) => (
+            <li>
+              <button
+                type="button"
+                class={`pricing-platform-tile${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
+                data-platform-id={p.id}
+                data-platform-short={p.shortName}
+                data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
+                aria-pressed="false"
+                aria-disabled={p.comingSoon ? 'true' : 'false'}
+              >
+                <span class="pricing-platform-tile__icon" aria-hidden="true">
+                  {p.iconId === 'tribal' && <IconTribal />}
+                  {p.iconId === 'local'  && <IconLocal />}
+                  {p.iconId === 'global' && <IconGlobal />}
+                </span>
+                <span class="pricing-platform-tile__name">{p.name}</span>
+                <span class="pricing-platform-tile__fit">{p.fitIf}</span>
+                {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <p class="pricing-platform-prompt" data-platform-prompt>Pick a platform above to see its tiers.</p>
+      </div>
+    </section>
+
+    <!-- 3. Tier grid — hidden until a platform is picked. The
+              `data-platform-section` flag is flipped by the script
+              below when the visitor clicks an active tile. -->
+    <section class="editorial-band editorial-band--white pricing-tiers" data-platform-section hidden aria-labelledby="tiers-h2">
+      <div class="editorial-band__inner">
+        <header class="pricing-tiers__head">
+          <p class="pricing-tiers__kicker">Tiers for <span data-platform-name>your platform</span></p>
+          <h2 class="pricing-compare__h2" id="tiers-h2">Three tiers. Priced annually.</h2>
+          <p class="pricing-compare__deck">Reservation, state, and national results are included at every tier. Cedar starts at Sapling. Cedar Grove is part of Tree.</p>
         </header>
 
         <ul class="pricing-tier-grid" aria-label="Pricing tiers">
           {tiers.map((t) => {
-            const mailtoBody = `&body=${encodeURIComponent(`Hi Lumecon team,\n\nI'd like to ${t.comingSoon ? 'be notified when' : 'request access to'} the ${t.name} tier of Tribal Economic Impact.\n\nOrganization: \nUse case: \n`)}`;
             const subject = encodeURIComponent(t.comingSoon ? `Notify me when ${t.name} ships` : t.ctaSubject);
             return (
               <li
@@ -97,7 +149,7 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
                       </svg>
                     )}
                   </span>
-                  <h2 class="pricing-tier-card__name">{t.name}</h2>
+                  <h3 class="pricing-tier-card__name">{t.name}</h3>
                   {t.comingSoon
                     ? <span class="pricing-tier-card__tag">Coming soon</span>
                     : t.featured
@@ -106,10 +158,13 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
                 </header>
 
                 <div class="pricing-tier-card__price-row">
-                  <span class="pricing-tier-card__price">{t.price}</span>
-                  <span class="pricing-tier-card__period">{t.period}</span>
+                  {t.price
+                    ? <>
+                        <span class="pricing-tier-card__price">{t.price}</span>
+                        <span class="pricing-tier-card__period">{t.period}</span>
+                      </>
+                    : <span class="pricing-tier-card__price-tbd">Pricing TBD</span>}
                 </div>
-                <p class="pricing-tier-card__discounted" data-discounted-price>&nbsp;</p>
 
                 <p class="pricing-tier-card__tagline">{t.tagline}</p>
 
@@ -132,7 +187,7 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
                 <div class="pricing-tier-card__cta">
                   <a
                     class={t.comingSoon ? 'btn btn--ghost' : 'btn'}
-                    href={`mailto:${site.email}?subject=${subject}${mailtoBody}`}
+                    href={`mailto:${site.email}?subject=${subject}`}
                     data-analytics={`pricing-${t.name}-request-access`}
                     data-cta-base={`mailto:${site.email}?subject=${subject}`}
                   >
@@ -146,8 +201,8 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
       </div>
     </section>
 
-    <!-- 2. Comparison band -->
-    <section class="editorial-band editorial-band--white pricing-compare" aria-labelledby="compare-h2">
+    <!-- 4. Comparison band — same gating as the tier grid. -->
+    <section class="editorial-band editorial-band--white pricing-compare" data-platform-section hidden aria-labelledby="compare-h2">
       <div class="editorial-band__inner">
         <p class="pricing-compare__kicker">Compare the tiers</p>
         <h2 class="pricing-compare__h2" id="compare-h2">The full picture, one row at a time.</h2>
@@ -184,8 +239,11 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
       </div>
     </section>
 
-    <!-- 3. Discount-code band -->
-    <section class="editorial-band editorial-band--cream pricing-support" aria-labelledby="support-h2">
+    <!-- 5. Discount-code band — gated. The discount math is symbolic
+              while prices are TBD; the input still validates the
+              code and the status line confirms the percentage that
+              will apply when pricing lands. -->
+    <section class="editorial-band editorial-band--cream pricing-support" data-platform-section hidden aria-labelledby="support-h2">
       <div class="editorial-band__inner">
         <p class="pricing-support__kicker">Discount code</p>
         <div class="discount-code-panel">
@@ -214,8 +272,9 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
       </div>
     </section>
 
-    <!-- 4. Terms band -->
-    <section class="editorial-band editorial-band--navy pricing-terms" aria-labelledby="terms-h2">
+    <!-- 6. Terms band — gated. Same prepay / data / price-change
+              language regardless of platform. -->
+    <section class="editorial-band editorial-band--navy pricing-terms" data-platform-section hidden aria-labelledby="terms-h2">
       <div class="editorial-band__inner">
         <header class="pricing-terms__head">
           <h2 class="pricing-terms__h2" id="terms-h2">The fine print, unbolded.</h2>
@@ -252,13 +311,18 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
 </BaseLayout>
 
 <script>
-  import { getProductDiscountCode, applyDiscountToAnnualPrice, type DiscountCode } from '../data/pricing';
+  /* Two concerns in one script:
+       1. Platform picker — clicking an active tile flips the
+          data-platform-section blocks visible, threads the chosen
+          platform's name into tier CTAs + the kicker, and emits a
+          telemetry event. Picking the same tile again deselects it.
+       2. Discount code — validates against PRODUCT_DISCOUNT_CODES,
+          updates the status line, and emits pricing.discount_applied.
+          With prices set to 0 in the data file, the per-card
+          discounted-price line is suppressed; the status line is
+          where the visitor reads the confirmation. */
+  import { getProductDiscountCode, type DiscountCode } from '../data/pricing';
   import { trackEvent } from '../lib/observability';
-
-  function formatMoney(n: number): string {
-    if (n === 0) return '$0';
-    return '$' + n.toLocaleString('en-US');
-  }
 
   function setStatus(el: HTMLElement | null, text: string, variant: 'info' | 'valid' | 'error'): void {
     if (!el) return;
@@ -268,32 +332,74 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
     if (variant === 'error') el.classList.add('discount-code-panel__status--error');
   }
 
-  function applyDiscountToCards(code: DiscountCode | null): void {
-    document.querySelectorAll<HTMLElement>('.pricing-tier-card').forEach((card) => {
-      const annualAttr = card.dataset.tierAnnual;
-      const annual = annualAttr ? Number(annualAttr) : NaN;
-      const priceLine = card.querySelector<HTMLElement>('[data-discounted-price]');
-      const cta = card.querySelector<HTMLAnchorElement>('.pricing-tier-card__cta a');
-      const ctaBase = cta?.dataset.ctaBase;
-      if (!code || !Number.isFinite(annual)) {
-        card.classList.remove('has-discount');
-        if (priceLine) priceLine.textContent = '';
-        if (cta && ctaBase) cta.setAttribute('href', ctaBase);
-        return;
-      }
-      const result = applyDiscountToAnnualPrice(annual, code);
-      card.classList.add('has-discount');
-      if (priceLine) {
-        priceLine.textContent = `${formatMoney(result.finalAnnual)} with ${code.code}`;
-      }
-      if (cta && ctaBase) {
-        const body = encodeURIComponent(`Discount code: ${code.code}`);
-        cta.setAttribute('href', `${ctaBase}&body=${body}`);
+  function showSections(show: boolean, platformShort: string): void {
+    const sections = document.querySelectorAll<HTMLElement>('[data-platform-section]');
+    sections.forEach((s) => { s.hidden = !show; });
+    document.querySelectorAll<HTMLElement>('[data-platform-name]').forEach((el) => {
+      el.textContent = show ? `${platformShort} Economic Impact` : 'your platform';
+    });
+    /* Bake the platform short name into each tier card's CTA so the
+       request goes in with the right subject ("Sprout tier — Tribal"
+       vs "Sprout tier — Local"). */
+    document.querySelectorAll<HTMLAnchorElement>('.pricing-tier-card__cta a').forEach((cta) => {
+      const base = cta.dataset.ctaBase;
+      if (!base) return;
+      if (show) {
+        const sep = base.includes('?') ? '%20%E2%80%94%20' : '?subject=';
+        cta.setAttribute('href', `${base}${sep}${encodeURIComponent(platformShort)}`);
+      } else {
+        cta.setAttribute('href', base);
       }
     });
   }
 
-  function setup(): void {
+  function setupPlatformPicker(): void {
+    const tiles = document.querySelectorAll<HTMLButtonElement>('.pricing-platform-tile');
+    const prompt = document.querySelector<HTMLElement>('[data-platform-prompt]');
+    let active: HTMLButtonElement | null = null;
+
+    tiles.forEach((tile) => {
+      tile.addEventListener('click', () => {
+        if (tile.dataset.platformComingSoon === 'true') {
+          if (prompt) prompt.textContent = "Global is launching after Tribal and Local stabilize. Pick Tribal or Local to see tiers; email contact@lumecon.ai to be notified when Global ships.";
+          trackEvent('pricing.platform_coming_soon_click', { platformId: tile.dataset.platformId });
+          return;
+        }
+
+        const isReselect = active === tile;
+        if (active) {
+          active.classList.remove('is-active');
+          active.setAttribute('aria-pressed', 'false');
+        }
+
+        if (isReselect) {
+          active = null;
+          showSections(false, '');
+          if (prompt) prompt.textContent = 'Pick a platform above to see its tiers.';
+          return;
+        }
+
+        active = tile;
+        tile.classList.add('is-active');
+        tile.setAttribute('aria-pressed', 'true');
+        const shortName = tile.dataset.platformShort || '';
+        const platformId = tile.dataset.platformId || '';
+        if (prompt) prompt.textContent = `Showing tiers for ${shortName} Economic Impact. Pick another platform to switch.`;
+        showSections(true, shortName);
+        trackEvent('pricing.platform_picked', { platformId, platformShort: shortName });
+
+        /* Scroll the tier section into view so the visitor doesn't
+           have to hunt for what just appeared. requestAnimationFrame
+           lets the hidden=false flip paint first. */
+        requestAnimationFrame(() => {
+          const next = document.querySelector<HTMLElement>('[data-platform-section]:not([hidden])');
+          next?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    });
+  }
+
+  function setupDiscount(): void {
     const form = document.querySelector<HTMLFormElement>('[data-discount-form]');
     if (!form) return;
     const input = form.querySelector<HTMLInputElement>('[data-discount-input]');
@@ -304,17 +410,17 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
       const trimmed = (raw || '').trim();
       if (!trimmed) {
         setStatus(status, 'Conference, pilot, and testing codes are supported.', 'info');
-        applyDiscountToCards(null);
         return;
       }
-      const match = getProductDiscountCode(trimmed);
+      const match: DiscountCode | null = getProductDiscountCode(trimmed);
       if (!match) {
         setStatus(status, 'Code not recognized.', 'error');
-        applyDiscountToCards(null);
         return;
       }
-      setStatus(status, `${match.label}: ${match.discountPct}% off annual pricing.`, 'valid');
-      applyDiscountToCards(match);
+      /* Prices aren't locked yet (priceAnnual is 0 in the data file),
+         so we describe the discount that will apply when pricing
+         lands instead of computing a dollar amount. */
+      setStatus(status, `${match.label}: ${match.discountPct}% off annual pricing — applied when pricing is finalized.`, 'valid');
       trackEvent('pricing.discount_applied', { code: match.code, discountPct: match.discountPct });
     };
 
@@ -323,6 +429,11 @@ const description = `Three annual tiers for Tribal Economic Impact by Lumecon: $
       handle(input.value);
     });
     input.addEventListener('input', () => handle(input.value));
+  }
+
+  function setup(): void {
+    setupPlatformPicker();
+    setupDiscount();
   }
 
   if (document.readyState === 'loading') {
