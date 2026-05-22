@@ -541,44 +541,102 @@
      Output uses opacity-only — the document frame stays anchored
      while the harmonized rows fill in, so it reads as data being
      added to a stationary document rather than a document growing. */
+  /* Station 1: three input sheets MIGRATE to the output's position
+     and size (translate + scale up + rotate to straighten the
+     parent's outer tilt), then crossfade into the output. So the
+     visitor reads "three messy inputs converge and become the
+     single harmonized output," not "inputs fade out, output fades
+     in."
+
+     Translate values are picked to put each sheet's centre at the
+     output's centre (~14, 0 in viewBox). The inner rotate counter-
+     acts the parent <g transform="rotate(...)"> tilt so the sheet
+     is upright at the moment of convergence — important because
+     the output document is upright.
+
+     Timing within the 8s cycle:
+       0-12%   sheets visible at their tilted left positions
+       12-30%  sheets migrate to output centre (scaling up 1->3,
+               rotating upright)
+       30-37%  CROSSFADE — sheets opacity 1->0 while .hf-out
+               opacity 0->1, all at the same screen position
+       37-77%  output visible, rows populate
+       77-82%  output stable
+       82-95%  output fades out for cycle reset
+       95-100% sheets reset to start positions (invisible) for the
+               next iteration */
   .hf-in {
     transform-box: fill-box;
-    transform-origin: 0 50%;
-    animation: hf-in-merge 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    transform-origin: center;
+    animation-duration: 8s;
+    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+    animation-iteration-count: infinite;
+    animation-fill-mode: backwards;
   }
-  .hf-in--a { animation-delay: 0s; }
-  .hf-in--b { animation-delay: .12s; }
-  .hf-in--c { animation-delay: .24s; }
-  @keyframes hf-in-merge {
-    0%       { opacity: 0; transform: translate(16px, 0) scale(.55); }
-    5%, 19%  { opacity: 1; transform: translate(0, 0)    scale(1);   }
-    24%      { opacity: 1; transform: translate(6px, 0)  scale(.85); }
-    30%, 100% { opacity: 0; transform: translate(16px, 0) scale(.55); }
+  .hf-in--a { animation-name: hf-in-merge-a; }
+  .hf-in--b { animation-name: hf-in-merge-b; }
+  .hf-in--c { animation-name: hf-in-merge-c; }
+
+  /* Sheet A: tilted -6° outer, starts upper-left (centre ~ -24,-20).
+     Counter-rotates +6° as it migrates to (14, 0). */
+  @keyframes hf-in-merge-a {
+    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1) rotate(0deg); }
+    22%       { opacity: 1; transform: translate(19px, 10px)  scale(2) rotate(3deg); }
+    30%       { opacity: 1; transform: translate(38px, 20px)  scale(3) rotate(6deg); }
+    37%, 95%  { opacity: 0; transform: translate(38px, 20px)  scale(3) rotate(6deg); }
+    100%      { opacity: 0; transform: translate(0, 0)        scale(1) rotate(0deg); }
   }
+  /* Sheet B: tilted +4° outer, starts mid-left (centre ~ -27, -2).
+     Counter-rotates -4° as it migrates to (14, 0). */
+  @keyframes hf-in-merge-b {
+    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1) rotate(0deg); }
+    22%       { opacity: 1; transform: translate(20px, 1px)   scale(2) rotate(-2deg); }
+    30%       { opacity: 1; transform: translate(41px, 2px)   scale(3) rotate(-4deg); }
+    37%, 95%  { opacity: 0; transform: translate(41px, 2px)   scale(3) rotate(-4deg); }
+    100%      { opacity: 0; transform: translate(0, 0)        scale(1) rotate(0deg); }
+  }
+  /* Sheet C: tilted -3° outer, starts lower-left (centre ~ -26, 18).
+     Counter-rotates +3° as it migrates to (14, 0). */
+  @keyframes hf-in-merge-c {
+    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1) rotate(0deg); }
+    22%       { opacity: 1; transform: translate(20px, -9px)  scale(2) rotate(1deg); }
+    30%       { opacity: 1; transform: translate(40px, -18px) scale(3) rotate(3deg); }
+    37%, 95%  { opacity: 0; transform: translate(40px, -18px) scale(3) rotate(3deg); }
+    100%      { opacity: 0; transform: translate(0, 0)        scale(1) rotate(0deg); }
+  }
+
+  /* Output document: fades in DURING the sheets' final approach
+     (crossfade window 30-37%), so the eye reads it as the three
+     sheets becoming the document. Stays visible through the rest
+     of the cycle. */
   .hf-out {
     opacity: 0;
     animation: hf-out-show 8s ease-in-out infinite;
   }
   @keyframes hf-out-show {
-    0%, 26%  { opacity: 0; }
-    33%, 77% { opacity: 1; }
-    82%, 100% { opacity: 0; }
+    0%, 30%   { opacity: 0; }
+    37%, 82%  { opacity: 1; }
+    92%, 100% { opacity: 0; }
   }
   .hf-out__row {
     transform-box: fill-box;
     transform-origin: left center;
     animation: hf-out-row 8s ease-in-out infinite;
   }
-  .hf-out__row--1 { animation-delay: .45s; }
-  .hf-out__row--2 { animation-delay: .55s; }
-  .hf-out__row--3 { animation-delay: .65s; }
-  .hf-out__row--4 { animation-delay: .75s; }
-  .hf-out__row--5 { animation-delay: .85s; }
-  .hf-out__row--6 { animation-delay: .95s; }
+  /* Row delays: each row materializes after the document is
+     visible, sweeping top to bottom so the visitor reads the data
+     populating row by row. Delays land in the 3.0-3.5s window which
+     is the 37-44% of the 8s cycle — right when the output appears. */
+  .hf-out__row--1 { animation-delay: 3.00s; }
+  .hf-out__row--2 { animation-delay: 3.12s; }
+  .hf-out__row--3 { animation-delay: 3.24s; }
+  .hf-out__row--4 { animation-delay: 3.36s; }
+  .hf-out__row--5 { animation-delay: 3.48s; }
+  .hf-out__row--6 { animation-delay: 3.60s; }
   @keyframes hf-out-row {
-    0%, 28%  { opacity: 0; transform: scaleX(0); }
-    36%, 78% { opacity: 1; transform: scaleX(1); }
-    82%, 100% { opacity: 0; transform: scaleX(0); }
+    0%        { opacity: 0; transform: scaleX(0); }
+    4%, 50%   { opacity: 1; transform: scaleX(1); }
+    56%, 100% { opacity: 0; transform: scaleX(0); }
   }
 
   /* ---------- Station 2: hourglass → bars → output lines ----
