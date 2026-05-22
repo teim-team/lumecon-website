@@ -43,7 +43,7 @@
   font-size: clamp(2.4rem, 5.5vw, 4.4rem);
   line-height: 1.1;
   letter-spacing: -.025em;
-  color: var(--navy);
+  color: var(--accent-deep);
   margin: 0;
   max-width: 24ch;
 }
