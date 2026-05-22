@@ -10,6 +10,10 @@
  * inline Cedar chat in the Cedar section (FAQSection.astro), but
  * everything is class-scoped to .cedar-fab-panel so the two
  * instances coexist on the homepage without clashing.
+ *
+ * cedar-chat.css carries the shared chat-surface styles (.cedar-chat,
+ * .cedar-msg, .cedar-chip, ...). Importing it here means the FAB
+ * panel renders styled on pages where FAQSection isn't rendered.
  */
 import {
   INTENTS,
@@ -18,6 +22,7 @@ import {
   OUT_OF_SCOPE_TRIGGERS,
   CHIP_IDS,
 } from '../data/cedarIntents';
+import '../styles/cedar-chat.css';
 
 const chips = CHIP_IDS.map((id) => INTENTS.find((i) => i.id === id)!).filter(Boolean);
 const cedarData = {
