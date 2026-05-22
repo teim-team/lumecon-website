@@ -52,7 +52,13 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
      'unsafe-inline' on script/style is required because Astro inlines
      per-page hydration shims and the JSON-LD blob below; revisit when
      we move off GitHub Pages and can set this as an HTTP header with
-     nonces. -->
+     nonces.
+
+     When the backend / observability ship, extend connect-src:
+       - https://api.lumecon.ai          (AWS API Gateway origin)
+       - https://*.datadoghq.com         (Datadog RUM beacon; swap
+                                          subdomain to match SITE)
+     and extend script-src if Datadog is loaded from the CDN agent. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://ipapi.co; upgrade-insecure-requests">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -109,6 +115,17 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
 <a href="#top" class="skip-link">Skip to main content</a>
 <slot />
 <CedarFAB />
+
+<script>
+  /* Observability boot: idempotent, no-op until PUBLIC_DATADOG_*
+     env vars are set + the SDK is installed. See src/lib/observability.ts
+     for the wire-up checklist. */
+  import { initObservability, trackEvent } from '../lib/observability';
+  void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
+  document.addEventListener('astro:page-load', () => {
+    void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
+  });
+</script>
 
 <script is:inline>
   // Scroll-reveal: anything with class="reveal" (or reveal-left/right/

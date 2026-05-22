@@ -12,9 +12,6 @@
  */
 import {
   INTENTS,
-  OUT_OF_SCOPE_ANSWER,
-  FALLBACK_ANSWER,
-  OUT_OF_SCOPE_TRIGGERS,
   CHIP_IDS,
   STATIC_FAQ_IDS,
   STATIC_FAQ_QUESTIONS,
@@ -23,22 +20,18 @@ import {
 // live in cedar-chat.css and are shared with CedarFAB.astro so the
 // FAB panel renders styled on pages where FAQSection isn't rendered.
 import '../styles/cedar-chat.css';
-// The 200+ lines of intent definitions, chip lists, and static FAQ
-// configuration that used to live here now live in cedarIntents.ts so
-// they can be reused and audited independently of the chat UI.
 
-// Build the chat surface + SEO subset off the imported tables.
+// Static <details> FAQ (no-JS fallback + FAQPage JSON-LD).
 const staticFaqs = STATIC_FAQ_IDS.map((id) => {
   const intent = INTENTS.find((i) => i.id === id)!;
   return { q: STATIC_FAQ_QUESTIONS[id], a: intent.answer };
 });
-const chips = CHIP_IDS.map((id) => INTENTS.find((i) => i.id === id)!).filter(Boolean);
-
-const cedarData = {
-  intents: INTENTS,
-  outOfScope: { answer: OUT_OF_SCOPE_ANSWER, triggers: OUT_OF_SCOPE_TRIGGERS },
-  fallback: { answer: FALLBACK_ANSWER },
-};
+// Quick-reply chips shown inside the welcome bubble. The chat
+// runtime in src/lib/cedarChat.ts owns answer resolution; this file
+// just renders the chips with their data-intent ids.
+const chips = CHIP_IDS
+  .map((id) => INTENTS.find((i) => i.id === id))
+  .filter((i): i is NonNullable<typeof i> => i != null && i.chip != null);
 interface Props {
   /** When true, render only the chat panel (no section wrapper,
       no title / byline / note). Used when embedding inside the
@@ -73,7 +66,7 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
           <span class="cedar-chat__status-label">Online</span>
         </span>
       </header>
-      <div class="cedar-chat__transcript" id="cedarTranscript" role="log" aria-live="polite" aria-label="Cedar conversation">
+      <div class="cedar-chat__transcript" data-cedar-transcript role="log" aria-live="polite" aria-label="Cedar conversation">
         <div class="cedar-msg cedar-msg--bot">
           <span class="cedar-msg__avatar" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
@@ -82,7 +75,7 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
           </span>
           <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
             <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
-            <div class="cedar-quickreply" id="cedarChips">
+            <div class="cedar-quickreply" data-cedar-chips>
               {chips.slice(0, 5).map((intent) => (
                 <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
               ))}
@@ -91,11 +84,11 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
         </div>
       </div>
 
-      <form class="cedar-chat__form" id="cedarForm" autocomplete="off">
+      <form class="cedar-chat__form" data-cedar-form autocomplete="off">
         <label class="cedar-chat__inputwrap">
           <span class="visually-hidden">Ask Cedar</span>
           <input
-            id="cedarInput"
+            data-cedar-input
             class="cedar-chat__input"
             type="text"
             name="q"
@@ -134,133 +127,30 @@ const wrapperClass = compact ? 'ask-cedar ask-cedar--compact' : 'ask-cedar';
     </div>
   </div>
 
-  <script type="application/json" id="cedarFaqData" set:html={JSON.stringify(cedarData)}></script>
 </Wrapper>
 
-<script is:inline>
-  (function () {
-  const dataEl = document.getElementById('cedarFaqData');
-  const chat = document.getElementById('cedarChat');
-  const fallback = document.getElementById('cedarFallback');
-  const transcript = document.getElementById('cedarTranscript');
-  const chipsEl = document.getElementById('cedarChips');
-  const form = document.getElementById('cedarForm');
-  const input = document.getElementById('cedarInput');
+<script>
+  /* Inline Cedar chat — boots from the shared runtime in
+     src/lib/cedarChat.ts (same module the FAB uses). The runtime
+     handles classification, API fallback, transcript rendering, and
+     observability hooks. */
+  import { bootChat } from '../lib/cedarChat';
 
-  if (!(dataEl && chat && fallback && transcript && chipsEl && form && input)) return;
-  const BANK = JSON.parse(dataEl.textContent || '{}');
-  const INTENTS = BANK.intents || [];
-
-  chat.removeAttribute('hidden');
-  fallback.setAttribute('hidden', '');
-
-  function appendMessage(variant, body) {
-    const wrap = document.createElement('div');
-    wrap.className = 'cedar-msg cedar-msg--' + variant;
-    if (variant === 'bot') {
-      const av = document.createElement('span');
-      av.className = 'cedar-msg__avatar';
-      av.setAttribute('aria-hidden', 'true');
-      av.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/></svg>';
-      wrap.appendChild(av);
-    }
-    const bubble = document.createElement('div');
-    bubble.className = 'cedar-msg__bubble';
-    if (typeof body === 'string') bubble.textContent = body;
-    else bubble.appendChild(body);
-    wrap.appendChild(bubble);
-    transcript.appendChild(wrap);
-    transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
-    return wrap;
+  function setup(): void {
+    const chat = document.getElementById('cedarChat');
+    const fallback = document.getElementById('cedarFallback');
+    if (!chat) return;
+    chat.removeAttribute('hidden');
+    fallback?.setAttribute('hidden', '');
+    bootChat(chat, { surface: 'inline' });
   }
 
-  // Normalize a string: lowercase, collapse whitespace, strip punctuation
-  // we don't care about. Wrap with spaces so word-boundary checks work
-  // ('this'.includes('hi') is true; ' this '.includes(' hi ') is false).
-  function normalize(s) {
-    return ' ' + (s || '').toLowerCase()
-      .replace(/[?!.,;:"'`()\[\]]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim() + ' ';
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
   }
-
-  function classify(rawText) {
-    const text = normalize(rawText);
-    if (text.trim() === '') return { intent: null, score: 0 };
-    let best = null;
-    let bestScore = 0;
-    for (let i = 0; i < INTENTS.length; i++) {
-      const intent = INTENTS[i];
-      let score = 0;
-      for (let t = 0; t < intent.triggers.length; t++) {
-        const trig = normalize(intent.triggers[t]);
-        if (trig.trim() === '') continue;
-        if (text.indexOf(trig) !== -1) {
-          // Longer phrases are worth more; "who are you" beats a single
-          // -word "cedar" hit when scoring against the same intent.
-          score += Math.max(1, trig.trim().split(' ').length);
-        }
-      }
-      if (score > bestScore) { bestScore = score; best = intent; }
-    }
-    return { intent: best, score: bestScore };
-  }
-
-  function isOutOfScope(rawText) {
-    const text = normalize(rawText);
-    const trigs = (BANK.outOfScope && BANK.outOfScope.triggers) || [];
-    for (let i = 0; i < trigs.length; i++) {
-      const t = normalize(trigs[i]);
-      if (t.trim() === '') continue;
-      if (text.indexOf(t) !== -1) return true;
-    }
-    return false;
-  }
-
-  function answerFor(rawText) {
-    const c = classify(rawText);
-    if (c.intent && c.score >= 1) return c.intent.answer;
-    if (isOutOfScope(rawText)) return BANK.outOfScope.answer;
-    return BANK.fallback.answer;
-  }
-
-  function reply(rawText, echoText) {
-    appendMessage('user', echoText != null ? echoText : rawText);
-    const dots = document.createElement('span');
-    dots.className = 'cedar-typing';
-    dots.innerHTML = '<span></span><span></span><span></span>';
-    const typing = appendMessage('bot', dots);
-    window.setTimeout(function () {
-      const bubble = typing.querySelector('.cedar-msg__bubble');
-      if (bubble) bubble.textContent = answerFor(rawText);
-    }, 650);
-  }
-
-  function collapseQuickReplies() {
-    if (chipsEl && !chipsEl.classList.contains('is-collapsed')) {
-      chipsEl.classList.add('is-collapsed');
-    }
-  }
-
-  chipsEl.addEventListener('click', function (e) {
-    const btn = e.target.closest('.cedar-chip');
-    if (!btn) return;
-    const id = btn.dataset.intent;
-    const intent = INTENTS.find(function (x) { return x.id === id; });
-    if (!intent) return;
-    collapseQuickReplies();
-    reply(intent.chip, intent.chip);
-  });
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const q = (input.value || '').trim();
-    if (!q) return;
-    input.value = '';
-    collapseQuickReplies();
-    reply(q, q);
-  });
-  })();
+  document.addEventListener('astro:page-load', setup);
 </script>
 
 <style>
