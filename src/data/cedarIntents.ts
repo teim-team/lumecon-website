@@ -174,7 +174,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'is this like implan', 'compete with implan', 'better than implan', 'like rims', 'rims ii', 'rims 2', 'is this like lightcast', 'like emsi', 'like remi', 'replacing economists', 'why not just use implan', 'makes this different', 'how is this different', 'implan alternative', 'compared to implan',
     ],
-    answer: "Lumecon is focused on making economic impact reporting easier to use, explain, and communicate. Traditional tools like IMPLAN, RIMS II, REMI, and Lightcast can be powerful, but they often require technical expertise and can be difficult for non-specialists to navigate. Lumecon's goal is to create a more guided, user-friendly experience while still treating the underlying analysis seriously.",
+    answer: "The methodology IMPLAN, RIMS II, and REMI use — input-output modeling, regional multipliers, base-year reweighting — is mainstream economics. The BEA accounts behind it are public. What's been missing is software that uses the tools that exist today: cloud infrastructure, modern UIs, RAG-based AI, real-time data feeds, and geographies that aren't trapped inside administrative borders. Lumecon benchmarks every multiplier against those incumbent models, updates the assumptions and data that should be updated, and keeps what shouldn't.",
   },
   {
     id: 'explain_simple',
@@ -270,7 +270,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'workflow', 'day to day', 'in practice', 'what does the work look like', 'what does the workflow', 'how is the workflow', 'how does the work flow', 'replacing my consultant', 'replacing consultants', 'replace consultant',
     ],
-    answer: "Legacy path: someone (a consultant or an in-house analyst) opens IMPLAN/RIMS/REMI, hand-cleans the data, picks multipliers, writes the report, and comes back weeks later. Lumecon path: drop your administrative data into the workspace, let Cedar harmonize and pre-fit the model, review the assumptions Cedar surfaces, approve or adjust each one, and export the report. The economist's judgment is still in the loop, but the data wrangling and re-runs aren't.",
+    answer: "Legacy path: a consultant or in-house analyst opens IMPLAN, RIMS II, or REMI — software whose workflow predates the internet — hand-cleans the data, picks multipliers, writes the report, and comes back weeks later. Lumecon path: drop your administrative data into the workspace, let Cedar harmonize and pre-fit the model, review the assumptions Cedar surfaces (every multiplier benchmarked against IMPLAN, RIMS II, and REMI), approve or adjust each one, and export the report. The economist's judgment stays in the loop. The data wrangling and re-runs don't.",
   },
   {
     id: 'roi_lumecon',
@@ -278,7 +278,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'cost vs', 'vs hiring a consultant', 'cheaper than a consultant', 'roi of', 'return on lumecon', 'is this worth it', 'why pay for this', 'why subscribe', 'cost of doing nothing', 'budget for impact', 'price compared to', 'savings vs',
     ],
-    answer: 'A single legacy impact study (IMPLAN/RIMS-driven consulting engagement) typically runs $50K to $150K and ships months later. Lumecon is five figures a year for unlimited studies across every geography. The payback is usually one or two studies — after that the subscription is producing analyses the organization couldn\'t have afforded one-off.',
+    answer: "A single legacy impact study typically runs $50K to $150K and ships months later. Lumecon is five figures a year for unlimited studies across every geography. The legacy price tag is what a workflow looks like after forty years of one toolchain owning the category — not a measure of how hard the work actually is. The math is mainstream economics; the public BEA accounts behind it are free. Payback is usually one or two studies; after that the subscription is producing analyses the organization couldn't have afforded one-off.",
   },
   {
     id: 'data_residency',
