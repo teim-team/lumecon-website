@@ -1,0 +1,36 @@
+---
+/**
+ * /map — the interactive impact-study map.
+ *
+ * The interactive workspace used to share the homepage hero with
+ * the brand block and workflow animation. Now it has its own page
+ * where it can fill the viewport without competing for attention.
+ * The homepage hero links here via "See the map".
+ *
+ * Implementation just hosts the shared MapWorkspace component plus
+ * the nav and footer chrome. The workspace itself prepares its data
+ * in its own frontmatter and pulls in src/scripts/hero.ts for the
+ * runtime.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import MapWorkspace from '../components/MapWorkspace.astro';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+---
+<BaseLayout
+  title="Map | Lumecon"
+  description="Run a live economic-impact study on any state, county, or tribal land. Hover any region to inspect; click to run a study with Cedar AI."
+  canonical="https://lumecon.ai/map"
+  keywords="Lumecon map, interactive economic impact map, state economic impact, county economic impact, tribal economic impact, AIANNH boundaries, IMPLAN alternative, RIMS II alternative, REMI alternative, BEA RIMS"
+  ogTitle="Lumecon map: live economic-impact studies on every state, county, and tribal land"
+  ogDescription="Hover or click any region to run an economic impact study in minutes, not months. An AI-assisted alternative to IMPLAN, RIMS II, REMI, and Lightcast."
+>
+  <Nav />
+  <main>
+    <MapWorkspace />
+  </main>
+  <Footer />
+</BaseLayout>

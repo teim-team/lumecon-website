@@ -1,0 +1,167 @@
+---
+/**
+ * /signup — authenticated-app signup page.
+ *
+ * Same placeholder pattern as /login: the form posts through
+ * lib/api.ts to `POST /v1/auth/signup` when PUBLIC_API_URL is set,
+ * otherwise the submit handler captures the email through the
+ * contact endpoint so early-access requests still reach the team.
+ * The shared submit handler lives inline below and is mirrored in
+ * /login (kept in sync because both pages need the same fallback
+ * behaviour and the auth flow is the only thing that varies).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/auth.css';
+---
+<BaseLayout
+  title="Sign up | Lumecon"
+  description="Create a Lumecon account for governments, tribal nations, foundations, universities, and mission-driven organizations."
+  canonical="https://lumecon.ai/signup"
+  keywords="Lumecon signup, Lumecon sign up, Lumecon early access, economic impact analysis account, IMPLAN alternative signup"
+>
+  <Nav />
+  <main class="auth">
+    <div class="auth-panel">
+      <p class="auth-eyebrow">Account</p>
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-sub">Tell us a little about you and your organization. We'll get you into the workspace.</p>
+      <form class="auth-form" data-auth-form data-auth-kind="signup" novalidate>
+        <label class="auth-field">
+          <span>Full name</span>
+          <input type="text" name="name" required autocomplete="name" />
+        </label>
+        <label class="auth-field">
+          <span>Work email</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="you@organization.gov" />
+        </label>
+        <label class="auth-field">
+          <span>Organization</span>
+          <input type="text" name="organization" autocomplete="organization" placeholder="City of Springfield / Cherokee Nation / Smith Family Foundation" />
+        </label>
+        <label class="auth-field">
+          <span>What do you plan to use Lumecon for?</span>
+          <input type="text" name="role" placeholder="Grant applications, council reporting, annual impact study..." />
+        </label>
+        <label class="auth-field">
+          <span>Password</span>
+          <input type="password" name="password" required autocomplete="new-password" minlength="8" />
+        </label>
+        <button type="submit" class="btn">Create account</button>
+        <p class="auth-meta" data-auth-status hidden></p>
+      </form>
+      <p class="auth-foot">
+        Already have an account? <a href="/login">Log in</a>
+      </p>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  /* Same handler as /login (kept inline rather than imported because
+     the script blocks are intentionally co-located with the markup
+     they drive; if this duplication ever grows beyond the small
+     window it is today, we'll factor it into src/lib/auth.ts). */
+  import { submitLogin, submitSignup, submitContact, apiConfigured } from '../lib/api';
+  import { trackEvent, trackError } from '../lib/observability';
+
+  type AuthKind = 'login' | 'signup';
+
+  function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
+    if (!el) return;
+    el.textContent = text;
+    el.hidden = false;
+    el.classList.remove('auth-meta--ok', 'auth-meta--err');
+    if (variant === 'ok') el.classList.add('auth-meta--ok');
+    if (variant === 'err') el.classList.add('auth-meta--err');
+  }
+
+  function setup(): void {
+    const form = document.querySelector<HTMLFormElement>('[data-auth-form]');
+    if (!form) return;
+    const kind = (form.dataset.authKind as AuthKind) || 'signup';
+    const status = form.querySelector<HTMLElement>('[data-auth-status]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    form.querySelectorAll<HTMLAnchorElement>('[data-auth-disabled]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        setStatus(status, 'info', "We're still building that. Email contact@lumecon.ai and we'll help.");
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const email = String(data.get('email') ?? '').trim();
+      const password = String(data.get('password') ?? '');
+      const name = String(data.get('name') ?? '').trim();
+      const organization = String(data.get('organization') ?? '').trim();
+      const role = String(data.get('role') ?? '').trim();
+
+      if (!email || !password || (kind === 'signup' && !name)) {
+        setStatus(status, 'err', 'Please fill in every required field.');
+        return;
+      }
+
+      submitBtn?.setAttribute('disabled', 'true');
+      setStatus(status, 'info', 'One moment...');
+
+      try {
+        if (apiConfigured()) {
+          const result = kind === 'signup'
+            ? await submitSignup({ name, email, password, organization, role })
+            : await submitLogin({ email, password });
+          if (result.ok) {
+            trackEvent('auth.success', { kind });
+            setStatus(status, 'ok', kind === 'signup'
+              ? 'Account created. Check your inbox to verify your email.'
+              : 'Logged in. Redirecting you to the workspace...');
+            return;
+          }
+          if (result.reason !== 'api-unconfigured') {
+            trackEvent('auth.fail', { kind, reason: result.reason });
+            setStatus(status, 'err', 'We could not complete that. Try again, or email contact@lumecon.ai.');
+            return;
+          }
+        }
+
+        const contactRes = await submitContact({
+          name: name || 'Lumecon early-access request',
+          email,
+          organization,
+          message: kind === 'signup'
+            ? `Signup attempt before auth is live. Role/use case: ${role || '(not provided)'}`
+            : 'Login attempt before auth is live.',
+          source: kind === 'signup' ? 'signup-page' : 'login-page',
+        });
+        if (contactRes.ok) {
+          setStatus(status, 'ok', "Auth isn't live yet, but we captured your email and someone from the team will reach out shortly.");
+          return;
+        }
+        const subject = encodeURIComponent('Lumecon early access');
+        const body = encodeURIComponent(
+          `Hi Lumecon team,\n\nI tried ${kind === 'signup' ? 'signing up' : 'logging in'} but the auth flow isn't live yet. Could you let me know when it is?\n\nEmail: ${email}\n${organization ? 'Organization: ' + organization + '\n' : ''}`
+        );
+        window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
+        setStatus(status, 'info', "Opening your email client so you can reach us directly...");
+      } catch (err: unknown) {
+        trackError(err, { where: 'auth.submit', kind });
+        setStatus(status, 'err', 'Something went wrong on our end. Try again in a moment, or email contact@lumecon.ai.');
+      } finally {
+        submitBtn?.removeAttribute('disabled');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+</script>

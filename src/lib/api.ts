@@ -100,6 +100,38 @@ export interface CedarChatResponse {
   followUps?: string[];
 }
 
+/** Authentication requests/responses. The marketing-site login and
+ *  signup pages are placeholders today; when the AWS backend ships,
+ *  the same forms post here and the response token is handed off to
+ *  the authenticated app (a separate origin). */
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+export interface LoginResponse {
+  /** Session token / JWT — opaque to the front-end. */
+  token: string;
+  /** ISO 8601 token expiry. */
+  expiresAt: string;
+  /** Authenticated user info for greeting / role-based UI. */
+  user: { id: string; name: string; email: string; orgId?: string };
+}
+
+export interface SignupRequest {
+  name: string;
+  email: string;
+  password: string;
+  organization?: string;
+  /** Free text describing the role / use case; drives onboarding. */
+  role?: string;
+}
+export interface SignupResponse {
+  user: { id: string; name: string; email: string };
+  /** Whether the signup flow requires email verification before the
+   *  user can log in. The marketing-site form branches on this. */
+  emailVerificationRequired: boolean;
+}
+
 /* ---------- internals ---------- */
 
 const isConfigured = (): boolean => typeof API_BASE === 'string' && API_BASE.length > 0;
@@ -148,6 +180,17 @@ export const getStudy = (studyId: string): Promise<ApiResult<StudyResponse>> =>
  *  any error reason. */
 export const cedarChat = (req: CedarChatRequest): Promise<ApiResult<CedarChatResponse>> =>
   request<CedarChatResponse>('/v1/cedar/chat', { method: 'POST', body: JSON.stringify(req) });
+
+/** Submit a login. Future endpoint: `POST /v1/auth/login`. The
+ *  marketing-site /login page renders the friendly "auth not yet
+ *  live" message when this returns 'api-unconfigured'. */
+export const submitLogin = (req: LoginRequest): Promise<ApiResult<LoginResponse>> =>
+  request<LoginResponse>('/v1/auth/login', { method: 'POST', body: JSON.stringify(req) });
+
+/** Submit a signup. Future endpoint: `POST /v1/auth/signup`. Same
+ *  graceful fallback as submitLogin when the backend isn't wired. */
+export const submitSignup = (req: SignupRequest): Promise<ApiResult<SignupResponse>> =>
+  request<SignupResponse>('/v1/auth/signup', { method: 'POST', body: JSON.stringify(req) });
 
 /* ---------- env helpers ---------- */
 

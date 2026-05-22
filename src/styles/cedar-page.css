@@ -1,0 +1,215 @@
+/* /cedar standalone page.
+   Layout = hero, three-step "how" explainer, then a grid of dashed
+   "TBD" placeholder cards. The dashed treatment is intentional —
+   visitors should read those cards as work in progress, not a
+   final state. As each card ships, swap the .cedar-tbd__card class
+   for the equivalent "shipped" treatment. */
+
+.cedar-page {
+  background: var(--white);
+  padding: clamp(5rem, 9vw, 7rem) 0 clamp(4rem, 8vw, 6rem);
+}
+
+/* ---------- Hero ---------- */
+.cedar-page__hero {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+  text-align: left;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+.cedar-page__eyebrow {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--cedar);
+  font-weight: 600;
+  margin: 0 0 1.1rem;
+}
+.cedar-page__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.06;
+  letter-spacing: -.025em;
+  color: var(--navy);
+  margin: 0 0 1.4rem;
+  max-width: 22ch;
+}
+.cedar-page__lede {
+  font-family: var(--font-sans);
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0 0 1.2rem;
+  max-width: 64ch;
+}
+.cedar-page__call {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  letter-spacing: .04em;
+  color: var(--cedar);
+  margin: 0;
+  padding: .6rem .85rem;
+  border-left: 2px solid var(--cedar);
+  background: var(--cedar-mist, #E0F2E7);
+  display: inline-block;
+}
+
+/* ---------- "How Cedar works" three-step ---------- */
+.cedar-page__how {
+  background: var(--cream);
+  /* full-bleed background while content stays at max-width */
+  box-shadow: 0 0 0 50vmax var(--cream);
+  clip-path: inset(0 -50vmax);
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+.cedar-page__how > .cedar-page__kicker,
+.cedar-page__how > .cedar-page__h2,
+.cedar-page__how > .cedar-page__steps {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+.cedar-page__kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 .8rem;
+}
+.cedar-page__h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -.022em;
+  color: var(--navy);
+  margin: 0 0 1.6rem;
+  max-width: 28ch;
+}
+.cedar-page__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--container-pad);
+  display: grid;
+  gap: 1.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.cedar-page__step {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 1.4rem 1.4rem 1.6rem;
+}
+.cedar-page__step-icon {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+  margin-bottom: .9rem;
+}
+.cedar-page__step-icon :global(svg) { width: 100%; height: 100%; display: block; }
+.cedar-page__step-head {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.12rem;
+  color: var(--navy);
+  letter-spacing: -.012em;
+  margin: 0 0 .6rem;
+}
+.cedar-page__step-body {
+  font-family: var(--font-sans);
+  font-size: .95rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0;
+}
+
+/* ---------- "Coming soon" placeholder grid ---------- */
+.cedar-page__placeholders {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+.cedar-page__deck {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0 0 2rem;
+  max-width: 60ch;
+}
+.cedar-tbd {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.3rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+/* Placeholder card: dashed border + a "TBD" tag so it's obvious
+   this is incomplete and intentional. */
+.cedar-tbd__card {
+  position: relative;
+  background: var(--white);
+  border: 2px dashed var(--rule-strong, rgba(14, 21, 48, .22));
+  border-radius: 12px;
+  padding: 1.4rem 1.4rem 1.6rem;
+  transition: border-color .18s var(--ease), background .18s var(--ease);
+}
+.cedar-tbd__card:hover {
+  border-color: var(--cedar);
+  background: var(--cedar-mist, #E0F2E7);
+}
+.cedar-tbd__tag {
+  position: absolute;
+  top: -.7rem;
+  left: 1.2rem;
+  background: var(--white);
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .22));
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: .15rem .55rem;
+  border-radius: 3px;
+}
+.cedar-tbd__card:hover .cedar-tbd__tag {
+  background: var(--cedar);
+  border-color: var(--cedar);
+  color: var(--white);
+}
+.cedar-tbd__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.12rem;
+  color: var(--navy);
+  letter-spacing: -.012em;
+  margin: .25rem 0 .55rem;
+}
+.cedar-tbd__body {
+  font-family: var(--font-sans);
+  font-size: .92rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .cedar-tbd { grid-template-columns: 1fr; }
+  .cedar-page__steps { grid-template-columns: 1fr; }
+}

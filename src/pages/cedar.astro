@@ -1,0 +1,124 @@
+---
+/**
+ * /cedar — standalone Cedar page.
+ *
+ * Took over the explainer that used to live on the homepage; the
+ * homepage now keeps only the persistent Cedar FAB. This page is
+ * the deeper experience: what Cedar is, how it works, and (over
+ * time) what it can show off when the team gives Cedar more
+ * material to work with.
+ *
+ * Most of the page below the fold is intentional placeholder real
+ * estate. The dev working on Cedar drops content into the dashed
+ * "TBD" cards as features ship — sample transcripts, source-record
+ * demos, methodology walkthroughs, dataset tour. Each card is a
+ * docked landing spot with a hint of what's coming.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import IconUpload from '../components/icons/IconUpload.astro';
+import IconSurfaceAssumption from '../components/icons/IconSurfaceAssumption.astro';
+import IconSourceRecord from '../components/icons/IconSourceRecord.astro';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/cedar.css';
+import '../styles/cedar-page.css';
+---
+<BaseLayout
+  title="Cedar | Lumecon"
+  description="Cedar is Lumecon's AI analyst. It reads messy data, surfaces every modeling assumption, and reshapes the same study for every audience. RAG-based, grounded in your files."
+  canonical="https://lumecon.ai/cedar"
+  keywords="Cedar AI, Lumecon Cedar, AI economic analyst, RAG economic impact, AI for economists, AI grant narrative, AI council memo, Cedar Lumecon assistant, AI impact analysis"
+  ogTitle="Cedar: AI for the unglamorous parts of economic impact analysis"
+  ogDescription="Reads messy data, surfaces every assumption for your sign-off, and reshapes the study for the audience in front of you. RAG-based and grounded in your files."
+>
+  <Nav />
+  <main class="cedar-page">
+
+    <!-- Hero: the same lede we used to show on the homepage CedarSection,
+         now standalone with more room. -->
+    <header class="cedar-page__hero">
+      <p class="cedar-page__eyebrow">Cedar</p>
+      <h1 class="cedar-page__title">AI for the unglamorous parts of economic impact analysis.</h1>
+      <p class="cedar-page__lede">
+        Cedar is Lumecon's AI analyst. It reads messy data, surfaces every assumption for your sign-off, and reshapes the study for the audience in front of you. Because Cedar is RAG-based, answers stay grounded in your actual files, not generic model output. Cedar does the heavy lift; your team stays in control of what the study says.
+      </p>
+      <p class="cedar-page__call">
+        Try Cedar from the green tree button in the bottom-right of any page.
+      </p>
+    </header>
+
+    <!-- What Cedar does — three-step explainer carried over from
+         the homepage CedarSection. -->
+    <section class="cedar-page__how" aria-labelledby="cedar-how-title">
+      <p class="cedar-page__kicker">How Cedar works</p>
+      <h2 class="cedar-page__h2" id="cedar-how-title">Three things, well.</h2>
+      <ol class="cedar-page__steps" aria-label="What Cedar does">
+        <li class="cedar-page__step">
+          <span class="cedar-page__step-icon"><IconUpload /></span>
+          <h3 class="cedar-page__step-head">Works with the data you actually have</h3>
+          <p class="cedar-page__step-body">Budgets, payroll, council agendas, board reports, audits, and grant filings. Cedar turns messy departmental files into usable study inputs, no matter what shape they arrive in.</p>
+        </li>
+        <li class="cedar-page__step">
+          <span class="cedar-page__step-icon"><IconSurfaceAssumption /></span>
+          <h3 class="cedar-page__step-head">Shows its work before it runs</h3>
+          <p class="cedar-page__step-body">Every multiplier, regional bridge, and base-year choice is named with a plain-English rationale. You confirm, adjust, or override, and the audit trail builds as the study moves.</p>
+        </li>
+        <li class="cedar-page__step">
+          <span class="cedar-page__step-icon"><IconSourceRecord /></span>
+          <h3 class="cedar-page__step-head">Adapts the same analysis to every audience</h3>
+          <p class="cedar-page__step-body">Council meeting, grant filing, board memo, or public release. Cedar redraws the same result for the next use case, without your team copying numbers across five different decks.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Placeholder cards: each is a docked landing spot for content
+         the Cedar dev will fill in as features ship. The dashed
+         border + "TBD" label makes it obvious these are placeholders,
+         not the final state. Keep the existing slots and add more as
+         needed; remove the dashed treatment as each card ships. -->
+    <section class="cedar-page__placeholders" aria-labelledby="cedar-coming-title">
+      <p class="cedar-page__kicker">Coming soon</p>
+      <h2 class="cedar-page__h2" id="cedar-coming-title">Where this page is going.</h2>
+      <p class="cedar-page__deck">
+        The deeper Cedar experience is in active development. As each piece ships, it lands here. If you want early access to any of these, the green tree button in the bottom-right will route the request to the team.
+      </p>
+      <ul class="cedar-tbd" aria-label="Cedar features in development">
+        <li class="cedar-tbd__card">
+          <span class="cedar-tbd__tag">TBD</span>
+          <h3 class="cedar-tbd__title">Sample transcripts</h3>
+          <p class="cedar-tbd__body">Three real Cedar conversations: a grant-narrative draft, a council Q&amp;A prep, and a board memo turnaround. Each shows the inputs Cedar saw, the assumptions it surfaced, and the output it produced.</p>
+        </li>
+        <li class="cedar-tbd__card">
+          <span class="cedar-tbd__tag">TBD</span>
+          <h3 class="cedar-tbd__title">Source-record demo</h3>
+          <p class="cedar-tbd__body">Click any number in a Cedar study and see the row in the source dataset it came from, the multiplier choice tied to it, and the BEA / ACS / LODES file vintage. The audit trail in full.</p>
+        </li>
+        <li class="cedar-tbd__card">
+          <span class="cedar-tbd__tag">TBD</span>
+          <h3 class="cedar-tbd__title">Methodology walkthrough</h3>
+          <p class="cedar-tbd__body">A guided tour of the input-output model under Cedar, the regional purchase coefficients, the assumption defaults per geography, and how Cedar's choices benchmark against the existing platforms.</p>
+        </li>
+        <li class="cedar-tbd__card">
+          <span class="cedar-tbd__tag">TBD</span>
+          <h3 class="cedar-tbd__title">Dataset tour</h3>
+          <p class="cedar-tbd__body">Every public dataset Cedar pulls from (ACS, BEA RIMS / SAGDP, LODES, QCEW, CBP, USASpending, the regional Fed banks), the vintage of each, and what Cedar's data team is layering on next.</p>
+        </li>
+        <li class="cedar-tbd__card">
+          <span class="cedar-tbd__tag">TBD</span>
+          <h3 class="cedar-tbd__title">Cedar in the workspace</h3>
+          <p class="cedar-tbd__body">Short screen recording of Cedar running an actual study end to end — file upload, harmonization prompts, assumption review, study run, and audience-specific export.</p>
+        </li>
+        <li class="cedar-tbd__card">
+          <span class="cedar-tbd__tag">TBD</span>
+          <h3 class="cedar-tbd__title">Safety + data handling</h3>
+          <p class="cedar-tbd__body">How Cedar keeps tribal data sovereignty intact, what stays in your tenant, what is and isn't used for training, and how the audit log captures every assumption Cedar ever made.</p>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>

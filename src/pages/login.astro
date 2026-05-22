@@ -1,0 +1,171 @@
+---
+/**
+ * /login — authenticated-app login page.
+ *
+ * Placeholder today: the form posts through lib/api.ts to the future
+ * `POST /v1/auth/login` endpoint. While PUBLIC_API_URL is unset, the
+ * submit handler renders a friendly "auth not yet live, we'll be in
+ * touch" message and captures the email through the same channel as
+ * the contact form so early-access requests still reach the team.
+ *
+ * When the AWS auth endpoint goes live, no markup or styling changes
+ * are needed — the `api-unconfigured` branch in the script below
+ * just stops firing because PUBLIC_API_URL is set in the deploy env.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/auth.css';
+---
+<BaseLayout
+  title="Log in | Lumecon"
+  description="Log in to your Lumecon account."
+  canonical="https://lumecon.ai/login"
+  keywords="Lumecon login, Lumecon sign in, economic impact analysis login"
+>
+  <Nav />
+  <main class="auth">
+    <div class="auth-panel">
+      <p class="auth-eyebrow">Account</p>
+      <h1 class="auth-title">Log in to Lumecon</h1>
+      <p class="auth-sub">Welcome back. Enter your work email to continue.</p>
+      <form class="auth-form" data-auth-form data-auth-kind="login" novalidate>
+        <label class="auth-field">
+          <span>Work email</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="you@organization.gov" />
+        </label>
+        <label class="auth-field">
+          <span>Password</span>
+          <input type="password" name="password" required autocomplete="current-password" minlength="8" />
+        </label>
+        <div class="auth-row">
+          <a href="#" data-auth-disabled>Forgot password?</a>
+        </div>
+        <button type="submit" class="btn">Log in</button>
+        <p class="auth-meta" data-auth-status hidden></p>
+      </form>
+      <p class="auth-foot">
+        New to Lumecon? <a href="/signup">Create an account</a>
+      </p>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  /* Real-looking placeholder auth handler.
+     - Posts to lib/api.ts when PUBLIC_API_URL is set.
+     - When unconfigured, falls back to capturing the email via the
+       contact endpoint (same path the contact form will use), so
+       early-access requests still reach the team. If THAT is also
+       unconfigured, falls back to mailto: so the user always has a
+       working escape hatch. */
+  import { submitLogin, submitSignup, submitContact, apiConfigured } from '../lib/api';
+  import { trackEvent, trackError } from '../lib/observability';
+
+  type AuthKind = 'login' | 'signup';
+
+  function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
+    if (!el) return;
+    el.textContent = text;
+    el.hidden = false;
+    el.classList.remove('auth-meta--ok', 'auth-meta--err');
+    if (variant === 'ok') el.classList.add('auth-meta--ok');
+    if (variant === 'err') el.classList.add('auth-meta--err');
+  }
+
+  function setup(): void {
+    const form = document.querySelector<HTMLFormElement>('[data-auth-form]');
+    if (!form) return;
+    const kind = (form.dataset.authKind as AuthKind) || 'login';
+    const status = form.querySelector<HTMLElement>('[data-auth-status]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    /* Disable any links flagged as not-yet-live so visitors don't
+       hit dead URLs. */
+    form.querySelectorAll<HTMLAnchorElement>('[data-auth-disabled]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        setStatus(status, 'info', "We're still building that. Email contact@lumecon.ai and we'll help.");
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const email = String(data.get('email') ?? '').trim();
+      const password = String(data.get('password') ?? '');
+      const name = String(data.get('name') ?? '').trim();
+      const organization = String(data.get('organization') ?? '').trim();
+      const role = String(data.get('role') ?? '').trim();
+
+      if (!email || !password) {
+        setStatus(status, 'err', 'Please fill in every required field.');
+        return;
+      }
+
+      submitBtn?.setAttribute('disabled', 'true');
+      setStatus(status, 'info', 'One moment...');
+
+      try {
+        if (apiConfigured()) {
+          const result = kind === 'signup'
+            ? await submitSignup({ name, email, password, organization, role })
+            : await submitLogin({ email, password });
+          if (result.ok) {
+            trackEvent('auth.success', { kind });
+            setStatus(status, 'ok', kind === 'signup'
+              ? 'Account created. Check your inbox to verify your email.'
+              : 'Logged in. Redirecting you to the workspace...');
+            return;
+          }
+          if (result.reason !== 'api-unconfigured') {
+            trackEvent('auth.fail', { kind, reason: result.reason });
+            setStatus(status, 'err', 'We could not complete that. Try again, or email contact@lumecon.ai.');
+            return;
+          }
+        }
+
+        /* api-unconfigured path: capture the email through the
+           contact endpoint so the team still gets the early-access
+           request. If THAT is also unconfigured, drop to mailto so
+           the visitor has a working escape hatch. */
+        const contactRes = await submitContact({
+          name: name || 'Lumecon early-access request',
+          email,
+          organization,
+          message: kind === 'signup'
+            ? `Signup attempt before auth is live. Role/use case: ${role || '(not provided)'}`
+            : 'Login attempt before auth is live.',
+          source: kind === 'signup' ? 'signup-page' : 'login-page',
+        });
+        if (contactRes.ok) {
+          setStatus(status, 'ok', "Auth isn't live yet, but we captured your email and someone from the team will reach out shortly.");
+          return;
+        }
+        /* Final fallback: open mailto so the visitor isn't left
+           stranded. */
+        const subject = encodeURIComponent('Lumecon early access');
+        const body = encodeURIComponent(
+          `Hi Lumecon team,\n\nI tried ${kind === 'signup' ? 'signing up' : 'logging in'} but the auth flow isn't live yet. Could you let me know when it is?\n\nEmail: ${email}\n${organization ? 'Organization: ' + organization + '\n' : ''}`
+        );
+        window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
+        setStatus(status, 'info', "Opening your email client so you can reach us directly...");
+      } catch (err: unknown) {
+        trackError(err, { where: 'auth.submit', kind });
+        setStatus(status, 'err', 'Something went wrong on our end. Try again in a moment, or email contact@lumecon.ai.');
+      } finally {
+        submitBtn?.removeAttribute('disabled');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+</script>

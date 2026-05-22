@@ -1,0 +1,358 @@
+---
+/**
+ * MapWorkspace — the interactive impact-study workspace.
+ *
+ * Lifted out of Hero.astro so the homepage hero can stay focused on
+ * the headline + workflow animation, and so the map gets its own
+ * dedicated /map page where it can breathe. Both surfaces import
+ * the same hero.css; the map-specific styles live there.
+ *
+ * AIANNH boundaries from Census TIGER/Line are clickable — picking
+ * one runs a tribal-economy study with framing tailored to the
+ * tribal land. Clicking any state runs a state-level study with
+ * randomized activity. The runtime that drives all of this lives in
+ * src/scripts/hero.ts.
+ */
+import { geoPath } from 'd3-geo';
+import { mesh, feature } from 'topojson-client';
+// @ts-ignore — us-atlas ships JSON, not TS
+import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
+// @ts-ignore — generated data, no .d.ts
+import { CENSUS_TRIBAL_LANDS } from '../data/tribalLands.generated.js';
+import '../styles/hero.css';
+
+// viewBox tight-fits the full us-atlas albers-USA projection bbox
+// (-58, 12, 957, 606), with a tiny margin so northern Washington, the
+// Maine coast, and the Alaska inset all stay visible at the edges.
+const VBX = -60, VBY = 5, VBW = 1020, VBH = 610;
+const path = geoPath();
+// @ts-ignore
+const statesFC: any = feature(usAtlas, usAtlas.objects.states);
+// @ts-ignore
+const stateBordersD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a !== b));
+// @ts-ignore
+const nationOutlineD = path(mesh(usAtlas, usAtlas.objects.states, (a: any, b: any) => a === b));
+
+// County border mesh — a single path of every county boundary.
+// Loaded from us-atlas/counties-albers-10m.json (separate import keeps
+// the heavier file out of the bundle when only states are visible).
+// @ts-ignore
+import countiesAtlas from 'us-atlas/counties-albers-10m.json' with { type: 'json' };
+// @ts-ignore
+const countyBordersD = path(mesh(countiesAtlas, countiesAtlas.objects.counties, (a: any, b: any) => a !== b));
+
+// Precompute county centroids at build time so a county-level study can
+// place its source dot on the actual county (not on the state centroid).
+// Keyed by 5-digit FIPS. Tiny payload (~3000 entries × ~25 bytes).
+// @ts-ignore
+const countiesFC: any = feature(countiesAtlas, countiesAtlas.objects.counties);
+const COUNTY_CENTROIDS: Record<string, { cx: number; cy: number }> = {};
+for (const f of countiesFC.features) {
+  const fips = String(f.id).padStart(5, '0');
+  const [cx, cy] = path.centroid(f);
+  if (Number.isFinite(cx) && Number.isFinite(cy)) {
+    COUNTY_CENTROIDS[fips] = { cx: +cx.toFixed(1), cy: +cy.toFixed(1) };
+  }
+}
+
+const stateData = statesFC.features.map((f: any) => {
+  const [cx, cy] = path.centroid(f);
+  return { id: f.id, name: f.properties.name, d: path(f), cx: +cx.toFixed(1), cy: +cy.toFixed(1) };
+});
+
+const STATE_CODES: Record<string, string> = {
+  '01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','11':'DC',
+  '12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY',
+  '22':'LA','23':'ME','24':'MD','25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT',
+  '31':'NE','32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH',
+  '40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT',
+  '50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY',
+};
+
+/* AIANNH polygons. Built at SSR for the tribal lookup table (so
+   reservation scenes can resolve to a real centroid), but NOT inlined
+   into the page SVG — the full set is served as a JSON endpoint at
+   /data/aiannh.json and lazy-loaded by the client on first map
+   interaction. That keeps the initial HTML from ballooning to 1MB. */
+const aiannh = (CENSUS_TRIBAL_LANDS as any[])
+  .filter(l => l.pathD && l.x != null && l.y != null && l.fips)
+  .map((l: any) => ({
+    id: l.id,
+    name: l.name,
+    shortName: l.shortName || l.name,
+    fips: l.fips,
+    category: l.category,
+    pathD: l.pathD,
+    x: l.x,
+    y: l.y,
+  }));
+
+const statesJson = JSON.stringify(
+  stateData.reduce((acc: any, s: any) => { acc[s.id] = { name: s.name, cx: s.cx, cy: s.cy, code: STATE_CODES[s.id] || '' }; return acc; }, {})
+);
+const countyCentroidsJson = JSON.stringify(COUNTY_CENTROIDS);
+
+/* Search index for the workspace search box. States + counties +
+   tribal lands are pre-flattened into a single array so the client
+   just filters one list. The county slice is the biggest piece
+   (~3,000 entries) but each is tiny — name+state-code+centroid —
+   and the JSON compresses well under gzip. Categories drive the
+   leading-icon and the subtitle. */
+const stateNameByFips: Record<string, string> = stateData.reduce((acc: any, s: any) => { acc[s.id] = s.name; return acc; }, {});
+type SearchEntry =
+  | { type: 'state'; id: string; name: string; sub: string; cx: number; cy: number }
+  | { type: 'county'; id: string; name: string; sub: string; cx: number; cy: number; stateFips: string }
+  | { type: 'tribal'; id: string; name: string; sub: string; cx: number; cy: number; fips: string };
+const searchIndex: SearchEntry[] = [
+  ...stateData.map((s: any) => ({
+    type: 'state' as const,
+    id: s.id,
+    name: s.name,
+    sub: `State · ${STATE_CODES[s.id] || ''}`,
+    cx: s.cx,
+    cy: s.cy,
+  })),
+  ...countiesFC.features
+    .filter((f: any) => f.properties?.name && Number.isFinite(path.centroid(f)[0]))
+    .map((f: any) => {
+      const fips = String(f.id).padStart(5, '0');
+      const stateFips = fips.slice(0, 2);
+      const stateCode = STATE_CODES[stateFips] || '';
+      const [cx, cy] = path.centroid(f);
+      return {
+        type: 'county' as const,
+        id: fips,
+        name: `${f.properties.name} County`,
+        sub: `County · ${stateCode}`,
+        cx: +cx.toFixed(1),
+        cy: +cy.toFixed(1),
+        stateFips,
+      };
+    }),
+  ...aiannh.map((t: any) => ({
+    type: 'tribal' as const,
+    id: String(t.id),
+    name: t.shortName || t.name,
+    sub: `${t.category || 'Tribal land'} · ${stateNameByFips[t.fips] || ''}`.trim(),
+    cx: t.x,
+    cy: t.y,
+    fips: t.fips,
+  })),
+];
+const searchIndexJson = JSON.stringify(searchIndex);
+
+/* Tribal lookup. The two big tables (TRIBAL_SCENE_KEYS for AIANNH
+   name → slug matching, MANUAL_TRIBES for hand-anchored centroids
+   not in the Census dataset) live in src/data/tribalLookup.ts so
+   they can be audited and extended without touching the hero. */
+import { TRIBAL_SCENE_KEYS, MANUAL_TRIBES } from '../data/tribalLookup';
+// (legacy in-file definitions removed in favor of the data module)
+type TribalEntry = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
+const tribalLookup: Record<string, TribalEntry> = {};
+for (const [slug, candidates] of Object.entries(TRIBAL_SCENE_KEYS)) {
+  for (const c of candidates) {
+    const found = aiannh.find((t: any) => t.name && t.name.toLowerCase().includes(c.toLowerCase()));
+    if (found) {
+      tribalLookup[slug] = { name: found.shortName || found.name, cx: found.x, cy: found.y, fips: found.fips };
+      break;
+    }
+  }
+}
+// Manual entries take precedence over Census matches with the same key.
+Object.assign(tribalLookup, MANUAL_TRIBES);
+
+// Enrich each entry with the FIPS of the county containing its centroid.
+// Computed at build time so the runtime can highlight state + county +
+// reservation as a nested hierarchy when a reservation scene fires.
+// @ts-ignore — module path resolved at SSR
+import { findContainingCounty } from '../data/countyMatch';
+for (const key of Object.keys(tribalLookup)) {
+  const t = tribalLookup[key];
+  const cf = findContainingCounty(t.cx, t.cy);
+  if (cf) t.countyFips = cf;
+}
+const tribalLookupJson = JSON.stringify(tribalLookup);
+---
+<section class="hero hero--map-only" id="top">
+  <div class="workspace" id="workspace">
+    <header class="workspace__bar">
+      <span class="workspace__title">
+        <img class="workspace__mark" src="/brand/lumecon-logo-mark-transparent.png" alt="" width="22" height="22" aria-hidden="true" />
+        <span class="workspace__title-text">Live economic impact study</span>
+        <span class="workspace__divider" aria-hidden="true"></span>
+        <!-- The full scene chip (LEVEL · Project · Location · 2026)
+             lives here at the top, replacing the redundant
+             state-name region we used to show. The chip already
+             names the level, project, and location, so the bottom
+             duplicate was dropped. The element id stays the same
+             so the existing runStudy JS keeps writing to it. -->
+        <span class="workspace__region" id="workspaceRegion" aria-live="polite">Hover any state to begin</span>
+      </span>
+      <span class="workspace__sub">
+        <span class="workspace__study-id" id="workspaceStudyId" aria-label="Study identifier">STUDY 001</span>
+        <span class="workspace__sub-divider" aria-hidden="true"></span>
+        <button type="button" class="workspace__again" id="workspaceAgain" aria-label="Run a new study">New study</button>
+        <span class="workspace__sub-divider" aria-hidden="true"></span>
+        <span class="workspace__dot" id="workspaceStatus" aria-hidden="true"></span>
+        <span class="workspace__sub-text" id="workspaceStatusLabel">Idle</span>
+      </span>
+    </header>
+
+    <div class="workspace__body">
+
+  <!-- Top controls: layer filters on the left, search on the right.
+       The search box autocompletes any state or tribal nation and
+       fires the same runStudy a click on that geography would. -->
+  <div class="workspace-controls">
+    <div class="workspace-filters" role="tablist" aria-label="Map layer">
+      <button type="button" class="wfilter is-active" data-layer="states"  role="tab" aria-selected="true">States</button>
+      <button type="button" class="wfilter"           data-layer="counties" role="tab" aria-selected="false">Counties</button>
+      <button type="button" class="wfilter"           data-layer="tribal"   role="tab" aria-selected="false">Tribal lands</button>
+    </div>
+    <div class="workspace-search" id="workspaceSearch">
+      <svg class="workspace-search__icon" viewBox="0 0 16 16" aria-hidden="true">
+        <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <line x1="10.5" y1="10.5" x2="14" y2="14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+      </svg>
+      <input type="text"
+             class="workspace-search__input"
+             id="workspaceSearchInput"
+             placeholder="Search a state, county, or tribal nation"
+             autocomplete="off"
+             spellcheck="false"
+             aria-label="Search a state, county, or tribal nation"
+             aria-autocomplete="list"
+             aria-controls="workspaceSearchPanel"
+             aria-expanded="false" />
+      <button type="button" class="workspace-search__clear" id="workspaceSearchClear" aria-label="Clear search" hidden>×</button>
+      <ul class="workspace-search__panel" id="workspaceSearchPanel" role="listbox" hidden></ul>
+    </div>
+  </div>
+
+  <!-- Map: dominant, full-width. AIANNH polygons are clickable. -->
+  <figure class="hero-stage" id="heroStage" aria-label="Interactive map. Hover any state or tribal land to inspect; click to run a study there.">
+    <svg class="hero-map" id="heroMap" viewBox={`${VBX} ${VBY} ${VBW} ${VBH}`} preserveAspectRatio="xMidYMid meet" role="img">
+      <defs>
+        <radialGradient id="hGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#F2D67A" stop-opacity=".95"/>
+          <stop offset="55%" stop-color="#C49A3C" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="#C49A3C" stop-opacity="0"/>
+        </radialGradient>
+        <pattern id="hGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0E1530" stroke-width=".4" stroke-opacity=".07" />
+        </pattern>
+      </defs>
+
+      <!-- Cartographic graticule under everything -->
+      <rect class="hero-map__grid" x={VBX} y={VBY} width={VBW} height={VBH} fill="url(#hGrid)" />
+
+      <path class="hero-map__fill" id="heroLandMask" d={nationOutlineD} />
+
+      <g class="hero-map__states">
+        {stateData.map((s: any) => (
+          <path
+            class="hero-state"
+            d={s.d}
+            data-id={s.id}
+            data-cx={s.cx}
+            data-cy={s.cy}
+            tabindex="0"
+            role="button"
+            aria-label={s.name}
+          ></path>
+        ))}
+      </g>
+
+      <!-- County-fill layer: lazy-injected. Only the counties referenced
+           by named scenes are loaded (from /data/counties.json) so the
+           payload stays small. Renders BETWEEN states and AIANNH so the
+           visual hierarchy is state → county → reservation. -->
+      <g class="hero-map__counties-fill" id="heroCountyLayer" data-loaded="0"></g>
+
+      <!-- AIANNH overlay: lazy-injected. The full polygon set is fetched
+           from /data/aiannh.json on first map interaction (or idle, whichever
+           comes first) and appended here. Events use delegation on this
+           group so we don't have to re-wire handlers after injection. -->
+      <g class="hero-map__aiannh" id="heroAiannhLayer" data-loaded="0"></g>
+
+      <path class="hero-map__county-borders" d={countyBordersD} />
+      <path class="hero-map__borders" d={stateBordersD} />
+      <path class="hero-map__outline" d={nationOutlineD} />
+
+      <!-- Curved bezier flow lines from source to top-impacted
+           regions. Populated by renderFlowLines() in runStudy. -->
+      <g class="hero-flow-layer" id="heroFlowLayer" aria-hidden="true"></g>
+
+      <g class="hero-source" id="heroSource">
+        <circle class="hero-glow"  cx="0" cy="0" r="120" fill="url(#hGlow)" />
+        <circle class="hero-ring"  data-ring="1" cx="0" cy="0" r="14" />
+        <circle class="hero-ring"  data-ring="2" cx="0" cy="0" r="14" />
+        <circle class="hero-ring"  data-ring="3" cx="0" cy="0" r="14" />
+        <circle class="hero-spark"      cx="0" cy="0" r="6" />
+        <circle class="hero-spark__core" cx="0" cy="0" r="2.4" />
+      </g>
+
+      <!-- Floating value labels populated by JS over each lit state -->
+      <g class="hero-value-layer" id="heroValueLayer" aria-hidden="true"></g>
+
+      <!-- Source callout: name pinned next to the source dot -->
+      <g class="hero-source-callout" id="heroSourceCallout" aria-hidden="true">
+        <line class="hero-callout__leader" x1="0" y1="0" x2="0" y2="0" />
+        <g class="hero-callout__plate">
+          <rect class="hero-callout__bg" x="0" y="0" rx="3" ry="3" width="0" height="22" />
+          <text class="hero-callout__txt" x="0" y="0" dominant-baseline="middle"></text>
+        </g>
+      </g>
+    </svg>
+
+    <button type="button" class="hero-zoomout" id="heroZoomOut" aria-label="Back to overview">← Overview</button>
+
+    <div class="hero-tooltip" id="heroTooltip" role="tooltip" aria-hidden="true">
+      <span class="hero-tooltip__name" id="ttName">-</span>
+      <span class="hero-tooltip__hint" id="ttHint">click to run a study here</span>
+    </div>
+  </figure>
+
+  <!-- The activity chip used to live here, below the map. It was
+       redundant with the workspace__region title above (which now
+       shows the same chip text), so it was removed. The id stays
+       referenced by runStudy() so it still writes to the same
+       hidden span for screen readers. -->
+  <span id="workspaceActivity" class="visually-hidden" aria-live="polite">&nbsp;</span>
+
+  <!-- Live figures — the only text inside the workspace -->
+  <dl class="hero-figs" aria-label="Result of the running economic impact study">
+    <div class="hero-fig" data-k="direct"><dt>Direct</dt>   <dd id="figDirect">-</dd></div>
+    <div class="hero-fig" data-k="indirect"><dt>Indirect</dt> <dd id="figIndirect">-</dd></div>
+    <div class="hero-fig" data-k="induced"><dt>Induced</dt>  <dd id="figInduced">-</dd></div>
+    <div class="hero-fig hero-fig--total hero-fig--derived" id="figTotalCell" data-k="total"><dt>Total impact</dt> <dd id="figTotal">-</dd></div>
+    <div class="hero-fig hero-fig--derived" id="figJobsCell" data-k="jobs"><dt>Jobs</dt> <dd id="figJobs">-</dd></div>
+  </dl>
+
+    </div>
+
+    <footer class="workspace__foot">
+      <span class="workspace-legend">
+        <span class="workspace-legend__key">
+          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--source"></span>Project (Direct)</span>
+          <span class="workspace-legend__item"><span class="workspace-legend__sw workspace-legend__sw--spillover"></span>Spillover (Indirect + Induced)</span>
+        </span>
+        <span class="workspace-legend__note">Chips and tints show illustrative regional shares. The table to the right is the full breakdown.</span>
+      </span>
+      <span class="workspace-attr">Geography: Census TIGER/Line. Multipliers illustrative.</span>
+    </footer>
+  </div>
+
+
+  <script is:inline type="application/json" id="heroStates"   set:html={statesJson}></script>
+  <script is:inline type="application/json" id="heroTribal"   set:html={tribalLookupJson}></script>
+  <script is:inline type="application/json" id="heroCounties" set:html={countyCentroidsJson}></script>
+  <script is:inline type="application/json" id="heroSearch"   set:html={searchIndexJson}></script>
+</section>
+
+{/* Hero map runtime lives in src/scripts/hero.ts. Astro/Vite picks
+    this import up, bundles it, and emits a single content-hashed JS
+    file the browser can cache across navigations. */}
+<script>
+  import '../scripts/hero.ts';
+</script>

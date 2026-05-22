@@ -18,7 +18,10 @@ const prefix = isHome ? '' : '/';
     <div class="nav-links" id="navLinks">
       <a href={`${prefix}#how`}>Why Lumecon?</a>
       <a href="/join">Join the team</a>
-      <a class="nav-cta" href={`mailto:${site.email}?subject=Lumecon%20demo%20request`}>Request a demo</a>
+      <span class="nav-auth" aria-hidden="false">
+        <a class="nav-ghost" href="/login">Log in</a>
+        <a class="nav-cta" href="/signup">Sign up</a>
+      </span>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
