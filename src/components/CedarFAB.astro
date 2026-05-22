@@ -1,0 +1,124 @@
+---
+/**
+ * Persistent Cedar FAB — round floating action button anchored to
+ * the bottom-right of every page. Click jumps you into the Cedar
+ * chat: on the homepage that's a smooth scroll to the #cedar
+ * section with the chat input pre-focused; on other pages it routes
+ * to the homepage Cedar surface.
+ *
+ * The button itself reads as a product chrome element rather than a
+ * marketing flourish — cedar-green background, white tree mark, soft
+ * shadow, subtle hover lift, accessible label.
+ */
+---
+<a
+  class="cedar-fab"
+  id="cedarFab"
+  href="/#cedar"
+  aria-label="Ask Cedar a question"
+  title="Ask Cedar"
+>
+  <span class="cedar-fab__icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <path d="M12 3 L7 9 L9.5 9 L5 15 L9 15 L4 21 L20 21 L15 15 L19 15 L14.5 9 L17 9 Z" fill="currentColor"/>
+    </svg>
+  </span>
+  <span class="cedar-fab__label">Ask Cedar</span>
+</a>
+
+<script is:inline>
+  (function () {
+    const fab = document.getElementById('cedarFab');
+    if (!fab) return;
+    fab.addEventListener('click', (e) => {
+      // On the homepage: smooth-scroll to the Cedar section and focus
+      // the input so the visitor can start typing immediately. Skip
+      // the default anchor jump.
+      const cedar = document.getElementById('cedar');
+      if (!cedar) return; // Off-page: let the href take them to /#cedar
+      e.preventDefault();
+      cedar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const input = document.getElementById('cedarInput');
+      if (input) {
+        // Wait for the scroll to settle before focusing so iOS doesn't
+        // jump the viewport unexpectedly.
+        window.setTimeout(() => input.focus({ preventScroll: true }), 600);
+      }
+    });
+  })();
+</script>
+
+<style>
+  .cedar-fab {
+    position: fixed;
+    right: clamp(.9rem, 2.2vw, 1.5rem);
+    bottom: clamp(.9rem, 2.2vw, 1.5rem);
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .7rem 1.05rem .7rem .85rem;
+    background: var(--cedar);
+    color: var(--white);
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: .88rem;
+    font-weight: 600;
+    letter-spacing: -.005em;
+    box-shadow:
+      0 4px 14px rgba(14, 88, 58, .35),
+      0 1px 3px rgba(10, 15, 38, .12);
+    transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+    cursor: pointer;
+  }
+  .cedar-fab:hover {
+    background: var(--green-deep);
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 22px rgba(14, 88, 58, .42),
+      0 1px 3px rgba(10, 15, 38, .15);
+  }
+  .cedar-fab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .cedar-fab__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .14);
+    flex-shrink: 0;
+  }
+  .cedar-fab__icon svg { display: block; }
+
+  /* Subtle ambient pulse so the FAB feels alive but doesn't beg. */
+  .cedar-fab::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    border: 1.5px solid var(--cedar-light);
+    opacity: 0;
+    animation: cedar-fab-pulse 3.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes cedar-fab-pulse {
+    0%, 100% { transform: scale(1);    opacity: 0;   }
+    50%      { transform: scale(1.07); opacity: .35; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cedar-fab::before { animation: none; }
+  }
+
+  /* Mobile: collapse to icon-only so the FAB doesn't dominate the
+     bottom of small screens. The label still shows on hover/focus. */
+  @media (max-width: 600px) {
+    .cedar-fab { padding: .7rem; }
+    .cedar-fab__label { display: none; }
+    .cedar-fab__icon { background: transparent; }
+  }
+</style>

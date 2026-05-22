@@ -14,15 +14,28 @@
 .hero-brand {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1.2rem;
   align-items: flex-start;
   padding-bottom: clamp(1rem, 2vw, 2rem);
   border-bottom: 1px solid var(--rule);
 }
-.hero-mark img {
-  height: clamp(56px, 7vw, 84px);
-  width: auto;
-  display: block;
+/* Tagline eyebrow: small mono uppercase up top, replacing the
+   previous oversized hero wordmark. The luminate emphasis still
+   pops via the shared .lumin class. */
+.hero-tagline {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+  margin: 0;
+}
+.hero-tagline em.lumin {
+  font-size: 1.15em;
+  letter-spacing: -.005em;
+  text-transform: lowercase;
+  padding: 0 .1em;
 }
 .hero-statement {
   font-family: var(--font-display);
