@@ -31,24 +31,32 @@ nav.nav--static {
   justify-content: space-between;
 }
 
-.logo {
-  display: flex;
+/* Nav brand: wordmark + a small descriptor that names what Lumecon
+   is. The descriptor sits behind a hairline separator so the
+   wordmark stays the dominant element. Collapses to wordmark-only
+   on narrow viewports where every pixel counts. */
+.nav-brand {
+  display: inline-flex;
   align-items: center;
-  transition: opacity .25s var(--ease);
+  gap: .65rem;
 }
-.logo img {
-  height: 34px;
-  width: auto;
-  display: block;
-  transition: height .3s var(--ease);
+.nav-brand__sep {
+  color: var(--rule-strong);
+  font-weight: 300;
+  font-size: 1rem;
+  user-select: none;
 }
-nav.nav--fixed:not(.scrolled) .logo img { height: 42px; }
-.logo:hover { opacity: .7; }
-
-/* Home-page hides the logo until scrolled so the hero's brand
-   composition is the first wordmark a visitor reads. */
-.home-page .logo { opacity: 0; pointer-events: none; }
-nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
+.nav-brand__desc {
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: -.005em;
+  white-space: nowrap;
+}
+@media (max-width: 880px) {
+  .nav-brand__sep, .nav-brand__desc { display: none; }
+}
 
 .nav-links {
   display: flex;

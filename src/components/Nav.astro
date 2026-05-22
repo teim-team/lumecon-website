@@ -9,7 +9,11 @@ const prefix = isHome ? '' : '/';
 ---
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
-    <BrandWordmark size="sm" ariaLabel={`${site.legalName} home`} taglineHidden={true} />
+    <div class="nav-brand">
+      <BrandWordmark size="sm" ariaLabel={`${site.legalName} home`} taglineHidden={true} />
+      <span class="nav-brand__sep" aria-hidden="true">|</span>
+      <span class="nav-brand__desc">Economic impact analysis software</span>
+    </div>
 
     <div class="nav-links" id="navLinks">
       <a href={`${prefix}#how`}>Why Lumecon?</a>

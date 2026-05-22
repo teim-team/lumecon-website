@@ -1,284 +1,239 @@
 ---
 /**
- * Hero workflow: three-step explainer at the top of the page.
- * Replaces the big LUMECON wordmark (already in the nav) so the
- * hero opens with what an economic impact study actually looks
- * like instead of a brand restatement.
+ * Hero workflow — one continuous flowing SVG showing what a Lumecon
+ * study looks like, end to end:
  *
- * Each step is a tile with an animated SVG icon and a one-line
- * label. Connectors between tiles read as the flow direction:
- *   Harmonize data  →  Cedar runs the analysis  →  See your impact
+ *   sources ──▶ Cedar ──▶ impact map
  *
- * Animations are CSS-driven and respect prefers-reduced-motion.
+ * Three stations along a single horizontal flow rail. Data ticks
+ * travel along the rail continuously, fading in on the left, getting
+ * absorbed by Cedar in the middle, and falling out as a lit-up
+ * region on the right. Each station pulses subtly as the data
+ * arrives. All line-art (stroke-only) to match the rest of the
+ * site's icon system; teal flow line ties into the UI accent.
+ *
+ * Respects prefers-reduced-motion. CSS-only — no JS.
  */
 ---
-<ol class="hero-flow" aria-label="How a Lumecon study runs">
-  <li class="hero-flow__step">
-    <div class="hero-flow__icon hero-flow__icon--data" aria-hidden="true">
-      <svg viewBox="0 0 64 56" fill="none">
-        <!-- Three source docs sliding into a merged stack on the right. -->
-        <g class="hf-data__src hf-data__src--a">
-          <rect x="3" y="6" width="14" height="18" rx="1.5" fill="var(--white)" stroke="currentColor" stroke-width="1.4"/>
-          <line x1="6" y1="11" x2="14" y2="11" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-          <line x1="6" y1="14" x2="14" y2="14" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-          <line x1="6" y1="17" x2="12" y2="17" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-        </g>
-        <g class="hf-data__src hf-data__src--b">
-          <rect x="3" y="22" width="14" height="18" rx="1.5" fill="var(--white)" stroke="currentColor" stroke-width="1.4"/>
-          <line x1="6" y1="27" x2="14" y2="27" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-          <line x1="6" y1="30" x2="14" y2="30" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-          <line x1="6" y1="33" x2="13" y2="33" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-        </g>
-        <g class="hf-data__src hf-data__src--c">
-          <rect x="3" y="38" width="14" height="14" rx="1.5" fill="var(--white)" stroke="currentColor" stroke-width="1.4"/>
-          <line x1="6" y1="43" x2="14" y2="43" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-          <line x1="6" y1="46" x2="13" y2="46" stroke="currentColor" stroke-width="1" stroke-opacity=".6"/>
-        </g>
-        <!-- Merge arrow + harmonized output stack. -->
-        <path class="hf-data__arrow" d="M22 28 L36 28" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="20" stroke-dashoffset="20"/>
-        <polyline class="hf-data__arrow-head" points="33,25 36,28 33,31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="miter"/>
-        <g class="hf-data__out">
-          <rect x="40" y="14" width="20" height="28" rx="2" fill="var(--white)" stroke="currentColor" stroke-width="1.5"/>
-          <rect x="43" y="19" width="14" height="3" rx=".4" fill="var(--accent)" opacity=".7"/>
-          <rect x="43" y="24" width="14" height="3" rx=".4" fill="var(--accent)" opacity=".55"/>
-          <rect x="43" y="29" width="10" height="3" rx=".4" fill="var(--accent)" opacity=".4"/>
-          <rect x="43" y="34" width="14" height="3" rx=".4" fill="var(--accent)" opacity=".25"/>
-        </g>
-      </svg>
-    </div>
-    <p class="hero-flow__label">Harmonize your data</p>
-  </li>
+<figure class="hero-flow" aria-label="How a Lumecon study runs">
+  <svg
+    class="hero-flow__svg"
+    viewBox="0 0 720 120"
+    preserveAspectRatio="xMidYMid meet"
+    role="img"
+    aria-hidden="true"
+  >
+    <!-- Continuous flow rail. Dashed so the eye reads movement
+         even when the traveling dots aren't visible. -->
+    <line class="hf-rail" x1="60" y1="60" x2="660" y2="60"
+          stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"
+          stroke-dasharray="3 6" />
 
-  <span class="hero-flow__rail" aria-hidden="true"></span>
+    <!-- Three traveling dots staggered around the loop so there's
+         always a tick in flight somewhere along the rail. -->
+    <circle class="hf-tick hf-tick--a" cx="60" cy="60" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--b" cx="60" cy="60" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--c" cx="60" cy="60" r="3" fill="var(--accent)"/>
 
-  <li class="hero-flow__step">
-    <div class="hero-flow__icon hero-flow__icon--cedar" aria-hidden="true">
-      <svg viewBox="0 0 64 56" fill="none">
-        <!-- Cedar tree silhouette + data ticks streaming into it. -->
-        <g class="hf-cedar__ticks">
-          <circle class="hf-cedar__tick hf-cedar__tick--a" cx="6" cy="14" r="1.4" fill="currentColor"/>
-          <circle class="hf-cedar__tick hf-cedar__tick--b" cx="8" cy="28" r="1.4" fill="currentColor"/>
-          <circle class="hf-cedar__tick hf-cedar__tick--c" cx="6" cy="42" r="1.4" fill="currentColor"/>
-        </g>
-        <g class="hf-cedar__tree">
-          <path d="M32 6 L22 20 L26 20 L18 32 L24 32 L14 46 L50 46 L40 32 L46 32 L38 20 L42 20 Z"
-                fill="var(--cedar)" stroke="var(--cedar)" stroke-width="1.2" stroke-linejoin="miter"/>
-          <rect x="30" y="46" width="4" height="5" fill="var(--navy)"/>
-        </g>
-        <!-- Soft pulse aura behind the tree. -->
-        <circle class="hf-cedar__aura" cx="32" cy="28" r="20" fill="var(--cedar)" opacity="0"/>
-      </svg>
-    </div>
-    <p class="hero-flow__label">Cedar runs the analysis</p>
-  </li>
+    <!-- ===== Station 1: sources / data harmonization ===== -->
+    <g class="hf-station hf-station--src" transform="translate(60 60)">
+      <circle class="hf-station__halo" r="34" fill="var(--accent)" opacity="0"/>
+      <g class="hf-src" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter" fill="var(--white)">
+        <rect class="hf-src__doc hf-src__doc--a" x="-22" y="-26" width="20" height="26" rx="1.5"/>
+        <rect class="hf-src__doc hf-src__doc--b" x="-12" y="-22" width="20" height="26" rx="1.5"/>
+        <rect class="hf-src__doc hf-src__doc--c" x="-2"  y="-18" width="20" height="26" rx="1.5"/>
+      </g>
+      <g stroke="var(--navy)" stroke-width=".9" stroke-opacity=".55">
+        <line x1="2"  y1="-13" x2="14" y2="-13"/>
+        <line x1="2"  y1="-9"  x2="14" y2="-9"/>
+        <line x1="2"  y1="-5"  x2="11" y2="-5"/>
+      </g>
+    </g>
 
-  <span class="hero-flow__rail" aria-hidden="true"></span>
+    <!-- ===== Station 2: Cedar runs the model ===== -->
+    <g class="hf-station hf-station--cedar" transform="translate(360 60)">
+      <circle class="hf-station__halo" r="40" fill="var(--cedar)" opacity="0"/>
+      <!-- Layered conifer outline. Reads as a real cedar, matches the
+           refined mark used on the FAB and the chat avatar. -->
+      <g class="hf-tree" stroke="var(--cedar)" stroke-width="1.6" stroke-linejoin="miter" fill="none">
+        <path d="M0 -32 L-8 -18 L-4 -18 L-12 -6 L-6 -6 L-16 8 L16 8 L6 -6 L12 -6 L4 -18 L8 -18 Z"
+              fill="var(--white)"/>
+        <line x1="0" y1="8" x2="0" y2="16" stroke-width="2" stroke-linecap="butt"/>
+      </g>
+      <!-- Inner glow that pulses with the data arrival cadence. -->
+      <circle class="hf-tree__pulse" r="3" cx="0" cy="-8" fill="var(--cedar-light)" opacity="0"/>
+    </g>
 
-  <li class="hero-flow__step">
-    <div class="hero-flow__icon hero-flow__icon--map" aria-hidden="true">
-      <svg viewBox="0 0 64 56" fill="none">
-        <!-- Schematic U.S. outline with regions lighting up in sequence. -->
-        <path d="M5 18 L10 11 L18 9 L26 12 L34 9 L42 11 L52 11 L58 16 L58 22 L60 28 L56 34 L52 38 L46 41 L40 38 L34 41 L26 40 L18 42 L12 38 L8 32 L5 26 Z"
-              fill="var(--paper)" stroke="currentColor" stroke-width="1.4" stroke-linejoin="miter"/>
-        <!-- Region tints: three illustrative regions that pulse in sequence. -->
-        <path class="hf-map__r hf-map__r--src" d="M28 18 L36 18 L38 26 L33 32 L26 30 L24 22 Z" fill="var(--gold)" opacity="0"/>
-        <path class="hf-map__r hf-map__r--a" d="M14 14 L24 14 L26 22 L20 28 L12 26 L10 18 Z" fill="var(--accent)" opacity="0"/>
-        <path class="hf-map__r hf-map__r--b" d="M38 17 L48 16 L52 22 L48 30 L40 28 L36 22 Z" fill="var(--accent)" opacity="0"/>
-        <!-- Value chip near the source region. -->
-        <g class="hf-map__chip">
-          <rect x="28" y="36" width="20" height="9" rx="1.5" fill="var(--white)" stroke="var(--gold)" stroke-width=".7"/>
-          <text x="38" y="42.4" font-family="JetBrains Mono, monospace" font-size="5.2" font-weight="600" fill="var(--navy)" text-anchor="middle">$24M</text>
-        </g>
-      </svg>
-    </div>
-    <p class="hero-flow__label">See your impact</p>
-  </li>
-</ol>
+    <!-- ===== Station 3: impact map ===== -->
+    <g class="hf-station hf-station--map" transform="translate(660 60)">
+      <circle class="hf-station__halo" r="38" fill="var(--gold)" opacity="0"/>
+      <g class="hf-map" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter" fill="none">
+        <!-- Schematic country outline -->
+        <path class="hf-map__land"
+              d="M-32 -18 L-26 -22 L-18 -22 L-10 -24 L-2 -22 L8 -24 L18 -22 L26 -18 L30 -10 L32 -2 L28 8 L22 14 L12 14 L4 12 L-4 14 L-14 12 L-22 10 L-30 4 L-32 -8 Z"
+              fill="var(--paper)"/>
+        <!-- Source region (gold) -->
+        <path class="hf-map__src" d="M-4 -14 L8 -14 L12 -6 L4 0 L-6 -2 Z"
+              fill="var(--gold)" fill-opacity="0"/>
+        <!-- Two spillover regions (teal) -->
+        <path class="hf-map__r hf-map__r--a" d="M-22 -12 L-10 -12 L-6 -4 L-14 4 L-24 0 Z"
+              fill="var(--accent)" fill-opacity="0"/>
+        <path class="hf-map__r hf-map__r--b" d="M12 -10 L24 -10 L26 -2 L18 6 L10 0 Z"
+              fill="var(--accent)" fill-opacity="0"/>
+      </g>
+    </g>
+  </svg>
+
+  <!-- Labels below the SVG, aligned to each station's x position. -->
+  <ol class="hero-flow__labels" aria-label="Study stages">
+    <li class="hero-flow__label">Harmonize your data</li>
+    <li class="hero-flow__label">Cedar runs the analysis</li>
+    <li class="hero-flow__label">See your impact</li>
+  </ol>
+</figure>
 
 <style>
   .hero-flow {
-    list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    align-items: stretch;
-    gap: clamp(.6rem, 1.6vw, 1.4rem);
     width: 100%;
     max-width: 760px;
   }
-  .hero-flow__step {
-    flex: 1 1 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: .65rem;
-    padding: 1rem .9rem 1.1rem;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 12px;
-    color: var(--ink-2);
-    transition: transform .2s var(--ease), box-shadow .2s var(--ease);
-  }
-  .hero-flow__step:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -10px rgba(10, 15, 38, .15);
-  }
-  .hero-flow__icon {
+  .hero-flow__svg {
     width: 100%;
-    max-width: 84px;
-    aspect-ratio: 64 / 56;
-    color: var(--navy);
+    height: auto;
+    display: block;
   }
-  .hero-flow__icon svg { width: 100%; height: 100%; display: block; }
+
+  /* Labels are an editorial row beneath the SVG. They mirror the
+     SVG's three station positions (12% / 50% / 88%) so they line up
+     under the icons even as the figure scales. */
+  .hero-flow__labels {
+    list-style: none;
+    padding: 0;
+    margin: .35rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: .6rem;
+  }
   .hero-flow__label {
-    font-family: var(--font-sans);
-    font-size: .82rem;
-    font-weight: 500;
-    color: var(--navy);
-    letter-spacing: -.005em;
-    margin: 0;
-    line-height: 1.25;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-align: center;
+    line-height: 1.3;
   }
-  /* Rails between tiles: thin teal hairline with a trailing arrow head. */
-  .hero-flow__rail {
-    flex: 0 0 auto;
-    align-self: center;
-    width: clamp(.8rem, 2vw, 1.6rem);
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent) 30%, var(--accent) 70%, transparent);
-    position: relative;
+  .hero-flow__label:nth-child(2) { color: var(--cedar); }
+
+  /* ---------- Continuous flow: traveling ticks along the rail ----------
+     Each tick scrolls left-to-right across the whole 600-unit rail,
+     staggered so a dot is always in flight. Opacity dips at the
+     extremes so the tick "enters" and "exits" gracefully. */
+  @keyframes hf-tick-run {
+    0%   { transform: translateX(0);      opacity: 0; r: 2.4; }
+    8%   { opacity: 1; }
+    50%  {                                 r: 3.4; }
+    92%  { opacity: 1; }
+    100% { transform: translateX(600px);  opacity: 0; r: 2.4; }
   }
-  .hero-flow__rail::after {
-    content: '';
-    position: absolute;
-    right: -1px;
-    top: 50%;
-    width: 6px;
-    height: 6px;
-    border-right: 1.5px solid var(--accent);
-    border-bottom: 1.5px solid var(--accent);
-    transform: translate(0, -50%) rotate(-45deg);
+  .hf-tick {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hf-tick-run 4.8s linear infinite;
+  }
+  .hf-tick--a { animation-delay: 0s; }
+  .hf-tick--b { animation-delay: 1.6s; }
+  .hf-tick--c { animation-delay: 3.2s; }
+
+  /* ---------- Station halo pulses ----------
+     Each station's halo flashes when a tick passes through it,
+     timed to the dot stagger. 4.8s cycle, halo blooms ~.3s every
+     1.6s as the next tick arrives. */
+  .hf-station__halo {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hf-halo 4.8s ease-in-out infinite;
+  }
+  .hf-station--src   .hf-station__halo { animation-delay: 0s; }
+  .hf-station--cedar .hf-station__halo { animation-delay: 1.6s; }
+  .hf-station--map   .hf-station__halo { animation-delay: 3.2s; }
+  @keyframes hf-halo {
+    0%, 25%   { opacity: 0;   transform: scale(.6); }
+    5%        { opacity: .22; transform: scale(1);  }
+    15%       { opacity: 0;   transform: scale(1.15);}
+    100%      { opacity: 0; }
   }
 
-  /* ---------- Step 1: data harmonization ---------- */
-  .hf-data__src {
+  /* ---------- Station 1: source docs shuffle in to be harmonized ---------- */
+  .hf-src__doc {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-data-slide 5.4s var(--ease) infinite;
+    animation: hf-src-settle 4.8s ease-in-out infinite;
   }
-  .hf-data__src--b { animation-delay: .25s; }
-  .hf-data__src--c { animation-delay: .5s; }
-  @keyframes hf-data-slide {
-    0%, 12%   { transform: translate(-2px, 0); opacity: .85; }
-    36%, 64%  { transform: translate(0, 0);    opacity: 1;   }
-    88%, 100% { transform: translate(-2px, 0); opacity: .85; }
-  }
-  .hf-data__arrow {
-    animation: hf-data-arrow 5.4s var(--ease) infinite;
-  }
-  @keyframes hf-data-arrow {
-    0%, 30%   { stroke-dashoffset: 20; }
-    50%, 80%  { stroke-dashoffset: 0;  }
-    100%      { stroke-dashoffset: 20; }
-  }
-  .hf-data__arrow-head { opacity: 0; animation: hf-data-head 5.4s var(--ease) infinite; }
-  @keyframes hf-data-head {
-    0%, 45% { opacity: 0; }
-    55%, 80% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-  .hf-data__out {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: hf-data-out 5.4s var(--ease) infinite;
-  }
-  @keyframes hf-data-out {
-    0%, 55%  { opacity: .35; transform: scale(.96); }
-    70%, 92% { opacity: 1;   transform: scale(1);   }
-    100%     { opacity: .35; transform: scale(.96); }
+  .hf-src__doc--b { animation-delay: .12s; }
+  .hf-src__doc--c { animation-delay: .24s; }
+  @keyframes hf-src-settle {
+    0%, 100% { transform: translate(-3px, 2px); }
+    6%, 18%  { transform: translate(0, 0);      }
   }
 
-  /* ---------- Step 2: Cedar analysis ---------- */
-  .hf-cedar__tick {
+  /* ---------- Station 2: Cedar pulse ---------- */
+  .hf-tree {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-cedar-flow 3.2s ease-in-out infinite;
-    opacity: 0;
+    animation: hf-tree-pulse 4.8s ease-in-out infinite;
+    animation-delay: 1.55s;
   }
-  .hf-cedar__tick--b { animation-delay: .25s; }
-  .hf-cedar__tick--c { animation-delay: .5s; }
-  @keyframes hf-cedar-flow {
-    0%   { transform: translate(0, 0);   opacity: 0; }
-    25%  { opacity: 1; }
-    70%  { transform: translate(20px, 0); opacity: 0; }
-    100% { transform: translate(20px, 0); opacity: 0; }
-  }
-  .hf-cedar__aura {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: hf-cedar-aura 3.2s ease-in-out infinite;
-  }
-  @keyframes hf-cedar-aura {
-    0%, 100% { opacity: 0;   transform: scale(.6); }
-    55%      { opacity: .18; transform: scale(1);  }
-    80%      { opacity: 0;   transform: scale(1.1);}
-  }
-  .hf-cedar__tree {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: hf-cedar-pulse 3.2s ease-in-out infinite;
-  }
-  @keyframes hf-cedar-pulse {
+  @keyframes hf-tree-pulse {
     0%, 100% { transform: scale(1); }
-    55%      { transform: scale(1.04); }
+    4%       { transform: scale(1.06); }
+    14%      { transform: scale(1); }
+  }
+  .hf-tree__pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hf-tree-spark 4.8s ease-in-out infinite;
+    animation-delay: 1.55s;
+  }
+  @keyframes hf-tree-spark {
+    0%, 100% { opacity: 0; r: 2;   }
+    4%       { opacity: 1; r: 4.5; }
+    18%      { opacity: 0; r: 8;   }
   }
 
-  /* ---------- Step 3: impact map ---------- */
+  /* ---------- Station 3: regions light up in sequence ---------- */
+  .hf-map__src,
   .hf-map__r {
     transform-box: fill-box;
     transform-origin: center;
   }
-  .hf-map__r--src { animation: hf-map-src 4s ease-in-out infinite; }
-  .hf-map__r--a   { animation: hf-map-r   4s ease-in-out infinite; animation-delay: .4s; }
-  .hf-map__r--b   { animation: hf-map-r   4s ease-in-out infinite; animation-delay: .7s; }
+  .hf-map__src { animation: hf-map-src 4.8s ease-in-out infinite; animation-delay: 3.15s; }
+  .hf-map__r--a { animation: hf-map-r   4.8s ease-in-out infinite; animation-delay: 3.4s;  }
+  .hf-map__r--b { animation: hf-map-r   4.8s ease-in-out infinite; animation-delay: 3.55s; }
   @keyframes hf-map-src {
-    0%, 100% { opacity: 0;  }
-    20%, 90% { opacity: .85; }
+    0%, 100% { fill-opacity: 0; }
+    8%, 35%  { fill-opacity: .9; }
+    50%, 95% { fill-opacity: .6; }
   }
   @keyframes hf-map-r {
-    0%, 100% { opacity: 0;   }
-    30%, 90% { opacity: .35; }
-  }
-  .hf-map__chip {
-    transform-box: fill-box;
-    transform-origin: center;
-    opacity: 0;
-    animation: hf-map-chip 4s ease-in-out infinite;
-    animation-delay: .8s;
-  }
-  @keyframes hf-map-chip {
-    0%, 20%  { opacity: 0; transform: translate(0, 3px); }
-    45%, 90% { opacity: 1; transform: translate(0, 0);   }
-    100%     { opacity: 0; transform: translate(0, 3px); }
+    0%, 100% { fill-opacity: 0; }
+    12%, 95% { fill-opacity: .45; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hf-data__src, .hf-data__arrow, .hf-data__arrow-head, .hf-data__out,
-    .hf-cedar__tick, .hf-cedar__aura, .hf-cedar__tree,
-    .hf-map__r, .hf-map__chip { animation: none; }
-    .hf-cedar__tick { opacity: 1; }
-    .hf-map__r--src { opacity: .85; }
-    .hf-map__r--a, .hf-map__r--b { opacity: .35; }
-    .hf-map__chip { opacity: 1; }
+    .hf-tick, .hf-station__halo,
+    .hf-src__doc, .hf-tree, .hf-tree__pulse,
+    .hf-map__src, .hf-map__r { animation: none; }
+    .hf-tick { opacity: 0; }
+    .hf-map__src { fill-opacity: .8; }
+    .hf-map__r { fill-opacity: .4; }
   }
 
+  /* Compact on phones: tighter aspect, smaller labels. */
   @media (max-width: 600px) {
-    .hero-flow { gap: .4rem; }
-    .hero-flow__step { padding: .8rem .55rem .85rem; gap: .5rem; border-radius: 10px; }
-    .hero-flow__icon { max-width: 60px; }
-    .hero-flow__label { font-size: .72rem; line-height: 1.2; }
-    .hero-flow__rail { width: .5rem; }
-    .hero-flow__rail::after { width: 5px; height: 5px; }
+    .hero-flow__labels { gap: .35rem; margin-top: .25rem; }
+    .hero-flow__label { font-size: .58rem; letter-spacing: .06em; }
   }
 </style>
