@@ -15,7 +15,6 @@ import { mesh, feature } from 'topojson-client';
 import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 // @ts-ignore — generated data, no .d.ts
 import { CENSUS_TRIBAL_LANDS } from '../data/tribalLands.generated.js';
-import BrandWordmark from './BrandWordmark.astro';
 import HeroWorkflow from './HeroWorkflow.astro';
 import '../styles/hero.css';
 
@@ -368,10 +367,10 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   </div>
 
 
-  <script type="application/json" id="heroStates"   set:html={statesJson}></script>
-  <script type="application/json" id="heroTribal"   set:html={tribalLookupJson}></script>
-  <script type="application/json" id="heroCounties" set:html={countyCentroidsJson}></script>
-  <script type="application/json" id="heroSearch"   set:html={searchIndexJson}></script>
+  <script is:inline type="application/json" id="heroStates"   set:html={statesJson}></script>
+  <script is:inline type="application/json" id="heroTribal"   set:html={tribalLookupJson}></script>
+  <script is:inline type="application/json" id="heroCounties" set:html={countyCentroidsJson}></script>
+  <script is:inline type="application/json" id="heroSearch"   set:html={searchIndexJson}></script>
 </section>
 
 <script>
@@ -413,9 +412,39 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   ] as const;
   const LEVEL_POOLS = [STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES];
 
-  // (slug → scene map removed — no more URL-hash routing. The
-  // /demo/<slug> pages still use sceneSlug() directly.)
-  const ADJ_RADIUS = { indirect: 220, induced: 480 };
+  /* ---------- Tuning constants ----------
+     Pulled out of the body of the script so they can be adjusted in
+     one place. Units are SVG viewBox units unless noted. */
+
+  /** Distance-decay exponent for the choropleth spillover map.
+   *  Higher = leakage concentrates in the immediately adjacent
+   *  states (more geographic embeddedness, FLQ-like). 2.2 is the
+   *  current sweet spot. */
+  const CHOROPLETH_DECAY = 2.2;
+  /** Random jitter applied per region in computeShares so neighbors
+   *  don't fall into a perfect concentric ring. The weight is
+   *  multiplied by (JITTER_MIN + rand() * JITTER_RANGE). */
+  const JITTER_MIN = 0.7;
+  const JITTER_RANGE = 0.6;
+  /** Choropleth opacity boost. The raw share is divided by this
+   *  threshold and raised to SHARE_BOOST_POWER, so the dimmest
+   *  neighbors don't fade out entirely. */
+  const SHARE_BOOST_THRESHOLD = 0.30;
+  const SHARE_BOOST_POWER = 0.6;
+  /** Curvature factor for the bezier flow lines from source to
+   *  neighbors. Multiplied by the source-to-neighbor distance to
+   *  set the control-point offset. */
+  const FLOW_CURVATURE = 0.22;
+  /** Max distance (in viewBox units) between a reservation scene's
+   *  tribalLookup centroid and the nearest AIANNH polygon center
+   *  before we give up trying to highlight the polygon. Some small
+   *  rancherias aren't in the AIANNH dataset; better to leave the
+   *  highlight off than light a far-away polygon that shares a name
+   *  fragment. */
+  const RESERVATION_HIGHLIGHT_MAX_DIST = 35;
+  /** Bbox inflation when finding counties that overlap a reservation
+   *  polygon. Small positive number so edge-touching counties match. */
+  const COUNTY_OVERLAP_PAD = 0.5;
 
   const stage   = document.getElementById('heroStage') as HTMLElement | null;
   const tooltip = document.getElementById('heroTooltip') as HTMLElement | null;
@@ -435,11 +464,25 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     const wait = (ms: number) => new Promise<void>(r => window.setTimeout(r, ms));
     const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
+    /**
+     * Format a dollar amount for display.
+     *  - $12M / $1.5M / $1.25M for millions (1 decimal above $10M, else 2)
+     *  - $850K for thousands
+     *  - $42 for sub-thousand
+     * Trailing zeros after the decimal are stripped so "5.00M" reads as "5M".
+     */
     const fmt = (n: number) =>
       n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.?0+$/, '') + 'M'
       : n >= 1_000   ? '$' + Math.round(n / 1_000) + 'K'
       :                '$' + Math.round(n);
 
+    /**
+     * Animate a number into an element using the cubic-out ease.
+     * @param el      Element whose textContent receives the running value.
+     * @param target  Final value (in dollars; formatted via fmt()).
+     * @param prefix  Optional prefix prepended to each tick (e.g., '+ ').
+     * @param dur     Total animation duration in ms.
+     */
     const tickTo = (el: HTMLElement, target: number, prefix = '', dur = 1100) => {
       const start = performance.now();
       const step = (now: number) => {
@@ -449,6 +492,8 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       };
       requestAnimationFrame(step);
     };
+    /** Same as tickTo() but renders as a localized integer (commas). Used
+     *  for jobs counts. */
     const tickInt = (el: HTMLElement, target: number, prefix = '', dur = 1100) => {
       const start = performance.now();
       const step = (now: number) => {
@@ -459,10 +504,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       requestAnimationFrame(step);
     };
 
-    /* Draw +value labels on the lit states of a given ring (0/1/2).
-       Picks up to 4 states by largest centroid-distance-from-source
-       so the labels don't all stack in one corner. Each label gets
-       its own SVG <g> appended to the value layer. */
     /* Light only the source state. Indirect (supply chain) and induced
        (household) effects don't have a clean geographic story at this
        resolution: indirect spreads to wherever suppliers are, induced
@@ -476,15 +517,23 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       });
     };
 
-    /* Distribute the indirect+induced spillover across neighboring
-       regions with distance decay, normalized so shares sum to 1.
-       Returns a Map<regionId, share 0..1>. Used to drive the
-       choropleth tint, the value chips, and the flow lines.
-
-       Seeded by the source coordinates so the same study always
-       shows the same neighbor pattern — this is illustrative, not a
-       real input-output computation, but it stays deterministic so
-       running the same study twice doesn't shuffle the map. */
+    /**
+     * Distribute the indirect+induced spillover across neighboring
+     * regions with distance decay, normalized so shares sum to 1.
+     *
+     * Seeded by the source coordinates so the same study always
+     * shows the same neighbor pattern. This is illustrative, not a
+     * real input-output computation, but it stays deterministic so
+     * running the same study twice doesn't shuffle the map.
+     *
+     * @param srcCx Source X in SVG coords.
+     * @param srcCy Source Y in SVG coords.
+     * @param regions Candidate regions to spread spillover across.
+     * @param topN Keep the top-N strongest neighbors only.
+     * @param decay Distance-decay exponent. Higher = tighter falloff.
+     * @param seedSalt Optional salt for the deterministic jitter.
+     * @returns Map of regionId → share (0..1) summing to 1.
+     */
     const computeShares = (srcCx: number, srcCy: number, regions: Array<{ id: string; cx: number; cy: number }>, topN: number, decay: number = 1.6, seedSalt: number = 0): Map<string, number> => {
       // Deterministic jitter so neighbors don't fall in perfect rings
       const rand = seededRandom(Math.floor(srcCx * 911 + srcCy * 113 + seedSalt));
@@ -496,7 +545,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           const d = Math.hypot(dx, dy);
           // distance decay + slight per-region jitter so it doesn't
           // look like an exact concentric ring
-          const w = (1 / Math.pow(d + 40, decay)) * (0.7 + rand() * 0.6);
+          const w = (1 / Math.pow(d + 40, decay)) * (JITTER_MIN + rand() * JITTER_RANGE);
           return { id: r.id, w, d };
         })
         .sort((a, b) => b.w - a.w)
@@ -507,8 +556,14 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       return out;
     };
 
-    /* Apply the choropleth tint by setting --impact-share on each
-       matching region. CSS handles the fill-opacity scaling. */
+    /**
+     * Apply a choropleth tint by writing the boosted share value into
+     * `--impact-share` and `data-impact` on each matching region. CSS
+     * handles the fill-opacity scaling.
+     *
+     * @param shares Output of computeShares() (regionId → 0..1).
+     * @param selector CSS selector for the region layer (e.g. `.hero-state`).
+     */
     const applyChoropleth = (shares: Map<string, number>, selector: string) => {
       // Clear old impact tints first
       stage.querySelectorAll<HTMLElement>(`${selector}[data-impact]`).forEach(el => {
@@ -520,7 +575,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         if (el) {
           // Boost the small shares so the dimmest neighbors don't
           // disappear. share is 0..~.35 typically; boost to 0..1.
-          const boosted = Math.min(1, Math.pow(share / 0.30, 0.6));
+          const boosted = Math.min(1, Math.pow(share / SHARE_BOOST_THRESHOLD, SHARE_BOOST_POWER));
           el.dataset.impact = String(Math.round(boosted * 100));
           el.style.setProperty('--impact-share', String(boosted.toFixed(3)));
         }
@@ -534,11 +589,20 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       });
     };
 
-    /* Render value chips on the top-N impacted regions. Each chip
-       is a small pill placed near the region centroid with a thin
-       leader line back to the centroid. Values shown in $K/M with
-       the type-of-effect label so the viewer reads the chip and
-       knows what it's measuring. */
+    /**
+     * Render value chips on the top-N impacted regions. Each chip is
+     * a small pill placed near the region centroid with a thin leader
+     * line back to the centroid. Values render in $K/M with the
+     * type-of-effect label so a viewer reading the chip immediately
+     * knows what it's measuring.
+     *
+     * Collision-aware: tries 8 candidate offsets per chip and picks
+     * the first non-overlapping placement.
+     *
+     * @param top Top-impacted regions plus the source as kind: 'local'.
+     * @param src Source point used to bias chip placement away from
+     *   the source's NE callout.
+     */
     const renderValueChips = (top: Array<{ id: string; cx: number; cy: number; amount: number; label: string; name: string; kind?: 'local' | 'leak' }>, src: { cx: number; cy: number }) => {
       const vlayer = document.getElementById('heroValueLayer');
       if (!vlayer) return;
@@ -609,8 +673,16 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       }
     };
 
-    /* Render curved flow lines from source to each top-impacted
-       region. Width scales with magnitude. */
+    /**
+     * Render curved flow lines from the source to each top-impacted
+     * region. Stroke width scales with magnitude; the curve uses a
+     * perpendicular offset (see FLOW_CURVATURE) so multiple lines
+     * fan out instead of stacking on top of each other.
+     *
+     * @param top Top-impacted regions with target coords + amounts.
+     * @param src Source point — origin of every flow line.
+     * @param maxAmount Used to normalize stroke widths.
+     */
     const renderFlowLines = (top: Array<{ cx: number; cy: number; amount: number }>, src: { cx: number; cy: number }, maxAmount: number) => {
       const flowLayer = document.getElementById('heroFlowLayer');
       if (!flowLayer) return;
@@ -624,7 +696,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         const midY = (src.cy + r.cy) / 2;
         const perpX = -dy / dist;
         const perpY = dx / dist;
-        const curvature = dist * 0.22;
+        const curvature = dist * FLOW_CURVATURE;
         const cpX = midX + perpX * curvature;
         const cpY = midY + perpY * curvature;
         const d = `M ${src.cx} ${src.cy} Q ${cpX} ${cpY} ${r.cx} ${r.cy}`;
@@ -660,6 +732,15 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       svgEl?.setAttribute('viewBox', vb.join(' '));
     };
     const easeInOut = (t: number) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    /**
+     * Tween the SVG viewBox from its current value to `target` over
+     * `dur` ms with an ease-in-out curve. Cancels any in-flight zoom
+     * so successive calls don't fight each other.
+     *
+     * @param target Final viewBox as [x, y, width, height].
+     * @param dur Duration in milliseconds.
+     * @returns Promise that resolves when the tween completes.
+     */
     const tweenVB = (target: [number, number, number, number], dur = 700) => {
       if (!svgEl) return Promise.resolve();
       const cur = (svgEl.getAttribute('viewBox') || overviewVB.join(' ')).split(/\s+/).map(Number) as [number, number, number, number];
@@ -683,19 +764,31 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       });
     };
 
-    /* Zoom into a source point. The detail viewBox is centered on the
-       source with a small margin. Zoom level depends on the geography
-       size — tribal-land detail wants tighter zoom than state-level. */
+    /**
+     * Zoom into a source point. The detail viewBox is centered on the
+     * source with a small margin. Zoom level depends on the geography
+     * size — tribal-land detail wants tighter zoom than state-level.
+     *
+     * @param cx Center X in SVG coords.
+     * @param cy Center Y in SVG coords.
+     * @param span Width of the zoomed viewBox. Smaller = tighter zoom.
+     */
     const zoomTo = (cx: number, cy: number, span = 200) => {
       const w = span;
       const h = span * (overviewVB[3] / overviewVB[2]);
       return tweenVB([cx - w / 2, cy - h / 2, w, h], 800);
     };
+    /** Restore the map to its overview viewBox. */
     const zoomOut = () => tweenVB(overviewVB, 700);
 
-    /* Tiny LCG for deterministic jitter inside computeShares. Same
-       study coords always produce the same neighbor pattern so a
-       given scene looks identical across reloads. */
+    /**
+     * Tiny LCG for deterministic jitter inside computeShares(). Same
+     * study coords always produce the same neighbor pattern so a
+     * given scene looks identical across reloads.
+     *
+     * @param seed Seed value. Use any integer.
+     * @returns A function that returns the next pseudo-random float in [0, 1).
+     */
     const seededRandom = (seed: number) => {
       let s = seed;
       return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
@@ -708,6 +801,10 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       clearChoropleth();
     };
 
+    /**
+     * Position the source dot + halo + ring + glow at (cx, cy). All
+     * four circles share the same center so they're moved together.
+     */
     const moveSource = (cx: number, cy: number) => {
       source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
         c.setAttribute('cx', String(cx));
@@ -722,6 +819,13 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       'hero-ring':       14,
       'hero-glow':      120,
     };
+    /**
+     * Scale the source dot + halo + ring + glow uniformly. Used to
+     * shrink the source for tighter geographies (county / reservation)
+     * so the dot doesn't swamp the polygon being studied.
+     *
+     * @param scale Multiplier applied to each circle's base radius.
+     */
     const scaleSource = (scale: number) => {
       source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
         for (const cls of Array.from(c.classList)) {
@@ -772,7 +876,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
       const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
       const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-      const framing  = opts?.framing  ?? `A ${amount.label} ${activity.label} in ${s.name}.`;
       const src      = opts?.sourcePoint ?? { cx: s.cx, cy: s.cy };
 
       stage.dataset.run = '';
@@ -837,7 +940,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         .map(([id, st]) => ({ id, cx: st.cx, cy: st.cy, name: (st.code || st.name).slice(0, 12) }));
       const tintN = _level === 'state' ? 6 : _level === 'county' ? 8 : 10;
       const chipN = _level === 'state' ? 3 : _level === 'county' ? 3 : 4;
-      const tintShares = computeShares(src.cx, src.cy, statePool, tintN, 2.2, runId);
+      const tintShares = computeShares(src.cx, src.cy, statePool, tintN, CHOROPLETH_DECAY, runId);
       applyChoropleth(tintShares, '.hero-state');
       const topShares = Array.from(tintShares.entries())
         .sort((a, b) => b[1] - a[1])
@@ -979,12 +1082,19 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         el.removeAttribute('data-active');
       });
     };
-    /* Pick the AIANNH polygon that best represents this reservation
-       scene. Loose name match is the first signal (multiple polygons
-       can share fragments like "Choctaw"), then break ties by
-       distance to the tribalLookup centroid — the polygon physically
-       closest to where the source dot lives. If nothing name-matches,
-       fall back to the nearest polygon within a sane radius. */
+    /**
+     * Pick the AIANNH polygon that best represents the currently
+     * pending reservation scene and highlight it (plus any counties
+     * whose bbox overlaps).
+     *
+     * Selection order:
+     *   1. Loose name match (multiple polygons can share fragments
+     *      like "Choctaw"), broken by distance to the tribalLookup
+     *      centroid (closest to the source dot wins).
+     *   2. Fallback: nearest polygon within RESERVATION_HIGHLIGHT_MAX_DIST.
+     *
+     * @returns true if a polygon was highlighted, false otherwise.
+     */
     const applyReservationHighlight = () => {
       if (!pendingReservationTribalKey) return false;
       const t = tribalLookup[pendingReservationTribalKey];
@@ -1012,11 +1122,8 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         }
       }
 
-      // Highlight is only meaningful if the chosen polygon is close to
-      // where the source dot lives. Some small rancherias aren't in
-      // the AIANNH dataset; we'd rather leave the highlight off than
-      // light up a far-away polygon that shares a name fragment.
-      const HIGHLIGHT_MAX_DIST = 35;
+      // Highlight is only meaningful if the chosen polygon is close
+      // to where the source dot lives — see RESERVATION_HIGHLIGHT_MAX_DIST.
       let best: SVGGraphicsElement | null = null;
       let bestDist = Infinity;
       if (nameMatches.length) {
@@ -1032,7 +1139,7 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
           if (d < bestDist) { bestDist = d; best = el; }
         }
       }
-      if (best && bestDist <= HIGHLIGHT_MAX_DIST) {
+      if (best && bestDist <= RESERVATION_HIGHLIGHT_MAX_DIST) {
         best.setAttribute('data-active', '1');
         // Recenter the source dot on the polygon's actual bbox center.
         // The tribalLookup centroid is from Census TIGER/Line interior
@@ -1056,24 +1163,31 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       }
       return false;
     };
-    /* Find every county polygon whose bbox overlaps the given AIANNH
-       polygon's bbox; mark them data-active so their fill + border
-       show. Loads counties lazily if they haven't been fetched yet
-       — the highlight applies once the polygons are in the DOM. */
+    /**
+     * Mark every county polygon whose bbox overlaps the given AIANNH
+     * polygon. Bbox overlap is an over-estimate (some matches will
+     * be edge-adjacent rather than truly intersecting) but at this
+     * scale the visual reads cleanly — visitors see all the counties
+     * a reservation crosses, not just the one containing the
+     * centroid.
+     *
+     * Async: county polygons are lazy-loaded; if they haven't been
+     * fetched yet this function kicks off the load and applies the
+     * highlight when polygons arrive.
+     */
     const highlightCountiesOverlappingAiannh = (aiannhEl: SVGGraphicsElement) => {
       const apply = () => {
         let rb: DOMRect | null = null;
         try { rb = aiannhEl.getBBox(); } catch { return; }
         if (!rb) return;
-        const PAD = 0.5; // small inflation so edge-touching counties match
         countyByFips.forEach((countyEl) => {
           try {
             const cb = countyEl.getBBox();
             const overlaps =
-              cb.x < rb.x + rb.width + PAD &&
-              cb.x + cb.width > rb.x - PAD &&
-              cb.y < rb.y + rb.height + PAD &&
-              cb.y + cb.height > rb.y - PAD;
+              cb.x < rb.x + rb.width + COUNTY_OVERLAP_PAD &&
+              cb.x + cb.width > rb.x - COUNTY_OVERLAP_PAD &&
+              cb.y < rb.y + rb.height + COUNTY_OVERLAP_PAD &&
+              cb.y + cb.height > rb.y - COUNTY_OVERLAP_PAD;
             if (overlaps) countyEl.setAttribute('data-active', '1');
           } catch {}
         });

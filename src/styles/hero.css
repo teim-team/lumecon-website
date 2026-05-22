@@ -40,11 +40,14 @@
   text-transform: lowercase;
   padding: 0 .1em;
 }
+/* Hero headline. Clamp's lower bound dips to 2rem so the headline
+   doesn't push every CTA below the fold on the smallest practical
+   mobile viewport (320px). Upper bound stays at 4.4rem for 1440px+. */
 .hero-statement {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 5.5vw, 4.4rem);
+  line-height: 1.08;
   letter-spacing: -.025em;
   color: var(--accent-deep);
   margin: 0;
