@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import CedarFAB from '../components/CedarFAB.astro';
 
 interface Props {
   title: string;
@@ -107,6 +108,7 @@ const ogIA = ogImageAlt || 'Lumecon: economic and policy analysis software for g
 <body class={bodyClass}>
 <a href="#top" class="skip-link">Skip to main content</a>
 <slot />
+<CedarFAB />
 
 <script is:inline>
   // Scroll-reveal: anything with class="reveal" (or reveal-left/right/

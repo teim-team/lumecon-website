@@ -16,6 +16,7 @@ import usAtlas from 'us-atlas/states-albers-10m.json' with { type: 'json' };
 // @ts-ignore — generated data, no .d.ts
 import { CENSUS_TRIBAL_LANDS } from '../data/tribalLands.generated.js';
 import BrandWordmark from './BrandWordmark.astro';
+import HeroWorkflow from './HeroWorkflow.astro';
 import '../styles/hero.css';
 
 // viewBox tight-fits the full us-atlas albers-USA projection bbox
@@ -173,9 +174,17 @@ for (const key of Object.keys(tribalLookup)) {
 const tribalLookupJson = JSON.stringify(tribalLookup);
 ---
 <section class="hero" id="top">
-  <!-- Brand statement: large wordmark, one position, one CTA. -->
   <div class="hero-brand">
-    <BrandWordmark size="lg" ariaLabel="Lumecon Inc." />
+    <!-- Tagline as a small eyebrow so the brand emphasis stays
+         present without occupying a full hero block (the wordmark
+         lives in the nav above). -->
+    <p class="hero-tagline reveal-soft">We <em class="lumin">luminate</em> economies.</p>
+
+    <!-- Three-step workflow: harmonize data, Cedar runs the
+         analysis, see your impact. Replaces the redundant big
+         wordmark block so the hero opens with what a Lumecon
+         study actually looks like. -->
+    <HeroWorkflow />
 
     <h1 class="hero-statement">
       Your work changes the economy around it. Let&rsquo;s prove it together.
