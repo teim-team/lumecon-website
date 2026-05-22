@@ -53,12 +53,16 @@
     };
 
     fab.addEventListener('click', (e) => {
-      // Only valid when the Cedar chat element is on the page
-      // (homepage). On other pages, do nothing — the FAB stays
-      // visible but inert. A future iteration will inline a
-      // dedicated panel chat so this works everywhere.
       const cedar = document.getElementById('cedar');
-      if (!cedar) return;
+      if (!cedar) {
+        // The Cedar surface only renders on the homepage. From any
+        // other page (e.g. /join), route the visitor home and land
+        // them on the Cedar section so the click still does
+        // something.
+        e.preventDefault();
+        window.location.assign('/#cedar');
+        return;
+      }
       e.stopPropagation();
       if (document.body.classList.contains('cedar-popped')) {
         closePop();
