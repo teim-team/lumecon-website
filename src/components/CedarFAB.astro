@@ -1,15 +1,30 @@
 ---
 /**
  * Persistent Cedar FAB — round floating action button anchored to
- * the bottom-right of every page. Click jumps you into the Cedar
- * chat: on the homepage that's a smooth scroll to the #cedar
- * section with the chat input pre-focused; on other pages it routes
- * to the homepage Cedar surface.
+ * the bottom-right of every page. Click toggles a self-contained
+ * Cedar chat panel that lives entirely inside this component, so
+ * it works the same on the homepage, /join, /privacy, /terms, and
+ * the prerendered /demo/* scenes.
  *
- * The button itself reads as a product chrome element rather than a
- * marketing flourish — cedar-green background, white tree mark, soft
- * shadow, subtle hover lift, accessible label.
+ * The panel reuses the same intent bank + answer logic as the
+ * inline Cedar chat in the Cedar section (FAQSection.astro), but
+ * everything is class-scoped to .cedar-fab-panel so the two
+ * instances coexist on the homepage without clashing.
  */
+import {
+  INTENTS,
+  OUT_OF_SCOPE_ANSWER,
+  FALLBACK_ANSWER,
+  OUT_OF_SCOPE_TRIGGERS,
+  CHIP_IDS,
+} from '../data/cedarIntents';
+
+const chips = CHIP_IDS.map((id) => INTENTS.find((i) => i.id === id)!).filter(Boolean);
+const cedarData = {
+  intents: INTENTS,
+  outOfScope: { answer: OUT_OF_SCOPE_ANSWER, triggers: OUT_OF_SCOPE_TRIGGERS },
+  fallback: { answer: FALLBACK_ANSWER },
+};
 ---
 <button
   type="button"
@@ -17,6 +32,7 @@
   id="cedarFab"
   aria-label="Ask Cedar a question"
   aria-expanded="false"
+  aria-controls="cedarFabPanel"
   title="Ask Cedar"
 >
   <span class="cedar-fab__icon cedar-fab__icon--tree" aria-hidden="true">
@@ -35,44 +51,214 @@
   <span class="cedar-fab__label cedar-fab__label--close">Close</span>
 </button>
 
+<!-- Self-contained Cedar chat panel. Hidden until the FAB opens it.
+     Class-scoped (cedar-fab-panel + child .cedar-chat etc.) so it
+     coexists with the inline Cedar chat on the homepage without
+     element-id collisions. -->
+<div class="cedar-fab-panel" id="cedarFabPanel" role="dialog" aria-label="Ask Cedar" aria-hidden="true" hidden>
+  <div class="cedar-chat">
+    <header class="cedar-chat__header">
+      <span class="cedar-chat__brand">
+        <span class="cedar-chat__name">Cedar</span>
+      </span>
+      <span class="cedar-chat__status" aria-label="Online">
+        <span class="cedar-chat__status-dot" aria-hidden="true"></span>
+        <span class="cedar-chat__status-label">Online</span>
+      </span>
+    </header>
+    <div class="cedar-chat__transcript" data-cedar-transcript role="log" aria-live="polite" aria-label="Cedar conversation">
+      <div class="cedar-msg cedar-msg--bot">
+        <span class="cedar-msg__avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+            <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
+          <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
+          <div class="cedar-quickreply" data-cedar-chips>
+            {chips.slice(0, 5).map((intent) => (
+              <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="cedar-chat__form" data-cedar-form autocomplete="off">
+      <label class="cedar-chat__inputwrap">
+        <span class="visually-hidden">Ask Cedar</span>
+        <input
+          data-cedar-input
+          class="cedar-chat__input"
+          type="text"
+          name="q"
+          placeholder="Ask Cedar a question..."
+          maxlength="280"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="sentences"
+          spellcheck="true"
+          enterkeyhint="send"
+          inputmode="text"
+          aria-label="Ask Cedar a question"
+        />
+      </label>
+      <button class="cedar-chat__send" type="submit" aria-label="Send">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+          <path d="M4 12L20 4L16 20L12 13L4 12Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="miter"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<script type="application/json" id="cedarFabData" set:html={JSON.stringify(cedarData)}></script>
+
 <script is:inline>
   (function () {
     const fab = document.getElementById('cedarFab');
-    if (!fab) return;
+    const panel = document.getElementById('cedarFabPanel');
+    const dataEl = document.getElementById('cedarFabData');
+    if (!fab || !panel || !dataEl) return;
 
-    const closePop = () => {
-      if (!document.body.classList.contains('cedar-popped')) return;
+    const transcript = panel.querySelector('[data-cedar-transcript]');
+    const chipsEl = panel.querySelector('[data-cedar-chips]');
+    const form = panel.querySelector('[data-cedar-form]');
+    const input = panel.querySelector('[data-cedar-input]');
+    if (!transcript || !chipsEl || !form || !input) return;
+
+    const BANK = JSON.parse(dataEl.textContent || '{}');
+    const INTENTS = BANK.intents || [];
+
+    const open = () => {
+      panel.hidden = false;
+      panel.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cedar-popped');
+      fab.setAttribute('aria-expanded', 'true');
+      window.setTimeout(function () { input.focus({ preventScroll: true }); }, 180);
+    };
+    const close = () => {
+      panel.hidden = true;
+      panel.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cedar-popped');
       fab.setAttribute('aria-expanded', 'false');
     };
-    const openPop = () => {
-      document.body.classList.add('cedar-popped');
-      fab.setAttribute('aria-expanded', 'true');
-      const input = document.getElementById('cedarInput');
-      if (input) window.setTimeout(() => input.focus({ preventScroll: true }), 200);
-    };
 
-    fab.addEventListener('click', (e) => {
-      const cedar = document.getElementById('cedar');
-      if (!cedar) {
-        // The Cedar surface only renders on the homepage. From any
-        // other page (e.g. /join), route the visitor home and land
-        // them on the Cedar section so the click still does
-        // something.
-        e.preventDefault();
-        window.location.assign('/#cedar');
-        return;
-      }
+    fab.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (document.body.classList.contains('cedar-popped')) {
-        closePop();
-      } else {
-        openPop();
-      }
+      if (document.body.classList.contains('cedar-popped')) close();
+      else open();
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closePop();
+    // Escape closes; clicking outside the panel and outside the FAB closes.
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && document.body.classList.contains('cedar-popped')) close();
+    });
+    document.addEventListener('click', function (e) {
+      if (!document.body.classList.contains('cedar-popped')) return;
+      const t = e.target;
+      if (!(t instanceof Node)) return;
+      if (panel.contains(t) || fab.contains(t)) return;
+      close();
+    });
+
+    // ---- chat: classify + reply ----
+    function normalize(s) {
+      return ' ' + (s || '').toLowerCase()
+        .replace(/[?!.,;:"'`()\[\]]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim() + ' ';
+    }
+    function classify(rawText) {
+      const text = normalize(rawText);
+      if (text.trim() === '') return null;
+      let best = null;
+      let bestScore = 0;
+      for (let i = 0; i < INTENTS.length; i++) {
+        const intent = INTENTS[i];
+        let score = 0;
+        for (let t = 0; t < intent.triggers.length; t++) {
+          const trig = normalize(intent.triggers[t]);
+          if (trig.trim() === '') continue;
+          if (text.indexOf(trig) !== -1) {
+            score += Math.max(1, trig.trim().split(' ').length);
+          }
+        }
+        if (score > bestScore) { bestScore = score; best = intent; }
+      }
+      return bestScore >= 1 ? best : null;
+    }
+    function isOutOfScope(rawText) {
+      const text = normalize(rawText);
+      const trigs = (BANK.outOfScope && BANK.outOfScope.triggers) || [];
+      for (let i = 0; i < trigs.length; i++) {
+        const t = normalize(trigs[i]);
+        if (t.trim() === '') continue;
+        if (text.indexOf(t) !== -1) return true;
+      }
+      return false;
+    }
+    function answerFor(rawText) {
+      const intent = classify(rawText);
+      if (intent) return intent.answer;
+      if (isOutOfScope(rawText)) return BANK.outOfScope.answer;
+      return BANK.fallback.answer;
+    }
+
+    function appendMessage(variant, body) {
+      const wrap = document.createElement('div');
+      wrap.className = 'cedar-msg cedar-msg--' + variant;
+      if (variant === 'bot') {
+        const av = document.createElement('span');
+        av.className = 'cedar-msg__avatar';
+        av.setAttribute('aria-hidden', 'true');
+        av.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/></svg>';
+        wrap.appendChild(av);
+      }
+      const bubble = document.createElement('div');
+      bubble.className = 'cedar-msg__bubble';
+      if (typeof body === 'string') bubble.textContent = body;
+      else bubble.appendChild(body);
+      wrap.appendChild(bubble);
+      transcript.appendChild(wrap);
+      transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
+      return wrap;
+    }
+
+    function reply(rawText, echoText) {
+      appendMessage('user', echoText != null ? echoText : rawText);
+      const dots = document.createElement('span');
+      dots.className = 'cedar-typing';
+      dots.innerHTML = '<span></span><span></span><span></span>';
+      const typing = appendMessage('bot', dots);
+      window.setTimeout(function () {
+        const bubble = typing.querySelector('.cedar-msg__bubble');
+        if (bubble) bubble.textContent = answerFor(rawText);
+      }, 650);
+    }
+
+    function collapseQuickReplies() {
+      if (chipsEl && !chipsEl.classList.contains('is-collapsed')) {
+        chipsEl.classList.add('is-collapsed');
+      }
+    }
+
+    chipsEl.addEventListener('click', function (e) {
+      const btn = e.target && e.target.closest ? e.target.closest('.cedar-chip') : null;
+      if (!btn) return;
+      const id = btn.dataset.intent;
+      const intent = INTENTS.find(function (x) { return x.id === id; });
+      if (!intent) return;
+      collapseQuickReplies();
+      reply(intent.chip, intent.chip);
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const q = (input.value || '').trim();
+      if (!q) return;
+      input.value = '';
+      collapseQuickReplies();
+      reply(q, q);
     });
   })();
 </script>
@@ -100,6 +286,7 @@
       0 1px 3px rgba(10, 15, 38, .12);
     transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
     cursor: pointer;
+    border: 0;
   }
   .cedar-fab:hover {
     background: var(--green-deep);
@@ -133,19 +320,14 @@
   body.cedar-popped .cedar-fab__icon--close { display: inline-flex; }
   body.cedar-popped .cedar-fab__label--close { display: inline; }
 
-  /* When the FAB pops the Cedar chat, kill the ambient pulse — the
-     panel is now the focus, not the button. */
+  /* When the FAB pops the panel, kill the ambient pulse — the panel
+     is now the focus, not the button. */
   body.cedar-popped .cedar-fab::before { animation: none; opacity: 0; }
   body.cedar-popped .cedar-fab { background: var(--navy); }
   body.cedar-popped .cedar-fab:hover { background: var(--navy2); box-shadow: 0 6px 16px rgba(10, 15, 38, .3); }
 
-  /* ---------- Popped chat panel ----------
-     The Cedar chat normally lives inline in the Cedar section. When
-     body.cedar-popped is set, we yank the existing .cedar-chat
-     element into a fixed-position panel anchored above the FAB. The
-     section's right-column placeholder shows a "popped out" hint so
-     the page layout doesn't collapse around the missing element. */
-  :global(body.cedar-popped #cedar .cedar-chat) {
+  /* ---------- The self-contained chat panel ---------- */
+  .cedar-fab-panel {
     position: fixed;
     bottom: clamp(4.5rem, 6vw, 5.5rem);
     right: clamp(.9rem, 2.2vw, 1.5rem);
@@ -154,45 +336,28 @@
     z-index: 85;
     display: flex;
     flex-direction: column;
+    animation: cedar-pop-in .25s var(--ease);
+  }
+  .cedar-fab-panel[hidden] { display: none; }
+  .cedar-fab-panel :global(.cedar-chat) {
+    width: 100%;
+    max-height: calc(100vh - 7.5rem);
+    display: flex;
+    flex-direction: column;
     box-shadow:
       0 24px 60px -16px rgba(10, 15, 38, .28),
       0 4px 16px rgba(10, 15, 38, .14);
-    animation: cedar-pop-in .25s var(--ease);
   }
-  :global(body.cedar-popped #cedar .cedar-chat__transcript) {
+  .cedar-fab-panel :global(.cedar-chat__transcript) {
     flex: 1 1 auto;
     min-height: 180px;
-  }
-  :global(body.cedar-popped #cedar .cedar-about__right)::before {
-    content: 'Chat popped out';
-    display: block;
-    padding: 1.5rem 1rem;
-    font-family: var(--font-mono);
-    font-size: .68rem;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    border: 1px dashed var(--rule);
-    border-radius: 14px;
-    text-align: center;
-    min-height: 380px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* .ask-cedar wrapper collapses naturally once its only visible
-     child (.cedar-chat) is lifted via position:fixed. The placeholder
-     ::before above gives the column its size. */
-  :global(body.cedar-popped #cedar .cedar-about__right) > :global(.ask-cedar) {
-    height: 0;
-    overflow: hidden;
   }
   @keyframes cedar-pop-in {
     from { transform: translateY(12px) scale(.97); opacity: 0; }
     to   { transform: translateY(0)    scale(1);   opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) {
-    :global(body.cedar-popped #cedar .cedar-chat) { animation: none; }
+    .cedar-fab-panel { animation: none; }
   }
 
   /* Subtle ambient pulse so the FAB feels alive but doesn't beg. */
@@ -220,14 +385,17 @@
     .cedar-fab { padding: .7rem; }
     .cedar-fab__label { display: none; }
     .cedar-fab__icon { background: transparent; }
-    /* Cap the popped panel so it doesn't fill the screen edge to
-       edge on a phone. */
-    :global(body.cedar-popped #cedar .cedar-chat) {
+    /* Cap the panel so it doesn't fill the screen edge to edge on a
+       phone. */
+    .cedar-fab-panel {
       bottom: 5rem;
       max-height: min(calc(100vh - 7rem), 520px);
       width: calc(100vw - 1.4rem);
     }
-    :global(body.cedar-popped #cedar .cedar-chat__transcript) {
+    .cedar-fab-panel :global(.cedar-chat) {
+      max-height: min(calc(100vh - 7rem), 520px);
+    }
+    .cedar-fab-panel :global(.cedar-chat__transcript) {
       max-height: 260px;
     }
   }
