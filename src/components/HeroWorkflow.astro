@@ -47,27 +47,35 @@
 
       <!-- Three input sheets, each a different size + orientation
            + tilt so they read as messy / non-uniform data. The
-           messier the inputs look, the clearer the merge moment
-           when they collapse into one harmonized sheet. -->
-      <g class="hf-in hf-in--a" transform="rotate(-6 -22 -20)">
-        <rect x="-34" y="-26" width="20" height="11" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-        <line x1="-31" y1="-22.5" x2="-17" y2="-22.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-31" y1="-20"   x2="-21" y2="-20"   stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-31" y1="-17.5" x2="-19" y2="-17.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+           outer <g transform="rotate(...)"> pins the tilt; the
+           inner .hf-in carries the CSS slide+merge animation, so
+           the two compose instead of CSS clobbering the rotation
+           and rendering the papers flat. -->
+      <g transform="rotate(-6 -22 -20)">
+        <g class="hf-in hf-in--a">
+          <rect x="-34" y="-26" width="20" height="11" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <line x1="-31" y1="-22.5" x2="-17" y2="-22.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-31" y1="-20"   x2="-21" y2="-20"   stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-31" y1="-17.5" x2="-19" y2="-17.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
       </g>
-      <g class="hf-in hf-in--b" transform="rotate(4 -24 0)">
-        <rect x="-34" y="-9" width="14" height="14" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-        <line x1="-31" y1="-5" x2="-22" y2="-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-31" y1="-2" x2="-25" y2="-2" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-31" y1="1"  x2="-23" y2="1"  stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      <g transform="rotate(4 -24 0)">
+        <g class="hf-in hf-in--b">
+          <rect x="-34" y="-9" width="14" height="14" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <line x1="-31" y1="-5" x2="-22" y2="-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-31" y1="-2" x2="-25" y2="-2" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-31" y1="1"  x2="-23" y2="1"  stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
       </g>
-      <g class="hf-in hf-in--c" transform="rotate(-3 -25 18)">
-        <rect x="-32" y="9" width="12" height="18" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-        <line x1="-29" y1="12" x2="-22" y2="12" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-29" y1="15" x2="-24" y2="15" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-29" y1="18" x2="-22" y2="18" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-29" y1="21" x2="-26" y2="21" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-29" y1="24" x2="-22" y2="24" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+      <g transform="rotate(-3 -25 18)">
+        <g class="hf-in hf-in--c">
+          <rect x="-32" y="9" width="12" height="18" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+          <line x1="-29" y1="12" x2="-22" y2="12" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-29" y1="15" x2="-24" y2="15" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-29" y1="18" x2="-22" y2="18" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-29" y1="21" x2="-26" y2="21" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-29" y1="24" x2="-22" y2="24" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
       </g>
 
       <g class="hf-out">
@@ -417,16 +425,16 @@
   .hf-in {
     transform-box: fill-box;
     transform-origin: 0 50%;
-    animation: hf-in-merge 7s ease-in-out infinite;
+    animation: hf-in-merge 7s cubic-bezier(.22, 1, .36, 1) infinite;
   }
   .hf-in--a { animation-delay: 0s; }
-  .hf-in--b { animation-delay: .08s; }
-  .hf-in--c { animation-delay: .16s; }
+  .hf-in--b { animation-delay: .12s; }
+  .hf-in--c { animation-delay: .24s; }
   @keyframes hf-in-merge {
-    0%       { opacity: 0; transform: translate(22px, 0) scale(.35); }
-    4%, 19%  { opacity: 1; transform: translate(0, 0)    scale(1);   }
-    23%      { opacity: 1; transform: translate(8px, 0)  scale(.9);  }
-    28%, 100% { opacity: 0; transform: translate(22px, 0) scale(.35); }
+    0%       { opacity: 0; transform: translate(16px, 0) scale(.55); }
+    5%, 19%  { opacity: 1; transform: translate(0, 0)    scale(1);   }
+    24%      { opacity: 1; transform: translate(6px, 0)  scale(.85); }
+    30%, 100% { opacity: 0; transform: translate(16px, 0) scale(.55); }
   }
   .hf-out {
     opacity: 0;
@@ -530,33 +538,33 @@
   .hf-bar {
     transform-box: fill-box;
     transform-origin: center bottom;
-    animation: hf-bar-grow 7s ease-in-out infinite;
+    animation: hf-bar-grow 7s cubic-bezier(.22, 1, .36, 1) infinite;
     opacity: 0;
   }
   .hf-bar--a { animation-delay: 2.5s; }
-  .hf-bar--b { animation-delay: 2.6s; }
-  .hf-bar--c { animation-delay: 2.7s; }
-  .hf-bar--d { animation-delay: 2.8s; }
-  .hf-bar--e { animation-delay: 2.9s; }
+  .hf-bar--b { animation-delay: 2.62s; }
+  .hf-bar--c { animation-delay: 2.74s; }
+  .hf-bar--d { animation-delay: 2.86s; }
+  .hf-bar--e { animation-delay: 2.98s; }
   @keyframes hf-bar-grow {
-    0%       { opacity: 0; transform: scaleY(.1); }
-    8%       { opacity: 1; transform: scaleY(1);  }
-    50%      { opacity: 1; transform: scaleY(1);  }
-    62%, 100% { opacity: 0; transform: scaleY(.1); }
+    0%        { opacity: 0; transform: scaleY(.2); }
+    8%        { opacity: 1; transform: scaleY(1);  }
+    52%       { opacity: 1; transform: scaleY(1);  }
+    62%, 100% { opacity: 0; transform: scaleY(.2); }
   }
   .hf-line {
     opacity: 0;
-    animation: hf-line-out 7s ease-in-out infinite;
+    animation: hf-line-out 7s cubic-bezier(.22, 1, .36, 1) infinite;
   }
-  .hf-line--a { animation-delay: 3.1s; }
-  .hf-line--b { animation-delay: 3.2s; }
-  .hf-line--c { animation-delay: 3.3s; }
+  .hf-line--a { animation-delay: 3.05s; }
+  .hf-line--b { animation-delay: 3.18s; }
+  .hf-line--c { animation-delay: 3.31s; }
   @keyframes hf-line-out {
-    0%       { x2: -6;  opacity: 0; }
-    8%       { opacity: 1; }
-    18%      { x2: 32;  opacity: .9; }
-    45%      { x2: 32;  opacity: .9; }
-    55%, 100% { x2: -6;  opacity: 0; }
+    0%        { x2: -6;  opacity: 0; }
+    8%        { opacity: 1; }
+    20%       { x2: 32;  opacity: .9; }
+    48%       { x2: 32;  opacity: .9; }
+    58%, 100% { x2: -6;  opacity: 0; }
   }
 
   /* ---------- Station 3: empty parcel → chunky construction ----------
@@ -616,17 +624,18 @@
     animation-delay: 0s;
   }
 
-  /* Casino sub-chunks. Each piece pops in with a snappy scale-bounce
-     so the building reads as constructing in stages. */
+  /* Casino sub-chunks. Each piece slides up gently into place so
+     the building reads as constructing in stages without a bouncy
+     pop. */
   .hf-casino__base,
   .hf-casino__body,
   .hf-casino__door {
     opacity: 0;
     animation-name: hf-chunk;
-    animation-timing-function: cubic-bezier(.22, 1.4, .4, 1);
+    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
   .hf-casino__base { animation-delay: 3.80s; }
-  .hf-casino__body { animation-delay: 3.95s; }
+  .hf-casino__body { animation-delay: 4.00s; }
   .hf-casino__door { animation-delay: 4.80s; }
 
   /* Marquee fills gold once the body is up. Driven separately so the
@@ -679,16 +688,17 @@
     92%, 100% { opacity: 0; fill: var(--ink-3); }
   }
 
-  /* Drive-through gas station chunks: pad, canopy, pumps. Each pops
-     in with the same snappy scale-bounce as the casino chunks. */
+  /* Drive-through gas station chunks: pad, canopy, pumps. Same
+     smooth ease-out curve as the casino chunks so the build flow is
+     consistent across phases. */
   .hf-build {
     opacity: 0;
     animation-name: hf-chunk;
-    animation-timing-function: cubic-bezier(.22, 1.4, .4, 1);
+    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
   .hf-build--gas-pad    { animation-delay: 5.85s; }
-  .hf-build--gas-canopy { animation-delay: 5.95s; }
-  .hf-build--gas-pumps  { animation-delay: 6.15s; }
+  .hf-build--gas-canopy { animation-delay: 6.00s; }
+  .hf-build--gas-pumps  { animation-delay: 6.20s; }
 
   /* Slabs (the casino parking lot) fade in together. */
   .hf-grow {
@@ -732,21 +742,25 @@
     90%, 100% { opacity: 0; transform: translateX(0); }
   }
 
-  /* ---- Shared keyframes for the chunky construction ---- */
+  /* ---- Shared keyframes for the chunky construction ----
+     No overshoot — the ease-out timing function already gives the
+     piece a sense of settling. Scale starts at .7 (a gentle grow
+     rather than a pop from nothing). Final fade-out lingers a hair
+     longer so the cycle reset feels less abrupt. */
   @keyframes hf-chunk {
-    0%       { opacity: 0; transform: scale(.45); }
-    4%       { opacity: 1; transform: scale(1.10); }
-    8%, 88%  { opacity: 1; transform: scale(1); }
-    96%, 100% { opacity: 0; transform: scale(.45); }
+    0%        { opacity: 0; transform: scale(.7); }
+    6%        { opacity: 1; transform: scale(1);  }
+    8%, 90%   { opacity: 1; transform: scale(1);  }
+    97%, 100% { opacity: 0; transform: scale(.7); }
   }
   @keyframes hf-slab {
     0%        { opacity: 0; }
-    4%, 88%   { opacity: 1; }
-    96%, 100% { opacity: 0; }
+    5%, 90%   { opacity: 1; }
+    97%, 100% { opacity: 0; }
   }
   @keyframes hf-cycle-out {
-    0%, 88%   { opacity: 1; }
-    96%, 100% { opacity: 0; }
+    0%, 90%   { opacity: 1; }
+    97%, 100% { opacity: 0; }
   }
 
   /* Dollar signs trickle up from the new development. The stream
