@@ -1,0 +1,136 @@
+/* NetworkSection — federated-learning band on the homepage.
+   Two-column on desktop (text left, diagram right); single column
+   on mobile. Sits between ProductsSection and HiringBanner. */
+
+.network {
+  background: var(--cream);
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  border-bottom: 1px solid var(--rule);
+  scroll-snap-align: start;
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.network-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: center;
+}
+@media (max-width: 880px) {
+  .network-inner { grid-template-columns: 1fr; }
+}
+
+.network-kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+.network-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  line-height: 1.08;
+  letter-spacing: -.022em;
+  color: var(--navy);
+  margin: 0 0 1.2rem;
+  max-width: 22ch;
+}
+.network-lede {
+  font-family: var(--font-sans);
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0 0 1.8rem;
+  max-width: 56ch;
+}
+
+.network-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.network-point {
+  background: var(--white);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: .85rem 1.1rem;
+}
+.network-point__head {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: -.01em;
+  color: var(--navy);
+  margin: 0 0 .25rem;
+}
+.network-point__body {
+  font-family: var(--font-sans);
+  font-size: .94rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0;
+}
+
+/* ---------- Diagram ---------- */
+.network-diagram {
+  /* Center the SVG and let it scale to a reasonable max size; the
+     diagram is decorative, so the text column carries the actual
+     message at narrow widths. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.network-diagram svg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+}
+
+/* Dashed edges from each client to the hub. Each line animates its
+   stroke-dashoffset inward so the eye reads "aggregated signal
+   flowing toward the model." Staggered delays so the five lines
+   don't pulse in lockstep. */
+.network-diagram__edge {
+  animation: network-edge-pulse 4s linear infinite;
+}
+.network-diagram__edge--a { animation-delay: 0s;   }
+.network-diagram__edge--b { animation-delay: .8s;  }
+.network-diagram__edge--c { animation-delay: 1.6s; }
+.network-diagram__edge--d { animation-delay: 2.4s; }
+.network-diagram__edge--e { animation-delay: 3.2s; }
+@keyframes network-edge-pulse {
+  0%   { stroke-dashoffset: 0;   stroke-opacity: .85; }
+  60%  { stroke-dashoffset: -28; stroke-opacity: .85; }
+  100% { stroke-dashoffset: -56; stroke-opacity: .85; }
+}
+
+/* Central hub pulses gently so the diagram doesn't feel static
+   even when no edge is mid-pulse. */
+.network-diagram__hub {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: network-hub-breathe 4s ease-in-out infinite;
+}
+@keyframes network-hub-breathe {
+  0%, 100% { transform: scale(1);    }
+  50%      { transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-diagram__edge,
+  .network-diagram__hub { animation: none; }
+}

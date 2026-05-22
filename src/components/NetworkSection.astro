@@ -1,0 +1,103 @@
+---
+/**
+ * NetworkSection — federated-learning / network-effect explainer.
+ *
+ * Positions the platform's differentiator: existing economic-impact
+ * tools treat administrative data as gospel and ship it as a
+ * static product. Lumecon's modeling engine improves as more
+ * organizations run economic impact studies — not by ingesting any
+ * client's raw data, but by aggregating coarse, anonymised
+ * signals across the network so every customer's next study is
+ * sharper than their last.
+ *
+ * We don't claim incumbents don't do this — they probably don't,
+ * but it's not the kind of thing you can prove from outside.
+ * Instead we lead with what we DO, which lets visitors draw the
+ * comparison.
+ */
+import '../styles/network.css';
+---
+<section class="network" id="network" aria-labelledby="network-title">
+  <div class="network-inner">
+    <div class="network-text">
+      <p class="network-kicker">The network</p>
+      <h2 class="network-title" id="network-title">Your data stays yours. The model gets sharper for everyone.</h2>
+      <p class="network-lede">Every new client makes every other client's next economic impact study a little better. Not because their data leaves their workspace &mdash; it doesn't &mdash; but because coarse, aggregated signals across the network train the regional multipliers, the assumption defaults, and Cedar's harmonization rules over time.</p>
+
+      <ul class="network-points">
+        <li class="network-point">
+          <h3 class="network-point__head">Federated by design</h3>
+          <p class="network-point__body">Raw administrative data never crosses tenant boundaries. The model learns from aggregated, anonymised signals &mdash; not row-level uploads.</p>
+        </li>
+        <li class="network-point">
+          <h3 class="network-point__head">Compounds with every study</h3>
+          <p class="network-point__body">More historic studies on file, more current studies running, more geographies covered &mdash; each one tightens the next regional multiplier estimate and the next Cedar harmonization pass.</p>
+        </li>
+        <li class="network-point">
+          <h3 class="network-point__head">Different from the incumbent posture</h3>
+          <p class="network-point__body">The existing platforms ship administrative data as a static product on a multi-year vintage cycle. Lumecon treats the network of customer studies as a living signal that sharpens the underlying model in between vintage refreshes.</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Network diagram: five client nodes around a central
+         Lumecon node. Dashed lines from each client send aggregated
+         signals INWARD (animated pulse). The visual reads as
+         "many tenants, one shared model — but the lines are dashed,
+         not solid, so the eye registers that something less than
+         raw data is moving across." -->
+    <div class="network-diagram" aria-hidden="true">
+      <svg viewBox="0 0 240 240" fill="none">
+        <!-- Outer client nodes -->
+        <g class="network-diagram__client">
+          <circle cx="120" cy="32"  r="14" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5"/>
+          <text x="120" y="36" text-anchor="middle" font-family="JetBrains Mono, ui-monospace" font-size="6" fill="var(--ink-3)">Tribe</text>
+        </g>
+        <g class="network-diagram__client">
+          <circle cx="208" cy="92"  r="14" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5"/>
+          <text x="208" y="96" text-anchor="middle" font-family="JetBrains Mono, ui-monospace" font-size="6" fill="var(--ink-3)">City</text>
+        </g>
+        <g class="network-diagram__client">
+          <circle cx="174" cy="200" r="14" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5"/>
+          <text x="174" y="204" text-anchor="middle" font-family="JetBrains Mono, ui-monospace" font-size="5.5" fill="var(--ink-3)">State</text>
+        </g>
+        <g class="network-diagram__client">
+          <circle cx="66"  cy="200" r="14" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5"/>
+          <text x="66"  y="204" text-anchor="middle" font-family="JetBrains Mono, ui-monospace" font-size="5" fill="var(--ink-3)">Found.</text>
+        </g>
+        <g class="network-diagram__client">
+          <circle cx="32"  cy="92"  r="14" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5"/>
+          <text x="32"  y="96" text-anchor="middle" font-family="JetBrains Mono, ui-monospace" font-size="5" fill="var(--ink-3)">Univ.</text>
+        </g>
+
+        <!-- Dashed connection lines from each client to the centre.
+             stroke-dasharray + offset animation creates the inward
+             pulse so the eye reads "aggregated signal flowing in." -->
+        <g class="network-diagram__edges" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 4" fill="none">
+          <line class="network-diagram__edge network-diagram__edge--a" x1="120" y1="46"  x2="120" y2="106"/>
+          <line class="network-diagram__edge network-diagram__edge--b" x1="194" y1="92"  x2="134" y2="120"/>
+          <line class="network-diagram__edge network-diagram__edge--c" x1="164" y1="190" x2="128" y2="134"/>
+          <line class="network-diagram__edge network-diagram__edge--d" x1="76"  y1="190" x2="112" y2="134"/>
+          <line class="network-diagram__edge network-diagram__edge--e" x1="46"  y1="92"  x2="106" y2="120"/>
+        </g>
+
+        <!-- Central Lumecon node — slightly bigger, gold ring to
+             match the brand source colour. The pulse animation makes
+             it read as "alive" without being aggressive. -->
+        <g class="network-diagram__hub">
+          <circle cx="120" cy="120" r="28" fill="var(--navy)" stroke="var(--gold)" stroke-width="2"/>
+          <text x="120" y="118" text-anchor="middle" font-family="Inter, system-ui" font-weight="700" font-size="7" fill="var(--white)" letter-spacing="0.5">LUMECON</text>
+          <text x="120" y="128" text-anchor="middle" font-family="JetBrains Mono, ui-monospace" font-size="5" fill="var(--gold)">model</text>
+        </g>
+
+        <!-- Lock icon next to the hub to telegraph the federation /
+             security framing. -->
+        <g class="network-diagram__lock" transform="translate(154 92)">
+          <rect x="-7" y="-3" width="14" height="11" rx="1.5" fill="var(--cream)" stroke="var(--navy)" stroke-width="1.2"/>
+          <path d="M-4 -3 V -7 a 4 4 0 0 1 8 0 V -3" stroke="var(--navy)" stroke-width="1.2" fill="none"/>
+          <circle cx="0" cy="2.5" r="1.2" fill="var(--navy)"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>

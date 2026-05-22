@@ -36,8 +36,10 @@ import '../styles/hero.css';
          substantial card with an icon, title, and one-line subtitle
          so the visitor's next-step options read as visually
          distinct entries rather than another row of small CTAs.
-         Sign up is the primary (filled navy); See a live study and
-         Meet Cedar are secondary cards. -->
+         Signup is intentionally NOT a hero tile — signing up is the
+         last action in the funnel, not the first ask. The hero
+         points at See-a-study, Meet-Cedar, and Pricing instead;
+         Sign Up surfaces from /pricing and from the nav. -->
     <nav class="hero-paths" aria-label="Explore Lumecon">
       <a class="hero-path" href="/map">
         <span class="hero-path__icon" aria-hidden="true">
@@ -47,8 +49,8 @@ import '../styles/hero.css';
             <line x1="15" y1="7" x2="15" y2="20"/>
           </svg>
         </span>
-        <span class="hero-path__title">See a live study</span>
-        <span class="hero-path__sub">Click any region. Watch the impact ripple through the economy in seconds.</span>
+        <span class="hero-path__title">See a live economic impact study</span>
+        <span class="hero-path__sub">Click any region. Watch an economic impact study run in seconds.</span>
       </a>
       <a class="hero-path" href="/cedar">
         <span class="hero-path__icon" aria-hidden="true">
@@ -58,17 +60,17 @@ import '../styles/hero.css';
           </svg>
         </span>
         <span class="hero-path__title">Meet Cedar</span>
-        <span class="hero-path__sub">The AI analyst that does the messy data wrangling for you.</span>
+        <span class="hero-path__sub">The AI analyst that turns your records into analysis-ready inputs.</span>
       </a>
-      <a class="hero-path hero-path--primary" href="/signup">
+      <a class="hero-path" href="/pricing">
         <span class="hero-path__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-            <path d="M5 12h12"/>
-            <path d="M13 6l6 6-6 6"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h10"/>
+            <circle cx="18" cy="17" r="2.4"/>
           </svg>
         </span>
-        <span class="hero-path__title">Sign up</span>
-        <span class="hero-path__sub">Run studies on your own data.</span>
+        <span class="hero-path__title">See pricing</span>
+        <span class="hero-path__sub">Annual subscriptions for governments, tribal nations, and mission-driven organizations.</span>
       </a>
     </nav>
   </div>
