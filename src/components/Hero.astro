@@ -66,7 +66,6 @@ const STATE_CODES: Record<string, string> = {
   '40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT',
   '50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY',
 };
-const CODE_TO_ID = Object.fromEntries(Object.entries(STATE_CODES).map(([id, code]) => [code, id]));
 
 /* AIANNH polygons. Built at SSR for the tribal lookup table (so
    reservation scenes can resolve to a real centroid), but NOT inlined
@@ -89,7 +88,6 @@ const aiannh = (CENSUS_TRIBAL_LANDS as any[])
 const statesJson = JSON.stringify(
   stateData.reduce((acc: any, s: any) => { acc[s.id] = { name: s.name, cx: s.cx, cy: s.cy, code: STATE_CODES[s.id] || '' }; return acc; }, {})
 );
-const codeMapJson = JSON.stringify(CODE_TO_ID);
 const countyCentroidsJson = JSON.stringify(COUNTY_CENTROIDS);
 
 /* Search index for the workspace search box. States + counties +
@@ -371,7 +369,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
 
 
   <script type="application/json" id="heroStates"   set:html={statesJson}></script>
-  <script type="application/json" id="heroCodeMap"  set:html={codeMapJson}></script>
   <script type="application/json" id="heroTribal"   set:html={tribalLookupJson}></script>
   <script type="application/json" id="heroCounties" set:html={countyCentroidsJson}></script>
   <script type="application/json" id="heroSearch"   set:html={searchIndexJson}></script>
@@ -385,7 +382,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     | { type: 'county'; id: string; name: string; sub: string; cx: number; cy: number; stateFips: string }
     | { type: 'tribal'; id: string; name: string; sub: string; cx: number; cy: number; fips: string };
   const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
-  const codeMap: Record<string, string> = JSON.parse((document.getElementById('heroCodeMap') as HTMLScriptElement).textContent || '{}');
   const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
   // FIPS → centroid for every U.S. county, computed at build time from
   // the same albers-USA projection the map uses. Lets a county-level
@@ -400,7 +396,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   // are only needed by the prerendered /demo/<slug> route, not here.
   // @ts-ignore — Vite resolves at bundle time
   import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES } from '../data/scenes';
-  type Scene = (typeof SCENES)[number];
 
   const ACTIVITIES = [
     { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
@@ -1477,66 +1472,28 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
     // Also load eagerly when the Tribal lands filter chip activates.
     document.querySelector('.wfilter[data-layer="tribal"]')?.addEventListener('click', () => loadAiannh(), { once: true });
 
-    /* ---------- IP geolocation kickoff ---------- */
-    const GEO_KEY = 'lumecon:geo';
-    const GEO_TTL_MS = 30 * 24 * 60 * 60 * 1000;
-    const readCachedState = (): string | null => {
-      try {
-        const raw = localStorage.getItem(GEO_KEY); if (!raw) return null;
-        const { code, at } = JSON.parse(raw) as { code: string; at: number };
-        if (!code || Date.now() - at > GEO_TTL_MS) return null;
-        return codeMap[code] || null;
-      } catch { return null; }
-    };
-    const detectStateId = async (): Promise<string | null> => {
-      const cached = readCachedState(); if (cached) return cached;
-      try {
-        const ctrl = new AbortController();
-        const t = window.setTimeout(() => ctrl.abort(), 2200);
-        const r = await fetch('https://ipapi.co/json/', { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
-        window.clearTimeout(t);
-        if (!r.ok) return null;
-        const j = await r.json();
-        const code: string | undefined = j && (j.region_code || j.region_code_iso3166_2);
-        const country: string | undefined = j && (j.country_code || j.country);
-        if (country !== 'US' || !code) return null;
-        try { localStorage.setItem(GEO_KEY, JSON.stringify({ code, at: Date.now() })); } catch {}
-        return codeMap[code] || null;
-      } catch { return null; }
-    };
+    /* First study kickoff.
 
-    /* First study: pick something IP-geolocated to the visitor's
-       state when we can, otherwise fall straight into the auto-
-       cycle deck. The URL-hash 'share a specific study' route is
-       gone — for that, /demo/<slug> pages are the real, indexable
-       URLs. */
+       Previously this called a third-party IP-geolocation endpoint
+       (ipapi.co) to pick a study near the visitor's state on first
+       load. That was dropped because:
+         - It was the only third-party network call from the homepage,
+           which made the request graph noisier than it needs to be
+           (some network-level security filters scrutinize outbound
+           XHRs to unfamiliar origins).
+         - It sent the visitor's IP to a third party for cosmetic
+           personalization.
+         - The catalog's auto-cycle deck already delivers a varied
+           first impression in <1s.
+
+       If we want to surface a geo-targeted scene later, do it
+       server-side (Cloudflare/AWS edge headers) so no third-party
+       lookup is needed. */
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const s = states['53']; if (s) { moveSource(s.cx, s.cy); shadeNeighbors('53'); }
       figD!.textContent = fmt(5_000_000);
     } else {
-      {
-        detectStateId().then(async (sid) => {
-          if (sid && states[sid]) {
-            // Build a synthesized STATE-level scene for the geo-detected
-            // region so it carries the same chip prefix + URL hash as the
-            // catalog scenes (smoke test asserts this consistency).
-            const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-            const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-            const geoScene: Scene = {
-              level: 'state',
-              state: sid,
-              amount,
-              activity,
-              chip:     `STATE · ${activity.label} · ${states[sid].name} (near you)`,
-              sentence: `A ${amount.label} ${activity.label} in ${states[sid].name}, near you.`,
-            };
-            await runScene(geoScene);
-            scheduleNext();
-          } else {
-            scheduleNext(900);
-          }
-        });
-      }
+      scheduleNext(900);
     }
 
     /* ---------- Per-figure metric explanations ----------
