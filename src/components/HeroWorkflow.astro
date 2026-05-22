@@ -933,24 +933,32 @@
     96%, 100% { opacity: 0; transform: scaleY(.15); }
   }
 
-  /* Dissemination cards: each card slides out to the right from
-     under the main slide, reading as the report being sent to a
-     different audience. */
+  /* Dissemination: the complete report breaks apart into the
+     deliverables that get sent out. Reads as the symmetric inverse
+     of Station 1 (where many messy inputs converged into ONE
+     harmonized output, here ONE complete report fragments into
+     MANY audience-specific copies). Timing: report builds 6.05s–
+     6.78s, holds briefly so the visitor sees a complete deliverable,
+     then 7.2s onward the cards extract outward from the slide
+     center to their final positions on the right. Their starting
+     CSS translateX(-30px) puts them visually overlapping the slide
+     so the "fragmenting out" motion reads clearly. */
   .hf-report__send-card {
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-report-send 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-report-extract 8s cubic-bezier(.22, 1, .36, 1) infinite;
     animation-fill-mode: backwards;
   }
-  .hf-report__send-card--a { animation-delay: 6.95s; }
-  .hf-report__send-card--b { animation-delay: 7.05s; }
-  .hf-report__send-card--c { animation-delay: 7.15s; }
-  @keyframes hf-report-send {
-    0%        { opacity: 0; transform: translate(-10px, 0) scale(.7); }
-    6%        { opacity: 1; transform: translate(0, 0)     scale(1);  }
-    12%, 86%  { opacity: 1; transform: translate(0, 0)     scale(1);  }
-    94%, 100% { opacity: 0; transform: translate(6px, 0)   scale(.85); }
+  .hf-report__send-card--a { animation-delay: 7.20s; }
+  .hf-report__send-card--b { animation-delay: 7.30s; }
+  .hf-report__send-card--c { animation-delay: 7.40s; }
+  @keyframes hf-report-extract {
+    0%        { opacity: 0; transform: translate(-30px, 0) scale(.5); }
+    4%        { opacity: 1; transform: translate(-30px, 0) scale(.6); }
+    10%       { opacity: 1; transform: translate(0, 0)     scale(1);  }
+    16%, 84%  { opacity: 1; transform: translate(0, 0)     scale(1);  }
+    92%, 100% { opacity: 0; transform: translate(0, 0)     scale(1);  }
   }
 
   @media (prefers-reduced-motion: reduce) {
