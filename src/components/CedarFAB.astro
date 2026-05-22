@@ -6,30 +6,20 @@
  * it works the same on the homepage, /join, /privacy, /terms, and
  * the prerendered /demo/* scenes.
  *
- * The panel reuses the same intent bank + answer logic as the
- * inline Cedar chat in the Cedar section (FAQSection.astro), but
- * everything is class-scoped to .cedar-fab-panel so the two
- * instances coexist on the homepage without clashing.
+ * The chat conversation logic itself (classification, API call,
+ * transcript rendering) lives in src/lib/cedarChat.ts and is shared
+ * with the inline Cedar chat in FAQSection.astro. This component is
+ * responsible only for the FAB chrome + open/close behaviour.
  *
- * cedar-chat.css carries the shared chat-surface styles (.cedar-chat,
- * .cedar-msg, .cedar-chip, ...). Importing it here means the FAB
- * panel renders styled on pages where FAQSection isn't rendered.
+ * Surface styles (.cedar-chat, .cedar-msg, .cedar-chip, ...) come
+ * from src/styles/cedar-chat.css, also shared.
  */
-import {
-  INTENTS,
-  OUT_OF_SCOPE_ANSWER,
-  FALLBACK_ANSWER,
-  OUT_OF_SCOPE_TRIGGERS,
-  CHIP_IDS,
-} from '../data/cedarIntents';
+import { INTENTS, CHIP_IDS } from '../data/cedarIntents';
 import '../styles/cedar-chat.css';
 
-const chips = CHIP_IDS.map((id) => INTENTS.find((i) => i.id === id)!).filter(Boolean);
-const cedarData = {
-  intents: INTENTS,
-  outOfScope: { answer: OUT_OF_SCOPE_ANSWER, triggers: OUT_OF_SCOPE_TRIGGERS },
-  fallback: { answer: FALLBACK_ANSWER },
-};
+const chips = CHIP_IDS
+  .map((id) => INTENTS.find((i) => i.id === id))
+  .filter((i): i is NonNullable<typeof i> => i != null && i.chip != null);
 ---
 <button
   type="button"
@@ -116,156 +106,66 @@ const cedarData = {
   </div>
 </div>
 
-<script type="application/json" id="cedarFabData" set:html={JSON.stringify(cedarData)}></script>
+<script>
+  /* Bundled module: imports the shared Cedar chat runtime + the
+     observability surface from src/lib. Re-runs on view transitions
+     via astro:page-load. */
+  import { bootChat } from '../lib/cedarChat';
+  import { trackEvent } from '../lib/observability';
 
-<script is:inline>
-  (function () {
+  function setup(): void {
     const fab = document.getElementById('cedarFab');
     const panel = document.getElementById('cedarFabPanel');
-    const dataEl = document.getElementById('cedarFabData');
-    if (!fab || !panel || !dataEl) return;
+    if (!fab || !panel) return;
 
-    const transcript = panel.querySelector('[data-cedar-transcript]');
-    const chipsEl = panel.querySelector('[data-cedar-chips]');
-    const form = panel.querySelector('[data-cedar-form]');
-    const input = panel.querySelector('[data-cedar-input]');
-    if (!transcript || !chipsEl || !form || !input) return;
+    // Boot the chat runtime (idempotent — guards on data-cedar-booted).
+    bootChat(panel, { surface: 'fab' });
 
-    const BANK = JSON.parse(dataEl.textContent || '{}');
-    const INTENTS = BANK.intents || [];
+    // FAB-specific open/close handlers. Guard against double-binding
+    // when astro:page-load re-fires this script.
+    if ((fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound) return;
+    (fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound = true;
 
     const open = () => {
       panel.hidden = false;
       panel.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cedar-popped');
       fab.setAttribute('aria-expanded', 'true');
-      window.setTimeout(function () { input.focus({ preventScroll: true }); }, 180);
+      const input = panel.querySelector<HTMLInputElement>('[data-cedar-input]');
+      window.setTimeout(() => input?.focus({ preventScroll: true }), 180);
+      trackEvent('cedar.fab.open');
     };
     const close = () => {
       panel.hidden = true;
       panel.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cedar-popped');
       fab.setAttribute('aria-expanded', 'false');
+      trackEvent('cedar.fab.close');
     };
 
-    fab.addEventListener('click', function (e) {
+    fab.addEventListener('click', (e) => {
       e.stopPropagation();
       if (document.body.classList.contains('cedar-popped')) close();
       else open();
     });
-
-    // Escape closes; clicking outside the panel and outside the FAB closes.
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && document.body.classList.contains('cedar-popped')) close();
     });
-    document.addEventListener('click', function (e) {
+    document.addEventListener('click', (e) => {
       if (!document.body.classList.contains('cedar-popped')) return;
       const t = e.target;
       if (!(t instanceof Node)) return;
       if (panel.contains(t) || fab.contains(t)) return;
       close();
     });
+  }
 
-    // ---- chat: classify + reply ----
-    function normalize(s) {
-      return ' ' + (s || '').toLowerCase()
-        .replace(/[?!.,;:"'`()\[\]]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim() + ' ';
-    }
-    function classify(rawText) {
-      const text = normalize(rawText);
-      if (text.trim() === '') return null;
-      let best = null;
-      let bestScore = 0;
-      for (let i = 0; i < INTENTS.length; i++) {
-        const intent = INTENTS[i];
-        let score = 0;
-        for (let t = 0; t < intent.triggers.length; t++) {
-          const trig = normalize(intent.triggers[t]);
-          if (trig.trim() === '') continue;
-          if (text.indexOf(trig) !== -1) {
-            score += Math.max(1, trig.trim().split(' ').length);
-          }
-        }
-        if (score > bestScore) { bestScore = score; best = intent; }
-      }
-      return bestScore >= 1 ? best : null;
-    }
-    function isOutOfScope(rawText) {
-      const text = normalize(rawText);
-      const trigs = (BANK.outOfScope && BANK.outOfScope.triggers) || [];
-      for (let i = 0; i < trigs.length; i++) {
-        const t = normalize(trigs[i]);
-        if (t.trim() === '') continue;
-        if (text.indexOf(t) !== -1) return true;
-      }
-      return false;
-    }
-    function answerFor(rawText) {
-      const intent = classify(rawText);
-      if (intent) return intent.answer;
-      if (isOutOfScope(rawText)) return BANK.outOfScope.answer;
-      return BANK.fallback.answer;
-    }
-
-    function appendMessage(variant, body) {
-      const wrap = document.createElement('div');
-      wrap.className = 'cedar-msg cedar-msg--' + variant;
-      if (variant === 'bot') {
-        const av = document.createElement('span');
-        av.className = 'cedar-msg__avatar';
-        av.setAttribute('aria-hidden', 'true');
-        av.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/></svg>';
-        wrap.appendChild(av);
-      }
-      const bubble = document.createElement('div');
-      bubble.className = 'cedar-msg__bubble';
-      if (typeof body === 'string') bubble.textContent = body;
-      else bubble.appendChild(body);
-      wrap.appendChild(bubble);
-      transcript.appendChild(wrap);
-      transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
-      return wrap;
-    }
-
-    function reply(rawText, echoText) {
-      appendMessage('user', echoText != null ? echoText : rawText);
-      const dots = document.createElement('span');
-      dots.className = 'cedar-typing';
-      dots.innerHTML = '<span></span><span></span><span></span>';
-      const typing = appendMessage('bot', dots);
-      window.setTimeout(function () {
-        const bubble = typing.querySelector('.cedar-msg__bubble');
-        if (bubble) bubble.textContent = answerFor(rawText);
-      }, 650);
-    }
-
-    function collapseQuickReplies() {
-      if (chipsEl && !chipsEl.classList.contains('is-collapsed')) {
-        chipsEl.classList.add('is-collapsed');
-      }
-    }
-
-    chipsEl.addEventListener('click', function (e) {
-      const btn = e.target && e.target.closest ? e.target.closest('.cedar-chip') : null;
-      if (!btn) return;
-      const id = btn.dataset.intent;
-      const intent = INTENTS.find(function (x) { return x.id === id; });
-      if (!intent) return;
-      collapseQuickReplies();
-      reply(intent.chip, intent.chip);
-    });
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const q = (input.value || '').trim();
-      if (!q) return;
-      input.value = '';
-      collapseQuickReplies();
-      reply(q, q);
-    });
-  })();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+  document.addEventListener('astro:page-load', setup);
 </script>
 
 <style>

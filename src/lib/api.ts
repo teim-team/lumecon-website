@@ -78,6 +78,28 @@ export interface StudyResponse {
   computedAt: string;
 }
 
+export interface CedarChatRequest {
+  /** The visitor's message. */
+  message: string;
+  /** Stable id for this browser session so the backend can keep
+   *  per-conversation context. Generated client-side, persisted in
+   *  sessionStorage. The marketing-site Cedar is anonymous; the
+   *  authenticated app Cedar will swap this for a user-scoped id. */
+  conversationId: string;
+  /** Where the message came from — 'fab' | 'inline'. Useful for
+   *  analytics and for the backend to tune answer length. */
+  surface?: 'fab' | 'inline';
+}
+export interface CedarChatResponse {
+  /** The assistant's reply, plain text or limited markdown. */
+  answer: string;
+  /** Optional citations / source records the answer pulled from
+   *  (populated when the RAG pipeline is live). */
+  sources?: Array<{ title: string; url?: string }>;
+  /** Optional follow-up suggestion chips the UI can render. */
+  followUps?: string[];
+}
+
 /* ---------- internals ---------- */
 
 const isConfigured = (): boolean => typeof API_BASE === 'string' && API_BASE.length > 0;
@@ -119,6 +141,13 @@ export const runStudy = (req: StudyRequest): Promise<ApiResult<StudyResponse>> =
 /** Fetch a previously run study by id. Future endpoint: `GET /v1/studies/:id`. */
 export const getStudy = (studyId: string): Promise<ApiResult<StudyResponse>> =>
   request<StudyResponse>(`/v1/studies/${encodeURIComponent(studyId)}`, { method: 'GET' });
+
+/** Send a message to the Cedar chat backend. Future endpoint:
+ *  `POST /v1/cedar/chat`. The marketing-site Cedar falls back to its
+ *  local keyword classifier when this returns 'api-unconfigured' or
+ *  any error reason. */
+export const cedarChat = (req: CedarChatRequest): Promise<ApiResult<CedarChatResponse>> =>
+  request<CedarChatResponse>('/v1/cedar/chat', { method: 'POST', body: JSON.stringify(req) });
 
 /* ---------- env helpers ---------- */
 
