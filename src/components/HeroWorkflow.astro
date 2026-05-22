@@ -762,7 +762,7 @@
        1.2s   Casino body rises
        1.3s   Marquee lights gold
        1.5s   CASINO wordmark appears
-       1.65s+ Windows light up one by one (two rows, staggered)
+       1.65s+ Windows light up (4 staggered waves a-d, left to right)
        2.0s   Grand entrance / awning
        2.2s   Parking lot pavement
        2.4s   First car drives into the lot from the left
@@ -775,12 +775,16 @@
        4.0s+  Dollar signs trickle up; built scene holds through
               ~7.2s, then the cycle resets at 8.0s and starts again.
 
-     Every animation runs on the same 8s duration with different
-     delays, so the overall visual rhythm repeats cleanly every
-     8 seconds. animation-fill-mode: backwards keeps each element
-     hidden at its 0% state before its delay elapses; otherwise CSS
-     would render the final state until the animation kicks in,
-     and the parcel would look pre-built on initial page load. */
+     IMPORTANT: every staged element's timing is encoded INSIDE its
+     keyframe (as "opacity: 0; ... 0%, X%" prefixes), with
+     animation-delay: 0 across the board. We used to use positive
+     animation-delay values to stagger this sequence, but CSS only
+     applies animation-delay BEFORE the first iteration, not between
+     iterations -- so each element ended up on its own offset 8s
+     cycle and the parcel never blanked together at the iteration
+     boundary. With timing baked into keyframes, all elements share
+     a single 8s timeline aligned to t=0, and the documented build
+     sequence replays cleanly every cycle. */
 
   .hf-imp__src,
   .hf-casino__base,
@@ -797,20 +801,18 @@
     transform-origin: center;
     animation-duration: 8s;
     animation-iteration-count: infinite;
-    animation-fill-mode: backwards;
   }
 
-  /* Road draws in first so the parcel reads as "lot starts empty,
-     road goes in, then buildings populate." */
+  /* Road draws in first. Hidden until 2% (0.16s), full opacity by
+     8% (0.64s), holds until 90%, fades out for the cycle reset. */
   .hf-road {
     opacity: 0;
     animation-name: hf-road-show;
     animation-timing-function: ease-out;
-    animation-delay: .2s;
   }
   @keyframes hf-road-show {
-    0%        { opacity: 0; }
-    6%, 90%   { opacity: 1; }
+    0%, 2%    { opacity: 0; }
+    8%, 90%   { opacity: 1; }
     97%, 100% { opacity: 0; }
   }
 
@@ -821,136 +823,192 @@
     opacity: 1;
     animation-name: hf-cycle-out;
     animation-timing-function: ease-in-out;
-    animation-delay: 0s;
   }
 
   /* Casino sub-chunks. Each piece grows in gently so the building
-     reads as constructing in stages without a bouncy pop. */
+     reads as constructing in stages without a bouncy pop. Each
+     keyframe holds opacity 0 until its appearance %, ramps to
+     opacity 1 over 6% of the cycle (~0.48s), holds until 90%,
+     then fades for the cycle reset. */
   .hf-casino__base,
   .hf-casino__body,
   .hf-casino__door {
     opacity: 0;
-    animation-name: hf-chunk;
     animation-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
-  .hf-casino__base { animation-delay: 1.0s; }
-  .hf-casino__body { animation-delay: 1.2s; }
-  .hf-casino__door { animation-delay: 2.0s; }
+  .hf-casino__base { animation-name: hf-stage-base; }
+  .hf-casino__body { animation-name: hf-stage-body; }
+  .hf-casino__door { animation-name: hf-stage-door; }
+  @keyframes hf-stage-base {     /* appears at 12.5% (= 1.0s into 8s) */
+    0%, 12%   { opacity: 0; transform: scale(.7); }
+    18%       { opacity: 1; transform: scale(1);  }
+    20%, 90%  { opacity: 1; transform: scale(1);  }
+    97%, 100% { opacity: 0; transform: scale(.7); }
+  }
+  @keyframes hf-stage-body {     /* appears at 15% (= 1.2s) */
+    0%, 15%   { opacity: 0; transform: scale(.7); }
+    21%       { opacity: 1; transform: scale(1);  }
+    23%, 90%  { opacity: 1; transform: scale(1);  }
+    97%, 100% { opacity: 0; transform: scale(.7); }
+  }
+  @keyframes hf-stage-door {     /* appears at 25% (= 2.0s) */
+    0%, 25%   { opacity: 0; transform: scale(.7); }
+    31%       { opacity: 1; transform: scale(1);  }
+    33%, 90%  { opacity: 1; transform: scale(1);  }
+    97%, 100% { opacity: 0; transform: scale(.7); }
+  }
 
-  /* Marquee fills gold once the body is up. Driven separately so the
-     colour change reads as "lights coming on." */
+  /* Marquee fills gold once the body is up. Driven separately so
+     the colour change reads as "lights coming on." Appears at 16%
+     (= 1.3s into 8s cycle). */
   .hf-casino__marquee {
     opacity: 0;
     fill: var(--ink-3);
-    animation-name: hf-marquee-light;
+    animation-name: hf-stage-marquee;
     animation-timing-function: ease-out;
-    animation-delay: 1.3s;
   }
-  @keyframes hf-marquee-light {
-    0%        { opacity: 0; fill: var(--ink-3); }
-    4%        { opacity: 1; fill: var(--ink-3); }
-    8%, 85%   { opacity: 1; fill: var(--gold);  }
+  @keyframes hf-stage-marquee {
+    0%, 16%   { opacity: 0; fill: var(--ink-3); }
+    20%       { opacity: 1; fill: var(--ink-3); }
+    24%, 85%  { opacity: 1; fill: var(--gold);  }
     92%, 100% { opacity: 0; fill: var(--ink-3); }
   }
+  /* CASINO wordmark fades in at 19% (= 1.5s). */
   .hf-casino__name {
     opacity: 0;
-    animation-name: hf-fade-hold;
+    animation-name: hf-stage-name;
     animation-timing-function: ease-out;
-    animation-delay: 1.5s;
   }
-  @keyframes hf-fade-hold {
-    0%, 4%    { opacity: 0; }
-    8%, 85%   { opacity: 1; }
+  @keyframes hf-stage-name {
+    0%, 19%   { opacity: 0; }
+    23%, 85%  { opacity: 1; }
     92%, 100% { opacity: 0; }
   }
 
-  /* Windows light up in sequence — casino opens floor by floor. */
+  /* Windows light up in four staggered waves (a/b/c/d) at 21/22/23/24%
+     of the cycle. Eight windows split across the waves so the casino
+     opens floor by floor without needing eight separate keyframes. */
   .hf-casino__win {
     opacity: 0;
     fill: var(--ink-3);
-    animation-name: hf-window-light;
     animation-timing-function: ease-out;
   }
-  .hf-casino__win--1 { animation-delay: 1.65s; }
-  .hf-casino__win--2 { animation-delay: 1.75s; }
-  .hf-casino__win--3 { animation-delay: 1.85s; }
-  .hf-casino__win--4 { animation-delay: 1.95s; }
-  .hf-casino__win--5 { animation-delay: 1.70s; }
-  .hf-casino__win--6 { animation-delay: 1.80s; }
-  .hf-casino__win--7 { animation-delay: 1.90s; }
-  .hf-casino__win--8 { animation-delay: 2.00s; }
-  @keyframes hf-window-light {
-    0%        { opacity: 0; fill: var(--ink-3); }
-    5%        { opacity: 1; fill: var(--ink-3); }
-    10%, 85%  { opacity: 1; fill: var(--gold);  }
+  .hf-casino__win--1,
+  .hf-casino__win--5 { animation-name: hf-stage-window-a; }
+  .hf-casino__win--2,
+  .hf-casino__win--6 { animation-name: hf-stage-window-b; }
+  .hf-casino__win--3,
+  .hf-casino__win--7 { animation-name: hf-stage-window-c; }
+  .hf-casino__win--4,
+  .hf-casino__win--8 { animation-name: hf-stage-window-d; }
+  @keyframes hf-stage-window-a {
+    0%, 21%   { opacity: 0; fill: var(--ink-3); }
+    26%       { opacity: 1; fill: var(--ink-3); }
+    30%, 85%  { opacity: 1; fill: var(--gold);  }
+    92%, 100% { opacity: 0; fill: var(--ink-3); }
+  }
+  @keyframes hf-stage-window-b {
+    0%, 22%   { opacity: 0; fill: var(--ink-3); }
+    27%       { opacity: 1; fill: var(--ink-3); }
+    31%, 85%  { opacity: 1; fill: var(--gold);  }
+    92%, 100% { opacity: 0; fill: var(--ink-3); }
+  }
+  @keyframes hf-stage-window-c {
+    0%, 23%   { opacity: 0; fill: var(--ink-3); }
+    28%       { opacity: 1; fill: var(--ink-3); }
+    32%, 85%  { opacity: 1; fill: var(--gold);  }
+    92%, 100% { opacity: 0; fill: var(--ink-3); }
+  }
+  @keyframes hf-stage-window-d {
+    0%, 24%   { opacity: 0; fill: var(--ink-3); }
+    29%       { opacity: 1; fill: var(--ink-3); }
+    33%, 85%  { opacity: 1; fill: var(--gold);  }
     92%, 100% { opacity: 0; fill: var(--ink-3); }
   }
 
-  /* Parking lot pavement fades in together (single slab). */
+  /* Parking lot pavement fades in at 27.5% (= 2.2s). */
   .hf-grow {
     opacity: 0;
-    animation-name: hf-slab;
     animation-timing-function: ease-out;
   }
-  .hf-grow--lot { animation-delay: 2.2s; }
-  @keyframes hf-slab {
-    0%        { opacity: 0; }
-    5%, 90%   { opacity: 1; }
+  .hf-grow--lot { animation-name: hf-stage-lot; }
+  @keyframes hf-stage-lot {
+    0%, 27%   { opacity: 0; }
+    32%, 90%  { opacity: 1; }
     97%, 100% { opacity: 0; }
   }
 
-  /* Gas station: pad → canopy → pumps. After the first traffic wave
-     parks, so the visitor reads "casino opens → traffic arrives →
-     gas station gets built to serve that traffic." */
+  /* Gas station: pad → canopy → pumps. After the first traffic
+     wave parks, so the visitor reads "casino opens → traffic
+     arrives → gas station gets built to serve that traffic." */
   .hf-build {
     opacity: 0;
-    animation-name: hf-chunk;
     animation-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
-  .hf-build--gas-pad    { animation-delay: 3.0s; }
-  .hf-build--gas-canopy { animation-delay: 3.15s; }
-  .hf-build--gas-pumps  { animation-delay: 3.35s; }
+  .hf-build--gas-pad    { animation-name: hf-stage-gas-pad; }
+  .hf-build--gas-canopy { animation-name: hf-stage-gas-canopy; }
+  .hf-build--gas-pumps  { animation-name: hf-stage-gas-pumps; }
+  @keyframes hf-stage-gas-pad {    /* appears at 37.5% (= 3.0s) */
+    0%, 37%   { opacity: 0; transform: scale(.7); }
+    43%       { opacity: 1; transform: scale(1);  }
+    45%, 90%  { opacity: 1; transform: scale(1);  }
+    97%, 100% { opacity: 0; transform: scale(.7); }
+  }
+  @keyframes hf-stage-gas-canopy { /* appears at 39% (= 3.15s) */
+    0%, 39%   { opacity: 0; transform: scale(.7); }
+    45%       { opacity: 1; transform: scale(1);  }
+    47%, 90%  { opacity: 1; transform: scale(1);  }
+    97%, 100% { opacity: 0; transform: scale(.7); }
+  }
+  @keyframes hf-stage-gas-pumps {  /* appears at 42% (= 3.35s) */
+    0%, 42%   { opacity: 0; transform: scale(.7); }
+    48%       { opacity: 1; transform: scale(1);  }
+    50%, 90%  { opacity: 1; transform: scale(1);  }
+    97%, 100% { opacity: 0; transform: scale(.7); }
+  }
 
-  /* Cars use a two-group pattern: the OUTER <g transform="translate"
+  /* Cars use a two-group pattern: the OUTER <g transform="translate">
      pins the final parking spot, the INNER .hf-car carries the
      slide-in. Lot cars enter from the LEFT (first traffic wave,
      before the gas station). Gas-station car enters from the RIGHT
-     (second wave, after the gas station is built). */
+     (second wave, after the gas station is built). Each car's
+     "drive in" timing is baked into its own keyframe so all four
+     cars share the same 8s cycle boundary. */
   .hf-car {
     opacity: 0;
     animation-timing-function: cubic-bezier(.2, .8, .25, 1);
   }
-  .hf-car--lot-a,
-  .hf-car--lot-b,
-  .hf-car--lot-c { animation-name: hf-car-drive-right; }
-  .hf-car--gas   { animation-name: hf-car-drive-left; }
-  .hf-car--lot-a { animation-delay: 2.4s;  }
-  .hf-car--lot-b { animation-delay: 2.55s; }
-  .hf-car--lot-c { animation-delay: 2.7s;  }
-  .hf-car--gas   { animation-delay: 3.6s;  }
-  @keyframes hf-car-drive-right {
-    0%        { opacity: 0; transform: translateX(-30px); }
-    4%        { opacity: 1; }
-    14%, 80%  { opacity: 1; transform: translateX(0); }
+  .hf-car--lot-a { animation-name: hf-stage-car-lot-a; } /* 30% = 2.4s */
+  .hf-car--lot-b { animation-name: hf-stage-car-lot-b; } /* 32% = 2.55s */
+  .hf-car--lot-c { animation-name: hf-stage-car-lot-c; } /* 34% = 2.7s */
+  .hf-car--gas   { animation-name: hf-stage-car-gas;   } /* 45% = 3.6s */
+  @keyframes hf-stage-car-lot-a {
+    0%, 30%   { opacity: 0; transform: translateX(-30px); }
+    34%       { opacity: 1; }
+    42%, 80%  { opacity: 1; transform: translateX(0); }
     90%, 100% { opacity: 0; transform: translateX(0); }
   }
-  @keyframes hf-car-drive-left {
-    0%        { opacity: 0; transform: translateX(28px); }
-    4%        { opacity: 1; }
-    14%, 80%  { opacity: 1; transform: translateX(0); }
+  @keyframes hf-stage-car-lot-b {
+    0%, 32%   { opacity: 0; transform: translateX(-30px); }
+    36%       { opacity: 1; }
+    44%, 80%  { opacity: 1; transform: translateX(0); }
+    90%, 100% { opacity: 0; transform: translateX(0); }
+  }
+  @keyframes hf-stage-car-lot-c {
+    0%, 34%   { opacity: 0; transform: translateX(-30px); }
+    38%       { opacity: 1; }
+    46%, 80%  { opacity: 1; transform: translateX(0); }
+    90%, 100% { opacity: 0; transform: translateX(0); }
+  }
+  @keyframes hf-stage-car-gas {
+    0%, 45%   { opacity: 0; transform: translateX(28px); }
+    49%       { opacity: 1; }
+    57%, 80%  { opacity: 1; transform: translateX(0); }
     90%, 100% { opacity: 0; transform: translateX(0); }
   }
 
-  /* Shared chunk keyframe for the chunky construction pieces.
-     Gentle grow from scale .7, settles by 6%, holds until 90%,
-     fades out at 97% so the cycle reset is smooth. */
-  @keyframes hf-chunk {
-    0%        { opacity: 0; transform: scale(.7); }
-    6%        { opacity: 1; transform: scale(1);  }
-    8%, 90%   { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
-  }
-
+  /* Whole-casino cycle-out: applied to the .hf-imp__src wrapper so
+     the whole building fades together at the cycle reset. */
   @keyframes hf-cycle-out {
     0%, 90%   { opacity: 1; }
     97%, 100% { opacity: 0; }
