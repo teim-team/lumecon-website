@@ -28,21 +28,32 @@
 <figure class="hero-flow" aria-label="How a Lumecon study runs">
   <svg
     class="hero-flow__svg"
-    viewBox="0 0 720 130"
+    viewBox="0 0 960 160"
     preserveAspectRatio="xMidYMid meet"
     role="img"
     aria-hidden="true"
   >
-    <line class="hf-rail" x1="60" y1="65" x2="660" y2="65"
+    {/* Platform container — reinforces that the four stations are
+        one system (the Lumecon Economic Impact Analysis Platform),
+        not four loose icons. Thin rounded border + a small mono
+        label up top, generous padding so it doesn't feel boxy. */}
+    <rect class="hf-platform" x="14" y="14" width="932" height="132" rx="6"
+          fill="none" stroke="var(--rule-strong, rgba(14,21,48,.16))" stroke-width=".8" stroke-dasharray="2 4"/>
+    <g class="hf-platform__label">
+      <rect x="32" y="6" width="240" height="16" rx="3" fill="var(--white)"/>
+      <text x="40" y="17" font-family="JetBrains Mono, ui-monospace, monospace" font-weight="600" font-size="7" letter-spacing=".14em" fill="var(--ink-3)">LUMECON · ECONOMIC IMPACT PLATFORM</text>
+    </g>
+
+    <line class="hf-rail" x1="80" y1="80" x2="880" y2="80"
           stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"
           stroke-dasharray="3 6" />
 
-    <circle class="hf-tick hf-tick--a" cx="60" cy="65" r="3" fill="var(--accent)"/>
-    <circle class="hf-tick hf-tick--b" cx="60" cy="65" r="3" fill="var(--accent)"/>
-    <circle class="hf-tick hf-tick--c" cx="60" cy="65" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--a" cx="80" cy="80" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--b" cx="80" cy="80" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--c" cx="80" cy="80" r="3" fill="var(--accent)"/>
 
     <!-- ===== Station 1: three sheets merge + transform into one ===== -->
-    <g class="hf-station hf-station--src" transform="translate(60 65)">
+    <g class="hf-station hf-station--src" transform="translate(80 80)">
       <circle class="hf-station__halo" r="42" fill="var(--accent)" opacity="0"/>
 
       <!-- Three input sheets, each a different size + orientation
@@ -93,7 +104,7 @@
     </g>
 
     <!-- ===== Station 2: Cedar processes inside a monitor ===== -->
-    <g class="hf-station hf-station--cedar" transform="translate(360 65)">
+    <g class="hf-station hf-station--cedar" transform="translate(346 80)">
       <circle class="hf-station__halo" r="48" fill="var(--cedar)" opacity="0"/>
 
       <g class="hf-cedar" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter" fill="none">
@@ -177,7 +188,7 @@
     <!-- ===== Station 3: blank land → casino + neighbourhood + gas
                           station, with dollars trickling up faster
                           as the density grows. ===== -->
-    <g class="hf-station hf-station--map" transform="translate(660 65)">
+    <g class="hf-station hf-station--map" transform="translate(612 80)">
       <circle class="hf-station__halo" r="48" fill="var(--gold)" opacity="0"/>
 
       <!-- Region outline (the empty land). Always visible; the
@@ -345,12 +356,63 @@
         <text class="hf-dollar hf-dollar--8" x="32"  y="0"   font-size="6"   fill="var(--gold)">$</text>
       </g>
     </g>
+
+    <!-- ===== Station 4: study packaged into a presentation that gets
+                          shared with the audiences who need to see it
+                          (council, board, foundation, funder). The
+                          slide carries forward a mini geography +
+                          mini bar chart so the visual ties back to
+                          Stations 2 and 3 — it's the same study, now
+                          in deliverable form. ===== -->
+    <g class="hf-station hf-station--report" transform="translate(880 80)">
+      <circle class="hf-station__halo" r="48" fill="var(--accent)" opacity="0"/>
+
+      <!-- Main slide / report. Builds in chunks (frame → title → map
+           → chart) so it reads as "the study being assembled," then
+           three smaller copies cascade out to the right as
+           dissemination cues. -->
+      <g class="hf-report">
+        <g class="hf-report__frame">
+          <rect x="-32" y="-22" width="46" height="34" rx="1.4" fill="var(--white)" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter"/>
+          <rect x="-32" y="-22" width="46" height="5" fill="var(--accent)" opacity=".28"/>
+        </g>
+        <g class="hf-report__title">
+          <rect x="-28" y="-20" width="14" height="1.6" rx=".2" fill="var(--navy)"/>
+          <rect x="-28" y="-17.6" width="22" height="1" rx=".2" fill="var(--ink-3)" opacity=".55"/>
+        </g>
+        <!-- Mini geography (left half of slide) — echoes Station 3. -->
+        <g class="hf-report__map">
+          <path d="M-28 -13 L-21 -14.5 L-15 -13.5 L-12 -10 L-13 -3 L-17 -1 L-22 -2 L-28 -5 Z"
+                fill="var(--paper)" stroke="var(--navy)" stroke-width=".55" stroke-linejoin="miter"/>
+          <rect x="-25" y="-9.5" width="2.5" height="2.2" fill="var(--gold)"/>
+          <line x1="-26" y1="-7" x2="-14" y2="-6.5" stroke="var(--ink-3)" stroke-width=".3" stroke-dasharray="1 1"/>
+        </g>
+        <!-- Mini bar chart (right half of slide) — echoes Cedar's bars. -->
+        <g class="hf-report__chart">
+          <line x1="-8" y1="8" x2="11" y2="8" stroke="var(--navy)" stroke-width=".4" stroke-opacity=".5"/>
+          <rect class="hf-report__bar hf-report__bar--a" x="-7" y="3"   width="3" height="5"  fill="var(--accent)"/>
+          <rect class="hf-report__bar hf-report__bar--b" x="-2.5" y="0"   width="3" height="8"  fill="var(--accent)"/>
+          <rect class="hf-report__bar hf-report__bar--c" x="2"   y="-3"  width="3" height="11" fill="var(--accent)"/>
+          <rect class="hf-report__bar hf-report__bar--d" x="6.5" y="-1"  width="3" height="9"  fill="var(--accent)"/>
+        </g>
+      </g>
+
+      <!-- Dissemination cascade: three smaller "copies" of the slide
+           that animate outward, reading as the report being shared
+           with multiple audiences. -->
+      <g class="hf-report__send">
+        <rect class="hf-report__send-card hf-report__send-card--a" x="18" y="-14" width="14" height="10" rx=".8" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
+        <rect class="hf-report__send-card hf-report__send-card--b" x="22" y="-3"  width="14" height="10" rx=".8" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
+        <rect class="hf-report__send-card hf-report__send-card--c" x="18" y="8"   width="14" height="10" rx=".8" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
+      </g>
+    </g>
   </svg>
 
   <ol class="hero-flow__labels" aria-label="Study stages">
     <li class="hero-flow__label">Harmonize your economic data</li>
     <li class="hero-flow__label">Cedar runs the economic impact analysis</li>
-    <li class="hero-flow__label">Prove your economic impact</li>
+    <li class="hero-flow__label">Quantify your economic impact</li>
+    <li class="hero-flow__label">Generate reports for the audiences you care about</li>
   </ol>
 </figure>
 
@@ -372,7 +434,7 @@
     padding: 0;
     margin: .35rem 0 0;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: .6rem;
   }
   .hero-flow__label {
@@ -383,16 +445,17 @@
     color: var(--ink-3);
     text-align: center;
     line-height: 1.3;
-    animation: hf-label-glow 7s ease-in-out infinite;
+    animation: hf-label-glow 8s ease-in-out infinite;
     text-shadow: 0 0 0 transparent;
   }
   .hero-flow__label:nth-child(1) { animation-delay: 0s; }
-  .hero-flow__label:nth-child(2) { animation-delay: 1.6s; --label-accent: var(--cedar); }
-  .hero-flow__label:nth-child(3) { animation-delay: 3.8s; --label-accent: var(--gold); }
+  .hero-flow__label:nth-child(2) { animation-delay: 1.8s; --label-accent: var(--cedar); }
+  .hero-flow__label:nth-child(3) { animation-delay: 4.0s; --label-accent: var(--gold); }
+  .hero-flow__label:nth-child(4) { animation-delay: 6.1s; --label-accent: var(--accent); }
   @keyframes hf-label-glow {
-    0%, 25%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
-    5%        { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
-    16%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
+    0%, 22%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    4%        { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
+    14%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
     100%      { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
   }
 
@@ -402,22 +465,22 @@
     8%   { opacity: 1; }
     50%  {                                r: 3.4; }
     92%  { opacity: 1; }
-    100% { transform: translateX(600px); opacity: 0; r: 2.4; }
+    100% { transform: translateX(800px); opacity: 0; r: 2.4; }
   }
   .hf-tick {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-tick-run 7s linear infinite;
+    animation: hf-tick-run 8s linear infinite;
   }
   .hf-tick--a { animation-delay: 0s; }
-  .hf-tick--b { animation-delay: 2.3s; }
-  .hf-tick--c { animation-delay: 4.6s; }
+  .hf-tick--b { animation-delay: 2.65s; }
+  .hf-tick--c { animation-delay: 5.3s; }
 
   /* ---------- Halo pulses ---------- */
   .hf-station__halo {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-halo 7s ease-in-out infinite;
+    animation: hf-halo 8s ease-in-out infinite;
   }
   .hf-station--src   .hf-station__halo { animation-delay: 0s; }
   .hf-station--cedar .hf-station__halo { animation-delay: 1.6s; }
@@ -451,7 +514,7 @@
   .hf-in {
     transform-box: fill-box;
     transform-origin: 0 50%;
-    animation: hf-in-merge 7s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-in-merge 8s cubic-bezier(.22, 1, .36, 1) infinite;
   }
   .hf-in--a { animation-delay: 0s; }
   .hf-in--b { animation-delay: .12s; }
@@ -464,7 +527,7 @@
   }
   .hf-out {
     opacity: 0;
-    animation: hf-out-show 7s ease-in-out infinite;
+    animation: hf-out-show 8s ease-in-out infinite;
   }
   @keyframes hf-out-show {
     0%, 26%  { opacity: 0; }
@@ -474,7 +537,7 @@
   .hf-out__row {
     transform-box: fill-box;
     transform-origin: left center;
-    animation: hf-out-row 7s ease-in-out infinite;
+    animation: hf-out-row 8s ease-in-out infinite;
   }
   .hf-out__row--1 { animation-delay: .45s; }
   .hf-out__row--2 { animation-delay: .55s; }
@@ -517,7 +580,7 @@
   .hf-cedar__tree {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-cedar-pulse 7s ease-in-out infinite;
+    animation: hf-cedar-pulse 8s ease-in-out infinite;
   }
   @keyframes hf-cedar-pulse {
     0%, 22%, 30%, 100% { transform: scale(1);    }
@@ -531,7 +594,7 @@
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-mini-sheet-show 7s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-mini-sheet-show 8s cubic-bezier(.22, 1, .36, 1) infinite;
   }
   @keyframes hf-mini-sheet-show {
     0%, 20%   { opacity: 0; transform: translateX(-6px) scale(.92); }
@@ -545,7 +608,7 @@
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-loading-show 7s ease-in-out infinite;
+    animation: hf-loading-show 8s ease-in-out infinite;
   }
   @keyframes hf-loading-show {
     0%, 38%   { opacity: 0; transform: scale(.85); }
@@ -585,7 +648,7 @@
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-mini-map-show 7s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-mini-map-show 8s cubic-bezier(.22, 1, .36, 1) infinite;
   }
   @keyframes hf-mini-map-show {
     0%, 51%   { opacity: 0; transform: scale(.82); }
@@ -645,7 +708,7 @@
   .hf-car {
     transform-box: fill-box;
     transform-origin: center;
-    animation-duration: 7s;
+    animation-duration: 8s;
     animation-iteration-count: infinite;
     animation-fill-mode: backwards;
   }
@@ -805,7 +868,7 @@
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-dollar-rise 7s ease-out infinite;
+    animation: hf-dollar-rise 8s ease-out infinite;
   }
   .hf-dollar--1 { animation-delay: 6.35s; }
   .hf-dollar--2 { animation-delay: 6.45s; }
@@ -822,6 +885,74 @@
     65%, 100% { opacity: 0; transform: translateY(-22px) scale(.7); }
   }
 
+  /* ---------- Station 4: study packaged + shared ----------
+     Builds in chunks at the tail of the 8s master cycle, so the
+     report assembles after Station 3's parcel is fully built. Mirrors
+     the chunky construction language of Station 3, but at this scale
+     the "chunks" are the parts of a deliverable (slide frame → title
+     → mini map → bar chart → dissemination cascade).
+
+     Timing inside the 8s cycle:
+       6.05s  Slide frame appears
+       6.25s  Title bar fills in
+       6.45s  Mini geography appears
+       6.55s  Bar chart bars grow (4 bars, staggered)
+       6.95s  Dissemination cards cascade out (3 cards, staggered) */
+  .hf-report__frame,
+  .hf-report__title,
+  .hf-report__map {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: backwards;
+    animation-name: hf-chunk;
+    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+  }
+  .hf-report__frame { animation-delay: 6.05s; }
+  .hf-report__title { animation-delay: 6.25s; }
+  .hf-report__map   { animation-delay: 6.45s; }
+
+  /* Report bars grow from baseline. */
+  .hf-report__bar {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    opacity: 0;
+    animation: hf-report-bar 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation-fill-mode: backwards;
+  }
+  .hf-report__bar--a { animation-delay: 6.55s; }
+  .hf-report__bar--b { animation-delay: 6.62s; }
+  .hf-report__bar--c { animation-delay: 6.70s; }
+  .hf-report__bar--d { animation-delay: 6.78s; }
+  @keyframes hf-report-bar {
+    0%       { opacity: 0; transform: scaleY(.15); }
+    6%       { opacity: 1; transform: scaleY(1);   }
+    14%, 88% { opacity: 1; transform: scaleY(1);   }
+    96%, 100% { opacity: 0; transform: scaleY(.15); }
+  }
+
+  /* Dissemination cards: each card slides out to the right from
+     under the main slide, reading as the report being sent to a
+     different audience. */
+  .hf-report__send-card {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: hf-report-send 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation-fill-mode: backwards;
+  }
+  .hf-report__send-card--a { animation-delay: 6.95s; }
+  .hf-report__send-card--b { animation-delay: 7.05s; }
+  .hf-report__send-card--c { animation-delay: 7.15s; }
+  @keyframes hf-report-send {
+    0%        { opacity: 0; transform: translate(-10px, 0) scale(.7); }
+    6%        { opacity: 1; transform: translate(0, 0)     scale(1);  }
+    12%, 86%  { opacity: 1; transform: translate(0, 0)     scale(1);  }
+    94%, 100% { opacity: 0; transform: translate(6px, 0)   scale(.85); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hf-tick, .hf-station__halo,
     .hf-in, .hf-out, .hf-out__row,
@@ -830,6 +961,8 @@
     .hf-imp__src, .hf-casino__base, .hf-casino__body, .hf-casino__door,
     .hf-casino__marquee, .hf-casino__name, .hf-casino__win,
     .hf-build, .hf-grow, .hf-car, .hf-dollar,
+    .hf-report__frame, .hf-report__title, .hf-report__map,
+    .hf-report__bar, .hf-report__send-card,
     .hero-flow__label { animation: none; }
     .hf-tick { opacity: 0; }
     .hf-in    { opacity: 1; transform: none; }
@@ -843,6 +976,8 @@
     .hf-casino__name    { opacity: 1; }
     .hf-casino__win { opacity: 1; fill: var(--gold); }
     .hf-dollar { opacity: 0; }
+    .hf-report__frame, .hf-report__title, .hf-report__map,
+    .hf-report__bar, .hf-report__send-card { opacity: 1; transform: none; }
     .hero-flow__label { color: var(--ink-3); }
   }
 
