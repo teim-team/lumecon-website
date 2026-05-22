@@ -898,22 +898,18 @@
      though — a PPT-style slide with a mini geography and bar chart,
      not the same multi-colored row stack as Station 1's output.
 
-     Strict sequencing — at no point are the main slide and the
-     chunks both on screen, so the eye reads the transformation as
-     "one thing becomes several things" instead of "several things
-     orbit one thing":
+     The slide and the chunks crossfade — slide is fading from
+     opacity 1 → 0 over the same window the chunks are fading in
+     from 0 → 1, so the eye reads "slide transforming into chunks"
+     rather than "slide disappears then chunks pop in." The slide
+     hits opacity 0 well before the chunks reach full opacity, so
+     they don't look simultaneous — just continuous.
 
-       6.05s  Main slide scales in (complete, as a unit)
-       6.5s   Main slide fully visible
-       7.0s   Main slide starts to fade
-       7.18s  Main slide gone
-       7.25s  First chunk appears at the slide center
-       7.45s  Chunk a fans up-right to its final position
-       7.35s  / 7.55s  Chunks b / c follow with a brief stagger
-       7.9s   Chunks fade as the cycle resets at 8s */
-
-  /* The full slide animates as a single unit so the build doesn't
-     compete with the transform-to-chunks step. */
+     Each chunk flies off with its own zig-zag trajectory: little
+     tilts alternating in rotation, Y position wobbling as it
+     translates right, so the cards feel sent / thrown rather than
+     sliding on a rail. Chunk A drifts up-right, Chunk B nearly
+     straight right with a wobble, Chunk C down-right. */
   .hf-report__main {
     transform-box: fill-box;
     transform-origin: center;
@@ -923,31 +919,69 @@
   }
   @keyframes hf-report-main {
     0%, 74%   { opacity: 0; transform: scale(.78); }
-    78%       { opacity: 1; transform: scale(1);   }
-    87%       { opacity: 1; transform: scale(1);   }
-    89%, 100% { opacity: 0; transform: scale(.96); }
+    78%       { opacity: 1; transform: scale(1); }
+    84%       { opacity: 1; transform: scale(1); }
+    87%       { opacity: .45; transform: scale(.96); }
+    89%, 100% { opacity: 0; transform: scale(.92); }
   }
 
-  /* Chunks: appear from the slide center after the slide is gone,
-     then translate outward to their final positions and fade. They
-     don't overlap the main slide because their visible window
-     (90.5%–98%) starts after the slide is at 0 opacity (89%). */
+  /* Chunks. Shared base — each chunk has its own keyframe with a
+     different fly-off path so the three cards fan out instead of
+     marching in formation. */
   .hf-chunk {
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-chunk-ship 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation-duration: 8s;
+    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+    animation-iteration-count: infinite;
     animation-fill-mode: backwards;
   }
-  .hf-chunk--a { animation-delay: .00s; }
-  .hf-chunk--b { animation-delay: .10s; }
-  .hf-chunk--c { animation-delay: .20s; }
-  @keyframes hf-chunk-ship {
-    0%, 90%   { opacity: 0; transform: translate(-14px, 0) scale(.55); }
-    91.5%     { opacity: 1; transform: translate(-14px, 0) scale(.7);  }
-    94%       { opacity: 1; transform: translate(0, 0)     scale(1);   }
-    96%       { opacity: 1; transform: translate(8px, 0)   scale(1);   }
-    99%, 100% { opacity: 0; transform: translate(18px, 0)  scale(.85); }
+  .hf-chunk--a { animation-name: hf-chunk-fly-a; }
+  .hf-chunk--b { animation-name: hf-chunk-fly-b; }
+  .hf-chunk--c { animation-name: hf-chunk-fly-c; }
+
+  /* Chunk A: emerges near slide center (translateY puts it next to
+     where the slide was), drifts up-right with wobble, flies off
+     toward the upper-right. */
+  @keyframes hf-chunk-fly-a {
+    0%, 85%   { opacity: 0; transform: translate(-8px, 6px) scale(.35) rotate(-4deg); }
+    87%       { opacity: .45; transform: translate(-6px, 5px) scale(.6) rotate(-3deg); }
+    90%       { opacity: 1; transform: translate(-1px, 1px) scale(.95) rotate(-1deg); }
+    92%       { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+    94%       { opacity: 1; transform: translate(5px, -4px) scale(1) rotate(-7deg); }
+    96%       { opacity: 1; transform: translate(11px, 1px) scale(.96) rotate(4deg); }
+    98%       { opacity: 1; transform: translate(18px, -5px) scale(.88) rotate(-5deg); }
+    99.5%     { opacity: 0; transform: translate(26px, -10px) scale(.78) rotate(2deg); }
+    100%      { opacity: 0; transform: translate(-8px, 6px) scale(.35) rotate(-4deg); }
+  }
+
+  /* Chunk B: emerges near slide center, drifts straight-ish right
+     with a softer wobble (smaller Y amplitude). */
+  @keyframes hf-chunk-fly-b {
+    0%, 85%   { opacity: 0; transform: translate(-8px, -3px) scale(.35) rotate(3deg); }
+    87%       { opacity: .45; transform: translate(-6px, -3px) scale(.6) rotate(2deg); }
+    90%       { opacity: 1; transform: translate(-1px, -1px) scale(.95) rotate(1deg); }
+    92%       { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+    94%       { opacity: 1; transform: translate(5px, -3px) scale(1) rotate(4deg); }
+    96%       { opacity: 1; transform: translate(11px, 2px) scale(.96) rotate(-3deg); }
+    98%       { opacity: 1; transform: translate(18px, -2px) scale(.88) rotate(3deg); }
+    99.5%     { opacity: 0; transform: translate(26px, 1px) scale(.78) rotate(-2deg); }
+    100%      { opacity: 0; transform: translate(-8px, -3px) scale(.35) rotate(3deg); }
+  }
+
+  /* Chunk C: emerges near slide center, drifts down-right with
+     wobble, flies off toward the lower-right. */
+  @keyframes hf-chunk-fly-c {
+    0%, 85%   { opacity: 0; transform: translate(-8px, -14px) scale(.35) rotate(5deg); }
+    87%       { opacity: .45; transform: translate(-6px, -12px) scale(.6) rotate(3deg); }
+    90%       { opacity: 1; transform: translate(-1px, -4px) scale(.95) rotate(1deg); }
+    92%       { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+    94%       { opacity: 1; transform: translate(5px, 4px) scale(1) rotate(6deg); }
+    96%       { opacity: 1; transform: translate(11px, 0) scale(.96) rotate(-4deg); }
+    98%       { opacity: 1; transform: translate(18px, 5px) scale(.88) rotate(3deg); }
+    99.5%     { opacity: 0; transform: translate(26px, 10px) scale(.78) rotate(-2deg); }
+    100%      { opacity: 0; transform: translate(-8px, -14px) scale(.35) rotate(5deg); }
   }
 
   @media (prefers-reduced-motion: reduce) {
