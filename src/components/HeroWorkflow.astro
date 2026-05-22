@@ -733,17 +733,13 @@
     opacity: 1;
   }
 
-  /* Drive-through gas station chunks: pad, canopy, pumps. Same
-     smooth ease-out curve as the casino chunks so the build flow is
-     consistent across phases. */
-  .hf-build {
-    opacity: 0;
-    animation-name: hf-chunk;
-    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
-  }
-  .hf-build--gas-pad    { animation-delay: 5.85s; }
-  .hf-build--gas-canopy { animation-delay: 6.00s; }
-  .hf-build--gas-pumps  { animation-delay: 6.20s; }
+  /* Drive-through gas station: pad, canopy, pumps. Visible at all
+     times, like the rest of Station 3 — the parcel is a built scene
+     with ambient activity, not a construction sequence. (Prior
+     versions had a hf-chunk build-in keyframe; removing that keyframe
+     left these elements at opacity 0 referencing a missing animation,
+     which is why the gas station went invisible.) */
+  .hf-build { opacity: 1; }
 
   /* Cars: parked at static (visible from page load), brief leave-
      and-return cycle near the end so there's motion without an
