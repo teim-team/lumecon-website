@@ -1,0 +1,267 @@
+/* Cedar chat surface — shared between the inline chat on the
+   homepage (FAQSection) and the floating chat panel popped by the
+   Cedar FAB on every page. Loaded by both, so the FAB chat keeps
+   its product-y look on /join, /privacy, /terms, /demo/*, etc.,
+   where FAQSection isn't rendered. */
+
+.cedar-chat {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--white);
+  padding: 0;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(14, 21, 48, .04),
+    0 14px 40px -16px rgba(14, 21, 48, .14);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header: small Cedar identity bar above the transcript. */
+.cedar-chat__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .65rem 1rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+}
+.cedar-chat__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+}
+.cedar-chat__avatar--header {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--cedar);
+  color: var(--white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cedar-chat__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .92rem;
+  letter-spacing: -.01em;
+  color: var(--navy);
+}
+.cedar-chat__status {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.cedar-chat__status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cedar-light);
+  box-shadow: 0 0 0 3px rgba(27, 182, 106, .18);
+}
+
+.cedar-chat__transcript {
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  max-height: 400px;
+  min-height: 220px;
+  overflow-y: auto;
+  padding: 1.3rem 1.3rem 1rem;
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
+.cedar-msg {
+  display: flex;
+  gap: .7rem;
+  align-items: flex-start;
+  max-width: 86%;
+  animation: cedar-fade-in .25s var(--ease) both;
+}
+.cedar-msg--user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.cedar-msg__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cedar);
+  color: var(--white);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .85rem;
+  letter-spacing: -.01em;
+}
+.cedar-msg__bubble {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  padding: .75rem .95rem;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-size: .94rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.cedar-msg--bot .cedar-msg__bubble { border-top-left-radius: 4px; }
+.cedar-msg--user .cedar-msg__bubble {
+  background: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+  border-top-right-radius: 4px;
+}
+@keyframes cedar-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Typing dots inside a Cedar bubble (JS-created). */
+.cedar-typing {
+  display: inline-flex;
+  gap: .3rem;
+  padding: .15rem 0;
+}
+.cedar-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  animation: cedar-bounce 1.2s ease-in-out infinite;
+}
+.cedar-typing span:nth-child(2) { animation-delay: .15s; }
+.cedar-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes cedar-bounce {
+  0%, 100% { transform: translateY(0);    opacity: .5; }
+  50%      { transform: translateY(-4px); opacity: 1;  }
+}
+
+/* Quick-reply chips inside the welcome bubble. */
+.cedar-msg__bubble--welcome {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+.cedar-msg__line { margin: 0; }
+.cedar-quickreply {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 0;
+}
+.cedar-quickreply.is-collapsed { display: none; }
+
+/* Free-text input row docked under the transcript. */
+.cedar-chat__form {
+  display: flex;
+  gap: .55rem;
+  align-items: stretch;
+  padding: .9rem 1.2rem 1rem;
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+}
+.cedar-chat__inputwrap {
+  flex: 1;
+  display: flex;
+}
+.cedar-chat__input {
+  flex: 1;
+  width: 100%;
+  padding: .75rem 1.05rem;
+  background: var(--white);
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  /* 16px floor on font-size prevents iOS Safari zoom on focus. */
+  font-size: 16px;
+  color: var(--ink-1);
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.cedar-chat__input::placeholder { color: var(--ink-3); }
+.cedar-chat__input:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(14, 21, 48, .1);
+}
+.cedar-chat__send {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  flex-shrink: 0;
+  background: var(--navy);
+  color: var(--white);
+  border: 1px solid var(--navy);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s var(--ease), transform .15s var(--ease);
+  touch-action: manipulation;
+}
+.cedar-chat__send:hover { background: var(--ink-1); transform: translateY(-1px); }
+.cedar-chat__send:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cedar-chat__send svg { display: block; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Quick-reply chip pill. */
+.cedar-chip {
+  padding: .42rem .85rem .42rem .95rem;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: .84rem;
+  font-weight: 500;
+  color: var(--navy);
+  cursor: pointer;
+  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease), transform .15s var(--ease);
+  letter-spacing: -.005em;
+  touch-action: manipulation;
+  text-align: left;
+  line-height: 1.25;
+  box-shadow: inset 3px 0 0 var(--cedar-light);
+}
+.cedar-chip:hover:not(:disabled) {
+  background: var(--cedar);
+  color: var(--white);
+  border-color: var(--cedar);
+  box-shadow: inset 3px 0 0 var(--white), 0 2px 6px rgba(14, 88, 58, .18);
+  transform: translateY(-1px);
+}
+.cedar-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .cedar-chat { border-radius: 12px; }
+  .cedar-msg { max-width: 94%; }
+  .cedar-chat__transcript { max-height: 360px; min-height: 240px; padding: 1rem 1rem .9rem; }
+  .cedar-chat__form { padding: .7rem 1rem .8rem; gap: .45rem; }
+  .cedar-chat__input { padding: .7rem .95rem; font-size: 16px; }
+  .cedar-chat__send { width: 42px; height: 42px; }
+  .cedar-chip { font-size: .82rem; padding: .4rem .75rem; }
+}
