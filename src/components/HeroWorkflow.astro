@@ -467,6 +467,10 @@
     grid-template-columns: repeat(4, 1fr);
     gap: .6rem;
   }
+  /* Each label highlights once per 8s cycle when its station is
+     active. Start time is encoded in each label's own keyframe so
+     all four labels share a single 8s timeline aligned to t=0 and
+     the highlight sequence replays cleanly every cycle. */
   .hero-flow__label {
     font-family: var(--font-mono);
     font-size: .66rem;
@@ -475,51 +479,118 @@
     color: var(--ink-3);
     text-align: center;
     line-height: 1.3;
-    animation: hf-label-glow 8s ease-in-out infinite;
+    animation-duration: 8s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
     text-shadow: 0 0 0 transparent;
   }
-  .hero-flow__label:nth-child(1) { animation-delay: 0s; }
-  .hero-flow__label:nth-child(2) { animation-delay: 1.8s; --label-accent: var(--cedar); }
-  .hero-flow__label:nth-child(3) { animation-delay: 4.0s; --label-accent: var(--gold); }
-  .hero-flow__label:nth-child(4) { animation-delay: 6.1s; --label-accent: var(--accent); }
-  @keyframes hf-label-glow {
-    0%, 22%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+  .hero-flow__label:nth-child(1) { animation-name: hf-label-glow-1; }
+  .hero-flow__label:nth-child(2) { animation-name: hf-label-glow-2; --label-accent: var(--cedar); }
+  .hero-flow__label:nth-child(3) { animation-name: hf-label-glow-3; --label-accent: var(--gold); }
+  .hero-flow__label:nth-child(4) { animation-name: hf-label-glow-4; --label-accent: var(--accent); }
+  /* Label 1: glows at 0% (= 0s into 8s) */
+  @keyframes hf-label-glow-1 {
+    0%        { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
     4%        { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
     14%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
-    100%      { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    22%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+  }
+  /* Label 2: glows at 22.5% (= 1.8s) */
+  @keyframes hf-label-glow-2 {
+    0%, 22%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    27%       { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
+    37%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
+    45%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+  }
+  /* Label 3: glows at 50% (= 4.0s) */
+  @keyframes hf-label-glow-3 {
+    0%, 50%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    54%       { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
+    64%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
+    72%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+  }
+  /* Label 4: glows at 76.25% (= 6.1s) */
+  @keyframes hf-label-glow-4 {
+    0%, 76%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    80%       { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
+    90%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
+    98%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
   }
 
-  /* ---------- Traveling ticks ---------- */
-  @keyframes hf-tick-run {
-    0%   { transform: translateX(0);     opacity: 0; r: 2.4; }
-    8%   { opacity: 1; }
-    50%  {                                r: 3.4; }
-    92%  { opacity: 1; }
-    100% { transform: translateX(800px); opacity: 0; r: 2.4; }
-  }
+  /* ---------- Traveling ticks ----------
+     Three ticks traverse left-to-right across the workflow. Each
+     tick's start time is encoded in its own keyframe (33% staggered
+     starts so they overlap for a continuous-flow feel) and each
+     tick traverses in ~67% of the 8s cycle. animation-delay is 0
+     for all three so they share a single 8s timeline -- otherwise
+     each tick's iteration boundary lands at a different wall-clock
+     moment and the canvas never returns to "no ticks" at the cycle
+     boundary. */
   .hf-tick {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-tick-run 8s linear infinite;
+    animation-duration: 8s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
   }
-  .hf-tick--a { animation-delay: 0s; }
-  .hf-tick--b { animation-delay: 2.65s; }
-  .hf-tick--c { animation-delay: 5.3s; }
+  .hf-tick--a { animation-name: hf-tick-a; }
+  .hf-tick--b { animation-name: hf-tick-b; }
+  .hf-tick--c { animation-name: hf-tick-c; }
+  @keyframes hf-tick-a {
+    0%        { transform: translateX(0);    opacity: 0; r: 2.4; }
+    8%        {                              opacity: 1;        }
+    33%       {                                          r: 3.4; }
+    58%       {                              opacity: 1;        }
+    66%       { transform: translateX(800px); opacity: 0; r: 2.4; }
+    66%, 100% { transform: translateX(800px); opacity: 0; r: 2.4; }
+  }
+  @keyframes hf-tick-b {
+    0%, 33%   { transform: translateX(0);    opacity: 0; r: 2.4; }
+    41%       {                              opacity: 1;        }
+    66%       {                                          r: 3.4; }
+    91%       {                              opacity: 1;        }
+    99%, 100% { transform: translateX(800px); opacity: 0; r: 2.4; }
+  }
+  @keyframes hf-tick-c {
+    0%, 16%   { transform: translateX(0);    opacity: 0; r: 2.4; }
+    24%       {                              opacity: 1;        }
+    50%       {                                          r: 3.4; }
+    75%       {                              opacity: 1;        }
+    83%, 100% { transform: translateX(800px); opacity: 0; r: 2.4; }
+  }
 
-  /* ---------- Halo pulses ---------- */
+  /* ---------- Halo pulses ----------
+     Each station's halo pulses once per 8s cycle at its activation
+     moment. Start time encoded inside each per-station keyframe;
+     animation-delay is 0 so all three halos share the 8s timeline
+     and the pulse sequence replays cleanly every cycle. */
   .hf-station__halo {
     transform-box: fill-box;
     transform-origin: center;
-    animation: hf-halo 8s ease-in-out infinite;
+    animation-duration: 8s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
   }
-  .hf-station--src   .hf-station__halo { animation-delay: 0s; }
-  .hf-station--cedar .hf-station__halo { animation-delay: 1.6s; }
-  .hf-station--map   .hf-station__halo { animation-delay: 3.8s; }
-  @keyframes hf-halo {
-    0%, 25%  { opacity: 0;   transform: scale(.6); }
-    4%       { opacity: .2;  transform: scale(1);  }
-    14%      { opacity: 0;   transform: scale(1.18);}
-    100%     { opacity: 0; }
+  .hf-station--src   .hf-station__halo { animation-name: hf-halo-src; }
+  .hf-station--cedar .hf-station__halo { animation-name: hf-halo-cedar; }
+  .hf-station--map   .hf-station__halo { animation-name: hf-halo-map; }
+  @keyframes hf-halo-src {     /* pulses at 0% (= 0s into 8s) */
+    0%        { opacity: 0;   transform: scale(.6);  }
+    4%        { opacity: .2;  transform: scale(1);   }
+    14%       { opacity: 0;   transform: scale(1.18);}
+    25%, 100% { opacity: 0;   transform: scale(.6);  }
+  }
+  @keyframes hf-halo-cedar {   /* pulses at 20% (= 1.6s) */
+    0%, 20%   { opacity: 0;   transform: scale(.6);  }
+    24%       { opacity: .2;  transform: scale(1);   }
+    34%       { opacity: 0;   transform: scale(1.18);}
+    45%, 100% { opacity: 0;   transform: scale(.6);  }
+  }
+  @keyframes hf-halo-map {     /* pulses at 47.5% (= 3.8s) */
+    0%, 47%   { opacity: 0;   transform: scale(.6);  }
+    51%       { opacity: .2;  transform: scale(1);   }
+    61%       { opacity: 0;   transform: scale(1.18);}
+    72%, 100% { opacity: 0;   transform: scale(.6);  }
   }
 
   /* ---------- Sequential pipeline timing across a 7s loop ----
@@ -618,25 +689,54 @@
     37%, 82%  { opacity: 1; }
     92%, 100% { opacity: 0; }
   }
+  /* Six output rows materialize sequentially after the document is
+     visible, sweeping top to bottom. Each row's start time is
+     encoded in its own keyframe (37.5-45% of the 8s cycle, ~3.0-3.6s)
+     so all six share a single 8s timeline aligned to t=0 and the
+     row-fill sequence replays cleanly every cycle. */
   .hf-out__row {
     transform-box: fill-box;
     transform-origin: left center;
-    animation: hf-out-row 8s ease-in-out infinite;
+    animation-duration: 8s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    opacity: 0;
   }
-  /* Row delays: each row materializes after the document is
-     visible, sweeping top to bottom so the visitor reads the data
-     populating row by row. Delays land in the 3.0-3.5s window which
-     is the 37-44% of the 8s cycle — right when the output appears. */
-  .hf-out__row--1 { animation-delay: 3.00s; }
-  .hf-out__row--2 { animation-delay: 3.12s; }
-  .hf-out__row--3 { animation-delay: 3.24s; }
-  .hf-out__row--4 { animation-delay: 3.36s; }
-  .hf-out__row--5 { animation-delay: 3.48s; }
-  .hf-out__row--6 { animation-delay: 3.60s; }
-  @keyframes hf-out-row {
-    0%        { opacity: 0; transform: scaleX(0); }
-    4%, 50%   { opacity: 1; transform: scaleX(1); }
-    56%, 100% { opacity: 0; transform: scaleX(0); }
+  .hf-out__row--1 { animation-name: hf-out-row-1; }
+  .hf-out__row--2 { animation-name: hf-out-row-2; }
+  .hf-out__row--3 { animation-name: hf-out-row-3; }
+  .hf-out__row--4 { animation-name: hf-out-row-4; }
+  .hf-out__row--5 { animation-name: hf-out-row-5; }
+  .hf-out__row--6 { animation-name: hf-out-row-6; }
+  @keyframes hf-out-row-1 {   /* row 1 appears at 37.5% (= 3.00s) */
+    0%, 37%   { opacity: 0; transform: scaleX(0); }
+    41%, 87%  { opacity: 1; transform: scaleX(1); }
+    93%, 100% { opacity: 0; transform: scaleX(0); }
+  }
+  @keyframes hf-out-row-2 {   /* row 2 at 39% (= 3.12s) */
+    0%, 39%   { opacity: 0; transform: scaleX(0); }
+    43%, 88%  { opacity: 1; transform: scaleX(1); }
+    94%, 100% { opacity: 0; transform: scaleX(0); }
+  }
+  @keyframes hf-out-row-3 {   /* row 3 at 40.5% (= 3.24s) */
+    0%, 40%   { opacity: 0; transform: scaleX(0); }
+    44%, 89%  { opacity: 1; transform: scaleX(1); }
+    95%, 100% { opacity: 0; transform: scaleX(0); }
+  }
+  @keyframes hf-out-row-4 {   /* row 4 at 42% (= 3.36s) */
+    0%, 42%   { opacity: 0; transform: scaleX(0); }
+    46%, 90%  { opacity: 1; transform: scaleX(1); }
+    96%, 100% { opacity: 0; transform: scaleX(0); }
+  }
+  @keyframes hf-out-row-5 {   /* row 5 at 43.5% (= 3.48s) */
+    0%, 43%   { opacity: 0; transform: scaleX(0); }
+    47%, 91%  { opacity: 1; transform: scaleX(1); }
+    97%, 100% { opacity: 0; transform: scaleX(0); }
+  }
+  @keyframes hf-out-row-6 {   /* row 6 at 45% (= 3.60s) */
+    0%, 45%   { opacity: 0; transform: scaleX(0); }
+    49%, 92%  { opacity: 1; transform: scaleX(1); }
+    98%, 100% { opacity: 0; transform: scaleX(0); }
   }
 
   /* ---------- Station 2: hourglass → bars → output lines ----
@@ -717,17 +817,33 @@
     50%  { transform: translateX(14px) scaleX(1); }
     100% { transform: translateX(0)    scaleX(1); }
   }
-  /* Trailing dots after "LOADING" — each blinks in sequence. */
+  /* Trailing dots after "LOADING" — each blinks in sequence. Each
+     dot's peak time is encoded in its own keyframe (peak at 50%,
+     62.5%, 75% of the 1.2s cycle) so the three dots share a single
+     1.2s timeline aligned to t=0; the typing-indicator stagger is
+     preserved without animation-delay drift. */
   .hf-load-dot {
-    animation: hf-load-dot 1.2s ease-in-out infinite;
+    animation-duration: 1.2s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
   }
-  .hf-load-dot--a { animation-delay: 0s;   }
-  .hf-load-dot--b { animation-delay: .15s; }
-  .hf-load-dot--c { animation-delay: .30s; }
-  @keyframes hf-load-dot {
+  .hf-load-dot--a { animation-name: hf-load-dot-a; }
+  .hf-load-dot--b { animation-name: hf-load-dot-b; }
+  .hf-load-dot--c { animation-name: hf-load-dot-c; }
+  @keyframes hf-load-dot-a {   /* peaks at 50% */
     0%, 30%   { opacity: .25; }
     50%       { opacity: 1;   }
     80%, 100% { opacity: .25; }
+  }
+  @keyframes hf-load-dot-b {   /* peaks at 62.5% (= 50% + 12.5%) */
+    0%, 42%   { opacity: .25; }
+    62%       { opacity: 1;   }
+    92%, 100% { opacity: .25; }
+  }
+  @keyframes hf-load-dot-c {   /* peaks at 75% (= 50% + 25%) */
+    0%, 55%   { opacity: .25; }
+    75%       { opacity: 1;   }
+    100%      { opacity: .25; }
   }
 
   /* Frame 3: mini map preview — Cedar's output. Scales up like the
