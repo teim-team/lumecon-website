@@ -305,16 +305,20 @@
   flex-wrap: wrap;
 }
 
-/* Filter chips above the map */
+/* Layer toggle above the map. Segmented control styling: inset
+   tray with a clear "pressed-in" feel so the active state reads
+   as the surface the others sit on top of. Bigger active shadow
+   sells the tactility. */
 .workspace-filters {
   display: inline-flex;
   align-items: center;
-  gap: .25rem;
-  padding: .35rem;
-  background: var(--cream);
+  gap: .2rem;
+  padding: .3rem;
+  background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: 999px;
   width: fit-content;
+  box-shadow: inset 0 1px 2px rgba(10, 15, 38, .06);
 }
 
 /* Search box — same pill-shape as the filter row, lives next to it. */
@@ -444,7 +448,7 @@
 .wfilter {
   background: transparent;
   border: 0;
-  padding: .4rem .85rem;
+  padding: .42rem .95rem;
   font-family: var(--font-sans);
   font-size: .82rem;
   font-weight: 500;
@@ -452,13 +456,18 @@
   color: var(--ink-3);
   cursor: pointer;
   border-radius: 999px;
-  transition: background .15s var(--ease), color .15s var(--ease);
+  position: relative;
+  transition: background .2s var(--ease), color .2s var(--ease), transform .12s var(--ease);
 }
 .wfilter:hover { color: var(--navy); }
+.wfilter:active { transform: scale(.97); }
 .wfilter.is-active {
   background: var(--white);
   color: var(--navy);
-  box-shadow: 0 1px 2px rgba(14, 21, 48, .08);
+  box-shadow:
+    0 1px 1px rgba(10, 15, 38, .08),
+    0 2px 6px rgba(10, 15, 38, .06),
+    inset 0 0 0 1px rgba(10, 15, 38, .04);
 }
 
 /* Tribal layer: reservation polygons are the visual hero. The
