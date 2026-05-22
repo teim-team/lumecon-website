@@ -113,14 +113,11 @@
       </g>
     </g>
 
-    <!-- ===== Station 3: source goes up first, then the neighbourhood
-                          grows around it inside the region ===== -->
+    <!-- ===== Station 3: casino opens → neighbourhood grows ===== -->
     <g class="hf-station hf-station--map" transform="translate(660 65)">
       <circle class="hf-station__halo" r="46" fill="var(--gold)" opacity="0"/>
 
-      <!-- Region outline: an irregular geographic boundary. Dashed
-           sub-boundary down the middle reads as two distinct
-           places inside the region. -->
+      <!-- Region outline + dashed sub-boundary. -->
       <path class="hf-imp__region"
             d="M-36 -22 L-22 -28 L-8 -26 L8 -28 L24 -24 L36 -16 L40 -4 L36 8 L28 22 L14 28 L-2 26 L-18 28 L-32 20 L-40 6 L-38 -8 Z"
             fill="var(--paper)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter" stroke-opacity=".55"/>
@@ -128,28 +125,50 @@
             stroke="var(--navy)" stroke-width=".8" stroke-opacity=".28"
             stroke-dasharray="2 3" stroke-linecap="round"/>
 
-      <!-- Source building: goes up first. Two chimneys with smoke,
-           pitched-roof body, lit windows, a door. Stands in for a
-           casino / factory / capital project — anything that
-           triggers a new flow of activity. -->
+      <!-- ===== Casino: builds in fast, then the lit marquee and
+                window grid turn on in sequence. ===== -->
       <g class="hf-imp__src">
-        <rect x="-28" y="-18" width="3.5" height="10" fill="var(--navy)" stroke="none"/>
-        <rect x="-23" y="-15" width="3.5" height="7"  fill="var(--navy)" stroke="none"/>
-        <circle class="hf-smoke hf-smoke--a" cx="-26.2" cy="-21" r="2"   fill="var(--ink-3)" opacity=".4"/>
-        <circle class="hf-smoke hf-smoke--b" cx="-21.2" cy="-19" r="1.7" fill="var(--ink-3)" opacity=".35"/>
-        <path d="M-32 -8 L-32 -2 L-26 -2 L-26 -8 L-20 -2 L-20 -8 L-14 -2 L-14 -8 L-8 -2 L-8 8 L-32 8 Z"
+        <!-- Pylon + marquee sign on top. -->
+        <line x1="-15" y1="-21" x2="-15" y2="-17" stroke="var(--navy)" stroke-width="1.2"/>
+        <rect class="hf-casino__marquee" x="-26" y="-25" width="22" height="4" rx="1"
+              fill="var(--gold)" stroke="var(--navy)" stroke-width="1.2"/>
+        <!-- Main casino body. -->
+        <rect x="-30" y="-17" width="26" height="19" rx=".5"
               fill="var(--white)" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter"/>
-        <rect x="-28" y="0" width="3" height="3.5" fill="var(--gold)" stroke="none"/>
-        <rect x="-22" y="0" width="3" height="3.5" fill="var(--gold)" stroke="none"/>
-        <rect x="-16" y="0" width="3" height="3.5" fill="var(--gold)" stroke="none"/>
-        <rect x="-14" y="3.5" width="4" height="4.5" fill="var(--navy)" stroke="none"/>
+        <!-- Two rows of windows — dark by default, light up one by
+             one as the casino "opens for business". -->
+        <g class="hf-casino__windows">
+          <rect class="hf-casino__win hf-casino__win--1" x="-27" y="-13.5" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--2" x="-22" y="-13.5" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--3" x="-17" y="-13.5" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--4" x="-12" y="-13.5" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--5"  x="-7"  y="-13.5" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--6"  x="-27" y="-8" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--7"  x="-22" y="-8" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--8"  x="-17" y="-8" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--9"  x="-12" y="-8" width="3" height="3" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--10" x="-7"  y="-8" width="3" height="3" fill="var(--ink-3)"/>
+        </g>
+        <!-- Entrance awning + door. -->
+        <rect x="-21" y="-3.5" width="12" height="2" fill="var(--accent)" stroke="var(--navy)" stroke-width="1"/>
+        <rect x="-18" y="-1.5" width="6" height="3.5" fill="var(--navy)" stroke="none"/>
       </g>
 
-      <!-- Neighbourhood elements that grow in after the source goes
-           up. Each appears sequentially as the cycle progresses:
-           first house, second house, then a small tree and a tiny
-           shop to round out the ecosystem. The source is built
-           first; the rest is the impact. -->
+      <!-- ===== Cars pulling up to the casino entrance. ===== -->
+      <g class="hf-car hf-car--a" transform="translate(-22 6)">
+        <rect x="-4" y="-2" width="8" height="3" rx=".7" fill="var(--terra)" stroke="var(--navy)" stroke-width=".9"/>
+        <path d="M-3 -2 L-1.5 -3.5 L1.5 -3.5 L3 -2" fill="var(--terra)" stroke="var(--navy)" stroke-width=".9" stroke-linejoin="miter"/>
+        <circle cx="-2.5" cy="1" r="1" fill="var(--navy)"/>
+        <circle cx="2.5"  cy="1" r="1" fill="var(--navy)"/>
+      </g>
+      <g class="hf-car hf-car--b" transform="translate(-12 7)">
+        <rect x="-4" y="-2" width="8" height="3" rx=".7" fill="var(--accent)" stroke="var(--navy)" stroke-width=".9"/>
+        <path d="M-3 -2 L-1.5 -3.5 L1.5 -3.5 L3 -2" fill="var(--accent)" stroke="var(--navy)" stroke-width=".9" stroke-linejoin="miter"/>
+        <circle cx="-2.5" cy="1" r="1" fill="var(--navy)"/>
+        <circle cx="2.5"  cy="1" r="1" fill="var(--navy)"/>
+      </g>
+
+      <!-- ===== Neighbourhood that develops around the casino. ===== -->
       <g class="hf-grow hf-grow--house-a">
         <path d="M8 -8 L16 -16 L24 -8 Z" fill="var(--terra-light)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
         <rect x="9" y="-8" width="14" height="10" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
@@ -164,18 +183,26 @@
         <rect x="26" y="9" width="3" height="5" fill="var(--navy)" stroke="none"/>
         <rect x="30" y="8" width="2" height="2" fill="var(--gold)" stroke="none"/>
       </g>
-      <!-- Small tree springs up between the houses. -->
-      <g class="hf-grow hf-grow--tree">
-        <path d="M16 16 L13 22 L19 22 Z" fill="var(--cedar)" stroke="var(--cedar)" stroke-width="1.1" stroke-linejoin="miter"/>
-        <path d="M16 19 L12 25 L20 25 Z" fill="var(--cedar)" stroke="var(--cedar)" stroke-width="1.1" stroke-linejoin="miter"/>
-        <rect x="15.2" y="25" width="1.6" height="2" fill="var(--navy)" stroke="none"/>
-      </g>
-      <!-- Small neighborhood shop. -->
       <g class="hf-grow hf-grow--shop">
         <rect x="-6" y="14" width="10" height="8" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
         <rect x="-6" y="11" width="10" height="3" fill="var(--accent)" stroke="var(--navy)" stroke-width="1.1" stroke-linejoin="miter"/>
         <rect x="-3" y="17" width="2.5" height="5" fill="var(--navy)" stroke="none"/>
         <rect x="1"  y="16" width="2.5" height="2.5" fill="var(--gold)" stroke="none"/>
+      </g>
+      <g class="hf-grow hf-grow--tree">
+        <path d="M16 16 L13 22 L19 22 Z" fill="var(--cedar)" stroke="var(--cedar)" stroke-width="1.1" stroke-linejoin="miter"/>
+        <path d="M16 19 L12 25 L20 25 Z" fill="var(--cedar)" stroke="var(--cedar)" stroke-width="1.1" stroke-linejoin="miter"/>
+        <rect x="15.2" y="25" width="1.6" height="2" fill="var(--navy)" stroke="none"/>
+      </g>
+
+      <!-- ===== Dollar signs floating up: the dollars the new
+                  business pulls into the region. ===== -->
+      <g class="hf-imp__dollars" font-family="JetBrains Mono, ui-monospace, monospace" font-weight="700">
+        <text class="hf-dollar hf-dollar--1" x="-18" y="-2" font-size="6"  fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--2" x="-2"  y="-4" font-size="7"  fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--3" x="14"  y="-2" font-size="6"  fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--4" x="-12" y="2"  font-size="5"  fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--5" x="26"  y="-4" font-size="6"  fill="var(--gold)">$</text>
       </g>
     </g>
   </svg>
@@ -353,75 +380,136 @@
     100%     { x2: -6;  opacity: 0; }
   }
 
-  /* ---------- Station 3: source builds, ecosystem grows around it ----
-     The cycle starts with an empty region. The source building
-     scales up first ("built fast"). Then the neighbourhood
-     elements pop in one by one: house A, house B, shop, tree.
-     By the end of the loop, the impact is the visible growth
-     around the source. */
+  /* ---------- Station 3: casino opens, neighbourhood grows ----
+     Inside the 6s station loop (Station 3 starts at 4s in cycle):
+       0.00s  Empty region.
+       0.05s  Casino body scales up from ground (built fast).
+       0.35s  Marquee on top lights up gold.
+       0.40s+ Window grid lights up window-by-window in a wave.
+       0.65s  Cars pull up to the entrance.
+       0.85s  House A appears.
+       1.15s  House B appears.
+       1.45s  Shop appears.
+       1.75s  Tree appears.
+       2.10s  Dollar signs start floating up from the new
+              development, staggered.
+       Steady state ~3 seconds, then fade for reset. */
 
-  /* Source builds in with a quick scale-up. */
+  /* Casino body builds up from the ground. */
   .hf-imp__src {
     transform-box: fill-box;
-    transform-origin: -20px 0;
-    animation: hf-imp-build 6s ease-out infinite;
+    transform-origin: -17px 2px; /* anchored at the building's base */
+    animation: hf-casino-build 6s cubic-bezier(.22, 1.4, .4, 1) infinite;
     animation-delay: 4s;
   }
-  @keyframes hf-imp-build {
-    0%       { opacity: 0; transform: scale(.2);  }
-    8%       { opacity: 1; transform: scale(1.1); }
-    14%      {              transform: scale(1);   }
-    88%      { opacity: 1; transform: scale(1);   }
-    96%, 100% { opacity: 0; transform: scale(.2);  }
+  @keyframes hf-casino-build {
+    0%       { opacity: 0; transform: scaleY(0)   scaleX(.85); }
+    7%       { opacity: 1; transform: scaleY(1.06) scaleX(1);  }
+    12%      {              transform: scaleY(1)    scaleX(1);  }
+    90%      { opacity: 1; transform: scaleY(1)    scaleX(1);  }
+    97%, 100% { opacity: 0; transform: scaleY(0)    scaleX(.85); }
   }
-  /* Chimney smoke once the source is built. Loops independently
-     so the source feels alive while the neighbourhood grows. */
-  .hf-smoke {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: hf-smoke-rise 2.4s ease-out infinite;
+  /* Marquee on top of the casino lights up when the building is
+     fully up. Toggles between gold and a pulsing brighter gold. */
+  .hf-casino__marquee {
+    animation: hf-casino-marquee 6s ease-in-out infinite;
+    animation-delay: 4.35s;
   }
-  .hf-smoke--a { animation-delay: 4.3s; }
-  .hf-smoke--b { animation-delay: 5.1s; }
-  @keyframes hf-smoke-rise {
-    0%   { transform: translate(0, 0)       scale(.4); opacity: 0;   }
-    25%  {                                              opacity: .45; }
-    100% { transform: translate(-2px, -10px) scale(1.4); opacity: 0; }
+  @keyframes hf-casino-marquee {
+    0%, 4%   { fill: var(--ink-3);    }
+    8%, 88%  { fill: var(--gold);     }
+    96%, 100% { fill: var(--ink-3);    }
   }
-  /* Each neighbourhood element scales in sequentially after the
-     source goes up. A subtle pop-in (overshoot + settle) makes
-     each arrival visible. */
+  /* Windows light up one by one — the casino opening for
+     business. Each window flips from ink-3 (dark) to gold
+     individually so the eye reads "lights are coming on." */
+  .hf-casino__win {
+    animation: hf-casino-light 6s ease-in-out infinite;
+  }
+  .hf-casino__win--1  { animation-delay: 4.4s;  }
+  .hf-casino__win--2  { animation-delay: 4.48s; }
+  .hf-casino__win--3  { animation-delay: 4.56s; }
+  .hf-casino__win--4  { animation-delay: 4.64s; }
+  .hf-casino__win--5  { animation-delay: 4.72s; }
+  .hf-casino__win--6  { animation-delay: 4.46s; }
+  .hf-casino__win--7  { animation-delay: 4.54s; }
+  .hf-casino__win--8  { animation-delay: 4.62s; }
+  .hf-casino__win--9  { animation-delay: 4.70s; }
+  .hf-casino__win--10 { animation-delay: 4.78s; }
+  @keyframes hf-casino-light {
+    0%, 8%   { fill: var(--ink-3); }
+    14%, 88% { fill: var(--gold);  }
+    96%, 100% { fill: var(--ink-3); }
+  }
+  /* Cars pull up after the casino opens. */
+  .hf-car {
+    opacity: 0;
+    animation: hf-car-arrive 6s ease-out infinite;
+  }
+  .hf-car--a { animation-delay: 4.65s; }
+  .hf-car--b { animation-delay: 4.78s; }
+  @keyframes hf-car-arrive {
+    0%       { opacity: 0; transform: translateX(-8px); }
+    8%       { opacity: 1; transform: translateX(0);    }
+    85%      { opacity: 1; transform: translateX(0);    }
+    93%, 100% { opacity: 0; transform: translateX(-8px); }
+  }
+
+  /* Each neighbourhood element scales in sequentially. */
   .hf-grow {
     transform-box: fill-box;
     transform-origin: center;
     animation: hf-imp-grow 6s ease-out infinite;
     opacity: 0;
   }
-  .hf-grow--house-a { animation-delay: 4.55s; }
-  .hf-grow--house-b { animation-delay: 4.85s; }
-  .hf-grow--shop    { animation-delay: 5.15s; }
-  .hf-grow--tree    { animation-delay: 5.45s; }
+  .hf-grow--house-a { animation-delay: 4.85s; }
+  .hf-grow--house-b { animation-delay: 5.15s; }
+  .hf-grow--shop    { animation-delay: 5.45s; }
+  .hf-grow--tree    { animation-delay: 5.75s; }
   @keyframes hf-imp-grow {
     0%       { opacity: 0; transform: scale(.1);  }
-    6%       { opacity: 1; transform: scale(1.15);}
-    12%      { opacity: 1; transform: scale(1);   }
-    65%      { opacity: 1; transform: scale(1);   }
-    72%, 100% { opacity: 0; transform: scale(.1);  }
+    5%       { opacity: 1; transform: scale(1.15);}
+    11%      { opacity: 1; transform: scale(1);   }
+    60%      { opacity: 1; transform: scale(1);   }
+    68%, 100% { opacity: 0; transform: scale(.1);  }
+  }
+
+  /* Dollar signs float up and fade. Staggered so a steady stream
+     of $ rises from the new development. */
+  .hf-dollar {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: hf-dollar-rise 6s ease-out infinite;
+  }
+  .hf-dollar--1 { animation-delay: 6.10s; }
+  .hf-dollar--2 { animation-delay: 6.25s; }
+  .hf-dollar--3 { animation-delay: 6.40s; }
+  .hf-dollar--4 { animation-delay: 6.55s; }
+  .hf-dollar--5 { animation-delay: 6.70s; }
+  @keyframes hf-dollar-rise {
+    0%       { opacity: 0; transform: translateY(0)    scale(.4); }
+    10%      { opacity: 1; transform: translateY(-3px) scale(1);  }
+    60%      { opacity: 1; transform: translateY(-12px) scale(1); }
+    80%, 100% { opacity: 0; transform: translateY(-20px) scale(.7); }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hf-tick, .hf-station__halo,
     .hf-in, .hf-out, .hf-out__row,
     .hf-cedar__tree, .hf-bar, .hf-line,
-    .hf-imp__src, .hf-grow, .hf-smoke,
+    .hf-imp__src, .hf-grow, .hf-car, .hf-dollar,
+    .hf-casino__marquee, .hf-casino__win,
     .hero-flow__label { animation: none; }
     .hf-tick { opacity: 0; }
     .hf-in    { opacity: 1; transform: none; }
     .hf-out   { opacity: 0; }
     .hf-bar   { transform: none; opacity: 1; }
     .hf-line  { opacity: 1; }
-    .hf-imp__src, .hf-grow { opacity: 1; transform: none; }
-    .hf-smoke { opacity: 0; }
+    .hf-imp__src, .hf-grow, .hf-car { opacity: 1; transform: none; }
+    .hf-casino__marquee { fill: var(--gold); }
+    .hf-casino__win { fill: var(--gold); }
+    .hf-dollar { opacity: 0; }
     .hero-flow__label { color: var(--ink-3); }
   }
 
