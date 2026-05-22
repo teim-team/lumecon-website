@@ -178,6 +178,42 @@ function appendMessage(
   return wrap;
 }
 
+/**
+ * Render inline follow-up chips beneath a bot message so the user can
+ * keep the conversation moving without typing. Chips delegate via the
+ * provided onSelect — typically `sendMessage(intent.chip)` — and self-
+ * destruct on click so the transcript stays clean.
+ */
+function renderFollowUps(
+  transcript: HTMLElement,
+  followUpIds: string[] | undefined,
+  onSelect: (intent: CedarIntent) => void,
+): void {
+  if (!followUpIds || followUpIds.length === 0) return;
+  const items = followUpIds
+    .map((id) => INTENTS.find((x) => x.id === id))
+    .filter((x): x is CedarIntent => !!x && !!x.chip);
+  if (items.length === 0) return;
+  const row = document.createElement('div');
+  row.className = 'cedar-followups';
+  row.setAttribute('role', 'group');
+  row.setAttribute('aria-label', 'Suggested follow-ups');
+  for (const intent of items) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cedar-chip cedar-chip--followup';
+    btn.dataset.intent = intent.id;
+    btn.textContent = intent.chip!;
+    btn.addEventListener('click', () => {
+      row.remove();
+      onSelect(intent);
+    });
+    row.appendChild(btn);
+  }
+  transcript.appendChild(row);
+  transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
+}
+
 function makeTypingIndicator(): HTMLElement {
   const dots = document.createElement('span');
   dots.className = 'cedar-typing';
@@ -228,6 +264,15 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     const answer = await resolveAnswer(rawText, surface, conversationId);
     const bubble = typing.querySelector<HTMLElement>('.cedar-msg__bubble');
     if (bubble) bubble.textContent = answer;
+    // Render follow-up chips inline beneath the bot bubble so the
+    // conversation can keep moving without the visitor having to
+    // think up the next question. Mapping uses the local classifier
+    // even when the API resolved the answer, since the chip rail
+    // mirrors topics the site is opinionated about.
+    const matched = classify(rawText);
+    renderFollowUps(transcript, matched?.followUps, (intent) => {
+      void sendMessage(intent.chip!, intent.chip!);
+    });
   };
 
   chips.addEventListener('click', (e) => {
