@@ -393,12 +393,13 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
   const countyCentroids: Record<string, { cx: number; cy: number }> = JSON.parse((document.getElementById('heroCounties') as HTMLScriptElement)?.textContent || '{}');
   const searchIndex: SearchEntry[] = JSON.parse((document.getElementById('heroSearch') as HTMLScriptElement)?.textContent || '[]');
 
-  // Shared scene catalog + slug helper imported from src/data/scenes.ts
-  // so the homepage demo and the static /demo/[slug] pages stay in sync.
+  // Shared scene catalog imported from src/data/scenes.ts so the
+  // homepage demo and the static /demo/[slug] pages stay in sync.
   // ACTIVITIES + AMOUNTS arrays stay local — they're the click-on-state
-  // generic fallback (not used by the named scenes).
+  // generic fallback (not used by the named scenes). slugify/sceneSlug
+  // are only needed by the prerendered /demo/<slug> route, not here.
   // @ts-ignore — Vite resolves at bundle time
-  import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES, slugify, sceneSlug } from '../data/scenes';
+  import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES } from '../data/scenes';
   type Scene = (typeof SCENES)[number];
 
   const ACTIVITIES = [
@@ -462,10 +463,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       };
       requestAnimationFrame(step);
     };
-
-    // setLine: no-op now that the narration line is removed; kept so
-    // existing call sites compile and silently do nothing.
-    const setLine = (_text: string) => { /* no narration line in DOM */ };
 
     /* Draw +value labels on the lit states of a given ring (0/1/2).
        Picks up to 4 states by largest centroid-distance-from-source
@@ -926,7 +923,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
         }
       }
 
-      setLine(`${framing}. A <em>${activity.label}</em> of <strong>${amount.label}</strong>.`);
       if (runId !== me) return;
 
       stage.dataset.ring = '1';
@@ -953,7 +949,6 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       figJobsCell?.classList.add('is-filled');
       tickTo(figT as HTMLElement, total, '', 1150);
       tickInt(figJ as HTMLElement, jobs, '≈ ', 950);
-      setLine(`That sum, with every multiplier sourced and the assumption ledger attached, is your study.`);
 
       const wsStatusDone = document.getElementById('workspaceStatus');
       const wsLabelDone = document.getElementById('workspaceStatusLabel');
