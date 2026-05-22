@@ -98,13 +98,37 @@ nav.nav--static {
   padding: .5rem 1rem;
   background: var(--navy);
   color: var(--white);
-  margin-left: .5rem;
+  margin-left: .35rem;
   font-weight: 600;
   letter-spacing: -.008em;
   border-radius: 6px;
 }
 .nav-links .nav-cta::after { content: none; }
 .nav-links .nav-cta:hover { background: var(--navy2); }
+
+/* Auth pair (Log in + Sign up) sits in the top-right of the nav.
+   The wrapper just groups the two buttons so the Log-in ghost link
+   doesn't get the underline-on-hover treatment from .nav-links a. */
+.nav-auth {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  margin-left: .9rem;
+}
+.nav-links .nav-ghost {
+  padding: .45rem .85rem;
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .18));
+  border-radius: 6px;
+  color: var(--navy);
+  font-weight: 600;
+  letter-spacing: -.005em;
+}
+.nav-links .nav-ghost::after { content: none; }
+.nav-links .nav-ghost:hover {
+  background: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+}
 
 /* Platforms dropdown — modern enterprise nav.
    Hover or click to open. Each item carries its platform color dot
