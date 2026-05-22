@@ -161,128 +161,140 @@
         <line x1="-36" y1="12" x2="38" y2="12" stroke="var(--ink-3)" stroke-width=".4" stroke-dasharray="2 2" stroke-opacity=".55"/>
       </g>
 
-      <!-- ===== Casino: marquee with "CASINO" lettering above a
-                windowed body and an arched entrance. ===== -->
+      <!-- ===== Casino: the source of activity. Builds in chunks:
+                base slab, body, marquee + lettering, windows lighting
+                up, and a tealed grand entrance. ===== -->
       <g class="hf-imp__src">
-        <!-- Marquee band with the lit "CASINO" wordmark. -->
-        <rect class="hf-casino__marquee" x="-32" y="-22" width="24" height="4.5"
-              fill="var(--gold)" stroke="var(--navy)" stroke-width="1.3"/>
-        <text class="hf-casino__name" x="-20" y="-18.5"
-              font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="3.8" letter-spacing=".12em"
-              fill="var(--navy)" text-anchor="middle">CASINO</text>
+        <!-- Foundation slab — sits the casino on the parcel so it
+             doesn't look like it floats above the road. -->
+        <rect class="hf-casino__base" x="-33" y="4.5" width="26" height="2" rx=".3"
+              fill="var(--ink-5, #c6c8d0)" stroke="var(--navy)" stroke-width=".5" stroke-opacity=".55"/>
 
-        <!-- Main casino body — two rows of windows under the marquee. -->
-        <rect x="-32" y="-17.5" width="24" height="23" rx=".5"
+        <!-- Main body. -->
+        <rect class="hf-casino__body" x="-32" y="-17.5" width="24" height="22" rx=".5"
               fill="var(--white)" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter"/>
 
-        <!-- Window grid: 2 rows of 4 windows. Lights flip on in
-             sequence so the casino reads as opening floor by floor. -->
+        <!-- Marquee band with the lit "CASINO" wordmark. -->
+        <rect class="hf-casino__marquee" x="-32" y="-22" width="24" height="4.8"
+              fill="var(--gold)" stroke="var(--navy)" stroke-width="1.3"/>
+        <text class="hf-casino__name" x="-20" y="-18.4"
+              font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="3.9" letter-spacing=".14em"
+              fill="var(--navy)" text-anchor="middle">CASINO</text>
+
+        <!-- Window grid: 2 rows of 4. Each window lights up in sequence
+             so the building reads as opening floor by floor. -->
         <g class="hf-casino__windows">
-          <rect class="hf-casino__win hf-casino__win--1" x="-29" y="-13" width="2.5" height="2.5" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--2" x="-24" y="-13" width="2.5" height="2.5" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--3" x="-19" y="-13" width="2.5" height="2.5" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--4" x="-14" y="-13" width="2.5" height="2.5" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--5" x="-29" y="-8"  width="2.5" height="2.5" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--6" x="-24" y="-8"  width="2.5" height="2.5" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--7" x="-19" y="-8"  width="2.5" height="2.5" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--8" x="-14" y="-8"  width="2.5" height="2.5" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--1" x="-29" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--2" x="-24" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--3" x="-19" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--4" x="-14" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--5" x="-29" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--6" x="-24" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--7" x="-19" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect class="hf-casino__win hf-casino__win--8" x="-14" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
         </g>
 
-        <!-- Arched grand entrance with a curved gold awning. -->
-        <path d="M-25 5.5 L-25 0 A 5 4 0 0 1 -15 0 L-15 5.5 Z"
-              fill="var(--accent)" stroke="var(--navy)" stroke-width="1.2" stroke-linejoin="miter"/>
-        <rect x="-22" y="1.5" width="4" height="4" fill="var(--navy)"/>
+        <!-- Arched grand entrance with a curved teal awning + dark
+             door. Slim gold step at the base for the polished look. -->
+        <g class="hf-casino__door">
+          <path d="M-25 4.5 L-25 -1 A 5 4 0 0 1 -15 -1 L-15 4.5 Z"
+                fill="var(--accent)" stroke="var(--navy)" stroke-width="1.2" stroke-linejoin="miter"/>
+          <rect x="-22.5" y=".5" width="5" height="4" fill="var(--navy)"/>
+          <rect x="-22.5" y="2.4" width="5" height=".5" fill="var(--gold)" stroke="none"/>
+        </g>
       </g>
 
       <!-- ===== Casino parking lot in front of the casino. Asphalt
-                strip with 4 painted stripes carving out 3 spots.
-                Three cars arrive sequentially. ===== -->
+                strip with 4 painted stripes carving out 3 spots. The
+                lot, stripes, and arrival arrow paint in together;
+                cars then drive in from the left along the road.
+
+                Each car uses a TWO-GROUP pattern: the OUTER <g> with
+                a transform="translate(x y)" attribute pins its final
+                parking spot, and the INNER .hf-car group runs the
+                CSS slide-in animation. CSS transform on the inner
+                group is composed relative to the outer attribute,
+                so animation and SVG positioning don't fight. ===== -->
       <g class="hf-grow hf-grow--lot">
-        <rect x="-32" y="6" width="24" height="4" fill="var(--ink-4, #d6d6d6)" stroke="var(--navy)" stroke-width=".4" stroke-opacity=".4"/>
-        <g stroke="var(--white)" stroke-width=".7" stroke-opacity=".9">
-          <line x1="-32" y1="6.3" x2="-32" y2="9.7"/>
-          <line x1="-24" y1="6.3" x2="-24" y2="9.7"/>
-          <line x1="-16" y1="6.3" x2="-16" y2="9.7"/>
-          <line x1="-8"  y1="6.3" x2="-8"  y2="9.7"/>
+        <rect x="-34" y="5.5" width="28" height="4.5" rx=".4" fill="var(--ink-5, #c6c8d0)" stroke="var(--navy)" stroke-width=".5" stroke-opacity=".55"/>
+        <g stroke="var(--white)" stroke-width=".8" stroke-opacity=".95">
+          <line x1="-32" y1="5.8" x2="-32" y2="9.7"/>
+          <line x1="-24" y1="5.8" x2="-24" y2="9.7"/>
+          <line x1="-16" y1="5.8" x2="-16" y2="9.7"/>
+          <line x1="-8"  y1="5.8" x2="-8"  y2="9.7"/>
         </g>
       </g>
-      <g class="hf-car hf-car--lot-a" transform="translate(-28 8.5)">
-        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8"/>
-        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
-        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
+      <g transform="translate(-28 8.5)">
+        <g class="hf-car hf-car--lot-a">
+          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8"/>
+          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
+          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
+          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+        </g>
       </g>
-      <g class="hf-car hf-car--lot-b" transform="translate(-20 8.5)">
-        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8"/>
-        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
-        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
+      <g transform="translate(-20 8.5)">
+        <g class="hf-car hf-car--lot-b">
+          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8"/>
+          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
+          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
+          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+        </g>
       </g>
-      <g class="hf-car hf-car--lot-c" transform="translate(-12 8.5)">
-        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--purple)" stroke="var(--navy)" stroke-width=".8"/>
-        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--purple)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
-        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
+      <g transform="translate(-12 8.5)">
+        <g class="hf-car hf-car--lot-c">
+          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--purple)" stroke="var(--navy)" stroke-width=".8"/>
+          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--purple)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
+          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
+          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+        </g>
       </g>
 
-      <!-- ===== Drive-through gas station fills the big empty space
-                on the upper-right side of the parcel. Wide gold
-                canopy on two posts, two pumps under the canopy, a
-                convenience store tucked behind the canopy, and a car
-                pulling through. Each piece is its own group so they
-                snap in as construction chunks, not all at once. ===== -->
-      <!-- Convenience store behind the canopy. -->
-      <g class="hf-build hf-build--gas-store">
-        <rect x="8" y="-22" width="14" height="13" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-        <rect x="8" y="-23.6" width="14" height="2" fill="var(--accent)" stroke="var(--navy)" stroke-width="1"/>
-        <rect x="14" y="-15" width="2.5" height="6" fill="var(--navy)" stroke="none"/>
-        <rect x="9.5" y="-19" width="3" height="2.5" fill="var(--gold)" stroke="none"/>
-        <rect x="18" y="-19" width="3" height="2.5" fill="var(--gold)" stroke="none"/>
+      <!-- ===== Drive-through gas station on the upper-right side of
+                the parcel. Wide gold canopy on two posts, two fuel
+                pumps under the canopy, a car driving through. No
+                separate convenience-store building — the canopy IS
+                the gas station. ===== -->
+      <!-- Concrete pad under the canopy + pump island, painted black
+           with a subtle stripe so the surface reads as "gas station"
+           apron, distinct from the asphalt road below. -->
+      <g class="hf-build hf-build--gas-pad">
+        <rect x="10" y="-3" width="30" height="13" rx=".5" fill="var(--ink-5, #c6c8d0)" stroke="var(--navy)" stroke-width=".5" stroke-opacity=".55"/>
       </g>
-      <!-- Canopy: wide flat roof on two posts, GAS sign on the
-           front edge. Cars drive under it to refuel. -->
+      <!-- Canopy: wide flat gold roof on two slim posts. GAS sign
+           runs along the front edge. -->
       <g class="hf-build hf-build--gas-canopy">
-        <line x1="26" y1="8" x2="26" y2="-4" stroke="var(--navy)" stroke-width="1.3"/>
-        <line x1="38" y1="8" x2="38" y2="-4" stroke="var(--navy)" stroke-width="1.3"/>
-        <rect x="24" y="-6" width="16" height="3" fill="var(--gold)" stroke="var(--navy)" stroke-width="1.2" stroke-linejoin="miter"/>
-        <text x="32" y="-3.8" font-family="Inter, sans-serif" font-weight="800" font-size="2.4" letter-spacing=".12em" fill="var(--navy)" text-anchor="middle">GAS</text>
+        <rect x="9" y="-9" width="32" height="4" rx=".4" fill="var(--gold)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
+        <text x="25" y="-6.1" font-family="Inter, sans-serif" font-weight="800" font-size="3" letter-spacing=".18em" fill="var(--navy)" text-anchor="middle">GAS</text>
+        <line x1="12" y1="-5" x2="12" y2="10" stroke="var(--navy)" stroke-width="1.3"/>
+        <line x1="38" y1="-5" x2="38" y2="10" stroke="var(--navy)" stroke-width="1.3"/>
       </g>
-      <!-- Two fuel pumps under the canopy. -->
+      <!-- Two fuel pumps standing on the concrete pad between the
+           posts. Each pump is a small navy column with a gold cap
+           (the screen / nozzle holder). -->
       <g class="hf-build hf-build--gas-pumps">
-        <rect x="28" y="3" width="1.8" height="5" fill="var(--ink-3)" stroke="var(--navy)" stroke-width=".7"/>
-        <rect x="34.2" y="3" width="1.8" height="5" fill="var(--ink-3)" stroke="var(--navy)" stroke-width=".7"/>
-      </g>
-      <!-- Car driving through the canopy on its way to the pump. -->
-      <g class="hf-car hf-car--gas" transform="translate(32 5.5)">
-        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8"/>
-        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
-        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
-      </g>
-
-      <!-- ===== Overflow car park where the old gas station used to
-                sit. Asphalt strip below the road on the right with
-                three painted stripes carving out two spots. Two cars
-                park here as the parcel densifies. ===== -->
-      <g class="hf-grow hf-grow--park2">
-        <rect x="16" y="16" width="20" height="4" fill="var(--ink-4, #d6d6d6)" stroke="var(--navy)" stroke-width=".4" stroke-opacity=".4"/>
-        <g stroke="var(--white)" stroke-width=".7" stroke-opacity=".9">
-          <line x1="16" y1="16.3" x2="16" y2="19.7"/>
-          <line x1="26" y1="16.3" x2="26" y2="19.7"/>
-          <line x1="36" y1="16.3" x2="36" y2="19.7"/>
+        <g>
+          <rect x="17.2" y="2" width="2.6" height="6" rx=".3" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
+          <rect x="17.2" y="2" width="2.6" height="1.5" fill="var(--gold)" stroke="var(--navy)" stroke-width=".7"/>
+        </g>
+        <g>
+          <rect x="30.2" y="2" width="2.6" height="6" rx=".3" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
+          <rect x="30.2" y="2" width="2.6" height="1.5" fill="var(--gold)" stroke="var(--navy)" stroke-width=".7"/>
         </g>
       </g>
-      <g class="hf-car hf-car--park-a" transform="translate(21 18.5)">
-        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8"/>
-        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
-        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
-      </g>
-      <g class="hf-car hf-car--park-b" transform="translate(31 18.5)">
-        <rect x="-3" y="-1.5" width="6" height="2.5" rx=".6" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8"/>
-        <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-        <circle cx="-1.8" cy="1.1" r=".8" fill="var(--navy)"/>
-        <circle cx="1.8"  cy="1.1" r=".8" fill="var(--navy)"/>
+      <!-- Car driving through the canopy: enters from the right, ends
+           up parked between the two pumps. Two-group pattern again so
+           the slide-in animation composes with the outer position. -->
+      <g transform="translate(25 6)">
+        <g class="hf-car hf-car--gas">
+          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8"/>
+          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
+          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
+          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+        </g>
       </g>
 
       <!-- ===== Dollar signs trickling up. Eight individual $
@@ -295,8 +307,8 @@
         <text class="hf-dollar hf-dollar--4" x="22"  y="-6"  font-size="6.5" fill="var(--gold)">$</text>
         <text class="hf-dollar hf-dollar--5" x="-14" y="0"   font-size="4.5" fill="var(--gold)">$</text>
         <text class="hf-dollar hf-dollar--6" x="2"   y="-8"  font-size="5"   fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--7" x="28"  y="14"  font-size="5"   fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--8" x="32"  y="10"  font-size="6"   fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--7" x="20"  y="2"   font-size="5"   fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--8" x="32"  y="0"   font-size="6"   fill="var(--gold)">$</text>
       </g>
     </g>
   </svg>
@@ -548,110 +560,109 @@
   }
 
   /* ---------- Station 3: empty parcel → chunky construction ----------
-     The parcel starts blank (just the outline + road). Buildings,
-     lots, and cars chunk in as construction phases. Every animated
-     piece uses animation-fill-mode: backwards so the element is
-     hidden BEFORE its delay elapses — otherwise CSS would render it
-     in its "final" state until the animation kicks in, making the
-     casino appear pre-built on page load.
+     The parcel starts blank (just the outline + road). Three clean
+     phases play in sequence; every piece uses
+     animation-fill-mode: backwards so it stays hidden before its
+     delay elapses (otherwise CSS would render it in its final state
+     until the animation kicks in, and the parcel would look
+     pre-built on page load).
 
-     7s master cycle, phases:
-       3.80s  Casino body chunks in
-       4.10s  Marquee + CASINO lettering snap in
-       4.45s  Windows light up one by one
-       5.00s  Casino parking lot snaps in
-       5.15s  Three casino-lot cars arrive
-       5.65s  Convenience store snaps in
-       5.85s  Drive-through canopy snaps in
-       6.05s  Two fuel pumps snap in
-       6.20s  Car pulls through the canopy
-       6.30s  Overflow car park snaps in
-       6.45s  Two overflow-park cars arrive
-       6.55s  Dollar signs trickle up
-       7.00s  Cycle resets — parcel returns to blank */
+     Master cycle 7s:
+       Phase 1  CASINO BUILDS (3.80s – 4.95s)
+         3.80s  Foundation slab appears
+         3.95s  Body rises into place
+         4.10s  Marquee snaps on + CASINO lettering glows in
+         4.45s  Windows light up one by one across two rows
+         4.80s  Entrance + awning pop
+       Phase 2  PARKING LOT + CARS (4.95s – 5.85s)
+         4.95s  Asphalt pad + painted stripes paint in
+         5.20s  First car drives in from the left
+         5.40s  Second car follows
+         5.60s  Third car follows
+       Phase 3  GAS STATION (5.85s – 6.85s)
+         5.85s  Concrete pad lays down
+         5.95s  Canopy + posts + GAS sign drop in
+         6.15s  Two fuel pumps pop in
+         6.40s  Car drives in from the right and stops at the pump
+       Tail (6.85s – 7.00s)
+         6.85s  Dollar signs trickle up; cycle resets at 7.00s. */
 
   /* Shared base for every "chunk-in" piece. backwards fill mode is
      what makes the parcel start empty. */
   .hf-imp__src,
+  .hf-casino__base,
+  .hf-casino__body,
+  .hf-casino__marquee,
+  .hf-casino__name,
+  .hf-casino__win,
+  .hf-casino__door,
   .hf-build,
   .hf-grow,
   .hf-car {
     transform-box: fill-box;
     transform-origin: center;
-    opacity: 0;
     animation-duration: 7s;
     animation-iteration-count: infinite;
     animation-fill-mode: backwards;
   }
 
-  /* Casino body chunks in with a snappy scale-bounce. */
+  /* Casino: the outer .hf-imp__src group is always present (its
+     children animate individually). It carries the cycle-out fade
+     so the whole casino disappears together at the end. */
   .hf-imp__src {
+    opacity: 1;
+    animation-name: hf-cycle-out;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+  }
+
+  /* Casino sub-chunks. Each piece pops in with a snappy scale-bounce
+     so the building reads as constructing in stages. */
+  .hf-casino__base,
+  .hf-casino__body,
+  .hf-casino__door {
+    opacity: 0;
     animation-name: hf-chunk;
     animation-timing-function: cubic-bezier(.22, 1.4, .4, 1);
-    animation-delay: 3.8s;
   }
+  .hf-casino__base { animation-delay: 3.80s; }
+  .hf-casino__body { animation-delay: 3.95s; }
+  .hf-casino__door { animation-delay: 4.80s; }
 
-  /* Drive-through gas station: store / canopy / pumps each snap in
-     as their own construction chunk. */
-  .hf-build {
-    animation-name: hf-chunk;
-    animation-timing-function: cubic-bezier(.22, 1.4, .4, 1);
-  }
-  .hf-build--gas-store  { animation-delay: 5.65s; }
-  .hf-build--gas-canopy { animation-delay: 5.85s; }
-  .hf-build--gas-pumps  { animation-delay: 6.05s; }
-
-  /* Slabs (parking lot asphalt + stripes) fade in together. */
-  .hf-grow {
-    animation-name: hf-slab;
-    animation-timing-function: ease-out;
-  }
-  .hf-grow--lot   { animation-delay: 5.00s; }
-  .hf-grow--park2 { animation-delay: 6.30s; }
-
-  /* Cars: opacity-only fade-in so we don't clobber each car's SVG
-     transform="translate(...)" attribute. */
-  .hf-car {
-    animation-name: hf-car-arrive;
-    animation-timing-function: ease-out;
-  }
-  .hf-car--lot-a  { animation-delay: 5.15s; }
-  .hf-car--lot-b  { animation-delay: 5.30s; }
-  .hf-car--lot-c  { animation-delay: 5.45s; }
-  .hf-car--gas    { animation-delay: 6.20s; }
-  .hf-car--park-a { animation-delay: 6.45s; }
-  .hf-car--park-b { animation-delay: 6.55s; }
-
-  /* Casino marquee fills gold once the body is up. Driven separately
-     from the body so the colour change reads as "lights coming on". */
+  /* Marquee fills gold once the body is up. Driven separately so the
+     colour change reads as "lights coming on". */
   .hf-casino__marquee {
-    animation: hf-casino-marquee 7s ease-in-out infinite;
-    animation-delay: 4.1s;
-    animation-fill-mode: backwards;
+    opacity: 0;
     fill: var(--ink-3);
+    animation-name: hf-marquee-light;
+    animation-timing-function: ease-out;
+    animation-delay: 4.10s;
   }
-  @keyframes hf-casino-marquee {
-    0%, 4%   { fill: var(--ink-3); }
-    8%, 85%  { fill: var(--gold);  }
-    92%, 100% { fill: var(--ink-3); }
+  @keyframes hf-marquee-light {
+    0%       { opacity: 0; fill: var(--ink-3); }
+    4%       { opacity: 1; fill: var(--ink-3); }
+    8%, 85%  { opacity: 1; fill: var(--gold);  }
+    92%, 100% { opacity: 0; fill: var(--ink-3); }
   }
   .hf-casino__name {
     opacity: 0;
-    animation: hf-casino-name 7s ease-in-out infinite;
-    animation-delay: 4.1s;
-    animation-fill-mode: backwards;
+    animation-name: hf-fade-hold;
+    animation-timing-function: ease-out;
+    animation-delay: 4.20s;
   }
-  @keyframes hf-casino-name {
-    0%, 5%   { opacity: 0; }
-    10%, 85% { opacity: 1; }
+  @keyframes hf-fade-hold {
+    0%, 4%   { opacity: 0; }
+    8%, 85%  { opacity: 1; }
     92%, 100% { opacity: 0; }
   }
 
-  /* Windows light up in sequence as the casino opens. 8 windows. */
+  /* Windows light up in sequence as the casino opens floor by floor.
+     8 windows, staggered. */
   .hf-casino__win {
-    animation: hf-casino-light 7s ease-in-out infinite;
-    animation-fill-mode: backwards;
+    opacity: 0;
     fill: var(--ink-3);
+    animation-name: hf-window-light;
+    animation-timing-function: ease-out;
   }
   .hf-casino__win--1 { animation-delay: 4.45s; }
   .hf-casino__win--2 { animation-delay: 4.55s; }
@@ -661,28 +672,81 @@
   .hf-casino__win--6 { animation-delay: 4.60s; }
   .hf-casino__win--7 { animation-delay: 4.70s; }
   .hf-casino__win--8 { animation-delay: 4.80s; }
-  @keyframes hf-casino-light {
-    0%, 6%   { fill: var(--ink-3); }
-    10%, 85% { fill: var(--gold);  }
-    92%, 100% { fill: var(--ink-3); }
+  @keyframes hf-window-light {
+    0%       { opacity: 0; fill: var(--ink-3); }
+    5%       { opacity: 1; fill: var(--ink-3); }
+    10%, 85% { opacity: 1; fill: var(--gold);  }
+    92%, 100% { opacity: 0; fill: var(--ink-3); }
+  }
+
+  /* Drive-through gas station chunks: pad, canopy, pumps. Each pops
+     in with the same snappy scale-bounce as the casino chunks. */
+  .hf-build {
+    opacity: 0;
+    animation-name: hf-chunk;
+    animation-timing-function: cubic-bezier(.22, 1.4, .4, 1);
+  }
+  .hf-build--gas-pad    { animation-delay: 5.85s; }
+  .hf-build--gas-canopy { animation-delay: 5.95s; }
+  .hf-build--gas-pumps  { animation-delay: 6.15s; }
+
+  /* Slabs (the casino parking lot) fade in together. */
+  .hf-grow {
+    opacity: 0;
+    animation-name: hf-slab;
+    animation-timing-function: ease-out;
+  }
+  .hf-grow--lot { animation-delay: 4.95s; }
+
+  /* Cars use a two-group pattern: the OUTER <g> with
+     transform="translate(x y)" pins each car's final position, the
+     INNER .hf-car carries the slide-in animation. CSS transform on
+     the inner group composes with the outer attribute, so the car
+     can slide in from off-parcel without losing its parking spot.
+
+     Casino-lot cars enter from the LEFT (along the road), driving
+     to the right into their spots. Gas-station car enters from the
+     RIGHT (off-parcel) and pulls left into the canopy. */
+  .hf-car {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(.2, .8, .25, 1);
+  }
+  .hf-car--lot-a,
+  .hf-car--lot-b,
+  .hf-car--lot-c { animation-name: hf-car-drive-right; }
+  .hf-car--gas { animation-name: hf-car-drive-left; }
+  .hf-car--lot-a { animation-delay: 5.20s; }
+  .hf-car--lot-b { animation-delay: 5.40s; }
+  .hf-car--lot-c { animation-delay: 5.60s; }
+  .hf-car--gas   { animation-delay: 6.40s; }
+  @keyframes hf-car-drive-right {
+    0%        { opacity: 0; transform: translateX(-30px); }
+    4%        { opacity: 1; }
+    14%, 80%  { opacity: 1; transform: translateX(0); }
+    90%, 100% { opacity: 0; transform: translateX(0); }
+  }
+  @keyframes hf-car-drive-left {
+    0%        { opacity: 0; transform: translateX(28px); }
+    4%        { opacity: 1; }
+    14%, 80%  { opacity: 1; transform: translateX(0); }
+    90%, 100% { opacity: 0; transform: translateX(0); }
   }
 
   /* ---- Shared keyframes for the chunky construction ---- */
   @keyframes hf-chunk {
-    0%       { opacity: 0; transform: scale(.4); }
-    5%       { opacity: 1; transform: scale(1.12); }
-    10%, 88% { opacity: 1; transform: scale(1); }
-    96%, 100% { opacity: 0; transform: scale(.4); }
+    0%       { opacity: 0; transform: scale(.45); }
+    4%       { opacity: 1; transform: scale(1.10); }
+    8%, 88%  { opacity: 1; transform: scale(1); }
+    96%, 100% { opacity: 0; transform: scale(.45); }
   }
   @keyframes hf-slab {
     0%        { opacity: 0; }
-    5%, 88%   { opacity: 1; }
+    4%, 88%   { opacity: 1; }
     96%, 100% { opacity: 0; }
   }
-  @keyframes hf-car-arrive {
-    0%        { opacity: 0; }
-    6%, 80%   { opacity: 1; }
-    90%, 100% { opacity: 0; }
+  @keyframes hf-cycle-out {
+    0%, 88%   { opacity: 1; }
+    96%, 100% { opacity: 0; }
   }
 
   /* Dollar signs trickle up from the new development. The stream
@@ -713,8 +777,9 @@
     .hf-in, .hf-out, .hf-out__row,
     .hf-cedar__tree, .hf-bar, .hf-line,
     .hf-loading, .hf-load-fill, .hf-load-dot, .hf-baseline,
-    .hf-imp__src, .hf-build, .hf-grow, .hf-car, .hf-dollar,
+    .hf-imp__src, .hf-casino__base, .hf-casino__body, .hf-casino__door,
     .hf-casino__marquee, .hf-casino__name, .hf-casino__win,
+    .hf-build, .hf-grow, .hf-car, .hf-dollar,
     .hero-flow__label { animation: none; }
     .hf-tick { opacity: 0; }
     .hf-in    { opacity: 1; transform: none; }
@@ -723,10 +788,11 @@
     .hf-line  { opacity: 1; }
     .hf-loading  { opacity: 0; }
     .hf-baseline { opacity: .4; }
-    .hf-imp__src, .hf-build, .hf-grow, .hf-car { opacity: 1; transform: none; }
-    .hf-casino__marquee { fill: var(--gold); }
+    .hf-imp__src, .hf-casino__base, .hf-casino__body, .hf-casino__door,
+    .hf-build, .hf-grow, .hf-car { opacity: 1; transform: none; }
+    .hf-casino__marquee { opacity: 1; fill: var(--gold); }
     .hf-casino__name    { opacity: 1; }
-    .hf-casino__win { fill: var(--gold); }
+    .hf-casino__win { opacity: 1; fill: var(--gold); }
     .hf-dollar { opacity: 0; }
     .hero-flow__label { color: var(--ink-3); }
   }
