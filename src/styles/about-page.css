@@ -439,14 +439,6 @@
   border-color: var(--accent);
   background: var(--accent-rgba-08);
 }
-.person-card__summary {
-  font-family: var(--font-sans);
-  font-size: .9rem;
-  line-height: 1.45;
-  color: var(--ink-2);
-  font-weight: 400;
-  margin-top: .35rem;
-}
 .person-card__arrow {
   grid-column: 3;
   grid-row: 1;
@@ -480,7 +472,6 @@
   .about-page__grid { grid-template-columns: 1fr; }
   .person-card__link { grid-template-columns: 48px 1fr 28px; column-gap: .85rem; }
   .person-card__avatar { width: 48px; height: 48px; font-size: .95rem; }
-  .person-card__summary { font-size: .86rem; }
   .person-card__links { padding-left: calc(48px + .85rem); }
 }
 
@@ -524,7 +515,6 @@
   .about-page__kicker { font-size: .8rem; }
   .person-card__name { font-size: 1.2rem; }
   .person-card__title { font-size: .74rem; }
-  .person-card__summary { font-size: 1rem; }
   .area-card__name { font-size: 1.2rem; }
   .area-card__roster { font-size: .96rem; }
 }
