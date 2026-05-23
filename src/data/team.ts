@@ -282,13 +282,13 @@ export const TEAM_BY_GROUP: Record<PersonGroup, Person[]> = {
 
 /**
  * Featured work — selected peer-reviewed and policy research authored
- * by people on the team. Surfaced on /about as a "research" card grid
- * and as ScholarlyArticle / Book JSON-LD so the team's credibility is
- * legible to both visitors and search.
+ * by people on the team. Surfaced on each person's /team/<slug> page
+ * (their own work only) and as ScholarlyArticle / Book JSON-LD so the
+ * team's credibility is legible to both visitors and search.
  *
  * `authors` lists every author in published order; entries with a
- * `slug` matching a TEAM person render as a link to that person's
- * card and resolve to their Person @id in the structured data.
+ * `slug` matching a TEAM person resolve to that person's page and
+ * Person @id in the structured data.
  */
 export interface Publication {
   slug: string;
@@ -362,3 +362,12 @@ export const PUBLICATIONS: Publication[] = [
     url: 'https://pubs.aeaweb.org/doi/pdf/10.1257/aeri.20240353',
   },
 ];
+
+/** Publications authored by each team slug, in listed order. Used to
+ *  surface a person's own selected work on their /team/<slug> page. */
+export const PUBLICATIONS_BY_AUTHOR: Record<string, Publication[]> = Object.fromEntries(
+  TEAM.map((p) => [p.slug, PUBLICATIONS.filter((pub) => pub.authors.some((a) => a.slug === p.slug))]),
+);
+
+/** Canonical URL path for a person's profile page. */
+export const personPath = (slug: string): string => `/team/${slug}`;

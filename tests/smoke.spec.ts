@@ -112,6 +112,19 @@ test('about page renders every team and advisor card plus working areas', async 
   await expect(page.locator('.area-card')).toHaveCount(5);
   // Founders carry a Lumecon email on the card; advisors don't.
   await expect(page.locator('#elijah-moreno .person-card__email')).toBeAttached();
+  // Each card links to that person's own /team/<slug> page.
+  await expect(page.locator('#elijah-moreno .person-card__link')).toHaveAttribute('href', '/team/elijah-moreno');
+});
+
+test('individual team-member pages render the full bio off the about page', async ({ page }) => {
+  await page.goto('/team/elijah-moreno', { waitUntil: 'domcontentloaded' });
+  await expect(page).toHaveTitle(/Elijah Moreno \| Lumecon/i);
+  await expect(page.locator('h1')).toContainText('Elijah Moreno');
+  await expect(page.locator('.person-page__back').first()).toBeVisible();
+  // The long bio that used to live on the about card now lives here.
+  await expect(page.locator('.person-page__bio p').first()).toContainText(/Cornell|Lumecon/);
+  // A researcher founder surfaces their selected work (the databook).
+  await expect(page.locator('.person-pub').first()).toBeVisible();
 });
 
 test('pricing platform pick reveals the three tier cards', async ({ page }) => {

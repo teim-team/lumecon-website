@@ -229,11 +229,10 @@ const jsonLd = [
     background: var(--white);
     padding: clamp(6rem, 11vw, 8rem) 0 clamp(4rem, 8vw, 6rem);
   }
-  /* Each major join section reads as a self-contained "page": at
-     least one viewport tall, vertically centered content, snap-
-     aligned so the visitor lands cleanly on the next chunk. The
-     global html scroll-snap-type: y proximity (in global.css) does
-     the snapping; these blocks supply the snap targets. */
+  /* Each major join section is a comfortably padded band that sizes
+     to its content. (Earlier these were forced to 100dvh and centered,
+     which left a full viewport of white space whenever a section's
+     copy was short — so the fixed height and scroll-snap were dropped.) */
   .join-hero,
   .join-transition,
   .join-team,
@@ -241,12 +240,10 @@ const jsonLd = [
   .join-apply {
     max-width: 1200px;
     margin: 0 auto;
-    padding: clamp(3rem, 6vw, 4.5rem) var(--container-pad);
-    min-block-size: 100dvh;
+    padding: clamp(2.6rem, 5vw, 4rem) var(--container-pad);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    scroll-snap-align: start;
   }
   /* Alternate-section backgrounds (cream on the even sections) so
      the page reads as five distinct "chapters" rather than one

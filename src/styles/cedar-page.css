@@ -147,17 +147,31 @@
   margin: 0 auto;
   padding: clamp(2.6rem, 5vw, 3.8rem) var(--container-pad);
 }
+/* Two columns on desktop: the explainer sits left, the chat box docks
+   right so it isn't stretched the full page width. Stacks on tablet. */
+@media (min-width: 901px) {
+  .cedar-page__try {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  .cedar-page__try-intro { position: sticky; top: 88px; }
+  .cedar-page__chat-panel { margin-top: 0; }
+}
 .cedar-page__deck {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.55;
   color: var(--ink-2);
   font-weight: 400;
-  margin: 0 0 1.8rem;
-  max-width: 60ch;
+  margin: 0;
+  max-width: 48ch;
 }
 .cedar-page__chat-panel {
-  max-width: 760px;
+  width: 100%;
+  max-width: 620px;
+  margin-top: 1.8rem;
   border: 1px solid var(--rule);
   border-radius: 14px;
   background: var(--white);
