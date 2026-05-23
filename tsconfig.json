@@ -1,3 +1,11 @@
 {
-  "extends": "astro/tsconfigs/strict"
+  // Astro's strict preset already sets include to
+  // [".astro/types.d.ts", "**/*"] and exclude to ["dist"], so src/
+  // AND tests/ are type-checked and Astro's generated types are
+  // picked up. Do NOT replace `include` with ["src","tests"] — that
+  // drops the .astro/types.d.ts reference and breaks Astro typing.
+  // We only widen `exclude` to keep tsc / `astro check` out of the
+  // gitignored test + build artifact directories.
+  "extends": "astro/tsconfigs/strict",
+  "exclude": ["dist", "test-results", "playwright-report", ".lighthouseci"]
 }
