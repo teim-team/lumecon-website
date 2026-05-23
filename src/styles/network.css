@@ -1,6 +1,6 @@
-/* NetworkSection — federated-learning band on the homepage.
-   Two-column on desktop (text left, diagram right); single column
-   on mobile. Sits between ProductsSection and HiringBanner. */
+/* NetworkSection — federated-learning band, lives at the bottom of
+   the /map page (below the workspace + explainers). Two-column on
+   desktop (text left, diagram right); single column on mobile. */
 
 .network {
   background: var(--cream);
