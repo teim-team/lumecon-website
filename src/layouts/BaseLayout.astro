@@ -45,7 +45,7 @@ const ogIA = ogImageAlt || 'Lumecon: economic impact analysis software for gover
 <meta name="copyright" content="Lumecon Inc.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="format-detection" content="telephone=no">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="light dark">
 <link rel="canonical" href={canonical}>
 <!-- Content Security Policy. Static-host friendly (meta-tag enforced).
      'unsafe-inline' on script/style is required because Astro inlines
@@ -71,7 +71,8 @@ const ogIA = ogImageAlt || 'Lumecon: economic impact analysis software for gover
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#0FB5A5">
+<meta name="theme-color" content="#0FB5A5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1530" media="(prefers-color-scheme: dark)">
 <meta name="msapplication-TileColor" content="#0FB5A5">
 <meta name="msapplication-TileImage" content="/android-chrome-192x192.png">
 <meta name="apple-mobile-web-app-title" content="Lumecon">
