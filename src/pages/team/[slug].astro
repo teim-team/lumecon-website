@@ -48,9 +48,10 @@ if (p.alumniOf?.length) personNode.alumniOf = p.alumniOf.map((n) => ({ "@type": 
 if (p.prevAffiliations?.length) personNode.affiliation = p.prevAffiliations.map((n) => ({ "@type": "Organization", "name": n }));
 
 const pubs = p.publications ?? [];
-/* The person's name as it appears in author lists (no ", PhD"), used
-   to bold their entry within each publication's author line. */
-const meName = p.name.replace(/,\s*PhD$/i, '');
+/* The person's name as it appears in author lists (without any
+   credential suffix like ", PhD" / ", MPP"), used to bold their entry
+   within each publication's author line. */
+const meName = p.name.replace(/,\s*(PhD|MPP)$/i, '');
 const boldMe = (authors: string) =>
   authors.replaceAll(meName, `<strong class="person-pub__me">${meName}</strong>`);
 
