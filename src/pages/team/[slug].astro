@@ -3,22 +3,15 @@
  * /team/<slug> — one succinct page per person.
  *
  * The /about page lists everyone as a compact card and links here for
- * the full story, so the roster stays scannable and the long-form bio
- * lives on its own page. Education, prior roles, the areas the person
- * works on, and (for the researchers) their selected publications all
- * render here, derived from src/data/team.ts.
+ * the bio. The page shows only the person's own bio (summary + the
+ * paragraphs from src/data/team.ts) and their contact / profile links
+ * — nothing beyond what their bio already said.
  */
 import { site } from '../../config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
-import {
-  TEAM,
-  WORKING_AREAS,
-  PUBLICATIONS_BY_AUTHOR,
-  personPath,
-  type Person,
-} from '../../data/team';
+import { TEAM, personPath, type Person } from '../../data/team';
 import '../../styles/global.css';
 import '../../styles/nav.css';
 import '../../styles/footer.css';
@@ -33,17 +26,6 @@ const { person } = Astro.props;
 const p = person;
 
 const groupLabel = p.group === 'advisor' ? 'Advisor & Contributor' : 'Team';
-const pubs = PUBLICATIONS_BY_AUTHOR[p.slug] ?? [];
-
-/* Areas this person touches, with their role in each, linking back to
-   the matching disclosure on the /about "How we work" section. */
-const areas = WORKING_AREAS.map((area) => {
-  let role: string | null = null;
-  if (area.leadSlug === p.slug) role = 'Lead';
-  else if ((area.advisorySlugs ?? []).includes(p.slug)) role = 'Advisory';
-  else if ((area.contributorSlugs ?? []).includes(p.slug)) role = 'Contributor';
-  return role ? { name: area.name, slug: area.slug, role } : null;
-}).filter(Boolean) as { name: string; slug: string; role: string }[];
 
 const linkedinIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>`;
 const scholarIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v3.92L12 21l7-3.9v-3.92L12 17l-7-3.82z"/></svg>`;
@@ -76,19 +58,6 @@ const jsonLd = [
       { "@type": "ListItem", "position": 3, "name": p.name, "item": personUrl },
     ],
   },
-  ...pubs.map((pub) => ({
-    "@context": "https://schema.org",
-    "@type": pub.type === 'book' ? "Book" : "ScholarlyArticle",
-    "name": pub.title,
-    "url": pub.url,
-    "datePublished": pub.year,
-    "author": pub.authors.map((a) =>
-      a.slug
-        ? { "@type": "Person", "@id": `${site.url}${personPath(a.slug)}`, "name": a.name }
-        : { "@type": "Person", "name": a.name }
-    ),
-    "publisher": { "@type": "Organization", "name": pub.venue },
-  })),
 ];
 ---
 <BaseLayout
@@ -130,60 +99,6 @@ const jsonLd = [
       <div class="person-page__bio">
         {p.bio.map((para) => <p>{para}</p>)}
       </div>
-
-      {(p.alumniOf?.length || p.prevAffiliations?.length) && (
-        <div class="person-page__facts">
-          {p.alumniOf?.length && (
-            <section class="person-fact">
-              <h2 class="person-fact__head">Education</h2>
-              <ul class="person-fact__list">
-                {p.alumniOf.map((n) => <li>{n}</li>)}
-              </ul>
-            </section>
-          )}
-          {p.prevAffiliations?.length && (
-            <section class="person-fact">
-              <h2 class="person-fact__head">Previously</h2>
-              <ul class="person-fact__list">
-                {p.prevAffiliations.map((n) => <li>{n}</li>)}
-              </ul>
-            </section>
-          )}
-        </div>
-      )}
-
-      {areas.length > 0 && (
-        <section class="person-page__areas">
-          <h2 class="person-page__sub">Works on</h2>
-          <ul class="person-areas">
-            {areas.map((a) => (
-              <li>
-                <a class="person-area" href={`/about#${a.slug}`}>
-                  <span class="person-area__role">{a.role}</span>
-                  <span class="person-area__name">{a.name}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {pubs.length > 0 && (
-        <section class="person-page__work">
-          <h2 class="person-page__sub">Selected work</h2>
-          <ul class="person-pubs">
-            {pubs.map((pub) => (
-              <li class="person-pub">
-                <p class="person-pub__venue">{pub.venue} &middot; {pub.year}</p>
-                <h3 class="person-pub__title">
-                  <a href={pub.url} target="_blank" rel="noopener noreferrer">{pub.title}</a>
-                </h3>
-                <p class="person-pub__summary">{pub.summary}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
 
       <a class="person-page__back person-page__back--bottom" href="/about">
         <span aria-hidden="true">&larr;</span> Back to the team
