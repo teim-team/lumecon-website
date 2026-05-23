@@ -15,11 +15,18 @@
  *
  * Team data lives in src/data/team.ts. Adding a person is one
  * entry there, not five edits across the markup.
+ *
+ * SEO: page emits AboutPage + Person + BreadcrumbList JSON-LD
+ * derived from the same team data, so Google's knowledge graph
+ * connects each person to their alumniOf institutions and prior
+ * affiliations (Fed Minneapolis CICD, NCAI, Modsy, Chime, etc.)
+ * without us hand-writing structured data twice.
  */
+import { site } from '../config';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { TEAM_BY_GROUP } from '../data/team';
+import { TEAM, TEAM_BY_GROUP, type Person } from '../data/team';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -27,14 +34,74 @@ import '../styles/about-page.css';
 
 const team = TEAM_BY_GROUP.team;
 const advisors = TEAM_BY_GROUP.advisor;
+
+/* ---------- JSON-LD ---------- */
+/* Build a schema.org Person entry per team member. alumniOf and
+   affiliation arrays power entity disambiguation in search: when
+   someone queries "Elijah Moreno Cornell" or "Laurel Wheeler
+   Federal Reserve", the connection is explicit in the structured
+   data rather than buried in prose. */
+function personJsonLd(p: Person) {
+  const personUrl = `${site.url}/about#${p.slug}`;
+  const node: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": personUrl,
+    "name": p.name,
+    "url": personUrl,
+    "jobTitle": p.title,
+    "description": p.summary,
+    "worksFor": { "@type": "Organization", "@id": `${site.url}#org`, "name": site.legalName },
+  };
+  if (p.alumniOf && p.alumniOf.length) {
+    node.alumniOf = p.alumniOf.map((n) => ({ "@type": "EducationalOrganization", "name": n }));
+  }
+  if (p.prevAffiliations && p.prevAffiliations.length) {
+    node.affiliation = p.prevAffiliations.map((n) => ({ "@type": "Organization", "name": n }));
+  }
+  return node;
+}
+
+const founders = TEAM.filter((p) => p.founder);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "url": `${site.url}/about`,
+    "name": "About Lumecon",
+    "description": "Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. The team builds economic impact analysis software for governments, tribal nations, foundations, and community-serving organizations.",
+    "isPartOf": { "@type": "WebSite", "@id": `${site.url}#website` },
+    "about": { "@type": "Organization", "@id": `${site.url}#org` },
+    "mainEntity": {
+      "@type": "Organization",
+      "@id": `${site.url}#org`,
+      "name": site.legalName,
+      "url": site.url,
+      "founder": founders.map((p) => ({ "@type": "Person", "@id": `${site.url}/about#${p.slug}`, "name": p.name })),
+      "employee": team.map((p) => ({ "@type": "Person", "@id": `${site.url}/about#${p.slug}`, "name": p.name })),
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": site.url },
+      { "@type": "ListItem", "position": 2, "name": "About", "item": `${site.url}/about` },
+    ],
+  },
+  ...TEAM.map(personJsonLd),
+];
 ---
 <BaseLayout
   title="About | Lumecon"
-  description="Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation, to make economic impact analysis accessible, transparent, and useful for governments, tribal nations, foundations, and community-serving organizations. Built with research, public policy, software, data infrastructure, and responsible AI."
+  description="Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation, to make economic impact analysis accessible, transparent, and useful for governments, tribal nations, foundations, and community-serving organizations. Team: Cornell, Dartmouth, Duke, Oxford, MIT, Wisconsin–Madison, Maryland, Illinois Urbana-Champaign. Prior experience at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), National Congress of American Indians, Federal Reserve Bank of Philadelphia, Federal Reserve Board of Governors, Modsy, Chime."
   canonical="https://lumecon.ai/about"
-  keywords="Lumecon team, Lumecon founders, Elijah Moreno, Michael Moreno, Coastal Band of the Chumash Nation, Cornell eHub, Human Spirit Entrepreneurship Fellows, Cornell Law Entrepreneurship Law Clinic, tribal economic impact, economic impact analysis software"
+  keywords="Lumecon team, Lumecon founders, Elijah Moreno, Michael Moreno, Coastal Band of the Chumash Nation, Center for Indian Country Development, CICD, Federal Reserve Bank of Minneapolis, Wilma Mankiller Fellow, National Congress of American Indians, Taylor Policy Group, Cornell eHub, Human Spirit Entrepreneurship Fellows, Cornell Law Entrepreneurship Law Clinic, Laurel Wheeler, Kaylyn Lee, Isabella Agnes, Francesca Agnes, Brian Kim, Havala Hanson, Vod Vilfort, tribal economic impact, economic impact analysis software"
   ogTitle="About Lumecon: economic impact analysis built with the communities it serves"
-  ogDescription="Founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Lumecon helps governments, tribal nations, foundations, and community-serving organizations turn real data into credible economic impact analysis."
+  ogDescription="Founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Team brings together Cornell, Dartmouth, Duke, Oxford, MIT, and Federal Reserve experience to make economic impact analysis accessible to governments, tribal nations, foundations, and community-serving organizations."
+  ogImageAlt="About Lumecon. Founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Economic impact analysis software for governments, tribal nations, foundations, and community-serving organizations."
+  jsonLd={jsonLd}
 >
   <Nav />
   <main class="about-page">

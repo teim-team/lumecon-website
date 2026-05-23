@@ -1,6 +1,7 @@
 ---
 import { site } from '../config';
 import { PLATFORMS } from '../data/platforms';
+import { FOUNDERS } from '../data/team';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -64,6 +65,12 @@ const jsonLd = [
       "https://globaleconomicimpact.com"
     ],
     "foundingLocation": { "@type": "Place", "name": site.builtAt },
+    "founder": FOUNDERS.map((p) => ({
+      "@type": "Person",
+      "@id": `${site.url}/about#${p.slug}`,
+      "name": p.name,
+      "jobTitle": p.title,
+    })),
     "knowsAbout": [
       "Economic Impact Analysis",
       "Policy Analysis",
