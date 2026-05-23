@@ -768,34 +768,94 @@ strong { font-weight: 600; color: inherit; }
 .delay-3 { transition-delay: .3s; }
 .delay-4 { transition-delay: .4s; }
 
-/* Asymmetric accent block behind key text. ::before sits a few px
-   off-axis with a low-opacity colored panel; it wipes in from the
-   left when the parent gets .seen (via the same IntersectionObserver
-   that drives .reveal-soft). Pair with .reveal-soft on the element
-   itself so the text rises while the highlight wipes in behind it.
-   Apply to standalone headlines / kickers — not to body paragraphs
-   inside lede boxes where the surrounding card already provides
-   visual emphasis. */
-.hl-block { position: relative; isolation: isolate; width: fit-content; max-width: 100%; }
+/* Asymmetric accent block behind key text. Each instance pulls its
+   angle, padding asymmetry, and tint from CSS custom properties so
+   different headlines on the same page don't read like the same
+   stamp repeated. ::before wipes in from the left when the parent
+   gets .seen (via the same IntersectionObserver that drives
+   .reveal-soft). Pair with .reveal-soft on the element itself so
+   the text rises while the highlight wipes in behind it. */
+.hl-block {
+  --hl-rot: -1.1deg;
+  --hl-color: var(--accent-rgba-18);
+  --hl-inset-t: -.18em;
+  --hl-inset-r: -.55em;
+  --hl-inset-b: -.08em;
+  --hl-inset-l: -.42em;
+  --hl-radius: 6px;
+  --hl-origin: left center;
+  position: relative;
+  isolation: isolate;
+  width: fit-content;
+  max-width: 100%;
+}
 .hl-block::before {
   content: '';
   position: absolute;
-  inset: -.18em -.55em -.08em -.42em;
-  background: var(--accent-rgba-18);
-  border-radius: 6px;
-  transform: rotate(-1deg) scaleX(0);
-  transform-origin: left center;
-  transition: transform .8s var(--ease) .15s;
+  inset: var(--hl-inset-t) var(--hl-inset-r) var(--hl-inset-b) var(--hl-inset-l);
+  background: var(--hl-color);
+  border-radius: var(--hl-radius);
+  transform: rotate(var(--hl-rot)) scaleX(0);
+  transform-origin: var(--hl-origin);
+  transition: transform .85s var(--ease) .15s;
   z-index: -1;
   pointer-events: none;
 }
 .hl-block.seen::before,
-.hl-block:not(.reveal-soft)::before { transform: rotate(-1deg) scaleX(1); }
-.hl-block--gold::before { background: rgba(240, 169, 26, .22); }
-.hl-block--right { display: inline-block; }
-.hl-block--right::before { transform-origin: right center; }
+.hl-block:not(.reveal-soft)::before {
+  transform: rotate(var(--hl-rot)) scaleX(1);
+}
+/* Variant decks. Each leans the angle a different way, shifts the
+   padding asymmetry, and (where useful) swaps the tint, so a page
+   with three flagged headlines doesn't get three identical
+   rectangles. Mix freely. */
+.hl-block--b {
+  --hl-rot: 1.4deg;
+  --hl-color: rgba(15, 181, 165, .22);
+  --hl-inset-t: -.1em;
+  --hl-inset-r: -.38em;
+  --hl-inset-b: -.22em;
+  --hl-inset-l: -.62em;
+  --hl-origin: right center;
+}
+.hl-block--c {
+  --hl-rot: -2.2deg;
+  --hl-color: var(--accent-bar);
+  --hl-inset-t: -.24em;
+  --hl-inset-r: -.7em;
+  --hl-inset-b: 0;
+  --hl-inset-l: -.28em;
+  --hl-radius: 3px;
+}
+.hl-block--d {
+  --hl-rot: .55deg;
+  --hl-color: rgba(15, 181, 165, .14);
+  --hl-inset-t: -.05em;
+  --hl-inset-r: -.5em;
+  --hl-inset-b: -.25em;
+  --hl-inset-l: -.5em;
+  --hl-radius: 10px;
+}
+.hl-block--gold {
+  --hl-rot: 1.8deg;
+  --hl-color: rgba(240, 169, 26, .22);
+  --hl-inset-t: -.14em;
+  --hl-inset-r: -.45em;
+  --hl-inset-b: -.18em;
+  --hl-inset-l: -.55em;
+}
+.hl-block--terra {
+  --hl-rot: -.6deg;
+  --hl-color: rgba(224, 74, 42, .14);
+  --hl-inset-t: -.18em;
+  --hl-inset-r: -.6em;
+  --hl-inset-b: -.1em;
+  --hl-inset-l: -.32em;
+  --hl-radius: 8px;
+}
+.hl-block--right { --hl-origin: right center; }
 @media (prefers-reduced-motion: reduce) {
-  .hl-block::before { transition: none; transform: rotate(-1deg) scaleX(1); }
+  .hl-block::before { transition: none; transform: rotate(var(--hl-rot)) scaleX(1); }
 }
 
 /* Focus styles for keyboard navigation */

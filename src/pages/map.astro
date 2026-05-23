@@ -41,7 +41,7 @@ import '../styles/map-page.css';
     <header class="map-page__header">
       <div class="map-page__header-inner">
         <p class="map-page__kicker">Interactive demo</p>
-        <h1 class="map-page__title reveal-soft hl-block">Run a live impact study.</h1>
+        <h1 class="map-page__title reveal-soft hl-block hl-block--gold">Run a live impact study.</h1>
         <p class="map-page__sub">Hover any region to inspect. Click to run a study with Cedar across full reservation, state, and national scope. Minutes, not months.</p>
         <p class="map-page__roadmap">US coverage today; international scope is on the roadmap.</p>
       </div>
@@ -49,30 +49,129 @@ import '../styles/map-page.css';
 
     <MapWorkspace />
 
-    <!-- "What you're seeing." Brief, scannable explainer beneath
-         the map so a visitor who's just clicked a region knows
-         (a) what an economic impact study is, and (b) why anyone
-         cares. The federated-learning angle lives in the
-         NetworkSection below this band; together they answer
-         "what is this" + "how does it stay sharp." -->
+    <!-- "What kickstarts a study." Quick icon strip naming the
+         inputs Cedar takes (audited financials, payroll, charitable
+         giving, lobbying, marketing, year, geography). Sits between
+         the workspace and the explainer cards so a visitor who's
+         poked at the map immediately sees what makes the engine
+         underneath it run. Always visible — these are short labels,
+         not paragraphs, so the strip is scannable in two seconds. -->
+    <section class="map-page__inputs" aria-labelledby="map-inputs-title">
+      <div class="map-page__about-inner">
+        <p class="map-page__about-kicker">What kickstarts a study</p>
+        <h2 class="map-page__about-title reveal-soft hl-block hl-block--d" id="map-inputs-title">The inputs you already have.</h2>
+        <p class="map-page__inputs-lede">Drop in what your organization already files. Cedar harmonises the rest against ACS, BEA, LODES, QCEW, and the public sources serious models rely on.</p>
+        <ul class="map-page__inputs-grid" aria-label="Study inputs">
+          <li class="map-page__input">
+            <span class="map-page__input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3 H17 L21 7 V21 H5 Z"/><rect x="8" y="11" width="9" height="1.4" fill="var(--white)"/><rect x="8" y="14" width="9" height="1.4" fill="var(--white)"/><rect x="8" y="17" width="6" height="1.4" fill="var(--white)"/></svg>
+            </span>
+            <span class="map-page__input-label">Audited financials</span>
+          </li>
+          <li class="map-page__input">
+            <span class="map-page__input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="14" rx="1"/><rect x="5.5" y="8" width="6" height="1.2" fill="var(--white)"/><rect x="5.5" y="10.5" width="9" height="1.2" fill="var(--white)"/><rect x="5.5" y="13" width="7" height="1.2" fill="var(--white)"/><circle cx="17.5" cy="15.5" r="2.2" fill="var(--white)"/></svg>
+            </span>
+            <span class="map-page__input-label">Payroll</span>
+          </li>
+          <li class="map-page__input">
+            <span class="map-page__input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21 L4 13 C2 11 2.5 7.5 5 6.2 C7.2 5 9.5 6 10.7 7.6 L12 9.2 L13.3 7.6 C14.5 6 16.8 5 19 6.2 C21.5 7.5 22 11 20 13 Z"/></svg>
+            </span>
+            <span class="map-page__input-label">Charitable giving</span>
+          </li>
+          <li class="map-page__input">
+            <span class="map-page__input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="20" width="18" height="1.6"/><path d="M5 20 V11 H7 V20 Z M10 20 V8 H12 V20 Z M14 20 V11 H16 V20 Z M18 20 V14 H20 V20 Z"/><circle cx="12" cy="4.6" r="2.2"/></svg>
+            </span>
+            <span class="map-page__input-label">Lobbying</span>
+          </li>
+          <li class="map-page__input">
+            <span class="map-page__input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 8 L14 5 L14 19 L4 16 Z"/><path d="M14 7 L19 4.2 V19.8 L14 17 Z"/><rect x="6" y="16" width="3" height="3.6" fill="var(--white)"/></svg>
+            </span>
+            <span class="map-page__input-label">Marketing spend</span>
+          </li>
+          <li class="map-page__input">
+            <span class="map-page__input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="5" width="17" height="15.5" rx=".8"/><rect x="3.5" y="5" width="17" height="3.6" fill="var(--accent-deep)"/><rect x="6.5" y="11" width="2.8" height="2.8" fill="var(--white)"/><rect x="10.6" y="11" width="2.8" height="2.8" fill="var(--white)"/><rect x="14.7" y="11" width="2.8" height="2.8" fill="var(--white)"/><rect x="6.5" y="15" width="2.8" height="2.8" fill="var(--white)"/><rect x="10.6" y="15" width="2.8" height="2.8" fill="var(--white)"/></svg>
+            </span>
+            <span class="map-page__input-label">Year &amp; range</span>
+          </li>
+          <li class="map-page__input">
+            <span class="map-page__input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 C7.5 2 4 5.4 4 9.8 C4 16 12 22 12 22 C12 22 20 16 20 9.8 C20 5.4 16.5 2 12 2 Z"/><circle cx="12" cy="9.6" r="3" fill="var(--white)"/></svg>
+            </span>
+            <span class="map-page__input-label">Geography</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- "What you're seeing." Collapsible by default. Visitors who
+         want the explainer expand it; visitors who already get it
+         scan past without a wall of text in their face. -->
     <section class="map-page__about" aria-labelledby="map-about-title">
       <div class="map-page__about-inner">
-        <p class="map-page__about-kicker">What you're seeing</p>
-        <h2 class="map-page__about-title reveal-soft hl-block" id="map-about-title">An economic impact study, run live.</h2>
-        <div class="map-page__about-grid">
-          <div class="map-page__about-card">
-            <h3 class="map-page__about-card-head">What it is</h3>
-            <p class="map-page__about-card-body">An economic impact study estimates how a project, program, or investment ripples through a regional economy: direct spending, supplier purchases, the wages workers earn and then spend, and the jobs and tax revenue all of that supports.</p>
+        <details class="map-page__details">
+          <summary class="map-page__details-summary">
+            <span class="map-page__details-kicker">What you&rsquo;re seeing</span>
+            <span class="map-page__details-title reveal-soft hl-block hl-block--c" id="map-about-title">An economic impact study, run live.</span>
+            <span class="map-page__details-chev" aria-hidden="true"></span>
+          </summary>
+          <div class="map-page__about-grid">
+            <div class="map-page__about-card">
+              <h3 class="map-page__about-card-head">What it is</h3>
+              <p class="map-page__about-card-body">An economic impact study estimates how a project, program, or investment ripples through a regional economy: direct spending, supplier purchases, the wages workers earn and then spend, and the jobs and tax revenue all of that supports.</p>
+            </div>
+            <div class="map-page__about-card">
+              <h3 class="map-page__about-card-head">What you'll see on the map</h3>
+              <p class="map-page__about-card-body">The source region lights up in gold. That's the direct effect. Teal flows trace the indirect and induced spillover to neighbouring regions. Total impact, jobs, and labour income land in the row beneath the map. Click another region to run a fresh study; everything updates in seconds.</p>
+            </div>
+            <div class="map-page__about-card">
+              <h3 class="map-page__about-card-head">How fast</h3>
+              <p class="map-page__about-card-body">Minutes, not months. The legacy path runs a single consulting engagement per study and ships months later. Lumecon runs the same canonical economics under a workflow built for cloud, modern data, and AI from day one.</p>
+            </div>
           </div>
-          <div class="map-page__about-card">
-            <h3 class="map-page__about-card-head">Why it matters</h3>
-            <p class="map-page__about-card-body">Grant applications, council briefings, board memos, and funder reports all hinge on a defensible jobs-and-investment number. Without one, the case for public dollars stalls. With one, a tribe, a city, a foundation, or a state agency can show its work.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- "Why it matters." Direct audience-facing framing — the
+         language anyone presenting impact numbers to a council, a
+         board, a foundation, or a federal office actually has to
+         use. Collapsible because the visitor either needs this
+         framing (and wants it expanded) or doesn't (and skips). -->
+    <section class="map-page__why-matters" aria-labelledby="map-why-title">
+      <div class="map-page__about-inner">
+        <details class="map-page__details map-page__details--invert">
+          <summary class="map-page__details-summary">
+            <span class="map-page__details-kicker map-page__details-kicker--invert">Why it matters</span>
+            <span class="map-page__details-title reveal-soft hl-block hl-block--gold" id="map-why-title">When the room asks why they should care.</span>
+            <span class="map-page__details-chev" aria-hidden="true"></span>
+          </summary>
+          <div class="map-page__why-body">
+            <p class="map-page__why-lede">Council chamber. Board room. Foundation review panel. Congressional staffer's office. Tribal council. The question every powerful audience asks is the same one: prove it. Prove the jobs you support, the wages you generate, the businesses that exist because you do, the tax base you sustain. Lumecon hands you the numbers each room respects, in the language each room speaks.</p>
+            <ul class="map-page__why-rooms" aria-label="Audiences that recognize these numbers">
+              <li class="map-page__why-room">
+                <h3 class="map-page__why-room-head">Councils &amp; boards</h3>
+                <p class="map-page__why-room-body">Jobs supported, payroll generated, local supplier spend, multi-year capital impact. The defensible figure that lands a vote instead of a memo back to staff.</p>
+              </li>
+              <li class="map-page__why-room">
+                <h3 class="map-page__why-room-head">Funders &amp; grantmakers</h3>
+                <p class="map-page__why-room-body">Federal grant programs (EDA, HUD CDBG, DOT BUILD, USDA, NTIA, EPA) want jobs, private investment, and regional benefit with a credible source. Lumecon ships the figures with the methodology attached.</p>
+              </li>
+              <li class="map-page__why-room">
+                <h3 class="map-page__why-room-head">Donors &amp; foundations</h3>
+                <p class="map-page__why-room-body">Annual reports stop reading as anecdote and start reading as evidence: dollars in, jobs and businesses out, measured the same way every year, comparable across grantees.</p>
+              </li>
+              <li class="map-page__why-room">
+                <h3 class="map-page__why-room-head">Public &amp; press</h3>
+                <p class="map-page__why-room-body">The plain-language version of the same study: how much local spending stayed in the region, how many local workers were hired, what the project bought that wouldn't have been bought otherwise.</p>
+              </li>
+            </ul>
           </div>
-          <div class="map-page__about-card">
-            <h3 class="map-page__about-card-head">What you'll see on the map</h3>
-            <p class="map-page__about-card-body">The source region lights up in gold. That's the direct effect. Teal flows trace the indirect and induced spillover to neighbouring regions. Total impact, jobs, and labour income land in the row beneath the map. Click another region to run a fresh study; everything updates in seconds.</p>
-          </div>
-        </div>
+        </details>
       </div>
     </section>
 
