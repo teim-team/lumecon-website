@@ -1,10 +1,11 @@
 /**
  * Cedar chat runtime.
  *
- * Single source of truth for the conversation logic shared by both
- * Cedar surfaces: the inline chat in the homepage Cedar section
- * (FAQSection.astro) and the floating panel popped by the persistent
- * Cedar FAB (CedarFAB.astro).
+ * Conversation logic for the persistent Cedar FAB (CedarFAB.astro).
+ * The FAB is the only Cedar chat surface today; an earlier homepage
+ * inline-chat section was removed, but bootChat() is still written
+ * surface-agnostic so a second surface can be added without
+ * touching this module.
  *
  * What this module owns:
  *   - Conversation state (transcript, quick-reply chip collapse)
@@ -18,8 +19,6 @@
  * What this module does NOT own:
  *   - Panel open/close affordance (the FAB's toggle stays in the
  *     CedarFAB component since it's surface-specific)
- *   - Static <details> FAQ fallback for no-JS visitors (still
- *     rendered by FAQSection)
  *
  * Surface contract: the caller passes a root element whose subtree
  * contains the following data attributes:

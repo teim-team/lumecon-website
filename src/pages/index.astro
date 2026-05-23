@@ -12,9 +12,10 @@ import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 
-// Curated FAQ subset, kept in sync with FAQSection's static fallback.
-// Powers the FAQPage JSON-LD only — the visible chat now runs from a
-// larger intent bank inside FAQSection.astro.
+// Curated FAQ subset that powers the FAQPage JSON-LD on the
+// homepage (visible to search crawlers, not rendered as on-page
+// markup). The visible Cedar Q&A is the FAB on every page; this
+// array exists only for structured-data discoverability.
 const FAQ_ITEMS = [
   { q: 'What is Lumecon?',
     a: 'Lumecon helps organizations understand and communicate their economic impact. Our platform turns complex data into clear, credible reports that show how spending, investment, employment, and community activity ripple through local economies. In plain English: we help people explain the value they create.' },
@@ -49,7 +50,7 @@ const jsonLd = [
     "url": site.url,
     "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
     "image": `${site.url}/lumecon-og-image-1200x630.png`,
-    "description": "Lumecon Inc. builds economic and policy analysis software for governments and mission-driven organizations. A faster, AI-assisted alternative to IMPLAN, RIMS II, REMI, and Lightcast, with Cedar AI to handle messy data across departments. Five figures a year, unlimited studies.",
+    "description": "Lumecon Inc. builds economic impact analysis software for governments, enterprises, and mission-driven organizations. Built for the 21st century, with Cedar AI to handle messy data across departments. Five figures a year, unlimited studies.",
     "email": site.email,
     "slogan": site.tagline,
     "naics": "541512",
@@ -170,12 +171,12 @@ const jsonLd = [
 ---
 <BaseLayout
   title="Lumecon | Economic Impact Analysis Software"
-  description="Economic impact analysis software for governments, enterprises, and mission-driven organizations. Defensible jobs, tax, and labor-income evidence for grant applications, council packets, board memos, and funder reporting. Five figures a year, unlimited studies. An AI-assisted alternative to IMPLAN, RIMS II, REMI, and Lightcast. Built at Ivy League and peer schools."
+  description="Economic impact analysis software for governments, enterprises, and mission-driven organizations. Defensible jobs, tax, and labor-income evidence for grant applications, council packets, board memos, and funder reporting. Five figures a year, unlimited studies. Built for the 21st century, at Ivy League and peer schools."
   canonical="https://lumecon.ai/"
   keywords="economic impact analysis, IMPLAN, IMPLAN alternative, RIMS II, RIMS II alternative, BEA RIMS, REMI, REMI Policy Insight, Lightcast, Lightcast alternative, EMSI, input-output modeling, fiscal multiplier, economic multipliers, tribal economic impact, reservation economics, ANCSA regions, Alaska Native Corporations, Native Hawaiian Organizations, AIANNH, Cedar AI, policy analysis software, government software, public-sector analytics, mission-driven organizations, CDFI, economic development organizations, Bureau of Economic Analysis, direct indirect induced effects, jobs output earnings, Cornell University, Cornell Brooks School, Ivy League, Cornell Law, Dartmouth"
   ogTitle="Lumecon: Economic impact analysis software for governments"
-  ogDescription="A faster, AI-assisted alternative to IMPLAN, RIMS II, REMI, and Lightcast. Five figures a year, unlimited studies, fresh every time. Run economic impact studies in-house, on your own data, with Cedar AI handling the messy parts. Built at Ivy League and peer schools, designed for governments and mission-driven organizations."
-  ogImageAlt="Lumecon: economic and policy analysis software for governments and mission-driven organizations. An alternative to IMPLAN, RIMS II, REMI, and BEA RIMS multipliers, built at Ivy League and peer schools."
+  ogDescription="Economic impact analysis software for governments, enterprises, and mission-driven organizations. Built for the 21st century. Five figures a year, unlimited studies, fresh every time. Run studies in-house, on your own data, with Cedar AI handling the messy parts."
+  ogImageAlt="Lumecon: economic impact analysis software for governments, enterprises, and mission-driven organizations. Built for the 21st century, at Ivy League and peer schools."
   bodyClass="home-page"
   jsonLd={jsonLd}
 >
