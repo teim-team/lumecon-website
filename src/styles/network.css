@@ -129,6 +129,42 @@
   text-align: left;
 }
 
+/* Each node is wrapped in a <g class="netv2__bob"> that floats
+   continuously throughout the cycle — independent of the
+   spawn/fill animation on the circle itself. The wrapper bobs in
+   a small ellipse around the node's anchor position, so the
+   network never reads as a static still life between scale
+   pulses. Per-node delays (negative for instant phase offset)
+   stagger when each node is at its peak/trough. Subtle: max
+   ~3px x 4px so the layout stays stable but the eye reads
+   "alive." */
+.netv2__bob {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: netv2-bob 6.5s ease-in-out infinite;
+  will-change: transform;
+}
+.netv2__bob--A { animation-delay:  -0.0s; animation-duration: 6.2s; }
+.netv2__bob--B { animation-delay:  -1.4s; animation-duration: 7.1s; }
+.netv2__bob--C { animation-delay:  -2.6s; animation-duration: 5.8s; }
+.netv2__bob--D { animation-delay:  -0.7s; animation-duration: 6.8s; }
+.netv2__bob--E { animation-delay:  -3.1s; animation-duration: 6.4s; }
+.netv2__bob--F { animation-delay:  -1.9s; animation-duration: 7.4s; }
+.netv2__bob--G { animation-delay:  -4.2s; animation-duration: 5.9s; }
+.netv2__bob--H { animation-delay:  -2.2s; animation-duration: 6.6s; }
+.netv2__bob--I { animation-delay:  -3.7s; animation-duration: 7.2s; }
+.netv2__bob--J { animation-delay:  -1.1s; animation-duration: 6.0s; }
+.netv2__bob--K { animation-delay:  -0.4s; animation-duration: 7.6s; }
+@keyframes netv2-bob {
+  0%, 100% { transform: translate( 0px,   0px); }
+  25%      { transform: translate( 1.2px, -2px); }
+  50%      { transform: translate( 0px,  -3px); }
+  75%      { transform: translate(-1.2px, -1.4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .netv2__bob { animation: none; }
+}
+
 .netv2__node {
   fill: var(--white);
   stroke: var(--accent);
