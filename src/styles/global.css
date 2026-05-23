@@ -896,26 +896,9 @@ strong { font-weight: 600; color: inherit; }
 .btn--invert-ghost { background: transparent; color: var(--white); border-color: rgba(255, 255, 255, .35); }
 .btn--invert-ghost:hover { background: rgba(255, 255, 255, .08); border-color: var(--white); }
 
-/* Top teal accent band. Full-width rail glued to the very top of
-   the viewport so the page edge reads as one continuous teal strip
-   instead of a stray progress sliver. On mobile this matches the
-   theme-color teal that iOS applies to the URL bar above the page,
-   so the address bar and the page top read as one unified header. */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
-  z-index: 9998;
-  pointer-events: none;
-}
-
-/* Scroll progress indicator sits on top of the rail as a brighter
-   highlight that fills as the visitor reads. Same colour family so
-   the rail-plus-fill reads as one progressive element. */
+/* Scroll progress indicator. Lives at the very top of the viewport;
+   the teal rail itself is painted by the nav (border-top) so there's
+   no white sliver between the rail and the nav content. */
 .scroll-progress {
   position: fixed;
   top: 0;
