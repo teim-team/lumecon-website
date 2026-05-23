@@ -7,11 +7,11 @@
  *   - Founding sentence visible by default; the rest of the
  *     About story sits behind a `<details>` so the page stays
  *     scannable.
- *   - Two card grids (Team, then Advisors & Contributors), each
- *     card showing an initials avatar + name + title + summary
- *     above the fold and the full bio hidden until clicked. No
- *     headshots at v1 — initials in a tinted circle act as the
- *     placeholder until photographs arrive.
+ *   - "How we work" cross-functional grid; each name links to that
+ *     person's /team/<slug> page.
+ *   - Two compact card grids (Team, then Advisors & Contributors).
+ *     Each card is a link to the person's own page — the long bio
+ *     lives there, not inline, so this page stays scannable.
  *
  * Team data lives in src/data/team.ts. Adding a person is one
  * entry there, not five edits across the markup.
@@ -26,7 +26,7 @@ import { site } from '../config';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { TEAM, TEAM_BY_GROUP, TEAM_BY_SLUG, WORKING_AREAS, PUBLICATIONS, type Person, type Publication } from '../data/team';
+import { TEAM, TEAM_BY_GROUP, TEAM_BY_SLUG, WORKING_AREAS, personPath, type Person } from '../data/team';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -42,7 +42,7 @@ const advisors = TEAM_BY_GROUP.advisor;
    Federal Reserve", the connection is explicit in the structured
    data rather than buried in prose. */
 function personJsonLd(p: Person) {
-  const personUrl = `${site.url}/about#${p.slug}`;
+  const personUrl = `${site.url}${personPath(p.slug)}`;
   const node: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -63,25 +63,6 @@ function personJsonLd(p: Person) {
     node.affiliation = p.prevAffiliations.map((n) => ({ "@type": "Organization", "name": n }));
   }
   return node;
-}
-
-/* Featured-work structured data: each paper becomes a Book or
-   ScholarlyArticle whose authors resolve to the team Person @ids,
-   tying published research to the people who wrote it. */
-function publicationJsonLd(pub: Publication) {
-  return {
-    "@context": "https://schema.org",
-    "@type": pub.type === 'book' ? "Book" : "ScholarlyArticle",
-    "name": pub.title,
-    "url": pub.url,
-    "datePublished": pub.year,
-    "author": pub.authors.map((a) =>
-      a.slug
-        ? { "@type": "Person", "@id": `${site.url}/about#${a.slug}`, "name": a.name }
-        : { "@type": "Person", "name": a.name }
-    ),
-    "publisher": { "@type": "Organization", "name": pub.venue },
-  };
 }
 
 const founders = TEAM.filter((p) => p.founder);
@@ -105,8 +86,8 @@ const jsonLd = [
       "@id": `${site.url}#org`,
       "name": site.legalName,
       "url": site.url,
-      "founder": founders.map((p) => ({ "@type": "Person", "@id": `${site.url}/about#${p.slug}`, "name": p.name })),
-      "employee": team.map((p) => ({ "@type": "Person", "@id": `${site.url}/about#${p.slug}`, "name": p.name })),
+      "founder": founders.map((p) => ({ "@type": "Person", "@id": `${site.url}${personPath(p.slug)}`, "name": p.name })),
+      "employee": team.map((p) => ({ "@type": "Person", "@id": `${site.url}${personPath(p.slug)}`, "name": p.name })),
     },
   },
   {
@@ -118,7 +99,6 @@ const jsonLd = [
     ],
   },
   ...TEAM.map(personJsonLd),
-  ...PUBLICATIONS.map(publicationJsonLd),
 ];
 ---
 <BaseLayout
@@ -184,13 +164,13 @@ const jsonLd = [
                     <span class="area-card__roster">
                       <span class="area-card__role">
                         <span class="area-card__role-label">Lead</span>{' '}
-                        <a class="area-card__person" href={`#${lead.slug}`}>{lead.name}</a>
+                        <a class="area-card__person" href={personPath(lead.slug)}>{lead.name}</a>
                       </span>
                       {advisory.length > 0 && (
                         <span class="area-card__role">
                           <span class="area-card__role-label">Advisory</span>{' '}
                           {advisory.map((p) => (
-                            <a class="area-card__person" href={`#${p.slug}`}>{p.name}</a>
+                            <a class="area-card__person" href={personPath(p.slug)}>{p.name}</a>
                           ))}
                         </span>
                       )}
@@ -198,7 +178,7 @@ const jsonLd = [
                         <span class="area-card__role">
                           <span class="area-card__role-label">Contributors</span>{' '}
                           {contributors.map((p) => (
-                            <a class="area-card__person" href={`#${p.slug}`}>{p.name}</a>
+                            <a class="area-card__person" href={personPath(p.slug)}>{p.name}</a>
                           ))}
                         </span>
                       )}
@@ -220,34 +200,23 @@ const jsonLd = [
         <h2 class="about-page__h2 reveal-soft hl-block hl-block--gold" id="about-team-title">The people building Lumecon.</h2>
         <ul class="about-page__grid" aria-label="Lumecon team">
           {team.map((p) => (
-            <li>
-              <details class="person-card" id={p.slug}>
-                <summary class="person-card__head">
-                  <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
-                  <span class="person-card__meta">
-                    <span class="person-card__name">{p.name}</span>
-                    <span class="person-card__title">{p.title}</span>
-                    {(p.email || p.linkedin || p.scholar) && (
-                      <span class="person-card__links">
-                        {p.email && (
-                          <a class="person-card__email" href={`mailto:${p.email}`} onclick="event.stopPropagation()">{p.email}</a>
-                        )}
-                        {p.linkedin && (
-                          <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} onclick="event.stopPropagation()" set:html={linkedinIcon}></a>
-                        )}
-                        {p.scholar && (
-                          <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} onclick="event.stopPropagation()" set:html={scholarIcon}></a>
-                        )}
-                      </span>
-                    )}
-                    <span class="person-card__summary">{p.summary}</span>
-                  </span>
-                  <span class="person-card__chev" aria-hidden="true"></span>
-                </summary>
-                <div class="person-card__bio">
-                  {p.bio.map((para) => <p>{para}</p>)}
-                </div>
-              </details>
+            <li class="person-card" id={p.slug}>
+              <a class="person-card__link" href={personPath(p.slug)} aria-label={`${p.name}, ${p.title} — view profile`}>
+                <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
+                <span class="person-card__meta">
+                  <span class="person-card__name">{p.name}</span>
+                  <span class="person-card__title">{p.title}</span>
+                  <span class="person-card__summary">{p.summary}</span>
+                </span>
+                <span class="person-card__arrow" aria-hidden="true"></span>
+              </a>
+              {(p.email || p.linkedin || p.scholar) && (
+                <span class="person-card__links">
+                  {p.email && <a class="person-card__email" href={`mailto:${p.email}`}>{p.email}</a>}
+                  {p.linkedin && <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} set:html={linkedinIcon}></a>}
+                  {p.scholar && <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} set:html={scholarIcon}></a>}
+                </span>
+              )}
             </li>
           ))}
         </ul>
@@ -260,71 +229,22 @@ const jsonLd = [
         <h2 class="about-page__h2 reveal-soft hl-block hl-block--d" id="about-advisors-title">Helping guide the company.</h2>
         <ul class="about-page__grid" aria-label="Lumecon advisors and contributors">
           {advisors.map((p) => (
-            <li>
-              <details class="person-card" id={p.slug}>
-                <summary class="person-card__head">
-                  <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
-                  <span class="person-card__meta">
-                    <span class="person-card__name">{p.name}</span>
-                    <span class="person-card__title">{p.title}</span>
-                    {(p.linkedin || p.scholar) && (
-                      <span class="person-card__links">
-                        {p.linkedin && (
-                          <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} onclick="event.stopPropagation()" set:html={linkedinIcon}></a>
-                        )}
-                        {p.scholar && (
-                          <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} onclick="event.stopPropagation()" set:html={scholarIcon}></a>
-                        )}
-                      </span>
-                    )}
-                    <span class="person-card__summary">{p.summary}</span>
-                  </span>
-                  <span class="person-card__chev" aria-hidden="true"></span>
-                </summary>
-                <div class="person-card__bio">
-                  {p.bio.map((para) => <p>{para}</p>)}
-                </div>
-              </details>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    <!-- Featured work: selected research authored by people on the
-         team. Establishes the caliber of the people behind Lumecon
-         right before the join bridge. Cards link out to the full
-         text; team authors link back up to their bio card. -->
-    <section class="about-page__research" aria-labelledby="about-research-title">
-      <div class="about-page__inner">
-        <p class="about-page__kicker">Featured work</p>
-        <h2 class="about-page__h2 reveal-soft hl-block hl-block--green-b" id="about-research-title">Research the team has published.</h2>
-        <p class="about-page__lede about-page__lede--how">
-          Lumecon is built on published economic research. A selection of work by people on the team, spanning tribal economic development, labor markets, community finance, and applied econometrics.
-        </p>
-        <ul class="about-page__pubs" aria-label="Featured research">
-          {PUBLICATIONS.map((pub) => (
-            <li>
-              <article class="pub-card">
-                <p class="pub-card__venue">{pub.venue} &middot; {pub.year}</p>
-                <h3 class="pub-card__title">
-                  <a href={pub.url} target="_blank" rel="noopener noreferrer">{pub.title}</a>
-                </h3>
-                <p class="pub-card__authors">
-                  {pub.authors.map((a, i) => (
-                    <>
-                      {i > 0 && ', '}
-                      {a.slug
-                        ? <a class="pub-card__author pub-card__author--team" href={`#${a.slug}`}>{a.name}</a>
-                        : <span class="pub-card__author">{a.name}</span>}
-                    </>
-                  ))}
-                </p>
-                <p class="pub-card__summary">{pub.summary}</p>
-                <a class="pub-card__link" href={pub.url} target="_blank" rel="noopener noreferrer">
-                  Read the paper <span aria-hidden="true">&rarr;</span>
-                </a>
-              </article>
+            <li class="person-card" id={p.slug}>
+              <a class="person-card__link" href={personPath(p.slug)} aria-label={`${p.name}, ${p.title} — view profile`}>
+                <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
+                <span class="person-card__meta">
+                  <span class="person-card__name">{p.name}</span>
+                  <span class="person-card__title">{p.title}</span>
+                  <span class="person-card__summary">{p.summary}</span>
+                </span>
+                <span class="person-card__arrow" aria-hidden="true"></span>
+              </a>
+              {(p.linkedin || p.scholar) && (
+                <span class="person-card__links">
+                  {p.linkedin && <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} set:html={linkedinIcon}></a>}
+                  {p.scholar && <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} set:html={scholarIcon}></a>}
+                </span>
+              )}
             </li>
           ))}
         </ul>
