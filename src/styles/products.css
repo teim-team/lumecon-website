@@ -67,12 +67,20 @@
   padding: 1.6rem 1.5rem 1.6rem;
   transition: border-color .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease);
 }
-.platform:hover {
+.platform:hover,
+.platform:focus-visible {
   border-color: var(--accent);
   transform: translateY(-2px);
   box-shadow:
     0 1px 2px rgba(10, 15, 38, .04),
     0 12px 24px -14px rgba(14, 21, 48, .14);
+}
+.platform:active {
+  border-color: var(--accent);
+  transform: translateY(0);
+  box-shadow:
+    0 1px 2px rgba(10, 15, 38, .04),
+    inset 0 0 0 1px var(--accent);
 }
 .platform__head {
   display: flex;
@@ -101,7 +109,9 @@
   height: 60%;
   display: block;
 }
-.platform:hover .platform__icon { color: var(--accent); }
+.platform:hover .platform__icon,
+.platform:focus-visible .platform__icon,
+.platform:active .platform__icon { color: var(--accent); background: var(--accent-rgba-08); }
 .platform__name {
   font-family: var(--font-display);
   font-weight: 600;

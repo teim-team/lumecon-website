@@ -74,7 +74,7 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For teams that want Cedar — our AI assistant — to turn records into analysis-ready inputs.',
+    tagline: 'For teams that want Cedar (our AI assistant) to turn records into analysis-ready inputs.',
     ctaSubject: 'Sapling tier',
     highlights: [
       'Everything in Sprout',
@@ -152,7 +152,7 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
   { capability: 'Cedar Grove: curated data, filings, source materials',            sprout: 'none',           sapling: 'none',          tree: 'soon' },
   { capability: 'Grant, SBA, federal, and compliance trackers',                    sprout: 'none',           sapling: 'none',          tree: 'soon' },
   { capability: 'Reusable data library for recurring submissions',                 sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Data exploration — guided EDA on any workspace dataset',          sprout: 'none',           sapling: 'yes',           tree: 'yes' },
+  { capability: 'Data exploration (guided EDA on any workspace dataset)',          sprout: 'none',           sapling: 'yes',           tree: 'yes' },
   { capability: 'Feasibility studies (NPV, break-even, sensitivity)',              sprout: 'none',           sapling: 'none',          tree: 'soon' },
   { capability: 'Cost-benefit analysis (federal-grant-aligned)',                   sprout: 'none',           sapling: 'none',          tree: 'soon' },
   { capability: 'ROI modeling (IRR, payback, scenario bands)',                     sprout: 'none',           sapling: 'none',          tree: 'soon' },

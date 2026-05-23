@@ -43,7 +43,7 @@ export const INTENTS: CedarIntent[] = [
       'what is lumecon', 'what does lumecon do', 'what does lumecon', 'explain lumecon', 'what is this company', 'what are you building', 'what is the platform', 'what is lumecon for', 'what problem', 'why does lumecon', 'what is the point of this site', 'this site', 'tell me about lumecon', 'about lumecon', 'overview', 'what do you do', 'lumecon do',
     ],
     answer: "Short version: we help organizations show their economic impact without the months-long consulting engagement. You upload what you have, we harmonize it against the public data sources serious models rely on (ACS, BEA, LODES, QCEW), and you get a defensible study with every assumption surfaced. The same study drops into a council memo, a grant narrative, or a board deck.",
-    expanded: "Going deeper: Lumecon sits between expensive software and expensive consulting. The existing platforms charge per geography, per user, per data tier; the consultants who actually run them charge by the billable hour. We collapse both into one flat annual subscription — unlimited studies, every geography, every team member. The engine itself does what serious input-output models always do (direct, indirect, induced, total impact), but it's wrapped in a workflow built for cloud, modern data, and AI from day one. Cedar handles the harmonization and surfaces every assumption so your team makes judgment calls instead of cleaning spreadsheets.",
+    expanded: "Going deeper: Lumecon sits between expensive software and expensive consulting. The existing platforms charge per geography, per user, per data tier; the consultants who actually run them charge by the billable hour. We collapse both into one flat annual subscription: unlimited studies, every geography, every team member. The engine itself does what serious input-output models always do (direct, indirect, induced, total impact), but it's wrapped in a workflow built for cloud, modern data, and AI from day one. Cedar handles the harmonization and surfaces every assumption so your team makes judgment calls instead of cleaning spreadsheets.",
     followUps: ['audience', 'multipliers', 'competitors', 'demo'],
   },
   {
@@ -62,7 +62,7 @@ export const INTENTS: CedarIntent[] = [
       'who uses lumecon', 'who uses this', 'who uses it', 'who is this for', 'who is this platform for', 'who is lumecon for', 'who is the platform made for', 'what kinds of clients', 'what kind of clients', 'what types of clients', 'clients do you serve', 'who do you serve', 'who do you work with', 'is this for nonprofits', 'is this for universities', 'is this for foundations', 'is this for developers', 'is this for community', 'is this for me', 'target audience', 'who are your customers', 'who buys this',
     ],
     answer: "Mostly governments, enterprises, and mission-driven organizations: tribal nations, state and local agencies, universities, foundations, ports, transit agencies, large nonprofits, and community development financial institutions. The common thread is they need to defend their numbers to a council, a board, or a funder, and they need that defense to hold up to scrutiny. Where do you sit?",
-    expanded: "Breaking it down: tribal nations and tribal enterprises (gaming, energy, government services, cultural institutions) use the Tribal Economic Impact platform. Cities, counties, state DOTs, departments of commerce, workforce boards, and treasury offices use the Local Economic Impact platform — typically for capital project justification, grant rounds, bond measures, and annual impact reports. Universities use it for the community ripple of operations, research, construction, and student spending. Foundations use it to show donors and boards what grantmaking actually moved. Ports, airports, and transit agencies use it for capital plans. CDFIs and community lenders use it for portfolio-level place-based impact.",
+    expanded: "Breaking it down: tribal nations and tribal enterprises (gaming, energy, government services, cultural institutions) use the Tribal Economic Impact platform. Cities, counties, state DOTs, departments of commerce, workforce boards, and treasury offices use the Local Economic Impact platform, typically for capital project justification, grant rounds, bond measures, and annual impact reports. Universities use it for the community ripple of operations, research, construction, and student spending. Foundations use it to show donors and boards what grantmaking actually moved. Ports, airports, and transit agencies use it for capital plans. CDFIs and community lenders use it for portfolio-level place-based impact.",
     followUps: ['tribal_platform', 'local_platform', 'foundation_use', 'state_agency_use'],
   },
   {
@@ -71,7 +71,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'tribal economic impact', 'tribal platform', 'tribal government', 'tribal nation', 'native nation', 'tribal enterprise', 'tribal gaming', 'tribes use this', 'is this made for native', 'help tribal', 'help tribes', 'help native', 'measure tribal', 'tribal grant', 'why do tribes need this', 'tribal',
     ],
-    answer: "Yes — the Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises. It handles the geographies the existing tools struggle with (reservations, off-reservation trust land, Alaska Native regional and village corporations, Native Hawaiian Home Lands), respects tribal data sovereignty, and produces studies you can hand to a council, a federal funder, or a casino regulator. The studies cover jobs, wages, supplier activity, and the regional ripple effects.",
+    answer: "Yes. The Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises. It handles the geographies the existing tools struggle with (reservations, off-reservation trust land, Alaska Native regional and village corporations, Native Hawaiian Home Lands), respects tribal data sovereignty, and produces studies you can hand to a council, a federal funder, or a casino regulator. The studies cover jobs, wages, supplier activity, and the regional ripple effects.",
     followUps: ['geographies', 'data_inputs', 'security', 'contact'],
   },
   {
@@ -80,7 +80,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'local economic impact', 'local platform', 'cities use', 'counties use', 'city use', 'county use', 'local government', 'municipal', 'state agency', 'state agencies', 'public agency', 'public agencies', 'measure a project', "project's impact", 'project impact', 'local development', 'public investment', "i'm not a tribal", 'non-tribal', 'non tribal',
     ],
-    answer: "Definitely. Cities, counties, state agencies, port and transit authorities, school districts, and special districts all use Lumecon for the same kinds of questions: what does this project, program, or bond actually do for the local economy, and how do we defend that number to a council, a board, or the public? Tell me what level you're at — city, county, state agency — and I can be more specific.",
+    answer: "Definitely. Cities, counties, state agencies, port and transit authorities, school districts, and special districts all use Lumecon for the same kinds of questions: what does this project, program, or bond actually do for the local economy, and how do we defend that number to a council, a board, or the public? Tell me what level you're at (city, county, state agency) and I can be more specific.",
     followUps: ['county_city_use', 'state_agency_use', 'bond_measure', 'demo'],
   },
   {
@@ -89,7 +89,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what reports', 'what report', 'pdf report', 'final output', 'output look like', 'create dashboards', 'dashboard', 'export the results', 'export', 'presentations', 'public meetings', 'board materials', 'economic impact report', 'deliverables', 'what do you produce', 'what does it produce', 'report do you',
     ],
-    answer: "Every study produces a full report PDF, an editable executive summary, the underlying tables and charts, and a slide-ready deck. The same study reshapes for the audience you're talking to — funders see the grant-ready jobs-and-investment narrative, councils see the local benefit framing, boards see the strategic context, public meetings see the plain-language version. The numbers are identical; only the framing changes.",
+    answer: "Every study produces a full report PDF, an editable executive summary, the underlying tables and charts, and a slide-ready deck. The same study reshapes for the audience you're talking to: funders see the grant-ready jobs-and-investment narrative, councils see the local benefit framing, boards see the strategic context, public meetings see the plain-language version. The numbers are identical; only the framing changes.",
     followUps: ['grant_applications', 'time_to_study', 'historical_forward', 'demo'],
   },
   {
@@ -98,7 +98,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what data', 'where does the data come', 'users upload data', 'upload my data', 'bring my own data', 'bring your own data', 'what inputs', 'what input', 'government data', 'public data', 'is the data credible', 'how do you calculate', 'what data sources', 'data sources', 'real economic data',
     ],
-    answer: "Your administrative records (budgets, payroll, program data, vendor spend) plus the canonical public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in higher-frequency signals where they help — USASpending, the regional Fed banks, anonymized mobility, satellite land use. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you.",
+    answer: "Your administrative records (budgets, payroll, program data, vendor spend) plus the canonical public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in higher-frequency signals where they help: USASpending, the regional Fed banks, anonymized mobility, satellite land use. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you.",
     followUps: ['security', 'accuracy', 'multipliers', 'time_to_study'],
   },
   {
@@ -107,8 +107,8 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what is a multiplier', 'what are multipliers', 'what are economic multipliers', 'explain multipliers', 'how do multipliers', 'indirect impact', 'induced impact', 'direct impact', 'total economic impact', 'ripple effect', 'ripple through', 'why does spending create', 'multiplier effect', 'multiplier',
     ],
-    answer: "A multiplier estimates how each dollar of activity ripples through an economy. Three layers: direct (the spending itself — wages, construction, supplies), indirect (the suppliers that get hired by the direct spenders), and induced (the local businesses that get hired when workers spend their paychecks). Add them up and you get total impact. Multipliers differ by industry and geography, which is why a casino in Connecticut has a different ripple than a wind farm in Nebraska.",
-    expanded: "Going one layer deeper: multipliers come from input-output models built on the BEA national accounts, regionalized down to your geography. Three things drive whether the ripple is big or small. One, regional purchase coefficients (RPCs) — how much of a dollar stays local versus leaks out to suppliers in another state. Two, the industry mix of the spending — wages in healthcare ripple differently than capital in heavy construction. Three, the wage-to-non-wage split, since worker spending is what drives induced effects. We surface each of those choices in the assumption layer of the report, so a reviewer can trace any number back to where it came from.",
+    answer: "A multiplier estimates how each dollar of activity ripples through an economy. Three layers: direct (the spending itself, like wages, construction, supplies), indirect (the suppliers that get hired by the direct spenders), and induced (the local businesses that get hired when workers spend their paychecks). Add them up and you get total impact. Multipliers differ by industry and geography, which is why a casino in Connecticut has a different ripple than a wind farm in Nebraska.",
+    expanded: "Going one layer deeper: multipliers come from input-output models built on the BEA national accounts, regionalized down to your geography. Three things drive whether the ripple is big or small. One, regional purchase coefficients (RPCs): how much of a dollar stays local versus leaks out to suppliers in another state. Two, the industry mix of the spending, since wages in healthcare ripple differently than capital in heavy construction. Three, the wage-to-non-wage split, since worker spending is what drives induced effects. We surface each of those choices in the assumption layer of the report, so a reviewer can trace any number back to where it came from.",
     followUps: ['explain_simple', 'accuracy', 'geographies', 'data_inputs'],
   },
   {
@@ -117,7 +117,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'is lumecon software', 'is this consulting', 'are you a saas', 'is this saas', 'saas company', 'sell reports', 'platform or a service', 'platform or service', 'hire you to do the analysis', 'is this self-service', 'is this self service', 'need an economist', 'turbotax for impact', 'is this automated', 'software or service',
     ],
-    answer: "Software. The whole bet is that economic impact analysis shouldn't be a months-long consulting engagement — it should be something your team can run any time you need it. Cedar handles the data wrangling and the modeling; your team makes the judgment calls. For complex first-time studies or unusual data situations the Lumecon team will walk you through it, but the steady-state is your team using the platform without us in the loop.",
+    answer: "Software. The whole bet is that economic impact analysis shouldn't be a months-long consulting engagement; it should be something your team can run any time you need it. Cedar handles the data wrangling and the modeling; your team makes the judgment calls. For complex first-time studies or unusual data situations the Lumecon team will walk you through it, but the steady-state is your team using the platform without us in the loop.",
     followUps: ['roi_lumecon', 'time_to_study', 'onboarding', 'pricing'],
   },
   {
@@ -126,8 +126,8 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how much', 'what is the price', 'pricing', 'what does it cost', 'cost of lumecon', 'subscription', 'do you have subscriptions', 'can i buy', 'how do i get access', 'become a customer', 'become a client', 'price',
     ],
-    answer: "Five figures a year, flat — one annual subscription covers unlimited studies across every geography (reservation, county, state, national). For comparison, the legacy stack tends to run six figures per study and ships months later. We're early enough that pricing is matched to the use case; tell the team a bit about your organization and we'll come back with a number.",
-    expanded: "More on pricing: it's an annual subscription, not per-study or per-seat or per-geography. Your whole team gets access; you can run as many studies as you want across reservations, counties, states, and national rollups. We work with selected pilot partners while the product is early, which means pricing flexes for size and use case — a community foundation looks different from a state DOT looks different from a tribal gaming enterprise. The math we use under the hood is mainstream economics and the BEA accounts are public, so we're not charging you for the data — we're charging for the software that makes the analysis actually usable.",
+    answer: "Five figures a year, flat. One annual subscription covers unlimited studies across every geography (reservation, county, state, national). For comparison, the legacy stack tends to run six figures per study and ships months later. We're early enough that pricing is matched to the use case; tell the team a bit about your organization and we'll come back with a number.",
+    expanded: "More on pricing: it's an annual subscription, not per-study or per-seat or per-geography. Your whole team gets access; you can run as many studies as you want across reservations, counties, states, and national rollups. We work with selected pilot partners while the product is early, which means pricing flexes for size and use case: a community foundation looks different from a state DOT looks different from a tribal gaming enterprise. The math we use under the hood is mainstream economics and the BEA accounts are public, so we're not charging you for the data; we're charging for the software that makes the analysis actually usable.",
     followUps: ['roi_lumecon', 'demo', 'contact', 'compare_implan_workflow'],
   },
   {
@@ -136,7 +136,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'schedule a demo', 'want a demo', 'see a demo', 'see the demo', 'get a demo', 'demo of', 'a demo', 'see the product', 'see the platform', 'show me the platform', 'show me the product', 'is there a demo', 'can i try', 'try the platform', 'try lumecon', 'accepting pilots', 'pilot program', 'pilot partner', 'walkthrough', 'book a call', 'set up a call',
     ],
-    answer: "Yes — happy to set one up. Easiest path is the contact form on this site (or contact@lumecon.ai) with three things: who you are, the kind of impact you want to measure, and any timeline you're working with. The demo runs in your geography against a study scenario relevant to your work, so it's worth the two minutes to give us that context up front.",
+    answer: "Yes. Happy to set one up. Easiest path is the contact form on this site (or contact@lumecon.ai) with three things: who you are, the kind of impact you want to measure, and any timeline you're working with. The demo runs in your geography against a study scenario relevant to your work, so it's worth the two minutes to give us that context up front.",
     followUps: ['contact', 'time_to_study', 'onboarding', 'pricing'],
   },
   {
@@ -145,7 +145,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how do i contact', 'contact you', 'who should i email', 'i want to talk', 'speak with the founder', 'speak to the founder', 'reach lumecon', 'reach the team', 'reach out', 'get in touch', 'send an email', 'email lumecon', 'phone number',
     ],
-    answer: "Contact form on this site or contact@lumecon.ai works. Drop a line about your organization and what you're trying to measure — the team reads everything and routes based on context. If it's time-sensitive (grant deadline, council vote, board meeting), say so and we'll move accordingly.",
+    answer: "Contact form on this site or contact@lumecon.ai works. Drop a line about your organization and what you're trying to measure; the team reads everything and routes based on context. If it's time-sensitive (grant deadline, council vote, board meeting), say so and we'll move accordingly.",
     followUps: ['demo', 'pricing', 'partnerships', 'hiring'],
   },
   {
@@ -188,8 +188,8 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how accurate', 'can i trust the numbers', 'trust the numbers', 'peer reviewed', 'peer review', 'defensible', 'someone challenges', 'used publicly', 'used for grants', 'use for grants', 'with policymakers', 'credibility', 'how credible', 'are the numbers', 'does cedar hallucinate', 'hallucinate', 'hallucination', 'rag', 'retrieval augmented', 'make stuff up',
     ],
-    answer: "Fair question. Three things keep the numbers defensible. One, every direct, indirect, induced, and total impact figure is verified against the existing platforms before it ships, so the numbers match what a reviewer would expect. Two, Cedar is RAG-based — answers come from the actual data and source record, not a model guess. Three, every assumption (multiplier choice, regional bridge, base year, scaling rules) is surfaced and citable in the report. A reviewer can trace any number back to where it came from.",
-    expanded: "More on how we keep this defensible: data provenance is per-row, so when a study cites a BEA multiplier for NAICS 23 in your county, you can click through to the source table and vintage. Assumptions are versioned with the study — change the regional purchase coefficient and the prior run stays preserved in the audit trail. Cedar's reasoning steps are logged alongside the numbers, so if anyone asks why we picked a particular industry bridge or wage assumption, the answer is in the report, not in someone's email. The methodology itself is published openly; we'd rather a reviewer challenge a specific number than wave away the whole approach.",
+    answer: "Fair question. Three things keep the numbers defensible. One, every direct, indirect, induced, and total impact figure is verified against the existing platforms before it ships, so the numbers match what a reviewer would expect. Two, Cedar is RAG-based, so answers come from the actual data and source record, not a model guess. Three, every assumption (multiplier choice, regional bridge, base year, scaling rules) is surfaced and citable in the report. A reviewer can trace any number back to where it came from.",
+    expanded: "More on how we keep this defensible: data provenance is per-row, so when a study cites a BEA multiplier for NAICS 23 in your county, you can click through to the source table and vintage. Assumptions are versioned with the study, so changing the regional purchase coefficient preserves the prior run in the audit trail. Cedar's reasoning steps are logged alongside the numbers, so if anyone asks why we picked a particular industry bridge or wage assumption, the answer is in the report, not in someone's email. The methodology itself is published openly; we'd rather a reviewer challenge a specific number than wave away the whole approach.",
     followUps: ['multipliers', 'data_inputs', 'competitors', 'security'],
   },
   {
@@ -206,8 +206,8 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'is this like implan', 'compete with implan', 'better than implan', 'like rims', 'rims ii', 'rims 2', 'is this like lightcast', 'like emsi', 'like remi', 'replacing economists', 'why not just use implan', 'makes this different', 'how is this different', 'implan alternative', 'compared to implan',
     ],
-    answer: "Same underlying economics — input-output modeling, regional multipliers, base-year reweighting — that's the mainstream stuff and the BEA accounts behind it are public. What's been missing is software built with the tools that exist today: cloud infrastructure, modern UI, RAG-based AI, real-time data feeds, and geographies that aren't trapped inside administrative borders. We verify our direct, indirect, induced, and total impact figures against the existing platforms, update the assumptions and data that should be updated, and keep what shouldn't.",
-    expanded: "Concretely, what's different: pricing structure (flat annual vs. per-geography per-user per-tier), workflow (Cedar harmonizes inputs in minutes rather than analysts hand-cleaning for weeks), geographies (reservations, off-reservation trust land, Alaska Native regional corporations, Native Hawaiian Home Lands all first-class — not edge cases), data freshness (high-frequency public feeds layered on top of the same canonical BEA accounts), and audit trail (every assumption surfaced and citable). What's the same: the math. We benchmark our direct, indirect, induced, and total impact figures against the existing platforms before any study ships, so a reviewer familiar with the legacy tools recognizes the numbers.",
+    answer: "Same underlying economics (input-output modeling, regional multipliers, base-year reweighting). That's the mainstream stuff and the BEA accounts behind it are public. What's been missing is software built with the tools that exist today: cloud infrastructure, modern UI, RAG-based AI, real-time data feeds, and geographies that aren't trapped inside administrative borders. We verify our direct, indirect, induced, and total impact figures against the existing platforms, update the assumptions and data that should be updated, and keep what shouldn't.",
+    expanded: "Concretely, what's different: pricing structure (flat annual vs. per-geography per-user per-tier), workflow (Cedar harmonizes inputs in minutes rather than analysts hand-cleaning for weeks), geographies (reservations, off-reservation trust land, Alaska Native regional corporations, Native Hawaiian Home Lands all first-class, not edge cases), data freshness (high-frequency public feeds layered on top of the same canonical BEA accounts), and audit trail (every assumption surfaced and citable). What's the same: the math. We benchmark our direct, indirect, induced, and total impact figures against the existing platforms before any study ships, so a reviewer familiar with the legacy tools recognizes the numbers.",
     followUps: ['multipliers', 'accuracy', 'roi_lumecon', 'compare_implan_workflow'],
   },
   {
@@ -216,7 +216,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'explain like', 'eli5', "i'm five", 'like i am five', 'what is economic impact', 'why does economic impact matter', 'what does this actually mean', 'why should i care', "what's an example", 'whats an example', 'give me an example', 'in simple terms', 'in plain english',
     ],
-    answer: "Picture a new community college campus opening. The construction crew gets paid (direct). Those workers buy lunch nearby, and the campus orders supplies from a regional vendor (indirect). The vendor pays its staff, who spend on rent, groceries, kids' soccer, the dentist (induced). Add all that up and you have the total economic impact — the campus, plus the ripple. That's the story Lumecon tells, with the math defensible and every assumption visible.",
+    answer: "Picture a new community college campus opening. The construction crew gets paid (direct). Those workers buy lunch nearby, and the campus orders supplies from a regional vendor (indirect). The vendor pays its staff, who spend on rent, groceries, kids' soccer, the dentist (induced). Add all that up and you have the total economic impact: the campus, plus the ripple. That's the story Lumecon tells, with the math defensible and every assumption visible.",
     followUps: ['multipliers', 'audience', 'reports_outputs', 'demo'],
   },
   {
@@ -225,7 +225,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what geographies', 'which geographies', 'what regions', 'which regions', 'coverage', 'what areas does it cover', 'rural counties', 'small region', 'small regions', 'native hawaiian', 'alaska native', 'ancsa', 'reservations', 'reservation level',
     ],
-    answer: "All of it. Every federally recognized tribal nation and reservation, every Alaska Native Regional Corporation, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the country as a whole. Multi-region and overlapping-geography studies work too — a project that crosses three counties or sits on a reservation that overlaps two counties is one study, not three. Whole thing's included in the flat annual subscription; we don't charge per geography.",
+    answer: "All of it. Every federally recognized tribal nation and reservation, every Alaska Native Regional Corporation, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the country as a whole. Multi-region and overlapping-geography studies work too: a project that crosses three counties or sits on a reservation that overlaps two counties is one study, not three. Whole thing's included in the flat annual subscription; we don't charge per geography.",
     followUps: ['tribal_platform', 'local_platform', 'pricing', 'demo'],
   },
   {
@@ -234,7 +234,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'historical', 'longitudinal', 'forward looking', 'forward-looking', 'project forward', 'plan a budget', 'capital project', 'grant proposal', 'budget proposal', 'over time', 'past impact', 'future impact',
     ],
-    answer: "Both. Look back to tell the story of what's already happened (annual impact reports, longitudinal studies), or model forward to plan a budget, grant ask, or capital project. The same data and methodology work either way — only the framing changes. Studies also sharpen over time as more of your data accumulates in the workspace.",
+    answer: "Both. Look back to tell the story of what's already happened (annual impact reports, longitudinal studies), or model forward to plan a budget, grant ask, or capital project. The same data and methodology work either way; only the framing changes. Studies also sharpen over time as more of your data accumulates in the workspace.",
     followUps: ['reports_outputs', 'time_to_study', 'grant_applications', 'demo'],
   },
   {
@@ -243,7 +243,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'where was lumecon built', 'where is lumecon based', 'where is lumecon from', "lumecon's background", 'team background', 'who built lumecon', 'who founded', 'founded by', 'cornell', 'team experience', 'who is on the team', 'who is behind',
     ],
-    answer: "Built at Ivy League and peer schools — Cornell, Dartmouth, Oxford, MIT, and Yale across the team's academic background, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC — which is where we learned what serious data handling and economic analysis are supposed to look like.",
+    answer: "Built at Ivy League and peer schools: Cornell, Dartmouth, Oxford, MIT, and Yale across the team's academic background, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.",
     followUps: ['hiring', 'company_overview', 'partnerships'],
   },
   {
@@ -252,7 +252,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'grant application', 'grant applications', 'federal grant', 'eda grant', 'hud grant', 'dot grant', 'epa grant', 'usda grant', 'cdbg', 'bil', 'bipartisan infrastructure law', 'rural development grant', 'broadband grant', 'workforce grant', 'arc grant', 'narrative for a grant', 'grant narrative', 'job estimates for a grant', 'private investment estimate', 'show economic benefit',
     ],
-    answer: "Yes — this is one of the most common uses. Most federal and state grant programs (EDA, HUD CDBG, DOT BUILD, USDA Rural Development, EPA, NTIA broadband, ARC) want applicants to estimate jobs, private investment, or regional benefit with a credible source behind the numbers. Lumecon produces the jobs, labor income, and tax-impact figures with the methodology attached, so the same study drops into the grant narrative, the council packet, and the board memo without rework.",
+    answer: "Yes. This is one of the most common uses. Most federal and state grant programs (EDA, HUD CDBG, DOT BUILD, USDA Rural Development, EPA, NTIA broadband, ARC) want applicants to estimate jobs, private investment, or regional benefit with a credible source behind the numbers. Lumecon produces the jobs, labor income, and tax-impact figures with the methodology attached, so the same study drops into the grant narrative, the council packet, and the board memo without rework.",
     followUps: ['reports_outputs', 'time_to_study', 'accuracy', 'demo'],
   },
   {
@@ -261,7 +261,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how long does it take', 'how long to produce', 'how long is a study', 'turnaround', 'turn around time', 'how fast can you', 'study timeline', 'project timeline', 'lead time', 'how quickly', 'in time for our board', 'before our deadline', 'before grant deadline',
     ],
-    answer: "Minutes for a standard study, once the data's in. The legacy path takes months because the analyst is harmonizing data by hand and re-running scenarios from scratch every time. Cedar does the harmonization in minutes, so the slow part becomes the judgment calls — which assumptions to surface, which scenario to model — not the spreadsheet work. Minutes, not months.",
+    answer: "Minutes for a standard study, once the data's in. The legacy path takes months because the analyst is harmonizing data by hand and re-running scenarios from scratch every time. Cedar does the harmonization in minutes, so the slow part becomes the judgment calls (which assumptions to surface, which scenario to model), not the spreadsheet work. Minutes, not months.",
     followUps: ['onboarding', 'compare_implan_workflow', 'demo', 'roi_lumecon'],
   },
   {
@@ -270,7 +270,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       "don't have an economist", 'no economist', 'not an economist', 'not a data scientist', 'not technical', 'we are not analysts', 'we are not analysts', 'small team', 'limited capacity', 'tight staffing', 'capacity constrained', 'who runs the analysis', 'do i need to know economics',
     ],
-    answer: "You don't need one. Most organizations using Lumecon don't have an economist on staff — that's exactly who the platform is built for. Cedar walks you through the data, picks defaults that match the geography and project type, and flags every assumption in plain English before the study is finalized. Your team makes the judgment calls; the platform handles the modeling. For unusual or methodology-sensitive projects, the Lumecon team is one email away.",
+    answer: "You don't need one. Most organizations using Lumecon don't have an economist on staff, and that's exactly who the platform is built for. Cedar walks you through the data, picks defaults that match the geography and project type, and flags every assumption in plain English before the study is finalized. Your team makes the judgment calls; the platform handles the modeling. For unusual or methodology-sensitive projects, the Lumecon team is one email away.",
     followUps: ['onboarding', 'time_to_study', 'demo', 'roi_lumecon'],
   },
   {
@@ -288,7 +288,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'city manager', 'city use case', 'city uses', 'county use case', 'county uses', 'edo', 'economic development director', 'economic development office', 'chamber of commerce', 'mayor', 'council member', 'school district', 'school bond', 'special district', 'how do cities use', 'how do counties use',
     ],
-    answer: "Cities and counties use Lumecon for capital project justification (fire station, library, transit line, parks), TIF and tax-abatement evaluation, school-district bond communication, business-attraction packages, and annual community impact reports. EDOs especially use it to compare projects on equal footing and to put concrete numbers behind a recruitment pitch or an incentive ask — the kind of analysis that used to require an outside consultant per project.",
+    answer: "Cities and counties use Lumecon for capital project justification (fire station, library, transit line, parks), TIF and tax-abatement evaluation, school-district bond communication, business-attraction packages, and annual community impact reports. EDOs especially use it to compare projects on equal footing and to put concrete numbers behind a recruitment pitch or an incentive ask, the kind of analysis that used to require an outside consultant per project.",
     followUps: ['bond_measure', 'grant_applications', 'reports_outputs', 'demo'],
   },
   {
@@ -297,7 +297,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'foundation use case', 'how do foundations use', 'foundation report', 'philanthropy', 'philanthropic', 'grantmaker', 'grantmaking', 'community foundation', 'private foundation', 'family foundation', 'measure our giving', 'measure grantmaking', 'sroi', 'social return on investment', 'donor report',
     ],
-    answer: "Foundations and community grantmakers use Lumecon to show donors and boards what their dollars actually moved: jobs supported, wages generated, local business activity, regional ripple effects. The annual report stops reading as anecdote and starts reading as evidence. Community foundations especially use it for place-based portfolios — the dollars invested in a county or a neighborhood, with the economic ripple measured the same way every year.",
+    answer: "Foundations and community grantmakers use Lumecon to show donors and boards what their dollars actually moved: jobs supported, wages generated, local business activity, regional ripple effects. The annual report stops reading as anecdote and starts reading as evidence. Community foundations especially use it for place-based portfolios: the dollars invested in a county or a neighborhood, with the economic ripple measured the same way every year.",
     followUps: ['reports_outputs', 'grant_applications', 'accuracy', 'demo'],
   },
   {
@@ -316,7 +316,7 @@ export const INTENTS: CedarIntent[] = [
       'workflow', 'day to day', 'in practice', 'what does the work look like', 'what does the workflow', 'how is the workflow', 'how does the work flow', 'replacing my consultant', 'replacing consultants', 'replace consultant',
     ],
     answer: "Legacy path: a consultant or analyst opens the existing platforms (software whose workflow predates the internet), hand-cleans data, picks multipliers, writes the report, comes back months later. Lumecon path: drop your administrative data into the workspace, Cedar harmonizes and pre-fits the model, you review the assumptions Cedar surfaces (with direct, indirect, induced, and total impact verified against the existing platforms), approve or adjust each one, export the report. Economist's judgment stays in the loop. The data wrangling and re-runs don't. Minutes, not months.",
-    expanded: "Step by step in the Lumecon workflow: (1) upload the records you already have — budgets, payroll, vendor lists, program data. (2) Cedar matches them against NAICS codes, geographies, time periods, and surfaces anything ambiguous for you to confirm. (3) Cedar pre-fits the impact model with defaults tuned to your geography and project type, and lists every assumption inline. (4) Your team reviews, adjusts, and approves. (5) Run the study; numbers come back in minutes with the audit trail attached. (6) Export the deliverables — full report, executive summary, slide deck, tables — each tuned to the audience. The judgment calls that used to live in a senior analyst's head are now visible in the report.",
+    expanded: "Step by step in the Lumecon workflow: (1) upload the records you already have (budgets, payroll, vendor lists, program data). (2) Cedar matches them against NAICS codes, geographies, time periods, and surfaces anything ambiguous for you to confirm. (3) Cedar pre-fits the impact model with defaults tuned to your geography and project type, and lists every assumption inline. (4) Your team reviews, adjusts, and approves. (5) Run the study; numbers come back in minutes with the audit trail attached. (6) Export the deliverables (full report, executive summary, slide deck, tables), each tuned to the audience. The judgment calls that used to live in a senior analyst's head are now visible in the report.",
     followUps: ['competitors', 'time_to_study', 'roi_lumecon', 'demo'],
   },
   {
@@ -325,7 +325,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'cost vs', 'vs hiring a consultant', 'cheaper than a consultant', 'roi of', 'return on lumecon', 'is this worth it', 'why pay for this', 'why subscribe', 'cost of doing nothing', 'budget for impact', 'price compared to', 'savings vs',
     ],
-    answer: "A single legacy impact study typically runs $50K to $150K and ships months later. Lumecon is five figures a year for unlimited studies across every geography. The legacy price tag is what a workflow looks like after forty years of one toolchain owning the category — it's not a measure of how hard the work actually is. The math is mainstream economics; the BEA accounts behind it are public and free. Payback is usually one or two studies; after that the subscription is producing analyses the organization couldn't have afforded one-off.",
+    answer: "A single legacy impact study typically runs $50K to $150K and ships months later. Lumecon is five figures a year for unlimited studies across every geography. The legacy price tag is what a workflow looks like after forty years of one toolchain owning the category; it's not a measure of how hard the work actually is. The math is mainstream economics; the BEA accounts behind it are public and free. Payback is usually one or two studies; after that the subscription is producing analyses the organization couldn't have afforded one-off.",
     followUps: ['pricing', 'compare_implan_workflow', 'demo', 'competitors'],
   },
   {
@@ -352,7 +352,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'tell me more', 'go deeper', 'more detail', 'more details', 'expand on that', 'expand on this', 'say more', 'keep going', 'continue', 'what else',
     ],
-    answer: "Happy to. To give you something specific instead of repeating myself, pick what's most useful — the methodology, the workflow, the pricing, the data we use, or a demo? Or describe the problem you're trying to solve and I'll route us there.",
+    answer: "Happy to. To give you something specific instead of repeating myself, pick what's most useful: the methodology, the workflow, the pricing, the data we use, or a demo? Or describe the problem you're trying to solve and I'll route us there.",
     followUps: ['company_overview', 'compare_implan_workflow', 'pricing', 'demo'],
   },
   {
@@ -361,7 +361,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'thanks', 'thank you', 'thx', 'ty', 'appreciate it', 'appreciated', 'cheers', 'much appreciated', 'thank u',
     ],
-    answer: "You bet. Anything else I can help with — pricing, geographies, a demo, the workflow?",
+    answer: "You bet. Anything else I can help with: pricing, geographies, a demo, the workflow?",
     followUps: ['pricing', 'demo', 'geographies', 'contact'],
   },
   {
@@ -370,7 +370,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'bye', 'goodbye', 'see you', 'see ya', 'later', "i'm done", 'thats all', "that's all", 'have a good one',
     ],
-    answer: "Take care. If something else comes up, the contact form and contact@lumecon.ai are both monitored — drop a line anytime.",
+    answer: "Take care. If something else comes up, the contact form and contact@lumecon.ai are both monitored. Drop a line anytime.",
   },
   {
     id: 'affirmative',
@@ -378,7 +378,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'yes', 'yeah', 'yep', 'sure', 'ok', 'okay', 'got it', 'makes sense', 'sounds good', 'cool', 'nice', 'great',
     ],
-    answer: "Good. Want me to keep going on this thread, or switch to something else — pricing, demo, the workflow, who else uses Lumecon?",
+    answer: "Good. Want me to keep going on this thread, or switch to something else: pricing, demo, the workflow, who else uses Lumecon?",
     followUps: ['pricing', 'demo', 'compare_implan_workflow', 'audience'],
   },
   {
@@ -387,7 +387,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'no', 'nope', 'not really', 'not yet', 'not now', 'maybe later',
     ],
-    answer: "No problem. If something else is on your mind — methodology, geographies, a specific use case — say the word and we'll route there. Otherwise the contact form is here whenever you're ready.",
+    answer: "No problem. If something else is on your mind (methodology, geographies, a specific use case), say the word and we'll route there. Otherwise the contact form is here whenever you're ready.",
     followUps: ['company_overview', 'audience', 'contact'],
   },
   {
@@ -396,7 +396,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'help', "i'm confused", 'what should i ask', "i don't know where to start", 'guide me', 'not sure what i need', 'i just want to know more', 'where do i start',
     ],
-    answer: "No problem — easiest starting points are: what Lumecon does, who uses it, how a study works, or what it costs. If you've got a specific project in mind (a grant, a bond, an annual impact report), tell me about it and I'll point us at the right answer.",
+    answer: "No problem. Easiest starting points: what Lumecon does, who uses it, how a study works, or what it costs. If you've got a specific project in mind (a grant, a bond, an annual impact report), tell me about it and I'll point us at the right answer.",
     followUps: ['company_overview', 'audience', 'pricing', 'demo'],
   },
   {
@@ -413,7 +413,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'hi', 'hello', 'hey', 'yo', 'sup', 'howdy', 'good morning', 'good afternoon', 'good evening', 'cedar',
     ],
-    answer: "Hey, I'm Cedar — Lumecon's site assistant. I can answer questions about what Lumecon does, who uses it, how the math works, what a study costs, or how to reach the team. What brings you in today?",
+    answer: "Hey, I'm Cedar, Lumecon's site assistant. I can answer questions about what Lumecon does, who uses it, how the math works, what a study costs, or how to reach the team. What brings you in today?",
     followUps: ['company_overview', 'audience', 'pricing', 'demo'],
   },
 ];

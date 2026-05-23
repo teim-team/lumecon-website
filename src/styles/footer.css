@@ -1,20 +1,14 @@
+/* Footer: light dominant surface so the page doesn't end on a slab
+   of navy. Only a thin navy bar at the very bottom carries the
+   copyright + email. Cream background, teal accents on column heads
+   and the Contact CTA tie the footer to the rest of the brand. */
 .footer {
-  background: var(--navy);
-  color: var(--cream);
-  padding: clamp(3rem, 6vw, 5rem) 0 1.6rem;
+  background: var(--cream);
+  color: var(--ink);
+  padding: clamp(2rem, 4vw, 2.8rem) 0 0;
   position: relative;
-  overflow: hidden;
+  border-top: 1px solid var(--rule);
 }
-.footer::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 90% 0%, rgba(15, 181, 165, .08), transparent 45%),
-    radial-gradient(circle at 0% 100%, rgba(139, 125, 168, .08), transparent 40%);
-  pointer-events: none;
-}
-.footer > * { position: relative; z-index: 2; }
 .footer-w {
   max-width: var(--container-max);
   margin: 0 auto;
@@ -23,93 +17,89 @@
 .footer-top {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(2rem, 5vw, 4rem);
-  padding-bottom: clamp(2rem, 4vw, 3rem);
-  border-bottom: 1px solid rgba(246, 241, 233, .12);
+  gap: clamp(1.5rem, 3.5vw, 2.8rem);
+  padding-bottom: clamp(1.4rem, 2.8vw, 2rem);
 }
-.footer-brand { display: flex; flex-direction: column; gap: .55rem; align-items: flex-start; }
-/* Wordmark + cedar tree mark side-by-side. The tree echoes the
-   Cedar FAB and the "Meet Cedar" hero tile, so the footer brand
-   reads as one thing instead of three across the site. */
+.footer-brand { display: flex; flex-direction: column; gap: .45rem; align-items: flex-start; }
 .footer-brand__wordmark {
   display: inline-flex;
   align-items: center;
-  gap: .55rem;
 }
-.footer-brand__mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  color: var(--cedar-light, #1BB66A);
-}
-.footer-brand__mark svg { width: 100%; height: 100%; display: block; }
 .footer-brand-pitch {
-  font-size: .9rem;
-  color: rgba(246, 241, 233, .65);
+  font-size: .85rem;
+  color: var(--ink-3);
   max-width: 24rem;
   line-height: 1.5;
 }
 .footer-cols {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1.2rem, 2.4vw, 2rem);
+  gap: clamp(1rem, 2vw, 1.6rem);
 }
-.footer-static {
-  font-size: .9rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, .55);
-  line-height: 1.45;
-}
-.footer-col { display: flex; flex-direction: column; gap: .55rem; }
+.footer-col { display: flex; flex-direction: column; gap: .35rem; }
 .footer-col__head {
-  font-size: .68rem;
+  font-size: .64rem;
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: .35rem;
-  opacity: .9;
+  margin-bottom: .25rem;
+  font-weight: 600;
 }
 .footer-col a {
-  font-size: .9rem;
+  font-size: .85rem;
   font-weight: 500;
-  color: rgba(246, 241, 233, .78);
+  color: var(--ink-2);
   transition: color .2s var(--ease);
+  text-decoration: none;
 }
-.footer-col a:hover { color: var(--cream); }
+.footer-col a:hover { color: var(--navy); }
+/* Contact link picks up the teal accent so it reads as the most
+   actionable item in the column. */
+.footer-col__contact {
+  color: var(--accent) !important;
+  font-weight: 600 !important;
+}
+.footer-col__contact:hover { color: var(--accent-btn-hover) !important; }
 
+/* Thin navy strip at the very bottom: just the copyright row + email.
+   Replaces the massive navy slab that used to swallow the whole
+   footer. */
+.footer-bar {
+  background: var(--navy);
+  color: var(--cream);
+  padding: .7rem 0;
+}
 .footer-bottom {
-  margin-top: 1.4rem;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: .5rem;
+  gap: .4rem 1rem;
+  align-items: center;
 }
 .footer-legal {
   font-size: .7rem;
-  color: rgba(246, 241, 233, .45);
-  max-width: 760px;
-  line-height: 1.55;
+  color: rgba(246, 241, 233, .6);
+  line-height: 1.45;
   letter-spacing: .005em;
 }
 .footer-email {
-  font-size: .72rem;
+  font-size: .7rem;
   letter-spacing: .04em;
-  color: rgba(246, 241, 233, .6);
+  color: rgba(246, 241, 233, .75);
   transition: color .2s var(--ease);
+  text-decoration: none;
 }
-.footer-email:hover { color: var(--accent); }
+.footer-email:hover { color: var(--accent-light); }
 
 @media (max-width: 1100px) {
-  .footer-cols { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  .footer-cols { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
 }
 @media (max-width: 900px) {
   .footer-top { grid-template-columns: 1fr; }
-  .footer-cols { grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  .footer-cols { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 }
 @media (max-width: 600px) {
   .footer-w { padding: 0 var(--mobile-pad); }
   .footer-cols { grid-template-columns: 1fr 1fr; }
-  .footer-bottom { flex-direction: column; text-align: left; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; text-align: left; }
 }
