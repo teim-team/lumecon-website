@@ -60,7 +60,7 @@
   --map-tribal:        #C77A18;
   --map-tribal-deep:   #7A4708;
 
-  color-scheme: light;
+  color-scheme: light dark;
 
   /* Type system — Inter for everything except mono marginalia.
      A modern software brand uses one sans aggressively across all
@@ -112,6 +112,89 @@ body {
   overscroll-behavior-x: none;
   line-height: 1.6;
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Dark mode ----------
+   Site uses --white for surfaces and --navy for text in most rules.
+   In dark mode we flip those (plus paper/cream/ink-2/ink-3/rule) so
+   the bulk of the site auto-inverts without a per-component refactor.
+   A small set of elements that use --navy as a saturated DARK
+   accent (default .btn fill, .nav-cta, .footer-bar, .cta-form
+   submit, hamburger bars, cedar FAB) need overrides so they stay
+   readable on the now-dark page rather than fading into it.
+   --accent / --gold / --cedar stay where they are; they pop on
+   both light and dark surfaces. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --white:        #0F1530;
+    --cream:        #131838;
+    --paper:        #181E40;
+    --navy:         #F1F3FA;
+    --navy2:        #BCC1D8;
+    --navy-soft:    rgba(241, 243, 250, .68);
+    --ink:          #F1F3FA;
+    --ink-2:        #C9CEDF;
+    --ink-3:        #8C92AB;
+    --ink-4:        #5F647B;
+    --rule:         rgba(255, 255, 255, .12);
+    --rule-strong:  rgba(255, 255, 255, .22);
+    --accent-rgba-08: rgba(15, 181, 165, .14);
+    --accent-rgba-18: rgba(15, 181, 165, .26);
+    /* Highlight tints need more punch to read on a dark surface. */
+    --gold:         #FFC83D;
+  }
+
+  /* Primary CTA: keep accent teal as the saturated action color in
+     dark mode (navy is no longer a dark hue). */
+  .btn {
+    background: var(--accent);
+    color: #0A0F26;
+    border-color: var(--accent);
+  }
+  .btn:hover { background: var(--accent-light); border-color: var(--accent-light); }
+  .btn--ghost { background: transparent; color: var(--navy); border-color: var(--rule-strong); }
+  .btn--ghost:hover { background: var(--accent); color: #0A0F26; border-color: var(--accent); }
+
+  /* Nav sign-up button mirrors the primary CTA. */
+  .nav-links .nav-cta { background: var(--accent); color: #0A0F26; }
+  .nav-links .nav-cta:hover { background: var(--accent-light); }
+  .nav-links .nav-ghost:hover { background: var(--accent); color: #0A0F26; border-color: var(--accent); }
+
+  /* Hamburger lines were navy on white nav; now need to show on
+     dark nav. They use background: var(--navy) which we flipped to
+     cream, so they auto-show. Good. */
+
+  /* Footer-bar: the dark stripe at the very bottom of every page
+     stays a deeper navy so it still reads as a defined band rather
+     than blending into the page. */
+  .footer-bar { background-color: #050920; color: #BCC1D8; }
+  .footer-email { color: rgba(241, 243, 250, .75); }
+  .footer-email:hover { color: var(--accent); }
+
+  /* Form fields: white-on-white in light mode becomes paper-on-
+     surface in dark mode. */
+  .cta-form a#formSend {
+    background: var(--accent);
+    color: #0A0F26;
+  }
+  .cta-form a#formSend:hover { background: var(--accent-light); }
+
+  /* Cedar FAB stays a saturated green bubble in both modes. */
+
+  /* Map workspace inner background: was a near-white tint
+     (var(--paper)); the flip makes it dark already. Border
+     contrast is the only thing to nudge. */
+
+  /* Forms / inputs on signup/login pages get a darker paper. */
+  input, textarea, select {
+    color-scheme: dark;
+  }
+
+  /* Pricing platform tile gradient overlay: the soft accent tint
+     reads as too-faint on dark; bump opacity. */
+  .pricing-platform-tile.is-active {
+    background: linear-gradient(0deg, rgba(15, 181, 165, .14) 0%, var(--white) 100%);
+  }
 }
 
 /* ---------- Section-snap scrolling ----------
@@ -768,15 +851,18 @@ strong { font-weight: 600; color: inherit; }
 .delay-3 { transition-delay: .3s; }
 .delay-4 { transition-delay: .4s; }
 
-/* Asymmetric accent block behind key text. Each instance pulls its
-   angle, padding asymmetry, and tint from CSS custom properties so
-   different headlines on the same page don't read like the same
-   stamp repeated. ::before wipes in from one side when the parent
-   gets .seen (via the same IntersectionObserver that drives
-   .reveal-soft). Three brand tints rotate across pages — teal
-   (UI accent), yellow (brand gold), green (cedar) — chosen
-   strategically so consecutive headlines never share a color and
-   the rail through the site reads as deliberate, not decorative. */
+/* Asymmetric accent block behind key text. Each instance pulls
+   its angle, inset asymmetry, tint, AND scale-X end-state from
+   CSS custom properties so variants differ in shape and not just
+   rotation. Some variants cover the full text width; others stop
+   short of one or both edges so the highlight reads as a smear
+   under a phrase rather than a uniform rectangle behind every
+   headline.
+
+   The ::before wipes in from one side when the parent gets .seen
+   (via the same IntersectionObserver that drives .reveal-soft).
+   Three brand tints rotate across pages: teal (UI accent),
+   yellow (brand gold), green (cedar). */
 .hl-block {
   --hl-rot: -1.4deg;
   --hl-color: rgba(15, 181, 165, .24);
@@ -786,6 +872,9 @@ strong { font-weight: 600; color: inherit; }
   --hl-inset-l: -.55em;
   --hl-radius: 6px;
   --hl-origin: left center;
+  /** End-state X scale (1 = highlight stretches full inset
+   *  width; values <1 leave one edge un-highlighted). */
+  --hl-scale: 1;
   position: relative;
   isolation: isolate;
   width: fit-content;
@@ -805,9 +894,9 @@ strong { font-weight: 600; color: inherit; }
 }
 .hl-block.seen::before,
 .hl-block:not(.reveal-soft)::before {
-  transform: rotate(var(--hl-rot)) scaleX(1);
+  transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale));
 }
-/* Teal variants — UI accent. */
+/* Teal — UI accent. Three variants, three shapes. */
 .hl-block--b {
   --hl-rot: 1.8deg;
   --hl-color: rgba(15, 181, 165, .28);
@@ -816,34 +905,38 @@ strong { font-weight: 600; color: inherit; }
   --hl-inset-b: -.34em;
   --hl-inset-l: -.85em;
   --hl-origin: right center;
+  --hl-scale: .82;          /* leaves the left edge of the text uncovered */
 }
 .hl-block--c {
-  --hl-rot: -2.6deg;
+  --hl-rot: -2.8deg;
   --hl-color: var(--accent-bar);
-  --hl-inset-t: -.36em;
-  --hl-inset-r: -.95em;
-  --hl-inset-b: -.05em;
+  --hl-inset-t: -.45em;     /* tall, runs above the text */
+  --hl-inset-r: -1.2em;
+  --hl-inset-b: 0;
   --hl-inset-l: -.4em;
   --hl-radius: 3px;
+  --hl-scale: .92;
 }
 .hl-block--d {
   --hl-rot: .6deg;
   --hl-color: rgba(15, 181, 165, .18);
-  --hl-inset-t: -.12em;
+  --hl-inset-t: -.08em;
   --hl-inset-r: -.7em;
-  --hl-inset-b: -.42em;
+  --hl-inset-b: -.55em;     /* low, sits beneath like a shadow */
   --hl-inset-l: -.7em;
-  --hl-radius: 12px;
+  --hl-radius: 16px;
 }
-/* Yellow / gold variants — brand luminate gold. */
+/* Gold — brand luminate. Two variants. */
 .hl-block--gold {
-  --hl-rot: 2.2deg;
+  --hl-rot: 2.4deg;
   --hl-color: rgba(240, 169, 26, .28);
   --hl-inset-t: -.22em;
-  --hl-inset-r: -.55em;
+  --hl-inset-r: -.45em;
   --hl-inset-b: -.3em;
-  --hl-inset-l: -.85em;
+  --hl-inset-l: -1em;
   --hl-radius: 8px;
+  --hl-origin: right center;
+  --hl-scale: .9;
 }
 .hl-block--gold-b {
   --hl-rot: -1.4deg;
@@ -853,8 +946,9 @@ strong { font-weight: 600; color: inherit; }
   --hl-inset-b: -.08em;
   --hl-inset-l: -.4em;
   --hl-radius: 4px;
+  --hl-scale: .7;           /* narrow smear: only ~70% of text width covered */
 }
-/* Green variant — cedar forest. */
+/* Green — cedar forest. Two variants. */
 .hl-block--green {
   --hl-rot: -1.8deg;
   --hl-color: rgba(14, 139, 79, .22);
@@ -869,14 +963,28 @@ strong { font-weight: 600; color: inherit; }
   --hl-color: rgba(27, 182, 106, .22);
   --hl-inset-t: -.14em;
   --hl-inset-r: -.5em;
-  --hl-inset-b: -.36em;
-  --hl-inset-l: -.9em;
+  --hl-inset-b: -.42em;     /* extra-tall on the bottom */
+  --hl-inset-l: -1em;
   --hl-origin: right center;
   --hl-radius: 14px;
+  --hl-scale: .85;
 }
+/* Smear variant: gradient that fades on both edges instead of
+   a hard rectangle. Use for one or two headlines per page so
+   the page doesn't feel uniformly rectangular. */
+.hl-block--smear {
+  --hl-rot: -.8deg;
+  --hl-color: linear-gradient(110deg, transparent 0%, rgba(15, 181, 165, .3) 22%, rgba(15, 181, 165, .3) 70%, transparent 92%);
+  --hl-inset-t: -.2em;
+  --hl-inset-r: -.5em;
+  --hl-inset-b: -.18em;
+  --hl-inset-l: -.5em;
+  --hl-radius: 24px;
+}
+.hl-block--smear::before { background: var(--hl-color); }
 .hl-block--right { --hl-origin: right center; }
 @media (prefers-reduced-motion: reduce) {
-  .hl-block::before { transition: none; transform: rotate(var(--hl-rot)) scaleX(1); }
+  .hl-block::before { transition: none; transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale)); }
 }
 
 /* Focus styles for keyboard navigation */

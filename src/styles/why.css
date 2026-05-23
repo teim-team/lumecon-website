@@ -47,11 +47,59 @@
   margin: 0;
   max-width: 62ch;
 }
-/* Accent box that wraps the three lede paragraphs. White card on
-   the cream section background, with a teal rail on the left so
-   the long prose reads as one deliberate block rather than three
-   floating lines. */
+/* Lede prose disclosure: kicker-style summary that opens to the
+   white-card lede box. Hidden by default on both mobile and
+   desktop so the h2 + three cards below carry the message above
+   the fold. */
+.why-header__lede-disclosure {
+  max-width: 72ch;
+  margin: 0 0 .4rem;
+}
+.why-header__lede-summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  padding: .5rem 0;
+}
+.why-header__lede-summary::-webkit-details-marker { display: none; }
+.why-header__lede-chev {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.why-header__lede-chev::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.4px solid var(--navy);
+  border-bottom: 1.4px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease);
+}
+.why-header__lede-disclosure[open] .why-header__lede-chev {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.why-header__lede-disclosure[open] .why-header__lede-chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+  border-color: var(--white);
+}
 .why-header__lede-box {
+  margin-top: .7rem;
   background: var(--white);
   border-left: 3px solid var(--accent);
   border-radius: 0 10px 10px 0;
@@ -63,6 +111,14 @@
   box-shadow:
     0 1px 2px rgba(10, 15, 38, .04),
     0 12px 32px -22px rgba(10, 15, 38, .12);
+  animation: why-lede-in .3s var(--ease);
+}
+@keyframes why-lede-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .why-header__lede-box { animation: none; }
 }
 .why-header__lede-box .why-header__lede {
   max-width: none;

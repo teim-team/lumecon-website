@@ -119,12 +119,15 @@ const jsonLd = [
     </header>
 
     <!-- Quick credentials strip — small, plain, monospaced. Same
-         pattern as the hero proof points on the home page. -->
+         pattern as the hero proof points on the home page. The
+         credentials end with a link to /about so applicants can
+         see the existing team in detail before they apply. -->
     <ul class="join-cred reveal-soft" aria-label="Team credentials" data-stagger="3">
       <li>Built at Ivy League and peer schools</li>
       <li>Six people</li>
       <li>Federal Reserve experience</li>
       <li>Patent pending</li>
+      <li><a class="join-cred__link" href="/about">Meet the team &rarr;</a></li>
     </ul>
 
     <!-- The world is changing. Headline carries the message; body
@@ -556,6 +559,13 @@ const jsonLd = [
     display: inline-flex;
     align-items: center;
   }
+  .join-cred__link {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .15s var(--ease);
+  }
+  .join-cred__link:hover { color: var(--accent-btn-hover); }
   .join-cred li + li::before {
     content: '';
     width: 3px;
