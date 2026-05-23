@@ -422,10 +422,10 @@
   margin-top: .25rem;
 }
 .person-card__links .person-card__email { margin-top: 0; }
-/* LinkedIn: a small square chip with sharp edges, echoing the
-   highlight-rectangle aesthetic, that picks up the teal accent on
-   hover the way the avatar ring does. */
-.person-card__linkedin {
+/* Profile chips (LinkedIn, Google Scholar): small square chips with
+   sharp edges, echoing the highlight-rectangle aesthetic, that pick
+   up the teal accent on hover the way the avatar ring does. */
+.person-card__social {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -436,8 +436,8 @@
   border: 1px solid var(--rule-strong, rgba(14, 21, 48, .18));
   transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
 }
-.person-card__linkedin svg { width: 14px; height: 14px; display: block; }
-.person-card__linkedin:hover {
+.person-card__social svg { width: 14px; height: 14px; display: block; }
+.person-card__social:hover {
   color: var(--accent);
   border-color: var(--accent);
   background: var(--accent-rgba-08);
@@ -507,6 +507,103 @@
   .person-card__head { grid-template-columns: 48px 1fr 28px; column-gap: .85rem; }
   .person-card__avatar { width: 48px; height: 48px; font-size: .95rem; }
   .person-card__summary { font-size: .86rem; }
+}
+
+/* ---------- Featured work ---------- */
+.about-page__research {
+  background: var(--white);
+  padding: clamp(2.6rem, 5vw, 3.8rem) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.about-page__pubs {
+  list-style: none;
+  margin: 1.6rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1rem;
+}
+/* Sharp teal left edge (research marker, mirrors the gold rule on
+   the about-belief line); the rest of the card keeps the soft card
+   radius used by the person cards so the two grids feel related. */
+.pub-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: clamp(1.1rem, 1.8vw, 1.4rem);
+  transition: border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.pub-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -16px rgba(14, 21, 48, .18);
+}
+.pub-card__venue {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+  line-height: 1.4;
+}
+.pub-card__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.08rem;
+  line-height: 1.28;
+  letter-spacing: -.014em;
+  margin: 0;
+}
+.pub-card__title a {
+  color: var(--navy);
+  text-decoration: none;
+  transition: color .15s var(--ease);
+}
+.pub-card__title a:hover { color: var(--accent); }
+.pub-card__authors {
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+  margin: 0;
+}
+.pub-card__author--team {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .15s var(--ease);
+}
+.pub-card__author--team:hover { border-bottom-color: var(--accent); }
+.pub-card__summary {
+  font-family: var(--font-sans);
+  font-size: .9rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+}
+.pub-card__link {
+  margin-top: auto;
+  padding-top: .35rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  width: fit-content;
+}
+.pub-card__link span { transition: transform .15s var(--ease); display: inline-block; }
+.pub-card__link:hover span { transform: translateX(3px); }
+@media (max-width: 720px) {
+  .about-page__pubs { grid-template-columns: 1fr; }
 }
 
 /* ---------- Bridge to /join ---------- */

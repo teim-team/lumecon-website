@@ -37,6 +37,9 @@ export interface Person {
   /** Public LinkedIn profile URL. Rendered as an icon link on the
    *  person card and emitted as Person.sameAs for entity linking. */
   linkedin?: string;
+  /** Google Scholar profile URL. Rendered as an icon link and
+   *  emitted as Person.sameAs alongside LinkedIn. */
+  scholar?: string;
   /** Whether this person is a co-founder of Lumecon (used for
    *  Organization.founder JSON-LD). */
   founder?: boolean;
@@ -57,6 +60,7 @@ export const TEAM: Person[] = [
     group: 'team',
     title: 'Co-Founder & CEO',
     email: 'elijah.moreno@lumecon.ai',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
     founder: true,
     summary: "Co-founder and CEO. PhD candidate in Public Policy at Cornell; A.B. Dartmouth; M.P.P. Cornell. Previously at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians, and the Taylor Policy Group.",
     bio: [
@@ -109,6 +113,7 @@ export const TEAM: Person[] = [
     title: 'Economics Lead',
     email: 'laurel.wheeler@lumecon.ai',
     linkedin: 'https://ca.linkedin.com/in/laurel-wheeler',
+    scholar: 'https://scholar.google.com/citations?user=oV06J_wAAAAJ&hl=en&oi=ao',
     summary: "Leads economic theory and tribal adaptation. PhD in Economics from Duke; previously an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).",
     bio: [
       "Laurel Wheeler leads Lumecon's economic theory and tribal adaptation work, helping ensure the platform reflects credible economic reasoning and the institutional realities of the communities it serves. She holds a B.A. in Political Science from the University of Florida, an M.S. in Economics for Development from the University of Oxford, and an M.A. and Ph.D. in Economics from Duke University.",
@@ -148,6 +153,7 @@ export const TEAM: Person[] = [
     title: 'Cedar Lead',
     email: 'francesca.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/francesca-agnes-a8106722b',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ',
     summary: "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Biology, University of Illinois Urbana-Champaign.",
     bio: [
       "Francesca Agnes leads development of Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions, and helping users move from messy data to usable analysis. She studied Biology at the University of Illinois Urbana-Champaign.",
@@ -176,6 +182,7 @@ export const TEAM: Person[] = [
     group: 'advisor',
     title: 'Product, Data Security & Research Operations Advisor',
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
+    scholar: 'https://scholar.google.com/citations?user=vETE-QYAAAAJ&hl=en&oi=ao',
     summary: "Advises on product direction, data governance, privacy, and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.",
     bio: [
       "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction, and responsible infrastructure. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets. She holds a Ph.D. in Statistics and Policy in Education from the University of Alaska Fairbanks, an M.A. in Urban Education Policy from Brown University, and a B.S. in Education from the University of Wisconsin–Whitewater.",
@@ -189,6 +196,7 @@ export const TEAM: Person[] = [
     tint: 'green',
     group: 'advisor',
     title: 'Methodology Advisor',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
     summary: "Advises on empirical methodology, econometrics, model design, and research standards. PhD candidate in Economics at MIT, focused on econometrics.",
     bio: [
       "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design, and research standards. He is a PhD candidate in Economics at MIT with a focus on econometrics.",
@@ -271,3 +279,86 @@ export const TEAM_BY_GROUP: Record<PersonGroup, Person[]> = {
   team: TEAM.filter((p) => p.group === 'team'),
   advisor: TEAM.filter((p) => p.group === 'advisor'),
 };
+
+/**
+ * Featured work — selected peer-reviewed and policy research authored
+ * by people on the team. Surfaced on /about as a "research" card grid
+ * and as ScholarlyArticle / Book JSON-LD so the team's credibility is
+ * legible to both visitors and search.
+ *
+ * `authors` lists every author in published order; entries with a
+ * `slug` matching a TEAM person render as a link to that person's
+ * card and resolve to their Person @id in the structured data.
+ */
+export interface Publication {
+  slug: string;
+  title: string;
+  authors: { name: string; slug?: string }[];
+  /** Journal or publisher line shown under the title. */
+  venue: string;
+  year: string;
+  /** Drives the JSON-LD @type: a databook is a Book, papers articles. */
+  type: 'book' | 'article';
+  /** One-to-two sentence plain-language summary. */
+  summary: string;
+  /** Link to the full text (PDF or landing page). */
+  url: string;
+}
+
+export const PUBLICATIONS: Publication[] = [
+  {
+    slug: 'reservations-databook',
+    title: 'Social and Economic Changes in American Indian Reservations: A Databook of the US Census and the American Community Survey, Third Edition, 1990–2020',
+    authors: [
+      { name: 'Randall Akee' },
+      { name: 'Elijah Moreno', slug: 'elijah-moreno' },
+      { name: 'Amy Besaw Medford' },
+    ],
+    venue: 'Ash Center for Democratic Governance and Innovation, Harvard Kennedy School',
+    year: '2025',
+    type: 'book',
+    summary: 'Three decades of Census and American Community Survey data tracking how life on American Indian reservations changed across fourteen socioeconomic indicators from 1990 to 2020 — documenting real gains in employment, education, and housing while mapping the gaps that still persist.',
+    url: 'https://ash.harvard.edu/wp-content/uploads/2025/09/Databook-Third-Edition-2025-09-07-1.pdf',
+  },
+  {
+    slug: 'more-than-chance',
+    title: 'More than Chance: The Local Labor Market Effects of Tribal Gaming',
+    authors: [
+      { name: 'Laurel Wheeler', slug: 'laurel-wheeler' },
+    ],
+    venue: 'Center for Indian Country Development, Federal Reserve Bank of Minneapolis',
+    year: '2023',
+    type: 'article',
+    summary: 'Using confidential Census microdata, this paper shows that tribal government gaming drives sustained gains in reservation employment and wages — with American Indians benefiting most — while housing costs rise by less than the wages it creates, pointing to net local benefits.',
+    url: 'https://www.minneapolisfed.org/-/media/assets/papers/cicdwp/2023/cicd-wp-2023-02.pdf',
+  },
+  {
+    slug: 'native-cdfi-lending',
+    title: 'Beyond Conventional Models: Lending by Native Community Development Financial Institutions',
+    authors: [
+      { name: 'Valentina Dimitrova-Grajzl' },
+      { name: 'Peter Grajzl' },
+      { name: 'Joseph Guse' },
+      { name: 'Michou Kokodoko' },
+      { name: 'Laurel Wheeler', slug: 'laurel-wheeler' },
+    ],
+    venue: 'Annals of Public and Cooperative Economics (CICD working paper, Federal Reserve Bank of Minneapolis)',
+    year: '2023',
+    type: 'article',
+    summary: 'The first systematic quantitative analysis of lending by Native Community Development Financial Institutions, drawing on loan-level data from eleven funds to show that both conventional risk measures and community-informed, character-based judgment predict repayment — evidence for holistic credit assessment in Native communities.',
+    url: 'https://www.minneapolisfed.org/-/media/assets/papers/cicdwp/2022/cicd-wp-2022-02.pdf?rev=019088c6865b41589003406b7079e3d2',
+  },
+  {
+    slug: 'tsls-information-provision',
+    title: 'Interpreting TSLS Estimators in Information Provision Experiments',
+    authors: [
+      { name: 'Vod Vilfort', slug: 'vod-vilfort' },
+      { name: 'Whitney Zhang' },
+    ],
+    venue: 'American Economic Review: Insights, Vol. 7, No. 3',
+    year: '2025',
+    type: 'article',
+    summary: 'A methodological paper formalizing the exclusion and monotonicity conditions under which two-stage least squares recovers a positive-weighted average of causal effects in information-provision experiments — with practical guidance on which estimators researchers can trust.',
+    url: 'https://pubs.aeaweb.org/doi/pdf/10.1257/aeri.20240353',
+  },
+];

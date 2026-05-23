@@ -26,7 +26,7 @@ import { site } from '../config';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { TEAM, TEAM_BY_GROUP, TEAM_BY_SLUG, WORKING_AREAS, type Person } from '../data/team';
+import { TEAM, TEAM_BY_GROUP, TEAM_BY_SLUG, WORKING_AREAS, PUBLICATIONS, type Person, type Publication } from '../data/team';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -54,7 +54,8 @@ function personJsonLd(p: Person) {
     "worksFor": { "@type": "Organization", "@id": `${site.url}#org`, "name": site.legalName },
   };
   if (p.email) node.email = `mailto:${p.email}`;
-  if (p.linkedin) node.sameAs = [p.linkedin];
+  const sameAs = [p.linkedin, p.scholar].filter(Boolean);
+  if (sameAs.length) node.sameAs = sameAs;
   if (p.alumniOf && p.alumniOf.length) {
     node.alumniOf = p.alumniOf.map((n) => ({ "@type": "EducationalOrganization", "name": n }));
   }
@@ -64,11 +65,31 @@ function personJsonLd(p: Person) {
   return node;
 }
 
+/* Featured-work structured data: each paper becomes a Book or
+   ScholarlyArticle whose authors resolve to the team Person @ids,
+   tying published research to the people who wrote it. */
+function publicationJsonLd(pub: Publication) {
+  return {
+    "@context": "https://schema.org",
+    "@type": pub.type === 'book' ? "Book" : "ScholarlyArticle",
+    "name": pub.title,
+    "url": pub.url,
+    "datePublished": pub.year,
+    "author": pub.authors.map((a) =>
+      a.slug
+        ? { "@type": "Person", "@id": `${site.url}/about#${a.slug}`, "name": a.name }
+        : { "@type": "Person", "name": a.name }
+    ),
+    "publisher": { "@type": "Organization", "name": pub.venue },
+  };
+}
+
 const founders = TEAM.filter((p) => p.founder);
 
-/* LinkedIn "in" glyph, sized by CSS. Injected with set:html so the
+/* Profile-link glyphs, sized by CSS. Injected with set:html so the
    same markup serves every card without repeating the path. */
 const linkedinIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>`;
+const scholarIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v3.92L12 21l7-3.9v-3.92L12 17l-7-3.82z"/></svg>`;
 
 const jsonLd = [
   {
@@ -97,6 +118,7 @@ const jsonLd = [
     ],
   },
   ...TEAM.map(personJsonLd),
+  ...PUBLICATIONS.map(publicationJsonLd),
 ];
 ---
 <BaseLayout
@@ -205,13 +227,16 @@ const jsonLd = [
                   <span class="person-card__meta">
                     <span class="person-card__name">{p.name}</span>
                     <span class="person-card__title">{p.title}</span>
-                    {(p.email || p.linkedin) && (
+                    {(p.email || p.linkedin || p.scholar) && (
                       <span class="person-card__links">
                         {p.email && (
                           <a class="person-card__email" href={`mailto:${p.email}`} onclick="event.stopPropagation()">{p.email}</a>
                         )}
                         {p.linkedin && (
-                          <a class="person-card__linkedin" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} onclick="event.stopPropagation()" set:html={linkedinIcon}></a>
+                          <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} onclick="event.stopPropagation()" set:html={linkedinIcon}></a>
+                        )}
+                        {p.scholar && (
+                          <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} onclick="event.stopPropagation()" set:html={scholarIcon}></a>
                         )}
                       </span>
                     )}
@@ -242,9 +267,14 @@ const jsonLd = [
                   <span class="person-card__meta">
                     <span class="person-card__name">{p.name}</span>
                     <span class="person-card__title">{p.title}</span>
-                    {p.linkedin && (
+                    {(p.linkedin || p.scholar) && (
                       <span class="person-card__links">
-                        <a class="person-card__linkedin" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} onclick="event.stopPropagation()" set:html={linkedinIcon}></a>
+                        {p.linkedin && (
+                          <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} onclick="event.stopPropagation()" set:html={linkedinIcon}></a>
+                        )}
+                        {p.scholar && (
+                          <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} onclick="event.stopPropagation()" set:html={scholarIcon}></a>
+                        )}
                       </span>
                     )}
                     <span class="person-card__summary">{p.summary}</span>
@@ -255,6 +285,46 @@ const jsonLd = [
                   {p.bio.map((para) => <p>{para}</p>)}
                 </div>
               </details>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Featured work: selected research authored by people on the
+         team. Establishes the caliber of the people behind Lumecon
+         right before the join bridge. Cards link out to the full
+         text; team authors link back up to their bio card. -->
+    <section class="about-page__research" aria-labelledby="about-research-title">
+      <div class="about-page__inner">
+        <p class="about-page__kicker">Featured work</p>
+        <h2 class="about-page__h2 reveal-soft hl-block hl-block--green-b" id="about-research-title">Research the team has published.</h2>
+        <p class="about-page__lede about-page__lede--how">
+          Lumecon is built on published economic research. A selection of work by people on the team, spanning tribal economic development, labor markets, community finance, and applied econometrics.
+        </p>
+        <ul class="about-page__pubs" aria-label="Featured research">
+          {PUBLICATIONS.map((pub) => (
+            <li>
+              <article class="pub-card">
+                <p class="pub-card__venue">{pub.venue} &middot; {pub.year}</p>
+                <h3 class="pub-card__title">
+                  <a href={pub.url} target="_blank" rel="noopener noreferrer">{pub.title}</a>
+                </h3>
+                <p class="pub-card__authors">
+                  {pub.authors.map((a, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      {a.slug
+                        ? <a class="pub-card__author pub-card__author--team" href={`#${a.slug}`}>{a.name}</a>
+                        : <span class="pub-card__author">{a.name}</span>}
+                    </>
+                  ))}
+                </p>
+                <p class="pub-card__summary">{pub.summary}</p>
+                <a class="pub-card__link" href={pub.url} target="_blank" rel="noopener noreferrer">
+                  Read the paper <span aria-hidden="true">&rarr;</span>
+                </a>
+              </article>
             </li>
           ))}
         </ul>
