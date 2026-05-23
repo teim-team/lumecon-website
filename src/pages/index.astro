@@ -1,5 +1,6 @@
 ---
 import { site } from '../config';
+import { PLATFORMS } from '../data/platforms';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -103,35 +104,18 @@ const jsonLd = [
       "target": `mailto:${site.email}`
     }
   },
-  {
+  ...PLATFORMS.map((p) => ({
     "@context": "https://schema.org",
     "@type": "Service",
     "serviceType": "Economic impact analysis software",
-    "name": site.products.local.name,
-    "url": site.products.local.url,
+    "name": p.name,
+    "url": p.url,
     "provider": { "@type": "Organization", "name": site.legalName },
-    "areaServed": { "@type": "Country", "name": "United States" },
-    "audience": { "@type": "Audience", "audienceType": "Municipal governments, EDOs, enterprises" }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Economic impact analysis software",
-    "name": site.products.tribal.name,
-    "url": site.products.tribal.url,
-    "provider": { "@type": "Organization", "name": site.legalName },
-    "areaServed": { "@type": "Country", "name": "United States" },
-    "audience": { "@type": "Audience", "audienceType": "Tribes, ANCs, NHOs, reservation economies" }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Economic impact analysis software",
-    "name": site.products.global.name,
-    "url": site.products.global.url,
-    "provider": { "@type": "Organization", "name": site.legalName },
-    "audience": { "@type": "Audience", "audienceType": "Multinationals, NGOs, cross-border programs" }
-  },
+    ...(p.slug === 'global'
+      ? {}
+      : { "areaServed": { "@type": "Country", "name": "United States" } }),
+    "audience": { "@type": "Audience", "audienceType": p.audience },
+  })),
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

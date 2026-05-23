@@ -269,7 +269,7 @@ nav.nav--static {
     left: 0;
     width: 100vw;
     height: 100dvh;
-    background-color: #FFFFFF;
+    background-color: var(--white);
     flex-direction: column;
     justify-content: center;
     align-items: center;

@@ -17,6 +17,7 @@
  * the site (FAB + Cedar tile + bare wordmark).
  */
 import { site } from '../config';
+import { PLATFORMS } from '../data/platforms';
 import BrandWordmark from './BrandWordmark.astro';
 interface Props {
   isHome?: boolean;
@@ -37,9 +38,7 @@ const prefix = isHome ? '' : '/';
       <div class="footer-cols">
         <div class="footer-col">
           <div class="footer-col__head mono">Platforms</div>
-          <a href={site.products.local.url}>Local Economic Impact</a>
-          <a href={site.products.tribal.url}>Tribal Economic Impact</a>
-          <a href={site.products.global.url}>Global Economic Impact</a>
+          {PLATFORMS.map((p) => <a href={p.url}>{p.name}</a>)}
         </div>
         <div class="footer-col">
           <div class="footer-col__head mono">Explore</div>
