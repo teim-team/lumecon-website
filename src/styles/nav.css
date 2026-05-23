@@ -1,4 +1,10 @@
-nav { padding: .85rem 0; }
+/* Teal rail at the very top of the nav. Lives on the nav itself
+   (not body::before) so there's no white sliver between the rail
+   and the wordmark — the rail and the nav background meet flush.
+   On mobile this matches the theme-color teal iOS paints behind
+   the URL bar so the address bar and the page top read as one
+   continuous header. */
+nav { padding: .85rem 0; border-top: 3px solid var(--accent); }
 nav.nav--fixed {
   position: fixed;
   top: 0;
@@ -252,20 +258,37 @@ nav.nav--static {
 .hamburger.on span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
 
 @media (max-width: 600px) {
+  /* Mobile menu: full-viewport overlay anchored to the visual
+     viewport via dvh (handles iOS Safari's collapsing URL bar
+     correctly). High z-index + opaque white background guarantees
+     the page content stays hidden while the menu is open. */
   .nav-links {
     display: none;
     position: fixed;
-    inset: 0;
-    background: var(--white);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    background-color: #FFFFFF;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1.8rem;
-    z-index: 105;
+    gap: 1.6rem;
+    z-index: 1000;
+    padding: 2rem;
   }
   .nav-links.open { display: flex; }
-  .nav-links.open a { font-size: 1.1rem; padding: .5rem 1.2rem; }
-  .hamburger { display: block; }
+  .nav-links.open a { font-size: 1.15rem; padding: .55rem 1.4rem; }
+  /* Auth pair: keep Log in and Sign up shoulder-to-shoulder inside
+     the open menu (without inheriting the parent's vertical
+     stacking) so they read as one row at the bottom of the stack. */
+  .nav-links .nav-auth {
+    display: inline-flex;
+    flex-direction: row;
+    gap: .55rem;
+    margin-left: 0;
+  }
+  .hamburger { display: block; position: relative; z-index: 1100; }
   /* On the home page the hero carries the wordmark — don't double up. */
   .home-page .logo { opacity: 0 !important; pointer-events: none !important; }
   .home-page nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }

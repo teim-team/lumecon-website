@@ -160,19 +160,31 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 /* Placeholder card: dashed border + a "TBD" tag so it's obvious
-   this is incomplete and intentional. */
+   this is incomplete and intentional. Body is hidden by default
+   so the grid reads as a row of short titles; clicking the
+   summary expands the description. */
 .cedar-tbd__card {
   position: relative;
   background: var(--white);
   border: 2px dashed var(--rule-strong, rgba(14, 21, 48, .22));
   border-radius: 12px;
-  padding: 1.4rem 1.4rem 1.6rem;
+  padding: 1.4rem 1.4rem 1.4rem;
   transition: border-color .18s var(--ease), background .18s var(--ease);
 }
-.cedar-tbd__card:hover {
+.cedar-tbd__card:hover,
+.cedar-tbd__card[open] {
   border-color: var(--cedar);
   background: var(--cedar-mist, #E0F2E7);
 }
+.cedar-tbd__summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 1rem;
+}
+.cedar-tbd__summary::-webkit-details-marker { display: none; }
 .cedar-tbd__tag {
   position: absolute;
   top: -.7rem;
@@ -187,7 +199,8 @@
   padding: .15rem .55rem;
   border-radius: 3px;
 }
-.cedar-tbd__card:hover .cedar-tbd__tag {
+.cedar-tbd__card:hover .cedar-tbd__tag,
+.cedar-tbd__card[open] .cedar-tbd__tag {
   background: var(--cedar);
   border-color: var(--cedar);
   color: var(--white);
@@ -198,7 +211,36 @@
   font-size: 1.12rem;
   color: var(--navy);
   letter-spacing: -.012em;
-  margin: .25rem 0 .55rem;
+  margin: 0;
+  line-height: 1.2;
+}
+.cedar-tbd__chev {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .22));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.cedar-tbd__chev::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--navy);
+  border-bottom: 1.5px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease), border-color .2s var(--ease);
+}
+.cedar-tbd__card[open] .cedar-tbd__chev {
+  background: var(--cedar);
+  border-color: var(--cedar);
+}
+.cedar-tbd__card[open] .cedar-tbd__chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+  border-color: var(--white);
 }
 .cedar-tbd__body {
   font-family: var(--font-sans);
@@ -206,7 +248,15 @@
   line-height: 1.5;
   color: var(--ink-2);
   font-weight: 400;
-  margin: 0;
+  margin: .85rem 0 0;
+  animation: cedar-tbd-body-in .3s var(--ease);
+}
+@keyframes cedar-tbd-body-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cedar-tbd__body { animation: none; }
 }
 
 @media (max-width: 600px) {
