@@ -168,10 +168,15 @@
   padding: clamp(1rem, 1.6vw, 1.2rem) clamp(1.1rem, 1.8vw, 1.4rem);
   transition: border-color .2s var(--ease), background .2s var(--ease);
 }
-.area-card[open] {
-  border-color: var(--accent);
-  background: var(--cream);
-}
+/* Each working area gets its own quiet wash + colored left edge so the
+   six cards read as distinct, visually interesting lanes rather than one
+   repeated white card. Tints stay low-opacity to keep the surface calm. */
+.about-page__areas > li:nth-child(1) .area-card { background: rgba(15, 181, 165, .06); border-left: 3px solid var(--accent); }
+.about-page__areas > li:nth-child(2) .area-card { background: rgba(240, 169, 26, .08); border-left: 3px solid var(--gold); }
+.about-page__areas > li:nth-child(3) .area-card { background: rgba(14, 139, 79, .07); border-left: 3px solid var(--green); }
+.about-page__areas > li:nth-child(4) .area-card { background: rgba(46, 91, 214, .06); border-left: 3px solid var(--blue); }
+.about-page__areas > li:nth-child(5) .area-card { background: rgba(110, 61, 216, .06); border-left: 3px solid var(--purple); }
+.about-page__areas > li:nth-child(6) .area-card { background: rgba(224, 74, 42, .055); border-left: 3px solid var(--terra); }
 .area-card__head {
   list-style: none;
   cursor: pointer;

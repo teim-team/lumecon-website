@@ -65,10 +65,10 @@ nav.nav--static {
   white-space: nowrap;
 }
 /* Drop the brand descriptor before the link row gets tight. The full
-   inline row (wordmark + "Run an economic impact study" + About + Join
-   + auth pair) needs ~1190px with the descriptor showing, so below that
-   the descriptor steps aside and the links keep the width. */
-@media (max-width: 1240px) {
+   inline row (wordmark + descriptor + "See your impact" + About + Join
+   + auth pair) needs ~1080px, so below ~1120px the descriptor steps
+   aside and the links keep the width. */
+@media (max-width: 1120px) {
   .nav-brand__sep, .nav-brand__desc { display: none; }
 }
 
@@ -262,9 +262,9 @@ nav.nav--static {
 .hamburger.on span:nth-child(2) { opacity: 0; }
 .hamburger.on span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
 
-@media (max-width: 960px) {
-  /* Collapse to the hamburger here: the inline row needs ~936px even
-     with the descriptor already hidden, so below ~960px the links go
+@media (max-width: 860px) {
+  /* Collapse to the hamburger here: the inline row needs ~820px even
+     with the descriptor already hidden, so below ~860px the links go
      into the overlay rather than wrapping mid-label.
      Full-viewport overlay anchored to the visual viewport via dvh
      (handles iOS Safari's collapsing URL bar correctly). High z-index
