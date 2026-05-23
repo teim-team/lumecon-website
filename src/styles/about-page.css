@@ -208,13 +208,25 @@
   color: var(--accent);
   font-weight: 600;
 }
-.area-card__role a {
+.area-card__person {
   color: var(--navy);
   text-decoration: none;
   border-bottom: 1px solid var(--rule);
   transition: color .15s var(--ease), border-color .15s var(--ease);
 }
-.area-card__role a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.area-card__person:hover { color: var(--accent); border-bottom-color: var(--accent); }
+/* CSS-driven separator: every Advisory / Contributors link after
+   the first prepends a middle dot (rather than a comma) so the
+   roster doesn't visually collide with PhD-suffix commas inside
+   names like "Havala Hanson, PhD". The dot is rendered as a
+   pseudo-element so the JSX stays free of wrapper fragments that
+   would otherwise introduce stray whitespace between siblings. */
+.area-card__person + .area-card__person::before {
+  content: ' · ';
+  color: var(--ink-3);
+  border-bottom: 0;
+  margin: 0 .15rem;
+}
 .area-card__chev {
   grid-column: 2;
   grid-row: 1 / span 2;

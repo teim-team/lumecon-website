@@ -2,17 +2,12 @@
 /**
  * /cedar — standalone Cedar page.
  *
- * Took over the explainer that used to live on the homepage; the
- * homepage now keeps only the persistent Cedar FAB. This page is
- * the deeper experience: what Cedar is, how it works, and (over
- * time) what it can show off when the team gives Cedar more
- * material to work with.
- *
- * Most of the page below the fold is intentional placeholder real
- * estate. The dev working on Cedar drops content into the dashed
- * "TBD" cards as features ship — sample transcripts, source-record
- * demos, methodology walkthroughs, dataset tour. Each card is a
- * docked landing spot with a hint of what's coming.
+ * Three blocks:
+ *   1. Hero with a one-sentence framing of what Cedar is.
+ *   2. "How Cedar works" — three steps.
+ *   3. Inline Cedar chat — same runtime as the FAB, mounted here
+ *      as a docked panel so the visitor can try Cedar without
+ *      hunting for the bottom-right tree button.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -20,32 +15,38 @@ import Footer from '../components/Footer.astro';
 import IconUpload from '../components/icons/IconUpload.astro';
 import IconSurfaceAssumption from '../components/icons/IconSurfaceAssumption.astro';
 import IconSourceRecord from '../components/icons/IconSourceRecord.astro';
+import { INTENTS, CHIP_IDS } from '../data/cedarIntents';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/cedar-page.css';
+import '../styles/cedar-chat.css';
+
+const chips = CHIP_IDS
+  .map((id) => INTENTS.find((i) => i.id === id))
+  .filter((i): i is NonNullable<typeof i> => i != null && i.chip != null);
 ---
 <BaseLayout
   title="Cedar | Lumecon"
   description="Cedar is Lumecon's AI analyst. It reads messy data, surfaces every modeling assumption, and reshapes the same study for every audience. RAG-based, grounded in your files."
   canonical="https://lumecon.ai/cedar"
   keywords="Cedar AI, Lumecon Cedar, AI economic analyst, RAG economic impact, AI for economists, AI grant narrative, AI council memo, Cedar Lumecon assistant, AI impact analysis"
-  ogTitle="Cedar: AI for the unglamorous parts of economic impact analysis"
+  ogTitle="Cedar: built for the tedious parts of economic impact analysis"
   ogDescription="Reads messy data, surfaces every assumption for your sign-off, and reshapes the study for the audience in front of you. RAG-based and grounded in your files."
 >
   <Nav />
   <main class="cedar-page">
 
     <!-- Hero: what Cedar is, in a sentence, with the call-to-action
-         to engage the FAB from any page. -->
+         to engage the inline chat below. -->
     <header class="cedar-page__hero">
       <p class="cedar-page__eyebrow">Cedar</p>
-      <h1 class="cedar-page__title reveal-soft hl-block hl-block--green">Built for the unglamorous parts of economic impact analysis.</h1>
+      <h1 class="cedar-page__title reveal-soft hl-block hl-block--green">Built for the tedious parts of economic impact analysis.</h1>
       <p class="cedar-page__lede">
         Cedar is Lumecon's AI analyst. It reads messy data, surfaces every assumption for your sign-off, and reshapes the study for the audience in front of you. Because Cedar is RAG-based, answers stay grounded in your actual files, not generic model output. Cedar does the heavy lift; your team stays in control of what the study says.
       </p>
       <p class="cedar-page__call">
-        Try Cedar from the green tree button in the bottom-right of any page.
+        Try the inline Cedar below, or open Cedar from the green tree button on any page.
       </p>
     </header>
 
@@ -72,82 +73,93 @@ import '../styles/cedar-page.css';
       </ol>
     </section>
 
-    <!-- Placeholder cards: each is a docked landing spot for content
-         the Cedar dev will fill in as features ship. The dashed
-         border + "TBD" label makes it obvious these are placeholders,
-         not the final state. Keep the existing slots and add more as
-         needed; remove the dashed treatment as each card ships. -->
-    <section class="cedar-page__placeholders" aria-labelledby="cedar-coming-title">
-      <p class="cedar-page__kicker">Coming soon</p>
-      <h2 class="cedar-page__h2 reveal-soft hl-block hl-block--gold" id="cedar-coming-title">Where this page is going.</h2>
-
+    <!-- Inline Cedar chat. Same DOM structure the FAB uses; the
+         bootChat() runtime below wires it up. surface: 'inline' so
+         analytics can distinguish inline conversations from FAB
+         conversations. -->
+    <section class="cedar-page__try" aria-labelledby="cedar-try-title">
+      <p class="cedar-page__kicker">Try it</p>
+      <h2 class="cedar-page__h2 reveal-soft hl-block hl-block--gold" id="cedar-try-title">Ask Cedar a question.</h2>
       <p class="cedar-page__deck">
-        The deeper Cedar experience is in active development. As each piece ships, it lands here. If you want early access to any of these, the green tree button in the bottom-right will route the request to the team.
+        This is the same Cedar that lives in the green tree button at the bottom of every page. Ask anything about Lumecon, the platforms, the data, the team, or the pricing. Pick a starter question or type your own.
       </p>
-      <ul class="cedar-tbd" aria-label="Cedar features in development">
-        <li>
-          <details class="cedar-tbd__card">
-            <summary class="cedar-tbd__summary">
-              <span class="cedar-tbd__tag">TBD</span>
-              <h3 class="cedar-tbd__title">Sample transcripts</h3>
-              <span class="cedar-tbd__chev" aria-hidden="true"></span>
-            </summary>
-            <p class="cedar-tbd__body">Three real Cedar conversations: a grant-narrative draft, a council Q&amp;A prep, and a board memo turnaround. Each shows the inputs Cedar saw, the assumptions it surfaced, and the output it produced.</p>
-          </details>
-        </li>
-        <li>
-          <details class="cedar-tbd__card">
-            <summary class="cedar-tbd__summary">
-              <span class="cedar-tbd__tag">TBD</span>
-              <h3 class="cedar-tbd__title">Source-record demo</h3>
-              <span class="cedar-tbd__chev" aria-hidden="true"></span>
-            </summary>
-            <p class="cedar-tbd__body">Click any number in a Cedar study and see the row in the source dataset it came from, the multiplier choice tied to it, and the BEA / ACS / LODES file vintage. The audit trail in full.</p>
-          </details>
-        </li>
-        <li>
-          <details class="cedar-tbd__card">
-            <summary class="cedar-tbd__summary">
-              <span class="cedar-tbd__tag">TBD</span>
-              <h3 class="cedar-tbd__title">Methodology walkthrough</h3>
-              <span class="cedar-tbd__chev" aria-hidden="true"></span>
-            </summary>
-            <p class="cedar-tbd__body">A guided tour of the input-output model under Cedar, the regional purchase coefficients, the assumption defaults per geography, and how Cedar's choices benchmark against the existing platforms.</p>
-          </details>
-        </li>
-        <li>
-          <details class="cedar-tbd__card">
-            <summary class="cedar-tbd__summary">
-              <span class="cedar-tbd__tag">TBD</span>
-              <h3 class="cedar-tbd__title">Dataset tour</h3>
-              <span class="cedar-tbd__chev" aria-hidden="true"></span>
-            </summary>
-            <p class="cedar-tbd__body">Every public dataset Cedar pulls from (ACS, BEA RIMS / SAGDP, LODES, QCEW, CBP, USASpending, the regional Fed banks), the vintage of each, and what Cedar's data team is layering on next.</p>
-          </details>
-        </li>
-        <li>
-          <details class="cedar-tbd__card">
-            <summary class="cedar-tbd__summary">
-              <span class="cedar-tbd__tag">TBD</span>
-              <h3 class="cedar-tbd__title">Cedar in the workspace</h3>
-              <span class="cedar-tbd__chev" aria-hidden="true"></span>
-            </summary>
-            <p class="cedar-tbd__body">Short screen recording of Cedar running an actual study end to end: file upload, harmonization prompts, assumption review, study run, and audience-specific export.</p>
-          </details>
-        </li>
-        <li>
-          <details class="cedar-tbd__card">
-            <summary class="cedar-tbd__summary">
-              <span class="cedar-tbd__tag">TBD</span>
-              <h3 class="cedar-tbd__title">Safety + data handling</h3>
-              <span class="cedar-tbd__chev" aria-hidden="true"></span>
-            </summary>
-            <p class="cedar-tbd__body">How Cedar keeps tribal data sovereignty intact, what stays in your tenant, what is and isn't used for training, and how the audit log captures every assumption Cedar ever made.</p>
-          </details>
-        </li>
-      </ul>
+
+      <div class="cedar-page__chat-panel" id="cedarInlinePanel">
+        <div class="cedar-chat">
+          <header class="cedar-chat__header">
+            <span class="cedar-chat__brand">
+              <span class="cedar-chat__name">Cedar</span>
+            </span>
+            <span class="cedar-chat__status" aria-label="Online">
+              <span class="cedar-chat__status-dot" aria-hidden="true"></span>
+              <span class="cedar-chat__status-label">Online</span>
+            </span>
+          </header>
+          <div class="cedar-chat__transcript" data-cedar-transcript role="log" aria-live="polite" aria-label="Cedar conversation">
+            <div class="cedar-msg cedar-msg--bot">
+              <span class="cedar-msg__avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+                  <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
+                <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
+                <div class="cedar-quickreply" data-cedar-chips>
+                  {chips.slice(0, 6).map((intent) => (
+                    <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <form class="cedar-chat__form" data-cedar-form autocomplete="off">
+            <label class="cedar-chat__inputwrap">
+              <span class="visually-hidden">Ask Cedar</span>
+              <input
+                data-cedar-input
+                class="cedar-chat__input"
+                type="text"
+                name="q"
+                placeholder="Ask Cedar a question..."
+                maxlength="280"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="sentences"
+                spellcheck="true"
+                enterkeyhint="send"
+                inputmode="text"
+                aria-label="Ask Cedar a question"
+              />
+            </label>
+            <button class="cedar-chat__send" type="submit" aria-label="Send">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+                <path d="M4 12L20 4L16 20L12 13L4 12Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="miter"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
     </section>
 
   </main>
+
+  <script>
+    /* Mount the same Cedar runtime the FAB uses, but on the
+       inline panel anchored to /cedar. surface: 'inline' tags the
+       analytics so we can tell inline conversations apart from
+       FAB conversations. */
+    import { bootChat } from '../lib/cedarChat';
+    function mount() {
+      const panel = document.getElementById('cedarInlinePanel');
+      if (panel) bootChat(panel as HTMLElement, { surface: 'inline' });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mount);
+    } else {
+      mount();
+    }
+    document.addEventListener('astro:page-load', mount);
+  </script>
+
   <Footer />
 </BaseLayout>

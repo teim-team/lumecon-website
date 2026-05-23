@@ -154,20 +154,23 @@ const jsonLd = [
                   <summary class="area-card__head">
                     <span class="area-card__name">{area.name}</span>
                     <span class="area-card__roster">
-                      <span class="area-card__role"><span class="area-card__role-label">Lead</span> <a href={`#${lead.slug}`}>{lead.name}</a></span>
+                      <span class="area-card__role">
+                        <span class="area-card__role-label">Lead</span>{' '}
+                        <a class="area-card__person" href={`#${lead.slug}`}>{lead.name}</a>
+                      </span>
                       {advisory.length > 0 && (
                         <span class="area-card__role">
                           <span class="area-card__role-label">Advisory</span>{' '}
-                          {advisory.map((p, i) => (
-                            <>{i > 0 && ', '}<a href={`#${p.slug}`}>{p.name}</a></>
+                          {advisory.map((p) => (
+                            <a class="area-card__person" href={`#${p.slug}`}>{p.name}</a>
                           ))}
                         </span>
                       )}
                       {contributors.length > 0 && (
                         <span class="area-card__role">
                           <span class="area-card__role-label">Contributors</span>{' '}
-                          {contributors.map((p, i) => (
-                            <>{i > 0 && ', '}<a href={`#${p.slug}`}>{p.name}</a></>
+                          {contributors.map((p) => (
+                            <a class="area-card__person" href={`#${p.slug}`}>{p.name}</a>
                           ))}
                         </span>
                       )}

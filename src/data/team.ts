@@ -50,15 +50,15 @@ export const TEAM: Person[] = [
     group: 'team',
     title: 'Co-Founder & CEO',
     founder: true,
-    summary: "PhD candidate in Public Policy at Cornell. Research on local economic development, public finance, tribal governments, and institutions.",
+    summary: "Co-founder and CEO. PhD candidate in Public Policy at Cornell; A.B. Dartmouth; M.P.P. Cornell. Previously at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians, and the Taylor Policy Group.",
     bio: [
       "Elijah Moreno is the co-founder and CEO of Lumecon. He is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions. He earned his Bachelor's at Dartmouth College in Economics modified with Native American Studies and a Public Policy minor, and a Master of Public Policy from Cornell University.",
-      "Before founding Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, where he worked on research related to Indian Country, economic development, and public policy. He was also a two-time participant in the American Economic Association Summer Training Program (hosted at the Center for Indian Country Development), a Wilma Mankiller Fellow at the National Congress of American Indians, and a research analyst at the Taylor Policy Group, Inc. He has built novel datasets including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting. His work brings together applied economics, institutional research, and data systems to help communities better understand and communicate their economic impact.",
+      "Before founding Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, where he worked on research related to Indian Country, economic development, and public policy. He was also a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians, and a research analyst at the Taylor Policy Group, Inc. He has built novel datasets including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting.",
     ],
-    alumniOf: ['Cornell University', 'Dartmouth College'],
+    alumniOf: ['Cornell University', 'Dartmouth College', 'Michigan State University'],
     prevAffiliations: [
       'Federal Reserve Bank of Minneapolis (Center for Indian Country Development)',
-      'American Economic Association Summer Training Program',
+      'American Economic Association Summer Training Program at Michigan State University',
       'National Congress of American Indians',
       'Taylor Policy Group, Inc.',
     ],
@@ -71,7 +71,7 @@ export const TEAM: Person[] = [
     group: 'team',
     title: 'Co-Founder & Founding Investor',
     founder: true,
-    summary: "Co-founder and founding investor. Early support that moved Lumecon from concept to product.",
+    summary: "Co-founder and founding investor. Early support that moved Lumecon from concept to product, alongside Elijah as enrolled members of the Coastal Band of the Chumash Nation.",
     bio: [
       "Michael Moreno is a co-founder and founding investor of Lumecon. His early support helped launch the company and move it from concept to early product development.",
     ],
@@ -83,7 +83,7 @@ export const TEAM: Person[] = [
     tint: 'green',
     group: 'team',
     title: 'Platform Lead',
-    summary: "Leads development of the Lumecon platform experience. Cornell, Computer Science and Business.",
+    summary: "Leads development of the Lumecon platform experience. Cornell University, Computer Science with a minor in Business.",
     bio: [
       "Kaylyn Lee leads development of the Lumecon platform experience, helping turn the company's economic impact tools into an organized, usable, customer-facing product. She is a graduate of Cornell University, where she studied Computer Science with a minor in Business.",
     ],
@@ -91,15 +91,15 @@ export const TEAM: Person[] = [
   },
   {
     slug: 'laurel-wheeler',
-    name: 'Laurel Wheeler',
+    name: 'Laurel Wheeler, PhD',
     initials: 'LW',
     tint: 'teal',
     group: 'team',
     title: 'Economics Lead',
-    summary: "Leads economic theory and tribal adaptation work. PhD Economics, Duke.",
+    summary: "Leads economic theory and tribal adaptation. PhD in Economics from Duke; previously an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).",
     bio: [
       "Laurel Wheeler leads Lumecon's economic theory and tribal adaptation work, helping ensure the platform reflects credible economic reasoning and the institutional realities of the communities it serves. She holds a B.A. in Political Science from the University of Florida, an M.S. in Economics for Development from the University of Oxford, and an M.A. and Ph.D. in Economics from Duke University.",
-      "Laurel previously worked as an economist at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis.",
+      "Before joining Lumecon, Laurel worked as an economist at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis.",
     ],
     alumniOf: ['University of Florida', 'University of Oxford', 'Duke University'],
     prevAffiliations: [
@@ -113,7 +113,7 @@ export const TEAM: Person[] = [
     tint: 'gold',
     group: 'team',
     title: 'Input/Output Engine Lead',
-    summary: "Leads the multiplier system and input/output engine. Wisconsin–Madison, Maryland.",
+    summary: "Leads the multiplier system and input/output engine. Bachelor's in Mathematics and Economics from Wisconsin–Madison and doctoral training in Economics at Maryland; previously at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
     bio: [
       "Isabella Agnes leads work on Lumecon's multiplier system and input/output engine, including the tools that translate source data into economic impact estimates and integrate the engine into the website. She holds Bachelor's degrees in Mathematics and Economics from the University of Wisconsin–Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
       "Isabella previously worked as a research assistant at the Federal Reserve Bank of Philadelphia and as a data scientist at the Board of Governors of the Federal Reserve System.",
@@ -131,7 +131,7 @@ export const TEAM: Person[] = [
     tint: 'green',
     group: 'team',
     title: 'Cedar Lead',
-    summary: "Leads Cedar, Lumecon's AI-assisted workflow for source records.",
+    summary: "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Biology, University of Illinois Urbana-Champaign.",
     bio: [
       "Francesca Agnes leads development of Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions, and helping users move from messy data to usable analysis. She studied Biology at the University of Illinois Urbana-Champaign.",
     ],
@@ -144,21 +144,21 @@ export const TEAM: Person[] = [
     tint: 'teal',
     group: 'advisor',
     title: 'Technical Advisor',
-    summary: "Software architecture, engineering systems, scalability. Dartmouth Economics; previously senior engineer at Modsy and Chime.",
+    summary: "Advises on software architecture, engineering systems, and scalability, and contributes on Cedar and data security. Dartmouth Economics; previously senior software engineer at Modsy and Chime.",
     bio: [
-      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability, and pilot-stage technical development. He is a graduate of Dartmouth College with a degree in Economics. He previously worked as a senior software engineer at Modsy and Chime.",
+      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability, and pilot-stage technical development, and also contributes on Cedar's AI workflow and on data security and research operations. He is a graduate of Dartmouth College with a degree in Economics. Before advising Lumecon, he worked as a senior software engineer at Modsy and Chime.",
     ],
     alumniOf: ['Dartmouth College'],
     prevAffiliations: ['Modsy', 'Chime'],
   },
   {
     slug: 'havala-hanson',
-    name: 'Havala Hanson',
+    name: 'Havala Hanson, PhD',
     initials: 'HH',
     tint: 'gold',
     group: 'advisor',
     title: 'Product, Data Security & Research Operations Advisor',
-    summary: "Product direction, data governance, privacy, research operations, responsible infrastructure.",
+    summary: "Advises on product direction, data governance, privacy, and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.",
     bio: [
       "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction, and responsible infrastructure. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets. She holds a Ph.D. in Statistics and Policy in Education from the University of Alaska Fairbanks, an M.A. in Urban Education Policy from Brown University, and a B.S. in Education from the University of Wisconsin–Whitewater.",
     ],
@@ -171,7 +171,7 @@ export const TEAM: Person[] = [
     tint: 'green',
     group: 'advisor',
     title: 'Methodology Advisor',
-    summary: "Empirical methodology, econometrics, model design. PhD candidate at MIT.",
+    summary: "Advises on empirical methodology, econometrics, model design, and research standards. PhD candidate in Economics at MIT, focused on econometrics.",
     bio: [
       "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design, and research standards. He is a PhD candidate in Economics at MIT with a focus on econometrics.",
     ],
@@ -232,7 +232,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     name: 'Cedar & AI Workflow',
     description: "This area focuses on Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions, and helping users move from messy data to usable analysis. The goal is to use AI carefully: making analysis faster and more accessible without removing human judgment, transparency, or accountability.",
     leadSlug: 'francesca-agnes',
-    advisorySlugs: ['havala-hanson'],
+    advisorySlugs: ['havala-hanson', 'brian-kim'],
     contributorSlugs: ['kaylyn-lee', 'isabella-agnes', 'elijah-moreno'],
   },
   {
@@ -240,7 +240,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     name: 'Data Governance, Security & Research Operations',
     description: "This area focuses on responsible data handling, privacy, documentation, and research operations. The goal is to make sure Lumecon can support organizations working with sensitive administrative, financial, institutional, and community data.",
     leadSlug: 'havala-hanson',
-    contributorSlugs: ['elijah-moreno', 'kaylyn-lee', 'francesca-agnes', 'isabella-agnes'],
+    contributorSlugs: ['elijah-moreno', 'kaylyn-lee', 'francesca-agnes', 'isabella-agnes', 'brian-kim'],
   },
 ];
 
