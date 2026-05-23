@@ -1,11 +1,8 @@
 /**
  * Pricing data — single source of truth for the /pricing page.
- *
- * Ported from the spec written against `src/pages/Pricing.jsx` on
- * branch claude/explore-lumecon-foundation-BDWKd. Field shape and
- * tier ids match that JSX surface so a future merge stays mechanical
- * (e.g., `id: 'starter' | 'standard' | 'leader'` token stays stable
- * even though the public name swaps Sprout / Sapling / Tree).
+ * Tier ids ('starter' | 'standard' | 'leader') stay stable even as
+ * the public name swaps (Sprout / Sapling / Tree) so the
+ * rendered names can change without touching the data shape.
  *
  * v1 launch notes:
  *   - The THIRD tier ("Tree") is NOT shipping at launch. Its data
