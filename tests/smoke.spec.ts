@@ -97,3 +97,49 @@ test('keyboard shortcut S triggers a new study', async ({ page }) => {
   const after = await page.locator('#workspaceRegion').textContent();
   expect(after).not.toBe(before);
 });
+
+/* Coverage for the pages built out after the homepage map: the
+ * about/team page, the pricing platform-pick reveal, and the inline
+ * Cedar chat. These are newer surfaces and therefore the most
+ * regression-prone in copy-tightening and refactor passes. */
+
+test('about page renders every team and advisor card plus working areas', async ({ page }) => {
+  await page.goto('/about', { waitUntil: 'domcontentloaded' });
+  await expect(page).toHaveTitle(/About \| Lumecon/i);
+  // Six team members + three advisors = nine person cards.
+  await expect(page.locator('.person-card')).toHaveCount(9);
+  // Five working-area cards in the How We Work section.
+  await expect(page.locator('.area-card')).toHaveCount(5);
+  // Founders carry a Lumecon email on the card; advisors don't.
+  await expect(page.locator('#elijah-moreno .person-card__email')).toBeAttached();
+});
+
+test('pricing platform pick reveals the three tier cards', async ({ page }) => {
+  await page.goto('/pricing', { waitUntil: 'networkidle' });
+  // The tier grid is gated behind a platform pick.
+  const tierSection = page.locator('[data-platform-section]').first();
+  await expect(tierSection).toBeHidden();
+  await page.locator('.pricing-platform-tile[data-platform-id="tribal-economic-impact"]').click();
+  await expect(tierSection).toBeVisible();
+  await expect(page.locator('.pricing-tier-card')).toHaveCount(3);
+  // Active-tier CTA routes into the signup flow with the tier id.
+  await expect(page.locator('.pricing-tier-card .btn').first()).toHaveAttribute('href', /\/signup\?tier=/);
+});
+
+test('cedar page boots the inline chat panel', async ({ page }) => {
+  await page.goto('/cedar', { waitUntil: 'networkidle' });
+  const panel = page.locator('#cedarInlinePanel');
+  await expect(panel).toBeVisible();
+  // bootChat() stamps data-cedar-booted on the root once wired.
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
+  await expect(panel.locator('.cedar-chip').first()).toBeVisible();
+});
+
+test('signup reflects a plan carried over from pricing', async ({ page }) => {
+  await page.goto('/signup?tier=standard&platform=tribal', { waitUntil: 'domcontentloaded' });
+  const badge = page.locator('[data-auth-plan]');
+  await expect(badge).toBeVisible();
+  await expect(badge).toContainText(/Sapling tier/);
+  await expect(badge).toContainText(/Tribal Economic Impact/);
+});
+
