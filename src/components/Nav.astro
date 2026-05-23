@@ -5,7 +5,6 @@ interface Props {
   isHome?: boolean;
 }
 const { isHome = false } = Astro.props;
-const prefix = isHome ? '' : '/';
 ---
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
@@ -16,7 +15,7 @@ const prefix = isHome ? '' : '/';
     </div>
 
     <div class="nav-links" id="navLinks">
-      <a href={`${prefix}#how`}>Why Lumecon?</a>
+      <a href="/map">Run an economic impact study</a>
       <a href="/about">About</a>
       <a href="/join">Join the team</a>
       <span class="nav-auth" aria-hidden="false">
