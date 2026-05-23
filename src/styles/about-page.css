@@ -413,6 +413,35 @@
   transition: color .15s var(--ease), border-color .15s var(--ease);
 }
 .person-card__email:hover { color: var(--accent); border-bottom-color: var(--accent); }
+/* Contact row: email (when shown) + LinkedIn icon sit shoulder-to-
+   shoulder so the card's reach-out affordances read as one group. */
+.person-card__links {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin-top: .25rem;
+}
+.person-card__links .person-card__email { margin-top: 0; }
+/* LinkedIn: a small square chip with sharp edges, echoing the
+   highlight-rectangle aesthetic, that picks up the teal accent on
+   hover the way the avatar ring does. */
+.person-card__linkedin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: var(--ink-3);
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .18));
+  transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
+}
+.person-card__linkedin svg { width: 14px; height: 14px; display: block; }
+.person-card__linkedin:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-rgba-08);
+}
 .person-card__summary {
   font-family: var(--font-sans);
   font-size: .9rem;
