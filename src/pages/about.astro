@@ -53,6 +53,7 @@ function personJsonLd(p: Person) {
     "description": p.summary,
     "worksFor": { "@type": "Organization", "@id": `${site.url}#org`, "name": site.legalName },
   };
+  if (p.email) node.email = `mailto:${p.email}`;
   if (p.alumniOf && p.alumniOf.length) {
     node.alumniOf = p.alumniOf.map((n) => ({ "@type": "EducationalOrganization", "name": n }));
   }
@@ -111,7 +112,7 @@ const jsonLd = [
         <p class="about-page__kicker">About</p>
         <h1 class="about-page__title reveal-soft hl-block hl-block--green">Built with the communities it serves.</h1>
         <p class="about-page__lede">
-          Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation, to make economic impact analysis more accessible, transparent, and useful for governments, tribal nations, foundations, nonprofits, and community-serving organizations.
+          Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. The company began with their own savings and a shared belief that economic impact analysis should be more accessible, transparent, and useful for the communities too often priced out of it.
         </p>
         <details class="about-page__more">
           <summary class="about-page__more-summary">
@@ -199,6 +200,9 @@ const jsonLd = [
                   <span class="person-card__meta">
                     <span class="person-card__name">{p.name}</span>
                     <span class="person-card__title">{p.title}</span>
+                    {p.email && (
+                      <a class="person-card__email" href={`mailto:${p.email}`} onclick="event.stopPropagation()">{p.email}</a>
+                    )}
                     <span class="person-card__summary">{p.summary}</span>
                   </span>
                   <span class="person-card__chev" aria-hidden="true"></span>

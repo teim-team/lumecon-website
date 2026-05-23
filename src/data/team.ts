@@ -30,6 +30,10 @@ export interface Person {
   summary: string;
   /** Full bio paragraphs revealed when the card is opened. */
   bio: string[];
+  /** Lumecon work email (firstname.lastname@lumecon.ai). Set on
+   *  team members for credibility on the closed card; advisors
+   *  don't get one displayed. */
+  email?: string;
   /** Whether this person is a co-founder of Lumecon (used for
    *  Organization.founder JSON-LD). */
   founder?: boolean;
@@ -49,6 +53,7 @@ export const TEAM: Person[] = [
     tint: 'teal',
     group: 'team',
     title: 'Co-Founder & CEO',
+    email: 'elijah.moreno@lumecon.ai',
     founder: true,
     summary: "Co-founder and CEO. PhD candidate in Public Policy at Cornell; A.B. Dartmouth; M.P.P. Cornell. Previously at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians, and the Taylor Policy Group.",
     bio: [
@@ -70,6 +75,7 @@ export const TEAM: Person[] = [
     tint: 'gold',
     group: 'team',
     title: 'Co-Founder & Founding Investor',
+    email: 'michael.moreno@lumecon.ai',
     founder: true,
     summary: "Co-founder and founding investor. Early support that moved Lumecon from concept to product, alongside Elijah as enrolled members of the Coastal Band of the Chumash Nation.",
     bio: [
@@ -83,6 +89,7 @@ export const TEAM: Person[] = [
     tint: 'green',
     group: 'team',
     title: 'Platform Lead',
+    email: 'kaylyn.lee@lumecon.ai',
     summary: "Leads development of the Lumecon platform experience. Cornell University, Computer Science with a minor in Business.",
     bio: [
       "Kaylyn Lee leads development of the Lumecon platform experience, helping turn the company's economic impact tools into an organized, usable, customer-facing product. She is a graduate of Cornell University, where she studied Computer Science with a minor in Business.",
@@ -96,6 +103,7 @@ export const TEAM: Person[] = [
     tint: 'teal',
     group: 'team',
     title: 'Economics Lead',
+    email: 'laurel.wheeler@lumecon.ai',
     summary: "Leads economic theory and tribal adaptation. PhD in Economics from Duke; previously an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).",
     bio: [
       "Laurel Wheeler leads Lumecon's economic theory and tribal adaptation work, helping ensure the platform reflects credible economic reasoning and the institutional realities of the communities it serves. She holds a B.A. in Political Science from the University of Florida, an M.S. in Economics for Development from the University of Oxford, and an M.A. and Ph.D. in Economics from Duke University.",
@@ -113,6 +121,7 @@ export const TEAM: Person[] = [
     tint: 'gold',
     group: 'team',
     title: 'Input/Output Engine Lead',
+    email: 'isabella.agnes@lumecon.ai',
     summary: "Leads the multiplier system and input/output engine. Bachelor's in Mathematics and Economics from Wisconsin–Madison and doctoral training in Economics at Maryland; previously at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
     bio: [
       "Isabella Agnes leads work on Lumecon's multiplier system and input/output engine, including the tools that translate source data into economic impact estimates and integrate the engine into the website. She holds Bachelor's degrees in Mathematics and Economics from the University of Wisconsin–Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
@@ -131,6 +140,7 @@ export const TEAM: Person[] = [
     tint: 'green',
     group: 'team',
     title: 'Cedar Lead',
+    email: 'francesca.agnes@lumecon.ai',
     summary: "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Biology, University of Illinois Urbana-Champaign.",
     bio: [
       "Francesca Agnes leads development of Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions, and helping users move from messy data to usable analysis. She studied Biology at the University of Illinois Urbana-Champaign.",

@@ -397,13 +397,29 @@
   color: var(--accent);
   font-weight: 600;
 }
+/* Lumecon work email shown on team cards (not advisors). Mono
+   so it reads as functional address rather than prose. Stops
+   the surrounding <summary> from toggling open when the email
+   itself is clicked. */
+.person-card__email {
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  color: var(--ink-3);
+  text-decoration: none;
+  letter-spacing: -.005em;
+  margin-top: .2rem;
+  width: fit-content;
+  border-bottom: 1px solid var(--rule);
+  transition: color .15s var(--ease), border-color .15s var(--ease);
+}
+.person-card__email:hover { color: var(--accent); border-bottom-color: var(--accent); }
 .person-card__summary {
   font-family: var(--font-sans);
   font-size: .9rem;
   line-height: 1.45;
   color: var(--ink-2);
   font-weight: 400;
-  margin-top: .25rem;
+  margin-top: .35rem;
 }
 .person-card__chev {
   grid-column: 3;
