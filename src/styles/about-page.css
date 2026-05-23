@@ -1,0 +1,328 @@
+/* /about page chrome.
+   Hero (h1 + founding sentence + collapsible long-form),
+   Cornell ecosystem footer note, two card grids (Team, Advisors).
+   Person cards open from a closed icon-name-title row to a full
+   bio paragraph stack. */
+
+.about-page { background: var(--white); }
+.about-page__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+/* ---------- Hero ---------- */
+.about-page__hero {
+  background: var(--cream);
+  padding: clamp(2.8rem, 5.5vw, 4.2rem) 0 clamp(2.4rem, 5vw, 3.6rem);
+  border-bottom: 1px solid var(--rule);
+}
+.about-page__kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 .85rem;
+}
+.about-page__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  line-height: 1.06;
+  letter-spacing: -.022em;
+  color: var(--navy);
+  margin: 0 0 1.3rem;
+  max-width: 22ch;
+}
+.about-page__lede {
+  font-family: var(--font-sans);
+  font-size: clamp(1.08rem, 1.5vw, 1.22rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0 0 1.4rem;
+  max-width: 68ch;
+}
+
+/* Disclosure for the longer about prose. Mirrors the map-page
+   details pattern (kicker + title + chev), but tighter since the
+   surface is plainer here. */
+.about-page__more {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--white);
+  padding: clamp(.9rem, 1.6vw, 1.1rem) clamp(1.1rem, 2vw, 1.4rem);
+  margin: 0 0 1.2rem;
+  max-width: 68ch;
+  transition: border-color .25s var(--ease);
+}
+.about-page__more[open] { border-color: var(--accent); }
+.about-page__more-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -.012em;
+  color: var(--navy);
+}
+.about-page__more-summary::-webkit-details-marker { display: none; }
+.about-page__chev {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.about-page__chev::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--navy);
+  border-bottom: 1.5px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease);
+}
+.about-page__more[open] .about-page__chev {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.about-page__more[open] .about-page__chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+  border-color: var(--white);
+}
+.about-page__more-body {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  animation: about-more-in .3s var(--ease);
+}
+.about-page__more-body p { margin: 0; }
+.about-page__belief {
+  border-left: 3px solid var(--gold);
+  padding: .4rem 0 .4rem .9rem;
+  color: var(--navy);
+  font-weight: 500;
+}
+.about-page__ecosystem {
+  font-family: var(--font-sans);
+  font-size: .92rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 68ch;
+  font-style: italic;
+}
+@keyframes about-more-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-page__more-body { animation: none; }
+}
+
+/* ---------- People sections ---------- */
+.about-page__people {
+  background: var(--white);
+  padding: clamp(2.6rem, 5vw, 3.8rem) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.about-page__people--advisors {
+  background: var(--cream);
+}
+.about-page__h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  line-height: 1.12;
+  letter-spacing: -.018em;
+  color: var(--navy);
+  margin: 0 0 1.4rem;
+  max-width: 28ch;
+}
+.about-page__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+/* ---------- Person card ---------- */
+.person-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: clamp(1rem, 1.6vw, 1.2rem);
+  transition: border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.about-page__people--advisors .person-card { background: var(--white); }
+.person-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -16px rgba(14, 21, 48, .18);
+}
+.person-card[open] {
+  border-color: var(--accent);
+  background: var(--white);
+}
+.person-card__head {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  column-gap: 1rem;
+  row-gap: .25rem;
+}
+.person-card__head::-webkit-details-marker { display: none; }
+
+/* Avatar: initials inside a tinted disc. Three brand tints rotate
+   across the grid so a row of nine cards reads as varied. The
+   ::after ring adds a soft second-tone halo so the avatar reads
+   as more than a flat color. */
+.person-card__avatar {
+  grid-row: 1 / span 1;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.08rem;
+  letter-spacing: -.01em;
+  color: var(--white);
+  position: relative;
+  flex-shrink: 0;
+}
+.person-card__avatar::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: .25;
+}
+.person-card__avatar--teal {
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: var(--white);
+}
+.person-card__avatar--teal::after { color: var(--accent); }
+.person-card__avatar--gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-btn-hover));
+  color: var(--navy);
+}
+.person-card__avatar--gold::after { color: var(--gold); }
+.person-card__avatar--green {
+  background: linear-gradient(135deg, var(--cedar-light), var(--green-deep));
+  color: var(--white);
+}
+.person-card__avatar--green::after { color: var(--cedar); }
+
+.person-card__meta {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  min-width: 0;
+}
+.person-card__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.08rem;
+  letter-spacing: -.014em;
+  color: var(--navy);
+  line-height: 1.2;
+}
+.person-card__title {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.person-card__summary {
+  font-family: var(--font-sans);
+  font-size: .9rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin-top: .25rem;
+}
+.person-card__chev {
+  grid-column: 3;
+  grid-row: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.person-card__chev::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--navy);
+  border-bottom: 1.5px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease);
+}
+.person-card[open] .person-card__chev {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.person-card[open] .person-card__chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+  border-color: var(--white);
+}
+.person-card__bio {
+  margin: 1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  font-family: var(--font-sans);
+  font-size: .95rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  animation: person-bio-in .3s var(--ease);
+}
+.person-card__bio p { margin: 0; }
+@keyframes person-bio-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .person-card__bio { animation: none; }
+}
+
+@media (max-width: 720px) {
+  .about-page__grid { grid-template-columns: 1fr; }
+  .person-card__head { grid-template-columns: 48px 1fr 28px; column-gap: .85rem; }
+  .person-card__avatar { width: 48px; height: 48px; font-size: .95rem; }
+  .person-card__summary { font-size: .86rem; }
+}
