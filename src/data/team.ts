@@ -18,8 +18,9 @@ export type AvatarTint = 'teal' | 'gold' | 'green';
  * /team/<slug> page. Display rule for `year`: use one exact year —
  * the journal year for a published article, the report/working-paper
  * year only when the item is a report or still a working paper. Never
- * combine two dates. `authors` is the display line, written
- * subject-first ("Name, with Coauthor A and Coauthor B").
+ * combine two dates. `authors` lists every author in true published
+ * order (comma-separated); the person's own name is bolded at render
+ * time, so it must appear verbatim (minus any ", PhD" suffix).
  */
 export interface Publication {
   title: string;
@@ -99,7 +100,7 @@ export const TEAM: Person[] = [
     publications: [
       {
         title: 'Social and Economic Changes in American Indian Reservations: A Databook of the US Census and the American Community Survey, Third Edition, 1990–2020',
-        authors: 'Elijah Moreno, with Randall Akee and Amy Besaw Medford',
+        authors: 'Randall Akee, Elijah Moreno, Amy Besaw Medford',
         year: '2025',
         venue: 'Ash Center for Democratic Governance and Innovation, Harvard Kennedy School',
         type: 'book',
@@ -159,45 +160,51 @@ export const TEAM: Person[] = [
     publications: [
       {
         title: 'Mapping the Native CDFI Industry: Insights from a New Survey',
-        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, and Michou Kokodoko',
+        authors: 'Valentina Dimitrova-Grajzl, Peter Grajzl, Michou Kokodoko, Laurel Wheeler',
         year: '2026',
         venue: 'Community Development',
         summary: 'One of the most detailed empirical portraits of the Native CDFI industry, using survey data from 49 certified and emerging Native CDFIs. It documents variation in age, size, geography, strategic goals, risk-assessment practices, product offerings, development services, and institutional challenges, and uses cluster analysis to identify four distinct Native CDFI profiles.',
+        url: 'https://doi.org/10.1080/15575330.2026.2631398',
       },
       {
         title: 'Fostering Financial Inclusion by Ensuring Cultural Fit: The Case of the NCDFI Industry',
-        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, and Michou Kokodoko',
+        authors: 'Valentina Dimitrova-Grajzl, Peter Grajzl, Michou Kokodoko, Laurel Wheeler',
         year: '2025',
         venue: 'American Indian Culture and Research Journal',
         summary: 'Uses interviews with Native CDFI leaders to examine how they design lending practices, development services, partnerships, and success metrics around the communities they serve. It emphasizes person-centered lending, strategic partnerships, customized financial products, inclusive measures of success, and the role of cultural fit in expanding financial inclusion.',
+        url: 'https://www.minneapolisfed.org/research/cicd-working-paper-series/fostering-financial-inclusion-by-ensuring-cultural-fit-the-case-of-the-ncdfi-industry',
       },
       {
         title: 'Harnessing Soft Information to Promote Financial Inclusion: The Case of Business Lending by a Native CDFI',
-        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, and Lakota Vogel',
+        authors: 'Valentina Dimitrova-Grajzl, Peter Grajzl, Lakota Vogel, Laurel Wheeler',
         year: '2025',
         venue: 'Journal of Financial Services Research',
         summary: 'Analyzes business loan data from a Native CDFI to compare conventional credit scores with lender-generated soft-information measures of borrower risk. It finds that a character-based risk measure predicts loan delinquency and interest rates beyond what credit scores alone explain, showing how relationship-based underwriting can capture information missed by standard credit metrics.',
+        url: 'https://doi.org/10.1007/s10693-024-00439-5',
       },
       {
         title: 'Applying Indigenous Approaches to Economics Instruction',
-        authors: 'Laurel Wheeler, with Larry Chavis',
+        authors: 'Larry Chavis, Laurel Wheeler',
         year: '2025',
         venue: 'Journal of Economics, Race, and Policy',
         summary: 'Develops a relational approach to economics instruction informed by Indigenous pedagogies from North America. It connects inclusive teaching practices with belonging, community, reciprocity, and contextual learning, arguing that economics becomes more accessible and rigorous when students understand economic questions through relationships, lived experience, and place.',
+        url: 'https://doi.org/10.1007/s41996-024-00158-y',
       },
       {
         title: 'Beyond Conventional Models: Lending by Native Community Development Financial Institutions',
-        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, Joseph Guse, and Michou Kokodoko',
+        authors: 'Valentina Dimitrova-Grajzl, Peter Grajzl, A. Joseph Guse, Michou Kokodoko, Laurel Wheeler',
         year: '2024',
         venue: 'Annals of Public and Cooperative Economics',
         summary: 'Uses loan-level data from eleven Native CDFI loan funds to study how Native CDFIs lend, whom they serve, and what predicts delinquency. It shows that Native CDFIs provide small and varied loans across diverse borrower circumstances, relying on both conventional risk measures and community-informed, character-based measures of creditworthiness.',
+        url: 'https://doi.org/10.1111/apce.12453',
       },
       {
         title: 'When the Lender Extends a Helping Hand: Native CDFI Client Counseling and Loan Performance in Indian Country',
-        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, Joseph Guse, and Michou Kokodoko',
+        authors: 'Valentina Dimitrova-Grajzl, Peter Grajzl, A. Joseph Guse, Michou Kokodoko, Laurel Wheeler',
         year: '2023',
         venue: 'Journal of Economics, Race, and Policy',
         summary: 'Uses loan-level data and survival analysis to study whether Native CDFI-provided financial counseling affects loan performance. It finds that counseling reduces the risk of loan failure, especially for borrowers with limited prior credit-market experience, with personalized coaching appearing more effective than less tailored classroom-style training.',
+        url: 'https://doi.org/10.1007/s41996-023-00119-x',
       },
     ],
   },
@@ -223,10 +230,11 @@ export const TEAM: Person[] = [
     publications: [
       {
         title: 'Place-Based Labor Market Inequality',
-        authors: 'Isabella Agnes, with Douglas Webber, Jessica Liu, and Erin Troland',
+        authors: 'Douglas A. Webber, Isabella Agnes, Jessica Liu, Erin Troland',
         year: '2025',
-        venue: 'Federal Reserve Finance and Economics Discussion Series',
+        venue: 'Federal Reserve Board, Finance and Economics Discussion Series (2025-040)',
         summary: 'Examines how labor market conditions vary across U.S. counties, showing that national averages often hide large differences in employment, wages, labor force participation, and job availability. Using county-level indicators and Lightcast job postings, it connects local labor market tightness to income growth and pandemic recovery while documenting the role of racial composition and geography in shaping labor market inequality.',
+        url: 'https://www.federalreserve.gov/econres/feds/place-based-labor-market-inequality.htm',
       },
     ],
   },
@@ -276,18 +284,36 @@ export const TEAM: Person[] = [
     alumniOf: ['University of Alaska Fairbanks', 'Brown University', 'University of Wisconsin–Whitewater'],
     publications: [
       {
+        title: 'Pathways to Teaching: Teacher Diversity, Testing, Certification, and Employment in Washington State',
+        authors: 'Jason Greenberg Motamedi, Sun Young Yoon, Havala Hanson',
+        year: '2021',
+        venue: 'Regional Educational Laboratory Northwest / IES (REL 2021-094)',
+        summary: 'Traces Washington’s teacher preparation and employment pipeline, focusing on where candidates move through or leave the path from testing to certification, employment, and retention. It shows how these pathways differ across racial and ethnic groups, identifying points where candidates of color face lower progression rates or longer timelines.',
+        url: 'https://ies.ed.gov/use-work/resource-library/report/descriptive-study/pathways-teaching-teacher-diversity-testing-certification-and-employment-washington-state',
+      },
+      {
+        title: 'Implementation of Career- and College-Ready Requirements for High School Graduation in Washington',
+        authors: 'Traci Fantz, Havala Hanson',
+        year: '2020',
+        venue: 'Regional Educational Laboratory Northwest / IES (REL 2020-020)',
+        summary: 'Examines Washington’s rollout of more demanding career- and college-ready graduation requirements: how districts implemented them, how students accessed the required coursework, and how the policy changes translated into actual student pathways.',
+        url: 'https://ies.ed.gov/ncee/rel/Products/Region/northwest/Publication/3954',
+      },
+      {
         title: 'Preparing Alaskans for Mining Careers Through Short, Industry-Informed Training Programs',
-        authors: 'Havala Hanson, with David Stevens, Manuel Vazquez, and Brandon Roberts',
+        authors: 'Havala Hanson, David Stevens, Manuel Vazquez, Brandon Roberts',
         year: '2018',
-        venue: 'University of Alaska / Education Northwest evaluation report',
+        venue: 'Education Northwest evaluation report',
         summary: 'Evaluates Alaska mining workforce training programs developed with industry input and built around short-term, hands-on occupational training. It examines program design, employer partnerships, student supports, completion, employment, and wage outcomes, finding high completion rates in the shorter programs and strong post-program employment among graduates.',
+        url: 'https://clear.dol.gov/study/preparing-alaskans-mining-careers-through-short-industry-informed-training-programs-university',
       },
       {
         title: 'Alaska Students’ Pathways from High School to Postsecondary Education and Employment',
-        authors: 'Havala Hanson, with Ashley Pierson',
+        authors: 'Havala Hanson, Ashley Pierson',
         year: '2016',
         venue: 'Regional Educational Laboratory Northwest / IES',
         summary: 'Follows Alaska public high school students into college, in-state employment, and early-career earnings. It documents more than 3,000 distinct postsecondary pathways and shows how students’ routes after high school differ by rurality, gender, Alaska Native status, graduation status, education level, employment, and wages.',
+        url: 'https://ies.ed.gov/ncee/rel/Products/Region/northwest/Publication/3730',
       },
     ],
   },
@@ -307,11 +333,11 @@ export const TEAM: Person[] = [
     publications: [
       {
         title: 'Interpreting TSLS Estimators in Information Provision Experiments',
-        authors: 'Vod Vilfort, with Whitney Zhang',
+        authors: 'Vod Vilfort, Whitney Zhang',
         year: '2025',
-        venue: 'American Economic Review: Insights',
+        venue: 'American Economic Review: Insights, 7(3): 376–95',
         summary: 'Formalizes the exclusion and monotonicity conditions under which two-stage least squares recovers a positive-weighted average of causal effects in information-provision experiments, with practical guidance on which estimators researchers can trust.',
-        url: 'https://pubs.aeaweb.org/doi/pdf/10.1257/aeri.20240353',
+        url: 'https://doi.org/10.1257/aeri.20240353',
       },
     ],
   },

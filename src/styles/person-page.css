@@ -191,6 +191,7 @@
   color: var(--ink-3);
   margin: 0 0 .5rem;
 }
+.person-pub__authors strong { color: var(--navy); font-weight: 600; }
 .person-pub__summary {
   font-family: var(--font-sans);
   font-size: .9rem;
