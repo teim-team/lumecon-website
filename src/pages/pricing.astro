@@ -49,7 +49,7 @@ import '../styles/pricing.css';
 const tiers = PUBLIC_PRICING_TIERS;
 const platforms = PRODUCT_LINES;
 
-const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, Local, or Global — and we will surface the tiers that fit. Annual subscriptions, prepayment options, and discount codes.';
+const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Local, or Global) and we will surface the tiers that fit. Annual subscriptions, prepayment options, and discount codes.';
 ---
 <BaseLayout
   title="Pricing | Lumecon"
@@ -67,8 +67,8 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
     <section class="editorial-band editorial-band--white pricing-hero">
       <div class="editorial-band__inner">
         <header class="pricing-hero__head">
-          <h1 class="editorial-question">Pick the platform that fits.</h1>
-          <p class="pricing-hero__lede">Lumecon runs as three platforms tuned to different work. Pick the one that matches yours — we&rsquo;ll surface the tiers from there.</p>
+          <h1 class="editorial-question reveal-soft hl-block">Pick the platform that fits.</h1>
+          <p class="pricing-hero__lede">Lumecon runs as three platforms tuned to different work. Pick the one that matches yours and we&rsquo;ll surface the tiers from there.</p>
           <p class="pricing-hero__aside">Annual subscriptions across every platform. Model updates, data refreshes, and workflow improvements land on every tier as they ship; you don&rsquo;t pay again to stay current.</p>
         </header>
 
@@ -110,7 +110,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
       <div class="editorial-band__inner">
         <header class="pricing-tiers__head">
           <p class="pricing-tiers__kicker">Tiers for <span data-platform-name>your platform</span></p>
-          <h2 class="pricing-compare__h2" id="tiers-h2">Three tiers. Priced annually.</h2>
+          <h2 class="pricing-compare__h2 reveal-soft hl-block" id="tiers-h2">Three tiers. Priced annually.</h2>
           <p class="pricing-compare__deck">Reservation, state, and national results are included at every tier. Cedar starts at Sapling. Cedar Grove is part of Tree.</p>
         </header>
 
@@ -215,13 +215,13 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
                 <tr>
                   <th scope="row" class="pricing-compare__row-label">{row.capability}</th>
                   <td data-value={row.sprout === 'yes' ? 'yes' : row.sprout === 'none' ? 'none' : row.sprout === 'soon' ? 'soon' : 'text'}>
-                    {row.sprout === 'yes' ? 'Included' : row.sprout === 'none' ? '—' : row.sprout === 'soon' ? 'Coming soon' : row.sprout}
+                    {row.sprout === 'yes' ? 'Included' : row.sprout === 'none' ? 'Not included' : row.sprout === 'soon' ? 'Coming soon' : row.sprout}
                   </td>
                   <td data-value={row.sapling === 'yes' ? 'yes' : row.sapling === 'none' ? 'none' : row.sapling === 'soon' ? 'soon' : 'text'}>
-                    {row.sapling === 'yes' ? 'Included' : row.sapling === 'none' ? '—' : row.sapling === 'soon' ? 'Coming soon' : row.sapling}
+                    {row.sapling === 'yes' ? 'Included' : row.sapling === 'none' ? 'Not included' : row.sapling === 'soon' ? 'Coming soon' : row.sapling}
                   </td>
                   <td class="pricing-compare__featured" data-value={row.tree === 'yes' ? 'yes' : row.tree === 'none' ? 'none' : row.tree === 'soon' ? 'soon' : 'text'}>
-                    {row.tree === 'yes' ? 'Included' : row.tree === 'none' ? '—' : row.tree === 'soon' ? 'Coming soon' : row.tree}
+                    {row.tree === 'yes' ? 'Included' : row.tree === 'none' ? 'Not included' : row.tree === 'soon' ? 'Coming soon' : row.tree}
                   </td>
                 </tr>
               ))}
@@ -348,13 +348,13 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
       });
     }
     /* Bake the platform short name into each tier card's CTA so the
-       request goes in with the right subject ("Sprout tier — Tribal"
-       vs "Sprout tier — Local"). */
+       request goes in with the right subject ("Sprout tier for Tribal"
+       vs "Sprout tier for Local"). */
     document.querySelectorAll<HTMLAnchorElement>('.pricing-tier-card__cta a').forEach((cta) => {
       const base = cta.dataset.ctaBase;
       if (!base) return;
       if (show) {
-        const sep = base.includes('?') ? '%20%E2%80%94%20' : '?subject=';
+        const sep = base.includes('?') ? '%20for%20' : '?subject=';
         cta.setAttribute('href', `${base}${sep}${encodeURIComponent(platformShort)}`);
       } else {
         cta.setAttribute('href', base);
@@ -429,7 +429,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
       /* Prices aren't locked yet (priceAnnual is 0 in the data file),
          so we describe the discount that will apply when pricing
          lands instead of computing a dollar amount. */
-      setStatus(status, `${match.label}: ${match.discountPct}% off annual pricing — applied when pricing is finalized.`, 'valid');
+      setStatus(status, `${match.label}: ${match.discountPct}% off annual pricing, applied when pricing is finalized.`, 'valid');
       trackEvent('pricing.discount_applied', { code: match.code, discountPct: match.discountPct });
     };
 

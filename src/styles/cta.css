@@ -1,9 +1,14 @@
+/* Contact section: flipped from a full-bleed navy slab to a lighter
+   surface so the page doesn't end on two stacked navy blocks (this
+   plus the old footer). Cream background with navy text keeps the
+   form readable while the navy footprint shrinks to just the thin
+   strip at the very bottom of the footer. */
 .cta {
-  background: var(--navy);
-  color: var(--white);
-  padding: clamp(5rem, 9vw, 7rem) 0;
+  background: var(--cream);
+  color: var(--navy);
+  padding: clamp(3.5rem, 7vw, 5rem) 0;
   scroll-snap-align: start;
-  min-block-size: 100dvh;
+  border-top: 1px solid var(--rule);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,99 +26,101 @@
   font-family: var(--font-mono);
   font-size: .7rem;
   letter-spacing: .14em;
-  color: var(--accent-light);
+  color: var(--accent);
   font-weight: 600;
   text-transform: uppercase;
-  margin: 0 0 1.2rem;
+  margin: 0 0 1rem;
 }
 .cta-display {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
-  line-height: 1.1;
+  font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+  line-height: 1.12;
   letter-spacing: -.02em;
-  color: var(--white);
-  margin: 0 0 1.2rem;
+  color: var(--navy);
+  margin: 0 0 1rem;
 }
 .cta-display em { font-style: italic; color: inherit; font-weight: inherit; }
 .cta-lede {
-  font-size: clamp(1.08rem, 1.5vw, 1.22rem);
-  line-height: 1.6;
-  color: rgba(255, 255, 255, .78);
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  line-height: 1.55;
+  color: var(--ink-2);
   max-width: 44ch;
-  margin: 0 0 1.4rem;
+  margin: 0 0 1.1rem;
   font-weight: 400;
 }
 .cta-email {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: .92rem;
+  font-size: .9rem;
   font-weight: 500;
-  color: var(--accent-light);
+  color: var(--accent);
   transition: color .15s;
 }
-.cta-email:hover { color: var(--white); }
+.cta-email:hover { color: var(--accent-btn-hover); }
 
 .cta-form {
-  background: rgba(255, 255, 255, .04);
-  border: 1px solid rgba(255, 255, 255, .12);
-  border-radius: 6px;
-  padding: 1.5rem;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 1.3rem;
+  position: relative;
 }
 .cta-form label {
   display: block;
   font-family: var(--font-mono);
-  font-size: .64rem;
+  font-size: .62rem;
   font-weight: 500;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, .55);
-  margin-bottom: .35rem;
+  color: var(--ink-3);
+  margin-bottom: .3rem;
 }
 .cta-form input, .cta-form select, .cta-form textarea {
   width: 100%;
-  padding: .65rem .8rem;
-  margin-bottom: 1rem;
+  padding: .6rem .75rem;
+  margin-bottom: .85rem;
   font-family: var(--font-sans);
-  font-size: .92rem;
-  background: rgba(255, 255, 255, .06);
-  border: 1px solid rgba(255, 255, 255, .14);
+  font-size: .9rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
   border-radius: 4px;
-  color: var(--white);
+  color: var(--navy);
   outline: none;
-  transition: border-color .15s, background .15s;
+  transition: border-color .15s, background .15s, box-shadow .15s;
   font-weight: 400;
 }
-.cta-form input::placeholder, .cta-form textarea::placeholder { color: rgba(255, 255, 255, .35); }
+.cta-form input::placeholder, .cta-form textarea::placeholder { color: var(--ink-3); }
 .cta-form input:focus, .cta-form select:focus, .cta-form textarea:focus {
-  border-color: rgba(255, 255, 255, .55);
-  background: rgba(255, 255, 255, .08);
+  border-color: var(--accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px var(--accent-rgba-18);
 }
 .cta-form select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,.4)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(10,15,38,.5)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right .85rem center;
   padding-right: 2rem;
 }
-.cta-form select option { background: var(--navy); color: var(--white); }
-.cta-form textarea { resize: vertical; min-height: 84px; }
+.cta-form select option { background: var(--white); color: var(--navy); }
+.cta-form textarea { resize: vertical; min-height: 78px; }
 .cta-form a#formSend {
   display: block;
   text-align: center;
   width: 100%;
-  padding: .85rem;
+  padding: .75rem;
   font-family: var(--font-sans);
-  font-size: .95rem;
-  font-weight: 500;
+  font-size: .92rem;
+  font-weight: 600;
   letter-spacing: -.005em;
-  background: var(--white);
-  color: var(--navy);
+  background: var(--navy);
+  color: var(--white);
   border-radius: 4px;
   cursor: pointer;
   transition: background .15s var(--ease);
   text-decoration: none;
 }
-.cta-form a#formSend:hover { background: var(--cream); }
+.cta-form a#formSend:hover { background: var(--navy2); }
 .cta-form a#formSend[aria-busy="true"] { opacity: .65; pointer-events: none; }
 @media (max-width: 880px) { .cta-inner { grid-template-columns: 1fr; } }

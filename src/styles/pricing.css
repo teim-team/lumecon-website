@@ -101,10 +101,16 @@
   transition: border-color .18s var(--ease), box-shadow .18s var(--ease), transform .18s var(--ease), background .18s var(--ease);
   position: relative;
 }
-.pricing-platform-tile:hover {
+.pricing-platform-tile:hover,
+.pricing-platform-tile:focus-visible {
   border-color: var(--accent);
   box-shadow: 0 6px 18px -6px rgba(14, 21, 48, .12);
   transform: translateY(-2px);
+}
+.pricing-platform-tile:active {
+  border-color: var(--accent);
+  background: var(--accent-rgba-08);
+  transform: translateY(0);
 }
 .pricing-platform-tile.is-active {
   border-color: var(--accent);
@@ -151,8 +157,10 @@
   color: var(--ink-3);
   transition: color .18s var(--ease);
 }
-.pricing-platform-tile:hover .pricing-platform-tile__icon { color: var(--accent); }
-.pricing-platform-tile.is-active .pricing-platform-tile__icon { color: var(--accent); }
+.pricing-platform-tile:hover .pricing-platform-tile__icon,
+.pricing-platform-tile:focus-visible .pricing-platform-tile__icon,
+.pricing-platform-tile:active .pricing-platform-tile__icon { color: var(--accent); background: var(--accent-rgba-08); }
+.pricing-platform-tile.is-active .pricing-platform-tile__icon { color: var(--accent); background: var(--accent-rgba-08); }
 .pricing-platform-tile--coming-soon .pricing-platform-tile__icon {
   background: var(--white);
   color: var(--ink-3);

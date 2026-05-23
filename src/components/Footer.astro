@@ -29,13 +29,7 @@ const prefix = isHome ? '' : '/';
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-brand__wordmark">
-          <BrandWordmark size="md" invert={true} ariaLabel={`${site.legalName} home`} />
-          <span class="footer-brand__mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z"/>
-              <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="butt"/>
-            </svg>
-          </span>
+          <BrandWordmark size="md" ariaLabel={`${site.legalName} home`} />
         </div>
         <div class="footer-brand-pitch">{site.pitch}</div>
       </div>
@@ -56,7 +50,7 @@ const prefix = isHome ? '' : '/';
         <div class="footer-col">
           <div class="footer-col__head mono">Company</div>
           <a href="/join">Join the team</a>
-          <a href={`${prefix}#contact`}>Contact</a>
+          <a class="footer-col__contact" href={`${prefix}#contact`}>Contact</a>
           <a href="https://www.linkedin.com/company/lumecon-ai" target="_blank" rel="noopener noreferrer me">LinkedIn</a>
         </div>
         <div class="footer-col">
@@ -66,12 +60,19 @@ const prefix = isHome ? '' : '/';
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="footer-bottom">
-      <div class="footer-legal">
-        &copy; {site.copyrightYear} {site.legalEntity} &middot; All rights reserved.
+  <!-- Compact navy strip for copyright + contact email so the
+       dominant footer surface stays light and the navy footprint
+       shrinks to a single thin bar. -->
+  <div class="footer-bar">
+    <div class="footer-w">
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          &copy; {site.copyrightYear} {site.legalEntity} &middot; All rights reserved.
+        </div>
+        <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
       </div>
-      <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
     </div>
   </div>
 </footer>

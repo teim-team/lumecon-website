@@ -67,41 +67,61 @@
 .why-header__lede-box .why-header__lede {
   max-width: none;
 }
-/* Card grid: single column on desktop with each card laid out as a
-   two-column row (text left, icon right). Stacking the cards
-   vertically with icons aligned to the right creates a tidy
-   "icon rail" down the right side of the section rather than a
-   half-empty 3-column grid. */
+/* Card grid: three cards in a row on desktop, each laid out as a
+   vertical stack (icon on top, headline below, chevron at the
+   bottom). The body stays hidden until the card is opened, so the
+   row reads as three deliberate icon+headline tiles instead of
+   three walls of text. */
 .why-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+  align-items: start;
 }
 .why-stat {
   color: var(--navy);
   background: var(--white);
-  padding: 1.2rem 1.4rem 1.4rem;
+  padding: clamp(1.4rem, 2.2vw, 1.8rem) clamp(1.2rem, 1.8vw, 1.5rem) clamp(1.4rem, 2.2vw, 1.8rem);
   border: 1px solid var(--rule);
   border-radius: 12px;
   transition: border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
   cursor: pointer;
+  height: 100%;
 }
-.why-stat:hover {
+.why-stat:hover,
+.why-stat:focus-within {
   border-color: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 12px 28px -16px rgba(14, 21, 48, .18);
 }
-.why-stat:hover .why-stat__k { color: var(--accent); }
+.why-stat[open],
+.why-stat:active {
+  border-color: var(--accent);
+  background: var(--accent-rgba-08);
+}
+.why-stat:hover .why-stat__k,
+.why-stat:focus-within .why-stat__k,
+.why-stat[open] .why-stat__k,
+.why-stat:active .why-stat__k { color: var(--accent); }
 .why-stat__k { transition: color .25s var(--ease); }
+/* Icons inside the card switch to teal in hover/focus/active/open
+   states. The SVGs use currentColor, so flipping the parent's color
+   recolours the entire icon body. */
+.why-stat__icon { transition: color .25s var(--ease); }
+.why-stat:hover .why-stat__icon,
+.why-stat:focus-within .why-stat__icon,
+.why-stat[open] .why-stat__icon,
+.why-stat:active .why-stat__icon { color: var(--accent); }
 
-/* Card head is a flex row: text on the left (flex: 1), icon to its
-   right, chevron at the far right. Stacking the cards vertically
-   plus this row layout produces an "icon rail" effect down the
-   right side of the section. */
+/* Card head stacks vertically: icon up top, headline in the middle,
+   chevron at the bottom. Centered so the row of three reads as
+   three balanced tiles. */
 .why-stat__head {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
+  text-align: center;
+  gap: 1rem;
   list-style: none;
   cursor: pointer;
 }
@@ -149,21 +169,21 @@
 @media (prefers-reduced-motion: reduce) {
   .why-stat__body { animation: none; }
 }
-/* Icon sits to the right of the headline in the row layout. order
-   flips it past the .why-stat__k (which renders before it in the
-   DOM) so the headline reads on the left. */
+/* Icon sits on top of the stack. order pulls it ahead of .why-stat__k
+   (which precedes it in the DOM) so the visual order is icon →
+   sentence → chevron. */
 .why-stat__icon {
   display: inline-flex;
   color: var(--navy);
-  order: 2;
+  order: 1;
   flex-shrink: 0;
 }
 .why-stat__icon svg {
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   display: block;
 }
-.why-stat__k { order: 1; flex: 1; }
+.why-stat__k { order: 2; }
 .why-stat__chev { order: 3; }
 
 /* ---------- 01: replace consultant + software ----------
@@ -263,11 +283,12 @@
 .why-stat__k {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1.2rem, 1.85vw, 1.5rem);
-  line-height: 1.2;
-  letter-spacing: -.018em;
+  font-size: clamp(1.05rem, 1.45vw, 1.2rem);
+  line-height: 1.25;
+  letter-spacing: -.014em;
   color: var(--navy);
   margin: 0;
+  max-width: 22ch;
 }
 .why-stat__amp { font-style: italic; color: var(--accent); font-weight: 500; }
 .why-stat__v {
@@ -314,9 +335,13 @@
   color: var(--ink-2);
 }
 @media (max-width: 880px) {
-  .why-grid { gap: .8rem; }
+  /* Phones: collapse the 3-column row to a single column so each
+     card still reads as icon → headline → arrow without horizontal
+     compression. */
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: .8rem;
+  }
   .why-header__title { font-size: clamp(1.8rem, 6vw, 2.2rem); }
-  /* On phones the row becomes tight; allow the headline to wrap
-     under the icon if needed by shrinking the icon a touch. */
-  .why-stat__icon svg { width: 36px; height: 36px; }
+  .why-stat__icon svg { width: 44px; height: 44px; }
 }

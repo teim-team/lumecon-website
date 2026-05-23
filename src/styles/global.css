@@ -768,6 +768,36 @@ strong { font-weight: 600; color: inherit; }
 .delay-3 { transition-delay: .3s; }
 .delay-4 { transition-delay: .4s; }
 
+/* Asymmetric accent block behind key text. ::before sits a few px
+   off-axis with a low-opacity colored panel; it wipes in from the
+   left when the parent gets .seen (via the same IntersectionObserver
+   that drives .reveal-soft). Pair with .reveal-soft on the element
+   itself so the text rises while the highlight wipes in behind it.
+   Apply to standalone headlines / kickers — not to body paragraphs
+   inside lede boxes where the surrounding card already provides
+   visual emphasis. */
+.hl-block { position: relative; isolation: isolate; width: fit-content; max-width: 100%; }
+.hl-block::before {
+  content: '';
+  position: absolute;
+  inset: -.18em -.55em -.08em -.42em;
+  background: var(--accent-rgba-18);
+  border-radius: 6px;
+  transform: rotate(-1deg) scaleX(0);
+  transform-origin: left center;
+  transition: transform .8s var(--ease) .15s;
+  z-index: -1;
+  pointer-events: none;
+}
+.hl-block.seen::before,
+.hl-block:not(.reveal-soft)::before { transform: rotate(-1deg) scaleX(1); }
+.hl-block--gold::before { background: rgba(240, 169, 26, .22); }
+.hl-block--right { display: inline-block; }
+.hl-block--right::before { transform-origin: right center; }
+@media (prefers-reduced-motion: reduce) {
+  .hl-block::before { transition: none; transform: rotate(-1deg) scaleX(1); }
+}
+
 /* Focus styles for keyboard navigation */
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -806,14 +836,33 @@ strong { font-weight: 600; color: inherit; }
 .btn--invert-ghost { background: transparent; color: var(--white); border-color: rgba(255, 255, 255, .35); }
 .btn--invert-ghost:hover { background: rgba(255, 255, 255, .08); border-color: var(--white); }
 
-/* Scroll progress indicator */
+/* Top teal accent band. Full-width rail glued to the very top of
+   the viewport so the page edge reads as one continuous teal strip
+   instead of a stray progress sliver. On mobile this matches the
+   theme-color teal that iOS applies to the URL bar above the page,
+   so the address bar and the page top read as one unified header. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 9998;
+  pointer-events: none;
+}
+
+/* Scroll progress indicator sits on top of the rail as a brighter
+   highlight that fills as the visitor reads. Same colour family so
+   the rail-plus-fill reads as one progressive element. */
 .scroll-progress {
   position: fixed;
   top: 0;
   left: 0;
   width: 0%;
-  height: 2px;
-  background: var(--accent);
+  height: 3px;
+  background: var(--accent-btn-hover);
   z-index: 9999;
   pointer-events: none;
   transition: width .1s linear;

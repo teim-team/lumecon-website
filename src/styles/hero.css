@@ -22,6 +22,26 @@
   scroll-snap-align: start;
   min-block-size: 88dvh;
 }
+/* Animate the hero in on load: each child rises and fades from
+   slightly below its resting position, staggered so the eye reads
+   headline → workflow → sub-copy → proof → tiles in sequence.
+   `animation-fill-mode: backwards` holds each element invisible
+   until its delay fires so nothing flashes pre-animation. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero-brand > * {
+  animation: hero-rise .7s var(--ease) backwards;
+}
+.hero-brand > :nth-child(1) { animation-delay: .05s; }
+.hero-brand > :nth-child(2) { animation-delay: .20s; }
+.hero-brand > :nth-child(3) { animation-delay: .35s; }
+.hero-brand > :nth-child(4) { animation-delay: .50s; }
+.hero-brand > :nth-child(5) { animation-delay: .65s; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-brand > * { animation: none; }
+}
 /* Tagline eyebrow: small mono uppercase up top, replacing the
    previous oversized hero wordmark. The luminate emphasis still
    pops via the shared .lumin class. */
@@ -125,15 +145,22 @@
   text-decoration: none;
   transition: border-color .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
 }
-.hero-path:hover {
+.hero-path:hover,
+.hero-path:focus-visible {
   border-color: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px -12px rgba(14, 21, 48, .18);
 }
-/* Icon color stays subtle by default and lifts to teal on hover.
-   Icons are intentionally FILLED (not outlines) so the whole
-   shape — not a thin stroke — transitions from grey to teal when
-   the cursor enters the tile. */
+.hero-path:active {
+  border-color: var(--accent);
+  background: var(--accent-rgba-08);
+  transform: translateY(0);
+}
+/* Icon color stays subtle by default and lifts to teal on hover,
+   focus, and active (the cursor-down / tap state). Icons are
+   intentionally FILLED (not outlines) so the whole shape, not a
+   thin stroke, transitions from grey to teal when the visitor
+   engages with the tile. */
 .hero-path__icon {
   display: inline-flex;
   width: 34px;
@@ -143,7 +170,9 @@
   transition: color .18s var(--ease);
 }
 .hero-path__icon svg { width: 100%; height: 100%; display: block; }
-.hero-path:hover .hero-path__icon { color: var(--accent); }
+.hero-path:hover .hero-path__icon,
+.hero-path:focus-visible .hero-path__icon,
+.hero-path:active .hero-path__icon { color: var(--accent); }
 .hero-path__title {
   font-family: var(--font-display);
   font-weight: 600;
