@@ -771,17 +771,19 @@ strong { font-weight: 600; color: inherit; }
 /* Asymmetric accent block behind key text. Each instance pulls its
    angle, padding asymmetry, and tint from CSS custom properties so
    different headlines on the same page don't read like the same
-   stamp repeated. ::before wipes in from the left when the parent
+   stamp repeated. ::before wipes in from one side when the parent
    gets .seen (via the same IntersectionObserver that drives
-   .reveal-soft). Pair with .reveal-soft on the element itself so
-   the text rises while the highlight wipes in behind it. */
+   .reveal-soft). Three brand tints rotate across pages — teal
+   (UI accent), yellow (brand gold), green (cedar) — chosen
+   strategically so consecutive headlines never share a color and
+   the rail through the site reads as deliberate, not decorative. */
 .hl-block {
-  --hl-rot: -1.1deg;
-  --hl-color: var(--accent-rgba-18);
-  --hl-inset-t: -.18em;
-  --hl-inset-r: -.55em;
-  --hl-inset-b: -.08em;
-  --hl-inset-l: -.42em;
+  --hl-rot: -1.4deg;
+  --hl-color: rgba(15, 181, 165, .24);
+  --hl-inset-t: -.3em;
+  --hl-inset-r: -.75em;
+  --hl-inset-b: -.18em;
+  --hl-inset-l: -.55em;
   --hl-radius: 6px;
   --hl-origin: left center;
   position: relative;
@@ -805,53 +807,72 @@ strong { font-weight: 600; color: inherit; }
 .hl-block:not(.reveal-soft)::before {
   transform: rotate(var(--hl-rot)) scaleX(1);
 }
-/* Variant decks. Each leans the angle a different way, shifts the
-   padding asymmetry, and (where useful) swaps the tint, so a page
-   with three flagged headlines doesn't get three identical
-   rectangles. Mix freely. */
+/* Teal variants — UI accent. */
 .hl-block--b {
-  --hl-rot: 1.4deg;
-  --hl-color: rgba(15, 181, 165, .22);
-  --hl-inset-t: -.1em;
-  --hl-inset-r: -.38em;
-  --hl-inset-b: -.22em;
-  --hl-inset-l: -.62em;
+  --hl-rot: 1.8deg;
+  --hl-color: rgba(15, 181, 165, .28);
+  --hl-inset-t: -.18em;
+  --hl-inset-r: -.55em;
+  --hl-inset-b: -.34em;
+  --hl-inset-l: -.85em;
   --hl-origin: right center;
 }
 .hl-block--c {
-  --hl-rot: -2.2deg;
+  --hl-rot: -2.6deg;
   --hl-color: var(--accent-bar);
-  --hl-inset-t: -.24em;
-  --hl-inset-r: -.7em;
-  --hl-inset-b: 0;
-  --hl-inset-l: -.28em;
+  --hl-inset-t: -.36em;
+  --hl-inset-r: -.95em;
+  --hl-inset-b: -.05em;
+  --hl-inset-l: -.4em;
   --hl-radius: 3px;
 }
 .hl-block--d {
-  --hl-rot: .55deg;
-  --hl-color: rgba(15, 181, 165, .14);
-  --hl-inset-t: -.05em;
-  --hl-inset-r: -.5em;
-  --hl-inset-b: -.25em;
-  --hl-inset-l: -.5em;
-  --hl-radius: 10px;
+  --hl-rot: .6deg;
+  --hl-color: rgba(15, 181, 165, .18);
+  --hl-inset-t: -.12em;
+  --hl-inset-r: -.7em;
+  --hl-inset-b: -.42em;
+  --hl-inset-l: -.7em;
+  --hl-radius: 12px;
 }
+/* Yellow / gold variants — brand luminate gold. */
 .hl-block--gold {
-  --hl-rot: 1.8deg;
-  --hl-color: rgba(240, 169, 26, .22);
-  --hl-inset-t: -.14em;
-  --hl-inset-r: -.45em;
-  --hl-inset-b: -.18em;
-  --hl-inset-l: -.55em;
-}
-.hl-block--terra {
-  --hl-rot: -.6deg;
-  --hl-color: rgba(224, 74, 42, .14);
-  --hl-inset-t: -.18em;
-  --hl-inset-r: -.6em;
-  --hl-inset-b: -.1em;
-  --hl-inset-l: -.32em;
+  --hl-rot: 2.2deg;
+  --hl-color: rgba(240, 169, 26, .28);
+  --hl-inset-t: -.22em;
+  --hl-inset-r: -.55em;
+  --hl-inset-b: -.3em;
+  --hl-inset-l: -.85em;
   --hl-radius: 8px;
+}
+.hl-block--gold-b {
+  --hl-rot: -1.4deg;
+  --hl-color: rgba(240, 169, 26, .22);
+  --hl-inset-t: -.32em;
+  --hl-inset-r: -.95em;
+  --hl-inset-b: -.08em;
+  --hl-inset-l: -.4em;
+  --hl-radius: 4px;
+}
+/* Green variant — cedar forest. */
+.hl-block--green {
+  --hl-rot: -1.8deg;
+  --hl-color: rgba(14, 139, 79, .22);
+  --hl-inset-t: -.28em;
+  --hl-inset-r: -.85em;
+  --hl-inset-b: -.14em;
+  --hl-inset-l: -.55em;
+  --hl-radius: 8px;
+}
+.hl-block--green-b {
+  --hl-rot: 1.2deg;
+  --hl-color: rgba(27, 182, 106, .22);
+  --hl-inset-t: -.14em;
+  --hl-inset-r: -.5em;
+  --hl-inset-b: -.36em;
+  --hl-inset-l: -.9em;
+  --hl-origin: right center;
+  --hl-radius: 14px;
 }
 .hl-block--right { --hl-origin: right center; }
 @media (prefers-reduced-motion: reduce) {
