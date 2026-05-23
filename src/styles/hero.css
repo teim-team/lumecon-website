@@ -131,15 +131,15 @@
   box-shadow: 0 8px 24px -12px rgba(14, 21, 48, .18);
 }
 /* Icon color stays subtle by default and lifts to teal on hover.
-   Previously the icons were full navy from the get-go, which made
-   them feel pre-emphasised; the muted default lets the title carry
-   the visual weight until the visitor's cursor is on the tile. */
+   Icons are intentionally FILLED (not outlines) so the whole
+   shape — not a thin stroke — transitions from grey to teal when
+   the cursor enters the tile. */
 .hero-path__icon {
   display: inline-flex;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   color: var(--ink-3);
-  margin-bottom: .15rem;
+  margin-bottom: .25rem;
   transition: color .18s var(--ease);
 }
 .hero-path__icon svg { width: 100%; height: 100%; display: block; }
