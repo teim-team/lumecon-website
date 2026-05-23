@@ -116,10 +116,23 @@
    participant just joined" rather than a fade. */
 .netv2 { width: 100%; height: auto; }
 
+/* Footnote sits below the SVG. Smaller type and ink-3 colour so
+   it reads as a methodology note, not competing prose. */
+.network-diagram__note {
+  margin: 1rem 0 0;
+  font-family: var(--font-sans);
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+  font-style: italic;
+  max-width: 360px;
+  text-align: left;
+}
+
 .netv2__node {
   fill: var(--white);
   stroke: var(--accent);
-  stroke-width: 1.5;
+  stroke-width: 1.6;
   transform-box: fill-box;
   transform-origin: center;
   opacity: 0;
@@ -150,79 +163,102 @@
 .netv2__node--H { animation-name: netv2-node-H; }
 .netv2__node--I { animation-name: netv2-node-I; }
 
+/* Each node keyframe carries three pieces of state:
+   - opacity / scale: spawn pop, then settle
+   - fill: starts white (outline only), then fills with accent
+     ~6-10% after spawn — i.e. shortly after the node's first
+     edge has drawn. The visual reads "this participant joined,
+     then became a working member of the network." */
 @keyframes netv2-node-A {
-  0%, 2%    { opacity: 0; transform: scale(.4); }
-  4%, 6%    { opacity: 1; transform: scale(1.5); }
-  8%, 86%   { opacity: 1; transform: scale(1); }
-  44%, 46%  { transform: scale(1.18); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 2%    { opacity: 0; transform: scale(.4); fill: var(--white); }
+  4%, 6%    { opacity: 1; transform: scale(1.5); fill: var(--white); }
+  8%, 14%   { opacity: 1; transform: scale(1); fill: var(--white); }
+  18%, 44%  { transform: scale(1); fill: var(--accent); }
+  46%       { transform: scale(1.18); }
+  48%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-B {
-  0%, 4%    { opacity: 0; transform: scale(.4); }
-  6%, 8%    { opacity: 1; transform: scale(1.45); }
-  10%, 86%  { opacity: 1; transform: scale(1); }
-  58%, 60%  { transform: scale(1.18); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 4%    { opacity: 0; transform: scale(.4); fill: var(--white); }
+  6%, 8%    { opacity: 1; transform: scale(1.45); fill: var(--white); }
+  10%, 16%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  20%, 58%  { transform: scale(1); fill: var(--accent); }
+  60%       { transform: scale(1.18); }
+  62%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-C {
-  0%, 7%    { opacity: 0; transform: scale(.4); }
-  9%, 11%   { opacity: 1; transform: scale(1.45); }
-  13%, 86%  { opacity: 1; transform: scale(1); }
-  72%, 74%  { transform: scale(1.16); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 7%    { opacity: 0; transform: scale(.4); fill: var(--white); }
+  9%, 11%   { opacity: 1; transform: scale(1.45); fill: var(--white); }
+  13%, 19%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  23%, 72%  { transform: scale(1); fill: var(--accent); }
+  74%       { transform: scale(1.16); }
+  76%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-D {
-  0%, 17%   { opacity: 0; transform: scale(.4); }
-  19%, 22%  { opacity: 1; transform: scale(1.45); }
-  24%, 86%  { opacity: 1; transform: scale(1); }
-  64%, 66%  { transform: scale(1.18); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 17%   { opacity: 0; transform: scale(.4); fill: var(--white); }
+  19%, 22%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
+  24%, 30%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  34%, 64%  { transform: scale(1); fill: var(--accent); }
+  66%       { transform: scale(1.18); }
+  68%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-E {
-  0%, 20%   { opacity: 0; transform: scale(.4); }
-  22%, 25%  { opacity: 1; transform: scale(1.45); }
-  27%, 86%  { opacity: 1; transform: scale(1); }
-  76%, 78%  { transform: scale(1.16); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 20%   { opacity: 0; transform: scale(.4); fill: var(--white); }
+  22%, 25%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
+  27%, 33%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  37%, 76%  { transform: scale(1); fill: var(--accent); }
+  78%       { transform: scale(1.16); }
+  80%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-F {
-  0%, 24%   { opacity: 0; transform: scale(.4); }
-  26%, 29%  { opacity: 1; transform: scale(1.55); }
-  31%, 86%  { opacity: 1; transform: scale(1); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 24%   { opacity: 0; transform: scale(.4); fill: var(--white); }
+  26%, 29%  { opacity: 1; transform: scale(1.55); fill: var(--white); }
+  31%, 38%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  42%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-J {
-  0%, 28%   { opacity: 0; transform: scale(.4); }
-  30%, 33%  { opacity: 1; transform: scale(1.55); }
-  35%, 86%  { opacity: 1; transform: scale(1); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 28%   { opacity: 0; transform: scale(.4); fill: var(--white); }
+  30%, 33%  { opacity: 1; transform: scale(1.55); fill: var(--white); }
+  35%, 42%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  46%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-G {
-  0%, 36%   { opacity: 0; transform: scale(.4); }
-  38%, 41%  { opacity: 1; transform: scale(1.45); }
-  43%, 86%  { opacity: 1; transform: scale(1); }
-  82%, 84%  { transform: scale(1.16); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 36%   { opacity: 0; transform: scale(.4); fill: var(--white); }
+  38%, 41%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
+  43%, 50%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  54%, 82%  { transform: scale(1); fill: var(--accent); }
+  84%       { transform: scale(1.16); }
+  86%       { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-K {
-  0%, 49%   { opacity: 0; transform: scale(.3); }
-  52%, 55%  { opacity: 1; transform: scale(1.6); }
-  58%, 86%  { opacity: 1; transform: scale(1); }
-  68%, 70%  { transform: scale(1.22); }
-  80%, 82%  { transform: scale(1.18); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 49%   { opacity: 0; transform: scale(.3); fill: var(--accent-rgba-18); }
+  52%, 55%  { opacity: 1; transform: scale(1.6); fill: var(--accent-rgba-18); }
+  58%, 64%  { opacity: 1; transform: scale(1); fill: var(--accent-rgba-18); }
+  68%, 80%  { transform: scale(1); fill: var(--accent); }
+  82%       { transform: scale(1.18); }
+  84%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-H {
-  0%, 64%   { opacity: 0; transform: scale(.4); }
-  66%, 69%  { opacity: 1; transform: scale(1.45); }
-  71%, 86%  { opacity: 1; transform: scale(1); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 64%   { opacity: 0; transform: scale(.4); fill: var(--white); }
+  66%, 69%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
+  71%, 76%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  80%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 @keyframes netv2-node-I {
-  0%, 68%   { opacity: 0; transform: scale(.4); }
-  70%, 73%  { opacity: 1; transform: scale(1.5); }
-  75%, 86%  { opacity: 1; transform: scale(1); }
-  90%, 100% { opacity: 0; transform: scale(.9); }
+  0%, 68%   { opacity: 0; transform: scale(.4); fill: var(--white); }
+  70%, 73%  { opacity: 1; transform: scale(1.5); fill: var(--white); }
+  75%, 80%  { opacity: 1; transform: scale(1); fill: var(--white); }
+  83%, 86%  { transform: scale(1); fill: var(--accent); }
+  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
 }
 
 /* Edges. Each draws shortly after its endpoint nodes have both

@@ -27,7 +27,7 @@ import '../styles/network.css';
   <div class="network-inner">
     <div class="network-text">
       <p class="network-kicker">The network</p>
-      <h2 class="network-title reveal-soft hl-block hl-block--c" id="network-title">Your work stays yours. The model gets sharper for everyone.</h2>
+      <h2 class="network-title reveal-soft hl-block hl-block--b" id="network-title">Your work stays yours. The model gets sharper for everyone.</h2>
       <p class="network-lede">Every new client makes every other client's next economic impact study a little better. We train on the network: anonymised, aggregated signals across thousands of studies. The regional multipliers, the assumption defaults, and Cedar's harmonization rules keep tightening as more organizations join.</p>
 
       <ul class="network-points">
@@ -52,8 +52,9 @@ import '../styles/network.css';
          seed nodes appear, then growth nodes spawn and connect,
          a hub forms, late nodes fill in the periphery, and the
          whole network breathes briefly before fading and looping.
-         Reads as "a network being built up and learning," not a
-         decorative pulse. -->
+         Each node "fills in" with accent shortly after its edges
+         connect so the visual reads as "this participant joined
+         and is now part of the network," not a decorative pulse. -->
     <div class="network-diagram" aria-hidden="true">
       <svg viewBox="0 0 240 240" fill="none" class="netv2">
         <g class="netv2__edges" stroke-linecap="round" fill="none">
@@ -92,6 +93,11 @@ import '../styles/network.css';
           <circle class="netv2__node netv2__node--K" cx="118" cy="116" r="10"/>
         </g>
       </svg>
+      <!-- Footnote under the diagram: how cross-customer learning
+           works without shipping row-level files around. Smaller
+           type so it reads as a methodology note rather than a
+           competing block of prose. -->
+      <p class="network-diagram__note">We use methods we developed in-house to capture the benefits of federated learning with coarse, anonymised data only. Raw records never leave your workspace; the shared model learns from aggregate signals across thousands of studies.</p>
     </div>
   </div>
 </section>

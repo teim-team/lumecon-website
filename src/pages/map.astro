@@ -41,7 +41,7 @@ import '../styles/map-page.css';
     <header class="map-page__header">
       <div class="map-page__header-inner">
         <p class="map-page__kicker">Interactive demo</p>
-        <h1 class="map-page__title reveal-soft hl-block hl-block--gold">Run a live impact study.</h1>
+        <h1 class="map-page__title reveal-soft hl-block hl-block--green-b">Run a live impact study.</h1>
         <p class="map-page__sub">Hover any region to inspect. Click to run a study with Cedar across full reservation, state, and national scope. Minutes, not months.</p>
         <p class="map-page__roadmap">US coverage today; international scope is on the roadmap.</p>
       </div>
@@ -49,48 +49,29 @@ import '../styles/map-page.css';
 
     <MapWorkspace />
 
-    <!-- "What kickstarts a study." Quick icon strip naming the
-         inputs Cedar takes (audited financials, payroll, charitable
-         giving, lobbying, marketing, year, geography). Sits between
-         the workspace and the explainer cards so a visitor who's
-         poked at the map immediately sees what makes the engine
-         underneath it run. Always visible — these are short labels,
-         not paragraphs, so the strip is scannable in two seconds. -->
+    <!-- "What kickstarts a study." Four input tiles naming the
+         records Cedar takes: financial records, the things your
+         org spends on, the time window, and the place. Lobbying
+         and marketing are NOT inputs — those are use cases for the
+         study (handled in "Why it matters" below). Icons come
+         first, then the explainer text mentioning the public
+         datasets Cedar pulls alongside what you supply. -->
     <section class="map-page__inputs" aria-labelledby="map-inputs-title">
       <div class="map-page__about-inner">
         <p class="map-page__about-kicker">What kickstarts a study</p>
-        <h2 class="map-page__about-title reveal-soft hl-block hl-block--d" id="map-inputs-title">The inputs you already have.</h2>
-        <p class="map-page__inputs-lede">Drop in what your organization already files. Cedar harmonises the rest against ACS, BEA, LODES, QCEW, and the public sources serious models rely on.</p>
+        <h2 class="map-page__about-title reveal-soft" id="map-inputs-title">The inputs you already have.</h2>
         <ul class="map-page__inputs-grid" aria-label="Study inputs">
           <li class="map-page__input">
             <span class="map-page__input-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3 H17 L21 7 V21 H5 Z"/><rect x="8" y="11" width="9" height="1.4" fill="var(--white)"/><rect x="8" y="14" width="9" height="1.4" fill="var(--white)"/><rect x="8" y="17" width="6" height="1.4" fill="var(--white)"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3 H15 L20 8 V21 H4 Z"/><rect x="6.6" y="10.4" width="10" height="1.2" fill="var(--white)"/><rect x="6.6" y="13.2" width="10" height="1.2" fill="var(--white)"/><rect x="6.6" y="16" width="6.5" height="1.2" fill="var(--white)"/><circle cx="17.4" cy="17.6" r="1.6" fill="var(--white)"/></svg>
             </span>
-            <span class="map-page__input-label">Audited financials</span>
+            <span class="map-page__input-label">Audited financials &amp; payroll</span>
           </li>
           <li class="map-page__input">
             <span class="map-page__input-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="14" rx="1"/><rect x="5.5" y="8" width="6" height="1.2" fill="var(--white)"/><rect x="5.5" y="10.5" width="9" height="1.2" fill="var(--white)"/><rect x="5.5" y="13" width="7" height="1.2" fill="var(--white)"/><circle cx="17.5" cy="15.5" r="2.2" fill="var(--white)"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21 L4 13 C2 11 2.5 7.5 5 6.2 C7.2 5 9.5 6 10.7 7.6 L12 9.2 L13.3 7.6 C14.5 6 16.8 5 19 6.2 C21.5 7.5 22 11 20 13 Z"/><circle cx="12" cy="13" r="1.3" fill="var(--white)"/></svg>
             </span>
-            <span class="map-page__input-label">Payroll</span>
-          </li>
-          <li class="map-page__input">
-            <span class="map-page__input-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21 L4 13 C2 11 2.5 7.5 5 6.2 C7.2 5 9.5 6 10.7 7.6 L12 9.2 L13.3 7.6 C14.5 6 16.8 5 19 6.2 C21.5 7.5 22 11 20 13 Z"/></svg>
-            </span>
-            <span class="map-page__input-label">Charitable giving</span>
-          </li>
-          <li class="map-page__input">
-            <span class="map-page__input-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="20" width="18" height="1.6"/><path d="M5 20 V11 H7 V20 Z M10 20 V8 H12 V20 Z M14 20 V11 H16 V20 Z M18 20 V14 H20 V20 Z"/><circle cx="12" cy="4.6" r="2.2"/></svg>
-            </span>
-            <span class="map-page__input-label">Lobbying</span>
-          </li>
-          <li class="map-page__input">
-            <span class="map-page__input-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 8 L14 5 L14 19 L4 16 Z"/><path d="M14 7 L19 4.2 V19.8 L14 17 Z"/><rect x="6" y="16" width="3" height="3.6" fill="var(--white)"/></svg>
-            </span>
-            <span class="map-page__input-label">Marketing spend</span>
+            <span class="map-page__input-label">Charitable giving &amp; other spending</span>
           </li>
           <li class="map-page__input">
             <span class="map-page__input-icon" aria-hidden="true">
@@ -105,6 +86,7 @@ import '../styles/map-page.css';
             <span class="map-page__input-label">Geography</span>
           </li>
         </ul>
+        <p class="map-page__inputs-lede">Drop in what your organization already files. Cedar harmonises the rest against the public sources serious models rely on (ACS, BEA, LODES, QCEW, County Business Patterns, USASpending, and the regional Fed banks) so the assumptions behind your study are grounded in canonical data, not a model guess.</p>
       </div>
     </section>
 
@@ -116,7 +98,7 @@ import '../styles/map-page.css';
         <details class="map-page__details">
           <summary class="map-page__details-summary">
             <span class="map-page__details-kicker">What you&rsquo;re seeing</span>
-            <span class="map-page__details-title reveal-soft hl-block hl-block--c" id="map-about-title">An economic impact study, run live.</span>
+            <span class="map-page__details-title reveal-soft hl-block hl-block--gold" id="map-about-title">An economic impact study, run live.</span>
             <span class="map-page__details-chev" aria-hidden="true"></span>
           </summary>
           <div class="map-page__about-grid">
@@ -147,7 +129,7 @@ import '../styles/map-page.css';
         <details class="map-page__details map-page__details--invert">
           <summary class="map-page__details-summary">
             <span class="map-page__details-kicker map-page__details-kicker--invert">Why it matters</span>
-            <span class="map-page__details-title reveal-soft hl-block hl-block--gold" id="map-why-title">When the room asks why they should care.</span>
+            <span class="map-page__details-title reveal-soft hl-block hl-block--c" id="map-why-title">When the room asks why they should care.</span>
             <span class="map-page__details-chev" aria-hidden="true"></span>
           </summary>
           <div class="map-page__why-body">
@@ -166,8 +148,16 @@ import '../styles/map-page.css';
                 <p class="map-page__why-room-body">Annual reports stop reading as anecdote and start reading as evidence: dollars in, jobs and businesses out, measured the same way every year, comparable across grantees.</p>
               </li>
               <li class="map-page__why-room">
+                <h3 class="map-page__why-room-head">Lobbying &amp; advocacy</h3>
+                <p class="map-page__why-room-body">Government affairs decks, op-eds, regulatory comment letters, and trade-association testimony. The same defensible jobs-and-investment number runs through every advocacy artifact instead of being rebuilt by a consultant per pitch.</p>
+              </li>
+              <li class="map-page__why-room">
+                <h3 class="map-page__why-room-head">Marketing &amp; comms</h3>
+                <p class="map-page__why-room-body">Annual report headlines, social cards, donor-pitch one-pagers, recruiting collateral. The plain-language version of the same study, ready to drop into the marketing pipeline without rebuilding the math.</p>
+              </li>
+              <li class="map-page__why-room">
                 <h3 class="map-page__why-room-head">Public &amp; press</h3>
-                <p class="map-page__why-room-body">The plain-language version of the same study: how much local spending stayed in the region, how many local workers were hired, what the project bought that wouldn't have been bought otherwise.</p>
+                <p class="map-page__why-room-body">How much local spending stayed in the region, how many local workers were hired, what the project bought that wouldn't have been bought otherwise. The reporter version of the same numbers, in plain English.</p>
               </li>
             </ul>
           </div>

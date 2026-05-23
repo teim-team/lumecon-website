@@ -132,56 +132,55 @@
   padding: clamp(2.4rem, 4.5vw, 3.6rem) 0 clamp(2rem, 3.6vw, 2.8rem);
   border-top: 1px solid var(--rule);
 }
-.map-page__inputs-lede {
-  font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.4vw, 1.12rem);
-  line-height: 1.55;
-  color: var(--ink-2);
-  font-weight: 400;
-  margin: -.6rem 0 1.6rem;
-  max-width: 64ch;
-}
+/* Icons-then-text flow: icons sit just below the title, the lede
+   describing public datasets follows beneath them. Icons render
+   without card chrome — no boxed banner around each — so the row
+   reads as a clean icon strip, not a stack of small tiles. */
 .map-page__inputs-grid {
   list-style: none;
-  margin: 0;
+  margin: 0 0 1.8rem;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: .65rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem 1.4rem;
 }
 .map-page__input {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: .55rem;
-  padding: .9rem 1rem 1rem;
-  background: var(--cream);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  transition: border-color .18s var(--ease), transform .18s var(--ease), background .18s var(--ease);
-}
-.map-page__input:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  background: var(--white);
+  gap: .7rem;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  transition: color .18s var(--ease);
 }
 .map-page__input-icon {
-  width: 30px;
-  height: 30px;
+  width: 42px;
+  height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--ink-3);
-  transition: color .18s var(--ease);
+  color: var(--accent);
+  transition: transform .18s var(--ease);
 }
 .map-page__input-icon svg { width: 100%; height: 100%; display: block; }
-.map-page__input:hover .map-page__input-icon { color: var(--accent); }
+.map-page__input:hover .map-page__input-icon { transform: translateY(-2px); }
 .map-page__input-label {
   font-family: var(--font-sans);
-  font-size: .86rem;
+  font-size: .92rem;
   font-weight: 600;
   letter-spacing: -.005em;
   color: var(--navy);
+  line-height: 1.3;
+}
+.map-page__inputs-lede {
+  font-family: var(--font-sans);
+  font-size: clamp(.95rem, 1.3vw, 1.05rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0;
+  max-width: 64ch;
 }
 
 /* ---------- Collapsible details (about + why-it-matters) ----------
@@ -325,7 +324,10 @@
 }
 @media (max-width: 880px) {
   .map-page__why-rooms { grid-template-columns: 1fr; gap: .7rem; }
-  .map-page__inputs-grid { grid-template-columns: repeat(2, 1fr); }
+  .map-page__inputs-grid { grid-template-columns: repeat(2, 1fr); gap: 1.1rem 1.2rem; }
+}
+@media (max-width: 480px) {
+  .map-page__inputs-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 }
 
 /* ---------- CTA band below the map ---------- */
