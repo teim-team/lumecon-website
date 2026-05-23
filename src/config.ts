@@ -10,7 +10,11 @@ export const site = {
   name: 'Lumecon',
   legalName: 'Lumecon Inc.',
   tagline: 'We luminate economies',
-  pitch: 'Economic and policy analysis software for governments and mission-driven organizations.',
+  /* Canonical product-pitch phrase. Used by JSON-LD descriptions
+     and as the default OG image alt across pages. Page-specific
+     descriptions should expand from this phrase rather than inventing
+     variants ("economic and policy analysis software," etc.). */
+  pitch: 'Economic impact analysis software for governments, enterprises, and mission-driven organizations.',
   url: 'https://lumecon.ai',
   email: 'contact@lumecon.ai',
   legalEntity: 'Lumecon Inc.',

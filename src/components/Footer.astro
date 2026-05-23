@@ -1,4 +1,21 @@
 ---
+/**
+ * Footer — four lean columns plus a copyright row.
+ *
+ * The previous layout mixed product lines (Local / Tribal / Global)
+ * with feature pages (Cedar / Map / Pricing) under one "Platforms"
+ * header, which was conceptually muddled, and stacked 20 link items
+ * across four columns. Now:
+ *
+ *   Platforms — the three Lumecon product lines.
+ *   Explore   — the three deep feature pages (Map, Cedar, Pricing).
+ *   Company   — three company links (no mailto-only items).
+ *   Legal     — two pages.
+ *
+ * The cedar tree mark sits next to the wordmark in the brand
+ * column so the brand reads as one thing instead of three across
+ * the site (FAB + Cedar tile + bare wordmark).
+ */
 import { site } from '../config';
 import BrandWordmark from './BrandWordmark.astro';
 interface Props {
@@ -11,7 +28,15 @@ const prefix = isHome ? '' : '/';
   <div class="footer-w">
     <div class="footer-top">
       <div class="footer-brand">
-        <BrandWordmark size="md" invert={true} ariaLabel={`${site.legalName} home`} />
+        <div class="footer-brand__wordmark">
+          <BrandWordmark size="md" invert={true} ariaLabel={`${site.legalName} home`} />
+          <span class="footer-brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z"/>
+              <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="butt"/>
+            </svg>
+          </span>
+        </div>
         <div class="footer-brand-pitch">{site.pitch}</div>
       </div>
 
@@ -21,32 +46,23 @@ const prefix = isHome ? '' : '/';
           <a href={site.products.local.url}>Local Economic Impact</a>
           <a href={site.products.tribal.url}>Tribal Economic Impact</a>
           <a href={site.products.global.url}>Global Economic Impact</a>
-          <a href="/cedar">Cedar AI</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col__head mono">Explore</div>
           <a href="/map">Live map</a>
+          <a href="/cedar">Cedar</a>
           <a href="/pricing">Pricing</a>
         </div>
         <div class="footer-col">
-          <div class="footer-col__head mono">Built for</div>
-          <a href={`${prefix}#how`}>Municipal governments</a>
-          <a href={`${prefix}#how`}>Tribal nations</a>
-          <a href={`${prefix}#how`}>State agencies</a>
-          <a href={`${prefix}#how`}>Universities</a>
-          <a href={`${prefix}#how`}>Foundations &amp; CDFIs</a>
-        </div>
-        <div class="footer-col">
           <div class="footer-col__head mono">Company</div>
-          <a href={`${prefix}#contact`}>Contact</a>
-          <a href={`${prefix}#contact`}>Partnerships</a>
           <a href="/join">Join the team</a>
-          <a href={`mailto:${site.email}?subject=Press`}>Press</a>
+          <a href={`${prefix}#contact`}>Contact</a>
           <a href="https://www.linkedin.com/company/lumecon-ai" target="_blank" rel="noopener noreferrer me">LinkedIn</a>
         </div>
         <div class="footer-col">
           <div class="footer-col__head mono">Legal</div>
           <a href="/terms">Terms of Service</a>
           <a href="/privacy">Privacy Policy</a>
-          <a href={`mailto:${site.email}?subject=Trademark`}>Trademark</a>
-          <a href={`mailto:${site.email}?subject=Compliance`}>Compliance</a>
         </div>
       </div>
     </div>

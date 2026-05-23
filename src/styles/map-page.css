@@ -54,6 +54,73 @@
   font-style: italic;
 }
 
+/* ---------- "What you're seeing" explainer band ----------
+   Sits between the MapWorkspace and the NetworkSection. Three
+   short, scannable cards: what an economic impact study is, why
+   it matters, and what specifically is happening on the map
+   above. Keeps the explainer succinct so visitors who just played
+   with the demo can read it in one breath without losing momentum. */
+.map-page__about {
+  background: var(--white);
+  padding: clamp(3rem, 6vw, 4.5rem) 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.map-page__about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+.map-page__about-kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 .8rem;
+}
+.map-page__about-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--navy);
+  margin: 0 0 1.8rem;
+  max-width: 28ch;
+}
+.map-page__about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 2.4vw, 1.8rem);
+}
+.map-page__about-card {
+  background: var(--cream);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.2rem 1.1rem;
+}
+.map-page__about-card-head {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -.012em;
+  color: var(--navy);
+  margin: 0 0 .4rem;
+}
+.map-page__about-card-body {
+  font-family: var(--font-sans);
+  font-size: .94rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0;
+}
+@media (max-width: 880px) {
+  .map-page__about-grid { grid-template-columns: 1fr; gap: .9rem; }
+}
+
 /* ---------- CTA band below the map ---------- */
 .map-page__cta {
   background: var(--cream);

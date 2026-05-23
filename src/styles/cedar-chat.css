@@ -1,8 +1,8 @@
-/* Cedar chat surface — shared between the inline chat on the
-   homepage (FAQSection) and the floating chat panel popped by the
-   Cedar FAB on every page. Loaded by both, so the FAB chat keeps
-   its product-y look on /join, /privacy, /terms, /demo/*, etc.,
-   where FAQSection isn't rendered. */
+/* Cedar chat surface — styles for the floating chat panel popped
+   by the Cedar FAB on every page. (Was previously shared with an
+   inline homepage chat surface; that surface has been removed but
+   the styles are written surface-agnostic in case another inline
+   chat lands later.) */
 
 .cedar-chat {
   border: 1px solid var(--rule);

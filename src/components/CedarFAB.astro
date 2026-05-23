@@ -7,9 +7,9 @@
  * the prerendered /demo/* scenes.
  *
  * The chat conversation logic itself (classification, API call,
- * transcript rendering) lives in src/lib/cedarChat.ts and is shared
- * with the inline Cedar chat in FAQSection.astro. This component is
- * responsible only for the FAB chrome + open/close behaviour.
+ * transcript rendering) lives in src/lib/cedarChat.ts. This
+ * component is responsible only for the FAB chrome + open/close
+ * behaviour; bootChat() does the rest.
  *
  * Surface styles (.cedar-chat, .cedar-msg, .cedar-chip, ...) come
  * from src/styles/cedar-chat.css, also shared.
