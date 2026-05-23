@@ -460,6 +460,14 @@
     height: auto;
     display: block;
   }
+  /* Desktop has the room — render the stations larger so the detail
+     inside each (the lit CASINO marquee, the report bars, the data
+     rows) is legible instead of squint-small, and bump the station
+     labels up from their compact mobile size. */
+  @media (min-width: 1100px) {
+    .hero-flow { max-width: 1040px; }
+    .hero-flow__label { font-size: .82rem; letter-spacing: .06em; }
+  }
 
   .hero-flow__labels {
     list-style: none;

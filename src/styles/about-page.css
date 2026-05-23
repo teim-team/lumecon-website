@@ -516,3 +516,15 @@
   margin: 0;
   max-width: 66ch;
 }
+
+/* Desktop readability: with the compact card layout there's room to
+   scale the names, titles, summaries, and rosters up on large screens
+   so the page doesn't read mobile-small on a wide monitor. */
+@media (min-width: 1024px) {
+  .about-page__kicker { font-size: .8rem; }
+  .person-card__name { font-size: 1.2rem; }
+  .person-card__title { font-size: .74rem; }
+  .person-card__summary { font-size: 1rem; }
+  .area-card__name { font-size: 1.2rem; }
+  .area-card__roster { font-size: .96rem; }
+}

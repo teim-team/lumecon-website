@@ -188,6 +188,18 @@
   color: var(--ink-2);
   font-weight: 400;
 }
+/* Desktop readability: with the extra width, scale the hero's
+   secondary text and the path-tile icons up so nothing reads as
+   mobile-small on a large screen. */
+@media (min-width: 1024px) {
+  .hero-proof li { font-size: .76rem; }
+  .hero-path__icon { width: 40px; height: 40px; }
+  .hero-path__title { font-size: 1.22rem; }
+  .hero-path__sub { font-size: .95rem; }
+}
+@media (min-width: 1100px) {
+  .hero-paths { max-width: 1040px; }
+}
 /* The hero tile grid is intentionally three equal-weight cards;
    none is primary because Sign-up — the actual primary conversion
    — surfaces later in the funnel via /pricing and the nav.

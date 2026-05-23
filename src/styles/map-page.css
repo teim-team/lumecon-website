@@ -434,3 +434,17 @@
   .map-page__cta-text { text-align: center; }
   .map-page__cta-buttons { justify-content: center; }
 }
+
+/* Desktop readability: the map page has plenty of width on a large
+   screen, so scale the icons, labels, and explainer text up from
+   their compact mobile sizes instead of leaving them squint-small. */
+@media (min-width: 1024px) {
+  .map-page__about-kicker { font-size: .8rem; }
+  .map-page__input-icon { width: 46px; height: 46px; }
+  .map-page__input-label { font-size: 1.04rem; }
+  .map-page__inputs-lede { font-size: 1.1rem; }
+  .map-page__about-card-head { font-size: 1.15rem; }
+  .map-page__about-card-body { font-size: 1.04rem; }
+  .map-page__why-room-head { font-size: 1.12rem; }
+  .map-page__why-room-body { font-size: 1.02rem; }
+}
