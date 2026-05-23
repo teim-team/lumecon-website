@@ -234,6 +234,17 @@
   margin-top: 1.1rem;
   animation: map-details-in .3s var(--ease);
 }
+/* Two columns on desktop so the explainer reads as chunks beside the
+   icon row instead of one tall, narrow paragraph stack. */
+@media (min-width: 760px) {
+  .map-page__inputs-more-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 2.6rem;
+  }
+  .map-page__inputs-more-body .map-page__inputs-lede { max-width: none; }
+  .map-page__inputs-more-body .map-page__inputs-lede + .map-page__inputs-lede { margin-top: 0; }
+}
 @media (prefers-reduced-motion: reduce) {
   .map-page__inputs-more[open] .map-page__inputs-more-body { animation: none; }
 }
