@@ -77,7 +77,7 @@ export interface Person {
 export const TEAM: Person[] = [
   {
     slug: 'elijah-moreno',
-    name: 'Elijah Moreno',
+    name: 'Elijah Moreno, MPP',
     initials: 'EM',
     tint: 'teal',
     group: 'team',

@@ -116,7 +116,7 @@ test('about page is just the About and How-we-work sections', async ({ page }) =
 
 test('individual team-member pages render the full bio off the about page', async ({ page }) => {
   await page.goto('/team/elijah-moreno', { waitUntil: 'domcontentloaded' });
-  await expect(page).toHaveTitle(/Elijah Moreno \| Lumecon/i);
+  await expect(page).toHaveTitle(/Elijah Moreno.*\| Lumecon/i);
   await expect(page.locator('h1')).toContainText('Elijah Moreno');
   await expect(page.locator('.person-page__back').first()).toBeVisible();
   // The long bio that used to live on the about card now lives here.
