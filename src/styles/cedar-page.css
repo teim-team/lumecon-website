@@ -192,3 +192,13 @@
   .cedar-page__steps { grid-template-columns: 1fr; }
   .cedar-page__chat-panel .cedar-chat { min-height: 420px; }
 }
+
+/* Desktop readability: scale the kicker, step icons, headings, body,
+   and deck up on large screens so nothing reads as mobile-small. */
+@media (min-width: 1024px) {
+  .cedar-page__kicker { font-size: .8rem; }
+  .cedar-page__step-icon { width: 46px; height: 46px; }
+  .cedar-page__step-head { font-size: 1.24rem; }
+  .cedar-page__step-body { font-size: 1.04rem; }
+  .cedar-page__deck { font-size: 1.12rem; }
+}
