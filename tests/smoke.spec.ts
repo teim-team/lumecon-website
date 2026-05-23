@@ -108,8 +108,8 @@ test('about page is just the About and How-we-work sections', async ({ page }) =
   await expect(page).toHaveTitle(/About \| Lumecon/i);
   // The roster card grids are gone; the page leans on How We Work.
   await expect(page.locator('.person-card')).toHaveCount(0);
-  // Five working-area cards, each naming clickable people.
-  await expect(page.locator('.area-card')).toHaveCount(5);
+  // Six working-area cards, each naming clickable people.
+  await expect(page.locator('.area-card')).toHaveCount(6);
   // Names in the working areas link to each person's /team/<slug> page.
   await expect(page.locator('.area-card__person[href="/team/elijah-moreno"]').first()).toBeAttached();
 });

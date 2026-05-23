@@ -268,6 +268,14 @@ export const WORKING_AREAS: WorkingArea[] = [
     leadSlug: 'havala-hanson',
     contributorSlugs: ['elijah-moreno', 'kaylyn-lee', 'francesca-agnes', 'isabella-agnes', 'brian-kim'],
   },
+  {
+    slug: 'business-development',
+    name: 'Business Development & Sales',
+    description: "This area focuses on bringing Lumecon to the governments, tribal nations, foundations, and institutions it serves: partnerships, pilots, outreach, and the relationships that turn interest into adoption. The goal is to grow the customer base deliberately, matching the platform to the organizations that need it most.",
+    leadSlug: 'elijah-moreno',
+    advisorySlugs: ['havala-hanson'],
+    contributorSlugs: ['laurel-wheeler'],
+  },
 ];
 
 /** Slug -> Person lookup used when rendering working-area people. */
