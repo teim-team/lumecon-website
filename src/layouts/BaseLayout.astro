@@ -189,6 +189,14 @@ const ogIA = ogImageAlt || 'Lumecon: economic impact analysis software for gover
         block: 'start',
       });
     }
+    /* Cross-page landing (e.g. clicking /#how from /pricing) jumps
+       to the target INSTANTLY rather than smooth-scrolling through
+       every intermediate section. The smooth animation made the
+       browser sail past Products on its way to Why, which felt
+       like the link was misrouted. */
+    function jumpScrollTo(el) {
+      el.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
     function stripHash() {
       try {
         history.replaceState(null, '', location.pathname + location.search);
@@ -203,7 +211,7 @@ const ogIA = ogImageAlt || 'Lumecon: economic impact analysis software for gover
       if (target) {
         // Defer one frame so layout is settled before scroll-to.
         requestAnimationFrame(() => {
-          smoothScrollTo(target);
+          jumpScrollTo(target);
           stripHash();
         });
       } else {

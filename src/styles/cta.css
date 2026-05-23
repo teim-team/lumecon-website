@@ -8,6 +8,7 @@
   color: var(--navy);
   padding: clamp(3.5rem, 7vw, 5rem) 0;
   scroll-snap-align: start;
+  min-block-size: 100dvh;
   border-top: 1px solid var(--rule);
   display: flex;
   flex-direction: column;

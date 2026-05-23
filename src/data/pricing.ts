@@ -253,8 +253,8 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'Local Economic Impact',
     shortName: 'Local',
     iconId: 'local',
-    audience: 'Nonprofits, municipalities, foundations, local institutions',
-    fitIf: "You're a municipality, state agency, foundation, university, or nonprofit running local or regional impact analysis.",
+    audience: 'Municipalities, state agencies, enterprises, foundations, universities, and nonprofits',
+    fitIf: "You're a municipality, state agency, enterprise, foundation, university, or nonprofit running local or regional impact analysis.",
     scope: 'Local & regional impact analysis outside Indigenous-economy workflows',
   },
   {
@@ -262,8 +262,8 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'Tribal Economic Impact',
     shortName: 'Tribal',
     iconId: 'tribal',
-    audience: 'Tribes, state-recognized tribes, ANCs, NHOs, tribal enterprises, chapters, Indigenous CDFIs, Indigenous-led institutions',
-    fitIf: "You're a tribe, ANC, NHO, tribal enterprise, or Indigenous CDFI making the case for reservation, state, or federal funding.",
+    audience: 'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
+    fitIf: "You're a tribal government or department within one, a Native non-profit, intertribal org, tribal college, ANC, NHO, tribal enterprise, Native CDFI, state-recognized tribe, or Native-entity federal contractor making the case for reservation, state, or federal funding.",
     scope: 'Reservation, state, national economic impact analysis',
   },
   {
