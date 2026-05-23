@@ -56,6 +56,5 @@ Disallow: /
 # https://llmstxt.org/
 # (informational; standard robots clients ignore the comment)
 
-# Sitemaps
+# Sitemap
 Sitemap: https://lumecon.ai/sitemap-index.xml
-Sitemap: https://lumecon.ai/sitemap.xml
