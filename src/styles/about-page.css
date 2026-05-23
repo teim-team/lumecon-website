@@ -1,8 +1,7 @@
 /* /about page chrome.
-   Hero (h1 + founding sentence + collapsible long-form),
-   Cornell ecosystem footer note, two card grids (Team, Advisors).
-   Person cards open from a closed icon-name-title row to a full
-   bio paragraph stack. */
+   Hero (h1 + founding sentence + collapsible long-form) and the
+   "How we work" cross-functional grid whose names link out to each
+   person's /team/<slug> page. No roster card grids. */
 
 .about-page { background: var(--white); }
 .about-page__inner {
@@ -277,15 +276,7 @@
   .area-card__desc { animation: none; }
 }
 
-/* ---------- People sections ---------- */
-.about-page__people {
-  background: var(--white);
-  padding: clamp(2.6rem, 5vw, 3.8rem) 0;
-  border-bottom: 1px solid var(--rule);
-}
-.about-page__people--advisors {
-  background: var(--cream);
-}
+/* ---------- Section heading (shared by How we work) ---------- */
 .about-page__h2 {
   font-family: var(--font-display);
   font-weight: 600;
@@ -296,185 +287,6 @@
   margin: 0 0 1.4rem;
   max-width: 28ch;
 }
-.about-page__grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1rem;
-}
-
-/* ---------- Person card (compact; links to /team/<slug>) ---------- */
-.person-card {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 14px;
-  padding: clamp(1rem, 1.6vw, 1.2rem);
-  display: flex;
-  flex-direction: column;
-  transition: border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
-}
-.person-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px -16px rgba(14, 21, 48, .18);
-}
-.person-card__link {
-  display: grid;
-  grid-template-columns: 56px 1fr auto;
-  align-items: center;
-  column-gap: 1rem;
-  row-gap: .25rem;
-  text-decoration: none;
-}
-
-/* Avatar: a single neutral monogram chip used for every team
-   member. The rainbow gradients we tried first clashed with the
-   teal/gold/green accent system used elsewhere on the site, so
-   the avatars are now uniformly quiet — paper-tinted disc with
-   navy initials and a thin teal accent ring that nods to the
-   brand without competing with the highlight rectangles. The
-   `tint` field on Person still ships in case we ever want
-   per-role variation back; the CSS just ignores it. */
-.person-card__avatar {
-  grid-row: 1 / span 1;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.08rem;
-  letter-spacing: -.005em;
-  color: var(--navy);
-  background: var(--paper);
-  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .18));
-  position: relative;
-  flex-shrink: 0;
-}
-.person-card__avatar::after {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1px solid var(--accent);
-  opacity: .35;
-  pointer-events: none;
-}
-.person-card:hover .person-card__avatar {
-  background: var(--accent-rgba-08);
-  border-color: var(--accent);
-}
-.person-card:hover .person-card__avatar::after { opacity: .7; }
-
-.person-card__meta {
-  grid-column: 2;
-  display: flex;
-  flex-direction: column;
-  gap: .15rem;
-  min-width: 0;
-}
-.person-card__name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.08rem;
-  letter-spacing: -.014em;
-  color: var(--navy);
-  line-height: 1.2;
-}
-.person-card__title {
-  font-family: var(--font-mono);
-  font-size: .68rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 600;
-}
-/* Lumecon work email shown on team cards (not advisors). Mono
-   so it reads as functional address rather than prose. Stops
-   the surrounding <summary> from toggling open when the email
-   itself is clicked. */
-.person-card__email {
-  font-family: var(--font-mono);
-  font-size: .76rem;
-  color: var(--ink-3);
-  text-decoration: none;
-  letter-spacing: -.005em;
-  margin-top: .2rem;
-  width: fit-content;
-  border-bottom: 1px solid var(--rule);
-  transition: color .15s var(--ease), border-color .15s var(--ease);
-}
-.person-card__email:hover { color: var(--accent); border-bottom-color: var(--accent); }
-/* Contact row: email (when shown) + LinkedIn icon sit shoulder-to-
-   shoulder so the card's reach-out affordances read as one group. */
-.person-card__links {
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-  margin-top: .8rem;
-  padding-left: calc(56px + 1rem);
-}
-.person-card__links .person-card__email { margin-top: 0; }
-/* Profile chips (LinkedIn, Google Scholar): small square chips with
-   sharp edges, echoing the highlight-rectangle aesthetic, that pick
-   up the teal accent on hover the way the avatar ring does. */
-.person-card__social {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  flex-shrink: 0;
-  color: var(--ink-3);
-  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .18));
-  transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
-}
-.person-card__social svg { width: 14px; height: 14px; display: block; }
-.person-card__social:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-rgba-08);
-}
-.person-card__arrow {
-  grid-column: 3;
-  grid-row: 1;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: background .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
-}
-.person-card__arrow::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-top: 1.5px solid var(--navy);
-  border-right: 1.5px solid var(--navy);
-  transform: rotate(45deg) translateX(-1px);
-  transition: border-color .2s var(--ease);
-}
-.person-card:hover .person-card__arrow {
-  background: var(--accent);
-  border-color: var(--accent);
-  transform: translateX(2px);
-}
-.person-card:hover .person-card__arrow::before { border-color: var(--white); }
-
-@media (max-width: 720px) {
-  .about-page__grid { grid-template-columns: 1fr; }
-  .person-card__link { grid-template-columns: 48px 1fr 28px; column-gap: .85rem; }
-  .person-card__avatar { width: 48px; height: 48px; font-size: .95rem; }
-  .person-card__links { padding-left: calc(48px + .85rem); }
-}
-
 /* ---------- Bridge to /join ---------- */
 .about-bridge {
   background: var(--cream);
@@ -508,13 +320,10 @@
   max-width: 66ch;
 }
 
-/* Desktop readability: with the compact card layout there's room to
-   scale the names, titles, summaries, and rosters up on large screens
-   so the page doesn't read mobile-small on a wide monitor. */
+/* Desktop readability: scale the kicker and working-area text up on
+   large screens so the page doesn't read mobile-small on a wide monitor. */
 @media (min-width: 1024px) {
   .about-page__kicker { font-size: .8rem; }
-  .person-card__name { font-size: 1.2rem; }
-  .person-card__title { font-size: .74rem; }
   .area-card__name { font-size: 1.2rem; }
   .area-card__roster { font-size: .96rem; }
 }

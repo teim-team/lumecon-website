@@ -2,16 +2,12 @@
 /**
  * /about — who built Lumecon and why.
  *
- * Structure mirrors the rest of the site:
- *   - Hero with a highlighted h1.
- *   - Founding sentence visible by default; the rest of the
- *     About story sits behind a `<details>` so the page stays
- *     scannable.
- *   - "How we work" cross-functional grid; each name links to that
- *     person's /team/<slug> page.
- *   - Two compact card grids (Team, then Advisors & Contributors).
- *     Each card is a link to the person's own page — the long bio
- *     lives there, not inline, so this page stays scannable.
+ * Two sections only, kept deliberately lean:
+ *   - Hero with a highlighted h1 and the founding story (the rest
+ *     behind a `<details>`).
+ *   - "How we work" cross-functional grid. Every person is named
+ *     here, and each name links to that person's /team/<slug> page,
+ *     so there's no separate roster grid to maintain.
  *
  * Team data lives in src/data/team.ts. Adding a person is one
  * entry there, not five edits across the markup.
@@ -33,7 +29,6 @@ import '../styles/footer.css';
 import '../styles/about-page.css';
 
 const team = TEAM_BY_GROUP.team;
-const advisors = TEAM_BY_GROUP.advisor;
 
 /* ---------- JSON-LD ---------- */
 /* Build a schema.org Person entry per team member. alumniOf and
@@ -66,11 +61,6 @@ function personJsonLd(p: Person) {
 }
 
 const founders = TEAM.filter((p) => p.founder);
-
-/* Profile-link glyphs, sized by CSS. Injected with set:html so the
-   same markup serves every card without repeating the path. */
-const linkedinIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>`;
-const scholarIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v3.92L12 21l7-3.9v-3.92L12 17l-7-3.82z"/></svg>`;
 
 const jsonLd = [
   {
@@ -190,61 +180,6 @@ const jsonLd = [
               </li>
             );
           })}
-        </ul>
-      </div>
-    </section>
-
-    <section class="about-page__people" aria-labelledby="about-team-title">
-      <div class="about-page__inner">
-        <p class="about-page__kicker">Team</p>
-        <h2 class="about-page__h2 reveal-soft hl-block hl-block--gold" id="about-team-title">The people building Lumecon.</h2>
-        <ul class="about-page__grid" aria-label="Lumecon team">
-          {team.map((p) => (
-            <li class="person-card" id={p.slug}>
-              <a class="person-card__link" href={personPath(p.slug)} aria-label={`${p.name}, ${p.title} — view profile`}>
-                <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
-                <span class="person-card__meta">
-                  <span class="person-card__name">{p.name}</span>
-                  <span class="person-card__title">{p.title}</span>
-                </span>
-                <span class="person-card__arrow" aria-hidden="true"></span>
-              </a>
-              {(p.email || p.linkedin || p.scholar) && (
-                <span class="person-card__links">
-                  {p.email && <a class="person-card__email" href={`mailto:${p.email}`}>{p.email}</a>}
-                  {p.linkedin && <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} set:html={linkedinIcon}></a>}
-                  {p.scholar && <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} set:html={scholarIcon}></a>}
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    <section class="about-page__people about-page__people--advisors" aria-labelledby="about-advisors-title">
-      <div class="about-page__inner">
-        <p class="about-page__kicker">Advisors &amp; Contributors</p>
-        <h2 class="about-page__h2 reveal-soft hl-block hl-block--d" id="about-advisors-title">Helping guide the company.</h2>
-        <ul class="about-page__grid" aria-label="Lumecon advisors and contributors">
-          {advisors.map((p) => (
-            <li class="person-card" id={p.slug}>
-              <a class="person-card__link" href={personPath(p.slug)} aria-label={`${p.name}, ${p.title} — view profile`}>
-                <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
-                <span class="person-card__meta">
-                  <span class="person-card__name">{p.name}</span>
-                  <span class="person-card__title">{p.title}</span>
-                </span>
-                <span class="person-card__arrow" aria-hidden="true"></span>
-              </a>
-              {(p.linkedin || p.scholar) && (
-                <span class="person-card__links">
-                  {p.linkedin && <a class="person-card__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} set:html={linkedinIcon}></a>}
-                  {p.scholar && <a class="person-card__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} set:html={scholarIcon}></a>}
-                </span>
-              )}
-            </li>
-          ))}
         </ul>
       </div>
     </section>
