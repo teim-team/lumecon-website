@@ -49,7 +49,7 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     tagline: 'For one person who has the core numbers and needs clear results.',
     ctaSubject: 'Sprout tier',
     highlights: [
-      'Reservation, state, and national analysis',
+      'Reservation, county, state, and national analysis',
       'Past, future, and multi-year runs',
       'Assumption ledger on every export',
     ],
@@ -137,7 +137,7 @@ export interface ComparisonRow {
  *  the launch page since the tier itself isn't buyable yet. */
 export const COMPARISON_ROWS: ComparisonRow[] = [
   { capability: 'Users',                                                           sprout: '1',              sapling: 'Up to 5',       tree: 'Up to 10' },
-  { capability: 'Reservation, state, and national scope',                          sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
+  { capability: 'Reservation, county, state, and national scope',                  sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
   { capability: 'Past, future, and multi-year analyses',                           sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
   { capability: 'Assumption ledger on every export',                               sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
   { capability: 'Council-ready PDF and CSV exports',                               sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
