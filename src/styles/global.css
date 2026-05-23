@@ -851,29 +851,29 @@ strong { font-weight: 600; color: inherit; }
 .delay-3 { transition-delay: .3s; }
 .delay-4 { transition-delay: .4s; }
 
-/* Asymmetric accent block behind key text. Each instance pulls
-   its angle, inset asymmetry, tint, AND scale-X end-state from
-   CSS custom properties so variants differ in shape and not just
-   rotation. Some variants cover the full text width; others stop
-   short of one or both edges so the highlight reads as a smear
-   under a phrase rather than a uniform rectangle behind every
-   headline.
-
-   The ::before wipes in from one side when the parent gets .seen
-   (via the same IntersectionObserver that drives .reveal-soft).
-   Three brand tints rotate across pages: teal (UI accent),
-   yellow (brand gold), green (cedar). */
+/* Asymmetric highlight smear behind key text. Every variant uses
+   a horizontal linear-gradient that fades on both edges (no hard
+   rectangles), with sharp corners (border-radius: 0). Variants
+   differ in:
+     - rotation angle (each headline leans a different way)
+     - inset on each side (some smears extend past the viewport
+       edge — body has overflow-x: hidden so the bleed clips
+       cleanly without adding a horizontal scrollbar)
+     - tint (teal / yellow / green rotate across pages)
+     - mobile-specific inset (highlights are pulled in or pushed
+       out at narrow widths so the asymmetry reads at every
+       breakpoint)
+   ::before wipes in via scaleX from 0 -> var(--hl-scale) when
+   the parent gets .seen (driven by the same IntersectionObserver
+   that powers .reveal-soft). */
 .hl-block {
   --hl-rot: -1.4deg;
-  --hl-color: rgba(15, 181, 165, .24);
-  --hl-inset-t: -.3em;
-  --hl-inset-r: -.75em;
+  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(15, 181, 165, .26) 12%, rgba(15, 181, 165, .26) 86%, transparent 100%);
+  --hl-inset-t: -.28em;
+  --hl-inset-r: -10vw;
   --hl-inset-b: -.18em;
-  --hl-inset-l: -.55em;
-  --hl-radius: 6px;
+  --hl-inset-l: -.6em;
   --hl-origin: left center;
-  /** End-state X scale (1 = highlight stretches full inset
-   *  width; values <1 leave one edge un-highlighted). */
   --hl-scale: 1;
   position: relative;
   isolation: isolate;
@@ -884,8 +884,8 @@ strong { font-weight: 600; color: inherit; }
   content: '';
   position: absolute;
   inset: var(--hl-inset-t) var(--hl-inset-r) var(--hl-inset-b) var(--hl-inset-l);
-  background: var(--hl-color);
-  border-radius: var(--hl-radius);
+  background: var(--hl-bg);
+  border-radius: 0;
   transform: rotate(var(--hl-rot)) scaleX(0);
   transform-origin: var(--hl-origin);
   transition: transform .85s var(--ease) .15s;
@@ -896,93 +896,99 @@ strong { font-weight: 600; color: inherit; }
 .hl-block:not(.reveal-soft)::before {
   transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale));
 }
-/* Teal — UI accent. Three variants, three shapes. */
+/* Teal variants. */
 .hl-block--b {
   --hl-rot: 1.8deg;
-  --hl-color: rgba(15, 181, 165, .28);
+  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(15, 181, 165, .3) 8%, rgba(15, 181, 165, .3) 82%, transparent 100%);
   --hl-inset-t: -.18em;
   --hl-inset-r: -.55em;
   --hl-inset-b: -.34em;
-  --hl-inset-l: -.85em;
+  --hl-inset-l: -8vw;
   --hl-origin: right center;
-  --hl-scale: .82;          /* leaves the left edge of the text uncovered */
-}
-.hl-block--c {
-  --hl-rot: -2.8deg;
-  --hl-color: var(--accent-bar);
-  --hl-inset-t: -.45em;     /* tall, runs above the text */
-  --hl-inset-r: -1.2em;
-  --hl-inset-b: 0;
-  --hl-inset-l: -.4em;
-  --hl-radius: 3px;
   --hl-scale: .92;
 }
-.hl-block--d {
-  --hl-rot: .6deg;
-  --hl-color: rgba(15, 181, 165, .18);
-  --hl-inset-t: -.08em;
-  --hl-inset-r: -.7em;
-  --hl-inset-b: -.55em;     /* low, sits beneath like a shadow */
-  --hl-inset-l: -.7em;
-  --hl-radius: 16px;
-}
-/* Gold — brand luminate. Two variants. */
-.hl-block--gold {
-  --hl-rot: 2.4deg;
-  --hl-color: rgba(240, 169, 26, .28);
-  --hl-inset-t: -.22em;
-  --hl-inset-r: -.45em;
-  --hl-inset-b: -.3em;
-  --hl-inset-l: -1em;
-  --hl-radius: 8px;
-  --hl-origin: right center;
+.hl-block--c {
+  --hl-rot: -2.6deg;
+  --hl-bg: linear-gradient(90deg, transparent 0%, var(--accent-bar) 18%, var(--accent-bar) 80%, transparent 100%);
+  --hl-inset-t: -.5em;
+  --hl-inset-r: -14vw;
+  --hl-inset-b: 0;
+  --hl-inset-l: -.4em;
   --hl-scale: .9;
 }
+.hl-block--d {
+  --hl-rot: .55deg;
+  --hl-bg: linear-gradient(90deg, transparent 0%, rgba(15, 181, 165, .2) 6%, rgba(15, 181, 165, .2) 94%, transparent 100%);
+  --hl-inset-t: -.08em;
+  --hl-inset-r: -18vw;
+  --hl-inset-b: -.5em;
+  --hl-inset-l: -10vw;
+}
+/* Gold variants. */
+.hl-block--gold {
+  --hl-rot: 2.3deg;
+  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(240, 169, 26, .3) 8%, rgba(240, 169, 26, .3) 86%, transparent 100%);
+  --hl-inset-t: -.22em;
+  --hl-inset-r: -.45em;
+  --hl-inset-b: -.32em;
+  --hl-inset-l: -12vw;
+  --hl-origin: right center;
+  --hl-scale: .94;
+}
 .hl-block--gold-b {
-  --hl-rot: -1.4deg;
-  --hl-color: rgba(240, 169, 26, .22);
+  --hl-rot: -1.3deg;
+  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(240, 169, 26, .24) 14%, rgba(240, 169, 26, .24) 78%, transparent 100%);
   --hl-inset-t: -.32em;
-  --hl-inset-r: -.95em;
+  --hl-inset-r: -8vw;
   --hl-inset-b: -.08em;
   --hl-inset-l: -.4em;
-  --hl-radius: 4px;
-  --hl-scale: .7;           /* narrow smear: only ~70% of text width covered */
+  --hl-scale: .78;
 }
-/* Green — cedar forest. Two variants. */
+/* Green variants. */
 .hl-block--green {
-  --hl-rot: -1.8deg;
-  --hl-color: rgba(14, 139, 79, .22);
+  --hl-rot: -1.7deg;
+  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(14, 139, 79, .24) 10%, rgba(14, 139, 79, .24) 85%, transparent 100%);
   --hl-inset-t: -.28em;
-  --hl-inset-r: -.85em;
+  --hl-inset-r: -16vw;
   --hl-inset-b: -.14em;
   --hl-inset-l: -.55em;
-  --hl-radius: 8px;
 }
 .hl-block--green-b {
   --hl-rot: 1.2deg;
-  --hl-color: rgba(27, 182, 106, .22);
-  --hl-inset-t: -.14em;
+  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(27, 182, 106, .24) 12%, rgba(27, 182, 106, .24) 84%, transparent 100%);
+  --hl-inset-t: -.16em;
   --hl-inset-r: -.5em;
-  --hl-inset-b: -.42em;     /* extra-tall on the bottom */
-  --hl-inset-l: -1em;
+  --hl-inset-b: -.4em;
+  --hl-inset-l: -14vw;
   --hl-origin: right center;
-  --hl-radius: 14px;
-  --hl-scale: .85;
+  --hl-scale: .88;
 }
-/* Smear variant: gradient that fades on both edges instead of
-   a hard rectangle. Use for one or two headlines per page so
-   the page doesn't feel uniformly rectangular. */
+/* Smear variant: extra-soft gradient with both edges fading
+   further in from the inset rectangle. Use for the headline you
+   want to break the strongest. */
 .hl-block--smear {
-  --hl-rot: -.8deg;
-  --hl-color: linear-gradient(110deg, transparent 0%, rgba(15, 181, 165, .3) 22%, rgba(15, 181, 165, .3) 70%, transparent 92%);
+  --hl-rot: -.7deg;
+  --hl-bg: linear-gradient(110deg, transparent 0%, rgba(15, 181, 165, .3) 22%, rgba(15, 181, 165, .3) 70%, transparent 92%);
   --hl-inset-t: -.2em;
-  --hl-inset-r: -.5em;
+  --hl-inset-r: -.6em;
   --hl-inset-b: -.18em;
-  --hl-inset-l: -.5em;
-  --hl-radius: 24px;
+  --hl-inset-l: -.6em;
 }
-.hl-block--smear::before { background: var(--hl-color); }
 .hl-block--right { --hl-origin: right center; }
+
+/* Mobile pulls some of the off-screen bleeds in so the highlights
+   feel proportionate to the smaller viewport but still asymmetric
+   from one variant to the next. */
+@media (max-width: 720px) {
+  .hl-block       { --hl-inset-r: -18vw; }
+  .hl-block--b    { --hl-inset-l: -18vw; }
+  .hl-block--c    { --hl-inset-r: -22vw; }
+  .hl-block--d    { --hl-inset-l: -18vw; --hl-inset-r: -22vw; }
+  .hl-block--gold { --hl-inset-l: -20vw; }
+  .hl-block--green    { --hl-inset-r: -22vw; }
+  .hl-block--green-b  { --hl-inset-l: -22vw; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hl-block::before { transition: none; transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale)); }
 }

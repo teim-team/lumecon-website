@@ -208,6 +208,17 @@ const jsonLd = [
       </div>
     </section>
 
+    <!-- Closing cross-link: send applicants to the existing team
+         page so they can see who they would be working with before
+         they hit send. -->
+    <aside class="join-bridge" aria-label="Meet the existing team">
+      <div class="join-bridge__inner">
+        <p class="join-bridge__kicker">Before you apply</p>
+        <p class="join-bridge__copy">See who you would be building Lumecon with. The team page lists every current teammate, their lead area, prior affiliations (Federal Reserve, Cornell, Dartmouth, Duke, Oxford, MIT), and the cross-functional structure they work inside.</p>
+        <a href="/about" class="btn">Meet the team &rarr;</a>
+      </div>
+    </aside>
+
   </main>
 
   <Footer />
@@ -598,6 +609,38 @@ const jsonLd = [
     font-weight: 400;
   }
   .join-cta { display: flex; gap: .8rem; flex-wrap: wrap; }
+
+  .join-bridge {
+    background: var(--cream);
+    border-top: 1px solid var(--rule);
+    padding: clamp(2.4rem, 5vw, 3.6rem) 0;
+  }
+  .join-bridge__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--container-pad);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .85rem;
+  }
+  .join-bridge__kicker {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0;
+  }
+  .join-bridge__copy {
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 66ch;
+  }
   .join-apply-note {
     font-family: var(--font-sans);
     font-size: .92rem;

@@ -110,6 +110,37 @@
 }
 .auth-meta--ok { border-color: var(--cedar); background: var(--cedar-mist, #E0F2E7); color: var(--green-deep, #0A6638); }
 .auth-meta--err { border-color: var(--error-color); color: var(--error-color); background: rgba(220, 38, 38, .06); }
+.auth-plan {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .45rem .65rem .45rem .55rem;
+  margin: 0 0 1.2rem;
+  background: var(--accent-rgba-08);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: .85rem;
+  color: var(--navy);
+  flex-wrap: wrap;
+}
+.auth-plan__label {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.auth-plan__value { font-weight: 600; }
+.auth-plan__change {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: auto;
+  font-size: .8rem;
+}
+.auth-plan__change:hover { text-decoration: underline; }
 .auth-foot {
   font-family: var(--font-sans);
   font-size: .92rem;

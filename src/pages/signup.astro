@@ -29,8 +29,20 @@ import '../styles/auth.css';
     <div class="auth-panel">
       <p class="auth-eyebrow">Account</p>
       <h1 class="auth-title">Create your account</h1>
-      <p class="auth-sub">Tell us a little about you and your organization. We'll get you into the workspace.</p>
+      <p class="auth-sub">Tell us a little about you and your organization, and we'll get you into the workspace.</p>
+      <!-- If /signup arrived from a pricing tier CTA, the URL
+           query carries tier= and platform= and this badge
+           reflects the chosen plan back at the visitor. Hidden
+           by default; the inline script below reveals it if the
+           query is present. -->
+      <p class="auth-plan" data-auth-plan hidden>
+        <span class="auth-plan__label">Plan</span>
+        <span class="auth-plan__value" data-auth-plan-value></span>
+        <a class="auth-plan__change" href="/pricing">Change plan</a>
+      </p>
       <form class="auth-form" data-auth-form data-auth-kind="signup" novalidate>
+        <input type="hidden" name="tier" data-auth-tier />
+        <input type="hidden" name="platform" data-auth-platform />
         <label class="auth-field">
           <span>Full name</span>
           <input type="text" name="name" required autocomplete="name" />
@@ -57,8 +69,42 @@ import '../styles/auth.css';
       <p class="auth-foot">
         Already have an account? <a href="/login">Log in</a>
       </p>
+      <p class="auth-foot">
+        Want to compare plans first? <a href="/pricing">See pricing &rarr;</a>
+      </p>
     </div>
   </main>
+
+  <script is:inline>
+    /* Pricing -> Signup handoff. The pricing tier CTA links to
+       /signup?tier=X&platform=Y. Read those query params, fill
+       the hidden form fields, and surface a small badge above
+       the form so the visitor sees the plan choice carried over.
+       Tier labels map to the public name (starter -> Sprout etc.). */
+    (function () {
+      var qs = new URLSearchParams(window.location.search);
+      var tier = qs.get('tier');
+      var platform = qs.get('platform');
+      if (!tier && !platform) return;
+      var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree' };
+      var platformName = { local: 'Local', tribal: 'Tribal', global: 'Global' };
+      var parts = [];
+      if (tier && tierName[tier]) parts.push(tierName[tier] + ' tier');
+      if (platform && platformName[platform]) parts.push(platformName[platform] + ' Economic Impact');
+      if (!parts.length) return;
+      var badge = document.querySelector('[data-auth-plan]');
+      var value = document.querySelector('[data-auth-plan-value]');
+      var tierInput = document.querySelector('[data-auth-tier]');
+      var platformInput = document.querySelector('[data-auth-platform]');
+      if (badge && value) {
+        value.textContent = parts.join(' · ');
+        badge.hidden = false;
+      }
+      if (tierInput && tier) tierInput.value = tier;
+      if (platformInput && platform) platformInput.value = platform;
+    })();
+  </script>
+
   <Footer />
 </BaseLayout>
 
