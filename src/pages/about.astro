@@ -142,12 +142,12 @@ const jsonLd = [
           Lumecon is built by a cross-functional team where each person has a clear lead area, but no part of the product is developed in isolation. Economic impact software only works when the economics, platform, data systems, and user workflow are designed together. Each team member has a primary role, and the company is intentionally collaborative across these areas.
         </p>
         <ul class="about-page__areas" aria-label="Working areas">
-          {WORKING_AREAS.map((area) => {
+          {WORKING_AREAS.map((area, i) => {
             const lead = TEAM_BY_SLUG[area.leadSlug];
             const advisory = (area.advisorySlugs ?? []).map((s) => TEAM_BY_SLUG[s]).filter(Boolean);
             const contributors = (area.contributorSlugs ?? []).map((s) => TEAM_BY_SLUG[s]).filter(Boolean);
             return (
-              <li>
+              <li class="reveal-soft" data-stagger={i + 1}>
                 <details class="area-card" id={area.slug}>
                   <summary class="area-card__head">
                     <span class="area-card__name">{area.name}</span>
