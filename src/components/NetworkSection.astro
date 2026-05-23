@@ -1,19 +1,25 @@
 ---
 /**
- * NetworkSection — federated-learning / network-effect explainer.
+ * NetworkSection — network-effect / continual-learning explainer.
  *
- * Positions the platform's differentiator: existing economic-impact
- * tools treat administrative data as gospel and ship it as a
- * static product. Lumecon's modeling engine improves as more
- * organizations run economic impact studies — not by ingesting any
- * client's raw data, but by aggregating coarse, anonymised
- * signals across the network so every customer's next study is
- * sharper than their last.
+ * Positions the platform's differentiator honestly: yes, Lumecon
+ * trains on customer data (with permission) — that's the whole
+ * point of a network that compounds. What the visitor needs to
+ * trust is that the SHAPE of that training is anonymised and
+ * aggregated across the network, and that their own workspace
+ * results stay theirs.
  *
- * We don't claim incumbents don't do this — they probably don't,
- * but it's not the kind of thing you can prove from outside.
- * Instead we lead with what we DO, which lets visitors draw the
- * comparison.
+ * The incumbent posture is different: existing economic-impact
+ * tools ship administrative data as a static product on a
+ * multi-year vintage cycle. We don't claim they refuse to learn —
+ * that's not the kind of thing you can prove from outside — but
+ * leading with what we DO lets visitors draw the comparison.
+ *
+ * Important: any "data never leaves your workspace" wording is
+ * misleading. We do train on customer data. The honest framing is:
+ * (1) results in your workspace are yours, (2) cross-customer
+ * learning runs on anonymised aggregates, (3) the result is that
+ * every new client makes the next study sharper for everyone.
  */
 import '../styles/network.css';
 ---
@@ -21,21 +27,21 @@ import '../styles/network.css';
   <div class="network-inner">
     <div class="network-text">
       <p class="network-kicker">The network</p>
-      <h2 class="network-title" id="network-title">Your data stays yours. The model gets sharper for everyone.</h2>
-      <p class="network-lede">Every new client makes every other client's next economic impact study a little better. Not because their data leaves their workspace &mdash; it doesn't &mdash; but because coarse, aggregated signals across the network train the regional multipliers, the assumption defaults, and Cedar's harmonization rules over time.</p>
+      <h2 class="network-title" id="network-title">Your work stays yours. The model gets sharper for everyone.</h2>
+      <p class="network-lede">Every new client makes every other client's next economic impact study a little better. We train on the network &mdash; anonymised, aggregated signals across thousands of studies &mdash; so the regional multipliers, the assumption defaults, and Cedar's harmonization rules keep tightening as more organizations join.</p>
 
       <ul class="network-points">
         <li class="network-point">
-          <h3 class="network-point__head">Federated by design</h3>
-          <p class="network-point__body">Raw administrative data never crosses tenant boundaries. The model learns from aggregated, anonymised signals &mdash; not row-level uploads.</p>
+          <h3 class="network-point__head">Anonymised, aggregated training</h3>
+          <p class="network-point__body">Cross-customer learning runs on anonymised aggregates, not row-level uploads. Identifiers, sensitive fields, and study-specific labels are stripped before any signal reaches the shared model.</p>
         </li>
         <li class="network-point">
-          <h3 class="network-point__head">Compounds with every study</h3>
-          <p class="network-point__body">More historic studies on file, more current studies running, more geographies covered &mdash; each one tightens the next regional multiplier estimate and the next Cedar harmonization pass.</p>
+          <h3 class="network-point__head">Your workspace is yours</h3>
+          <p class="network-point__body">Your raw files, your study outputs, and your audit trail stay in your tenant. What you publish is what you choose to publish; the network sees patterns, not your specific results.</p>
         </li>
         <li class="network-point">
-          <h3 class="network-point__head">Different from the incumbent posture</h3>
-          <p class="network-point__body">The existing platforms ship administrative data as a static product on a multi-year vintage cycle. Lumecon treats the network of customer studies as a living signal that sharpens the underlying model in between vintage refreshes.</p>
+          <h3 class="network-point__head">Compounds with every economic impact study</h3>
+          <p class="network-point__body">More historic studies on file, more current studies running, more geographies covered &mdash; each one tightens the next regional multiplier estimate and the next Cedar harmonization pass. The incumbents treat administrative data as a static product; we treat the network as a living signal.</p>
         </li>
       </ul>
     </div>

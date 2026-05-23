@@ -18,6 +18,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MapWorkspace from '../components/MapWorkspace.astro';
+import NetworkSection from '../components/NetworkSection.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -47,6 +48,40 @@ import '../styles/map-page.css';
     </header>
 
     <MapWorkspace />
+
+    <!-- "What you're seeing." Brief, scannable explainer beneath
+         the map so a visitor who's just clicked a region knows
+         (a) what an economic impact study is, and (b) why anyone
+         cares. The federated-learning angle lives in the
+         NetworkSection below this band; together they answer
+         "what is this" + "how does it stay sharp." -->
+    <section class="map-page__about" aria-labelledby="map-about-title">
+      <div class="map-page__about-inner">
+        <p class="map-page__about-kicker">What you're seeing</p>
+        <h2 class="map-page__about-title" id="map-about-title">An economic impact study, run live.</h2>
+        <div class="map-page__about-grid">
+          <div class="map-page__about-card">
+            <h3 class="map-page__about-card-head">What it is</h3>
+            <p class="map-page__about-card-body">An economic impact study estimates how a project, program, or investment ripples through a regional economy: direct spending, supplier purchases, the wages workers earn and then spend, and the jobs and tax revenue all of that supports.</p>
+          </div>
+          <div class="map-page__about-card">
+            <h3 class="map-page__about-card-head">Why it matters</h3>
+            <p class="map-page__about-card-body">Grant applications, council briefings, board memos, and funder reports all hinge on a defensible jobs-and-investment number. Without one, the case for public dollars stalls. With one, a tribe, a city, a foundation, or a state agency can show its work.</p>
+          </div>
+          <div class="map-page__about-card">
+            <h3 class="map-page__about-card-head">What you'll see on the map</h3>
+            <p class="map-page__about-card-body">The source region lights up in gold &mdash; that's the direct effect. Teal flows trace the indirect and induced spillover to neighbouring regions. Total impact, jobs, and labour income land in the row beneath the map. Click another region to run a fresh study; everything updates in seconds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- "How the model learns." NetworkSection lives here, at the
+         bottom of /map, NOT on the homepage. The reason it makes
+         sense in this slot specifically: visitors who've just run
+         a live study are the ones who care how the model behind
+         the study stays accurate. -->
+    <NetworkSection />
 
     <!-- CTA band below the map. Compact, single-row on desktop, so
          the visitor who just played with the demo gets a clear

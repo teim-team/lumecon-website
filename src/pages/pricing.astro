@@ -330,6 +330,23 @@ const description = 'Pricing tiers for Lumecon. Pick your platform — Tribal, L
     document.querySelectorAll<HTMLElement>('[data-platform-name]').forEach((el) => {
       el.textContent = show ? `${platformShort} Economic Impact` : 'your platform';
     });
+
+    /* Re-trigger the sprout/sapling/tree grow-from-ground
+       animation each time the tier section reveals. The icons'
+       CSS animation only fires on initial render, so without this
+       reset, a visitor who picks a platform after the page has
+       loaded never sees the staggered grow. Strip the inline
+       animation, force a reflow, then put it back — the classic
+       restart-animation trick. */
+    if (show) {
+      const icons = document.querySelectorAll<HTMLElement>('.pricing-tier-card__icon');
+      icons.forEach((icon) => {
+        icon.style.animation = 'none';
+        // Force layout flush so the browser registers the reset.
+        void icon.offsetHeight;
+        icon.style.animation = '';
+      });
+    }
     /* Bake the platform short name into each tier card's CTA so the
        request goes in with the right subject ("Sprout tier — Tribal"
        vs "Sprout tier — Local"). */
