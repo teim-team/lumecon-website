@@ -103,17 +103,15 @@ test('keyboard shortcut S triggers a new study', async ({ page }) => {
  * Cedar chat. These are newer surfaces and therefore the most
  * regression-prone in copy-tightening and refactor passes. */
 
-test('about page renders every team and advisor card plus working areas', async ({ page }) => {
+test('about page is just the About and How-we-work sections', async ({ page }) => {
   await page.goto('/about', { waitUntil: 'domcontentloaded' });
   await expect(page).toHaveTitle(/About \| Lumecon/i);
-  // Six team members + three advisors = nine person cards.
-  await expect(page.locator('.person-card')).toHaveCount(9);
-  // Five working-area cards in the How We Work section.
-  await expect(page.locator('.area-card')).toHaveCount(5);
-  // Founders carry a Lumecon email on the card; advisors don't.
-  await expect(page.locator('#elijah-moreno .person-card__email')).toBeAttached();
-  // Each card links to that person's own /team/<slug> page.
-  await expect(page.locator('#elijah-moreno .person-card__link')).toHaveAttribute('href', '/team/elijah-moreno');
+  // The roster card grids are gone; the page leans on How We Work.
+  await expect(page.locator('.person-card')).toHaveCount(0);
+  // Six working-area cards, each naming clickable people.
+  await expect(page.locator('.area-card')).toHaveCount(6);
+  // Names in the working areas link to each person's /team/<slug> page.
+  await expect(page.locator('.area-card__person[href="/team/elijah-moreno"]').first()).toBeAttached();
 });
 
 test('individual team-member pages render the full bio off the about page', async ({ page }) => {
@@ -123,6 +121,8 @@ test('individual team-member pages render the full bio off the about page', asyn
   await expect(page.locator('.person-page__back').first()).toBeVisible();
   // The long bio that used to live on the about card now lives here.
   await expect(page.locator('.person-page__bio p').first()).toContainText(/Cornell|Lumecon/);
+  // Selected work renders for those who have publications (the databook).
+  await expect(page.locator('.person-pub').first()).toBeVisible();
 });
 
 test('pricing platform pick reveals the three tier cards', async ({ page }) => {
