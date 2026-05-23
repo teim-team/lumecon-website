@@ -1,0 +1,189 @@
+---
+/**
+ * /about — who built Lumecon and why.
+ *
+ * Structure mirrors the rest of the site:
+ *   - Hero with a highlighted h1.
+ *   - Founding sentence visible by default; the rest of the
+ *     About story sits behind a `<details>` so the page stays
+ *     scannable.
+ *   - Two card grids (Team, then Advisors & Contributors), each
+ *     card showing an initials avatar + name + title + summary
+ *     above the fold and the full bio hidden until clicked. No
+ *     headshots at v1 — initials in a tinted circle act as the
+ *     placeholder until photographs arrive.
+ *
+ * Team data lives in src/data/team.ts. Adding a person is one
+ * entry there, not five edits across the markup.
+ *
+ * SEO: page emits AboutPage + Person + BreadcrumbList JSON-LD
+ * derived from the same team data, so Google's knowledge graph
+ * connects each person to their alumniOf institutions and prior
+ * affiliations (Fed Minneapolis CICD, NCAI, Modsy, Chime, etc.)
+ * without us hand-writing structured data twice.
+ */
+import { site } from '../config';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { TEAM, TEAM_BY_GROUP, type Person } from '../data/team';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/about-page.css';
+
+const team = TEAM_BY_GROUP.team;
+const advisors = TEAM_BY_GROUP.advisor;
+
+/* ---------- JSON-LD ---------- */
+/* Build a schema.org Person entry per team member. alumniOf and
+   affiliation arrays power entity disambiguation in search: when
+   someone queries "Elijah Moreno Cornell" or "Laurel Wheeler
+   Federal Reserve", the connection is explicit in the structured
+   data rather than buried in prose. */
+function personJsonLd(p: Person) {
+  const personUrl = `${site.url}/about#${p.slug}`;
+  const node: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": personUrl,
+    "name": p.name,
+    "url": personUrl,
+    "jobTitle": p.title,
+    "description": p.summary,
+    "worksFor": { "@type": "Organization", "@id": `${site.url}#org`, "name": site.legalName },
+  };
+  if (p.alumniOf && p.alumniOf.length) {
+    node.alumniOf = p.alumniOf.map((n) => ({ "@type": "EducationalOrganization", "name": n }));
+  }
+  if (p.prevAffiliations && p.prevAffiliations.length) {
+    node.affiliation = p.prevAffiliations.map((n) => ({ "@type": "Organization", "name": n }));
+  }
+  return node;
+}
+
+const founders = TEAM.filter((p) => p.founder);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "url": `${site.url}/about`,
+    "name": "About Lumecon",
+    "description": "Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. The team builds economic impact analysis software for governments, tribal nations, foundations, and community-serving organizations.",
+    "isPartOf": { "@type": "WebSite", "@id": `${site.url}#website` },
+    "about": { "@type": "Organization", "@id": `${site.url}#org` },
+    "mainEntity": {
+      "@type": "Organization",
+      "@id": `${site.url}#org`,
+      "name": site.legalName,
+      "url": site.url,
+      "founder": founders.map((p) => ({ "@type": "Person", "@id": `${site.url}/about#${p.slug}`, "name": p.name })),
+      "employee": team.map((p) => ({ "@type": "Person", "@id": `${site.url}/about#${p.slug}`, "name": p.name })),
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": site.url },
+      { "@type": "ListItem", "position": 2, "name": "About", "item": `${site.url}/about` },
+    ],
+  },
+  ...TEAM.map(personJsonLd),
+];
+---
+<BaseLayout
+  title="About | Lumecon"
+  description="Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation, to make economic impact analysis accessible, transparent, and useful for governments, tribal nations, foundations, and community-serving organizations. Team: Cornell, Dartmouth, Duke, Oxford, MIT, Wisconsin–Madison, Maryland, Illinois Urbana-Champaign. Prior experience at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), National Congress of American Indians, Federal Reserve Bank of Philadelphia, Federal Reserve Board of Governors, Modsy, Chime."
+  canonical="https://lumecon.ai/about"
+  keywords="Lumecon team, Lumecon founders, Elijah Moreno, Michael Moreno, Coastal Band of the Chumash Nation, Center for Indian Country Development, CICD, Federal Reserve Bank of Minneapolis, Wilma Mankiller Fellow, National Congress of American Indians, Taylor Policy Group, Cornell eHub, Human Spirit Entrepreneurship Fellows, Cornell Law Entrepreneurship Law Clinic, Laurel Wheeler, Kaylyn Lee, Isabella Agnes, Francesca Agnes, Brian Kim, Havala Hanson, Vod Vilfort, tribal economic impact, economic impact analysis software"
+  ogTitle="About Lumecon: economic impact analysis built with the communities it serves"
+  ogDescription="Founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Team brings together Cornell, Dartmouth, Duke, Oxford, MIT, and Federal Reserve experience to make economic impact analysis accessible to governments, tribal nations, foundations, and community-serving organizations."
+  ogImageAlt="About Lumecon. Founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Economic impact analysis software for governments, tribal nations, foundations, and community-serving organizations."
+  jsonLd={jsonLd}
+>
+  <Nav />
+  <main class="about-page">
+
+    <header class="about-page__hero">
+      <div class="about-page__inner">
+        <p class="about-page__kicker">About</p>
+        <h1 class="about-page__title reveal-soft hl-block hl-block--green">Built with the communities it serves.</h1>
+        <p class="about-page__lede">
+          Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation, to make economic impact analysis more accessible, transparent, and useful for governments, tribal nations, foundations, nonprofits, and community-serving organizations.
+        </p>
+        <details class="about-page__more">
+          <summary class="about-page__more-summary">
+            <span>The longer version</span>
+            <span class="about-page__chev" aria-hidden="true"></span>
+          </summary>
+          <div class="about-page__more-body">
+            <p>Economic impact analysis is powerful, but too often it is expensive, opaque, and difficult to adapt to the communities being studied. Lumecon builds software that helps organizations turn real administrative, financial, and program data into credible economic impact analysis, with clear assumptions, reusable source records, and outputs designed for decision-making.</p>
+            <p class="about-page__belief">Our work starts from a simple belief: communities should not need massive consulting budgets to understand and communicate the economic value they create.</p>
+            <p>Lumecon combines economic research, public policy, software, data infrastructure, and responsible AI to help organizations produce analysis that is easier to run, easier to audit, and easier to explain. We are especially focused on communities and institutions that are often economically visible in the real world but underrepresented in standard data tools.</p>
+          </div>
+        </details>
+        <p class="about-page__ecosystem">
+          Supported by Cornell&rsquo;s entrepreneurship ecosystem, including the Human Spirit Entrepreneurship Fellows program through Cornell eHub and the Cornell Law School Entrepreneurship Law Clinic.
+        </p>
+      </div>
+    </header>
+
+    <section class="about-page__people" aria-labelledby="about-team-title">
+      <div class="about-page__inner">
+        <p class="about-page__kicker">Team</p>
+        <h2 class="about-page__h2 reveal-soft hl-block hl-block--gold" id="about-team-title">The people building Lumecon.</h2>
+        <ul class="about-page__grid" aria-label="Lumecon team">
+          {team.map((p) => (
+            <li>
+              <details class="person-card" id={p.slug}>
+                <summary class="person-card__head">
+                  <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
+                  <span class="person-card__meta">
+                    <span class="person-card__name">{p.name}</span>
+                    <span class="person-card__title">{p.title}</span>
+                    <span class="person-card__summary">{p.summary}</span>
+                  </span>
+                  <span class="person-card__chev" aria-hidden="true"></span>
+                </summary>
+                <div class="person-card__bio">
+                  {p.bio.map((para) => <p>{para}</p>)}
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="about-page__people about-page__people--advisors" aria-labelledby="about-advisors-title">
+      <div class="about-page__inner">
+        <p class="about-page__kicker">Advisors &amp; Contributors</p>
+        <h2 class="about-page__h2 reveal-soft hl-block hl-block--b" id="about-advisors-title">Helping shape the company during pilots.</h2>
+        <ul class="about-page__grid" aria-label="Lumecon advisors and contributors">
+          {advisors.map((p) => (
+            <li>
+              <details class="person-card" id={p.slug}>
+                <summary class="person-card__head">
+                  <span class={`person-card__avatar person-card__avatar--${p.tint}`} aria-hidden="true">{p.initials}</span>
+                  <span class="person-card__meta">
+                    <span class="person-card__name">{p.name}</span>
+                    <span class="person-card__title">{p.title}</span>
+                    <span class="person-card__summary">{p.summary}</span>
+                  </span>
+                  <span class="person-card__chev" aria-hidden="true"></span>
+                </summary>
+                <div class="person-card__bio">
+                  {p.bio.map((para) => <p>{para}</p>)}
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>

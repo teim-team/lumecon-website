@@ -1,34 +1,49 @@
 # Lumecon Inc.
 
-> Lumecon Inc. is economic and policy analysis software for governments and mission-driven organizations. A modern alternative to IMPLAN, RIMS II, REMI, and BEA RIMS multipliers. Built at Cornell University. Parent brand of three specialized platforms: Local Economic Impact, Tribal Economic Impact, and Global Economic Impact. Cedar is the built-in AI assistant that reads messy data across departments, surfaces assumptions, and writes the source record for each run.
+> Lumecon Inc. is economic impact analysis software for governments, enterprises, and mission-driven organizations. Three platforms (Local Economic Impact, Tribal Economic Impact, Global Economic Impact) sit on a shared modeling backbone with Cedar, an AI assistant that reads administrative data, surfaces every assumption, and writes the source record. Built for the 21st century: cloud infrastructure, modern UI, RAG-based AI, real-time data feeds, and native AIANNH geography. Run studies in-house, in minutes instead of months.
 
-Lumecon replaces both the consultant and the overpriced legacy software in your budget process. It runs impact studies in-house on your own real-time administrative data using current modeling methods, and ships each run with the full assumption ledger, sources, and method so a council member or grant reviewer can verify the result. We use AI to reduce the infrastructure and analysis constraints organizations face, not as a marketing gimmick.
+Lumecon collapses what used to be an expensive software subscription plus an expensive consulting engagement into one annual subscription that any size organization can afford. Each run ships with the full assumption ledger, source records, and methodology so a council member, board, or federal grant reviewer can verify the result. We use AI to reduce the data-cleaning bottleneck that has kept impact analysis to a once-a-year luxury, not as a marketing decoration.
 
 ## Category
 
-Economic impact analysis software. Direct alternatives include IMPLAN, RIMS II (Bureau of Economic Analysis), REMI Policy Insight, and BEA RIMS II multipliers. Differentiators: built-in AI for handling messy administrative data, native AIANNH (American Indian/Alaska Native/Native Hawaiian) geography, transparent multipliers with full source documentation, and a price point accessible to small governments and mission-driven organizations.
+Economic impact analysis software. Same underlying economics as IMPLAN, RIMS II (Bureau of Economic Analysis), REMI Policy Insight, and Lightcast/EMSI. What's different: pricing structure (flat annual rather than per-geography per-user per-tier), workflow (Cedar harmonizes inputs in minutes rather than analysts hand-cleaning for weeks), geographies (reservations, off-reservation trust land, Alaska Native regional and village corporations, Native Hawaiian Home Lands all first-class), data freshness (high-frequency public feeds plus our own proprietary signals layered on the BEA accounts), and audit trail (every assumption surfaced and citable).
 
 ## Platforms
 
-- [Local Economic Impact](https://localeconomicimpact.com/): For US municipal governments, economic development organizations, enterprises, and nonprofits. In active development.
-- [Tribal Economic Impact](https://tribaleconomicimpact.com/): For tribes, Alaska Native Corporations, Native Hawaiian Organizations, and reservation economies, with Indigenous data sovereignty in the foundation. Patent pending.
-- [Global Economic Impact](https://globaleconomicimpact.com/): For multinationals, NGOs, and governments. Cross-border and multiregional analysis. Future development.
+- [Local Economic Impact](https://localeconomicimpact.com/): For US municipalities, state agencies, enterprises, foundations, universities, and nonprofits. In active development.
+- [Tribal Economic Impact](https://tribaleconomicimpact.com/): For tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, and Native-entity federal contractors. Indigenous data sovereignty built in, not added on. In active development.
+- [Global Economic Impact](https://globaleconomicimpact.com/): For multinationals, NGOs, governments, and foundations whose work crosses borders. Future development.
 
 ## Cedar
 
-Cedar is the AI assistant inside every Lumecon platform. It reads user uploads (budgets, payroll detail, council agendas, chapter audits, federal grant filings), surfaces each assumption the model is about to use, prompts the user to confirm or override, and writes a record of every source, method, and multiplier as the run completes. Marketing-page Cedar is scoped to questions about the demo and does not call any upstream provider.
+Cedar is the AI assistant inside every Lumecon platform. It reads user uploads (audited financials, payroll detail, council agendas, chapter audits, federal grant filings), surfaces each assumption the model is about to use, prompts the user to confirm or override, and writes a record of every source, method, and multiplier as the run completes. Marketing-page Cedar is keyword-scoped to questions about the demo and does not call any upstream provider.
 
 ## Audience
 
-Governments and mission-driven organizations: municipal governments, tribal nations and tribal enterprises, state agencies, federal programs, universities and research labs, foundations, Community Development Financial Institutions (CDFIs), economic development organizations.
+Governments and mission-driven organizations: tribal nations and tribal enterprises, municipal governments, state agencies, federal programs, universities and research labs, foundations, Community Development Financial Institutions (CDFIs), economic development organizations, ports and transit agencies.
 
 ## Concepts the site covers
 
-Economic impact analysis, input-output modeling, direct effects, indirect effects, induced effects, fiscal multipliers, jobs supported, output, earnings, value added, IMPLAN, RIMS II, REMI, BEA RIMS, tribal economics, reservation economics, AIANNH geography, ANCSA regional corporations, CDFI lending, foundation reporting, federal grant pass-through, economic development organizations, public-sector analytics.
+Economic impact analysis, input-output modeling, direct effects, indirect effects, induced effects, fiscal multipliers, jobs supported, output, earnings, value added, regional purchase coefficients, IMPLAN, RIMS II, REMI, BEA RIMS, Lightcast, EMSI, tribal economics, reservation economics, AIANNH geography, ANCSA regional corporations, Native Hawaiian Home Lands, CDFI lending, foundation reporting, federal grant pass-through, economic development organizations, public-sector analytics, federated learning on coarse data.
+
+## Founders & team
+
+- Elijah Moreno, Co-Founder & CEO. PhD candidate in Public Policy at Cornell University; A.B. Dartmouth College; M.P.P. Cornell. Previously Senior Research Assistant at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), Wilma Mankiller Fellow at the National Congress of American Indians, research analyst at Taylor Policy Group, Inc. Enrolled member of the Coastal Band of the Chumash Nation.
+- Michael Moreno, Co-Founder & Founding Investor. Enrolled member of the Coastal Band of the Chumash Nation.
+- Kaylyn Lee, Platform Lead. B.S. Computer Science with a minor in Business, Cornell University.
+- Laurel Wheeler, Economics Lead. B.A. Political Science (Florida), M.S. Economics for Development (Oxford), M.A. and Ph.D. Economics (Duke). Previously economist at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis).
+- Isabella Agnes, Input/Output Engine Lead. B.S. Mathematics and Computer Science (Wisconsin–Madison), doctoral training in Economics (Maryland). Previously research assistant at the Federal Reserve Bank of Philadelphia and data scientist at the Board of Governors of the Federal Reserve System.
+- Francesca Agnes, Cedar Lead. Biology, University of Illinois Urbana-Champaign.
+
+## Advisors & Contributors
+
+- Brian Kim, Technical Advisor. Previously senior software engineer at Modsy and Chime.
+- Havala Hanson, Data Security Advisor. Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin–Whitewater).
+- Vod Vilfort, Methodology Advisor. PhD candidate in Economics at MIT, focused on econometrics.
 
 ## Origin
 
-Built at Cornell University with counsel from the Cornell Law Entrepreneurship Law Clinic. Founder's academic background spans Cornell and Dartmouth (Ivy League).
+Built at Ivy League and peer schools (Cornell, Dartmouth, Oxford, MIT, Yale across the team's academic background) with counsel from the Cornell Law School Entrepreneurship Law Clinic. Supported by Cornell's entrepreneurship ecosystem, including the Human Spirit Entrepreneurship Fellows program through Cornell eHub.
 
 ## Contact
 
@@ -38,6 +53,10 @@ Built at Cornell University with counsel from the Cornell Law Entrepreneurship L
 
 ## Optional
 
+- [About](https://lumecon.ai/about/)
+- [Map](https://lumecon.ai/map/)
+- [Cedar](https://lumecon.ai/cedar/)
+- [Pricing](https://lumecon.ai/pricing/)
 - [Privacy policy](https://lumecon.ai/privacy/)
 - [Terms of service](https://lumecon.ai/terms/)
 - [Status](https://lumecon.ai/status/)
