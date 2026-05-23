@@ -173,9 +173,9 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 <div class="pricing-tier-card__cta">
                   <a
                     class={t.comingSoon ? 'btn btn--ghost' : 'btn'}
-                    href={`mailto:${site.email}?subject=${subject}`}
+                    href={t.comingSoon ? `mailto:${site.email}?subject=${subject}` : `/signup?tier=${t.id}`}
                     data-analytics={`pricing-${t.name}-request-access`}
-                    data-cta-base={`mailto:${site.email}?subject=${subject}`}
+                    data-cta-base={t.comingSoon ? `mailto:${site.email}?subject=${subject}` : `/signup?tier=${t.id}`}
                   >
                     {t.comingSoon ? 'Notify me when it ships' : 'Sign up'}
                   </a>
@@ -341,17 +341,20 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
         icon.style.animation = '';
       });
     }
-    /* Bake the platform short name into each tier card's CTA so the
-       request goes in with the right subject ("Sprout tier for Tribal"
-       vs "Sprout tier for Local"). */
+    /* Bake the platform short name into each tier card's CTA.
+       Active-tier CTAs route to /signup?tier=X and pick up the
+       chosen platform as &platform=Y so the signup page can
+       greet the visitor with what they picked. Notify-me CTAs
+       stay as mailto and append "for X" to the email subject. */
     document.querySelectorAll<HTMLAnchorElement>('.pricing-tier-card__cta a').forEach((cta) => {
       const base = cta.dataset.ctaBase;
       if (!base) return;
-      if (show) {
+      if (!show) { cta.setAttribute('href', base); return; }
+      if (base.startsWith('/signup')) {
+        cta.setAttribute('href', `${base}&platform=${platformShort.toLowerCase()}`);
+      } else {
         const sep = base.includes('?') ? '%20for%20' : '?subject=';
         cta.setAttribute('href', `${base}${sep}${encodeURIComponent(platformShort)}`);
-      } else {
-        cta.setAttribute('href', base);
       }
     });
   }

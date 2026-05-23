@@ -28,22 +28,32 @@ import '../styles/network.css';
     <div class="network-text">
       <p class="network-kicker">The network</p>
       <h2 class="network-title reveal-soft hl-block hl-block--b" id="network-title">Your work stays yours. The model gets sharper for everyone.</h2>
-      <p class="network-lede">Every new client makes every other client's next economic impact study a little better. We train on the network: anonymised, aggregated signals across thousands of studies. The regional multipliers, the assumption defaults, and Cedar's harmonization rules keep tightening as more organizations join.</p>
-
-      <ul class="network-points">
-        <li class="network-point">
-          <h3 class="network-point__head">Anonymised, aggregated training</h3>
-          <p class="network-point__body">Cross-customer learning runs on anonymised aggregates, not row-level uploads. Identifiers, sensitive fields, and study-specific labels are stripped before any signal reaches the shared model.</p>
-        </li>
-        <li class="network-point">
-          <h3 class="network-point__head">Your workspace is yours</h3>
-          <p class="network-point__body">Your raw files, your study outputs, and your audit trail stay in your tenant. What you publish is what you choose to publish; the network sees patterns, not your specific results.</p>
-        </li>
-        <li class="network-point">
-          <h3 class="network-point__head">Compounds with every economic impact study</h3>
-          <p class="network-point__body">More historic studies on file, more current studies running, more geographies covered. Each one tightens the next regional multiplier estimate and the next Cedar harmonization pass. The incumbents treat administrative data as a static product; we treat the network as a living signal.</p>
-        </li>
-      </ul>
+      <!-- Lede + three points hide behind a disclosure so the title
+           and the diagram carry the section by default. Visitors
+           who want the deeper framing tap to expand. -->
+      <details class="network-disclosure">
+        <summary class="network-disclosure__summary">
+          <span>How the network learns</span>
+          <span class="network-disclosure__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="network-disclosure__body">
+          <p class="network-lede">Every new client makes every other client's next economic impact study a little better. We train on the network: anonymised, aggregated signals across thousands of studies. The regional multipliers, the assumption defaults, and Cedar's harmonization rules keep tightening as more organizations join.</p>
+          <ul class="network-points">
+            <li class="network-point">
+              <h3 class="network-point__head">Anonymised, aggregated training</h3>
+              <p class="network-point__body">Cross-customer learning runs on anonymised aggregates, not row-level uploads. Identifiers, sensitive fields, and study-specific labels are stripped before any signal reaches the shared model.</p>
+            </li>
+            <li class="network-point">
+              <h3 class="network-point__head">Your workspace is yours</h3>
+              <p class="network-point__body">Your raw files, your study outputs, and your audit trail stay in your tenant. What you publish is what you choose to publish; the network sees patterns, not your specific results.</p>
+            </li>
+            <li class="network-point">
+              <h3 class="network-point__head">Compounds with every economic impact study</h3>
+              <p class="network-point__body">More historic studies on file, more current studies running, more geographies covered. Each one tightens the next regional multiplier estimate and the next Cedar harmonization pass. The incumbents treat administrative data as a static product; we treat the network as a living signal.</p>
+            </li>
+          </ul>
+        </div>
+      </details>
     </div>
 
     <!-- Asymmetric, evolving network. Not a tidy mesh — eleven

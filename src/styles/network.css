@@ -114,6 +114,66 @@
      82-100% network breathes, then fades and loops
    Each spawn has a brief scale-up "pop" so the eye reads "a new
    participant just joined" rather than a fade. */
+/* Lede + three explainer points hide behind a disclosure so the
+   section reads as a title + diagram by default. Visitors who want
+   the framing tap to expand. Pattern matches the map page details
+   so the chevron and reveal feel familiar. */
+.network-disclosure { margin-top: 0; }
+.network-disclosure__summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  padding: .5rem 0;
+}
+.network-disclosure__summary::-webkit-details-marker { display: none; }
+.network-disclosure__chev {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.network-disclosure__chev::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.4px solid var(--navy);
+  border-bottom: 1.4px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease);
+}
+.network-disclosure[open] .network-disclosure__chev {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.network-disclosure[open] .network-disclosure__chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+  border-color: var(--white);
+}
+.network-disclosure__body {
+  margin-top: 1rem;
+  animation: network-disclosure-in .3s var(--ease);
+}
+@keyframes network-disclosure-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .network-disclosure__body { animation: none; }
+}
+
 .netv2 { width: 100%; height: auto; }
 
 /* Footnote sits below the SVG. Smaller type and ink-3 colour so
