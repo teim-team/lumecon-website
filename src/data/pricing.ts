@@ -218,59 +218,10 @@ export const applyDiscountToAnnualPrice = (annual: number, code: DiscountCode): 
 
 /* ---------- Product lines / pricing platforms ----------
  *
- * Three platforms; the /pricing page renders one tile per platform
- * at the top of the page and only reveals the tier grid once the
- * visitor picks one. Tribal + Local are buyable at v1; Global is
- * gated as "Coming soon."
- *
- * The `fitIf` string powers the hover/blurb on each platform tile,
- * answering "this is the right fit if..." in one sentence so the
- * visitor self-selects before seeing pricing structure. */
-export interface ProductLine {
-  id: 'tribal-economic-impact' | 'local-economic-impact' | 'global-economic-impact';
-  name: string;
-  /** Short label used in CTA subjects, e.g. "Tribal". */
-  shortName: string;
-  /** Filename token for the matching homepage icon component:
-   *  'tribal' -> IconTribal, 'local' -> IconLocal, 'global' -> IconGlobal. */
-  iconId: 'tribal' | 'local' | 'global';
-  /** Verbose audience description (used in metadata / fallback). */
-  audience: string;
-  /** Short "right fit if..." blurb shown on the platform tile. */
-  fitIf: string;
-  /** Scope of analysis the platform covers. */
-  scope: string;
-  /** v1 gating: hides tier reveal + replaces CTA with notify-me. */
-  comingSoon?: boolean;
-}
-
-export const PRODUCT_LINES: ProductLine[] = [
-  {
-    id: 'local-economic-impact',
-    name: 'Local Economic Impact',
-    shortName: 'Local',
-    iconId: 'local',
-    audience: 'Municipalities, state agencies, enterprises, foundations, universities, and nonprofits',
-    fitIf: "You're a municipality, state agency, enterprise, foundation, university, or nonprofit running local or regional impact analysis.",
-    scope: 'Local & regional impact analysis outside Indigenous-economy workflows',
-  },
-  {
-    id: 'tribal-economic-impact',
-    name: 'Tribal Economic Impact',
-    shortName: 'Tribal',
-    iconId: 'tribal',
-    audience: 'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
-    fitIf: "You're a tribal government or department within one, a Native non-profit, intertribal org, tribal college, ANC, NHO, tribal enterprise, Native CDFI, state-recognized tribe, or Native-entity federal contractor making the case for reservation, state, or federal funding.",
-    scope: 'Reservation, state, national economic impact analysis',
-  },
-  {
-    id: 'global-economic-impact',
-    name: 'Global Economic Impact',
-    shortName: 'Global',
-    iconId: 'global',
-    audience: 'Organizations needing broader market, supply-chain, or international analysis',
-    fitIf: 'You need national, international, supply-chain, or cross-border analysis. Launching after Local and Tribal stabilize.',
-    scope: 'National, international, cross-border analysis',
-    comingSoon: true,
-  },
-];
+ * Re-exported from src/data/platforms.ts so anything that imported
+ * PRODUCT_LINES or ProductLine from this file keeps working. The
+ * underlying data (name, fitIf, audience, scope, etc.) lives in
+ * platforms.ts; this file is just the comparison-table / discount
+ * surface for the pricing page. */
+export { PLATFORMS as PRODUCT_LINES } from './platforms';
+export type { Platform as ProductLine } from './platforms';

@@ -1,10 +1,10 @@
-// Site-wide configuration — single source of truth
+// Site-wide configuration — single source of truth for the site's
+// brand, contact, and meta fields. Product/platform data lives in
+// src/data/platforms.ts; site.products re-exports the lookup table
+// from there so legacy `site.products.local.url`-style accesses
+// keep working without copy duplicated across files.
 
-export const navLinks = [
-  { label: 'Products', href: '#products' },
-  { label: 'Cedar', href: '#cedar' },
-  { label: 'Partnerships', href: '#contact' },
-] as const;
+import { PLATFORM_BY_SLUG } from './data/platforms';
 
 export const site = {
   name: 'Lumecon',
@@ -22,24 +22,5 @@ export const site = {
   builtAt: 'Cornell University',
   copyrightYear: 2026,
   maxWidth: '1100px',
-  products: {
-    local: {
-      name: 'Local Economic Impact',
-      url: 'https://localeconomicimpact.com',
-      domain: 'localeconomicimpact.com',
-      status: 'In active development',
-    },
-    tribal: {
-      name: 'Tribal Economic Impact',
-      url: 'https://tribaleconomicimpact.com',
-      domain: 'tribaleconomicimpact.com',
-      status: 'In active development',
-    },
-    global: {
-      name: 'Global Economic Impact',
-      url: 'https://globaleconomicimpact.com',
-      domain: 'globaleconomicimpact.com',
-      status: 'Future development',
-    },
-  },
+  products: PLATFORM_BY_SLUG,
 } as const;

@@ -1,68 +1,20 @@
 ---
 /**
  * Three platforms displayed as a side-by-side card grid on desktop.
- * Previous version used per-platform <details> elements that hid
- * the description behind a click — for a marketing page where the
- * platforms ARE the product, the full pitch is what visitors want
- * to read. So the disclosure is gone; each card surfaces icon +
- * name + URL + tagline + description + status badge + a primary
- * Sign-up CTA and a secondary Visit-site link. Future-development
- * platforms (Global) swap the Sign-up CTA for a Notify-me mailto.
+ * Each card surfaces icon + name + URL + tagline + description +
+ * status badge + a CTA. Active platforms route to /pricing for the
+ * tier table; future-development platforms (Global at v1) swap the
+ * CTA for a notify-me mailto.
+ *
+ * Platform data comes from src/data/platforms.ts. Editing the
+ * tagline or description belongs there, not here.
  */
 import { site } from '../config';
-import '../styles/products.css';
+import { PLATFORMS } from '../data/platforms';
 import IconLocal from './icons/IconLocal.astro';
 import IconTribal from './icons/IconTribal.astro';
 import IconGlobal from './icons/IconGlobal.astro';
-const { local, tribal, global: globalProduct } = site.products;
-
-interface PlatformCard {
-  slug: 'local' | 'tribal' | 'global';
-  name: string;
-  domain: string;
-  url: string;
-  tag: string;
-  desc: string;
-  badge: string;
-  badgeKind: 'active' | 'future';
-  /** Future-development platforms surface a Notify-me CTA instead
-   *  of the standard See-pricing flow. */
-  future?: boolean;
-}
-
-const platforms: PlatformCard[] = [
-  {
-    slug: 'local',
-    name: local.name,
-    domain: local.domain,
-    url: local.url,
-    tag: 'Turn your budget data into an economic impact study you can present.',
-    desc: 'For cities, counties, state agencies, enterprises, foundations, universities, and the nonprofits that work alongside them. Run grant, council, and board-ready studies in-house, in minutes instead of months.',
-    badge: 'In active development',
-    badgeKind: 'active',
-  },
-  {
-    slug: 'tribal',
-    name: tribal.name,
-    domain: tribal.domain,
-    url: tribal.url,
-    tag: 'Modeled on tribal terms, not adapted from a state model.',
-    desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs, and Native-entity federal contractors. Indigenous data sovereignty is built in, not added on.',
-    badge: 'In active development',
-    badgeKind: 'active',
-  },
-  {
-    slug: 'global',
-    name: globalProduct.name,
-    domain: globalProduct.domain,
-    url: globalProduct.url,
-    tag: 'For organizations whose work crosses borders.',
-    desc: 'For governments, multinationals, NGOs, and foundations whose work crosses borders. Same modeling backbone, so a project in one country is directly comparable to a project in another.',
-    badge: 'Future development',
-    badgeKind: 'future',
-    future: true,
-  },
-];
+import '../styles/products.css';
 ---
 <section class="platforms" id="products">
   <div class="platforms-inner">
@@ -72,29 +24,22 @@ const platforms: PlatformCard[] = [
     </header>
 
     <div class="platforms-grid">
-      {platforms.map((p) => (
+      {PLATFORMS.map((p) => (
         <article class={`platform platform--${p.slug}`}>
           <header class="platform__head">
             <span class="platform__icon" aria-hidden="true">
-              {p.slug === 'local'  && <IconLocal />}
-              {p.slug === 'tribal' && <IconTribal />}
-              {p.slug === 'global' && <IconGlobal />}
+              {p.iconId === 'local'  && <IconLocal />}
+              {p.iconId === 'tribal' && <IconTribal />}
+              {p.iconId === 'global' && <IconGlobal />}
             </span>
-            <span class={`platform__badge platform__badge--${p.badgeKind}`}>{p.badge}</span>
+            <span class={`platform__badge platform__badge--${p.badgeKind}`}>{p.status}</span>
           </header>
           <h3 class="platform__name">{p.name}</h3>
           <span class="platform__url">{p.domain}</span>
           <p class="platform__tag">{p.tag}</p>
           <p class="platform__desc">{p.desc}</p>
           <div class="platform__cta">
-            {/* One CTA per card: see-pricing-and-learn-more for
-                active platforms (the pricing page covers both the
-                deeper product info and the tier table), notify-me
-                for future-development platforms. Two side-by-side
-                buttons read as redundant since Sign-up only
-                surfaces value after the visitor has seen pricing
-                anyway. */}
-            {p.future
+            {p.comingSoon
               ? <a class="btn" href={`mailto:${site.email}?subject=${encodeURIComponent('Notify me when ' + p.name + ' ships')}`}>Notify me when it ships</a>
               : <a class="btn" href="/pricing">Learn more &amp; pricing</a>}
           </div>

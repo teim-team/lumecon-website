@@ -238,7 +238,7 @@
   gap: 1rem;
   padding: .65rem 1rem;
   border-bottom: 1px solid var(--rule);
-  background: #FAFBFC;
+  background: var(--paper);
 }
 .workspace__title {
   display: inline-flex;
