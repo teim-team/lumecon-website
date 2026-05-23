@@ -172,10 +172,6 @@
   outline-offset: 4px;
   border-radius: 2px;
 }
-/* Labels are hidden until the icon is hovered, focused, or tapped.
-   They stay in the DOM (collapsed, not display:none) so screen
-   readers still announce each input. tabindex on the <li> gives
-   touch and keyboard users a way to reveal them. */
 .map-page__input-label {
   font-family: var(--font-sans);
   font-size: .92rem;
@@ -183,19 +179,28 @@
   letter-spacing: -.005em;
   color: var(--navy);
   line-height: 1.3;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transform: translateY(-3px);
-  transition: opacity .2s var(--ease), max-height .25s var(--ease), transform .2s var(--ease);
 }
-.map-page__input:hover .map-page__input-label,
-.map-page__input:focus-within .map-page__input-label {
-  opacity: 1;
-  max-height: 3.5em;
-  transform: none;
+/* On hover-capable devices the labels stay hidden until the icon is
+   hovered or keyboard-focused, keeping the row to clean icons. Touch
+   devices (hover: none) keep the labels visible since there's no
+   hover to reveal them. The label is always in the DOM so screen
+   readers announce each input either way. */
+@media (hover: hover) {
+  .map-page__input-label {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(-3px);
+    transition: opacity .2s var(--ease), max-height .25s var(--ease), transform .2s var(--ease);
+  }
+  .map-page__input:hover .map-page__input-label,
+  .map-page__input:focus-within .map-page__input-label {
+    opacity: 1;
+    max-height: 3.5em;
+    transform: none;
+  }
 }
-@media (prefers-reduced-motion: reduce) {
+@media (hover: hover) and (prefers-reduced-motion: reduce) {
   .map-page__input-label { transition: opacity .2s var(--ease); }
 }
 .map-page__inputs-lede {
