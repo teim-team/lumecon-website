@@ -158,14 +158,14 @@ html {
    Subtle, thematic motion so each icon hints at what its section is
    about. Disabled under prefers-reduced-motion. */
 
-/* Local: dot walks the inner cells of the 3×3 grid; pulses to the
-   brand gold each time it lands on a new cell, so each step reads
-   as "another locality lighting up". */
+/* Local: white "active locality" dot walks the 3x3 grid of city
+   blocks. The filled panel underneath transitions grey -> teal via
+   the parent's color, so the whole icon body changes — the dot
+   stays white to read against either fill. */
 .icon--local .icon-local__dot {
   transform-box: fill-box;
   transform-origin: center;
-  animation: icon-local-scan 8s ease-in-out infinite,
-             icon-local-tint 8s ease-in-out infinite;
+  animation: icon-local-scan 8s ease-in-out infinite;
 }
 @keyframes icon-local-scan {
   0%   { transform: translate(0, 0); }
@@ -175,12 +175,10 @@ html {
   80%  { transform: translate(-4.3px, 0); }
   100% { transform: translate(0, 0); }
 }
-@keyframes icon-local-tint {
-  0%, 18%, 38%, 58%, 78%, 100% { fill: currentColor; }
-  20%, 40%, 60%, 80%           { fill: var(--accent); }
-}
 
-/* Tribal: three inner nodes pulse in a wave (community heartbeat). */
+/* Tribal: three inner nodes pulse in a wave (community heartbeat).
+   Dots use fill="currentColor" so they tint with the parent on
+   hover; the pulse only changes their scale, not the colour. */
 .icon--tribal .icon-tribal__dot {
   transform-box: fill-box;
   transform-origin: center;
@@ -189,14 +187,16 @@ html {
 .icon--tribal .icon-tribal__dot--b { animation-delay: .25s; }
 .icon--tribal .icon-tribal__dot--c { animation-delay: .5s; }
 @keyframes icon-tribal-pulse {
-  0%, 100% { transform: scale(1);    fill: currentColor; }
-  45%      { transform: scale(1.35); fill: var(--accent); }
-  60%      { transform: scale(1.15); fill: var(--accent); }
-  80%      { transform: scale(1);    fill: currentColor; }
+  0%, 100% { transform: scale(1);    }
+  45%      { transform: scale(1.35); }
+  60%      { transform: scale(1.15); }
+  80%      { transform: scale(1);    }
 }
 
-/* Global: the inner arc draws in, then the two endpoint dots pulse
-   (cross-border flow). */
+/* Global: the cross-border arc draws in over the filled globe,
+   then the two endpoint dots pulse. The arc + dots stay white so
+   they read against the filled disc; the disc itself transitions
+   colour on parent hover. */
 .icon--global .icon-global__arc {
   stroke-dashoffset: 100;
   animation: icon-global-draw 3.6s ease-out infinite;
@@ -213,9 +213,9 @@ html {
   100% { stroke-dashoffset: 0; }
 }
 @keyframes icon-global-pulse {
-  0%, 60%, 100% { transform: scale(1); fill: currentColor; }
-  65%, 80%      { transform: scale(1.4); fill: var(--accent); }
-  85%           { transform: scale(1); fill: currentColor; }
+  0%, 60%, 100% { transform: scale(1); }
+  65%, 80%      { transform: scale(1.4); }
+  85%           { transform: scale(1); }
 }
 
 /* Upload: the dot moves up into the document (uploading). */

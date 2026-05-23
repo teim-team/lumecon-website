@@ -89,14 +89,19 @@
   justify-content: center;
   background: var(--cream);
   border-radius: 10px;
-  color: var(--navy);
+  /* Subtle by default, teal on card hover, so the whole filled
+     icon body changes colour rather than starting pre-emphasised
+     in navy. */
+  color: var(--ink-3);
   flex-shrink: 0;
+  transition: color .18s var(--ease), background .18s var(--ease);
 }
 .platform__icon svg {
   width: 60%;
   height: 60%;
   display: block;
 }
+.platform:hover .platform__icon { color: var(--accent); }
 .platform__name {
   font-family: var(--font-display);
   font-weight: 600;

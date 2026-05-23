@@ -1,10 +1,20 @@
 ---
 const { class: className = '' } = Astro.props as { class?: string };
 ---
-<svg class={`icon icon--global ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-  <path d="M4.5 15.5C8.8 11.8 15.2 11.8 19.5 15.5" stroke="currentColor" stroke-width="1.25"/>
-  <path d="M7.25 14C8.8 11.7 10.4 10.55 12 10.55C13.6 10.55 15.2 11.7 16.75 14" stroke="currentColor" stroke-width="1.25"/>
-  <path class="icon-global__arc" d="M9 13.35C11.1 8.95 14.3 8.95 16.25 13.35" stroke="currentColor" stroke-width="1.25" pathLength="100" stroke-dasharray="100" stroke-dashoffset="0"/>
-  <circle class="icon-global__dot icon-global__dot--left" cx="9" cy="13.35" r="1.5" fill="currentColor"/>
-  <circle class="icon-global__dot icon-global__dot--right" cx="16.25" cy="13.35" r="1.5" fill="currentColor"/>
+<svg class={`icon icon--global ${className}`} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <!-- Filled globe silhouette so the whole disc transitions
+       colour on hover. White latitude + meridian lines cut across
+       the disc; a cross-border arc draws in over the surface and
+       two endpoint dots pulse to suggest international flow. -->
+  <circle cx="12" cy="12" r="8.5"/>
+  <ellipse cx="12" cy="12" rx="8.5" ry="3.4" fill="none" stroke="var(--white)" stroke-width=".75"/>
+  <line x1="3.5" y1="12" x2="20.5" y2="12" stroke="var(--white)" stroke-width=".75"/>
+  <line x1="12"  y1="3.5" x2="12"  y2="20.5" stroke="var(--white)" stroke-width=".75"/>
+  <path class="icon-global__arc"
+        d="M7 14 Q12 7 17 14"
+        fill="none" stroke="var(--white)" stroke-width="1.2"
+        stroke-linecap="round"
+        pathLength="100" stroke-dasharray="100" stroke-dashoffset="0"/>
+  <circle class="icon-global__dot icon-global__dot--left"  cx="7"  cy="14" r="1.3" fill="var(--white)"/>
+  <circle class="icon-global__dot icon-global__dot--right" cx="17" cy="14" r="1.3" fill="var(--white)"/>
 </svg>

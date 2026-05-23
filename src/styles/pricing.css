@@ -146,12 +146,18 @@
   height: 48px;
   border-radius: 10px;
   background: var(--cream);
-  color: var(--navy);
+  /* Subtle by default; teal on tile hover. Whole filled icon
+     body transitions, not just an outline. */
+  color: var(--ink-3);
+  transition: color .18s var(--ease);
 }
+.pricing-platform-tile:hover .pricing-platform-tile__icon { color: var(--accent); }
+.pricing-platform-tile.is-active .pricing-platform-tile__icon { color: var(--accent); }
 .pricing-platform-tile--coming-soon .pricing-platform-tile__icon {
   background: var(--white);
   color: var(--ink-3);
 }
+.pricing-platform-tile--coming-soon:hover .pricing-platform-tile__icon { color: var(--cedar); }
 .pricing-platform-tile__icon :global(svg) { width: 60%; height: 60%; display: block; }
 .pricing-platform-tile__name {
   grid-column: 2;
