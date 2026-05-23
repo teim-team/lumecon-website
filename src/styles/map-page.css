@@ -155,16 +155,16 @@
   transition: color .18s var(--ease);
 }
 .map-page__input-icon {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent);
-  transition: transform .18s var(--ease);
+  color: var(--navy);
+  transition: transform .18s var(--ease), color .18s var(--ease);
 }
 .map-page__input-icon svg { width: 100%; height: 100%; display: block; }
-.map-page__input:hover .map-page__input-icon { transform: translateY(-2px); }
+.map-page__input:hover .map-page__input-icon { transform: translateY(-2px); color: var(--accent); }
 .map-page__input-label {
   font-family: var(--font-sans);
   font-size: .92rem;
@@ -182,6 +182,7 @@
   margin: 0;
   max-width: 64ch;
 }
+.map-page__inputs-lede + .map-page__inputs-lede { margin-top: .9rem; }
 
 /* ---------- Collapsible details (about + why-it-matters) ----------
    Both bands open from a summary row that carries the kicker, the
