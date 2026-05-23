@@ -86,8 +86,6 @@ const jsonLd = [
         </div>
       </header>
 
-      <p class="person-page__summary">{p.summary}</p>
-
       {(p.email || p.linkedin || p.scholar) && (
         <div class="person-page__links">
           {p.email && <a class="person-page__email" href={`mailto:${p.email}`}>{p.email}</a>}

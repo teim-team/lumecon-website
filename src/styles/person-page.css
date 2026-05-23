@@ -90,15 +90,6 @@
   font-weight: 600;
   margin: 0;
 }
-.person-page__summary {
-  font-family: var(--font-sans);
-  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
-  line-height: 1.5;
-  color: var(--navy);
-  font-weight: 500;
-  margin: 0 0 1.1rem;
-}
-
 /* Contact + profile links. */
 .person-page__links {
   display: flex;
