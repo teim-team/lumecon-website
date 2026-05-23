@@ -26,7 +26,7 @@ import { site } from '../config';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { TEAM, TEAM_BY_GROUP, type Person } from '../data/team';
+import { TEAM, TEAM_BY_GROUP, TEAM_BY_SLUG, WORKING_AREAS, type Person } from '../data/team';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -120,7 +120,7 @@ const jsonLd = [
           </summary>
           <div class="about-page__more-body">
             <p>Economic impact analysis is powerful, but too often it is expensive, opaque, and difficult to adapt to the communities being studied. Lumecon builds software that helps organizations turn real administrative, financial, and program data into credible economic impact analysis, with clear assumptions, reusable source records, and outputs designed for decision-making.</p>
-            <p class="about-page__belief">Our work starts from a simple belief: communities should not need massive consulting budgets to understand and communicate the economic value they create.</p>
+            <p class="about-page__belief">Our work starts from a simple belief: communities should not need massive consulting budgets, or advanced degrees in economics, to understand and communicate the economic value they create.</p>
             <p>Lumecon combines economic research, public policy, software, data infrastructure, and responsible AI to help organizations produce analysis that is easier to run, easier to audit, and easier to explain. We are especially focused on communities and institutions that are often economically visible in the real world but underrepresented in standard data tools.</p>
           </div>
         </details>
@@ -129,6 +129,59 @@ const jsonLd = [
         </p>
       </div>
     </header>
+
+    <!-- How We Work: explains the cross-functional structure
+         BEFORE individual bios so visitors read the overlap on
+         the team cards as intentional rather than messy. Each
+         area is a <details> showing the lead + contributors +
+         advisory roster; the description paragraph hides until
+         opened. -->
+    <section class="about-page__how-we-work" aria-labelledby="about-how-title">
+      <div class="about-page__inner">
+        <p class="about-page__kicker">How we work</p>
+        <h2 class="about-page__h2 reveal-soft hl-block hl-block--smear" id="about-how-title">Cross-functional, by design.</h2>
+        <p class="about-page__lede about-page__lede--how">
+          Lumecon is built by a cross-functional team where each person has a clear lead area, but no part of the product is developed in isolation. Economic impact software only works when the economics, platform, data systems, and user workflow are designed together. Each team member has a primary role, and the company is intentionally collaborative across these areas.
+        </p>
+        <ul class="about-page__areas" aria-label="Working areas">
+          {WORKING_AREAS.map((area) => {
+            const lead = TEAM_BY_SLUG[area.leadSlug];
+            const advisory = (area.advisorySlugs ?? []).map((s) => TEAM_BY_SLUG[s]).filter(Boolean);
+            const contributors = (area.contributorSlugs ?? []).map((s) => TEAM_BY_SLUG[s]).filter(Boolean);
+            return (
+              <li>
+                <details class="area-card" id={area.slug}>
+                  <summary class="area-card__head">
+                    <span class="area-card__name">{area.name}</span>
+                    <span class="area-card__roster">
+                      <span class="area-card__role"><span class="area-card__role-label">Lead</span> <a href={`#${lead.slug}`}>{lead.name}</a></span>
+                      {advisory.length > 0 && (
+                        <span class="area-card__role">
+                          <span class="area-card__role-label">Advisory</span>{' '}
+                          {advisory.map((p, i) => (
+                            <>{i > 0 && ', '}<a href={`#${p.slug}`}>{p.name}</a></>
+                          ))}
+                        </span>
+                      )}
+                      {contributors.length > 0 && (
+                        <span class="area-card__role">
+                          <span class="area-card__role-label">Contributors</span>{' '}
+                          {contributors.map((p, i) => (
+                            <>{i > 0 && ', '}<a href={`#${p.slug}`}>{p.name}</a></>
+                          ))}
+                        </span>
+                      )}
+                    </span>
+                    <span class="area-card__chev" aria-hidden="true"></span>
+                  </summary>
+                  <p class="area-card__desc">{area.description}</p>
+                </details>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
 
     <section class="about-page__people" aria-labelledby="about-team-title">
       <div class="about-page__inner">
@@ -160,7 +213,7 @@ const jsonLd = [
     <section class="about-page__people about-page__people--advisors" aria-labelledby="about-advisors-title">
       <div class="about-page__inner">
         <p class="about-page__kicker">Advisors &amp; Contributors</p>
-        <h2 class="about-page__h2 reveal-soft hl-block hl-block--b" id="about-advisors-title">Helping shape the company during pilots.</h2>
+        <h2 class="about-page__h2 reveal-soft hl-block hl-block--b" id="about-advisors-title">Helping guide the company.</h2>
         <ul class="about-page__grid" aria-label="Lumecon advisors and contributors">
           {advisors.map((p) => (
             <li>

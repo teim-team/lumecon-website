@@ -52,12 +52,13 @@ export const TEAM: Person[] = [
     founder: true,
     summary: "PhD candidate in Public Policy at Cornell. Research on local economic development, public finance, tribal governments, and institutions.",
     bio: [
-      "Elijah Moreno is the co-founder and CEO of Lumecon. He is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions. He earned his undergraduate degree from Dartmouth College and a Master of Public Policy from Cornell University.",
-      "Before founding Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, where he worked on research related to Indian Country, economic development, and public policy. He was also a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group, Inc. His work brings together applied economics, institutional research, and data systems to help communities better understand and communicate their economic impact.",
+      "Elijah Moreno is the co-founder and CEO of Lumecon. He is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions. He earned his Bachelor's at Dartmouth College in Economics modified with Native American Studies and a Public Policy minor, and a Master of Public Policy from Cornell University.",
+      "Before founding Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, where he worked on research related to Indian Country, economic development, and public policy. He was also a two-time participant in the American Economic Association Summer Training Program (hosted at the Center for Indian Country Development), a Wilma Mankiller Fellow at the National Congress of American Indians, and a research analyst at the Taylor Policy Group, Inc. He has built novel datasets including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting. His work brings together applied economics, institutional research, and data systems to help communities better understand and communicate their economic impact.",
     ],
     alumniOf: ['Cornell University', 'Dartmouth College'],
     prevAffiliations: [
       'Federal Reserve Bank of Minneapolis (Center for Indian Country Development)',
+      'American Economic Association Summer Training Program',
       'National Congress of American Indians',
       'Taylor Policy Group, Inc.',
     ],
@@ -114,7 +115,7 @@ export const TEAM: Person[] = [
     title: 'Input/Output Engine Lead',
     summary: "Leads the multiplier system and input/output engine. Wisconsin–Madison, Maryland.",
     bio: [
-      "Isabella Agnes leads work on Lumecon's multiplier system and input/output engine, including the tools that translate source data into economic impact estimates and integrate the engine into the website. She holds degrees in Mathematics and Computer Science from the University of Wisconsin–Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
+      "Isabella Agnes leads work on Lumecon's multiplier system and input/output engine, including the tools that translate source data into economic impact estimates and integrate the engine into the website. She holds Bachelor's degrees in Mathematics and Economics from the University of Wisconsin–Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
       "Isabella previously worked as a research assistant at the Federal Reserve Bank of Philadelphia and as a data scientist at the Board of Governors of the Federal Reserve System.",
     ],
     alumniOf: ['University of Wisconsin–Madison', 'University of Maryland, College Park'],
@@ -143,10 +144,11 @@ export const TEAM: Person[] = [
     tint: 'teal',
     group: 'advisor',
     title: 'Technical Advisor',
-    summary: "Software architecture, engineering systems, scalability. Previously senior engineer at Modsy and Chime.",
+    summary: "Software architecture, engineering systems, scalability. Dartmouth Economics; previously senior engineer at Modsy and Chime.",
     bio: [
-      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability, and pilot-stage technical development. He previously worked as a senior software engineer at Modsy and Chime.",
+      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability, and pilot-stage technical development. He is a graduate of Dartmouth College with a degree in Economics. He previously worked as a senior software engineer at Modsy and Chime.",
     ],
+    alumniOf: ['Dartmouth College'],
     prevAffiliations: ['Modsy', 'Chime'],
   },
   {
@@ -155,10 +157,10 @@ export const TEAM: Person[] = [
     initials: 'HH',
     tint: 'gold',
     group: 'advisor',
-    title: 'Data Security Advisor',
-    summary: "Data security, privacy, research operations, responsible data infrastructure.",
+    title: 'Product, Data Security & Research Operations Advisor',
+    summary: "Product direction, data governance, privacy, research operations, responsible infrastructure.",
     bio: [
-      "Havala Hanson advises Lumecon on data security, privacy, research operations, and responsible data infrastructure. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets. She holds a Ph.D. in Statistics and Policy in Education from the University of Alaska Fairbanks, an M.A. in Urban Education Policy from Brown University, and a B.S. in Education from the University of Wisconsin–Whitewater.",
+      "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction, and responsible infrastructure. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets. She holds a Ph.D. in Statistics and Policy in Education from the University of Alaska Fairbanks, an M.A. in Urban Education Policy from Brown University, and a B.S. in Education from the University of Wisconsin–Whitewater.",
     ],
     alumniOf: ['University of Alaska Fairbanks', 'Brown University', 'University of Wisconsin–Whitewater'],
   },
@@ -179,6 +181,73 @@ export const TEAM: Person[] = [
 
 /** Co-founders, used by the homepage Organization.founder JSON-LD. */
 export const FOUNDERS = TEAM.filter((p) => p.founder);
+
+/**
+ * Working areas — the five lanes Lumecon's work splits across.
+ * Each lane names a single Lead and the people who contribute or
+ * advise so that visitors reading the About page see the overlap
+ * as deliberate cross-functional structure rather than fuzzy
+ * roles. Slugs match TEAM entries so the page can resolve names
+ * and link straight to each person's bio card.
+ */
+export interface WorkingArea {
+  slug: string;
+  name: string;
+  /** One paragraph describing the area's goal. */
+  description: string;
+  /** Person who carries primary responsibility. */
+  leadSlug: string;
+  /** People who contribute material work to the area. */
+  contributorSlugs?: string[];
+  /** Advisors who shape the area without owning day-to-day work. */
+  advisorySlugs?: string[];
+}
+
+export const WORKING_AREAS: WorkingArea[] = [
+  {
+    slug: 'platform-product',
+    name: 'Platform & Product',
+    description: "This area focuses on the customer-facing platform: how users move through a study, upload data, review assumptions, understand results, and produce outputs. The goal is to make complex economic analysis feel organized, usable, and credible for real institutional users.",
+    leadSlug: 'kaylyn-lee',
+    advisorySlugs: ['brian-kim', 'havala-hanson'],
+    contributorSlugs: ['francesca-agnes', 'isabella-agnes', 'elijah-moreno'],
+  },
+  {
+    slug: 'economic-modeling',
+    name: 'Economic Modeling & Tribal Adaptation',
+    description: "This area focuses on the economic logic behind Lumecon's models, including theory, model assumptions, tribal adaptation, and empirical credibility. The goal is to make sure Lumecon's analysis reflects both rigorous economic reasoning and the institutional realities of the communities being studied.",
+    leadSlug: 'laurel-wheeler',
+    advisorySlugs: ['vod-vilfort'],
+    contributorSlugs: ['elijah-moreno', 'isabella-agnes', 'francesca-agnes', 'havala-hanson'],
+  },
+  {
+    slug: 'io-engine',
+    name: 'Input/Output Engine',
+    description: "This area focuses on the multiplier system and analytical engine that translate source data into economic impact estimates. The goal is to connect user inputs, regional data, and economic assumptions into a clear, auditable modeling workflow.",
+    leadSlug: 'isabella-agnes',
+    contributorSlugs: ['francesca-agnes', 'laurel-wheeler', 'elijah-moreno'],
+  },
+  {
+    slug: 'cedar-ai',
+    name: 'Cedar & AI Workflow',
+    description: "This area focuses on Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions, and helping users move from messy data to usable analysis. The goal is to use AI carefully: making analysis faster and more accessible without removing human judgment, transparency, or accountability.",
+    leadSlug: 'francesca-agnes',
+    advisorySlugs: ['havala-hanson'],
+    contributorSlugs: ['kaylyn-lee', 'isabella-agnes', 'elijah-moreno'],
+  },
+  {
+    slug: 'data-governance',
+    name: 'Data Governance, Security & Research Operations',
+    description: "This area focuses on responsible data handling, privacy, documentation, and research operations. The goal is to make sure Lumecon can support organizations working with sensitive administrative, financial, institutional, and community data.",
+    leadSlug: 'havala-hanson',
+    contributorSlugs: ['elijah-moreno', 'kaylyn-lee', 'francesca-agnes', 'isabella-agnes'],
+  },
+];
+
+/** Slug -> Person lookup used when rendering working-area people. */
+export const TEAM_BY_SLUG: Record<string, Person> = Object.fromEntries(
+  TEAM.map((p) => [p.slug, p]),
+);
 
 export const TEAM_BY_GROUP: Record<PersonGroup, Person[]> = {
   team: TEAM.filter((p) => p.group === 'team'),
