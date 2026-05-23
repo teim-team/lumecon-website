@@ -164,18 +164,7 @@
   transition: transform .18s var(--ease), color .18s var(--ease);
 }
 .map-page__input-icon svg { width: 100%; height: 100%; display: block; }
-.map-page__input:hover .map-page__input-icon,
-.map-page__input:focus-within .map-page__input-icon { transform: translateY(-2px); color: var(--accent); }
-.map-page__input:focus { outline: none; }
-.map-page__input:focus-visible .map-page__input-icon {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
-  border-radius: 2px;
-}
-/* Labels are hidden until the icon is hovered, focused, or tapped.
-   They stay in the DOM (collapsed, not display:none) so screen
-   readers still announce each input. tabindex on the <li> gives
-   touch and keyboard users a way to reveal them. */
+.map-page__input:hover .map-page__input-icon { transform: translateY(-2px); color: var(--accent); }
 .map-page__input-label {
   font-family: var(--font-sans);
   font-size: .92rem;
@@ -183,20 +172,6 @@
   letter-spacing: -.005em;
   color: var(--navy);
   line-height: 1.3;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transform: translateY(-3px);
-  transition: opacity .2s var(--ease), max-height .25s var(--ease), transform .2s var(--ease);
-}
-.map-page__input:hover .map-page__input-label,
-.map-page__input:focus-within .map-page__input-label {
-  opacity: 1;
-  max-height: 3.5em;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .map-page__input-label { transition: opacity .2s var(--ease); }
 }
 .map-page__inputs-lede {
   font-family: var(--font-sans);
@@ -208,6 +183,60 @@
   max-width: 64ch;
 }
 .map-page__inputs-lede + .map-page__inputs-lede { margin-top: .9rem; }
+
+/* The explainer paragraphs are collapsed by default so the section
+   reads as header + inputs at a glance; the detail is one tap away.
+   Lighter than the bordered .map-page__details bands below since the
+   section already carries its own kicker and title. */
+.map-page__inputs-more-summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: -.005em;
+  color: var(--navy);
+  transition: color .15s var(--ease);
+}
+.map-page__inputs-more-summary::-webkit-details-marker { display: none; }
+.map-page__inputs-more-summary:hover { color: var(--accent); }
+.map-page__inputs-more-chev {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .16));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.map-page__inputs-more-chev::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--navy);
+  border-bottom: 1.5px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease);
+}
+.map-page__inputs-more[open] .map-page__inputs-more-chev {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.map-page__inputs-more[open] .map-page__inputs-more-chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+  border-color: var(--white);
+}
+.map-page__inputs-more[open] .map-page__inputs-more-body {
+  margin-top: 1.1rem;
+  animation: map-details-in .3s var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-page__inputs-more[open] .map-page__inputs-more-body { animation: none; }
+}
 
 /* ---------- Collapsible details (about + why-it-matters) ----------
    Both bands open from a summary row that carries the kicker, the
