@@ -121,6 +121,8 @@ test('individual team-member pages render the full bio off the about page', asyn
   await expect(page.locator('.person-page__back').first()).toBeVisible();
   // The long bio that used to live on the about card now lives here.
   await expect(page.locator('.person-page__bio p').first()).toContainText(/Cornell|Lumecon/);
+  // Selected work renders for those who have publications (the databook).
+  await expect(page.locator('.person-pub').first()).toBeVisible();
 });
 
 test('pricing platform pick reveals the three tier cards', async ({ page }) => {

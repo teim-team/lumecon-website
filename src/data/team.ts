@@ -13,6 +13,26 @@
 export type PersonGroup = 'team' | 'advisor';
 export type AvatarTint = 'teal' | 'gold' | 'green';
 
+/**
+ * A selected publication shown under "Selected work" on a person's
+ * /team/<slug> page. Display rule for `year`: use one exact year —
+ * the journal year for a published article, the report/working-paper
+ * year only when the item is a report or still a working paper. Never
+ * combine two dates. `authors` is the display line, written
+ * subject-first ("Name, with Coauthor A and Coauthor B").
+ */
+export interface Publication {
+  title: string;
+  authors: string;
+  year: string;
+  venue: string;
+  summary: string;
+  /** Optional link to the full text; the title links out when present. */
+  url?: string;
+  /** Drives JSON-LD @type; defaults to a scholarly article. */
+  type?: 'book' | 'article';
+}
+
 export interface Person {
   /** Short stable id (kebab-case). Used for anchor links and React-style keys. */
   slug: string;
@@ -49,6 +69,8 @@ export interface Person {
    *  Person.affiliation JSON-LD. Improves entity recognition in
    *  search ("Elijah Moreno + Federal Reserve" connects). */
   prevAffiliations?: string[];
+  /** Selected publications shown on the person's /team/<slug> page. */
+  publications?: Publication[];
 }
 
 export const TEAM: Person[] = [
@@ -73,6 +95,17 @@ export const TEAM: Person[] = [
       'American Economic Association Summer Training Program at Michigan State University',
       'National Congress of American Indians',
       'Taylor Policy Group, Inc.',
+    ],
+    publications: [
+      {
+        title: 'Social and Economic Changes in American Indian Reservations: A Databook of the US Census and the American Community Survey, Third Edition, 1990–2020',
+        authors: 'Elijah Moreno, with Randall Akee and Amy Besaw Medford',
+        year: '2025',
+        venue: 'Ash Center for Democratic Governance and Innovation, Harvard Kennedy School',
+        type: 'book',
+        summary: 'Three decades of Census and American Community Survey data tracking how life on American Indian reservations changed across fourteen socioeconomic indicators from 1990 to 2020 — documenting real gains in employment, education, and housing while mapping the gaps that still persist.',
+        url: 'https://ash.harvard.edu/wp-content/uploads/2025/09/Databook-Third-Edition-2025-09-07-1.pdf',
+      },
     ],
   },
   {
@@ -123,6 +156,50 @@ export const TEAM: Person[] = [
     prevAffiliations: [
       'Federal Reserve Bank of Minneapolis (Center for Indian Country Development)',
     ],
+    publications: [
+      {
+        title: 'Mapping the Native CDFI Industry: Insights from a New Survey',
+        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, and Michou Kokodoko',
+        year: '2026',
+        venue: 'Community Development',
+        summary: 'One of the most detailed empirical portraits of the Native CDFI industry, using survey data from 49 certified and emerging Native CDFIs. It documents variation in age, size, geography, strategic goals, risk-assessment practices, product offerings, development services, and institutional challenges, and uses cluster analysis to identify four distinct Native CDFI profiles.',
+      },
+      {
+        title: 'Fostering Financial Inclusion by Ensuring Cultural Fit: The Case of the NCDFI Industry',
+        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, and Michou Kokodoko',
+        year: '2025',
+        venue: 'American Indian Culture and Research Journal',
+        summary: 'Uses interviews with Native CDFI leaders to examine how they design lending practices, development services, partnerships, and success metrics around the communities they serve. It emphasizes person-centered lending, strategic partnerships, customized financial products, inclusive measures of success, and the role of cultural fit in expanding financial inclusion.',
+      },
+      {
+        title: 'Harnessing Soft Information to Promote Financial Inclusion: The Case of Business Lending by a Native CDFI',
+        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, and Lakota Vogel',
+        year: '2025',
+        venue: 'Journal of Financial Services Research',
+        summary: 'Analyzes business loan data from a Native CDFI to compare conventional credit scores with lender-generated soft-information measures of borrower risk. It finds that a character-based risk measure predicts loan delinquency and interest rates beyond what credit scores alone explain, showing how relationship-based underwriting can capture information missed by standard credit metrics.',
+      },
+      {
+        title: 'Applying Indigenous Approaches to Economics Instruction',
+        authors: 'Laurel Wheeler, with Larry Chavis',
+        year: '2025',
+        venue: 'Journal of Economics, Race, and Policy',
+        summary: 'Develops a relational approach to economics instruction informed by Indigenous pedagogies from North America. It connects inclusive teaching practices with belonging, community, reciprocity, and contextual learning, arguing that economics becomes more accessible and rigorous when students understand economic questions through relationships, lived experience, and place.',
+      },
+      {
+        title: 'Beyond Conventional Models: Lending by Native Community Development Financial Institutions',
+        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, Joseph Guse, and Michou Kokodoko',
+        year: '2024',
+        venue: 'Annals of Public and Cooperative Economics',
+        summary: 'Uses loan-level data from eleven Native CDFI loan funds to study how Native CDFIs lend, whom they serve, and what predicts delinquency. It shows that Native CDFIs provide small and varied loans across diverse borrower circumstances, relying on both conventional risk measures and community-informed, character-based measures of creditworthiness.',
+      },
+      {
+        title: 'When the Lender Extends a Helping Hand: Native CDFI Client Counseling and Loan Performance in Indian Country',
+        authors: 'Laurel Wheeler, with Valentina Dimitrova-Grajzl, Peter Grajzl, Joseph Guse, and Michou Kokodoko',
+        year: '2023',
+        venue: 'Journal of Economics, Race, and Policy',
+        summary: 'Uses loan-level data and survival analysis to study whether Native CDFI-provided financial counseling affects loan performance. It finds that counseling reduces the risk of loan failure, especially for borrowers with limited prior credit-market experience, with personalized coaching appearing more effective than less tailored classroom-style training.',
+      },
+    ],
   },
   {
     slug: 'isabella-agnes',
@@ -142,6 +219,15 @@ export const TEAM: Person[] = [
     prevAffiliations: [
       'Federal Reserve Bank of Philadelphia',
       'Board of Governors of the Federal Reserve System',
+    ],
+    publications: [
+      {
+        title: 'Place-Based Labor Market Inequality',
+        authors: 'Isabella Agnes, with Douglas Webber, Jessica Liu, and Erin Troland',
+        year: '2025',
+        venue: 'Federal Reserve Finance and Economics Discussion Series',
+        summary: 'Examines how labor market conditions vary across U.S. counties, showing that national averages often hide large differences in employment, wages, labor force participation, and job availability. Using county-level indicators and Lightcast job postings, it connects local labor market tightness to income growth and pandemic recovery while documenting the role of racial composition and geography in shaping labor market inequality.',
+      },
     ],
   },
   {
@@ -188,6 +274,22 @@ export const TEAM: Person[] = [
       "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction, and responsible infrastructure. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets. She holds a bachelor's degree in Education from the University of Wisconsin–Whitewater, a master's in Urban Education Policy from Brown University, and a PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.",
     ],
     alumniOf: ['University of Alaska Fairbanks', 'Brown University', 'University of Wisconsin–Whitewater'],
+    publications: [
+      {
+        title: 'Preparing Alaskans for Mining Careers Through Short, Industry-Informed Training Programs',
+        authors: 'Havala Hanson, with David Stevens, Manuel Vazquez, and Brandon Roberts',
+        year: '2018',
+        venue: 'University of Alaska / Education Northwest evaluation report',
+        summary: 'Evaluates Alaska mining workforce training programs developed with industry input and built around short-term, hands-on occupational training. It examines program design, employer partnerships, student supports, completion, employment, and wage outcomes, finding high completion rates in the shorter programs and strong post-program employment among graduates.',
+      },
+      {
+        title: 'Alaska Students’ Pathways from High School to Postsecondary Education and Employment',
+        authors: 'Havala Hanson, with Ashley Pierson',
+        year: '2016',
+        venue: 'Regional Educational Laboratory Northwest / IES',
+        summary: 'Follows Alaska public high school students into college, in-state employment, and early-career earnings. It documents more than 3,000 distinct postsecondary pathways and shows how students’ routes after high school differ by rurality, gender, Alaska Native status, graduation status, education level, employment, and wages.',
+      },
+    ],
   },
   {
     slug: 'vod-vilfort',
@@ -202,6 +304,16 @@ export const TEAM: Person[] = [
       "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design, and research standards. He is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
     ],
     alumniOf: ['Massachusetts Institute of Technology'],
+    publications: [
+      {
+        title: 'Interpreting TSLS Estimators in Information Provision Experiments',
+        authors: 'Vod Vilfort, with Whitney Zhang',
+        year: '2025',
+        venue: 'American Economic Review: Insights',
+        summary: 'Formalizes the exclusion and monotonicity conditions under which two-stage least squares recovers a positive-weighted average of causal effects in information-provision experiments, with practical guidance on which estimators researchers can trust.',
+        url: 'https://pubs.aeaweb.org/doi/pdf/10.1257/aeri.20240353',
+      },
+    ],
   },
 ];
 
@@ -251,7 +363,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     name: 'Input/Output Engine',
     description: "This area focuses on the multiplier system and analytical engine that translate source data into economic impact estimates. The goal is to connect user inputs, regional data, and economic assumptions into a clear, auditable modeling workflow.",
     leadSlug: 'isabella-agnes',
-    contributorSlugs: ['francesca-agnes', 'laurel-wheeler', 'elijah-moreno'],
+    contributorSlugs: ['francesca-agnes', 'laurel-wheeler', 'elijah-moreno', 'vod-vilfort'],
   },
   {
     slug: 'cedar-ai',

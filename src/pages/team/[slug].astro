@@ -47,6 +47,8 @@ if (sameAs.length) personNode.sameAs = sameAs;
 if (p.alumniOf?.length) personNode.alumniOf = p.alumniOf.map((n) => ({ "@type": "EducationalOrganization", "name": n }));
 if (p.prevAffiliations?.length) personNode.affiliation = p.prevAffiliations.map((n) => ({ "@type": "Organization", "name": n }));
 
+const pubs = p.publications ?? [];
+
 const jsonLd = [
   personNode,
   {
@@ -58,6 +60,18 @@ const jsonLd = [
       { "@type": "ListItem", "position": 3, "name": p.name, "item": personUrl },
     ],
   },
+  ...pubs.map((pub) => {
+    const node: Record<string, unknown> = {
+      "@context": "https://schema.org",
+      "@type": pub.type === 'book' ? "Book" : "ScholarlyArticle",
+      "name": pub.title,
+      "datePublished": pub.year,
+      "author": { "@type": "Person", "@id": personUrl, "name": p.name },
+      "publisher": { "@type": "Organization", "name": pub.venue },
+    };
+    if (pub.url) node.url = pub.url;
+    return node;
+  }),
 ];
 ---
 <BaseLayout
@@ -97,6 +111,26 @@ const jsonLd = [
       <div class="person-page__bio">
         {p.bio.map((para) => <p>{para}</p>)}
       </div>
+
+      {pubs.length > 0 && (
+        <section class="person-page__work">
+          <h2 class="person-page__sub">Selected work</h2>
+          <ul class="person-pubs">
+            {pubs.map((pub) => (
+              <li class="person-pub">
+                <p class="person-pub__venue">{pub.venue} &middot; {pub.year}</p>
+                <h3 class="person-pub__title">
+                  {pub.url
+                    ? <a href={pub.url} target="_blank" rel="noopener noreferrer">{pub.title}</a>
+                    : pub.title}
+                </h3>
+                <p class="person-pub__authors">{pub.authors}</p>
+                <p class="person-pub__summary">{pub.summary}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <a class="person-page__back person-page__back--bottom" href="/about">
         <span aria-hidden="true">&larr;</span> Back to the team
