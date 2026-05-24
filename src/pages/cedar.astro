@@ -107,9 +107,12 @@ const chips = CHIP_IDS
               </div>
             </div>
             <div class="cedar-quickreply" data-cedar-chips>
-              {chips.slice(0, 6).map((intent) => (
-                <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+              {chips.map((intent, i) => (
+                <button class:list={['cedar-chip', { 'cedar-chip--extra': i >= 5 }]} type="button" data-intent={intent.id} hidden={i >= 5}>{intent.chip}</button>
               ))}
+              {chips.length > 5 && (
+                <button class="cedar-chip-more" type="button" data-cedar-more>See more options</button>
+              )}
             </div>
           </div>
           <form class="cedar-chat__form" data-cedar-form autocomplete="off">

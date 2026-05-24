@@ -310,6 +310,20 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     void sendMessage(intent.chip, intent.chip);
   });
 
+  // "See more options": reveal the held-back starter prompts, then
+  // retire the link. Keeps the opening set short while the full bank
+  // stays one tap away.
+  const moreBtn = root.querySelector<HTMLButtonElement>('[data-cedar-more]');
+  if (moreBtn) {
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      root.querySelectorAll<HTMLElement>('.cedar-chip--extra').forEach((el) => {
+        el.hidden = false;
+      });
+      moreBtn.hidden = true;
+    });
+  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const q = (input.value || '').trim();
