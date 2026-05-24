@@ -425,7 +425,7 @@ export const INTENTS: CedarIntent[] = [
     id: 'global_platform',
     chip: 'Does it work outside the US?',
     triggers: [
-      'international', 'global', 'global economic impact', 'outside the us', 'outside the united states', 'other countries', 'overseas', 'cross border', 'cross-border', 'canada', 'mexico', 'europe', 'worldwide', 'non us', 'abroad', 'which countries', 'global platform',
+      'international', 'global economic impact', 'global platform', 'outside the us', 'outside the united states', 'other countries', 'another country', 'overseas', 'cross border', 'cross-border', 'worldwide', 'non us', 'work abroad', 'which countries do you', 'do you cover canada', 'do you cover mexico', 'do you cover europe', 'do you support international',
     ],
     answer: "Today Lumecon covers the United States end to end — every county, state, tribal nation, and the national rollup. International coverage is the Global Economic Impact platform, which is on the roadmap rather than live: the engine and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
   },
