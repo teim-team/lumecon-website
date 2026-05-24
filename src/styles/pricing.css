@@ -226,6 +226,7 @@
 
 /* Tier kicker that names the currently-picked platform. */
 .pricing-tiers__head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.pricing-hero__kicker,
 .pricing-tiers__kicker {
   font-family: var(--font-mono);
   font-size: .72rem;
