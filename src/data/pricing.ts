@@ -57,9 +57,9 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
       'One user',
       'Workspace included',
       'Manual data entry',
-      'Full reservation, state, and national impact analysis',
+      'Full reservation, county, state, and national impact analysis',
       'Past, future, and multi-year analyses',
-      'High-frequency mobility signals where available',
+      'High-frequency alternative data (mobility signals) where available',
       'Council-ready PDF and structured CSV exports',
       'Full assumption ledger on every export',
       'Standard email support',
@@ -113,7 +113,7 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
       'Data, trackers, and reporting materials matched to your intended uses',
       { text: 'Grant, foundation, SBA benefits, Federal reporting, and compliance trackers', accent: 'gold' },
       'Reusable data library for recurring submissions',
-      'Regularly added high-frequency, administrative, and public data sources',
+      'Regularly added alternative, administrative, and public data sources',
       'Deadline tracking and submission prep tied to the person/entity management board',
       'SSO and SCIM provisioning',
       'Dedicated implementation support',
@@ -141,7 +141,7 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
   { capability: 'Past, future, and multi-year analyses',                           sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
   { capability: 'Assumption ledger on every export',                               sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
   { capability: 'Council-ready PDF and CSV exports',                               sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
-  { capability: 'High-frequency mobility signals where available',                 sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
+  { capability: 'High-frequency alternative data (mobility signals) where available', sprout: 'yes',          sapling: 'yes',           tree: 'yes' },
   { capability: 'Cedar AI assistant',                                              sprout: 'none',           sapling: 'yes',           tree: 'yes' },
   { capability: 'Document import (Cedar extracts inputs from PDFs)',               sprout: 'none',           sapling: 'yes',           tree: 'yes' },
   { capability: 'Use-case tailoring (advocacy, grants, compliance, planning)',     sprout: 'none',           sapling: 'yes',           tree: 'yes' },
@@ -170,7 +170,7 @@ export interface PrepaymentTier {
 
 export const ANNUAL_SUBSCRIPTION_DISCOUNTS: PrepaymentTier[] = [
   { years: 1, label: 'Annual',         discountPct: 0,  note: 'Standard annual subscription.' },
-  { years: 2, label: '2-year prepaid', discountPct: 10, note: 'Recommended for pilot-to-v1 continuity and budget certainty.' },
+  { years: 2, label: '2-year prepaid', discountPct: 10, note: 'Recommended for pilot-to-launch continuity and budget certainty.' },
   { years: 3, label: '3-year prepaid', discountPct: 15, note: 'Best value; locks pricing through implementation and early benchmarking.' },
 ];
 

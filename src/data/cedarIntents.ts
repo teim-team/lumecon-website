@@ -52,7 +52,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what is cedar', 'who are you', 'are you the chatbot', 'are you a chatbot', 'are you a bot', 'what can cedar help', 'why are you called cedar', 'what does this assistant do', 'can you answer', 'are you ai', 'are you a real person', 'who is cedar', 'how can i use this chatbot', 'about cedar', 'what does cedar do', 'tell me about cedar',
     ],
-    answer: "I'm Cedar, Lumecon's assistant. Inside the product I read your administrative files, harmonize them with public data, surface every modeling assumption, and write the source record. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what a study costs, or how to reach the team. If I'm not the right tool for what you need, I'll say so and point you at someone who is.",
+    answer: "I'm Cedar, Lumecon's assistant. Inside the platform I read your administrative files, harmonize them with public data, surface every modeling assumption, and write the source record. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what a study costs, or how to reach the team. If I'm not the right tool for what you need, I'll say so and point you at someone who is.",
     followUps: ['company_overview', 'accuracy', 'technical', 'demo'],
   },
   {
@@ -98,7 +98,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what data', 'where does the data come', 'users upload data', 'upload my data', 'bring my own data', 'bring your own data', 'what inputs', 'what input', 'government data', 'public data', 'is the data credible', 'how do you calculate', 'what data sources', 'data sources', 'real economic data',
     ],
-    answer: "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in higher-frequency signals where they help (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own proprietary signals built in-house: regional multipliers refined across thousands of past studies, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you.",
+    answer: "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in alternative data where it helps (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own proprietary signals built in-house: regional multipliers refined across thousands of past studies, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you.",
     followUps: ['security', 'accuracy', 'multipliers', 'time_to_study'],
   },
   {
@@ -127,7 +127,7 @@ export const INTENTS: CedarIntent[] = [
       'how much', 'what is the price', 'pricing', 'what does it cost', 'cost of lumecon', 'subscription', 'do you have subscriptions', 'can i buy', 'how do i get access', 'become a customer', 'become a client', 'price',
     ],
     answer: "Pricing is five figures a year on a flat annual subscription that covers unlimited studies across every geography (reservation, county, state, and national). For comparison, the legacy stack tends to run six figures per study and ships months later. We are early enough that pricing is matched to each use case, so the best path is to tell the team a bit about your organization and we will come back with a number.",
-    expanded: "More on pricing: it's an annual subscription, not per-study or per-seat or per-geography. Your whole team gets access; you can run as many studies as you want across reservations, counties, states, and national rollups. We work with selected pilot partners while the product is early, which means pricing flexes for size and use case: a community foundation looks different from a state DOT looks different from a tribal gaming enterprise. The math we use under the hood is mainstream economics and the BEA accounts are public, so we're not charging you for the data; we're charging for the software that makes the analysis actually usable.",
+    expanded: "More on pricing: it's an annual subscription, not per-study or per-seat or per-geography. Your whole team gets access; you can run as many studies as you want across reservations, counties, states, and national rollups. We work with selected pilot partners while the platform is early, which means pricing flexes for size and use case: a community foundation looks different from a state DOT looks different from a tribal gaming enterprise. The math we use under the hood is mainstream economics and the BEA accounts are public, so we're not charging you for the data; we're charging for the software that makes the analysis actually usable.",
     followUps: ['roi_lumecon', 'demo', 'contact', 'compare_implan_workflow'],
   },
   {
@@ -171,7 +171,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'tech stack', 'technology stack', 'do you have an api', 'have an api', 'api access', 'integrate with my system', 'integration', 'upload spreadsheet', 'upload spreadsheets', 'connect to external', 'external database', 'multiple people', 'support teams', 'team account', 'sso', 'single sign on',
     ],
-    answer: 'Lumecon is being designed as a modern web platform with support for structured data, guided workflows, and organization-level use. Some technical features may depend on the stage of the product and the needs of pilot users. For integrations, team access, uploads, or API questions, the best next step is to contact the Lumecon team directly.',
+    answer: 'Lumecon is being designed as a modern web platform with support for structured data, guided workflows, and organization-level use. Some technical features may depend on the stage of the platform and the needs of pilot users. For integrations, team access, uploads, or API questions, the best next step is to contact the Lumecon team directly.',
   },
   {
     id: 'security',

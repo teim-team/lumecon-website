@@ -70,7 +70,7 @@ export const PLATFORMS: readonly Platform[] = [
     desc: 'For cities, counties, state agencies, enterprises, foundations, universities, and the nonprofits that work alongside them. Run grant, council, and board-ready studies in-house, in minutes instead of months.',
     audience: 'Municipalities, state agencies, enterprises, foundations, universities, and nonprofits',
     fitIf: "You're a municipality, state agency, enterprise, foundation, university, or nonprofit running local or regional impact analysis.",
-    scope: 'Local & regional impact analysis outside Indigenous-economy workflows',
+    scope: 'Local & regional economic impact analysis',
     iconId: 'local',
   },
   {

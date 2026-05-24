@@ -49,7 +49,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
   title="Pricing | Lumecon"
   description={description}
   canonical="https://lumecon.ai/pricing"
-  keywords="Lumecon pricing, Tribal Economic Impact pricing, Local Economic Impact pricing, Global Economic Impact pricing, economic impact analysis pricing, IMPLAN alternative pricing, RIMS II alternative pricing, REMI alternative pricing, Cedar AI pricing, annual subscription"
+  keywords="Lumecon pricing, Tribal Economic Impact pricing, Local Economic Impact pricing, Global Economic Impact pricing, economic impact analysis pricing, economic impact software cost, alternative data, IMPLAN alternative pricing, Implan price, RIMS II alternative pricing, REMI alternative pricing, Remi, AI for government, AI for tribes, Cedar AI pricing, annual subscription, transparent pricing"
   ogTitle="Lumecon pricing: pick your platform, then your tier"
   ogDescription={description}
 >
@@ -62,7 +62,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
       <div class="editorial-band__inner">
         <header class="pricing-hero__head">
           <h1 class="editorial-question reveal-soft hl-block hl-block--green">Pick the Lumecon platform that fits.</h1>
-          <p class="pricing-hero__lede">Lumecon provides three platforms tuned to different work. Pick the one that matches yours and we&rsquo;ll surface the tiers from there.</p>
+          <p class="pricing-hero__lede">Lumecon provides three platforms tuned to different work. Pick the one that matches yours to see its tiers. We know your time is limited, so there&rsquo;s no demo call to unlock a number &mdash; the pricing is right here.</p>
           <p class="pricing-hero__aside">Annual subscriptions across every platform. Model updates, data refreshes, and workflow improvements land on every tier as they ship; you don&rsquo;t pay again to stay current.</p>
         </header>
 
@@ -140,7 +140,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                     ? <span class="pricing-tier-card__tag">Coming soon</span>
                     : t.featured
                       ? <span class="pricing-tier-card__tag">Most complete</span>
-                      : <span class="pricing-tier-card__tag">v1</span>}
+                      : null}
                 </header>
 
                 <div class="pricing-tier-card__price-row">
@@ -149,7 +149,10 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                         <span class="pricing-tier-card__price">{t.price}</span>
                         <span class="pricing-tier-card__period">{t.period}</span>
                       </>
-                    : <span class="pricing-tier-card__price-tbd">Pricing TBD</span>}
+                    : <>
+                        <span class="pricing-tier-card__price">Five figures</span>
+                        <span class="pricing-tier-card__period">/ year, flat</span>
+                      </>}
                 </div>
 
                 <p class="pricing-tier-card__tagline">{t.tagline}</p>
