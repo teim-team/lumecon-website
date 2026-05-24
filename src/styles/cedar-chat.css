@@ -32,15 +32,22 @@
   gap: .55rem;
 }
 .cedar-chat__avatar--header {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: var(--cedar);
-  color: var(--white);
+  background: var(--white);
+  border: 1px solid var(--rule);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+.cedar-chat__avatar--header img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
 }
 .cedar-chat__name {
   font-family: var(--font-display);
