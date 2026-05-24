@@ -31,22 +31,6 @@
   align-items: center;
   gap: .55rem;
 }
-.cedar-chat__avatar--header {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.cedar-chat__avatar--header img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-  display: block;
-}
 .cedar-chat__name {
   font-family: var(--font-display);
   font-weight: 600;

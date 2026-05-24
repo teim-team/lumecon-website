@@ -51,9 +51,6 @@ const chips = CHIP_IDS
   <div class="cedar-chat">
     <header class="cedar-chat__header">
       <span class="cedar-chat__brand">
-        <span class="cedar-chat__avatar cedar-chat__avatar--header" aria-hidden="true">
-          <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="18" height="18" loading="lazy" />
-        </span>
         <span class="cedar-chat__name">Cedar</span>
       </span>
       <span class="cedar-chat__status" aria-label="Online">
@@ -179,72 +176,72 @@ const chips = CHIP_IDS
     z-index: 80;
     display: inline-flex;
     align-items: center;
-    gap: .55rem;
-    padding: .7rem 1.05rem .7rem .85rem;
-    background: var(--navy);
+    gap: .5rem;
+    padding: 0;
+    background: transparent;
     color: var(--white);
-    border-radius: 999px;
-    text-decoration: none;
+    border: 0;
+    cursor: pointer;
     font-family: var(--font-sans);
     font-size: .88rem;
     font-weight: 600;
     letter-spacing: -.005em;
-    box-shadow:
-      0 4px 14px rgba(10, 15, 38, .28),
-      0 1px 3px rgba(10, 15, 38, .12);
-    transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
-    cursor: pointer;
-    border: 0;
-  }
-  .cedar-fab:hover {
-    background: var(--navy2);
-    transform: translateY(-2px);
-    box-shadow:
-      0 8px 22px rgba(10, 15, 38, .34),
-      0 1px 3px rgba(10, 15, 38, .15);
   }
   .cedar-fab:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline-offset: 4px;
+    border-radius: 999px;
   }
   .cedar-fab__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, .14);
     flex-shrink: 0;
   }
   .cedar-fab__icon svg,
   .cedar-fab__icon img { display: block; }
-  /* The logo mark sits on a white disc so the brand colours read on
-     the navy button; the close X keeps the translucent disc. */
-  .cedar-fab__icon--mark { background: var(--white); transition: box-shadow .2s var(--ease); }
-  .cedar-fab__icon--mark img { width: 24px; height: 24px; object-fit: contain; }
-  /* Gold glow on the mark when the FAB is pressed / hovered — reads as
-     the icon lighting up, with no standing gold ring in the chat. */
-  .cedar-fab:hover .cedar-fab__icon--mark,
-  .cedar-fab:focus-visible .cedar-fab__icon--mark,
-  .cedar-fab:active .cedar-fab__icon--mark {
-    box-shadow: 0 0 0 2px var(--gold), 0 0 12px 2px rgba(240, 169, 26, .65);
+
+  /* Closed state = the bare logo mark, floating. No disc, no ring; a
+     soft drop-shadow lifts the line-art off the page, and a gentle
+     bob makes it feel alive. */
+  .cedar-fab__icon--mark {
+    width: 52px;
+    height: 52px;
+    animation: cedar-fab-float 4.2s ease-in-out infinite;
+    filter: drop-shadow(0 6px 10px rgba(10, 15, 38, .22)) drop-shadow(0 1px 2px rgba(10, 15, 38, .16));
+  }
+  .cedar-fab__icon--mark img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    transition: transform .18s var(--ease);
+  }
+  .cedar-fab:hover .cedar-fab__icon--mark img { transform: scale(1.06); }
+  @keyframes cedar-fab-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cedar-fab__icon--mark { animation: none; }
   }
 
-  /* Open / closed states swap which icon + label is visible so the
-     same FAB does double duty as "Ask Cedar" and "Close". */
+  /* The "Ask Cedar" label is dropped — the floating mark is the cue. */
   .cedar-fab__icon--close,
+  .cedar-fab__label--ask,
   .cedar-fab__label--close { display: none; }
-  body.cedar-popped .cedar-fab__icon--mark,
-  body.cedar-popped .cedar-fab__label--ask { display: none; }
+  .cedar-fab__icon--close { width: 22px; height: 22px; }
+
+  /* Open state = a clear navy "Close" pill (the mark steps aside). */
+  body.cedar-popped .cedar-fab {
+    background: var(--navy);
+    padding: .7rem 1.05rem;
+    border-radius: 999px;
+    box-shadow: 0 6px 16px rgba(10, 15, 38, .3);
+  }
+  body.cedar-popped .cedar-fab:hover { background: var(--navy2); }
+  body.cedar-popped .cedar-fab__icon--mark { display: none; }
   body.cedar-popped .cedar-fab__icon--close { display: inline-flex; }
   body.cedar-popped .cedar-fab__label--close { display: inline; }
-
-  /* When the FAB pops the panel, kill the ambient pulse — the panel
-     is now the focus, not the button. */
-  body.cedar-popped .cedar-fab::before { animation: none; opacity: 0; }
-  body.cedar-popped .cedar-fab { background: var(--navy); }
-  body.cedar-popped .cedar-fab:hover { background: var(--navy2); box-shadow: 0 6px 16px rgba(10, 15, 38, .3); }
 
   /* ---------- The self-contained chat panel ---------- */
   .cedar-fab-panel {
@@ -280,30 +277,9 @@ const chips = CHIP_IDS
     .cedar-fab-panel { animation: none; }
   }
 
-  /* Subtle ambient pulse so the FAB feels alive but doesn't beg. */
-  .cedar-fab::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 999px;
-    border: 1.5px solid rgba(255, 255, 255, .5);
-    opacity: 0;
-    animation: cedar-fab-pulse 3.6s ease-in-out infinite;
-    pointer-events: none;
-  }
-  @keyframes cedar-fab-pulse {
-    0%, 100% { transform: scale(1);    opacity: 0;   }
-    50%      { transform: scale(1.07); opacity: .35; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cedar-fab::before { animation: none; }
-  }
-
-  /* Mobile: collapse to icon-only so the FAB doesn't dominate the
-     bottom of small screens. The label still shows on hover/focus. */
+  /* Mobile: cap the panel so it doesn't fill the screen edge to edge
+     on a phone. The closed FAB is already just the floating mark. */
   @media (max-width: 600px) {
-    .cedar-fab { padding: .7rem; }
-    .cedar-fab__label { display: none; }
     /* Cap the panel so it doesn't fill the screen edge to edge on a
        phone. */
     .cedar-fab-panel {
