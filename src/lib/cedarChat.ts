@@ -84,24 +84,42 @@ function normalize(s: string): string {
     .trim() + ' ';
 }
 
-export function classify(rawText: string): CedarIntent | null {
+export interface IntentMatch {
+  /** Highest trigger-match score across all intents (0 = no match). */
+  score: number;
+  /** All intents that tie for that top score, in declaration order.
+   *  More than one means the message is ambiguous. */
+  intents: CedarIntent[];
+}
+
+/* Score every intent by its trigger hits (longer phrases weigh more)
+   and return the top-scoring intents. Exposing the tie set lets the
+   runtime ask the visitor to clarify when confidence is low instead of
+   committing to a guess. */
+export function topMatches(rawText: string): IntentMatch {
   const text = normalize(rawText);
-  if (text.trim() === '') return null;
-  let best: CedarIntent | null = null;
-  let bestScore = 0;
+  if (text.trim() === '') return { score: 0, intents: [] };
+  const scored: Array<{ intent: CedarIntent; score: number }> = [];
+  let best = 0;
   for (const intent of INTENTS) {
     let score = 0;
     for (const trig of intent.triggers) {
       const norm = normalize(trig);
       if (norm.trim() === '') continue;
-      if (text.indexOf(norm) !== -1) {
-        // Longer phrases beat single-word hits.
-        score += Math.max(1, norm.trim().split(' ').length);
-      }
+      // Longer phrases beat single-word hits.
+      if (text.indexOf(norm) !== -1) score += Math.max(1, norm.trim().split(' ').length);
     }
-    if (score > bestScore) { bestScore = score; best = intent; }
+    if (score > 0) {
+      scored.push({ intent, score });
+      if (score > best) best = score;
+    }
   }
-  return bestScore >= 1 ? best : null;
+  return { score: best, intents: scored.filter((s) => s.score === best).map((s) => s.intent) };
+}
+
+export function classify(rawText: string): CedarIntent | null {
+  const { score, intents } = topMatches(rawText);
+  return score >= 1 ? intents[0] : null;
 }
 
 function isOutOfScope(rawText: string): boolean {
@@ -114,11 +132,39 @@ function isOutOfScope(rawText: string): boolean {
   return false;
 }
 
+/* When the top match is a tie between distinct, substantive topics,
+   Cedar asks which one the visitor means rather than guessing wrong or
+   dumping the generic fallback. */
+function clarifyPrompt(candidates: CedarIntent[]): string {
+  const labels = candidates.slice(0, 3).map((c) => `"${c.chip}"`);
+  const list =
+    labels.length <= 1
+      ? labels[0]
+      : labels.slice(0, -1).join(', ') + ' or ' + labels[labels.length - 1];
+  return `I can read that a couple of ways, and I'd rather get it right than guess — did you mean ${list}? Tell me which one (or add a few words) and I'll go deep.`;
+}
+
+/** Substantive (chip-bearing) intents tied at the top score. Length >= 2
+ *  means the message is ambiguous enough to clarify. */
+function ambiguousCandidates(rawText: string): CedarIntent[] {
+  const { score, intents } = topMatches(rawText);
+  if (score < 1) return [];
+  const substantive = intents.filter((i) => i.chip);
+  return substantive.length >= 2 ? substantive : [];
+}
+
 export function localAnswer(rawText: string): string {
-  const intent = classify(rawText);
-  if (intent) return intent.answer;
-  if (isOutOfScope(rawText)) return OUT_OF_SCOPE_ANSWER;
-  return FALLBACK_ANSWER;
+  const oos = isOutOfScope(rawText);
+  const { score, intents } = topMatches(rawText);
+  // An out-of-scope signal beats a *weak* single-keyword match: e.g.
+  // "who is the president of mexico" should hit the out-of-scope reply,
+  // not the Global-platform answer it would otherwise match on the bare
+  // word "mexico". A strong, multi-word product match still wins.
+  if (oos && score <= 1) return OUT_OF_SCOPE_ANSWER;
+  const candidates = intents.filter((i) => i.chip);
+  if (score >= 1 && candidates.length >= 2) return clarifyPrompt(candidates);
+  if (score >= 1) return intents[0].answer;
+  return oos ? OUT_OF_SCOPE_ANSWER : FALLBACK_ANSWER;
 }
 
 /* ----- API-first / local-fallback resolver -------------------------
@@ -278,6 +324,10 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
       priorIntent != null &&
       typeof priorIntent.expanded === 'string';
     const localFallback = isDrillDown ? priorIntent!.expanded! : localAnswer(rawText);
+    // When the message was ambiguous, localAnswer asked the visitor to
+    // clarify instead of committing — so we shouldn't record a guessed
+    // topic as the conversation's "last topic".
+    const clarified = !isDrillDown && ambiguousCandidates(rawText).length >= 2;
 
     const answer = await resolveAnswer(rawText, surface, conversationId, localFallback);
 
@@ -293,7 +343,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // Update conversation memory: substantive topics overwrite
     // priorIntent; fillers leave it alone so "thanks" → "tell me
     // more" still drills into the topic before the thanks.
-    if (matched && !NON_TOPIC_INTENTS.has(matched.id)) {
+    if (!clarified && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
       priorIntent = matched;
     }
   };
