@@ -146,6 +146,23 @@ async function resolveAnswer(
   }
 }
 
+/* ----- Thinking pause ----------------------------------------------
+   Keep the typing indicator up briefly so a reply reads as composed
+   rather than precomputed. Scales with answer length and collapses to
+   near-instant when the visitor prefers reduced motion. */
+const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+const prefersReducedMotion = (): boolean =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function thinkingPause(answer: string): number {
+  if (prefersReducedMotion()) return 200;
+  return Math.min(1800, Math.max(700, 480 + answer.length * 4));
+}
+
 /* ----- Conversation memory -----------------------------------------
    IDs of the conversational-filler intents that shouldn't be tracked
    as the "last topic" — drilling into "tell me more" right after
@@ -168,7 +185,7 @@ const NON_TOPIC_INTENTS = new Set([
    it on the same root is a no-op — guarded by data-cedar-booted. */
 
 const BOTAVATAR_SVG =
-  '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/></svg>';
+  '<img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="18" height="18" />';
 
 function appendMessage(
   transcript: HTMLElement,
@@ -192,47 +209,6 @@ function appendMessage(
   transcript.appendChild(wrap);
   transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
   return wrap;
-}
-
-/**
- * Render inline follow-up chips beneath a bot message so the user can
- * keep the conversation moving without typing. Chips delegate via the
- * provided onSelect — typically `sendMessage(intent.chip)` — and self-
- * destruct on click so the transcript stays clean.
- */
-function renderFollowUps(
-  transcript: HTMLElement,
-  followUpIds: string[] | undefined,
-  onSelect: (intent: CedarIntent) => void,
-): void {
-  if (!followUpIds || followUpIds.length === 0) return;
-  const items = followUpIds
-    .map((id) => INTENTS.find((x) => x.id === id))
-    .filter((x): x is CedarIntent => !!x && !!x.chip);
-  if (items.length === 0) return;
-  const row = document.createElement('div');
-  row.className = 'cedar-followups';
-  row.setAttribute('role', 'group');
-  row.setAttribute('aria-label', 'Suggested follow-ups');
-  for (const intent of items) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'cedar-chip cedar-chip--followup';
-    btn.dataset.intent = intent.id;
-    btn.textContent = intent.chip!;
-    btn.addEventListener('click', (e) => {
-      // Stop the click from reaching any outside-click handlers
-      // (e.g. CedarFAB's panel close), and defer the row removal
-      // until the current event loop finishes so the click target
-      // stays attached for any other listeners walking the DOM.
-      e.stopPropagation();
-      onSelect(intent);
-      setTimeout(() => row.remove(), 0);
-    });
-    row.appendChild(btn);
-  }
-  transcript.appendChild(row);
-  transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
 }
 
 function makeTypingIndicator(): HTMLElement {
@@ -273,6 +249,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
   const { transcript, chips, form, input } = els;
   const conversationId = getConversationId();
   const surface = opts.surface;
+  const nowMs = opts.now ?? (() => Date.now());
 
   const collapseChips = () => {
     if (!chips.classList.contains('is-collapsed')) chips.classList.add('is-collapsed');
@@ -287,27 +264,25 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     appendMessage(transcript, 'user', echoText ?? rawText);
     trackEvent('cedar.message.sent', { surface, length: rawText.length });
     const typing = appendMessage(transcript, 'bot', makeTypingIndicator());
+    const startedAt = nowMs();
 
-    // Classify locally up-front so we can wire conversation memory
-    // and follow-ups regardless of whether the API or the local
-    // classifier ends up answering.
+    // Classify up-front so conversation memory and the "tell me more"
+    // drill-down work whether the API or the local classifier answers.
     const matched = classify(rawText);
     const isDrillDown =
       matched?.id === 'tell_me_more' &&
       priorIntent != null &&
       typeof priorIntent.expanded === 'string';
-
-    let localFallback: string;
-    let followUpSource: CedarIntent | null;
-    if (isDrillDown) {
-      localFallback = priorIntent!.expanded!;
-      followUpSource = priorIntent;
-    } else {
-      localFallback = localAnswer(rawText);
-      followUpSource = matched;
-    }
+    const localFallback = isDrillDown ? priorIntent!.expanded! : localAnswer(rawText);
 
     const answer = await resolveAnswer(rawText, surface, conversationId, localFallback);
+
+    // Let the typing indicator breathe before the reply lands. Subtract
+    // any time a real API call already spent so we don't stack a second
+    // pause on top of a slow backend.
+    const remaining = thinkingPause(answer) - (nowMs() - startedAt);
+    if (remaining > 0) await sleep(remaining);
+
     const bubble = typing.querySelector<HTMLElement>('.cedar-msg__bubble');
     if (bubble) bubble.textContent = answer;
 
@@ -317,18 +292,6 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     if (matched && !NON_TOPIC_INTENTS.has(matched.id)) {
       priorIntent = matched;
     }
-
-    // If the responding intent has an `expanded` field (and we
-    // didn't just deliver it via "tell me more"), prepend a
-    // "Tell me more" chip so the visitor can drill in without
-    // having to discover the trigger phrase.
-    let followUpIds = followUpSource?.followUps;
-    if (!isDrillDown && followUpSource?.expanded && followUpIds) {
-      followUpIds = ['tell_me_more', ...followUpIds.filter((id) => id !== 'tell_me_more')];
-    }
-    renderFollowUps(transcript, followUpIds, (intent) => {
-      void sendMessage(intent.chip!, intent.chip!);
-    });
   };
 
   chips.addEventListener('click', (e) => {

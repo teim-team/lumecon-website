@@ -2,5 +2,5 @@
 Contact: mailto:contact@lumecon.ai
 Preferred-Languages: en
 Canonical: https://lumecon.ai/.well-known/security.txt
-Policy: https://github.com/elijahsamsonmoreno-lang/lumecon/blob/main/SECURITY.md
+Policy: https://github.com/teim-team/lumecon-website/blob/main/SECURITY.md
 Expires: 2027-05-14T00:00:00.000Z

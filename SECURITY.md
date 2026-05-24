@@ -16,10 +16,10 @@ When reporting, please include:
 In scope:
 - `lumecon.ai` and any subdomain that resolves to Lumecon-operated infrastructure.
 - The three platform domains: `localeconomicimpact.com`, `tribaleconomicimpact.com`, `globaleconomicimpact.com`.
-- The marketing-page Cedar assistant (pattern-matched, no upstream call).
+- The marketing-page Cedar assistant (local keyword classifier on the static deploy; an optional backend API path exists behind `PUBLIC_API_URL`).
 
 Out of scope:
-- Findings on third-party services we link to (LinkedIn, ipapi.co geolocation, font CDNs).
+- Findings on third-party services we link to (LinkedIn, font CDNs).
 - Brute-force attacks, denial-of-service tests, social engineering.
 - Reports about missing security headers without an exploitable consequence.
 

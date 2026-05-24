@@ -30,11 +30,8 @@ const chips = CHIP_IDS
   aria-controls="cedarFabPanel"
   title="Ask Cedar"
 >
-  <span class="cedar-fab__icon cedar-fab__icon--tree" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter">
-      <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/>
-      <line x1="12" y1="20" x2="12" y2="22" stroke-linecap="butt" stroke-width="2"/>
-    </svg>
+  <span class="cedar-fab__icon cedar-fab__icon--mark" aria-hidden="true">
+    <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="20" height="20" />
   </span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -64,18 +61,16 @@ const chips = CHIP_IDS
     <div class="cedar-chat__transcript" data-cedar-transcript role="log" aria-live="polite" aria-label="Cedar conversation">
       <div class="cedar-msg cedar-msg--bot">
         <span class="cedar-msg__avatar" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-            <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/>
-          </svg>
+          <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="30" height="30" />
         </span>
         <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
-          <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
-          <div class="cedar-quickreply" data-cedar-chips>
-            {chips.slice(0, 5).map((intent) => (
-              <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
-            ))}
-          </div>
+          <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.</p>
         </div>
+      </div>
+      <div class="cedar-quickreply" data-cedar-chips>
+        {chips.slice(0, 5).map((intent) => (
+          <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+        ))}
       </div>
     </div>
     <form class="cedar-chat__form" data-cedar-form autocomplete="off">
@@ -181,60 +176,72 @@ const chips = CHIP_IDS
     z-index: 80;
     display: inline-flex;
     align-items: center;
-    gap: .55rem;
-    padding: .7rem 1.05rem .7rem .85rem;
-    background: var(--cedar);
+    gap: .5rem;
+    padding: 0;
+    background: transparent;
     color: var(--white);
-    border-radius: 999px;
-    text-decoration: none;
+    border: 0;
+    cursor: pointer;
     font-family: var(--font-sans);
     font-size: .88rem;
     font-weight: 600;
     letter-spacing: -.005em;
-    box-shadow:
-      0 4px 14px rgba(14, 88, 58, .35),
-      0 1px 3px rgba(10, 15, 38, .12);
-    transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
-    cursor: pointer;
-    border: 0;
-  }
-  .cedar-fab:hover {
-    background: var(--green-deep);
-    transform: translateY(-2px);
-    box-shadow:
-      0 8px 22px rgba(14, 88, 58, .42),
-      0 1px 3px rgba(10, 15, 38, .15);
   }
   .cedar-fab:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline-offset: 4px;
+    border-radius: 999px;
   }
   .cedar-fab__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, .14);
     flex-shrink: 0;
   }
-  .cedar-fab__icon svg { display: block; }
+  .cedar-fab__icon svg,
+  .cedar-fab__icon img { display: block; }
 
-  /* Open / closed states swap which icon + label is visible so the
-     same FAB does double duty as "Ask Cedar" and "Close". */
+  /* Closed state = the bare logo mark, floating. No disc, no ring; a
+     soft drop-shadow lifts the line-art off the page, and a gentle
+     bob makes it feel alive. */
+  .cedar-fab__icon--mark {
+    width: 52px;
+    height: 52px;
+    animation: cedar-fab-float 4.2s ease-in-out infinite;
+    filter: drop-shadow(0 6px 10px rgba(10, 15, 38, .22)) drop-shadow(0 1px 2px rgba(10, 15, 38, .16));
+  }
+  .cedar-fab__icon--mark img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    transition: transform .18s var(--ease);
+  }
+  .cedar-fab:hover .cedar-fab__icon--mark img { transform: scale(1.06); }
+  @keyframes cedar-fab-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cedar-fab__icon--mark { animation: none; }
+  }
+
+  /* The "Ask Cedar" label is dropped — the floating mark is the cue. */
   .cedar-fab__icon--close,
+  .cedar-fab__label--ask,
   .cedar-fab__label--close { display: none; }
-  body.cedar-popped .cedar-fab__icon--tree,
-  body.cedar-popped .cedar-fab__label--ask { display: none; }
+  .cedar-fab__icon--close { width: 22px; height: 22px; }
+
+  /* Open state = a clear navy "Close" pill (the mark steps aside). */
+  body.cedar-popped .cedar-fab {
+    background: var(--navy);
+    padding: .7rem 1.05rem;
+    border-radius: 999px;
+    box-shadow: 0 6px 16px rgba(10, 15, 38, .3);
+  }
+  body.cedar-popped .cedar-fab:hover { background: var(--navy2); }
+  body.cedar-popped .cedar-fab__icon--mark { display: none; }
   body.cedar-popped .cedar-fab__icon--close { display: inline-flex; }
   body.cedar-popped .cedar-fab__label--close { display: inline; }
-
-  /* When the FAB pops the panel, kill the ambient pulse — the panel
-     is now the focus, not the button. */
-  body.cedar-popped .cedar-fab::before { animation: none; opacity: 0; }
-  body.cedar-popped .cedar-fab { background: var(--navy); }
-  body.cedar-popped .cedar-fab:hover { background: var(--navy2); box-shadow: 0 6px 16px rgba(10, 15, 38, .3); }
 
   /* ---------- The self-contained chat panel ---------- */
   .cedar-fab-panel {
@@ -270,31 +277,9 @@ const chips = CHIP_IDS
     .cedar-fab-panel { animation: none; }
   }
 
-  /* Subtle ambient pulse so the FAB feels alive but doesn't beg. */
-  .cedar-fab::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 999px;
-    border: 1.5px solid var(--cedar-light);
-    opacity: 0;
-    animation: cedar-fab-pulse 3.6s ease-in-out infinite;
-    pointer-events: none;
-  }
-  @keyframes cedar-fab-pulse {
-    0%, 100% { transform: scale(1);    opacity: 0;   }
-    50%      { transform: scale(1.07); opacity: .35; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cedar-fab::before { animation: none; }
-  }
-
-  /* Mobile: collapse to icon-only so the FAB doesn't dominate the
-     bottom of small screens. The label still shows on hover/focus. */
+  /* Mobile: cap the panel so it doesn't fill the screen edge to edge
+     on a phone. The closed FAB is already just the floating mark. */
   @media (max-width: 600px) {
-    .cedar-fab { padding: .7rem; }
-    .cedar-fab__label { display: none; }
-    .cedar-fab__icon { background: transparent; }
     /* Cap the panel so it doesn't fill the screen edge to edge on a
        phone. */
     .cedar-fab-panel {
