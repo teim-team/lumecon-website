@@ -661,29 +661,29 @@
   /* Sheet A: tilted -6° outer, starts upper-left (centre ~ -24,-20).
      Counter-rotates +6° as it migrates to (14, 0). */
   @keyframes hf-in-merge-a {
-    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1) rotate(0deg); }
-    22%       { opacity: 1; transform: translate(19px, 10px)  scale(2) rotate(3deg); }
-    30%       { opacity: 1; transform: translate(38px, 20px)  scale(3) rotate(6deg); }
-    37%, 95%  { opacity: 0; transform: translate(38px, 20px)  scale(3) rotate(6deg); }
-    100%      { opacity: 0; transform: translate(0, 0)        scale(1) rotate(0deg); }
+    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1)    rotate(0deg); }
+    22%       { opacity: 1; transform: translate(19px, 10px)  scale(1.25) rotate(3deg); }
+    30%       { opacity: 1; transform: translate(38px, 20px)  scale(1.5)  rotate(6deg); }
+    37%, 95%  { opacity: 0; transform: translate(38px, 20px)  scale(1.5)  rotate(6deg); }
+    100%      { opacity: 0; transform: translate(0, 0)        scale(1)    rotate(0deg); }
   }
   /* Sheet B: tilted +4° outer, starts mid-left (centre ~ -27, -2).
      Counter-rotates -4° as it migrates to (14, 0). */
   @keyframes hf-in-merge-b {
-    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1) rotate(0deg); }
-    22%       { opacity: 1; transform: translate(20px, 1px)   scale(2) rotate(-2deg); }
-    30%       { opacity: 1; transform: translate(41px, 2px)   scale(3) rotate(-4deg); }
-    37%, 95%  { opacity: 0; transform: translate(41px, 2px)   scale(3) rotate(-4deg); }
-    100%      { opacity: 0; transform: translate(0, 0)        scale(1) rotate(0deg); }
+    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1)    rotate(0deg); }
+    22%       { opacity: 1; transform: translate(20px, 1px)   scale(1.25) rotate(-2deg); }
+    30%       { opacity: 1; transform: translate(41px, 2px)   scale(1.5)  rotate(-4deg); }
+    37%, 95%  { opacity: 0; transform: translate(41px, 2px)   scale(1.5)  rotate(-4deg); }
+    100%      { opacity: 0; transform: translate(0, 0)        scale(1)    rotate(0deg); }
   }
   /* Sheet C: tilted -3° outer, starts lower-left (centre ~ -26, 18).
      Counter-rotates +3° as it migrates to (14, 0). */
   @keyframes hf-in-merge-c {
-    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1) rotate(0deg); }
-    22%       { opacity: 1; transform: translate(20px, -9px)  scale(2) rotate(1deg); }
-    30%       { opacity: 1; transform: translate(40px, -18px) scale(3) rotate(3deg); }
-    37%, 95%  { opacity: 0; transform: translate(40px, -18px) scale(3) rotate(3deg); }
-    100%      { opacity: 0; transform: translate(0, 0)        scale(1) rotate(0deg); }
+    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1)    rotate(0deg); }
+    22%       { opacity: 1; transform: translate(20px, -9px)  scale(1.25) rotate(1deg); }
+    30%       { opacity: 1; transform: translate(40px, -18px) scale(1.5)  rotate(3deg); }
+    37%, 95%  { opacity: 0; transform: translate(40px, -18px) scale(1.5)  rotate(3deg); }
+    100%      { opacity: 0; transform: translate(0, 0)        scale(1)    rotate(0deg); }
   }
 
   /* Output document: fades in DURING the sheets' final approach
@@ -692,12 +692,14 @@
      of the cycle. */
   .hf-out {
     opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
     animation: hf-out-show 8s ease-in-out infinite;
   }
   @keyframes hf-out-show {
-    0%, 30%   { opacity: 0; }
-    37%, 82%  { opacity: 1; }
-    92%, 100% { opacity: 0; }
+    0%, 28%   { opacity: 0; transform: scale(.9); }
+    40%, 82%  { opacity: 1; transform: scale(1); }
+    92%, 100% { opacity: 0; transform: scale(.97); }
   }
   /* Six output rows materialize sequentially after the document is
      visible, sweeping top to bottom. Each row's start time is
@@ -1200,8 +1202,7 @@
   @keyframes hf-report-main {
     0%, 60%   { opacity: 1; transform: scale(1); }
     64%       { opacity: .35; transform: scale(.96); }
-    67%, 94%  { opacity: 0; transform: scale(.92); }
-    97%       { opacity: 1; transform: scale(1); }
+    67%, 91%  { opacity: 0; transform: scale(.92); }
     100%      { opacity: 1; transform: scale(1); }
   }
 
@@ -1250,11 +1251,9 @@
     64%       { opacity: .5;  transform: translate(0,  6px) scale(3); }
     67%       { opacity: 1;   transform: translate(0,  6px) scale(3); }
     72%       { opacity: 1;   transform: translate(0,  4px) scale(2); }
-    77%, 82%  { opacity: 1;   transform: translate(0,  0)   scale(1)   rotate(0deg); }
-    86%       { opacity: 1;   transform: translate(5px, -3px)  scale(1)   rotate(-6deg); }
-    90%       { opacity: 1;   transform: translate(12px, 1px)  scale(.96) rotate(4deg); }
-    94%       { opacity: 1;   transform: translate(20px, -5px) scale(.88) rotate(-4deg); }
-    96%       { opacity: 0;   transform: translate(28px, -10px) scale(.78) rotate(2deg); }
+    77%, 83%  { opacity: 1;   transform: translate(0,  0)     scale(1)   rotate(0deg); }
+    90%       { opacity: 1;   transform: translate(15px, -7px)  scale(.94) rotate(-5deg); }
+    96%       { opacity: 0;   transform: translate(30px, -13px) scale(.8)  rotate(-8deg); }
     100%      { opacity: 0;   transform: translate(0,  6px) scale(3); }
   }
 
@@ -1265,11 +1264,9 @@
     64%       { opacity: .5;  transform: translate(0, -5px) scale(3); }
     67%       { opacity: 1;   transform: translate(0, -5px) scale(3); }
     72%       { opacity: 1;   transform: translate(0, -3px) scale(2); }
-    77%, 82%  { opacity: 1;   transform: translate(0,  0)   scale(1)   rotate(0deg); }
-    86%       { opacity: 1;   transform: translate(5px, -2px) scale(1)   rotate(3deg); }
-    90%       { opacity: 1;   transform: translate(12px, 2px) scale(.96) rotate(-3deg); }
-    94%       { opacity: 1;   transform: translate(20px, -1px) scale(.88) rotate(2deg); }
-    96%       { opacity: 0;   transform: translate(28px, 1px)  scale(.78) rotate(-2deg); }
+    77%, 83%  { opacity: 1;   transform: translate(0,  0)    scale(1)   rotate(0deg); }
+    90%       { opacity: 1;   transform: translate(15px, 1px)  scale(.94) rotate(3deg); }
+    96%       { opacity: 0;   transform: translate(30px, 2px)  scale(.8)  rotate(5deg); }
     100%      { opacity: 0;   transform: translate(0, -5px) scale(3); }
   }
 
@@ -1280,11 +1277,9 @@
     64%       { opacity: .5;  transform: translate(0, -16px) scale(3); }
     67%       { opacity: 1;   transform: translate(0, -16px) scale(3); }
     72%       { opacity: 1;   transform: translate(0, -10px) scale(2); }
-    77%, 82%  { opacity: 1;   transform: translate(0,  0)    scale(1)   rotate(0deg); }
-    86%       { opacity: 1;   transform: translate(5px, 4px)  scale(1)   rotate(5deg); }
-    90%       { opacity: 1;   transform: translate(12px, 0)   scale(.96) rotate(-4deg); }
-    94%       { opacity: 1;   transform: translate(20px, 5px) scale(.88) rotate(3deg); }
-    96%       { opacity: 0;   transform: translate(28px, 10px) scale(.78) rotate(-2deg); }
+    77%, 83%  { opacity: 1;   transform: translate(0,  0)     scale(1)   rotate(0deg); }
+    90%       { opacity: 1;   transform: translate(15px, 7px)  scale(.94) rotate(6deg); }
+    96%       { opacity: 0;   transform: translate(30px, 13px) scale(.8)  rotate(9deg); }
     100%      { opacity: 0;   transform: translate(0, -16px) scale(3); }
   }
 
