@@ -185,7 +185,7 @@ const NON_TOPIC_INTENTS = new Set([
    it on the same root is a no-op — guarded by data-cedar-booted. */
 
 const BOTAVATAR_SVG =
-  '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/></svg>';
+  '<img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="18" height="18" />';
 
 function appendMessage(
   transcript: HTMLElement,
@@ -305,6 +305,19 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     collapseChips();
     void sendMessage(intent.chip, intent.chip);
   });
+
+  // "More suggestions": reveal the held-back starter chips, then retire
+  // the link. Initial turn shows a short list; the rest are one tap away.
+  const moreBtn = root.querySelector<HTMLButtonElement>('[data-cedar-more]');
+  if (moreBtn) {
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      root.querySelectorAll<HTMLElement>('.cedar-chip--extra').forEach((el) => {
+        el.hidden = false;
+      });
+      moreBtn.hidden = true;
+    });
+  }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
