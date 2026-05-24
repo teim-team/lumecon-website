@@ -306,19 +306,6 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     void sendMessage(intent.chip, intent.chip);
   });
 
-  // "More suggestions": reveal the held-back starter chips, then retire
-  // the link. Initial turn shows a short list; the rest are one tap away.
-  const moreBtn = root.querySelector<HTMLButtonElement>('[data-cedar-more]');
-  if (moreBtn) {
-    moreBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      root.querySelectorAll<HTMLElement>('.cedar-chip--extra').forEach((el) => {
-        el.hidden = false;
-      });
-      moreBtn.hidden = true;
-    });
-  }
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const q = (input.value || '').trim();
