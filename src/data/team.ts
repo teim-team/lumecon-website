@@ -374,7 +374,8 @@ export const WORKING_AREAS: WorkingArea[] = [
     name: 'Input/Output Engine',
     description: "This area focuses on the multiplier system and analytical engine that translate source data into economic impact estimates. The goal is to connect user inputs, regional data, and economic assumptions into a clear, auditable modeling workflow.",
     leadSlug: 'isabella-agnes',
-    contributorSlugs: ['francesca-agnes', 'laurel-wheeler', 'elijah-moreno', 'vod-vilfort'],
+    advisorySlugs: ['vod-vilfort'],
+    contributorSlugs: ['francesca-agnes', 'laurel-wheeler', 'elijah-moreno'],
   },
   {
     slug: 'cedar-ai',
