@@ -64,19 +64,16 @@ const chips = CHIP_IDS
     <div class="cedar-chat__transcript" data-cedar-transcript role="log" aria-live="polite" aria-label="Cedar conversation">
       <div class="cedar-msg cedar-msg--bot">
         <span class="cedar-msg__avatar" aria-hidden="true">
-          <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="18" height="18" />
+          <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="30" height="30" />
         </span>
         <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
-          <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
-          <div class="cedar-quickreply" data-cedar-chips>
-            {chips.slice(0, 8).map((intent, i) => (
-              <button class:list={['cedar-chip', { 'cedar-chip--extra': i >= 3 }]} type="button" data-intent={intent.id} hidden={i >= 3}>{intent.chip}</button>
-            ))}
-            {chips.length > 3 && (
-              <button class="cedar-chip-more" type="button" data-cedar-more>More suggestions</button>
-            )}
-          </div>
+          <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.</p>
         </div>
+      </div>
+      <div class="cedar-quickreply" data-cedar-chips>
+        {chips.slice(0, 5).map((intent) => (
+          <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+        ))}
       </div>
     </div>
     <form class="cedar-chat__form" data-cedar-form autocomplete="off">
@@ -224,8 +221,15 @@ const chips = CHIP_IDS
   .cedar-fab__icon img { display: block; }
   /* The logo mark sits on a white disc so the brand colours read on
      the navy button; the close X keeps the translucent disc. */
-  .cedar-fab__icon--mark { background: var(--white); border: 1.5px solid var(--gold); }
-  .cedar-fab__icon--mark img { width: 22px; height: 22px; object-fit: contain; }
+  .cedar-fab__icon--mark { background: var(--white); transition: box-shadow .2s var(--ease); }
+  .cedar-fab__icon--mark img { width: 24px; height: 24px; object-fit: contain; }
+  /* Gold glow on the mark when the FAB is pressed / hovered — reads as
+     the icon lighting up, with no standing gold ring in the chat. */
+  .cedar-fab:hover .cedar-fab__icon--mark,
+  .cedar-fab:focus-visible .cedar-fab__icon--mark,
+  .cedar-fab:active .cedar-fab__icon--mark {
+    box-shadow: 0 0 0 2px var(--gold), 0 0 12px 2px rgba(240, 169, 26, .65);
+  }
 
   /* Open / closed states swap which icon + label is visible so the
      same FAB does double duty as "Ask Cedar" and "Close". */
