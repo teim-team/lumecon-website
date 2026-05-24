@@ -63,6 +63,7 @@ export const INTENTS: CedarIntent[] = [
       'tribal economic impact', 'tribal platform', 'tribal government', 'tribal nation', 'native nation', 'tribal enterprise', 'tribal gaming', 'tribes use this', 'is this made for native', 'help tribal', 'help tribes', 'help native', 'measure tribal', 'tribal grant', 'why do tribes need this', 'tribal',
     ],
     answer: "The Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises, and it handles the geographies the existing tools struggle with (reservations, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands), respects tribal data sovereignty, and produces studies you can hand to a council, a federal funder, or a casino regulator. The resulting studies cover jobs, wages, supplier activity, and the regional ripple effects. Are you with a tribal nation or a tribal enterprise?",
+    expanded: "Going deeper for tribal nations: the platform treats reservation and off-reservation trust land, Alaska Native Regional and Village Corporations, and Native Hawaiian Home Lands as first-class geographies, not edge cases the legacy tools force into county approximations. Data sovereignty is built in — a single-tenant workspace, you control what's uploaded and shared, nothing trains a shared model, and cross-study learning runs only on anonymized aggregates. Typical outputs are gaming and enterprise impact studies for a council or a federal funder (NIGC, BIA, Treasury), grant narratives, and annual reports showing jobs, wages, and the dollars kept in the regional economy.",
   },
   {
     id: 'local_platform',
@@ -71,6 +72,7 @@ export const INTENTS: CedarIntent[] = [
       'local economic impact', 'local platform', 'cities use', 'counties use', 'city use', 'county use', 'local government', 'municipal', 'state agency', 'state agencies', 'public agency', 'public agencies', 'measure a project', "project's impact", 'project impact', 'local development', 'public investment', "i'm not a tribal", 'non-tribal', 'non tribal',
     ],
     answer: "Definitely. Cities, counties, state agencies, port and transit authorities, school districts, and special districts all use Lumecon for the same kinds of questions: what does this project, program, or bond actually do for the local economy, and how do we defend that number to a council, a board, or the public? Tell me what level you're at (city, county, state agency) and I can be more specific.",
+    expanded: "Across local government: cities and counties use it for capital projects, bonds, TIF and abatement decisions, business attraction, and annual impact reports; state agencies (DOT, commerce, workforce, treasury, health) use it for capital programs, grant scoring, and budget defense; ports, transit, and special districts use it for capital plans and rate cases. It all runs on the same engine and the same public data, so a number you cite to a council holds up the same way in a grant application or a rating-agency meeting.",
   },
   {
     id: 'reports_outputs',
@@ -79,6 +81,7 @@ export const INTENTS: CedarIntent[] = [
       'what reports', 'what report', 'pdf report', 'final output', 'output look like', 'create dashboards', 'dashboard', 'export the results', 'export', 'presentations', 'public meetings', 'board materials', 'economic impact report', 'deliverables', 'what do you produce', 'what does it produce', 'report do you',
     ],
     answer: "Every study produces a full report PDF, an editable executive summary, the underlying tables and charts, and a slide-ready deck. The same study reshapes for the audience you're talking to: funders see the grant-ready jobs-and-investment narrative, councils see the local benefit framing, boards see the strategic context, public meetings see the plain-language version. The numbers are identical; only the framing changes. Who's the audience you need to win over?",
+    expanded: "On the deliverables: every study exports a full report PDF, an editable executive summary, the underlying tables and charts as CSV, and a slide-ready deck. The numbers are identical across versions — only the framing shifts: funders see the jobs-and-investment narrative, councils see local benefit, boards see strategic context, public meetings get the plain-language version. Every figure carries its assumption ledger, so when someone challenges a number you trace it to the multiplier, base year, and data vintage behind it instead of defending a black box.",
   },
   {
     id: 'data_inputs',
@@ -87,6 +90,7 @@ export const INTENTS: CedarIntent[] = [
       'what data', 'where does the data come', 'users upload data', 'upload my data', 'bring my own data', 'bring your own data', 'what inputs', 'what input', 'government data', 'public data', 'is the data credible', 'how do you calculate', 'what data sources', 'data sources', 'real economic data',
     ],
     answer: "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in alternative data where it helps (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own proprietary signals built in-house: regional multipliers refined across thousands of past studies, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you. What does your data look like right now?",
+    expanded: "More on data: you bring administrative records — budgets, payroll, program rosters, vendor and contract spend — in whatever shape they arrive (spreadsheets, PDFs, exports). Cedar matches them to NAICS codes, geographies, and time periods, flags anything ambiguous for you to confirm, and joins them to the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, and County Business Patterns, plus higher-frequency alternative signals where they sharpen the estimate. Messy and scattered-across-departments is the normal starting point, not a blocker.",
   },
   {
     id: 'multipliers',
@@ -104,6 +108,7 @@ export const INTENTS: CedarIntent[] = [
       'is lumecon software', 'is this consulting', 'are you a saas', 'is this saas', 'saas company', 'sell reports', 'platform or a service', 'platform or service', 'hire you to do the analysis', 'is this self-service', 'is this self service', 'need an economist', 'turbotax for impact', 'is this automated', 'software or service',
     ],
     answer: "Lumecon is software, not consulting. The whole bet is that economic impact analysis should not be a months-long consulting engagement and should instead be something your team can run any time you need it. Cedar handles the data wrangling and the modeling while your team makes the judgment calls, and the Lumecon team will walk you through complex first-time studies or unusual data situations even though the steady state is your team using the platform without us in the loop. Does your team have an economist on staff?",
+    expanded: "On software vs. consulting: the steady state is your team running studies in the platform whenever you need one — no per-study fee, no waiting on an outside firm. You don't need an economist on staff; Cedar picks defaults matched to your geography and project type and explains each one in plain English for your sign-off. The Lumecon team is there for a first study, an unusual data situation, or a methodology-sensitive project, but the capability lives with you, not on a consultant's calendar.",
   },
   {
     id: 'pricing',
@@ -121,6 +126,7 @@ export const INTENTS: CedarIntent[] = [
       'schedule a demo', 'want a demo', 'see a demo', 'see the demo', 'get a demo', 'demo of', 'a demo', 'see the product', 'see the platform', 'show me the platform', 'show me the product', 'is there a demo', 'can i try', 'try the platform', 'try lumecon', 'accepting pilots', 'pilot program', 'pilot partner', 'walkthrough', 'book a call', 'set up a call',
     ],
     answer: "Happy to set one up. The easiest path is the contact form on this site or contact@lumecon.ai with three things included up front: who you are, the kind of impact you want to measure, and any timeline you are working with. The demo runs in your geography against a study scenario relevant to your work, so the two minutes spent giving us that context up front pays off quickly. What kind of impact are you hoping to measure?",
+    expanded: "What a demo looks like: tell us your geography and the kind of impact you want to show, and we run a study in your region against a relevant scenario — walking through how Cedar harmonizes inputs, surfaces assumptions, and produces the report. It's concrete, not a slideshow; you see your own use case. Fastest path is the contact form or contact@lumecon.ai with who you are, what you want to measure, and any timeline. If there's a grant or council deadline, say so and we'll move to fit it.",
   },
   {
     id: 'contact',
@@ -227,6 +233,7 @@ export const INTENTS: CedarIntent[] = [
       'grant application', 'grant applications', 'federal grant', 'eda grant', 'hud grant', 'dot grant', 'epa grant', 'usda grant', 'cdbg', 'bil', 'bipartisan infrastructure law', 'rural development grant', 'broadband grant', 'workforce grant', 'arc grant', 'narrative for a grant', 'grant narrative', 'job estimates for a grant', 'private investment estimate', 'show economic benefit',
     ],
     answer: "Grant applications are one of the most common uses of Lumecon. Most federal and state grant programs (EDA, HUD CDBG, DOT BUILD, USDA Rural Development, EPA, NTIA broadband, and ARC) want applicants to estimate jobs, private investment, or regional benefit with a credible source behind the numbers. Lumecon produces the jobs, labor income, and tax-impact figures with the methodology attached, so the same study drops into the grant narrative, the council packet, and the board memo without any rework. Which grant program are you aiming at?",
+    expanded: "More on grants: most programs want a credible, sourced estimate of jobs, private investment, or regional benefit, and Lumecon produces exactly that with the methodology attached so a reviewer can trace every figure. EDA wants jobs and leveraged private investment; HUD CDBG wants low-to-moderate-income benefit; DOT BUILD/RAISE wants benefit-cost framing; USDA Rural Development and NTIA broadband want jobs and output; ARC wants distress-area impact. The same study exports to the narrative, the budget justification, and the council packet, so you build the numbers once instead of rebuilding them per reviewer.",
   },
   {
     id: 'time_to_study',
@@ -235,6 +242,7 @@ export const INTENTS: CedarIntent[] = [
       'how long does it take', 'how long to produce', 'how long is a study', 'turnaround', 'turn around time', 'how fast can you', 'study timeline', 'project timeline', 'lead time', 'how quickly', 'in time for our board', 'before our deadline', 'before grant deadline',
     ],
     answer: "A standard study takes minutes once the data is in. The legacy path takes months because the analyst is harmonizing data by hand and re-running scenarios from scratch every time, while Cedar does the harmonization in minutes so the slow part becomes the judgment calls (which assumptions to surface, which scenario to model) rather than the spreadsheet work. Are you working against a deadline?",
+    expanded: "Why it's minutes, not months: the legacy timeline is dominated by an analyst hand-cleaning data and re-keying it into a tool whose workflow predates the internet, then re-running from scratch for each scenario. Cedar harmonizes and pre-fits the model the moment your data lands, so the only human time left is judgment — which assumptions to surface, which scenario to model, what to override. The first defensible study comes back the same session the data's in; revisions are a re-run, not a re-engagement. Against a council vote or grant deadline, that's the difference between making it and missing it.",
   },
   {
     id: 'no_economist',
@@ -251,6 +259,7 @@ export const INTENTS: CedarIntent[] = [
       'state department of', 'state dot', 'state doc', 'state commerce', 'state treasury', 'state agency use case', 'state agency uses', 'department of commerce', 'department of transportation', 'state legislature', 'state budget office', 'state workforce board', 'state health department', 'how do states use',
     ],
     answer: "State DOTs, departments of commerce, workforce boards, treasury offices, and health departments use Lumecon to justify capital programs, score grant rounds, defend budget asks at the legislature, and produce annual impact reports. Typical artifacts: a defensible jobs / labor income / GDP figure for a capital plan, a multi-year impact narrative for a workforce program, a regional benefit comparison across counties for a competitive grant. Same engine, different reports. Which agency are you with?",
+    expanded: "By agency: a state DOT models capital-program and corridor impact for the legislature and federal applications; a department of commerce scores grant rounds and incentive deals on equal footing; a workforce board shows the multi-year return on training programs; a treasury or budget office defends appropriations with jobs and GDP figures; a health department sizes the economic footprint of facilities and programs. Each gets the same direct, indirect, induced, and total figures with the assumption ledger attached, reshaped into the artifact that office actually presents.",
   },
   {
     id: 'county_city_use',
@@ -259,6 +268,7 @@ export const INTENTS: CedarIntent[] = [
       'city manager', 'city use case', 'city uses', 'county use case', 'county uses', 'edo', 'economic development director', 'economic development office', 'chamber of commerce', 'mayor', 'council member', 'school district', 'school bond', 'special district', 'how do cities use', 'how do counties use',
     ],
     answer: "Cities and counties use Lumecon for capital project justification (fire station, library, transit line, parks), TIF and tax-abatement evaluation, school-district bond communication, business-attraction packages, and annual community impact reports. EDOs especially use it to compare projects on equal footing and to put concrete numbers behind a recruitment pitch or an incentive ask, the kind of analysis that used to require an outside consultant per project. Are you on the city or county side?",
+    expanded: "In practice for cities and counties: the common studies are capital-project justification (a fire station, library, transit line, or parks bond), TIF and tax-abatement evaluation, business-attraction and incentive analysis, and the annual community impact report. Economic development offices use it to compare projects on equal footing and to put a defensible number behind a recruitment pitch. The output reshapes for the audience — council resolution, voter pamphlet, rating-agency deck — off one run, so the analysis that used to mean a consultant per project now lives in your workspace.",
   },
   {
     id: 'foundation_use',
