@@ -7,15 +7,16 @@ import { test, expect } from '@playwright/test';
  * covered by Lighthouse CI, not here.
  */
 
-test('home page loads and renders the hero map', async ({ page }) => {
+test('home page loads and renders the hero workflow', async ({ page }) => {
   const errs: string[] = [];
   page.on('pageerror', e => errs.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
 
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
-  await expect(page.locator('#heroMap')).toBeVisible();
-  await expect(page.locator('.hero-state').first()).toBeAttached();
+  // The homepage hero is the workflow diagram; the interactive map now
+  // lives on /map (exercised by the tests below).
+  await expect(page.locator('.hero-flow')).toBeVisible();
 
   // Filter out known harmless console errors (cert + meta-CSP warnings).
   const real = errs.filter(e =>
@@ -26,8 +27,14 @@ test('home page loads and renders the hero map', async ({ page }) => {
   expect(real).toEqual([]);
 });
 
+test('map page renders the interactive hero map', async ({ page }) => {
+  await page.goto('/map', { waitUntil: 'networkidle' });
+  await expect(page.locator('#heroMap')).toBeVisible();
+  await expect(page.locator('.hero-state').first()).toBeAttached();
+});
+
 test('auto-cycle fires a study within 10s', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.goto('/map', { waitUntil: 'networkidle' });
   // The header region gets populated with the full chip when a scene
   // starts running. Levels: STATE / COUNTY / RESERVATION / ANCSA
   // REGION / NHO. (URL hash is no longer used — /demo/<slug> pages
@@ -37,7 +44,7 @@ test('auto-cycle fires a study within 10s', async ({ page }) => {
 });
 
 test('"New study" button cycles through levels', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.goto('/map', { waitUntil: 'networkidle' });
   await page.waitForTimeout(1500);
   const observedLevels: string[] = [];
   for (let i = 0; i < 3; i++) {
@@ -75,12 +82,12 @@ test('demo page renders with real figures', async ({ page }) => {
 
 test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({ request, page }) => {
   // Grep the raw HTML response to confirm the polygons aren't inlined.
-  const r = await request.get('/');
+  const r = await request.get('/map');
   const html = await r.text();
   const inlined = (html.match(/class="hero-aiannh/g) || []).length;
   expect(inlined).toBe(0);
   // Then verify they populate at runtime.
-  await page.goto('/');
+  await page.goto('/map');
   await page.waitForFunction(
     () => (document.querySelectorAll('.hero-aiannh').length || 0) > 100,
     null,
@@ -89,7 +96,7 @@ test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async (
 });
 
 test('keyboard shortcut S triggers a new study', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.goto('/map', { waitUntil: 'networkidle' });
   await page.waitForTimeout(2000);
   const before = await page.locator('#workspaceRegion').textContent();
   await page.keyboard.press('s');
