@@ -49,7 +49,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
   title="Pricing | Lumecon"
   description={description}
   canonical="https://lumecon.ai/pricing"
-  keywords="Lumecon pricing, Tribal Economic Impact pricing, Local Economic Impact pricing, Global Economic Impact pricing, economic impact analysis pricing, IMPLAN alternative pricing, RIMS II alternative pricing, REMI alternative pricing, Cedar AI pricing, annual subscription"
+  keywords="Lumecon pricing, Tribal Economic Impact pricing, Local Economic Impact pricing, Global Economic Impact pricing, economic impact analysis pricing, alternative data, IMPLAN alternative pricing, RIMS II alternative pricing, REMI alternative pricing, Cedar AI pricing, annual subscription"
   ogTitle="Lumecon pricing: pick your platform, then your tier"
   ogDescription={description}
 >
@@ -140,7 +140,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                     ? <span class="pricing-tier-card__tag">Coming soon</span>
                     : t.featured
                       ? <span class="pricing-tier-card__tag">Most complete</span>
-                      : <span class="pricing-tier-card__tag">v1</span>}
+                      : null}
                 </header>
 
                 <div class="pricing-tier-card__price-row">
@@ -149,7 +149,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                         <span class="pricing-tier-card__price">{t.price}</span>
                         <span class="pricing-tier-card__period">{t.period}</span>
                       </>
-                    : <span class="pricing-tier-card__price-tbd">Pricing TBD</span>}
+                    : <span class="pricing-tier-card__price-tbd">Pricing on request</span>}
                 </div>
 
                 <p class="pricing-tier-card__tagline">{t.tagline}</p>
