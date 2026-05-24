@@ -8,8 +8,10 @@ Pages at [lumecon.ai](https://lumecon.ai).
 The site explains the three Lumecon platforms (Local, Tribal, and Global
 Economic Impact), demonstrates the workflow through an interactive US map,
 introduces Cedar (the AI assistant), and carries the pricing, about/team,
-and join-the-team pages. Cedar's marketing-page chat is keyword-classified
-and self-contained — it does not call any upstream model provider.
+and join-the-team pages. On the static deploy (no backend configured),
+Cedar's chat is answered entirely by a local keyword classifier and calls
+no upstream provider; when `PUBLIC_API_URL` is set it calls the Cedar
+backend and falls back to the local classifier on any error.
 
 ## Tech stack
 
@@ -52,8 +54,12 @@ npm run dev        # local dev server at http://localhost:4321
 ```
 src/
   components/   Astro components (Hero, Nav, Footer, MapWorkspace, CedarFAB, ...)
-  pages/        One file per route (index, about, cedar, map, pricing, join, ...)
-  layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP
+  pages/        One file per route (index, about, cedar, map, pricing, join,
+                  login, signup, status, privacy, terms, 404), dynamic routes
+                  (team/[slug], demo/[slug]), and JSON endpoints
+                  (data/aiannh.json.ts, data/counties.json.ts)
+  layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
+                LegalLayout.astro — privacy/terms wrapper
   data/         Single sources of truth:
                   platforms.ts    the three product lines
                   team.ts         team + advisors + working areas
