@@ -62,7 +62,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'tribal economic impact', 'tribal platform', 'tribal government', 'tribal nation', 'native nation', 'tribal enterprise', 'tribal gaming', 'tribes use this', 'is this made for native', 'help tribal', 'help tribes', 'help native', 'measure tribal', 'tribal grant', 'why do tribes need this', 'tribal',
     ],
-    answer: "The Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises, and it handles the geographies the existing tools struggle with (reservations, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands), respects tribal data sovereignty, and produces studies you can hand to a council, a federal funder, or a casino regulator. The resulting studies cover jobs, wages, supplier activity, and the regional ripple effects.",
+    answer: "The Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises, and it handles the geographies the existing tools struggle with (reservations, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands), respects tribal data sovereignty, and produces studies you can hand to a council, a federal funder, or a casino regulator. The resulting studies cover jobs, wages, supplier activity, and the regional ripple effects. Are you with a tribal nation or a tribal enterprise?",
   },
   {
     id: 'local_platform',
@@ -432,6 +432,14 @@ export const INTENTS: CedarIntent[] = [
     answer: "Sorry this was frustrating. I may not have understood what you were looking for. Lumecon's team can give a clearer answer if you reach out through the contact form, or email contact@lumecon.ai. You can also try asking me directly about the platform, pricing, demos, economic impact reports, or who Lumecon serves.",
   },
   {
+    id: 'how_are_you',
+    chip: null,
+    triggers: [
+      'how are you', 'how are u', 'how r u', 'how are ya', 'how is it going', "how's it going", 'hows it going', 'how are things', 'how do you do', 'how is your day', 'how have you been', 'how you doing', 'how ya doing', 'are you doing well', 'you doing ok', 'hope you are well', 'hope youre well', 'how is everything',
+    ],
+    answer: "Doing well, thanks for asking! I'm Cedar, and I'm happiest helping you get to know Lumecon. Want the quick version of what it does, who it's for (tribal nations, governments, foundations), or to watch a live impact study run?",
+  },
+  {
     id: 'greeting',
     chip: null,
     triggers: [
@@ -459,12 +467,13 @@ export const OUT_OF_SCOPE_TRIGGERS = [
 // free-text input.
 export const CHIP_IDS = [
   'company_overview',
+  'tribal_platform',
   'audience',
+  'grant_applications',
+  'pricing',
   'county_city_use',
   'state_agency_use',
-  'grant_applications',
   'time_to_study',
-  'pricing',
   'demo',
   'competitors',
   'cedar_identity',

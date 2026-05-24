@@ -201,22 +201,31 @@ const chips = CHIP_IDS
   .cedar-fab__icon svg,
   .cedar-fab__icon img { display: block; }
 
-  /* Closed state = the bare logo mark, floating. No disc, no ring; a
-     soft drop-shadow lifts the line-art off the page, and a gentle
-     bob makes it feel alive. */
+  /* Closed state = the logo mark on a solid white disc so it stands
+     out on any background, lifted by a soft shadow and a gentle bob so
+     it still reads as floating. */
   .cedar-fab__icon--mark {
-    width: 52px;
-    height: 52px;
+    width: 58px;
+    height: 58px;
+    background: var(--white);
+    border-radius: 50%;
+    box-shadow: 0 8px 20px rgba(10, 15, 38, .22), 0 2px 5px rgba(10, 15, 38, .12);
     animation: cedar-fab-float 4.2s ease-in-out infinite;
-    filter: drop-shadow(0 6px 10px rgba(10, 15, 38, .22)) drop-shadow(0 1px 2px rgba(10, 15, 38, .16));
+    transition: box-shadow .2s var(--ease);
   }
   .cedar-fab__icon--mark img {
-    width: 52px;
-    height: 52px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
     transition: transform .18s var(--ease);
   }
   .cedar-fab:hover .cedar-fab__icon--mark img { transform: scale(1.06); }
+  /* Gold glow on press, so the icon lights up when tapped. */
+  .cedar-fab:hover .cedar-fab__icon--mark,
+  .cedar-fab:focus-visible .cedar-fab__icon--mark,
+  .cedar-fab:active .cedar-fab__icon--mark {
+    box-shadow: 0 8px 20px rgba(10, 15, 38, .22), 0 0 0 3px var(--gold), 0 0 16px 3px rgba(240, 169, 26, .5);
+  }
   @keyframes cedar-fab-float {
     0%, 100% { transform: translateY(0); }
     50%      { transform: translateY(-6px); }
