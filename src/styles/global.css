@@ -210,6 +210,13 @@ body {
    are at least one viewport tall (dvh accounts for mobile URL bars). */
 html {
   scroll-snap-type: y proximity;
+  /* The headline highlight blocks bleed sideways (negative vw insets)
+     for an editorial look; clip the x-axis at the root so that bleed
+     can never become a horizontal scroll. `clip` (not `hidden`) avoids
+     making <html> a scroll container, so the y-axis snap above keeps
+     working. body already clips x, but the bleed was escaping at the
+     <html> level on some pages. */
+  overflow-x: clip;
   /* Reserve room for the nav at the top of every snapped section so
      snap-align: start doesn't pull the page past a static nav (or
      hide content under a fixed one). The value needs to be at least
