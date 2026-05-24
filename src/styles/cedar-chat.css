@@ -256,35 +256,6 @@
   outline-offset: 2px;
 }
 
-/* Follow-up chip row rendered inline beneath a bot bubble. Indents
-   under the avatar column so it visually aligns with the bubble it's
-   suggesting next steps for. */
-.cedar-followups {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .4rem;
-  padding: .15rem 0 .3rem calc(28px + .55rem);
-  margin: -.15rem 0 .25rem;
-  animation: cedar-followups-in .25s var(--ease, ease);
-}
-.cedar-chip--followup {
-  font-size: .78rem;
-  padding: .32rem .7rem;
-  background: var(--paper, #fbf6ec);
-  box-shadow: inset 3px 0 0 var(--cedar-light);
-}
-.cedar-chip--followup:hover:not(:disabled) {
-  background: var(--cedar);
-  color: var(--white);
-}
-@keyframes cedar-followups-in {
-  from { opacity: 0; transform: translateY(-3px); }
-  to   { opacity: 1; transform: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cedar-followups { animation: none; }
-}
-
 @media (max-width: 600px) {
   .cedar-chat { border-radius: 12px; }
   .cedar-msg { max-width: 94%; }
@@ -293,6 +264,4 @@
   .cedar-chat__input { padding: .7rem .95rem; font-size: 16px; }
   .cedar-chat__send { width: 42px; height: 42px; }
   .cedar-chip { font-size: .82rem; padding: .4rem .75rem; }
-  .cedar-followups { padding-left: calc(22px + .45rem); }
-  .cedar-chip--followup { font-size: .75rem; padding: .3rem .6rem; }
 }
