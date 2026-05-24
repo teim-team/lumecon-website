@@ -1,17 +1,13 @@
 /**
- * Team data — single source of truth for the /about page.
+ * Team data — single source of truth for the team.
  *
- * Each Person renders as a card on the About page: an initials
- * avatar, the name, the title, and a short summary above the
- * fold; the longer bio paragraphs reveal when the card is opened.
- *
- * `group` partitions the page into "Team" and "Advisors &
- * Contributors" sections. Order within each section is the order
- * listed below.
+ * The /about page names everyone in the "How we work" grid (linking
+ * to each person's page); the full bio, links, and selected work
+ * render on /team/<slug>. `group` partitions Team vs. Advisors &
+ * Contributors. Order within each section is the order listed below.
  */
 
 export type PersonGroup = 'team' | 'advisor';
-export type AvatarTint = 'teal' | 'gold' | 'green';
 
 /**
  * A selected publication shown under "Selected work" on a person's
@@ -41,22 +37,20 @@ export interface Person {
   name: string;
   /** Initials shown in the avatar circle. */
   initials: string;
-  /** Avatar background tint. Rotates across cards for visual variety. */
-  tint: AvatarTint;
   /** Page section. */
   group: PersonGroup;
   /** Role / title displayed under the name. */
   title: string;
-  /** One-sentence summary shown when the card is closed. */
+  /** Short summary used for the page meta description and Person
+   *  JSON-LD (not rendered as visible copy). */
   summary: string;
-  /** Full bio paragraphs revealed when the card is opened. */
+  /** Full bio paragraphs shown on the person's /team/<slug> page. */
   bio: string[];
-  /** Lumecon work email (firstname.lastname@lumecon.ai). Set on
-   *  team members for credibility on the closed card; advisors
-   *  don't get one displayed. */
+  /** Lumecon work email (firstname.lastname@lumecon.ai). Shown on the
+   *  person's /team/<slug> page; advisors don't get one. */
   email?: string;
   /** Public LinkedIn profile URL. Rendered as an icon link on the
-   *  person card and emitted as Person.sameAs for entity linking. */
+   *  person's /team/<slug> page and emitted as Person.sameAs. */
   linkedin?: string;
   /** Google Scholar profile URL. Rendered as an icon link and
    *  emitted as Person.sameAs alongside LinkedIn. */
@@ -79,7 +73,6 @@ export const TEAM: Person[] = [
     slug: 'elijah-moreno',
     name: 'Elijah Moreno, MPP',
     initials: 'EM',
-    tint: 'teal',
     group: 'team',
     title: 'Co-Founder & CEO',
     email: 'elijah.moreno@lumecon.ai',
@@ -113,7 +106,6 @@ export const TEAM: Person[] = [
     slug: 'michael-moreno',
     name: 'Michael Moreno',
     initials: 'MM',
-    tint: 'gold',
     group: 'team',
     title: 'Co-Founder & Founding Investor',
     email: 'michael.moreno@lumecon.ai',
@@ -127,7 +119,6 @@ export const TEAM: Person[] = [
     slug: 'kaylyn-lee',
     name: 'Kaylyn Lee',
     initials: 'KL',
-    tint: 'green',
     group: 'team',
     title: 'Platform Lead',
     email: 'kaylyn.lee@lumecon.ai',
@@ -142,7 +133,6 @@ export const TEAM: Person[] = [
     slug: 'laurel-wheeler',
     name: 'Laurel Wheeler, PhD',
     initials: 'LW',
-    tint: 'teal',
     group: 'team',
     title: 'Economics Lead',
     email: 'laurel.wheeler@lumecon.ai',
@@ -212,7 +202,6 @@ export const TEAM: Person[] = [
     slug: 'isabella-agnes',
     name: 'Isabella Agnes',
     initials: 'IA',
-    tint: 'gold',
     group: 'team',
     title: 'Input/Output Engine Lead',
     email: 'isabella.agnes@lumecon.ai',
@@ -242,7 +231,6 @@ export const TEAM: Person[] = [
     slug: 'francesca-agnes',
     name: 'Francesca Agnes',
     initials: 'FA',
-    tint: 'green',
     group: 'team',
     title: 'Cedar Lead',
     email: 'francesca.agnes@lumecon.ai',
@@ -258,7 +246,6 @@ export const TEAM: Person[] = [
     slug: 'brian-kim',
     name: 'Brian Kim',
     initials: 'BK',
-    tint: 'teal',
     group: 'advisor',
     title: 'Technical Advisor',
     summary: "Advises on software architecture, engineering systems, and scalability, and contributes on Cedar and data security. Holds a bachelor's in Economics from Dartmouth. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
@@ -272,7 +259,6 @@ export const TEAM: Person[] = [
     slug: 'havala-hanson',
     name: 'Havala Hanson, PhD',
     initials: 'HH',
-    tint: 'gold',
     group: 'advisor',
     title: 'Product, Data Security & Research Operations Advisor',
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
@@ -321,7 +307,6 @@ export const TEAM: Person[] = [
     slug: 'vod-vilfort',
     name: 'Vod Vilfort',
     initials: 'VV',
-    tint: 'green',
     group: 'advisor',
     title: 'Methodology Advisor',
     scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
