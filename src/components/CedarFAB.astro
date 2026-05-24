@@ -30,11 +30,8 @@ const chips = CHIP_IDS
   aria-controls="cedarFabPanel"
   title="Ask Cedar"
 >
-  <span class="cedar-fab__icon cedar-fab__icon--tree" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter">
-      <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/>
-      <line x1="12" y1="20" x2="12" y2="22" stroke-linecap="butt" stroke-width="2"/>
-    </svg>
+  <span class="cedar-fab__icon cedar-fab__icon--mark" aria-hidden="true">
+    <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="20" height="20" />
   </span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -54,6 +51,9 @@ const chips = CHIP_IDS
   <div class="cedar-chat">
     <header class="cedar-chat__header">
       <span class="cedar-chat__brand">
+        <span class="cedar-chat__avatar cedar-chat__avatar--header" aria-hidden="true">
+          <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="18" height="18" loading="lazy" />
+        </span>
         <span class="cedar-chat__name">Cedar</span>
       </span>
       <span class="cedar-chat__status" aria-label="Online">
@@ -64,16 +64,17 @@ const chips = CHIP_IDS
     <div class="cedar-chat__transcript" data-cedar-transcript role="log" aria-live="polite" aria-label="Cedar conversation">
       <div class="cedar-msg cedar-msg--bot">
         <span class="cedar-msg__avatar" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-            <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z" fill="currentColor"/>
-          </svg>
+          <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="18" height="18" />
         </span>
         <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
           <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or pick a question below.</p>
           <div class="cedar-quickreply" data-cedar-chips>
-            {chips.slice(0, 5).map((intent) => (
-              <button class="cedar-chip" type="button" data-intent={intent.id}>{intent.chip}</button>
+            {chips.slice(0, 8).map((intent, i) => (
+              <button class:list={['cedar-chip', { 'cedar-chip--extra': i >= 3 }]} type="button" data-intent={intent.id} hidden={i >= 3}>{intent.chip}</button>
             ))}
+            {chips.length > 3 && (
+              <button class="cedar-chip-more" type="button" data-cedar-more>More suggestions</button>
+            )}
           </div>
         </div>
       </div>
@@ -183,7 +184,7 @@ const chips = CHIP_IDS
     align-items: center;
     gap: .55rem;
     padding: .7rem 1.05rem .7rem .85rem;
-    background: var(--cedar);
+    background: var(--navy);
     color: var(--white);
     border-radius: 999px;
     text-decoration: none;
@@ -192,17 +193,17 @@ const chips = CHIP_IDS
     font-weight: 600;
     letter-spacing: -.005em;
     box-shadow:
-      0 4px 14px rgba(14, 88, 58, .35),
+      0 4px 14px rgba(10, 15, 38, .28),
       0 1px 3px rgba(10, 15, 38, .12);
     transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
     cursor: pointer;
     border: 0;
   }
   .cedar-fab:hover {
-    background: var(--green-deep);
+    background: var(--navy2);
     transform: translateY(-2px);
     box-shadow:
-      0 8px 22px rgba(14, 88, 58, .42),
+      0 8px 22px rgba(10, 15, 38, .34),
       0 1px 3px rgba(10, 15, 38, .15);
   }
   .cedar-fab:focus-visible {
@@ -219,13 +220,18 @@ const chips = CHIP_IDS
     background: rgba(255, 255, 255, .14);
     flex-shrink: 0;
   }
-  .cedar-fab__icon svg { display: block; }
+  .cedar-fab__icon svg,
+  .cedar-fab__icon img { display: block; }
+  /* The logo mark sits on a white disc so the brand colours read on
+     the navy button; the close X keeps the translucent disc. */
+  .cedar-fab__icon--mark { background: var(--white); }
+  .cedar-fab__icon--mark img { width: 20px; height: 20px; object-fit: contain; }
 
   /* Open / closed states swap which icon + label is visible so the
      same FAB does double duty as "Ask Cedar" and "Close". */
   .cedar-fab__icon--close,
   .cedar-fab__label--close { display: none; }
-  body.cedar-popped .cedar-fab__icon--tree,
+  body.cedar-popped .cedar-fab__icon--mark,
   body.cedar-popped .cedar-fab__label--ask { display: none; }
   body.cedar-popped .cedar-fab__icon--close { display: inline-flex; }
   body.cedar-popped .cedar-fab__label--close { display: inline; }
@@ -276,7 +282,7 @@ const chips = CHIP_IDS
     position: absolute;
     inset: -3px;
     border-radius: 999px;
-    border: 1.5px solid var(--cedar-light);
+    border: 1.5px solid rgba(255, 255, 255, .5);
     opacity: 0;
     animation: cedar-fab-pulse 3.6s ease-in-out infinite;
     pointer-events: none;
@@ -294,7 +300,6 @@ const chips = CHIP_IDS
   @media (max-width: 600px) {
     .cedar-fab { padding: .7rem; }
     .cedar-fab__label { display: none; }
-    .cedar-fab__icon { background: transparent; }
     /* Cap the panel so it doesn't fill the screen edge to edge on a
        phone. */
     .cedar-fab-panel {
