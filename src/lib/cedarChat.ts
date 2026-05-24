@@ -269,8 +269,12 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // Classify up-front so conversation memory and the "tell me more"
     // drill-down work whether the API or the local classifier answers.
     const matched = classify(rawText);
+    // "Tell me more" — or a plain "yes / sure" right after Cedar
+    // offered to go deeper — drills into the prior topic's expanded
+    // answer, so the thread actually continues instead of replying with
+    // a generic acknowledgement.
     const isDrillDown =
-      matched?.id === 'tell_me_more' &&
+      (matched?.id === 'tell_me_more' || matched?.id === 'affirmative') &&
       priorIntent != null &&
       typeof priorIntent.expanded === 'string';
     const localFallback = isDrillDown ? priorIntent!.expanded! : localAnswer(rawText);
