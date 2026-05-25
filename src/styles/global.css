@@ -271,12 +271,23 @@ html {
 
 /* prefers-contrast: more — strengthen the hairline rules and the
    lightest text token so structure and secondary copy hold up on
-   high-contrast displays without otherwise touching the palette. */
-@media (prefers-contrast: more) {
+   high-contrast displays. Scoped per color scheme: on light surfaces
+   the rules/text go darker, on dark surfaces they go lighter. (A single
+   unscoped rule would push dark values onto the dark-mode palette too,
+   which *reduces* contrast for users running dark mode + high contrast
+   together.) */
+@media (prefers-contrast: more) and (prefers-color-scheme: light) {
   :root {
     --rule: rgba(10, 15, 38, .34);
     --rule-strong: rgba(10, 15, 38, .55);
     --ink-3: #4A4F6B;
+  }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root {
+    --rule: rgba(255, 255, 255, .34);
+    --rule-strong: rgba(255, 255, 255, .55);
+    --ink-3: #B8BED6;
   }
 }
 
