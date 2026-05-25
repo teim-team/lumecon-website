@@ -184,6 +184,18 @@
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 500;
+  max-width: 62ch;
+}
+/* Parenthetical aside under the headline — softer and sentence-case so
+   it reads as the quiet follow-on, not a second label. */
+.hero-sources__note {
+  margin-top: -.2rem;
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  font-weight: 400;
+  max-width: 56ch;
 }
 .hero-sources__list {
   list-style: none;
