@@ -174,10 +174,20 @@ export const runStudy = (req: StudyRequest): Promise<ApiResult<StudyResponse>> =
 export const getStudy = (studyId: string): Promise<ApiResult<StudyResponse>> =>
   request<StudyResponse>(`/v1/studies/${encodeURIComponent(studyId)}`, { method: 'GET' });
 
-/** Send a message to the Cedar chat backend. Future endpoint:
- *  `POST /v1/cedar/chat`. The marketing-site Cedar falls back to its
- *  local keyword classifier when this returns 'api-unconfigured' or
- *  any error reason. */
+/** Send a message to a Cedar chat backend. This is the marketing site's
+ *  simplified, anonymous seam — `surface` + a per-session `conversationId`,
+ *  no user/project — and it falls back to the local keyword classifier when
+ *  it returns 'api-unconfigured' or any error.
+ *
+ *  NOTE: the real Cedar *service* (the FastAPI repo) has a richer
+ *  server-to-server contract that the authenticated `teim-app` backend is
+ *  the intended caller of, not this static site:
+ *    POST /api/v1/messages, `Authorization: Bearer <CEDAR_INTERNAL_API_KEY>`,
+ *    camelCase { requestId, threadId?, user{id,email?}, project{id,name,...},
+ *    context?, projectContext?, message{id,text} } → { messageId, threadId,
+ *    answer, contextUsed, unavailable }. `conversationId` here maps to
+ *    Cedar's `threadId` (persist + replay it). See README → "The TEIM
+ *    ecosystem" for the full contract. */
 export const cedarChat = (req: CedarChatRequest): Promise<ApiResult<CedarChatResponse>> =>
   request<CedarChatResponse>('/v1/cedar/chat', { method: 'POST', body: JSON.stringify(req) });
 
