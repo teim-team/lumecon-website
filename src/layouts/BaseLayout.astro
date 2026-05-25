@@ -1,5 +1,6 @@
 ---
 import CedarFAB from '../components/CedarFAB.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 
 interface Props {
   title: string;
@@ -120,18 +121,51 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
 <a href="#top" class="skip-link">Skip to main content</a>
 <slot />
 <CedarFAB />
+<ConsentBanner />
 
 <script>
-  /* Observability boot: idempotent, no-op until PUBLIC_DATADOG_*
-     env vars are set + the SDK is installed. See src/lib/observability.ts
-     for the wire-up checklist. */
+  /* Observability boot — consent-gated (#89). Analytics initialises only
+     after the visitor accepts via the ConsentBanner; until then
+     initObservability() is never called, so the client stays a no-op,
+     no RUM beacon fires, and no cookie is set. Re-checks on view
+     transitions and when consent is granted live. Still no-op overall
+     until PUBLIC_DATADOG_* env vars + the SDK are configured. */
   import { initObservability, trackEvent, captureGlobalErrors } from '../lib/observability';
-  // Route uncaught errors / rejections to observability (#57). Registers
-  // once; safe even before a RUM client is configured (no-op until then).
+  import { hasAnalyticsConsent, CONSENT_EVENT } from '../lib/consent';
+  // Registering global error capture is consent-neutral: trackError is a
+  // no-op until observability initialises (which requires consent), so
+  // nothing leaves the page before then.
   captureGlobalErrors();
-  void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
-  document.addEventListener('astro:page-load', () => {
+  const bootAnalytics = () => {
+    if (!hasAnalyticsConsent()) return;
     void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
+  };
+
+  /* Scroll-depth milestones (#84) — 25/50/75/100%, once each per page,
+     reset on view transition. Only wired after consent so there's no
+     scroll listener running for visitors who declined. */
+  let scrollWired = false;
+  const wireScrollDepth = () => {
+    if (scrollWired || !hasAnalyticsConsent()) return;
+    scrollWired = true;
+    const depths = [25, 50, 75, 100];
+    let maxFired = 0;
+    window.addEventListener('scroll', () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const pct = Math.min(100, Math.round((window.scrollY / scrollable) * 100));
+      for (const d of depths) {
+        if (pct >= d && d > maxFired) { maxFired = d; trackEvent('scroll.depth', { pct: d, path: location.pathname }); }
+      }
+    }, { passive: true });
+    document.addEventListener('astro:page-load', () => { maxFired = 0; });
+  };
+
+  bootAnalytics();
+  wireScrollDepth();
+  document.addEventListener('astro:page-load', bootAnalytics);
+  window.addEventListener(CONSENT_EVENT, (e) => {
+    if ((e as CustomEvent).detail === 'granted') { bootAnalytics(); wireScrollDepth(); }
   });
 </script>
 

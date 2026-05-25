@@ -38,6 +38,7 @@ const searchIndex: SearchEntry[] = JSON.parse((document.getElementById('heroSear
 // are only needed by the prerendered /demo/<slug> route, not here.
 // @ts-ignore — Vite resolves at bundle time
 import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES } from '../data/scenes';
+import { trackEvent } from '../lib/observability';
 
 const ACTIVITIES = [
   { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
@@ -972,6 +973,8 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(btn => {
     btn.addEventListener('click', () => {
       const layer = btn.dataset.layer || 'states';
+      // Map interaction analytics (#83) — which layers visitors explore.
+      trackEvent('map.layer', { layer });
       document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(b => {
         const on = b === btn;
         b.classList.toggle('is-active', on);

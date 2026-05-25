@@ -1,0 +1,115 @@
+---
+/**
+ * Analytics consent banner.
+ *
+ * Shown only when the visitor hasn't chosen yet (consent === 'unset').
+ * Until they Accept, analytics stays off (see src/lib/consent.ts and the
+ * gated observability boot in BaseLayout). Anchored bottom-left so it
+ * doesn't collide with the Cedar FAB on the bottom-right.
+ */
+---
+<div class="consent" id="consentBanner" role="dialog" aria-label="Analytics consent" aria-live="polite" hidden>
+  <p class="consent__text">
+    We use privacy-friendly analytics to see what&rsquo;s useful and improve the site. No analytics run until you accept. See our <a href="/privacy">Privacy Policy</a>.
+  </p>
+  <div class="consent__actions">
+    <button type="button" class="consent__btn consent__btn--ghost" data-consent="denied">Decline</button>
+    <button type="button" class="consent__btn consent__btn--accept" data-consent="granted">Accept</button>
+  </div>
+</div>
+
+<script>
+  import { getConsent, setConsent } from '../lib/consent';
+
+  function setup(): void {
+    const banner = document.getElementById('consentBanner');
+    if (!banner) return;
+    // Only surface the banner if the visitor hasn't decided yet.
+    if (getConsent() !== 'unset') { banner.hidden = true; return; }
+    if ((banner as HTMLElement & { __bound?: boolean }).__bound) { banner.hidden = false; return; }
+    (banner as HTMLElement & { __bound?: boolean }).__bound = true;
+    banner.hidden = false;
+    banner.addEventListener('click', (e) => {
+      const btn = (e.target as Element | null)?.closest<HTMLElement>('[data-consent]');
+      if (!btn) return;
+      const choice = btn.dataset.consent;
+      if (choice === 'granted' || choice === 'denied') {
+        setConsent(choice);
+        banner.hidden = true;
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+  document.addEventListener('astro:page-load', setup);
+</script>
+
+<style>
+  .consent {
+    position: fixed;
+    left: clamp(.9rem, 2.2vw, 1.5rem);
+    bottom: clamp(.9rem, 2.2vw, 1.5rem);
+    z-index: 90;
+    width: min(420px, calc(100vw - 1.8rem));
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 1rem 1.1rem 1.05rem;
+    box-shadow: 0 16px 40px -12px rgba(10, 15, 38, .5);
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    animation: consent-in .3s var(--ease) both;
+  }
+  .consent[hidden] { display: none; }
+  .consent__text {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: .84rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .86);
+  }
+  .consent__text a {
+    color: var(--accent-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .consent__actions {
+    display: flex;
+    gap: .5rem;
+    justify-content: flex-end;
+  }
+  .consent__btn {
+    font-family: var(--font-sans);
+    font-size: .82rem;
+    font-weight: 600;
+    padding: .45rem .9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease);
+  }
+  .consent__btn--ghost {
+    background: transparent;
+    color: rgba(255, 255, 255, .82);
+    border: 1px solid rgba(255, 255, 255, .28);
+  }
+  .consent__btn--ghost:hover { background: rgba(255, 255, 255, .1); color: var(--white); }
+  .consent__btn--accept {
+    background: var(--accent);
+    color: #0A0F26;
+    border: 1px solid var(--accent);
+  }
+  .consent__btn--accept:hover { background: var(--accent-light); border-color: var(--accent-light); }
+  .consent__btn:focus-visible { outline: 2px solid var(--accent-light); outline-offset: 2px; }
+  @keyframes consent-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .consent { animation: none; }
+  }
+</style>
