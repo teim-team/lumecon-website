@@ -27,15 +27,27 @@ test('home page loads and renders the hero workflow', async ({ page }) => {
   expect(real).toEqual([]);
 });
 
-test('map page renders the interactive hero map', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'd3-geo map runs on Chromium; headless WebKit is unreliable for it (iOS Safari covered by hand-QA).');
+/* Map tests run on both engines now (#100). They previously skipped
+   WebKit because fixed-timeout waits were flaky on the d3-geo map under
+   headless Safari; the waits below key off real conditions (the map
+   actually rendering, the chip text actually changing) instead, which
+   is robust on both engines. WebKit is the informational CI lane, so if
+   a render genuinely can't complete headless it surfaces there without
+   blocking the merge gate. */
+test('map page renders the interactive hero map', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
   await expect(page.locator('#heroMap')).toBeVisible();
+  // Wait for the states to actually paint (d3 path data present), not
+  // just for an element to attach.
   await expect(page.locator('.hero-state').first()).toBeAttached();
+  await page.waitForFunction(
+    () => document.querySelectorAll('.hero-state[d]').length > 40,
+    null,
+    { timeout: 10_000 },
+  );
 });
 
-test('auto-cycle fires a study within 10s', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'd3-geo map runs on Chromium; headless WebKit is unreliable for it (iOS Safari covered by hand-QA).');
+test('auto-cycle fires a study within 10s', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
   // The header region gets populated with the full chip when a scene
   // starts running. Levels: STATE / COUNTY / RESERVATION / ANCSA
@@ -45,15 +57,19 @@ test('auto-cycle fires a study within 10s', async ({ page, browserName }) => {
     .toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, { timeout: 10_000 });
 });
 
-test('"New study" button cycles through levels', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'd3-geo map runs on Chromium; headless WebKit is unreliable for it (iOS Safari covered by hand-QA).');
+test('"New study" button cycles through levels', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
-  await page.waitForTimeout(1500);
+  const region = page.locator('#workspaceRegion');
+  // Wait for the first auto-study to land before driving the button.
+  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, { timeout: 10_000 });
   const observedLevels: string[] = [];
   for (let i = 0; i < 3; i++) {
+    const prev = await region.textContent();
     await page.locator('#workspaceAgain').click();
-    await page.waitForTimeout(1200);
-    const chip = await page.locator('#workspaceRegion').textContent();
+    // Wait until the chip text actually changes (the study re-ran)
+    // instead of a fixed delay — robust across engines and CI load.
+    await expect.poll(async () => await region.textContent(), { timeout: 8000 }).not.toBe(prev);
+    const chip = await region.textContent();
     // First chip token before the bullet is the level. The reservation
     // pool now includes ANCSA REGION and NHO entries; normalize those
     // to RESERVATION so the rotating-pool assertion stays stable.
@@ -83,8 +99,7 @@ test('demo page renders with real figures', async ({ page }) => {
   await expect(page.locator('.demo-fig dd')).toContainText([/\$5M/, /\$2\.3M/, /\$3\.6/, /\$10\.9/, /≈\s*\d/]);
 });
 
-test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({ request, page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'd3-geo map runs on Chromium; headless WebKit is unreliable for it (iOS Safari covered by hand-QA).');
+test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({ request, page }) => {
   // Grep the raw HTML response to confirm the polygons aren't inlined.
   const r = await request.get('/map');
   const html = await r.text();
@@ -99,15 +114,14 @@ test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async (
   );
 });
 
-test('keyboard shortcut S triggers a new study', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'd3-geo map runs on Chromium; headless WebKit is unreliable for it (iOS Safari covered by hand-QA).');
+test('keyboard shortcut S triggers a new study', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
-  await page.waitForTimeout(2000);
-  const before = await page.locator('#workspaceRegion').textContent();
+  const region = page.locator('#workspaceRegion');
+  // Wait for the first auto-study so there's a baseline chip to change.
+  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, { timeout: 10_000 });
+  const before = await region.textContent();
   await page.keyboard.press('s');
-  await page.waitForTimeout(1200);
-  const after = await page.locator('#workspaceRegion').textContent();
-  expect(after).not.toBe(before);
+  await expect.poll(async () => await region.textContent(), { timeout: 8000 }).not.toBe(before);
 });
 
 /* Coverage for the pages built out after the homepage map: the
