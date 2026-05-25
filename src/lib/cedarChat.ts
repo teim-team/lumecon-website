@@ -74,6 +74,37 @@ function generateId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
+/* ----- Transcript persistence --------------------------------------
+   Save the dynamic turns (the static welcome is excluded) per
+   conversation id so reopening the FAB or moving between pages keeps
+   the thread. Capped to the last 40 messages; sessionStorage = cleared
+   on tab close. */
+const LOG_KEY = 'lumecon:cedar:log';
+interface LoggedMsg {
+  role: 'user' | 'bot';
+  text: string;
+}
+
+function loadHistory(id: string): LoggedMsg[] {
+  if (typeof sessionStorage === 'undefined') return [];
+  try {
+    const raw = sessionStorage.getItem(`${LOG_KEY}:${id}`);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.slice(-40) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(id: string, msgs: LoggedMsg[]): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.setItem(`${LOG_KEY}:${id}`, JSON.stringify(msgs.slice(-40)));
+  } catch {
+    /* quota or disabled storage — degrade silently */
+  }
+}
+
 /* ----- Local keyword classifier ------------------------------------
    The same scoring rules the inline scripts used, lifted out so
    there's one implementation to debug and improve. */
@@ -115,6 +146,37 @@ export function topMatches(rawText: string): IntentMatch {
     }
   }
   return { score: best, intents: scored.filter((s) => s.score === best).map((s) => s.intent) };
+}
+
+/* True if a and b differ by at most one insertion, deletion, or
+   substitution. Bounded and cheap — used only as a typo fallback. */
+function withinOneEdit(a: string, b: string): boolean {
+  if (a === b) return true;
+  if (a.length > b.length) return withinOneEdit(b, a);
+  if (b.length - a.length > 1) return false;
+  let i = 0, j = 0, edits = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { i++; j++; continue; }
+    if (++edits > 1) return false;
+    if (a.length === b.length) { i++; j++; } else { j++; }
+  }
+  return edits + (b.length - j) <= 1;
+}
+
+/* When nothing matches exactly, try a conservative typo pass: a user
+   word (>= 5 chars) within one edit of a single-word trigger (>= 5
+   chars). Catches "pricng" / "trbal" without hurting precision. */
+function fuzzyMatch(rawText: string): CedarIntent | null {
+  const tokens = normalize(rawText).trim().split(' ').filter((t) => t.length >= 5);
+  if (!tokens.length) return null;
+  for (const intent of INTENTS) {
+    for (const trig of intent.triggers) {
+      const t = trig.toLowerCase().trim();
+      if (t.length < 5 || t.indexOf(' ') !== -1) continue;
+      if (tokens.some((u) => withinOneEdit(u, t))) return intent;
+    }
+  }
+  return null;
 }
 
 export function classify(rawText: string): CedarIntent | null {
@@ -164,7 +226,9 @@ export function localAnswer(rawText: string): string {
   const candidates = intents.filter((i) => i.chip);
   if (score >= 1 && candidates.length >= 2) return clarifyPrompt(candidates);
   if (score >= 1) return intents[0].answer;
-  return oos ? OUT_OF_SCOPE_ANSWER : FALLBACK_ANSWER;
+  const fuzzy = fuzzyMatch(rawText);
+  if (fuzzy) return fuzzy.answer;
+  return FALLBACK_ANSWER;
 }
 
 /* ----- API-first / local-fallback resolver -------------------------
@@ -208,6 +272,31 @@ function thinkingPause(answer: string): number {
   if (prefersReducedMotion()) return 200;
   return Math.min(1800, Math.max(700, 480 + answer.length * 4));
 }
+
+/* Reveal a reply word-by-word so it reads as Cedar composing rather
+   than a block of text snapping in. Instant under reduced motion. */
+async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: string): Promise<void> {
+  if (prefersReducedMotion()) { bubble.textContent = text; return; }
+  const tokens = text.split(/(\s+)/);
+  const perWord = tokens.length > 90 ? 8 : 15;
+  bubble.textContent = '';
+  for (const tok of tokens) {
+    bubble.textContent += tok;
+    transcript.scrollTo({ top: transcript.scrollHeight });
+    if (tok.trim()) await sleep(perWord);
+  }
+}
+
+/* Example prompts the input placeholder cycles through while idle, so
+   first-time visitors see the kinds of things Cedar can field. */
+const PLACEHOLDER_EXAMPLES = [
+  'Ask Cedar a question…',
+  'Try "how much does it cost?"',
+  'Try "does this work for tribal nations?"',
+  'Try "EPA grant"',
+  'Try "how long does a study take?"',
+  'Try "see a demo"',
+];
 
 /* ----- Conversation memory -----------------------------------------
    IDs of the conversational-filler intents that shouldn't be tracked
@@ -264,6 +353,108 @@ function makeTypingIndicator(): HTMLElement {
   return dots;
 }
 
+/* ----- Audience memory (#6) ----------------------------------------
+   Note who the visitor says they are so follow-up suggestions can lean
+   into their use case. */
+const AUDIENCE_INTENT: Record<string, string> = {
+  tribal: 'tribal_platform',
+  city: 'county_city_use',
+  state: 'state_agency_use',
+  foundation: 'foundation_use',
+  university: 'university_use',
+  nonprofit: 'nonprofit_use',
+};
+const AUDIENCE_PATTERNS: Array<{ key: string; words: string[] }> = [
+  { key: 'tribal', words: ['tribe', 'tribal', 'native', 'reservation', 'casino'] },
+  { key: 'city', words: ['city', 'cities', 'county', 'counties', 'municipal', 'mayor', 'town'] },
+  { key: 'state', words: ['state agency', 'state dot', 'legislature', 'department of', 'state of'] },
+  { key: 'foundation', words: ['foundation', 'grantmaker', 'grantmaking', 'philanthropy', 'donor'] },
+  { key: 'university', words: ['university', 'college', 'campus', 'higher ed'] },
+  { key: 'nonprofit', words: ['nonprofit', 'non profit', 'non-profit', ' ngo', 'cdfi', 'charity'] },
+];
+function detectAudience(rawText: string): string | null {
+  const text = ' ' + rawText.toLowerCase() + ' ';
+  for (const a of AUDIENCE_PATTERNS) {
+    if (a.words.some((w) => text.includes(w))) return a.key;
+  }
+  return null;
+}
+
+/* ----- Per-reply feedback (#7) -------------------------------------- */
+const THUMB_UP_SVG =
+  '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M7 21V9l5-6a2 2 0 0 1 2 2v4h5a2 2 0 0 1 2 2.3l-1.3 6A2 2 0 0 1 17.7 21H7Zm0 0H4V9h3"/></svg>';
+const THUMB_DOWN_SVG =
+  '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" style="transform:rotate(180deg)"><path d="M7 21V9l5-6a2 2 0 0 1 2 2v4h5a2 2 0 0 1 2 2.3l-1.3 6A2 2 0 0 1 17.7 21H7Zm0 0H4V9h3"/></svg>';
+
+function attachFeedback(bubble: HTMLElement, surface: CedarSurface): void {
+  const row = document.createElement('div');
+  row.className = 'cedar-feedback';
+  row.setAttribute('role', 'group');
+  row.setAttribute('aria-label', 'Was this answer helpful?');
+  (['up', 'down'] as const).forEach((v) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cedar-feedback__btn';
+    btn.setAttribute('aria-label', v === 'up' ? 'Helpful' : 'Not helpful');
+    btn.innerHTML = v === 'up' ? THUMB_UP_SVG : THUMB_DOWN_SVG;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      trackEvent('cedar.feedback', { value: v, surface });
+      row.querySelectorAll('button').forEach((b) => { (b as HTMLButtonElement).disabled = true; });
+      btn.classList.add('is-selected');
+    });
+    row.appendChild(btn);
+  });
+  bubble.appendChild(row);
+}
+
+/* ----- Context follow-up chips (#10) -------------------------------- */
+function followUpsFor(
+  matched: CedarIntent | null,
+  isDrillDown: boolean,
+  audience: string | null,
+): Array<{ label: string; text: string }> {
+  const out: Array<{ label: string; text: string }> = [];
+  const push = (id: string) => {
+    if (out.length >= 3) return;
+    if (matched && matched.id === id) return;
+    const it = INTENTS.find((x) => x.id === id);
+    if (it?.chip && !out.some((o) => o.text === it.chip)) out.push({ label: it.chip, text: it.chip });
+  };
+  if (!isDrillDown && matched && typeof matched.expanded === 'string') {
+    out.push({ label: 'Tell me more', text: 'tell me more' });
+  }
+  if (audience && AUDIENCE_INTENT[audience]) push(AUDIENCE_INTENT[audience]);
+  for (const id of ['demo', 'pricing', 'contact']) push(id);
+  return out.slice(0, 3);
+}
+
+function renderFollowUps(
+  transcript: HTMLElement,
+  items: Array<{ label: string; text: string }>,
+  onSelect: (text: string) => void,
+): void {
+  if (!items.length) return;
+  const row = document.createElement('div');
+  row.className = 'cedar-followups';
+  row.setAttribute('role', 'group');
+  row.setAttribute('aria-label', 'Suggested next questions');
+  for (const it of items) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cedar-followup';
+    btn.textContent = it.label;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      row.remove();
+      onSelect(it.text);
+    });
+    row.appendChild(btn);
+  }
+  transcript.appendChild(row);
+  transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
+}
+
 interface BootedElements {
   transcript: HTMLElement;
   chips: HTMLElement;
@@ -305,9 +496,28 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
      follow-up like "tell me more" can drill into it instead of hitting
      a generic answer. Cleared when the user starts a new topic. */
   let priorIntent: CedarIntent | null = null;
+  /* Consecutive unmatched messages — after two in a row Cedar nudges
+     the visitor toward a human instead of looping on the fallback. */
+  let misses = 0;
+  /* Remembered audience so follow-up suggestions lean into the
+     visitor's use case (#6). */
+  let audience: string | null = null;
+
+  /* Restore the conversation: replay saved turns after the static
+     welcome so reopening the panel or changing pages keeps the thread. */
+  const history = loadHistory(conversationId);
+  const record = (role: 'user' | 'bot', text: string) => {
+    history.push({ role, text });
+    saveHistory(conversationId, history);
+  };
+  if (history.length) {
+    for (const m of history) appendMessage(transcript, m.role, m.text);
+    collapseChips();
+  }
 
   const sendMessage = async (rawText: string, echoText?: string) => {
     appendMessage(transcript, 'user', echoText ?? rawText);
+    record('user', echoText ?? rawText);
     trackEvent('cedar.message.sent', { surface, length: rawText.length });
     const typing = appendMessage(transcript, 'bot', makeTypingIndicator());
     const startedAt = nowMs();
@@ -328,6 +538,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // clarify instead of committing — so we shouldn't record a guessed
     // topic as the conversation's "last topic".
     const clarified = !isDrillDown && ambiguousCandidates(rawText).length >= 2;
+    const missed = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
+    const aud = detectAudience(rawText);
+    if (aud) audience = aud;
 
     const answer = await resolveAnswer(rawText, surface, conversationId, localFallback);
 
@@ -338,13 +551,40 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     if (remaining > 0) await sleep(remaining);
 
     const bubble = typing.querySelector<HTMLElement>('.cedar-msg__bubble');
-    if (bubble) bubble.textContent = answer;
+    if (bubble) await streamText(transcript, bubble, answer);
+    record('bot', answer);
 
     // Update conversation memory: substantive topics overwrite
     // priorIntent; fillers leave it alone so "thanks" → "tell me
     // more" still drills into the topic before the thanks.
     if (!clarified && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
       priorIntent = matched;
+    }
+
+    const isFiller = !!(matched && NON_TOPIC_INTENTS.has(matched.id));
+    // Per-reply 👍/👎 feedback on substantive answers (#7).
+    if (bubble && !isFiller && !missed) attachFeedback(bubble, surface);
+    // Context-aware next-step chips on a real topic answer (#10),
+    // biased toward the remembered audience (#6).
+    if (!clarified && !missed && (isDrillDown || (matched != null && !isFiller))) {
+      renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience), (t) => {
+        collapseChips();
+        void sendMessage(t);
+      });
+    }
+
+    // Log true misses (so the intent bank can grow from real queries)
+    // and, after two in a row, hand off to a human.
+    if (missed) {
+      trackEvent('cedar.unmatched', { surface, text: rawText.slice(0, 120) });
+      misses += 1;
+      if (misses === 2) {
+        const handoff = 'I might be missing what you need — the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.';
+        appendMessage(transcript, 'bot', handoff);
+        record('bot', handoff);
+      }
+    } else {
+      misses = 0;
     }
   };
 
@@ -382,6 +622,17 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     collapseChips();
     void sendMessage(q);
   });
+
+  // Cycle the placeholder through example prompts while the field is
+  // idle and empty (skipped under reduced motion).
+  if (!prefersReducedMotion()) {
+    let phIdx = 0;
+    window.setInterval(() => {
+      if (document.activeElement === input || input.value) return;
+      phIdx = (phIdx + 1) % PLACEHOLDER_EXAMPLES.length;
+      input.setAttribute('placeholder', PLACEHOLDER_EXAMPLES[phIdx]);
+    }, 4200);
+  }
 
   return true;
 }
