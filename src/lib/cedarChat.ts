@@ -74,6 +74,37 @@ function generateId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
+/* ----- Transcript persistence --------------------------------------
+   Save the dynamic turns (the static welcome is excluded) per
+   conversation id so reopening the FAB or moving between pages keeps
+   the thread. Capped to the last 40 messages; sessionStorage = cleared
+   on tab close. */
+const LOG_KEY = 'lumecon:cedar:log';
+interface LoggedMsg {
+  role: 'user' | 'bot';
+  text: string;
+}
+
+function loadHistory(id: string): LoggedMsg[] {
+  if (typeof sessionStorage === 'undefined') return [];
+  try {
+    const raw = sessionStorage.getItem(`${LOG_KEY}:${id}`);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.slice(-40) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(id: string, msgs: LoggedMsg[]): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.setItem(`${LOG_KEY}:${id}`, JSON.stringify(msgs.slice(-40)));
+  } catch {
+    /* quota or disabled storage — degrade silently */
+  }
+}
+
 /* ----- Local keyword classifier ------------------------------------
    The same scoring rules the inline scripts used, lifted out so
    there's one implementation to debug and improve. */
@@ -115,6 +146,37 @@ export function topMatches(rawText: string): IntentMatch {
     }
   }
   return { score: best, intents: scored.filter((s) => s.score === best).map((s) => s.intent) };
+}
+
+/* True if a and b differ by at most one insertion, deletion, or
+   substitution. Bounded and cheap — used only as a typo fallback. */
+function withinOneEdit(a: string, b: string): boolean {
+  if (a === b) return true;
+  if (a.length > b.length) return withinOneEdit(b, a);
+  if (b.length - a.length > 1) return false;
+  let i = 0, j = 0, edits = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { i++; j++; continue; }
+    if (++edits > 1) return false;
+    if (a.length === b.length) { i++; j++; } else { j++; }
+  }
+  return edits + (b.length - j) <= 1;
+}
+
+/* When nothing matches exactly, try a conservative typo pass: a user
+   word (>= 5 chars) within one edit of a single-word trigger (>= 5
+   chars). Catches "pricng" / "trbal" without hurting precision. */
+function fuzzyMatch(rawText: string): CedarIntent | null {
+  const tokens = normalize(rawText).trim().split(' ').filter((t) => t.length >= 5);
+  if (!tokens.length) return null;
+  for (const intent of INTENTS) {
+    for (const trig of intent.triggers) {
+      const t = trig.toLowerCase().trim();
+      if (t.length < 5 || t.indexOf(' ') !== -1) continue;
+      if (tokens.some((u) => withinOneEdit(u, t))) return intent;
+    }
+  }
+  return null;
 }
 
 export function classify(rawText: string): CedarIntent | null {
@@ -164,7 +226,9 @@ export function localAnswer(rawText: string): string {
   const candidates = intents.filter((i) => i.chip);
   if (score >= 1 && candidates.length >= 2) return clarifyPrompt(candidates);
   if (score >= 1) return intents[0].answer;
-  return oos ? OUT_OF_SCOPE_ANSWER : FALLBACK_ANSWER;
+  const fuzzy = fuzzyMatch(rawText);
+  if (fuzzy) return fuzzy.answer;
+  return FALLBACK_ANSWER;
 }
 
 /* ----- API-first / local-fallback resolver -------------------------
@@ -334,8 +398,21 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
      the visitor toward a human instead of looping on the fallback. */
   let misses = 0;
 
+  /* Restore the conversation: replay saved turns after the static
+     welcome so reopening the panel or changing pages keeps the thread. */
+  const history = loadHistory(conversationId);
+  const record = (role: 'user' | 'bot', text: string) => {
+    history.push({ role, text });
+    saveHistory(conversationId, history);
+  };
+  if (history.length) {
+    for (const m of history) appendMessage(transcript, m.role, m.text);
+    collapseChips();
+  }
+
   const sendMessage = async (rawText: string, echoText?: string) => {
     appendMessage(transcript, 'user', echoText ?? rawText);
+    record('user', echoText ?? rawText);
     trackEvent('cedar.message.sent', { surface, length: rawText.length });
     const typing = appendMessage(transcript, 'bot', makeTypingIndicator());
     const startedAt = nowMs();
@@ -367,6 +444,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
 
     const bubble = typing.querySelector<HTMLElement>('.cedar-msg__bubble');
     if (bubble) await streamText(transcript, bubble, answer);
+    record('bot', answer);
 
     // Update conversation memory: substantive topics overwrite
     // priorIntent; fillers leave it alone so "thanks" → "tell me
@@ -377,12 +455,14 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
 
     // Log true misses (so the intent bank can grow from real queries)
     // and, after two in a row, hand off to a human.
-    const missed = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText);
+    const missed = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
     if (missed) {
       trackEvent('cedar.unmatched', { surface, text: rawText.slice(0, 120) });
       misses += 1;
       if (misses === 2) {
-        appendMessage(transcript, 'bot', 'I might be missing what you need — the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.');
+        const handoff = 'I might be missing what you need — the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.';
+        appendMessage(transcript, 'bot', handoff);
+        record('bot', handoff);
       }
     } else {
       misses = 0;
