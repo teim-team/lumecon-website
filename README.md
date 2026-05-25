@@ -1,9 +1,11 @@
 # Lumecon
 
-Marketing and product site for **Lumecon Inc.** — economic impact analysis
+Public marketing site for **Lumecon Inc.** — economic impact analysis
 software for governments, enterprises, and mission-driven organizations.
 Built as a static [Astro](https://astro.build) site and deployed to GitHub
-Pages at [lumecon.ai](https://lumecon.ai).
+Pages at [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
+authenticated product and its data layer live in sibling repositories (see
+[The TEIM ecosystem](#where-this-fits-the-teim-ecosystem)).
 
 The site explains the three Lumecon platforms (Local, Tribal, and Global
 Economic Impact), demonstrates the workflow through an interactive US map,
@@ -114,6 +116,57 @@ without any env vars — `src/lib/api.ts` and `observability.ts` degrade
 gracefully when `PUBLIC_API_URL` and analytics keys are unset (the
 `api-unconfigured` path), so the static marketing site works on its own.
 Never commit a real `.env`.
+
+## Where this fits: the TEIM ecosystem
+
+Lumecon is a **standalone brand**, and this repository is its public
+marketing site — its own design system, its own deploy, intentionally
+independent. It does **not** import code or styles from the product. The
+product and the data it runs on live in sibling `teim-team` repositories:
+
+| Repo | What it is | Relationship to this site |
+| --- | --- | --- |
+| **`teim-app`** | The authenticated product: TEIM (Tribal Economic Impact Model), a React 19 + Vite SPA with a Fastify backend. It also carries its own in-app marketing surface under a separate "TEIM by Lumecon" brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate brands** — do not cross-import styles or tokens. |
+| **`cedar`** | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents and keeps only compressed chat memory; it never stores project data, files, or results. | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a *separate*, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
+| **`teim-engine`** | The economic-accounts data layer: EPA `stateior` StateIO supply/use tables shipped as CSV. | Upstream of the impact math the site describes. Keep the homepage "foundational data" strip consistent with the public sources the engine actually draws on. |
+
+### Cedar service contract (server-to-server)
+
+Documented here so any future server-side integration matches the canonical
+shape. The **authenticated app — not this marketing site — is the intended
+caller**, because Cedar needs the `user` + `project` context an anonymous
+visitor here doesn't have.
+
+- **Endpoint:** `POST /api/v1/messages` (the only public endpoint today).
+- **Auth:** `Authorization: Bearer <CEDAR_INTERNAL_API_KEY>` (shared secret).
+  Missing/bad token → 401.
+- **Health:** `GET /ready` → 200 (503 if Postgres is down). Point uptime
+  checks here, not at `/health`.
+- **Wire format:** **camelCase** in both directions (snake_case tolerated,
+  but send camelCase).
+- **Request** (required: `requestId`, `user{id}`, `project{id,name}`,
+  `message{id,text}`; optional: `threadId`, `projectContext`, `context`).
+- **Response:** `{ messageId, threadId, answer, contextUsed, unavailable }`.
+- **Session lifecycle:** omit `threadId` on the first turn; Cedar returns one;
+  persist it per conversation and echo it on every later turn (`threadId` is
+  Cedar's session id).
+- **Error handling:** refusals (out-of-scope / prompt-injection) and
+  `unavailable: true` still return **HTTP 200** — treat as normal answers, not
+  errors. Handle 401 (key) and 5xx (Cedar/DB down) explicitly.
+- **Gotcha:** `contextUsed` is reflected back only from the top-level
+  `context` object (route, pathname, `latestRun.status`,
+  `latestResultSummary`) — not from `projectContext`.
+
+### Underlying data (teim-engine)
+
+teim-engine assembles EPA `stateior` StateIO accounts as CSV: years
+**2015–2023**, **50 states + DC**, **71 BEA Summary sectors**, five tables per
+region (`Industry_Output`, `Make`, `Use`, `Domestic_Use`, `Import`) with the
+identity `Use = Domestic_Use + Import` (the in-region vs. rest-of-US split).
+Values are nominal USD. This supply/use base is what the impact multipliers
+the site describes are built on, so the homepage data-sources strip should
+stay consistent with the public sources behind it (Census ACS/LODES/QWI/CBP/
+TIGER, BEA Input-Output, BLS QCEW, USDA NASS, USAspending, FRED, NOAA).
 
 ## Security
 
