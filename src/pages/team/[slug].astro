@@ -82,10 +82,10 @@ const jsonLd = [
 ---
 <BaseLayout
   title={`${p.name} | Lumecon`}
-  description={`${p.name} — ${p.title} at Lumecon. ${p.summary}`}
+  description={`${p.name}, ${p.title} at Lumecon. ${p.summary}`}
   canonical={`https://lumecon.ai${personPath(p.slug)}`}
   keywords={[p.name, p.title, 'Lumecon', ...(p.alumniOf ?? []), ...(p.prevAffiliations ?? [])].join(', ')}
-  ogTitle={`${p.name} — ${p.title} at Lumecon`}
+  ogTitle={`${p.name}, ${p.title} at Lumecon`}
   ogDescription={p.summary}
   jsonLd={jsonLd}
 >

@@ -88,21 +88,87 @@
   margin: 0;
   max-width: 56ch;
 }
-/* Plain-language definition line (#74) — quieter than the sub, set
-   off by a teal rule so first-timers can spot the "what is this?"
-   explainer without it competing with the headline. */
-.hero-plain {
-  font-family: var(--font-sans);
-  font-size: clamp(.98rem, 1.2vw, 1.08rem);
-  line-height: 1.5;
+/* Lede row: product sub-paragraph + a teal "New to this?" disclosure.
+   Stacked on mobile; side-by-side on desktop with the disclosure to the
+   right of the paragraph. */
+.hero-lede-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+  width: 100%;
+}
+@media (min-width: 880px) {
+  .hero-lede-row {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2.2rem;
+  }
+  .hero-sub { flex: 1 1 auto; }
+  .hero-eia { flex: 0 0 clamp(15rem, 23vw, 19rem); padding-top: .1rem; }
+}
+/* Teal collapsible "New to this?" — mirrors the network disclosure. */
+.hero-eia { margin: 0; }
+.hero-eia__summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  padding: .35rem 0;
+}
+.hero-eia__summary::-webkit-details-marker { display: none; }
+.hero-eia__summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+.hero-eia__chev {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.hero-eia__chev::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.4px solid var(--navy);
+  border-bottom: 1.4px solid var(--navy);
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform .25s var(--ease);
+}
+.hero-eia[open] .hero-eia__chev { background: var(--accent); border-color: var(--accent); }
+.hero-eia[open] .hero-eia__chev::before {
+  transform: rotate(225deg) translate(-1px, -1px);
+  border-color: var(--white);
+}
+.hero-eia__body {
+  margin: .7rem 0 0;
+  font-size: var(--type-base);
+  line-height: 1.55;
   color: var(--ink-2);
   font-weight: 400;
-  margin: 0;
-  max-width: 60ch;
+  max-width: 38ch;
   padding-left: .9rem;
   border-left: 2px solid var(--accent);
+  animation: hero-eia-in .3s var(--ease);
 }
-.hero-plain strong { font-weight: 600; color: var(--ink-1, var(--navy)); }
+.hero-eia__body strong { font-weight: 600; color: var(--navy); }
+@keyframes hero-eia-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-eia__body { animation: none; }
+}
 /* Trusted data sources strip (#22) — a quiet credibility band under
    the path tiles: small mono label, then the source links. */
 .hero-sources {

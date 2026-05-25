@@ -24,15 +24,25 @@ import '../styles/hero.css';
          Wordmark lives in the nav, so we don't repeat it here. -->
     <HeroWorkflow />
 
-    <p class="hero-sub">
-      Economic impact analysis software for governments, enterprises, and mission-driven organizations. Cedar AI turns your budget and program data into credible evidence for grant applications, council packets, board memos, and funder reports in minutes rather than months.
-    </p>
-    <!-- Plain-language definition for first-timers (#74): says what
-         "economic impact analysis" actually means before the proof
-         points assume the visitor already knows. -->
-    <p class="hero-plain">
-      New to this? <strong>Economic impact analysis</strong> shows how one dollar spent can generate more than one dollar in return as it moves through wages, suppliers, tax revenue, and nearby businesses.
-    </p>
+    <!-- Lede row: the product sub-paragraph, with a teal "New to this?"
+         disclosure for first-timers beside it on desktop (stacked on
+         mobile). The disclosure expands to a plain-language definition
+         of economic impact analysis so newcomers aren't assumed to
+         already know the term. -->
+    <div class="hero-lede-row">
+      <p class="hero-sub">
+        Economic impact analysis software for governments, enterprises, and mission-driven organizations. Cedar AI turns your budget and program data into credible evidence for grant applications, council packets, board memos, and funder reports in minutes rather than months.
+      </p>
+      <details class="hero-eia">
+        <summary class="hero-eia__summary">
+          <span>New to this?</span>
+          <span class="hero-eia__chev" aria-hidden="true"></span>
+        </summary>
+        <p class="hero-eia__body">
+          <strong>Economic impact analysis</strong> shows how one dollar spent can generate more than one dollar in return as it moves through wages, suppliers, tax revenue, and nearby businesses.
+        </p>
+      </details>
+    </div>
     <ul class="hero-proof" aria-label="Proof points">
       <li>Built at Ivy League and peer schools</li>
       <li>Patent pending</li>
@@ -96,9 +106,12 @@ import '../styles/hero.css';
     <aside class="hero-sources" aria-label="Data sources">
       <span class="hero-sources__label">Grounded in the public data serious models trust</span>
       <ul class="hero-sources__list">
-        <li><a href="https://www.census.gov" target="_blank" rel="noopener noreferrer">U.S. Census &mdash; ACS, LODES, QWI, CBP</a></li>
-        <li><a href="https://www.bea.gov/industry/input-output-accounts-data" target="_blank" rel="noopener noreferrer">BEA &mdash; Input-Output Accounts</a></li>
-        <li><a href="https://www.bls.gov" target="_blank" rel="noopener noreferrer">BLS &mdash; QCEW</a></li>
+        <li><a href="https://www.census.gov" target="_blank" rel="noopener noreferrer">U.S. Census: ACS, LODES, QWI, CBP, TIGER/Line</a></li>
+        <li><a href="https://www.bea.gov/industry/input-output-accounts-data" target="_blank" rel="noopener noreferrer">BEA Input-Output Accounts</a></li>
+        <li><a href="https://www.bls.gov/cew/" target="_blank" rel="noopener noreferrer">BLS QCEW</a></li>
+        <li><a href="https://www.nass.usda.gov" target="_blank" rel="noopener noreferrer">USDA NASS</a></li>
+        <li><a href="https://www.usaspending.gov" target="_blank" rel="noopener noreferrer">USAspending</a></li>
+        <li><a href="https://www.noaa.gov" target="_blank" rel="noopener noreferrer">NOAA</a></li>
       </ul>
     </aside>
   </div>

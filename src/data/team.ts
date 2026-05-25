@@ -80,7 +80,7 @@ export const TEAM: Person[] = [
     founder: true,
     summary: "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians, and the Taylor Policy Group.",
     bio: [
-      "Elijah Moreno is the co-founder and CEO of Lumecon. He is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions. He holds a bachelor's degree in Economics — modified with Native American Studies, with a minor in Public Policy — from Dartmouth College, and a master's in Public Policy from Cornell University.",
+      "Elijah Moreno is the co-founder and CEO of Lumecon. He is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College, and a master's in Public Policy from Cornell University.",
       "Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians, and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset, and conducted extensive research on Native-entity federal contracting.",
     ],
     alumniOf: ['Cornell University', 'Dartmouth College', 'Michigan State University'],
@@ -97,7 +97,7 @@ export const TEAM: Person[] = [
         year: '2025',
         venue: 'Ash Center for Democratic Governance and Innovation, Harvard Kennedy School',
         type: 'book',
-        summary: 'Three decades of Census and American Community Survey data tracking how life on American Indian reservations changed across fourteen socioeconomic indicators from 1990 to 2020 — documenting real gains in employment, education, and housing while mapping the gaps that still persist.',
+        summary: 'Three decades of Census and American Community Survey data tracking how life on American Indian reservations changed across fourteen socioeconomic indicators from 1990 to 2020, documenting real gains in employment, education, and housing while mapping the gaps that still persist.',
         url: 'https://ash.harvard.edu/wp-content/uploads/2025/09/Databook-Third-Edition-2025-09-07-1.pdf',
       },
     ],
