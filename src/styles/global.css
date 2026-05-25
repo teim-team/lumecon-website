@@ -32,6 +32,12 @@
   --accent-hover: #2DC9BA;
   --accent-btn-hover: #0A8A7E;
   --accent-deep: #0A8A7E;
+  /* Deepened teal for surfaces that carry WHITE text (Cedar chips,
+     sent-message bubbles, send button). The bright --accent gives only
+     ~2.6:1 with white — below WCAG AA — so white-on-teal UI uses these
+     instead (~4.9:1 / hover ~6:1) while keeping a teal identity. */
+  --accent-chip: #0A7F74;
+  --accent-chip-hover: #086960;
   --blue: #2E5BD6;           /* bold electric-leaning navy-blue */
   --blue-deep: #1E40A6;
   --purple: #6E3DD8;
@@ -87,12 +93,14 @@
   --weight-black:   800;
 }
 
-/* Dark-mode flip removed. We intentionally lock to the light palette
-   so the marketing site renders the same regardless of OS theme.
-   The previous prefers-color-scheme rule swapped --white and --navy
-   tokens, but many components carry hard-coded rgba(255,255,255,X)
-   text colors that expect a navy surface — when the tokens flipped,
-   those texts went white-on-white on iOS dark mode. */
+/* Dark mode is token-flip based (see the @media block below): most
+   surfaces use --white and most text uses --navy, so swapping those
+   tokens inverts the bulk of the site automatically. The handful of
+   components that hardcode a light surface (the nav bar, pricing tiles)
+   or a saturated --navy fill (CTAs, footer bar, hamburger) get explicit
+   overrides in that block so nothing ends up light-on-light. If you add
+   a component that hardcodes rgba(255,255,255,X) for a background or a
+   --navy fill, give it a matching dark-mode override there. */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -195,6 +203,9 @@ body {
   .pricing-platform-tile.is-active {
     background: linear-gradient(0deg, rgba(15, 181, 165, .14) 0%, var(--white) 100%);
   }
+  /* The nav surface override lives in nav.css instead — nav.css loads
+     after global.css, so an equal-specificity rule here would lose the
+     cascade to nav.css's hardcoded-white background. */
 }
 
 /* ---------- Section-snap scrolling ----------

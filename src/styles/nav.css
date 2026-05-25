@@ -301,3 +301,24 @@ nav.nav--static {
   .home-page .logo { opacity: 0 !important; pointer-events: none !important; }
   .home-page nav.scrolled .logo { opacity: 1 !important; pointer-events: auto !important; }
 }
+
+/* ---------- Dark mode ----------
+   The nav surface is a hardcoded translucent white above (it overlays
+   light pages), so it doesn't flip with the token swap. Repaint it dark
+   so the nav links — var(--navy), now light — stay visible. This lives
+   in nav.css (not global.css) because nav.css loads later and an
+   equal-specificity rule in global.css loses the cascade. */
+@media (prefers-color-scheme: dark) {
+  nav.nav--fixed {
+    background: linear-gradient(180deg, rgba(10, 15, 38, .94), rgba(10, 15, 38, 0));
+  }
+  nav.nav--fixed.scrolled,
+  nav.nav--static {
+    background: rgba(10, 15, 38, .94);
+    border-bottom-color: var(--rule);
+  }
+  /* Sign-up CTA stays the saturated teal action color (navy is a light
+     token in dark mode) with dark text. */
+  .nav-links .nav-cta { background: var(--accent); color: #0A0F26; border-color: var(--accent); }
+  .nav-links .nav-cta:hover { background: var(--accent-light); }
+}
