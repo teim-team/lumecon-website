@@ -34,11 +34,17 @@
 .hero-brand > * {
   animation: hero-rise .7s var(--ease) backwards;
 }
+/* Stagger order matches the hero-brand children in source order:
+   headline → workflow → sub → plain-language line → proof → path tiles
+   → data-sources strip. Keep one delay per child so a newly inserted
+   block doesn't drop to 0s and animate out of sequence. */
 .hero-brand > :nth-child(1) { animation-delay: .05s; }
 .hero-brand > :nth-child(2) { animation-delay: .20s; }
 .hero-brand > :nth-child(3) { animation-delay: .35s; }
 .hero-brand > :nth-child(4) { animation-delay: .50s; }
 .hero-brand > :nth-child(5) { animation-delay: .65s; }
+.hero-brand > :nth-child(6) { animation-delay: .80s; }
+.hero-brand > :nth-child(7) { animation-delay: .95s; }
 @media (prefers-reduced-motion: reduce) {
   .hero-brand > * { animation: none; }
 }
@@ -82,6 +88,60 @@
   margin: 0;
   max-width: 56ch;
 }
+/* Plain-language definition line (#74) — quieter than the sub, set
+   off by a teal rule so first-timers can spot the "what is this?"
+   explainer without it competing with the headline. */
+.hero-plain {
+  font-family: var(--font-sans);
+  font-size: clamp(.98rem, 1.2vw, 1.08rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin: 0;
+  max-width: 60ch;
+  padding-left: .9rem;
+  border-left: 2px solid var(--accent);
+}
+.hero-plain strong { font-weight: 600; color: var(--ink-1, var(--navy)); }
+/* Trusted data sources strip (#22) — a quiet credibility band under
+   the path tiles: small mono label, then the source links. */
+.hero-sources {
+  margin-top: .4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.hero-sources__label {
+  font-family: var(--font-mono);
+  font-size: .64rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.hero-sources__list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem .9rem;
+  padding: 0;
+  margin: 0;
+}
+.hero-sources__list a {
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-strong);
+  padding-bottom: 1px;
+  transition: color .15s var(--ease), border-color .15s var(--ease);
+}
+.hero-sources__list a:hover {
+  color: var(--accent-deep);
+  border-color: var(--accent);
+}
+.hero-sources__list a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .hero-proof {
   list-style: none;
   display: flex;
