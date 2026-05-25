@@ -311,6 +311,16 @@ const tribalLookupJson = JSON.stringify(tribalLookup);
       <span class="hero-tooltip__name" id="ttName">-</span>
       <span class="hero-tooltip__hint" id="ttHint">click to run a study here</span>
     </div>
+
+    <!-- First-visit coachmark (#39): a one-time hint that the map is
+         interactive. Hidden by default; the runtime reveals it only for
+         visitors who haven't seen it, and dismisses it on first
+         interaction, an explicit "Got it", or after a few seconds. -->
+    <div class="hero-coachmark" id="heroCoachmark" role="status" hidden>
+      <span class="hero-coachmark__dot" aria-hidden="true"></span>
+      <span class="hero-coachmark__text">Tap any state or tribal land to run a live study</span>
+      <button type="button" class="hero-coachmark__close" id="heroCoachmarkClose" aria-label="Dismiss hint">Got it</button>
+    </div>
   </figure>
 
   <!-- The activity chip used to live here, below the map. It was
