@@ -209,6 +209,31 @@ function thinkingPause(answer: string): number {
   return Math.min(1800, Math.max(700, 480 + answer.length * 4));
 }
 
+/* Reveal a reply word-by-word so it reads as Cedar composing rather
+   than a block of text snapping in. Instant under reduced motion. */
+async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: string): Promise<void> {
+  if (prefersReducedMotion()) { bubble.textContent = text; return; }
+  const tokens = text.split(/(\s+)/);
+  const perWord = tokens.length > 90 ? 8 : 15;
+  bubble.textContent = '';
+  for (const tok of tokens) {
+    bubble.textContent += tok;
+    transcript.scrollTo({ top: transcript.scrollHeight });
+    if (tok.trim()) await sleep(perWord);
+  }
+}
+
+/* Example prompts the input placeholder cycles through while idle, so
+   first-time visitors see the kinds of things Cedar can field. */
+const PLACEHOLDER_EXAMPLES = [
+  'Ask Cedar a question…',
+  'Try "how much does it cost?"',
+  'Try "does this work for tribal nations?"',
+  'Try "EPA grant"',
+  'Try "how long does a study take?"',
+  'Try "see a demo"',
+];
+
 /* ----- Conversation memory -----------------------------------------
    IDs of the conversational-filler intents that shouldn't be tracked
    as the "last topic" — drilling into "tell me more" right after
@@ -305,6 +330,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
      follow-up like "tell me more" can drill into it instead of hitting
      a generic answer. Cleared when the user starts a new topic. */
   let priorIntent: CedarIntent | null = null;
+  /* Consecutive unmatched messages — after two in a row Cedar nudges
+     the visitor toward a human instead of looping on the fallback. */
+  let misses = 0;
 
   const sendMessage = async (rawText: string, echoText?: string) => {
     appendMessage(transcript, 'user', echoText ?? rawText);
@@ -338,13 +366,26 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     if (remaining > 0) await sleep(remaining);
 
     const bubble = typing.querySelector<HTMLElement>('.cedar-msg__bubble');
-    if (bubble) bubble.textContent = answer;
+    if (bubble) await streamText(transcript, bubble, answer);
 
     // Update conversation memory: substantive topics overwrite
     // priorIntent; fillers leave it alone so "thanks" → "tell me
     // more" still drills into the topic before the thanks.
     if (!clarified && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
       priorIntent = matched;
+    }
+
+    // Log true misses (so the intent bank can grow from real queries)
+    // and, after two in a row, hand off to a human.
+    const missed = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText);
+    if (missed) {
+      trackEvent('cedar.unmatched', { surface, text: rawText.slice(0, 120) });
+      misses += 1;
+      if (misses === 2) {
+        appendMessage(transcript, 'bot', 'I might be missing what you need — the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.');
+      }
+    } else {
+      misses = 0;
     }
   };
 
@@ -382,6 +423,17 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     collapseChips();
     void sendMessage(q);
   });
+
+  // Cycle the placeholder through example prompts while the field is
+  // idle and empty (skipped under reduced motion).
+  if (!prefersReducedMotion()) {
+    let phIdx = 0;
+    window.setInterval(() => {
+      if (document.activeElement === input || input.value) return;
+      phIdx = (phIdx + 1) % PLACEHOLDER_EXAMPLES.length;
+      input.setAttribute('placeholder', PLACEHOLDER_EXAMPLES[phIdx]);
+    }, 4200);
+  }
 
   return true;
 }
