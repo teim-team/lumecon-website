@@ -5,8 +5,11 @@
  * RPC, direct/indirect/induced, etc.). Gives first-timers a reference
  * and gives Cedar a stable page to point people to.
  *
- * Built on LegalLayout for the shared chrome + prose styling; the term
- * list is a semantic <dl> so it reads well to both people and crawlers.
+ * Styled to echo the Lumecon proposal deck: teal small-caps kickers,
+ * a cyan title band, soft mint / cyan callout panels, and clean
+ * hairline-divided definition rows. Built on LegalLayout for the shared
+ * chrome; the term list is a semantic <dl> so it reads well to both
+ * people and crawlers.
  */
 import LegalLayout from '../layouts/LegalLayout.astro';
 
@@ -46,55 +49,128 @@ const definedTermSet = {
   canonical="https://lumecon.ai/glossary"
   keywords="economic impact glossary, what is a multiplier, regional purchase coefficient, RPC, direct indirect induced effects, input-output model, economic impact analysis terms, labor income, FTE jobs"
 >
-  <h1 class="hl-block hl-block--gold-b">Glossary</h1>
-  <div class="date">Plain-language definitions</div>
-  <p>The terms that come up most across economic impact analysis — and across Lumecon and Cedar. No economics degree required.</p>
+  <p class="gloss-kicker">Reference</p>
+  <h1 class="gloss-title hl-block hl-block--c">Glossary</h1>
 
-  <dl class="glossary">
+  <div class="gloss-intro">
+    <p class="gloss-kicker gloss-kicker--on-tint">Plain-language definitions</p>
+    <p class="gloss-intro__text">The terms that come up most across economic impact analysis &mdash; and across Lumecon and Cedar. Defined in plain language, no economics degree required.</p>
+  </div>
+
+  <dl class="gloss">
     {TERMS.map((t) => (
-      <div class="glossary__row" id={t.term.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '')}>
-        <dt class="glossary__term">{t.term}{t.abbr && <span class="glossary__abbr"> ({t.abbr})</span>}</dt>
-        <dd class="glossary__def">{t.def}</dd>
+      <div class="gloss__row" id={t.term.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '')}>
+        <dt class="gloss__term">
+          <span class="gloss__name">{t.term}</span>
+          {t.abbr && <span class="gloss__abbr">{t.abbr}</span>}
+        </dt>
+        <dd class="gloss__def">{t.def}</dd>
       </div>
     ))}
   </dl>
 
-  <p class="glossary__foot">Want to see these in motion? Watch a live study on the <a href="/map" class="note-link">interactive map</a>, or ask <a href="/cedar" class="note-link">Cedar</a> to explain any of them.</p>
+  <aside class="gloss-cta">
+    <p class="gloss-kicker gloss-kicker--on-tint">See it in motion</p>
+    <p class="gloss-cta__text">Watch a live study run on the <a href="/map">interactive map</a>, or ask <a href="/cedar">Cedar</a> to explain any of these in plain language.</p>
+  </aside>
 
   <script type="application/ld+json" set:html={JSON.stringify(definedTermSet)} is:inline />
 </LegalLayout>
 
 <style>
-  .glossary {
-    margin: 2rem 0 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.4rem;
+  /* Teal small-caps kicker — the proposal deck's section-label device. */
+  .gloss-kicker {
+    font-family: var(--font-mono);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin: 0 0 .5rem;
   }
-  .glossary__row {
+  .gloss-title { margin-bottom: 1.4rem; }
+
+  /* Soft mint intro panel, echoing the proposal's summary boxes. */
+  .gloss-intro {
+    background: var(--cedar-mist);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem 1.2rem;
+    margin: 0 0 2.4rem;
+  }
+  .gloss-kicker--on-tint { margin-bottom: .35rem; }
+  .gloss-intro__text {
+    margin: 0;
+    font-size: .95rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+
+  /* Definition rows — clean hairline-divided entries like the deck's
+     comparison tables. Term in the display face, abbreviation as a
+     quiet teal tag, definition in body ink. */
+  .gloss {
+    margin: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .gloss__row {
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--rule);
     scroll-margin-top: 6rem;
   }
-  .glossary__term {
+  .gloss__term {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: .35rem;
+  }
+  .gloss__name {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 1.02rem;
-    color: var(--navy);
+    font-size: 1.05rem;
     letter-spacing: -.01em;
-    margin-bottom: .3rem;
+    color: var(--navy);
   }
-  .glossary__abbr {
-    color: var(--accent-deep);
+  .gloss__abbr {
+    font-family: var(--font-mono);
+    font-size: .58rem;
     font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    background: var(--accent-rgba-08);
+    padding: .15rem .45rem;
+    border-radius: 5px;
+    transform: translateY(-1px);
   }
-  .glossary__def {
+  .gloss__def {
+    margin: 0;
     font-size: .92rem;
     line-height: 1.7;
     color: var(--gray);
     font-weight: 500;
-    padding-left: .9rem;
-    border-left: 2px solid var(--rule-strong);
   }
-  .glossary__foot {
-    margin-top: 2rem;
+
+  /* Closing cyan panel with the cross-links — the deck's highlight box. */
+  .gloss-cta {
+    background: var(--accent-bar);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem 1.2rem;
+    margin-top: 2.5rem;
   }
+  .gloss-cta__text {
+    margin: 0;
+    font-size: .95rem;
+    line-height: 1.6;
+    color: var(--navy);
+    font-weight: 500;
+  }
+  .gloss-cta__text a {
+    color: var(--accent-deep);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .gloss-cta__text a:hover { color: var(--navy); }
 </style>
