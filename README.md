@@ -117,6 +117,78 @@ gracefully when `PUBLIC_API_URL` and analytics keys are unset (the
 `api-unconfigured` path), so the static marketing site works on its own.
 Never commit a real `.env`.
 
+## Design system (colors, type, fonts)
+
+The canonical source of truth is the `:root` block in
+[`src/styles/global.css`](./src/styles/global.css) — every value below is a
+CSS custom property defined there. This is the **Lumecon marketing site's**
+system; per-platform product surfaces (Local / Tribal / Global) may diverge
+on color and font, but the type scale and spacing are a good shared baseline.
+
+### Fonts
+
+Loaded from Google Fonts in `BaseLayout.astro`:
+
+| Role | Family (token) | Weights loaded |
+| --- | --- | --- |
+| Display + UI sans (almost everything) | **Inter** (`--font-sans`, `--font-display`) | 400, 500, 600, 700, 800 |
+| Mono labels / eyebrows / data chips | **JetBrains Mono** (`--font-mono`) | 400, 500, 700 |
+| Serif fallback for the wordmark only | **Spectral** (`--font-serif`) | 300–800 + italics |
+
+One sans (Inter) carries the hierarchy via weight + size, not a serif/sans pairing.
+
+### Type scale
+
+Root is 16px; **body copy is set to 18px** with `line-height: 1.6`. The token
+ladder (rem):
+
+| Token | Size | Typical use |
+| --- | --- | --- |
+| `--type-xs` | 0.75rem / 12px | fine print, mono captions |
+| `--type-sm` | 0.875rem / 14px | small UI text |
+| `--type-base` | 1rem / 16px | base unit (body renders at 18px) |
+| `--type-md` | 1.125rem / 18px | lede / large body |
+| `--type-lg` | 1.375rem / 22px | sub-headings |
+| `--type-xl` | 1.75rem / 28px | h3 |
+| `--type-2xl` | 2.25rem / 36px | section headings (h2) |
+| `--type-3xl` | 3rem / 48px | large section headings |
+| `--type-display` | `clamp(2.8rem, 7.5vw, 6rem)` | display / hero |
+
+Headlines are fluid: the homepage hero (`.hero-statement`) is
+`clamp(2rem, 5.5vw, 4.4rem)` at weight 600. Eyebrows / kickers are mono,
+uppercase, ~0.64–0.82rem with wide letter-spacing.
+Weights: `--weight-regular 400` · `--weight-medium 500` · `--weight-semi 600`
+· `--weight-bold 700` · `--weight-black 800`.
+
+### Color scheme
+
+Cool, modern palette: white/near-black-navy surfaces with a **teal** UI accent
+and **gold** reserved for the brand wordmark.
+
+| Token | Hex | Role |
+| --- | --- | --- |
+| `--white` | `#FFFFFF` | primary surface |
+| `--paper` | `#F7F7F8` | rare soft surface (forms/panels) |
+| `--navy` / `--ink` | `#0A0F26` | primary text / darkest surface |
+| `--ink-2` | `#353B5C` | body text |
+| `--ink-3` | `#6B6F8A` | muted text, eyebrows |
+| `--ink-4` | `#9DA1B5` | faint dividers/dots |
+| `--accent` | `#0FB5A5` | **teal UI accent** — eyebrows, focus rings, hovers, dividers |
+| `--accent-deep` | `#0A8A7E` | accent text/links, hovers |
+| `--accent-chip` | `#0A7F74` | white-on-teal surfaces (chips/bubbles/send) — deepened to clear WCAG AA |
+| `--accent-light` / `--accent-bar` | `#5FD9CC` / `#B8EDE6` | teal tints (highlights, bands) |
+| `--gold` | `#F0A91A` | **reserved for the wordmark / "luminate" emphasis — not a UI accent** |
+| `--green` | `#0E8B4F` | highlight tint / "complete" status |
+| `--terra` | `#E04A2A` | warm highlight tint |
+| `--blue` / `--purple` | `#2E5BD6` / `#6E3DD8` | highlight tints |
+| `--rule` / `--rule-strong` | `rgba(10,15,38,.12)` / `.24` | hairline borders |
+| `--error-color` | `#DC2626` | error / validation |
+| `--map-tribal` | `#C77A18` | map: tribal-lands layer |
+
+Notes: corners are **rounded** (cards/chips/inputs); headline highlights use
+the `.hl-block` smear system with rotating tints; a `prefers-color-scheme: dark`
+block in `global.css` flips the surface/ink tokens (teal/gold stay put).
+
 ## Where this fits: the TEIM ecosystem
 
 Lumecon is a **standalone brand**, and this repository is its public
