@@ -51,33 +51,6 @@ export interface ContactResponse {
   receivedAt: string;
 }
 
-export interface StudyRequest {
-  /** Geography level. Matches scenes.ts. */
-  level: 'state' | 'county' | 'reservation';
-  /** 2-digit FIPS for state/county. */
-  state?: string;
-  /** 5-digit FIPS for county studies. */
-  countyFips?: string;
-  /** Lookup key for reservation studies. */
-  tribalKey?: string;
-  /** Project descriptor. */
-  projectName: string;
-  /** Dollar amount in whole USD. */
-  amountUsd: number;
-  /** Activity profile id matching ACT in scenes.ts. */
-  activityId: string;
-}
-export interface StudyResponse {
-  studyId: string;
-  direct: number;
-  indirect: number;
-  induced: number;
-  total: number;
-  jobs: number;
-  /** ISO 8601. */
-  computedAt: string;
-}
-
 export interface CedarChatRequest {
   /** The visitor's message. */
   message: string;
@@ -117,6 +90,11 @@ export interface LoginResponse {
   user: { id: string; name: string; email: string; orgId?: string };
 }
 
+/* NOTE on integration: account creation/auth is owned by the `teim-app`
+   backend, whose account model splits the name (name_first / name_last)
+   and carries organization + account_id. If this form is ever wired to
+   real auth, align it to teim-app's contract (likely first/last name +
+   account_id) rather than this single-`name` placeholder. */
 export interface SignupRequest {
   name: string;
   email: string;
@@ -166,13 +144,11 @@ const request = async <T>(path: string, init: RequestInit): Promise<ApiResult<T>
 export const submitContact = (req: ContactRequest): Promise<ApiResult<ContactResponse>> =>
   request<ContactResponse>('/v1/contact', { method: 'POST', body: JSON.stringify(req) });
 
-/** Run an impact study. Future endpoint: `POST /v1/studies`. */
-export const runStudy = (req: StudyRequest): Promise<ApiResult<StudyResponse>> =>
-  request<StudyResponse>('/v1/studies', { method: 'POST', body: JSON.stringify(req) });
-
-/** Fetch a previously run study by id. Future endpoint: `GET /v1/studies/:id`. */
-export const getStudy = (studyId: string): Promise<ApiResult<StudyResponse>> =>
-  request<StudyResponse>(`/v1/studies/${encodeURIComponent(studyId)}`, { method: 'GET' });
+/* Running and fetching impact studies is NOT this site's job — that
+   happens in the authenticated `teim-app` product against the
+   `teim-engine` StateIO accounts (keyed by year / region / table / BEA
+   sector). No study seam is defined here on purpose, so this marketing
+   repo doesn't carry a competing, divergent study contract. */
 
 /** Send a message to a Cedar chat backend. This is the marketing site's
  *  simplified, anonymous seam — `surface` + a per-session `conversationId`,
