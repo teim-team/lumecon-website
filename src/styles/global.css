@@ -244,6 +244,42 @@ html {
   border-radius: 2px;
 }
 
+/* Forced-colors (Windows High Contrast) support (#63). The OS replaces
+   our palette, so the job is to make sure anything that conveyed
+   meaning purely through a background fill keeps a visible edge, and
+   that selected/focus states still read. Filled pills (chips, CTAs,
+   the Cedar FAB, the send button) get a system-color border so they
+   don't dissolve into the background, and the focus ring maps to the
+   system Highlight color. */
+@media (forced-colors: active) {
+  *:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+  .btn, .nav-cta, .nav-ghost,
+  .cedar-chip, .cedar-chip-more, .cedar-chat__send, .cedar-fab,
+  .cedar-feedback__btn, .cedar-followup,
+  .pricing-platform-tile, .pricing-tier-card .btn,
+  .hero-path, .wfilter, .workspace__again, .hero-coachmark__close {
+    border: 1px solid ButtonText;
+  }
+  /* Selected / pressed / active states need a non-color cue. */
+  [aria-pressed="true"],
+  .wfilter.is-active,
+  .cedar-feedback__btn.is-selected {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+}
+
+/* prefers-contrast: more — strengthen the hairline rules and the
+   lightest text token so structure and secondary copy hold up on
+   high-contrast displays without otherwise touching the palette. */
+@media (prefers-contrast: more) {
+  :root {
+    --rule: rgba(10, 15, 38, .34);
+    --rule-strong: rgba(10, 15, 38, .55);
+    --ink-3: #4A4F6B;
+  }
+}
+
 /* ---------- Icon animations ----------
    Subtle, thematic motion so each icon hints at what its section is
    about. Disabled under prefers-reduced-motion. */
