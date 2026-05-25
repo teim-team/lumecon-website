@@ -1,0 +1,28 @@
+version: 2
+updates:
+  # npm dependencies (Astro, d3-geo, Playwright, etc.). Weekly, grouped
+  # so routine patch/minor bumps arrive as one PR instead of many.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      npm-minor-patch:
+        update-types:
+          - minor
+          - patch
+    labels:
+      - dependencies
+
+  # GitHub Actions used by the smoke, lighthouse, and deploy workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - github-actions

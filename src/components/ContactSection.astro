@@ -19,6 +19,17 @@ import '../styles/cta.css';
       <div class="form-validation-error" id="femailError">Please enter a valid email</div>
       <label for="fmsg">Message</label>
       <textarea id="fmsg" name="message" placeholder="Briefly: who you are and what brought you here."></textarea>
+
+      <!-- Honeypot (#95): hidden from people, tempting to bots. A real
+           visitor never sees or fills it; if it arrives filled we drop
+           the submission. Scaffolding now (the form is mailto); the same
+           field gets server-side rejection + rate-limiting when a real
+           contact endpoint replaces the mailto. -->
+      <div class="cta-hp" aria-hidden="true">
+        <label for="forg-url">Company website</label>
+        <input type="text" id="forg-url" name="org_url" tabindex="-1" autocomplete="off" />
+      </div>
+
       <a id="formSend" href="mailto:contact@lumecon.ai?subject=Lumecon%20inquiry">Send by email</a>
 
       <div class="form-success-overlay" id="formSuccess">
@@ -31,6 +42,19 @@ import '../styles/cta.css';
     </div>
   </div>
 </section>
+
+<style>
+  /* Honeypot: kept in the layout (so bots that read the DOM fill it) but
+     pulled off-screen and out of the tab order for real visitors. Not
+     display:none — some bots skip hidden fields. */
+  .cta-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
 
 <script>
   const SUCCESS_SHOW_DELAY = 800; // ms after mailto opens
@@ -54,8 +78,16 @@ import '../styles/cta.css';
       emailError.classList.remove('show');
     };
 
+    const honeypot = document.getElementById('forg-url') as HTMLInputElement | null;
+
     sendBtn.addEventListener('click', (ev) => {
       ev.preventDefault();
+      // Honeypot tripped — a bot filled the hidden field. Show the same
+      // success state so we don't reveal the trap, but send nothing.
+      if (honeypot && honeypot.value.trim() !== '') {
+        formSuccess.classList.add('show');
+        return;
+      }
       clearErrors();
       const n = nameInput.value.trim();
       const e = emailInput.value.trim();
