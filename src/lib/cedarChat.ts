@@ -618,9 +618,14 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     const resolved = await resolveAnswer(rawText, surface, conversationId, localFallback);
     const answer = resolved.text;
     // A genuine miss is when neither the backend nor the local classifier
-    // produced an answer. If the API answered, it's not a miss — so we
+    // produced an answer. If the API answered, it's not a miss, so we
     // don't emit cedar.unmatched or count it toward the human handoff.
     const missed = localMiss && !resolved.fromApi;
+    // A clarify prompt is only actually shown when the LOCAL fallback was
+    // used. If the backend answered, the visitor saw a committed answer,
+    // not "did you mean...", so it should earn feedback, follow-ups, and
+    // a remembered topic like any other real answer.
+    const clarifiedShown = clarified && !resolved.fromApi;
 
     // Let the typing indicator breathe before the reply lands. Subtract
     // any time a real API call already spent so we don't stack a second
@@ -635,7 +640,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // Update conversation memory: substantive topics overwrite
     // priorIntent; fillers leave it alone so "thanks" → "tell me
     // more" still drills into the topic before the thanks.
-    if (!clarified && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
+    if (!clarifiedShown && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
       priorIntent = matched;
     }
 
@@ -644,7 +649,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     if (bubble && !isFiller && !missed) attachFeedback(bubble, surface);
     // Context-aware next-step chips on a real topic answer (#10),
     // biased toward the remembered audience (#6).
-    if (!clarified && !missed && (isDrillDown || (matched != null && !isFiller))) {
+    if (!clarifiedShown && !missed && (isDrillDown || (matched != null && !isFiller))) {
       renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience), (t, it) => {
         collapseChips();
         void sendMessage(t, t, it);
