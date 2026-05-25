@@ -280,10 +280,18 @@ async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: st
   const tokens = text.split(/(\s+)/);
   const perWord = tokens.length > 90 ? 8 : 15;
   bubble.textContent = '';
-  for (const tok of tokens) {
-    bubble.textContent += tok;
-    transcript.scrollTo({ top: transcript.scrollHeight });
-    if (tok.trim()) await sleep(perWord);
+  // The transcript is an aria-live log; mark it busy while we append
+  // word-by-word so a screen reader announces the finished answer once
+  // (on busy → false) instead of reading every partial token (#64).
+  transcript.setAttribute('aria-busy', 'true');
+  try {
+    for (const tok of tokens) {
+      bubble.textContent += tok;
+      transcript.scrollTo({ top: transcript.scrollHeight });
+      if (tok.trim()) await sleep(perWord);
+    }
+  } finally {
+    transcript.setAttribute('aria-busy', 'false');
   }
 }
 
