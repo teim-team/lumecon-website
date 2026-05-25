@@ -24,10 +24,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
-    "@playwright/test": "~1.56",
+    "@playwright/test": "~1.60",
     "@types/d3-geo": "^3.1.0",
     "@types/topojson-client": "^3.1.5",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3"
   }
