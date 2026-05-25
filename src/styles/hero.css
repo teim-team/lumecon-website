@@ -34,11 +34,17 @@
 .hero-brand > * {
   animation: hero-rise .7s var(--ease) backwards;
 }
+/* Stagger order matches the hero-brand children in source order:
+   headline → workflow → sub → plain-language line → proof → path tiles
+   → data-sources strip. Keep one delay per child so a newly inserted
+   block doesn't drop to 0s and animate out of sequence. */
 .hero-brand > :nth-child(1) { animation-delay: .05s; }
 .hero-brand > :nth-child(2) { animation-delay: .20s; }
 .hero-brand > :nth-child(3) { animation-delay: .35s; }
 .hero-brand > :nth-child(4) { animation-delay: .50s; }
 .hero-brand > :nth-child(5) { animation-delay: .65s; }
+.hero-brand > :nth-child(6) { animation-delay: .80s; }
+.hero-brand > :nth-child(7) { animation-delay: .95s; }
 @media (prefers-reduced-motion: reduce) {
   .hero-brand > * { animation: none; }
 }
