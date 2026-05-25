@@ -237,7 +237,7 @@ function clarifyPrompt(candidates: CedarIntent[]): string {
     labels.length <= 1
       ? labels[0]
       : labels.slice(0, -1).join(', ') + ' or ' + labels[labels.length - 1];
-  return `I can read that a couple of ways, and I'd rather get it right than guess — did you mean ${list}? Tell me which one (or add a few words) and I'll go deep.`;
+  return `I can read that a couple of ways, and I'd rather get it right than guess. Did you mean ${list}? Tell me which one (or add a few words) and I'll go deep.`;
 }
 
 /** Substantive (chip-bearing) intents tied at the top score. Length >= 2
@@ -461,19 +461,23 @@ function attachFeedback(bubble: HTMLElement, surface: CedarSurface): void {
 }
 
 /* ----- Context follow-up chips (#10) -------------------------------- */
+interface FollowUp { label: string; text: string; intent?: CedarIntent }
 function followUpsFor(
   matched: CedarIntent | null,
   isDrillDown: boolean,
   audience: string | null,
-): Array<{ label: string; text: string }> {
-  const out: Array<{ label: string; text: string }> = [];
+): FollowUp[] {
+  const out: FollowUp[] = [];
   const push = (id: string) => {
     if (out.length >= 3) return;
     if (matched && matched.id === id) return;
     const it = INTENTS.find((x) => x.id === id);
-    if (it?.chip && !out.some((o) => o.text === it.chip)) out.push({ label: it.chip, text: it.chip });
+    // Carry the intent so the click routes straight to it (its chip
+    // label may not contain its own trigger phrases).
+    if (it?.chip && !out.some((o) => o.text === it.chip)) out.push({ label: it.chip, text: it.chip, intent: it });
   };
   if (!isDrillDown && matched && typeof matched.expanded === 'string') {
+    // No intent: "tell me more" routes through the drill-down path.
     out.push({ label: 'Tell me more', text: 'tell me more' });
   }
   if (audience && AUDIENCE_INTENT[audience]) push(AUDIENCE_INTENT[audience]);
@@ -483,8 +487,8 @@ function followUpsFor(
 
 function renderFollowUps(
   transcript: HTMLElement,
-  items: Array<{ label: string; text: string }>,
-  onSelect: (text: string) => void,
+  items: FollowUp[],
+  onSelect: (text: string, intent?: CedarIntent) => void,
 ): void {
   if (!items.length) return;
   const row = document.createElement('div');
@@ -499,7 +503,7 @@ function renderFollowUps(
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       row.remove();
-      onSelect(it.text);
+      onSelect(it.text, it.intent);
     });
     row.appendChild(btn);
   }
@@ -573,32 +577,41 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     collapseChips();
   }
 
-  const sendMessage = async (rawText: string, echoText?: string) => {
+  const sendMessage = async (rawText: string, echoText?: string, forcedIntent?: CedarIntent) => {
     appendMessage(transcript, 'user', echoText ?? rawText);
     record('user', echoText ?? rawText);
     trackEvent('cedar.message.sent', { surface, length: rawText.length });
     const typing = appendMessage(transcript, 'bot', makeTypingIndicator());
     const startedAt = nowMs();
 
-    // Classify up-front so conversation memory and the "tell me more"
-    // drill-down work whether the API or the local classifier answers.
-    const matched = classify(rawText);
-    // "Tell me more" — or a plain "yes / sure" right after Cedar
-    // offered to go deeper — drills into the prior topic's expanded
-    // answer, so the thread actually continues instead of replying with
-    // a generic acknowledgement.
+    // A chip (or follow-up) click is an explicit choice of intent, so
+    // route straight to that intent's answer. Re-classifying the chip's
+    // label is wrong: some labels (e.g. "How long does a study take?")
+    // don't contain their own trigger phrases and would fall through to
+    // the generic reply. Otherwise classify the free-text up-front so
+    // conversation memory and the "tell me more" drill-down still work.
+    const matched = forcedIntent ?? classify(rawText);
+    // "Tell me more", or a plain "yes / sure" right after Cedar offered
+    // to go deeper, drills into the prior topic's expanded answer so the
+    // thread continues instead of replying with a generic acknowledgement.
     const isDrillDown =
+      !forcedIntent &&
       (matched?.id === 'tell_me_more' || matched?.id === 'affirmative') &&
       priorIntent != null &&
       typeof priorIntent.expanded === 'string';
-    const localFallback = isDrillDown ? priorIntent!.expanded! : localAnswer(rawText);
+    const localFallback = forcedIntent
+      ? forcedIntent.answer
+      : isDrillDown
+        ? priorIntent!.expanded!
+        : localAnswer(rawText);
     // When the message was ambiguous, localAnswer asked the visitor to
-    // clarify instead of committing — so we shouldn't record a guessed
-    // topic as the conversation's "last topic".
-    const clarified = !isDrillDown && ambiguousCandidates(rawText).length >= 2;
+    // clarify instead of committing, so we shouldn't record a guessed
+    // topic as the conversation's "last topic". A forced intent is never
+    // ambiguous and never a miss.
+    const clarified = !forcedIntent && !isDrillDown && ambiguousCandidates(rawText).length >= 2;
     // Whether the *local* classifier failed to find anything. This only
     // becomes a real "miss" if the backend didn't answer either (below).
-    const localMiss = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
+    const localMiss = !forcedIntent && !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
     const aud = detectAudience(rawText);
     if (aud) audience = aud;
 
@@ -632,9 +645,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // Context-aware next-step chips on a real topic answer (#10),
     // biased toward the remembered audience (#6).
     if (!clarified && !missed && (isDrillDown || (matched != null && !isFiller))) {
-      renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience), (t) => {
+      renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience), (t, it) => {
         collapseChips();
-        void sendMessage(t);
+        void sendMessage(t, t, it);
       });
     }
 
@@ -644,7 +657,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
       trackEvent('cedar.unmatched', { surface, text: rawText.slice(0, 120) });
       misses += 1;
       if (misses === 2) {
-        const handoff = 'I might be missing what you need — the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.';
+        const handoff = 'I might be missing what you need, and the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.';
         appendMessage(transcript, 'bot', handoff);
         record('bot', handoff);
       }
@@ -667,7 +680,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     if (!intent || !intent.chip) return;
     trackEvent('cedar.chip', { surface, intent: intent.id });
     collapseChips();
-    void sendMessage(intent.chip, intent.chip);
+    void sendMessage(intent.chip!, intent.chip!, intent);
   });
 
   // "See more options": reveal the held-back starter prompts, then

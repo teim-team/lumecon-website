@@ -1,4 +1,5 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
+import { INTENTS, CHIP_IDS, FALLBACK_ANSWER } from '../src/data/cedarIntents';
 
 /**
  * Cedar classifier routing tests.
@@ -76,7 +77,7 @@ test('cedar asks to clarify when a message is genuinely ambiguous', async ({ pag
   // "implan pricing" ties competitors and pricing at the top score — two
   // distinct chip-bearing topics, so Cedar should ask rather than guess.
   const bubble = await ask(panel, 'implan pricing');
-  await expect(bubble).toContainText('did you mean');
+  await expect(bubble).toContainText('Did you mean');
 });
 
 test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
@@ -85,6 +86,34 @@ test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
   // "pricng" is one edit from the "pricing" trigger.
   const bubble = await ask(panel, 'pricng');
   await expect(bubble).toContainText('five figures a year');
+});
+
+test('every starter chip routes to its own intent, never the fallback', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'Routing is engine-independent; headless WebKit is unreliable in CI.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  // A chip is an explicit intent choice. Some labels (e.g. "How long
+  // does a study take?") don't contain their own trigger phrases, so
+  // re-classifying the label used to drop them to the generic fallback.
+  // Fire each chip's click handler and confirm it answers with its own
+  // intent. We dispatch the click directly (rather than driving the
+  // cramped floating panel) because the bug lived in the chip handler's
+  // routing, which the delegated listener runs regardless of layout.
+  // Reload per chip because the first click collapses the chip rail.
+  for (const id of CHIP_IDS) {
+    const intent = INTENTS.find((i) => i.id === id)!;
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const panel = page.locator('#cedarFabPanel');
+    await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
+    await page.evaluate((cid) => {
+      const el = document.querySelector(`#cedarFabPanel .cedar-chip[data-intent="${cid}"]`);
+      el?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    }, id);
+    const reply = panel.locator('.cedar-msg--bot .cedar-msg__bubble').last();
+    await expect(reply, `chip "${id}" should answer with its own intent`)
+      .toContainText(intent.answer.slice(0, 30), { timeout: 6000 });
+    await expect(reply, `chip "${id}" must not fall back`)
+      .not.toContainText(FALLBACK_ANSWER.slice(0, 30));
+  }
 });
 
 test('cedar handles rapid back-to-back submits without breaking', async ({ page, browserName }) => {
