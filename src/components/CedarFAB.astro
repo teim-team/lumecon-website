@@ -11,15 +11,13 @@
  * component is responsible only for the FAB chrome + open/close
  * behaviour; bootChat() does the rest.
  *
- * Surface styles (.cedar-chat, .cedar-msg, .cedar-chip, ...) come
- * from src/styles/cedar-chat.css, also shared.
+ * The chat surface markup itself (.cedar-chat, header, transcript,
+ * chips, form) is the shared <CedarChat /> component, so the FAB and
+ * the inline /cedar panel render the exact same surface and can't
+ * drift. Surface styles come from src/styles/cedar-chat.css, imported
+ * by that component.
  */
-import { INTENTS, CHIP_IDS } from '../data/cedarIntents';
-import '../styles/cedar-chat.css';
-
-const chips = CHIP_IDS
-  .map((id) => INTENTS.find((i) => i.id === id))
-  .filter((i): i is NonNullable<typeof i> => i != null && i.chip != null);
+import CedarChat from './CedarChat.astro';
 ---
 <button
   type="button"
@@ -48,60 +46,7 @@ const chips = CHIP_IDS
      coexists with the inline Cedar chat on the homepage without
      element-id collisions. -->
 <div class="cedar-fab-panel" id="cedarFabPanel" role="dialog" aria-label="Ask Cedar" aria-hidden="true" hidden>
-  <div class="cedar-chat">
-    <header class="cedar-chat__header">
-      <span class="cedar-chat__brand">
-        <span class="cedar-chat__name">Cedar</span>
-      </span>
-      <span class="cedar-chat__status" aria-label="Online">
-        <span class="cedar-chat__status-dot" aria-hidden="true"></span>
-        <span class="cedar-chat__status-label">Online</span>
-      </span>
-    </header>
-    <div class="cedar-chat__transcript" data-cedar-transcript role="log" aria-live="polite" aria-label="Cedar conversation">
-      <div class="cedar-msg cedar-msg--bot">
-        <span class="cedar-msg__avatar" aria-hidden="true">
-          <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="30" height="30" />
-        </span>
-        <div class="cedar-msg__bubble cedar-msg__bubble--welcome">
-          <p class="cedar-msg__line">Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.</p>
-        </div>
-      </div>
-      <div class="cedar-quickreply" data-cedar-chips>
-        {chips.map((intent, i) => (
-          <button class:list={['cedar-chip', { 'cedar-chip--extra': i >= 5 }]} type="button" data-intent={intent.id} hidden={i >= 5}>{intent.chip}</button>
-        ))}
-        {chips.length > 5 && (
-          <button class="cedar-chip-more" type="button" data-cedar-more>See more options</button>
-        )}
-      </div>
-    </div>
-    <form class="cedar-chat__form" data-cedar-form autocomplete="off">
-      <label class="cedar-chat__inputwrap">
-        <span class="visually-hidden">Ask Cedar</span>
-        <input
-          data-cedar-input
-          class="cedar-chat__input"
-          type="text"
-          name="q"
-          placeholder="Ask Cedar a question..."
-          maxlength="280"
-          autocomplete="off"
-          autocorrect="off"
-          autocapitalize="sentences"
-          spellcheck="true"
-          enterkeyhint="send"
-          inputmode="text"
-          aria-label="Ask Cedar a question"
-        />
-      </label>
-      <button class="cedar-chat__send" type="submit" aria-label="Send">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-          <path d="M4 12L20 4L16 20L12 13L4 12Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="miter"/>
-        </svg>
-      </button>
-    </form>
-  </div>
+  <CedarChat />
 </div>
 
 <script>
