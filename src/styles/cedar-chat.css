@@ -110,7 +110,11 @@
 .cedar-msg--bot .cedar-msg__bubble { border-top-left-radius: 4px; }
 .cedar-msg--user .cedar-msg__bubble {
   background: var(--accent-chip);
-  color: var(--white);
+  /* Fixed white, not var(--white): the teal surface is a fixed brand
+     color that doesn't flip in dark mode, so the text mustn't either
+     (var(--white) flips to dark navy → dark-on-teal, fails AA). White
+     on --accent-chip is ~4.9:1 in both modes. */
+  color: #fff;
   border-color: var(--accent-chip);
   border-top-right-radius: 4px;
 }
@@ -195,7 +199,7 @@
   padding: 0;
   flex-shrink: 0;
   background: var(--accent-chip);
-  color: var(--white);
+  color: #fff; /* fixed white on the fixed teal — see user-bubble note */
   border: 1px solid var(--accent-chip);
   border-radius: 50%;
   display: inline-flex;
@@ -231,7 +235,7 @@
   font-family: var(--font-sans);
   font-size: .9rem;
   font-weight: 500;
-  color: var(--white);
+  color: #fff; /* fixed white on the fixed teal — see user-bubble note */
   cursor: pointer;
   transition: background .15s var(--ease), transform .15s var(--ease);
   letter-spacing: -.005em;

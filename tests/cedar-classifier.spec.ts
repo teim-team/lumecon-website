@@ -86,3 +86,30 @@ test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
   const bubble = await ask(panel, 'pricng');
   await expect(bubble).toContainText('five figures a year');
 });
+
+test('cedar handles rapid back-to-back submits without breaking', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+  // Intentionally NOT reduced motion: this exercises the word-by-word
+  // streaming + the transcript aria-busy toggle under concurrency.
+  const errs: string[] = [];
+  page.on('pageerror', (e) => errs.push(e.message));
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  const panel = page.locator('#cedarFabPanel');
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
+  await page.locator('#cedarFab').click();
+  const input = panel.locator('[data-cedar-input]');
+
+  // Fire two messages back-to-back, the second while the first is still
+  // composing.
+  await input.fill('what is lumecon');
+  await input.press('Enter');
+  await input.fill('how much does it cost');
+  await input.press('Enter');
+
+  // Both user turns and both replies (plus the welcome bubble) render.
+  await expect(panel.locator('.cedar-msg--user')).toHaveCount(2, { timeout: 8000 });
+  await expect(panel.locator('.cedar-msg--bot')).toHaveCount(3, { timeout: 12000 });
+  // The aria-busy flag is released once streaming settles (never stuck).
+  await expect(panel.locator('[data-cedar-transcript]')).toHaveAttribute('aria-busy', 'false', { timeout: 12000 });
+  expect(errs).toEqual([]);
+});
