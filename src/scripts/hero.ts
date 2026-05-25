@@ -1110,6 +1110,22 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
      /data/counties.json endpoint). Injected once on idle. When a
      scene fires with scene.countyFips set, we add data-active="1"
      on the matching county polygon for the tiered highlight. */
+  /* Map-data loading is network-aware (#36/#37/#40):
+       - mapFetchAbort cancels in-flight county/AIANNH fetches when the
+         visitor navigates away (Astro view transition or full unload),
+         so we don't burn bandwidth on a page they've already left.
+       - liteMode (Save-Data header or a 2g-class connection) suppresses
+         the *automatic* prefetch of the ~1MB overlays. They still load
+         on an explicit interaction, so the states map stays fully usable
+         without pulling the heavy layers uninvited. */
+  let mapFetchAbort = new AbortController();
+  const abortMapFetches = () => { try { mapFetchAbort.abort(); } catch { /* noop */ } };
+  window.addEventListener('pagehide', abortMapFetches, { once: true });
+  document.addEventListener('astro:before-swap', abortMapFetches, { once: true });
+  const netConn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const liteMode = !!netConn && (netConn.saveData === true || /(^|-)2g$/.test(netConn.effectiveType || ''));
+  const isAbortError = (err: unknown): boolean => err instanceof DOMException && err.name === 'AbortError';
+
   const countyLayer = document.getElementById('heroCountyLayer');
   let countyLoading: Promise<void> | null = null;
   const countyByFips = new Map<string, SVGPathElement>();
@@ -1117,7 +1133,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   const loadCounties = (): Promise<void> => {
     if (!countyLayer || countyLayer.dataset.loaded === '1') return Promise.resolve();
     if (countyLoading) return countyLoading;
-    countyLoading = fetch('/data/counties.json', { credentials: 'same-origin' })
+    countyLoading = fetch('/data/counties.json', { credentials: 'same-origin', signal: mapFetchAbort.signal })
       .then(r => r.ok ? r.json() : [])
       .then((polys: any[]) => {
         if (!countyLayer || countyLayer.dataset.loaded === '1') return;
@@ -1169,7 +1185,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   const loadAiannh = (): Promise<void> => {
     if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return Promise.resolve();
     if (aiannhLoading) return aiannhLoading;
-    aiannhLoading = fetch('/data/aiannh.json', { credentials: 'same-origin' })
+    aiannhLoading = fetch('/data/aiannh.json', { credentials: 'same-origin', signal: mapFetchAbort.signal })
       .then(r => r.ok ? r.json() : [])
       .then((polys: any[]) => {
         if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return;
@@ -1200,17 +1216,69 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     return aiannhLoading;
   };
 
-  // Trigger lazy-load on first stage interaction or after idle.
+  // bfcache restore (#40): leaving the page aborts mapFetchAbort, which
+  // permanently poisons its signal. If the visitor comes back via the
+  // back/forward cache, replace the controller and drop any memoized
+  // load promise that never resolved, so the overlays can fetch again
+  // instead of rejecting instantly for the rest of the session. Layers
+  // already injected before navigating away survive in the restored DOM.
+  window.addEventListener('pageshow', (e) => {
+    if (!(e as PageTransitionEvent).persisted) return;
+    mapFetchAbort = new AbortController();
+    if (aiannhLayer?.dataset.loaded !== '1') aiannhLoading = null;
+    if (countyLayer?.dataset.loaded !== '1') countyLoading = null;
+  });
+
+  // Trigger lazy-load on first stage interaction (always — an explicit
+  // hover/focus means the visitor wants the overlays, lite mode or not).
   const triggerLoadOnce = () => { loadAiannh(); loadCounties(); };
   stage.addEventListener('pointerenter', triggerLoadOnce, { once: true });
   stage.addEventListener('focusin', triggerLoadOnce, { once: true });
-  // Also kick off after the first auto-cycle scene completes so even
-  // visitors who never touch the map get the layers ready.
+
+  // Automatic prefetch so even visitors who never touch the map get the
+  // layers ready — but only once the map is actually on screen (#36) and
+  // only when the connection isn't asking us to conserve data (#37).
   const w = window as unknown as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void };
-  if (typeof w.requestIdleCallback === 'function') {
-    w.requestIdleCallback(() => { loadAiannh(); loadCounties(); }, { timeout: 4000 });
-  } else {
-    w.setTimeout(() => { loadAiannh(); loadCounties(); }, 2500);
+  const idlePrefetch = () => {
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(() => { loadAiannh(); loadCounties(); }, { timeout: 4000 });
+    } else {
+      w.setTimeout(() => { loadAiannh(); loadCounties(); }, 2500);
+    }
+  };
+  if (!liteMode) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          obs.disconnect();
+          idlePrefetch();
+        }
+      }, { rootMargin: '200px' });
+      io.observe(stage);
+    } else {
+      idlePrefetch();
+    }
+  }
+
+  /* First-visit coachmark (#39). Shown once per browser; dismissed on
+     the first real map interaction, an explicit "Got it", or a timeout,
+     and the choice is remembered so it never nags a returning visitor. */
+  const coachmark = document.getElementById('heroCoachmark');
+  if (coachmark) {
+    let seen = false;
+    try { seen = localStorage.getItem('lumecon:map:coachmark') === '1'; } catch { seen = false; }
+    if (!seen) {
+      coachmark.hidden = false;
+      const dismissCoach = () => {
+        if (coachmark.hidden) return;
+        coachmark.hidden = true;
+        try { localStorage.setItem('lumecon:map:coachmark', '1'); } catch { /* storage disabled — fine */ }
+      };
+      document.getElementById('heroCoachmarkClose')?.addEventListener('click', (e) => { e.stopPropagation(); dismissCoach(); });
+      stage.addEventListener('pointerdown', dismissCoach, { once: true });
+      stage.addEventListener('focusin', dismissCoach, { once: true });
+      window.setTimeout(dismissCoach, 7000);
+    }
   }
 
   // Delegated handlers — work whether the polygons are injected or not.

@@ -891,6 +891,67 @@
 /* Hidden narration line (kept for JS compatibility, never shown) */
 .hero-narration { display: none; }
 
+/* First-visit coachmark — a one-time navy pill near the top of the map
+   telling the visitor it's interactive. Matches the tooltip's navy /
+   white treatment; the teal dot ties it to the brand accent. */
+.hero-coachmark {
+  position: absolute;
+  top: .75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  max-width: calc(100% - 1.5rem);
+  background: var(--navy);
+  color: var(--white);
+  padding: .42rem .5rem .42rem .75rem;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: .8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  box-shadow: 0 10px 28px -10px rgba(10, 15, 38, .5);
+  z-index: 12;
+  animation: hero-coachmark-in .3s var(--ease) both;
+}
+.hero-coachmark[hidden] { display: none; }
+.hero-coachmark__dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: hero-coachmark-pulse 1.8s ease-in-out infinite;
+}
+.hero-coachmark__close {
+  flex-shrink: 0;
+  border: 0;
+  background: rgba(255, 255, 255, .14);
+  color: var(--white);
+  font-family: inherit;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: .22rem .55rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s var(--ease);
+}
+.hero-coachmark__close:hover { background: rgba(255, 255, 255, .26); }
+.hero-coachmark__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@keyframes hero-coachmark-in {
+  from { opacity: 0; transform: translate(-50%, -6px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes hero-coachmark-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-rgba-18); }
+  50%      { box-shadow: 0 0 0 5px rgba(15, 181, 165, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-coachmark { animation: none; }
+  .hero-coachmark__dot { animation: none; }
+}
+
 /* ---------- figure marginalia ---------- */
 .hero-figs {
   display: grid;
