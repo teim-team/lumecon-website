@@ -1118,7 +1118,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
          the *automatic* prefetch of the ~1MB overlays. They still load
          on an explicit interaction, so the states map stays fully usable
          without pulling the heavy layers uninvited. */
-  const mapFetchAbort = new AbortController();
+  let mapFetchAbort = new AbortController();
   const abortMapFetches = () => { try { mapFetchAbort.abort(); } catch { /* noop */ } };
   window.addEventListener('pagehide', abortMapFetches, { once: true });
   document.addEventListener('astro:before-swap', abortMapFetches, { once: true });
@@ -1215,6 +1215,19 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       .catch(() => { /* swallow — non-essential overlay */ });
     return aiannhLoading;
   };
+
+  // bfcache restore (#40): leaving the page aborts mapFetchAbort, which
+  // permanently poisons its signal. If the visitor comes back via the
+  // back/forward cache, replace the controller and drop any memoized
+  // load promise that never resolved, so the overlays can fetch again
+  // instead of rejecting instantly for the rest of the session. Layers
+  // already injected before navigating away survive in the restored DOM.
+  window.addEventListener('pageshow', (e) => {
+    if (!(e as PageTransitionEvent).persisted) return;
+    mapFetchAbort = new AbortController();
+    if (aiannhLayer?.dataset.loaded !== '1') aiannhLoading = null;
+    if (countyLayer?.dataset.loaded !== '1') countyLoading = null;
+  });
 
   // Trigger lazy-load on first stage interaction (always — an explicit
   // hover/focus means the visitor wants the overlays, lite mode or not).
