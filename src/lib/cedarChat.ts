@@ -621,11 +621,6 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // produced an answer. If the API answered, it's not a miss, so we
     // don't emit cedar.unmatched or count it toward the human handoff.
     const missed = localMiss && !resolved.fromApi;
-    // A clarify prompt is only actually shown when the LOCAL fallback was
-    // used. If the backend answered, the visitor saw a committed answer,
-    // not "did you mean...", so it should earn feedback, follow-ups, and
-    // a remembered topic like any other real answer.
-    const clarifiedShown = clarified && !resolved.fromApi;
 
     // Let the typing indicator breathe before the reply lands. Subtract
     // any time a real API call already spent so we don't stack a second
@@ -638,18 +633,26 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     record('bot', answer);
 
     // Update conversation memory: substantive topics overwrite
-    // priorIntent; fillers leave it alone so "thanks" → "tell me
-    // more" still drills into the topic before the thanks.
-    if (!clarifiedShown && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
+    // priorIntent; fillers leave it alone so "thanks" then "tell me
+    // more" still drills into the topic before the thanks. Stays gated on
+    // `clarified` (not the API result): when the message was locally
+    // ambiguous, `matched` is only a declaration-order tie-break guess,
+    // so we must not remember it as the topic even if the backend
+    // answered, or a later "tell me more" drills into the wrong thing.
+    if (!clarified && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
       priorIntent = matched;
     }
 
     const isFiller = !!(matched && NON_TOPIC_INTENTS.has(matched.id));
-    // Per-reply 👍/👎 feedback on substantive answers (#7).
+    // Per-reply 👍/👎 feedback on substantive answers (#7). Not gated on
+    // `clarified`, so an API answer to an ambiguous question still earns
+    // feedback — that's topic-independent.
     if (bubble && !isFiller && !missed) attachFeedback(bubble, surface);
-    // Context-aware next-step chips on a real topic answer (#10),
-    // biased toward the remembered audience (#6).
-    if (!clarifiedShown && !missed && (isDrillDown || (matched != null && !isFiller))) {
+    // Context-aware next-step chips on a real topic answer (#10), biased
+    // toward the remembered audience (#6). Gated on `clarified` because
+    // the chips are built from the local `matched` guess; rendering them
+    // for a locally-ambiguous query would show off-topic chips.
+    if (!clarified && !missed && (isDrillDown || (matched != null && !isFiller))) {
       renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience), (t, it) => {
         collapseChips();
         void sendMessage(t, t, it);
