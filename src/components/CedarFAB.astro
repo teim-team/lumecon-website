@@ -223,12 +223,6 @@ const chips = CHIP_IDS
     transition: transform .18s var(--ease);
   }
   .cedar-fab:hover .cedar-fab__icon--mark img { transform: scale(1.06); }
-  /* Gold glow on press, so the icon lights up when tapped. */
-  .cedar-fab:hover .cedar-fab__icon--mark,
-  .cedar-fab:focus-visible .cedar-fab__icon--mark,
-  .cedar-fab:active .cedar-fab__icon--mark {
-    box-shadow: 0 8px 20px rgba(10, 15, 38, .22), 0 0 0 3px var(--gold), 0 0 16px 3px rgba(240, 169, 26, .5);
-  }
   @keyframes cedar-fab-float {
     0%, 100% { transform: translateY(0); }
     50%      { transform: translateY(-6px); }
