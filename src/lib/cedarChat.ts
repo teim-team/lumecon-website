@@ -234,25 +234,35 @@ export function localAnswer(rawText: string): string {
 /* ----- API-first / local-fallback resolver -------------------------
    When PUBLIC_API_URL is set and the Cedar endpoint responds OK, use
    its answer. Otherwise fall back to the local classifier. Either
-   way the visitor gets a sensible reply — the seam is invisible. */
+   way the visitor gets a sensible reply — the seam is invisible.
+
+   `fromApi` reports whether the text came from a successful backend
+   response (vs. the local fallback). The caller needs this so it
+   doesn't mislabel an API-answered question as a local "miss" — that
+   would corrupt the unmatched-query analytics and could trip the
+   two-strike human handoff even though the bot answered correctly. */
+interface ResolvedAnswer {
+  text: string;
+  fromApi: boolean;
+}
 async function resolveAnswer(
   message: string,
   surface: CedarSurface,
   conversationId: string,
   localFallback: string,
-): Promise<string> {
-  if (!apiConfigured()) return localFallback;
+): Promise<ResolvedAnswer> {
+  if (!apiConfigured()) return { text: localFallback, fromApi: false };
   try {
     const result = await cedarChatApi({ message, surface, conversationId });
-    if (result.ok) {
+    if (result.ok && result.data.answer) {
       trackEvent('cedar.api.success', { surface });
-      return result.data.answer || localFallback;
+      return { text: result.data.answer, fromApi: true };
     }
-    trackEvent('cedar.api.fallback', { surface, reason: result.reason });
-    return localFallback;
+    trackEvent('cedar.api.fallback', { surface, reason: result.ok ? 'empty-answer' : result.reason });
+    return { text: localFallback, fromApi: false };
   } catch (err: unknown) {
     trackError(err, { where: 'cedarChat.resolveAnswer', surface });
-    return localFallback;
+    return { text: localFallback, fromApi: false };
   }
 }
 
@@ -546,11 +556,18 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // clarify instead of committing — so we shouldn't record a guessed
     // topic as the conversation's "last topic".
     const clarified = !isDrillDown && ambiguousCandidates(rawText).length >= 2;
-    const missed = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
+    // Whether the *local* classifier failed to find anything. This only
+    // becomes a real "miss" if the backend didn't answer either (below).
+    const localMiss = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
     const aud = detectAudience(rawText);
     if (aud) audience = aud;
 
-    const answer = await resolveAnswer(rawText, surface, conversationId, localFallback);
+    const resolved = await resolveAnswer(rawText, surface, conversationId, localFallback);
+    const answer = resolved.text;
+    // A genuine miss is when neither the backend nor the local classifier
+    // produced an answer. If the API answered, it's not a miss — so we
+    // don't emit cedar.unmatched or count it toward the human handoff.
+    const missed = localMiss && !resolved.fromApi;
 
     // Let the typing indicator breathe before the reply lands. Subtract
     // any time a real API call already spent so we don't stack a second
