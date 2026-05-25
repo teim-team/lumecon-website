@@ -125,7 +125,10 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
   /* Observability boot: idempotent, no-op until PUBLIC_DATADOG_*
      env vars are set + the SDK is installed. See src/lib/observability.ts
      for the wire-up checklist. */
-  import { initObservability, trackEvent } from '../lib/observability';
+  import { initObservability, trackEvent, captureGlobalErrors } from '../lib/observability';
+  // Route uncaught errors / rejections to observability (#57). Registers
+  // once; safe even before a RUM client is configured (no-op until then).
+  captureGlobalErrors();
   void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
   document.addEventListener('astro:page-load', () => {
     void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
