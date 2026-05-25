@@ -353,6 +353,108 @@ function makeTypingIndicator(): HTMLElement {
   return dots;
 }
 
+/* ----- Audience memory (#6) ----------------------------------------
+   Note who the visitor says they are so follow-up suggestions can lean
+   into their use case. */
+const AUDIENCE_INTENT: Record<string, string> = {
+  tribal: 'tribal_platform',
+  city: 'county_city_use',
+  state: 'state_agency_use',
+  foundation: 'foundation_use',
+  university: 'university_use',
+  nonprofit: 'nonprofit_use',
+};
+const AUDIENCE_PATTERNS: Array<{ key: string; words: string[] }> = [
+  { key: 'tribal', words: ['tribe', 'tribal', 'native', 'reservation', 'casino'] },
+  { key: 'city', words: ['city', 'cities', 'county', 'counties', 'municipal', 'mayor', 'town'] },
+  { key: 'state', words: ['state agency', 'state dot', 'legislature', 'department of', 'state of'] },
+  { key: 'foundation', words: ['foundation', 'grantmaker', 'grantmaking', 'philanthropy', 'donor'] },
+  { key: 'university', words: ['university', 'college', 'campus', 'higher ed'] },
+  { key: 'nonprofit', words: ['nonprofit', 'non profit', 'non-profit', ' ngo', 'cdfi', 'charity'] },
+];
+function detectAudience(rawText: string): string | null {
+  const text = ' ' + rawText.toLowerCase() + ' ';
+  for (const a of AUDIENCE_PATTERNS) {
+    if (a.words.some((w) => text.includes(w))) return a.key;
+  }
+  return null;
+}
+
+/* ----- Per-reply feedback (#7) -------------------------------------- */
+const THUMB_UP_SVG =
+  '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M7 21V9l5-6a2 2 0 0 1 2 2v4h5a2 2 0 0 1 2 2.3l-1.3 6A2 2 0 0 1 17.7 21H7Zm0 0H4V9h3"/></svg>';
+const THUMB_DOWN_SVG =
+  '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" style="transform:rotate(180deg)"><path d="M7 21V9l5-6a2 2 0 0 1 2 2v4h5a2 2 0 0 1 2 2.3l-1.3 6A2 2 0 0 1 17.7 21H7Zm0 0H4V9h3"/></svg>';
+
+function attachFeedback(bubble: HTMLElement, surface: CedarSurface): void {
+  const row = document.createElement('div');
+  row.className = 'cedar-feedback';
+  row.setAttribute('role', 'group');
+  row.setAttribute('aria-label', 'Was this answer helpful?');
+  (['up', 'down'] as const).forEach((v) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cedar-feedback__btn';
+    btn.setAttribute('aria-label', v === 'up' ? 'Helpful' : 'Not helpful');
+    btn.innerHTML = v === 'up' ? THUMB_UP_SVG : THUMB_DOWN_SVG;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      trackEvent('cedar.feedback', { value: v, surface });
+      row.querySelectorAll('button').forEach((b) => { (b as HTMLButtonElement).disabled = true; });
+      btn.classList.add('is-selected');
+    });
+    row.appendChild(btn);
+  });
+  bubble.appendChild(row);
+}
+
+/* ----- Context follow-up chips (#10) -------------------------------- */
+function followUpsFor(
+  matched: CedarIntent | null,
+  isDrillDown: boolean,
+  audience: string | null,
+): Array<{ label: string; text: string }> {
+  const out: Array<{ label: string; text: string }> = [];
+  const push = (id: string) => {
+    if (out.length >= 3) return;
+    if (matched && matched.id === id) return;
+    const it = INTENTS.find((x) => x.id === id);
+    if (it?.chip && !out.some((o) => o.text === it.chip)) out.push({ label: it.chip, text: it.chip });
+  };
+  if (!isDrillDown && matched && typeof matched.expanded === 'string') {
+    out.push({ label: 'Tell me more', text: 'tell me more' });
+  }
+  if (audience && AUDIENCE_INTENT[audience]) push(AUDIENCE_INTENT[audience]);
+  for (const id of ['demo', 'pricing', 'contact']) push(id);
+  return out.slice(0, 3);
+}
+
+function renderFollowUps(
+  transcript: HTMLElement,
+  items: Array<{ label: string; text: string }>,
+  onSelect: (text: string) => void,
+): void {
+  if (!items.length) return;
+  const row = document.createElement('div');
+  row.className = 'cedar-followups';
+  row.setAttribute('role', 'group');
+  row.setAttribute('aria-label', 'Suggested next questions');
+  for (const it of items) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cedar-followup';
+    btn.textContent = it.label;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      row.remove();
+      onSelect(it.text);
+    });
+    row.appendChild(btn);
+  }
+  transcript.appendChild(row);
+  transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
+}
+
 interface BootedElements {
   transcript: HTMLElement;
   chips: HTMLElement;
@@ -397,6 +499,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
   /* Consecutive unmatched messages — after two in a row Cedar nudges
      the visitor toward a human instead of looping on the fallback. */
   let misses = 0;
+  /* Remembered audience so follow-up suggestions lean into the
+     visitor's use case (#6). */
+  let audience: string | null = null;
 
   /* Restore the conversation: replay saved turns after the static
      welcome so reopening the panel or changing pages keeps the thread. */
@@ -433,6 +538,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // clarify instead of committing — so we shouldn't record a guessed
     // topic as the conversation's "last topic".
     const clarified = !isDrillDown && ambiguousCandidates(rawText).length >= 2;
+    const missed = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
+    const aud = detectAudience(rawText);
+    if (aud) audience = aud;
 
     const answer = await resolveAnswer(rawText, surface, conversationId, localFallback);
 
@@ -453,9 +561,20 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
       priorIntent = matched;
     }
 
+    const isFiller = !!(matched && NON_TOPIC_INTENTS.has(matched.id));
+    // Per-reply 👍/👎 feedback on substantive answers (#7).
+    if (bubble && !isFiller && !missed) attachFeedback(bubble, surface);
+    // Context-aware next-step chips on a real topic answer (#10),
+    // biased toward the remembered audience (#6).
+    if (!clarified && !missed && (isDrillDown || (matched != null && !isFiller))) {
+      renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience), (t) => {
+        collapseChips();
+        void sendMessage(t);
+      });
+    }
+
     // Log true misses (so the intent bank can grow from real queries)
     // and, after two in a row, hand off to a human.
-    const missed = !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
     if (missed) {
       trackEvent('cedar.unmatched', { surface, text: rawText.slice(0, 120) });
       misses += 1;

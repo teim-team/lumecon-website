@@ -270,6 +270,65 @@
 .cedar-chip-more:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
 .cedar-chip-more[hidden] { display: none; }
 
+/* Per-reply feedback (#7) — quiet thumbs inside a bot bubble. */
+.cedar-feedback {
+  display: flex;
+  gap: .15rem;
+  margin: .5rem -.15rem -.2rem;
+}
+.cedar-feedback__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--ink-4);
+  cursor: pointer;
+  transition: color .15s var(--ease), background .15s var(--ease);
+}
+.cedar-feedback__btn:hover:not(:disabled) { color: var(--accent-deep); background: var(--paper); }
+.cedar-feedback__btn.is-selected { color: var(--accent-deep); }
+.cedar-feedback__btn:disabled { cursor: default; }
+.cedar-feedback__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* Context follow-up chips (#10) — tappable next questions under a
+   reply. Indented under the avatar column to align with the bubble. */
+.cedar-followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  padding: 0 0 .2rem calc(30px + .7rem);
+  margin: -.25rem 0 .1rem;
+  animation: cedar-followups-in .25s var(--ease, ease);
+}
+.cedar-followup {
+  padding: .34rem .7rem;
+  background: var(--white);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: .8rem;
+  font-weight: 500;
+  color: var(--accent-deep);
+  cursor: pointer;
+  line-height: 1.2;
+  transition: background .15s var(--ease), color .15s var(--ease), transform .15s var(--ease);
+  touch-action: manipulation;
+}
+.cedar-followup:hover:not(:disabled) { background: var(--accent); color: var(--white); transform: translateY(-1px); }
+.cedar-followup:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+@keyframes cedar-followups-in {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cedar-followups { animation: none; }
+}
+
 @media (max-width: 600px) {
   .cedar-chat { border-radius: 12px; }
   .cedar-msg { max-width: 94%; }
