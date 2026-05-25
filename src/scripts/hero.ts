@@ -1123,8 +1123,12 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
          without pulling the heavy layers uninvited. */
   let mapFetchAbort = new AbortController();
   const abortMapFetches = () => { try { mapFetchAbort.abort(); } catch { /* noop */ } };
-  window.addEventListener('pagehide', abortMapFetches, { once: true });
-  document.addEventListener('astro:before-swap', abortMapFetches, { once: true });
+  // Registered (not { once: true }) so a bfcache restore — which makes a
+  // fresh controller below — is still covered on the *next* navigation
+  // away. abort() is idempotent, so firing on both pagehide and a view
+  // swap is harmless.
+  window.addEventListener('pagehide', abortMapFetches);
+  document.addEventListener('astro:before-swap', abortMapFetches);
   const netConn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
   const liteMode = !!netConn && (netConn.saveData === true || /(^|-)2g$/.test(netConn.effectiveType || ''));
   const isAbortError = (err: unknown): boolean => err instanceof DOMException && err.name === 'AbortError';
@@ -1160,7 +1164,14 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
           if (target) target.setAttribute('data-active', '1');
         }
       })
-      .catch(() => {});
+      .catch((err: unknown) => {
+        // A deliberate abort (navigation) should stay memoized so we
+        // don't refetch a page we're leaving. A transient failure
+        // (network blip, 5xx) must NOT poison the loader — clear the
+        // memo so the next interaction can retry instead of replaying a
+        // resolved-but-empty promise.
+        if (!isAbortError(err)) countyLoading = null;
+      });
     return countyLoading;
   };
   const clearCountyHighlight = () => {
@@ -1215,7 +1226,11 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
         // the polygons finished loading.
         applyReservationHighlight();
       })
-      .catch(() => { /* swallow — non-essential overlay */ });
+      .catch((err: unknown) => {
+        // Keep a navigation abort memoized; clear a transient failure so
+        // a later interaction can retry instead of being stuck.
+        if (!isAbortError(err)) aiannhLoading = null;
+      });
     return aiannhLoading;
   };
 

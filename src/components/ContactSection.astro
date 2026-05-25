@@ -82,10 +82,17 @@ import '../styles/cta.css';
 
     sendBtn.addEventListener('click', (ev) => {
       ev.preventDefault();
-      // Honeypot tripped — a bot filled the hidden field. Show the same
-      // success state so we don't reveal the trap, but send nothing.
+      // Honeypot tripped — usually a bot filled the hidden field, but an
+      // aggressive autofill/extension could fill it for a real visitor.
+      // Show the success state so a bot can't tell it was caught and send
+      // nothing — but still tear the overlay down (and clear the field)
+      // so a real visitor isn't locked out of the form for the session.
       if (honeypot && honeypot.value.trim() !== '') {
         formSuccess.classList.add('show');
+        setTimeout(() => {
+          formSuccess.classList.remove('show');
+          honeypot.value = '';
+        }, FORM_RESET_DELAY);
         return;
       }
       clearErrors();

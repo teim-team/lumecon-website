@@ -105,6 +105,40 @@ function saveHistory(id: string, msgs: LoggedMsg[]): void {
   }
 }
 
+/* ----- Conversation memory persistence -----------------------------
+   The transcript text alone isn't enough to resume a thread: the
+   drill-down ("tell me more"), the audience-biased follow-ups, and the
+   two-strike handoff counter all depend on in-memory state that would
+   otherwise reset on every in-tab navigation (re-running bootChat).
+   Persist that small state alongside the transcript so reopening the
+   panel or changing pages keeps the conversation's memory, not just its
+   text — e.g. "tell me more" still drills into the last topic, and a
+   visitor who already saw the handoff doesn't get a second one. */
+const STATE_KEY = 'lumecon:cedar:state';
+interface ConvoState {
+  priorIntentId?: string | null;
+  misses?: number;
+  audience?: string | null;
+}
+function loadState(id: string): ConvoState {
+  if (typeof sessionStorage === 'undefined') return {};
+  try {
+    const raw = sessionStorage.getItem(`${STATE_KEY}:${id}`);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+function saveState(id: string, state: ConvoState): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.setItem(`${STATE_KEY}:${id}`, JSON.stringify(state));
+  } catch {
+    /* quota or disabled storage — degrade silently */
+  }
+}
+
 /* ----- Local keyword classifier ------------------------------------
    The same scoring rules the inline scripts used, lifted out so
    there's one implementation to debug and improve. */
@@ -514,16 +548,22 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     if (!chips.classList.contains('is-collapsed')) chips.classList.add('is-collapsed');
   };
 
-  /* Per-conversation memory: tracks the last substantive topic so a
-     follow-up like "tell me more" can drill into it instead of hitting
-     a generic answer. Cleared when the user starts a new topic. */
-  let priorIntent: CedarIntent | null = null;
-  /* Consecutive unmatched messages — after two in a row Cedar nudges
-     the visitor toward a human instead of looping on the fallback. */
-  let misses = 0;
-  /* Remembered audience so follow-up suggestions lean into the
-     visitor's use case (#6). */
-  let audience: string | null = null;
+  /* Per-conversation memory, restored from sessionStorage so it
+     survives in-tab navigation alongside the transcript:
+       - priorIntent: the last substantive topic, so "tell me more"
+         drills into it instead of hitting a generic answer.
+       - misses: consecutive unmatched messages; after two in a row
+         Cedar nudges toward a human. Persisted so a visitor who already
+         saw the handoff doesn't get a second one after navigating.
+       - audience: remembered use case, biasing follow-ups (#6). */
+  const savedState = loadState(conversationId);
+  let priorIntent: CedarIntent | null =
+    savedState.priorIntentId ? (INTENTS.find((i) => i.id === savedState.priorIntentId) ?? null) : null;
+  let misses = typeof savedState.misses === 'number' ? savedState.misses : 0;
+  let audience: string | null = savedState.audience ?? null;
+  const persistState = () => {
+    saveState(conversationId, { priorIntentId: priorIntent?.id ?? null, misses, audience });
+  };
 
   /* Restore the conversation: replay saved turns after the static
      welcome so reopening the panel or changing pages keeps the thread. */
@@ -624,6 +664,10 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     } else {
       misses = 0;
     }
+
+    // Persist the conversation memory (priorIntent / misses / audience)
+    // so it survives navigation, matching the transcript's durability.
+    persistState();
   };
 
   chips.addEventListener('click', (e) => {
