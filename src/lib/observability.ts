@@ -143,6 +143,28 @@ export function trackError(err: unknown, attrs?: Attrs): void {
   (client ?? NOOP).addError(err, attrs);
 }
 
+/* ----- Global error capture (#57) ---------------------------------
+   Route uncaught errors and unhandled promise rejections through
+   trackError so production JS failures surface in observability rather
+   than dying silently in the console. No-op until a RUM client is
+   configured; idempotent so re-running on view transitions is safe. */
+let errorCaptureWired = false;
+export function captureGlobalErrors(): void {
+  if (errorCaptureWired || typeof window === 'undefined') return;
+  errorCaptureWired = true;
+  window.addEventListener('error', (e: ErrorEvent) => {
+    trackError(e.error ?? e.message, {
+      kind: 'window.error',
+      source: e.filename,
+      line: e.lineno,
+      col: e.colno,
+    });
+  });
+  window.addEventListener('unhandledrejection', (e: PromiseRejectionEvent) => {
+    trackError(e.reason, { kind: 'unhandledrejection' });
+  });
+}
+
 /** Identify the current visitor (call after the visitor authenticates
  *  against the future API). Until then, calling this is a no-op. */
 export function identifyUser(props: { id?: string; email?: string; name?: string } & Attrs): void {

@@ -621,6 +621,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     const id = btn.dataset.intent;
     const intent = INTENTS.find((x) => x.id === id);
     if (!intent || !intent.chip) return;
+    trackEvent('cedar.chip', { surface, intent: intent.id });
     collapseChips();
     void sendMessage(intent.chip, intent.chip);
   });
