@@ -84,7 +84,7 @@ export const PLATFORMS: readonly Platform[] = [
     comingSoon: false,
     badgeKind: 'active',
     tag: 'Modeled on tribal terms, not adapted from a state model.',
-    desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs, and Native-entity federal contractors, with Indigenous data sovereignty built into the platform from the start rather than added on later.',
+    desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs, and Native-entity federal contractors, with Indigenous data sovereignty a design priority from the start rather than an afterthought.',
     audience: 'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
     fitIf: "You're a tribal government or department within one, a Native non-profit, intertribal org, tribal college, ANC, NHO, tribal enterprise, Native CDFI, state-recognized tribe, or Native-entity federal contractor making the case for reservation, state, or federal funding.",
     scope: 'Reservation, state, national economic impact analysis',
