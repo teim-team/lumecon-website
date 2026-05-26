@@ -365,7 +365,14 @@ function thinkingPause(answer: string): number {
    like a finished product and double as conversion paths. */
 const INTERNAL_PATHS = 'pricing|about|map|cedar|signup|join|glossary|demo';
 function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Escape quotes too, not just &<>: a URL containing a double quote must
+  // not be able to break out of the href="..." attribute we build below.
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 function renderRich(text: string): string {
   let html = escapeHtml(text);
