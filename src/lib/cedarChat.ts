@@ -356,10 +356,40 @@ function thinkingPause(answer: string): number {
   return Math.min(1800, Math.max(700, 480 + answer.length * 4));
 }
 
+/* Render a *bot* answer with light, safe formatting: clickable email +
+   internal links and **bold**. HTML is escaped first, then only our own
+   anchors/strong tags are injected, so this can't introduce XSS — and it
+   only ever runs on author-controlled answer strings (or the future API
+   reply), never on raw user input (user bubbles stay textContent). The
+   clickable contact email and /pricing, /demo links make the reply feel
+   like a finished product and double as conversion paths. */
+const INTERNAL_PATHS = 'pricing|about|map|cedar|signup|join|glossary|demo';
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function renderRich(text: string): string {
+  let html = escapeHtml(text);
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(
+    /\bhttps?:\/\/[^\s<]+/g,
+    (m) => `<a href="${m}" target="_blank" rel="noopener noreferrer">${m}</a>`,
+  );
+  html = html.replace(
+    /\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g,
+    '<a href="mailto:$1">$1</a>',
+  );
+  html = html.replace(
+    new RegExp(`(^|[\\s(])(/(?:${INTERNAL_PATHS}))\\b`, 'g'),
+    '$1<a href="$2">$2</a>',
+  );
+  return html;
+}
+
 /* Reveal a reply word-by-word so it reads as Cedar composing rather
-   than a block of text snapping in. Instant under reduced motion. */
+   than a block of text snapping in, then finalize to the rich (linked)
+   markup. Instant under reduced motion. */
 async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: string): Promise<void> {
-  if (prefersReducedMotion()) { bubble.textContent = text; return; }
+  if (prefersReducedMotion()) { bubble.innerHTML = renderRich(text); return; }
   const tokens = text.split(/(\s+)/);
   const perWord = tokens.length > 90 ? 8 : 15;
   bubble.textContent = '';
@@ -373,6 +403,9 @@ async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: st
       transcript.scrollTo({ top: transcript.scrollHeight });
       if (tok.trim()) await sleep(perWord);
     }
+    // Swap the streamed plain text for the linked/bolded markup once the
+    // full answer has landed (keeps the composing animation, adds polish).
+    bubble.innerHTML = renderRich(text);
   } finally {
     transcript.setAttribute('aria-busy', 'false');
   }
@@ -429,8 +462,12 @@ function appendMessage(
   }
   const bubble = document.createElement('div');
   bubble.className = 'cedar-msg__bubble';
-  if (typeof body === 'string') bubble.textContent = body;
-  else bubble.appendChild(body);
+  if (typeof body === 'string') {
+    // Bot strings (restored history, handoff message) get the same safe
+    // rich rendering as streamed replies; user strings stay textContent.
+    if (variant === 'bot') bubble.innerHTML = renderRich(body);
+    else bubble.textContent = body;
+  } else bubble.appendChild(body);
   wrap.appendChild(bubble);
   transcript.appendChild(wrap);
   transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
