@@ -189,12 +189,12 @@ export function topMatches(rawText: string): IntentMatch {
 
 /* Fuzzy typo fallback (Fuse.js). Runs only when nothing matched exactly
    (topMatches score < 1). The old hand-rolled matcher tolerated a single
-   edit on single-word triggers only; Fuse adds transposition and
-   multi-edit tolerance over every trigger word, so "tiff abatemnt",
-   "reservaton", and "casnio" route instead of dropping to the fallback.
-   The index maps each trigger word (>= 4 chars) to its intent; a tight
-   threshold keeps it from hijacking genuinely out-of-scope input (which
-   is also gated behind the OOS check that runs before this). */
+   edit; Fuse adds transposition and multi-edit tolerance, so "tiff
+   abatemnt", "reservaton", and "casnio" route instead of dropping to the
+   fallback. The index holds single-word triggers only (built below); a
+   tight threshold plus a length guard keep it from hijacking genuinely
+   out-of-scope input (which is also gated behind the OOS check that runs
+   before this). */
 interface TriggerToken { w: string; idx: number; }
 const FUZZY_TOKENS: TriggerToken[] = (() => {
   const seen = new Set<string>();
@@ -451,7 +451,7 @@ const NON_TOPIC_INTENTS = new Set([
    it on the same root is a no-op — guarded by data-cedar-booted. */
 
 const BOTAVATAR_SVG =
-  '<img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="18" height="18" />';
+  '<img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="30" height="30" />';
 
 function appendMessage(
   transcript: HTMLElement,
