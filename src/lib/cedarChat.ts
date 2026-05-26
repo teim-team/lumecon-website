@@ -144,7 +144,11 @@ function saveState(id: string, state: ConvoState): void {
    there's one implementation to debug and improve. */
 function normalize(s: string): string {
   return ' ' + (s || '').toLowerCase()
-    .replace(/[?!.,;:"'`()\[\]]/g, ' ')
+    // Strip apostrophes/backticks so contractions collapse the way people
+    // type them: "i'm" / "i’m" / "im" all normalize to "im", and a trigger
+    // stored as "i'm five" becomes "im five" instead of the broken "i m five".
+    .replace(/['’`]/g, '')
+    .replace(/[?!.,;:"()\[\]]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim() + ' ';
 }
@@ -240,13 +244,23 @@ function clarifyPrompt(candidates: CedarIntent[]): string {
   return `I can read that a couple of ways, and I'd rather get it right than guess. Did you mean ${list}? Tell me which one (or add a few words) and I'll go deep.`;
 }
 
-/** Substantive (chip-bearing) intents tied at the top score. Length >= 2
- *  means the message is ambiguous enough to clarify. */
+/* Only clarify when the ambiguity is real. A two-way tie on a single bare
+   word (score 1) is usually a compound question Cedar can just answer with
+   the declaration-order winner, so interrogating the visitor there is
+   annoying. Clarify when either the tie is "strong" (two distinct
+   multi-word topics, score >= 2) or genuinely scattered (three or more
+   chip-bearing topics share the top score). */
+function shouldClarify(score: number, candidateCount: number): boolean {
+  return candidateCount >= 3 || (score >= 2 && candidateCount >= 2);
+}
+
+/** Substantive (chip-bearing) intents tied at the top score, returned only
+ *  when the tie is ambiguous enough to be worth a clarify prompt. */
 function ambiguousCandidates(rawText: string): CedarIntent[] {
   const { score, intents } = topMatches(rawText);
   if (score < 1) return [];
   const substantive = intents.filter((i) => i.chip);
-  return substantive.length >= 2 ? substantive : [];
+  return shouldClarify(score, substantive.length) ? substantive : [];
 }
 
 export function localAnswer(rawText: string): string {
@@ -258,7 +272,7 @@ export function localAnswer(rawText: string): string {
   // word "mexico". A strong, multi-word product match still wins.
   if (oos && score <= 1) return OUT_OF_SCOPE_ANSWER;
   const candidates = intents.filter((i) => i.chip);
-  if (score >= 1 && candidates.length >= 2) return clarifyPrompt(candidates);
+  if (shouldClarify(score, candidates.length)) return clarifyPrompt(candidates);
   if (score >= 1) return intents[0].answer;
   const fuzzy = fuzzyMatch(rawText);
   if (fuzzy) return fuzzy.answer;
