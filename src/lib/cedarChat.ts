@@ -29,6 +29,7 @@
  * The chips themselves must each have data-intent="<intent-id>".
  */
 
+import Fuse from 'fuse.js';
 import {
   INTENTS,
   OUT_OF_SCOPE_ANSWER,
@@ -186,35 +187,59 @@ export function topMatches(rawText: string): IntentMatch {
   return { score: best, intents: scored.filter((s) => s.score === best).map((s) => s.intent) };
 }
 
-/* True if a and b differ by at most one insertion, deletion, or
-   substitution. Bounded and cheap — used only as a typo fallback. */
-function withinOneEdit(a: string, b: string): boolean {
-  if (a === b) return true;
-  if (a.length > b.length) return withinOneEdit(b, a);
-  if (b.length - a.length > 1) return false;
-  let i = 0, j = 0, edits = 0;
-  while (i < a.length && j < b.length) {
-    if (a[i] === b[j]) { i++; j++; continue; }
-    if (++edits > 1) return false;
-    if (a.length === b.length) { i++; j++; } else { j++; }
-  }
-  return edits + (b.length - j) <= 1;
-}
+/* Fuzzy typo fallback (Fuse.js). Runs only when nothing matched exactly
+   (topMatches score < 1). The old hand-rolled matcher tolerated a single
+   edit on single-word triggers only; Fuse adds transposition and
+   multi-edit tolerance over every trigger word, so "tiff abatemnt",
+   "reservaton", and "casnio" route instead of dropping to the fallback.
+   The index maps each trigger word (>= 4 chars) to its intent; a tight
+   threshold keeps it from hijacking genuinely out-of-scope input (which
+   is also gated behind the OOS check that runs before this). */
+interface TriggerToken { w: string; idx: number; }
+const FUZZY_TOKENS: TriggerToken[] = (() => {
+  const seen = new Set<string>();
+  const out: TriggerToken[] = [];
+  INTENTS.forEach((intent, idx) => {
+    for (const trig of intent.triggers) {
+      // Only index single-word triggers (>= 5 chars). Tokenizing
+      // multi-word triggers would index common words ("place", "work",
+      // "model") and let Fuse hijack off-topic input ("taco place").
+      // This mirrors the old matcher's candidate set; Fuse only upgrades
+      // the edit tolerance over it.
+      const t = trig.toLowerCase().trim();
+      if (t.length < 5 || /[\s-]/.test(t)) continue;
+      const key = `${t}|${idx}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ w: t, idx });
+    }
+  });
+  return out;
+})();
+const FUZZY_THRESHOLD = 0.25;
+const fuzzyFuse = new Fuse(FUZZY_TOKENS, {
+  keys: ['w'],
+  includeScore: true,
+  threshold: FUZZY_THRESHOLD,
+  ignoreLocation: true,
+  minMatchCharLength: 4,
+});
 
-/* When nothing matches exactly, try a conservative typo pass: a user
-   word (>= 5 chars) within one edit of a single-word trigger (>= 5
-   chars). Catches "pricng" / "trbal" without hurting precision. */
 function fuzzyMatch(rawText: string): CedarIntent | null {
   const tokens = normalize(rawText).trim().split(' ').filter((t) => t.length >= 5);
   if (!tokens.length) return null;
-  for (const intent of INTENTS) {
-    for (const trig of intent.triggers) {
-      const t = trig.toLowerCase().trim();
-      if (t.length < 5 || t.indexOf(' ') !== -1) continue;
-      if (tokens.some((u) => withinOneEdit(u, t))) return intent;
+  let best: { idx: number; score: number } | null = null;
+  for (const tok of tokens) {
+    const hit = fuzzyFuse.search(tok, { limit: 1 })[0];
+    // Tight gates so a random 5-letter token can't find a neighbour: low
+    // Fuse score AND a similar word length (a real typo barely changes
+    // length). Keeps it a strict superset of the old one-edit matcher.
+    if (hit && typeof hit.score === 'number' && hit.score <= FUZZY_THRESHOLD
+        && Math.abs(hit.item.w.length - tok.length) <= 2) {
+      if (!best || hit.score < best.score) best = { idx: hit.item.idx, score: hit.score };
     }
   }
-  return null;
+  return best ? INTENTS[best.idx] : null;
 }
 
 export function classify(rawText: string): CedarIntent | null {

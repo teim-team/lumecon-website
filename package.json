@@ -19,6 +19,7 @@
     "@astrojs/sitemap": "^3.7.2",
     "astro": "^6.3.7",
     "d3-geo": "^3.1.1",
+    "fuse.js": "7.3.0",
     "topojson-client": "^3.1.0",
     "us-atlas": "^3.0.1"
   },
