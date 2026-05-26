@@ -29,6 +29,7 @@
  * The chips themselves must each have data-intent="<intent-id>".
  */
 
+import Fuse from 'fuse.js';
 import {
   INTENTS,
   OUT_OF_SCOPE_ANSWER,
@@ -186,35 +187,59 @@ export function topMatches(rawText: string): IntentMatch {
   return { score: best, intents: scored.filter((s) => s.score === best).map((s) => s.intent) };
 }
 
-/* True if a and b differ by at most one insertion, deletion, or
-   substitution. Bounded and cheap — used only as a typo fallback. */
-function withinOneEdit(a: string, b: string): boolean {
-  if (a === b) return true;
-  if (a.length > b.length) return withinOneEdit(b, a);
-  if (b.length - a.length > 1) return false;
-  let i = 0, j = 0, edits = 0;
-  while (i < a.length && j < b.length) {
-    if (a[i] === b[j]) { i++; j++; continue; }
-    if (++edits > 1) return false;
-    if (a.length === b.length) { i++; j++; } else { j++; }
-  }
-  return edits + (b.length - j) <= 1;
-}
+/* Fuzzy typo fallback (Fuse.js). Runs only when nothing matched exactly
+   (topMatches score < 1). The old hand-rolled matcher tolerated a single
+   edit on single-word triggers only; Fuse adds transposition and
+   multi-edit tolerance over every trigger word, so "tiff abatemnt",
+   "reservaton", and "casnio" route instead of dropping to the fallback.
+   The index maps each trigger word (>= 4 chars) to its intent; a tight
+   threshold keeps it from hijacking genuinely out-of-scope input (which
+   is also gated behind the OOS check that runs before this). */
+interface TriggerToken { w: string; idx: number; }
+const FUZZY_TOKENS: TriggerToken[] = (() => {
+  const seen = new Set<string>();
+  const out: TriggerToken[] = [];
+  INTENTS.forEach((intent, idx) => {
+    for (const trig of intent.triggers) {
+      // Only index single-word triggers (>= 5 chars). Tokenizing
+      // multi-word triggers would index common words ("place", "work",
+      // "model") and let Fuse hijack off-topic input ("taco place").
+      // This mirrors the old matcher's candidate set; Fuse only upgrades
+      // the edit tolerance over it.
+      const t = trig.toLowerCase().trim();
+      if (t.length < 5 || /[\s-]/.test(t)) continue;
+      const key = `${t}|${idx}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ w: t, idx });
+    }
+  });
+  return out;
+})();
+const FUZZY_THRESHOLD = 0.25;
+const fuzzyFuse = new Fuse(FUZZY_TOKENS, {
+  keys: ['w'],
+  includeScore: true,
+  threshold: FUZZY_THRESHOLD,
+  ignoreLocation: true,
+  minMatchCharLength: 4,
+});
 
-/* When nothing matches exactly, try a conservative typo pass: a user
-   word (>= 5 chars) within one edit of a single-word trigger (>= 5
-   chars). Catches "pricng" / "trbal" without hurting precision. */
 function fuzzyMatch(rawText: string): CedarIntent | null {
   const tokens = normalize(rawText).trim().split(' ').filter((t) => t.length >= 5);
   if (!tokens.length) return null;
-  for (const intent of INTENTS) {
-    for (const trig of intent.triggers) {
-      const t = trig.toLowerCase().trim();
-      if (t.length < 5 || t.indexOf(' ') !== -1) continue;
-      if (tokens.some((u) => withinOneEdit(u, t))) return intent;
+  let best: { idx: number; score: number } | null = null;
+  for (const tok of tokens) {
+    const hit = fuzzyFuse.search(tok, { limit: 1 })[0];
+    // Tight gates so a random 5-letter token can't find a neighbour: low
+    // Fuse score AND a similar word length (a real typo barely changes
+    // length). Keeps it a strict superset of the old one-edit matcher.
+    if (hit && typeof hit.score === 'number' && hit.score <= FUZZY_THRESHOLD
+        && Math.abs(hit.item.w.length - tok.length) <= 2) {
+      if (!best || hit.score < best.score) best = { idx: hit.item.idx, score: hit.score };
     }
   }
-  return null;
+  return best ? INTENTS[best.idx] : null;
 }
 
 export function classify(rawText: string): CedarIntent | null {
@@ -331,10 +356,40 @@ function thinkingPause(answer: string): number {
   return Math.min(1800, Math.max(700, 480 + answer.length * 4));
 }
 
+/* Render a *bot* answer with light, safe formatting: clickable email +
+   internal links and **bold**. HTML is escaped first, then only our own
+   anchors/strong tags are injected, so this can't introduce XSS — and it
+   only ever runs on author-controlled answer strings (or the future API
+   reply), never on raw user input (user bubbles stay textContent). The
+   clickable contact email and /pricing, /demo links make the reply feel
+   like a finished product and double as conversion paths. */
+const INTERNAL_PATHS = 'pricing|about|map|cedar|signup|join|glossary|demo';
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function renderRich(text: string): string {
+  let html = escapeHtml(text);
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(
+    /\bhttps?:\/\/[^\s<]+/g,
+    (m) => `<a href="${m}" target="_blank" rel="noopener noreferrer">${m}</a>`,
+  );
+  html = html.replace(
+    /\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g,
+    '<a href="mailto:$1">$1</a>',
+  );
+  html = html.replace(
+    new RegExp(`(^|[\\s(])(/(?:${INTERNAL_PATHS}))\\b`, 'g'),
+    '$1<a href="$2">$2</a>',
+  );
+  return html;
+}
+
 /* Reveal a reply word-by-word so it reads as Cedar composing rather
-   than a block of text snapping in. Instant under reduced motion. */
+   than a block of text snapping in, then finalize to the rich (linked)
+   markup. Instant under reduced motion. */
 async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: string): Promise<void> {
-  if (prefersReducedMotion()) { bubble.textContent = text; return; }
+  if (prefersReducedMotion()) { bubble.innerHTML = renderRich(text); return; }
   const tokens = text.split(/(\s+)/);
   const perWord = tokens.length > 90 ? 8 : 15;
   bubble.textContent = '';
@@ -348,6 +403,9 @@ async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: st
       transcript.scrollTo({ top: transcript.scrollHeight });
       if (tok.trim()) await sleep(perWord);
     }
+    // Swap the streamed plain text for the linked/bolded markup once the
+    // full answer has landed (keeps the composing animation, adds polish).
+    bubble.innerHTML = renderRich(text);
   } finally {
     transcript.setAttribute('aria-busy', 'false');
   }
@@ -404,8 +462,12 @@ function appendMessage(
   }
   const bubble = document.createElement('div');
   bubble.className = 'cedar-msg__bubble';
-  if (typeof body === 'string') bubble.textContent = body;
-  else bubble.appendChild(body);
+  if (typeof body === 'string') {
+    // Bot strings (restored history, handoff message) get the same safe
+    // rich rendering as streamed replies; user strings stay textContent.
+    if (variant === 'bot') bubble.innerHTML = renderRich(body);
+    else bubble.textContent = body;
+  } else bubble.appendChild(body);
   wrap.appendChild(bubble);
   transcript.appendChild(wrap);
   transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });

@@ -23,6 +23,7 @@
  *   node --experimental-strip-types scripts/cedar-eval.ts --full "q"   # print full answer text
  */
 
+import Fuse from 'fuse.js';
 import {
   INTENTS,
   OUT_OF_SCOPE_ANSWER,
@@ -63,30 +64,43 @@ function topMatches(rawText: string): IntentMatch {
   return { score: best, intents: scored.filter((s) => s.score === best).map((s) => s.intent) };
 }
 
-function withinOneEdit(a: string, b: string): boolean {
-  if (a === b) return true;
-  if (a.length > b.length) return withinOneEdit(b, a);
-  if (b.length - a.length > 1) return false;
-  let i = 0, j = 0, edits = 0;
-  while (i < a.length && j < b.length) {
-    if (a[i] === b[j]) { i++; j++; continue; }
-    if (++edits > 1) return false;
-    if (a.length === b.length) { i++; j++; } else { j++; }
-  }
-  return edits + (b.length - j) <= 1;
-}
+interface TriggerToken { w: string; idx: number; }
+const FUZZY_TOKENS: TriggerToken[] = (() => {
+  const seen = new Set<string>();
+  const out: TriggerToken[] = [];
+  INTENTS.forEach((intent, idx) => {
+    for (const trig of intent.triggers) {
+      const t = trig.toLowerCase().trim();
+      if (t.length < 5 || /[\s-]/.test(t)) continue;
+      const key = `${t}|${idx}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ w: t, idx });
+    }
+  });
+  return out;
+})();
+const FUZZY_THRESHOLD = 0.25;
+const fuzzyFuse = new Fuse(FUZZY_TOKENS, {
+  keys: ['w'],
+  includeScore: true,
+  threshold: FUZZY_THRESHOLD,
+  ignoreLocation: true,
+  minMatchCharLength: 4,
+});
 
 function fuzzyMatch(rawText: string): CedarIntent | null {
   const tokens = normalize(rawText).trim().split(' ').filter((t) => t.length >= 5);
   if (!tokens.length) return null;
-  for (const intent of INTENTS) {
-    for (const trig of intent.triggers) {
-      const t = trig.toLowerCase().trim();
-      if (t.length < 5 || t.indexOf(' ') !== -1) continue;
-      if (tokens.some((u) => withinOneEdit(u, t))) return intent;
+  let best: { idx: number; score: number } | null = null;
+  for (const tok of tokens) {
+    const hit = fuzzyFuse.search(tok, { limit: 1 })[0];
+    if (hit && typeof hit.score === 'number' && hit.score <= FUZZY_THRESHOLD
+        && Math.abs(hit.item.w.length - tok.length) <= 2) {
+      if (!best || hit.score < best.score) best = { idx: hit.item.idx, score: hit.score };
     }
   }
-  return null;
+  return best ? INTENTS[best.idx] : null;
 }
 
 function isOutOfScope(rawText: string): boolean {
