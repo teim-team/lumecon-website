@@ -42,7 +42,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what is lumecon', 'what does lumecon do', 'what does lumecon', 'explain lumecon', 'what is this company', 'what is this', 'what does this do', 'wat does this do', 'wat is this', 'what are you building', 'what is the platform', 'what is lumecon for', 'what problem', 'why does lumecon', 'what is the point of this site', 'this site', 'what are you selling', 'what do you sell', 'what are u sellin', 'sellin', 'tell me about lumecon', 'about lumecon', 'overview', 'what do you do', 'lumecon do', 'what yall do', 'what you guys do', 'what u guys do', 'wut is this', 'wut do you do', 'what this do', 'what u do', 'what do u do', 'what is all this', 'what this is',
     ],
-    answer: "Short version: we help organizations show their economic impact without the months-long consulting engagement. You upload what you have, we harmonize it against the public data sources serious models rely on (ACS, BEA, LODES, QCEW), and you get a defensible study with every assumption surfaced. The same study drops into a council memo, a grant narrative, or a board deck.",
+    answer: "We help organizations show their economic impact without a months-long consulting engagement. You upload what you have, we harmonize it against the public data sources serious models rely on (ACS, BEA, LODES, QCEW), and you get a defensible study with every assumption shown. The same study drops into a council memo, a grant narrative, or a board deck.",
     expanded: "Going deeper: Lumecon sits between expensive software and expensive consulting. The existing platforms charge per geography, per user, per data tier; the consultants who actually run them charge by the billable hour. We collapse both into one flat annual subscription: unlimited studies, with every geography and data tier included. The engine itself does what serious input-output models always do (direct, indirect, induced, total impact), but it's wrapped in a workflow built for cloud, modern data, and AI from day one. Cedar handles the harmonization and surfaces every assumption so your team makes judgment calls instead of cleaning spreadsheets.",
   },
   {
@@ -72,7 +72,7 @@ export const INTENTS: CedarIntent[] = [
       'tribal economic impact', 'tribal platform', 'tribal government', 'tribal nation', 'native nation', 'tribal enterprise', 'tribal gaming', 'tribes use this', 'is this made for native', 'help tribal', 'help tribes', 'help native', 'measure tribal', 'tribal grant', 'why do tribes need this', 'tribal',
       'tribe', 'tribes', 'native', 'native american', 'indigenous', 'casino', 'gaming', 'intertribal', 'tribal college', 'native cdfi', 'tero', 'self determination', 'reservation economy', 'indian country', 'off-reservation', 'off reservation', 'off-rez', 'county model', 'force us into a county', 'combine our enterprises', 'multiple enterprises', 'tribal-wide', 'enrolled members', 'work for tribe', 'works for tribe', 'for my tribe', 'help my tribe', 'good for tribes', 'tribe use this', 'this for tribes', 'we are a tribe', 'we a tribe',
     ],
-    answer: "The Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises, and it handles the geographies the existing tools struggle with (reservations, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands), is designed to respect tribal data sovereignty, and produces studies you can hand to a council, a federal funder, or a casino regulator. The resulting studies cover jobs, wages, supplier activity, and the regional ripple effects. Are you with a tribal nation or a tribal enterprise?",
+    answer: "The Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises. It handles the geographies the existing tools struggle with: reservations, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands. It is designed to respect tribal data sovereignty and produces studies you can hand to a council, a federal funder, or a casino regulator. The numbers cover jobs, wages, supplier activity, and the regional ripple effects. Are you with a tribal nation or a tribal enterprise?",
     expanded: "Going deeper for tribal nations: the platform treats reservation and off-reservation trust land, Alaska Native Regional and Village Corporations, and Native Hawaiian Home Lands as first-class geographies, not edge cases the legacy tools force into county approximations. Data sovereignty is a design priority: a single-tenant workspace, you control what's uploaded and shared, your records are not used to train a shared model, and cross-study learning runs only on anonymized aggregates. Typical outputs are gaming and enterprise impact studies for a council or a federal funder (NIGC, BIA, Treasury), grant narratives, and annual reports showing jobs, wages, and the dollars kept in the regional economy.",
   },
   {
@@ -102,7 +102,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what data', 'where does the data come', 'users upload data', 'upload my data', 'bring my own data', 'bring your own data', 'what inputs', 'what input', 'government data', 'public data', 'is the data credible', 'how do you calculate', 'what data sources', 'data sources', 'real economic data', 'income statement', 'profit and loss', 'p&l', 'balance sheet', 'cash flow', 'general ledger', 'chart of accounts', 'trial balance', 'ebitda', 'audited financials', 'financial statements', 'quickbooks',
     ],
-    answer: "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in alternative data where it helps (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own proprietary signals built in-house: regional multipliers refined across thousands of past studies, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you. What does your data look like right now?",
+    answer: "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in alternative data where it helps (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own signals built in-house: regional multipliers refined across thousands of past studies, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you. What does your data look like right now?",
     expanded: "More on data: you bring administrative records (budgets, payroll, program rosters, vendor and contract spend) in whatever shape they arrive (spreadsheets, PDFs, exports). Cedar matches them to NAICS codes, geographies, and time periods, flags anything ambiguous for you to confirm, and joins them to the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, and County Business Patterns, plus higher-frequency alternative signals where they sharpen the estimate. Messy and scattered-across-departments is the normal starting point, not a blocker.",
   },
   {
@@ -144,7 +144,7 @@ export const INTENTS: CedarIntent[] = [
       'cheaper plan', 'cheapest plan', 'cheaper option', 'is there a cheaper', 'lowest tier', 'entry tier', 'tight budget', 'priced for governments', 'can we afford', 'too expensive for us', 'nonprofit discount',
     ],
     answer: "Pricing is five figures a year on a flat annual subscription that covers unlimited studies across every geography (reservation, county, state, and national). For comparison, the legacy stack is commonly cited at $50K to $150K per study and ships months later. The tiers are right on the pricing page (no call required), and we flex for size and use case, so reach out if your situation is unusual. Want me to break down what each tier includes?",
-    expanded: "More on pricing: it's an annual subscription, not per-study or per-geography. Seats scale by tier (one on Sprout, up to five on Sapling, up to ten on Tree) with no per-use metering, and you can run as many studies as you want across reservations, counties, states, and national rollups. We work with selected pilot partners while the platform is early, which means pricing flexes for size and use case: a community foundation looks different from a state DOT looks different from a tribal gaming enterprise. The math we use under the hood is mainstream economics and the BEA accounts are public, so we're not charging you for the data; we're charging for the software that makes the analysis actually usable.",
+    expanded: "More on pricing: it's an annual subscription, not per-study or per-geography. Seats scale by tier (one on Sprout, up to five on Sapling, up to ten on Tree) with no per-use metering, and you can run as many studies as you want across reservations, counties, states, and national rollups. We work with selected pilot partners while the platform is early, which means pricing flexes for size and use case: a community foundation looks different from a state DOT looks different from a tribal gaming enterprise. The math under the hood is mainstream economics and the BEA accounts are public, so we are not charging for the data. We are charging for the software that makes the analysis usable.",
   },
   {
     id: 'demo',
@@ -206,7 +206,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how accurate', 'can i trust the numbers', 'trust the numbers', 'peer reviewed', 'peer review', 'defensible', 'defensible methodology', 'someone challenges', 'used publicly', 'used for grants', 'use for grants', 'with policymakers', 'credibility', 'how credible', 'credible enough', 'are the numbers', 'does cedar hallucinate', 'hallucinate', 'hallucination', 'rag', 'retrieval augmented', 'make stuff up', 'black box', 'is it a black box', 'can the council see', 'show the assumptions', 'see the assumptions', 'defend to council', 'defend to the board', 'defend it to council', 'hold up to scrutiny', 'stand up to scrutiny', 'county commission', 'federal reviewer', 'will reviewers accept', 'documentation for funder', 'audit trail', 'stand up to our board',
     ],
-    answer: "Three things are designed to keep the numbers defensible. Direct, indirect, induced, and total impact figures are benchmarked against established RIMS II and IMPLAN-style results, so they line up with what a reviewer would expect. Cedar is RAG-based, so answers come from the actual data and source record rather than a model guess. And every assumption (multiplier choice, regional bridge, base year, scaling rules) is surfaced and citable in the report, so a reviewer can trace any number back to where it came from.",
+    answer: "Three things are designed to keep the numbers defensible. The direct, indirect, induced, and total figures are benchmarked against established RIMS II and IMPLAN-style results, so they line up with what a reviewer would expect. Cedar pulls from your actual data and the source record rather than guessing. And every assumption (the multiplier, the base year, the scaling) is shown and citable, so a reviewer can trace any number back to where it came from.",
     expanded: "More on how this stays defensible: data provenance is per-row, so when a study cites a BEA multiplier for NAICS 23 in your county, you can click through to the source table and vintage. Assumptions are versioned with the study, so changing the regional purchase coefficient preserves the prior run in the audit trail. Cedar's reasoning steps are logged alongside the numbers, so if anyone asks why we picked a particular industry bridge or wage assumption, the answer is in the report, not in someone's email. We would rather a reviewer challenge a specific number than wave away the whole approach, so the methodology behind any figure is available for review.",
   },
   {
@@ -225,8 +225,8 @@ export const INTENTS: CedarIntent[] = [
       'is this like implan', 'compete with implan', 'better than implan', 'like rims', 'rims ii', 'rims 2', 'is this like lightcast', 'like emsi', 'like remi', 'replacing economists', 'why not just use implan', 'makes this different', 'how is this different', 'implan alternative', 'compared to implan',
       'implan', 'rims', 'lightcast', 'emsi', 'remi', 'competitor', 'competitors', 'alternative to', 'vs implan', 'instead of implan', 'difference', 'how are you different', 'what sets you apart', 'why you',
     ],
-    answer: "Same underlying economics (input-output modeling, regional multipliers, base-year reweighting). That's the mainstream stuff and the BEA accounts behind it are public. Our multipliers come from the BEA make-and-use tables, regionalized to your geography and benchmarked against RIMS II and IMPLAN-style results, not numbers we invent. What's been missing is software built with the tools that exist today: cloud infrastructure, modern UI, RAG-based AI, real-time data feeds, and geographies that aren't trapped inside administrative borders. We benchmark our direct, indirect, induced, and total impact figures against established results, update the assumptions and data that should be updated, and keep what shouldn't. Are you comparing us against a specific tool?",
-    expanded: "Concretely, what's different: pricing structure (flat annual vs. per-geography per-user per-tier), workflow (Cedar harmonizes inputs in minutes rather than analysts hand-cleaning for weeks), geographies (reservations, off-reservation trust land, Alaska Native regional corporations, Native Hawaiian Home Lands all first-class, not edge cases), data freshness (high-frequency public feeds plus our own proprietary signals layered on the same BEA accounts), and audit trail (every assumption surfaced and citable). What's the same: the math. We benchmark our direct, indirect, induced, and total impact figures against the existing platforms before any study ships, so a reviewer familiar with the legacy tools recognizes the numbers.",
+    answer: "Same underlying economics (input-output modeling, regional multipliers, base-year reweighting). That's the mainstream stuff and the BEA accounts behind it are public. Our multipliers come from the BEA make-and-use tables, regionalized to your geography and benchmarked against RIMS II and IMPLAN-style results, not numbers we invent. What's been missing is software built with the tools that exist today: cloud, a modern interface, grounded AI, current data feeds, and geographies that aren't forced into county lines. We benchmark our direct, indirect, induced, and total impact figures against established results, update the assumptions and data that should be updated, and keep what shouldn't. Are you comparing us against a specific tool?",
+    expanded: "Concretely, what's different: pricing structure (flat annual vs. per-geography per-user per-tier), workflow (Cedar harmonizes inputs in minutes rather than analysts hand-cleaning for weeks), geographies (reservations, off-reservation trust land, Alaska Native regional corporations, Native Hawaiian Home Lands all first-class, not edge cases), data freshness (high-frequency public feeds plus our own signals layered on the same BEA accounts), and audit trail (every assumption surfaced and citable). What's the same: the math. We benchmark our direct, indirect, induced, and total impact figures against the existing platforms before any study ships, so a reviewer familiar with the legacy tools recognizes the numbers.",
   },
   {
     id: 'explain_simple',
@@ -258,7 +258,7 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['company_overview', 'accuracy', 'contact'],
     chip: 'Where was Lumecon built?',
     triggers: [
-      'where was lumecon built', 'where is lumecon based', 'where is lumecon from', "lumecon's background", 'team background', 'who built lumecon', 'who founded', 'founded by', 'cornell', 'team experience', 'who is on the team', 'who is behind',
+      'where was lumecon built', 'where is lumecon based', 'where is lumecon from', 'where are you based', 'where are you located', 'where are you guys', 'your headquarters', 'headquartered', "lumecon's background", 'team background', 'who built lumecon', 'who founded', 'founded by', 'cornell', 'team experience', 'who is on the team', 'who is behind',
     ],
     answer: "Built at Ivy League and peer schools: Cornell, Dartmouth, Oxford, MIT, and Yale across the team's academic background, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.",
   },
@@ -386,7 +386,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'alternative data', 'high frequency data', 'high-frequency data', 'mobility data', 'satellite data', 'non traditional data', 'non-traditional data', 'real time data', 'real-time data', 'proprietary signals', 'card spending data', 'web scraped',
     ],
-    answer: "Yes. Alongside the official sources every serious model uses (ACS, BEA, LODES, QCEW, County Business Patterns), Lumecon layers in alternative data: higher-frequency public feeds, anonymized mobility, satellite land use, USASpending, and the regional Fed banks, plus proprietary signals built in-house from thousands of past studies. It keeps a study current between the slow official releases, and we only use it where it measurably improves the estimate.",
+    answer: "Yes. Alongside the official sources every serious model uses (ACS, BEA, LODES, QCEW, County Business Patterns), Lumecon layers in alternative data: higher-frequency public feeds, anonymized mobility, satellite land use, USASpending, and the regional Fed banks, plus our own signals built in-house from thousands of past studies. It keeps a study current between the slow official releases, and we only use it where it measurably improves the estimate.",
   },
   {
     id: 'cedar_grove',
@@ -713,7 +713,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'type i multiplier', 'type ii multiplier', 'type i', 'type ii', 'type 1', 'type 2', 'type i or type ii', 'type 1 multiplier', 'type 2 multiplier', 'sam multiplier', 'household endogenous', 'closed model', 'open model', 'which multiplier type', 'type sam', 'consumption function', 'household row', 'keynesian', 'where do your multipliers come from', 'where do the multipliers come from', 'multiplier source', 'rims ii or', 'derive your multipliers', 'build your own multipliers', 'make and use tables',
     ],
-    answer: "Lumecon works in the standard input-output framework, so the Type I versus Type II (and SAM, household-endogenous) distinction applies the way you would expect: Type I captures direct and indirect effects, while Type II and SAM close the model on households to add induced effects. The multipliers are derived from the BEA national make-and-use tables, regionalized to your geography, and benchmarked against RIMS II and IMPLAN-style results rather than being free parameters we invent. The study states which multipliers it used, so the induced layer is never a black box. If you need a specific multiplier convention for comparability with prior work, that is a setting the team can confirm.",
+    answer: "Lumecon uses the standard input-output framework, so the Type I versus Type II distinction works as you would expect: Type I captures direct and indirect effects, while Type II and SAM add induced effects by closing the model on households. The multipliers come from the BEA make-and-use tables, regionalized to your geography and benchmarked against RIMS II and IMPLAN-style results, not parameters we invent. Each study states which it used, so the induced layer is never a black box. If you need a specific convention to match prior work, the team can set that.",
   },
   {
     id: 'rpc_method',
@@ -721,7 +721,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'regional purchase coefficient', 'regional purchase coefficients', 'estimate rpc', 'rpc', 'location quotient', 'supply-demand pooling', 'regionalize', 'regionalize national accounts', 'trade leakage', 'inter-regional feedback', 'cross-hauling', 'shift-share', 'shift share', 'economic base', 'export base', 'economic base analysis',
     ],
-    answer: "Regional purchase coefficients are central, since they decide how much of each dollar stays in-region versus leaks out, and Lumecon regionalizes the national accounts using established methods (location-quotient and supply-demand-pooling style approaches) rather than anything proprietary and opaque. The RPC and regionalization assumptions are surfaced per study, so you can see, and adjust, how local capture was estimated. For multi-region studies, inter-regional feedback is handled explicitly. Happy to go deeper with the team on a specific geography.",
+    answer: "Regional purchase coefficients are central: they decide how much of each dollar stays in-region versus leaks out. Lumecon regionalizes the national accounts using established methods (location-quotient and supply-demand-pooling approaches), not anything opaque. The RPC and regionalization assumptions are shown per study, so you can see and adjust how local capture was estimated. For multi-region studies, inter-regional feedback is handled explicitly.",
   },
   {
     id: 'io_assumptions',
@@ -862,10 +862,18 @@ export const INTENTS: CedarIntent[] = [
     answer: "You're welcome. Anything else I can help with, like pricing, geographies, a demo, or the workflow?",
   },
   {
+    id: 'compliment',
+    chip: null,
+    triggers: [
+      'youre helpful', 'you are helpful', 'you re helpful', 'i like you', 'youre great', 'you are great', 'youre awesome', 'you are awesome', 'youre smart', 'you are smart', 'good bot', 'nice bot', 'this is helpful', 'very helpful', 'youre the best', 'love this', 'you rock', 'thats helpful',
+    ],
+    answer: "That's kind of you to say. If it's useful, I can keep going on pricing, the methodology, who uses Lumecon, or set up a demo. What would help most?",
+  },
+  {
     id: 'goodbye',
     chip: null,
     triggers: [
-      'bye', 'goodbye', 'see you', 'see ya', 'later', "i'm done", 'thats all', "that's all", 'have a good one',
+      'bye', 'goodbye', 'see you', 'see ya', 'later', "i'm done", 'thats all', "that's all", 'have a good one', 'have a good day', 'have a great day', 'have a nice day',
     ],
     answer: "Take care, and if something else comes up the contact form and contact@lumecon.ai are both monitored, so feel free to drop a line anytime.",
   },
@@ -875,7 +883,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'yes', 'yeah', 'yep', 'sure', 'ok', 'okay', 'got it', 'makes sense', 'sounds good', 'cool', 'nice', 'great',
     ],
-    answer: "Glad that landed. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow, or who else uses Lumecon?",
+    answer: "Good. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow, or who else uses Lumecon?",
   },
   {
     id: 'negative',
@@ -931,13 +939,13 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'how are you', 'how are u', 'how r u', 'how are ya', 'how is it going', "how's it going", 'hows it going', 'how are things', 'how do you do', 'how is your day', 'how have you been', 'how you doing', 'how ya doing', 'are you doing well', 'you doing ok', 'hope you are well', 'hope youre well', 'how is everything',
     ],
-    answer: "Doing well, thanks for asking! I'm Cedar, and I'm happiest helping you get to know Lumecon. Want the quick version of what it does, who it's for (tribal nations, governments, foundations), or to watch a live impact study run?",
+    answer: "Doing well, thanks for asking. I'm Cedar, and I'm at my best helping you get to know Lumecon. Want the quick version of what it does, who it's for (tribal nations, governments, foundations), or to watch a live impact study run?",
   },
   {
     id: 'greeting',
     chip: null,
     triggers: [
-      'hi', 'hello', 'hey', 'yo', 'sup', 'howdy', 'good morning', 'good afternoon', 'good evening', 'cedar', 'u there', 'you there', 'anyone there', 'anybody there',
+      'hi', 'hello', 'hey', 'yo', 'sup', 'howdy', 'good morning', 'good afternoon', 'good evening', 'cedar', 'u there', 'you there', 'anyone there', 'anybody there', 'nice to meet you', 'nice to meet', 'good to meet you', 'whats up', 'wassup', 'wsg',
     ],
     answer: "Hey, I'm Cedar, Lumecon's site assistant. I can answer questions about what Lumecon does, who uses it, how the math works, what a study costs, or how to reach the team. What brings you in today?",
   },
