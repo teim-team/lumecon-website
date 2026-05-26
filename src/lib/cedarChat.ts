@@ -563,8 +563,17 @@ function followUpsFor(
     // No intent: "tell me more" routes through the drill-down path.
     out.push({ label: 'Tell me more', text: 'tell me more' });
   }
+  // Bias one slot toward the visitor's stated audience (#6).
   if (audience && AUDIENCE_INTENT[audience]) push(AUDIENCE_INTENT[audience]);
-  for (const id of ['demo', 'pricing', 'contact']) push(id);
+  // Deepen the CURRENT topic with its own curated related questions, so the
+  // next step follows what was just discussed instead of showing the same
+  // demo/pricing/contact rail on every answer (which reads redundant). Only
+  // fall back to the generic next steps when an intent has no related set.
+  if (matched?.followUps?.length) {
+    for (const id of matched.followUps) push(id);
+  } else {
+    for (const id of ['demo', 'pricing', 'contact']) push(id);
+  }
   return out.slice(0, 3);
 }
 

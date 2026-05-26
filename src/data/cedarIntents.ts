@@ -27,11 +27,17 @@ export interface CedarIntent {
    *  with "tell me more" / "go deeper" while this intent was the last
    *  topic. Keeps Cedar feeling context-aware without an LLM. */
   expanded?: string;
+  /** Curated related-question chips shown after this answer (intent ids,
+   *  in priority order). They deepen the CURRENT topic instead of falling
+   *  back to the generic demo/pricing/contact rail on every reply. Targets
+   *  must be chip-bearing intents (their chip label becomes the button). */
+  followUps?: string[];
 }
 
 export const INTENTS: CedarIntent[] = [
   {
     id: 'company_overview',
+    followUps: ['compare_implan_workflow', 'pricing', 'examples'],
     chip: 'What is Lumecon?',
     triggers: [
       'what is lumecon', 'what does lumecon do', 'what does lumecon', 'explain lumecon', 'what is this company', 'what is this', 'what does this do', 'wat does this do', 'wat is this', 'what are you building', 'what is the platform', 'what is lumecon for', 'what problem', 'why does lumecon', 'what is the point of this site', 'this site', 'what are you selling', 'what do you sell', 'what are u sellin', 'sellin', 'tell me about lumecon', 'about lumecon', 'overview', 'what do you do', 'lumecon do', 'what yall do', 'what you guys do', 'what u guys do', 'wut is this', 'wut do you do', 'what this do', 'what u do', 'what do u do', 'what is all this', 'what this is',
@@ -41,6 +47,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'cedar_identity',
+    followUps: ['company_overview', 'cedar_tiers', 'demo'],
     chip: 'What is Cedar?',
     triggers: [
       'what is cedar', 'who are you', 'are you the chatbot', 'are you a chatbot', 'are you a bot', 'what can cedar help', 'why are you called cedar', 'what does this assistant do', 'can you answer', 'are you ai', 'are you a real person', 'who is cedar', 'how can i use this chatbot', 'about cedar', 'what does cedar do', 'tell me about cedar', 'r u a bot', 'u a bot', 'are u a bot', 'r u real', 'u real', 'are u ai', 'r u ai', 'u a robot', 'are you a robot', 'is this a robot', 'is this automated', 'who r u', 'who are u', 'who u',
@@ -49,15 +56,17 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'audience',
+    followUps: ['pricing', 'examples', 'demo'],
     chip: 'Who is Lumecon for?',
     triggers: [
       'who uses lumecon', 'who uses this', 'who uses it', 'who is this for', 'who is this platform for', 'who is lumecon for', 'who is the platform made for', 'what kinds of clients', 'what kind of clients', 'what types of clients', 'clients do you serve', 'who do you serve', 'who do you work with', 'is this for nonprofits', 'is this for universities', 'is this for foundations', 'is this for developers', 'is this for community', 'is this for me', 'target audience', 'who are your customers', 'who buys this', 'this for who', 'who this for', 'who this is for', 'who its for', 'who it for', 'this is for who', 'who can use this', 'who use this', 'who use it',
     ],
-    answer: "Mostly governments, enterprises, and mission-driven organizations: tribal nations, state and local agencies, universities, foundations, ports, transit agencies, large nonprofits, and community development financial institutions. The common thread is they need to defend their numbers to a council, a board, or a funder, and they need that defense to hold up to scrutiny. Where do you sit?",
+    answer: "Mostly governments, enterprises, and mission-driven organizations: tribal nations, state and local agencies, universities, foundations, ports, transit agencies, large nonprofits, and community development financial institutions. The common thread is they need to defend their numbers to a council, a board, or a funder, and they need that defense to hold up to scrutiny. We build Lumecon with these organizations, not just for them. Where do you sit?",
     expanded: "Breaking it down: tribal nations and tribal enterprises (gaming, energy, government services, cultural institutions) use the Tribal Economic Impact platform. Cities, counties, state DOTs, departments of commerce, workforce boards, and treasury offices use the Local Economic Impact platform, typically for capital project justification, grant rounds, bond measures, and annual impact reports. Universities use it for the community ripple of operations, research, construction, and student spending. Foundations use it to show donors and boards what grantmaking actually moved. Ports, airports, and transit agencies use it for capital plans. CDFIs and community lenders use it for portfolio-level place-based impact.",
   },
   {
     id: 'tribal_platform',
+    followUps: ['data_sovereignty', 'grant_applications', 'pricing'],
     chip: 'Does this work for tribal nations?',
     triggers: [
       'tribal economic impact', 'tribal platform', 'tribal government', 'tribal nation', 'native nation', 'tribal enterprise', 'tribal gaming', 'tribes use this', 'is this made for native', 'help tribal', 'help tribes', 'help native', 'measure tribal', 'tribal grant', 'why do tribes need this', 'tribal',
@@ -68,6 +77,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'local_platform',
+    followUps: ['county_city_use', 'bond_measure', 'pricing'],
     chip: 'Can cities and counties use this?',
     triggers: [
       'local economic impact', 'local platform', 'cities use', 'counties use', 'city use', 'county use', 'local government', 'municipal', 'state agency', 'state agencies', 'public agency', 'public agencies', 'measure a project', "project's impact", 'project impact', 'local development', 'public investment', "i'm not a tribal", 'non-tribal', 'non tribal',
@@ -77,6 +87,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'reports_outputs',
+    followUps: ['examples', 'accuracy', 'demo'],
     chip: 'What kind of reports does it produce?',
     triggers: [
       'what reports', 'what report', 'pdf report', 'final output', 'output look like', 'create dashboards', 'dashboard', 'export the results', 'export', 'presentations', 'public meetings', 'board materials', 'board deck', 'slide deck', 'economic impact report', 'impact report', 'annual report', 'annual impact report', 'community impact report', 'donor report', 'one pager', 'one-pager', 'executive summary', 'what format', 'deliverables', 'what do you produce', 'what does it produce', 'report do you',
@@ -86,6 +97,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'data_inputs',
+    followUps: ['security', 'multipliers', 'onboarding'],
     chip: 'What data does it use?',
     triggers: [
       'what data', 'where does the data come', 'users upload data', 'upload my data', 'bring my own data', 'bring your own data', 'what inputs', 'what input', 'government data', 'public data', 'is the data credible', 'how do you calculate', 'what data sources', 'data sources', 'real economic data', 'income statement', 'profit and loss', 'p&l', 'balance sheet', 'cash flow', 'general ledger', 'chart of accounts', 'trial balance', 'ebitda', 'audited financials', 'financial statements', 'quickbooks',
@@ -95,6 +107,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'multipliers',
+    followUps: ['effects_explained', 'accuracy', 'data_inputs'],
     chip: 'What are multipliers?',
     triggers: [
       'what is a multiplier', 'what are multipliers', 'what are economic multipliers', 'explain multipliers', 'how do multipliers', 'indirect impact', 'induced impact', 'direct impact', 'total economic impact', 'ripple effect', 'ripple through', 'why does spending create', 'multiplier effect', 'multiplier',
@@ -105,6 +118,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'software_vs_consulting',
+    followUps: ['no_economist', 'onboarding', 'pricing'],
     chip: 'Is this software or consulting?',
     triggers: [
       'is lumecon software', 'is this consulting', 'are you a saas', 'is this saas', 'saas company', 'sell reports', 'platform or a service', 'platform or service', 'hire you to do the analysis', 'is this self-service', 'is this self service', 'need an economist', 'turbotax for impact', 'is this automated', 'software or service', 'better than a consultant', 'why not hire a consultant', 'instead of a consultant', 'vs a consultant', 'replace a consultant', 'do i still need a consultant',
@@ -114,6 +128,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'pricing',
+    followUps: ['roi_lumecon', 'team_access', 'demo'],
     chip: 'How much does it cost?',
     triggers: [
       'how much', 'what is the price', 'whats the price', 'pricing', 'what does it cost', 'what does this cost', 'whats the cost', 'how much is it', 'how much does it cost', 'cost of lumecon', 'subscription', 'do you have subscriptions', 'can i buy', 'how do i get access', 'become a customer', 'become a client', 'price tag', 'pricing page', 'how much cost', 'how much it cost', 'how much it costs', 'how much for', 'how much money', 'how much u charge', 'how much you charge', 'what you charge', 'what it cost', 'what it costs', 'cost money', 'wuts the price', 'how much $$$', 'how much $',
@@ -133,6 +148,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'demo',
+    followUps: ['examples', 'pricing', 'contact'],
     chip: 'Can I see a demo?',
     triggers: [
       'schedule a demo', 'want a demo', 'see a demo', 'see the demo', 'get a demo', 'demo of', 'a demo', 'see the product', 'see the platform', 'show me the platform', 'show me the product', 'is there a demo', 'can i try', 'try the platform', 'try lumecon', 'accepting pilots', 'pilot program', 'pilot partner', 'walkthrough', 'book a call', 'set up a call',
@@ -176,6 +192,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'security',
+    followUps: ['data_sovereignty', 'data_residency', 'contact'],
     chip: 'Is my data safe?',
     triggers: [
       'is my data safe', 'is my info safe', 'my info safe', 'info safe', 'my information safe', 'data privacy', 'data security', 'happens to uploaded data', 'do you sell data', 'is this confidential', 'confidential', 'upload sensitive', 'sensitive information', 'protect client data', 'protect data', 'secure enough for governments', 'tribal data', 'how do you protect', 'pii', 'personally identifiable', 'handle pii', 'federal reserve experience', 'government data',
@@ -184,6 +201,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'accuracy',
+    followUps: ['ai_vs_chatgpt', 'competitors', 'examples'],
     chip: 'How credible are the numbers?',
     triggers: [
       'how accurate', 'can i trust the numbers', 'trust the numbers', 'peer reviewed', 'peer review', 'defensible', 'defensible methodology', 'someone challenges', 'used publicly', 'used for grants', 'use for grants', 'with policymakers', 'credibility', 'how credible', 'credible enough', 'are the numbers', 'does cedar hallucinate', 'hallucinate', 'hallucination', 'rag', 'retrieval augmented', 'make stuff up', 'black box', 'is it a black box', 'can the council see', 'show the assumptions', 'see the assumptions', 'defend to council', 'defend to the board', 'defend it to council', 'hold up to scrutiny', 'stand up to scrutiny', 'county commission', 'federal reviewer', 'will reviewers accept', 'documentation for funder', 'audit trail', 'stand up to our board',
@@ -201,6 +219,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'competitors',
+    followUps: ['compare_implan_workflow', 'accuracy', 'pricing'],
     chip: 'How is this different from IMPLAN / RIMS / Lightcast?',
     triggers: [
       'is this like implan', 'compete with implan', 'better than implan', 'like rims', 'rims ii', 'rims 2', 'is this like lightcast', 'like emsi', 'like remi', 'replacing economists', 'why not just use implan', 'makes this different', 'how is this different', 'implan alternative', 'compared to implan',
@@ -219,6 +238,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'geographies',
+    followUps: ['tribal_platform', 'examples', 'pricing'],
     chip: 'What geographies are covered?',
     triggers: [
       'what geographies', 'which geographies', 'what regions', 'which regions', 'coverage', 'what areas does it cover', 'rural counties', 'small region', 'small regions', 'native hawaiian', 'alaska native', 'ancsa', 'reservations', 'reservation level',
@@ -235,6 +255,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'where_built',
+    followUps: ['company_overview', 'accuracy', 'contact'],
     chip: 'Where was Lumecon built?',
     triggers: [
       'where was lumecon built', 'where is lumecon based', 'where is lumecon from', "lumecon's background", 'team background', 'who built lumecon', 'who founded', 'founded by', 'cornell', 'team experience', 'who is on the team', 'who is behind',
@@ -243,6 +264,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'grant_applications',
+    followUps: ['time_to_study', 'reports_outputs', 'demo'],
     chip: 'Can it support grant applications?',
     triggers: [
       'grant application', 'grant applications', 'federal grant', 'eda grant', 'hud grant', 'dot grant', 'epa grant', 'usda grant', 'cdbg', 'bil', 'bipartisan infrastructure law', 'rural development grant', 'broadband grant', 'workforce grant', 'arc grant', 'narrative for a grant', 'grant narrative', 'job estimates for a grant', 'private investment estimate', 'show economic benefit',
@@ -256,6 +278,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'time_to_study',
+    followUps: ['onboarding', 'demo', 'pricing'],
     chip: 'How long does a study take?',
     triggers: [
       'how long does it take', 'how long does a study take', 'how long does a study', 'how long does the study', 'how long to produce', 'how long is a study', 'study take', 'turnaround', 'turn around time', 'turnaround time', 'turn a study around', 'how fast can you', 'study timeline', 'project timeline', 'lead time', 'how quickly', 'in time for our board', 'before our deadline', 'before grant deadline', 'council vote', 'before our council vote', 'before the vote', 'board meeting', 'by next meeting', 'by our next meeting', 'rush', 'quick turnaround', 'how soon', 'fast turnaround', 'how fast', 'how quick', 'take long', 'how long it take', 'how long take', 'how long will it take', 'is it quick',
@@ -265,6 +288,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'no_economist',
+    followUps: ['onboarding', 'demo', 'software_vs_consulting'],
     chip: "We don't have an economist on staff",
     triggers: [
       "don't have an economist", 'no economist', 'not an economist', 'not a data scientist', 'not technical', 'we are not analysts', 'small team', 'limited capacity', 'tight staffing', 'capacity constrained', 'who runs the analysis', 'do i need to know economics', 'normal person', 'can a normal person', 'someone like me', 'for someone like me', 'do i need to be smart', 'not an expert', 'no expertise',
@@ -273,6 +297,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'state_agency_use',
+    followUps: ['grant_applications', 'reports_outputs', 'pricing'],
     chip: 'How do state agencies use it?',
     triggers: [
       'state department of', 'state dot', 'state doc', 'state commerce', 'state treasury', 'state agency use case', 'state agency uses', 'department of commerce', 'department of transportation', 'state legislature', 'state budget office', 'state workforce board', 'state health department', 'how do states use', 'defend an appropriation', 'appropriations defense', 'appropriations request', 'legislative scrutiny', 'fiscal note', 'budget hearing', 'testify to the legislature', 'testify', 'legislative session', 'legislative ask', 'budget defense',
@@ -282,6 +307,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'county_city_use',
+    followUps: ['bond_measure', 'grant_applications', 'pricing'],
     chip: 'How do cities and counties use it?',
     triggers: [
       'city manager', 'city use case', 'city uses', 'county use case', 'county uses', 'edo', 'economic development director', 'economic development office', 'chamber of commerce', 'mayor', 'council member', 'school district', 'school districts', 'work with school', 'school bond', 'special district', 'special districts', 'how do cities use', 'how do counties use', 'annual community impact',
@@ -291,6 +317,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'foundation_use',
+    followUps: ['reports_outputs', 'accuracy', 'pricing'],
     chip: 'How do foundations use it?',
     triggers: [
       'foundation use case', 'how do foundations use', 'foundation report', 'philanthropy', 'philanthropic', 'grantmaker', 'grantmaking', 'community foundation', 'private foundation', 'family foundation', 'measure our giving', 'measure giving', 'our giving', 'measure grantmaking', 'donor report', 'place-based', 'place based', 'portfolio impact', 'portfolio-level', 'grantee outcomes', 'grantee', 'same way every year', 'year over year', 'show donors', 'show our board',
@@ -299,6 +326,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'bond_measure',
+    followUps: ['county_city_use', 'examples', 'time_to_study'],
     chip: 'Can we use it for a bond measure?',
     triggers: [
       'bond measure', 'school bond', 'municipal bond', 'infrastructure bond', 'general obligation bond', 'go bond', 'voter bond', 'capital bond', 'bond campaign', 'bond election', 'parks bond', 'transit bond',
@@ -307,6 +335,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'compare_implan_workflow',
+    followUps: ['time_to_study', 'onboarding', 'demo'],
     chip: 'How is the workflow different?',
     triggers: [
       'workflow', 'day to day', 'in practice', 'what does the work look like', 'what does the workflow', 'how is the workflow', 'how does the work flow', 'replacing my consultant', 'replacing consultants', 'replace consultant',
@@ -317,6 +346,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'roi_lumecon',
+    followUps: ['pricing', 'software_vs_consulting', 'demo'],
     chip: 'What does Lumecon cost vs. the alternative?',
     triggers: [
       'cost vs', 'vs hiring a consultant', 'cheaper than a consultant', 'roi', 'roi of', 'return on investment', 'return on lumecon', 'is this worth it', 'is it worth it', 'worth the money', 'why pay for this', 'why subscribe', 'cost of doing nothing', 'budget for impact', 'price compared to', 'savings vs', 'payback', 'payback period', 'cost savings', 'total cost of ownership', 'tco', 'switching cost', 'build vs buy', 'build versus buy', 'sunk cost', 'breakeven', 'break even', 'opex', 'capex', 'operating expense', 'capital expense', 'vendor consolidation',
@@ -333,6 +363,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'onboarding',
+    followUps: ['time_to_study', 'data_inputs', 'demo'],
     chip: 'How does onboarding work?',
     triggers: [
       'how do i get started', 'how do we get started', 'onboarding', 'onboard', 'getting started', 'first study', 'first project', 'kick off', 'kickoff', 'how does setup work', 'how long is setup', 'training',
@@ -341,6 +372,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'effects_explained',
+    followUps: ['multipliers', 'accuracy', 'examples'],
     chip: 'Direct, indirect, induced?',
     triggers: [
       'direct indirect induced', 'direct indirect and induced', 'direct effect', 'indirect effect', 'induced effect', 'three effects', 'difference between direct and indirect', 'what is total impact', 'spillover effect', 'output effect', 'what do the numbers mean', 'double counting', 'double-counting', 'count twice', 'counted twice',
@@ -366,6 +398,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'ai_vs_chatgpt',
+    followUps: ['accuracy', 'security', 'cedar_tiers'],
     chip: 'Is Cedar just ChatGPT?',
     triggers: [
       'just chatgpt', 'is this chatgpt', 'is cedar chatgpt', 'is it gpt', 'use gpt', 'use openai', 'is it a large language model', 'does the ai make up', 'does it make up numbers', 'made up numbers', 'is the ai reliable', 'ai trustworthy', 'generative ai', 'is cedar generative',
@@ -383,6 +416,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'examples',
+    followUps: ['accuracy', 'pricing', 'demo'],
     chip: 'Can I see example numbers?',
     triggers: [
       'example numbers', 'examples', 'sample report', 'sample study', 'real numbers', 'show me a study', 'case study', 'case studies', 'see results', 'sample output', 'example study', 'see real',
@@ -399,6 +433,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'data_sovereignty',
+    followUps: ['security', 'tribal_platform', 'contact'],
     chip: 'Do you respect data sovereignty?',
     triggers: [
       'data sovereignty', 'indigenous data sovereignty', 'tribal data sovereignty', 'who owns the data', 'data ownership', 'own our data', 'care principles', 'ocap', 'data governance', 'own my data', 'keep our data', 'enrolled members data', 'train on our data', 'train on my data', 'train your models', 'use our data to train', 'sell our data', 'do you sell our data', 'syndicate', 'who can see our data', 'data stays ours', 'will you sell our data',
@@ -407,6 +442,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'jobs_employment',
+    followUps: ['effects_explained', 'grant_applications', 'examples'],
     chip: 'How does it report jobs?',
     triggers: [
       'jobs', 'job creation', 'jobs created', 'employment', 'employment impact', 'how many jobs', 'labor income', 'wages', 'payroll impact', 'fte', 'full time equivalent', 'jobs supported', 'direct jobs', 'job numbers', 'employment effect', 'how many positions',
@@ -416,6 +452,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'university_use',
+    followUps: ['reports_outputs', 'pricing', 'demo'],
     chip: 'How do universities use it?',
     triggers: [
       'university', 'universities', 'college', 'colleges', 'higher ed', 'higher education', 'campus', 'student spending', 'visitor spending', 'research university', 'college town', 'institutional impact', 'university impact', 'land grant', 'town gown', 'town-gown', 'dorm', 'dormitory', 'new building', 'campus construction', 'campus capital project', 'teaching hospital', 'medical center', 'student spend',
@@ -425,6 +462,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'nonprofit_use',
+    followUps: ['reports_outputs', 'grant_applications', 'pricing'],
     chip: 'How do nonprofits use it?',
     triggers: [
       'nonprofit', 'non profit', 'non-profit', 'nonprofits', 'ngo', 'charity', 'mission driven', 'social enterprise', 'community organization', 'cdfi', 'community development financial', 'community lender', 'social return', 'donor report',
@@ -798,6 +836,7 @@ export const INTENTS: CedarIntent[] = [
   /* --- Upsell: free vs paid Cedar (the one new chip) --- */
   {
     id: 'cedar_tiers',
+    followUps: ['pricing', 'cedar_grove', 'demo'],
     chip: 'Free vs paid Cedar?',
     triggers: [
       'free vs paid', 'free version', 'paid cedar', 'real cedar', 'full cedar', 'is the ai cedar included', 'is ai cedar included', 'is cedar free', 'cedar free', 'is the ai cedar free', 'is lumecon free', 'lumecon free', 'free or paid', 'what do i get if i pay', 'what do i unlock', 'unlock cedar', 'upgrade', 'upgrade cedar', 'this cedar vs', 'smarter cedar', 'cedar in the product', 'cedar in the platform', 'what does cedar do in the product', 'difference between this and the paid',
