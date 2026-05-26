@@ -74,9 +74,11 @@ test('cedar sends an off-topic question to the out-of-scope reply', async ({ pag
 test('cedar asks to clarify when a message is genuinely ambiguous', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'Routing is engine-independent; headless WebKit is unreliable in CI.');
   const panel = await openCedar(page);
-  // "implan pricing" ties competitors and pricing at the top score — two
-  // distinct chip-bearing topics, so Cedar should ask rather than guess.
-  const bubble = await ask(panel, 'implan pricing');
+  // Cedar only clarifies on genuine ambiguity now: a weak two-way tie on a
+  // single bare word just answers the declaration-order winner. "tribal
+  // pricing demo" names three distinct chip-bearing topics tied at the top
+  // score, so Cedar should ask which one rather than guess.
+  const bubble = await ask(panel, 'tribal pricing demo');
   await expect(bubble).toContainText('Did you mean');
 });
 
