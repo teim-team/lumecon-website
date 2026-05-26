@@ -37,7 +37,7 @@ export interface CedarIntent {
 export const INTENTS: CedarIntent[] = [
   {
     id: 'company_overview',
-    followUps: ['compare_implan_workflow', 'pricing', 'examples'],
+    followUps: ['mission', 'compare_implan_workflow', 'pricing'],
     chip: 'What is Lumecon?',
     triggers: [
       'what is lumecon', 'what does lumecon do', 'what does lumecon', 'explain lumecon', 'what is this company', 'what is this', 'what does this do', 'wat does this do', 'wat is this', 'what are you building', 'what is the platform', 'what is lumecon for', 'what problem', 'why does lumecon', 'what is the point of this site', 'this site', 'what are you selling', 'what do you sell', 'what are u sellin', 'sellin', 'tell me about lumecon', 'about lumecon', 'overview', 'what do you do', 'lumecon do', 'what yall do', 'what you guys do', 'what u guys do', 'wut is this', 'wut do you do', 'what this do', 'what u do', 'what do u do', 'what is all this', 'what this is',
@@ -46,11 +46,39 @@ export const INTENTS: CedarIntent[] = [
     expanded: "Going deeper: Lumecon sits between expensive software and expensive consulting. The existing platforms charge per geography, per user, per data tier; the consultants who actually run them charge by the billable hour. We collapse both into one flat annual subscription: unlimited studies, with every geography and data tier included. The engine itself does what serious input-output models always do (direct, indirect, induced, total impact), but it's wrapped in a workflow built for cloud, modern data, and AI from day one. Cedar handles the harmonization and surfaces every assumption so your team makes judgment calls instead of cleaning spreadsheets.",
   },
   {
+    id: 'mission',
+    followUps: ['why_now', 'company_overview', 'demo'],
+    chip: 'Why Lumecon?',
+    triggers: [
+      'why lumecon', 'why does lumecon exist', 'why do you exist', 'whats your mission', 'what is your mission', 'your mission', 'mission', 'what do you stand for', 'what does lumecon mean', 'luminate economies', 'luminate', 'why was lumecon built', 'why build lumecon', 'whats the point of lumecon', 'purpose of lumecon', 'why should i care', 'what drives you',
+    ],
+    answer: "Lumecon means luminate economies. We exist because too much meaningful work goes unseen: organizations create jobs, house elders, improve roads, and move money through their local economy in ways that are real but hard to prove. When that work is not measured well, it is easier to ignore, and funding gets harder to defend. Our job is to make the economically invisible visible, and to show what the numbers represent: people with paychecks, families with stability, and communities with infrastructure. Economic impact analysis should make the human stakes impossible to miss, not abstract them away.",
+    expanded: "The deeper point: when an organization's value is not measured well, decision-makers miss most of it, community investments look smaller than they are, and the groups most often asked to prove their worth are the ones least able to afford the proof. Lumecon turns the administrative records you already keep into a study that shows the full picture, with every assumption visible so the result holds up to scrutiny. The goal is not just a number. It is evidence a council, a board, or a funder can trust, and that reflects the people behind the work.",
+  },
+  {
+    id: 'why_now',
+    followUps: ['pricing', 'roi_lumecon', 'mission'],
+    chip: 'Why now?',
+    triggers: [
+      'why now', 'why build this now', 'why hasnt this existed', 'why didnt this exist', 'why does this matter now', 'whats different now', 'why is now the time', 'why now and not before', 'why not sooner',
+    ],
+    answer: "The old model does not serve enough people. Economic impact analysis has been locked behind expensive software, consultant markups, geography-based pricing, and per-seat fees, which prices out the very organizations most often asked to prove their value. Public data is richer now, software is more powerful, and the methods are more sophisticated, so the tools should be better and the evidence easier to reuse. Lumecon is built around a different incentive: we would rather you stay and build stronger evidence over time than be charged again for every geography, dataset, or support request. The more useful Lumecon is to each organization, the better the whole system gets.",
+  },
+  {
+    id: 'cedar_naming',
+    followUps: ['cedar_identity', 'cedar_grove', 'cedar_tiers'],
+    chip: 'Why is it called Cedar?',
+    triggers: [
+      'why are you called cedar', 'why is it called cedar', 'why the name cedar', 'why call it cedar', 'why named cedar', 'why the name', 'what does cedar mean', 'meaning of cedar', 'why cedar', 'where does the name cedar come from', 'why is the ai called cedar',
+    ],
+    answer: "The name is intentional. Most AI feels sterile, placeless, and detached. A cedar is rooted, durable, and protective, which is closer to what this should feel like: memory, place, and care rather than automation for its own sake. Inside Lumecon, Cedar helps you work with messy source records, compliance forms, public datasets, and study assumptions, and it organizes that evidence without stripping away where it came from or what it represents. Cedar is not just here to make studies faster. It is here to help your economic evidence keep its roots.",
+  },
+  {
     id: 'cedar_identity',
-    followUps: ['company_overview', 'cedar_tiers', 'demo'],
+    followUps: ['cedar_naming', 'company_overview', 'cedar_tiers'],
     chip: 'What is Cedar?',
     triggers: [
-      'what is cedar', 'who are you', 'are you the chatbot', 'are you a chatbot', 'are you a bot', 'what can cedar help', 'why are you called cedar', 'what does this assistant do', 'can you answer', 'are you ai', 'are you a real person', 'who is cedar', 'how can i use this chatbot', 'about cedar', 'what does cedar do', 'tell me about cedar', 'r u a bot', 'u a bot', 'are u a bot', 'r u real', 'u real', 'are u ai', 'r u ai', 'u a robot', 'are you a robot', 'is this a robot', 'is this automated', 'who r u', 'who are u', 'who u',
+      'what is cedar', 'who are you', 'are you the chatbot', 'are you a chatbot', 'are you a bot', 'what can cedar help', 'what does this assistant do', 'can you answer', 'are you ai', 'are you a real person', 'who is cedar', 'how can i use this chatbot', 'about cedar', 'what does cedar do', 'tell me about cedar', 'r u a bot', 'u a bot', 'are u a bot', 'r u real', 'u real', 'are u ai', 'r u ai', 'u a robot', 'are you a robot', 'is this a robot', 'is this automated', 'who r u', 'who are u', 'who u',
     ],
     answer: "I'm Cedar, Lumecon's assistant. Inside the platform I read your administrative files, harmonize them with public data, surface every modeling assumption, and write the source record. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what a study costs, or how to reach the team. If I'm not the right tool for what you need, I'll say so and point you at someone who is.",
   },
@@ -390,11 +418,12 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'cedar_grove',
+    followUps: ['cedar_tiers', 'cedar_naming', 'pricing'],
     chip: 'What is Cedar Grove?',
     triggers: [
-      'cedar grove', 'what is cedar grove', 'grove tier', 'curated data', 'data library', 'reusable data', 'filings library',
+      'cedar grove', 'what is cedar grove', 'grove tier', 'curated data', 'data library', 'reusable data', 'filings library', 'data lake',
     ],
-    answer: "Cedar Grove is the curated data layer in the top tier (Tree): pre-assembled filings, source materials, trackers, and a reusable data library so recurring submissions (grants, federal reporting, compliance) don't start from scratch each cycle. It's also available as a standalone subscription. Cedar Grove rolls out after launch; the Cedar assistant itself is available from the Sapling tier.",
+    answer: "Cedar Grove is the full data environment Cedar grows into: harmonized data, compliance forms, source records, geographic bridges, assumptions, and institutional knowledge living together and reusable across cycles, so recurring submissions like grants and federal reporting don't start from scratch. We don't call it a grove just because it sounds warmer than data lake. A data lake stores information; Cedar Grove gives that information roots. One cedar helps structure a study; a grove becomes a living, auditable system of economic evidence that grows stronger the more an organization uses it. It comes with the top Tree tier and is also available as a standalone subscription, rolling out after launch. And yes, if a tree falls in the forest, would anyone hear it? If it has an impact on the economy, Lumecon will measure it.",
   },
   {
     id: 'ai_vs_chatgpt',
