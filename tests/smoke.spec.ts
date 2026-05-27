@@ -18,11 +18,11 @@ test('home page loads and renders the hero workflow', async ({ page }) => {
   // lives on /map (exercised by the tests below).
   await expect(page.locator('.hero-flow')).toBeVisible();
 
-  // Filter out known harmless console errors (cert + meta-CSP warnings).
+  // Filter out a known-harmless console error (TLS cert on the preview host).
+  // (The old frame-ancestors meta-CSP warning and the ipapi.co geolocation
+  // call were both removed, so they can no longer appear here.)
   const real = errs.filter(e =>
-    !e.includes('CERT_AUTHORITY_INVALID') &&
-    !e.includes('frame-ancestors') &&
-    !e.includes('ipapi.co')
+    !e.includes('CERT_AUTHORITY_INVALID')
   );
   expect(real).toEqual([]);
 });
