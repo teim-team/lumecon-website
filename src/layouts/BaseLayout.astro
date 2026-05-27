@@ -1,7 +1,6 @@
 ---
 import CedarFAB from '../components/CedarFAB.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
-import PageWipe from '../components/PageWipe.astro';
 
 interface Props {
   title: string;
@@ -120,7 +119,6 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
 </head>
 <body class={bodyClass}>
 <a href="#top" class="skip-link">Skip to main content</a>
-<PageWipe />
 <slot />
 <CedarFAB />
 <ConsentBanner />
