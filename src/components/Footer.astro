@@ -70,10 +70,22 @@ const prefix = isHome ? '' : '/';
     <div class="footer-w">
       <div class="footer-bottom">
         <div class="footer-legal">
-          &copy; {site.copyrightYear} {site.legalEntity} &middot; All rights reserved.
+          &copy; <span id="copyrightYear">{site.copyrightYear}</span> {site.legalEntity} &middot; All rights reserved.
         </div>
         <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
       </div>
     </div>
   </div>
 </footer>
+
+<script>
+  // Keep the copyright year current even between deploys. The build-time
+  // value rendered above is the no-JS fallback and the initial paint;
+  // this refreshes it to the visitor's current year on load.
+  function setCopyrightYear(): void {
+    const el = document.getElementById('copyrightYear');
+    if (el) el.textContent = String(new Date().getFullYear());
+  }
+  setCopyrightYear();
+  document.addEventListener('astro:page-load', setCopyrightYear);
+</script>
