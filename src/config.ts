@@ -20,7 +20,8 @@ export const site = {
   legalEntity: 'Lumecon Inc.',
   counsel: 'Cornell Law Entrepreneurship Law Clinic',
   builtAt: 'Cornell University',
-  copyrightYear: 2026,
+  // Computed at build time, so every deploy stamps the current year.
+  copyrightYear: new Date().getFullYear(),
   maxWidth: '1100px',
   products: PLATFORM_BY_SLUG,
 } as const;
