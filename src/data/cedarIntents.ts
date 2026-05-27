@@ -449,9 +449,9 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['accuracy', 'pricing', 'demo'],
     chip: 'Can I see example numbers?',
     triggers: [
-      'example numbers', 'examples', 'sample report', 'sample study', 'real numbers', 'show me a study', 'case study', 'case studies', 'see results', 'sample output', 'example study', 'see real',
+      'example numbers', 'examples', 'sample report', 'sample study', 'real numbers', 'show me a study', 'case study', 'case studies', 'see results', 'sample output', 'example study', 'see real', 'live map', 'interactive map', 'see the map', 'show me the map', 'where is the map', 'can i see the map', 'the impact map', 'see a live study', 'live example',
     ],
-    answer: "The interactive map on the homepage runs live example studies: click any state, county, or reservation and direct, indirect, induced, and total impact, jobs, and labor income update in seconds. Those figures are illustrative, to show the workflow; a real study uses your actual data. For a walkthrough with numbers close to your use case, the team is one email away.",
+    answer: "The interactive map on the See your impact page (/map) runs live example studies: click any state, county, or reservation and direct, indirect, induced, and total impact, jobs, and labor income update in seconds. Those figures are illustrative, to show the workflow; a real study uses your actual data. For a walkthrough with numbers close to your use case, the team is one email away.",
   },
   {
     id: 'team_access',
@@ -860,7 +860,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'im a reporter', 'i am a reporter', 'im a journalist', 'i am a journalist', 'press inquiry', 'media inquiry', 'media question', 'writing a story', 'can i quote', 'press contact', 'for a story',
     ],
-    answer: "Happy to help with a story. The fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline, and what you are working on, and a person will get back to you. For background, the About page covers the team and the company, and the homepage map shows a live example study you are welcome to reference.",
+    answer: "Happy to help with a story. The fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline, and what you are working on, and a person will get back to you. For background, the About page covers the team and the company, and the interactive map on the See your impact page (/map) shows a live example study you are welcome to reference.",
   },
 
   /* --- Upsell: free vs paid Cedar (the one new chip) --- */
