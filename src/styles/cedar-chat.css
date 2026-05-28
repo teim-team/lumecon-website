@@ -121,12 +121,12 @@
 /* Inline links Cedar renders inside a reply (contact email, /pricing,
    /demo, external sources). Bot bubbles only. */
 .cedar-msg--bot .cedar-msg__bubble a {
-  color: var(--accent-deep);
+  color: var(--accent-text);
   text-decoration: underline;
   text-underline-offset: 2px;
   font-weight: 600;
 }
-.cedar-msg--bot .cedar-msg__bubble a:hover { color: var(--accent-chip-hover); }
+.cedar-msg--bot .cedar-msg__bubble a:hover { color: var(--navy); }
 .cedar-msg--bot .cedar-msg__bubble a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -279,7 +279,7 @@
   font-family: var(--font-sans);
   font-size: .82rem;
   font-weight: 600;
-  color: var(--accent-deep);
+  color: var(--accent-text);
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
@@ -309,8 +309,8 @@
   cursor: pointer;
   transition: color .15s var(--ease), background .15s var(--ease);
 }
-.cedar-feedback__btn:hover:not(:disabled) { color: var(--accent-deep); background: var(--paper); }
-.cedar-feedback__btn.is-selected { color: var(--accent-deep); }
+.cedar-feedback__btn:hover:not(:disabled) { color: var(--accent-text); background: var(--paper); }
+.cedar-feedback__btn.is-selected { color: var(--accent-text); }
 .cedar-feedback__btn:disabled { cursor: default; }
 .cedar-feedback__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
@@ -332,7 +332,7 @@
   font-family: var(--font-sans);
   font-size: .8rem;
   font-weight: 500;
-  color: var(--accent-deep);
+  color: var(--accent-text);
   cursor: pointer;
   line-height: 1.2;
   transition: background .15s var(--ease), color .15s var(--ease), transform .15s var(--ease);

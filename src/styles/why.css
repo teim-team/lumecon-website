@@ -25,7 +25,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0;
 }
@@ -74,7 +74,7 @@
 .why-stat:hover .why-stat__k,
 .why-stat:focus-within .why-stat__k,
 .why-stat[open] .why-stat__k,
-.why-stat:active .why-stat__k { color: var(--accent); }
+.why-stat:active .why-stat__k { color: var(--accent-text); }
 .why-stat__k { transition: color .25s var(--ease); }
 /* Icons inside the card switch to teal in hover/focus/active/open
    states. The SVGs use currentColor, so flipping the parent's color
@@ -83,7 +83,7 @@
 .why-stat:hover .why-stat__icon,
 .why-stat:focus-within .why-stat__icon,
 .why-stat[open] .why-stat__icon,
-.why-stat:active .why-stat__icon { color: var(--accent); }
+.why-stat:active .why-stat__icon { color: var(--accent-text); }
 
 /* Card head stacks vertically: icon up top, headline in the middle,
    chevron at the bottom. Centered so the row of three reads as
@@ -247,7 +247,7 @@
   font-size: .68rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   margin: 0;
@@ -262,7 +262,7 @@
   margin: 0;
   max-width: 22ch;
 }
-.why-stat__amp { font-style: italic; color: var(--accent); font-weight: 500; }
+.why-stat__amp { font-style: italic; color: var(--accent-text); font-weight: 500; }
 .why-stat__v {
   font-size: 1.05rem;
   line-height: 1.55;
@@ -299,7 +299,7 @@
   color: var(--ink-3);
   font-weight: 600;
 }
-.why-sources__group:last-child .why-sources__label { color: var(--accent); }
+.why-sources__group:last-child .why-sources__label { color: var(--accent-text); }
 .why-sources__items {
   font-family: var(--font-sans);
   font-size: .9rem;

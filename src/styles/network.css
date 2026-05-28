@@ -30,7 +30,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 1rem;
 }
@@ -129,7 +129,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   padding: .5rem 0;
 }

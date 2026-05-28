@@ -27,7 +27,7 @@
   font-family: var(--font-mono);
   font-size: .7rem;
   letter-spacing: .14em;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   text-transform: uppercase;
   margin: 0 0 1rem;
@@ -55,7 +55,7 @@
   font-family: var(--font-mono);
   font-size: .9rem;
   font-weight: 500;
-  color: var(--accent);
+  color: var(--accent-text);
   transition: color .15s;
 }
 .cta-email:hover { color: var(--accent-btn-hover); }

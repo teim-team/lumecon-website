@@ -21,7 +21,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .85rem;
 }
@@ -213,7 +213,7 @@
   font-size: .62rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 .area-card__person {
@@ -222,7 +222,7 @@
   border-bottom: 1px solid var(--rule);
   transition: color .15s var(--ease), border-color .15s var(--ease);
 }
-.area-card__person:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.area-card__person:hover { color: var(--accent-text); border-bottom-color: var(--accent); }
 /* CSS-driven separator: every Advisory / Contributors link after
    the first prepends a middle dot (rather than a comma) so the
    roster doesn't visually collide with PhD-suffix commas inside
@@ -315,7 +315,7 @@
   font-size: .68rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0;
 }

@@ -38,6 +38,19 @@
      instead (~4.9:1 / hover ~6:1) while keeping a teal identity. */
   --accent-chip: #0A7F74;
   --accent-chip-hover: #086960;
+  /* Semantic token for teal *text/links/focus rings* on the current
+     surface. Light mode: accent-chip (4.88:1 on white, AA). Dark mode is
+     overridden in the prefers-color-scheme block below to accent-light,
+     since the deeper chip teal fails AA on a dark surface. Keep
+     --accent-chip itself for button/chip backgrounds (where white text
+     needs the darker hue). */
+  --accent-text: #0A7F74;
+  /* Cedar-green text. Same pattern as --accent-text: the bright --cedar
+     #0E8B4F only gets 4.35:1 on white (fails AA body text), so for text
+     we use the deep variant (7.89:1) and switch to cedar-light in dark
+     mode (6.94:1 on dark navy). Keep --cedar for the Cedar FAB and
+     decorative fills. */
+  --cedar-text: #0B5E36;
   --blue: #2E5BD6;           /* bold electric-leaning navy-blue */
   --blue-deep: #1E40A6;
   --purple: #6E3DD8;
@@ -148,6 +161,12 @@ body {
     --rule-strong:  rgba(255, 255, 255, .22);
     --accent-rgba-08: rgba(15, 181, 165, .14);
     --accent-rgba-18: rgba(15, 181, 165, .26);
+    /* On a dark surface, the deeper chip teal (#0A7F74) only gets 3.68:1
+       and fails AA for body text. Switch the text-accent token to the
+       lighter teal, which lands at 10.66:1 on the dark navy surface. */
+    --accent-text: #5FD9CC;
+    /* Brighter cedar so green text clears AA against the dark surface. */
+    --cedar-text: #1BB66A;
     /* Highlight tints need more punch to read on a dark surface. */
     --gold:         #FFC83D;
   }
@@ -177,7 +196,7 @@ body {
      than blending into the page. */
   .footer-bar { background-color: #050920; color: #BCC1D8; }
   .footer-email { color: rgba(241, 243, 250, .75); }
-  .footer-email:hover { color: var(--accent); }
+  .footer-email:hover { color: var(--accent-text); }
 
   /* Form fields: white-on-white in light mode becomes paper-on-
      surface in dark mode. */
@@ -705,7 +724,7 @@ html {
   font-size: .62rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   margin-bottom: .55rem;
   font-weight: 600;
 }
@@ -799,7 +818,7 @@ html {
 }
 .kicker::before {
   content: '§';
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 700;
 }
 .kicker--invert { color: var(--cream); opacity: .85; }
@@ -1121,7 +1140,7 @@ strong { font-weight: 600; color: inherit; }
   border-radius: 50%;
   background: var(--navy);
   border: 1.5px solid rgba(255, 252, 247, .12);
-  color: var(--accent);
+  color: var(--accent-text);
   cursor: pointer;
   z-index: 999;
   display: flex;
@@ -1276,12 +1295,12 @@ strong { font-weight: 600; color: inherit; }
 }
 .chat-ctrl-btn:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .chat-ctrl-btn.active {
   background: var(--navy);
   border-color: var(--navy);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .chat-conv-indicator {
   font-size: .52rem;

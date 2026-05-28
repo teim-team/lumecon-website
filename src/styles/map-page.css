@@ -22,7 +22,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .85rem;
 }
@@ -76,7 +76,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .8rem;
 }
@@ -164,7 +164,7 @@
   transition: transform .18s var(--ease), color .18s var(--ease);
 }
 .map-page__input-icon svg { width: 100%; height: 100%; display: block; }
-.map-page__input:hover .map-page__input-icon { transform: translateY(-2px); color: var(--accent); }
+.map-page__input:hover .map-page__input-icon { transform: translateY(-2px); color: var(--accent-text); }
 .map-page__input-label {
   font-family: var(--font-sans);
   font-size: .92rem;
@@ -202,7 +202,7 @@
   transition: color .15s var(--ease);
 }
 .map-page__inputs-more-summary::-webkit-details-marker { display: none; }
-.map-page__inputs-more-summary:hover { color: var(--accent); }
+.map-page__inputs-more-summary:hover { color: var(--accent-text); }
 .map-page__inputs-more-chev {
   width: 24px;
   height: 24px;
@@ -282,7 +282,7 @@
   font-size: .7rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 .map-page__details-title {
