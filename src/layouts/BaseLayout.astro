@@ -58,7 +58,13 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
        - https://api.lumecon.ai          (AWS API Gateway origin)
        - https://*.datadoghq.com         (Datadog RUM beacon; swap
                                           subdomain to match SITE)
-     and extend script-src if Datadog is loaded from the CDN agent. -->
+     and extend script-src if Datadog is loaded from the CDN agent.
+
+     Note: frame-ancestors / X-Frame-Options (clickjacking) and
+     Strict-Transport-Security can only be set as HTTP *headers*, which
+     static hosting (GitHub Pages) cannot emit. They are not enforced
+     until a header-capable layer (Cloudflare, the API origin, etc.)
+     fronts the site; add `X-Frame-Options: DENY` there. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
