@@ -123,7 +123,12 @@ body {
   color: var(--navy);
   background: var(--white);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* `clip`, not `hidden`: `hidden` turns <body> into its own scroll
+     container on iOS Safari, which breaks momentum scrolling, the URL-
+     bar autohide, and `position: fixed` math. `clip` clips overflow
+     without creating a scroll container, so the viewport keeps owning
+     the scroll. */
+  overflow-x: clip;
   /* `contain` on the Y axis blocks the iOS Safari pull-to-refresh
      gesture (a swipe-down at the top of the page used to reload
      the document and read as a "random page reset"). The X axis
@@ -239,19 +244,21 @@ body {
    The min-block-size pairing in each component CSS ensures sections
    are at least one viewport tall (dvh accounts for mobile URL bars). */
 html {
-  scroll-snap-type: y proximity;
+  /* Scroll-snap intentionally OFF. We previously had
+       scroll-snap-type: y proximity
+     to give the homepage a "section-by-section" feel, but html-level
+     scroll-snap consistently caused "broken/jumpy scroll" reports on
+     macOS trackpads and iOS Safari (it fought momentum scrolling at
+     section boundaries). The .snap-section / scroll-snap-align hints on
+     children become inert without a snap container, so we leave them in
+     place as harmless markers. */
+  scroll-snap-type: none;
   /* The headline highlight blocks bleed sideways (negative vw insets)
      for an editorial look; clip the x-axis at the root so that bleed
      can never become a horizontal scroll. `clip` (not `hidden`) avoids
-     making <html> a scroll container, so the y-axis snap above keeps
-     working. body already clips x, but the bleed was escaping at the
-     <html> level on some pages. */
+     making <html> a scroll container. */
   overflow-x: clip;
-  /* Reserve room for the nav at the top of every snapped section so
-     snap-align: start doesn't pull the page past a static nav (or
-     hide content under a fixed one). The value needs to be at least
-     the nav's rendered height, which sits around 70–80px after the
-     base font bumped to 18px. */
+  /* Reserve room for the fixed nav so anchor jumps land below it. */
   scroll-padding-top: clamp(4.5rem, 8vh, 5.5rem);
 }
 /* Disable snap on small landscape screens — phones in landscape have
