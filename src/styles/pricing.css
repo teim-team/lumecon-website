@@ -159,13 +159,13 @@
 }
 .pricing-platform-tile:hover .pricing-platform-tile__icon,
 .pricing-platform-tile:focus-visible .pricing-platform-tile__icon,
-.pricing-platform-tile:active .pricing-platform-tile__icon { color: var(--accent); background: var(--accent-rgba-08); }
-.pricing-platform-tile.is-active .pricing-platform-tile__icon { color: var(--accent); background: var(--accent-rgba-08); }
+.pricing-platform-tile:active .pricing-platform-tile__icon { color: var(--accent-text); background: var(--accent-rgba-08); }
+.pricing-platform-tile.is-active .pricing-platform-tile__icon { color: var(--accent-text); background: var(--accent-rgba-08); }
 .pricing-platform-tile--coming-soon .pricing-platform-tile__icon {
   background: var(--white);
   color: var(--ink-3);
 }
-.pricing-platform-tile--coming-soon:hover .pricing-platform-tile__icon { color: var(--cedar); }
+.pricing-platform-tile--coming-soon:hover .pricing-platform-tile__icon { color: var(--cedar-text); }
 .pricing-platform-tile__icon :global(svg) { width: 60%; height: 60%; display: block; }
 .pricing-platform-tile__name {
   grid-column: 2;
@@ -232,7 +232,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .8rem;
 }
@@ -369,7 +369,7 @@
 .pricing-tier-card__discounted {
   font-family: var(--font-mono);
   font-size: .82rem;
-  color: var(--cedar);
+  color: var(--cedar-text);
   margin: 0;
   display: none;
 }
@@ -434,7 +434,7 @@
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 1rem;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .pricing-tier-card__details[open] summary::after { content: '–'; }
 .pricing-tier-card__details ul {
@@ -486,7 +486,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .8rem;
 }
@@ -547,15 +547,15 @@
 .pricing-compare td[data-value="yes"] { color: var(--navy); }
 .pricing-compare td[data-value="yes"]::before {
   content: '✓ ';
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 700;
   margin-right: .2rem;
 }
 .pricing-compare td[data-value="none"] { color: var(--ink-4); }
-.pricing-compare td[data-value="soon"] { color: var(--cedar); font-style: italic; }
+.pricing-compare td[data-value="soon"] { color: var(--cedar-text); font-style: italic; }
 .pricing-compare td[data-value="soon"]::before {
   content: '◌ ';
-  color: var(--cedar);
+  color: var(--cedar-text);
 }
 
 /* ---------- Discount-code band ---------- */
@@ -564,7 +564,7 @@
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .6rem;
 }
@@ -618,7 +618,7 @@
   color: var(--ink-3);
   margin: 0;
 }
-.discount-code-panel__status--valid { color: var(--cedar); font-weight: 500; }
+.discount-code-panel__status--valid { color: var(--cedar-text); font-weight: 500; }
 .discount-code-panel__status--error { color: var(--error-color); font-weight: 500; }
 
 /* ---------- Terms band ---------- */

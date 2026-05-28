@@ -29,7 +29,7 @@
   font-size: .68rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .8rem;
 }
@@ -96,7 +96,7 @@
   margin-top: -.3rem;
 }
 .auth-row a { color: var(--navy); border-bottom: 1px solid var(--rule-strong); }
-.auth-row a:hover { color: var(--accent); border-color: var(--accent); }
+.auth-row a:hover { color: var(--accent-text); border-color: var(--accent); }
 .auth-meta {
   font-family: var(--font-sans);
   font-size: .9rem;
@@ -129,12 +129,12 @@
   font-size: .6rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 .auth-plan__value { font-weight: 600; }
 .auth-plan__change {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   text-decoration: none;
   margin-left: auto;
@@ -151,7 +151,7 @@
   border-top: 1px solid var(--rule);
 }
 .auth-foot a { color: var(--navy); border-bottom: 1px solid var(--rule-strong); font-weight: 600; }
-.auth-foot a:hover { color: var(--accent); border-color: var(--accent); }
+.auth-foot a:hover { color: var(--accent-text); border-color: var(--accent); }
 
 @media (max-width: 480px) {
   .auth-panel { padding: 1.6rem 1.4rem; border-radius: 12px; }

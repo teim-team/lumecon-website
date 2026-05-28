@@ -27,7 +27,7 @@
   text-decoration: none;
   transition: color .15s var(--ease);
 }
-.person-page__back:hover { color: var(--accent); }
+.person-page__back:hover { color: var(--accent-text); }
 .person-page__back span { transition: transform .15s var(--ease); display: inline-block; }
 .person-page__back:hover span { transform: translateX(-3px); }
 .person-page__back--bottom { margin-top: clamp(2rem, 4vw, 3rem); }
@@ -68,7 +68,7 @@
   font-size: .7rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 .35rem;
 }
@@ -108,7 +108,7 @@
   border-bottom: 1px solid var(--rule);
   transition: color .15s var(--ease), border-color .15s var(--ease);
 }
-.person-page__email:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.person-page__email:hover { color: var(--accent-text); border-bottom-color: var(--accent); }
 .person-page__social {
   display: inline-flex;
   align-items: center;
@@ -121,7 +121,7 @@
   transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
 }
 .person-page__social svg { width: 15px; height: 15px; display: block; }
-.person-page__social:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-rgba-08); }
+.person-page__social:hover { color: var(--accent-text); border-color: var(--accent); background: var(--accent-rgba-08); }
 
 .person-page__bio {
   display: flex;
@@ -146,7 +146,7 @@
   font-size: .7rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   margin: 0 0 1rem;
 }
@@ -184,7 +184,7 @@
   margin: 0 0 .3rem;
 }
 .person-pub__title a { color: var(--navy); text-decoration: none; transition: color .15s var(--ease); }
-.person-pub__title a:hover { color: var(--accent); }
+.person-pub__title a:hover { color: var(--accent-text); }
 .person-pub__authors {
   font-family: var(--font-sans);
   font-size: .82rem;
