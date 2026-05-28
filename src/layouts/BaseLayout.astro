@@ -34,7 +34,7 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content={description}>
 <meta name="keywords" content={keywords}>
@@ -205,7 +205,17 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
           io.unobserve(el);
         }
       }, { rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
-      for (var j = 0; j < els.length; j++) io.observe(els[j]);
+      // Elements that are ALREADY above the current viewport on load
+      // (e.g. anchor jump, scroll restoration after back-nav, deep
+      // link) would otherwise stay at opacity:0 forever because the
+      // observer only fires when they re-enter the viewport. Reveal
+      // them immediately so a visitor never sees blank space above
+      // their scroll position.
+      for (var j = 0; j < els.length; j++) {
+        var rj = els[j].getBoundingClientRect();
+        if (rj.bottom < 0) { els[j].classList.add('seen'); continue; }
+        io.observe(els[j]);
+      }
     }
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', bind);
