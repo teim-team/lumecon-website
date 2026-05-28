@@ -28,6 +28,18 @@
  *      mark the intended path).
  *   4. Replace the `mailto:` fallback in ContactSection.astro with
  *      a call to `submitContact(...)`.
+ *   5. Add rate limiting / request throttling and a WAF at the API edge
+ *      (e.g. API Gateway throttling + AWS WAF, or Cloudflare in front).
+ *      The static front end cannot rate-limit; this MUST live server-side
+ *      once any endpoint accepts data. Apply per-IP/per-conversation
+ *      limits to /v1/cedar/chat and stricter limits + the existing
+ *      honeypot (and optionally a CAPTCHA) to /v1/contact and /v1/auth/*.
+ *   6. Server-side input validation and injection/authz defense on every
+ *      endpoint (none of this is enforceable from the static site today).
+ *   7. Clickjacking: set an `X-Frame-Options: DENY` (or `frame-ancestors`)
+ *      HTTP *header* at the host/CDN. It cannot be set via <meta> on
+ *      static hosting, so it is not enforced until a header-capable layer
+ *      (Cloudflare, the API origin, etc.) fronts the site.
  */
 
 const API_BASE: string | undefined = import.meta.env.PUBLIC_API_URL;
