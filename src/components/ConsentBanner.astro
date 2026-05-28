@@ -51,8 +51,11 @@
 <style>
   .consent {
     position: fixed;
-    left: clamp(.9rem, 2.2vw, 1.5rem);
-    bottom: clamp(.9rem, 2.2vw, 1.5rem);
+    /* Inset by the safe area so the banner clears iPhone notches /
+       home indicator when viewport-fit=cover lets the viewport
+       extend under them. */
+    left: calc(clamp(.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-left, 0px));
+    bottom: calc(clamp(.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-bottom, 0px));
     z-index: 90;
     width: min(420px, calc(100vw - 1.8rem));
     background: var(--navy);

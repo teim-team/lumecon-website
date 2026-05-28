@@ -153,8 +153,12 @@ import CedarChat from './CedarChat.astro';
 <style>
   .cedar-fab {
     position: fixed;
-    right: clamp(.9rem, 2.2vw, 1.5rem);
-    bottom: clamp(.9rem, 2.2vw, 1.5rem);
+    /* Lift the bottom-anchored FAB above iOS Safari's home-indicator
+       strip on notch iPhones (viewport-fit=cover lets the viewport
+       extend under it). env() falls back to 0 on hosts without a
+       safe area. */
+    right: calc(clamp(.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-right, 0px));
+    bottom: calc(clamp(.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-bottom, 0px));
     z-index: 80;
     display: inline-flex;
     align-items: center;
@@ -231,10 +235,10 @@ import CedarChat from './CedarChat.astro';
   /* ---------- The self-contained chat panel ---------- */
   .cedar-fab-panel {
     position: fixed;
-    bottom: clamp(4.5rem, 6vw, 5.5rem);
-    right: clamp(.9rem, 2.2vw, 1.5rem);
+    bottom: calc(clamp(4.5rem, 6vw, 5.5rem) + env(safe-area-inset-bottom, 0px));
+    right: calc(clamp(.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-right, 0px));
     width: min(380px, calc(100vw - 1.8rem));
-    max-height: calc(100vh - 7.5rem);
+    max-height: calc(100dvh - 7.5rem);
     z-index: 85;
     display: flex;
     flex-direction: column;
@@ -243,7 +247,7 @@ import CedarChat from './CedarChat.astro';
   .cedar-fab-panel[hidden] { display: none; }
   .cedar-fab-panel :global(.cedar-chat) {
     width: 100%;
-    max-height: calc(100vh - 7.5rem);
+    max-height: calc(100dvh - 7.5rem);
     display: flex;
     flex-direction: column;
     box-shadow:
@@ -269,11 +273,11 @@ import CedarChat from './CedarChat.astro';
        phone. */
     .cedar-fab-panel {
       bottom: 5rem;
-      max-height: min(calc(100vh - 7rem), 520px);
+      max-height: min(calc(100dvh - 7rem), 520px);
       width: calc(100vw - 1.4rem);
     }
     .cedar-fab-panel :global(.cedar-chat) {
-      max-height: min(calc(100vh - 7rem), 520px);
+      max-height: min(calc(100dvh - 7rem), 520px);
     }
     .cedar-fab-panel :global(.cedar-chat__transcript) {
       max-height: 260px;
