@@ -97,7 +97,7 @@ export const PLATFORMS: readonly Platform[] = [
     scope: 'Local & regional economic impact analysis',
     iconId: 'local',
     kind: 'regional',
-    tierPrices: { starter: 10000, standard: 15000, leader: 20000 },
+    tierPrices: { starter: 7500, standard: 15000, leader: 20000 },
   },
   {
     slug: 'tribal',
@@ -116,7 +116,7 @@ export const PLATFORMS: readonly Platform[] = [
     scope: 'Reservation, state, national economic impact analysis',
     iconId: 'tribal',
     kind: 'regional',
-    tierPrices: { starter: 12500, standard: 17500, leader: 25000 },
+    tierPrices: { starter: 10000, standard: 17500, leader: 25000 },
   },
   {
     slug: 'global',

@@ -35,6 +35,11 @@ export interface PricingTier {
   /** v1: gates Tree off the buy flow without dropping it from the
    *  comparison table or the visual narrative. */
   comingSoon?: boolean;
+  /** Whether the tier accepts a monthly or quarterly payment plan
+   *  against a 12-month commitment. Sprout has this on so smaller
+   *  orgs can align with their budget cycles; Sapling and Tree
+   *  are annual-prepay only. */
+  paymentPlans?: boolean;
 }
 
 export const PUBLIC_PRICING_TIERS: PricingTier[] = [
@@ -46,6 +51,8 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     period: '',
     tagline: 'For one person who has the core numbers and needs clear results.',
     ctaSubject: 'Sprout tier',
+    paymentPlans: true,
+    note: 'Monthly or quarterly payment plans available, no upcharge. 12-month commitment.',
     highlights: [
       'Reservation, county, state, and national analysis',
       'Past, future, and multi-year runs',
@@ -61,6 +68,7 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
       'Council-ready PDF and structured CSV exports',
       'Full assumption ledger on every export',
       'Standard email support',
+      { text: 'Monthly or quarterly payment plans, no upcharge (12-month commitment)', accent: 'gold' },
     ],
   },
   {
@@ -178,11 +186,11 @@ export const TOOLBOX_ADDON: AddOn = {
   priceLabel: '+$15K',
   priceAnnual: 15000,
   period: 'fixed-price add-on, per study',
-  tagline: 'Add our team to any Lumecon subscription. We turn your platform outputs into a finished, presentation-ready economic impact package.',
+  tagline: 'Add our team to any Lumecon subscription. We turn your platform outputs into a finished economic impact package, branded with your visual identity and your own images so the deliverable reads as yours.',
   highlights: [
     'Full written report, deck, and executive summary',
     'Three rounds of revisions',
-    'Branded deliverables, press-ready',
+    'Branded outputs using your logo, colors, and images',
   ],
   features: [
     'Full written economic impact report',
@@ -191,11 +199,12 @@ export const TOOLBOX_ADDON: AddOn = {
     'Source record and assumption ledger',
     'One tailored memo or media-ready findings sheet',
     'Three rounds of revisions on every deliverable',
-    'Branded deliverables aligned to your visual identity',
+    'Branded deliverables aligned to your visual identity (logo, colors, typography)',
+    'Drop in your own images, photography, and charts so the report reads as yours, not ours',
     'Press- and publication-ready outputs',
     'Flat fee, taxes included',
   ],
-  note: 'Requires an active Lumecon subscription (Sapling or Tree recommended). Not available on the Consultant plan.',
+  note: 'Requires an active Lumecon subscription (Sapling or Tree recommended). Note: Cedar inside Sapling and Tree already produces branded reports using your visual identity and your own images. Toolbox is the option when you want our team writing and designing the package for you. Not available on the Consultant plan.',
 };
 
 /* ---------- Comparison rows ---------- */
