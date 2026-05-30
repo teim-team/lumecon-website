@@ -1,6 +1,6 @@
 ---
 import { site } from '../config';
-import { PLATFORMS } from '../data/platforms';
+import { REGIONAL_PLATFORMS } from '../data/platforms';
 import { FOUNDERS } from '../data/team';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -110,7 +110,7 @@ const jsonLd = [
       "target": `mailto:${site.email}`
     }
   },
-  ...PLATFORMS.map((p) => ({
+  ...REGIONAL_PLATFORMS.map((p) => ({
     "@context": "https://schema.org",
     "@type": "Service",
     "serviceType": "Economic impact analysis software",

@@ -16,11 +16,30 @@
  * is one edit here, not five across the tree.
  */
 
-export type PlatformSlug = 'local' | 'tribal' | 'global';
+export type PlatformSlug = 'local' | 'tribal' | 'global' | 'consultant';
 export type PlatformId =
   | 'local-economic-impact'
   | 'tribal-economic-impact'
-  | 'global-economic-impact';
+  | 'global-economic-impact'
+  | 'consultant-economic-impact';
+
+/** 'regional' platforms live on the homepage / footer "Platforms" rail
+ *  and share the Sprout / Sapling / Tree tier ladder. 'service'
+ *  platforms (Consultant) only appear on /pricing, render a single
+ *  flat tier instead of the tier ladder, and don't get the Toolbox
+ *  add-on (the add-on requires an active subscription, which the
+ *  Consultant offering already implicitly includes). */
+export type PlatformKind = 'regional' | 'service';
+
+/** Per-tier annual prices for a platform. Regional platforms populate
+ *  starter / standard / leader. Service platforms populate `flat`.
+ *  Numbers are USD. A 0 means "TBD, not yet priced." */
+export interface PlatformTierPrices {
+  starter?: number;
+  standard?: number;
+  leader?: number;
+  flat?: number;
+}
 
 export interface Platform {
   /** Short token used in CSS classes, icon mappings, and JS lookups. */
@@ -53,6 +72,11 @@ export interface Platform {
   scope: string;
   /** Icon component token: 'local' -> IconLocal etc. */
   iconId: PlatformSlug;
+  /** Whether this is a regional product line or a service offering.
+   *  Filters out service platforms from the homepage / footer. */
+  kind: PlatformKind;
+  /** Public per-tier prices, set per platform. Undefined = TBD. */
+  tierPrices?: PlatformTierPrices;
 }
 
 export const PLATFORMS: readonly Platform[] = [
@@ -72,6 +96,8 @@ export const PLATFORMS: readonly Platform[] = [
     fitIf: "You're a municipality, state agency, enterprise, foundation, university, or nonprofit running local or regional impact analysis.",
     scope: 'Local & regional economic impact analysis',
     iconId: 'local',
+    kind: 'regional',
+    tierPrices: { starter: 10000, standard: 15000, leader: 20000 },
   },
   {
     slug: 'tribal',
@@ -89,6 +115,8 @@ export const PLATFORMS: readonly Platform[] = [
     fitIf: "You're a tribal government or department within one, a Native non-profit, intertribal org, tribal college, ANC, NHO, tribal enterprise, Native CDFI, state-recognized tribe, or Native-entity federal contractor making the case for reservation, state, or federal funding.",
     scope: 'Reservation, state, national economic impact analysis',
     iconId: 'tribal',
+    kind: 'regional',
+    tierPrices: { starter: 12500, standard: 17500, leader: 25000 },
   },
   {
     slug: 'global',
@@ -106,9 +134,34 @@ export const PLATFORMS: readonly Platform[] = [
     fitIf: 'You need national, international, supply-chain, or cross-border analysis. Launching after Local and Tribal stabilize.',
     scope: 'National, international, cross-border analysis',
     iconId: 'global',
+    kind: 'regional',
+  },
+  {
+    slug: 'consultant',
+    id: 'consultant-economic-impact',
+    name: 'For Consultants',
+    shortName: 'Consultant',
+    url: 'https://lumecon.ai/pricing',
+    domain: 'lumecon.ai',
+    status: 'In active development',
+    comingSoon: false,
+    badgeKind: 'active',
+    tag: 'Lumecon for consultants delivering studies to outside clients.',
+    desc: 'For independent consultants and consulting firms running economic impact studies on behalf of two distinct client entities in a single fiscal year. All geographies included; Cedar and the Toolbox add-on are not available on this plan.',
+    audience: 'Independent consultants and consulting firms running economic impact studies on behalf of outside clients',
+    fitIf: "You're a consultant running studies for outside clients. Two distinct entities, one fiscal year, all geographies (reservation, county, state, national). No consortium projects.",
+    scope: 'Reservation, county, state, and national economic impact analysis',
+    iconId: 'consultant',
+    kind: 'service',
+    tierPrices: { flat: 15000 },
   },
 ];
 
 /** Slug -> Platform lookup. */
 export const PLATFORM_BY_SLUG: Record<PlatformSlug, Platform> =
   Object.fromEntries(PLATFORMS.map((p) => [p.slug, p])) as Record<PlatformSlug, Platform>;
+
+/** Convenience helpers — most surfaces only want one kind of platform.
+ *  Homepage product cards and the footer "Platforms" rail show only
+ *  regional offerings; the pricing platform-picker shows all of them. */
+export const REGIONAL_PLATFORMS: readonly Platform[] = PLATFORMS.filter((p) => p.kind === 'regional');

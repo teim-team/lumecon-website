@@ -10,7 +10,7 @@
  * tagline or description belongs there, not here.
  */
 import { site } from '../config';
-import { PLATFORMS } from '../data/platforms';
+import { REGIONAL_PLATFORMS } from '../data/platforms';
 import IconLocal from './icons/IconLocal.astro';
 import IconTribal from './icons/IconTribal.astro';
 import IconGlobal from './icons/IconGlobal.astro';
@@ -24,7 +24,7 @@ import '../styles/products.css';
     </header>
 
     <div class="platforms-grid">
-      {PLATFORMS.map((p) => (
+      {REGIONAL_PLATFORMS.map((p) => (
         <article class={`platform platform--${p.slug}`}>
           <header class="platform__head">
             <span class="platform__icon" aria-hidden="true">

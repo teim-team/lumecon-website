@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Toolbox">
+  <!-- Ground — same base pair as the four tier icons so the add-on
+       sits on the same baseline as the row above it. -->
+  <ellipse cx="100" cy="175" rx="76" ry="9" fill="#E8D9A8" opacity="0.72"/>
+  <path d="M 24 175 Q 100 167 176 175 L 176 183 L 24 183 Z" fill="#C19A3C" opacity="0.32"/>
+
+  <!-- Toolbox body (cedar green, rounded box) -->
+  <rect x="50" y="110" width="100" height="60" rx="3" fill="#2D5A3F"/>
+  <!-- Plank highlight band -->
+  <rect x="50" y="142" width="100" height="3" fill="#1E3D2A" opacity="0.55"/>
+  <!-- Bottom edge shadow -->
+  <rect x="50" y="166" width="100" height="4" fill="#1E3D2A" opacity="0.65"/>
+  <!-- Side seams (gives the wooden-box feel) -->
+  <line x1="58"  y1="113" x2="58"  y2="168" stroke="#1E3D2A" stroke-width="0.8" opacity="0.4"/>
+  <line x1="142" y1="113" x2="142" y2="168" stroke="#1E3D2A" stroke-width="0.8" opacity="0.4"/>
+
+  <!-- Handle posts (terra/wood) holding up the crossbar -->
+  <rect x="74" y="90" width="4" height="22" fill="#8A3A20"/>
+  <rect x="122" y="90" width="4" height="22" fill="#8A3A20"/>
+  <!-- Handle crossbar -->
+  <rect x="68" y="84" width="64" height="7" rx="2" fill="#AE4E2C"/>
+  <rect x="68" y="84" width="64" height="2" fill="#5E2812" opacity="0.45"/>
+
+  <!-- Tools sticking out the top of the box -->
+  <!-- Trowel (left): wooden handle + metal scoop -->
+  <rect x="60" y="98" width="3" height="16" fill="#8A3A20"/>
+  <path d="M 58 114 Q 61.5 124 65 114 L 65 110 L 58 110 Z" fill="#9CA3B0"/>
+  <!-- Hand fork (mid-left): handle + three tines -->
+  <rect x="70" y="98" width="3" height="16" fill="#8A3A20"/>
+  <line x1="69.5" y1="114" x2="69.5" y2="120" stroke="#9CA3B0" stroke-width="1.2"/>
+  <line x1="71.5" y1="114" x2="71.5" y2="120" stroke="#9CA3B0" stroke-width="1.2"/>
+  <line x1="73.5" y1="114" x2="73.5" y2="120" stroke="#9CA3B0" stroke-width="1.2"/>
+  <!-- Pruning shears (right of handle): two crossed handles + blade tips -->
+  <path d="M 92 100 L 100 116" stroke="#AE4E2C" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 100 100 L 92 116" stroke="#AE4E2C" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="96" cy="108" r="1.6" fill="#3A2418"/>
+  <path d="M 92 100 L 89 95 M 100 100 L 103 95" stroke="#9CA3B0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Watering can (right side, sitting in the box) -->
+  <rect x="116" y="98" width="22" height="20" rx="1.5" fill="#3C8050"/>
+  <path d="M 138 102 L 144 100 L 144 112 L 138 110 Z" fill="#3C8050"/>
+  <path d="M 144 100 L 150 98 L 150 102 L 144 104 Z" fill="#3C8050"/>
+  <rect x="118" y="96" width="14" height="3" rx="1" fill="#2C6239"/>
+  <path d="M 116 102 Q 113 108 116 116" stroke="#3C8050" stroke-width="2" fill="none"/>
+</svg>

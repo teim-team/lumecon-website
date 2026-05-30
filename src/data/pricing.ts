@@ -4,22 +4,20 @@
  * the public name swaps (Sprout / Sapling / Tree) so the
  * rendered names can change without touching the data shape.
  *
+ * Per-platform prices live on the Platform records in
+ * src/data/platforms.ts (`tierPrices` field). This file holds the
+ * tier metadata (names, taglines, highlights, features) that's the
+ * same across every platform; the page merges the two at render time
+ * so a Sprout under Local shows $10K and a Sprout under Tribal shows
+ * $12.5K from the same tier definition here.
+ *
  * v1 launch notes:
- *   - The THIRD tier ("Tree") is NOT shipping at launch. Its data
- *     stays here so the comparison table previews what is coming,
- *     but the tier card renders with the `comingSoon` treatment
- *     (no buyable CTA, no price line) and the CTA below the card
- *     routes to a notify-me mailto instead of "Request access."
+ *   - The Tree tier ships for buyable platforms now that prices are
+ *     set. Tribal Tree pricing follows the Tribal price column; Local
+ *     Tree pricing follows Local. The `comingSoon` flag below remains
+ *     on Tree only for platforms whose Tree column isn't priced yet.
  *   - The GLOBAL platform is NOT shipping at launch. Its tile on
- *     the platform picker carries the same `comingSoon` treatment.
- *   - DOLLAR FIGURES ARE INTENTIONALLY EMPTY. Finance hasn't signed
- *     off on the numbers yet, and we don't want placeholder numbers
- *     ($5k / $15k / $25k) showing on the live site. The tier card
- *     renders "Pricing TBD" instead of a dollar amount; the
- *     `priceAnnual` numeric field is retained for future discount
- *     math but is set to 0 until real prices land. When prices do
- *     land, set the `price` string AND the `priceAnnual` numeric
- *     and the page will surface them automatically.
+ *     the platform picker carries the `comingSoon` treatment.
  */
 
 export interface PricingTier {
@@ -98,7 +96,6 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     tagline: 'For organizations that need Cedar Grove, reporting workflows, and implementation support.',
     ctaSubject: 'Tree tier',
     featured: true,
-    comingSoon: true,
     note: 'Cedar Grove is also available as a standalone subscription. Contact contact@lumecon.ai.',
     highlights: [
       'Everything in Sapling',
@@ -120,6 +117,86 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     ],
   },
 ];
+
+/* ---------- Consultant: single-tier service offering ----------
+ *
+ * The Consultant platform is structurally different from Local /
+ * Tribal / Global: one fixed tier (Arborist), one flat annual price,
+ * no Cedar, no Toolbox. Modeled as its own tier definition so the
+ * pricing page can render it directly when the Consultant platform
+ * is picked, instead of reusing the Sprout / Sapling / Tree ladder. */
+export const CONSULTANT_TIER: PricingTier = {
+  id: 'starter', // schema slot; the page renders by name, not id
+  name: 'Arborist',
+  priceAnnual: 0,  // pulled from PLATFORMS.consultant.tierPrices.flat at render time
+  price: '',
+  period: '',
+  tagline: 'For consultants delivering Lumecon-backed economic impact studies to two distinct client entities in a single fiscal year.',
+  ctaSubject: 'Arborist tier for Consultant',
+  highlights: [
+    'Two distinct client entities (no consortium)',
+    'One fiscal year of analyses',
+    'All geographies: reservation, county, state, national',
+  ],
+  features: [
+    'Run economic impact studies on behalf of two distinct outside entities',
+    'Single fiscal year of analyses across both projects',
+    'All geographies included: reservation, county, state, national',
+    'Past, future, and multi-year analyses',
+    'Council-ready PDF and structured CSV exports',
+    'Full assumption ledger on every export',
+    'Standard email support',
+    'Cedar AI assistant is not included on this plan',
+    'Projects cannot be consortia (a single entity per project)',
+    'Toolbox add-on is not available on this plan',
+  ],
+};
+
+/* ---------- Toolbox add-on ----------
+ *
+ * A done-for-you study package that attaches to any active Lumecon
+ * subscription. Cannot be bought standalone — the add-on relies on
+ * the customer's existing Lumecon platform (Cedar, data, source
+ * record, modeling workflow) to keep the price flat at $15K. Hidden
+ * from the Consultant platform (service offerings don't get the
+ * add-on). */
+export interface AddOn {
+  id: 'toolbox';
+  name: string;
+  priceLabel: string;     // "+$15K"
+  priceAnnual: number;    // 15000
+  period: string;         // "fixed-price add-on, per study"
+  tagline: string;
+  highlights: string[];
+  features: string[];
+  note: string;
+}
+
+export const TOOLBOX_ADDON: AddOn = {
+  id: 'toolbox',
+  name: 'Toolbox',
+  priceLabel: '+$15K',
+  priceAnnual: 15000,
+  period: 'fixed-price add-on, per study',
+  tagline: 'Add our team to any Lumecon subscription. We turn your platform outputs into a finished, presentation-ready economic impact package.',
+  highlights: [
+    'Full written report, deck, and executive summary',
+    'Three rounds of revisions',
+    'Branded deliverables, press-ready',
+  ],
+  features: [
+    'Full written economic impact report',
+    'Presentation deck',
+    'Executive summary',
+    'Source record and assumption ledger',
+    'One tailored memo or media-ready findings sheet',
+    'Three rounds of revisions on every deliverable',
+    'Branded deliverables aligned to your visual identity',
+    'Press- and publication-ready outputs',
+    'Flat fee, taxes included',
+  ],
+  note: 'Requires an active Lumecon subscription (Sapling or Tree recommended). Not available on the Consultant plan.',
+};
 
 /* ---------- Comparison rows ---------- */
 
