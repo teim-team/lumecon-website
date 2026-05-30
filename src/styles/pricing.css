@@ -71,77 +71,36 @@
 }
 
 /* ---------- Platform picker ----------
-   Four tiles split into two groups so the internal/external split is
-   obvious without making the visitor read fit-text. "For your team"
-   holds the regional platforms (the customer's own staff runs studies
-   in Lumecon); "For consulting firms" holds the Consultant offering
-   (a firm runs studies on behalf of outside clients). The two groups
-   stack vertically with a soft divider between them so the second
-   group reads as a sibling category, not a buried 4th option. */
-.pricing-platform-groups {
-  display: grid;
-  gap: clamp(1.6rem, 3vw, 2.4rem);
-  margin: 0 0 1.4rem;
-}
-.pricing-platform-group {
-  display: grid;
-  gap: 1rem;
-}
-/* The external group gets a hairline divider above it so the eye
-   reads "two categories" instead of "one long list of four." */
-.pricing-platform-group--external {
-  padding-top: clamp(1.6rem, 3vw, 2.2rem);
-  border-top: 1px dashed var(--rule-strong, rgba(14, 21, 48, .18));
-}
-.pricing-platform-group__head {
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-  max-width: 60ch;
-}
-.pricing-platform-group__kicker {
+   Four tiles in one row on desktop so the picker reads as a single
+   set. The Consultant tile (kind === 'service') is visually
+   distinguished via the .pricing-platform-tile--service left-edge
+   accent + a "For consultants" corner tag, so the internal-vs-
+   external distinction still reads at a glance without needing
+   group headers. Below 1100px the grid wraps to 2-up; below 600px
+   it stacks to 1-up. */
+.pricing-platform-prelude {
   font-family: var(--font-mono);
-  font-size: .68rem;
+  font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
-  margin: 0;
-}
-.pricing-platform-group--external .pricing-platform-group__kicker {
-  /* Cedar-green eyebrow on the external group so the visual cue
-     ties it to the "different category" subtree (mentor / outside
-     partner) without changing the brand palette. */
-  color: var(--cedar-text);
-}
-.pricing-platform-group__title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.18rem;
-  letter-spacing: -.014em;
-  color: var(--navy);
-  margin: 0;
-}
-.pricing-platform-group__sub {
-  font-family: var(--font-sans);
-  font-size: .92rem;
-  line-height: 1.45;
-  color: var(--ink-2);
-  margin: 0;
-  font-weight: 400;
+  margin: 0 0 1.1rem;
 }
 .pricing-platform-grid {
   list-style: none;
-  margin: 0;
+  margin: 0 0 1.4rem;
   padding: 0;
   display: grid;
-  gap: 1.2rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.1rem;
+  /* Desktop: four-up. Tablet (<1100): 2-up. Phone (<600): 1-up. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
-/* External group has only one tile; cap its width so it doesn't
-   stretch to full container width and read like a banner. */
-.pricing-platform-grid--single {
-  grid-template-columns: minmax(260px, 420px);
+@media (max-width: 1100px) {
+  .pricing-platform-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .pricing-platform-grid { grid-template-columns: 1fr; }
 }
 .pricing-platform-tile {
   width: 100%;
@@ -149,16 +108,29 @@
   background: var(--white);
   border: 1px solid var(--rule);
   border-radius: 14px;
-  padding: 1.4rem 1.4rem 1.6rem;
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 1rem;
-  row-gap: .55rem;
+  padding: 1.2rem 1.2rem 1.4rem;
+  /* Stack icon over content on desktop 4-up so each tile has more
+     room for the name and fit text; switch to side-by-side at 2-up
+     and below where horizontal space comes back. */
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
   cursor: pointer;
   font-family: inherit;
   transition: border-color .18s var(--ease), box-shadow .18s var(--ease), transform .18s var(--ease), background .18s var(--ease);
   position: relative;
+}
+@media (max-width: 1100px) {
+  /* At 2-up the tiles are wider; revert to the icon-left grid so
+     the picker doesn't suddenly look like four giant cards. */
+  .pricing-platform-tile {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 1rem;
+    row-gap: .55rem;
+    padding: 1.4rem 1.4rem 1.6rem;
+  }
 }
 .pricing-platform-tile:hover,
 .pricing-platform-tile:focus-visible {
@@ -261,6 +233,13 @@
   background: var(--cedar);
   padding: .18rem .55rem;
   border-radius: 3px;
+}
+/* "For consultants" tag — uses the brand accent (teal) instead of
+   cedar so the eye reads "this is the service offering," not "this
+   is coming soon" (which is what cedar signals on the Global tile). */
+.pricing-platform-tile__tag--service {
+  background: var(--accent);
+  color: #0A0F26;
 }
 .pricing-platform-prompt {
   font-family: var(--font-mono);

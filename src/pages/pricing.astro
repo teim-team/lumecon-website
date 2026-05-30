@@ -77,87 +77,44 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
           <p class="pricing-hero__aside">Annual subscriptions across every platform. Model updates, data refreshes, and workflow improvements land on every tier as they ship; you don&rsquo;t pay again to stay current.</p>
         </header>
 
-        <!-- 2. Platform picker. Grouped into two columns:
-              "For your team" holds the regional platforms (your own
-              staff uses Lumecon directly), and "For consulting firms"
-              holds the Consultant offering (a firm runs studies on
-              behalf of outside clients). Splitting the picker makes
-              the distinction obvious without forcing the visitor to
-              read the per-tile fitIf to figure out which group they
-              belong in. -->
-        <div class="pricing-platform-groups" aria-label="Platform picker">
-          <section class="pricing-platform-group">
-            <header class="pricing-platform-group__head">
-              <p class="pricing-platform-group__kicker">For your team</p>
-              <h3 class="pricing-platform-group__title">Your staff runs studies in Lumecon.</h3>
-              <p class="pricing-platform-group__sub">Pick the platform that matches the geographies and audiences you work in.</p>
-            </header>
-            <ul class="pricing-platform-grid" aria-label="Platforms for your team">
-              {platforms.filter((p) => p.kind === 'regional').map((p) => (
-                <li>
-                  <button
-                    type="button"
-                    class={`pricing-platform-tile${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
-                    data-platform-id={p.id}
-                    data-platform-slug={p.slug}
-                    data-platform-short={p.shortName}
-                    data-platform-kind={p.kind}
-                    data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
-                    data-price-starter={p.tierPrices?.starter ?? ''}
-                    data-price-standard={p.tierPrices?.standard ?? ''}
-                    data-price-leader={p.tierPrices?.leader ?? ''}
-                    data-price-flat={p.tierPrices?.flat ?? ''}
-                    aria-pressed="false"
-                  >
-                    <span class="pricing-platform-tile__icon" aria-hidden="true">
-                      {p.iconId === 'tribal' && <IconTribal />}
-                      {p.iconId === 'local'  && <IconLocal />}
-                      {p.iconId === 'global' && <IconGlobal />}
-                    </span>
-                    <span class="pricing-platform-tile__name">{p.name}</span>
-                    <span class="pricing-platform-tile__fit">{p.fitIf}</span>
-                    {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section class="pricing-platform-group pricing-platform-group--external">
-            <header class="pricing-platform-group__head">
-              <p class="pricing-platform-group__kicker">For consulting firms</p>
-              <h3 class="pricing-platform-group__title">You run studies on behalf of outside clients.</h3>
-              <p class="pricing-platform-group__sub">A dedicated plan for two distinct client entities in a single fiscal year.</p>
-            </header>
-            <ul class="pricing-platform-grid pricing-platform-grid--single" aria-label="Plans for consulting firms">
-              {platforms.filter((p) => p.kind === 'service').map((p) => (
-                <li>
-                  <button
-                    type="button"
-                    class={`pricing-platform-tile pricing-platform-tile--service${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
-                    data-platform-id={p.id}
-                    data-platform-slug={p.slug}
-                    data-platform-short={p.shortName}
-                    data-platform-kind={p.kind}
-                    data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
-                    data-price-starter={p.tierPrices?.starter ?? ''}
-                    data-price-standard={p.tierPrices?.standard ?? ''}
-                    data-price-leader={p.tierPrices?.leader ?? ''}
-                    data-price-flat={p.tierPrices?.flat ?? ''}
-                    aria-pressed="false"
-                  >
-                    <span class="pricing-platform-tile__icon" aria-hidden="true">
-                      <IconArborist />
-                    </span>
-                    <span class="pricing-platform-tile__name">{p.name}</span>
-                    <span class="pricing-platform-tile__fit">{p.fitIf}</span>
-                    {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+        <!-- 2. Platform picker. Four tiles in one row on desktop so
+              the picker reads as a single set instead of "three +
+              one lonely tile underneath." The Consultant tile is
+              visually distinguished (teal left-edge accent + a
+              "For consultants" corner tag) so the internal-vs-
+              external distinction still reads at a glance. -->
+        <p class="pricing-platform-prelude">Three platforms for your team. One plan for consulting firms.</p>
+        <ul class="pricing-platform-grid" aria-label="Platform picker">
+          {platforms.map((p) => (
+            <li>
+              <button
+                type="button"
+                class={`pricing-platform-tile${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}${p.kind === 'service' ? ' pricing-platform-tile--service' : ''}`}
+                data-platform-id={p.id}
+                data-platform-slug={p.slug}
+                data-platform-short={p.shortName}
+                data-platform-kind={p.kind}
+                data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
+                data-price-starter={p.tierPrices?.starter ?? ''}
+                data-price-standard={p.tierPrices?.standard ?? ''}
+                data-price-leader={p.tierPrices?.leader ?? ''}
+                data-price-flat={p.tierPrices?.flat ?? ''}
+                aria-pressed="false"
+              >
+                <span class="pricing-platform-tile__icon" aria-hidden="true">
+                  {p.iconId === 'tribal'     && <IconTribal />}
+                  {p.iconId === 'local'      && <IconLocal />}
+                  {p.iconId === 'global'     && <IconGlobal />}
+                  {p.iconId === 'consultant' && <IconArborist />}
+                </span>
+                <span class="pricing-platform-tile__name">{p.name}</span>
+                <span class="pricing-platform-tile__fit">{p.fitIf}</span>
+                {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
+                {p.kind === 'service' && !p.comingSoon && <span class="pricing-platform-tile__tag pricing-platform-tile__tag--service">For consultants</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
         <p class="pricing-platform-prompt" data-platform-prompt>Pick a platform above to see its tiers.</p>
       </div>
     </section>
@@ -553,7 +510,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
     const deck     = document.querySelector<HTMLElement>('[data-tiers-deck]');
     if (show && platformKind === 'service') {
       if (headline) headline.textContent = 'One tier. Two projects. One fiscal year.';
-      if (deck) deck.textContent = 'Built for consultants delivering studies to outside clients. All geographies included. Cedar and the Toolbox add-on are not part of this plan.';
+      if (deck) deck.textContent = 'Built for consultants delivering studies to outside clients. All geographies included. Cedar, Cedar Grove, and the Toolbox add-on are not part of this plan.';
     } else if (show) {
       if (headline) headline.textContent = 'Three tiers. Priced annually.';
       if (deck) deck.textContent = 'Reservation, county, state, and national results are included at every tier. Cedar starts at Sapling. Cedar Grove arrives on Tree.';
