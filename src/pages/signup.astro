@@ -57,7 +57,7 @@ import '../styles/auth.css';
         </label>
         <label class="auth-field">
           <span>What do you plan to use Lumecon for?</span>
-          <input type="text" name="role" placeholder="Grant applications, council reporting, annual impact study..." />
+          <input type="text" name="role" placeholder="Grant applications, annual impact reports, board / leadership updates..." />
         </label>
         <label class="auth-field">
           <span>Password</span>
@@ -86,11 +86,11 @@ import '../styles/auth.css';
       var tier = qs.get('tier');
       var platform = qs.get('platform');
       if (!tier && !platform) return;
-      var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree' };
-      var platformName = { local: 'Local', tribal: 'Tribal', global: 'Global' };
+      var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree', arborist: 'Arborist' };
+      var platformName = { local: 'Local Economic Impact', tribal: 'Tribal Economic Impact', global: 'Global Economic Impact', consultant: 'Consultant plan' };
       var parts = [];
-      if (tier && tierName[tier]) parts.push(tierName[tier] + ' tier');
-      if (platform && platformName[platform]) parts.push(platformName[platform] + ' Economic Impact');
+      if (tier && tierName[tier]) parts.push(tier === 'arborist' ? 'Arborist plan' : tierName[tier] + ' tier');
+      if (platform && platformName[platform] && tier !== 'arborist') parts.push(platformName[platform]);
       if (!parts.length) return;
       var badge = document.querySelector('[data-auth-plan]');
       var value = document.querySelector('[data-auth-plan-value]');

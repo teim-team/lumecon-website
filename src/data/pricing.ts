@@ -60,11 +60,11 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     ],
     features: [
       'One user',
-      'Unlimited studies, all geographies your platform covers',
+      'Unlimited studies, every geography your platform covers',
       'Manual data entry',
       'Past, future, and multi-year analyses',
       'High-frequency alternative data (mobility signals) where available',
-      'Presentation-ready PDF and structured CSV exports',
+      'Standard PDF report, structured CSV export, and slide deck',
       'Full assumption ledger on every export',
       { text: 'Monthly or quarterly payment plans, no upcharge (12-month commitment)', accent: 'gold' },
     ],
@@ -75,20 +75,20 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For teams that want Cedar to process their messy data, structure it for the model, and act as a thought partner on the write-up.',
+    tagline: 'For teams that want Cedar to process their messy data, structure it for the model, and act as a thought partner on the write-up. Your outputs come out carrying your visual identity.',
     ctaSubject: 'Sapling tier',
     highlights: [
       'Everything in Sprout',
       'Cedar processes your data and acts as a thought partner',
-      'Branded reports with your logo, colors, and own images',
+      'Your outputs carry your logo, colors, and own images',
     ],
     features: [
       'Everything in Sprout',
       'Up to 5 users',
-      { text: 'Full Cedar access: upload PDFs, CSVs, and XLSX files (more formats expanding over time)', accent: 'gold' },
+      { text: 'Full Cedar access: upload PDFs, CSVs, and XLSX files, with more formats expanding over time', accent: 'gold' },
       { text: 'Cedar structures the inputs, surfaces every assumption, and acts as a thought partner on the write-up', accent: 'gold' },
       'Review queues for HR, payroll, finance, and compliance inputs',
-      { text: 'Branded reports using your logo, colors, typography, and your own images', accent: 'gold' },
+      { text: 'Your outputs (PDF report, deck, executive summary) carry your logo, colors, typography, and your own images', accent: 'gold' },
     ],
   },
   {
@@ -97,18 +97,19 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For organizations that need harmonized data across studies and compliance-ready reporting on top of everything in Sapling.',
+    tagline: 'For organizations that want their data harmonized across every study they run, plus complementary administrative datasets that show how socioeconomic outcomes are actually changing on the ground, plus compliance-ready reporting on top of everything in Sapling.',
     ctaSubject: 'Tree tier',
     featured: true,
     highlights: [
       'Everything in Sapling',
-      'Cedar Grove: harmonized data that compounds across studies',
+      'Cedar Grove: your data harmonized across studies, plus complementary administrative data on socioeconomic outcomes',
       'Compliance-ready reporting for grants and federal submissions',
     ],
     features: [
       'Everything in Sapling',
       'Up to 10 users',
-      { text: 'Cedar Grove: data that stays harmonized across every study you run, so the second study is easier than the first and the tenth is easier than the second', accent: 'gold' },
+      { text: 'Cedar Grove: your data stays harmonized across every study, so the second study is easier than the first and the tenth is easier than the second', accent: 'gold' },
+      { text: 'Complementary administrative data layered alongside your own, showing how local socioeconomic outcomes are actually changing. Reinforces the economic-impact narrative with real outcome evidence.', accent: 'gold' },
       { text: 'Compliance-ready reporting for grants, federal submissions, and audited annual reports', accent: 'gold' },
     ],
   },
@@ -127,24 +128,21 @@ export const CONSULTANT_TIER: PricingTier = {
   priceAnnual: 0,  // pulled from PLATFORMS.consultant.tierPrices.flat at render time
   price: '',
   period: '',
-  tagline: 'For consultants delivering Lumecon-backed economic impact studies to two distinct client entities. Project-based, flat $15K for both projects, renewable for new engagements.',
+  tagline: 'If your firm runs economic impact studies for outside clients, the Arborist plan is built for that. You pay $15K for two projects together, one project per client, and when those wrap up you book the next engagement as a fresh $15K with the next two clients.',
   ctaSubject: 'Arborist plan for Consultant',
   highlights: [
-    'Two projects, one project per distinct client (no consortia)',
-    'Flat $15K for both projects, project-based not subscription',
-    'All geographies: reservation, county, state, national',
+    'Two projects in one engagement, one client per project',
+    'Flat $15K for the pair of projects, not an auto-renewing subscription',
+    'Every geography is included, from reservation up to national',
   ],
   features: [
-    'Run economic impact studies on behalf of two distinct outside entities',
-    'One project per entity; no consortia (a single entity per project)',
-    'Project-based engagement, flat fee for both projects, renewable for new engagements',
-    'All geographies included: reservation, county, state, national',
-    'Past, future, and multi-year analyses',
+    'Run economic impact studies on behalf of two outside clients in one engagement',
+    'Single-entity projects only, so no rolling several clients into one consortium',
+    'Renew with a fresh $15K when those two projects wrap, possibly with new clients',
+    'Every geography is included, from reservation up to county, state, and national',
+    'Past, future, and multi-year analyses, with every assumption surfaced and citable',
     'Presentation-ready PDF and structured CSV exports',
-    'Full assumption ledger on every export',
-    'Cedar AI assistant is not part of this plan',
-    'Cedar Grove (harmonized data layer) is not part of this plan',
-    'Toolbox add-on is not available on this plan',
+    'Cedar, Cedar Grove, and the Toolbox add-on stay with the customer subscriptions where they belong, so they are not part of this plan',
   ],
 };
 
@@ -192,7 +190,7 @@ export const TOOLBOX_ADDON: AddOn = {
     'Press- and publication-ready outputs',
     'Flat fee, taxes included',
   ],
-  note: 'Requires an active Lumecon subscription (Sapling or Tree recommended). Note: Cedar inside Sapling and Tree already produces branded reports using your visual identity and your own images. Toolbox is the option when you want our team writing and designing the package for you. Not available on the Consultant plan.',
+  note: 'Requires an active Lumecon subscription (Sapling or Tree recommended). Note: at Sapling and Tree, the outputs Cedar already produces (PDF report, deck, executive summary) carry your visual identity and your own images, so Toolbox is the option you add when you want our team writing and designing the finished package for you. Not available on the Consultant plan.',
 };
 
 /* ---------- Comparison rows ---------- */
@@ -229,15 +227,12 @@ export interface ComparisonRow {
  *      they earn a row by shipping
  */
 export const COMPARISON_ROWS: ComparisonRow[] = [
-  { capability: 'Users',                                                           sprout: '1',                                  sapling: 'Up to 5',                          tree: 'Up to 10' },
-  { capability: 'Geographies',                                                     sprout: 'All included',                       sapling: 'All included',                     tree: 'All included' },
-  { capability: 'Studies per year',                                                sprout: 'Unlimited',                          sapling: 'Unlimited',                        tree: 'Unlimited' },
-  { capability: 'Past, future, and multi-year analyses',                           sprout: 'yes',                                sapling: 'yes',                              tree: 'yes' },
-  { capability: 'Assumption ledger on every export',                               sprout: 'yes',                                sapling: 'yes',                              tree: 'yes' },
-  { capability: 'Cedar: upload messy data and act as a thought partner',           sprout: 'none',                               sapling: 'yes',                              tree: 'yes' },
-  { capability: 'Branded reports using your logo, colors, and own images',         sprout: 'none',                               sapling: 'yes',                              tree: 'yes' },
-  { capability: 'Cedar Grove: harmonized data + compliance-ready reporting',       sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
-  { capability: 'Payment cadence',                                                 sprout: 'Annual, monthly, or quarterly',      sapling: 'Annual',                           tree: 'Annual' },
+  { capability: 'Users',                                                                                                sprout: '1',                                  sapling: 'Up to 5',                          tree: 'Up to 10' },
+  { capability: 'Geographies',                                                                                          sprout: 'All included',                       sapling: 'All included',                     tree: 'All included' },
+  { capability: 'Cedar: upload messy data and act as a thought partner',                                                sprout: 'none',                               sapling: 'yes',                              tree: 'yes' },
+  { capability: 'Outputs (PDF report, deck, executive summary)',                                                        sprout: 'Standard',                           sapling: 'Branded with your identity',       tree: 'Branded with your identity' },
+  { capability: 'Cedar Grove: harmonized data + complementary administrative datasets + compliance-ready reporting',    sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
+  { capability: 'Payment cadence',                                                                                      sprout: 'Annual, monthly, or quarterly',      sapling: 'Annual',                           tree: 'Annual' },
 ];
 
 /* ---------- Prepayment ladder ---------- */
