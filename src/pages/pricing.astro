@@ -99,6 +99,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 data-price-standard={p.tierPrices?.standard ?? ''}
                 data-price-leader={p.tierPrices?.leader ?? ''}
                 data-price-flat={p.tierPrices?.flat ?? ''}
+                data-geography-scope={p.geographyScope}
                 aria-pressed="false"
               >
                 <span class="pricing-platform-tile__icon" aria-hidden="true">
@@ -227,7 +228,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
 
             <div class="pricing-tier-card__price-row">
               <span class="pricing-tier-card__price" data-tier-price-slot="flat">$—</span>
-              <span class="pricing-tier-card__period">/ year, flat</span>
+              <span class="pricing-tier-card__period">for two projects, flat</span>
             </div>
 
             <p class="pricing-tier-card__tagline">{CONSULTANT_TIER.tagline}</p>
@@ -330,7 +331,13 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
             <tbody>
               {COMPARISON_ROWS.map((row) => (
                 <tr>
-                  <th scope="row" class="pricing-compare__row-label">{row.capability}</th>
+                  {/* The Geographies row's label is platform-aware:
+                      the picker script swaps in the picked platform's
+                      geographyScope so a Local visitor sees "City,
+                      county, state, national" instead of a generic
+                      label. Marked with data-geographies-label so the
+                      script can find it. */}
+                  <th scope="row" class="pricing-compare__row-label" data-geographies-label={row.capability === 'Geographies' ? 'true' : undefined}>{row.capability}</th>
                   <td data-value={row.sprout === 'yes' ? 'yes' : row.sprout === 'none' ? 'none' : row.sprout === 'soon' ? 'soon' : 'text'}>
                     {row.sprout === 'yes' ? 'Included' : row.sprout === 'none' ? 'Not included' : row.sprout === 'soon' ? 'Coming soon' : row.sprout}
                   </td>
@@ -505,15 +512,30 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
       el.textContent = show ? platformName : 'your platform';
     });
 
-    /* Headline + deck swap for service vs regional platforms. */
+    /* Headline + deck swap. The deck threads the picked platform's
+       geography scope through and surfaces the unlimited-use + we-
+       encourage-quarterly-refresh framing, since the comparison table
+       no longer carries a "Studies per year" row to make that
+       implicit. */
     const headline = document.querySelector<HTMLElement>('[data-tiers-headline]');
     const deck     = document.querySelector<HTMLElement>('[data-tiers-deck]');
+    const scope    = tile?.dataset.geographyScope || '';
     if (show && platformKind === 'service') {
-      if (headline) headline.textContent = 'One tier. Two projects. One fiscal year.';
-      if (deck) deck.textContent = 'Built for consultants delivering studies to outside clients. All geographies included. Cedar, Cedar Grove, and the Toolbox add-on are not part of this plan.';
+      if (headline) headline.textContent = 'One plan. Two projects. Project-based, not a subscription.';
+      if (deck) deck.textContent = `The Arborist plan is built for consulting firms running studies for outside clients. Every geography is included (${scope.toLowerCase()}). Cedar, Cedar Grove, and the Toolbox add-on stay with the customer subscriptions, so they are not part of this plan.`;
     } else if (show) {
       if (headline) headline.textContent = 'Three tiers. Priced annually.';
-      if (deck) deck.textContent = 'Reservation, county, state, and national results are included at every tier. Cedar starts at Sapling. Cedar Grove arrives on Tree.';
+      if (deck) deck.textContent = `Every tier covers ${scope.toLowerCase()} geographies and you can run as many studies as you need. We actually encourage refreshing your data at least quarterly so each study reflects current conditions. Cedar starts at Sapling, and Cedar Grove arrives on Tree.`;
+    }
+
+    /* Geographies row in the comparison table — replace the generic
+       "Geographies" label with the picked platform's scope so Local
+       visitors don't see "reservation" mentioned and vice versa. */
+    const geoLabel = document.querySelector<HTMLElement>('[data-geographies-label]');
+    if (show && geoLabel && scope) {
+      geoLabel.textContent = `Geographies (${scope.toLowerCase()})`;
+    } else if (geoLabel) {
+      geoLabel.textContent = 'Geographies';
     }
 
     if (show && tile) applyPlatformToTiers(tile);
