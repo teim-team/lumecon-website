@@ -313,7 +313,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
               (there's only one tier to compare against itself). -->
     <section class="editorial-band editorial-band--white pricing-compare" data-platform-section data-regional-only hidden aria-labelledby="compare-h2">
       <div class="editorial-band__inner">
-        <p class="pricing-compare__kicker">Compare the tiers</p>
+        <p class="pricing-compare__kicker">Compare the tiers for <span data-platform-name>your platform</span></p>
         <h2 class="pricing-compare__h2 reveal-soft hl-block hl-block--b" id="compare-h2">The full picture, one row at a time.</h2>
         <p class="pricing-compare__deck">No clever section names or hidden &ldquo;contact us for details&rdquo; lines. What each tier actually includes.</p>
 
@@ -349,6 +349,20 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 </tr>
               ))}
             </tbody>
+            <!-- Price footer. JS fills the price cells from the
+                 picked platform's per-tier prices on each pick so a
+                 Local visitor sees $7.5K / $15K / $20K and a Tribal
+                 visitor sees $10K / $17.5K / $25K. Anchored to the
+                 bottom of the comparison so the reader walks the
+                 capability rows top-down and lands on the price. -->
+            <tfoot>
+              <tr class="pricing-compare__price-row">
+                <th scope="row" class="pricing-compare__row-label">Annual price</th>
+                <td class="pricing-compare__price-cell" data-compare-price-slot="starter">$&mdash;</td>
+                <td class="pricing-compare__price-cell" data-compare-price-slot="standard">$&mdash;</td>
+                <td class="pricing-compare__price-cell pricing-compare__featured" data-compare-price-slot="leader">$&mdash;</td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -494,8 +508,11 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
       leader:   Number(tile.dataset.priceLeader   || 0),
     };
     Object.entries(prices).forEach(([tierId, price]) => {
-      const slot = document.querySelector<HTMLElement>(`[data-tier-price-slot="${tierId}"]`);
-      if (slot) slot.textContent = fmtUSD(price);
+      // Fill both the tier-card price + the comparison-table footer
+      // price for this tier so the visitor sees the price echoed at
+      // the bottom of each column after they've walked the rows.
+      document.querySelectorAll<HTMLElement>(`[data-tier-price-slot="${tierId}"], [data-compare-price-slot="${tierId}"]`)
+        .forEach((slot) => { slot.textContent = fmtUSD(price); });
     });
   }
 

@@ -593,6 +593,39 @@
   color: var(--cedar-text);
 }
 
+/* Price footer row. Sits at the bottom of the comparison table so
+   the visitor walks the capability rows top-down and lands on the
+   tier's price for the platform they picked. Re-asserts the
+   price-by-tier mapping after the visitor has compared features. */
+.pricing-compare tfoot .pricing-compare__price-row {
+  background: var(--cream);
+}
+.pricing-compare tfoot .pricing-compare__price-row th,
+.pricing-compare tfoot .pricing-compare__price-row td {
+  border-top: 2px solid var(--rule-strong, rgba(14, 21, 48, .14));
+  border-bottom: 0;
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+}
+.pricing-compare tfoot .pricing-compare__row-label {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.pricing-compare__price-cell {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: -.018em;
+  color: var(--navy);
+}
+.pricing-compare__price-cell.pricing-compare__featured {
+  color: var(--accent-deep, #0A8A7E);
+}
+
 /* ---------- Discount-code band ---------- */
 .pricing-support__kicker {
   font-family: var(--font-mono);

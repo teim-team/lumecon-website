@@ -9,8 +9,8 @@ import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 
 const CHROME = process.env.CHROME_BIN || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const BASE   = process.env.SHOT_BASE  || 'http://127.0.0.1:4329';
-const OUT    = process.env.SHOT_OUT   || '/tmp/shots7';
+const BASE   = process.env.SHOT_BASE  || 'http://127.0.0.1:4330';
+const OUT    = process.env.SHOT_OUT   || '/tmp/shots8';
 
 await mkdir(OUT, { recursive: true });
 const browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox'] });
