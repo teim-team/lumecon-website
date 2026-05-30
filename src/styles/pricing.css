@@ -71,18 +71,77 @@
 }
 
 /* ---------- Platform picker ----------
-   Three tiles use the homepage product icons (IconTribal / IconLocal
-   / IconGlobal). Hover lifts the tile + reveals the right-fit
-   blurb beneath the name. The picked tile gets `.is-active` to lock
-   in the highlighted state until another tile is picked. The
-   coming-soon tile (Global at v1) is dashed and non-buyable. */
+   Four tiles split into two groups so the internal/external split is
+   obvious without making the visitor read fit-text. "For your team"
+   holds the regional platforms (the customer's own staff runs studies
+   in Lumecon); "For consulting firms" holds the Consultant offering
+   (a firm runs studies on behalf of outside clients). The two groups
+   stack vertically with a soft divider between them so the second
+   group reads as a sibling category, not a buried 4th option. */
+.pricing-platform-groups {
+  display: grid;
+  gap: clamp(1.6rem, 3vw, 2.4rem);
+  margin: 0 0 1.4rem;
+}
+.pricing-platform-group {
+  display: grid;
+  gap: 1rem;
+}
+/* The external group gets a hairline divider above it so the eye
+   reads "two categories" instead of "one long list of four." */
+.pricing-platform-group--external {
+  padding-top: clamp(1.6rem, 3vw, 2.2rem);
+  border-top: 1px dashed var(--rule-strong, rgba(14, 21, 48, .18));
+}
+.pricing-platform-group__head {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  max-width: 60ch;
+}
+.pricing-platform-group__kicker {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+  margin: 0;
+}
+.pricing-platform-group--external .pricing-platform-group__kicker {
+  /* Cedar-green eyebrow on the external group so the visual cue
+     ties it to the "different category" subtree (mentor / outside
+     partner) without changing the brand palette. */
+  color: var(--cedar-text);
+}
+.pricing-platform-group__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.18rem;
+  letter-spacing: -.014em;
+  color: var(--navy);
+  margin: 0;
+}
+.pricing-platform-group__sub {
+  font-family: var(--font-sans);
+  font-size: .92rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin: 0;
+  font-weight: 400;
+}
 .pricing-platform-grid {
   list-style: none;
-  margin: 0 0 1.4rem;
+  margin: 0;
   padding: 0;
   display: grid;
   gap: 1.2rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+/* External group has only one tile; cap its width so it doesn't
+   stretch to full container width and read like a banner. */
+.pricing-platform-grid--single {
+  grid-template-columns: minmax(260px, 420px);
 }
 .pricing-platform-tile {
   width: 100%;
@@ -672,14 +731,233 @@
 }
 .pricing-terms__block strong { color: var(--white); font-weight: 600; }
 
+/* ---------- Service-platform tile (Consultant) ----------
+   Same tile shape as the regional tiles, with a small visual cue
+   (left edge accent + the Arborist icon) so the picker reads as
+   "three regional platforms + one consultant offering" without an
+   extra heading or row break. */
+.pricing-platform-tile--service {
+  border-left: 3px solid var(--accent);
+}
+.pricing-platform-tile--service:hover,
+.pricing-platform-tile--service:focus-visible,
+.pricing-platform-tile--service.is-active {
+  border-left-color: var(--accent);
+}
+
+/* ---------- Single-card tier grid (Consultant Arborist) ----------
+   Same card visuals as the regional tier cards; the grid itself is
+   capped at one column on desktop so the single Arborist card sits
+   left-aligned at a comfortable tier-card width instead of stretching
+   to full container width. */
+.pricing-tier-grid--single {
+  grid-template-columns: minmax(280px, 420px);
+}
+
+/* ---------- Toolbox add-on card ----------
+   Single full-width card that sits BELOW the tier grid on regional
+   platforms. Hidden on the service platform (Consultant) since the
+   Toolbox add-on requires an active subscription, which the Consultant
+   plan structurally doesn't grant. Visually distinct from the tier
+   cards (cream background, side-by-side icon + body layout) so the
+   visitor reads it as "add-on, not a tier." */
+.pricing-addon {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+}
+.pricing-addon[hidden] { display: none; }
+.pricing-addon__card {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: clamp(1rem, 2vw, 1.6rem);
+  align-items: start;
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: clamp(1.4rem, 2.4vw, 1.8rem);
+  position: relative;
+}
+.pricing-addon__icon {
+  display: block;
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  object-position: center bottom;
+  margin: 0;
+}
+.pricing-addon__body {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  min-width: 0;
+}
+.pricing-addon__head {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: .9rem;
+  margin-bottom: .2rem;
+}
+.pricing-addon__eyebrow {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+  margin: 0;
+}
+.pricing-addon__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -.018em;
+  color: var(--navy);
+  margin: 0;
+}
+.pricing-addon__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  margin-top: .2rem;
+  flex-wrap: wrap;
+}
+.pricing-addon__price {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: -.018em;
+  color: var(--navy);
+}
+.pricing-addon__period {
+  font-family: var(--font-sans);
+  font-size: .9rem;
+  color: var(--ink-3);
+}
+.pricing-addon__tagline {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+  font-weight: 400;
+}
+.pricing-addon__highlights {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .5rem;
+}
+.pricing-addon__highlights li {
+  font-family: var(--font-sans);
+  font-size: .92rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  font-weight: 500;
+  padding-left: 1.3rem;
+  position: relative;
+}
+.pricing-addon__highlights li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .35rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.pricing-addon__details {
+  border-top: 1px solid var(--rule);
+  padding-top: .8rem;
+}
+.pricing-addon__details summary {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.pricing-addon__details summary::-webkit-details-marker { display: none; }
+.pricing-addon__details summary::after {
+  content: '+';
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--accent-text);
+}
+.pricing-addon__details[open] summary::after { content: '–'; }
+.pricing-addon__details ul {
+  list-style: none;
+  margin: .9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: .5rem;
+}
+.pricing-addon__details ul li {
+  font-family: var(--font-sans);
+  font-size: .9rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  padding-left: 1.2rem;
+  position: relative;
+  font-weight: 400;
+}
+.pricing-addon__details ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .55rem;
+  width: 6px;
+  height: 1.5px;
+  background: var(--accent);
+  opacity: .6;
+}
+.pricing-addon__note {
+  font-family: var(--font-sans);
+  font-size: .85rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+  margin: 0;
+  font-style: italic;
+}
+.pricing-addon__cta { margin-top: .4rem; }
+.pricing-addon__cta .btn { width: auto; }
+
 @media (max-width: 980px) {
   /* Slightly smaller plant icon on tablets / phones so it doesn't
      dominate the card at narrower widths. */
   .pricing-tier-card__icon { width: 84px; height: 84px; }
+  .pricing-addon__card {
+    grid-template-columns: 140px 1fr;
+  }
+  .pricing-addon__icon {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 @media (max-width: 600px) {
   .pricing-tier-grid { grid-template-columns: 1fr; }
+  .pricing-tier-grid--single { grid-template-columns: 1fr; }
   .discount-code-panel__field { flex-direction: column; }
   .discount-code-panel__apply { width: 100%; }
+  /* Toolbox: stack icon above body on phones. */
+  .pricing-addon__card {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  .pricing-addon__icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+  }
+  .pricing-addon__cta .btn { width: 100%; }
 }

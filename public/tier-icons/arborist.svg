@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Arborist">
+  <!-- Ground — identical pair (ellipse + front-edge shadow) to sprout / sapling / tree
+       so the four tier icons share a continuous baseline. -->
+  <ellipse cx="100" cy="175" rx="76" ry="9" fill="#E8D9A8" opacity="0.72"/>
+  <path d="M 24 175 Q 100 167 176 175 L 176 183 L 24 183 Z" fill="#C19A3C" opacity="0.32"/>
+
+  <!-- Wooden support stakes (the binding) — back layer so the trunk sits in front.
+       Two vertical stakes flanking the trunk + a horizontal crossbar tying them. -->
+  <rect x="74" y="118" width="4" height="58" fill="#8A3A20"/>
+  <rect x="122" y="118" width="4" height="58" fill="#8A3A20"/>
+  <rect x="74" y="138" width="52" height="4" fill="#8A3A20"/>
+  <rect x="74" y="160" width="52" height="4" fill="#8A3A20"/>
+  <!-- Stake caps — small darker pegs on top of each stake -->
+  <rect x="72" y="116" width="8" height="3" fill="#5E2812"/>
+  <rect x="120" y="116" width="8" height="3" fill="#5E2812"/>
+
+  <!-- Trunk (sapling-weight, lighter than full Tree) -->
+  <path d="M 94 175 Q 96 150 98 120 Q 100 108 100 100 Q 100 108 102 120 Q 104 150 106 175 Z" fill="#AE4E2C"/>
+
+  <!-- Canopy: back layer (dark forest) -->
+  <circle cx="74"  cy="92" r="22" fill="#2C6239" opacity="0.92"/>
+  <circle cx="126" cy="92" r="22" fill="#2C6239" opacity="0.92"/>
+  <circle cx="100" cy="68" r="26" fill="#2C6239" opacity="0.92"/>
+
+  <!-- Canopy: mid layer (cedar primary) -->
+  <circle cx="82"  cy="90" r="18" fill="#3C8050"/>
+  <circle cx="118" cy="90" r="18" fill="#3C8050"/>
+  <circle cx="100" cy="72" r="22" fill="#3C8050"/>
+
+  <!-- Canopy highlights -->
+  <ellipse cx="90"  cy="80" rx="5" ry="3" fill="#A9D5B5" opacity="0.75"/>
+  <ellipse cx="112" cy="80" rx="5" ry="3" fill="#A9D5B5" opacity="0.75"/>
+
+  <!-- Tie-string (the literal "binding"): a single dark cord wrapping
+       trunk-to-stake, the visual cue the icon is named for. -->
+  <path d="M 74 130 Q 100 126 126 130" stroke="#3A2418" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+</svg>

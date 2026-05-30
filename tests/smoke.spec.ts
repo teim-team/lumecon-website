@@ -156,9 +156,27 @@ test('pricing platform pick reveals the three tier cards', async ({ page }) => {
   await expect(tierSection).toBeHidden();
   await page.locator('.pricing-platform-tile[data-platform-id="tribal-economic-impact"]').click();
   await expect(tierSection).toBeVisible();
-  await expect(page.locator('.pricing-tier-card')).toHaveCount(3);
+  // Scoped to the regional grid — the Consultant grid lives in the same
+  // section but stays hidden until the Consultant tile is picked.
+  await expect(page.locator('[data-tier-grid="regional"] .pricing-tier-card')).toHaveCount(3);
+  // Tribal Sprout price (12,500) is wired through the picker.
+  await expect(page.locator('[data-tier-price-slot="starter"]')).toHaveText('$12.5K');
   // Active-tier CTA routes into the signup flow with the tier id.
-  await expect(page.locator('.pricing-tier-card .btn').first()).toHaveAttribute('href', /\/signup\?tier=/);
+  await expect(page.locator('[data-tier-grid="regional"] .pricing-tier-card .btn').first()).toHaveAttribute('href', /\/signup\?tier=/);
+  // Toolbox add-on is shown for regional platforms.
+  await expect(page.locator('[data-addon="toolbox"]')).toBeVisible();
+});
+
+test('pricing consultant pick shows the single Arborist tier without Toolbox', async ({ page }) => {
+  await page.goto('/pricing', { waitUntil: 'networkidle' });
+  await page.locator('.pricing-platform-tile[data-platform-id="consultant-economic-impact"]').click();
+  await expect(page.locator('[data-tier-grid="consultant"] .pricing-tier-card')).toHaveCount(1);
+  // Regional grid is hidden when Consultant is picked.
+  await expect(page.locator('[data-tier-grid="regional"]')).toBeHidden();
+  // Toolbox add-on is hidden — it requires an active subscription.
+  await expect(page.locator('[data-addon="toolbox"]')).toBeHidden();
+  // Arborist flat price (15,000) is wired through the picker.
+  await expect(page.locator('[data-tier-price-slot="flat"]')).toHaveText('$15K');
 });
 
 test('cedar page boots the inline chat panel', async ({ page }) => {

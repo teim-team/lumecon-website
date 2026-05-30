@@ -4,23 +4,30 @@
  *
  * The visitor flow:
  *   1. Land on the page.
- *   2. Pick the platform that matches their work — Tribal, Local,
- *      or Global. Global is gated as "Coming soon" at v1.
- *   3. Tier grid + comparison table + discount band reveal beneath
- *      the platform picker. The picked platform's name threads
- *      through tier CTAs and the comparison-table heading so the
- *      visitor sees their context echoed back to them.
+ *   2. Pick a platform. The picker is grouped: "For your team"
+ *      holds the regional platforms (Tribal, Local, Global; Global
+ *      gated "Coming soon" at v1) — these are for the customer's
+ *      own staff running studies in Lumecon. "For consulting firms"
+ *      holds the Consultant plan — for firms running studies on
+ *      behalf of outside clients.
+ *   3. Tier grid + (regional only) comparison table + Toolbox
+ *      add-on + discount band reveal beneath the picker. The
+ *      picked platform's name threads through tier CTAs and the
+ *      kicker so the visitor sees their context echoed back to
+ *      them. The Consultant grid is a single Arborist tier and
+ *      hides the comparison table + Toolbox.
  *
- * Why gate the tiers behind a platform pick: the three platforms
+ * Why gate the tiers behind a platform pick: the four offerings
  * serve very different audiences (tribal nations vs. municipalities
- * vs. cross-border analysis), and showing every tier on every
- * platform at once would force a tribal-nation buyer to mentally
- * filter out "this isn't for me" rows. Gating cleans that up.
+ * vs. cross-border analysis vs. consulting firms), and showing every
+ * tier on every platform at once would force a tribal-nation buyer
+ * to mentally filter out "this isn't for me" rows. Gating cleans
+ * that up.
  *
- * Dollar figures are intentionally hidden — finance hasn't locked
- * prices yet and we don't want placeholder numbers leaking out as
- * if they were real. Each tier card renders "Pricing TBD" until
- * src/data/pricing.ts has real prices populated.
+ * Prices are per-platform now (Local Sprout $10K, Tribal Sprout
+ * $12.5K, etc.) so the tier-card price spans render placeholder
+ * text on initial paint and are filled in by the picker script
+ * from the picked tile's data-price-* attributes.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -28,12 +35,15 @@ import Footer from '../components/Footer.astro';
 import IconTribal from '../components/icons/IconTribal.astro';
 import IconLocal from '../components/icons/IconLocal.astro';
 import IconGlobal from '../components/icons/IconGlobal.astro';
+import IconArborist from '../components/icons/IconArborist.astro';
 import { site } from '../config';
 import {
   PUBLIC_PRICING_TIERS,
   COMPARISON_ROWS,
   ANNUAL_SUBSCRIPTION_DISCOUNTS,
   PRODUCT_LINES,
+  CONSULTANT_TIER,
+  TOOLBOX_ADDON,
 } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -63,58 +73,117 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
         <header class="pricing-hero__head">
           <p class="pricing-hero__kicker">Pricing</p>
           <h1 class="editorial-question reveal-soft hl-block hl-block--green">Pick the Lumecon platform that fits.</h1>
-          <p class="pricing-hero__lede">Lumecon provides three platforms tuned to different work. Pick the one that matches yours to see its tiers. We know your time is limited, so there&rsquo;s no demo call to unlock a number. The pricing is right here.</p>
+          <p class="pricing-hero__lede">Lumecon ships three platforms tuned to different work, plus a Consultant plan for firms delivering studies to outside clients. Pick the one that fits to see its tiers. We know your time is limited, so there&rsquo;s no demo call to unlock a number. The pricing is right here.</p>
           <p class="pricing-hero__aside">Annual subscriptions across every platform. Model updates, data refreshes, and workflow improvements land on every tier as they ship; you don&rsquo;t pay again to stay current.</p>
         </header>
 
-        <!-- 2. Platform picker. Three tiles with the same icons the
-                  homepage uses for each product. Tribal + Local are
-                  active; Global is "Coming soon." Picking a tile
-                  reveals the tier section below. -->
-        <ul class="pricing-platform-grid" aria-label="Platform picker">
-          {platforms.map((p) => (
-            <li>
-              <button
-                type="button"
-                class={`pricing-platform-tile${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
-                data-platform-id={p.id}
-                data-platform-short={p.shortName}
-                data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
-                aria-pressed="false"
-              >
-                <span class="pricing-platform-tile__icon" aria-hidden="true">
-                  {p.iconId === 'tribal' && <IconTribal />}
-                  {p.iconId === 'local'  && <IconLocal />}
-                  {p.iconId === 'global' && <IconGlobal />}
-                </span>
-                <span class="pricing-platform-tile__name">{p.name}</span>
-                <span class="pricing-platform-tile__fit">{p.fitIf}</span>
-                {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <!-- 2. Platform picker. Grouped into two columns:
+              "For your team" holds the regional platforms (your own
+              staff uses Lumecon directly), and "For consulting firms"
+              holds the Consultant offering (a firm runs studies on
+              behalf of outside clients). Splitting the picker makes
+              the distinction obvious without forcing the visitor to
+              read the per-tile fitIf to figure out which group they
+              belong in. -->
+        <div class="pricing-platform-groups" aria-label="Platform picker">
+          <section class="pricing-platform-group">
+            <header class="pricing-platform-group__head">
+              <p class="pricing-platform-group__kicker">For your team</p>
+              <h3 class="pricing-platform-group__title">Your staff runs studies in Lumecon.</h3>
+              <p class="pricing-platform-group__sub">Pick the platform that matches the geographies and audiences you work in.</p>
+            </header>
+            <ul class="pricing-platform-grid" aria-label="Platforms for your team">
+              {platforms.filter((p) => p.kind === 'regional').map((p) => (
+                <li>
+                  <button
+                    type="button"
+                    class={`pricing-platform-tile${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
+                    data-platform-id={p.id}
+                    data-platform-slug={p.slug}
+                    data-platform-short={p.shortName}
+                    data-platform-kind={p.kind}
+                    data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
+                    data-price-starter={p.tierPrices?.starter ?? ''}
+                    data-price-standard={p.tierPrices?.standard ?? ''}
+                    data-price-leader={p.tierPrices?.leader ?? ''}
+                    data-price-flat={p.tierPrices?.flat ?? ''}
+                    aria-pressed="false"
+                  >
+                    <span class="pricing-platform-tile__icon" aria-hidden="true">
+                      {p.iconId === 'tribal' && <IconTribal />}
+                      {p.iconId === 'local'  && <IconLocal />}
+                      {p.iconId === 'global' && <IconGlobal />}
+                    </span>
+                    <span class="pricing-platform-tile__name">{p.name}</span>
+                    <span class="pricing-platform-tile__fit">{p.fitIf}</span>
+                    {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="pricing-platform-group pricing-platform-group--external">
+            <header class="pricing-platform-group__head">
+              <p class="pricing-platform-group__kicker">For consulting firms</p>
+              <h3 class="pricing-platform-group__title">You run studies on behalf of outside clients.</h3>
+              <p class="pricing-platform-group__sub">A dedicated plan for two distinct client entities in a single fiscal year.</p>
+            </header>
+            <ul class="pricing-platform-grid pricing-platform-grid--single" aria-label="Plans for consulting firms">
+              {platforms.filter((p) => p.kind === 'service').map((p) => (
+                <li>
+                  <button
+                    type="button"
+                    class={`pricing-platform-tile pricing-platform-tile--service${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
+                    data-platform-id={p.id}
+                    data-platform-slug={p.slug}
+                    data-platform-short={p.shortName}
+                    data-platform-kind={p.kind}
+                    data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
+                    data-price-starter={p.tierPrices?.starter ?? ''}
+                    data-price-standard={p.tierPrices?.standard ?? ''}
+                    data-price-leader={p.tierPrices?.leader ?? ''}
+                    data-price-flat={p.tierPrices?.flat ?? ''}
+                    aria-pressed="false"
+                  >
+                    <span class="pricing-platform-tile__icon" aria-hidden="true">
+                      <IconArborist />
+                    </span>
+                    <span class="pricing-platform-tile__name">{p.name}</span>
+                    <span class="pricing-platform-tile__fit">{p.fitIf}</span>
+                    {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
         <p class="pricing-platform-prompt" data-platform-prompt>Pick a platform above to see its tiers.</p>
       </div>
     </section>
 
-    <!-- 3. Tier grid — hidden until a platform is picked. The
-              `data-platform-section` flag is flipped by the script
-              below when the visitor clicks an active tile. -->
+    <!-- 3. Tier grid — hidden until a platform is picked. Two
+              variants live in the markup: the regional Sprout /
+              Sapling / Tree grid (shown for Local / Tribal / Global)
+              and the single-card Consultant (Arborist) grid. The
+              picker script flips which one is visible based on the
+              picked tile's data-platform-kind. -->
     <section class="editorial-band editorial-band--white pricing-tiers" data-platform-section hidden aria-labelledby="tiers-h2">
       <div class="editorial-band__inner">
         <header class="pricing-tiers__head">
           <p class="pricing-tiers__kicker">Tiers for <span data-platform-name>your platform</span></p>
-          <h2 class="pricing-compare__h2 reveal-soft hl-block hl-block--gold-b" id="tiers-h2">Three tiers. Priced annually.</h2>
-          <p class="pricing-compare__deck">Reservation, county, state, and national results are included at every tier. Cedar starts at Sapling. Cedar Grove arrives on Tree after launch.</p>
+          <h2 class="pricing-compare__h2 reveal-soft hl-block hl-block--gold-b" id="tiers-h2" data-tiers-headline>Three tiers. Priced annually.</h2>
+          <p class="pricing-compare__deck" data-tiers-deck>Reservation, county, state, and national results are included at every tier. Cedar starts at Sapling. Cedar Grove arrives on Tree.</p>
         </header>
 
-        <ul class="pricing-tier-grid" aria-label="Pricing tiers">
-          {tiers.map((t) => {
-            const subject = encodeURIComponent(t.comingSoon ? `Notify me when ${t.name} ships` : t.ctaSubject);
-            return (
+        <!-- Regional tier grid (Sprout / Sapling / Tree). Prices are
+             populated dynamically from the picked platform's
+             tierPrices in script below. Initial "$—" placeholder
+             keeps the layout stable during the swap. -->
+        <ul class="pricing-tier-grid" aria-label="Pricing tiers" data-tier-grid="regional">
+          {tiers.map((t) => (
               <li
-                class={`pricing-tier-card${t.featured ? ' pricing-tier-card--featured' : ''}${t.comingSoon ? ' pricing-tier-card--coming-soon' : ''}`}
+                class={`pricing-tier-card${t.featured ? ' pricing-tier-card--featured' : ''}`}
                 data-tier-id={t.id}
                 data-tier-annual={t.priceAnnual}
               >
@@ -137,23 +206,14 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 />
                 <header class="pricing-tier-card__head">
                   <h3 class="pricing-tier-card__name">{t.name}</h3>
-                  {t.comingSoon
-                    ? <span class="pricing-tier-card__tag">Coming soon</span>
-                    : t.featured
-                      ? <span class="pricing-tier-card__tag">Most complete</span>
-                      : null}
+                  {t.featured
+                    ? <span class="pricing-tier-card__tag">Most complete</span>
+                    : null}
                 </header>
 
                 <div class="pricing-tier-card__price-row">
-                  {t.price
-                    ? <>
-                        <span class="pricing-tier-card__price">{t.price}</span>
-                        <span class="pricing-tier-card__period">{t.period}</span>
-                      </>
-                    : <>
-                        <span class="pricing-tier-card__price">Five figures</span>
-                        <span class="pricing-tier-card__period">/ year, flat</span>
-                      </>}
+                  <span class="pricing-tier-card__price" data-tier-price-slot={t.id}>$—</span>
+                  <span class="pricing-tier-card__period">/ year, flat</span>
                 </div>
 
                 <p class="pricing-tier-card__tagline">{t.tagline}</p>
@@ -176,23 +236,125 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
 
                 <div class="pricing-tier-card__cta">
                   <a
-                    class={t.comingSoon ? 'btn btn--ghost' : 'btn'}
-                    href={t.comingSoon ? `mailto:${site.email}?subject=${subject}` : `/signup?tier=${t.id}`}
+                    class="btn"
+                    href={`/signup?tier=${t.id}`}
                     data-analytics={`pricing-${t.name}-request-access`}
-                    data-cta-base={t.comingSoon ? `mailto:${site.email}?subject=${subject}` : `/signup?tier=${t.id}`}
+                    data-cta-base={`/signup?tier=${t.id}`}
                   >
-                    {t.comingSoon ? 'Notify me when it ships' : 'Sign up'}
+                    Sign up
                   </a>
                 </div>
               </li>
-            );
-          })}
+          ))}
         </ul>
+
+        <!-- Consultant tier grid (single Arborist card). Hidden by
+             default; shown only when the picked platform's kind is
+             'service'. The flat price slot is filled from the
+             Consultant tile's data-price-flat. -->
+        <ul class="pricing-tier-grid pricing-tier-grid--single" aria-label="Pricing tiers" data-tier-grid="consultant" hidden>
+          <li class="pricing-tier-card pricing-tier-card--featured" data-tier-id="arborist">
+            <img
+              class="pricing-tier-card__icon"
+              src="/tier-icons/arborist.svg"
+              alt=""
+              aria-hidden="true"
+              width="200"
+              height="200"
+              loading="lazy"
+            />
+            <header class="pricing-tier-card__head">
+              <h3 class="pricing-tier-card__name">{CONSULTANT_TIER.name}</h3>
+              <span class="pricing-tier-card__tag">For consultants</span>
+            </header>
+
+            <div class="pricing-tier-card__price-row">
+              <span class="pricing-tier-card__price" data-tier-price-slot="flat">$—</span>
+              <span class="pricing-tier-card__period">/ year, flat</span>
+            </div>
+
+            <p class="pricing-tier-card__tagline">{CONSULTANT_TIER.tagline}</p>
+
+            <ul class="pricing-tier-card__highlights" aria-label="Arborist highlights">
+              {CONSULTANT_TIER.highlights.map((h) => <li>{h}</li>)}
+            </ul>
+
+            <details class="pricing-tier-card__details">
+              <summary data-analytics="pricing-Arborist-details">Full capability list</summary>
+              <ul>
+                {CONSULTANT_TIER.features.map((f) => <li>{f}</li>)}
+              </ul>
+            </details>
+
+            <div class="pricing-tier-card__cta">
+              <a
+                class="btn"
+                href="/signup?tier=arborist&platform=consultant"
+                data-analytics="pricing-Arborist-request-access"
+                data-cta-base="/signup?tier=arborist&platform=consultant"
+              >
+                Sign up
+              </a>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Toolbox add-on — sits under the tier grid for regional
+             platforms only. Hidden whenever the picked platform's
+             kind is 'service' (Consultant), and always hidden when
+             no platform is picked. -->
+        <aside class="pricing-addon" data-addon="toolbox" hidden aria-label="Toolbox add-on">
+          <div class="pricing-addon__card">
+            <img
+              class="pricing-addon__icon"
+              src="/tier-icons/toolbox.svg"
+              alt=""
+              aria-hidden="true"
+              width="200"
+              height="200"
+              loading="lazy"
+            />
+            <div class="pricing-addon__body">
+              <header class="pricing-addon__head">
+                <p class="pricing-addon__eyebrow">Add-on</p>
+                <h3 class="pricing-addon__name">{TOOLBOX_ADDON.name}</h3>
+                <div class="pricing-addon__price-row">
+                  <span class="pricing-addon__price">{TOOLBOX_ADDON.priceLabel}</span>
+                  <span class="pricing-addon__period">{TOOLBOX_ADDON.period}</span>
+                </div>
+              </header>
+              <p class="pricing-addon__tagline">{TOOLBOX_ADDON.tagline}</p>
+              <ul class="pricing-addon__highlights" aria-label="Toolbox highlights">
+                {TOOLBOX_ADDON.highlights.map((h) => <li>{h}</li>)}
+              </ul>
+              <details class="pricing-addon__details">
+                <summary data-analytics="pricing-Toolbox-details">What&rsquo;s included</summary>
+                <ul>
+                  {TOOLBOX_ADDON.features.map((f) => <li>{f}</li>)}
+                </ul>
+              </details>
+              <p class="pricing-addon__note">{TOOLBOX_ADDON.note}</p>
+              <div class="pricing-addon__cta">
+                <a
+                  class="btn"
+                  href={`mailto:${site.email}?subject=${encodeURIComponent('Add Toolbox to my subscription')}`}
+                  data-analytics="pricing-Toolbox-add"
+                  data-cta-base={`mailto:${site.email}?subject=${encodeURIComponent('Add Toolbox to my subscription')}`}
+                >
+                  Add Toolbox to a subscription
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <!-- 4. Comparison band — same gating as the tier grid. -->
-    <section class="editorial-band editorial-band--white pricing-compare" data-platform-section hidden aria-labelledby="compare-h2">
+    <!-- 4. Comparison band — same gating as the tier grid, plus an
+              additional `data-regional-only` flag the script hides
+              when the picked platform is the Consultant offering
+              (there's only one tier to compare against itself). -->
+    <section class="editorial-band editorial-band--white pricing-compare" data-platform-section data-regional-only hidden aria-labelledby="compare-h2">
       <div class="editorial-band__inner">
         <p class="pricing-compare__kicker">Compare the tiers</p>
         <h2 class="pricing-compare__h2 reveal-soft hl-block hl-block--b" id="compare-h2">The full picture, one row at a time.</h2>
@@ -322,12 +484,78 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
     if (variant === 'error') el.classList.add('discount-code-panel__status--error');
   }
 
-  function showSections(show: boolean, platformShort: string): void {
+  /** USD formatter — drops cents on whole-thousand amounts, prints
+   *  "$12.5K" for half-thousand amounts. Mirrors the server-side
+   *  `fmtUSD` so SSR and client-side formatting stay in sync. */
+  function fmtUSD(n: number): string {
+    if (!Number.isFinite(n) || n <= 0) return '$—';
+    if (n % 1000 === 0) return `$${(n / 1000).toFixed(0)}K`;
+    return `$${(n / 1000).toLocaleString('en-US', { maximumFractionDigits: 1 })}K`;
+  }
+
+  /** Picks the right tier grid for the platform kind, populates each
+   *  tier's price from the tile's per-tier price data, and shows /
+   *  hides the toolbox + comparison sections accordingly. */
+  function applyPlatformToTiers(tile: HTMLButtonElement): void {
+    const kind = tile.dataset.platformKind || 'regional';
+    const regionalGrid = document.querySelector<HTMLElement>('[data-tier-grid="regional"]');
+    const consultantGrid = document.querySelector<HTMLElement>('[data-tier-grid="consultant"]');
+    const toolbox = document.querySelector<HTMLElement>('[data-addon="toolbox"]');
+    const regionalOnlySections = document.querySelectorAll<HTMLElement>('[data-regional-only]');
+
+    if (kind === 'service') {
+      // Consultant: single tier card, no toolbox, no comparison.
+      if (regionalGrid) regionalGrid.hidden = true;
+      if (consultantGrid) consultantGrid.hidden = false;
+      if (toolbox) toolbox.hidden = true;
+      regionalOnlySections.forEach((s) => { s.hidden = true; });
+      const flat = Number(tile.dataset.priceFlat || 0);
+      const flatSlot = document.querySelector<HTMLElement>('[data-tier-price-slot="flat"]');
+      if (flatSlot) flatSlot.textContent = fmtUSD(flat);
+      return;
+    }
+
+    // Regional: Sprout / Sapling / Tree grid + toolbox + comparison.
+    if (regionalGrid) regionalGrid.hidden = false;
+    if (consultantGrid) consultantGrid.hidden = true;
+    if (toolbox) toolbox.hidden = false;
+    regionalOnlySections.forEach((s) => { s.hidden = false; });
+
+    const prices: Record<string, number> = {
+      starter:  Number(tile.dataset.priceStarter  || 0),
+      standard: Number(tile.dataset.priceStandard || 0),
+      leader:   Number(tile.dataset.priceLeader   || 0),
+    };
+    Object.entries(prices).forEach(([tierId, price]) => {
+      const slot = document.querySelector<HTMLElement>(`[data-tier-price-slot="${tierId}"]`);
+      if (slot) slot.textContent = fmtUSD(price);
+    });
+  }
+
+  function showSections(show: boolean, tile: HTMLButtonElement | null): void {
     const sections = document.querySelectorAll<HTMLElement>('[data-platform-section]');
     sections.forEach((s) => { s.hidden = !show; });
+    const platformShort = tile?.dataset.platformShort || '';
+    const platformKind  = tile?.dataset.platformKind  || 'regional';
+    const platformName  = platformKind === 'service'
+      ? 'the Consultant plan'
+      : `${platformShort} Economic Impact`;
     document.querySelectorAll<HTMLElement>('[data-platform-name]').forEach((el) => {
-      el.textContent = show ? `${platformShort} Economic Impact` : 'your platform';
+      el.textContent = show ? platformName : 'your platform';
     });
+
+    /* Headline + deck swap for service vs regional platforms. */
+    const headline = document.querySelector<HTMLElement>('[data-tiers-headline]');
+    const deck     = document.querySelector<HTMLElement>('[data-tiers-deck]');
+    if (show && platformKind === 'service') {
+      if (headline) headline.textContent = 'One tier. Two projects. One fiscal year.';
+      if (deck) deck.textContent = 'Built for consultants delivering studies to outside clients. All geographies included. Cedar and the Toolbox add-on are not part of this plan.';
+    } else if (show) {
+      if (headline) headline.textContent = 'Three tiers. Priced annually.';
+      if (deck) deck.textContent = 'Reservation, county, state, and national results are included at every tier. Cedar starts at Sapling. Cedar Grove arrives on Tree.';
+    }
+
+    if (show && tile) applyPlatformToTiers(tile);
 
     /* Re-trigger the sprout/sapling/tree grow-from-ground
        animation each time the tier section reveals. The icons'
@@ -350,12 +578,14 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
        chosen platform as &platform=Y so the signup page can
        greet the visitor with what they picked. Notify-me CTAs
        stay as mailto and append "for X" to the email subject. */
-    document.querySelectorAll<HTMLAnchorElement>('.pricing-tier-card__cta a').forEach((cta) => {
+    document.querySelectorAll<HTMLAnchorElement>('.pricing-tier-card__cta a, .pricing-addon__cta a').forEach((cta) => {
       const base = cta.dataset.ctaBase;
       if (!base) return;
-      if (!show) { cta.setAttribute('href', base); return; }
+      if (!show || !platformShort) { cta.setAttribute('href', base); return; }
       if (base.startsWith('/signup')) {
-        cta.setAttribute('href', `${base}&platform=${platformShort.toLowerCase()}`);
+        const sep = base.includes('?') ? '&' : '?';
+        // Don't double-append platform= if the base already has one.
+        cta.setAttribute('href', /[?&]platform=/.test(base) ? base : `${base}${sep}platform=${platformShort.toLowerCase()}`);
       } else {
         const sep = base.includes('?') ? '%20for%20' : '?subject=';
         cta.setAttribute('href', `${base}${sep}${encodeURIComponent(platformShort)}`);
@@ -384,7 +614,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
 
         if (isReselect) {
           active = null;
-          showSections(false, '');
+          showSections(false, null);
           if (prompt) prompt.textContent = 'Pick a platform above to see its tiers.';
           return;
         }
@@ -394,9 +624,14 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
         tile.setAttribute('aria-pressed', 'true');
         const shortName = tile.dataset.platformShort || '';
         const platformId = tile.dataset.platformId || '';
-        if (prompt) prompt.textContent = `Showing tiers for ${shortName} Economic Impact. Pick another platform to switch.`;
-        showSections(true, shortName);
-        trackEvent('pricing.platform_picked', { platformId, platformShort: shortName });
+        const kind = tile.dataset.platformKind || 'regional';
+        if (prompt) {
+          prompt.textContent = kind === 'service'
+            ? `Showing the ${shortName} plan. Pick another platform to switch.`
+            : `Showing tiers for ${shortName} Economic Impact. Pick another platform to switch.`;
+        }
+        showSections(true, tile);
+        trackEvent('pricing.platform_picked', { platformId, platformShort: shortName, kind });
 
         /* Scroll the tier section into view so the visitor doesn't
            have to hunt for what just appeared. requestAnimationFrame
