@@ -77,21 +77,21 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For teams that want Cedar (our AI assistant) to turn records into analysis-ready inputs.',
+    tagline: 'For teams that want Cedar to do the data intake, alignment, and report drafting.',
     ctaSubject: 'Sapling tier',
     highlights: [
       'Everything in Sprout',
-      'Full Cedar access',
-      'Cedar aligns files to analysis-ready inputs',
+      'Cedar AI assistant (intake, alignment, drafting)',
+      'Branded reports with your logo and own images',
     ],
     features: [
       'Everything in Sprout',
       'Up to 5 users',
-      { text: 'Full Cedar access', accent: 'gold' },
-      'Guidance can be tailored to advocacy, investment, grants, planning, communications, or compliance',
+      { text: 'Full Cedar access (intake, alignment, review queues, report drafting)', accent: 'gold' },
+      'Upload PDFs, images, spreadsheets, payroll, finance, audit, and planning files',
       'Cedar aligns files to analysis-ready inputs you review and control',
       'Workspace review queues for HR, payroll, finance, council, and compliance inputs',
-      'Upload PDFs, images, spreadsheets, payroll, finance, audit, and planning files',
+      { text: 'Branded reports using your logo, colors, typography, and your own images', accent: 'gold' },
       'Priority email support, 24h response target',
     ],
   },
@@ -101,25 +101,19 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For organizations that need Cedar Grove, reporting workflows, and implementation support.',
+    tagline: 'For organizations that want Cedar Grove and the enterprise hooks (SSO, dedicated support) on top of everything in Sapling.',
     ctaSubject: 'Tree tier',
     featured: true,
     note: 'Cedar Grove is also available as a standalone subscription. Contact contact@lumecon.ai.',
     highlights: [
       'Everything in Sapling',
-      'Cedar Grove + full analytic suite',
-      'Grant, SBA, Federal, and compliance trackers',
+      'Cedar Grove: data layer that compounds across studies',
+      'SSO/SCIM and dedicated implementation support',
     ],
     features: [
       'Everything in Sapling',
       'Up to 10 users',
-      { text: 'Cedar Grove access', accent: 'gold' },
-      { text: 'Full analytic suite: feasibility, cost-benefit, ROI, causal inference', accent: 'gold' },
-      'Data, trackers, and reporting materials matched to your intended uses',
-      { text: 'Grant, foundation, SBA benefits, Federal reporting, and compliance trackers', accent: 'gold' },
-      'Reusable data library for recurring submissions',
-      'Regularly added alternative, administrative, and public data sources',
-      'Deadline tracking and submission prep tied to the person/entity management board',
+      { text: 'Cedar Grove: curated data layer that grows reusable across studies and submissions', accent: 'gold' },
       'SSO and SCIM provisioning',
       'Dedicated implementation support',
     ],
@@ -218,31 +212,39 @@ export interface ComparisonRow {
   tree: ComparisonCell;
 }
 
-/** 21 hand-ordered rows from the source spec. "Tree" cells that
- *  describe features only Tree includes render as "Coming soon" on
- *  the launch page since the tier itself isn't buyable yet. */
+/** Comparison rows. Designed for PRECISION, not row count: the old
+ *  21-row table inflated Tree by splitting "Cedar" into five
+ *  separate rows (Cedar AI / document import / use-case tailoring /
+ *  workspace review queues / data exploration) and padded Tree with
+ *  eight "none / none / soon" rows for features that haven't
+ *  shipped yet. The Wikipedia tactic, and exactly the kind of
+ *  competitive-comparison bullshit the brand should not be doing.
+ *
+ *  The new table answers the real buyer questions:
+ *    1. How many seats do I get?
+ *    2. What geographies are included? (same across tiers, but
+ *       worth saying out loud — buyers ask "is this gated")
+ *    3. Does Cedar do the work, and where does that start?
+ *    4. Can I brand the reports? (yes, once Cedar is on)
+ *    5. What enterprise hooks are on Tree? (Cedar Grove, SSO/SCIM)
+ *    6. How responsive is support?
+ *    7. Can I pay over time?
+ *
+ *  Roadmap features (advanced analytic suite, grant trackers) live
+ *  in the Tree tier card's expanded capability list, not here. The
+ *  comparison table is for things you can buy and use today. */
 export const COMPARISON_ROWS: ComparisonRow[] = [
-  { capability: 'Users',                                                           sprout: '1',              sapling: 'Up to 5',       tree: 'Up to 10' },
-  { capability: 'Reservation, county, state, and national scope',                  sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
-  { capability: 'Past, future, and multi-year analyses',                           sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
-  { capability: 'Assumption ledger on every export',                               sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
-  { capability: 'Council-ready PDF and CSV exports',                               sprout: 'yes',            sapling: 'yes',           tree: 'yes' },
-  { capability: 'High-frequency alternative data (mobility signals) where available', sprout: 'yes',          sapling: 'yes',           tree: 'yes' },
-  { capability: 'Cedar AI assistant',                                              sprout: 'none',           sapling: 'yes',           tree: 'yes' },
-  { capability: 'Document import (Cedar extracts inputs from PDFs)',               sprout: 'none',           sapling: 'yes',           tree: 'yes' },
-  { capability: 'Use-case tailoring (advocacy, grants, compliance, planning)',     sprout: 'none',           sapling: 'yes',           tree: 'yes' },
-  { capability: 'Workspace review queues',                                         sprout: 'none',           sapling: 'yes',           tree: 'yes' },
-  { capability: 'Cedar Grove: curated data, filings, source materials',            sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Grant, SBA, federal, and compliance trackers',                    sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Reusable data library for recurring submissions',                 sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Data exploration (guided EDA on any workspace dataset)',          sprout: 'none',           sapling: 'yes',           tree: 'yes' },
-  { capability: 'Feasibility studies (NPV, break-even, sensitivity)',              sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Cost-benefit analysis (federal-grant-aligned)',                   sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'ROI modeling (IRR, payback, scenario bands)',                     sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Causal inference (diff-in-diff, RDD, synthetic control, IV)',     sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'SSO and SCIM provisioning',                                       sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Dedicated implementation support',                                sprout: 'none',           sapling: 'none',          tree: 'soon' },
-  { capability: 'Support response target',                                         sprout: 'Standard email', sapling: 'Priority, 24h', tree: 'Dedicated' },
+  { capability: 'Users',                                                           sprout: '1',                                  sapling: 'Up to 5',                          tree: 'Up to 10' },
+  { capability: 'Geographies (reservation, county, state, national)',              sprout: 'All included',                       sapling: 'All included',                     tree: 'All included' },
+  { capability: 'Studies per year',                                                sprout: 'Unlimited',                          sapling: 'Unlimited',                        tree: 'Unlimited' },
+  { capability: 'Past, future, and multi-year analyses',                           sprout: 'yes',                                sapling: 'yes',                              tree: 'yes' },
+  { capability: 'Assumption ledger on every export',                               sprout: 'yes',                                sapling: 'yes',                              tree: 'yes' },
+  { capability: 'Cedar AI assistant (intake, alignment, review queues, drafting)', sprout: 'none',                               sapling: 'yes',                              tree: 'yes' },
+  { capability: 'Branded reports using your logo, colors, and own images',         sprout: 'none',                               sapling: 'yes',                              tree: 'yes' },
+  { capability: 'Cedar Grove (curated data layer that compounds across studies)',  sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
+  { capability: 'SSO and SCIM provisioning',                                       sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
+  { capability: 'Implementation support',                                          sprout: 'Standard email',                     sapling: 'Priority email, 24h',              tree: 'Dedicated' },
+  { capability: 'Payment cadence',                                                 sprout: 'Annual, monthly, or quarterly',      sapling: 'Annual',                           tree: 'Annual' },
 ];
 
 /* ---------- Prepayment ladder ---------- */
