@@ -159,8 +159,8 @@ test('pricing platform pick reveals the three tier cards', async ({ page }) => {
   // Scoped to the regional grid — the Consultant grid lives in the same
   // section but stays hidden until the Consultant tile is picked.
   await expect(page.locator('[data-tier-grid="regional"] .pricing-tier-card')).toHaveCount(3);
-  // Tribal Sprout price (12,500) is wired through the picker.
-  await expect(page.locator('[data-tier-price-slot="starter"]')).toHaveText('$12.5K');
+  // Tribal Sprout price (10,000) is wired through the picker.
+  await expect(page.locator('[data-tier-price-slot="starter"]')).toHaveText('$10K');
   // Active-tier CTA routes into the signup flow with the tier id.
   await expect(page.locator('[data-tier-grid="regional"] .pricing-tier-card .btn').first()).toHaveAttribute('href', /\/signup\?tier=/);
   // Toolbox add-on is shown for regional platforms.

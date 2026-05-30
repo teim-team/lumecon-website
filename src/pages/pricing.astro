@@ -391,10 +391,10 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
       </div>
     </section>
 
-    <!-- 5. Discount-code band — gated. The discount math is symbolic
-              while prices are TBD; the input still validates the
-              code and the status line confirms the percentage that
-              will apply when pricing lands. -->
+    <!-- 5. Discount-code band — gated. Prices are locked in now, so
+              the status line confirms the percentage off and the
+              code applies at checkout (the server validates again
+              before billing). -->
     <section class="editorial-band editorial-band--cream pricing-support" data-platform-section hidden aria-labelledby="support-h2">
       <div class="editorial-band__inner">
         <p class="pricing-support__kicker">Discount code</p>
@@ -445,6 +445,10 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 </li>
               ))}
             </ul>
+          </div>
+          <div class="pricing-terms__block">
+            <h3>Payment cadence on Sprout.</h3>
+            <p>The Sprout tier on Local and Tribal supports monthly or quarterly payments against a 12-month commitment, with no upcharge for paying over time. Sapling and Tree are annual prepay only. The intent is to align the lowest tier with smaller orgs&rsquo; budget cycles without inflating the price.</p>
           </div>
           <div class="pricing-terms__block">
             <h3>You own your exports.</h3>
@@ -662,10 +666,10 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
         setStatus(status, 'Code not recognized.', 'error');
         return;
       }
-      /* Prices aren't locked yet (priceAnnual is 0 in the data file),
-         so we describe the discount that will apply when pricing
-         lands instead of computing a dollar amount. */
-      setStatus(status, `${match.label}: ${match.discountPct}% off annual pricing, applied when pricing is finalized.`, 'valid');
+      /* Prices live on the picked platform's tile (data-price-*),
+         not here, so the status line confirms the percentage off
+         and the actual dollar amount is computed at checkout. */
+      setStatus(status, `${match.label}: ${match.discountPct}% off annual pricing, applied at checkout.`, 'valid');
       trackEvent('pricing.discount_applied', { code: match.code, discountPct: match.discountPct });
     };
 

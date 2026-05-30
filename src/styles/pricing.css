@@ -305,6 +305,10 @@
   margin: 0;
   padding: 0;
 }
+/* Without this, the .pricing-tier-grid display:grid above (specificity
+   0,1,0) ties the user-agent [hidden]{display:none} and wins by source
+   order — leaving "hidden" grids visible. Make the override explicit. */
+.pricing-tier-grid[hidden] { display: none; }
 .pricing-tier-card {
   position: relative;
   background: var(--white);
