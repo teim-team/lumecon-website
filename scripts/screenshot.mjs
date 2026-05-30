@@ -2,8 +2,8 @@ import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 
 const CHROME = process.env.CHROME_BIN || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const BASE   = 'http://127.0.0.1:4325';
-const OUT    = '/tmp/shots3';
+const BASE   = process.env.SHOT_BASE || 'http://127.0.0.1:4327';
+const OUT    = process.env.SHOT_OUT  || '/tmp/shots5';
 
 await mkdir(OUT, { recursive: true });
 const browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox'] });

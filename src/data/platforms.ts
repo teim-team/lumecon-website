@@ -77,6 +77,12 @@ export interface Platform {
   kind: PlatformKind;
   /** Public per-tier prices, set per platform. Undefined = TBD. */
   tierPrices?: PlatformTierPrices;
+  /** Geographies the platform covers, in display order, used in tier
+   *  copy and the comparison table. Local is sub-state (city / county
+   *  / state / national); Tribal is reservation-anchored (no county);
+   *  Global is national + international; Consultant covers the full
+   *  set because consulting firms work across client types. */
+  geographyScope: string;
 }
 
 export const PLATFORMS: readonly Platform[] = [
@@ -98,6 +104,7 @@ export const PLATFORMS: readonly Platform[] = [
     iconId: 'local',
     kind: 'regional',
     tierPrices: { starter: 7500, standard: 15000, leader: 20000 },
+    geographyScope: 'County, state, and national',
   },
   {
     slug: 'tribal',
@@ -117,6 +124,7 @@ export const PLATFORMS: readonly Platform[] = [
     iconId: 'tribal',
     kind: 'regional',
     tierPrices: { starter: 10000, standard: 17500, leader: 25000 },
+    geographyScope: 'Reservation, county, state, and national',
   },
   {
     slug: 'global',
@@ -135,6 +143,7 @@ export const PLATFORMS: readonly Platform[] = [
     scope: 'National, international, cross-border analysis',
     iconId: 'global',
     kind: 'regional',
+    geographyScope: 'National, international, and cross-border',
   },
   {
     slug: 'consultant',
@@ -154,6 +163,7 @@ export const PLATFORMS: readonly Platform[] = [
     iconId: 'consultant',
     kind: 'service',
     tierPrices: { flat: 15000 },
+    geographyScope: 'Reservation, county, state, and national',
   },
 ];
 
