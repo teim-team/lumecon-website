@@ -111,7 +111,6 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 <span class="pricing-platform-tile__name">{p.name}</span>
                 <span class="pricing-platform-tile__fit">{p.fitIf}</span>
                 {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
-                {p.kind === 'service' && !p.comingSoon && <span class="pricing-platform-tile__tag pricing-platform-tile__tag--service">For consultants</span>}
               </button>
             </li>
           ))}
@@ -214,7 +213,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
           <li class="pricing-tier-card pricing-tier-card--featured" data-tier-id="arborist">
             <img
               class="pricing-tier-card__icon"
-              src="/tier-icons/arborist.svg"
+              src="/tier-icons/arborist.png"
               alt=""
               aria-hidden="true"
               width="200"
@@ -265,7 +264,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
           <div class="pricing-addon__card">
             <img
               class="pricing-addon__icon"
-              src="/tier-icons/toolbox.svg"
+              src="/tier-icons/toolbox.png"
               alt=""
               aria-hidden="true"
               width="200"
