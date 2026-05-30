@@ -71,18 +71,77 @@
 }
 
 /* ---------- Platform picker ----------
-   Three tiles use the homepage product icons (IconTribal / IconLocal
-   / IconGlobal). Hover lifts the tile + reveals the right-fit
-   blurb beneath the name. The picked tile gets `.is-active` to lock
-   in the highlighted state until another tile is picked. The
-   coming-soon tile (Global at v1) is dashed and non-buyable. */
+   Four tiles split into two groups so the internal/external split is
+   obvious without making the visitor read fit-text. "For your team"
+   holds the regional platforms (the customer's own staff runs studies
+   in Lumecon); "For consulting firms" holds the Consultant offering
+   (a firm runs studies on behalf of outside clients). The two groups
+   stack vertically with a soft divider between them so the second
+   group reads as a sibling category, not a buried 4th option. */
+.pricing-platform-groups {
+  display: grid;
+  gap: clamp(1.6rem, 3vw, 2.4rem);
+  margin: 0 0 1.4rem;
+}
+.pricing-platform-group {
+  display: grid;
+  gap: 1rem;
+}
+/* The external group gets a hairline divider above it so the eye
+   reads "two categories" instead of "one long list of four." */
+.pricing-platform-group--external {
+  padding-top: clamp(1.6rem, 3vw, 2.2rem);
+  border-top: 1px dashed var(--rule-strong, rgba(14, 21, 48, .18));
+}
+.pricing-platform-group__head {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  max-width: 60ch;
+}
+.pricing-platform-group__kicker {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+  margin: 0;
+}
+.pricing-platform-group--external .pricing-platform-group__kicker {
+  /* Cedar-green eyebrow on the external group so the visual cue
+     ties it to the "different category" subtree (mentor / outside
+     partner) without changing the brand palette. */
+  color: var(--cedar-text);
+}
+.pricing-platform-group__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.18rem;
+  letter-spacing: -.014em;
+  color: var(--navy);
+  margin: 0;
+}
+.pricing-platform-group__sub {
+  font-family: var(--font-sans);
+  font-size: .92rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin: 0;
+  font-weight: 400;
+}
 .pricing-platform-grid {
   list-style: none;
-  margin: 0 0 1.4rem;
+  margin: 0;
   padding: 0;
   display: grid;
   gap: 1.2rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+/* External group has only one tile; cap its width so it doesn't
+   stretch to full container width and read like a banner. */
+.pricing-platform-grid--single {
+  grid-template-columns: minmax(260px, 420px);
 }
 .pricing-platform-tile {
   width: 100%;

@@ -4,12 +4,18 @@
  *
  * The visitor flow:
  *   1. Land on the page.
- *   2. Pick the platform that matches their work — Tribal, Local,
- *      or Global. Global is gated as "Coming soon" at v1.
- *   3. Tier grid + comparison table + discount band reveal beneath
- *      the platform picker. The picked platform's name threads
- *      through tier CTAs and the comparison-table heading so the
- *      visitor sees their context echoed back to them.
+ *   2. Pick a platform. The picker is grouped: "For your team"
+ *      holds the regional platforms (Tribal, Local, Global; Global
+ *      gated "Coming soon" at v1) — these are for the customer's
+ *      own staff running studies in Lumecon. "For consulting firms"
+ *      holds the Consultant plan — for firms running studies on
+ *      behalf of outside clients.
+ *   3. Tier grid + (regional only) comparison table + Toolbox
+ *      add-on + discount band reveal beneath the picker. The
+ *      picked platform's name threads through tier CTAs and the
+ *      kicker so the visitor sees their context echoed back to
+ *      them. The Consultant grid is a single Arborist tier and
+ *      hides the comparison table + Toolbox.
  *
  * Why gate the tiers behind a platform pick: the four offerings
  * serve very different audiences (tribal nations vs. municipalities
@@ -71,40 +77,87 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
           <p class="pricing-hero__aside">Annual subscriptions across every platform. Model updates, data refreshes, and workflow improvements land on every tier as they ship; you don&rsquo;t pay again to stay current.</p>
         </header>
 
-        <!-- 2. Platform picker. Three tiles with the same icons the
-                  homepage uses for each product. Tribal + Local are
-                  active; Global is "Coming soon." Picking a tile
-                  reveals the tier section below. -->
-        <ul class="pricing-platform-grid" aria-label="Platform picker">
-          {platforms.map((p) => (
-            <li>
-              <button
-                type="button"
-                class={`pricing-platform-tile${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}${p.kind === 'service' ? ' pricing-platform-tile--service' : ''}`}
-                data-platform-id={p.id}
-                data-platform-slug={p.slug}
-                data-platform-short={p.shortName}
-                data-platform-kind={p.kind}
-                data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
-                data-price-starter={p.tierPrices?.starter ?? ''}
-                data-price-standard={p.tierPrices?.standard ?? ''}
-                data-price-leader={p.tierPrices?.leader ?? ''}
-                data-price-flat={p.tierPrices?.flat ?? ''}
-                aria-pressed="false"
-              >
-                <span class="pricing-platform-tile__icon" aria-hidden="true">
-                  {p.iconId === 'tribal'     && <IconTribal />}
-                  {p.iconId === 'local'      && <IconLocal />}
-                  {p.iconId === 'global'     && <IconGlobal />}
-                  {p.iconId === 'consultant' && <IconArborist />}
-                </span>
-                <span class="pricing-platform-tile__name">{p.name}</span>
-                <span class="pricing-platform-tile__fit">{p.fitIf}</span>
-                {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <!-- 2. Platform picker. Grouped into two columns:
+              "For your team" holds the regional platforms (your own
+              staff uses Lumecon directly), and "For consulting firms"
+              holds the Consultant offering (a firm runs studies on
+              behalf of outside clients). Splitting the picker makes
+              the distinction obvious without forcing the visitor to
+              read the per-tile fitIf to figure out which group they
+              belong in. -->
+        <div class="pricing-platform-groups" aria-label="Platform picker">
+          <section class="pricing-platform-group">
+            <header class="pricing-platform-group__head">
+              <p class="pricing-platform-group__kicker">For your team</p>
+              <h3 class="pricing-platform-group__title">Your staff runs studies in Lumecon.</h3>
+              <p class="pricing-platform-group__sub">Pick the platform that matches the geographies and audiences you work in.</p>
+            </header>
+            <ul class="pricing-platform-grid" aria-label="Platforms for your team">
+              {platforms.filter((p) => p.kind === 'regional').map((p) => (
+                <li>
+                  <button
+                    type="button"
+                    class={`pricing-platform-tile${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
+                    data-platform-id={p.id}
+                    data-platform-slug={p.slug}
+                    data-platform-short={p.shortName}
+                    data-platform-kind={p.kind}
+                    data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
+                    data-price-starter={p.tierPrices?.starter ?? ''}
+                    data-price-standard={p.tierPrices?.standard ?? ''}
+                    data-price-leader={p.tierPrices?.leader ?? ''}
+                    data-price-flat={p.tierPrices?.flat ?? ''}
+                    aria-pressed="false"
+                  >
+                    <span class="pricing-platform-tile__icon" aria-hidden="true">
+                      {p.iconId === 'tribal' && <IconTribal />}
+                      {p.iconId === 'local'  && <IconLocal />}
+                      {p.iconId === 'global' && <IconGlobal />}
+                    </span>
+                    <span class="pricing-platform-tile__name">{p.name}</span>
+                    <span class="pricing-platform-tile__fit">{p.fitIf}</span>
+                    {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="pricing-platform-group pricing-platform-group--external">
+            <header class="pricing-platform-group__head">
+              <p class="pricing-platform-group__kicker">For consulting firms</p>
+              <h3 class="pricing-platform-group__title">You run studies on behalf of outside clients.</h3>
+              <p class="pricing-platform-group__sub">A dedicated plan for two distinct client entities in a single fiscal year.</p>
+            </header>
+            <ul class="pricing-platform-grid pricing-platform-grid--single" aria-label="Plans for consulting firms">
+              {platforms.filter((p) => p.kind === 'service').map((p) => (
+                <li>
+                  <button
+                    type="button"
+                    class={`pricing-platform-tile pricing-platform-tile--service${p.comingSoon ? ' pricing-platform-tile--coming-soon' : ''}`}
+                    data-platform-id={p.id}
+                    data-platform-slug={p.slug}
+                    data-platform-short={p.shortName}
+                    data-platform-kind={p.kind}
+                    data-platform-coming-soon={p.comingSoon ? 'true' : 'false'}
+                    data-price-starter={p.tierPrices?.starter ?? ''}
+                    data-price-standard={p.tierPrices?.standard ?? ''}
+                    data-price-leader={p.tierPrices?.leader ?? ''}
+                    data-price-flat={p.tierPrices?.flat ?? ''}
+                    aria-pressed="false"
+                  >
+                    <span class="pricing-platform-tile__icon" aria-hidden="true">
+                      <IconArborist />
+                    </span>
+                    <span class="pricing-platform-tile__name">{p.name}</span>
+                    <span class="pricing-platform-tile__fit">{p.fitIf}</span>
+                    {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
         <p class="pricing-platform-prompt" data-platform-prompt>Pick a platform above to see its tiers.</p>
       </div>
     </section>
