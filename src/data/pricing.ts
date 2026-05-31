@@ -75,12 +75,12 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For teams that want Cedar to process their messy data, structure it for the model, and act as a thought partner on the write-up. Your outputs come out carrying your visual identity.',
+    tagline: 'For teams that want Cedar to process their messy data, structure it for the model, and act as a thought partner on the write-up.',
     ctaSubject: 'Sapling tier',
     highlights: [
       'Everything in Sprout',
       'Cedar processes your data and acts as a thought partner',
-      'Your outputs carry your logo, colors, and own images',
+      'Up to 5 users on one workspace',
     ],
     features: [
       'Everything in Sprout',
@@ -88,7 +88,6 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
       { text: 'Full Cedar access: upload PDFs, CSVs, and XLSX files, with more formats expanding over time', accent: 'gold' },
       { text: 'Cedar structures the inputs, surfaces every assumption, and acts as a thought partner on the write-up', accent: 'gold' },
       'Review queues for HR, payroll, finance, and compliance inputs',
-      { text: 'Your outputs (PDF report, deck, executive summary) carry your logo, colors, typography, and your own images', accent: 'gold' },
     ],
   },
   {
@@ -97,17 +96,18 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For organizations that want their data harmonized across every study they run, plus complementary administrative datasets that show how socioeconomic outcomes are actually changing on the ground, plus compliance-ready reporting on top of everything in Sapling.',
+    tagline: 'For organizations that want custom-branded outputs, data harmonized across every study, complementary administrative datasets that show how socioeconomic outcomes are actually changing on the ground, and compliance-ready reporting on top of everything in Sapling.',
     ctaSubject: 'Tree tier',
     featured: true,
     highlights: [
       'Everything in Sapling',
-      'Cedar Grove: your data harmonized across studies, plus complementary administrative data on socioeconomic outcomes',
-      'Compliance-ready reporting for grants and federal submissions',
+      'Custom branding: upload your logos and images, automatically formatted into every output',
+      'Cedar Grove: harmonized data + complementary admin data on socioeconomic outcomes',
     ],
     features: [
       'Everything in Sapling',
       'Up to 10 users',
+      { text: 'Custom branding: upload your logos, colors, and images once and every output (PDF report, deck, executive summary) picks them up automatically', accent: 'gold' },
       { text: 'Cedar Grove: your data stays harmonized across every study, so the second study is easier than the first and the tenth is easier than the second', accent: 'gold' },
       { text: 'Complementary administrative data layered alongside your own, showing how local socioeconomic outcomes are actually changing. Reinforces the economic-impact narrative with real outcome evidence.', accent: 'gold' },
       { text: 'Compliance-ready reporting for grants, federal submissions, and audited annual reports', accent: 'gold' },
@@ -190,7 +190,7 @@ export const TOOLBOX_ADDON: AddOn = {
     'Press- and publication-ready outputs',
     'Flat fee, taxes included',
   ],
-  note: 'Requires an active Lumecon subscription (Sapling or Tree recommended). Note: at Sapling and Tree, the outputs Cedar already produces (PDF report, deck, executive summary) carry your visual identity and your own images, so Toolbox is the option you add when you want our team writing and designing the finished package for you. Not available on the Consultant plan.',
+  note: 'Requires an active Lumecon subscription (Tree recommended). Note: at Tree, custom branding lets you upload your logos and images once and every output Cedar produces picks them up automatically. Toolbox is the option you add when you also want our team writing and designing the finished package. Not available on the Consultant plan.',
 };
 
 /* ---------- Comparison rows ---------- */
@@ -230,7 +230,7 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
   { capability: 'Users',                                                                                                sprout: '1',                                  sapling: 'Up to 5',                          tree: 'Up to 10' },
   { capability: 'Geographies',                                                                                          sprout: 'All included',                       sapling: 'All included',                     tree: 'All included' },
   { capability: 'Cedar: upload messy data and act as a thought partner',                                                sprout: 'none',                               sapling: 'yes',                              tree: 'yes' },
-  { capability: 'Outputs (PDF report, deck, executive summary)',                                                        sprout: 'Standard',                           sapling: 'Branded with your identity',       tree: 'Branded with your identity' },
+  { capability: 'Custom branding: upload your logos, colors, and images, automatically formatted into every output',    sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
   { capability: 'Cedar Grove: harmonized data + complementary administrative datasets + compliance-ready reporting',    sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
   { capability: 'Payment cadence',                                                                                      sprout: 'Annual, monthly, or quarterly',      sapling: 'Annual',                           tree: 'Annual' },
 ];

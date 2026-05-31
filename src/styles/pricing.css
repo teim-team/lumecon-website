@@ -234,13 +234,6 @@
   padding: .18rem .55rem;
   border-radius: 3px;
 }
-/* "For consultants" tag — uses the brand accent (teal) instead of
-   cedar so the eye reads "this is the service offering," not "this
-   is coming soon" (which is what cedar signals on the Global tile). */
-.pricing-platform-tile__tag--service {
-  background: var(--accent);
-  color: #0A0F26;
-}
 .pricing-platform-prompt {
   font-family: var(--font-mono);
   font-size: .76rem;
@@ -551,6 +544,21 @@
   max-width: 60ch;
   font-weight: 400;
 }
+/* Comparison band gets a wider inner container on desktop than the
+   rest of the page (1320px vs the default 1200px) and the table
+   switches to fixed layout with explicit column widths so the
+   Capability column can't eat the whole table. Tier columns at
+   ~21% give the short cells like "Annual, monthly, or quarterly"
+   the room they need to sit on one line. Only kicks in above
+   1280px viewport; below that the table reverts to its tablet/
+   phone behaviour (auto-layout + horizontal scroll). */
+@media (min-width: 1280px) {
+  .pricing-compare .editorial-band__inner { max-width: 1320px; }
+  .pricing-compare table { table-layout: fixed; }
+  .pricing-compare thead th:first-child { width: 36%; }
+  .pricing-compare thead th:not(:first-child) { width: 21.33%; }
+}
+
 .pricing-compare__table-wrap {
   overflow-x: auto;
   border: 1px solid var(--rule);
@@ -598,6 +606,39 @@
 .pricing-compare td[data-value="soon"]::before {
   content: '◌ ';
   color: var(--cedar-text);
+}
+
+/* Price footer row. Sits at the bottom of the comparison table so
+   the visitor walks the capability rows top-down and lands on the
+   tier's price for the platform they picked. Re-asserts the
+   price-by-tier mapping after the visitor has compared features. */
+.pricing-compare tfoot .pricing-compare__price-row {
+  background: var(--cream);
+}
+.pricing-compare tfoot .pricing-compare__price-row th,
+.pricing-compare tfoot .pricing-compare__price-row td {
+  border-top: 2px solid var(--rule-strong, rgba(14, 21, 48, .14));
+  border-bottom: 0;
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+}
+.pricing-compare tfoot .pricing-compare__row-label {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.pricing-compare__price-cell {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: -.018em;
+  color: var(--navy);
+}
+.pricing-compare__price-cell.pricing-compare__featured {
+  color: var(--accent-deep, #0A8A7E);
 }
 
 /* ---------- Discount-code band ---------- */
@@ -715,18 +756,13 @@
 .pricing-terms__block strong { color: var(--white); font-weight: 600; }
 
 /* ---------- Service-platform tile (Consultant) ----------
-   Same tile shape as the regional tiles, with a small visual cue
-   (left edge accent + the Arborist icon) so the picker reads as
-   "three regional platforms + one consultant offering" without an
-   extra heading or row break. */
-.pricing-platform-tile--service {
-  border-left: 3px solid var(--accent);
-}
-.pricing-platform-tile--service:hover,
-.pricing-platform-tile--service:focus-visible,
-.pricing-platform-tile--service.is-active {
-  border-left-color: var(--accent);
-}
+   The Consultant tile now shares the exact same chrome as the
+   regional tiles. The earlier teal left-edge accent made the tile
+   read as "selected/active" alongside three quiet siblings, which
+   was misleading. The visual distinction comes from the eyebrow
+   line above the picker ("Three platforms for your team. One plan
+   for consulting firms.") and the tile's own "For Consultants"
+   name, both of which are clearer than a colored stripe. */
 
 /* ---------- Single-card tier grid (Consultant Arborist) ----------
    Same card visuals as the regional tier cards; the grid itself is

@@ -392,6 +392,21 @@ html {
   85%           { transform: scale(1); }
 }
 
+/* Arborist (picker icon for the Consultant plan): the gold "tending"
+   accent at the trunk-tie position pulses gently so the icon reads
+   as alive at 24px. Matches the rhythm of icon-tribal-pulse so the
+   four picker tiles share a visual cadence. */
+.icon--arborist .icon-arborist__dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: icon-arborist-pulse 3s ease-in-out infinite;
+}
+@keyframes icon-arborist-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1;   }
+  45%      { transform: scale(1.45); opacity: .85; }
+  65%      { transform: scale(1);    opacity: 1;   }
+}
+
 /* Upload: the dot moves up into the document (uploading). */
 .icon--upload .icon-upload__dot {
   transform-box: fill-box;
@@ -671,6 +686,7 @@ html {
   .icon--tribal .icon-tribal__dot,
   .icon--global .icon-global__arc,
   .icon--global .icon-global__dot,
+  .icon--arborist .icon-arborist__dot,
   .icon--upload .icon-upload__dot,
   .icon--upload .icon-upload__arrow,
   .icon--surface .icon-surface__lens,

@@ -111,7 +111,6 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 <span class="pricing-platform-tile__name">{p.name}</span>
                 <span class="pricing-platform-tile__fit">{p.fitIf}</span>
                 {p.comingSoon && <span class="pricing-platform-tile__tag">Coming soon</span>}
-                {p.kind === 'service' && !p.comingSoon && <span class="pricing-platform-tile__tag pricing-platform-tile__tag--service">For consultants</span>}
               </button>
             </li>
           ))}
@@ -214,7 +213,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
           <li class="pricing-tier-card pricing-tier-card--featured" data-tier-id="arborist">
             <img
               class="pricing-tier-card__icon"
-              src="/tier-icons/arborist.svg"
+              src="/tier-icons/arborist.png"
               alt=""
               aria-hidden="true"
               width="200"
@@ -265,7 +264,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
           <div class="pricing-addon__card">
             <img
               class="pricing-addon__icon"
-              src="/tier-icons/toolbox.svg"
+              src="/tier-icons/toolbox.png"
               alt=""
               aria-hidden="true"
               width="200"
@@ -314,7 +313,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
               (there's only one tier to compare against itself). -->
     <section class="editorial-band editorial-band--white pricing-compare" data-platform-section data-regional-only hidden aria-labelledby="compare-h2">
       <div class="editorial-band__inner">
-        <p class="pricing-compare__kicker">Compare the tiers</p>
+        <p class="pricing-compare__kicker">Compare the tiers for <span data-platform-name>your platform</span></p>
         <h2 class="pricing-compare__h2 reveal-soft hl-block hl-block--b" id="compare-h2">The full picture, one row at a time.</h2>
         <p class="pricing-compare__deck">No clever section names or hidden &ldquo;contact us for details&rdquo; lines. What each tier actually includes.</p>
 
@@ -350,6 +349,20 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
                 </tr>
               ))}
             </tbody>
+            <!-- Price footer. JS fills the price cells from the
+                 picked platform's per-tier prices on each pick so a
+                 Local visitor sees $7.5K / $15K / $20K and a Tribal
+                 visitor sees $10K / $17.5K / $25K. Anchored to the
+                 bottom of the comparison so the reader walks the
+                 capability rows top-down and lands on the price. -->
+            <tfoot>
+              <tr class="pricing-compare__price-row">
+                <th scope="row" class="pricing-compare__row-label">Annual price</th>
+                <td class="pricing-compare__price-cell" data-compare-price-slot="starter">$&mdash;</td>
+                <td class="pricing-compare__price-cell" data-compare-price-slot="standard">$&mdash;</td>
+                <td class="pricing-compare__price-cell pricing-compare__featured" data-compare-price-slot="leader">$&mdash;</td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -495,8 +508,11 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
       leader:   Number(tile.dataset.priceLeader   || 0),
     };
     Object.entries(prices).forEach(([tierId, price]) => {
-      const slot = document.querySelector<HTMLElement>(`[data-tier-price-slot="${tierId}"]`);
-      if (slot) slot.textContent = fmtUSD(price);
+      // Fill both the tier-card price + the comparison-table footer
+      // price for this tier so the visitor sees the price echoed at
+      // the bottom of each column after they've walked the rows.
+      document.querySelectorAll<HTMLElement>(`[data-tier-price-slot="${tierId}"], [data-compare-price-slot="${tierId}"]`)
+        .forEach((slot) => { slot.textContent = fmtUSD(price); });
     });
   }
 
@@ -525,7 +541,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
       if (deck) deck.textContent = `The Arborist plan is built for consulting firms running studies for outside clients. Every geography is included (${scope.toLowerCase()}). Cedar, Cedar Grove, and the Toolbox add-on stay with the customer subscriptions, so they are not part of this plan.`;
     } else if (show) {
       if (headline) headline.textContent = 'Three tiers. Priced annually.';
-      if (deck) deck.textContent = `Every tier covers ${scope.toLowerCase()} geographies and you can run as many studies as you need. We actually encourage refreshing your data at least quarterly so each study reflects current conditions. Cedar starts at Sapling, and Cedar Grove arrives on Tree.`;
+      if (deck) deck.textContent = `Every tier covers ${scope.toLowerCase()} geographies. You can run as many studies as you need; we recommend refreshing your data at least quarterly so each study reflects current conditions. Studies can zoom into specific sub-entities, projects, or scenario plans, and you can look backward more than one year to understand impact over time or forward to forecast. Cedar starts at Sapling, and Cedar Grove arrives on Tree.`;
     }
 
     /* Geographies row in the comparison table — replace the generic
