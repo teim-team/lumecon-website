@@ -544,6 +544,21 @@
   max-width: 60ch;
   font-weight: 400;
 }
+/* Comparison band gets a wider inner container on desktop than the
+   rest of the page (1320px vs the default 1200px) and the table
+   switches to fixed layout with explicit column widths so the
+   Capability column can't eat the whole table. Tier columns at
+   ~21% give the short cells like "Annual, monthly, or quarterly"
+   the room they need to sit on one line. Only kicks in above
+   1280px viewport; below that the table reverts to its tablet/
+   phone behaviour (auto-layout + horizontal scroll). */
+@media (min-width: 1280px) {
+  .pricing-compare .editorial-band__inner { max-width: 1320px; }
+  .pricing-compare table { table-layout: fixed; }
+  .pricing-compare thead th:first-child { width: 36%; }
+  .pricing-compare thead th:not(:first-child) { width: 21.33%; }
+}
+
 .pricing-compare__table-wrap {
   overflow-x: auto;
   border: 1px solid var(--rule);
