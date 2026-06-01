@@ -357,15 +357,16 @@ def parse(md):
 
 # ---- Custom block renderers ----
 def render_screenshot(payload, max_w=COL_W):
-    """Branded screenshot placeholder. slug | caption."""
+    """Branded screenshot placeholder, sized for a desktop screenshot
+    (~16:10) at roughly half a page tall so the real screenshots fit
+    in cleanly when they replace these placeholders."""
     slug, _, caption = payload.partition("|")
     slug = slug.strip(); caption = caption.strip()
-    # Inner content of the placeholder box
     inner = Table(
         [
             [Paragraph("PRODUCT", STY["ph-eyebrow"])],
             [Paragraph(slug.upper().replace("-", " "), ps("ph-slug",
-                fontName="Inter-Bold", fontSize=11, leading=14,
+                fontName="Inter-Bold", fontSize=14, leading=18,
                 textColor=NAVY, alignment=1))],
         ],
         colWidths=[max_w - 0.4 * inch],
@@ -376,8 +377,7 @@ def render_screenshot(payload, max_w=COL_W):
         ("TOPPADDING", (0, 0), (-1, -1), 1),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
     ]))
-    # Outer box with cream + dashed border
-    height = 1.55 * inch
+    height = 4.0 * inch  # Approximately half a portrait page
     outer = Table([[inner]], colWidths=[max_w], rowHeights=[height])
     outer.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), PLACEHOLDER),
@@ -453,49 +453,69 @@ def render_statgrid(payload):
 
 
 def render_workflow_compare(_payload=""):
-    """Two-column diagram: legacy workflow vs Lumecon workflow."""
-    legacy_steps = [
-        "Hire a consultant or open a desktop software license.",
-        "Collect data manually from spreadsheets and PDFs.",
-        "Clean and harmonize inputs by hand.",
-        "Pick multipliers; document assumptions in the report margin.",
-        "Build charts. Write the report. Format the deck.",
-        "Revise. Re-run. Bill again for the next update.",
+    """Two-column side-by-side comparison. No "legacy / workflow" labels;
+    neutral header copy that doesn't read as AI-deck boilerplate. Each
+    column holds enough detail to stand on its own."""
+    today_steps = [
+        "A consultant is hired, or a desktop software license is opened.",
+        "Data is collected by hand from spreadsheets, PDFs, and emails.",
+        "Inputs are cleaned and harmonized manually.",
+        "Multipliers are picked one by one. Assumptions are typed into the report margin.",
+        "Charts are built by hand. A senior analyst writes the report.",
+        "The deck is formatted overnight. Revisions take a week each.",
+        "Every refresh starts over and is billed again.",
     ]
     lumecon_steps = [
-        "Open the workspace.",
-        "Upload PDFs, CSVs, and XLSX files into Cedar.",
-        "Cedar structures inputs against public data sources.",
-        "Review every assumption Cedar surfaces; approve or override.",
-        "Export the branded report, deck, and executive summary.",
-        "Refresh quarterly. Same workspace. No re-engagement.",
+        "The workspace opens to a clean study setup.",
+        "PDFs, CSVs, and XLSX files are dropped into Cedar.",
+        "Cedar structures inputs against public data automatically.",
+        "Every assumption Cedar surfaces is reviewable and overridable.",
+        "Branded report, deck, and executive summary export in one click.",
+        "Revisions are a re-run, not a re-engagement.",
+        "Refresh quarterly without reopening a contract.",
     ]
 
-    def col_block(title_kicker, title, steps, accent):
-        items = [Paragraph(s, STY["wf-l"]) for s in steps]
+    def col_block(title_kicker, title, steps, is_today):
+        items = [Paragraph("• " + s, STY["wf-l"]) for s in steps]
         head = [
             Paragraph(title_kicker, ps("wf-k", fontName="Inter-SemiBold",
-                fontSize=7, leading=10, textColor=accent, spaceAfter=2)),
+                fontSize=7.5, leading=10,
+                textColor=INK_3 if is_today else ACCENT_DEEP,
+                spaceAfter=4)),
             Paragraph(title, STY["wf-h"]),
+            Spacer(1, 4),
         ]
-        cell = Table([[h] for h in head + items], colWidths=[COL_W - 0.5 * inch])
+        rows = [[fl] for fl in head + items]
+        cell = Table(rows, colWidths=[(COL_W - 0.2 * inch) / 2 - 8])
         cell.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT if accent == INK_3 else PAPER),
-            ("BOX", (0, 0), (-1, -1), 0.6,
-              RULE if accent == INK_3 else ACCENT),
-            ("LEFTPADDING", (0, 0), (-1, -1), 10),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 10),
-            ("TOPPADDING", (0, 0), (-1, -1), 8),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+            ("BACKGROUND", (0, 0), (-1, -1),
+              TEAL_BG_SOFT if is_today else PAPER),
+            ("BOX", (0, 0), (-1, -1), 0.7,
+              HexColor("#C4E5DF") if is_today else ACCENT),
+            ("LEFTPADDING", (0, 0), (-1, -1), 12),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+            ("TOPPADDING", (0, 0), (-1, -1), 10),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
         ]))
         return cell
 
-    legacy = col_block("LEGACY WORKFLOW", "Months of consultant time.",
-                       legacy_steps, INK_3)
-    lumecon = col_block("LUMECON WORKFLOW", "Minutes of platform time.",
-                        lumecon_steps, ACCENT_DEEP)
-    # Stack vertically inside the single column the markdown sits in
-    return KeepTogether([legacy, Spacer(1, 6), lumecon, Spacer(1, 6)])
+    today = col_block("TODAY", "Months of consultant time.",
+                      today_steps, is_today=True)
+    lumecon = col_block("WITH LUMECON", "Minutes of platform time.",
+                        lumecon_steps, is_today=False)
+    # Side-by-side row
+    side_by_side = Table(
+        [[today, lumecon]],
+        colWidths=[(COL_W - 0.2 * inch) / 2 + 4] * 2,
+    )
+    side_by_side.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    return KeepTogether([side_by_side, Spacer(1, 8)])
 
 
 def render_roadmap(payload):
@@ -583,31 +603,127 @@ def render_funds(payload):
 
 
 def render_teamgrid(payload):
-    """Team person cards. Each line: name | role | bio."""
+    """Team person cards in a 3-column square grid. Each card carries
+    a role label, a name, and a tight 1-2 line bio."""
     rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    cols = 3
+    cell_w = (COL_W - 0.2 * inch) / cols
+    cell_h = 2.05 * inch  # roughly square at the column width
+
     cards = []
     for r in rows:
         parts = [p.strip() for p in r.split("|")]
         if len(parts) < 3:
             parts += [""] * (3 - len(parts))
         name, role, bio = parts[0], parts[1], parts[2]
-        card = Table([
+        inner = Table([
             [Paragraph(role.upper(), STY["tm-role"])],
             [Paragraph(name, STY["tm-name"])],
-            [Spacer(1, 3)],
+            [Spacer(1, 4)],
             [Paragraph(inline(bio), STY["tm-bio"])],
-        ], colWidths=[COL_W - 14])
+        ], colWidths=[cell_w - 14])
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        card = Table([[inner]], colWidths=[cell_w], rowHeights=[cell_h])
         card.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
-            ("LINEABOVE", (0, 0), (-1, 0), 1.4, ACCENT),
+            ("LINEABOVE", (0, 0), (-1, 0), 1.6, ACCENT),
             ("LEFTPADDING", (0, 0), (-1, -1), 8),
             ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-            ("TOPPADDING", (0, 0), (-1, -1), 4),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("TOPPADDING", (0, 0), (-1, -1), 8),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ]))
-        cards.append(KeepTogether(card))
-        cards.append(Spacer(1, 6))
-    return cards
+        cards.append(card)
+
+    # Pad with blank cells so the final row is full
+    while len(cards) % cols != 0:
+        cards.append(Spacer(cell_w, cell_h))
+
+    rows_grid = []
+    for j in range(0, len(cards), cols):
+        rows_grid.append(cards[j:j + cols])
+
+    grid = Table(rows_grid, colWidths=[cell_w] * cols)
+    grid.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 4),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    return [KeepTogether(grid), Spacer(1, 10)]
+
+
+def render_pricing_side(payload):
+    """Side-by-side pricing tables. Each input line:
+        Title | Tier=Price | Tier=Price | Tier=Price ...
+    """
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    if not rows:
+        return []
+    tables = []
+    cell_w = (COL_W - 0.2 * inch) / 2
+    for r in rows:
+        parts = [p.strip() for p in r.split("|")]
+        title = parts[0]
+        tier_lines = parts[1:]
+        data = [[Paragraph("Tier", STY["thead"]),
+                 Paragraph("Annual price", STY["thead"])]]
+        for tl in tier_lines:
+            tier, _, price = tl.partition("=")
+            data.append([
+                Paragraph(tier.strip(), STY["tstrong"]),
+                Paragraph(price.strip(), STY["tnum"]),
+            ])
+        tbl = Table(data, colWidths=[cell_w * 0.5, cell_w * 0.5])
+        tbl.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), NAVY),
+            ("TEXTCOLOR", (0, 0), (-1, 0), PAPER),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+            ("TOPPADDING", (0, 0), (-1, -1), 5),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+            ("LINEBELOW", (0, 0), (-1, 0), 0.5, NAVY),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [PAPER, ZEBRA]),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ]))
+        block = [
+            Paragraph(title, ps("rev-h", fontName="Inter-SemiBold",
+                fontSize=10.5, leading=14, textColor=NAVY,
+                spaceAfter=4)),
+            tbl,
+        ]
+        wrap = Table([[fl] for fl in block], colWidths=[cell_w])
+        wrap.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        tables.append(wrap)
+
+    # Layout side by side: two tables per row
+    grid_rows = []
+    for j in range(0, len(tables), 2):
+        pair = tables[j:j + 2]
+        while len(pair) < 2:
+            pair.append(Spacer(cell_w, 0))
+        grid_rows.append(pair)
+    grid = Table(grid_rows, colWidths=[cell_w + 4] * 2)
+    grid.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    return [KeepTogether(grid), Spacer(1, 10)]
 
 
 def render_institutions(payload):
@@ -784,6 +900,8 @@ def build_body(md):
                 flow.extend(render_teamgrid(payload))
             elif kind == "INSTITUTIONS":
                 flow.extend(render_institutions(payload))
+            elif kind == "PRICING":
+                flow.extend(render_pricing_side(payload))
     return flow
 
 

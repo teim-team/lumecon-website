@@ -137,27 +137,16 @@ Patents, trademarks, copyrights, and trade secret protections sit on top of thes
 
 ---
 
-## Revenue Model
+## {{HL:teal}}Revenue Model
 
-### Local Economic Impact
+[[PRICING:
+Local Economic Impact | Sprout=$7,500 | Sapling=$15,000 | Tree=$20,000
+Tribal Economic Impact | Sprout=$10,000 | Sapling=$17,500 | Tree=$25,000
+]]
 
-| Tier | Annual price |
-| --- | ---: |
-| Sprout | $7,500 |
-| Sapling | $15,000 |
-| Tree | $20,000 |
+**Arborist.** $15,000 flat for two projects in one engagement, renewable as a fresh engagement. Built for consulting firms.
 
-### Tribal Economic Impact
-
-| Tier | Annual price |
-| --- | ---: |
-| Sprout | $10,000 |
-| Sapling | $17,500 |
-| Tree | $25,000 |
-
-**Arborist.** $15,000 flat for two projects in one engagement, renewable as a fresh engagement when those wrap up. Built for consulting firms.
-
-**Toolbox.** $15,000 add-on. Team-produced finished deliverables with three rounds of revisions, recommended pairing with the Tree tier so deliverables pick up the customer's custom branding automatically.
+**Toolbox.** $15,000 add-on. Team-produced finished deliverables with three rounds of revisions, paired with Tree so deliverables pick up the customer's custom branding automatically.
 
 [[SCREENSHOT: report-pdf | Exported PDF report. Branded to the customer's visual identity with the assumption ledger embedded.]]
 
@@ -181,14 +170,14 @@ Marketing, customer acquisition, piloting | $10,000 | Pilot implementation, cust
 Investors invest in teams. This one is the strongest part of the company.
 
 [[TEAMGRID:
-Elijah Moreno, MPP | Co-Founder & CEO | Cornell PhD candidate in Public Policy. Dartmouth Economics with Native American Studies. Cornell MPP. Federal Reserve Bank of Minneapolis (Center for Indian Country Development). National Congress of American Indians (Wilma Mankiller Fellow). Taylor Policy Group. Built the Native Entity Enterprise dataset and the leading body of empirical work on tribal federal contracting.
-Laurel Wheeler, PhD | Economics Lead | Duke PhD in Economics. Oxford MSc in Economics for Development. Federal Reserve Bank of Minneapolis (Center for Indian Country Development) economist. Published work on Native CDFI lending, financial inclusion, and the economics of tribal credit.
-Isabella Agnes | Input/Output Engine Lead | University of Wisconsin–Madison (Mathematics and Economics). Doctoral training in Economics at the University of Maryland. Federal Reserve Board of Governors data scientist. Federal Reserve Bank of Philadelphia research assistant.
-Francesca Agnes | Cedar Lead | University of Illinois Urbana-Champaign. Leads Cedar, Lumecon's AI workflow for organizing source records and surfacing assumptions.
-Kaylyn Lee | Platform Lead | Cornell University Computer Science with Business. Leads the customer-facing platform, from data upload through report export.
-Vod Vilfort | Methodology Advisor | MIT PhD candidate in Economics with a focus on econometrics. Yale undergraduate in Economics and Mathematics. Published in American Economic Review: Insights on instrumental-variable estimators in information-provision experiments.
-Brian Kim | Technical Advisor | Dartmouth Economics. Senior software engineer at Modsy and Chime. Advises on architecture, scalability, Cedar's AI workflow, and data security.
-Havala Hanson, PhD | Product, Data Security & Research Operations Advisor | University of Alaska Fairbanks PhD in Statistics and Policy in Education. Brown University MA. Extensive experience designing data governance and security procedures for sensitive administrative datasets.
+Elijah Moreno, MPP | Co-Founder & CEO | Cornell PhD candidate. Dartmouth Economics. Federal Reserve CICD. NCAI Mankiller Fellow. Native Entity Enterprise dataset.
+Laurel Wheeler, PhD | Economics Lead | Duke PhD in Economics. Oxford MSc. Federal Reserve CICD economist. Native CDFI lending researcher.
+Isabella Agnes | Input/Output Engine Lead | Wisconsin Math + Economics. Maryland doctoral. Federal Reserve Board. Federal Reserve Philadelphia.
+Francesca Agnes | Cedar Lead | Illinois Urbana-Champaign. Leads Cedar, the AI assistant for source intake and assumption tracking.
+Kaylyn Lee | Platform Lead | Cornell Computer Science with Business. Leads the customer-facing platform end to end.
+Vod Vilfort | Methodology Advisor | MIT PhD candidate in econometrics. Yale Economics and Mathematics. AER: Insights, 2025.
+Brian Kim | Technical Advisor | Dartmouth Economics. Senior engineer at Modsy and Chime. Architecture, Cedar, and security.
+Havala Hanson, PhD | Product, Data Security & Research Ops Advisor | Alaska Fairbanks PhD in Statistics. Brown MA. Data governance for sensitive administrative datasets.
 Michael Moreno | Co-Founder & Founding Investor | Moved the company from concept to product through founding capital and early-stage support.
 ]]
 
