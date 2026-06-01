@@ -66,12 +66,21 @@ GOLD        = HexColor("#F0A91A")
 ACCENT      = HexColor("#0FB5A5")
 ACCENT_DEEP = HexColor("#0A8A7E")
 ACCENT_BAR  = HexColor("#B8EDE6")
+# Cream is kept as a token but is no longer used as a surface tint
+# anywhere in the document. Surfaces and accent rails use teal tints
+# instead so the deck reads as teal-heavy, matching the rest of the
+# brand on the live site.
 CREAM       = HexColor("#FAF6EE")
 RULE        = HexColor("#E8E8EE")
 RULE_STRONG = HexColor("#C4C7D4")
 PAPER       = colors.white
 ZEBRA       = HexColor("#F5FBFA")
 PLACEHOLDER = HexColor("#F1F4F8")
+# Teal-tinted surfaces. Used for the side rail, stat grid, team cards,
+# Use-of-Funds totals row, and the legacy-workflow box. Softer than
+# ACCENT_BAR so they read as page surfaces rather than highlights.
+TEAL_BG_SOFT   = HexColor("#EAF7F4")
+TEAL_BG_MEDIUM = HexColor("#D5EFEC")
 
 # ---- Fonts ----
 pdfmetrics.registerFont(TTFont("Inter",          str(FONTS / "Inter-Regular.ttf")))
@@ -384,48 +393,59 @@ def render_screenshot(payload, max_w=COL_W):
 
 
 def render_statgrid(payload):
-    """payload lines: number | label / one per line, separated by newlines."""
+    """Stat grid arranged as alternating number / label rows. Fixed row
+    heights guarantee numbers across a row sit on the same baseline
+    and labels under them line up regardless of label length.
+
+    Pairs (col1, col2) per visual row; rows stack as:
+        [num1, num2]
+        [lbl1, lbl2]
+        [num3, num4]
+        [lbl3, lbl4]
+        ...
+    """
     rows = [r.strip() for r in payload.split("\n") if r.strip()]
-    cells = []
+    pairs = []
     for r in rows:
         num, _, lbl = r.partition("|")
-        cells.append([
-            Paragraph(num.strip(), STY["stat-num"]),
-            Paragraph(lbl.strip(), STY["stat-lbl"]),
-        ])
-    # Render as 2-column grid: 2 stats per row
-    grid = []
-    for j in range(0, len(cells), 2):
-        left = cells[j]
-        right = cells[j + 1] if j + 1 < len(cells) else [Paragraph("", STY["stat-num"]), Paragraph("", STY["stat-lbl"])]
-        grid.append([
-            Table([left[0:1], left[1:2]],
-                  colWidths=[(COL_W - 12) / 2],
-                  style=TableStyle([
-                      ("LEFTPADDING", (0, 0), (-1, -1), 0),
-                      ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-                      ("TOPPADDING", (0, 0), (-1, -1), 2),
-                      ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
-                  ])),
-            Table([right[0:1], right[1:2]],
-                  colWidths=[(COL_W - 12) / 2],
-                  style=TableStyle([
-                      ("LEFTPADDING", (0, 0), (-1, -1), 0),
-                      ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-                      ("TOPPADDING", (0, 0), (-1, -1), 2),
-                      ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
-                  ])),
-        ])
-    t = Table(grid, colWidths=[(COL_W - 12) / 2] * 2)
-    t.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), CREAM),
-        ("LINEABOVE", (0, 0), (-1, 0), 0.5, RULE),
-        ("LINEBELOW", (0, 0), (-1, -1), 0.5, RULE),
-        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        pairs.append((num.strip(), lbl.strip()))
+
+    col_count = 2
+    num_row_h = 36
+    lbl_row_h = 28
+    cell_w = (COL_W - 12) / col_count
+
+    data = []
+    row_heights = []
+    # Build alternating number / label rows
+    for j in range(0, len(pairs), col_count):
+        chunk = pairs[j:j + col_count]
+        while len(chunk) < col_count:
+            chunk.append(("", ""))
+        data.append([Paragraph(n, STY["stat-num"]) for (n, _) in chunk])
+        row_heights.append(num_row_h)
+        data.append([Paragraph(l, STY["stat-lbl"]) for (_, l) in chunk])
+        row_heights.append(lbl_row_h)
+
+    t = Table(data, colWidths=[cell_w] * col_count, rowHeights=row_heights)
+    style = TableStyle([
+        ("BACKGROUND",   (0, 0), (-1, -1), TEAL_BG_SOFT),
+        ("LINEABOVE",    (0, 0), (-1, 0), 0.5, ACCENT),
+        ("LINEBELOW",    (0, -1), (-1, -1), 0.5, ACCENT),
+        ("LEFTPADDING",  (0, 0), (-1, -1), 6),
         ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING", (0, 0), (-1, -1), 8),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
-    ]))
+        ("TOPPADDING",   (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING",(0, 0), (-1, -1), 2),
+        # Numbers sit at the BOTTOM of their row so the visual baseline
+        # is shared across columns; labels sit at the TOP of their row
+        # so they hug the number above them.
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ])
+    # Hairline divider between every (num, lbl) pair group
+    for i in range(1, len(pairs) // col_count):
+        style.add("LINEABOVE", (0, i * 2), (-1, i * 2), 0.4,
+                  HexColor("#C4E5DF"))
+    t.setStyle(style)
     return [t, Spacer(1, 6)]
 
 
@@ -457,7 +477,7 @@ def render_workflow_compare(_payload=""):
         ]
         cell = Table([[h] for h in head + items], colWidths=[COL_W - 0.5 * inch])
         cell.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, -1), CREAM if accent == INK_3 else PAPER),
+            ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT if accent == INK_3 else PAPER),
             ("BOX", (0, 0), (-1, -1), 0.6,
               RULE if accent == INK_3 else ACCENT),
             ("LEFTPADDING", (0, 0), (-1, -1), 10),
@@ -552,7 +572,7 @@ def render_funds(payload):
         ("LINEBELOW", (0, 0), (-1, 0), 0.4, NAVY),
         ("LINEBELOW", (0, 1), (-1, -2), 0.3, RULE),
         ("LINEABOVE", (0, -1), (-1, -1), 0.6, NAVY),
-        ("BACKGROUND", (0, -1), (-1, -1), CREAM),
+        ("BACKGROUND", (0, -1), (-1, -1), TEAL_BG_MEDIUM),
         ("ROWBACKGROUNDS", (0, 1), (-1, -2), [PAPER, ZEBRA]),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
     ]))
@@ -575,7 +595,7 @@ def render_teamgrid(payload):
             [Paragraph(inline(bio), STY["tm-bio"])],
         ], colWidths=[COL_W - 14])
         card.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, -1), CREAM),
+            ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
             ("LINEABOVE", (0, 0), (-1, 0), 1.4, ACCENT),
             ("LEFTPADDING", (0, 0), (-1, -1), 8),
             ("RIGHTPADDING", (0, 0), (-1, -1), 8),
@@ -595,9 +615,9 @@ def render_institutions(payload):
 # ---- Page decoration ----
 def cover_decoration(canvas, doc):
     canvas.saveState()
-    canvas.setFillColor(CREAM)
+    canvas.setFillColor(TEAL_BG_SOFT)
     canvas.rect(0, 0, RAIL_W, PAGE_H, stroke=0, fill=1)
-    canvas.setStrokeColor(GOLD)
+    canvas.setStrokeColor(ACCENT)
     canvas.setLineWidth(2.2)
     canvas.line(RAIL_W, 0, RAIL_W, PAGE_H)
     canvas.restoreState()
@@ -605,12 +625,11 @@ def cover_decoration(canvas, doc):
 
 def body_decoration(canvas, doc):
     canvas.saveState()
-    # Cream side rail on every body page so the page reads as the
-    # same document as the cover, with the gold accent line giving
-    # the same edge cue the homepage uses to anchor the brand.
-    canvas.setFillColor(CREAM)
+    # Teal-tinted side rail with the brand accent line at the inside
+    # edge. Continuous through the deck.
+    canvas.setFillColor(TEAL_BG_SOFT)
     canvas.rect(0, 0, RAIL_W, PAGE_H, stroke=0, fill=1)
-    canvas.setStrokeColor(GOLD)
+    canvas.setStrokeColor(ACCENT)
     canvas.setLineWidth(2.2)
     canvas.line(RAIL_W, 0, RAIL_W, PAGE_H)
     # Running header
