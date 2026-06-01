@@ -126,7 +126,7 @@ STY = {
                  textColor=NAVY, spaceBefore=18, spaceAfter=10),
     "h3":     ps("h3", fontName="Inter-SemiBold", fontSize=11, leading=14,
                  textColor=NAVY, spaceBefore=10, spaceAfter=3),
-    "body":   ps("body", fontSize=10, leading=15, spaceAfter=8),
+    "body":   ps("body", fontSize=10, leading=15, spaceAfter=8, alignment=4),
     "pull":   ps("pull", fontName="Inter-Bold", fontSize=20, leading=25,
                  textColor=NAVY, spaceBefore=8, spaceAfter=14),
     "li":     ps("li", fontSize=10, leading=15, spaceAfter=3, leftIndent=14),
@@ -477,7 +477,50 @@ def render_workflow_compare(_payload=""):
     ]
 
     def col_block(title_kicker, title, steps, is_today):
-        items = [Paragraph("• " + s, STY["wf-l"]) for s in steps]
+        if is_today:
+            icon_bg = HexColor("#FBE5E3")
+            icon_color = HexColor("#C84441")
+            icon_char = "×"  # ×
+            icon_size = 13
+        else:
+            icon_bg = TEAL_BG_MEDIUM
+            icon_color = ACCENT_DEEP
+            icon_char = "✓"  # ✓
+            icon_size = 9
+
+        col_outer = (COL_W - 0.2 * inch) / 2 - 8
+        inner_w = col_outer - 24  # 12pt left + 12pt right padding
+        icon_w = 14
+        gap_w = 8
+        text_w = inner_w - icon_w - gap_w
+
+        icon_style = ps(f"wf-icon-{int(is_today)}",
+            fontName="Inter-Bold", fontSize=icon_size, leading=icon_size + 2,
+            textColor=icon_color, alignment=1)
+
+        def make_item(step_text):
+            icon_cell = Table([[Paragraph(icon_char, icon_style)]],
+                              colWidths=[icon_w], rowHeights=[14])
+            icon_cell.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, -1), icon_bg),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 0),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ]))
+            row = Table([[icon_cell, "", Paragraph(step_text, STY["wf-l"])]],
+                        colWidths=[icon_w, gap_w, text_w])
+            row.setStyle(TableStyle([
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 2),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+            ]))
+            return row
+
+        items = [make_item(s) for s in steps]
         head = [
             Paragraph(title_kicker, ps("wf-k", fontName="Inter-SemiBold",
                 fontSize=7.5, leading=10,
@@ -487,7 +530,7 @@ def render_workflow_compare(_payload=""):
             Spacer(1, 4),
         ]
         rows = [[fl] for fl in head + items]
-        cell = Table(rows, colWidths=[(COL_W - 0.2 * inch) / 2 - 8])
+        cell = Table(rows, colWidths=[col_outer])
         cell.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, -1),
               TEAL_BG_SOFT if is_today else PAPER),
@@ -1009,15 +1052,15 @@ def build_cover():
     seal_size = 2.4 * inch
     seal = Image(str(SEAL), width=seal_size, height=seal_size)
 
-    # Tagline mirrors BrandWordmark.astro: "We {italic gold}luminate{/}
-    # economies" — the only place Spectral italic + gold appears in
-    # this document, matching the site's .lumin treatment exactly.
+    # Tagline mirrors the website's descriptor strip ("Economic impact
+    # analysis software ..."). The rest of the document carries the
+    # detail; the cover just states what Lumecon is.
     tagline_style = ps("cover-tagline",
-        fontName="Inter", fontSize=22, leading=28,
-        textColor=NAVY, spaceAfter=8)
+        fontName="Inter", fontSize=15, leading=22,
+        textColor=INK_2, spaceAfter=8)
     tagline_html = (
-        'We <font name="Spectral-Italic" color="#F0A91A">'
-        '<font size="26">luminate</font></font> economies.'
+        "Economic impact analysis software for governments, "
+        "enterprises, and mission-driven organizations."
     )
 
     return [
