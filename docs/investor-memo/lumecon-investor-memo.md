@@ -8,121 +8,171 @@ Confidential and Proprietary
 
 ## Executive Summary
 
-Lumecon is building the next generation of economic impact analysis software.
-
-Governments, tribal nations, nonprofits, universities, foundations, enterprises, and consultants spend tens of thousands of dollars and hundreds of labor hours producing economic impact studies. Software, cloud computing, AI, and data infrastructure have all advanced. The industry still relies on workflows that would be familiar twenty years ago. Downloading spreadsheets. Cleaning data manually. Documenting assumptions by hand. Building charts. Writing reports. Formatting deliverables.
-
-The market is expensive, consultant-dependent, and inaccessible to many organizations that would benefit from economic impact analysis.
-
-Lumecon exists to change that.
+Lumecon Inc. is a Delaware corporation building economic impact analysis software for governments, enterprises, tribal nations, and mission-driven organizations.
 
 Our mission is simple.
 
 **Make the economically invisible visible.**
 
-We are building a software platform that combines economic modeling, AI-assisted workflows, reusable data infrastructure, automated reporting, and expert review. The goal is to drop the cost and complexity of economic impact analysis by an order of magnitude.
+Every day, governments, nonprofits, tribal nations, universities, enterprises, and foundations create jobs, support families, improve infrastructure, expand educational opportunity, and strengthen communities. Many struggle to quantify and communicate the full extent of that impact.
 
-We are not just competing with existing providers.
+Lumecon is the software that solves it.
 
-We are expanding the market.
+We combine modern infrastructure, transparent economic modeling, AI-assisted workflows, alternative data integration, and forthcoming privacy-preserving learning architectures to make sophisticated economic impact analysis accessible to the organizations the current market underserves.
 
----
-
-## The Opportunity
-
-Economic impact analysis is already a proven market.
-
-Organizations commission studies to justify public investments, secure grant funding, support legislative advocacy, communicate community benefits, evaluate programs, satisfy reporting requirements, and demonstrate economic value.
-
-Existing providers prove demand exists.
-
-IMPLAN reports serving more than 900 organizations. Charlesbank Capital Partners acquired it in 2024. REMI reports serving more than 200.
-
-That demand is real. It is also undercounted.
-
-Most current customers are organizations that can afford expensive software licenses, consultant support, or both. Many organizations that need economic impact analysis are effectively excluded from the market because the total cost is too high.
-
-Software licenses range from roughly $7,500 to more than $65,000 a year. Many organizations then bring in consultants to operate those systems. That adds $25,000 to $100,000 or more per project.
-
-Many potential customers simply never enter the market.
-
-The real opportunity is larger than existing customer counts suggest.
+The company is currently raising up to $100,000 in SAFE financing to accelerate product development, support pilot implementation, strengthen intellectual property protection, and expand commercialization.
 
 ---
 
-## Why Now
+## Investment Summary
 
-AI has opened a rare gap between technological capability and institutional adoption.
-
-Recent research finds that many professional occupations have substantial theoretical exposure to AI. Actual adoption is well below what current systems can support.
-
-Economic impact analysis sits directly in that gap.
-
-Organizations want efficiency, automation, and lower costs. They also need transparency, documentation, methodological rigor, and expert oversight.
-
-They do not want black-box outputs.
-
-They want tools that make experts more productive.
-
-Lumecon is built around that reality. We are not replacing economists, analysts, consultants, or policy professionals. We are letting them operate at much larger scale.
+| Item | Description |
+| --- | --- |
+| Company | Lumecon Inc. |
+| Entity Type | Delaware C-Corporation |
+| Financing Instrument | SAFE |
+| Valuation Cap | $5,000,000 Post-Money |
+| Raise Target | Up to $100,000 |
+| Founder Capital Committed | $50,000 |
+| Founder Capital Deployed | $25,000 |
+| Company Founded | January 2026 |
+| Corporate Conversion | May 2026 |
 
 ---
 
-## Software First
+## Company History
 
-Lumecon is a software company.
+Lumecon originated as Moreno Ventures LLC in December 2025.
 
-Our primary objective is not consulting revenue. Our primary objective is building infrastructure.
+Operations formally began on January 1, 2026.
 
-The traditional workflow burns substantial labor on collecting data, cleaning spreadsheets, harmonizing inputs, documenting assumptions, building charts, designing reports, formatting presentations, and revising deliverables.
+In May 2026, the company converted into Lumecon Inc., a Delaware corporation.
 
-Much of that is necessary.
+The founders have personally committed $50,000 in capital to support development, infrastructure, legal formation, product development, and commercialization.
 
-Much of it is also repetitive.
-
-Lumecon is productizing those workflows. We are building systems that automate or accelerate data ingestion, geography matching, harmonization, assumption tracking, chart generation, report generation, slide generation, visual branding, and documentation.
-
-Human review stays essential.
-
-The goal is not to eliminate expertise.
-
-The goal is to point expertise at the work where it creates the most value.
+The company has also received a $6,000 Human Spirit Fellowship through Cornell University's Entrepreneurship Hub and has been accepted into the Cornell Law School Entrepreneurship Legal Clinic.
 
 ---
 
-## Why Tribal Markets
+## The Problem
 
-Our initial focus is tribal economic impact analysis.
+Economic impact analysis is expensive, consultant-dependent, hard to update, and inaccessible to many organizations.
 
-Not because the tribal market is small. Because it is one of the most technically challenging economic measurement environments in the United States.
+Organizations face layered costs before they ever see a study.
 
-Reservations. Trust land. Overlapping jurisdictions. Indigenous data sovereignty. Rural economies. Unique institutional structures. Most existing systems do not address these well.
+Software licenses can range from roughly $7,500 to more than $65,000 a year.
 
-Our internal review identified more than fifty publicly available tribal economic impact studies commissioned between roughly 2000 and 2026. Demand has grown over time. The public record likely understates true demand because many tribal studies stay internal. Several organizations appear repeatedly. That suggests recurring demand rather than one-time purchases.
+Consulting engagements add tens of thousands of dollars beyond the license.
 
-Tribal Economic Impact is both a meaningful market opportunity and a strategic entry point.
+Internal staff time goes to collecting, cleaning, and organizing data.
+
+Update cycles bring the bill back every time a study needs to be refreshed.
+
+For many organizations, the practical cost of one professional economic impact study can clear $25,000 to $100,000.
+
+Many organizations that would benefit from economic impact analysis simply do not participate in the market.
+
+The existing customer base reflects organizations that can afford current solutions. Not organizations that need them.
+
+---
+
+## Market Validation
+
+Economic impact analysis is an established software category with demonstrated demand.
+
+In 2024, private equity firm Charlesbank Capital Partners acquired IMPLAN, one of the largest economic impact analysis software providers in the United States.
+
+IMPLAN reports serving more than 900 organizations. REMI reports serving more than 200.
+
+Together they demonstrate existing customer demand, recurring software revenue, institutional adoption, strategic acquisition interest, and long-term market viability.
+
+These customer counts only represent organizations that can currently afford existing solutions.
+
+The addressable market is substantially larger.
+
+---
+
+## Why the Market Is Larger Than It Looks
+
+Most economic impact software providers serve organizations with substantial budgets, internal technical expertise, or access to consulting support.
+
+Many governments, nonprofits, tribal organizations, foundations, and mission-driven institutions are priced out.
+
+Lumecon's strategy is to expand access rather than compete for the customers already served.
+
+By reducing both software costs and workflow costs through automation, AI-assisted workflows, integrated reporting, and modern infrastructure, we make economic impact analysis accessible to organizations that previously could not justify the expense.
+
+Our objective is not just to capture market share.
+
+Our objective is to expand the market itself.
+
+---
+
+## Why Tribal Markets Matter
+
+Tribal Economic Impact is not merely a vertical adaptation.
+
+It is a strategic entry point.
+
+Our review identified more than fifty publicly available tribal economic impact studies commissioned between roughly 2000 and 2026 by tribal governments, tribal enterprises, Native nonprofits, intertribal organizations, tribal colleges, gaming organizations, and Native-serving institutions.
+
+These studies likely represent only a portion of total demand. Many studies stay unpublished or circulate only internally.
+
+Several organizations appear repeatedly throughout the record. That suggests recurring demand rather than one-time use.
+
+Economic impact analysis is an ongoing planning, reporting, advocacy, accountability, and funding tool. Not a one-time consulting product.
+
+Lowering cost and increasing accessibility increases both update frequency and market participation.
 
 If we solve the hardest geographic and institutional problems first, broader expansion gets substantially easier.
 
 ---
 
-## Product Roadmap
+## Product Vision
 
-**2026 · Local Economic Impact.** County, state, and national economic impact analysis for governments, universities, nonprofits, foundations, and enterprises.
+Lumecon is not replicating existing economic impact software.
 
-**2026 · Tribal Economic Impact.** Reservation-focused economic impact analysis designed around tribal institutions and Indigenous data sovereignty.
+We are building a next-generation platform centered on modern cloud-native infrastructure, AI-assisted workflows, tribal-specific modeling, reservation-level analysis, alternative data integration, organizational memory systems, compliance support, transparent assumptions, and automated reporting.
 
-**2026 · Cedar.** Lumecon's AI-assisted workflow and agent system. Cedar helps users organize source materials, structure inputs, document assumptions, manage workflows, and generate analysis-ready outputs.
+Over time, we expect to incorporate additional data sources including mobility data, satellite-derived indicators, shipping and logistics information, utility and infrastructure data, administrative datasets, and other emerging alternative data.
 
-**2027 · Cedar Grove.** A compliance, data harmonization, and organizational intelligence layer. Cedar Grove helps organizations maintain institutional memory and simplify recurring reporting requirements.
-
-**2028 · Global Economic Impact.** Expansion into national, international, cross-border, and supply-chain analysis. Most early customers will be in the United States. Long-term international demand is significant.
+These data sources create opportunities to measure economic activity across geographies that do not align with traditional political boundaries. Examples include tribal reservations, congressional districts, economic development zones, service areas, watersheds, and multi-jurisdictional regions.
 
 ---
 
-## Business Model
+## Product Roadmap
 
-Lumecon generates revenue through software subscriptions, consultant access, and optional service layers.
+**2026 · Local Economic Impact.** Serves cities, counties, state agencies, universities, foundations, enterprises, and nonprofits. Coverage: county, state, and national.
+
+**2026 · Tribal Economic Impact.** Serves tribal governments, tribal enterprises, Native nonprofits, tribal colleges, Alaska Native Corporations, Native Hawaiian Organizations, Native CDFIs, and Native-entity federal contractors. Coverage: reservation, county, state, and national. Unlike conventional systems adapted from state-level models, Tribal Economic Impact is designed around tribal institutions and Indigenous data sovereignty from inception.
+
+**2026 · Cedar.** Lumecon's AI-assisted workflow and agent platform. Source document organization, data extraction, assumption tracking, audit trail creation, workflow automation, and reporting assistance.
+
+**2027 · Cedar Grove.** Lumecon's organizational intelligence layer. Data harmonization, compliance support, centralized repositories, organizational memory, longitudinal reporting, and multi-study management. The goal is to transform economic impact analysis from a one-time report into a continuously maintained organizational asset.
+
+**2028 · Global Economic Impact.** Extends Lumecon's framework to national, international, cross-border, and supply-chain analysis. Most early demand is United States based. The long-run opportunity extends far beyond.
+
+---
+
+## Competitive Advantages
+
+**Underserved customer focus.** Lumecon focuses on organizations that have historically been priced out of the market, not on customers existing providers already serve.
+
+**Tribal expertise.** Deep expertise in tribal governments, Native economies, reservation geography, and Indigenous data governance.
+
+**Geographic flexibility.** Designed to support analysis across complex and overlapping geographies, not just conventional administrative boundaries.
+
+**Alternative data integration.** Future incorporation of alternative datasets creates opportunities to improve geographic precision and reduce reliance on modeling assumptions.
+
+**AI-assisted workflows.** Cedar reduces the labor burden traditionally associated with economic impact analysis.
+
+**Organizational memory.** Cedar Grove creates long-term switching costs by helping organizations retain and reuse institutional knowledge across studies.
+
+**Intellectual property.** The company intends to actively develop and protect proprietary methodologies, workflows, technologies, and software systems through patents, copyrights, trademarks, trade secret protections, and contractual safeguards where appropriate.
+
+---
+
+## Revenue Model
 
 ### Local Economic Impact
 
@@ -140,64 +190,52 @@ Lumecon generates revenue through software subscriptions, consultant access, and
 | Sapling | $17,500 |
 | Tree | $25,000 |
 
-### Arborist
+### Arborist (Consultant plan)
 
-A consultant-focused plan. $15,000 for two projects.
-
-Consultants are not just competitors. They are also customers. Arborist lets consulting firms use Lumecon's modeling infrastructure while keeping Cedar, Cedar Grove, and other workflow advantages reserved for direct subscribers.
+A project-based plan for consulting firms running studies on behalf of outside clients. $15,000 flat for two projects in one engagement, renewable as a fresh engagement when those wrap up.
 
 ### Toolbox
 
-A $15,000 add-on. Converts platform outputs into publication-ready deliverables: a full written report, a presentation deck, an executive summary, an assumption ledger, source documentation, and a media-ready findings sheet.
+A $15,000 add-on. Converts platform outputs into publication-ready deliverables: a full written report, a presentation deck, an executive summary, an assumption ledger, source documentation, and a media-ready findings sheet. Three rounds of revisions included.
 
 ---
 
-## Competitive Advantages
+## Commercialization Strategy
 
-Several advantages are difficult to replicate.
+Initial commercialization focuses on tribal governments, Native organizations, economic development organizations, local governments, universities, and foundations.
 
-**Combined expertise.** Most AI companies lack deep economic modeling expertise. Most economic impact providers are not building modern software. We do both.
+Pilot deployments begin in 2026.
 
-**Underserved customers.** We are focused on organizations the existing platforms do not serve, not only on the customers those platforms already have.
+Early revenue is expected to come from economic impact studies, pilot implementations, and software subscriptions.
 
-**Reusable infrastructure.** Our data and workflow layers improve over time. Cedar and Cedar Grove compound across studies in ways one-off consulting cannot.
-
-**Workflow advantages beyond modeling.** Cedar and Cedar Grove extend Lumecon's value beyond the impact figure itself. They handle the intake, the assumption ledger, the harmonization, and the reusable institutional memory that the rest of the industry leaves to spreadsheets.
-
-**Hard geographies, handled.** Reservations, congressional districts, service areas, and other non-standard geographies are core to our platform, not edge cases.
-
-**Alternative data on the roadmap.** We plan to integrate mobility, satellite, shipping, utility, and administrative datasets over time.
-
-**Protected by design.** We intend to protect proprietary systems, methods, workflows, and software through patents, copyrights, trademarks, trade secret protections, and contractual safeguards where appropriate.
+Revenue generated during early commercialization will be reinvested into engineering, infrastructure, intellectual property protection, data acquisition, customer support, and platform expansion.
 
 ---
 
 ## Team
 
-Lumecon combines expertise from Cornell University, Dartmouth College, Yale University, Massachusetts Institute of Technology, Duke University, Oxford University, Brown University, and the Federal Reserve System.
+Lumecon combines expertise from Cornell University, Dartmouth College, Duke University, Oxford University, Brown University, Yale University, Massachusetts Institute of Technology, the Federal Reserve System, and the Center for Indian Country Development.
 
-The team includes economists, econometricians, software engineers, policy researchers, statisticians, and experts in tribal economic development, public finance, and data governance.
+The team brings expertise in public policy, economic development, econometrics, software engineering, artificial intelligence, tribal finance, data governance, and research operations.
 
 ---
 
 ## Use of Funds
 
-SAFE proceeds will support engineering, cloud infrastructure, AI development, Cedar, Cedar Grove, economic modeling, data infrastructure, pilot implementation, commercialization, intellectual property protection, and legal and compliance activities.
+SAFE proceeds will support engineering (platform development, product refinement, customer features), infrastructure (cloud computing, storage, monitoring, security), artificial intelligence (Cedar development, agent systems, token and inference costs), economic modeling (refinement, validation, tribal adaptation), intellectual property (patent filings, trademark protection, copyright registration), commercialization (pilot implementation, customer onboarding, sales and marketing support), and legal and compliance activities (corporate governance, customer contracting, financing documentation).
 
 ---
 
 ## Closing
 
-Economic impact analysis is a proven market.
+Economic impact analysis has already demonstrated its value through decades of use across governments, nonprofits, universities, tribal nations, enterprises, and foundations.
 
-The challenge is not whether organizations need it.
+The question is no longer whether economic impact analysis matters.
 
-The challenge is that too many organizations cannot access it efficiently.
+The question is who has access to it.
 
-Lumecon is building the infrastructure layer that makes economic impact analysis more affordable, more transparent, more scalable, and easier to update.
+Lumecon is building software designed to expand access, reduce costs, improve transparency, and create new opportunities for the organizations the current market underserves.
 
-The future of economic impact analysis will be software-driven, AI-assisted, expert-reviewed, and continuously improving.
+Our goal remains simple.
 
-Our goal is not just to produce economic impact studies.
-
-Our goal is to build the platform that powers them.
+**Make the economically invisible visible.**
