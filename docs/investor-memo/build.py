@@ -156,48 +156,123 @@ STY = {
 }
 
 
-# ---- Highlight (hl-block) palette ----
-# Mirrors the .hl-block variants on the live site. The block is rendered
-# as a paragraph with backColor on the text + extra padding so the
-# highlight extends beyond the glyphs, the way the site's pseudo-
-# element treatment does.
-HL_COLORS = {
-    "teal":  ACCENT_BAR,        # #B8EDE6 — default .hl-block
-    "gold":  HexColor("#FFE7A0"),  # --goldbar
-    "green": HexColor("#C9E9CE"),  # cedar-mist softened
-}
+# ---- Highlight (hl-block) ----
+# Mirrors src/styles/global.css .hl-block: a rotated rectangle filled
+# with a linear gradient that fades transparent on both edges. The
+# block sits behind the headline text and bleeds beyond it on the
+# left and right, the way the site's ::before pseudo-element does.
+# All variants are teal per the brand decision to drop the gold/green
+# alternatives in document use.
+
+from reportlab.platypus import Flowable
+from PIL import Image as PILImage
+
+HL_GRADIENT_PNG = HERE / "_hl-teal-gradient.png"
+
+
+def _make_hl_gradient_png():
+    """Pre-render the teal gradient as a PNG: transparent → teal at 0.26
+    alpha → teal at 0.26 alpha → transparent, with the fade on the
+    outer 8% on each end. Cached on disk on first call."""
+    if HL_GRADIENT_PNG.exists():
+        return
+    width, height = 1200, 80
+    img = PILImage.new("RGBA", (width, height), (0, 0, 0, 0))
+    pix = img.load()
+    r, g, b = 15, 181, 165
+    peak_alpha = int(0.26 * 255)
+    fade = 0.08
+    for x in range(width):
+        pct = x / width
+        if pct < fade:
+            alpha = int(peak_alpha * pct / fade)
+        elif pct > 1 - fade:
+            alpha = int(peak_alpha * (1 - pct) / fade)
+        else:
+            alpha = peak_alpha
+        for y in range(height):
+            pix[x, y] = (r, g, b, alpha)
+    img.save(str(HL_GRADIENT_PNG), "PNG")
+
+
+_make_hl_gradient_png()
+
+
+# Slight asymmetric rotations per headline so adjacent hl-blocks tilt
+# different ways, mirroring how the .hl-block / .hl-block--b / --c
+# variants alternate on the site (negative, positive, larger negative,
+# small positive, etc.).
+_angle_iter = iter([])
+
+
+def _next_angle():
+    global _angle_iter
+    try:
+        return next(_angle_iter)
+    except StopIteration:
+        _angle_iter = iter([-1.8, 1.6, -2.4, 1.1, -1.5, 2.0, -2.0, 1.4])
+        return next(_angle_iter)
+
+
+class HlHeadline(Flowable):
+    """A headline drawn with the hl-block treatment from the site:
+    a tilted rectangle filled with a transparent-fade gradient (the
+    pre-rendered PNG), bleeding past the text on both sides, with
+    the headline glyphs drawn on top in navy."""
+
+    def __init__(self, text, font_name="Inter-Bold", font_size=22,
+                 navy=NAVY, col_w=COL_W, angle=-1.8,
+                 leading_factor=1.6):
+        Flowable.__init__(self)
+        self.text = text
+        self.font_name = font_name
+        self.font_size = font_size
+        self.navy = navy
+        self.col_w = col_w
+        self.angle = angle
+        self.text_w = pdfmetrics.stringWidth(text, font_name, font_size)
+        # Shrink to fit if the headline is wider than the column.
+        if self.text_w > col_w - 16:
+            scale = (col_w - 16) / self.text_w
+            self.font_size = font_size * scale
+            self.text_w = col_w - 16
+        self.height = self.font_size * leading_factor
+
+    def wrap(self, avail_w, avail_h):
+        return (self.col_w, self.height + 4)
+
+    def draw(self):
+        c = self.canv
+        baseline_y = self.height * 0.25
+        bleed_l = 14
+        bleed_r = 22
+        bx = -bleed_l
+        bw = self.text_w + bleed_l + bleed_r
+        by = baseline_y - self.font_size * 0.18
+        bh = self.font_size * 1.18
+        cx = bx + bw / 2
+        cy = by + bh / 2
+
+        c.saveState()
+        c.translate(cx, cy)
+        c.rotate(self.angle)
+        c.translate(-cx, -cy)
+        c.drawImage(str(HL_GRADIENT_PNG), bx, by, width=bw, height=bh,
+                    mask="auto")
+        c.restoreState()
+
+        c.setFillColor(self.navy)
+        c.setFont(self.font_name, self.font_size)
+        c.drawString(0, baseline_y, self.text)
 
 
 def render_h2_with_hl(text):
-    """h2 rendered with a hl-block wash behind it.
-    text may begin with {{HL:teal}}, {{HL:gold}}, or {{HL:green}}.
-    Without a marker the h2 renders flat (no wash)."""
-    m = re.match(r"\{\{HL:(teal|gold|green)\}\}(.*)", text)
-    if m:
-        color = HL_COLORS[m.group(1)]
-        label = m.group(2).strip()
-    else:
-        color = None
-        label = text
-
-    if color is None:
-        return Paragraph(label, STY["h2"])
-
-    # Wrap the h2 text in a single-cell Table with the highlight color
-    # behind it, vertically centered and padded so the wash extends
-    # past the glyphs the way the site's hl-block ::before treatment
-    # does. The Table takes only the column width.
-    p = Paragraph(label, STY["h2"])
-    box = Table([[p]], colWidths=[COL_W])
-    box.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), color),
-        ("LEFTPADDING", (0, 0), (-1, -1), 8),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 6),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-    ]))
-    return box
+    """h2 rendered with the rotated teal hl-block behind it.
+    Any {{HL:color}} marker is stripped (teal is the only variant
+    used in document form). Adjacent calls alternate tilt direction."""
+    text = re.sub(r"\{\{HL:[a-z]+\}\}\s*", "", text).strip()
+    return HlHeadline(text, font_name="Inter-Bold", font_size=22,
+                      navy=NAVY, col_w=COL_W, angle=_next_angle())
 
 
 # ---- Markdown parsing ----

@@ -53,7 +53,7 @@ This is not a "use AI for X" story. It is a "modernize a stagnant category" stor
 The addressable customer set is large, recurring, and fragmented enough that no single incumbent has consolidated it.
 
 [[STATGRID:
-574 | federally recognized tribes
+575 | federally recognized tribes
 200+ | Alaska Native Corporations and related entities
 3,000+ | U.S. counties
 50 | U.S. states
