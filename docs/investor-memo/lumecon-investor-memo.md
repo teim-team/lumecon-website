@@ -6,7 +6,7 @@ Confidential and Proprietary
 
 ---
 
-## Executive Summary
+## {{HL:teal}}Executive Summary
 
 Lumecon is the software platform that makes economic impact analysis accessible to the organizations the current market underserves. The category is proven, the entry point is the most technically demanding segment of it, and the underlying technology shift makes building this company possible now in a way it was not five years ago.
 
@@ -14,7 +14,7 @@ Lumecon is the software platform that makes economic impact analysis accessible 
 
 The company is currently raising up to $100,000 in SAFE financing at a $5,000,000 post-money valuation cap to accelerate product development, pilot implementation, intellectual property protection, and commercialization. The founders have personally committed $50,000 in capital, with $25,000 already deployed.
 
-[[SCREENSHOT: dashboard | Lumecon dashboard showing a completed economic impact run with jobs, labor income, output, tax impact, and export options.]]
+[[SCREENSHOT: dashboard | Lumecon dashboard. A completed economic impact run with jobs, labor income, output, tax impact, and export options on a single screen.]]
 
 ---
 
@@ -34,21 +34,21 @@ The company is currently raising up to $100,000 in SAFE financing at a $5,000,00
 
 ---
 
-## Why Now
+## {{HL:gold}}Why Now
 
 Three things converged in the last 24 months that make this company possible to build now.
 
-**AI can do the repetitive part of professional knowledge work.** Recent labor-economics research finds that the share of professional work theoretically exposed to current AI systems substantially exceeds what is being adopted in practice. Economic impact analysis is in that gap. The work is heavy on document intake, harmonization, assumption tracking, charting, and report writing, all of which sit on the productive side of the adoption curve.
+**AI can do the repetitive part of professional knowledge work.** Recent labor-economics research finds that the share of professional work theoretically exposed to current AI systems substantially exceeds what is being adopted in practice. Economic impact analysis sits in that gap. The work is heavy on document intake, harmonization, assumption tracking, charting, and report writing, all of which are on the productive side of the adoption curve.
 
 **Existing providers have not modernized.** IMPLAN and REMI operate on workflows that predate the cloud. The market leaders prove demand and validate willingness to pay, but their stacks were built when desktop software was the assumption. The gap between what current technology can support and what shipped product offers is unusually wide.
 
-**Customers want experts plus AI, not black-box outputs.** Governments, tribes, foundations, and grantmakers cannot accept a number they cannot defend. Lumecon sits between AI-only tools and traditional consultants: AI handles intake, harmonization, and drafting, while the analyst stays accountable for every assumption.
+**Customers want experts plus AI, not black-box outputs.** Governments, tribes, foundations, and grantmakers cannot accept a number they cannot defend. Lumecon sits between AI-only tools and traditional consultants. AI handles intake, harmonization, and drafting; the analyst stays accountable for every assumption.
 
 This is not a "use AI for X" story. It is a "modernize a stagnant category" story where AI is one of several enabling shifts.
 
 ---
 
-## Market Opportunity
+## {{HL:green}}Market Opportunity
 
 The addressable customer set is large, recurring, and fragmented enough that no single incumbent has consolidated it.
 
@@ -67,7 +67,7 @@ Existing providers serve more than 1,100 organizations between IMPLAN (900+) and
 
 ---
 
-## The Problem
+## {{HL:teal}}The Problem
 
 Economic impact analysis today is a months-long project with a five-figure-per-study price tag. Lumecon turns the same work into a repeatable software workflow.
 
@@ -77,9 +77,11 @@ The legacy stack charges per geography, per user, per data tier. Then the consul
 
 Lumecon collapses both layers. One annual subscription, unlimited studies, every geography included, Cedar handling the intake and the drafting, and human review focused on the judgment calls that actually need a human.
 
+[[SCREENSHOT: study-setup | New study setup. Pick the geography, the time window, the project type, and the data sources, and Cedar prepares the workspace.]]
+
 ---
 
-## Why Tribes First
+## {{HL:gold}}Why Tribes First
 
 Tribal economies are among the most difficult economic environments to model accurately in the United States. Reservations, off-reservation trust lands, overlapping jurisdictions, sovereign governments, rural geography, Alaska Native Corporation regions, Native Hawaiian Home Lands, and Indigenous data sovereignty requirements together create a problem that the major incumbents handle by approximating reservations as counties and hoping nobody asks.
 
@@ -87,17 +89,17 @@ Solving these problems first creates infrastructure that deploys directly into b
 
 The same review that identified 50+ public tribal impact studies between 2000 and 2026 also showed several organizations commissioning studies repeatedly, which means tribal demand is recurring rather than one-time. That recurring footprint is the early-customer base that funds the broader expansion.
 
-[[SCREENSHOT: reservation-map | Reservation-level analysis requires geographies that do not fit cleanly into county or state boundaries. Lumecon supports reservation, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands as first-class geographies.]]
+[[SCREENSHOT: geography-selector | Geography selector. Reservation, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands as first-class geographies.]]
 
 ---
 
-## Product
-
-[[SCREENSHOT: cedar | Cedar organizes uploaded PDFs, CSVs, and XLSX files into reviewable analysis inputs. Source records, extracted fields, the assumption ledger, and the human-review queue all live in one workspace.]]
+## {{HL:green}}Product
 
 **Three regional platforms on one engine.** Local Economic Impact for cities, counties, and state agencies. Tribal Economic Impact for tribal governments, enterprises, and Native organizations. Global Economic Impact, launching in 2028, for cross-border and supply-chain analysis. Every platform runs the same modeling backbone and the same three-tier ladder (Sprout, Sapling, Tree).
 
 **Cedar.** Lumecon's AI-assisted workflow. Cedar uploads and processes data in PDF, CSV, and XLSX formats today, with more formats expanding over time. It structures inputs against public data sources, surfaces every modeling assumption for human sign-off, and acts as a thought partner on the write-up. Cedar is not a ghostwriter. The analyst stays accountable for the substance.
+
+[[SCREENSHOT: cedar-upload | Cedar upload and review queue. Drop in PDFs, CSVs, and XLSX files; Cedar extracts fields and stages them for human review.]]
 
 **Cedar Grove.** Launches in 2027 as the organizational intelligence layer. Customer data stays harmonized across every study a customer runs. Complementary administrative datasets (employment shifts, business openings and closures, wage movements, transfer-payment flows) sit alongside the customer's own data, so each study reinforces the impact narrative with real outcome evidence rather than only modeled multipliers. Recurring submissions (grants, federal reporting, audited annual reports) start from a base that already passed review.
 
@@ -105,7 +107,7 @@ The same review that identified 50+ public tribal impact studies between 2000 an
 
 ---
 
-## The Moat
+## {{HL:teal}}The Moat
 
 The defensibility is layered, and each layer compounds on the one below it.
 
@@ -157,7 +159,9 @@ Patents, trademarks, copyrights, and trade secret protections sit on top of thes
 
 **Toolbox.** $15,000 add-on. Team-produced finished deliverables with three rounds of revisions, recommended pairing with the Tree tier so deliverables pick up the customer's custom branding automatically.
 
-[[SCREENSHOT: pricing | Lumecon's tiered model lowers the entry point for customers while preserving expansion paths through Sapling, Tree, Cedar Grove, Toolbox, and Arborist.]]
+[[SCREENSHOT: report-pdf | Exported PDF report. Branded to the customer's visual identity with the assumption ledger embedded.]]
+
+[[SCREENSHOT: deck-export | Exported slide deck. Same numbers, different framing, ready for council, board, or funder audiences.]]
 
 ---
 
@@ -174,9 +178,9 @@ Legal and compliance | $10,000 | Corporate governance, customer contracting, fin
 
 ---
 
-## Team
+## {{HL:gold}}Team
 
-This is the section that has done the most to convince other people to fund this company so far. Putting it forward.
+Investors invest in teams. This one is the strongest part of the company.
 
 [[TEAMGRID:
 Elijah Moreno, MPP | Co-Founder & CEO | Cornell PhD candidate in Public Policy. Dartmouth Economics with Native American Studies. Cornell MPP. Federal Reserve Bank of Minneapolis (Center for Indian Country Development). National Congress of American Indians (Wilma Mankiller Fellow). Taylor Policy Group. Built the Native Entity Enterprise dataset and the leading body of empirical work on tribal federal contracting.
@@ -201,29 +205,3 @@ Economic impact analysis is a proven category with stagnant incumbents, a custom
 The question is no longer whether economic impact analysis matters. The question is who has access to it.
 
 **Make the economically invisible visible.**
-
----
-
-## Appendix · Product Evidence
-
-Final screenshots are being staged as the platform reaches alpha. The placeholders below indicate where each screenshot will land in the next revision of this memorandum.
-
-[[SCREENSHOT: dashboard-overview | Dashboard overview. Jobs, labor income, output, tax impact, multipliers, and export options on a single screen.]]
-
-[[SCREENSHOT: study-setup | New study setup flow. Choose the geography, the time window, the project type, and the data sources.]]
-
-[[SCREENSHOT: cedar-upload | Cedar upload and review queue. Drop in PDFs, CSVs, and XLSX files; Cedar extracts fields and stages them for human review.]]
-
-[[SCREENSHOT: assumption-ledger | Assumption ledger. Every modeling assumption shown inline with its source, with a one-click toggle to revisit and override.]]
-
-[[SCREENSHOT: report-pdf | Exported PDF report with the customer's branding applied automatically (Tree tier custom branding).]]
-
-[[SCREENSHOT: deck-export | Exported slide deck. Same numbers, different framing, ready for council, board, or funder audiences.]]
-
-[[SCREENSHOT: branding-panel | Custom branding panel. Upload logo, color palette, and imagery once; every output picks them up automatically.]]
-
-[[SCREENSHOT: geography-selector | Reservation geography selector. Reservation, off-reservation trust land, Alaska Native regions, and Native Hawaiian Home Lands as first-class geographies.]]
-
-[[SCREENSHOT: arborist-workflow | Arborist consultant workflow. Two distinct client engagements, project-scoped, all geographies included.]]
-
-[[SCREENSHOT: toolbox-package | Toolbox deliverable package. Full written report, deck, executive summary, source record, assumption ledger, and one media-ready findings sheet, branded to the customer.]]

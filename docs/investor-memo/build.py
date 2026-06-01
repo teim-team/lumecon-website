@@ -109,13 +109,13 @@ def ps(name, **kw):
 STY = {
     "kicker": ps("kicker", fontName="Inter-SemiBold", fontSize=7.5, leading=10,
                  textColor=ACCENT_DEEP, spaceAfter=2),
-    "h2":     ps("h2", fontName="Inter-Bold", fontSize=15, leading=18,
-                 textColor=NAVY, spaceBefore=8, spaceAfter=3),
+    "h2":     ps("h2", fontName="Inter-Bold", fontSize=22, leading=26,
+                 textColor=NAVY, spaceBefore=14, spaceAfter=8),
     "h3":     ps("h3", fontName="Inter-SemiBold", fontSize=10.5, leading=13,
                  textColor=NAVY, spaceBefore=8, spaceAfter=2),
     "body":   ps("body", spaceAfter=6),
-    "pull":   ps("pull", fontName="Inter-SemiBold", fontSize=14, leading=18,
-                 textColor=NAVY, spaceBefore=4, spaceAfter=8),
+    "pull":   ps("pull", fontName="Inter-Bold", fontSize=18, leading=22,
+                 textColor=NAVY, spaceBefore=6, spaceAfter=10),
     "li":     ps("li", spaceAfter=2, leftIndent=12),
     "thead":  ps("thead", fontName="Inter-SemiBold", fontSize=8, leading=11,
                  textColor=PAPER),
@@ -132,7 +132,7 @@ STY = {
                      spaceAfter=8),
     "cover-foot": ps("cover-foot", fontName="Inter-SemiBold", fontSize=7.5,
                      leading=10, textColor=INK_3),
-    "stat-num": ps("stat-num", fontName="Inter-Bold", fontSize=22, leading=24,
+    "stat-num": ps("stat-num", fontName="Inter-Bold", fontSize=28, leading=30,
                    textColor=NAVY, alignment=1),
     "stat-lbl": ps("stat-lbl", fontSize=8, leading=11, textColor=INK_3,
                    alignment=1),
@@ -154,6 +154,50 @@ STY = {
                textColor=NAVY, spaceAfter=4),
     "wf-l": ps("wf-l", fontSize=9, leading=12, textColor=INK, spaceAfter=2),
 }
+
+
+# ---- Highlight (hl-block) palette ----
+# Mirrors the .hl-block variants on the live site. The block is rendered
+# as a paragraph with backColor on the text + extra padding so the
+# highlight extends beyond the glyphs, the way the site's pseudo-
+# element treatment does.
+HL_COLORS = {
+    "teal":  ACCENT_BAR,        # #B8EDE6 — default .hl-block
+    "gold":  HexColor("#FFE7A0"),  # --goldbar
+    "green": HexColor("#C9E9CE"),  # cedar-mist softened
+}
+
+
+def render_h2_with_hl(text):
+    """h2 rendered with a hl-block wash behind it.
+    text may begin with {{HL:teal}}, {{HL:gold}}, or {{HL:green}}.
+    Without a marker the h2 renders flat (no wash)."""
+    m = re.match(r"\{\{HL:(teal|gold|green)\}\}(.*)", text)
+    if m:
+        color = HL_COLORS[m.group(1)]
+        label = m.group(2).strip()
+    else:
+        color = None
+        label = text
+
+    if color is None:
+        return Paragraph(label, STY["h2"])
+
+    # Wrap the h2 text in a single-cell Table with the highlight color
+    # behind it, vertically centered and padded so the wash extends
+    # past the glyphs the way the site's hl-block ::before treatment
+    # does. The Table takes only the column width.
+    p = Paragraph(label, STY["h2"])
+    box = Table([[p]], colWidths=[COL_W])
+    box.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), color),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
+    return box
 
 
 # ---- Markdown parsing ----
@@ -486,6 +530,15 @@ def cover_decoration(canvas, doc):
 
 def body_decoration(canvas, doc):
     canvas.saveState()
+    # Cream side rail on every body page so the page reads as the
+    # same document as the cover, with the gold accent line giving
+    # the same edge cue the homepage uses to anchor the brand.
+    canvas.setFillColor(CREAM)
+    canvas.rect(0, 0, RAIL_W, PAGE_H, stroke=0, fill=1)
+    canvas.setStrokeColor(GOLD)
+    canvas.setLineWidth(2.2)
+    canvas.line(RAIL_W, 0, RAIL_W, PAGE_H)
+    # Running header
     canvas.setFont("Inter-SemiBold", 7.5)
     canvas.setFillColor(INK_3)
     canvas.drawString(MARGIN_L, PAGE_H - 0.36 * inch,
@@ -496,6 +549,7 @@ def body_decoration(canvas, doc):
     canvas.setLineWidth(0.5)
     canvas.line(MARGIN_L, PAGE_H - 0.43 * inch,
                 PAGE_W - MARGIN_R, PAGE_H - 0.43 * inch)
+    # Footer
     canvas.setFont("Inter", 7.5)
     canvas.drawString(MARGIN_L, 0.3 * inch, "CONFIDENTIAL AND PROPRIETARY")
     canvas.drawRightString(PAGE_W - MARGIN_R, 0.3 * inch,
@@ -567,8 +621,12 @@ def build_body(md):
             flow.append(HRFlowable(width="100%", thickness=0.4, color=RULE))
             flow.append(Spacer(1, 4))
         elif k == "h2":
-            flow.append(Paragraph(v.upper(), STY["kicker"]))
-            flow.append(Paragraph(v, STY["h2"]))
+            # Strip any {{HL:color}} marker from the kicker label so the
+            # tiny mono caps eyebrow above the h2 doesn't repeat the
+            # marker text. The marker is consumed by render_h2_with_hl.
+            kicker_text = re.sub(r"\{\{HL:[a-z]+\}\}", "", v).strip()
+            flow.append(Paragraph(kicker_text.upper(), STY["kicker"]))
+            flow.append(render_h2_with_hl(v))
         elif k == "h3":
             flow.append(Paragraph(v, STY["h3"]))
         elif k == "pull":
