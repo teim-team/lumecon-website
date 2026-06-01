@@ -111,15 +111,13 @@ The same review that identified 50+ public tribal impact studies between 2000 an
 
 The defensibility is layered, and each layer compounds on the one below it.
 
-**Layer 1. Tribal and Native-economy expertise.** Founders and senior team members carry direct experience at the Federal Reserve Bank of Minneapolis Center for Indian Country Development, the National Congress of American Indians, and through original work like the Native Entity Enterprise dataset. The category leaders do not have this expertise and cannot acquire it quickly.
-
-**Layer 2. Complex-geography engine.** Reservations, trust lands, congressional districts, economic development zones, service areas, watersheds, and multi-jurisdictional regions are first-class geographies. This is infrastructure that is hard to retrofit into legacy systems.
-
-**Layer 3. Reusable data infrastructure.** Cleaning and harmonizing public, alternative, and administrative datasets happens once. Every customer benefits. Every new dataset added widens the lead.
-
-**Layer 4. Cedar Grove and customer switching costs.** Once a customer has built up a harmonized data layer, a curated source library, an assumption history, and recurring report templates inside Cedar Grove, switching providers means rebuilding institutional memory. The longer a customer is on the platform, the more expensive that decision becomes.
-
-**Layer 5. Privacy-preserving learning, on the roadmap.** The architecture is designed to support federated learning so models can improve from cross-customer signals without raw data ever leaving a customer's workspace. This preserves Indigenous data sovereignty by design and creates a network effect that is hard to replicate without the same architectural commitments.
+[[MOAT:
+Tribal and Native-economy expertise | Direct experience from the Federal Reserve CICD, NCAI, and the Native Entity Enterprise dataset. Hard to acquire.
+Complex-geography engine | Reservations, trust lands, congressional districts, watersheds, and multi-jurisdictional regions as first-class geographies.
+Reusable data infrastructure | Clean and harmonize public, alternative, and administrative data once. Every customer benefits.
+Cedar Grove and switching costs | Harmonized data, source library, assumption history. The longer a customer stays, the more expensive switching gets.
+Privacy-preserving learning | Architecture supports federated learning. Models improve across customers without raw data ever leaving.
+]]
 
 Patents, trademarks, copyrights, and trade secret protections sit on top of these layers as a procedural moat, not the primary one.
 
@@ -144,13 +142,17 @@ Local Economic Impact | Sprout=$7,500 | Sapling=$15,000 | Tree=$20,000
 Tribal Economic Impact | Sprout=$10,000 | Sapling=$17,500 | Tree=$25,000
 ]]
 
-**Arborist.** $15,000 flat for two projects in one engagement, renewable as a fresh engagement. Built for consulting firms.
+[[ADDONS:
+Arborist | $15,000 flat | For consulting firms running studies on outside clients. Two projects in one engagement, renewable as a fresh engagement.
+Toolbox | $15,000 add-on | Team-produced finished deliverables (report, deck, executive summary, source record, assumption ledger). Three rounds of revisions. Pairs with Tree so deliverables pick up the customer's custom branding automatically.
+]]
 
-**Toolbox.** $15,000 add-on. Team-produced finished deliverables with three rounds of revisions, paired with Tree so deliverables pick up the customer's custom branding automatically.
+First subscriptions and pilots begin in 2026. The company is targeting first paid revenue by end of 2026 from a focused set of Tribal and Local pilots in priority geographies.
 
-[[SCREENSHOT: report-pdf | Exported PDF report. Branded to the customer's visual identity with the assumption ledger embedded.]]
-
-[[SCREENSHOT: deck-export | Exported slide deck. Same numbers, different framing, ready for council, board, or funder audiences.]]
+[[SCREENSHOTPAIR:
+report-pdf | Exported PDF report. Branded to the customer's visual identity with the assumption ledger embedded.
+deck-export | Exported slide deck. Same numbers, different framing, ready for council, board, or funder audiences.
+]]
 
 ---
 
@@ -171,14 +173,17 @@ Investors invest in teams. This one is the strongest part of the company.
 
 [[TEAMGRID:
 Elijah Moreno, MPP | Co-Founder & CEO | Cornell PhD candidate. Dartmouth Economics. Federal Reserve CICD. NCAI Mankiller Fellow. Native Entity Enterprise dataset.
+Michael Moreno | Co-Founder & Founding Investor | Moved the company from concept to product through founding capital and early-stage support.
 Laurel Wheeler, PhD | Economics Lead | Duke PhD in Economics. Oxford MSc. Federal Reserve CICD economist. Native CDFI lending researcher.
 Isabella Agnes | Input/Output Engine Lead | Wisconsin Math + Economics. Maryland doctoral. Federal Reserve Board. Federal Reserve Philadelphia.
 Francesca Agnes | Cedar Lead | Illinois Urbana-Champaign. Leads Cedar, the AI assistant for source intake and assumption tracking.
 Kaylyn Lee | Platform Lead | Cornell Computer Science with Business. Leads the customer-facing platform end to end.
+]]
+
+[[ADVISORGRID:
 Vod Vilfort | Methodology Advisor | MIT PhD candidate in econometrics. Yale Economics and Mathematics. AER: Insights, 2025.
 Brian Kim | Technical Advisor | Dartmouth Economics. Senior engineer at Modsy and Chime. Architecture, Cedar, and security.
-Havala Hanson, PhD | Product, Data Security & Research Ops Advisor | Alaska Fairbanks PhD in Statistics. Brown MA. Data governance for sensitive administrative datasets.
-Michael Moreno | Co-Founder & Founding Investor | Moved the company from concept to product through founding capital and early-stage support.
+Havala Hanson, PhD | Product & Data Security Advisor | Alaska Fairbanks PhD in Statistics. Brown MA. Data governance for sensitive administrative datasets.
 ]]
 
 [[INSTITUTIONS: Cornell · Dartmouth · Yale · Duke · MIT · Oxford · Brown · University of Wisconsin–Madison · University of Maryland · University of Alaska Fairbanks · Federal Reserve System · Center for Indian Country Development]]

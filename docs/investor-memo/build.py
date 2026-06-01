@@ -36,6 +36,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase.pdfmetrics import registerFontFamily
 from reportlab.platypus import (
     BaseDocTemplate,
+    CondPageBreak,
     Frame,
     HRFlowable,
     Image,
@@ -557,10 +558,13 @@ def render_roadmap(payload):
 def render_funds(payload):
     """Use of funds table. Each line: category | amount | description."""
     rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    thead_style = ps("thead-soft",
+        fontName="Inter-SemiBold", fontSize=8, leading=11,
+        textColor=ACCENT_DEEP)
     data = [[
-        Paragraph("Category", STY["thead"]),
-        Paragraph("Amount", STY["thead"]),
-        Paragraph("Detail", STY["thead"]),
+        Paragraph("Category", thead_style),
+        Paragraph("Amount", thead_style),
+        Paragraph("Detail", thead_style),
     ]]
     for r in rows:
         parts = [p.strip() for p in r.split("|")]
@@ -586,18 +590,16 @@ def render_funds(payload):
     col_w = COL_W
     t = Table(data, colWidths=[col_w * 0.27, col_w * 0.18, col_w * 0.55])
     t.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, 0), NAVY),
-        ("TEXTCOLOR", (0, 0), (-1, 0), PAPER),
-        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("BACKGROUND",   (0, 0), (-1, 0),  PAPER),
+        ("LINEBELOW",    (0, 0), (-1, 0),  1.0, ACCENT),
+        ("LINEBELOW",    (0, 1), (-1, -2), 0.3, RULE),
+        ("LINEABOVE",    (0, -1), (-1, -1), 0.5, ACCENT),
+        ("BACKGROUND",   (0, -1), (-1, -1), TEAL_BG_SOFT),
+        ("LEFTPADDING",  (0, 0), (-1, -1), 6),
         ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING", (0, 0), (-1, -1), 5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-        ("LINEBELOW", (0, 0), (-1, 0), 0.4, NAVY),
-        ("LINEBELOW", (0, 1), (-1, -2), 0.3, RULE),
-        ("LINEABOVE", (0, -1), (-1, -1), 0.6, NAVY),
-        ("BACKGROUND", (0, -1), (-1, -1), TEAL_BG_MEDIUM),
-        ("ROWBACKGROUNDS", (0, 1), (-1, -2), [PAPER, ZEBRA]),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING",   (0, 0), (-1, -1), 7),
+        ("BOTTOMPADDING",(0, 0), (-1, -1), 7),
+        ("VALIGN",       (0, 0), (-1, -1), "MIDDLE"),
     ]))
     return [KeepTogether(t), Spacer(1, 8)]
 
@@ -668,12 +670,15 @@ def render_pricing_side(payload):
         return []
     tables = []
     cell_w = (COL_W - 0.2 * inch) / 2
+    thead_style = ps("thead-soft",
+        fontName="Inter-SemiBold", fontSize=8, leading=11,
+        textColor=ACCENT_DEEP)
     for r in rows:
         parts = [p.strip() for p in r.split("|")]
         title = parts[0]
         tier_lines = parts[1:]
-        data = [[Paragraph("Tier", STY["thead"]),
-                 Paragraph("Annual price", STY["thead"])]]
+        data = [[Paragraph("Tier", thead_style),
+                 Paragraph("Annual price", thead_style)]]
         for tl in tier_lines:
             tier, _, price = tl.partition("=")
             data.append([
@@ -682,15 +687,14 @@ def render_pricing_side(payload):
             ])
         tbl = Table(data, colWidths=[cell_w * 0.5, cell_w * 0.5])
         tbl.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), NAVY),
-            ("TEXTCOLOR", (0, 0), (-1, 0), PAPER),
-            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("BACKGROUND",   (0, 0), (-1, 0),  PAPER),
+            ("LINEBELOW",    (0, 0), (-1, 0),  1.0, ACCENT),
+            ("LINEBELOW",    (0, 1), (-1, -1), 0.3, RULE),
+            ("LEFTPADDING",  (0, 0), (-1, -1), 6),
             ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-            ("TOPPADDING", (0, 0), (-1, -1), 5),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-            ("LINEBELOW", (0, 0), (-1, 0), 0.5, NAVY),
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [PAPER, ZEBRA]),
-            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING",   (0, 0), (-1, -1), 7),
+            ("BOTTOMPADDING",(0, 0), (-1, -1), 7),
+            ("VALIGN",       (0, 0), (-1, -1), "MIDDLE"),
         ]))
         block = [
             Paragraph(title, ps("rev-h", fontName="Inter-SemiBold",
@@ -729,6 +733,232 @@ def render_pricing_side(payload):
 def render_institutions(payload):
     return [Paragraph(payload.upper().replace("·", "<font color='#0FB5A5'>·</font>"),
                       STY["inst"]), Spacer(1, 6)]
+
+
+def render_addons(payload):
+    """Arborist + Toolbox table. Each input line:
+        Name | Price | Description
+    Renders alongside the pricing tables as a separate compact table
+    so the revenue picture is complete in one place."""
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    thead_style = ps("thead-soft",
+        fontName="Inter-SemiBold", fontSize=8, leading=11,
+        textColor=ACCENT_DEEP)
+    data = [[
+        Paragraph("Offering", thead_style),
+        Paragraph("Price", thead_style),
+        Paragraph("Detail", thead_style),
+    ]]
+    for r in rows:
+        parts = [p.strip() for p in r.split("|")]
+        if len(parts) < 3:
+            parts += [""] * (3 - len(parts))
+        data.append([
+            Paragraph(parts[0], STY["tstrong"]),
+            Paragraph(parts[1], STY["tnum"]),
+            Paragraph(parts[2], STY["tcell"]),
+        ])
+    col_w = COL_W
+    t = Table(data, colWidths=[col_w * 0.18, col_w * 0.17, col_w * 0.65])
+    t.setStyle(TableStyle([
+        ("BACKGROUND",   (0, 0), (-1, 0),  PAPER),
+        ("LINEBELOW",    (0, 0), (-1, 0),  1.0, ACCENT),
+        ("LINEBELOW",    (0, 1), (-1, -1), 0.3, RULE),
+        ("LEFTPADDING",  (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING",   (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING",(0, 0), (-1, -1), 8),
+        ("VALIGN",       (0, 0), (-1, -1), "TOP"),
+    ]))
+    return [KeepTogether(t), Spacer(1, 8)]
+
+
+def render_screenshot_pair(payload):
+    """Two screenshot placeholders side by side, each at half column
+    width and a shorter height so the pair fits on one page row."""
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    cell_w = (COL_W - 0.2 * inch) / 2
+    height = 2.8 * inch
+
+    def one(slug, caption):
+        inner = Table(
+            [[Paragraph("PRODUCT", STY["ph-eyebrow"])],
+             [Paragraph(slug.upper().replace("-", " "),
+                ps("ph-slug-small", fontName="Inter-Bold",
+                   fontSize=11, leading=14, textColor=NAVY,
+                   alignment=1))]],
+            colWidths=[cell_w - 0.3 * inch],
+        )
+        outer = Table([[inner]], colWidths=[cell_w], rowHeights=[height])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), PLACEHOLDER),
+            ("BOX", (0, 0), (-1, -1), 0.7, RULE_STRONG),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        cap = Paragraph(inline(caption), STY["ph-cap"])
+        block = Table([[outer], [cap]], colWidths=[cell_w])
+        block.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        return block
+
+    cells = []
+    for r in rows[:2]:
+        slug, _, caption = r.partition("|")
+        cells.append(one(slug.strip(), caption.strip()))
+    while len(cells) < 2:
+        cells.append(Spacer(cell_w, height))
+    pair = Table([cells], colWidths=[cell_w + 4] * 2)
+    pair.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    return [KeepTogether(pair), Spacer(1, 10)]
+
+
+class MoatIllustration(Flowable):
+    """Literal moat illustration. Five concentric rounded rectangles
+    (outermost = Layer 1, innermost = Layer 5), filled with teal at
+    progressively deeper saturation. Each ring carries its title at
+    the top of the visible strip; the innermost ring carries the
+    Lumecon mark at center."""
+
+    SHADES = [
+        HexColor("#EAF7F4"),
+        HexColor("#C9EAE3"),
+        HexColor("#86D2C5"),
+        HexColor("#39B7A4"),
+        HexColor("#0A8A7E"),
+    ]
+    TEXT_LIGHT = colors.white
+    TEXT_DARK  = HexColor("#0A0F26")
+
+    def __init__(self, layers, col_w):
+        Flowable.__init__(self)
+        self.layers = layers
+        self.col_w = col_w
+        self.height = 4.6 * inch
+
+    def wrap(self, aw, ah):
+        return (self.col_w, self.height + 8)
+
+    def draw(self):
+        c = self.canv
+        n = len(self.layers)
+        inset_h = 0.34 * inch
+        inset_v = 0.42 * inch
+        for i, (title, _desc) in enumerate(self.layers):
+            x = i * inset_h
+            y = i * inset_v
+            w = self.col_w - 2 * x
+            h = self.height - 2 * y
+            c.setFillColor(self.SHADES[i])
+            c.setStrokeColor(HexColor("#0A8A7E"))
+            c.setLineWidth(0.4)
+            c.roundRect(x, y, w, h, 9, stroke=1, fill=1)
+            text_color = self.TEXT_DARK if i < 3 else self.TEXT_LIGHT
+            # LAYER N eyebrow in the visible top strip
+            c.setFillColor(text_color)
+            c.setFont("Inter-SemiBold", 6.5)
+            c.drawString(x + 12, y + h - 11, f"LAYER {i+1}")
+            # Title sits inline with the layer label, right-aligned
+            # toward the inner edge so the strip doesn't feel crowded.
+            c.setFont("Inter-Bold", 10)
+            title_w = pdfmetrics.stringWidth(title, "Inter-Bold", 10)
+            # Place title to the right of the LAYER label, but leave
+            # room before the next inner ring (which starts at x +
+            # inset_h on the right).
+            max_title_right = x + w - inset_h - 8 if i < n - 1 else x + w - 12
+            label_w = pdfmetrics.stringWidth(f"LAYER {i+1}", "Inter-SemiBold", 6.5)
+            title_x = x + 12 + label_w + 10
+            if title_x + title_w > max_title_right:
+                title = title  # leave it; small overflow is OK
+            c.drawString(title_x, y + h - 11, title)
+
+
+def render_moat(payload):
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    layers = []
+    for r in rows:
+        title, _, desc = r.partition("|")
+        layers.append((title.strip(), desc.strip()))
+    return [KeepTogether(MoatIllustration(layers, COL_W)), Spacer(1, 8)]
+
+
+def render_advisor_grid(payload):
+    """Advisors row, with cards visually different from the main team
+    cards: outlined rather than filled, smaller, accent rule below the
+    name. Sits on its own row so the visual separation from team is
+    explicit."""
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    cols = 3
+    cell_w = (COL_W - 0.2 * inch) / cols
+    cell_h = 1.55 * inch
+
+    cards = []
+    for r in rows:
+        parts = [p.strip() for p in r.split("|")]
+        if len(parts) < 3:
+            parts += [""] * (3 - len(parts))
+        name, role, bio = parts[0], parts[1], parts[2]
+        inner = Table([
+            [Paragraph("ADVISOR", ps("adv-eyebrow",
+                fontName="Inter-SemiBold", fontSize=7, leading=10,
+                textColor=ACCENT_DEEP, spaceAfter=2))],
+            [Paragraph(name, ps("adv-name",
+                fontName="Inter-Bold", fontSize=10, leading=13,
+                textColor=NAVY))],
+            [Paragraph(role, ps("adv-role",
+                fontName="Inter", fontSize=8, leading=10,
+                textColor=INK_3, spaceAfter=3))],
+            [Paragraph(inline(bio), STY["tm-bio"])],
+        ], colWidths=[cell_w - 14])
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        card = Table([[inner]], colWidths=[cell_w], rowHeights=[cell_h])
+        card.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+            ("BOX", (0, 0), (-1, -1), 0.6, ACCENT),
+            ("LEFTPADDING", (0, 0), (-1, -1), 8),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+            ("TOPPADDING", (0, 0), (-1, -1), 8),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        cards.append(card)
+
+    while len(cards) % cols != 0:
+        cards.append(Spacer(cell_w, cell_h))
+
+    rows_grid = [cards[j:j + cols] for j in range(0, len(cards), cols)]
+    grid = Table(rows_grid, colWidths=[cell_w] * cols)
+    grid.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 4),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    advisor_header = Paragraph("ADVISORS",
+        ps("adv-header", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=ACCENT_DEEP, spaceBefore=8, spaceAfter=4))
+    return [advisor_header, KeepTogether(grid), Spacer(1, 8)]
 
 
 # ---- Page decoration ----
@@ -772,11 +1002,23 @@ def body_decoration(canvas, doc):
 
 # ---- Cover ----
 def build_cover():
-    """Portrait cover: seal mark at the top, title block in the middle,
-    company footer at the bottom. Layout flows vertically inside the
-    cover frame so the page works as a 8.5x11 deliverable."""
+    """Portrait cover. Seal mark on top, title in the middle, the
+    website's actual tagline ("We luminate economies") below. No
+    marketing paragraph; the rest of the document carries the detail.
+    """
     seal_size = 2.4 * inch
     seal = Image(str(SEAL), width=seal_size, height=seal_size)
+
+    # Tagline mirrors BrandWordmark.astro: "We {italic gold}luminate{/}
+    # economies" — the only place Spectral italic + gold appears in
+    # this document, matching the site's .lumin treatment exactly.
+    tagline_style = ps("cover-tagline",
+        fontName="Inter", fontSize=22, leading=28,
+        textColor=NAVY, spaceAfter=8)
+    tagline_html = (
+        'We <font name="Spectral-Italic" color="#F0A91A">'
+        '<font size="26">luminate</font></font> economies.'
+    )
 
     return [
         Spacer(1, 0.2 * inch),
@@ -791,14 +1033,8 @@ def build_cover():
             'for Lumecon.',
             STY["cover-title"],
         ),
-        Paragraph(
-            "<b>Software-first economic impact analysis</b> for the "
-            "organizations the current market underserves. Built for "
-            "governments, tribal nations, nonprofits, universities, "
-            "foundations, enterprises, and the consultants who serve them.",
-            STY["cover-deck"],
-        ),
-        Spacer(1, 0.4 * inch),
+        Paragraph(tagline_html, tagline_style),
+        Spacer(1, 0.45 * inch),
         HRFlowable(width="100%", thickness=0.6, color=RULE),
         Spacer(1, 10),
         Paragraph(
@@ -827,6 +1063,11 @@ def build_body(md):
             # tiny mono caps eyebrow above the h2 doesn't repeat the
             # marker text. The marker is consumed by render_h2_with_hl.
             kicker_text = re.sub(r"\{\{HL:[a-z]+\}\}", "", v).strip()
+            # If less than ~3 inches remain on the current page, push
+            # the section to the next page rather than letting the
+            # kicker + headline orphan at the bottom with no body
+            # underneath.
+            flow.append(CondPageBreak(3 * inch))
             flow.append(Paragraph(kicker_text.upper(), STY["kicker"]))
             flow.append(render_h2_with_hl(v))
         elif k == "h3":
@@ -868,18 +1109,27 @@ def build_body(md):
                 cw = [COL_W * 0.5, COL_W * 0.5]
             else:
                 cw = [COL_W / col_count] * col_count
+            # Lighter, editorial table style: no heavy navy header bar.
+            # Header text in teal-deep on white with a teal underline.
+            # Thin neutral row separators. No alternating zebra fill
+            # (that SaaS look read as vibe-coded).
+            data[0] = [
+                Paragraph(inline(h), ps("thead-soft",
+                    fontName="Inter-SemiBold", fontSize=8, leading=11,
+                    textColor=ACCENT_DEEP,
+                    spaceBefore=0, spaceAfter=0))
+                for h in header
+            ]
             t = Table(data, colWidths=cw, hAlign="LEFT")
             t.setStyle(TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), NAVY),
-                ("TEXTCOLOR", (0, 0), (-1, 0), PAPER),
-                ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                ("BACKGROUND",   (0, 0), (-1, 0),  PAPER),
+                ("LINEBELOW",    (0, 0), (-1, 0),  1.0, ACCENT),
+                ("LINEBELOW",    (0, 1), (-1, -1), 0.3, RULE),
+                ("LEFTPADDING",  (0, 0), (-1, -1), 6),
                 ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-                ("TOPPADDING", (0, 0), (-1, -1), 5),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-                ("LINEBELOW", (0, 0), (-1, 0), 0.5, NAVY),
-                ("LINEBELOW", (0, 1), (-1, -2), 0.3, RULE),
-                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [PAPER, ZEBRA]),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("TOPPADDING",   (0, 0), (-1, -1), 7),
+                ("BOTTOMPADDING",(0, 0), (-1, -1), 7),
+                ("VALIGN",       (0, 0), (-1, -1), "MIDDLE"),
             ]))
             flow.append(Spacer(1, 2))
             flow.append(KeepTogether(t))
@@ -898,10 +1148,18 @@ def build_body(md):
                 flow.extend(render_funds(payload))
             elif kind == "TEAMGRID":
                 flow.extend(render_teamgrid(payload))
+            elif kind == "ADVISORGRID":
+                flow.extend(render_advisor_grid(payload))
             elif kind == "INSTITUTIONS":
                 flow.extend(render_institutions(payload))
             elif kind == "PRICING":
                 flow.extend(render_pricing_side(payload))
+            elif kind == "ADDONS":
+                flow.extend(render_addons(payload))
+            elif kind == "SCREENSHOTPAIR":
+                flow.extend(render_screenshot_pair(payload))
+            elif kind == "MOAT":
+                flow.extend(render_moat(payload))
     return flow
 
 
