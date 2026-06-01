@@ -168,12 +168,10 @@ Patents, trademarks, copyrights, and trade secret protections sit on top of thes
 ## Use of Funds
 
 [[FUNDS:
-Engineering | $35,000 | Platform development, product refinement, customer features.
-Infrastructure | $15,000 | Cloud computing, storage, monitoring, security.
-Intellectual property | $15,000 | Patents, trademarks, copyrights.
-Data | $10,000 | Alternative data acquisition and licensing.
-Commercialization | $15,000 | Pilot implementation, customer onboarding, sales and marketing.
-Legal and compliance | $10,000 | Corporate governance, customer contracting, financing.
+Contractors | $50,000 | Six months of work. Economist, two data scientists, and software engineer at 8 to 12 hours a week.
+Legal, compliance, IP | $30,000 | Corporate governance, customer contracting, financing documentation, patents, trademarks, and copyrights.
+Infrastructure | $10,000 | Cloud computing, storage, monitoring, and security.
+Marketing, customer acquisition, piloting | $10,000 | Pilot implementation, customer onboarding, sales, and marketing.
 ]]
 
 ---

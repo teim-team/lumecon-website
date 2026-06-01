@@ -96,17 +96,20 @@ registerFontFamily(
     boldItalic="Inter-Bold",
 )
 
-# ---- Page geometry ----
-PAGE_W, PAGE_H = landscape(LETTER)
-MARGIN_L = 0.85 * inch
-MARGIN_R = 0.6  * inch
-MARGIN_T = 0.6  * inch
-MARGIN_B = 0.55 * inch
+# ---- Page geometry (portrait Letter for contained sections) ----
+PAGE_W, PAGE_H = LETTER  # 8.5" wide x 11" tall (portrait)
+MARGIN_L = 1.0  * inch
+MARGIN_R = 0.8  * inch
+MARGIN_T = 0.7  * inch
+MARGIN_B = 0.65 * inch
 RAIL_W = 0.45 * inch
-GUTTER = 0.35 * inch
 CONTENT_W = PAGE_W - MARGIN_L - MARGIN_R
 CONTENT_H = PAGE_H - MARGIN_T - MARGIN_B
-COL_W = (CONTENT_W - GUTTER) / 2
+# Single-column body: column width equals the content width. The
+# landscape two-column layout was breaking section content across
+# pages in unhelpful places; one wider column lets the renderer
+# keep h2 + body + screenshot together more often.
+COL_W = CONTENT_W
 
 
 # ---- Styles ----
@@ -116,16 +119,16 @@ def ps(name, **kw):
     return ParagraphStyle(name, **base)
 
 STY = {
-    "kicker": ps("kicker", fontName="Inter-SemiBold", fontSize=7.5, leading=10,
-                 textColor=ACCENT_DEEP, spaceAfter=2),
-    "h2":     ps("h2", fontName="Inter-Bold", fontSize=22, leading=26,
-                 textColor=NAVY, spaceBefore=14, spaceAfter=8),
-    "h3":     ps("h3", fontName="Inter-SemiBold", fontSize=10.5, leading=13,
-                 textColor=NAVY, spaceBefore=8, spaceAfter=2),
-    "body":   ps("body", spaceAfter=6),
-    "pull":   ps("pull", fontName="Inter-Bold", fontSize=18, leading=22,
-                 textColor=NAVY, spaceBefore=6, spaceAfter=10),
-    "li":     ps("li", spaceAfter=2, leftIndent=12),
+    "kicker": ps("kicker", fontName="Inter-SemiBold", fontSize=8, leading=11,
+                 textColor=ACCENT_DEEP, spaceAfter=3),
+    "h2":     ps("h2", fontName="Inter-Bold", fontSize=24, leading=28,
+                 textColor=NAVY, spaceBefore=18, spaceAfter=10),
+    "h3":     ps("h3", fontName="Inter-SemiBold", fontSize=11, leading=14,
+                 textColor=NAVY, spaceBefore=10, spaceAfter=3),
+    "body":   ps("body", fontSize=10, leading=15, spaceAfter=8),
+    "pull":   ps("pull", fontName="Inter-Bold", fontSize=20, leading=25,
+                 textColor=NAVY, spaceBefore=8, spaceAfter=14),
+    "li":     ps("li", fontSize=10, leading=15, spaceAfter=3, leftIndent=14),
     "thead":  ps("thead", fontName="Inter-SemiBold", fontSize=8, leading=11,
                  textColor=PAPER),
     "tcell":  ps("tcell", fontSize=9, leading=12),
@@ -135,9 +138,9 @@ STY = {
                  textColor=NAVY, alignment=2),
     "cover-meta": ps("cover-meta", fontName="Inter-SemiBold", fontSize=8,
                      leading=11, textColor=INK_3, spaceAfter=18),
-    "cover-title": ps("cover-title", fontName="Inter-Bold", fontSize=30,
-                      leading=34, textColor=NAVY, spaceAfter=14),
-    "cover-deck": ps("cover-deck", fontSize=15, leading=22, textColor=INK_2,
+    "cover-title": ps("cover-title", fontName="Inter-Bold", fontSize=38,
+                      leading=44, textColor=NAVY, spaceAfter=18),
+    "cover-deck": ps("cover-deck", fontSize=14, leading=21, textColor=INK_2,
                      spaceAfter=8),
     "cover-foot": ps("cover-foot", fontName="Inter-SemiBold", fontSize=7.5,
                      leading=10, textColor=INK_3),
@@ -280,7 +283,7 @@ def render_h2_with_hl(text):
     Any {{HL:color}} marker is stripped (teal is the only variant
     used in document form). Adjacent calls alternate tilt direction."""
     text = re.sub(r"\{\{HL:[a-z]+\}\}\s*", "", text).strip()
-    return HlHeadline(text, font_name="Inter-Bold", font_size=22,
+    return HlHeadline(text, font_name="Inter-Bold", font_size=24,
                       navy=NAVY, col_w=COL_W, angle=_next_angle())
 
 
@@ -446,7 +449,7 @@ def render_statgrid(payload):
         style.add("LINEABOVE", (0, i * 2), (-1, i * 2), 0.4,
                   HexColor("#C4E5DF"))
     t.setStyle(style)
-    return [t, Spacer(1, 6)]
+    return [KeepTogether(t), Spacer(1, 8)]
 
 
 def render_workflow_compare(_payload=""):
@@ -528,7 +531,7 @@ def render_roadmap(payload):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
         ("LINEBELOW", (0, 0), (-1, -2), 0.4, RULE),
     ]))
-    return [t, Spacer(1, 6)]
+    return [KeepTogether(t), Spacer(1, 8)]
 
 
 def render_funds(payload):
@@ -576,7 +579,7 @@ def render_funds(payload):
         ("ROWBACKGROUNDS", (0, 1), (-1, -2), [PAPER, ZEBRA]),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
     ]))
-    return [t, Spacer(1, 6)]
+    return [KeepTogether(t), Spacer(1, 8)]
 
 
 def render_teamgrid(payload):
@@ -602,7 +605,7 @@ def render_teamgrid(payload):
             ("TOPPADDING", (0, 0), (-1, -1), 4),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
         ]))
-        cards.append(card)
+        cards.append(KeepTogether(card))
         cards.append(Spacer(1, 6))
     return cards
 
@@ -653,15 +656,20 @@ def body_decoration(canvas, doc):
 
 # ---- Cover ----
 def build_cover():
-    seal_size = 3.6 * inch
+    """Portrait cover: seal mark at the top, title block in the middle,
+    company footer at the bottom. Layout flows vertically inside the
+    cover frame so the page works as a 8.5x11 deliverable."""
+    seal_size = 2.4 * inch
     seal = Image(str(SEAL), width=seal_size, height=seal_size)
 
-    right = [
+    return [
+        Spacer(1, 0.2 * inch),
+        seal,
+        Spacer(1, 1.0 * inch),
         Paragraph(
             "INVESTOR MEMORANDUM  ·  SUMMER 2026  ·  CONFIDENTIAL",
             STY["cover-meta"],
         ),
-        # Title smaller now; deck larger and stronger
         Paragraph(
             'An <font backColor="#B8EDE6"> investor memorandum </font> '
             'for Lumecon.',
@@ -674,30 +682,14 @@ def build_cover():
             "foundations, enterprises, and the consultants who serve them.",
             STY["cover-deck"],
         ),
-        Spacer(1, 0.2 * inch),
+        Spacer(1, 0.4 * inch),
         HRFlowable(width="100%", thickness=0.6, color=RULE),
-        Spacer(1, 8),
+        Spacer(1, 10),
         Paragraph(
             "Lumecon Inc.  ·  A Delaware Corporation  ·  lumecon.ai",
             STY["cover-foot"],
         ),
     ]
-
-    t = Table(
-        [[seal, right]],
-        colWidths=[seal_size + 0.4 * inch,
-                   PAGE_W - RAIL_W - MARGIN_R - seal_size - 0.4 * inch - 0.6 * inch],
-        rowHeights=[CONTENT_H],
-    )
-    t.setStyle(TableStyle([
-        ("VALIGN", (0, 0), (0, 0), "TOP"),
-        ("VALIGN", (1, 0), (1, 0), "MIDDLE"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 0),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
-    ]))
-    return [t]
 
 
 # ---- Body ----
@@ -724,8 +716,17 @@ def build_body(md):
         elif k == "h3":
             flow.append(Paragraph(v, STY["h3"]))
         elif k == "pull":
-            flow.append(Spacer(1, 2))
-            flow.append(Paragraph(inline(v), STY["pull"]))
+            # Wrap the pull-quote together with the trailing flowable
+            # already in the column so it can't orphan onto its own page
+            # (the closing mission line was landing alone on the final
+            # page before this).
+            pull_p = Paragraph(inline(v), STY["pull"])
+            if flow and isinstance(flow[-1], Paragraph):
+                prior = flow.pop()
+                flow.append(KeepTogether([prior, Spacer(1, 2), pull_p]))
+            else:
+                flow.append(Spacer(1, 2))
+                flow.append(pull_p)
         elif k == "p":
             flow.append(Paragraph(inline(v), STY["body"]))
         elif k == "list":
@@ -765,7 +766,7 @@ def build_body(md):
                 ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
             ]))
             flow.append(Spacer(1, 2))
-            flow.append(t)
+            flow.append(KeepTogether(t))
             flow.append(Spacer(1, 8))
         elif k == "block":
             kind, payload = v
@@ -791,13 +792,17 @@ def main():
     md = SRC.read_text(encoding="utf-8")
     doc = BaseDocTemplate(
         str(PDF),
-        pagesize=landscape(LETTER),
+        pagesize=LETTER,
         leftMargin=MARGIN_L, rightMargin=MARGIN_R,
         topMargin=MARGIN_T, bottomMargin=MARGIN_B,
         title="Lumecon Investor Memorandum",
         author="Lumecon Inc.",
         subject="Confidential investor memorandum",
     )
+    # Portrait single-column frames. The cover frame indents past the
+    # teal side rail so the cover content reads as inset from the
+    # brand edge. The body frame uses the same left inset on every
+    # page so the rail anchors the document consistently.
     cover_frame = Frame(
         RAIL_W + 0.4 * inch, MARGIN_B,
         PAGE_W - RAIL_W - 0.4 * inch - MARGIN_R,
@@ -805,21 +810,15 @@ def main():
         id="cover", leftPadding=0, rightPadding=0,
         topPadding=0, bottomPadding=0,
     )
-    body_left = Frame(
+    body_frame = Frame(
         MARGIN_L, MARGIN_B + 0.15 * inch,
         COL_W, PAGE_H - MARGIN_T - MARGIN_B - 0.45 * inch,
-        id="left", leftPadding=0, rightPadding=0,
-        topPadding=0, bottomPadding=0,
-    )
-    body_right = Frame(
-        MARGIN_L + COL_W + GUTTER, MARGIN_B + 0.15 * inch,
-        COL_W, PAGE_H - MARGIN_T - MARGIN_B - 0.45 * inch,
-        id="right", leftPadding=0, rightPadding=0,
+        id="body", leftPadding=0, rightPadding=0,
         topPadding=0, bottomPadding=0,
     )
     doc.addPageTemplates([
         PageTemplate(id="cover", frames=[cover_frame], onPage=cover_decoration),
-        PageTemplate(id="body", frames=[body_left, body_right],
+        PageTemplate(id="body", frames=[body_frame],
                      onPage=body_decoration),
     ])
     flow = build_cover()
