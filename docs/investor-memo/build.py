@@ -120,8 +120,12 @@ def ps(name, **kw):
     return ParagraphStyle(name, **base)
 
 STY = {
+    # keepWithNext binds the kicker to the h2 that follows it; the h2
+    # in turn binds to the first body flowable. The chain guarantees
+    # section headers never orphan at the bottom of a page.
     "kicker": ps("kicker", fontName="Inter-SemiBold", fontSize=8, leading=11,
-                 textColor=ACCENT_DEEP, spaceAfter=3),
+                 textColor=ACCENT_DEEP, spaceAfter=3,
+                 keepWithNext=True),
     "h2":     ps("h2", fontName="Inter-Bold", fontSize=24, leading=28,
                  textColor=NAVY, spaceBefore=18, spaceAfter=10),
     "h3":     ps("h3", fontName="Inter-SemiBold", fontSize=11, leading=14,
@@ -237,6 +241,9 @@ class HlHeadline(Flowable):
                  navy=NAVY, col_w=COL_W, angle=-1.8,
                  leading_factor=1.6):
         Flowable.__init__(self)
+        # Bind to the next flowable so the headline never orphans at
+        # the bottom of a page without at least one body block beside it.
+        self.keepWithNext = 1
         self.text = text
         self.font_name = font_name
         self.font_size = font_size
@@ -295,6 +302,13 @@ def inline(s):
     s = re.sub(
         r"(^|[^*])\*([^*]+?)\*(?!\*)",
         r'\1<font name="Spectral-Italic" color="#F0A91A">\2</font>',
+        s,
+    )
+    # Footnote markers: [^N] → small teal superscript
+    s = re.sub(
+        r"\[\^(\d+)\]",
+        r'<super rise="3"><font name="Inter-SemiBold" size="6.5" '
+        r'color="#0A8A7E">\1</font></super>',
         s,
     )
     return s
@@ -426,9 +440,9 @@ def render_statgrid(payload):
         chunk = pairs[j:j + col_count]
         while len(chunk) < col_count:
             chunk.append(("", ""))
-        data.append([Paragraph(n, STY["stat-num"]) for (n, _) in chunk])
+        data.append([Paragraph(inline(n), STY["stat-num"]) for (n, _) in chunk])
         row_heights.append(num_row_h)
-        data.append([Paragraph(l, STY["stat-lbl"]) for (_, l) in chunk])
+        data.append([Paragraph(inline(l), STY["stat-lbl"]) for (_, l) in chunk])
         row_heights.append(lbl_row_h)
 
     t = Table(data, colWidths=[cell_w] * col_count, rowHeights=row_heights)
@@ -871,73 +885,229 @@ def render_screenshot_pair(payload):
     return [KeepTogether(pair), Spacer(1, 10)]
 
 
-class MoatIllustration(Flowable):
-    """Literal moat illustration. Five concentric rounded rectangles
-    (outermost = Layer 1, innermost = Layer 5), filled with teal at
-    progressively deeper saturation. Each ring carries its title at
-    the top of the visible strip; the innermost ring carries the
-    Lumecon mark at center."""
-
-    SHADES = [
-        HexColor("#EAF7F4"),
-        HexColor("#C9EAE3"),
-        HexColor("#86D2C5"),
-        HexColor("#39B7A4"),
-        HexColor("#0A8A7E"),
+def render_cedarflow(_payload=""):
+    """Cedar's source-intake-to-deliverable flow. Four steps shown as
+    cards in a row with chevrons between them. This is the one product
+    diagram in the document; it replaces the row of empty wireframe
+    placeholders the deck used to carry."""
+    steps = [
+        ("01", "Source intake",
+         "Drop PDFs, CSVs, and XLSX files. Cedar extracts and types every field."),
+        ("02", "Harmonize",
+         "Inputs match against public datasets. Geographies, sectors, and time windows resolve automatically."),
+        ("03", "Assumption ledger",
+         "Every modeling choice surfaces for analyst review. Override, annotate, or approve in place."),
+        ("04", "Deliverable",
+         "Report, deck, and executive summary export branded to the customer with the assumption record attached."),
     ]
-    TEXT_LIGHT = colors.white
-    TEXT_DARK  = HexColor("#0A0F26")
+    n = len(steps)
+    # Six segments: 4 cards + 3 chevrons between
+    chev_w = 14
+    card_w = (COL_W - chev_w * (n - 1) - 6) / n
 
-    def __init__(self, layers, col_w):
-        Flowable.__init__(self)
-        self.layers = layers
-        self.col_w = col_w
-        self.height = 4.6 * inch
+    def card(num, title, desc):
+        kicker = Paragraph(
+            num,
+            ps(f"cf-num-{num}",
+               fontName="Inter-Bold", fontSize=10, leading=12,
+               textColor=ACCENT_DEEP, spaceAfter=4),
+        )
+        title_p = Paragraph(
+            title,
+            ps(f"cf-t-{num}",
+               fontName="Inter-Bold", fontSize=10.5, leading=13,
+               textColor=NAVY, spaceAfter=4),
+        )
+        desc_p = Paragraph(
+            desc,
+            ps(f"cf-d-{num}",
+               fontName="Inter", fontSize=8.5, leading=11.5,
+               textColor=INK_2),
+        )
+        inner = Table(
+            [[kicker], [title_p], [desc_p]],
+            colWidths=[card_w - 18],
+        )
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        outer = Table([[inner]], colWidths=[card_w], rowHeights=[1.55 * inch])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+            ("BOX", (0, 0), (-1, -1), 0.7, ACCENT),
+            ("LINEABOVE", (0, 0), (-1, 0), 2.2, ACCENT),
+            ("LEFTPADDING", (0, 0), (-1, -1), 9),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 9),
+            ("TOPPADDING", (0, 0), (-1, -1), 10),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        return outer
 
-    def wrap(self, aw, ah):
-        return (self.col_w, self.height + 8)
+    chev = Paragraph(
+        "›",
+        ps("cf-chev",
+           fontName="Inter-Bold", fontSize=18, leading=22,
+           textColor=ACCENT_DEEP, alignment=1),
+    )
 
-    def draw(self):
-        c = self.canv
-        n = len(self.layers)
-        inset_h = 0.34 * inch
-        inset_v = 0.42 * inch
-        for i, (title, _desc) in enumerate(self.layers):
-            x = i * inset_h
-            y = i * inset_v
-            w = self.col_w - 2 * x
-            h = self.height - 2 * y
-            c.setFillColor(self.SHADES[i])
-            c.setStrokeColor(HexColor("#0A8A7E"))
-            c.setLineWidth(0.4)
-            c.roundRect(x, y, w, h, 9, stroke=1, fill=1)
-            text_color = self.TEXT_DARK if i < 3 else self.TEXT_LIGHT
-            # LAYER N eyebrow in the visible top strip
-            c.setFillColor(text_color)
-            c.setFont("Inter-SemiBold", 6.5)
-            c.drawString(x + 12, y + h - 11, f"LAYER {i+1}")
-            # Title sits inline with the layer label, right-aligned
-            # toward the inner edge so the strip doesn't feel crowded.
-            c.setFont("Inter-Bold", 10)
-            title_w = pdfmetrics.stringWidth(title, "Inter-Bold", 10)
-            # Place title to the right of the LAYER label, but leave
-            # room before the next inner ring (which starts at x +
-            # inset_h on the right).
-            max_title_right = x + w - inset_h - 8 if i < n - 1 else x + w - 12
-            label_w = pdfmetrics.stringWidth(f"LAYER {i+1}", "Inter-SemiBold", 6.5)
-            title_x = x + 12 + label_w + 10
-            if title_x + title_w > max_title_right:
-                title = title  # leave it; small overflow is OK
-            c.drawString(title_x, y + h - 11, title)
+    row_cells = []
+    col_widths = []
+    for i, (num, title, desc) in enumerate(steps):
+        row_cells.append(card(num, title, desc))
+        col_widths.append(card_w)
+        if i < n - 1:
+            row_cells.append(chev)
+            col_widths.append(chev_w)
+    row = Table([row_cells], colWidths=col_widths)
+    row.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    caption = Paragraph(
+        "Cedar's workflow. Each step is auditable; the analyst signs off "
+        "on every assumption before the deliverable exports.",
+        STY["ph-cap"],
+    )
+    return [KeepTogether([row, Spacer(1, 4), caption]), Spacer(1, 10)]
+
+
+def render_references(payload):
+    """Numbered references list. Each input line:
+        N | citation text
+    Renders as a two-column table: the number in teal, the citation
+    in body type, with hairline separators. The aim is a clean
+    bibliography, not a footer block."""
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    data = []
+    for r in rows:
+        num, _, text = r.partition("|")
+        num_p = Paragraph(
+            num.strip(),
+            ps(f"ref-n-{num.strip()}",
+               fontName="Inter-Bold", fontSize=8, leading=11,
+               textColor=ACCENT_DEEP, alignment=2),
+        )
+        text_p = Paragraph(
+            text.strip(),
+            ps(f"ref-t-{num.strip()}",
+               fontName="Inter", fontSize=8.5, leading=12,
+               textColor=INK_2),
+        )
+        data.append([num_p, text_p])
+    t = Table(
+        data,
+        colWidths=[0.32 * inch, COL_W - 0.32 * inch - 4],
+    )
+    style = TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 7),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+    ])
+    for i in range(1, len(data)):
+        style.add("LINEABOVE", (0, i), (-1, i), 0.3, RULE)
+    t.setStyle(style)
+    return [t, Spacer(1, 8)]
+
+
+MOAT_SHADES = [
+    HexColor("#EAF7F4"),
+    HexColor("#C9EAE3"),
+    HexColor("#86D2C5"),
+    HexColor("#39B7A4"),
+    HexColor("#0A8A7E"),
+]
 
 
 def render_moat(payload):
+    """Stratigraphic moat. One row per layer, deepening from top
+    (lightest teal, broadest reach) to bottom (deepest teal, hardest
+    to displace). Each row carries a depth bar, the layer name, and
+    the full description so the diagram reads as a real defensibility
+    map rather than a stack of empty rectangles."""
     rows = [r.strip() for r in payload.split("\n") if r.strip()]
     layers = []
     for r in rows:
         title, _, desc = r.partition("|")
         layers.append((title.strip(), desc.strip()))
-    return [KeepTogether(MoatIllustration(layers, COL_W)), Spacer(1, 8)]
+
+    n = len(layers)
+    bar_col_w = 0.55 * inch
+    title_col_w = 1.85 * inch
+    desc_col_w = COL_W - bar_col_w - title_col_w - 6
+    cells = []
+    for i, (title, desc) in enumerate(layers):
+        shade = MOAT_SHADES[min(i, len(MOAT_SHADES) - 1)]
+        # Depth marker: a small horizontal stack that gets longer as
+        # we go down. Visualizes "deeper layer, harder to dislodge."
+        bar_w = bar_col_w - 14
+        depth = bar_w * (i + 1) / n
+        depth_flow = Table(
+            [[""]],
+            colWidths=[depth],
+            rowHeights=[10],
+        )
+        depth_flow.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), shade),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        layer_kicker = Paragraph(
+            f"LAYER {i+1}",
+            ps(f"moat-k-{i}",
+               fontName="Inter-SemiBold", fontSize=6.5, leading=9,
+               textColor=ACCENT_DEEP, spaceAfter=3),
+        )
+        depth_cell = Table(
+            [[layer_kicker], [depth_flow]],
+            colWidths=[bar_col_w - 8],
+        )
+        depth_cell.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        title_p = Paragraph(
+            title,
+            ps(f"moat-t-{i}",
+               fontName="Inter-Bold", fontSize=10, leading=13,
+               textColor=NAVY),
+        )
+        desc_p = Paragraph(
+            desc,
+            ps(f"moat-d-{i}",
+               fontName="Inter", fontSize=9, leading=12.5,
+               textColor=INK_2),
+        )
+        cells.append([depth_cell, title_p, desc_p])
+
+    t = Table(cells, colWidths=[bar_col_w, title_col_w, desc_col_w])
+    style = TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+        ("BOX", (0, 0), (-1, -1), 0.7, HexColor("#C4E5DF")),
+    ])
+    # Hairline separators between layer rows
+    for i in range(1, n):
+        style.add("LINEABOVE", (0, i), (-1, i), 0.4, HexColor("#DDEEEA"))
+    t.setStyle(style)
+    return [KeepTogether(t), Spacer(1, 10)]
 
 
 def render_advisor_grid(payload):
@@ -1106,11 +1276,9 @@ def build_body(md):
             # tiny mono caps eyebrow above the h2 doesn't repeat the
             # marker text. The marker is consumed by render_h2_with_hl.
             kicker_text = re.sub(r"\{\{HL:[a-z]+\}\}", "", v).strip()
-            # If less than ~3 inches remain on the current page, push
-            # the section to the next page rather than letting the
-            # kicker + headline orphan at the bottom with no body
-            # underneath.
-            flow.append(CondPageBreak(3 * inch))
+            # Kicker and headline use keepWithNext to bind to the
+            # first body flowable that follows; no manual page-break
+            # gymnastics needed.
             flow.append(Paragraph(kicker_text.upper(), STY["kicker"]))
             flow.append(render_h2_with_hl(v))
         elif k == "h3":
@@ -1203,6 +1371,10 @@ def build_body(md):
                 flow.extend(render_screenshot_pair(payload))
             elif kind == "MOAT":
                 flow.extend(render_moat(payload))
+            elif kind == "CEDARFLOW":
+                flow.extend(render_cedarflow(payload))
+            elif kind == "REFERENCES":
+                flow.extend(render_references(payload))
     return flow
 
 

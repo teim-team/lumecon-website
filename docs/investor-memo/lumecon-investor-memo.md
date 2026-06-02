@@ -10,17 +10,13 @@ Confidential and Proprietary
 
 Lumecon is the software platform that makes economic impact analysis accessible to the organizations the current market underserves. The category is proven, the entry point is the most technically demanding segment of it, and the underlying technology shift makes building this company possible now in a way it was not five years ago.
 
-**Make the economically invisible visible.**
-
 The company is currently raising up to $100,000 in SAFE financing at a $5,000,000 post-money valuation cap to accelerate product development, pilot implementation, intellectual property protection, and commercialization. The founders have personally committed $50,000 in capital, with $25,000 already deployed.
-
-[[SCREENSHOT: dashboard | Lumecon dashboard. A completed economic impact run with jobs, labor income, output, tax impact, and export options on a single screen.]]
 
 ---
 
 ## Investment Summary
 
-| Item | Description |
+| Item | Detail |
 | --- | --- |
 | Company | Lumecon Inc. |
 | Entity Type | Delaware C-Corporation |
@@ -38,9 +34,9 @@ The company is currently raising up to $100,000 in SAFE financing at a $5,000,00
 
 Three things converged in the last 24 months that make this company possible to build now.
 
-**AI can do the repetitive part of professional knowledge work.** Recent labor-economics research finds that the share of professional work theoretically exposed to current AI systems substantially exceeds what is being adopted in practice. Economic impact analysis sits in that gap. The work is heavy on document intake, harmonization, assumption tracking, charting, and report writing, all of which are on the productive side of the adoption curve.
+**AI can do the repetitive part of professional knowledge work.** Recent labor-economics research finds that the share of professional work theoretically exposed to current AI systems substantially exceeds what is being adopted in practice.[^1] Economic impact analysis sits in that gap. The work is heavy on document intake, harmonization, assumption tracking, charting, and report writing, all of which are on the productive side of the adoption curve.
 
-**Existing providers have not modernized.** IMPLAN and REMI operate on workflows that predate the cloud. The market leaders prove demand and validate willingness to pay, but their stacks were built when desktop software was the assumption. The gap between what current technology can support and what shipped product offers is unusually wide.
+**Existing providers have not modernized.** IMPLAN and REMI operate on workflows that predate the cloud.[^2] The market leaders prove demand and validate willingness to pay, but their stacks were built when desktop software was the assumption. The gap between what current technology can support and what shipped product offers is unusually wide.
 
 **Customers want experts plus AI, not black-box outputs.** Governments, tribes, foundations, and grantmakers cannot accept a number they cannot defend. Lumecon sits between AI-only tools and traditional consultants. AI handles intake, harmonization, and drafting; the analyst stays accountable for every assumption.
 
@@ -53,17 +49,17 @@ This is not a "use AI for X" story. It is a "modernize a stagnant category" stor
 The addressable customer set is large, recurring, and fragmented enough that no single incumbent has consolidated it.
 
 [[STATGRID:
-575 | federally recognized tribes
-200+ | Alaska Native Corporations and related entities
-3,000+ | U.S. counties
+575 | federally recognized tribes[^3]
+200+ | Alaska Native Corporations and related entities[^4]
+3,000+ | U.S. counties[^5]
 50 | U.S. states
-19,000+ | incorporated cities, towns, and villages
-86,000+ | nonprofits with annual revenue over $1M
-4,000+ | accredited colleges and universities
-1.8M+ | private-sector establishments above 50 employees
+19,000+ | incorporated cities, towns, and villages[^5]
+86,000+ | nonprofits with annual revenue over $1M[^6]
+4,000+ | accredited colleges and universities[^7]
+1.8M+ | private-sector firms with 5 or more employees[^8]
 ]]
 
-Existing providers serve more than 1,100 organizations between IMPLAN (900+) and REMI (200+). Charlesbank Capital Partners acquired IMPLAN in 2024, confirming category demand and acquisition interest. The customer counts above demonstrate willingness to pay, not the boundary of the market. Most of the organizations listed have never run an economic impact study because the practical cost of one is $25,000 to $100,000 once software, consulting, and internal staff time are added together. Lumecon's pricing structure breaks below that floor and turns one-time studies into a continuously refreshed planning tool.
+Existing providers serve more than 1,100 organizations between IMPLAN (900+) and REMI (200+).[^9] Charlesbank Capital Partners acquired IMPLAN in 2024, confirming category demand and acquisition interest.[^10] The customer counts above demonstrate willingness to pay, not the boundary of the market. Most of the organizations listed have never run an economic impact study because the practical cost of one is $25,000 to $100,000 once software, consulting, and internal staff time are added together.[^11] Lumecon's pricing structure breaks below that floor and turns one-time studies into a continuously refreshed planning tool.
 
 ---
 
@@ -77,8 +73,6 @@ The legacy stack charges per geography, per user, per data tier. Then the consul
 
 Lumecon collapses both layers. One annual subscription, unlimited studies, every geography included, Cedar handling the intake and the drafting, and human review focused on the judgment calls that actually need a human.
 
-[[SCREENSHOT: study-setup | New study setup. Pick the geography, the time window, the project type, and the data sources, and Cedar prepares the workspace.]]
-
 ---
 
 ## {{HL:gold}}Why Tribes First
@@ -87,9 +81,7 @@ Tribal economies are among the most difficult economic environments to model acc
 
 Solving these problems first creates infrastructure that deploys directly into broader markets. The geographic engine, the data sovereignty controls, the institutional flexibility, and the multi-jurisdictional reasoning are exactly what cities, foundations, federal agencies, and international clients need. Tribes are the strategically right entry point because they force the hardest version of the problem to be solved first.
 
-The same review that identified 50+ public tribal impact studies between 2000 and 2026 also showed several organizations commissioning studies repeatedly, which means tribal demand is recurring rather than one-time. That recurring footprint is the early-customer base that funds the broader expansion.
-
-[[SCREENSHOT: geography-selector | Geography selector. Reservation, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands as first-class geographies.]]
+An internal review of public tribal impact studies between 2000 and 2026 identified 50+ published reports across more than two dozen tribal organizations, several of which commissioned studies repeatedly.[^12] That recurring footprint is the early-customer base that funds the broader expansion.
 
 ---
 
@@ -99,7 +91,7 @@ The same review that identified 50+ public tribal impact studies between 2000 an
 
 **Cedar.** Lumecon's AI-assisted workflow. Cedar uploads and processes data in PDF, CSV, and XLSX formats today, with more formats expanding over time. It structures inputs against public data sources, surfaces every modeling assumption for human sign-off, and acts as a thought partner on the write-up. Cedar is not a ghostwriter. The analyst stays accountable for the substance.
 
-[[SCREENSHOT: cedar-upload | Cedar upload and review queue. Drop in PDFs, CSVs, and XLSX files; Cedar extracts fields and stages them for human review.]]
+[[CEDARFLOW]]
 
 **Cedar Grove.** Launches in 2027 as the organizational intelligence layer. Customer data stays harmonized across every study a customer runs. Complementary administrative datasets (employment shifts, business openings and closures, wage movements, transfer-payment flows) sit alongside the customer's own data, so each study reinforces the impact narrative with real outcome evidence rather than only modeled multipliers. Recurring submissions (grants, federal reporting, audited annual reports) start from a base that already passed review.
 
@@ -149,11 +141,6 @@ Toolbox | $15,000 add-on | Team-produced finished deliverables (report, deck, ex
 
 First subscriptions and pilots begin in 2026. The company is targeting first paid revenue by end of 2026 from a focused set of Tribal and Local pilots in priority geographies.
 
-[[SCREENSHOTPAIR:
-report-pdf | Exported PDF report. Branded to the customer's visual identity with the assumption ledger embedded.
-deck-export | Exported slide deck. Same numbers, different framing, ready for council, board, or funder audiences.
-]]
-
 ---
 
 ## Use of Funds
@@ -197,3 +184,22 @@ Economic impact analysis is a proven category with stagnant incumbents, a custom
 The question is no longer whether economic impact analysis matters. The question is who has access to it.
 
 **Make the economically invisible visible.**
+
+---
+
+## References
+
+[[REFERENCES:
+1 | Eloundou, T., Manning, S., Mishkin, P., & Rock, D. (2023). "GPTs are GPTs: An Early Look at the Labor Market Impact Potential of Large Language Models." OpenAI / Penn / OpenResearch working paper. arXiv:2303.10130.
+2 | IMPLAN and REMI product documentation and release notes, accessed 2025–2026. Both vendors ship desktop-installed software with cloud companions added in the last 24 months.
+3 | Bureau of Indian Affairs, "Indian Entities Recognized by and Eligible To Receive Services From the United States Bureau of Indian Affairs," annual Federal Register list, most recent edition.
+4 | Alaska Native Claims Settlement Act of 1971 (43 U.S.C. § 1601 et seq.) established 12 Alaska Native regional corporations and over 200 village corporations.
+5 | U.S. Census Bureau, 2022 Census of Governments: Organization. 3,143 county-equivalents; 19,495 municipal governments.
+6 | National Center for Charitable Statistics, IRS Business Master File extract (2024). Approximately 86,000 501(c)(3) nonprofits report annual gross receipts above $1M.
+7 | U.S. Department of Education, National Center for Education Statistics, IPEDS 2023–24 institutional directory. Approximately 4,000 accredited Title IV-eligible postsecondary institutions.
+8 | U.S. Census Bureau, Statistics of U.S. Businesses (SUSB), most recent annual release. Approximately 1.8M employer firms with five or more employees.
+9 | IMPLAN Group LLC and Regional Economic Models, Inc. (REMI), public-facing customer counts and case study libraries, accessed 2025–2026.
+10 | Charlesbank Capital Partners, press release, "Charlesbank Capital Partners Acquires IMPLAN," 2024.
+11 | Estimated from public IMPLAN and REMI list pricing, Federal and state RFP awards for impact analysis contracts, and consultant rate cards. Includes software license, consulting hours, and internal staff time. Internal estimate; ranges vary by scope and geography.
+12 | Internal Lumecon dataset of publicly available tribal economic impact studies, 2000–2026. Compiled from tribal government and tribal enterprise public filings and consultant reports. Internal estimate.
+]]
