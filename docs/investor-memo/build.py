@@ -304,9 +304,12 @@ def inline(s):
         r'\1<font name="Spectral-Italic" color="#F0A91A">\2</font>',
         s,
     )
-    # Footnote markers: [^N] → small teal superscript
+    # Footnote markers: [^N] → small teal superscript. Labels may
+    # be alphanumeric (e.g., [^5a], [^6b]) so we can disambiguate
+    # multiple sources cited in the same stat without renumbering
+    # the entire reference list.
     s = re.sub(
-        r"\[\^(\d+)\]",
+        r"\[\^([0-9a-z]+)\]",
         r'<super rise="3"><font name="Inter-SemiBold" size="6.5" '
         r'color="#0A8A7E">\1</font></super>',
         s,
@@ -992,26 +995,26 @@ def render_references(payload):
         num_p = Paragraph(
             num.strip(),
             ps(f"ref-n-{num.strip()}",
-               fontName="Inter-Bold", fontSize=8, leading=11,
+               fontName="Inter-Bold", fontSize=7.5, leading=10,
                textColor=ACCENT_DEEP, alignment=2),
         )
         text_p = Paragraph(
             text.strip(),
             ps(f"ref-t-{num.strip()}",
-               fontName="Inter", fontSize=8.5, leading=12,
+               fontName="Inter", fontSize=7.5, leading=10.5,
                textColor=INK_2),
         )
         data.append([num_p, text_p])
     t = Table(
         data,
-        colWidths=[0.32 * inch, COL_W - 0.32 * inch - 4],
+        colWidths=[0.28 * inch, COL_W - 0.28 * inch - 4],
     )
     style = TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 6),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING", (0, 0), (-1, -1), 7),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+        ("LEFTPADDING", (0, 0), (-1, -1), 5),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
     ])
     for i in range(1, len(data)):
         style.add("LINEABOVE", (0, i), (-1, i), 0.3, RULE)
@@ -1028,86 +1031,117 @@ MOAT_SHADES = [
 ]
 
 
+class MoatPyramid(Flowable):
+    """Defensibility pyramid. Layers stack vertically; each layer is
+    drawn as a horizontal teal-shaded bar that widens toward the
+    bottom (broadest base, narrowest peak). The TOP layer is the
+    earliest / most-defensible compounding effect; the BOTTOM layer
+    is the foundation.
+
+    Each layer carries: a layer-number kicker, the layer name (bold),
+    and a one-line description, laid out beside the band."""
+
+    def __init__(self, layers_foundation_first, col_w):
+        Flowable.__init__(self)
+        # Input ordering: layer 1 is the foundation (broadest base of
+        # the pyramid), layer N is the most compounding (narrowest
+        # peak). Stored as-is; the draw loop indexes from the peak
+        # downward.
+        self.layers = layers_foundation_first
+        self.col_w = col_w
+        n = len(self.layers)
+        self.row_h = 0.55 * inch
+        self.gap = 4
+        self.height = n * (self.row_h + self.gap) + 6
+
+    def wrap(self, aw, ah):
+        return (self.col_w, self.height + 6)
+
+    def draw(self):
+        c = self.canv
+        n = len(self.layers)
+        # Pyramid geometry: the visual band itself takes the LEFT
+        # portion of the column. Text labels sit to the right, with
+        # the description on a second line under the title.
+        band_max_w = 2.7 * inch
+        band_min_w = 1.0 * inch
+        band_x_center = 1.55 * inch
+        text_x = band_max_w + 0.45 * inch
+        text_w = self.col_w - text_x - 6
+
+        for visual_i in range(n):
+            # visual_i = 0 is the visual peak (narrowest band);
+            # visual_i = n - 1 is the visual base (widest band).
+            # The peak shows the most-compounding layer (last in
+            # input), the base shows the foundation (first in input).
+            real_layer_n = n - visual_i  # 5,4,3,2,1 from top down
+            input_idx = real_layer_n - 1
+            title, desc = self.layers[input_idx]
+            shade = MOAT_SHADES[min(input_idx, len(MOAT_SHADES) - 1)]
+
+            t = visual_i / max(n - 1, 1)
+            band_w = band_min_w + (band_max_w - band_min_w) * t
+            band_x = band_x_center - band_w / 2
+            band_y = self.height - (visual_i + 1) * (self.row_h + self.gap)
+            band_h = self.row_h
+
+            c.setFillColor(shade)
+            c.setStrokeColor(HexColor("#0A8A7E"))
+            c.setLineWidth(0.4)
+            c.roundRect(band_x, band_y, band_w, band_h, 4,
+                        stroke=1, fill=1)
+            # Layer number centered inside the band, in a contrasting
+            # color depending on band darkness.
+            inside_color = (colors.white if real_layer_n >= 4
+                            else NAVY)
+            c.setFillColor(inside_color)
+            c.setFont("Inter-Bold", 11)
+            label = f"LAYER {real_layer_n}"
+            label_w = pdfmetrics.stringWidth(label, "Inter-Bold", 11)
+            c.drawString(band_x + (band_w - label_w) / 2,
+                         band_y + band_h / 2 - 4, label)
+
+            # Title to the right of the band, with the description
+            # under it. Drawn at fixed y so each layer aligns with
+            # the center of its band.
+            title_baseline = band_y + band_h / 2 + 2
+            c.setFillColor(NAVY)
+            c.setFont("Inter-Bold", 10.5)
+            c.drawString(text_x, title_baseline, title)
+
+            c.setFillColor(INK_2)
+            c.setFont("Inter", 8.5)
+            # Wrap description to text_w using rough char-per-width
+            # estimate; fine for one-liners.
+            avg_char_w = 4.6
+            max_chars = max(int(text_w / avg_char_w), 30)
+            if len(desc) > max_chars:
+                # Split at the nearest space before max_chars
+                cut = desc.rfind(" ", 0, max_chars)
+                if cut == -1:
+                    cut = max_chars
+                line1 = desc[:cut].strip()
+                line2 = desc[cut:].strip()
+                c.drawString(text_x, title_baseline - 12, line1)
+                c.drawString(text_x, title_baseline - 23, line2)
+            else:
+                c.drawString(text_x, title_baseline - 12, desc)
+
+
 def render_moat(payload):
-    """Stratigraphic moat. One row per layer, deepening from top
-    (lightest teal, broadest reach) to bottom (deepest teal, hardest
-    to displace). Each row carries a depth bar, the layer name, and
-    the full description so the diagram reads as a real defensibility
-    map rather than a stack of empty rectangles."""
+    """Pyramid moat. The defensibility stack reads top-down: peak
+    (narrowest, most compounding) at the top, foundation (broadest)
+    at the bottom. Each layer carries its name and description
+    beside the visual band."""
     rows = [r.strip() for r in payload.split("\n") if r.strip()]
     layers = []
     for r in rows:
         title, _, desc = r.partition("|")
         layers.append((title.strip(), desc.strip()))
-
-    n = len(layers)
-    bar_col_w = 0.55 * inch
-    title_col_w = 1.85 * inch
-    desc_col_w = COL_W - bar_col_w - title_col_w - 6
-    cells = []
-    for i, (title, desc) in enumerate(layers):
-        shade = MOAT_SHADES[min(i, len(MOAT_SHADES) - 1)]
-        # Depth marker: a small horizontal stack that gets longer as
-        # we go down. Visualizes "deeper layer, harder to dislodge."
-        bar_w = bar_col_w - 14
-        depth = bar_w * (i + 1) / n
-        depth_flow = Table(
-            [[""]],
-            colWidths=[depth],
-            rowHeights=[10],
-        )
-        depth_flow.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, -1), shade),
-            ("LEFTPADDING", (0, 0), (-1, -1), 0),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-            ("TOPPADDING", (0, 0), (-1, -1), 0),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
-        ]))
-        layer_kicker = Paragraph(
-            f"LAYER {i+1}",
-            ps(f"moat-k-{i}",
-               fontName="Inter-SemiBold", fontSize=6.5, leading=9,
-               textColor=ACCENT_DEEP, spaceAfter=3),
-        )
-        depth_cell = Table(
-            [[layer_kicker], [depth_flow]],
-            colWidths=[bar_col_w - 8],
-        )
-        depth_cell.setStyle(TableStyle([
-            ("LEFTPADDING", (0, 0), (-1, -1), 0),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-            ("TOPPADDING", (0, 0), (-1, -1), 0),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ]))
-        title_p = Paragraph(
-            title,
-            ps(f"moat-t-{i}",
-               fontName="Inter-Bold", fontSize=10, leading=13,
-               textColor=NAVY),
-        )
-        desc_p = Paragraph(
-            desc,
-            ps(f"moat-d-{i}",
-               fontName="Inter", fontSize=9, leading=12.5,
-               textColor=INK_2),
-        )
-        cells.append([depth_cell, title_p, desc_p])
-
-    t = Table(cells, colWidths=[bar_col_w, title_col_w, desc_col_w])
-    style = TableStyle([
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 8),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 10),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
-        ("BOX", (0, 0), (-1, -1), 0.7, HexColor("#C4E5DF")),
-    ])
-    # Hairline separators between layer rows
-    for i in range(1, n):
-        style.add("LINEABOVE", (0, i), (-1, i), 0.4, HexColor("#DDEEEA"))
-    t.setStyle(style)
-    return [KeepTogether(t), Spacer(1, 10)]
+    # Markdown input lists layers 1..N where 1 = foundational and
+    # N = most compounding. The pyramid renderer takes the list in
+    # that natural order and inverts internally for the visual.
+    return [KeepTogether(MoatPyramid(layers, COL_W)), Spacer(1, 10)]
 
 
 def render_advisor_grid(payload):
@@ -1615,6 +1649,186 @@ def render_bigline(payload):
             Spacer(1, 8)]
 
 
+# ---- Market opportunity blocks (WEDGE, MARKETSEGMENTS, CALLOUT) ----
+def render_wedge(payload):
+    """The wedge: two oversized callouts (number + label + caption)
+    that anchor the market-opportunity page. First non-pipe line is
+    the section eyebrow."""
+    lines = [l.strip() for l in payload.split("\n") if l.strip()]
+    eyebrow = lines[0] if lines and "|" not in lines[0] else "THE WEDGE"
+    body_lines = [l for l in lines if "|" in l]
+    rows = []
+    for l in body_lines:
+        parts = [p.strip() for p in l.split("|")]
+        while len(parts) < 3:
+            parts.append("")
+        rows.append(parts[:3])
+
+    eyebrow_p = Paragraph(
+        eyebrow.upper(),
+        ps("wedge-eyebrow", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=ACCENT_DEEP, spaceAfter=8),
+    )
+
+    cols = max(len(rows), 1)
+    gap = 12
+    cell_w = (COL_W - gap * (cols - 1)) / cols
+
+    def cell(num, label, caption):
+        # Shrink the headline number until it fits one line in the
+        # column width. "12 + ~225" is much wider than "575" so the
+        # font size has to flex; without this the wider number wraps
+        # and the two callouts visually mismatch.
+        target_w = cell_w - 4
+        for size in (54, 46, 40, 34, 30, 26):
+            if pdfmetrics.stringWidth(num, "Inter-Bold", size) <= target_w:
+                break
+        num_p = Paragraph(
+            num,
+            ps(f"w-n-{num[:6]}", fontName="Inter-Bold", fontSize=size,
+               leading=size + 4, textColor=NAVY, spaceAfter=4),
+        )
+        label_p = Paragraph(
+            label,
+            ps(f"w-l-{num[:6]}", fontName="Inter-Bold", fontSize=13,
+               leading=16, textColor=ACCENT_DEEP, spaceAfter=6),
+        )
+        cap_p = Paragraph(
+            inline(caption),
+            ps(f"w-c-{num[:6]}", fontName="Inter", fontSize=9.5,
+               leading=13, textColor=INK_2),
+        )
+        return Table(
+            [[num_p], [label_p], [cap_p]],
+            colWidths=[cell_w],
+        )
+
+    cells = [cell(*r) for r in rows]
+    for c in cells:
+        c.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+    row = Table([cells], colWidths=[cell_w + (gap if i < cols - 1 else 0)
+                                    for i in range(cols)])
+    row.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    return [KeepTogether([eyebrow_p, row]), Spacer(1, 14)]
+
+
+def render_marketsegments(payload):
+    """Three-card market-segment map. First non-`:::` line is the
+    section eyebrow. Subsequent lines: `Title ::: bullet ::: bullet ::: ...`"""
+    lines = [l.strip() for l in payload.split("\n") if l.strip()]
+    eyebrow = lines[0] if lines and ":::" not in lines[0] else "THE BROADER MARKET"
+    body_lines = [l for l in lines if ":::" in l]
+    segments = []
+    for l in body_lines:
+        parts = [p.strip() for p in l.split(":::")]
+        title = parts[0]
+        bullets = parts[1:]
+        segments.append((title, bullets))
+
+    cols = max(len(segments), 1)
+    gap = 8
+    cell_w = (COL_W - gap * (cols - 1) - 2) / cols
+    cell_h = 1.85 * inch
+
+    def segment_card(title, bullets):
+        title_p = Paragraph(
+            title.upper(),
+            ps(f"ms-t-{title[:6]}",
+               fontName="Inter-Bold", fontSize=9, leading=12,
+               textColor=ACCENT_DEEP, spaceAfter=6),
+        )
+        rule = HRFlowable(width="100%", thickness=0.6, color=ACCENT,
+                          spaceBefore=0, spaceAfter=6)
+        bullet_rows = [[title_p], [rule]]
+        for b in bullets:
+            bp = Paragraph(
+                inline(b),
+                ps(f"ms-b-{title[:4]}-{b[:6]}",
+                   fontName="Inter", fontSize=9, leading=12.5,
+                   textColor=INK_2, spaceAfter=4),
+            )
+            bullet_rows.append([bp])
+        inner = Table(bullet_rows, colWidths=[cell_w - 18])
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        outer = Table([[inner]], colWidths=[cell_w], rowHeights=[cell_h])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
+            ("LEFTPADDING", (0, 0), (-1, -1), 9),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 9),
+            ("TOPPADDING", (0, 0), (-1, -1), 10),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        return outer
+
+    cards = [segment_card(t, b) for (t, b) in segments]
+    row = Table([cards], colWidths=[cell_w + (gap if i < cols - 1 else 0)
+                                     for i in range(cols)])
+    row.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+
+    eyebrow_p = Paragraph(
+        eyebrow.upper(),
+        ps("ms-eyebrow", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=ACCENT_DEEP, spaceBefore=4, spaceAfter=8),
+    )
+    return [KeepTogether([eyebrow_p, row]), Spacer(1, 12)]
+
+
+def render_callout(payload):
+    """Centered statement on a soft teal background. The page's
+    rhetorical anchor; sits between sections to deliver a single
+    sentence with weight."""
+    text = payload.strip()
+    para = Paragraph(
+        inline(text),
+        ps("co-text", fontName="Inter-Bold", fontSize=13, leading=18,
+           textColor=NAVY, alignment=1),
+    )
+    inner = Table([[para]], colWidths=[COL_W - 24])
+    inner.setStyle(TableStyle([
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
+    outer = Table([[inner]], colWidths=[COL_W])
+    outer.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
+        ("LINEABOVE", (0, 0), (-1, 0), 2.2, ACCENT),
+        ("LINEBELOW", (0, -1), (-1, -1), 2.2, ACCENT),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+        ("TOPPADDING", (0, 0), (-1, -1), 16),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 16),
+    ]))
+    return [Spacer(1, 4), KeepTogether(outer), Spacer(1, 12)]
+
+
 # ---- Page decoration ----
 def cover_decoration(canvas, doc):
     canvas.saveState()
@@ -1860,6 +2074,12 @@ def build_body(md):
                 block_flows = render_risks(payload)
             elif kind == "BIGLINE":
                 block_flows = render_bigline(payload)
+            elif kind == "WEDGE":
+                block_flows = render_wedge(payload)
+            elif kind == "MARKETSEGMENTS":
+                block_flows = render_marketsegments(payload)
+            elif kind == "CALLOUT":
+                block_flows = render_callout(payload)
             emit(block_flows)
     # Final flush of any unbound h2 group (shouldn't happen with
     # well-formed input, but defensive).

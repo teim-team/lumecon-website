@@ -39,22 +39,28 @@ This is not a "use AI for X" story. It is a "modernize a stagnant category" stor
 
 ## {{HL:green}}Market Opportunity
 
-The addressable customer set is large, recurring, and fragmented enough that no single incumbent has consolidated it.
+Existing providers prove willingness to pay. They do not define the boundary of the market.
 
-[[STATGRID:
-575 | federally recognized tribes[^3]
-200+ | Alaska Native Corporations and related entities[^4]
-3,000+ | U.S. counties[^5]
-50 | U.S. states
-19,000+ | incorporated cities, towns, and villages[^5]
-86,000+ | nonprofits with annual revenue over $1M[^6]
-4,000+ | accredited colleges and universities[^7]
-1.8M+ | private-sector firms with 5 or more employees[^8]
+[[WEDGE:
+THE WEDGE
+575 | Federally Recognized Tribes | One of the most technically difficult economic environments in the United States.[^3]
+12 + ~225 | Alaska Native Corporations | 12 regional corporations and roughly 225 village corporations, operating across unique ownership and governance structures.[^4]
 ]]
+
+[[MARKETSEGMENTS:
+THE BROADER MARKET
+Public Sector ::: 90,837 U.S. local governments[^5a] ::: 3,144 counties and county equivalents[^5b] ::: ~19,500 incorporated cities, towns, and villages[^5c] ::: 50 states
+Institutions ::: 4,150 degree-granting colleges and universities[^7] ::: 1.9M+ registered U.S. nonprofits[^6a] ::: Tens of thousands of larger public charities above $1M in revenue[^6b]
+Private Sector ::: 2M+ employer firms with 5 or more employees[^8] ::: Consulting firms serving governments, nonprofits, universities, and foundations ::: Economic-development organizations
+]]
+
+[[CALLOUT: Lumecon is built for the much larger set of organizations that currently do not participate in the market.]]
 
 IMPLAN publicly reports more than 900 client organizations, and REMI has long served public agencies, universities, and consultants on the state and federal side.[^9] In 2024, Charlesbank Capital Partners acquired a controlling stake in IMPLAN for more than $100 million, with the Wall Street Journal reporting that IMPLAN had grown revenue at more than 35% annually over the prior three years.[^10] That transaction is the cleanest available evidence that the category attracts institutional capital and that demand is durable.
 
-The customer counts above demonstrate willingness to pay, not the boundary of the market. Most of the organizations listed have never run an economic impact study because the practical cost of one can exceed $25,000 and, in more complex engagements, approach or exceed $100,000 once software, consulting, and internal staff time are added together.[^11] Lumecon's pricing structure breaks below that floor and turns one-time studies into a continuously refreshed planning tool.
+Most of the organizations above have never run an economic impact study because the practical cost of one can exceed $25,000 and, in more complex engagements, approach or exceed $100,000 once software, consulting, and internal staff time are added together.[^11] Lumecon's pricing structure breaks below that floor and turns one-time studies into a continuously refreshed planning tool.
+
+The same measurement problem exists globally. Subnational governments worldwide manage 40% of public expenditures and 58% of public investment in OECD countries.[^13] UCLG's network represents local and regional governments across more than 140 countries.[^14] Lumecon's long-run opportunity extends to governments, NGOs, foundations, development organizations, and multinational firms operating across borders.
 
 ---
 
@@ -227,14 +233,19 @@ Pro Rata | Side letter on request
 [[REFERENCES:
 1 | Eloundou, T., Manning, S., Mishkin, P., & Rock, D. (2023). "GPTs are GPTs: An Early Look at the Labor Market Impact Potential of Large Language Models." OpenAI / Penn / OpenResearch working paper. arXiv:2303.10130.
 2 | IMPLAN and REMI product documentation and release notes, accessed 2025–2026. Both vendors ship desktop-installed software with cloud companions added in the last 24 months.
-3 | Bureau of Indian Affairs, "Indian Entities Recognized by and Eligible To Receive Services From the United States Bureau of Indian Affairs," annual Federal Register list, most recent edition.
-4 | Alaska Native Claims Settlement Act of 1971 (43 U.S.C. § 1601 et seq.) established 12 Alaska Native regional corporations and over 200 village corporations.
-5 | U.S. Census Bureau, 2022 Census of Governments: Organization. 3,143 county-equivalents; 19,495 municipal governments.
-6 | National Center for Charitable Statistics, IRS Business Master File extract (2024). Approximately 86,000 501(c)(3) nonprofits report annual gross receipts above $1M.
-7 | U.S. Department of Education, National Center for Education Statistics, IPEDS 2023–24 institutional directory. Approximately 4,000 accredited Title IV-eligible postsecondary institutions.
-8 | U.S. Census Bureau, Statistics of U.S. Businesses (SUSB), most recent annual release. Approximately 1.8M employer firms with five or more employees.
+3 | Bureau of Indian Affairs, Tribal Leaders Directory and "Indian Entities Recognized by and Eligible To Receive Services From the United States Bureau of Indian Affairs," Federal Register, January 30, 2026. 575 federally recognized tribes.
+4 | Alaska Native Regional Corporations (12) per ANCSA Regional Association; approximately 225 village corporations per the Resource Development Council for Alaska / ANCSA Regional Association.
+5a | Federal Reserve Bank of St. Louis, "The Number and Type of Local Governments in the U.S.," 2024, citing the 2022 Census of Governments. 90,837 U.S. local governments.
+5b | U.S. Census Bureau, 2022 Census of Governments and OECD Local Data Portal methodology. 3,144 counties and county-equivalents; 3,031 county governments.
+5c | U.S. Census Bureau, "Incorporated places in the United States." Approximately 19,500 incorporated places.
+6a | Candid, "Money in the U.S. Social Sector," accessed 2025–2026. Approximately 1.9M registered U.S. nonprofits.
+6b | Nonprofit Impact Matters, downloadable data charts: 92% of U.S. nonprofits operate with annual revenue under $1M; the remainder (a large public-charity universe in the tens of thousands) is the relevant segment for paid impact studies.
+7 | National Science Foundation / NCSES, U.S. institutions providing science and engineering higher education, 2019–20: approximately 4,150 degree-granting institutions. NCES / IES reports 5,819 Title IV institutions for 2023–24.
+8 | U.S. Census Bureau, Statistics of U.S. Businesses (SUSB), 2022 annual data. Approximately 2M employer firms with five or more employees. Distribution per Pew Research, "A Look at Small Businesses in the U.S.," April 2024.
 9 | IMPLAN, "IMPLAN Announces…," press release via PRNewswire, 2024 ("technology serves more than 900 clients"). REMI customer base referenced via REMI public materials, accessed 2025–2026.
 10 | Wall Street Journal, coverage of Charlesbank Capital Partners' 2024 acquisition of a controlling stake in IMPLAN for more than $100 million; reported IMPLAN revenue growth above 35% annually over the prior three years. Charlesbank Capital Partners press release, "Charlesbank Capital Partners Acquires IMPLAN," 2024.
-11 | Estimated from public IMPLAN and REMI list pricing, Federal and state RFP awards for impact analysis contracts, and consultant rate cards. Includes software license, consulting hours, and internal staff time. Internal estimate; ranges vary by scope and geography.
+11 | Estimated from public IMPLAN and REMI list pricing, federal and state RFP awards for impact analysis contracts, and consultant rate cards. Includes software license, consulting hours, and internal staff time. Internal estimate; ranges vary by scope and geography.
 12 | Internal Lumecon dataset of publicly available tribal economic impact studies, 2000–2026. Compiled from tribal government and tribal enterprise public filings and consultant reports. Internal estimate.
+13 | OECD, "Subnational finance and investment," 2022 figures: subnational governments account for 40% of public expenditures and 58% of public investment in OECD countries.
+14 | United Cities and Local Governments (UCLG) network description and OECD/UCLG World Observatory on Subnational Government Finance (2022 edition covers 135 countries representing 93% of world population and 94% of global GDP).
 ]]
