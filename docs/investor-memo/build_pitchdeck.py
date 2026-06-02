@@ -573,115 +573,178 @@ def slide_02_problem():
     return [layout]
 
 
-# ---- Slide 3: Solution ----
+# ---- Slide 3: What is EIA + How Lumecon Works ----
 def slide_03_solution():
-    """Headline + 4 numbered image cards in a row for the Cedar
-    workflow: source intake -> harmonize -> assumption ledger -> deliverable."""
+    """Two-panel slide. Left: what economic impact analysis is, in
+    plain language, with use cases and the cost reality. Right: how
+    Lumecon does it, as a 5-step workflow with the RAG callout. This
+    is the dummy-proof slide — investors who have never heard of EIA
+    leave understanding what the category does and where Lumecon
+    sits."""
     header = slide_header("Solution",
-                            "Source Intake. Harmonize. Defend. Deliver.",
-                            headline_size=30)
-    steps = [
-        ("01", "Source Intake",
-         "PDFs, CSVs, XLSX files dropped into Cedar. Every field extracted "
-         "and typed.",
-         "Cedar upload"),
-        ("02", "Harmonize",
-         "Inputs structured against public datasets. Geographies, sectors, "
-         "and time windows resolved automatically.",
-         "Cedar harmonize"),
-        ("03", "Assumption Ledger",
-         "Every modeling choice surfaces for analyst sign-off. Override, "
-         "annotate, or approve in place.",
-         "Assumption ledger"),
-        ("04", "Branded Deliverable",
-         "Report, deck, and executive summary export with the customer's "
-         "visual identity and the assumption record attached.",
-         "Branded export"),
-    ]
-    n = len(steps)
-    gap = 12
-    card_w = (CONTENT_W - gap * (n - 1)) / n
-    card_h = CONTENT_H * 0.55
+                            "What Economic Impact Analysis Is, and How We Do It.",
+                            headline_size=26)
 
-    cells = []
-    for num, title, body, slot in steps:
-        cells.append(numbered_card(num, title, body, card_w, card_h,
-                                     with_image_slot=slot))
-    row = Table([cells],
-                 colWidths=[card_w + (gap if i < n - 1 else 0)
-                            for i in range(n)])
-    row.setStyle(TableStyle([
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    panel_w = (CONTENT_W - 24) / 2
+    panel_h = CONTENT_H * 0.62
+
+    # Left panel: WHAT EIA IS
+    left_title = Paragraph(
+        "Economic impact analysis measures how a dollar of spending "
+        "<font color='#0A8A7E'><b>ripples through an economy</b></font> — "
+        "creating jobs, wages, output, and tax revenue.",
+        ps("eia-d", fontName="Inter", fontSize=12.5, leading=17,
+           textColor=NAVY, spaceAfter=14))
+
+    use_cases = [
+        ("Bond justification",
+         "Why this project is worth borrowing for."),
+        ("Grant compliance",
+         "Documenting impact for federal and foundation funders."),
+        ("Site selection & development",
+         "Comparing economic outcomes across geographies."),
+        ("Lobbying & policy",
+         "Quantifying the impact of a proposed change."),
+    ]
+    uc_rows = []
+    for t, b in use_cases:
+        t_p = Paragraph(
+            f"<font name='Inter-Bold' color='#0A0F26'>{t}</font><br/>"
+            f"<font color='#353B5C'>{b}</font>",
+            ps(f"uc-{t[:6]}",
+               fontName="Inter", fontSize=10, leading=13.5,
+               textColor=INK_2))
+        uc_rows.append([t_p])
+    uc_block = Table(uc_rows, colWidths=[panel_w - 32])
+    uc_block.setStyle(TableStyle([
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
-    ]))
-    return header + [Spacer(1, 28), row]
-
-
-# ---- Slide 4: Product ----
-def slide_04_product():
-    """Left: 6 numbered platform cards in 2x3. Right: product mockup
-    placeholder."""
-    left_w = CONTENT_W * 0.55
-    right_w = CONTENT_W * 0.40
-    gap_w = CONTENT_W * 0.05
-
-    items = [
-        ("01", "Local",
-         "Cities, counties, and state agencies. Tier ladder ships 2026."),
-        ("02", "Tribal",
-         "Tribal governments, enterprises, and Native organizations. "
-         "Same engine, sovereign-aware geographies."),
-        ("03", "Cedar",
-         "AI workflow inside Sapling and Tree tiers. Source intake, "
-         "harmonization, assumption tracking."),
-        ("04", "Cedar Grove",
-         "Organizational intelligence layer (2027). Harmonized customer "
-         "memory across every study."),
-        ("05", "Global",
-         "Cross-border and supply-chain analysis (2028). Same backbone, "
-         "international geographies."),
-        ("06", "RIMS II / IMPLAN-Class Engine",
-         "Underneath the AI layer: a credible regional input-output engine "
-         "re-parameterized for complex jurisdictions."),
-    ]
-    card_w = (left_w - 12) / 2
-    card_h = (CONTENT_H * 0.55) / 3
-    rows = []
-    for i in range(0, len(items), 2):
-        rows.append([
-            navy_card(f"{items[i][0]}  {items[i][1]}", items[i][2],
-                       card_w, card_h),
-            navy_card(f"{items[i+1][0]}  {items[i+1][1]}", items[i+1][2],
-                       card_w, card_h),
-        ])
-    grid = Table(rows,
-                  colWidths=[card_w + 6, card_w + 6],
-                  rowHeights=[card_h + 8] * len(rows))
-    grid.setStyle(TableStyle([
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 0),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
     ]))
 
-    left_col = stack(
-        slide_header("Product",
-                      "Three Platforms. One Engine. One Ladder.",
-                      headline_size=30) +
-        [Spacer(1, 22), grid],
-        col_w=left_w,
+    pain_html = (
+        '<font name="Inter-Bold" color="#0A0F26">$50K-$100K per '
+        'study, months of work, and a five-figure annual software '
+        'bill.</font><br/>'
+        '<font color="#353B5C" size="9.5">IMPLAN and REMI software '
+        'start at $7,500. Consultants charge $50K-$100K to run them. '
+        'Most organizations cannot afford either.</font>'
     )
-    right_col = ImageSlot("Lumecon dashboard",
-                            right_w, CONTENT_H * 0.85,
-                            caption=("Suggested: product screenshot — "
-                                      "completed study workspace"),
-                            big=True)
-    layout = Table([[left_col, "", right_col]],
-                    colWidths=[left_w, gap_w, right_w])
+    pain_p = Paragraph(pain_html,
+        ps("eia-pain", fontName="Inter", fontSize=10.5, leading=14,
+           textColor=INK_2))
+    pain_eb = Paragraph(
+        "TODAY",
+        ps("eia-pain-eb", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=HexColor("#A35A0F"), spaceAfter=4))
+    pain_box_inner = stack([pain_eb, pain_p], col_w=panel_w - 56)
+    pain_box = Table([[pain_box_inner]], colWidths=[panel_w - 32])
+    pain_box.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), HexColor("#FCEEDA")),
+        ("LINEABOVE", (0, 0), (-1, 0), 1.6, HexColor("#E2B973")),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+        ("TOPPADDING", (0, 0), (-1, -1), 12),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+    ]))
+
+    eyebrow_left = Paragraph(
+        "WHAT EIA IS",
+        ps("eb-left", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=ACCENT_DEEP, spaceAfter=10))
+
+    left_inner = stack([eyebrow_left, left_title, uc_block,
+                          Spacer(1, 14), pain_box],
+                         col_w=panel_w - 32)
+    left_panel = Table([[left_inner]], colWidths=[panel_w],
+                        rowHeights=[panel_h])
+    left_panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
+        ("LEFTPADDING", (0, 0), (-1, -1), 16),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 16),
+        ("TOPPADDING", (0, 0), (-1, -1), 16),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 16),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    # Right panel: HOW LUMECON DOES IT (5-step workflow + RAG callout)
+    eyebrow_right = Paragraph(
+        "HOW LUMECON WORKS",
+        ps("eb-right", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=ACCENT_DEEP, spaceAfter=10))
+    right_intro = Paragraph(
+        "AI-guided intake. Analyst-confirmed values. Every number "
+        "traced back to a source document.",
+        ps("hw-intro", fontName="Inter-SemiBold", fontSize=11.5,
+           leading=15, textColor=NAVY, spaceAfter=14))
+
+    steps = [
+        ("1", "Upload", "Financials, payroll, reports."),
+        ("2", "Extract", "Revenue, jobs, expenses pulled and typed."),
+        ("3", "Confirm", "Analyst reviews every value, every multiplier."),
+        ("4", "Model", "Confirmed data feeds the engine."),
+        ("5", "Results", "Provenance + defensible report."),
+    ]
+    step_rows_data = []
+    for num, title, body in steps:
+        num_p = Paragraph(
+            num,
+            ps(f"hw-n-{num}", fontName="Inter-Bold", fontSize=15,
+               leading=18, textColor=ACCENT_DEEP, alignment=1))
+        t_p = Paragraph(
+            f"<font name='Inter-Bold' color='#0A0F26'>{title}.</font> "
+            f"<font color='#353B5C'>{body}</font>",
+            ps(f"hw-t-{num}", fontName="Inter", fontSize=9.5,
+               leading=12.5, textColor=INK_2))
+        step_rows_data.append([num_p, t_p])
+    step_block = Table(step_rows_data,
+                        colWidths=[0.30 * inch, panel_w - 32 - 0.30 * inch])
+    step_block.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+
+    rag_html = (
+        '<font name="Inter-Bold" color="#FFFFFF">'
+        'Every number traced. Nothing assumed.</font><br/>'
+        '<font color="#D5EFEC">'
+        'RAG-based retrieval, not generation. Liability-safe by design.'
+        '</font>'
+    )
+    rag_p = Paragraph(rag_html,
+        ps("rag", fontName="Inter", fontSize=10, leading=14,
+           textColor=PAPER, alignment=0))
+    rag_box = Table([[rag_p]], colWidths=[panel_w - 32])
+    rag_box.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), ACCENT_DEEP),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+        ("TOPPADDING", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+    ]))
+
+    right_inner = stack([eyebrow_right, right_intro, step_block,
+                          Spacer(1, 14), rag_box],
+                         col_w=panel_w - 32)
+    right_panel = Table([[right_inner]], colWidths=[panel_w],
+                         rowHeights=[panel_h])
+    right_panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+        ("BOX", (0, 0), (-1, -1), 0.6, RULE),
+        ("LINEABOVE", (0, 0), (-1, 0), 2.6, ACCENT),
+        ("LEFTPADDING", (0, 0), (-1, -1), 16),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 16),
+        ("TOPPADDING", (0, 0), (-1, -1), 16),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 16),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    layout = Table([[left_panel, "", right_panel]],
+                    colWidths=[panel_w, 24, panel_w])
     layout.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
@@ -689,87 +752,239 @@ def slide_04_product():
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
     ]))
-    return [layout]
+    return header + [Spacer(1, 16), layout]
+
+
+# ---- Slide 4: Product ----
+def slide_04_product():
+    """Three product tiers with explicit domains and patent status,
+    plus a 'who uses this' row underneath. Mirrors the old deck's
+    clean Local/Tribal/Global breakdown."""
+    header = slide_header("Product",
+                            "Three Products, One Company.",
+                            headline_size=30)
+
+    products = [
+        ("Local EIA", "Tier 1", "localeconomicimpact.com",
+         "Standard methods. Lower cost. Easier access.",
+         "Competes on price · Building now", ACCENT_DEEP),
+        ("Tribal EIA", "Tier 2", "tribaleconomicimpact.com",
+         "Built for governments that don't fit standard assumptions.",
+         "Patent-Pending · Building now", HexColor("#A35A0F")),
+        ("Global EIA", "Tier 3", "globaleconomicimpact.com",
+         "Same logic. Any geography.",
+         "Patentable · Future", NAVY),
+    ]
+    n = len(products)
+    gap = 16
+    card_w = (CONTENT_W - gap * (n - 1)) / n
+    card_h = 2.5 * inch
+
+    def product_card(name, tier, domain, desc, badge, accent_color):
+        eyebrow_p = Paragraph(
+            tier.upper(),
+            ps(f"pc-eb-{name[:4]}",
+               fontName="Inter-SemiBold", fontSize=8.5, leading=11,
+               textColor=PAPER, spaceAfter=6))
+        name_p = Paragraph(
+            name,
+            ps(f"pc-n-{name[:4]}",
+               fontName="Inter-Bold", fontSize=22, leading=26,
+               textColor=PAPER, spaceAfter=4))
+        domain_p = Paragraph(
+            domain,
+            ps(f"pc-d-{name[:4]}",
+               fontName="Inter", fontSize=9.5, leading=12,
+               textColor=HexColor("#D5EFEC"), spaceAfter=10))
+        desc_p = Paragraph(
+            desc,
+            ps(f"pc-de-{name[:4]}",
+               fontName="Inter", fontSize=10.5, leading=14,
+               textColor=PAPER, spaceAfter=10))
+        badge_p = Paragraph(
+            badge,
+            ps(f"pc-b-{name[:4]}",
+               fontName="Inter-SemiBold", fontSize=8.5, leading=11,
+               textColor=HexColor("#EAF7F4")))
+
+        inner = stack([eyebrow_p, name_p, domain_p, desc_p,
+                        Spacer(1, 14), badge_p],
+                       col_w=card_w - 32)
+        outer = Table([[inner]], colWidths=[card_w], rowHeights=[card_h])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), accent_color),
+            ("LEFTPADDING", (0, 0), (-1, -1), 18),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 18),
+            ("TOPPADDING", (0, 0), (-1, -1), 18),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 18),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        return outer
+
+    cards = [product_card(*p) for p in products]
+    cards_row = Table([cards],
+                       colWidths=[card_w + (gap if i < n - 1 else 0)
+                                  for i in range(n)])
+    cards_row.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+
+    # Who uses this row
+    uses_eyebrow = Paragraph(
+        "WHO USES THIS",
+        ps("uu-eb", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=ACCENT_DEEP, spaceAfter=8))
+    uses = [
+        ("Tribal governments", "Compact negotiations, grant compliance."),
+        ("Municipalities", "Bond justification, development impact."),
+        ("Nonprofits", "Funder reporting, community evidence."),
+        ("Enterprises", "Compliance, site selection."),
+    ]
+    uses_cells = []
+    use_col_w = (CONTENT_W - 36) / 4
+    for who, what in uses:
+        w_p = Paragraph(who,
+            ps(f"uu-w-{who[:6]}",
+               fontName="Inter-Bold", fontSize=10, leading=13,
+               textColor=NAVY, spaceAfter=2))
+        wh_p = Paragraph(what,
+            ps(f"uu-wh-{who[:6]}",
+               fontName="Inter", fontSize=8.5, leading=11,
+               textColor=INK_2))
+        col = stack([w_p, wh_p], col_w=use_col_w - 12)
+        uses_cells.append(col)
+    uses_row = Table([uses_cells],
+                      colWidths=[use_col_w + 12, use_col_w + 12,
+                                  use_col_w + 12, use_col_w])
+    uses_row.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    return header + [Spacer(1, 18), cards_row, Spacer(1, 18),
+                      uses_eyebrow, uses_row]
 
 
 # ---- Slide 5: Value Proposition (full-bleed hero) ----
 def slide_05_value_proposition():
-    """Hero image placeholder + overlaid headline and benefits.
-    Drawn entirely on the canvas."""
-    return [Spacer(1, SLIDE_H - 2 * MARGIN)]
+    """Different Math comparison. Side-by-side calculation showing
+    how the same project produces different impact numbers under
+    standard county-multiplier methodology versus Lumecon's tribal-
+    aware methodology. This is the proof artifact for the value
+    proposition: real numbers, illustrative but concrete."""
+    header = slide_header("The Difference",
+                            "Same Project. Different Math.",
+                            headline_size=30)
+    subhead = Paragraph(
+        "Better theory + better data changes the result. The same "
+        "$50M tribal-enterprise investment, analyzed two ways:",
+        ps("dm-sub", fontName="Inter", fontSize=12, leading=15.5,
+           textColor=INK_2, spaceAfter=22))
+
+    panel_w = (CONTENT_W - 20) / 2
+    panel_h = CONTENT_H * 0.50
+
+    # Left: STANDARD calculation
+    std_eb = Paragraph(
+        "STANDARD",
+        ps("std-eb", fontName="Inter-SemiBold", fontSize=8.5,
+           leading=11, textColor=INK_3, spaceAfter=8))
+    std_amt = Paragraph(
+        '<font name="Inter-Bold" size="60" color="#9DA1B5">$90M</font>',
+        ps("std-a", fontName="Inter-Bold", fontSize=60, leading=66,
+           textColor=INK_4, spaceAfter=10))
+    std_math = Paragraph(
+        "$50M × 1.8 county multiplier",
+        ps("std-m", fontName="Inter", fontSize=11, leading=14,
+           textColor=INK_3))
+    std_note = Paragraph(
+        "Built on county-aggregate multipliers. Reservations treated "
+        "as part of the surrounding county. Activity that leaks past "
+        "county lines is uncounted.",
+        ps("std-n", fontName="Inter", fontSize=9.5, leading=12.5,
+           textColor=INK_3, spaceBefore=14))
+
+    std_inner = stack([std_eb, std_amt, std_math, std_note],
+                       col_w=panel_w - 36)
+    std_panel = Table([[std_inner]], colWidths=[panel_w],
+                       rowHeights=[panel_h])
+    std_panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), HexColor("#F4F6F8")),
+        ("BOX", (0, 0), (-1, -1), 0.5, RULE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 22),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 22),
+        ("TOPPADDING", (0, 0), (-1, -1), 22),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 22),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    # Right: LUMECON calculation
+    lm_eb = Paragraph(
+        "LUMECON",
+        ps("lm-eb", fontName="Inter-SemiBold", fontSize=8.5,
+           leading=11, textColor=PAPER, spaceAfter=8))
+    lm_amt = Paragraph(
+        '<font name="Inter-Bold" size="60" color="#FFFFFF">$115M</font>',
+        ps("lm-a", fontName="Inter-Bold", fontSize=60, leading=66,
+           textColor=PAPER, spaceAfter=10))
+    lm_math = Paragraph(
+        "$50M × 2.3 Lumecon multiplier",
+        ps("lm-m", fontName="Inter", fontSize=11, leading=14,
+           textColor=HexColor("#D5EFEC")))
+    lm_diff = Paragraph(
+        '<font name="Inter-Bold" color="#FFFFFF" size="16">$25M of real '
+        'activity, recovered.</font>',
+        ps("lm-d", fontName="Inter-Bold", fontSize=16, leading=20,
+           textColor=PAPER, spaceBefore=14, spaceAfter=8))
+    lm_note = Paragraph(
+        "Tribal-aware geography, intra-reservation labor flows, off-"
+        "reservation trust land, and locally-calibrated multipliers. "
+        "Same source data, sharper math.",
+        ps("lm-n", fontName="Inter", fontSize=9.5, leading=12.5,
+           textColor=HexColor("#D5EFEC")))
+
+    lm_inner = stack([lm_eb, lm_amt, lm_math, lm_diff, lm_note],
+                      col_w=panel_w - 36)
+    lm_panel = Table([[lm_inner]], colWidths=[panel_w],
+                      rowHeights=[panel_h])
+    lm_panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), ACCENT_DEEP),
+        ("LEFTPADDING", (0, 0), (-1, -1), 22),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 22),
+        ("TOPPADDING", (0, 0), (-1, -1), 22),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 22),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    layout = Table([[std_panel, "", lm_panel]],
+                    colWidths=[panel_w, 20, panel_w])
+    layout.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+
+    illus = Paragraph(
+        "<i>Illustrative. Real multipliers vary by sector, time "
+        "window, and customer-confirmed inputs.</i>",
+        ps("dm-il", fontName="Inter", fontSize=8.5, leading=11,
+           textColor=INK_4, spaceBefore=14))
+
+    return header + [Spacer(1, 8), subhead, layout, illus]
 
 
 def draw_value_prop_overlay(canvas, doc):
-    canvas.saveState()
-    # Hero background
-    canvas.setFillColor(TEAL_BG_SOFT)
-    canvas.rect(0, 0, SLIDE_W, SLIDE_H, stroke=0, fill=1)
-    # Subtle darker stripe right side
-    canvas.setFillColor(TEAL_BG_MEDIUM)
-    canvas.rect(SLIDE_W * 0.55, 0, SLIDE_W * 0.45, SLIDE_H,
-                stroke=0, fill=1)
-    canvas.setFillColor(ACCENT_DEEP)
-    canvas.setFont("Inter-SemiBold", 8.5)
-    canvas.drawRightString(SLIDE_W - MARGIN,
-                            SLIDE_H - MARGIN - 4,
-                            "IMAGE  ·  VALUE-PROP HERO PLACEHOLDER")
-
-    # Tag and headline
-    tag_h = 26
-    tag_w = 90
-    canvas.setFillColor(NAVY)
-    canvas.roundRect(MARGIN, SLIDE_H - MARGIN - tag_h - 6,
-                      tag_w, tag_h, tag_h / 2,
-                      stroke=0, fill=1)
-    canvas.setFillColor(PAPER)
-    canvas.setFont("Inter-SemiBold", 9)
-    canvas.drawString(MARGIN + 14,
-                       SLIDE_H - MARGIN - tag_h + 4,
-                       "VALUE PROPOSITION")
-
-    canvas.setFillColor(NAVY)
-    canvas.setFont("Inter-Bold", 40)
-    canvas.drawString(MARGIN, SLIDE_H * 0.72,
-                       "Built for the Hardest")
-    canvas.drawString(MARGIN, SLIDE_H * 0.65,
-                       "Geography First.")
-    canvas.setFont("Inter", 14)
-    canvas.setFillColor(INK_2)
-    canvas.drawString(MARGIN, SLIDE_H * 0.58,
-                       "Tribal economies force the hardest version of "
-                       "every modeling problem.")
-    canvas.drawString(MARGIN, SLIDE_H * 0.545,
-                       "The infrastructure that solves them deploys "
-                       "directly into the rest of the market.")
-
-    # 3 check benefits
-    benefits = [
-        ("Sovereign-Aware Geographies",
-         "Reservations, trust lands, ANC regions, and Native Hawaiian "
-         "Home Lands as first-class objects."),
-        ("Defensible Assumptions",
-         "Every multiplier and every modeling choice surfaced for "
-         "analyst sign-off before export."),
-        ("Recurring Refresh",
-         "One subscription, unlimited studies, quarterly refresh "
-         "without reopening a contract."),
-    ]
-    y0 = SLIDE_H * 0.30
-    for i, (title, body) in enumerate(benefits):
-        bx = MARGIN
-        by = y0 - i * 0.50 * inch
-        canvas.setFillColor(ACCENT)
-        canvas.circle(bx + 9, by + 6, 9, stroke=0, fill=1)
-        canvas.setFillColor(PAPER)
-        canvas.setFont("Inter-Bold", 10)
-        canvas.drawString(bx + 5.5, by + 2.5, "✓")
-        canvas.setFillColor(NAVY)
-        canvas.setFont("Inter-Bold", 12.5)
-        canvas.drawString(bx + 28, by + 4, title)
-        canvas.setFillColor(INK_2)
-        canvas.setFont("Inter", 10)
-        canvas.drawString(bx + 260, by + 4, body)
-    canvas.restoreState()
+    """No-op now. Slide 5 is a regular body slide, not a hero slide,
+    after the rebuild to the Different Math comparison."""
+    pass
 
 
 # ---- Slide 6: Market Opportunity ----
@@ -885,107 +1100,113 @@ def slide_06_market():
 
 # ---- Slide 7: Competition ----
 def slide_07_competition():
-    """Checkmark competitor matrix on the left; Key Advantages on right."""
+    """Specific named competitors with their actual pricing and the
+    specific gap each leaves. No abstract matrix. Investors get
+    named comparisons and concrete dollar amounts."""
     header = slide_header("Competition",
-                            "Built for Modern Workflows, Not Legacy Software.",
+                            "Who Else Does This, and Why They Leave Gaps.",
                             headline_size=28)
-    # Matrix
-    cols = ["Modern Stack", "Tribal-Aware",
-            "Recurring", "AI-Assisted", "Defensible"]
-    rows_data = [
-        ("Lumecon",   [True, True, True, True, True]),
-        ("IMPLAN",    [False, False, False, False, True]),
-        ("REMI",      [False, False, False, False, True]),
-        ("Consultants", [False, "partial", False, "partial", True]),
-        ("AI-only tools", [True, False, True, True, False]),
-    ]
-    head_row = [Paragraph("",
-        ps("mc-h-", fontName="Inter-SemiBold", fontSize=9))] + [
-        Paragraph(h.upper(),
-            ps(f"mc-h-{h[:6]}", fontName="Inter-SemiBold", fontSize=8,
-               leading=10, textColor=INK_3, alignment=1))
-        for h in cols]
-    data = [head_row]
-    for name, marks in rows_data:
-        row = [Paragraph(name,
-            ps(f"mc-n-{name[:6]}", fontName="Inter-Bold", fontSize=10,
-               leading=12, textColor=NAVY))]
-        for m in marks:
-            if m is True:
-                glyph = "<font color='#0FB5A5'>●</font>"
-                size = 15
-            elif m is False:
-                glyph = "<font color='#D5D7E0'>○</font>"
-                size = 15
-            else:
-                # "Partial" rendered as a small uppercase label since
-                # the half-filled circle glyph isn't in Inter.
-                glyph = ("<font name='Inter-Bold' size='7' "
-                         "color='#A35A0F'>PARTIAL</font>")
-                size = 11
-            row.append(Paragraph(f'<para align="center">{glyph}</para>',
-                ps(f"mc-c-{name[:4]}", fontName="Inter-Bold",
-                   fontSize=size, leading=size, alignment=1)))
-        data.append(row)
-    matrix_w = CONTENT_W * 0.58
-    col_w = (matrix_w - 1.4 * inch) / len(cols)
-    matrix = Table(data,
-                    colWidths=[1.4 * inch] + [col_w] * len(cols))
-    matrix.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, 0), TEAL_BG_SOFT),
-        ("LINEBELOW", (0, 0), (-1, 0), 1, ACCENT),
-        ("LINEBELOW", (0, 1), (-1, -2), 0.3, RULE),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 8),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 8),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
-    ]))
 
-    advantages = [
-        ("Tribal & Native-Economy Expertise",
-         "Federal Reserve CICD, NCAI, Native Entity Enterprise dataset."),
-        ("Complex-Geography Engine",
-         "Sovereign geographies as first-class, not approximations."),
-        ("Cedar Grove Memory",
-         "Switching cost compounds as studies accumulate."),
-        ("AI + Defensible",
-         "Cedar surfaces every assumption for human sign-off before export."),
+    competitors = [
+        ("IMPLAN",
+         "$7,500-$65,000 / yr software",
+         "+ $50K-$100K per study via consultants",
+         "Built on county-aggregate multipliers. Treats reservations "
+         "as part of the surrounding county. Desktop-era workflow."),
+        ("REMI",
+         "$50K+ setup + annual",
+         "Custom regional modeling, consultant-driven",
+         "Macro policy focus. Months to onboard a new region. Not "
+         "built for recurring impact studies."),
+        ("Lightcast (formerly EMSI)",
+         "Labor-market analytics platform",
+         "Different category, adjacent buyer",
+         "Workforce data, not impact analysis. Doesn't model fiscal "
+         "or output multipliers for a project."),
+        ("Consulting firms",
+         "$50K-$100K per engagement",
+         "EY, RSM, KPMG, regional EDOs",
+         "High-margin service, low capacity. Each study restarts "
+         "from zero. No software leverage between engagements."),
+        ("AI-only tools",
+         "ChatGPT, Claude, Perplexity",
+         "Generation, not retrieval",
+         "Hallucination liability in a credibility-sensitive "
+         "workflow. Cannot defend assumptions or cite provenance."),
     ]
-    adv_rows = []
-    for t, b in advantages:
-        t_p = Paragraph(t,
-            ps(f"ka-t-{t[:6]}", fontName="Inter-Bold", fontSize=10.5,
-               leading=13, textColor=NAVY, spaceAfter=2))
-        b_p = Paragraph(b,
-            ps(f"ka-b-{t[:6]}", fontName="Inter", fontSize=8.5,
-               leading=11, textColor=INK_2))
-        adv_rows.append([t_p])
-        adv_rows.append([b_p])
-        adv_rows.append([Spacer(1, 8)])
-    adv_tbl = Table(adv_rows,
-                     colWidths=[CONTENT_W * 0.38])
-    adv_tbl.setStyle(TableStyle([
-        ("LEFTPADDING", (0, 0), (-1, -1), 14),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    rows = []
+    row_h = 0.62 * inch
+    for name, price, sub, gap in competitors:
+        name_p = Paragraph(
+            name,
+            ps(f"cp-n-{name[:6]}", fontName="Inter-Bold", fontSize=11,
+               leading=14, textColor=NAVY))
+        price_p = Paragraph(
+            f"<font name='Inter-Bold' color='#0A0F26'>{price}</font><br/>"
+            f"<font color='#6B6F8A' size='8.5'>{sub}</font>",
+            ps(f"cp-p-{name[:6]}", fontName="Inter", fontSize=9.5,
+               leading=12, textColor=INK_2))
+        gap_p = Paragraph(
+            f"<font name='Inter-SemiBold' color='#A35A0F' size='7.5'>"
+            f"GAP &nbsp; </font>"
+            f"<font color='#353B5C' size='9.5'>{gap}</font>",
+            ps(f"cp-g-{name[:6]}", fontName="Inter", fontSize=9.5,
+               leading=12.5, textColor=INK_2))
+        rows.append([name_p, price_p, gap_p])
+
+    matrix_w = CONTENT_W * 0.66
+    table = Table(rows,
+                   colWidths=[matrix_w * 0.20,
+                               matrix_w * 0.32,
+                               matrix_w * 0.48])
+    style = TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 10),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 10),
+        ("TOPPADDING", (0, 0), (-1, -1), 12),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+    ])
+    for i in range(1, len(rows)):
+        style.add("LINEABOVE", (0, i), (-1, i), 0.3, RULE)
+    table.setStyle(style)
+
+    # Lumecon callout panel on the right
+    lm_eb = Paragraph(
+        "LUMECON",
+        ps("lm-eb2", fontName="Inter-SemiBold", fontSize=9,
+           leading=12, textColor=PAPER, spaceAfter=8))
+    lm_h = Paragraph(
+        "One platform.<br/>Three products.<br/>Three subscription tiers.",
+        ps("lm-h2", fontName="Inter-Bold", fontSize=15, leading=19,
+           textColor=PAPER, spaceAfter=14))
+    lm_b = Paragraph(
+        '<font color="#D5EFEC">$7.5K-$25K / year. Unlimited studies. '
+        'Tribal-aware geographies. RAG retrieval, not generation. '
+        'Patentable methods.</font>',
+        ps("lm-b2", fontName="Inter", fontSize=10, leading=14,
+           textColor=HexColor("#D5EFEC"), spaceAfter=14))
+    lm_close = Paragraph(
+        '<font name="Inter-Bold" color="#FFFFFF">Underserved get '
+        'access. Existing buyers get a superior alternative.</font>',
+        ps("lm-c2", fontName="Inter-Bold", fontSize=10, leading=14,
+           textColor=PAPER))
+    right_inner = stack([lm_eb, lm_h, lm_b, lm_close],
+                         col_w=CONTENT_W * 0.30 - 32)
+    right_panel = Table([[right_inner]],
+                         colWidths=[CONTENT_W * 0.30],
+                         rowHeights=[row_h * len(competitors) + 16])
+    right_panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), ACCENT_DEEP),
+        ("LEFTPADDING", (0, 0), (-1, -1), 16),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 16),
+        ("TOPPADDING", (0, 0), (-1, -1), 16),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 16),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
     ]))
 
-    adv_header = NavyTag("Key Advantages")
-    right_col = Table([[adv_header], [Spacer(1, 14)], [adv_tbl]],
-                       colWidths=[CONTENT_W * 0.38])
-    right_col.setStyle(TableStyle([
-        ("LEFTPADDING", (0, 0), (-1, -1), 0),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
-    ]))
-
-    layout = Table([[matrix, "", right_col]],
-                    colWidths=[matrix_w, 0.2 * inch,
-                                CONTENT_W - matrix_w - 0.2 * inch])
+    layout = Table([[table, "", right_panel]],
+                    colWidths=[matrix_w, 0.25 * inch,
+                                CONTENT_W - matrix_w - 0.25 * inch])
     layout.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
@@ -993,7 +1214,7 @@ def slide_07_competition():
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
     ]))
-    return header + [Spacer(1, 22), layout]
+    return header + [Spacer(1, 18), layout]
 
 
 # ---- Slide 8: Business Model ----
@@ -1247,21 +1468,23 @@ def slide_10_gtm():
     """4 numbered list items on the left, upward arrow/curve graphic
     on the right. Mirrors LIRA's GTM slide."""
     header = slide_header("GTM Strategy",
-                            "Tribes First. Cities Follow. Global Next.",
+                            "Built-In Distribution from Day One.",
                             headline_size=30)
     items = [
+        ("Media Partnership",
+         "Vertically integrated digital media partner serving Indian "
+         "Country: 40K+ subscribers, 15+ years. Bundle pricing + revenue "
+         "share. ~5 customers covers the $50K acquisition cost."),
         ("Founder-Led Wedge",
          "First Tribal and Local pilots acquired via direct outreach to "
          "tribal governments, NCAI relationships, and state EDOs."),
         ("Partnership Layer",
          "NACA, tribal enterprise networks, Native CDFI Coalition, and "
          "Cornell CICD pipeline drive the next cohort of pilots."),
-        ("State + Federal Programs",
-         "Federal-program impact reporting (HUD, USDA, EDA, BIA) becomes "
-         "a recurring use case that pulls the customer base broader."),
-        ("Global Expansion",
-         "Subnational governments worldwide carry the same measurement "
-         "problem; UCLG and OECD networks open the international leg."),
+        ("Federal Programs",
+         "HUD, USDA, EDA, BIA impact reporting becomes a recurring use "
+         "case that pulls the customer base broader. Global expansion "
+         "via UCLG / OECD networks follows."),
     ]
     list_rows = []
     for t, b in items:
@@ -1880,18 +2103,8 @@ def main():
         draw_cover_overlay(canvas, doc)
     templates.append(PageTemplate(id="s1", frames=[full_frame],
                                     onPage=cover_dec))
-    # Slides 2-4 (body)
-    for i in range(2, 5):
-        templates.append(PageTemplate(id=f"s{i}", frames=[body_frame],
-                                        onPage=make_page_decoration(i)))
-    # Slide 5 (value prop, full-bleed + overlay)
-    def vp_dec(canvas, doc):
-        make_page_decoration(5, full_bleed=True)(canvas, doc)
-        draw_value_prop_overlay(canvas, doc)
-    templates.append(PageTemplate(id="s5", frames=[full_frame],
-                                    onPage=vp_dec))
-    # Slides 6-14 (body)
-    for i in range(6, 15):
+    # Slides 2-14 (body)
+    for i in range(2, 15):
         templates.append(PageTemplate(id=f"s{i}", frames=[body_frame],
                                         onPage=make_page_decoration(i)))
     # Slide 15 (closing, full-bleed + overlay)
