@@ -88,7 +88,14 @@ An internal review of public tribal impact studies between 2000 and 2026 identif
 
 ## {{HL:green}}Product
 
-**Three regional platforms on one engine.** Local Economic Impact for cities, counties, and state agencies. Tribal Economic Impact for tribal governments, enterprises, and Native organizations. Global Economic Impact, launching in 2028, for cross-border and supply-chain analysis. Every platform runs the same modeling backbone and the same three-tier ladder (Sprout, Sapling, Tree).
+Three regional platforms on one engine. One modeling backbone. One three-tier ladder (Sprout, Sapling, Tree). The platform stack progresses from the foundational regional products today to the cross-border layer launching in 2028.
+
+[[LADDER:
+Global Economic Impact | Cross-border, supply-chain, and multinational analysis. Launches 2028.
+Cedar Grove | Organizational intelligence layer; harmonized customer memory across studies. Launches 2027.
+Cedar | AI workflow for source intake, harmonization, and assumption tracking. Ships inside Sapling and Tree.
+Local + Tribal Economic Impact | The two regional platforms shipping in 2026. Shared modeling engine, shared tier ladder.
+]]
 
 **Cedar.** Lumecon's AI-assisted workflow. Cedar uploads and processes data in PDF, CSV, and XLSX formats today, with more formats expanding over time. It structures inputs against public data sources, surfaces every modeling assumption for human sign-off, and acts as a thought partner on the write-up. Cedar is not a ghostwriter. The analyst stays accountable for the substance.
 
@@ -225,6 +232,8 @@ Pro Rata | Side letter on request
 ]]
 
 [[BIGLINE: Make the economically invisible visible.]]
+
+[[CLOSINGSEAL]]
 
 ---
 

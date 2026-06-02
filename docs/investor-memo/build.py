@@ -615,53 +615,154 @@ def render_roadmap(payload):
     return [KeepTogether(t), Spacer(1, 8)]
 
 
+FUNDS_SHADES = [
+    HexColor("#0A8A7E"),
+    HexColor("#0FB5A5"),
+    HexColor("#39B7A4"),
+    HexColor("#86D2C5"),
+    HexColor("#C9EAE3"),
+]
+
+
+class FundsDonut(Flowable):
+    """Donut chart of allocation segments. Center carries the total
+    in big type, each segment a separate teal shade descending by
+    allocation share so the largest segment reads first."""
+
+    def __init__(self, segments, donut_w):
+        Flowable.__init__(self)
+        # segments: [(category, amount_int, detail), ...]
+        self.segments = segments
+        self.donut_w = donut_w
+        self.height = donut_w
+
+    def wrap(self, aw, ah):
+        return (self.donut_w, self.height)
+
+    def draw(self):
+        c = self.canv
+        total = sum(a for _, a, _ in self.segments)
+        cx = self.donut_w / 2
+        cy = self.height / 2
+        outer_r = min(self.donut_w, self.height) / 2 - 8
+        inner_r = outer_r * 0.58
+
+        # Wedges, sorted by amount desc so colors map predictably.
+        ordered = sorted(self.segments, key=lambda s: -s[1])
+        start_angle = 90
+        for i, (_cat, amt, _det) in enumerate(ordered):
+            pct = amt / total if total else 0
+            sweep = -pct * 360
+            c.setFillColor(FUNDS_SHADES[i % len(FUNDS_SHADES)])
+            c.setStrokeColor(PAPER)
+            c.setLineWidth(1.2)
+            c.wedge(cx - outer_r, cy - outer_r,
+                    cx + outer_r, cy + outer_r,
+                    start_angle, sweep, fill=1, stroke=1)
+            start_angle += sweep
+
+        # Inner cutout
+        c.setFillColor(PAPER)
+        c.setStrokeColor(PAPER)
+        c.circle(cx, cy, inner_r, fill=1, stroke=0)
+
+        # Center label
+        total_label = f"${total // 1000}K" if total >= 1000 else f"${total}"
+        c.setFillColor(NAVY)
+        c.setFont("Inter-Bold", 22)
+        label_w = pdfmetrics.stringWidth(total_label, "Inter-Bold", 22)
+        c.drawString(cx - label_w / 2, cy - 4, total_label)
+
+        c.setFillColor(INK_3)
+        c.setFont("Inter-SemiBold", 7)
+        sub = "TOTAL RAISE"
+        sub_w = pdfmetrics.stringWidth(sub, "Inter-SemiBold", 7)
+        c.drawString(cx - sub_w / 2, cy - 16, sub)
+
+
 def render_funds(payload):
-    """Use of funds table. Each line: category | amount | description."""
+    """Use of funds donut + legend. Donut on the left, legend on
+    the right with color chip, category, amount, percent, and a
+    one-line detail."""
     rows = [r.strip() for r in payload.split("\n") if r.strip()]
-    thead_style = ps("thead-soft",
-        fontName="Inter-SemiBold", fontSize=8, leading=11,
-        textColor=ACCENT_DEEP)
-    data = [[
-        Paragraph("Category", thead_style),
-        Paragraph("Amount", thead_style),
-        Paragraph("Detail", thead_style),
-    ]]
+    segments = []
     for r in rows:
         parts = [p.strip() for p in r.split("|")]
-        if len(parts) < 3:
-            parts += [""] * (3 - len(parts))
-        data.append([
-            Paragraph(parts[0], STY["tstrong"]),
-            Paragraph(parts[1], STY["tnum"]),
-            Paragraph(parts[2], STY["tcell"]),
-        ])
-    # Totals row
-    total = 0
-    for r in rows:
-        parts = [p.strip() for p in r.split("|")]
-        if len(parts) >= 2:
-            amt = re.sub(r"[^\d]", "", parts[1])
-            if amt: total += int(amt)
-    data.append([
-        Paragraph("<b>Total</b>", STY["tstrong"]),
-        Paragraph(f"<b>${total:,}</b>", STY["tnum"]),
-        Paragraph("", STY["tcell"]),
-    ])
-    col_w = COL_W
-    t = Table(data, colWidths=[col_w * 0.27, col_w * 0.18, col_w * 0.55])
-    t.setStyle(TableStyle([
-        ("BACKGROUND",   (0, 0), (-1, 0),  PAPER),
-        ("LINEBELOW",    (0, 0), (-1, 0),  1.0, ACCENT),
-        ("LINEBELOW",    (0, 1), (-1, -2), 0.3, RULE),
-        ("LINEABOVE",    (0, -1), (-1, -1), 0.5, ACCENT),
-        ("BACKGROUND",   (0, -1), (-1, -1), TEAL_BG_SOFT),
-        ("LEFTPADDING",  (0, 0), (-1, -1), 6),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING",   (0, 0), (-1, -1), 7),
-        ("BOTTOMPADDING",(0, 0), (-1, -1), 7),
-        ("VALIGN",       (0, 0), (-1, -1), "MIDDLE"),
+        while len(parts) < 3:
+            parts.append("")
+        amt = int(re.sub(r"[^\d]", "", parts[1]) or "0")
+        segments.append((parts[0], amt, parts[2]))
+    total = sum(a for _, a, _ in segments)
+
+    donut_w = 2.7 * inch
+    legend_w = COL_W - donut_w - 12
+    donut = FundsDonut(segments, donut_w)
+
+    # Legend mirrors the wedge sort (largest first)
+    ordered = sorted(segments, key=lambda s: -s[1])
+    legend_rows = []
+    for i, (cat, amt, detail) in enumerate(ordered):
+        pct = amt / total if total else 0
+        chip = Table([[""]], colWidths=[9], rowHeights=[9])
+        chip.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), FUNDS_SHADES[i]),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        head_text = (
+            f'<font name="Inter-Bold" color="#0A0F26">{cat}</font> '
+            f'&nbsp; '
+            f'<font name="Inter-SemiBold" color="#0A8A7E" size="9">'
+            f'${amt:,} · {pct:.0%}</font>'
+        )
+        head_p = Paragraph(
+            head_text,
+            ps(f"lg-h-{cat[:6]}",
+               fontName="Inter", fontSize=9.5, leading=12,
+               textColor=INK, spaceAfter=2),
+        )
+        detail_p = Paragraph(
+            detail,
+            ps(f"lg-d-{cat[:6]}",
+               fontName="Inter", fontSize=8.5, leading=11.5,
+               textColor=INK_2),
+        )
+        text_col = Table(
+            [[head_p], [detail_p]],
+            colWidths=[legend_w - 22],
+        )
+        text_col.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        legend_rows.append([chip, text_col])
+
+    legend = Table(legend_rows, colWidths=[14, legend_w - 14])
+    legend.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (0, -1), "TOP"),
+        ("VALIGN", (1, 0), (1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 7),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
     ]))
-    return [KeepTogether(t), Spacer(1, 8)]
+
+    chart = Table(
+        [[donut, legend]],
+        colWidths=[donut_w, legend_w + 12],
+    )
+    chart.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    return [KeepTogether(chart), Spacer(1, 10)]
 
 
 def render_teamgrid(payload):
@@ -1798,6 +1899,124 @@ def render_marketsegments(payload):
     return [KeepTogether([eyebrow_p, row]), Spacer(1, 12)]
 
 
+def render_ladder(payload):
+    """Product-ecosystem ladder. Input lists levels from peak (top
+    of input = top of ladder) to foundation (bottom of input = base).
+    Renders as a column of cards with up-chevrons between them; the
+    teal saturation deepens upward to match the platform progression."""
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    levels = []
+    for r in rows:
+        title, _, desc = r.partition("|")
+        levels.append((title.strip(), desc.strip()))
+    n = len(levels)
+    # Peak first in input → peak first visually
+    inner_w = COL_W - 4
+    card_h = 0.62 * inch
+
+    def make_card(title, desc, shade):
+        title_p = Paragraph(
+            title,
+            ps(f"ld-t-{title[:8]}",
+               fontName="Inter-Bold", fontSize=11, leading=14,
+               textColor=NAVY, spaceAfter=2),
+        )
+        desc_p = Paragraph(
+            inline(desc),
+            ps(f"ld-d-{title[:8]}",
+               fontName="Inter", fontSize=8.5, leading=11.5,
+               textColor=INK_2),
+        )
+        inner = Table(
+            [[title_p, desc_p]],
+            colWidths=[(inner_w - 24) * 0.32, (inner_w - 24) * 0.68],
+        )
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ]))
+        outer = Table([[inner]], colWidths=[inner_w], rowHeights=[card_h])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), shade),
+            ("LEFTPADDING", (0, 0), (-1, -1), 12),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+            ("TOPPADDING", (0, 0), (-1, -1), 8),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ]))
+        return outer
+
+    arrow_p = Paragraph(
+        "▲",
+        ps("ld-arrow", fontName="Inter-Bold", fontSize=11, leading=13,
+           textColor=ACCENT_DEEP, alignment=1),
+    )
+
+    rows_out = []
+    # Peak is at the top (index 0); use darker shade for peak, lighter
+    # at the base.
+    for i, (title, desc) in enumerate(levels):
+        # i=0 -> top -> darkest shade; i=n-1 -> base -> lightest
+        shade_idx = (n - 1 - i)
+        shade = MOAT_SHADES[min(shade_idx, len(MOAT_SHADES) - 1)]
+        rows_out.append([make_card(title, desc, shade)])
+        if i < n - 1:
+            rows_out.append([arrow_p])
+
+    table = Table(rows_out, colWidths=[inner_w])
+    table.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+    ]))
+    return [KeepTogether(table), Spacer(1, 10)]
+
+
+class ClosingSeal(Flowable):
+    """Centered seal mark + bookend footer line. Sits below the
+    BIGLINE on the closing page so the empty space below the
+    headline gains visual weight instead of reading as orphan
+    white space."""
+
+    def __init__(self, col_w, seal_size=1.4 * inch):
+        Flowable.__init__(self)
+        self.col_w = col_w
+        self.seal_size = seal_size
+        self.height = seal_size + 0.7 * inch
+
+    def wrap(self, aw, ah):
+        return (self.col_w, self.height)
+
+    def draw(self):
+        c = self.canv
+        # Center the seal horizontally
+        cx = self.col_w / 2
+        seal_y = self.height - self.seal_size - 8
+        try:
+            c.drawImage(str(SEAL),
+                        cx - self.seal_size / 2, seal_y,
+                        width=self.seal_size, height=self.seal_size,
+                        mask="auto")
+        except Exception:
+            pass
+
+        # Small footer line below the seal
+        c.setFillColor(INK_3)
+        c.setFont("Inter-SemiBold", 7.5)
+        line = "LUMECON INC.  ·  LUMECON.AI  ·  SUMMER 2026"
+        line_w = pdfmetrics.stringWidth(line, "Inter-SemiBold", 7.5)
+        c.drawString(cx - line_w / 2, seal_y - 18, line)
+
+
+def render_closingseal(_payload=""):
+    return [Spacer(1, 18), ClosingSeal(COL_W)]
+
+
 def render_callout(payload):
     """Centered statement on a soft teal background. The page's
     rhetorical anchor; sits between sections to deliver a single
@@ -2080,6 +2299,10 @@ def build_body(md):
                 block_flows = render_marketsegments(payload)
             elif kind == "CALLOUT":
                 block_flows = render_callout(payload)
+            elif kind == "LADDER":
+                block_flows = render_ladder(payload)
+            elif kind == "CLOSINGSEAL":
+                block_flows = render_closingseal(payload)
             emit(block_flows)
     # Final flush of any unbound h2 group (shouldn't happen with
     # well-formed input, but defensive).
