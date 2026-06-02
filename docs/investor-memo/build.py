@@ -375,18 +375,32 @@ def parse(md):
 
 # ---- Custom block renderers ----
 def render_screenshot(payload, max_w=COL_W):
-    """Branded screenshot placeholder, sized for a desktop screenshot
-    (~16:10) at roughly half a page tall so the real screenshots fit
-    in cleanly when they replace these placeholders."""
+    """Screenshot placeholder template, sized as a clear TODO marker
+    for a future product capture. Uses a dashed teal border and a
+    subtle teal tint so it reads as 'placeholder for a real asset'
+    rather than a finished visual."""
     slug, _, caption = payload.partition("|")
     slug = slug.strip(); caption = caption.strip()
+    eyebrow_p = Paragraph(
+        "PLACEHOLDER  ·  PRODUCT CAPTURE",
+        ps("ph-eb",
+           fontName="Inter-SemiBold", fontSize=7, leading=10,
+           textColor=ACCENT_DEEP, alignment=1, spaceAfter=4),
+    )
+    slug_p = Paragraph(
+        slug.replace("-", " ").upper(),
+        ps("ph-slug",
+           fontName="Inter-Bold", fontSize=13, leading=16,
+           textColor=NAVY, alignment=1, spaceAfter=4),
+    )
+    note_p = Paragraph(
+        "Live capture will replace this template in the final send version.",
+        ps("ph-note",
+           fontName="Inter", fontSize=8, leading=11,
+           textColor=INK_3, alignment=1),
+    )
     inner = Table(
-        [
-            [Paragraph("PRODUCT", STY["ph-eyebrow"])],
-            [Paragraph(slug.upper().replace("-", " "), ps("ph-slug",
-                fontName="Inter-Bold", fontSize=14, leading=18,
-                textColor=NAVY, alignment=1))],
-        ],
+        [[eyebrow_p], [slug_p], [note_p]],
         colWidths=[max_w - 0.4 * inch],
     )
     inner.setStyle(TableStyle([
@@ -395,12 +409,11 @@ def render_screenshot(payload, max_w=COL_W):
         ("TOPPADDING", (0, 0), (-1, -1), 1),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
     ]))
-    height = 4.0 * inch  # Approximately half a portrait page
+    height = 2.0 * inch
     outer = Table([[inner]], colWidths=[max_w], rowHeights=[height])
     outer.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), PLACEHOLDER),
-        ("BOX", (0, 0), (-1, -1), 0.7, RULE_STRONG),
-        ("LINEABOVE", (0, 0), (-1, 0), 0, RULE_STRONG),
+        ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
+        ("BOX", (0, 0), (-1, -1), 0.8, HexColor("#86D2C5")),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),
         ("LEFTPADDING", (0, 0), (-1, -1), 6),
@@ -409,7 +422,7 @@ def render_screenshot(payload, max_w=COL_W):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
     ]))
     caption_p = Paragraph(inline(caption), STY["ph-cap"])
-    wrap = [outer, Spacer(1, 3), caption_p, Spacer(1, 6)]
+    wrap = [outer, Spacer(1, 4), caption_p, Spacer(1, 8)]
     return KeepTogether(wrap)
 
 
@@ -989,6 +1002,71 @@ def render_screenshot_pair(payload):
     return [KeepTogether(pair), Spacer(1, 10)]
 
 
+class HArrow(Flowable):
+    """Horizontal right-pointing arrow drawn with canvas primitives.
+    Cleaner than the text chevron character and visually consistent
+    with the rest of the diagram. Used between Cedar workflow cards."""
+
+    def __init__(self, w=22, color=None):
+        Flowable.__init__(self)
+        self.w = w
+        self.h = 14
+        self.color = color if color is not None else ACCENT_DEEP
+
+    def wrap(self, aw, ah):
+        return (self.w, self.h)
+
+    def draw(self):
+        c = self.canv
+        mid = self.h / 2
+        # Arrow shaft
+        c.setStrokeColor(self.color)
+        c.setLineWidth(1.5)
+        c.setLineCap(1)
+        c.line(0, mid, self.w - 6, mid)
+        # Filled arrowhead triangle
+        c.setFillColor(self.color)
+        c.setStrokeColor(self.color)
+        path = c.beginPath()
+        path.moveTo(self.w - 7, mid - 4)
+        path.lineTo(self.w, mid)
+        path.lineTo(self.w - 7, mid + 4)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
+
+
+class VArrow(Flowable):
+    """Vertical upward arrow. Used between Product Ladder cards to
+    signal progression from foundation to compounding peak."""
+
+    def __init__(self, h=18, color=None, w=14):
+        Flowable.__init__(self)
+        self.w = w
+        self.h = h
+        self.color = color if color is not None else ACCENT_DEEP
+
+    def wrap(self, aw, ah):
+        return (self.w, self.h)
+
+    def draw(self):
+        c = self.canv
+        mid = self.w / 2
+        # Shaft
+        c.setStrokeColor(self.color)
+        c.setLineWidth(1.5)
+        c.setLineCap(1)
+        c.line(mid, 0, mid, self.h - 6)
+        # Filled head
+        c.setFillColor(self.color)
+        c.setStrokeColor(self.color)
+        path = c.beginPath()
+        path.moveTo(mid - 4, self.h - 7)
+        path.lineTo(mid, self.h)
+        path.lineTo(mid + 4, self.h - 7)
+        path.close()
+        c.drawPath(path, fill=1, stroke=0)
+
+
 def render_cedarflow(_payload=""):
     """Cedar's source-intake-to-deliverable flow. Four steps shown as
     cards in a row with chevrons between them. This is the one product
@@ -1052,20 +1130,13 @@ def render_cedarflow(_payload=""):
         ]))
         return outer
 
-    chev = Paragraph(
-        "›",
-        ps("cf-chev",
-           fontName="Inter-Bold", fontSize=18, leading=22,
-           textColor=ACCENT_DEEP, alignment=1),
-    )
-
     row_cells = []
     col_widths = []
     for i, (num, title, desc) in enumerate(steps):
         row_cells.append(card(num, title, desc))
         col_widths.append(card_w)
         if i < n - 1:
-            row_cells.append(chev)
+            row_cells.append(HArrow(w=chev_w - 4))
             col_widths.append(chev_w)
     row = Table([row_cells], colWidths=col_widths)
     row.setStyle(TableStyle([
@@ -1133,14 +1204,10 @@ MOAT_SHADES = [
 
 
 class MoatPyramid(Flowable):
-    """Defensibility pyramid. Layers stack vertically; each layer is
-    drawn as a horizontal teal-shaded bar that widens toward the
-    bottom (broadest base, narrowest peak). The TOP layer is the
-    earliest / most-defensible compounding effect; the BOTTOM layer
-    is the foundation.
-
-    Each layer carries: a layer-number kicker, the layer name (bold),
-    and a one-line description, laid out beside the band."""
+    """Defensibility pyramid drawn as a true triangular pyramid: each
+    layer is a trapezoid stacked vertically, narrowest at the peak,
+    widest at the base. Title and description sit beside each
+    trapezoid; the layer number is centered inside the trapezoid."""
 
     def __init__(self, layers_foundation_first, col_w):
         Flowable.__init__(self)
@@ -1151,9 +1218,12 @@ class MoatPyramid(Flowable):
         self.layers = layers_foundation_first
         self.col_w = col_w
         n = len(self.layers)
-        self.row_h = 0.55 * inch
-        self.gap = 4
-        self.height = n * (self.row_h + self.gap) + 6
+        self.layer_h = 0.52 * inch
+        self.gap = 2
+        self.pyramid_base_w = 2.6 * inch
+        self.pyramid_peak_w = 0.55 * inch
+        self.pyramid_left_inset = 0.15 * inch
+        self.height = n * (self.layer_h + self.gap) + 6
 
     def wrap(self, aw, ah):
         return (self.col_w, self.height + 6)
@@ -1161,72 +1231,79 @@ class MoatPyramid(Flowable):
     def draw(self):
         c = self.canv
         n = len(self.layers)
-        # Pyramid geometry: the visual band itself takes the LEFT
-        # portion of the column. Text labels sit to the right, with
-        # the description on a second line under the title.
-        band_max_w = 2.7 * inch
-        band_min_w = 1.0 * inch
-        band_x_center = 1.55 * inch
-        text_x = band_max_w + 0.45 * inch
+        text_x = self.pyramid_base_w + self.pyramid_left_inset + 0.45 * inch
         text_w = self.col_w - text_x - 6
 
+        pyramid_total_h = n * (self.layer_h + self.gap)
+        cx = self.pyramid_left_inset + self.pyramid_base_w / 2
+
         for visual_i in range(n):
-            # visual_i = 0 is the visual peak (narrowest band);
-            # visual_i = n - 1 is the visual base (widest band).
-            # The peak shows the most-compounding layer (last in
-            # input), the base shows the foundation (first in input).
-            real_layer_n = n - visual_i  # 5,4,3,2,1 from top down
+            # visual_i = 0 -> peak (narrowest); visual_i = n - 1 -> base
+            real_layer_n = n - visual_i
             input_idx = real_layer_n - 1
             title, desc = self.layers[input_idx]
             shade = MOAT_SHADES[min(input_idx, len(MOAT_SHADES) - 1)]
 
-            t = visual_i / max(n - 1, 1)
-            band_w = band_min_w + (band_max_w - band_min_w) * t
-            band_x = band_x_center - band_w / 2
-            band_y = self.height - (visual_i + 1) * (self.row_h + self.gap)
-            band_h = self.row_h
+            # Top and bottom widths of this trapezoid. The pyramid
+            # widens linearly from peak to base, so interpolate.
+            t_top = visual_i / n
+            t_bot = (visual_i + 1) / n
+            top_w = (self.pyramid_peak_w +
+                     (self.pyramid_base_w - self.pyramid_peak_w) * t_top)
+            bot_w = (self.pyramid_peak_w +
+                     (self.pyramid_base_w - self.pyramid_peak_w) * t_bot)
 
+            top_y = self.height - 3 - visual_i * (self.layer_h + self.gap)
+            bot_y = top_y - self.layer_h
+
+            x_tl = cx - top_w / 2
+            x_tr = cx + top_w / 2
+            x_br = cx + bot_w / 2
+            x_bl = cx - bot_w / 2
+
+            # Filled trapezoid
             c.setFillColor(shade)
             c.setStrokeColor(HexColor("#0A8A7E"))
-            c.setLineWidth(0.4)
-            c.roundRect(band_x, band_y, band_w, band_h, 4,
-                        stroke=1, fill=1)
-            # Layer number centered inside the band, in a contrasting
-            # color depending on band darkness.
+            c.setLineWidth(0.5)
+            path = c.beginPath()
+            path.moveTo(x_tl, top_y)
+            path.lineTo(x_tr, top_y)
+            path.lineTo(x_br, bot_y)
+            path.lineTo(x_bl, bot_y)
+            path.close()
+            c.drawPath(path, fill=1, stroke=1)
+
+            # Layer number centered inside the trapezoid
+            cy_layer = (top_y + bot_y) / 2
             inside_color = (colors.white if real_layer_n >= 4
                             else NAVY)
             c.setFillColor(inside_color)
-            c.setFont("Inter-Bold", 11)
-            label = f"LAYER {real_layer_n}"
-            label_w = pdfmetrics.stringWidth(label, "Inter-Bold", 11)
-            c.drawString(band_x + (band_w - label_w) / 2,
-                         band_y + band_h / 2 - 4, label)
+            c.setFont("Inter-Bold", 10)
+            label = f"L{real_layer_n}"
+            label_w = pdfmetrics.stringWidth(label, "Inter-Bold", 10)
+            c.drawString(cx - label_w / 2, cy_layer - 3, label)
 
-            # Title to the right of the band, with the description
-            # under it. Drawn at fixed y so each layer aligns with
-            # the center of its band.
-            title_baseline = band_y + band_h / 2 + 2
+            # Title + description beside the trapezoid, vertically
+            # aligned with its center
+            title_y = cy_layer + 2
             c.setFillColor(NAVY)
             c.setFont("Inter-Bold", 10.5)
-            c.drawString(text_x, title_baseline, title)
+            c.drawString(text_x, title_y, title)
 
             c.setFillColor(INK_2)
             c.setFont("Inter", 8.5)
-            # Wrap description to text_w using rough char-per-width
-            # estimate; fine for one-liners.
             avg_char_w = 4.6
             max_chars = max(int(text_w / avg_char_w), 30)
             if len(desc) > max_chars:
-                # Split at the nearest space before max_chars
                 cut = desc.rfind(" ", 0, max_chars)
                 if cut == -1:
                     cut = max_chars
                 line1 = desc[:cut].strip()
                 line2 = desc[cut:].strip()
-                c.drawString(text_x, title_baseline - 12, line1)
-                c.drawString(text_x, title_baseline - 23, line2)
+                c.drawString(text_x, title_y - 12, line1)
+                c.drawString(text_x, title_y - 22, line2)
             else:
-                c.drawString(text_x, title_baseline - 12, desc)
+                c.drawString(text_x, title_y - 12, desc)
 
 
 def render_moat(payload):
@@ -1949,12 +2026,6 @@ def render_ladder(payload):
         ]))
         return outer
 
-    arrow_p = Paragraph(
-        "▲",
-        ps("ld-arrow", fontName="Inter-Bold", fontSize=11, leading=13,
-           textColor=ACCENT_DEEP, alignment=1),
-    )
-
     rows_out = []
     # Peak is at the top (index 0); use darker shade for peak, lighter
     # at the base.
@@ -1964,7 +2035,16 @@ def render_ladder(payload):
         shade = MOAT_SHADES[min(shade_idx, len(MOAT_SHADES) - 1)]
         rows_out.append([make_card(title, desc, shade)])
         if i < n - 1:
-            rows_out.append([arrow_p])
+            arrow_wrap = Table([[VArrow(h=16)]], colWidths=[inner_w])
+            arrow_wrap.setStyle(TableStyle([
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 0),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ]))
+            rows_out.append([arrow_wrap])
 
     table = Table(rows_out, colWidths=[inner_w])
     table.setStyle(TableStyle([
@@ -2339,9 +2419,9 @@ def build_cover():
             STY["cover-meta"],
         ),
         Paragraph(
-            'Economic impact analysis, '
-            '<font backColor="#B8EDE6"> rebuilt </font> '
-            'as software.',
+            'Make the economically '
+            '<font backColor="#B8EDE6"> invisible </font> '
+            'visible.',
             STY["cover-title"],
         ),
         Paragraph(tagline_html, tagline_style),

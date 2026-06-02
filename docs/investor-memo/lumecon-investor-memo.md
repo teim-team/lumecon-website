@@ -78,6 +78,8 @@ Tribal economies are among the most difficult economic environments to model acc
 
 Solving these problems first creates infrastructure that deploys directly into broader markets. The geographic engine, the data sovereignty controls, the institutional flexibility, and the multi-jurisdictional reasoning are exactly what cities, foundations, federal agencies, and international clients need. Tribes are the strategically right entry point because they force the hardest version of the problem to be solved first.
 
+[[SCREENSHOT: geography-selector | Geography selector. Reservation, off-reservation trust land, Alaska Native regional and village corporations, and Native Hawaiian Home Lands available as first-class geographies. Placeholder for the live workspace capture.]]
+
 Incumbents handle this category today by approximating reservations as counties and routing tribal customers through the same workflow they sell to a state DOT. Lumecon does not. The modeling infrastructure required to do this correctly (sovereign-government geographies, ANC and trust-land jurisdictions, Indigenous data sovereignty controls, complex-geography aware multipliers) is exactly the kind of investment a desktop vendor is unlikely to make for a segment they already serve poorly. The asymmetry is the moat.
 
 An internal review of public tribal impact studies between 2000 and 2026 identified 50+ published reports across more than two dozen tribal organizations, several of which commissioned studies repeatedly.[^12] That recurring footprint is the early-customer base that funds the broader expansion.
@@ -150,6 +152,8 @@ Toolbox | $15,000 add-on | Team-produced finished deliverables (report, deck, ex
 ]]
 
 First subscriptions and pilots begin in 2026. The company is targeting first paid revenue by end of 2026 from a focused set of Tribal and Local pilots in priority geographies.
+
+[[SCREENSHOT: branded-report | Branded report export. Customer visual identity, embedded assumption ledger, full multiplier provenance, one-click PDF and deck. Placeholder for the live export sample.]]
 
 ---
 
