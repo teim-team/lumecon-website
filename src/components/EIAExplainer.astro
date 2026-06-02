@@ -1,0 +1,600 @@
+---
+/**
+ * EIAExplainer — show, don't tell, what an economic impact study
+ * actually does.
+ *
+ * Two panels:
+ *   (1) The multiplier math, made literal. A $1 input is walked
+ *       through Direct / Indirect / Induced / Fiscal flows with
+ *       explicit dollar amounts, ending at a 2.3x total. Right next
+ *       to it: the same input under the standard 1.8x county
+ *       methodology, so the visitor sees the gap (the 0.5x of
+ *       activity uncounted by the legacy tools) in concrete dollars.
+ *   (2) The data inputs that feed the engine, grouped by category,
+ *       with what's live today versus what is coming.
+ *
+ * Sits between the workflow strip (HeroWorkflow.astro) and the
+ * path tiles. The workflow shows the FLOW; this section shows the
+ * MATH and the INPUTS that make the flow defensible.
+ */
+---
+<section class="eia-explainer" aria-labelledby="eia-explainer-h">
+  <header class="eia-explainer__head">
+    <span class="eia-explainer__kicker">WHAT THE STUDY ACTUALLY DOES</span>
+    <h2 id="eia-explainer-h" class="eia-explainer__title">
+      The multiplier math, made literal.
+    </h2>
+    <p class="eia-explainer__lede">
+      An economic impact study traces every dollar of an investment as it ripples
+      through wages, suppliers, household spending, and tax revenue. The total is the
+      <em>multiplier</em>. Better geography and better data move the multiplier.
+    </p>
+  </header>
+
+  <!-- ===== Multiplier breakdown: side-by-side comparison ===== -->
+  <div class="eia-math" aria-label="Multiplier breakdown">
+    <article class="eia-math__panel eia-math__panel--lumecon" aria-labelledby="eia-lumecon-h">
+      <span class="eia-math__pill">LUMECON</span>
+      <h3 id="eia-lumecon-h" class="eia-math__h">$1 in &nbsp;→&nbsp; $2.30 out</h3>
+      <p class="eia-math__sub">Tribal-aware geography. Sovereign-aware multipliers. Locally-calibrated inputs.</p>
+
+      <ol class="eia-math__rows">
+        <li class="eia-math__row">
+          <span class="eia-math__row-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="3.6"/>
+              <path d="M5 20c1.4-3.4 4-5 7-5s5.6 1.6 7 5"/>
+            </svg>
+          </span>
+          <span class="eia-math__row-text">
+            <span class="eia-math__row-name">Direct</span>
+            <span class="eia-math__row-body">Wages paid to workers on the project itself.</span>
+          </span>
+          <span class="eia-math__row-num">$0.55</span>
+        </li>
+        <li class="eia-math__row">
+          <span class="eia-math__row-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="9" width="18" height="11" rx="1.4"/>
+              <path d="M7 9V6.6c0-1 .8-1.8 1.8-1.8h6.4c1 0 1.8.8 1.8 1.8V9"/>
+              <line x1="3" y1="14" x2="21" y2="14"/>
+            </svg>
+          </span>
+          <span class="eia-math__row-text">
+            <span class="eia-math__row-name">Indirect</span>
+            <span class="eia-math__row-body">Purchases from local suppliers, vendors, and contractors.</span>
+          </span>
+          <span class="eia-math__row-num">$0.60</span>
+        </li>
+        <li class="eia-math__row">
+          <span class="eia-math__row-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/>
+              <path d="M3 11h18v8a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 19Z"/>
+              <line x1="8" y1="15.5" x2="16" y2="15.5"/>
+            </svg>
+          </span>
+          <span class="eia-math__row-text">
+            <span class="eia-math__row-name">Induced</span>
+            <span class="eia-math__row-body">Household spending by those wage earners in the local economy.</span>
+          </span>
+          <span class="eia-math__row-num">$0.85</span>
+        </li>
+        <li class="eia-math__row">
+          <span class="eia-math__row-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 21V8.4l8-4.8 8 4.8V21"/>
+              <line x1="2.6" y1="21" x2="21.4" y2="21"/>
+              <rect x="8.6" y="13" width="7" height="8"/>
+            </svg>
+          </span>
+          <span class="eia-math__row-text">
+            <span class="eia-math__row-name">Fiscal</span>
+            <span class="eia-math__row-body">State and local tax revenue generated along the way.</span>
+          </span>
+          <span class="eia-math__row-num">$0.30</span>
+        </li>
+      </ol>
+
+      <footer class="eia-math__total">
+        <span class="eia-math__total-label">Total impact per dollar</span>
+        <span class="eia-math__total-num">$2.30</span>
+        <span class="eia-math__total-mult">2.30 × multiplier</span>
+      </footer>
+    </article>
+
+    <article class="eia-math__panel eia-math__panel--standard" aria-labelledby="eia-standard-h">
+      <span class="eia-math__pill eia-math__pill--muted">STANDARD COUNTY METHOD</span>
+      <h3 id="eia-standard-h" class="eia-math__h eia-math__h--muted">$1 in &nbsp;→&nbsp; $1.80 out</h3>
+      <p class="eia-math__sub">County-aggregate multipliers. Reservation activity rolled up to the surrounding county.</p>
+
+      <ol class="eia-math__rows">
+        <li class="eia-math__row eia-math__row--muted">
+          <span class="eia-math__row-text">
+            <span class="eia-math__row-name">Direct + Indirect + Induced + Fiscal</span>
+            <span class="eia-math__row-body">Same flows, county-wide assumptions.</span>
+          </span>
+          <span class="eia-math__row-num eia-math__row-num--muted">$1.80</span>
+        </li>
+        <li class="eia-math__row eia-math__row--gap">
+          <span class="eia-math__row-text">
+            <span class="eia-math__row-name eia-math__row-name--gap">Activity leaking past county lines</span>
+            <span class="eia-math__row-body">Captured by Lumecon. Uncounted by the standard method.</span>
+          </span>
+          <span class="eia-math__row-num eia-math__row-num--gap">+ $0.50</span>
+        </li>
+      </ol>
+
+      <footer class="eia-math__total eia-math__total--muted">
+        <span class="eia-math__total-label">Standard total per dollar</span>
+        <span class="eia-math__total-num eia-math__total-num--muted">$1.80</span>
+        <span class="eia-math__total-mult">1.80 × multiplier</span>
+      </footer>
+    </article>
+  </div>
+
+  <p class="eia-explainer__illus">
+    Illustrative. Real multipliers vary by sector, region, time window, and customer-confirmed inputs. The
+    spread between methodologies is real and material on every tribal study we have reviewed.
+  </p>
+
+  <!-- ===== Data inputs panel ===== -->
+  <div class="eia-data" aria-labelledby="eia-data-h">
+    <header class="eia-data__head">
+      <span class="eia-explainer__kicker">DATA INPUTS</span>
+      <h2 id="eia-data-h" class="eia-explainer__title">
+        Every number traces back to a source.
+      </h2>
+      <p class="eia-explainer__lede">
+        Public datasets every major economic impact platform uses, plus the inputs Lumecon adds and
+        the data we are bringing online next.
+      </p>
+    </header>
+
+    <div class="eia-data__grid">
+      <!-- Column 1: Public data, live -->
+      <section class="eia-data__col" aria-labelledby="eia-col-public">
+        <h3 id="eia-col-public" class="eia-data__col-h">Public data &mdash; live today</h3>
+        <ul class="eia-data__list">
+          <li class="eia-data__item eia-data__item--live">
+            <a href="https://www.census.gov" target="_blank" rel="noopener noreferrer">U.S. Census</a>
+            <span class="eia-data__detail">ACS · LODES · QWI · CBP · TIGER/Line</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <a href="https://www.bea.gov/industry/input-output-accounts-data" target="_blank" rel="noopener noreferrer">BEA Input-Output Accounts</a>
+            <span class="eia-data__detail">The engine itself: industry-to-industry flows.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <a href="https://www.bls.gov/cew/" target="_blank" rel="noopener noreferrer">BLS QCEW</a>
+            <span class="eia-data__detail">Quarterly employment and wages by county.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <a href="https://www.nass.usda.gov" target="_blank" rel="noopener noreferrer">USDA NASS</a>
+            <span class="eia-data__detail">Agriculture and rural-economy detail.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <a href="https://www.usaspending.gov" target="_blank" rel="noopener noreferrer">USAspending</a>
+            <span class="eia-data__detail">Federal contracts, grants, and assistance.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <a href="https://fred.stlouisfed.org" target="_blank" rel="noopener noreferrer">FRED (St. Louis Fed)</a>
+            <span class="eia-data__detail">Macro context: rates, prices, regional employment.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <a href="https://www.noaa.gov" target="_blank" rel="noopener noreferrer">NOAA</a>
+            <span class="eia-data__detail">Weather, environmental, and coastal-economy data.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Column 2: Sovereign-aware geographies + customer-confirmed -->
+      <section class="eia-data__col" aria-labelledby="eia-col-sov">
+        <h3 id="eia-col-sov" class="eia-data__col-h">What Lumecon adds &mdash; live today</h3>
+        <ul class="eia-data__list">
+          <li class="eia-data__item eia-data__item--live">
+            <span class="eia-data__name">Sovereign-aware geographies</span>
+            <span class="eia-data__detail">Federally recognized reservations, off-reservation trust lands, Alaska Native regional and village corporations, and Native Hawaiian Home Lands.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <span class="eia-data__name">Customer-confirmed inputs</span>
+            <span class="eia-data__detail">Your budget, payroll, and program data. Cedar AI reads source documents; the analyst signs off on every value.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <span class="eia-data__name">Multiplier overrides</span>
+            <span class="eia-data__detail">Per-sector, per-region multiplier adjustments with a full audit trail back to the source.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--live">
+            <span class="eia-data__name">Assumption ledger</span>
+            <span class="eia-data__detail">Every modeling choice surfaced for human sign-off before any number leaves the platform.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Column 3: Coming soon -->
+      <section class="eia-data__col eia-data__col--soon" aria-labelledby="eia-col-soon">
+        <h3 id="eia-col-soon" class="eia-data__col-h">Coming next</h3>
+        <ul class="eia-data__list">
+          <li class="eia-data__item eia-data__item--soon">
+            <span class="eia-data__name">Real-time administrative feeds</span>
+            <span class="eia-data__detail">State revenue, unemployment insurance, and SNAP retailer activity for high-frequency refresh.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--soon">
+            <span class="eia-data__name">Satellite-derived activity proxies</span>
+            <span class="eia-data__detail">Nighttime lights, vehicle counts, and built-environment change as ground-truth on output.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--soon">
+            <span class="eia-data__name">Mobile commuter flows</span>
+            <span class="eia-data__detail">Origin-destination patterns at sub-county resolution, where consented and aggregated.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--soon">
+            <span class="eia-data__name">Tribal multiplier library</span>
+            <span class="eia-data__detail">Lumecon-original sovereign-government multipliers, built from the studies we run.</span>
+          </li>
+          <li class="eia-data__item eia-data__item--soon">
+            <span class="eia-data__name">Federated learning across customers</span>
+            <span class="eia-data__detail">Models improve from every deployment without raw customer data ever leaving the customer.</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Section frame — sits below HeroWorkflow inside .hero-brand. */
+  .eia-explainer {
+    margin-top: 1.4rem;
+    padding: 1.6rem 1.4rem;
+    border: 1px solid var(--rule, #E8E8EE);
+    border-radius: 14px;
+    background: var(--paper, #FCFCFC);
+  }
+  @media (min-width: 760px) {
+    .eia-explainer { padding: 2rem 1.8rem; }
+  }
+
+  /* Section header (shared by both panels) */
+  .eia-explainer__head { margin-bottom: 1.2rem; }
+  .eia-explainer__kicker {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-text, #0A8A7E);
+    font-weight: 600;
+    margin-bottom: .35rem;
+  }
+  .eia-explainer__title {
+    font-family: var(--font-display, "Inter"), system-ui, sans-serif;
+    font-weight: 700;
+    color: var(--navy, #0A0F26);
+    font-size: clamp(1.3rem, 2.3vw, 1.7rem);
+    line-height: 1.18;
+    margin: 0 0 .45rem;
+  }
+  .eia-explainer__lede {
+    font-family: var(--font-sans, "Inter"), system-ui, sans-serif;
+    color: var(--ink-2, #353B5C);
+    font-size: .96rem;
+    line-height: 1.5;
+    max-width: 78ch;
+    margin: 0;
+  }
+  .eia-explainer__lede em {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--accent-text, #0A8A7E);
+  }
+  .eia-explainer__illus {
+    margin: .8rem 0 1.6rem;
+    font-family: var(--font-sans);
+    font-size: .8rem;
+    line-height: 1.5;
+    color: var(--ink-3, #6B6F8A);
+    font-style: italic;
+    max-width: 90ch;
+  }
+
+  /* ===== Multiplier math: side-by-side panels ===== */
+  .eia-math {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 880px) {
+    .eia-math { grid-template-columns: 1.25fr 1fr; }
+  }
+
+  .eia-math__panel {
+    position: relative;
+    padding: 1.2rem 1.2rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--rule, #E8E8EE);
+    background: var(--white, #fff);
+  }
+  .eia-math__panel--lumecon {
+    background: linear-gradient(180deg, #EAF7F4 0%, #FFFFFF 60%);
+    border-color: rgba(15, 181, 165, .35);
+  }
+
+  .eia-math__pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--white, #fff);
+    background: var(--accent-text, #0A8A7E);
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: .55rem;
+  }
+  .eia-math__pill--muted {
+    color: var(--ink-2, #353B5C);
+    background: var(--ink-5, #D5D7E0);
+  }
+
+  .eia-math__h {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--navy);
+    font-size: clamp(1.3rem, 2.6vw, 1.85rem);
+    margin: 0 0 .25rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .eia-math__h--muted { color: var(--ink-3, #6B6F8A); }
+  .eia-math__sub {
+    font-family: var(--font-sans);
+    font-size: .85rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+    margin: 0 0 .9rem;
+  }
+
+  .eia-math__rows {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+  }
+  .eia-math__row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: .65rem;
+    align-items: flex-start;
+    padding: .55rem .25rem;
+    border-bottom: 1px dashed rgba(15, 181, 165, .22);
+  }
+  .eia-math__row:last-child { border-bottom: none; }
+  .eia-math__row--muted {
+    grid-template-columns: 1fr auto;
+    color: var(--ink-3, #6B6F8A);
+    border-bottom-color: rgba(0, 0, 0, .08);
+  }
+  .eia-math__row--gap {
+    grid-template-columns: 1fr auto;
+    background: #FCEEDA;
+    border-radius: 6px;
+    border: 1px dashed #E2B973;
+    padding: .55rem .7rem;
+    margin-top: .25rem;
+  }
+
+  .eia-math__row-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--white);
+    border: 1px solid rgba(15, 181, 165, .35);
+    border-radius: 6px;
+    color: var(--accent-text);
+  }
+  .eia-math__row-icon svg { width: 16px; height: 16px; }
+
+  .eia-math__row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .eia-math__row-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .95rem;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .eia-math__row-name--gap { color: #A35A0F; }
+  .eia-math__row-body {
+    font-family: var(--font-sans);
+    font-size: .82rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .eia-math__row--muted .eia-math__row-name { color: var(--ink-3); }
+
+  .eia-math__row-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--accent-text);
+    white-space: nowrap;
+    align-self: center;
+  }
+  .eia-math__row-num--muted { color: var(--ink-3); }
+  .eia-math__row-num--gap { color: #A35A0F; }
+
+  .eia-math__total {
+    display: flex;
+    align-items: baseline;
+    gap: .9rem;
+    margin-top: 1rem;
+    padding-top: .75rem;
+    border-top: 2px solid var(--accent, #0FB5A5);
+  }
+  .eia-math__total--muted {
+    border-top-color: var(--ink-5, #D5D7E0);
+  }
+  .eia-math__total-label {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    flex: 1;
+  }
+  .eia-math__total-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+    color: var(--accent-text);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .eia-math__total-num--muted { color: var(--ink-3); }
+  .eia-math__total-mult {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  /* ===== Data inputs panel ===== */
+  .eia-data {
+    margin-top: 2rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  .eia-data__head { margin-bottom: 1.1rem; }
+
+  .eia-data__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  @media (min-width: 760px) {
+    .eia-data__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1040px) {
+    .eia-data__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .eia-data__col {
+    padding: 1rem 1.1rem;
+    border-radius: 10px;
+    background: #FAFCFC;
+    border: 1px solid var(--rule);
+  }
+  .eia-data__col--soon {
+    background: linear-gradient(180deg, #F4FAFB 0%, #FFFFFF 100%);
+    border-style: dashed;
+    border-color: rgba(15, 181, 165, .4);
+  }
+  .eia-data__col-h {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    font-weight: 700;
+    margin: 0 0 .65rem;
+  }
+  .eia-data__col--soon .eia-data__col-h { color: #A35A0F; }
+
+  .eia-data__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+  }
+  .eia-data__item {
+    position: relative;
+    padding: .55rem .6rem .55rem 1.8rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+  }
+  .eia-data__item::before {
+    content: '';
+    position: absolute;
+    left: .55rem;
+    top: .8rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.6px solid currentColor;
+  }
+  .eia-data__item--live { color: var(--accent-text); }
+  .eia-data__item--live::before {
+    background: var(--accent, #0FB5A5);
+    border-color: var(--accent, #0FB5A5);
+  }
+  .eia-data__item--live::after {
+    content: '';
+    position: absolute;
+    left: .8rem;
+    top: 1rem;
+    width: 5px;
+    height: 8px;
+    border-right: 1.8px solid var(--white);
+    border-bottom: 1.8px solid var(--white);
+    transform: rotate(40deg);
+  }
+  .eia-data__item--soon {
+    color: #A35A0F;
+    background: #FFF8EB;
+  }
+  .eia-data__item--soon::before {
+    border-style: dashed;
+    background: transparent;
+    border-color: #A35A0F;
+  }
+
+  .eia-data__item a,
+  .eia-data__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .96rem;
+    color: var(--navy);
+    text-decoration: none;
+    display: block;
+    line-height: 1.25;
+  }
+  .eia-data__item a {
+    border-bottom: 1px solid var(--rule-strong, rgba(14, 21, 48, .16));
+    display: inline-block;
+    padding-bottom: 1px;
+  }
+  .eia-data__item a:hover {
+    color: var(--accent-text);
+    border-color: var(--accent);
+  }
+  .eia-data__item a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+  .eia-data__detail {
+    display: block;
+    margin-top: .15rem;
+    font-family: var(--font-sans);
+    font-size: .82rem;
+    line-height: 1.42;
+    color: var(--ink-2, #353B5C);
+    font-weight: 400;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eia-explainer { transition: none; }
+  }
+</style>
