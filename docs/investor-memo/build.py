@@ -2017,6 +2017,232 @@ def render_closingseal(_payload=""):
     return [Spacer(1, 18), ClosingSeal(COL_W)]
 
 
+def render_sampleoutput(_payload=""):
+    """Side-by-side sample of what Cedar produces (impact brief, four
+    KPIs) and what the analyst sees while it's producing it
+    (assumption ledger, four sample rows with status chips). The
+    visual is explicitly marked ILLUSTRATIVE so it is never mistaken
+    for a real customer engagement. Acts as the product's
+    proof-artifact: not a screenshot, not an empty box."""
+    panel_w = (COL_W - 10) / 2
+
+    # ---- Left: Impact Brief ----
+    impact_kpis = [
+        ("JOBS", "12,400", "direct + indirect + induced"),
+        ("LABOR INCOME", "$840M", "annual"),
+        ("OUTPUT", "$1.6B", "annual"),
+        ("STATE + LOCAL TAX", "$73M", "annual"),
+    ]
+    kpi_w = (panel_w - 22) / 2
+    kpi_h = 0.78 * inch
+
+    def kpi_tile(label, value, caption):
+        lbl = Paragraph(
+            label,
+            ps(f"so-l-{label[:6]}",
+               fontName="Inter-SemiBold", fontSize=6, leading=8,
+               textColor=ACCENT_DEEP, spaceAfter=2),
+        )
+        val = Paragraph(
+            value,
+            ps(f"so-v-{label[:6]}",
+               fontName="Inter-Bold", fontSize=17, leading=20,
+               textColor=NAVY, spaceAfter=1),
+        )
+        cap = Paragraph(
+            caption,
+            ps(f"so-c-{label[:6]}",
+               fontName="Inter", fontSize=6.5, leading=9,
+               textColor=INK_3),
+        )
+        inner = Table([[lbl], [val], [cap]], colWidths=[kpi_w - 12])
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        outer = Table([[inner]], colWidths=[kpi_w], rowHeights=[kpi_h])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+            ("BOX", (0, 0), (-1, -1), 0.5, HexColor("#DDEEEA")),
+            ("LINEABOVE", (0, 0), (-1, 0), 1.4, ACCENT),
+            ("LEFTPADDING", (0, 0), (-1, -1), 8),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+            ("TOPPADDING", (0, 0), (-1, -1), 7),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        return outer
+
+    kpi_grid_rows = []
+    for i in range(0, 4, 2):
+        kpi_grid_rows.append([kpi_tile(*impact_kpis[i]),
+                              kpi_tile(*impact_kpis[i + 1])])
+    kpi_grid = Table(kpi_grid_rows,
+                     colWidths=[kpi_w + 6, kpi_w])
+    kpi_grid.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 3),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+    ]))
+
+    left_eyebrow_l = Paragraph(
+        "IMPACT BRIEF",
+        ps("so-le", fontName="Inter-SemiBold", fontSize=7, leading=10,
+           textColor=ACCENT_DEEP),
+    )
+    left_eyebrow_r = Paragraph(
+        "ILLUSTRATIVE",
+        ps("so-le2", fontName="Inter-SemiBold", fontSize=6.5, leading=10,
+           textColor=INK_3, alignment=2),
+    )
+    left_header = Table([[left_eyebrow_l, left_eyebrow_r]],
+                        colWidths=[panel_w * 0.6, panel_w * 0.4 - 16])
+    left_header.setStyle(TableStyle([
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    left_panel_inner = Table(
+        [[left_header], [kpi_grid]],
+        colWidths=[panel_w - 16],
+    )
+    left_panel_inner.setStyle(TableStyle([
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    left_panel = Table([[left_panel_inner]], colWidths=[panel_w])
+    left_panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    # ---- Right: Assumption Ledger ----
+    ledger = [
+        ("Multiplier source", "RIMS II (2022)", "APPROVED", "approved"),
+        ("Geographic basis",
+         "Reservation + buffer counties", "OVERRIDE", "override"),
+        ("Sector mapping", "NAICS 6-digit", "APPROVED", "approved"),
+        ("Employment elasticity", "0.45", "REVIEW", "review"),
+    ]
+    CHIP_STYLES = {
+        "approved": (HexColor("#D5EFEC"), ACCENT_DEEP),
+        "override": (HexColor("#FBE5E3"), HexColor("#C84441")),
+        "review":   (HexColor("#FCEEDA"), HexColor("#A35A0F")),
+    }
+
+    def ledger_row(field, value, chip_text, chip_kind):
+        bg, fg = CHIP_STYLES[chip_kind]
+        chip_p = Paragraph(
+            chip_text,
+            ps(f"so-cp-{chip_text[:4]}",
+               fontName="Inter-SemiBold", fontSize=6, leading=8,
+               textColor=fg, alignment=1),
+        )
+        chip = Table([[chip_p]],
+                     colWidths=[0.65 * inch],
+                     rowHeights=[12])
+        chip.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), bg),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        field_p = Paragraph(
+            field,
+            ps(f"so-f-{field[:6]}",
+               fontName="Inter-SemiBold", fontSize=7.5, leading=10,
+               textColor=INK_3),
+        )
+        value_p = Paragraph(
+            value,
+            ps(f"so-vl-{field[:6]}",
+               fontName="Inter", fontSize=9, leading=11.5,
+               textColor=NAVY),
+        )
+        left_col = Table([[field_p], [value_p]],
+                         colWidths=[panel_w - 0.65 * inch - 22])
+        left_col.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        row = Table([[left_col, chip]],
+                    colWidths=[panel_w - 0.65 * inch - 22,
+                               0.65 * inch])
+        row.setStyle(TableStyle([
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 6),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ]))
+        return row
+
+    right_header = Paragraph(
+        "ASSUMPTION LEDGER  ·  CEDAR",
+        ps("so-rh", fontName="Inter-SemiBold", fontSize=7, leading=10,
+           textColor=ACCENT_DEEP, spaceAfter=6),
+    )
+    ledger_rows_data = [[right_header]]
+    for i, l in enumerate(ledger):
+        ledger_rows_data.append([ledger_row(*l)])
+        if i < len(ledger) - 1:
+            ledger_rows_data.append([HRFlowable(
+                width="100%", thickness=0.3,
+                color=HexColor("#DDEEEA"))])
+    right_panel_inner = Table(ledger_rows_data,
+                              colWidths=[panel_w - 16])
+    right_panel_inner.setStyle(TableStyle([
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    right_panel = Table([[right_panel_inner]], colWidths=[panel_w])
+    right_panel.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+        ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#C4E5DF")),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    # ---- Side by side ----
+    pair = Table([[left_panel, right_panel]],
+                 colWidths=[panel_w + 5, panel_w + 5])
+    pair.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    caption = Paragraph(
+        "Illustrative. Real outputs include direct, indirect, and induced "
+        "impacts and a full audit trail of every modeling assumption "
+        "Cedar surfaces for analyst sign-off before export.",
+        STY["ph-cap"],
+    )
+    return [KeepTogether([pair, Spacer(1, 4), caption]), Spacer(1, 12)]
+
+
 def render_callout(payload):
     """Centered statement on a soft teal background. The page's
     rhetorical anchor; sits between sections to deliver a single
@@ -2303,6 +2529,8 @@ def build_body(md):
                 block_flows = render_ladder(payload)
             elif kind == "CLOSINGSEAL":
                 block_flows = render_closingseal(payload)
+            elif kind == "SAMPLEOUTPUT":
+                block_flows = render_sampleoutput(payload)
             emit(block_flows)
     # Final flush of any unbound h2 group (shouldn't happen with
     # well-formed input, but defensive).

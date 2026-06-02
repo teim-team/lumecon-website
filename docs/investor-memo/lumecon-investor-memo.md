@@ -27,7 +27,7 @@ Entity | Delaware C-Corp | Founded January 2026
 
 Three things converged in the last 24 months that make this company possible to build now.
 
-**AI can do the repetitive part of professional knowledge work.** Recent labor-economics research finds that the share of professional work theoretically exposed to current AI systems substantially exceeds what is being adopted in practice.[^1] Economic impact analysis sits in that gap. The work is heavy on document intake, harmonization, assumption tracking, charting, and report writing, all of which are on the productive side of the adoption curve.
+**AI can do the repetitive part of professional knowledge work.** Recent labor-economics research finds that the share of professional work theoretically exposed to current AI systems substantially exceeds what is being adopted in practice.[^1] Economic impact analysis sits in that gap. The binding constraint in the category has never been modeling capacity. It has been the human time spent reading source documents, harmonizing inputs against public datasets, naming and tracking every assumption, and writing the same kind of paragraph and chart again on every engagement. That sequence is exactly the kind of work current AI systems do well and current institutions trust only when each step is reviewable.
 
 **Existing providers have not modernized.** IMPLAN and REMI operate on workflows that predate the cloud.[^2] The market leaders prove demand and validate willingness to pay, but their stacks were built when desktop software was the assumption. The gap between what current technology can support and what shipped product offers is unusually wide.
 
@@ -66,13 +66,9 @@ The same measurement problem exists globally. Subnational governments worldwide 
 
 ## {{HL:teal}}The Problem
 
-Economic impact analysis today is a months-long project with a five-figure-per-study price tag. Lumecon turns the same work into a repeatable software workflow.
+Economic impact analysis today is a months-long, labor-bound project with a five-figure-per-study price tag. A consultant is hired or a desktop license is opened. Data is collected by hand from spreadsheets, PDFs, and emails. Inputs are cleaned and harmonized manually. Multipliers are picked one by one. Assumptions are typed into the report margin. Charts are built by hand. A senior analyst writes the report; a junior one keys the model. The deck is formatted overnight. Revisions take a week each. Every refresh starts the cycle over and is billed again. The legacy stack charges per geography, per user, per data tier; the consultants who operate it bill by the hour. Update cycles bring the bill back every time the data needs to move.
 
-[[WORKFLOWCOMPARE]]
-
-The legacy stack charges per geography, per user, per data tier. Then the consultants who operate it charge by the hour, with junior analysts running the model and senior analysts writing the report. Update cycles bring the bill back every time the data needs to be refreshed.
-
-Lumecon collapses both layers. One annual subscription, unlimited studies, every geography included, Cedar handling the intake and the drafting, and human review focused on the judgment calls that actually need a human.
+Lumecon collapses both layers. One annual subscription. Unlimited studies. Every geography included. Cedar reads the source documents, surfaces every modeling assumption for analyst sign-off, drafts the narrative against the customer's own template, and exports a branded deliverable on demand. The analyst spends time on the judgment calls; the platform handles the mechanics. Refresh quarterly without reopening a contract.
 
 ---
 
@@ -81,6 +77,8 @@ Lumecon collapses both layers. One annual subscription, unlimited studies, every
 Tribal economies are among the most difficult economic environments to model accurately in the United States. Reservations, off-reservation trust lands, overlapping jurisdictions, sovereign governments, rural geography, Alaska Native Corporation regions, Native Hawaiian Home Lands, and Indigenous data sovereignty requirements together create a problem that the major incumbents handle by approximating reservations as counties and hoping nobody asks.
 
 Solving these problems first creates infrastructure that deploys directly into broader markets. The geographic engine, the data sovereignty controls, the institutional flexibility, and the multi-jurisdictional reasoning are exactly what cities, foundations, federal agencies, and international clients need. Tribes are the strategically right entry point because they force the hardest version of the problem to be solved first.
+
+Incumbents handle this category today by approximating reservations as counties and routing tribal customers through the same workflow they sell to a state DOT. Lumecon does not. The modeling infrastructure required to do this correctly (sovereign-government geographies, ANC and trust-land jurisdictions, Indigenous data sovereignty controls, complex-geography aware multipliers) is exactly the kind of investment a desktop vendor is unlikely to make for a segment they already serve poorly. The asymmetry is the moat.
 
 An internal review of public tribal impact studies between 2000 and 2026 identified 50+ published reports across more than two dozen tribal organizations, several of which commissioned studies repeatedly.[^12] That recurring footprint is the early-customer base that funds the broader expansion.
 
@@ -99,7 +97,11 @@ Local + Tribal Economic Impact | The two regional platforms shipping in 2026. Sh
 
 **Cedar.** Lumecon's AI-assisted workflow. Cedar uploads and processes data in PDF, CSV, and XLSX formats today, with more formats expanding over time. It structures inputs against public data sources, surfaces every modeling assumption for human sign-off, and acts as a thought partner on the write-up. Cedar is not a ghostwriter. The analyst stays accountable for the substance.
 
+Underneath the AI workflow Lumecon runs a regional input-output engine in the RIMS II / IMPLAN-class tradition, re-parameterized for complex jurisdictions and recompiled on each refresh. Cedar's value is not that it replaces that engine; it is that it threads source documents into the engine and threads the engine's outputs back into a deliverable an analyst can defend in front of a council, a board, or a federal program officer.
+
 [[CEDARFLOW]]
+
+[[SAMPLEOUTPUT]]
 
 **Cedar Grove.** Launches in 2027 as the organizational intelligence layer. Customer data stays harmonized across every study a customer runs. Complementary administrative datasets (employment shifts, business openings and closures, wage movements, transfer-payment flows) sit alongside the customer's own data, so each study reinforces the impact narrative with real outcome evidence rather than only modeled multipliers. Recurring submissions (grants, federal reporting, audited annual reports) start from a base that already passed review.
 
