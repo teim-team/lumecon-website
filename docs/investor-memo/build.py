@@ -1174,6 +1174,447 @@ def render_advisor_grid(payload):
     return [advisor_header, KeepTogether(grid), Spacer(1, 8)]
 
 
+# ---- Card-grid block renderers (DEALTERMS, TRACTION, SAFETERMS) ----
+def _card_grid(rows, cols, value_size=14, kicker_color=None,
+               value_color=NAVY, accent_top=True):
+    """Generic 3-segment card grid: KICKER / VALUE / DETAIL per cell,
+    laid out into `cols` columns. Used by DEALTERMS, TRACTION, and
+    SAFETERMS so the visual language is shared across the deck.
+    `rows` is a list of (kicker, value, detail) tuples."""
+    if kicker_color is None:
+        kicker_color = ACCENT_DEEP
+    gap = 6
+    cell_w = (COL_W - gap * (cols - 1) - 2) / cols
+    cell_h = 0.95 * inch
+
+    def card(kicker, value, detail):
+        kicker_p = Paragraph(
+            kicker.upper(),
+            ps(f"cg-k-{kicker[:8]}",
+               fontName="Inter-SemiBold", fontSize=7, leading=10,
+               textColor=kicker_color, spaceAfter=4),
+        )
+        value_p = Paragraph(
+            value,
+            ps(f"cg-v-{kicker[:8]}",
+               fontName="Inter-Bold", fontSize=value_size,
+               leading=value_size + 2,
+               textColor=value_color, spaceAfter=4),
+        )
+        detail_p = Paragraph(
+            detail,
+            ps(f"cg-d-{kicker[:8]}",
+               fontName="Inter", fontSize=8, leading=11,
+               textColor=INK_2),
+        )
+        inner = Table(
+            [[kicker_p], [value_p], [detail_p]],
+            colWidths=[cell_w - 18],
+        )
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        outer = Table([[inner]], colWidths=[cell_w], rowHeights=[cell_h])
+        styles = [
+            ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+            ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#C4E5DF")),
+            ("LEFTPADDING", (0, 0), (-1, -1), 9),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 9),
+            ("TOPPADDING", (0, 0), (-1, -1), 9),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 9),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]
+        if accent_top:
+            styles.append(("LINEABOVE", (0, 0), (-1, 0), 1.6, ACCENT))
+        outer.setStyle(TableStyle(styles))
+        return outer
+
+    cards = [card(k, v, d) for (k, v, d) in rows]
+    while len(cards) % cols != 0:
+        cards.append(Spacer(cell_w, cell_h))
+    grid_rows = [cards[j:j + cols] for j in range(0, len(cards), cols)]
+    grid = Table(grid_rows, colWidths=[cell_w + 1] * cols)
+    grid.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 3),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 3),
+        ("TOPPADDING", (0, 0), (-1, -1), 3),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+    ]))
+    return grid
+
+
+def _parse_pipe_rows(payload, expected_segments=3):
+    rows = []
+    for r in payload.split("\n"):
+        r = r.strip()
+        if not r:
+            continue
+        parts = [p.strip() for p in r.split("|")]
+        while len(parts) < expected_segments:
+            parts.append("")
+        rows.append(parts[:expected_segments])
+    return rows
+
+
+def render_dealterms(payload):
+    rows = _parse_pipe_rows(payload, 3)
+    grid = _card_grid(rows, cols=3, value_size=14)
+    return [KeepTogether(grid), Spacer(1, 10)]
+
+
+def render_traction(payload):
+    rows = _parse_pipe_rows(payload, 3)
+    grid = _card_grid(rows, cols=3, value_size=11)
+    return [KeepTogether(grid), Spacer(1, 10)]
+
+
+def render_safeterms(payload):
+    """SAFE terms summary card. 6 essential SAFE terms in a 3-wide
+    compact grid so it sits comfortably on the closing page above the
+    BIGLINE without pushing into a near-empty trailing page."""
+    rows = _parse_pipe_rows(payload, 2)
+    cols = 3
+    gap = 6
+    cell_w = (COL_W - gap * (cols - 1) - 2) / cols
+    cell_h = 0.62 * inch
+
+    def card(label, value):
+        kicker_p = Paragraph(
+            label.upper(),
+            ps(f"st-k-{label[:8]}",
+               fontName="Inter-SemiBold", fontSize=6.5, leading=9,
+               textColor=ACCENT_DEEP, spaceAfter=4),
+        )
+        value_p = Paragraph(
+            value,
+            ps(f"st-v-{label[:8]}",
+               fontName="Inter-Bold", fontSize=10, leading=12.5,
+               textColor=NAVY),
+        )
+        inner = Table(
+            [[kicker_p], [value_p]],
+            colWidths=[cell_w - 14],
+        )
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        outer = Table([[inner]], colWidths=[cell_w], rowHeights=[cell_h])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), TEAL_BG_SOFT),
+            ("LEFTPADDING", (0, 0), (-1, -1), 7),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 7),
+            ("TOPPADDING", (0, 0), (-1, -1), 8),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        return outer
+
+    cards = [card(*r) for r in rows]
+    while len(cards) % cols != 0:
+        cards.append(Spacer(cell_w, cell_h))
+    grid_rows = [cards[j:j + cols] for j in range(0, len(cards), cols)]
+    grid = Table(grid_rows, colWidths=[cell_w + 1] * cols)
+    grid.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 2),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 2),
+        ("TOPPADDING", (0, 0), (-1, -1), 2),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+    ]))
+    header = Paragraph(
+        "SAFE TERMS",
+        ps("st-header", fontName="Inter-SemiBold", fontSize=8,
+           leading=11, textColor=ACCENT_DEEP,
+           spaceBefore=4, spaceAfter=6),
+    )
+    return [KeepTogether([header, grid]), Spacer(1, 12)]
+
+
+def render_roadmap_horiz(payload):
+    """Horizontal milestone columns. Groups events by year and lays
+    each year-cluster out in a column with the year banner at the top
+    and the event titles below it. Reads left-to-right like a real
+    timeline; replaces the old vertical chip+label list."""
+    rows = _parse_pipe_rows(payload, 3)
+    # Group by year
+    years = []
+    by_year = {}
+    for year, title, desc in rows:
+        if year not in by_year:
+            by_year[year] = []
+            years.append(year)
+        by_year[year].append((title, desc))
+
+    n = len(years)
+    gap = 8
+    col_w = (COL_W - gap * (n - 1) - 4) / n
+
+    def year_col(year, events):
+        year_p = Paragraph(
+            year,
+            ps(f"rh-y-{year}",
+               fontName="Inter-Bold", fontSize=20, leading=24,
+               textColor=PAPER, alignment=1),
+        )
+        year_chip = Table(
+            [[year_p]],
+            colWidths=[col_w - 8],
+            rowHeights=[0.5 * inch],
+        )
+        year_chip.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), NAVY),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        event_blocks = []
+        for title, desc in events:
+            title_p = Paragraph(
+                title,
+                ps(f"rh-t-{title[:8]}",
+                   fontName="Inter-Bold", fontSize=10, leading=13,
+                   textColor=NAVY, spaceAfter=2),
+            )
+            desc_p = Paragraph(
+                desc,
+                ps(f"rh-d-{title[:8]}",
+                   fontName="Inter", fontSize=8.5, leading=11.5,
+                   textColor=INK_2, spaceAfter=8),
+            )
+            event_blocks.append([title_p])
+            event_blocks.append([desc_p])
+
+        all_blocks = [[year_chip], [Spacer(1, 8)]] + event_blocks
+        col = Table(all_blocks, colWidths=[col_w - 8])
+        col.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        return col
+
+    cols = [year_col(y, by_year[y]) for y in years]
+    timeline = Table([cols], colWidths=[col_w + (gap if i < n - 1 else 0)
+                                         for i in range(n)])
+    timeline.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    return [KeepTogether(timeline), Spacer(1, 12)]
+
+
+def render_pricing_cards(payload):
+    """Pricing cards. Each input line is one platform:
+        Platform | Tier=Price=Description | Tier=Price=Description | ...
+    Renders the platform name as a small subhead, then 3 cards side
+    by side underneath."""
+    rows = [r.strip() for r in payload.split("\n") if r.strip()]
+    out = []
+    for r in rows:
+        parts = [p.strip() for p in r.split("|")]
+        platform = parts[0]
+        tiers = []
+        for tier_spec in parts[1:]:
+            segs = [s.strip() for s in tier_spec.split("=")]
+            while len(segs) < 3:
+                segs.append("")
+            tiers.append(segs[:3])
+        # Subhead
+        out.append(Paragraph(
+            platform,
+            ps(f"pc-sub-{platform[:8]}",
+               fontName="Inter-SemiBold", fontSize=10.5, leading=14,
+               textColor=NAVY, spaceBefore=2, spaceAfter=6),
+        ))
+        cols = len(tiers)
+        gap = 6
+        cell_w = (COL_W - gap * (cols - 1) - 2) / cols
+        cell_h = 1.25 * inch
+
+        def card(name, price, desc):
+            tier_p = Paragraph(
+                name.upper(),
+                ps(f"pc-t-{name[:6]}",
+                   fontName="Inter-SemiBold", fontSize=7.5, leading=10,
+                   textColor=ACCENT_DEEP, spaceAfter=4),
+            )
+            price_p = Paragraph(
+                price,
+                ps(f"pc-p-{name[:6]}",
+                   fontName="Inter-Bold", fontSize=18, leading=22,
+                   textColor=NAVY, spaceAfter=4),
+            )
+            desc_p = Paragraph(
+                desc,
+                ps(f"pc-d-{name[:6]}",
+                   fontName="Inter", fontSize=8, leading=11,
+                   textColor=INK_2),
+            )
+            inner = Table(
+                [[tier_p], [price_p], [desc_p]],
+                colWidths=[cell_w - 18],
+            )
+            inner.setStyle(TableStyle([
+                ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 0),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ]))
+            outer = Table([[inner]], colWidths=[cell_w], rowHeights=[cell_h])
+            outer.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+                ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#C4E5DF")),
+                ("LINEABOVE", (0, 0), (-1, 0), 2.2, ACCENT),
+                ("LEFTPADDING", (0, 0), (-1, -1), 9),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 9),
+                ("TOPPADDING", (0, 0), (-1, -1), 10),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ]))
+            return outer
+
+        card_cells = [card(*t) for t in tiers]
+        platform_row = Table([card_cells],
+                             colWidths=[cell_w + (gap if i < cols - 1 else 0)
+                                        for i in range(cols)])
+        platform_row.setStyle(TableStyle([
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        out.append(KeepTogether(platform_row))
+        out.append(Spacer(1, 10))
+    return out
+
+
+def render_risks(payload):
+    """Risk cards. One row per risk. Each row carries the risk
+    category, the risk statement, and the mitigation, separated by
+    a hairline so the mitigation reads as a paired response."""
+    rows = _parse_pipe_rows(payload, 3)
+    items = []
+    for cat, risk, mit in rows:
+        cat_p = Paragraph(
+            cat.upper(),
+            ps(f"rk-c-{cat[:8]}",
+               fontName="Inter-SemiBold", fontSize=7, leading=10,
+               textColor=ACCENT_DEEP, spaceAfter=4),
+        )
+        risk_p = Paragraph(
+            risk,
+            ps(f"rk-r-{cat[:8]}",
+               fontName="Inter-Bold", fontSize=10, leading=13,
+               textColor=NAVY, spaceAfter=4),
+        )
+        mit_label = Paragraph(
+            "MITIGATION",
+            ps(f"rk-ml-{cat[:8]}",
+               fontName="Inter-SemiBold", fontSize=6.5, leading=9,
+               textColor=INK_3, spaceAfter=2),
+        )
+        mit_p = Paragraph(
+            mit,
+            ps(f"rk-m-{cat[:8]}",
+               fontName="Inter", fontSize=9, leading=12,
+               textColor=INK_2),
+        )
+        inner = Table(
+            [[cat_p], [risk_p], [HRFlowable(width="100%", thickness=0.3,
+                                              color=HexColor("#DDEEEA"),
+                                              spaceBefore=2, spaceAfter=6)],
+             [mit_label], [mit_p]],
+            colWidths=[COL_W - 28],
+        )
+        inner.setStyle(TableStyle([
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        outer = Table([[inner]], colWidths=[COL_W])
+        outer.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), PAPER),
+            ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#C4E5DF")),
+            ("LEFTPADDING", (0, 0), (-1, -1), 12),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+            ("TOPPADDING", (0, 0), (-1, -1), 10),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        items.append(KeepTogether([outer, Spacer(1, 6)]))
+    return items
+
+
+class BigLine(Flowable):
+    """Designed final-line flowable. Large Inter-Bold text with a
+    rotated hl-block behind one operative span; sits at the end of the
+    closing page as the document's mic-drop line."""
+
+    def __init__(self, text, col_w=COL_W, font_size=28, leading_factor=1.25):
+        Flowable.__init__(self)
+        self.text = text
+        self.col_w = col_w
+        self.font_size = font_size
+        self.text_w = pdfmetrics.stringWidth(text, "Inter-Bold", font_size)
+        if self.text_w > col_w - 12:
+            scale = (col_w - 12) / self.text_w
+            self.font_size = font_size * scale
+            self.text_w = col_w - 12
+        # Two-line headline budget so the closing line wraps naturally
+        self.height = self.font_size * leading_factor + 8
+
+    def wrap(self, aw, ah):
+        return (self.col_w, self.height + 8)
+
+    def draw(self):
+        c = self.canv
+        baseline_y = self.height * 0.25
+        # The hl-block behind the operative phrase
+        bleed_l = 12
+        bleed_r = 18
+        bx = -bleed_l
+        bw = self.text_w + bleed_l + bleed_r
+        by = baseline_y - self.font_size * 0.18
+        bh = self.font_size * 1.18
+        cx = bx + bw / 2
+        cy = by + bh / 2
+        c.saveState()
+        c.translate(cx, cy)
+        c.rotate(-1.6)
+        c.translate(-cx, -cy)
+        c.drawImage(str(HL_GRADIENT_PNG), bx, by, width=bw, height=bh,
+                    mask="auto")
+        c.restoreState()
+        c.setFillColor(NAVY)
+        c.setFont("Inter-Bold", self.font_size)
+        c.drawString(0, baseline_y, self.text)
+
+
+def render_bigline(payload):
+    return [Spacer(1, 6), BigLine(payload.strip(), col_w=COL_W),
+            Spacer(1, 8)]
+
+
 # ---- Page decoration ----
 def cover_decoration(canvas, doc):
     canvas.saveState()
@@ -1215,22 +1656,19 @@ def body_decoration(canvas, doc):
 
 # ---- Cover ----
 def build_cover():
-    """Portrait cover. Seal mark on top, title in the middle, the
-    website's actual tagline ("We luminate economies") below. No
-    marketing paragraph; the rest of the document carries the detail.
-    """
-    seal_size = 2.4 * inch
+    """Portrait cover. Seal mark on top, thesis-grade title (with the
+    hl-block treatment on the operative word), the long-form descriptor
+    underneath."""
+    seal_size = 2.05 * inch
     seal = Image(str(SEAL), width=seal_size, height=seal_size)
 
-    # Tagline mirrors the website's descriptor strip ("Economic impact
-    # analysis software ..."). The rest of the document carries the
-    # detail; the cover just states what Lumecon is.
     tagline_style = ps("cover-tagline",
-        fontName="Inter", fontSize=15, leading=22,
+        fontName="Inter", fontSize=13.5, leading=20,
         textColor=INK_2, spaceAfter=8)
     tagline_html = (
-        "Economic impact analysis software for governments, "
-        "enterprises, and mission-driven organizations."
+        "Lumecon is building software-first economic impact "
+        "infrastructure for governments, tribal nations, enterprises, "
+        "consultants, and mission-driven organizations."
     )
 
     return [
@@ -1242,8 +1680,9 @@ def build_cover():
             STY["cover-meta"],
         ),
         Paragraph(
-            'An <font backColor="#B8EDE6"> investor memorandum </font> '
-            'for Lumecon.',
+            'Economic impact analysis, '
+            '<font backColor="#B8EDE6"> rebuilt </font> '
+            'as software.',
             STY["cover-title"],
         ),
         Paragraph(tagline_html, tagline_style),
@@ -1260,6 +1699,41 @@ def build_cover():
 # ---- Body ----
 def build_body(md):
     flow = []
+    # Holds the kicker + h2 flowables until the next non-hr body block
+    # arrives; we then wrap the entire group + that first body flowable
+    # in a single KeepTogether so the headline can never orphan at the
+    # bottom of a page. (keepWithNext on custom Flowables isn't honored
+    # reliably across reportlab versions, hence the explicit buffer.)
+    pending_h2 = None
+
+    def _unwrap_kt(fl):
+        # Some renderers return [KeepTogether(x), ...]; when we bind a
+        # pending h2 to that first item we'd otherwise nest KeepTogether
+        # which trips up the layout engine and creates phantom big
+        # blocks that bump the whole group to the next page.
+        if isinstance(fl, KeepTogether):
+            content = getattr(fl, "_content", None)
+            if content is not None:
+                return list(content)
+            content = getattr(fl, "_flowables", None)
+            if content is not None:
+                return list(content)
+        return [fl]
+
+    def emit(new_items):
+        nonlocal pending_h2
+        if not new_items:
+            return
+        if pending_h2 is not None:
+            first = new_items[0]
+            rest = new_items[1:]
+            first_unwrapped = _unwrap_kt(first)
+            flow.append(KeepTogether(pending_h2 + first_unwrapped))
+            flow.extend(rest)
+            pending_h2 = None
+        else:
+            flow.extend(new_items)
+
     items = list(parse(md))
     saw_h1, saw_meta = False, False
     for k, v in items:
@@ -1268,39 +1742,37 @@ def build_body(md):
         if k == "p" and saw_h1 and not saw_meta:
             saw_meta = True; continue
         if k == "hr":
+            # hr is a section separator; never bind it to a pending h2.
+            # If there's a pending h2 with nothing following it (rare),
+            # flush it ungrouped so it isn't lost.
+            if pending_h2 is not None:
+                flow.extend(pending_h2)
+                pending_h2 = None
             flow.append(Spacer(1, 2))
             flow.append(HRFlowable(width="100%", thickness=0.4, color=RULE))
             flow.append(Spacer(1, 4))
         elif k == "h2":
-            # Strip any {{HL:color}} marker from the kicker label so the
-            # tiny mono caps eyebrow above the h2 doesn't repeat the
-            # marker text. The marker is consumed by render_h2_with_hl.
+            if pending_h2 is not None:
+                flow.extend(pending_h2)
             kicker_text = re.sub(r"\{\{HL:[a-z]+\}\}", "", v).strip()
-            # Kicker and headline use keepWithNext to bind to the
-            # first body flowable that follows; no manual page-break
-            # gymnastics needed.
-            flow.append(Paragraph(kicker_text.upper(), STY["kicker"]))
-            flow.append(render_h2_with_hl(v))
+            pending_h2 = [
+                Paragraph(kicker_text.upper(), STY["kicker"]),
+                render_h2_with_hl(v),
+            ]
         elif k == "h3":
-            flow.append(Paragraph(v, STY["h3"]))
+            emit([Paragraph(v, STY["h3"])])
         elif k == "pull":
-            # Wrap the pull-quote together with the trailing flowable
-            # already in the column so it can't orphan onto its own page
-            # (the closing mission line was landing alone on the final
-            # page before this).
             pull_p = Paragraph(inline(v), STY["pull"])
-            if flow and isinstance(flow[-1], Paragraph):
+            if flow and isinstance(flow[-1], Paragraph) and pending_h2 is None:
                 prior = flow.pop()
                 flow.append(KeepTogether([prior, Spacer(1, 2), pull_p]))
             else:
-                flow.append(Spacer(1, 2))
-                flow.append(pull_p)
+                emit([Spacer(1, 2), pull_p])
         elif k == "p":
-            flow.append(Paragraph(inline(v), STY["body"]))
+            emit([Paragraph(inline(v), STY["body"])])
         elif k == "list":
-            for item in v:
-                flow.append(Paragraph("• " + inline(item), STY["li"]))
-            flow.append(Spacer(1, 4))
+            li_items = [Paragraph("• " + inline(item), STY["li"]) for item in v]
+            emit(li_items + [Spacer(1, 4)])
         elif k == "table":
             header, body, aligns = v
             col_count = len(header)
@@ -1342,39 +1814,57 @@ def build_body(md):
                 ("BOTTOMPADDING",(0, 0), (-1, -1), 7),
                 ("VALIGN",       (0, 0), (-1, -1), "MIDDLE"),
             ]))
-            flow.append(Spacer(1, 2))
-            flow.append(KeepTogether(t))
-            flow.append(Spacer(1, 8))
+            emit([Spacer(1, 2), KeepTogether(t), Spacer(1, 8)])
         elif k == "block":
             kind, payload = v
+            block_flows = []
             if kind == "SCREENSHOT":
-                flow.append(render_screenshot(payload))
+                block_flows = [render_screenshot(payload)]
             elif kind == "STATGRID":
-                flow.extend(render_statgrid(payload))
+                block_flows = render_statgrid(payload)
             elif kind == "WORKFLOWCOMPARE":
-                flow.append(render_workflow_compare(payload))
+                block_flows = [render_workflow_compare(payload)]
             elif kind == "ROADMAP":
-                flow.extend(render_roadmap(payload))
+                block_flows = render_roadmap(payload)
             elif kind == "FUNDS":
-                flow.extend(render_funds(payload))
+                block_flows = render_funds(payload)
             elif kind == "TEAMGRID":
-                flow.extend(render_teamgrid(payload))
+                block_flows = render_teamgrid(payload)
             elif kind == "ADVISORGRID":
-                flow.extend(render_advisor_grid(payload))
+                block_flows = render_advisor_grid(payload)
             elif kind == "INSTITUTIONS":
-                flow.extend(render_institutions(payload))
+                block_flows = render_institutions(payload)
             elif kind == "PRICING":
-                flow.extend(render_pricing_side(payload))
+                block_flows = render_pricing_side(payload)
             elif kind == "ADDONS":
-                flow.extend(render_addons(payload))
+                block_flows = render_addons(payload)
             elif kind == "SCREENSHOTPAIR":
-                flow.extend(render_screenshot_pair(payload))
+                block_flows = render_screenshot_pair(payload)
             elif kind == "MOAT":
-                flow.extend(render_moat(payload))
+                block_flows = render_moat(payload)
             elif kind == "CEDARFLOW":
-                flow.extend(render_cedarflow(payload))
+                block_flows = render_cedarflow(payload)
             elif kind == "REFERENCES":
-                flow.extend(render_references(payload))
+                block_flows = render_references(payload)
+            elif kind == "DEALTERMS":
+                block_flows = render_dealterms(payload)
+            elif kind == "TRACTION":
+                block_flows = render_traction(payload)
+            elif kind == "SAFETERMS":
+                block_flows = render_safeterms(payload)
+            elif kind == "ROADMAPHORIZ":
+                block_flows = render_roadmap_horiz(payload)
+            elif kind == "PRICINGCARDS":
+                block_flows = render_pricing_cards(payload)
+            elif kind == "RISKS":
+                block_flows = render_risks(payload)
+            elif kind == "BIGLINE":
+                block_flows = render_bigline(payload)
+            emit(block_flows)
+    # Final flush of any unbound h2 group (shouldn't happen with
+    # well-formed input, but defensive).
+    if pending_h2 is not None:
+        flow.extend(pending_h2)
     return flow
 
 

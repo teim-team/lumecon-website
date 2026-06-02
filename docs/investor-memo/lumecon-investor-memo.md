@@ -12,21 +12,14 @@ Lumecon is the software platform that makes economic impact analysis accessible 
 
 The company is currently raising up to $100,000 in SAFE financing at a $5,000,000 post-money valuation cap to accelerate product development, pilot implementation, intellectual property protection, and commercialization. The founders have personally committed $50,000 in capital, with $25,000 already deployed.
 
----
-
-## Investment Summary
-
-| Item | Detail |
-| --- | --- |
-| Company | Lumecon Inc. |
-| Entity Type | Delaware C-Corporation |
-| Financing Instrument | Y Combinator Post-Money SAFE (Valuation Cap, No Discount) |
-| Valuation Cap | $5,000,000 Post-Money |
-| Raise Target | Up to $100,000 |
-| Founder Capital Committed | $50,000 |
-| Founder Capital Deployed | $25,000 |
-| Company Founded | January 2026 |
-| Corporate Conversion | May 2026 |
+[[DEALTERMS:
+Instrument | Y Combinator SAFE | Post-money, no discount
+Valuation Cap | $5.0M | Post-money
+Raise Target | Up to $100K | SAFE financing
+Founder Committed | $50K | Personal capital
+Founder Deployed | $25K | Already deployed
+Entity | Delaware C-Corp | Founded January 2026
+]]
 
 ---
 
@@ -59,7 +52,9 @@ The addressable customer set is large, recurring, and fragmented enough that no 
 1.8M+ | private-sector firms with 5 or more employees[^8]
 ]]
 
-Existing providers serve more than 1,100 organizations between IMPLAN (900+) and REMI (200+).[^9] Charlesbank Capital Partners acquired IMPLAN in 2024, confirming category demand and acquisition interest.[^10] The customer counts above demonstrate willingness to pay, not the boundary of the market. Most of the organizations listed have never run an economic impact study because the practical cost of one is $25,000 to $100,000 once software, consulting, and internal staff time are added together.[^11] Lumecon's pricing structure breaks below that floor and turns one-time studies into a continuously refreshed planning tool.
+IMPLAN publicly reports more than 900 client organizations, and REMI has long served public agencies, universities, and consultants on the state and federal side.[^9] In 2024, Charlesbank Capital Partners acquired a controlling stake in IMPLAN for more than $100 million, with the Wall Street Journal reporting that IMPLAN had grown revenue at more than 35% annually over the prior three years.[^10] That transaction is the cleanest available evidence that the category attracts institutional capital and that demand is durable.
+
+The customer counts above demonstrate willingness to pay, not the boundary of the market. Most of the organizations listed have never run an economic impact study because the practical cost of one can exceed $25,000 and, in more complex engagements, approach or exceed $100,000 once software, consulting, and internal staff time are added together.[^11] Lumecon's pricing structure breaks below that floor and turns one-time studies into a continuously refreshed planning tool.
 
 ---
 
@@ -108,7 +103,7 @@ Tribal and Native-economy expertise | Direct experience from the Federal Reserve
 Complex-geography engine | Reservations, trust lands, congressional districts, watersheds, and multi-jurisdictional regions as first-class geographies.
 Reusable data infrastructure | Clean and harmonize public, alternative, and administrative data once. Every customer benefits.
 Cedar Grove and switching costs | Harmonized data, source library, assumption history. The longer a customer stays, the more expensive switching gets.
-Privacy-preserving learning | Architecture supports federated learning. Models improve across customers without raw data ever leaving.
+Privacy-preserving learning | Future federated learning architecture. Models improve across customers without raw data ever leaving.
 ]]
 
 Patents, trademarks, copyrights, and trade secret protections sit on top of these layers as a procedural moat, not the primary one.
@@ -117,21 +112,21 @@ Patents, trademarks, copyrights, and trade secret protections sit on top of thes
 
 ## Roadmap
 
-[[ROADMAP:
-2026 | Local Economic Impact launches. Coverage: county, state, national.
-2026 | Tribal Economic Impact launches. Coverage: reservation, county, state, national.
-2026 | Cedar launches as the AI workflow inside Sapling and Tree tiers.
-2027 | Cedar Grove launches as the organizational intelligence layer on Tree.
-2028 | Global Economic Impact launches. National, international, cross-border, and supply-chain analysis.
+[[ROADMAPHORIZ:
+2026 | Local Economic Impact | County, state, national coverage
+2026 | Tribal Economic Impact | Reservation, county, state, national
+2026 | Cedar | AI workflow inside Sapling and Tree tiers
+2027 | Cedar Grove | Organizational intelligence layer on Tree
+2028 | Global Economic Impact | Cross-border and supply-chain analysis
 ]]
 
 ---
 
 ## {{HL:teal}}Revenue Model
 
-[[PRICING:
-Local Economic Impact | Sprout=$7,500 | Sapling=$15,000 | Tree=$20,000
-Tribal Economic Impact | Sprout=$10,000 | Sapling=$17,500 | Tree=$25,000
+[[PRICINGCARDS:
+Local Economic Impact | Sprout=$7,500=County coverage. One study workspace. | Sapling=$15,000=State and national coverage. Unlimited studies. | Tree=$20,000=Cedar AI workflow included. Custom branding on exports.
+Tribal Economic Impact | Sprout=$10,000=Reservation coverage. One study workspace. | Sapling=$17,500=All geographies. Unlimited studies. | Tree=$25,000=Cedar AI workflow. Cedar Grove ready. Custom branding.
 ]]
 
 [[ADDONS:
@@ -150,6 +145,21 @@ Contractors | $50,000 | Six months of work. Economist, two data scientists, and 
 Legal, compliance, IP | $30,000 | Corporate governance, customer contracting, financing documentation, patents, trademarks, and copyrights.
 Infrastructure | $10,000 | Cloud computing, storage, monitoring, and security.
 Marketing, customer acquisition, piloting | $10,000 | Pilot implementation, customer onboarding, sales, and marketing.
+]]
+
+---
+
+## {{HL:green}}Current Progress
+
+The company is past the concept stage. Capital is deployed, legal counsel is engaged, the product timeline is mapped, and the public commercial surface is live.
+
+[[TRACTION:
+Founder Capital | $50K committed, $25K deployed | Funding contractor work, infrastructure, and incorporation
+Fellowship Support | $6K awarded | [FELLOWSHIP NAME] (placeholder, to confirm)
+Legal Engagement | Cornell Law Entrepreneurship Clinic | Corporate, IP, and customer contracting in active workstream
+Product Timeline | MVP end of June 2026 | Local and Tribal Economic Impact platforms launch end of 2026
+Strategic Outreach | Early conversations underway | Native American Contractors Association (NACA) as a priority early relationship
+Commercial Surface | lumecon.ai live | Public product positioning, pricing, and inbound capture
 ]]
 
 ---
@@ -177,13 +187,38 @@ Havala Hanson, PhD | Product & Data Security Advisor | Alaska Fairbanks PhD in S
 
 ---
 
+## {{HL:teal}}Risk Factors
+
+Material risks the company has identified and the mitigations in place. This is not a complete enumeration; the full SAFE risk-factor schedule will accompany the appended SAFE document.
+
+[[RISKS:
+Concentration | Early customer base will be small and segment-focused. | Tribal customers commission studies repeatedly, and the same engine deploys directly into the broader local, federal, and international markets.
+Execution | Small team operating on limited capital against a multi-year roadmap. | Founder capital extends runway, contractor model keeps burn predictable, and the team's domain expertise compresses the learning curve.
+Data Sovereignty | Tribal data, federal datasets, and administrative data carry sovereignty and compliance requirements. | Data governance is built into the architecture from day one, with on-premise and federated learning options.
+Incumbent Response | Charlesbank's IMPLAN investment may accelerate the incumbent's modernization. | Lumecon's complex-geography engine, Cedar workflow, and Cedar Grove cannot be retrofitted into desktop software; they have to be rebuilt.
+Model Accuracy and Audit | AI error in a credibility-sensitive workflow is the central product risk. | Cedar surfaces every modeling assumption for human sign-off before a deliverable exports. The analyst stays accountable for the substance.
+]]
+
+---
+
 ## Closing
 
 Economic impact analysis is a proven category with stagnant incumbents, a customer base limited by price rather than need, and an underlying technology shift that makes the next generation of platforms possible to build. The strategically correct entry point is the segment that current providers handle worst, which is tribal economies and the complex geographies that come with them. Solving for that segment produces infrastructure that deploys directly into the rest of the market.
 
 The question is no longer whether economic impact analysis matters. The question is who has access to it.
 
-**Make the economically invisible visible.**
+The full SAFE form will be attached as an appendix in the final send version.
+
+[[SAFETERMS:
+Instrument | Y Combinator post-money SAFE
+Valuation Cap | $5,000,000 post-money
+Raise Target | Up to $100,000
+Discount | None
+MFN | Standard
+Pro Rata | Side letter on request
+]]
+
+[[BIGLINE: Make the economically invisible visible.]]
 
 ---
 
@@ -198,8 +233,8 @@ The question is no longer whether economic impact analysis matters. The question
 6 | National Center for Charitable Statistics, IRS Business Master File extract (2024). Approximately 86,000 501(c)(3) nonprofits report annual gross receipts above $1M.
 7 | U.S. Department of Education, National Center for Education Statistics, IPEDS 2023–24 institutional directory. Approximately 4,000 accredited Title IV-eligible postsecondary institutions.
 8 | U.S. Census Bureau, Statistics of U.S. Businesses (SUSB), most recent annual release. Approximately 1.8M employer firms with five or more employees.
-9 | IMPLAN Group LLC and Regional Economic Models, Inc. (REMI), public-facing customer counts and case study libraries, accessed 2025–2026.
-10 | Charlesbank Capital Partners, press release, "Charlesbank Capital Partners Acquires IMPLAN," 2024.
+9 | IMPLAN, "IMPLAN Announces…," press release via PRNewswire, 2024 ("technology serves more than 900 clients"). REMI customer base referenced via REMI public materials, accessed 2025–2026.
+10 | Wall Street Journal, coverage of Charlesbank Capital Partners' 2024 acquisition of a controlling stake in IMPLAN for more than $100 million; reported IMPLAN revenue growth above 35% annually over the prior three years. Charlesbank Capital Partners press release, "Charlesbank Capital Partners Acquires IMPLAN," 2024.
 11 | Estimated from public IMPLAN and REMI list pricing, Federal and state RFP awards for impact analysis contracts, and consultant rate cards. Includes software license, consulting hours, and internal staff time. Internal estimate; ranges vary by scope and geography.
 12 | Internal Lumecon dataset of publicly available tribal economic impact studies, 2000–2026. Compiled from tribal government and tribal enterprise public filings and consultant reports. Internal estimate.
 ]]
