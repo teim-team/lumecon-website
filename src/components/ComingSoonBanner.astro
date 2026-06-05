@@ -1,0 +1,247 @@
+---
+/**
+ * Site-wide "Coming soon" corner banner.
+ *
+ * A compact, on-brand status card pinned to the top-right corner of
+ * every page (rendered globally from BaseLayout). It signals that
+ * Lumecon is launching soon and routes inquiries to contact@lumecon.ai.
+ *
+ * Placement is deliberately collision-free: the Cedar FAB owns the
+ * bottom-right, the consent banner the bottom-left, and the nav the top
+ * edge — so this card sits top-right, just clear of the nav, at a lower
+ * z-index than the nav/menu so an open mobile menu overlays it.
+ *
+ * Dismissible: the visitor's choice is remembered in localStorage so the
+ * card doesn't nag on every navigation. Brand cues — white surface,
+ * hairline border, a 3px teal left accent bar, mono uppercase teal
+ * kicker, and a soft lift — keep it unmistakably Lumecon. No gold (brand
+ * reserved) and no marker-highlight rectangle (those are header-only).
+ */
+import { site } from '../config';
+---
+
+<aside class="coming-soon" id="comingSoon" aria-label="Site status" hidden>
+  <button
+    type="button"
+    class="coming-soon__close"
+    id="comingSoonClose"
+    aria-label="Dismiss coming soon notice"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+    </svg>
+  </button>
+  <p class="coming-soon__kicker">
+    <span class="coming-soon__dot" aria-hidden="true"></span>Coming soon
+  </p>
+  <p class="coming-soon__title">We&rsquo;re putting the finishing touches on Lumecon.</p>
+  <p class="coming-soon__contact">
+    Questions or early-access inquiries?
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+  </p>
+</aside>
+
+<script>
+  const STORAGE_KEY = 'lumecon:coming-soon-dismissed';
+
+  function setup(): void {
+    const banner = document.getElementById('comingSoon');
+    if (!banner) return;
+
+    // Respect a prior dismissal. localStorage can throw in private modes /
+    // sandboxed iframes — fall back to simply showing the banner.
+    let dismissed = false;
+    try {
+      dismissed = localStorage.getItem(STORAGE_KEY) === '1';
+    } catch {
+      /* no-op */
+    }
+    if (dismissed) {
+      banner.hidden = true;
+      return;
+    }
+
+    banner.hidden = false;
+
+    // Guard against double-binding when astro:page-load re-runs setup.
+    if ((banner as HTMLElement & { __bound?: boolean }).__bound) return;
+    (banner as HTMLElement & { __bound?: boolean }).__bound = true;
+
+    const close = document.getElementById('comingSoonClose');
+    close?.addEventListener('click', () => {
+      banner.hidden = true;
+      try {
+        localStorage.setItem(STORAGE_KEY, '1');
+      } catch {
+        /* no-op */
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+  document.addEventListener('astro:page-load', setup);
+</script>
+
+<style>
+  .coming-soon {
+    position: fixed;
+    /* Clear the nav bar at the top and inset by the safe area so the
+       card never tucks under an iPhone notch when viewport-fit=cover. */
+    top: calc(4.75rem + env(safe-area-inset-top, 0px));
+    right: calc(clamp(0.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-right, 0px));
+    /* Below the nav (z 100+) so an open mobile menu overlays this, but
+       above page content. */
+    z-index: 70;
+    width: min(310px, calc(100vw - 1.8rem));
+    background: var(--white);
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    /* Soft-rounded card, with a sharp 3px teal accent bar down the left
+       edge — the brand's "notable block" flag. */
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+    padding: 0.85rem 1rem 0.9rem 1.05rem;
+    box-shadow: 0 16px 40px -14px rgba(10, 15, 38, 0.4);
+    animation: coming-soon-in 0.35s var(--ease) both;
+  }
+  .coming-soon[hidden] {
+    display: none;
+  }
+
+  .coming-soon__close {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    color: var(--ink-3);
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      color 0.15s var(--ease),
+      background 0.15s var(--ease);
+  }
+  .coming-soon__close:hover {
+    color: var(--ink);
+    background: var(--accent-rgba-08);
+  }
+  .coming-soon__close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .coming-soon__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .coming-soon__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent-rgba-18);
+    animation: coming-soon-pulse 2.4s var(--ease) infinite;
+  }
+
+  .coming-soon__title {
+    margin: 0 0 0.4rem;
+    /* Sit clear of the close button. */
+    padding-right: 1.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .coming-soon__contact {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+  .coming-soon__contact a {
+    color: var(--accent-text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space: nowrap;
+  }
+  .coming-soon__contact a:hover {
+    color: var(--accent-deep);
+  }
+  .coming-soon__contact a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @keyframes coming-soon-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes coming-soon-pulse {
+    0% {
+      box-shadow: 0 0 0 0 var(--accent-rgba-18);
+    }
+    70% {
+      box-shadow: 0 0 0 7px rgba(15, 181, 165, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(15, 181, 165, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .coming-soon {
+      animation: none;
+    }
+    .coming-soon__dot {
+      animation: none;
+    }
+  }
+
+  /* On short / narrow viewports keep the card from crowding the nav CTA
+     and hamburger by nudging it a touch tighter. */
+  @media (max-width: 600px) {
+    .coming-soon {
+      top: calc(4.25rem + env(safe-area-inset-top, 0px));
+      width: min(300px, calc(100vw - 1.4rem));
+    }
+  }
+</style>
