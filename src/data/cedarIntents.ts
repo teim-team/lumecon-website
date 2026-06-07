@@ -539,7 +539,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'international', 'global economic impact', 'global platform', 'outside the us', 'outside the united states', 'other countries', 'another country', 'overseas', 'cross border', 'cross-border', 'worldwide', 'non us', 'work abroad', 'which countries do you', 'do you cover canada', 'do you cover mexico', 'do you cover europe', 'do you support international',
     ],
-    answer: "Today Lumecon covers the United States end to end: every county, state, tribal nation, and the national rollup. International coverage is the Global Economic Impact platform, which is on the roadmap rather than live: the engine and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
+    answer: "Today Lumecon covers the United States end to end: every county, state, tribal nation, and the national rollup. International coverage is the Global Economic Impact platform, on the roadmap next: the engine and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
   },
   /* ===== Depth pack: niche, vocabulary-specific intents surfaced by a
      panel of buyer-persona tests. All chip:null (reachable via free-text,
@@ -811,7 +811,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'sso', 'saml', 'oidc', 'single sign on', 'single sign-on', 'scim', 'mfa', 'okta', 'azure ad', 'entra', 'role based access', 'rbac', 'identity provider', 'provisioning',
     ],
-    answer: "Access is governed by role-based controls within a single-tenant workspace per organization. For enterprise identity (SSO via SAML or OIDC, MFA, SCIM provisioning with Okta or Entra), tell the team your identity provider and requirements and they will confirm what is available today versus on the near-term roadmap. This is a common procurement question, and we are glad to walk through it before you commit.",
+    answer: "Access is governed by role-based controls within a single-tenant workspace per organization. For enterprise identity (SSO via SAML or OIDC, MFA, SCIM provisioning with Okta or Entra), tell the team your identity provider and requirements and they will confirm the setup for your deployment. This is a common procurement question, and we are glad to walk through it before you commit.",
   },
   {
     id: 'sla_support',
@@ -819,7 +819,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'sla', 'uptime', 'service level', 'service level agreement', 'availability guarantee', 'support response', 'support response time', 'support hours', 'incident response', 'status page',
     ],
-    answer: "Support and service levels are set in the subscription agreement, and while the platform is early the team is directly reachable, so questions and issues reach a person fast rather than a ticket queue. For a formal uptime or response-time SLA tied to a contract, tell the team your requirements and they will put specifics in writing. Email contact@lumecon.ai to scope it.",
+    answer: "Support and service levels are set in the subscription agreement, and the team is directly reachable, so questions and issues reach a person fast rather than a ticket queue. For a formal uptime or response-time SLA tied to a contract, tell the team your requirements and they will put specifics in writing. Email contact@lumecon.ai to scope it.",
   },
   {
     id: 'contracts_legal',
@@ -851,7 +851,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'accessibility', 'wcag', 'section 508', '508', 'vpat', 'ada compliant', 'ada compliance', 'screen reader', 'accessible', 'a11y', 'keyboard navigation',
     ],
-    answer: "Accessibility is a real requirement for public-sector buyers, and we treat it that way: the platform is being built with WCAG 2.1 AA and Section 508 in mind, including keyboard navigation and screen-reader support. For a formal VPAT or a specific conformance requirement, tell the team where you are in procurement and they will share current status and timeline. Email contact@lumecon.ai for the details your accessibility review needs.",
+    answer: "Accessibility is a real requirement for public-sector buyers, and we treat it that way: the platform is built to WCAG 2.1 AA and Section 508, including keyboard navigation and screen-reader support. For a formal VPAT or a specific conformance requirement, tell the team where you are in procurement and they will share the documentation your review needs. Email contact@lumecon.ai for the details.",
   },
 
   {

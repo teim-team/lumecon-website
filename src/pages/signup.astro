@@ -182,17 +182,17 @@ import '../styles/auth.css';
           email,
           organization,
           message: kind === 'signup'
-            ? `Signup attempt before auth is live. Role/use case: ${role || '(not provided)'}`
-            : 'Login attempt before auth is live.',
+            ? `Early-access request via the signup page. Role/use case: ${role || '(not provided)'}`
+            : 'Early-access request via the login page.',
           source: kind === 'signup' ? 'signup-page' : 'login-page',
         });
         if (contactRes.ok) {
-          setStatus(status, 'ok', "Auth isn't live yet, but we captured your email and someone from the team will reach out shortly.");
+          setStatus(status, 'ok', "Thanks — we've got your details, and someone from the team will set you up with access shortly.");
           return;
         }
         const subject = encodeURIComponent('Lumecon early access');
         const body = encodeURIComponent(
-          `Hi Lumecon team,\n\nI tried ${kind === 'signup' ? 'signing up' : 'logging in'} but the auth flow isn't live yet. Could you let me know when it is?\n\nEmail: ${email}\n${organization ? 'Organization: ' + organization + '\n' : ''}`
+          `Hi Lumecon team,\n\nI'd like to request access to Lumecon. Could you set me up?\n\nEmail: ${email}\n${organization ? 'Organization: ' + organization + '\n' : ''}`
         );
         window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
         setStatus(status, 'info', "Opening your email client so you can reach us directly...");

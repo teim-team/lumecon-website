@@ -120,7 +120,7 @@ export const TEAM: Person[] = [
     founder: true,
     summary: "Co-founder and founding investor. His early support moved Lumecon from concept to product, alongside Elijah as enrolled members of the Coastal Band of the Chumash Nation.",
     bio: [
-      "Michael Moreno is a co-founder and the founding investor of Lumecon. His early support helped launch the company and move it from concept to early product development.",
+      "Michael Moreno is a co-founder and the founding investor of Lumecon. His early support helped launch the company and move it from concept to product.",
     ],
   },
   {
