@@ -80,7 +80,7 @@ export const TEAM: Person[] = [
     founder: true,
     summary: "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians, and the Taylor Policy Group.",
     bio: [
-      "Elijah Moreno is the co-founder and CEO of Lumecon. He is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College, and a master's in Public Policy from Cornell University.",
+      "Elijah Moreno is the co-founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University, and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions.",
       "Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians, and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset, and conducted extensive research on Native-entity federal contracting.",
     ],
     alumniOf: ['Cornell University', 'Dartmouth College', 'Michigan State University'],
@@ -99,6 +99,14 @@ export const TEAM: Person[] = [
         type: 'book',
         summary: 'Three decades of Census and American Community Survey data tracking how life on American Indian reservations changed across fourteen socioeconomic indicators from 1990 to 2020, documenting real gains in employment, education, and housing while mapping the gaps that still persist.',
         url: 'https://ash.harvard.edu/wp-content/uploads/2025/09/Databook-Third-Edition-2025-09-07-1.pdf',
+      },
+      {
+        title: 'Alaska Native Students as English Learner Students: Examining Patterns in Identification, Classification, Service Provision, and Reclassification',
+        authors: 'Ilana Umansky, Lorna Porter, Elijah Moreno, Ashley Pierson',
+        year: '2021',
+        venue: 'Regional Educational Laboratory Northwest / IES (REL 2021-088)',
+        summary: 'Examines the population of Alaska Native students classified as English learner (EL) students and how EL policies function for them across identification, classification, service provision, and reclassification. Drawing on Alaska state data from 2011/12 to 2018/19, it finds that about a quarter of Alaska Native kindergartners were classified as EL students, speaking 24 different home languages, and that these students had lower measured English proficiency and higher rates of economic disadvantage than their non–Alaska Native EL peers.',
+        url: 'https://files.eric.ed.gov/fulltext/ED612515.pdf',
       },
     ],
   },
@@ -196,6 +204,14 @@ export const TEAM: Person[] = [
         summary: 'Uses loan-level data and survival analysis to study whether Native CDFI-provided financial counseling affects loan performance. It finds that counseling reduces the risk of loan failure, especially for borrowers with limited prior credit-market experience, with personalized coaching appearing more effective than less tailored classroom-style training.',
         url: 'https://doi.org/10.1007/s41996-023-00119-x',
       },
+      {
+        title: 'More than Chance: The Local Labor Market Effects of Tribal Gaming',
+        authors: 'Laurel Wheeler',
+        year: '2023',
+        venue: 'Federal Reserve Bank of Minneapolis, Center for Indian Country Development Working Paper Series (2023-02)',
+        summary: 'Uses confidential U.S. Census microdata and a database of tribal government–owned casinos to estimate how tribal gaming affects local labor markets across different markets, time horizons, and subgroups. It finds that tribal gaming drives sustained gains in reservation employment and wages — with American Indians benefiting the most — and that while it raises average housing rents, the increase is smaller than the wage gains, implying net local benefits.',
+        url: 'https://www.minneapolisfed.org/research/cicd-working-paper-series/more-than-chance-the-local-labor-market-effects-of-tribal-gaming',
+      },
     ],
   },
   {
@@ -265,7 +281,7 @@ export const TEAM: Person[] = [
     scholar: 'https://scholar.google.com/citations?user=vETE-QYAAAAJ&hl=en&oi=ao',
     summary: "Advises on product direction, data governance, privacy, and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.",
     bio: [
-      "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction, and responsible infrastructure. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets. She holds a bachelor's degree in Education from the University of Wisconsin–Whitewater, a master's in Urban Education Policy from Brown University, and a PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.",
+      "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction, and responsible infrastructure. She holds a bachelor's degree in Education from the University of Wisconsin–Whitewater, a master's in Urban Education Policy from Brown University, and a PhD in Statistics and Policy in Education from the University of Alaska Fairbanks. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets.",
     ],
     alumniOf: ['University of Alaska Fairbanks', 'Brown University', 'University of Wisconsin–Whitewater'],
     publications: [
@@ -310,11 +326,11 @@ export const TEAM: Person[] = [
     group: 'advisor',
     title: 'Methodology Advisor',
     scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
-    summary: "Advises on empirical methodology, econometrics, model design, and research standards. PhD candidate in Economics at MIT, focused on econometrics.",
+    summary: "Advises on empirical methodology, econometrics, model design, and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
     bio: [
-      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design, and research standards. He is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
+      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design, and research standards. He holds a bachelor's degree in Mathematics and Economics from Yale University and is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
     ],
-    alumniOf: ['Massachusetts Institute of Technology'],
+    alumniOf: ['Yale University', 'Massachusetts Institute of Technology'],
     publications: [
       {
         title: 'Interpreting TSLS Estimators in Information Provision Experiments',
