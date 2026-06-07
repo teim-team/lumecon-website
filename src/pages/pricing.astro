@@ -377,7 +377,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
         <p class="pricing-support__kicker">Discount code</p>
         <div class="discount-code-panel">
           <h2 class="discount-code-panel__title" id="support-h2">Met us at an event?</h2>
-          <p class="discount-code-panel__copy">Drop in your conference, pilot, or testing code. We&rsquo;ll apply it when you request access.</p>
+          <p class="discount-code-panel__copy">Drop in your conference, partner, or testing code. We&rsquo;ll apply it when you request access.</p>
           <form class="discount-code-panel__form" data-discount-form autocomplete="off">
             <div class="discount-code-panel__field">
               <input
@@ -395,7 +395,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
               />
               <button type="submit" class="btn discount-code-panel__apply">Apply</button>
             </div>
-            <p class="discount-code-panel__status" id="discount-status" data-discount-status>Conference, pilot, and testing codes are supported.</p>
+            <p class="discount-code-panel__status" id="discount-status" data-discount-status>Conference, partner, and testing codes are supported.</p>
           </form>
         </div>
       </div>
@@ -653,7 +653,7 @@ const description = 'Pricing tiers for Lumecon. Pick your platform (Tribal, Loca
     const handle = (raw: string): void => {
       const trimmed = (raw || '').trim();
       if (!trimmed) {
-        setStatus(status, 'Conference, pilot, and testing codes are supported.', 'info');
+        setStatus(status, 'Conference, partner, and testing codes are supported.', 'info');
         return;
       }
       const match: DiscountCode | null = getProductDiscountCode(trimmed);

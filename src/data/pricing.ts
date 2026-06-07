@@ -246,7 +246,7 @@ export interface PrepaymentTier {
 
 export const ANNUAL_SUBSCRIPTION_DISCOUNTS: PrepaymentTier[] = [
   { years: 1, label: 'Annual',         discountPct: 0,  note: 'Standard annual subscription.' },
-  { years: 2, label: '2-year prepaid', discountPct: 10, note: 'Recommended for pilot-to-launch continuity and budget certainty.' },
+  { years: 2, label: '2-year prepaid', discountPct: 10, note: 'Recommended for multi-year continuity and budget certainty.' },
   { years: 3, label: '3-year prepaid', discountPct: 15, note: 'Best value; locks pricing for three years.' },
 ];
 
@@ -267,7 +267,7 @@ export interface DiscountCode {
  *  values are user-visible in the bundle. */
 export const PRODUCT_DISCOUNT_CODES: DiscountCode[] = [
   { code: 'CONF10',          label: 'Conference code',       discountPct: 10,  audience: 'Conference, webinar, and partner-event offers' },
-  { code: 'PILOT25',         label: 'Pilot partner code',    discountPct: 25,  audience: 'Approved pilot organizations and early design partners' },
+  { code: 'PARTNER25',       label: 'Partner code',          discountPct: 25,  audience: 'Approved partner and early-access organizations' },
   { code: 'LUMECONTEST100',  label: 'Internal testing comp', discountPct: 100, audience: 'Internal checkout and QA testing only', internalOnly: true },
 ];
 

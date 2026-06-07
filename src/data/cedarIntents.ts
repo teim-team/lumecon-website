@@ -213,7 +213,7 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['examples', 'pricing', 'contact'],
     chip: 'Can I see a demo?',
     triggers: [
-      'schedule a demo', 'want a demo', 'see a demo', 'see the demo', 'get a demo', 'demo of', 'a demo', 'see the product', 'see the platform', 'show me the platform', 'show me the product', 'is there a demo', 'can i try', 'try the platform', 'try lumecon', 'accepting pilots', 'pilot program', 'pilot partner', 'walkthrough', 'book a call', 'set up a call',
+      'schedule a demo', 'want a demo', 'see a demo', 'see the demo', 'get a demo', 'demo of', 'a demo', 'see the product', 'see the platform', 'show me the platform', 'show me the product', 'is there a demo', 'can i try', 'try the platform', 'try lumecon', 'early access', 'accepting customers', 'become a partner', 'walkthrough', 'book a call', 'set up a call',
       'demo', 'trial', 'free trial', 'try it', 'try it out', 'test it', 'test drive', 'sandbox', 'poc', 'proof of concept', 'book a demo', 'request a demo', 'talk to sales', 'sales call', 'see it in action', 'live demo', 'you have demo', 'you got a demo', 'wanna demo', 'wanna see it', 'lemme see it', 'can i get a demo', 'gimme a demo', 'show me it', 'show me how it works', 'want demo', 'can i see it',
     ],
     answer: "Happy to set one up. The easiest path is the contact form on this site or contact@lumecon.ai with three things included up front: who you are, the kind of impact you want to measure, and any timeline you are working with. The demo runs in your geography against a study scenario relevant to your work, so the two minutes spent giving us that context up front pays off quickly. What kind of impact are you hoping to measure?",
@@ -250,7 +250,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'tech stack', 'technology stack', 'do you have an api', 'have an api', 'api', 'rest api', 'api access', 'integrate with my system', 'integrate with our', 'integration', 'integrations', 'erp', 'gis', 'data warehouse', 'snowflake', 'webhook', 'upload spreadsheet', 'upload spreadsheets', 'connect to external', 'external database', 'multiple people', 'support teams', 'team account', 'export api',
     ],
-    answer: 'Lumecon is being designed as a modern web platform with support for structured data, guided workflows, and organization-level use. Some technical features may depend on the stage of the platform and the needs of pilot users. For integrations, team access, uploads, or API questions, the best next step is to contact the Lumecon team directly.',
+    answer: 'Lumecon is a modern web platform with support for structured data, guided workflows, and organization-level use. For integrations, team access, uploads, or API questions, the best next step is to contact the Lumecon team directly.',
   },
   {
     id: 'security',
@@ -421,7 +421,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'where is the data hosted', 'where is it hosted', 'data residency', 'data location', 'where do you store', 'where is my data', 'hosting', 'aws', 'cloud provider', 'us cloud', 'us only', 'us region', 'govcloud', 'storage location', 'data center', 'what region',
     ],
-    answer: "Lumecon runs on US-region cloud, with a single-tenant workspace per organization, encryption in transit and at rest, and role-based access controls. For pilots with sensitive procurement or compliance requirements (FedRAMP, HIPAA-adjacent, state PIIA, tribal data sovereignty), we'll walk through the specifics before any data leaves your environment. If you need a specific compliance posture or region, say so up front and we'll tell you whether it's something we already cover or something we'll need to scope.",
+    answer: "Lumecon runs on US-region cloud, with a single-tenant workspace per organization, encryption in transit and at rest, and role-based access controls. For organizations with sensitive procurement or compliance requirements (FedRAMP, HIPAA-adjacent, state PIIA, tribal data sovereignty), we'll walk through the specifics before any data leaves your environment. If you need a specific compliance posture or region, say so up front and we'll tell you whether it's something we already cover or something we'll need to scope.",
   },
   {
     id: 'onboarding',
