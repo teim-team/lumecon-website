@@ -242,7 +242,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'are you hiring', 'work for lumecon', 'have internships', 'internship', "i'm a developer", "i'm a designer", "i'm an engineer", 'join the team', 'open roles', 'open role', 'careers', 'apply for a job', 'job opening', 'join lumecon',
     ],
-    answer: "We are a six-person team bringing on early teammates and interns across software engineering, machine learning, data, economic impact modeling, marketing, and sales. These are early-stage, learning-focused roles, and we mentor people who are persistent. The /join page has the full breakdown and the current details on each role, or you can email contact@lumecon.ai with a résumé and a paragraph on what draws you to the work.",
+    answer: "We are a six-person team hiring across software engineering, machine learning, data, economic impact modeling, marketing, and sales, including internships. These are hands-on, high-ownership roles, and we mentor people who are persistent. The /join page has the full breakdown and the current details on each role, or you can email contact@lumecon.ai with a résumé and a paragraph on what draws you to the work.",
   },
   {
     id: 'technical',
@@ -803,7 +803,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'soc 2', 'soc2', 'iso 27001', 'iso27001', 'fedramp', 'hipaa', 'are you certified', 'are you compliant', 'compliance attestation', 'audit report', 'security questionnaire', 'vendor security', 'trust center', 'hitrust', 'stateramp', 'certifications', 'subprocessor', 'subprocessors', 'sub-processors', 'third-party processors', 'who are your subprocessors',
     ],
-    answer: "Lumecon runs on US-region cloud with encryption in transit and at rest, single-tenant workspaces, and role-based access, and the team carries hands-on experience handling PII and sensitive government data across the Federal Reserve system. As an early-stage platform we are glad to complete a vendor security questionnaire, share which controls are in place today, and talk through our certification roadmap (SOC 2 and similar) before anything sensitive moves. For a procurement review, email contact@lumecon.ai and we will get your security team a packet.",
+    answer: "Lumecon runs on US-region cloud with encryption in transit and at rest, single-tenant workspaces, and role-based access, and the team carries hands-on experience handling PII and sensitive government data across the Federal Reserve system. We are glad to complete a vendor security questionnaire, share which controls are in place today, and talk through our certification roadmap (SOC 2 and similar) before anything sensitive moves. For a procurement review, email contact@lumecon.ai and we will get your security team a packet.",
   },
   {
     id: 'sso_auth',
@@ -860,7 +860,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'pen test', 'pentest', 'penetration test', 'penetration testing', 'vulnerability disclosure', 'vuln disclosure', 'responsible disclosure', 'breach notification', 'data breach', 'breach', 'backups', 'backup', 'disaster recovery', 'dr plan', 'rto', 'rpo', 'audit logs', 'activity logs', 'access logs', 'encryption keys', 'key management', 'kms', 'customer managed keys', 'customer-managed keys', 'api key', 'your api key', 'admin key', 'secret key',
     ],
-    answer: "Those are the right questions for a security review. Lumecon runs on US-region cloud with encryption in transit and at rest and single-tenant workspaces; on the operational specifics (penetration testing, vulnerability disclosure, breach-notification timelines, backups and disaster recovery, audit logging, and key management), we are glad to share what is in place today and what is on the roadmap as part of a security questionnaire. As an early-stage platform some of these are still being formalized, and we would rather tell you exactly where each one stands than overstate it. Email contact@lumecon.ai and we will route your security team to the specifics.",
+    answer: "Those are the right questions for a security review. Lumecon runs on US-region cloud with encryption in transit and at rest and single-tenant workspaces; on the operational specifics (penetration testing, vulnerability disclosure, breach-notification timelines, backups and disaster recovery, audit logging, and key management), we are glad to share what is in place today and what is on the roadmap as part of a security questionnaire. Some of these are still being formalized, and we would rather tell you exactly where each one stands than overstate it. Email contact@lumecon.ai and we will route your security team to the specifics.",
   },
   {
     id: 'local_capture',
