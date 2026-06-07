@@ -49,12 +49,12 @@ test('cedar routes representative questions to the right intent', async ({ page,
 
   const cases: Array<{ q: string; expect: string }> = [
     { q: 'what does lumecon do', expect: 'a council memo, a grant narrative' },
-    { q: 'how much does it cost', expect: 'covers unlimited studies across every geography' },
+    { q: 'how much does it cost', expect: 'per-study or per-geography' },
     { q: 'does this work for tribal nations', expect: 'built specifically for tribal nations' },
     { q: 'EPA grant', expect: 'one of the most common uses of Lumecon' },
     { q: 'how long does it take', expect: 'A standard study takes minutes' },
     { q: 'can I see a demo', expect: 'Happy to set one up' },
-    { q: 'what is cedar', expect: 'Inside the platform I read your administrative files' },
+    { q: 'what is cedar', expect: 'I handle the data wrangling and the polish' },
     { q: 'how is this different from implan', expect: 'Same underlying economics' },
   ];
 
@@ -87,7 +87,7 @@ test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
   const panel = await openCedar(page);
   // "pricng" is one edit from the "pricing" trigger.
   const bubble = await ask(panel, 'pricng');
-  await expect(bubble).toContainText('five figures a year');
+  await expect(bubble).toContainText('per-study or per-geography');
 });
 
 test('every starter chip routes to its own intent, never the fallback', async ({ page, browserName }) => {

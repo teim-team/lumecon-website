@@ -322,7 +322,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'where was lumecon built', 'where is lumecon based', 'where is lumecon from', 'where are you based', 'where are you located', 'where are you guys', 'your headquarters', 'headquartered', "lumecon's background", 'team background', 'who built lumecon', 'who founded', 'founded by', 'cornell', 'team experience', 'who is on the team', 'who is behind',
     ],
-    answer: "Built at Ivy League and peer schools: Cornell, Dartmouth, Oxford, MIT, and Yale across the team's academic background, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.",
+    answer: "Built at Ivy League and peer schools: Cornell, Dartmouth, Duke, Oxford, MIT, and Yale across the team's academic background, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.",
   },
   {
     id: 'grant_applications',
@@ -886,7 +886,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'who owns this', 'who runs this', 'who runs the company', 'who are the founders', 'who is the founder', 'is there a ceo', 'who started this', 'whos behind this', 'who is behind this', 'who owns the company', 'leadership team', 'who is the ceo',
     ],
-    answer: "Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Elijah is the CEO; the broader team leads economics, the platform, the input-output engine, Cedar, and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, Duke, Oxford, and MIT. The About page has each person and their work. Want the link, or an introduction to the team?",
+    answer: "Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Elijah is the CEO; the broader team leads economics, the platform, the input-output engine, Cedar, and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, Duke, Oxford, MIT, and Yale. The About page has each person and their work. Want the link, or an introduction to the team?",
   },
   {
     id: 'press_media',
