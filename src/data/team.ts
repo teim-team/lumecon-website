@@ -250,7 +250,7 @@ export const TEAM: Person[] = [
     title: 'Technical Advisor',
     summary: "Advises on software architecture, engineering systems, and scalability, and contributes on Cedar and data security. Holds a bachelor's in Economics from Dartmouth. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
     bio: [
-      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability, and pilot-stage technical development, and also contributes on Cedar's AI workflow and on data security and research operations. He holds a bachelor's degree in Economics from Dartmouth College. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
+      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability, and technical development, and also contributes on Cedar's AI workflow and on data security and research operations. He holds a bachelor's degree in Economics from Dartmouth College. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
     ],
     alumniOf: ['Dartmouth College'],
     prevAffiliations: ['Modsy', 'Chime'],
@@ -395,7 +395,7 @@ export const WORKING_AREAS: WorkingArea[] = [
   {
     slug: 'business-development',
     name: 'Business Development & Sales',
-    description: "This area focuses on bringing Lumecon to the governments, tribal nations, foundations, and institutions it serves: partnerships, pilots, outreach, and the relationships that turn interest into adoption. The goal is to grow the customer base deliberately, matching the platform to the organizations that need it most.",
+    description: "This area focuses on bringing Lumecon to the governments, tribal nations, foundations, and institutions it serves: partnerships, outreach, and the relationships that turn interest into adoption. The goal is to grow the customer base deliberately, matching the platform to the organizations that need it most.",
     leadSlug: 'elijah-moreno',
     advisorySlugs: ['havala-hanson'],
     contributorSlugs: ['laurel-wheeler'],
