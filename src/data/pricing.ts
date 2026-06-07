@@ -8,8 +8,8 @@
  * src/data/platforms.ts (`tierPrices` field). This file holds the
  * tier metadata (names, taglines, highlights, features) that's the
  * same across every platform; the page merges the two at render time
- * so a Sprout under Local shows $10K and a Sprout under Tribal shows
- * $12.5K from the same tier definition here.
+ * so a Sprout under Local shows $7.5K and a Sprout under Tribal shows
+ * $10K from the same tier definition here.
  *
  * v1 launch notes:
  *   - The Tree tier ships for buyable platforms now that prices are
