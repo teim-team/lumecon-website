@@ -2,25 +2,43 @@
 /**
  * Site-wide "Coming soon" corner banner.
  *
- * A compact, on-brand status card pinned to the top-right corner of
- * every page (rendered globally from BaseLayout). It signals that
- * Lumecon is launching soon and routes inquiries to contact@lumecon.ai.
+ * Pinned to the top-right corner of every page (rendered globally from
+ * BaseLayout). Signals that Lumecon is launching soon and routes
+ * inquiries to contact@lumecon.ai.
  *
- * Placement is deliberately collision-free: the Cedar FAB owns the
- * bottom-right, the consent banner the bottom-left, and the nav the top
- * edge — so this card sits top-right, just clear of the nav, at a lower
- * z-index than the nav/menu so an open mobile menu overlays it.
+ * Responsive shape:
+ *   - Desktop (>600px): the full card (kicker + message + contact),
+ *     sitting in the top-right whitespace beside the hero.
+ *   - Mobile (<=600px): collapses to a compact "Coming soon" pill so it
+ *     never covers the hero headline; tapping it expands the card, and
+ *     the toggle gives clear open/close feedback.
+ *
+ * Placement is collision-free: the Cedar FAB owns the bottom-right, the
+ * consent banner the bottom-left, and the nav the top edge — so this
+ * sits top-right, just clear of the nav, below the nav z-index so an
+ * open mobile menu overlays it.
  *
  * Dismissible: the visitor's choice is remembered in localStorage so the
  * card doesn't nag on every navigation. Brand cues — white surface,
  * hairline border, a 3px teal left accent bar, mono uppercase teal
- * kicker, and a soft lift — keep it unmistakably Lumecon. No gold (brand
- * reserved) and no marker-highlight rectangle (those are header-only).
+ * kicker — keep it unmistakably Lumecon. No gold (brand reserved) and no
+ * marker-highlight rectangle (those are header-only).
  */
 import { site } from '../config';
 ---
 
 <aside class="coming-soon" id="comingSoon" aria-label="Site status" hidden>
+  <button
+    type="button"
+    class="coming-soon__toggle"
+    id="comingSoonToggle"
+    aria-expanded="false"
+    aria-controls="comingSoonBody"
+  >
+    <span class="coming-soon__dot" aria-hidden="true"></span>
+    <span class="coming-soon__kicker-text">Coming soon</span>
+    <span class="coming-soon__chev" aria-hidden="true"></span>
+  </button>
   <button
     type="button"
     class="coming-soon__close"
@@ -41,18 +59,18 @@ import { site } from '../config';
       <line x1="18" y1="6" x2="6" y2="18"></line>
     </svg>
   </button>
-  <p class="coming-soon__kicker">
-    <span class="coming-soon__dot" aria-hidden="true"></span>Coming soon
-  </p>
-  <p class="coming-soon__title">We&rsquo;re putting the finishing touches on Lumecon.</p>
-  <p class="coming-soon__contact">
-    Questions or early-access inquiries?
-    <a href={`mailto:${site.email}`}>{site.email}</a>
-  </p>
+  <div class="coming-soon__body" id="comingSoonBody">
+    <p class="coming-soon__title">We&rsquo;re putting the finishing touches on Lumecon.</p>
+    <p class="coming-soon__contact">
+      Questions or early-access inquiries?
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+  </div>
 </aside>
 
 <script>
   const STORAGE_KEY = 'lumecon:coming-soon-dismissed';
+  const MOBILE = '(max-width: 600px)';
 
   function setup(): void {
     const banner = document.getElementById('comingSoon');
@@ -73,12 +91,32 @@ import { site } from '../config';
 
     banner.hidden = false;
 
+    const toggle = document.getElementById('comingSoonToggle');
+    // Expanded by default on desktop, collapsed to a pill on mobile so it
+    // never covers the hero headline.
+    const isMobile = () => window.matchMedia(MOBILE).matches;
+    const setOpen = (open: boolean) => {
+      banner.classList.toggle('is-open', open);
+      toggle?.setAttribute('aria-expanded', String(open));
+    };
+    setOpen(!isMobile());
+
     // Guard against double-binding when astro:page-load re-runs setup.
     if ((banner as HTMLElement & { __bound?: boolean }).__bound) return;
     (banner as HTMLElement & { __bound?: boolean }).__bound = true;
 
-    const close = document.getElementById('comingSoonClose');
-    close?.addEventListener('click', () => {
+    // The toggle only collapses/expands on mobile (on desktop the card is
+    // always shown and the toggle reads as a label).
+    toggle?.addEventListener('click', () => {
+      if (!isMobile()) return;
+      setOpen(!banner.classList.contains('is-open'));
+    });
+
+    // Keep the open/closed default in sync if the viewport crosses the
+    // breakpoint (e.g. device rotation) while the banner is untouched.
+    window.matchMedia(MOBILE).addEventListener('change', (e) => setOpen(!e.matches));
+
+    document.getElementById('comingSoonClose')?.addEventListener('click', () => {
       banner.hidden = true;
       try {
         localStorage.setItem(STORAGE_KEY, '1');
@@ -122,6 +160,55 @@ import { site } from '../config';
     display: none;
   }
 
+  .coming-soon__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    /* Desktop: the toggle reads as a label, not an interactive control. */
+    cursor: default;
+    text-align: left;
+  }
+  .coming-soon__toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .coming-soon__dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent-rgba-18);
+    animation: coming-soon-pulse 2.4s var(--ease) infinite;
+  }
+  .coming-soon__kicker-text {
+    flex: 1 1 auto;
+  }
+  /* Chevron only matters on mobile (where the pill collapses). */
+  .coming-soon__chev {
+    display: none;
+    flex: none;
+    width: 6px;
+    height: 6px;
+    margin-right: 1.1rem; /* clear the close button */
+    border-right: 1.5px solid var(--accent-text);
+    border-bottom: 1.5px solid var(--accent-text);
+    transform: rotate(45deg);
+    transition: transform 0.2s var(--ease);
+  }
+
   .coming-soon__close {
     position: absolute;
     top: 0.45rem;
@@ -150,31 +237,12 @@ import { site } from '../config';
     outline-offset: 2px;
   }
 
-  .coming-soon__kicker {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin: 0 0 0.35rem;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent-text);
+  .coming-soon__body {
+    margin-top: 0.4rem;
   }
-  .coming-soon__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 0 var(--accent-rgba-18);
-    animation: coming-soon-pulse 2.4s var(--ease) infinite;
-  }
-
   .coming-soon__title {
     margin: 0 0 0.4rem;
-    /* Sit clear of the close button. */
-    padding-right: 1.4rem;
+    padding-right: 1.4rem; /* sit clear of the close button */
     font-family: var(--font-sans);
     font-size: 0.92rem;
     font-weight: 600;
@@ -234,14 +302,47 @@ import { site } from '../config';
     .coming-soon__dot {
       animation: none;
     }
+    .coming-soon__chev {
+      transition: none;
+    }
   }
 
-  /* On short / narrow viewports keep the card from crowding the nav CTA
-     and hamburger by nudging it a touch tighter. */
+  /* ---------- Mobile: collapse to a compact pill ----------
+     Default state is the pill (toggle only); tapping expands the body.
+     This keeps the hero headline clear on narrow screens. */
   @media (max-width: 600px) {
     .coming-soon {
       top: calc(4.25rem + env(safe-area-inset-top, 0px));
+      /* Shrink to the pill's content when collapsed. */
+      width: auto;
+      max-width: calc(100vw - 1.4rem);
+      padding: 0.5rem 0.85rem;
+    }
+    .coming-soon__toggle {
+      cursor: pointer;
+      padding-right: 0.1rem;
+    }
+    .coming-soon__chev {
+      display: block;
+    }
+    /* Collapsed: hide the body and the close affordance (tap to expand
+       first), and tuck the chevron back since there's no close button. */
+    .coming-soon:not(.is-open) .coming-soon__body {
+      display: none;
+    }
+    .coming-soon:not(.is-open) .coming-soon__close {
+      display: none;
+    }
+    .coming-soon:not(.is-open) .coming-soon__chev {
+      margin-right: 0;
+    }
+    /* Expanded: widen to the card and point the chevron up. */
+    .coming-soon.is-open {
       width: min(300px, calc(100vw - 1.4rem));
+      padding: 0.85rem 1rem 0.9rem 1.05rem;
+    }
+    .coming-soon.is-open .coming-soon__chev {
+      transform: rotate(-135deg);
     }
   }
 </style>

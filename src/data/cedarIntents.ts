@@ -242,7 +242,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'are you hiring', 'work for lumecon', 'have internships', 'internship', "i'm a developer", "i'm a designer", "i'm an engineer", 'join the team', 'open roles', 'open role', 'careers', 'apply for a job', 'job opening', 'join lumecon',
     ],
-    answer: "We are a six-person team bringing on early teammates and interns across software engineering, machine learning, data, economic impact modeling, marketing, and sales. These are early-stage, learning-focused roles, and we mentor people who are persistent. The /join page has the full breakdown and the current details on each role, or you can email contact@lumecon.ai with a résumé and a paragraph on what draws you to the work.",
+    answer: "We are a six-person team hiring across software engineering, machine learning, data, economic impact modeling, marketing, and sales, including internships. These are hands-on, high-ownership roles, and we mentor people who are persistent. The /join page has the full breakdown and the current details on each role, or you can email contact@lumecon.ai with a résumé and a paragraph on what draws you to the work.",
   },
   {
     id: 'technical',
@@ -539,7 +539,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'international', 'global economic impact', 'global platform', 'outside the us', 'outside the united states', 'other countries', 'another country', 'overseas', 'cross border', 'cross-border', 'worldwide', 'non us', 'work abroad', 'which countries do you', 'do you cover canada', 'do you cover mexico', 'do you cover europe', 'do you support international',
     ],
-    answer: "Today Lumecon covers the United States end to end: every county, state, tribal nation, and the national rollup. International coverage is the Global Economic Impact platform, which is on the roadmap rather than live: the engine and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
+    answer: "Today Lumecon covers the United States end to end: every county, state, tribal nation, and the national rollup. International coverage is the Global Economic Impact platform, on the roadmap next: the engine and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
   },
   /* ===== Depth pack: niche, vocabulary-specific intents surfaced by a
      panel of buyer-persona tests. All chip:null (reachable via free-text,
@@ -803,7 +803,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'soc 2', 'soc2', 'iso 27001', 'iso27001', 'fedramp', 'hipaa', 'are you certified', 'are you compliant', 'compliance attestation', 'audit report', 'security questionnaire', 'vendor security', 'trust center', 'hitrust', 'stateramp', 'certifications', 'subprocessor', 'subprocessors', 'sub-processors', 'third-party processors', 'who are your subprocessors',
     ],
-    answer: "Lumecon runs on US-region cloud with encryption in transit and at rest, single-tenant workspaces, and role-based access, and the team carries hands-on experience handling PII and sensitive government data across the Federal Reserve system. As an early-stage platform we are glad to complete a vendor security questionnaire, share which controls are in place today, and talk through our certification roadmap (SOC 2 and similar) before anything sensitive moves. For a procurement review, email contact@lumecon.ai and we will get your security team a packet.",
+    answer: "Lumecon runs on US-region cloud with encryption in transit and at rest, single-tenant workspaces, and role-based access, and the team carries hands-on experience handling PII and sensitive government data across the Federal Reserve system. We are glad to complete a vendor security questionnaire, share which controls are in place today, and talk through our certification roadmap (SOC 2 and similar) before anything sensitive moves. For a procurement review, email contact@lumecon.ai and we will get your security team a packet.",
   },
   {
     id: 'sso_auth',
@@ -811,7 +811,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'sso', 'saml', 'oidc', 'single sign on', 'single sign-on', 'scim', 'mfa', 'okta', 'azure ad', 'entra', 'role based access', 'rbac', 'identity provider', 'provisioning',
     ],
-    answer: "Access is governed by role-based controls within a single-tenant workspace per organization. For enterprise identity (SSO via SAML or OIDC, MFA, SCIM provisioning with Okta or Entra), tell the team your identity provider and requirements and they will confirm what is available today versus on the near-term roadmap. This is a common procurement question, and we are glad to walk through it before you commit.",
+    answer: "Access is governed by role-based controls within a single-tenant workspace per organization. For enterprise identity (SSO via SAML or OIDC, MFA, SCIM provisioning with Okta or Entra), tell the team your identity provider and requirements and they will confirm the setup for your deployment. This is a common procurement question, and we are glad to walk through it before you commit.",
   },
   {
     id: 'sla_support',
@@ -819,7 +819,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'sla', 'uptime', 'service level', 'service level agreement', 'availability guarantee', 'support response', 'support response time', 'support hours', 'incident response', 'status page',
     ],
-    answer: "Support and service levels are set in the subscription agreement, and while the platform is early the team is directly reachable, so questions and issues reach a person fast rather than a ticket queue. For a formal uptime or response-time SLA tied to a contract, tell the team your requirements and they will put specifics in writing. Email contact@lumecon.ai to scope it.",
+    answer: "Support and service levels are set in the subscription agreement, and the team is directly reachable, so questions and issues reach a person fast rather than a ticket queue. For a formal uptime or response-time SLA tied to a contract, tell the team your requirements and they will put specifics in writing. Email contact@lumecon.ai to scope it.",
   },
   {
     id: 'contracts_legal',
@@ -851,7 +851,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'accessibility', 'wcag', 'section 508', '508', 'vpat', 'ada compliant', 'ada compliance', 'screen reader', 'accessible', 'a11y', 'keyboard navigation',
     ],
-    answer: "Accessibility is a real requirement for public-sector buyers, and we treat it that way: the platform is being built with WCAG 2.1 AA and Section 508 in mind, including keyboard navigation and screen-reader support. For a formal VPAT or a specific conformance requirement, tell the team where you are in procurement and they will share current status and timeline. Email contact@lumecon.ai for the details your accessibility review needs.",
+    answer: "Accessibility is a real requirement for public-sector buyers, and we treat it that way: the platform is built to WCAG 2.1 AA and Section 508, including keyboard navigation and screen-reader support. For a formal VPAT or a specific conformance requirement, tell the team where you are in procurement and they will share the documentation your review needs. Email contact@lumecon.ai for the details.",
   },
 
   {
@@ -860,7 +860,7 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'pen test', 'pentest', 'penetration test', 'penetration testing', 'vulnerability disclosure', 'vuln disclosure', 'responsible disclosure', 'breach notification', 'data breach', 'breach', 'backups', 'backup', 'disaster recovery', 'dr plan', 'rto', 'rpo', 'audit logs', 'activity logs', 'access logs', 'encryption keys', 'key management', 'kms', 'customer managed keys', 'customer-managed keys', 'api key', 'your api key', 'admin key', 'secret key',
     ],
-    answer: "Those are the right questions for a security review. Lumecon runs on US-region cloud with encryption in transit and at rest and single-tenant workspaces; on the operational specifics (penetration testing, vulnerability disclosure, breach-notification timelines, backups and disaster recovery, audit logging, and key management), we are glad to share what is in place today and what is on the roadmap as part of a security questionnaire. As an early-stage platform some of these are still being formalized, and we would rather tell you exactly where each one stands than overstate it. Email contact@lumecon.ai and we will route your security team to the specifics.",
+    answer: "Those are the right questions for a security review. Lumecon runs on US-region cloud with encryption in transit and at rest and single-tenant workspaces; on the operational specifics (penetration testing, vulnerability disclosure, breach-notification timelines, backups and disaster recovery, audit logging, and key management), we are glad to share what is in place today and what is on the roadmap as part of a security questionnaire. Some of these are still being formalized, and we would rather tell you exactly where each one stands than overstate it. Email contact@lumecon.ai and we will route your security team to the specifics.",
   },
   {
     id: 'local_capture',

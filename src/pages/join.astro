@@ -41,7 +41,7 @@ const mailto = (subject: string, body = '') =>
 
 const applyBody = `Hi Lumecon team,
 
-I'd like to be considered for an early-teammate role at Lumecon Inc.
+I'd like to be considered for a role at Lumecon Inc.
 
 Name:
 School / program:
@@ -59,14 +59,14 @@ const jsonLd = [
     "@type": "WebPage",
     "name": "Join the Lumecon team",
     "url": `${site.url}/join`,
-    "description": "Lumecon Inc. is looking for early teammates across software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales. Open to undergraduate and graduate students. Unpaid early-stage roles. We mentor people who are persistent.",
+    "description": "Lumecon Inc. is hiring across software engineering, machine learning, data analytics, economic impact modeling, marketing, and sales. Open to undergraduate and graduate students. We mentor people who are persistent.",
     "publisher": { "@id": `${site.url}#org` },
   },
   {
     "@context": "https://schema.org",
     "@type": "JobPosting",
-    "title": "Early teammate, software engineering, ML, data, economist, marketing, sales",
-    "description": "Lumecon Inc. is looking for early teammates across software engineering, machine learning / AI, data analytics, economic impact modeling, marketing, and sales. Built for governments and mission-driven organizations. We mentor people who are persistent. Send a résumé and we'll reach back when a fit opens.",
+    "title": "Software engineering, ML, data, economist, marketing, sales",
+    "description": "Lumecon Inc. is hiring across software engineering, machine learning / AI, data analytics, economic impact modeling, marketing, and sales. Built for governments and mission-driven organizations. We mentor people who are persistent. Send a résumé and we'll reach back when a fit opens.",
     "datePosted": today,
     "validThrough": oneYear,
     "employmentType": ["FULL_TIME", "INTERN"],
@@ -85,11 +85,11 @@ const jsonLd = [
 ---
 <BaseLayout
   title="Join the Lumecon team | Build economic impact analysis software for governments, enterprises, and mission-driven organizations"
-  description="Six-person economic impact analysis software company built at Ivy League and peer schools. Hiring early teammates across engineering, ML, data, economic modeling, marketing, and sales. Undergraduate and graduate students welcome. Unpaid early-stage roles."
+  description="Economic impact analysis software company built at Ivy League and peer schools. Hiring across engineering, ML, data, economic modeling, marketing, and sales. Undergraduate and graduate students welcome."
   canonical="https://lumecon.ai/join"
   keywords="join Lumecon, Lumecon careers, Lumecon team, Lumecon early team, Cornell startup, Cornell entrepreneurship, software engineering Cornell, machine learning Cornell, AI startup Cornell, data analytics Cornell, economic impact modeling Cornell, input-output modeling internship, IMPLAN internship, RIMS II internship, REMI internship, regional economics PhD, applied economics PhD, Cornell PhD, Cornell graduate student, Cornell Brooks School, Cornell Dyson, Cornell ILR, Cornell ORIE, Cornell CS, Cornell Information Science, Cornell economics, Dartmouth, Oxford, Stanford, MIT, Harvard, Princeton, Yale, UPenn Wharton, Brown, Columbia, Berkeley, Carnegie Mellon, Princeton ORFE, Berkeley ARE, Yale SOM, Oxford PPE, Federal Reserve, mission-driven startup, government technology, tribal economic impact, public sector software, send resume Lumecon"
   ogTitle="Join the Lumecon team"
-  ogDescription="Six-person economic impact analysis software company built at Ivy League and peer schools. Looking for early teammates across engineering, ML, data, economist, marketing, and sales. We mentor people who are persistent."
+  ogDescription="Economic impact analysis software company built at Ivy League and peer schools. Hiring across engineering, ML, data, economist, marketing, and sales. We mentor people who are persistent."
   jsonLd={jsonLd}
 >
   <Nav />
@@ -161,10 +161,10 @@ const jsonLd = [
           <span class="join-collapse__chev" aria-hidden="true"></span>
         </summary>
         <div class="join-collapse__body">
-          <p>Lumecon Inc. is a six-person team built at Ivy League and peer schools. We're looking for early teammates across engineering, ML, data, economic impact modeling, marketing, and sales.</p>
-          <p>If you don't have every skill on a role description, apply anyway. We're early enough that everyone is wearing several hats, and we'd rather work with someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
-          <p>What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. These are <strong>early-stage, learning-focused roles</strong> for students and early-career builders; we'll share the specifics of each role when we talk.</p>
-          <p>We're looking for people who want to stick around and help build a strong team. We can't make any promises, but the early teammates who put in the work are the ones we'd want with us when Lumecon raises capital and starts generating revenue.</p>
+          <p>Lumecon Inc. is a six-person team built at Ivy League and peer schools. We hire across engineering, ML, data, economic impact modeling, marketing, and sales.</p>
+          <p>If you don't have every skill on a role description, apply anyway. We work across disciplines, and we'd rather work with someone who learns quickly and finishes things than someone who already knows the job. We'll fill the gaps with you on the way.</p>
+          <p>What we look for: kindness, curiosity, ownership, and the willingness to ship work you're proud of. These are <strong>hands-on, high-ownership roles</strong> for students and early-career builders; we'll share the specifics of each role when we talk.</p>
+          <p>We're looking for people who want to stick around and help build a strong team. The people who put in the work are the ones we grow with as Lumecon scales.</p>
         </div>
       </details>
     </section>
@@ -199,7 +199,7 @@ const jsonLd = [
           A résumé, the track you're interested in, and one paragraph on what draws you to the work. That's the whole application. We read every submission.
         </p>
         <div class="join-cta reveal-soft" data-stagger="2">
-          <a href={mailto('Lumecon early-teammate application', applyBody)} class="btn">Send a résumé</a>
+          <a href={mailto('Lumecon application', applyBody)} class="btn">Send a résumé</a>
           <a href={`mailto:${site.email}`} class="btn btn--ghost">Email directly</a>
         </div>
         <p class="join-apply-note reveal-soft" data-stagger="3">
