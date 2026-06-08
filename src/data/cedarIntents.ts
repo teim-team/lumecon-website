@@ -461,12 +461,12 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'ai_vs_chatgpt',
-    followUps: ['what_is_rag', 'accuracy', 'cedar_tiers'],
+    followUps: ['cedar_identity', 'accuracy', 'cedar_tiers'],
     chip: 'Is Cedar just ChatGPT?',
     triggers: [
       'just chatgpt', 'is this chatgpt', 'is cedar chatgpt', 'is it gpt', 'use gpt', 'use openai', 'is it a large language model', 'does the ai make up', 'does it make up numbers', 'made up numbers', 'is the ai reliable', 'ai trustworthy', 'generative ai', 'is cedar generative',
     ],
-    answer: "No. Cedar is grounded (RAG-based) in established economic data and a curated library of studies and reference materials, with your own past studies folded in as your workspace grows, not free-typing answers like a general chatbot. It does the data wrangling and surfaces every assumption for your sign-off; it does not invent the numbers. The economic math starts from mainstream input-output modeling and extends it with modern econometric and machine-learning methods, calibrated as we built, and a person approves each assumption before a study ships. The AI speeds the work without taking over the judgment.",
+    answer: "No. Cedar is trained and tailored on established economic data and a curated library of studies and reference materials, with your own past studies folded in as your workspace grows, so it answers from real sources rather than free-typing like a general chatbot. It does the data wrangling and surfaces every assumption for your sign-off; it does not invent the numbers. The economic math starts from mainstream input-output modeling and extends it with modern econometric and machine-learning methods, calibrated as we built, and a person approves each assumption before a study ships. The AI speeds the work without taking over the judgment.",
     expanded: "The distinction in practice: a general chatbot generates plausible text and can confidently state a wrong number. Cedar is constrained to retrieve from established public data tables and a curated library of studies and reference materials (with your own past studies folded in as your workspace grows), then map them into the model, so its outputs trace back to a source row rather than a guess. Anything ambiguous (an unclear vendor, an industry code that could go two ways) is flagged for a human to confirm rather than silently resolved. And the final figures aren't Cedar's opinion; they're the input-output engine's output, calibrated and benchmarked as we built. So the AI is a fast, careful research assistant, not the thing deciding your impact number.",
   },
   {
@@ -995,15 +995,15 @@ export const INTENTS: CedarIntent[] = [
   {
     id: 'what_is_rag',
     followUps: ['ai_vs_chatgpt', 'accuracy', 'what_is_chatbot'],
-    chip: 'What is RAG?',
+    chip: null,
     triggers: [
       'what is rag', 'whats rag', 'what does rag mean', 'what does rag stand for', 'explain rag', 'rag meaning', 'retrieval augmented generation', 'what is retrieval augmented', 'rag in plain', 'what is rag based',
     ],
-    answer: "RAG stands for retrieval-augmented generation. In plain terms, instead of answering from memory the way a typical chatbot does, the AI first retrieves the relevant facts from a trusted source (here, established public data tables and a curated library of studies and reference materials, with your own past studies folded in as your workspace grows) and then answers from those, with a trail back to where each piece came from. That is why Cedar's numbers trace to a real source row rather than a guess. Think of a careful research assistant that looks things up, not one that free-types a plausible answer.",
+    answer: "Short version: it's what keeps Cedar honest. Instead of answering from memory the way a typical chatbot does, Cedar is trained and tailored on trusted sources (established public data and a curated library of studies and reference materials, with your own past studies folded in as your workspace grows) and looks the facts up there before answering, with a trail back to where each piece came from. That is why Cedar's numbers trace to a real source rather than a guess. Think of a careful research assistant that looks things up, not one that free-types a plausible answer. (The technical name for this is retrieval-augmented generation, or RAG.)",
   },
   {
     id: 'what_is_chatbot',
-    followUps: ['cedar_identity', 'ai_vs_chatgpt', 'what_is_rag'],
+    followUps: ['cedar_identity', 'ai_vs_chatgpt', 'accuracy'],
     chip: 'What is a chatbot?',
     triggers: [
       'what is a chatbot', 'whats a chatbot', 'what does chatbot mean', 'define chatbot', 'what is a bot', 'whats a bot', 'what is a virtual assistant', 'what is an ai assistant', 'what is a chat bot',
