@@ -20,13 +20,18 @@
   gap: clamp(1.5rem, 3.5vw, 2.8rem);
   padding-bottom: clamp(1.4rem, 2.8vw, 2rem);
 }
-.footer-brand { display: flex; flex-direction: column; gap: .45rem; align-items: flex-start; }
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: flex-start;
+}
 .footer-brand__wordmark {
   display: inline-flex;
   align-items: center;
 }
 .footer-brand-pitch {
-  font-size: .85rem;
+  font-size: 0.85rem;
   color: var(--ink-3);
   max-width: 24rem;
   line-height: 1.5;
@@ -36,30 +41,38 @@
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(1rem, 2vw, 1.6rem);
 }
-.footer-col { display: flex; flex-direction: column; gap: .35rem; }
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
 .footer-col__head {
-  font-size: .64rem;
-  letter-spacing: .14em;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
   font-weight: 600;
 }
 .footer-col a {
-  font-size: .85rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--ink-2);
-  transition: color .2s var(--ease);
+  transition: color 0.2s var(--ease);
   text-decoration: none;
 }
-.footer-col a:hover { color: var(--navy); }
+.footer-col a:hover {
+  color: var(--navy);
+}
 /* Contact link picks up the teal accent so it reads as the most
    actionable item in the column. */
 .footer-col__contact {
   color: var(--accent-text) !important;
   font-weight: 600 !important;
 }
-.footer-col__contact:hover { color: var(--accent-btn-hover) !important; }
+.footer-col__contact:hover {
+  color: var(--accent-btn-hover) !important;
+}
 
 /* Thin navy strip at the very bottom: just the copyright row + email.
    Replaces the massive navy slab that used to swallow the whole
@@ -67,39 +80,57 @@
 .footer-bar {
   background: var(--navy);
   color: var(--cream);
-  padding: .7rem 0;
+  padding: 0.7rem 0;
 }
 .footer-bottom {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: .4rem 1rem;
+  gap: 0.4rem 1rem;
   align-items: center;
 }
 .footer-legal {
-  font-size: .7rem;
-  color: rgba(246, 241, 233, .6);
+  font-size: 0.7rem;
+  color: rgba(246, 241, 233, 0.6);
   line-height: 1.45;
-  letter-spacing: .005em;
+  letter-spacing: 0.005em;
 }
 .footer-email {
-  font-size: .7rem;
-  letter-spacing: .04em;
-  color: rgba(246, 241, 233, .75);
-  transition: color .2s var(--ease);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: rgba(246, 241, 233, 0.75);
+  transition: color 0.2s var(--ease);
   text-decoration: none;
 }
-.footer-email:hover { color: var(--accent-light); }
+.footer-email:hover {
+  color: var(--accent-light);
+}
 
 @media (max-width: 1100px) {
-  .footer-cols { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+  .footer-cols {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
 }
 @media (max-width: 900px) {
-  .footer-top { grid-template-columns: 1fr; }
-  .footer-cols { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+  .footer-cols {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
 }
 @media (max-width: 600px) {
-  .footer-w { padding: 0 var(--mobile-pad); }
-  .footer-cols { grid-template-columns: 1fr 1fr; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; text-align: left; }
+  .footer-w {
+    padding: 0 var(--mobile-pad);
+  }
+  .footer-cols {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
 }

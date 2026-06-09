@@ -20,6 +20,7 @@ import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/auth.css';
 ---
+
 <BaseLayout
   title="Log in | Lumecon"
   description="Log in to your Lumecon account."
@@ -35,11 +36,23 @@ import '../styles/auth.css';
       <form class="auth-form" data-auth-form data-auth-kind="login" novalidate>
         <label class="auth-field">
           <span>Work email</span>
-          <input type="email" name="email" required autocomplete="email" placeholder="you@organization.gov" />
+          <input
+            type="email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder="you@organization.gov"
+          />
         </label>
         <label class="auth-field">
           <span>Password</span>
-          <input type="password" name="password" required autocomplete="current-password" minlength="8" />
+          <input
+            type="password"
+            name="password"
+            required
+            autocomplete="current-password"
+            minlength="8"
+          />
         </label>
         <div class="auth-row">
           <a href="#" data-auth-disabled>Forgot password?</a>
@@ -89,7 +102,11 @@ import '../styles/auth.css';
     form.querySelectorAll<HTMLAnchorElement>('[data-auth-disabled]').forEach((a) => {
       a.addEventListener('click', (e) => {
         e.preventDefault();
-        setStatus(status, 'info', "Email contact@lumecon.ai and the team will help you get back in.");
+        setStatus(
+          status,
+          'info',
+          'Email contact@lumecon.ai and the team will help you get back in.',
+        );
       });
     });
 
@@ -112,19 +129,28 @@ import '../styles/auth.css';
 
       try {
         if (apiConfigured()) {
-          const result = kind === 'signup'
-            ? await submitSignup({ name, email, password, organization, role })
-            : await submitLogin({ email, password });
+          const result =
+            kind === 'signup'
+              ? await submitSignup({ name, email, password, organization, role })
+              : await submitLogin({ email, password });
           if (result.ok) {
             trackEvent('auth.success', { kind });
-            setStatus(status, 'ok', kind === 'signup'
-              ? 'Account created. Check your inbox to verify your email.'
-              : 'Logged in. Redirecting you to the workspace...');
+            setStatus(
+              status,
+              'ok',
+              kind === 'signup'
+                ? 'Account created. Check your inbox to verify your email.'
+                : 'Logged in. Redirecting you to the workspace...',
+            );
             return;
           }
           if (result.reason !== 'api-unconfigured') {
             trackEvent('auth.fail', { kind, reason: result.reason });
-            setStatus(status, 'err', 'We could not complete that. Try again, or email contact@lumecon.ai.');
+            setStatus(
+              status,
+              'err',
+              'We could not complete that. Try again, or email contact@lumecon.ai.',
+            );
             return;
           }
         }
@@ -137,26 +163,35 @@ import '../styles/auth.css';
           name: name || 'Lumecon early-access request',
           email,
           organization,
-          message: kind === 'signup'
-            ? `Early-access request via the signup page. Role/use case: ${role || '(not provided)'}`
-            : 'Early-access request via the login page.',
+          message:
+            kind === 'signup'
+              ? `Early-access request via the signup page. Role/use case: ${role || '(not provided)'}`
+              : 'Early-access request via the login page.',
           source: kind === 'signup' ? 'signup-page' : 'login-page',
         });
         if (contactRes.ok) {
-          setStatus(status, 'ok', "Thanks — we've got your details, and someone from the team will set you up with access shortly.");
+          setStatus(
+            status,
+            'ok',
+            "Thanks — we've got your details, and someone from the team will set you up with access shortly.",
+          );
           return;
         }
         /* Final fallback: open mailto so the visitor isn't left
            stranded. */
         const subject = encodeURIComponent('Lumecon early access');
         const body = encodeURIComponent(
-          `Hi Lumecon team,\n\nI'd like to request access to Lumecon. Could you set me up?\n\nEmail: ${email}\n${organization ? 'Organization: ' + organization + '\n' : ''}`
+          `Hi Lumecon team,\n\nI'd like to request access to Lumecon. Could you set me up?\n\nEmail: ${email}\n${organization ? 'Organization: ' + organization + '\n' : ''}`,
         );
         window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
-        setStatus(status, 'info', "Opening your email client so you can reach us directly...");
+        setStatus(status, 'info', 'Opening your email client so you can reach us directly...');
       } catch (err: unknown) {
         trackError(err, { where: 'auth.submit', kind });
-        setStatus(status, 'err', 'Something went wrong on our end. Try again in a moment, or email contact@lumecon.ai.');
+        setStatus(
+          status,
+          'err',
+          'Something went wrong on our end. Try again in a moment, or email contact@lumecon.ai.',
+        );
       } finally {
         submitBtn?.removeAttribute('disabled');
       }

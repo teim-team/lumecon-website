@@ -14,7 +14,8 @@ export const site = {
      and as the default OG image alt across pages. Page-specific
      descriptions should expand from this phrase rather than inventing
      variants ("economic and policy analysis software," etc.). */
-  pitch: 'Economic impact analysis software for governments, enterprises, and mission-driven organizations.',
+  pitch:
+    'Economic impact analysis software for governments, enterprises, and mission-driven organizations.',
   url: 'https://lumecon.ai',
   email: 'contact@lumecon.ai',
   legalEntity: 'Lumecon Inc.',

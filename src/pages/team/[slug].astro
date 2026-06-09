@@ -21,7 +21,9 @@ export function getStaticPaths() {
   return TEAM.map((person) => ({ params: { slug: person.slug }, props: { person } }));
 }
 
-interface Props { person: Person }
+interface Props {
+  person: Person;
+}
 const { person } = Astro.props;
 const p = person;
 
@@ -32,20 +34,22 @@ const scholarIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="fals
 
 const personUrl = `${site.url}${personPath(p.slug)}`;
 const personNode: Record<string, unknown> = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": personUrl,
-  "name": p.name,
-  "url": personUrl,
-  "jobTitle": p.title,
-  "description": p.summary,
-  "worksFor": { "@type": "Organization", "@id": `${site.url}#org`, "name": site.legalName },
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': personUrl,
+  name: p.name,
+  url: personUrl,
+  jobTitle: p.title,
+  description: p.summary,
+  worksFor: { '@type': 'Organization', '@id': `${site.url}#org`, name: site.legalName },
 };
 if (p.email) personNode.email = `mailto:${p.email}`;
 const sameAs = [p.linkedin, p.scholar].filter(Boolean);
 if (sameAs.length) personNode.sameAs = sameAs;
-if (p.alumniOf?.length) personNode.alumniOf = p.alumniOf.map((n) => ({ "@type": "EducationalOrganization", "name": n }));
-if (p.prevAffiliations?.length) personNode.affiliation = p.prevAffiliations.map((n) => ({ "@type": "Organization", "name": n }));
+if (p.alumniOf?.length)
+  personNode.alumniOf = p.alumniOf.map((n) => ({ '@type': 'EducationalOrganization', name: n }));
+if (p.prevAffiliations?.length)
+  personNode.affiliation = p.prevAffiliations.map((n) => ({ '@type': 'Organization', name: n }));
 
 const pubs = p.publications ?? [];
 /* The person's name as it appears in author lists (without any
@@ -58,33 +62,36 @@ const boldMe = (authors: string) =>
 const jsonLd = [
   personNode,
   {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": site.url },
-      { "@type": "ListItem", "position": 2, "name": "About", "item": `${site.url}/about` },
-      { "@type": "ListItem", "position": 3, "name": p.name, "item": personUrl },
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'About', item: `${site.url}/about` },
+      { '@type': 'ListItem', position: 3, name: p.name, item: personUrl },
     ],
   },
   ...pubs.map((pub) => {
     const node: Record<string, unknown> = {
-      "@context": "https://schema.org",
-      "@type": pub.type === 'book' ? "Book" : "ScholarlyArticle",
-      "name": pub.title,
-      "datePublished": pub.year,
-      "author": { "@type": "Person", "@id": personUrl, "name": p.name },
-      "publisher": { "@type": "Organization", "name": pub.venue },
+      '@context': 'https://schema.org',
+      '@type': pub.type === 'book' ? 'Book' : 'ScholarlyArticle',
+      name: pub.title,
+      datePublished: pub.year,
+      author: { '@type': 'Person', '@id': personUrl, name: p.name },
+      publisher: { '@type': 'Organization', name: pub.venue },
     };
     if (pub.url) node.url = pub.url;
     return node;
   }),
 ];
 ---
+
 <BaseLayout
   title={`${p.name} | Lumecon`}
   description={`${p.name}, ${p.title} at Lumecon. ${p.summary}`}
   canonical={`https://lumecon.ai${personPath(p.slug)}`}
-  keywords={[p.name, p.title, 'Lumecon', ...(p.alumniOf ?? []), ...(p.prevAffiliations ?? [])].join(', ')}
+  keywords={[p.name, p.title, 'Lumecon', ...(p.alumniOf ?? []), ...(p.prevAffiliations ?? [])].join(
+    ', ',
+  )}
   ogTitle={`${p.name}, ${p.title} at Lumecon`}
   ogDescription={p.summary}
   jsonLd={jsonLd}
@@ -92,7 +99,6 @@ const jsonLd = [
   <Nav />
   <main class="person-page">
     <div class="person-page__inner">
-
       <a class="person-page__back" href="/about">
         <span aria-hidden="true">&larr;</span> The team
       </a>
@@ -106,42 +112,73 @@ const jsonLd = [
         </div>
       </header>
 
-      {(p.email || p.linkedin || p.scholar) && (
-        <div class="person-page__links">
-          {p.email && <a class="person-page__email" href={`mailto:${p.email}`}>{p.email}</a>}
-          {p.linkedin && <a class="person-page__social" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on LinkedIn`} set:html={linkedinIcon}></a>}
-          {p.scholar && <a class="person-page__social" href={p.scholar} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on Google Scholar`} set:html={scholarIcon}></a>}
-        </div>
-      )}
+      {
+        (p.email || p.linkedin || p.scholar) && (
+          <div class="person-page__links">
+            {p.email && (
+              <a class="person-page__email" href={`mailto:${p.email}`}>
+                {p.email}
+              </a>
+            )}
+            {p.linkedin && (
+              <a
+                class="person-page__social"
+                href={p.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${p.name} on LinkedIn`}
+                set:html={linkedinIcon}
+              />
+            )}
+            {p.scholar && (
+              <a
+                class="person-page__social"
+                href={p.scholar}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${p.name} on Google Scholar`}
+                set:html={scholarIcon}
+              />
+            )}
+          </div>
+        )
+      }
 
       <div class="person-page__bio reveal-soft">
         {p.bio.map((para) => <p>{para}</p>)}
       </div>
 
-      {pubs.length > 0 && (
-        <section class="person-page__work reveal-soft">
-          <h2 class="person-page__sub">Selected work</h2>
-          <ul class="person-pubs">
-            {pubs.map((pub) => (
-              <li class="person-pub">
-                <p class="person-pub__venue">{pub.venue} &middot; {pub.year}</p>
-                <h3 class="person-pub__title">
-                  {pub.url
-                    ? <a href={pub.url} target="_blank" rel="noopener noreferrer">{pub.title}</a>
-                    : pub.title}
-                </h3>
-                <p class="person-pub__authors" set:html={boldMe(pub.authors)}></p>
-                <p class="person-pub__summary">{pub.summary}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {
+        pubs.length > 0 && (
+          <section class="person-page__work reveal-soft">
+            <h2 class="person-page__sub">Selected work</h2>
+            <ul class="person-pubs">
+              {pubs.map((pub) => (
+                <li class="person-pub">
+                  <p class="person-pub__venue">
+                    {pub.venue} &middot; {pub.year}
+                  </p>
+                  <h3 class="person-pub__title">
+                    {pub.url ? (
+                      <a href={pub.url} target="_blank" rel="noopener noreferrer">
+                        {pub.title}
+                      </a>
+                    ) : (
+                      pub.title
+                    )}
+                  </h3>
+                  <p class="person-pub__authors" set:html={boldMe(pub.authors)} />
+                  <p class="person-pub__summary">{pub.summary}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
 
       <a class="person-page__back person-page__back--bottom" href="/about">
         <span aria-hidden="true">&larr;</span> Back to the team
       </a>
-
     </div>
   </main>
   <Footer />

@@ -1,12 +1,33 @@
 ---
 const { class: className = '' } = Astro.props as { class?: string };
 ---
+
 <svg class={`icon icon--code ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
   <!-- Each glyph is drawn in sequence as if being typed:
        opening bracket, then forward slash, then closing bracket.
        A gold caret blinks at the cursor position at the end. -->
-  <polyline class="icon-code__glyph icon-code__glyph--a" points="9 8 5 12 9 16" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" stroke-linecap="butt"/>
-  <line     class="icon-code__glyph icon-code__glyph--b" x1="13" y1="6" x2="11" y2="18" stroke="currentColor" stroke-width="1.25" stroke-linecap="butt"/>
-  <polyline class="icon-code__glyph icon-code__glyph--c" points="15 8 19 12 15 16" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" stroke-linecap="butt"/>
-  <rect class="icon-code__caret" x="20.4" y="9.6" width=".9" height="4.8" fill="#0FB5A5"/>
+  <polyline
+    class="icon-code__glyph icon-code__glyph--a"
+    points="9 8 5 12 9 16"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linejoin="miter"
+    stroke-linecap="butt"></polyline>
+  <line
+    class="icon-code__glyph icon-code__glyph--b"
+    x1="13"
+    y1="6"
+    x2="11"
+    y2="18"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="butt"></line>
+  <polyline
+    class="icon-code__glyph icon-code__glyph--c"
+    points="15 8 19 12 15 16"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linejoin="miter"
+    stroke-linecap="butt"></polyline>
+  <rect class="icon-code__caret" x="20.4" y="9.6" width=".9" height="4.8" fill="#0FB5A5"></rect>
 </svg>

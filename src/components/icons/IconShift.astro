@@ -1,47 +1,59 @@
 ---
 const { class: className = '' } = Astro.props as { class?: string };
 ---
+
 <svg class={`icon icon--shift ${className}`} viewBox="0 0 100 100" fill="none" aria-hidden="true">
   <!-- An enclosed navy box. A gold shape (square / triangle / circle
        / diamond) bounces inside it; every time it hits a wall it
        transforms into the next shape and the wall flashes briefly.
        Reads as 'forms changing on impact' — the literal version of
        'the world is changing fast'. -->
-  <rect class="icon-shift__box" x="6" y="6" width="88" height="88"
-        rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+  <rect
+    class="icon-shift__box"
+    x="6"
+    y="6"
+    width="88"
+    height="88"
+    rx="2"
+    stroke="currentColor"
+    stroke-width="1.6"
+    fill="none"></rect>
   <g id="hgShiftBouncer" transform="translate(50 50)">
-    <path id="hgShiftBouncerPath" d="M -8,-8 H 8 V 8 H -8 Z" fill="#0FB5A5"/>
+    <path id="hgShiftBouncerPath" d="M -8,-8 H 8 V 8 H -8 Z" fill="#0FB5A5"></path>
   </g>
 </svg>
 
 <script is:inline>
   (function () {
-    const g    = document.getElementById('hgShiftBouncer');
+    const g = document.getElementById('hgShiftBouncer');
     const path = document.getElementById('hgShiftBouncerPath');
     if (!g || !path) return;
-    const prefersReduced = window.matchMedia
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
     // Shapes the bouncer cycles through. All centered on (0,0) so
     // we only translate the group, never re-anchor.
     const shapes = [
-      'M -8,-8 H 8 V 8 H -8 Z',                // square
-      'M 0,-10 L 10,8 L -10,8 Z',              // triangle
-      'M 0,-10 L 10,0 L 0,10 L -10,0 Z',       // diamond
-      'M 9,0 A 9,9 0 1,1 -9,0 A 9,9 0 1,1 9,0',// circle
-      'M -9,-6 L 9,-9 L 8,9 L -8,7 Z',         // tilted quad
+      'M -8,-8 H 8 V 8 H -8 Z', // square
+      'M 0,-10 L 10,8 L -10,8 Z', // triangle
+      'M 0,-10 L 10,0 L 0,10 L -10,0 Z', // diamond
+      'M 9,0 A 9,9 0 1,1 -9,0 A 9,9 0 1,1 9,0', // circle
+      'M -9,-6 L 9,-9 L 8,9 L -8,7 Z', // tilted quad
     ];
     let shapeIdx = 0;
 
     // Inner play area for the bouncer center (bouncer is ~10px half-size
     // and the box is x=6..94 with a 1.6 stroke, so center range is
     // 18..82 to keep the shape fully inside the visible walls).
-    const minX = 18, maxX = 82, minY = 18, maxY = 82;
+    const minX = 18,
+      maxX = 82,
+      minY = 18,
+      maxY = 82;
     let x = 50 + (Math.random() * 8 - 4);
     let y = 50 + (Math.random() * 8 - 4);
-    let vx = (Math.random() < .5 ? -1 : 1) * (0.55 + Math.random() * 0.25);
-    let vy = (Math.random() < .5 ? -1 : 1) * (0.45 + Math.random() * 0.25);
+    let vx = (Math.random() < 0.5 ? -1 : 1) * (0.55 + Math.random() * 0.25);
+    let vy = (Math.random() < 0.5 ? -1 : 1) * (0.45 + Math.random() * 0.25);
 
     function morph() {
       shapeIdx = (shapeIdx + 1) % shapes.length;
@@ -51,10 +63,10 @@ const { class: className = '' } = Astro.props as { class?: string };
       path.animate(
         [
           { transform: 'scale(1)', fill: '#0FB5A5' },
-          { transform: 'scale(1.25)', fill: '#FFD24B', offset: .35 },
+          { transform: 'scale(1.25)', fill: '#FFD24B', offset: 0.35 },
           { transform: 'scale(1)', fill: '#0FB5A5' },
         ],
-        { duration: 280, easing: 'ease-out' }
+        { duration: 280, easing: 'ease-out' },
       );
     }
 
@@ -67,10 +79,24 @@ const { class: className = '' } = Astro.props as { class?: string };
       x += vx * step;
       y += vy * step;
       let bounced = false;
-      if (x < minX) { x = minX; vx = Math.abs(vx); bounced = true; }
-      else if (x > maxX) { x = maxX; vx = -Math.abs(vx); bounced = true; }
-      if (y < minY) { y = minY; vy = Math.abs(vy); bounced = true; }
-      else if (y > maxY) { y = maxY; vy = -Math.abs(vy); bounced = true; }
+      if (x < minX) {
+        x = minX;
+        vx = Math.abs(vx);
+        bounced = true;
+      } else if (x > maxX) {
+        x = maxX;
+        vx = -Math.abs(vx);
+        bounced = true;
+      }
+      if (y < minY) {
+        y = minY;
+        vy = Math.abs(vy);
+        bounced = true;
+      } else if (y > maxY) {
+        y = maxY;
+        vy = -Math.abs(vy);
+        bounced = true;
+      }
       if (bounced) morph();
       g.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
       requestAnimationFrame(tick);
@@ -81,5 +107,8 @@ const { class: className = '' } = Astro.props as { class?: string };
 
 <style>
   /* Path needs to scale around its own center for the impact punch. */
-  .icon--shift path { transform-box: fill-box; transform-origin: center; }
+  .icon--shift path {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
 </style>

@@ -35,16 +35,18 @@ function fmt(n: number): string {
   return '$' + Math.round(n);
 }
 
-const levelLabel = scene.level === 'state' ? 'State'
-                 : scene.level === 'county' ? 'County'
-                 : 'Reservation';
+const levelLabel =
+  scene.level === 'state' ? 'State' : scene.level === 'county' ? 'County' : 'Reservation';
 
 const parts = scene.chip.split(' · ');
 const projectName = parts[1] || scene.chip;
 const region = parts[2] || '';
 
-const title = projectName + (region ? ' - ' + region : '') + ' | Lumecon economic impact study example';
-const description = scene.sentence + ' Lumecon shows direct, indirect, and induced effects with every multiplier sourced.';
+const title =
+  projectName + (region ? ' - ' + region : '') + ' | Lumecon economic impact study example';
+const description =
+  scene.sentence +
+  ' Lumecon shows direct, indirect, and induced effects with every multiplier sourced.';
 const slug = sceneSlug(scene);
 const canonical = 'https://lumecon.ai/demo/' + slug;
 const ogTitle = projectName + (region ? ' - ' + region : '');
@@ -61,6 +63,7 @@ const jsonLd = {
 
 const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.activity.label}, IMPLAN, RIMS II, REMI, Lumecon`;
 ---
+
 <BaseLayout
   title={title}
   description={description}
@@ -90,12 +93,18 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
           <div class="demo-fig">
             <dt>Indirect</dt>
             <dd>+ {fmt(indirect)}</dd>
-            <p class="demo-fig__note">Supplier spending. Multiplier: <strong>{scene.activity.indirect}</strong> ({scene.activity.label}).</p>
+            <p class="demo-fig__note">
+              Supplier spending. Multiplier: <strong>{scene.activity.indirect}</strong> ({
+                scene.activity.label
+              }).
+            </p>
           </div>
           <div class="demo-fig">
             <dt>Induced</dt>
             <dd>+ {fmt(induced)}</dd>
-            <p class="demo-fig__note">Household spending. Multiplier: <strong>{scene.activity.induced}</strong>.</p>
+            <p class="demo-fig__note">
+              Household spending. Multiplier: <strong>{scene.activity.induced}</strong>.
+            </p>
           </div>
           <div class="demo-fig demo-fig--total">
             <dt>Total impact</dt>
@@ -105,7 +114,9 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
           <div class="demo-fig">
             <dt>Jobs supported</dt>
             <dd>≈ {jobs.toLocaleString()}</dd>
-            <p class="demo-fig__note">Estimated at <strong>{scene.activity.jobsPerM}</strong> jobs per $M of activity.</p>
+            <p class="demo-fig__note">
+              Estimated at <strong>{scene.activity.jobsPerM}</strong> jobs per $M of activity.
+            </p>
           </div>
         </dl>
       </section>
@@ -113,10 +124,21 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
       <section class="demo-method">
         <h2>How Lumecon produces this study</h2>
         <ol>
-          <li>The team uploads source documents to Cedar: budget detail, payroll records, council agendas, grant filings.</li>
-          <li>Cedar reads the files, surfaces every assumption (multipliers, base year, regional bridges), and asks for confirmation or override.</li>
-          <li>Lumecon runs input-output modeling using current methods and the confirmed assumptions.</li>
-          <li>The source record writes itself: every method, every multiplier, every override is logged with the run. A council member or grant reviewer can verify the result.</li>
+          <li>
+            The team uploads source documents to Cedar: budget detail, payroll records, council
+            agendas, grant filings.
+          </li>
+          <li>
+            Cedar reads the files, surfaces every assumption (multipliers, base year, regional
+            bridges), and asks for confirmation or override.
+          </li>
+          <li>
+            Lumecon runs input-output modeling using current methods and the confirmed assumptions.
+          </li>
+          <li>
+            The source record writes itself: every method, every multiplier, every override is
+            logged with the run. A council member or grant reviewer can verify the result.
+          </li>
         </ol>
       </section>
 
@@ -125,7 +147,10 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
         <a href="/#contact" class="btn btn--ghost">Request a demo</a>
       </section>
 
-      <p class="demo-disclaimer">Example study, illustrative multipliers. Lumecon configures multipliers using the most current modeling methods for the relevant geography and sector at run time.</p>
+      <p class="demo-disclaimer">
+        Example study, illustrative multipliers. Lumecon configures multipliers using the most
+        current modeling methods for the relevant geography and sector at run time.
+      </p>
     </div>
   </main>
 
@@ -145,8 +170,8 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
   }
   .demo-eyebrow {
     font-family: var(--font-mono);
-    font-size: .72rem;
-    letter-spacing: .14em;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--accent-text);
     font-weight: 600;
@@ -157,7 +182,7 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
     font-weight: 600;
     font-size: clamp(2.2rem, 4.8vw, 3.6rem);
     line-height: 1.08;
-    letter-spacing: -.025em;
+    letter-spacing: -0.025em;
     color: var(--navy);
     margin: 0;
   }
@@ -165,7 +190,7 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
     font-family: var(--font-sans);
     font-size: 1rem;
     color: var(--ink-3);
-    margin: .35rem 0 0;
+    margin: 0.35rem 0 0;
     font-weight: 500;
   }
   .demo-sentence {
@@ -184,8 +209,8 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
   }
   .demo-figures__head {
     font-family: var(--font-mono);
-    font-size: .68rem;
-    letter-spacing: .14em;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--ink-3);
     font-weight: 600;
@@ -199,31 +224,36 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
   }
   .demo-fig dt {
     font-family: var(--font-sans);
-    font-size: .82rem;
+    font-size: 0.82rem;
     color: var(--ink-3);
     font-weight: 500;
-    letter-spacing: -.005em;
-    margin: 0 0 .35rem;
+    letter-spacing: -0.005em;
+    margin: 0 0 0.35rem;
   }
   .demo-fig dd {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: clamp(1.4rem, 2.4vw, 1.95rem);
     color: var(--navy);
-    letter-spacing: -.022em;
+    letter-spacing: -0.022em;
     line-height: 1;
-    margin: 0 0 .45rem;
+    margin: 0 0 0.45rem;
     font-variant-numeric: tabular-nums;
   }
-  .demo-fig--total dd { color: var(--accent-btn-hover); }
+  .demo-fig--total dd {
+    color: var(--accent-btn-hover);
+  }
   .demo-fig__note {
-    font-size: .8rem;
+    font-size: 0.8rem;
     line-height: 1.45;
     color: var(--ink-3);
     margin: 0;
     font-weight: 400;
   }
-  .demo-fig__note strong { color: var(--navy); font-weight: 600; }
+  .demo-fig__note strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
   .demo-method {
     margin-top: clamp(2rem, 4vw, 3rem);
   }
@@ -231,7 +261,7 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
     font-family: var(--font-display);
     font-weight: 600;
     font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-    letter-spacing: -.018em;
+    letter-spacing: -0.018em;
     color: var(--navy);
     margin: 0 0 1rem;
   }
@@ -242,18 +272,20 @@ const keywords = `economic impact analysis, ${projectName}, ${region}, ${scene.a
     line-height: 1.55;
     color: var(--ink-2);
   }
-  .demo-method li { margin-bottom: .55rem; }
+  .demo-method li {
+    margin-bottom: 0.55rem;
+  }
   .demo-cta {
     margin-top: clamp(2rem, 4vw, 3rem);
     display: flex;
-    gap: .8rem;
+    gap: 0.8rem;
     flex-wrap: wrap;
   }
   .demo-disclaimer {
     margin-top: 2rem;
     padding-top: 1.4rem;
     border-top: 1px solid var(--rule);
-    font-size: .82rem;
+    font-size: 0.82rem;
     color: var(--ink-3);
     line-height: 1.5;
     font-style: italic;

@@ -16,45 +16,58 @@ import IconTribal from './icons/IconTribal.astro';
 import IconGlobal from './icons/IconGlobal.astro';
 import '../styles/products.css';
 ---
+
 <section class="platforms" id="products">
   <div class="platforms-inner">
     <header class="platforms-head">
       <p class="platforms-eyebrow">Platforms</p>
-      <h2 class="platforms-lead reveal-soft hl-block hl-block--gold">Three platforms, built for the economies they serve.</h2>
+      <h2 class="platforms-lead reveal-soft hl-block hl-block--gold">
+        Three platforms, built for the economies they serve.
+      </h2>
     </header>
 
     <div class="platforms-grid">
-      {REGIONAL_PLATFORMS.map((p) => (
-        <article class={`platform platform--${p.slug}`}>
-          <header class="platform__head">
-            <span class="platform__icon" aria-hidden="true">
-              {p.iconId === 'local'  && <IconLocal />}
-              {p.iconId === 'tribal' && <IconTribal />}
-              {p.iconId === 'global' && <IconGlobal />}
-            </span>
-            <span class={`platform__badge platform__badge--${p.badgeKind}`}>{p.status}</span>
-          </header>
-          <h3 class="platform__name">{p.name}</h3>
-          <span class="platform__url">{p.domain}</span>
-          <p class="platform__tag">{p.tag}</p>
-          <!-- Audience paragraph hidden by default on mobile and
-               desktop. The card stays scannable; visitors who want
-               to know exactly who the platform is for can expand
-               "Who it's for" or jump to /pricing. -->
-          <details class="platform__who">
-            <summary class="platform__who-summary">
-              <span>Who it&rsquo;s for</span>
-              <span class="platform__who-chev" aria-hidden="true"></span>
-            </summary>
-            <p class="platform__desc">{p.desc}</p>
-          </details>
-          <div class="platform__cta">
-            {p.comingSoon
-              ? <a class="btn" href={`mailto:${site.email}?subject=${encodeURIComponent('Notify me when ' + p.name + ' ships')}`}>Notify me when it ships</a>
-              : <a class="btn" href="/pricing">Learn more &amp; pricing</a>}
-          </div>
-        </article>
-      ))}
+      {
+        REGIONAL_PLATFORMS.map((p) => (
+          <article class={`platform platform--${p.slug}`}>
+            <header class="platform__head">
+              <span class="platform__icon" aria-hidden="true">
+                {p.iconId === 'local' && <IconLocal />}
+                {p.iconId === 'tribal' && <IconTribal />}
+                {p.iconId === 'global' && <IconGlobal />}
+              </span>
+              <span class={`platform__badge platform__badge--${p.badgeKind}`}>{p.status}</span>
+            </header>
+            <h3 class="platform__name">{p.name}</h3>
+            <span class="platform__url">{p.domain}</span>
+            <p class="platform__tag">{p.tag}</p>
+            {/* The audience paragraph is collapsed by default so the card
+              stays scannable; visitors who want to know exactly who the
+              platform is for can expand "Who it's for" or jump to /pricing. */}
+            <details class="platform__who">
+              <summary class="platform__who-summary">
+                <span>Who it&rsquo;s for</span>
+                <span class="platform__who-chev" aria-hidden="true" />
+              </summary>
+              <p class="platform__desc">{p.desc}</p>
+            </details>
+            <div class="platform__cta">
+              {p.comingSoon ? (
+                <a
+                  class="btn"
+                  href={`mailto:${site.email}?subject=${encodeURIComponent('Notify me when ' + p.name + ' ships')}`}
+                >
+                  Notify me when it ships
+                </a>
+              ) : (
+                <a class="btn" href="/pricing">
+                  Learn more &amp; pricing
+                </a>
+              )}
+            </div>
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>

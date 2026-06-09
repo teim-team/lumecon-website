@@ -98,8 +98,10 @@ export const PLATFORMS: readonly Platform[] = [
     badgeKind: 'active',
     tag: 'Turn your budget data into an economic impact study you can present.',
     desc: 'For cities, counties, state agencies, enterprises, foundations, universities, and the nonprofits that work alongside them. Run grant, council, and board-ready studies in-house, in minutes instead of months.',
-    audience: 'Municipalities, state agencies, enterprises, foundations, universities, and nonprofits',
-    fitIf: "You're a municipality, state agency, enterprise, foundation, university, or nonprofit running local or regional impact analysis.",
+    audience:
+      'Municipalities, state agencies, enterprises, foundations, universities, and nonprofits',
+    fitIf:
+      "You're a municipality, state agency, enterprise, foundation, university, or nonprofit running local or regional impact analysis.",
     scope: 'Local & regional economic impact analysis',
     iconId: 'local',
     kind: 'regional',
@@ -118,8 +120,10 @@ export const PLATFORMS: readonly Platform[] = [
     badgeKind: 'active',
     tag: 'Modeled on tribal terms, not adapted from a state model.',
     desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs, and Native-entity federal contractors, with Indigenous data sovereignty a design priority from the start rather than an afterthought.',
-    audience: 'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
-    fitIf: "You're a tribal government or department within one, a Native non-profit, intertribal org, tribal college, ANC, NHO, tribal enterprise, Native CDFI, state-recognized tribe, or Native-entity federal contractor making the case for reservation, state, or federal funding.",
+    audience:
+      'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
+    fitIf:
+      "You're a tribal government or department within one, a Native non-profit, intertribal org, tribal college, ANC, NHO, tribal enterprise, Native CDFI, state-recognized tribe, or Native-entity federal contractor making the case for reservation, state, or federal funding.",
     scope: 'Reservation, state, national economic impact analysis',
     iconId: 'tribal',
     kind: 'regional',
@@ -139,7 +143,8 @@ export const PLATFORMS: readonly Platform[] = [
     tag: 'For organizations whose work crosses borders.',
     desc: 'For governments, multinationals, NGOs, and foundations whose work crosses borders, with the same modeling backbone running underneath so a project in one country is directly comparable to a project in another.',
     audience: 'Organizations needing broader market, supply-chain, or international analysis',
-    fitIf: 'You need national, international, supply-chain, or cross-border analysis. Launching after Local and Tribal stabilize.',
+    fitIf:
+      'You need national, international, supply-chain, or cross-border analysis. Launching after Local and Tribal stabilize.',
     scope: 'National, international, cross-border analysis',
     iconId: 'global',
     kind: 'regional',
@@ -157,8 +162,10 @@ export const PLATFORMS: readonly Platform[] = [
     badgeKind: 'active',
     tag: 'Lumecon for consultants delivering studies to outside clients.',
     desc: 'For independent consultants and consulting firms running economic impact studies on behalf of two distinct client entities in a single fiscal year. All geographies included; Cedar and the Toolbox add-on are not available on this plan.',
-    audience: 'Independent consultants and consulting firms running economic impact studies on behalf of outside clients',
-    fitIf: "You're a consultant running studies for outside clients. Two distinct entities, one fiscal year, all geographies (reservation, county, state, national). No consortium projects.",
+    audience:
+      'Independent consultants and consulting firms running economic impact studies on behalf of outside clients',
+    fitIf:
+      "You're a consultant running studies for outside clients. Two distinct entities, one fiscal year, all geographies (reservation, county, state, national). No consortium projects.",
     scope: 'Reservation, county, state, and national economic impact analysis',
     iconId: 'consultant',
     kind: 'service',
@@ -168,10 +175,13 @@ export const PLATFORMS: readonly Platform[] = [
 ];
 
 /** Slug -> Platform lookup. */
-export const PLATFORM_BY_SLUG: Record<PlatformSlug, Platform> =
-  Object.fromEntries(PLATFORMS.map((p) => [p.slug, p])) as Record<PlatformSlug, Platform>;
+export const PLATFORM_BY_SLUG: Record<PlatformSlug, Platform> = Object.fromEntries(
+  PLATFORMS.map((p) => [p.slug, p]),
+) as Record<PlatformSlug, Platform>;
 
 /** Convenience helpers — most surfaces only want one kind of platform.
  *  Homepage product cards and the footer "Platforms" rail show only
  *  regional offerings; the pricing platform-picker shows all of them. */
-export const REGIONAL_PLATFORMS: readonly Platform[] = PLATFORMS.filter((p) => p.kind === 'regional');
+export const REGIONAL_PLATFORMS: readonly Platform[] = PLATFORMS.filter(
+  (p) => p.kind === 'regional',
+);

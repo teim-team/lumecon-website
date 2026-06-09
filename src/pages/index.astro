@@ -18,145 +18,163 @@ import '../styles/footer.css';
 // markup). The visible Cedar Q&A is the FAB on every page; this
 // array exists only for structured-data discoverability.
 const FAQ_ITEMS = [
-  { q: 'What is Lumecon?',
-    a: 'Lumecon helps organizations understand and communicate their economic impact. Our platform turns complex data into clear, credible reports that show how spending, investment, employment, and community activity ripple through local economies. In plain English: we help people explain the value they create.' },
-  { q: 'Who uses Lumecon?',
-    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits, and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue, or local development, Lumecon can help make that impact easier to understand.' },
-  { q: 'How does Lumecon support tribal nations?',
-    a: "Lumecon's Tribal Economic Impact Platform helps tribal governments and tribal enterprises communicate their economic contributions with clear, data-backed reports. That can include jobs supported, wages generated, business activity, local spending, and broader regional impacts. The goal is to help Native nations tell a stronger economic story while respecting the distinct governance context of tribal economies." },
-  { q: 'Can cities, counties, and other organizations use Lumecon?',
-    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers, and other organizations. The platform can help explain how a project, institution, investment, or program affects a local or regional economy.' },
-  { q: 'What are economic multipliers?',
-    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies, or funds construction, that activity directly supports jobs and spending. Then suppliers, workers, and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.' },
-  { q: 'What geographies does Lumecon cover?',
-    a: 'Lumecon covers all federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country. All of it is included in one annual subscription, not priced per geography.' },
-  { q: 'What is Cedar?',
-    a: "I'm Cedar, Lumecon's site assistant. I can help explain what Lumecon does, who the platform is for, how economic impact reporting works, and how to get in touch with the team. I'm here to point you in the right direction, not replace a conversation with the Lumecon team." },
-  { q: 'Where was Lumecon built?',
-    a: "Lumecon Inc. was built at Ivy League and peer schools, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team's academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC." },
+  {
+    q: 'What is Lumecon?',
+    a: 'Lumecon helps organizations understand and communicate their economic impact. Our platform turns complex data into clear, credible reports that show how spending, investment, employment, and community activity ripple through local economies. In plain English: we help people explain the value they create.',
+  },
+  {
+    q: 'Who uses Lumecon?',
+    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits, and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue, or local development, Lumecon can help make that impact easier to understand.',
+  },
+  {
+    q: 'How does Lumecon support tribal nations?',
+    a: "Lumecon's Tribal Economic Impact Platform helps tribal governments and tribal enterprises communicate their economic contributions with clear, data-backed reports. That can include jobs supported, wages generated, business activity, local spending, and broader regional impacts. The goal is to help Native nations tell a stronger economic story while respecting the distinct governance context of tribal economies.",
+  },
+  {
+    q: 'Can cities, counties, and other organizations use Lumecon?',
+    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers, and other organizations. The platform can help explain how a project, institution, investment, or program affects a local or regional economy.',
+  },
+  {
+    q: 'What are economic multipliers?',
+    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies, or funds construction, that activity directly supports jobs and spending. Then suppliers, workers, and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.',
+  },
+  {
+    q: 'What geographies does Lumecon cover?',
+    a: 'Lumecon covers all federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country. All of it is included in one annual subscription, not priced per geography.',
+  },
+  {
+    q: 'What is Cedar?',
+    a: "I'm Cedar, Lumecon's site assistant. I can help explain what Lumecon does, who the platform is for, how economic impact reporting works, and how to get in touch with the team. I'm here to point you in the right direction, not replace a conversation with the Lumecon team.",
+  },
+  {
+    q: 'Where was Lumecon built?',
+    a: "Lumecon Inc. was built at Ivy League and peer schools, with counsel from the Cornell Law Entrepreneurship Law Clinic. The team's academic background spans Cornell, Dartmouth, Oxford, MIT, and Yale. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.",
+  },
 ];
 
 const jsonLd = [
   {
-    "@context": "https://schema.org",
-    "@type": ["Organization", "SoftwareApplication"],
-    "@id": `${site.url}#org`,
-    "name": site.legalName,
-    "legalName": site.legalName,
-    "alternateName": ["Lumecon", "Lumecon.ai", site.name],
-    "disambiguatingDescription": "Lumecon Inc. is an AI-assisted economic impact analysis software company, headquartered online at lumecon.ai. Not affiliated with any unrelated trademark-similar businesses in other industries.",
-    "applicationCategory": "BusinessApplication",
-    "applicationSubCategory": "Economic Impact Analysis Software",
-    "operatingSystem": "Web",
-    "url": site.url,
-    "logo": `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
-    "image": `${site.url}/lumecon-og-image-1200x630.png`,
-    "description": "Lumecon Inc. builds economic impact analysis software for governments, enterprises, and mission-driven organizations. Built by alumni of the Federal Reserve System, Cornell, Dartmouth, Oxford, MIT, and Duke for teams that demand credible data and models at a price that lets them integrate impact analysis into their everyday workflow rather than treating it as a once-a-year consulting expense.",
-    "email": site.email,
-    "slogan": site.tagline,
-    "naics": "541512",
-    "industry": "Economic Impact Analysis Software",
-    "sameAs": [
-      "https://www.linkedin.com/company/lumecon-ai",
-      "https://lumecon.ai",
-      "https://localeconomicimpact.com",
-      "https://tribaleconomicimpact.com",
-      "https://globaleconomicimpact.com"
+    '@context': 'https://schema.org',
+    '@type': ['Organization', 'SoftwareApplication'],
+    '@id': `${site.url}#org`,
+    name: site.legalName,
+    legalName: site.legalName,
+    alternateName: ['Lumecon', 'Lumecon.ai', site.name],
+    disambiguatingDescription:
+      'Lumecon Inc. is an AI-assisted economic impact analysis software company, headquartered online at lumecon.ai. Not affiliated with any unrelated trademark-similar businesses in other industries.',
+    applicationCategory: 'BusinessApplication',
+    applicationSubCategory: 'Economic Impact Analysis Software',
+    operatingSystem: 'Web',
+    url: site.url,
+    logo: `${site.url}/brand/lumecon-logo-horizontal-transparent.png`,
+    image: `${site.url}/lumecon-og-image-1200x630.png`,
+    description:
+      'Lumecon Inc. builds economic impact analysis software for governments, enterprises, and mission-driven organizations. Built by alumni of the Federal Reserve System, Cornell, Dartmouth, Oxford, MIT, and Duke for teams that demand credible data and models at a price that lets them integrate impact analysis into their everyday workflow rather than treating it as a once-a-year consulting expense.',
+    email: site.email,
+    slogan: site.tagline,
+    naics: '541512',
+    industry: 'Economic Impact Analysis Software',
+    sameAs: [
+      'https://www.linkedin.com/company/lumecon-ai',
+      'https://lumecon.ai',
+      'https://localeconomicimpact.com',
+      'https://tribaleconomicimpact.com',
+      'https://globaleconomicimpact.com',
     ],
-    "foundingLocation": { "@type": "Place", "name": site.builtAt },
-    "founder": FOUNDERS.map((p) => ({
-      "@type": "Person",
-      "@id": `${site.url}/team/${p.slug}`,
-      "name": p.name,
-      "jobTitle": p.title,
+    foundingLocation: { '@type': 'Place', name: site.builtAt },
+    founder: FOUNDERS.map((p) => ({
+      '@type': 'Person',
+      '@id': `${site.url}/team/${p.slug}`,
+      name: p.name,
+      jobTitle: p.title,
     })),
-    "knowsAbout": [
-      "Economic Impact Analysis",
-      "Policy Analysis",
-      "Input-Output Modeling",
-      "IMPLAN",
-      "RIMS II",
-      "BEA RIMS II",
-      "REMI",
-      "Lightcast",
-      "EMSI",
-      "Bureau of Economic Analysis multipliers",
-      "Fiscal Multiplier",
-      "Economic Multipliers",
-      "Tribal Economics",
-      "Indigenous Economic Development",
-      "Reservation Economics",
-      "Alaska Native Corporations",
-      "Native Hawaiian Organizations",
-      "AIANNH geography",
-      "Direct, Indirect, and Induced Effects",
-      "Jobs, Output, and Earnings",
-      "Economic Development Organizations",
-      "Municipal Finance",
-      "State and Local Government Software",
-      "Public Sector Analytics",
-      "Mission-Driven Organizations",
-      "CDFIs",
-      "Foundation Reporting",
-      "Cornell University",
-      "Cornell Brooks School of Public Policy",
-      "Ivy League research",
-      "Cornell Law Entrepreneurship Law Clinic",
-      "Dartmouth College"
+    knowsAbout: [
+      'Economic Impact Analysis',
+      'Policy Analysis',
+      'Input-Output Modeling',
+      'IMPLAN',
+      'RIMS II',
+      'BEA RIMS II',
+      'REMI',
+      'Lightcast',
+      'EMSI',
+      'Bureau of Economic Analysis multipliers',
+      'Fiscal Multiplier',
+      'Economic Multipliers',
+      'Tribal Economics',
+      'Indigenous Economic Development',
+      'Reservation Economics',
+      'Alaska Native Corporations',
+      'Native Hawaiian Organizations',
+      'AIANNH geography',
+      'Direct, Indirect, and Induced Effects',
+      'Jobs, Output, and Earnings',
+      'Economic Development Organizations',
+      'Municipal Finance',
+      'State and Local Government Software',
+      'Public Sector Analytics',
+      'Mission-Driven Organizations',
+      'CDFIs',
+      'Foundation Reporting',
+      'Cornell University',
+      'Cornell Brooks School of Public Policy',
+      'Ivy League research',
+      'Cornell Law Entrepreneurship Law Clinic',
+      'Dartmouth College',
     ],
-    "keywords": "economic impact analysis, IMPLAN, RIMS II, REMI, Lightcast, BEA multipliers, input-output modeling, alternative data, high-frequency data, tribal economic impact, policy analysis software, government analytics, Cornell, Ivy League",
-    "potentialAction": {
-      "@type": "ContactAction",
-      "target": `mailto:${site.email}`
-    }
+    keywords:
+      'economic impact analysis, IMPLAN, RIMS II, REMI, Lightcast, BEA multipliers, input-output modeling, alternative data, high-frequency data, tribal economic impact, policy analysis software, government analytics, Cornell, Ivy League',
+    potentialAction: {
+      '@type': 'ContactAction',
+      target: `mailto:${site.email}`,
+    },
   },
   ...REGIONAL_PLATFORMS.map((p) => ({
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Economic impact analysis software",
-    "name": p.name,
-    "url": p.url,
-    "provider": { "@type": "Organization", "name": site.legalName },
-    ...(p.slug === 'global'
-      ? {}
-      : { "areaServed": { "@type": "Country", "name": "United States" } }),
-    "audience": { "@type": "Audience", "audienceType": p.audience },
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Economic impact analysis software',
+    name: p.name,
+    url: p.url,
+    provider: { '@type': 'Organization', name: site.legalName },
+    ...(p.slug === 'global' ? {} : { areaServed: { '@type': 'Country', name: 'United States' } }),
+    audience: { '@type': 'Audience', audienceType: p.audience },
   })),
   {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": site.url },
-      { "@type": "ListItem", "position": 2, "name": "Platforms", "item": `${site.url}/#products` },
-      { "@type": "ListItem", "position": 3, "name": "Why Lumecon", "item": `${site.url}/#how` },
-      { "@type": "ListItem", "position": 4, "name": "See your impact", "item": `${site.url}/map` },
-      { "@type": "ListItem", "position": 5, "name": "Cedar", "item": `${site.url}/cedar` },
-      { "@type": "ListItem", "position": 6, "name": "Pricing", "item": `${site.url}/pricing` },
-      { "@type": "ListItem", "position": 7, "name": "Contact", "item": `${site.url}/#contact` }
-    ]
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Platforms', item: `${site.url}/#products` },
+      { '@type': 'ListItem', position: 3, name: 'Why Lumecon', item: `${site.url}/#how` },
+      { '@type': 'ListItem', position: 4, name: 'See your impact', item: `${site.url}/map` },
+      { '@type': 'ListItem', position: 5, name: 'Cedar', item: `${site.url}/cedar` },
+      { '@type': 'ListItem', position: 6, name: 'Pricing', item: `${site.url}/pricing` },
+      { '@type': 'ListItem', position: 7, name: 'Contact', item: `${site.url}/#contact` },
+    ],
   },
   {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": `${site.url}#faq`,
-    "mainEntity": FAQ_ITEMS.map(item => ({
-      "@type": "Question",
-      "name": item.q,
-      "acceptedAnswer": { "@type": "Answer", "text": item.a }
-    }))
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${site.url}#faq`,
+    mainEntity: FAQ_ITEMS.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
   },
   {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": `${site.url}#website`,
-    "url": site.url,
-    "name": "Lumecon Inc.",
-    "alternateName": "Lumecon",
-    "publisher": { "@id": `${site.url}#org` },
-    "inLanguage": "en-US"
-  }
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${site.url}#website`,
+    url: site.url,
+    name: 'Lumecon Inc.',
+    alternateName: 'Lumecon',
+    publisher: { '@id': `${site.url}#org` },
+    inLanguage: 'en-US',
+  },
 ];
 ---
+
 <BaseLayout
   title="Lumecon | Economic Impact Analysis Software"
   description="Economic impact analysis software, with the Cedar AI assistant, for governments, tribal nations, enterprises, and mission-driven organizations. Built by alumni of the Federal Reserve System, Cornell, Dartmouth, Oxford, MIT, and Duke for teams that demand credible data and models at a price that lets them integrate impact analysis into their everyday workflow rather than treating it as a once-a-year consulting expense."
@@ -180,7 +198,9 @@ const jsonLd = [
 </BaseLayout>
 
 <style is:global>
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+  }
 </style>
 
 <script>
@@ -192,7 +212,7 @@ const jsonLd = [
   const SECTION_ACTIVE_ROOT_MARGIN = '-40% 0px -55% 0px';
 
   // Scroll progress indicator + nav scroll state
-  (function() {
+  (function () {
     const nav = document.getElementById('nav');
     const progressBar = document.getElementById('scrollProgress');
     if (!nav || !progressBar) return;
@@ -206,44 +226,59 @@ const jsonLd = [
       nav.classList.toggle('scrolled', scrollTop > NAV_SCROLL_THRESHOLD);
       ticking = false;
     };
-    window.addEventListener('scroll', () => {
-      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
-    }, { passive: true });
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
   })();
 
   // Intersection observer for reveal animations (staggered product blocks)
-  const obs = new IntersectionObserver(es => {
-    es.forEach(e => {
-      if (e.isIntersecting) {
-        const el = e.target as HTMLElement;
-        const stagger = el.dataset.stagger;
-        if (stagger) {
-          setTimeout(() => el.classList.add('seen'), parseInt(stagger) * STAGGER_DELAY_PER_ITEM);
-        } else {
-          el.classList.add('seen');
+  const obs = new IntersectionObserver(
+    (es) => {
+      es.forEach((e) => {
+        if (e.isIntersecting) {
+          const el = e.target as HTMLElement;
+          const stagger = el.dataset.stagger;
+          if (stagger) {
+            setTimeout(() => el.classList.add('seen'), parseInt(stagger) * STAGGER_DELAY_PER_ITEM);
+          } else {
+            el.classList.add('seen');
+          }
+          obs.unobserve(e.target);
         }
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: REVEAL_THRESHOLD, rootMargin: REVEAL_ROOT_MARGIN });
-  document.querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal').forEach(el => obs.observe(el));
+      });
+    },
+    { threshold: REVEAL_THRESHOLD, rootMargin: REVEAL_ROOT_MARGIN },
+  );
+  document
+    .querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal')
+    .forEach((el) => obs.observe(el));
 
   // Active section highlighting in nav
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a[href^="#"], .nav-links a[href^="/#"]');
-  const sectionObs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        navLinks.forEach(link => {
-          const href = link.getAttribute('href') || '';
-          const match = href === '#' + id || href === '/#' + id;
-          link.classList.toggle('nav-active', match);
-          if (match) link.setAttribute('aria-current', 'location');
-          else link.removeAttribute('aria-current');
-        });
-      }
-    });
-  }, { threshold: 0, rootMargin: SECTION_ACTIVE_ROOT_MARGIN });
-  sections.forEach(s => sectionObs.observe(s));
+  const sectionObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navLinks.forEach((link) => {
+            const href = link.getAttribute('href') || '';
+            const match = href === '#' + id || href === '/#' + id;
+            link.classList.toggle('nav-active', match);
+            if (match) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
+          });
+        }
+      });
+    },
+    { threshold: 0, rootMargin: SECTION_ACTIVE_ROOT_MARGIN },
+  );
+  sections.forEach((s) => sectionObs.observe(s));
 </script>

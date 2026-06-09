@@ -2,6 +2,7 @@
 import { site } from '../config';
 import LegalLayout from '../layouts/LegalLayout.astro';
 ---
+
 <LegalLayout
   title="Terms of Service | Lumecon"
   description="Terms of Service for Lumecon and its family of platforms: Local Economic Impact, Tribal Economic Impact, and Global Economic Impact. Covers software, subscriptions, advisory, and Cedar AI usage."
@@ -10,8 +11,21 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 >
   <h1 class="hl-block hl-block--green">Terms of Service</h1>
   <div class="date">Being prepared by legal counsel</div>
-  <p>The Terms of Service for Lumecon and its family of platforms (Local Economic Impact, Tribal Economic Impact, and Global Economic Impact) are being prepared.</p>
-  <p>These terms will govern use of all Lumecon services, software, annual subscriptions, custom advisory, and associated websites, including the Cedar&trade; AI assistant.</p>
-  <p>Lumecon, We luminate economies, Cedar, Local Economic Impact, Tribal Economic Impact, and Global Economic Impact are trademarks of {site.legalEntity}. Lumecon&rsquo;s technology is patent pending and remains the exclusive intellectual property of the company.</p>
-  <div class="note"><strong>Counsel:</strong> {site.counsel}<br>Contact: <a href={`mailto:${site.email}`} class="note-link">{site.email}</a></div>
+  <p>
+    The Terms of Service for Lumecon and its family of platforms (Local Economic Impact, Tribal
+    Economic Impact, and Global Economic Impact) are being prepared.
+  </p>
+  <p>
+    These terms will govern use of all Lumecon services, software, annual subscriptions, custom
+    advisory, and associated websites, including the Cedar&trade; AI assistant.
+  </p>
+  <p>
+    Lumecon, We luminate economies, Cedar, Local Economic Impact, Tribal Economic Impact, and Global
+    Economic Impact are trademarks of {site.legalEntity}. Lumecon&rsquo;s technology is patent
+    pending and remains the exclusive intellectual property of the company.
+  </p>
+  <div class="note">
+    <strong>Counsel:</strong>
+    {site.counsel}<br />Contact: <a href={`mailto:${site.email}`} class="note-link">{site.email}</a>
+  </div>
 </LegalLayout>

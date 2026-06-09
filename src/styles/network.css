@@ -22,13 +22,15 @@
   align-items: center;
 }
 @media (max-width: 880px) {
-  .network-inner { grid-template-columns: 1fr; }
+  .network-inner {
+    grid-template-columns: 1fr;
+  }
 }
 
 .network-kicker {
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
@@ -39,7 +41,7 @@
   font-weight: 600;
   font-size: clamp(2rem, 4vw, 2.9rem);
   line-height: 1.08;
-  letter-spacing: -.022em;
+  letter-spacing: -0.022em;
   color: var(--navy);
   margin: 0 0 1.2rem;
   max-width: 22ch;
@@ -66,19 +68,19 @@
   background: var(--white);
   border-left: 3px solid var(--accent);
   border-radius: 0 8px 8px 0;
-  padding: .85rem 1.1rem;
+  padding: 0.85rem 1.1rem;
 }
 .network-point__head {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.02rem;
-  letter-spacing: -.01em;
+  letter-spacing: -0.01em;
   color: var(--navy);
-  margin: 0 0 .25rem;
+  margin: 0 0 0.25rem;
 }
 .network-point__body {
   font-family: var(--font-sans);
-  font-size: .94rem;
+  font-size: 0.94rem;
   line-height: 1.5;
   color: var(--ink-2);
   font-weight: 400;
@@ -118,32 +120,38 @@
    section reads as a title + diagram by default. Visitors who want
    the framing tap to expand. Pattern matches the map page details
    so the chevron and reveal feel familiar. */
-.network-disclosure { margin-top: 0; }
+.network-disclosure {
+  margin-top: 0;
+}
 .network-disclosure__summary {
   list-style: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: .6rem;
+  gap: 0.6rem;
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
 }
-.network-disclosure__summary::-webkit-details-marker { display: none; }
+.network-disclosure__summary::-webkit-details-marker {
+  display: none;
+}
 .network-disclosure__chev {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 1px solid var(--rule-strong, rgba(14,21,48,.16));
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, 0.16));
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background .2s var(--ease), border-color .2s var(--ease);
+  transition:
+    background 0.2s var(--ease),
+    border-color 0.2s var(--ease);
 }
 .network-disclosure__chev::before {
   content: '';
@@ -152,7 +160,7 @@
   border-right: 1.4px solid var(--navy);
   border-bottom: 1.4px solid var(--navy);
   transform: rotate(45deg) translate(-1px, -1px);
-  transition: transform .25s var(--ease);
+  transition: transform 0.25s var(--ease);
 }
 .network-disclosure[open] .network-disclosure__chev {
   background: var(--accent);
@@ -164,24 +172,35 @@
 }
 .network-disclosure__body {
   margin-top: 1rem;
-  animation: network-disclosure-in .3s var(--ease);
+  animation: network-disclosure-in 0.3s var(--ease);
 }
 @keyframes network-disclosure-in {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .network-disclosure__body { animation: none; }
+  .network-disclosure__body {
+    animation: none;
+  }
 }
 
-.netv2 { width: 100%; height: auto; }
+.netv2 {
+  width: 100%;
+  height: auto;
+}
 
 /* Footnote sits below the SVG. Smaller type and ink-3 colour so
    it reads as a methodology note, not competing prose. */
 .network-diagram__note {
   margin: 1rem 0 0;
   font-family: var(--font-sans);
-  font-size: .78rem;
+  font-size: 0.78rem;
   line-height: 1.5;
   color: var(--ink-3);
   font-style: italic;
@@ -204,25 +223,69 @@
   animation: netv2-bob 6.5s ease-in-out infinite;
   will-change: transform;
 }
-.netv2__bob--A { animation-delay:  -0.0s; animation-duration: 6.2s; }
-.netv2__bob--B { animation-delay:  -1.4s; animation-duration: 7.1s; }
-.netv2__bob--C { animation-delay:  -2.6s; animation-duration: 5.8s; }
-.netv2__bob--D { animation-delay:  -0.7s; animation-duration: 6.8s; }
-.netv2__bob--E { animation-delay:  -3.1s; animation-duration: 6.4s; }
-.netv2__bob--F { animation-delay:  -1.9s; animation-duration: 7.4s; }
-.netv2__bob--G { animation-delay:  -4.2s; animation-duration: 5.9s; }
-.netv2__bob--H { animation-delay:  -2.2s; animation-duration: 6.6s; }
-.netv2__bob--I { animation-delay:  -3.7s; animation-duration: 7.2s; }
-.netv2__bob--J { animation-delay:  -1.1s; animation-duration: 6.0s; }
-.netv2__bob--K { animation-delay:  -0.4s; animation-duration: 7.6s; }
+.netv2__bob--A {
+  animation-delay: -0s;
+  animation-duration: 6.2s;
+}
+.netv2__bob--B {
+  animation-delay: -1.4s;
+  animation-duration: 7.1s;
+}
+.netv2__bob--C {
+  animation-delay: -2.6s;
+  animation-duration: 5.8s;
+}
+.netv2__bob--D {
+  animation-delay: -0.7s;
+  animation-duration: 6.8s;
+}
+.netv2__bob--E {
+  animation-delay: -3.1s;
+  animation-duration: 6.4s;
+}
+.netv2__bob--F {
+  animation-delay: -1.9s;
+  animation-duration: 7.4s;
+}
+.netv2__bob--G {
+  animation-delay: -4.2s;
+  animation-duration: 5.9s;
+}
+.netv2__bob--H {
+  animation-delay: -2.2s;
+  animation-duration: 6.6s;
+}
+.netv2__bob--I {
+  animation-delay: -3.7s;
+  animation-duration: 7.2s;
+}
+.netv2__bob--J {
+  animation-delay: -1.1s;
+  animation-duration: 6s;
+}
+.netv2__bob--K {
+  animation-delay: -0.4s;
+  animation-duration: 7.6s;
+}
 @keyframes netv2-bob {
-  0%, 100% { transform: translate( 0px,   0px); }
-  25%      { transform: translate( 1.2px, -2px); }
-  50%      { transform: translate( 0px,  -3px); }
-  75%      { transform: translate(-1.2px, -1.4px); }
+  0%,
+  100% {
+    transform: translate(0px, 0px);
+  }
+  25% {
+    transform: translate(1.2px, -2px);
+  }
+  50% {
+    transform: translate(0px, -3px);
+  }
+  75% {
+    transform: translate(-1.2px, -1.4px);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .netv2__bob { animation: none; }
+  .netv2__bob {
+    animation: none;
+  }
 }
 
 .netv2__node {
@@ -238,16 +301,32 @@
 }
 /* Seed cluster: A, B, C — pre-existing participants, on-screen
    from the first few % of the cycle. */
-.netv2__node--A { animation-name: netv2-node-A; }
-.netv2__node--B { animation-name: netv2-node-B; }
-.netv2__node--C { animation-name: netv2-node-C; }
+.netv2__node--A {
+  animation-name: netv2-node-A;
+}
+.netv2__node--B {
+  animation-name: netv2-node-B;
+}
+.netv2__node--C {
+  animation-name: netv2-node-C;
+}
 /* Growth wave: D, E, F, J — enter at 18-25%. */
-.netv2__node--D { animation-name: netv2-node-D; }
-.netv2__node--E { animation-name: netv2-node-E; }
-.netv2__node--F { animation-name: netv2-node-F; }
-.netv2__node--J { animation-name: netv2-node-J; }
+.netv2__node--D {
+  animation-name: netv2-node-D;
+}
+.netv2__node--E {
+  animation-name: netv2-node-E;
+}
+.netv2__node--F {
+  animation-name: netv2-node-F;
+}
+.netv2__node--J {
+  animation-name: netv2-node-J;
+}
 /* Extension: G — fills in the lower-left at ~36%. */
-.netv2__node--G { animation-name: netv2-node-G; }
+.netv2__node--G {
+  animation-name: netv2-node-G;
+}
 /* Hub K — bigger, slightly filled, appears at 50% as the
    network's center forms. */
 .netv2__node--K {
@@ -256,8 +335,12 @@
   stroke-width: 2;
 }
 /* Final: H, I — close out the periphery at 66-72%. */
-.netv2__node--H { animation-name: netv2-node-H; }
-.netv2__node--I { animation-name: netv2-node-I; }
+.netv2__node--H {
+  animation-name: netv2-node-H;
+}
+.netv2__node--I {
+  animation-name: netv2-node-I;
+}
 
 /* Each node keyframe carries three pieces of state:
    - opacity / scale: spawn pop, then settle
@@ -266,95 +349,400 @@
      edge has drawn. The visual reads "this participant joined,
      then became a working member of the network." */
 @keyframes netv2-node-A {
-  0%, 2%    { opacity: 0; transform: scale(.4); fill: var(--white); }
-  4%, 6%    { opacity: 1; transform: scale(1.5); fill: var(--white); }
-  8%, 14%   { opacity: 1; transform: scale(1); fill: var(--white); }
-  18%, 44%  { transform: scale(1); fill: var(--accent); }
-  46%       { transform: scale(1.18); }
-  48%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  2% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  4%,
+  6% {
+    opacity: 1;
+    transform: scale(1.5);
+    fill: var(--white);
+  }
+  8%,
+  14% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  18%,
+  44% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  46% {
+    transform: scale(1.18);
+  }
+  48%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-B {
-  0%, 4%    { opacity: 0; transform: scale(.4); fill: var(--white); }
-  6%, 8%    { opacity: 1; transform: scale(1.45); fill: var(--white); }
-  10%, 16%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  20%, 58%  { transform: scale(1); fill: var(--accent); }
-  60%       { transform: scale(1.18); }
-  62%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  4% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  6%,
+  8% {
+    opacity: 1;
+    transform: scale(1.45);
+    fill: var(--white);
+  }
+  10%,
+  16% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  20%,
+  58% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+  62%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-C {
-  0%, 7%    { opacity: 0; transform: scale(.4); fill: var(--white); }
-  9%, 11%   { opacity: 1; transform: scale(1.45); fill: var(--white); }
-  13%, 19%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  23%, 72%  { transform: scale(1); fill: var(--accent); }
-  74%       { transform: scale(1.16); }
-  76%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  7% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  9%,
+  11% {
+    opacity: 1;
+    transform: scale(1.45);
+    fill: var(--white);
+  }
+  13%,
+  19% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  23%,
+  72% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  74% {
+    transform: scale(1.16);
+  }
+  76%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-D {
-  0%, 17%   { opacity: 0; transform: scale(.4); fill: var(--white); }
-  19%, 22%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
-  24%, 30%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  34%, 64%  { transform: scale(1); fill: var(--accent); }
-  66%       { transform: scale(1.18); }
-  68%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  17% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  19%,
+  22% {
+    opacity: 1;
+    transform: scale(1.45);
+    fill: var(--white);
+  }
+  24%,
+  30% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  34%,
+  64% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  66% {
+    transform: scale(1.18);
+  }
+  68%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-E {
-  0%, 20%   { opacity: 0; transform: scale(.4); fill: var(--white); }
-  22%, 25%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
-  27%, 33%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  37%, 76%  { transform: scale(1); fill: var(--accent); }
-  78%       { transform: scale(1.16); }
-  80%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  20% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  22%,
+  25% {
+    opacity: 1;
+    transform: scale(1.45);
+    fill: var(--white);
+  }
+  27%,
+  33% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  37%,
+  76% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  78% {
+    transform: scale(1.16);
+  }
+  80%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-F {
-  0%, 24%   { opacity: 0; transform: scale(.4); fill: var(--white); }
-  26%, 29%  { opacity: 1; transform: scale(1.55); fill: var(--white); }
-  31%, 38%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  42%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  24% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  26%,
+  29% {
+    opacity: 1;
+    transform: scale(1.55);
+    fill: var(--white);
+  }
+  31%,
+  38% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  42%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-J {
-  0%, 28%   { opacity: 0; transform: scale(.4); fill: var(--white); }
-  30%, 33%  { opacity: 1; transform: scale(1.55); fill: var(--white); }
-  35%, 42%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  46%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  28% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  30%,
+  33% {
+    opacity: 1;
+    transform: scale(1.55);
+    fill: var(--white);
+  }
+  35%,
+  42% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  46%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-G {
-  0%, 36%   { opacity: 0; transform: scale(.4); fill: var(--white); }
-  38%, 41%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
-  43%, 50%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  54%, 82%  { transform: scale(1); fill: var(--accent); }
-  84%       { transform: scale(1.16); }
-  86%       { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  36% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  38%,
+  41% {
+    opacity: 1;
+    transform: scale(1.45);
+    fill: var(--white);
+  }
+  43%,
+  50% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  54%,
+  82% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  84% {
+    transform: scale(1.16);
+  }
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-K {
-  0%, 49%   { opacity: 0; transform: scale(.3); fill: var(--accent-rgba-18); }
-  52%, 55%  { opacity: 1; transform: scale(1.6); fill: var(--accent-rgba-18); }
-  58%, 64%  { opacity: 1; transform: scale(1); fill: var(--accent-rgba-18); }
-  68%, 80%  { transform: scale(1); fill: var(--accent); }
-  82%       { transform: scale(1.18); }
-  84%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  49% {
+    opacity: 0;
+    transform: scale(0.3);
+    fill: var(--accent-rgba-18);
+  }
+  52%,
+  55% {
+    opacity: 1;
+    transform: scale(1.6);
+    fill: var(--accent-rgba-18);
+  }
+  58%,
+  64% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--accent-rgba-18);
+  }
+  68%,
+  80% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  82% {
+    transform: scale(1.18);
+  }
+  84%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-H {
-  0%, 64%   { opacity: 0; transform: scale(.4); fill: var(--white); }
-  66%, 69%  { opacity: 1; transform: scale(1.45); fill: var(--white); }
-  71%, 76%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  80%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  64% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  66%,
+  69% {
+    opacity: 1;
+    transform: scale(1.45);
+    fill: var(--white);
+  }
+  71%,
+  76% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  80%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 @keyframes netv2-node-I {
-  0%, 68%   { opacity: 0; transform: scale(.4); fill: var(--white); }
-  70%, 73%  { opacity: 1; transform: scale(1.5); fill: var(--white); }
-  75%, 80%  { opacity: 1; transform: scale(1); fill: var(--white); }
-  83%, 86%  { transform: scale(1); fill: var(--accent); }
-  90%, 100% { opacity: 0; transform: scale(.9); fill: var(--accent); }
+  0%,
+  68% {
+    opacity: 0;
+    transform: scale(0.4);
+    fill: var(--white);
+  }
+  70%,
+  73% {
+    opacity: 1;
+    transform: scale(1.5);
+    fill: var(--white);
+  }
+  75%,
+  80% {
+    opacity: 1;
+    transform: scale(1);
+    fill: var(--white);
+  }
+  83%,
+  86% {
+    transform: scale(1);
+    fill: var(--accent);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+    fill: var(--accent);
+  }
 }
 
 /* Edges. Each draws shortly after its endpoint nodes have both
@@ -375,70 +763,205 @@
 }
 .netv2__edge--ab,
 .netv2__edge--ac,
-.netv2__edge--bc { animation-name: netv2-edge-seed; }
+.netv2__edge--bc {
+  animation-name: netv2-edge-seed;
+}
 .netv2__edge--bd,
-.netv2__edge--cd { animation-name: netv2-edge-growth-1; }
+.netv2__edge--cd {
+  animation-name: netv2-edge-growth-1;
+}
 .netv2__edge--de,
 .netv2__edge--df,
-.netv2__edge--ef { animation-name: netv2-edge-growth-2; }
+.netv2__edge--ef {
+  animation-name: netv2-edge-growth-2;
+}
 .netv2__edge--cj,
-.netv2__edge--aj { animation-name: netv2-edge-growth-3; }
+.netv2__edge--aj {
+  animation-name: netv2-edge-growth-3;
+}
 .netv2__edge--cg,
-.netv2__edge--gj { animation-name: netv2-edge-extend; }
+.netv2__edge--gj {
+  animation-name: netv2-edge-extend;
+}
 .netv2__edge--dk,
 .netv2__edge--ek,
 .netv2__edge--ak,
-.netv2__edge--kg { animation-name: netv2-edge-hub; }
+.netv2__edge--kg {
+  animation-name: netv2-edge-hub;
+}
 .netv2__edge--kh,
 .netv2__edge--gh,
 .netv2__edge--hi,
-.netv2__edge--ei { animation-name: netv2-edge-final; }
+.netv2__edge--ei {
+  animation-name: netv2-edge-final;
+}
 
 @keyframes netv2-edge-seed {
-  0%, 9%    { stroke-opacity: 0; stroke-dashoffset: 100; }
-  12%, 15%  { stroke-opacity: .85; stroke-dashoffset: 0; }
-  17%, 86%  { stroke-opacity: .32; stroke-dashoffset: 0; }
-  90%, 100% { stroke-opacity: 0; stroke-dashoffset: 0; }
+  0%,
+  9% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  12%,
+  15% {
+    stroke-opacity: 0.85;
+    stroke-dashoffset: 0;
+  }
+  17%,
+  86% {
+    stroke-opacity: 0.32;
+    stroke-dashoffset: 0;
+  }
+  90%,
+  100% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes netv2-edge-growth-1 {
-  0%, 21%   { stroke-opacity: 0; stroke-dashoffset: 100; }
-  24%, 27%  { stroke-opacity: .85; stroke-dashoffset: 0; }
-  29%, 86%  { stroke-opacity: .32; stroke-dashoffset: 0; }
-  90%, 100% { stroke-opacity: 0; stroke-dashoffset: 0; }
+  0%,
+  21% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  24%,
+  27% {
+    stroke-opacity: 0.85;
+    stroke-dashoffset: 0;
+  }
+  29%,
+  86% {
+    stroke-opacity: 0.32;
+    stroke-dashoffset: 0;
+  }
+  90%,
+  100% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes netv2-edge-growth-2 {
-  0%, 26%   { stroke-opacity: 0; stroke-dashoffset: 100; }
-  29%, 32%  { stroke-opacity: .85; stroke-dashoffset: 0; }
-  34%, 86%  { stroke-opacity: .32; stroke-dashoffset: 0; }
-  90%, 100% { stroke-opacity: 0; stroke-dashoffset: 0; }
+  0%,
+  26% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  29%,
+  32% {
+    stroke-opacity: 0.85;
+    stroke-dashoffset: 0;
+  }
+  34%,
+  86% {
+    stroke-opacity: 0.32;
+    stroke-dashoffset: 0;
+  }
+  90%,
+  100% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes netv2-edge-growth-3 {
-  0%, 31%   { stroke-opacity: 0; stroke-dashoffset: 100; }
-  34%, 37%  { stroke-opacity: .85; stroke-dashoffset: 0; }
-  39%, 86%  { stroke-opacity: .32; stroke-dashoffset: 0; }
-  90%, 100% { stroke-opacity: 0; stroke-dashoffset: 0; }
+  0%,
+  31% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  34%,
+  37% {
+    stroke-opacity: 0.85;
+    stroke-dashoffset: 0;
+  }
+  39%,
+  86% {
+    stroke-opacity: 0.32;
+    stroke-dashoffset: 0;
+  }
+  90%,
+  100% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes netv2-edge-extend {
-  0%, 40%   { stroke-opacity: 0; stroke-dashoffset: 100; }
-  43%, 46%  { stroke-opacity: .85; stroke-dashoffset: 0; }
-  48%, 86%  { stroke-opacity: .32; stroke-dashoffset: 0; }
-  90%, 100% { stroke-opacity: 0; stroke-dashoffset: 0; }
+  0%,
+  40% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  43%,
+  46% {
+    stroke-opacity: 0.85;
+    stroke-dashoffset: 0;
+  }
+  48%,
+  86% {
+    stroke-opacity: 0.32;
+    stroke-dashoffset: 0;
+  }
+  90%,
+  100% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes netv2-edge-hub {
-  0%, 54%   { stroke-opacity: 0; stroke-dashoffset: 100; }
-  57%, 60%  { stroke-opacity: .95; stroke-dashoffset: 0; }
-  62%, 86%  { stroke-opacity: .38; stroke-dashoffset: 0; }
-  90%, 100% { stroke-opacity: 0; stroke-dashoffset: 0; }
+  0%,
+  54% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  57%,
+  60% {
+    stroke-opacity: 0.95;
+    stroke-dashoffset: 0;
+  }
+  62%,
+  86% {
+    stroke-opacity: 0.38;
+    stroke-dashoffset: 0;
+  }
+  90%,
+  100% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes netv2-edge-final {
-  0%, 68%   { stroke-opacity: 0; stroke-dashoffset: 100; }
-  71%, 74%  { stroke-opacity: .85; stroke-dashoffset: 0; }
-  76%, 86%  { stroke-opacity: .35; stroke-dashoffset: 0; }
-  90%, 100% { stroke-opacity: 0; stroke-dashoffset: 0; }
+  0%,
+  68% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  71%,
+  74% {
+    stroke-opacity: 0.85;
+    stroke-dashoffset: 0;
+  }
+  76%,
+  86% {
+    stroke-opacity: 0.35;
+    stroke-dashoffset: 0;
+  }
+  90%,
+  100% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .netv2__node, .netv2__edge { animation: none; opacity: 1; }
-  .netv2__node { fill: var(--white); }
-  .netv2__edge { stroke-opacity: .35; stroke-dashoffset: 0; }
+  .netv2__node,
+  .netv2__edge {
+    animation: none;
+    opacity: 1;
+  }
+  .netv2__node {
+    fill: var(--white);
+  }
+  .netv2__edge {
+    stroke-opacity: 0.35;
+    stroke-dashoffset: 0;
+  }
 }

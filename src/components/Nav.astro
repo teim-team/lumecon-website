@@ -6,6 +6,7 @@ interface Props {
 }
 const { isHome = false } = Astro.props;
 ---
+
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
   <div class="nav-w">
     <div class="nav-brand">
@@ -30,7 +31,7 @@ const { isHome = false } = Astro.props;
 </nav>
 
 <script>
-  (function() {
+  (function () {
     const hb = document.getElementById('hamburger');
     const nl = document.getElementById('navLinks');
     if (!hb || !nl) return;
@@ -54,7 +55,7 @@ const { isHome = false } = Astro.props;
       nl.classList.contains('open') ? closeMenu() : openMenu();
     });
 
-    nl.querySelectorAll('a').forEach(a => {
+    nl.querySelectorAll('a').forEach((a) => {
       a.addEventListener('click', closeMenu);
     });
 

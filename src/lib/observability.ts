@@ -53,10 +53,10 @@ const readConfig = (): ObservabilityConfig | null => {
   const env = import.meta.env;
   const cfg = {
     applicationId: env.PUBLIC_DATADOG_APPLICATION_ID,
-    clientToken:   env.PUBLIC_DATADOG_CLIENT_TOKEN,
-    site:          env.PUBLIC_DATADOG_SITE,
-    service:       env.PUBLIC_DATADOG_SERVICE,
-    env:           env.PUBLIC_DATADOG_ENV,
+    clientToken: env.PUBLIC_DATADOG_CLIENT_TOKEN,
+    site: env.PUBLIC_DATADOG_SITE,
+    service: env.PUBLIC_DATADOG_SERVICE,
+    env: env.PUBLIC_DATADOG_ENV,
   };
   if (!cfg.applicationId || !cfg.clientToken || !cfg.site || !cfg.service || !cfg.env) {
     return null;
@@ -98,7 +98,8 @@ export function initObservability(): Promise<void> {
       if (!warnedUnconfigured && typeof console !== 'undefined') {
         warnedUnconfigured = true;
         // One-time hint in dev; muted in production builds.
-        if (import.meta.env.DEV) console.info('[observability] Datadog env vars not set; tracking is a no-op.');
+        if (import.meta.env.DEV)
+          console.info('[observability] Datadog env vars not set; tracking is a no-op.');
       }
       return;
     }

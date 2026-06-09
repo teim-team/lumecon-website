@@ -1,10 +1,43 @@
 ---
 const { class: className = '' } = Astro.props as { class?: string };
 ---
+
 <svg class={`icon icon--data ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
   <!-- Bars stay still; the gold fill sweeps from one to the next. -->
-  <rect class="icon-data__bar icon-data__bar--a" x="3.5"  y="14" width="3.5" height="7"  stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
-  <rect class="icon-data__bar icon-data__bar--b" x="8.75" y="10" width="3.5" height="11" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
-  <rect class="icon-data__bar icon-data__bar--c" x="14"   y="6"  width="3.5" height="15" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
-  <rect class="icon-data__bar icon-data__bar--d" x="19.25" y="12" width="3.5" height="9"  stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter"/>
+  <rect
+    class="icon-data__bar icon-data__bar--a"
+    x="3.5"
+    y="14"
+    width="3.5"
+    height="7"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linejoin="miter"></rect>
+  <rect
+    class="icon-data__bar icon-data__bar--b"
+    x="8.75"
+    y="10"
+    width="3.5"
+    height="11"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linejoin="miter"></rect>
+  <rect
+    class="icon-data__bar icon-data__bar--c"
+    x="14"
+    y="6"
+    width="3.5"
+    height="15"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linejoin="miter"></rect>
+  <rect
+    class="icon-data__bar icon-data__bar--d"
+    x="19.25"
+    y="12"
+    width="3.5"
+    height="9"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linejoin="miter"></rect>
 </svg>
