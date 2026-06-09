@@ -1,42 +1,42 @@
 :root {
   /* Lumecon Inc. — bold, modern govt-software palette.
      Pure white surfaces, saturated brand accents, no muddy mid-tones. */
-  --white: #FFFFFF;
-  --cream: #FFFFFF;          /* same as white; sections separate via hairlines, not tint */
-  --paper: #F7F7F8;          /* one rare softer surface (forms, panels), barely off-white */
-  --navy: #0A0F26;           /* deeper, more saturated near-black-navy */
-  --navy2: #1A2046;
-  --navy-soft: rgba(10, 15, 38, .68);
-  --ink: #0A0F26;
-  --ink-2: #353B5C;
-  --ink-3: #6B6F8A;
-  --ink-4: #9DA1B5;
-  --terra: #E04A2A;          /* bold coral-orange */
-  --terra-dark: #B33013;
-  --terra-light: #F58057;
-  --cedar: #0E8B4F;          /* saturated forest green */
-  --cedar-light: #1BB66A;
-  --cedar-mist: #E0F2E7;
-  --green: #0E8B4F;
-  --green-deep: #0B5E36;
-  --gold: #F0A91A;           /* brand gold — reserved for the wordmark and the "luminate" emphasis. NOT a UI accent. */
-  --gold-light: #FFD24B;
-  --goldbar: #FFE7A0;
+  --white: #ffffff;
+  --cream: #ffffff; /* same as white; sections separate via hairlines, not tint */
+  --paper: #f7f7f8; /* one rare softer surface (forms, panels), barely off-white */
+  --navy: #0a0f26; /* deeper, more saturated near-black-navy */
+  --navy2: #1a2046;
+  --navy-soft: rgba(10, 15, 38, 0.68);
+  --ink: #0a0f26;
+  --ink-2: #353b5c;
+  --ink-3: #6b6f8a;
+  --ink-4: #9da1b5;
+  --terra: #e04a2a; /* bold coral-orange */
+  --terra-dark: #b33013;
+  --terra-light: #f58057;
+  --cedar: #0e8b4f; /* saturated forest green */
+  --cedar-light: #1bb66a;
+  --cedar-mist: #e0f2e7;
+  --green: #0e8b4f;
+  --green-deep: #0b5e36;
+  --gold: #f0a91a; /* brand gold — reserved for the wordmark and the "luminate" emphasis. NOT a UI accent. */
+  --gold-light: #ffd24b;
+  --goldbar: #ffe7a0;
   /* UI accent palette — teal. Used for eyebrows, numbers, focus
      rings, hovers, icon highlights, dividers. Gold is reserved for
      the brand wordmark "luminate" so it reads as deliberate brand
      DNA, not a default accent. */
-  --accent: #0FB5A5;
-  --accent-light: #5FD9CC;
-  --accent-bar: #B8EDE6;
-  --accent-hover: #2DC9BA;
-  --accent-btn-hover: #0A8A7E;
-  --accent-deep: #0A8A7E;
+  --accent: #0fb5a5;
+  --accent-light: #5fd9cc;
+  --accent-bar: #b8ede6;
+  --accent-hover: #2dc9ba;
+  --accent-btn-hover: #0a8a7e;
+  --accent-deep: #0a8a7e;
   /* Deepened teal for surfaces that carry WHITE text (Cedar chips,
      sent-message bubbles, send button). The bright --accent gives only
      ~2.6:1 with white — below WCAG AA — so white-on-teal UI uses these
      instead (~4.9:1 / hover ~6:1) while keeping a teal identity. */
-  --accent-chip: #0A7F74;
+  --accent-chip: #0a7f74;
   --accent-chip-hover: #086960;
   /* Semantic token for teal *text/links/focus rings* on the current
      surface. Light mode: accent-chip (4.88:1 on white, AA). Dark mode is
@@ -44,40 +44,39 @@
      since the deeper chip teal fails AA on a dark surface. Keep
      --accent-chip itself for button/chip backgrounds (where white text
      needs the darker hue). */
-  --accent-text: #0A7F74;
+  --accent-text: #0a7f74;
   /* Cedar-green text. Same pattern as --accent-text: the bright --cedar
      #0E8B4F only gets 4.35:1 on white (fails AA body text), so for text
      we use the deep variant (7.89:1) and switch to cedar-light in dark
      mode (6.94:1 on dark navy). Keep --cedar for the Cedar FAB and
      decorative fills. */
-  --cedar-text: #0B5E36;
-  --blue: #2E5BD6;           /* bold electric-leaning navy-blue */
-  --blue-deep: #1E40A6;
-  --purple: #6E3DD8;
-  --purple-rule: #6E3DD8;
-  --gray: #353B5C;
-  --graylt: #6B6F8A;
-  --blush: #FFF1ED;
-  --rule: rgba(10, 15, 38, .12);
-  --rule-strong: rgba(10, 15, 38, .24);
-  --ease: cubic-bezier(.22, 1, .36, 1);
+  --cedar-text: #0b5e36;
+  --blue: #2e5bd6; /* bold electric-leaning navy-blue */
+  --blue-deep: #1e40a6;
+  --purple: #6e3dd8;
+  --purple-rule: #6e3dd8;
+  --gray: #353b5c;
+  --graylt: #6b6f8a;
+  --blush: #fff1ed;
+  --rule: rgba(10, 15, 38, 0.12);
+  --rule-strong: rgba(10, 15, 38, 0.24);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --container-max: 1240px;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
-  --error-color: #DC2626;
-  --gold-hover: #FFC83D;
-  --gold-btn-hover: #C98906;
-  --accent-rgba-08: rgba(15, 181, 165, .08);
-  --accent-rgba-18: rgba(15, 181, 165, .18);
+  --error-color: #dc2626;
+  --gold-hover: #ffc83d;
+  --gold-btn-hover: #c98906;
+  --accent-rgba-08: rgba(15, 181, 165, 0.08);
+  --accent-rgba-18: rgba(15, 181, 165, 0.18);
 
   /* Map palette. Source = gold (focal point), tribal = amber-gold
      (warm sibling, deeper than gold so reservations read as a
      distinct layer without leaving the warm family), spillover =
-     teal accent (cool counterpoint). Previously the AIANNH layer
-     used bold coral --terra which fought both the gold source and
-     the teal spillover and made the map feel chromatically chaotic. */
-  --map-tribal:        #C77A18;
-  --map-tribal-deep:   #7A4708;
+     teal accent (cool counterpoint). Avoid bold coral here: it
+     fights both the gold source and the teal spillover. */
+  --map-tribal: #c77a18;
+  --map-tribal-deep: #7a4708;
 
   color-scheme: light dark;
 
@@ -90,20 +89,20 @@
   --font-display: 'Inter', system-ui, -apple-system, sans-serif;
   --font-serif: 'Spectral', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --type-xs:        0.75rem;
-  --type-sm:        0.875rem;
-  --type-base:      1rem;
-  --type-md:        1.125rem;
-  --type-lg:        1.375rem;
-  --type-xl:        1.75rem;
-  --type-2xl:       2.25rem;
-  --type-3xl:       3rem;
-  --type-display:   clamp(2.8rem, 7.5vw, 6rem);
+  --type-xs: 0.75rem;
+  --type-sm: 0.875rem;
+  --type-base: 1rem;
+  --type-md: 1.125rem;
+  --type-lg: 1.375rem;
+  --type-xl: 1.75rem;
+  --type-2xl: 2.25rem;
+  --type-3xl: 3rem;
+  --type-display: clamp(2.8rem, 7.5vw, 6rem);
   --weight-regular: 400;
-  --weight-medium:  500;
-  --weight-semi:    600;
-  --weight-bold:    700;
-  --weight-black:   800;
+  --weight-medium: 500;
+  --weight-semi: 600;
+  --weight-bold: 700;
+  --weight-black: 800;
 }
 
 /* Dark mode is token-flip based (see the @media block below): most
@@ -115,7 +114,13 @@
    a component that hardcodes rgba(255,255,255,X) for a background or a
    --navy fill, give it a matching dark-mode override there. */
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: var(--font-sans);
@@ -152,45 +157,65 @@ body {
    both light and dark surfaces. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --white:        #0F1530;
-    --cream:        #131838;
-    --paper:        #181E40;
-    --navy:         #F1F3FA;
-    --navy2:        #BCC1D8;
-    --navy-soft:    rgba(241, 243, 250, .68);
-    --ink:          #F1F3FA;
-    --ink-2:        #C9CEDF;
-    --ink-3:        #8C92AB;
-    --ink-4:        #5F647B;
-    --rule:         rgba(255, 255, 255, .12);
-    --rule-strong:  rgba(255, 255, 255, .22);
-    --accent-rgba-08: rgba(15, 181, 165, .14);
-    --accent-rgba-18: rgba(15, 181, 165, .26);
+    --white: #0f1530;
+    --cream: #131838;
+    --paper: #181e40;
+    --navy: #f1f3fa;
+    --navy2: #bcc1d8;
+    --navy-soft: rgba(241, 243, 250, 0.68);
+    --ink: #f1f3fa;
+    --ink-2: #c9cedf;
+    --ink-3: #8c92ab;
+    --ink-4: #5f647b;
+    --rule: rgba(255, 255, 255, 0.12);
+    --rule-strong: rgba(255, 255, 255, 0.22);
+    --accent-rgba-08: rgba(15, 181, 165, 0.14);
+    --accent-rgba-18: rgba(15, 181, 165, 0.26);
     /* On a dark surface, the deeper chip teal (#0A7F74) only gets 3.68:1
        and fails AA for body text. Switch the text-accent token to the
        lighter teal, which lands at 10.66:1 on the dark navy surface. */
-    --accent-text: #5FD9CC;
+    --accent-text: #5fd9cc;
     /* Brighter cedar so green text clears AA against the dark surface. */
-    --cedar-text: #1BB66A;
+    --cedar-text: #1bb66a;
     /* Highlight tints need more punch to read on a dark surface. */
-    --gold:         #FFC83D;
+    --gold: #ffc83d;
   }
 
   /* Primary CTA: keep accent teal as the saturated action color in
      dark mode (navy is no longer a dark hue). */
   .btn {
     background: var(--accent);
-    color: #0A0F26;
+    color: #0a0f26;
     border-color: var(--accent);
   }
-  .btn:hover { background: var(--accent-light); border-color: var(--accent-light); }
-  .btn--ghost { background: transparent; color: var(--navy); border-color: var(--rule-strong); }
-  .btn--ghost:hover { background: var(--accent); color: #0A0F26; border-color: var(--accent); }
+  .btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent-light);
+  }
+  .btn--ghost {
+    background: transparent;
+    color: var(--navy);
+    border-color: var(--rule-strong);
+  }
+  .btn--ghost:hover {
+    background: var(--accent);
+    color: #0a0f26;
+    border-color: var(--accent);
+  }
 
   /* Nav sign-up button mirrors the primary CTA. */
-  .nav-links .nav-cta { background: var(--accent); color: #0A0F26; }
-  .nav-links .nav-cta:hover { background: var(--accent-light); }
-  .nav-links .nav-ghost:hover { background: var(--accent); color: #0A0F26; border-color: var(--accent); }
+  .nav-links .nav-cta {
+    background: var(--accent);
+    color: #0a0f26;
+  }
+  .nav-links .nav-cta:hover {
+    background: var(--accent-light);
+  }
+  .nav-links .nav-ghost:hover {
+    background: var(--accent);
+    color: #0a0f26;
+    border-color: var(--accent);
+  }
 
   /* Hamburger lines were navy on white nav; now need to show on
      dark nav. They use background: var(--navy) which we flipped to
@@ -199,17 +224,26 @@ body {
   /* Footer-bar: the dark stripe at the very bottom of every page
      stays a deeper navy so it still reads as a defined band rather
      than blending into the page. */
-  .footer-bar { background-color: #050920; color: #BCC1D8; }
-  .footer-email { color: rgba(241, 243, 250, .75); }
-  .footer-email:hover { color: var(--accent-text); }
+  .footer-bar {
+    background-color: #050920;
+    color: #bcc1d8;
+  }
+  .footer-email {
+    color: rgba(241, 243, 250, 0.75);
+  }
+  .footer-email:hover {
+    color: var(--accent-text);
+  }
 
   /* Form fields: white-on-white in light mode becomes paper-on-
      surface in dark mode. */
   .cta-form a#formSend {
     background: var(--accent);
-    color: #0A0F26;
+    color: #0a0f26;
   }
-  .cta-form a#formSend:hover { background: var(--accent-light); }
+  .cta-form a#formSend:hover {
+    background: var(--accent-light);
+  }
 
   /* Cedar FAB stays a saturated green bubble in both modes. */
 
@@ -218,14 +252,16 @@ body {
      contrast is the only thing to nudge. */
 
   /* Forms / inputs on signup/login pages get a darker paper. */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     color-scheme: dark;
   }
 
   /* Pricing platform tile gradient overlay: the soft accent tint
      reads as too-faint on dark; bump opacity. */
   .pricing-platform-tile.is-active {
-    background: linear-gradient(0deg, rgba(15, 181, 165, .14) 0%, var(--white) 100%);
+    background: linear-gradient(0deg, rgba(15, 181, 165, 0.14) 0%, var(--white) 100%);
   }
   /* The nav surface override lives in nav.css instead — nav.css loads
      after global.css, so an equal-specificity rule here would lose the
@@ -264,10 +300,14 @@ html {
 /* Disable snap on small landscape screens — phones in landscape have
    too little vertical room for 100dvh sections to feel right. */
 @media (max-height: 480px) {
-  html { scroll-snap-type: none; }
+  html {
+    scroll-snap-type: none;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-snap-type: none; }
+  html {
+    scroll-snap-type: none;
+  }
 }
 .snap-section {
   scroll-snap-align: start;
@@ -289,16 +329,29 @@ html {
    don't dissolve into the background, and the focus ring maps to the
    system Highlight color. */
 @media (forced-colors: active) {
-  *:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
-  .btn, .nav-cta, .nav-ghost,
-  .cedar-chip, .cedar-chip-more, .cedar-chat__send, .cedar-fab,
-  .cedar-feedback__btn, .cedar-followup,
-  .pricing-platform-tile, .pricing-tier-card .btn,
-  .hero-path, .wfilter, .workspace__again, .hero-coachmark__close {
+  *:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .btn,
+  .nav-cta,
+  .nav-ghost,
+  .cedar-chip,
+  .cedar-chip-more,
+  .cedar-chat__send,
+  .cedar-fab,
+  .cedar-feedback__btn,
+  .cedar-followup,
+  .pricing-platform-tile,
+  .pricing-tier-card .btn,
+  .hero-path,
+  .wfilter,
+  .workspace__again,
+  .hero-coachmark__close {
     border: 1px solid ButtonText;
   }
   /* Selected / pressed / active states need a non-color cue. */
-  [aria-pressed="true"],
+  [aria-pressed='true'],
   .wfilter.is-active,
   .cedar-feedback__btn.is-selected {
     outline: 2px solid Highlight;
@@ -315,16 +368,16 @@ html {
    together.) */
 @media (prefers-contrast: more) and (prefers-color-scheme: light) {
   :root {
-    --rule: rgba(10, 15, 38, .34);
-    --rule-strong: rgba(10, 15, 38, .55);
-    --ink-3: #4A4F6B;
+    --rule: rgba(10, 15, 38, 0.34);
+    --rule-strong: rgba(10, 15, 38, 0.55);
+    --ink-3: #4a4f6b;
   }
 }
 @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
   :root {
-    --rule: rgba(255, 255, 255, .34);
-    --rule-strong: rgba(255, 255, 255, .55);
-    --ink-3: #B8BED6;
+    --rule: rgba(255, 255, 255, 0.34);
+    --rule-strong: rgba(255, 255, 255, 0.55);
+    --ink-3: #b8bed6;
   }
 }
 
@@ -342,12 +395,24 @@ html {
   animation: icon-local-scan 8s ease-in-out infinite;
 }
 @keyframes icon-local-scan {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(4.3px, 0); }
-  40%  { transform: translate(4.3px, 4.3px); }
-  60%  { transform: translate(0, 4.3px); }
-  80%  { transform: translate(-4.3px, 0); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(4.3px, 0);
+  }
+  40% {
+    transform: translate(4.3px, 4.3px);
+  }
+  60% {
+    transform: translate(0, 4.3px);
+  }
+  80% {
+    transform: translate(-4.3px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 /* Tribal: three inner nodes pulse in a wave (community heartbeat).
@@ -358,13 +423,26 @@ html {
   transform-origin: center;
   animation: icon-tribal-pulse 2.8s ease-in-out infinite;
 }
-.icon--tribal .icon-tribal__dot--b { animation-delay: .25s; }
-.icon--tribal .icon-tribal__dot--c { animation-delay: .5s; }
+.icon--tribal .icon-tribal__dot--b {
+  animation-delay: 0.25s;
+}
+.icon--tribal .icon-tribal__dot--c {
+  animation-delay: 0.5s;
+}
 @keyframes icon-tribal-pulse {
-  0%, 100% { transform: scale(1);    }
-  45%      { transform: scale(1.35); }
-  60%      { transform: scale(1.15); }
-  80%      { transform: scale(1);    }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.35);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  80% {
+    transform: scale(1);
+  }
 }
 
 /* Global: the cross-border arc draws in over the filled globe,
@@ -380,16 +458,33 @@ html {
   transform-origin: center;
   animation: icon-global-pulse 3.6s ease-in-out infinite;
 }
-.icon--global .icon-global__dot--right { animation-delay: 1.8s; }
+.icon--global .icon-global__dot--right {
+  animation-delay: 1.8s;
+}
 @keyframes icon-global-draw {
-  0%   { stroke-dashoffset: 100; }
-  40%  { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 0; }
+  0% {
+    stroke-dashoffset: 100;
+  }
+  40% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes icon-global-pulse {
-  0%, 60%, 100% { transform: scale(1); }
-  65%, 80%      { transform: scale(1.4); }
-  85%           { transform: scale(1); }
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+  }
+  65%,
+  80% {
+    transform: scale(1.4);
+  }
+  85% {
+    transform: scale(1);
+  }
 }
 
 /* Arborist (picker icon for the Consultant plan): the gold "tending"
@@ -402,9 +497,19 @@ html {
   animation: icon-arborist-pulse 3s ease-in-out infinite;
 }
 @keyframes icon-arborist-pulse {
-  0%, 100% { transform: scale(1);    opacity: 1;   }
-  45%      { transform: scale(1.45); opacity: .85; }
-  65%      { transform: scale(1);    opacity: 1;   }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  45% {
+    transform: scale(1.45);
+    opacity: 0.85;
+  }
+  65% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Upload: the dot moves up into the document (uploading). */
@@ -419,17 +524,45 @@ html {
   animation: icon-upload-arrow 2.6s ease-in-out infinite;
 }
 @keyframes icon-upload-rise {
-  0%   { transform: translateY(0); opacity: 1; }
-  50%  { transform: translateY(-3.5px); opacity: 1; }
-  60%  { transform: translateY(-3.5px); opacity: 0; }
-  61%  { transform: translateY(2px);    opacity: 0; }
-  75%  { transform: translateY(0);      opacity: 1; }
-  100% { transform: translateY(0);      opacity: 1; }
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-3.5px);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-3.5px);
+    opacity: 0;
+  }
+  61% {
+    transform: translateY(2px);
+    opacity: 0;
+  }
+  75% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 @keyframes icon-upload-arrow {
-  0%, 40% { transform: translateY(0); opacity: 1; }
-  60%     { transform: translateY(-1.5px); opacity: .6; }
-  100%    { transform: translateY(0); opacity: 1; }
+  0%,
+  40% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-1.5px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Surface Assumption: a magnifying glass sweeps left-to-right across
@@ -446,39 +579,84 @@ html {
   animation: icon-surface-hit 3.8s ease-in-out infinite;
 }
 @keyframes icon-surface-sweep {
-  0%       { transform: translate(-3px, -2px); }
-  25%      { transform: translate(-3px, -2px); }
-  45%      { transform: translate(0, 0); }
-  70%      { transform: translate(3.5px, 2.5px); }
-  100%     { transform: translate(-3px, -2px); }
+  0% {
+    transform: translate(-3px, -2px);
+  }
+  25% {
+    transform: translate(-3px, -2px);
+  }
+  45% {
+    transform: translate(0, 0);
+  }
+  70% {
+    transform: translate(3.5px, 2.5px);
+  }
+  100% {
+    transform: translate(-3px, -2px);
+  }
 }
 @keyframes icon-surface-hit {
-  0%, 35%      { transform: scale(.4); opacity: 0; }
-  45%, 70%     { transform: scale(1);  opacity: 1; }
-  85%, 100%    { transform: scale(.4); opacity: 0; }
+  0%,
+  35% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  45%,
+  70% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  85%,
+  100% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
 }
 
 /* Source record: each line draws in, then the gold check completes. */
 .icon--source-record .icon-record__line {
   stroke-dashoffset: 100;
 }
-.icon--source-record .icon-record__line--a { animation: icon-record-line 3.6s ease-out infinite; }
-.icon--source-record .icon-record__line--b { animation: icon-record-line 3.6s ease-out infinite .25s; }
+.icon--source-record .icon-record__line--a {
+  animation: icon-record-line 3.6s ease-out infinite;
+}
+.icon--source-record .icon-record__line--b {
+  animation: icon-record-line 3.6s ease-out infinite 0.25s;
+}
 .icon--source-record .icon-record__check {
   transform-box: fill-box;
   transform-origin: center;
   animation: icon-record-check 3.6s ease-in-out infinite;
 }
 @keyframes icon-record-line {
-  0%   { stroke-dashoffset: 100; }
-  40%  { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 0; }
+  0% {
+    stroke-dashoffset: 100;
+  }
+  40% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes icon-record-check {
-  0%, 55% { transform: scale(.65); opacity: .35; }
-  70%     { transform: scale(1.2); opacity: 1;   }
-  85%     { transform: scale(1);   opacity: 1;   }
-  100%    { transform: scale(1);   opacity: 1;   }
+  0%,
+  55% {
+    transform: scale(0.65);
+    opacity: 0.35;
+  }
+  70% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  85% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Code: each bracket / slash draws in sequence as if being typed, then
@@ -488,24 +666,52 @@ html {
   stroke-dashoffset: 28;
   animation: icon-code-draw 3.6s ease-in-out infinite;
 }
-.icon--code .icon-code__glyph--a { animation-delay: 0s; }
-.icon--code .icon-code__glyph--b { animation-delay: .35s; }
-.icon--code .icon-code__glyph--c { animation-delay: .7s; }
+.icon--code .icon-code__glyph--a {
+  animation-delay: 0s;
+}
+.icon--code .icon-code__glyph--b {
+  animation-delay: 0.35s;
+}
+.icon--code .icon-code__glyph--c {
+  animation-delay: 0.7s;
+}
 .icon--code .icon-code__caret {
   opacity: 0;
   animation: icon-code-caret 3.6s ease-out infinite;
 }
 @keyframes icon-code-draw {
-  0%       { stroke-dashoffset: 28; }
-  30%, 85% { stroke-dashoffset: 0;  }
-  100%     { stroke-dashoffset: 28; }
+  0% {
+    stroke-dashoffset: 28;
+  }
+  30%,
+  85% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 28;
+  }
 }
 @keyframes icon-code-caret {
-  0%, 38%   { opacity: 0; }
-  42%, 50%  { opacity: 1; }
-  54%, 62%  { opacity: 0; }
-  66%, 74%  { opacity: 1; }
-  78%, 100% { opacity: 0; }
+  0%,
+  38% {
+    opacity: 0;
+  }
+  42%,
+  50% {
+    opacity: 1;
+  }
+  54%,
+  62% {
+    opacity: 0;
+  }
+  66%,
+  74% {
+    opacity: 1;
+  }
+  78%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* ML: the three "code lines" type out in sequence; the gold caret
@@ -515,20 +721,39 @@ html {
   stroke-dashoffset: 12;
   animation: icon-ml-type 3.6s ease-in-out infinite;
 }
-.icon--ml .icon-ml__line--a { animation-delay: 0s; }
-.icon--ml .icon-ml__line--b { animation-delay: .25s; }
-.icon--ml .icon-ml__line--c { animation-delay: .5s; }
+.icon--ml .icon-ml__line--a {
+  animation-delay: 0s;
+}
+.icon--ml .icon-ml__line--b {
+  animation-delay: 0.25s;
+}
+.icon--ml .icon-ml__line--c {
+  animation-delay: 0.5s;
+}
 .icon--ml .icon-ml__caret {
-  animation: icon-ml-blink .9s steps(2, end) infinite;
+  animation: icon-ml-blink 0.9s steps(2, end) infinite;
 }
 @keyframes icon-ml-type {
-  0%       { stroke-dashoffset: 12; }
-  35%, 90% { stroke-dashoffset: 0;  }
-  100%     { stroke-dashoffset: 12; }
+  0% {
+    stroke-dashoffset: 12;
+  }
+  35%,
+  90% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 12;
+  }
 }
 @keyframes icon-ml-blink {
-  0%, 50%   { opacity: 1;   }
-  51%, 100% { opacity: .25; }
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0.25;
+  }
 }
 
 /* Data: bars stay still; gold fill sweeps across them in sequence. */
@@ -536,13 +761,28 @@ html {
   fill: transparent;
   animation: icon-data-sweep 3.2s ease-in-out infinite;
 }
-.icon--data .icon-data__bar--a { animation-delay: 0s; }
-.icon--data .icon-data__bar--b { animation-delay: .4s; }
-.icon--data .icon-data__bar--c { animation-delay: .8s; }
-.icon--data .icon-data__bar--d { animation-delay: 1.2s; }
+.icon--data .icon-data__bar--a {
+  animation-delay: 0s;
+}
+.icon--data .icon-data__bar--b {
+  animation-delay: 0.4s;
+}
+.icon--data .icon-data__bar--c {
+  animation-delay: 0.8s;
+}
+.icon--data .icon-data__bar--d {
+  animation-delay: 1.2s;
+}
 @keyframes icon-data-sweep {
-  0%, 70%, 100% { fill: transparent; }
-  15%, 45%      { fill: var(--accent); }
+  0%,
+  70%,
+  100% {
+    fill: transparent;
+  }
+  15%,
+  45% {
+    fill: var(--accent);
+  }
 }
 
 /* Economist: scatter points flicker in over time (data getting
@@ -556,29 +796,70 @@ html {
 /* Stagger the dots along the X axis (left to right) so the scatter
    looks like data being collected over time, finishing just before
    the regression line starts drawing. */
-.icon--economist .icon-econ__pt--a { animation-delay: 0.00s; }
-.icon--economist .icon-econ__pt--b { animation-delay: 0.13s; }
-.icon--economist .icon-econ__pt--c { animation-delay: 0.26s; }
-.icon--economist .icon-econ__pt--d { animation-delay: 0.39s; }
-.icon--economist .icon-econ__pt--e { animation-delay: 0.52s; }
-.icon--economist .icon-econ__pt--f { animation-delay: 0.65s; }
-.icon--economist .icon-econ__pt--g { animation-delay: 0.78s; }
-.icon--economist .icon-econ__pt--h { animation-delay: 0.91s; }
-.icon--economist .icon-econ__pt--i { animation-delay: 1.04s; }
-.icon--economist .icon-econ__pt--j { animation-delay: 1.17s; }
+.icon--economist .icon-econ__pt--a {
+  animation-delay: 0s;
+}
+.icon--economist .icon-econ__pt--b {
+  animation-delay: 0.13s;
+}
+.icon--economist .icon-econ__pt--c {
+  animation-delay: 0.26s;
+}
+.icon--economist .icon-econ__pt--d {
+  animation-delay: 0.39s;
+}
+.icon--economist .icon-econ__pt--e {
+  animation-delay: 0.52s;
+}
+.icon--economist .icon-econ__pt--f {
+  animation-delay: 0.65s;
+}
+.icon--economist .icon-econ__pt--g {
+  animation-delay: 0.78s;
+}
+.icon--economist .icon-econ__pt--h {
+  animation-delay: 0.91s;
+}
+.icon--economist .icon-econ__pt--i {
+  animation-delay: 1.04s;
+}
+.icon--economist .icon-econ__pt--j {
+  animation-delay: 1.17s;
+}
 .icon--economist .icon-econ__fit {
   animation: icon-econ-fit 4s ease-out infinite;
 }
 @keyframes icon-econ-pt {
-  0%       { opacity: 0; transform: scale(.4); }
-  18%      { opacity: 1; transform: scale(1.15); }
-  28%, 95% { opacity: 1; transform: scale(1); }
-  100%     { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  28%,
+  95% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @keyframes icon-econ-fit {
-  0%, 35% { stroke-dashoffset: 100; }
-  60%, 95% { stroke-dashoffset: 0; }
-  100%    { stroke-dashoffset: 100; }
+  0%,
+  35% {
+    stroke-dashoffset: 100;
+  }
+  60%,
+  95% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
+  }
 }
 
 /* Megaphone: two ripples travel outward; the gold dot pulses at the bell.
@@ -591,20 +872,38 @@ html {
   transform-origin: 17px 12px;
   animation: icon-mega-wave 2.2s ease-out infinite;
 }
-.icon--megaphone .icon-mega__wave--b { animation-delay: .35s; }
+.icon--megaphone .icon-mega__wave--b {
+  animation-delay: 0.35s;
+}
 .icon--megaphone .icon-mega__dot {
   transform-box: fill-box;
   transform-origin: center;
   animation: icon-mega-dot 2.2s ease-in-out infinite;
 }
 @keyframes icon-mega-wave {
-  0%   { opacity: 0; transform: scale(.55); }
-  30%  { opacity: 1; transform: scale(.85); }
-  100% { opacity: 0; transform: scale(1.5); }
+  0% {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
 }
 @keyframes icon-mega-dot {
-  0%, 100% { transform: scale(1);   opacity: 1;  }
-  50%      { transform: scale(1.3); opacity: .85; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.85;
+  }
 }
 
 /* Chat (role-card): the three dots bounce like a typing indicator. */
@@ -613,11 +912,23 @@ html {
   transform-origin: center;
   animation: icon-chat-bounce 1.4s ease-in-out infinite;
 }
-.icon--chat-role .icon-chat__dot--b { animation-delay: .18s; }
-.icon--chat-role .icon-chat__dot--c { animation-delay: .36s; }
+.icon--chat-role .icon-chat__dot--b {
+  animation-delay: 0.18s;
+}
+.icon--chat-role .icon-chat__dot--c {
+  animation-delay: 0.36s;
+}
 @keyframes icon-chat-bounce {
-  0%, 60%, 100% { transform: translateY(0);    opacity: .65; }
-  30%           { transform: translateY(-2px); opacity: 1;   }
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.65;
+  }
+  30% {
+    transform: translateY(-2px);
+    opacity: 1;
+  }
 }
 
 /* Ripple (Join hero): three rings expand outward from a gold center.
@@ -627,21 +938,42 @@ html {
   transform-origin: center;
   animation: icon-ripple-out 3.6s ease-out infinite;
 }
-.icon--ripple .icon-ripple__ring--a { animation-delay: 0s; }
-.icon--ripple .icon-ripple__ring--b { animation-delay: 1.2s; }
-.icon--ripple .icon-ripple__ring--c { animation-delay: 2.4s; }
+.icon--ripple .icon-ripple__ring--a {
+  animation-delay: 0s;
+}
+.icon--ripple .icon-ripple__ring--b {
+  animation-delay: 1.2s;
+}
+.icon--ripple .icon-ripple__ring--c {
+  animation-delay: 2.4s;
+}
 .icon--ripple .icon-ripple__core {
   transform-box: fill-box;
   transform-origin: center;
   animation: icon-ripple-core 3.6s ease-in-out infinite;
 }
 @keyframes icon-ripple-out {
-  0%   { transform: scale(.15); opacity: 1;  stroke-width: 2; }
-  100% { transform: scale(1.6); opacity: 0;  stroke-width: .6; }
+  0% {
+    transform: scale(0.15);
+    opacity: 1;
+    stroke-width: 2;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+    stroke-width: 0.6;
+  }
 }
 @keyframes icon-ripple-core {
-  0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0)); }
-  50%      { transform: scale(1.18); filter: drop-shadow(0 0 6px rgba(15, 181, 165, .55)); }
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0));
+  }
+  50% {
+    transform: scale(1.18);
+    filter: drop-shadow(0 0 6px rgba(15, 181, 165, 0.55));
+  }
 }
 
 /* Shift (Join transition): the bouncer + box + path animations all
@@ -666,19 +998,52 @@ html {
   animation: icon-mentor-mentee 4s ease-out infinite;
 }
 @keyframes icon-mentor-mentor {
-  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0)); }
-  50%      { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(15, 181, 165, .55)); }
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 4px rgba(15, 181, 165, 0.55));
+  }
 }
 @keyframes icon-mentor-line {
-  0%, 12%   { stroke-dashoffset: 100; }
-  40%, 90%  { stroke-dashoffset: 0; }
-  100%      { stroke-dashoffset: 100; }
+  0%,
+  12% {
+    stroke-dashoffset: 100;
+  }
+  40%,
+  90% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
+  }
 }
 @keyframes icon-mentor-mentee {
-  0%, 18%   { transform: scale(.2); opacity: 0; fill: var(--accent); }
-  38%       { transform: scale(1.15); opacity: 1; fill: var(--accent); }
-  50%, 88%  { transform: scale(1); opacity: 1; fill: currentColor; }
-  100%      { transform: scale(.2); opacity: 0; fill: currentColor; }
+  0%,
+  18% {
+    transform: scale(0.2);
+    opacity: 0;
+    fill: var(--accent);
+  }
+  38% {
+    transform: scale(1.15);
+    opacity: 1;
+    fill: var(--accent);
+  }
+  50%,
+  88% {
+    transform: scale(1);
+    opacity: 1;
+    fill: currentColor;
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+    fill: currentColor;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -710,17 +1075,30 @@ html {
   .icon--mentor .icon-mentor__mentee {
     animation: none !important;
   }
-  .icon--ripple .icon-ripple__ring { opacity: .35; }
-  .icon--mentor .icon-mentor__line { stroke-dashoffset: 0; }
+  .icon--ripple .icon-ripple__ring {
+    opacity: 0.35;
+  }
+  .icon--mentor .icon-mentor__line {
+    stroke-dashoffset: 0;
+  }
   .icon--source-record .icon-record__line,
   .icon--ml .icon-ml__line,
   .icon--code .icon-code__glyph,
-  .icon--economist .icon-econ__fit { stroke-dashoffset: 0; }
+  .icon--economist .icon-econ__fit {
+    stroke-dashoffset: 0;
+  }
   .icon--global .icon-global__arc,
   .icon--code .icon-code__caret,
-  .icon--economist .icon-econ__pt { opacity: 1; }
-  .icon--surface .icon-surface__hit { opacity: 1; transform: none; }
-  .icon--data .icon-data__bar { fill: var(--accent); }
+  .icon--economist .icon-econ__pt {
+    opacity: 1;
+  }
+  .icon--surface .icon-surface__hit {
+    opacity: 1;
+    transform: none;
+  }
+  .icon--data .icon-data__bar {
+    fill: var(--accent);
+  }
 }
 
 /* Keyboard-shortcut help overlay, summoned with `?` and dismissed with
@@ -734,41 +1112,52 @@ html {
   background: var(--navy);
   color: var(--white);
   border-radius: 6px;
-  padding: .8rem 1rem;
-  box-shadow: 0 6px 24px rgba(14, 21, 48, .22);
+  padding: 0.8rem 1rem;
+  box-shadow: 0 6px 24px rgba(14, 21, 48, 0.22);
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;
-  transition: opacity .18s var(--ease), transform .18s var(--ease);
+  transition:
+    opacity 0.18s var(--ease),
+    transform 0.18s var(--ease);
 }
-.kb-hint.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.kb-hint.is-on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
 .kb-hint__head {
   font-family: var(--font-mono);
-  font-size: .62rem;
-  letter-spacing: .14em;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
-  margin-bottom: .55rem;
+  margin-bottom: 0.55rem;
   font-weight: 600;
 }
 .kb-hint__list {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: .4rem .8rem;
+  gap: 0.4rem 0.8rem;
   margin: 0;
-  font-size: .82rem;
+  font-size: 0.82rem;
   line-height: 1.3;
 }
-.kb-hint__list dt { margin: 0; }
-.kb-hint__list dd { margin: 0; color: rgba(255, 255, 255, .82); }
+.kb-hint__list dt {
+  margin: 0;
+}
+.kb-hint__list dd {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+}
 .kb-hint kbd {
   font-family: var(--font-mono);
-  font-size: .68rem;
-  background: rgba(255, 255, 255, .12);
+  font-size: 0.68rem;
+  background: rgba(255, 255, 255, 0.12);
   color: var(--white);
-  padding: .1rem .35rem;
+  padding: 0.1rem 0.35rem;
   border-radius: 3px;
-  border: 1px solid rgba(255, 255, 255, .18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   font-weight: 600;
 }
 
@@ -776,22 +1165,48 @@ html {
    running study. Hides nav, hero brand, sections below the workspace,
    etc., leaving just the workspace card with figures + attribution. */
 @media print {
-  nav, .hero-brand, .platforms, .why, .cedar-about, .cta, .footer,
-  .back-to-top, .scroll-progress, .kb-hint, .skip-link,
-  .hero-zoomout, .workspace-filters, .workspace__again {
+  nav,
+  .hero-brand,
+  .platforms,
+  .why,
+  .cedar-about,
+  .cta,
+  .footer,
+  .back-to-top,
+  .scroll-progress,
+  .kb-hint,
+  .skip-link,
+  .hero-zoomout,
+  .workspace-filters,
+  .workspace__again {
     display: none !important;
   }
-  body, html { background: #fff !important; color: #000 !important; }
-  .hero { padding: 1rem !important; }
+  body,
+  html {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .hero {
+    padding: 1rem !important;
+  }
   .workspace {
     box-shadow: none !important;
     border: 1px solid #000 !important;
     page-break-inside: avoid;
   }
-  .workspace__bar { background: #fff !important; }
-  .hero-fig--derived { opacity: 1 !important; }
-  .hero-map { max-height: 4in !important; }
-  .hero-supplier, .hero-household { opacity: 1 !important; }
+  .workspace__bar {
+    background: #fff !important;
+  }
+  .hero-fig--derived {
+    opacity: 1 !important;
+  }
+  .hero-map {
+    max-height: 4in !important;
+  }
+  .hero-supplier,
+  .hero-household {
+    opacity: 1 !important;
+  }
 }
 
 /* Skip-to-content link — visible only on keyboard focus, jumps past nav. */
@@ -806,18 +1221,18 @@ html {
 }
 .skip-link:focus {
   position: fixed;
-  top: .5rem;
-  left: .5rem;
+  top: 0.5rem;
+  left: 0.5rem;
   width: auto;
   height: auto;
   overflow: visible;
   clip: auto;
   z-index: 10000;
-  padding: .55rem .9rem;
+  padding: 0.55rem 0.9rem;
   background: var(--navy);
   color: var(--white);
   font-family: var(--font-sans);
-  font-size: .88rem;
+  font-size: 0.88rem;
   font-weight: 600;
   border-radius: 4px;
   text-decoration: none;
@@ -829,14 +1244,14 @@ html {
 .kicker {
   display: inline-flex;
   align-items: center;
-  gap: .55rem;
+  gap: 0.55rem;
   font-family: var(--font-mono);
   font-size: var(--type-xs);
   font-weight: 500;
-  letter-spacing: .14em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--navy);
-  opacity: .78;
+  opacity: 0.78;
   margin-bottom: 1.25rem;
 }
 .kicker::before {
@@ -844,16 +1259,25 @@ html {
   color: var(--accent-text);
   font-weight: 700;
 }
-.kicker--invert { color: var(--cream); opacity: .85; }
-.kicker--invert::before { color: var(--accent-light); }
+.kicker--invert {
+  color: var(--cream);
+  opacity: 0.85;
+}
+.kicker--invert::before {
+  color: var(--accent-light);
+}
 .display {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 144;
+  font-variation-settings: 'opsz' 144;
   font-weight: 500;
-  letter-spacing: -.022em;
-  line-height: .98;
+  letter-spacing: -0.022em;
+  line-height: 0.98;
 }
-.display em { font-style: italic; font-weight: 400; color: var(--gold); }
+.display em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
 
 /* Brand emphasis — the cursive gold "luminate" wordplay that runs
    through the site. Spectral italic gives the calligraphic flourish
@@ -868,25 +1292,28 @@ html {
   animation: luminate-glow 3.4s ease-in-out infinite;
 }
 @keyframes luminate-glow {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: 0 0 0 rgba(240, 169, 26, 0);
     filter: brightness(1);
   }
   50% {
     text-shadow:
-      0 0 10px rgba(240, 169, 26, .5),
-      0 0 22px rgba(240, 169, 26, .28);
+      0 0 10px rgba(240, 169, 26, 0.5),
+      0 0 22px rgba(240, 169, 26, 0.28);
     filter: brightness(1.08);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lumin { animation: none; }
+  .lumin {
+    animation: none;
+  }
 }
 .lede {
   font-size: clamp(1.05rem, 1.6vw, 1.32rem);
   line-height: 1.55;
   color: var(--navy);
-  opacity: .88;
+  opacity: 0.88;
   max-width: 38rem;
 }
 .rule-h {
@@ -906,13 +1333,40 @@ html {
   margin: 0;
 }
 
-a { color: inherit; text-decoration: none; }
-h1, h2, h3 { font-family: var(--font-display); line-height: 1.08; }
-h1, h2 { font-weight: 600; letter-spacing: -.02em; color: var(--navy); }
-h3 { font-weight: 600; letter-spacing: -.012em; line-height: 1.2; color: var(--navy); }
-em { font-style: italic; color: inherit; font-weight: inherit; }
-strong { font-weight: 600; color: inherit; }
-.mono { font-family: var(--font-mono); }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.08;
+}
+h1,
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+}
+h3 {
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--navy);
+}
+em {
+  font-style: italic;
+  color: inherit;
+  font-weight: inherit;
+}
+strong {
+  font-weight: 600;
+  color: inherit;
+}
+.mono {
+  font-family: var(--font-mono);
+}
 
 /* Container utility */
 .container {
@@ -921,42 +1375,121 @@ strong { font-weight: 600; color: inherit; }
   padding: 0 var(--container-pad);
 }
 
-
 /* Reveal animations */
-@keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
-@keyframes scaleIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes scaleIn {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
 
 /* Visually hide an element but keep it in the a11y tree (used for
    screen-reader-only labels and aria-live regions that have a
    visible duplicate elsewhere). */
 .visually-hidden {
   position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
 }
 
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); will-change: opacity, transform; }
-.reveal.seen { opacity: 1; transform: none; }
-/* A softer reveal for inline body text — smaller travel, faster. */
-.reveal-soft { opacity: 0; transform: translateY(10px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
-.reveal-soft.seen { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .reveal, .reveal-soft, .reveal-left, .reveal-right, .reveal-diagonal { opacity: 1 !important; transform: none !important; transition: none !important; }
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease);
+  will-change: opacity, transform;
 }
-.reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-.reveal-left.seen { opacity: 1; transform: none; }
-.reveal-right { opacity: 0; transform: translateX(60px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-.reveal-right.seen { opacity: 1; transform: none; }
-.reveal-diagonal { opacity: 0; transform: translate(30px, -20px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
-.reveal-diagonal.seen { opacity: 1; transform: none; }
-.delay-1 { transition-delay: .1s; }
-.delay-2 { transition-delay: .2s; }
-.delay-3 { transition-delay: .3s; }
-.delay-4 { transition-delay: .4s; }
+.reveal.seen {
+  opacity: 1;
+  transform: none;
+}
+/* A softer reveal for inline body text — smaller travel, faster. */
+.reveal-soft {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+}
+.reveal-soft.seen {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-soft,
+  .reveal-left,
+  .reveal-right,
+  .reveal-diagonal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease);
+}
+.reveal-left.seen {
+  opacity: 1;
+  transform: none;
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease);
+}
+.reveal-right.seen {
+  opacity: 1;
+  transform: none;
+}
+.reveal-diagonal {
+  opacity: 0;
+  transform: translate(30px, -20px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+}
+.reveal-diagonal.seen {
+  opacity: 1;
+  transform: none;
+}
+.delay-1 {
+  transition-delay: 0.1s;
+}
+.delay-2 {
+  transition-delay: 0.2s;
+}
+.delay-3 {
+  transition-delay: 0.3s;
+}
+.delay-4 {
+  transition-delay: 0.4s;
+}
 
 /* Asymmetric highlight smear behind key text. Every variant uses
    a horizontal linear-gradient that fades on both edges (no hard
@@ -975,11 +1508,17 @@ strong { font-weight: 600; color: inherit; }
    that powers .reveal-soft). */
 .hl-block {
   --hl-rot: -1.4deg;
-  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(15, 181, 165, .26) 12%, rgba(15, 181, 165, .26) 86%, transparent 100%);
-  --hl-inset-t: -.28em;
+  --hl-bg: linear-gradient(
+    95deg,
+    transparent 0%,
+    rgba(15, 181, 165, 0.26) 12%,
+    rgba(15, 181, 165, 0.26) 86%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.28em;
   --hl-inset-r: -10vw;
-  --hl-inset-b: -.18em;
-  --hl-inset-l: -.6em;
+  --hl-inset-b: -0.18em;
+  --hl-inset-l: -0.6em;
   --hl-origin: left center;
   --hl-scale: 1;
   position: relative;
@@ -995,7 +1534,7 @@ strong { font-weight: 600; color: inherit; }
   border-radius: 0;
   transform: rotate(var(--hl-rot)) scaleX(0);
   transform-origin: var(--hl-origin);
-  transition: transform .85s var(--ease) .15s;
+  transition: transform 0.85s var(--ease) 0.15s;
   z-index: -1;
   pointer-events: none;
 }
@@ -1006,98 +1545,166 @@ strong { font-weight: 600; color: inherit; }
 /* Teal variants. */
 .hl-block--b {
   --hl-rot: 1.8deg;
-  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(15, 181, 165, .3) 8%, rgba(15, 181, 165, .3) 82%, transparent 100%);
-  --hl-inset-t: -.18em;
-  --hl-inset-r: -.55em;
-  --hl-inset-b: -.34em;
+  --hl-bg: linear-gradient(
+    95deg,
+    transparent 0%,
+    rgba(15, 181, 165, 0.3) 8%,
+    rgba(15, 181, 165, 0.3) 82%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.18em;
+  --hl-inset-r: -0.55em;
+  --hl-inset-b: -0.34em;
   --hl-inset-l: -8vw;
   --hl-origin: right center;
-  --hl-scale: .92;
+  --hl-scale: 0.92;
 }
 .hl-block--c {
   --hl-rot: -2.6deg;
-  --hl-bg: linear-gradient(90deg, transparent 0%, var(--accent-bar) 18%, var(--accent-bar) 80%, transparent 100%);
-  --hl-inset-t: -.5em;
+  --hl-bg: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-bar) 18%,
+    var(--accent-bar) 80%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.5em;
   --hl-inset-r: -14vw;
   --hl-inset-b: 0;
-  --hl-inset-l: -.4em;
-  --hl-scale: .9;
+  --hl-inset-l: -0.4em;
+  --hl-scale: 0.9;
 }
 .hl-block--d {
-  --hl-rot: .55deg;
-  --hl-bg: linear-gradient(90deg, transparent 0%, rgba(15, 181, 165, .2) 6%, rgba(15, 181, 165, .2) 94%, transparent 100%);
-  --hl-inset-t: -.08em;
+  --hl-rot: 0.55deg;
+  --hl-bg: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(15, 181, 165, 0.2) 6%,
+    rgba(15, 181, 165, 0.2) 94%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.08em;
   --hl-inset-r: -18vw;
-  --hl-inset-b: -.5em;
+  --hl-inset-b: -0.5em;
   --hl-inset-l: -10vw;
 }
 /* Gold variants. */
 .hl-block--gold {
   --hl-rot: 2.3deg;
-  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(240, 169, 26, .3) 8%, rgba(240, 169, 26, .3) 86%, transparent 100%);
-  --hl-inset-t: -.22em;
-  --hl-inset-r: -.45em;
-  --hl-inset-b: -.32em;
+  --hl-bg: linear-gradient(
+    95deg,
+    transparent 0%,
+    rgba(240, 169, 26, 0.3) 8%,
+    rgba(240, 169, 26, 0.3) 86%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.22em;
+  --hl-inset-r: -0.45em;
+  --hl-inset-b: -0.32em;
   --hl-inset-l: -12vw;
   --hl-origin: right center;
-  --hl-scale: .94;
+  --hl-scale: 0.94;
 }
 .hl-block--gold-b {
   --hl-rot: -1.3deg;
-  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(240, 169, 26, .24) 14%, rgba(240, 169, 26, .24) 78%, transparent 100%);
-  --hl-inset-t: -.32em;
+  --hl-bg: linear-gradient(
+    95deg,
+    transparent 0%,
+    rgba(240, 169, 26, 0.24) 14%,
+    rgba(240, 169, 26, 0.24) 78%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.32em;
   --hl-inset-r: -8vw;
-  --hl-inset-b: -.08em;
-  --hl-inset-l: -.4em;
-  --hl-scale: .78;
+  --hl-inset-b: -0.08em;
+  --hl-inset-l: -0.4em;
+  --hl-scale: 0.78;
 }
 /* Green variants. */
 .hl-block--green {
   --hl-rot: -1.7deg;
-  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(14, 139, 79, .24) 10%, rgba(14, 139, 79, .24) 85%, transparent 100%);
-  --hl-inset-t: -.28em;
+  --hl-bg: linear-gradient(
+    95deg,
+    transparent 0%,
+    rgba(14, 139, 79, 0.24) 10%,
+    rgba(14, 139, 79, 0.24) 85%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.28em;
   --hl-inset-r: -16vw;
-  --hl-inset-b: -.14em;
-  --hl-inset-l: -.55em;
+  --hl-inset-b: -0.14em;
+  --hl-inset-l: -0.55em;
 }
 .hl-block--green-b {
   --hl-rot: 1.2deg;
-  --hl-bg: linear-gradient(95deg, transparent 0%, rgba(27, 182, 106, .24) 12%, rgba(27, 182, 106, .24) 84%, transparent 100%);
-  --hl-inset-t: -.16em;
-  --hl-inset-r: -.5em;
-  --hl-inset-b: -.4em;
+  --hl-bg: linear-gradient(
+    95deg,
+    transparent 0%,
+    rgba(27, 182, 106, 0.24) 12%,
+    rgba(27, 182, 106, 0.24) 84%,
+    transparent 100%
+  );
+  --hl-inset-t: -0.16em;
+  --hl-inset-r: -0.5em;
+  --hl-inset-b: -0.4em;
   --hl-inset-l: -14vw;
   --hl-origin: right center;
-  --hl-scale: .88;
+  --hl-scale: 0.88;
 }
 /* Smear variant: extra-soft gradient with both edges fading
    further in from the inset rectangle. Use for the headline you
    want to break the strongest. */
 .hl-block--smear {
-  --hl-rot: -.7deg;
-  --hl-bg: linear-gradient(110deg, transparent 0%, rgba(15, 181, 165, .3) 22%, rgba(15, 181, 165, .3) 70%, transparent 92%);
-  --hl-inset-t: -.2em;
-  --hl-inset-r: -.6em;
-  --hl-inset-b: -.18em;
-  --hl-inset-l: -.6em;
+  --hl-rot: -0.7deg;
+  --hl-bg: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(15, 181, 165, 0.3) 22%,
+    rgba(15, 181, 165, 0.3) 70%,
+    transparent 92%
+  );
+  --hl-inset-t: -0.2em;
+  --hl-inset-r: -0.6em;
+  --hl-inset-b: -0.18em;
+  --hl-inset-l: -0.6em;
 }
-.hl-block--right { --hl-origin: right center; }
+.hl-block--right {
+  --hl-origin: right center;
+}
 
 /* Mobile pulls some of the off-screen bleeds in so the highlights
    feel proportionate to the smaller viewport but still asymmetric
    from one variant to the next. */
 @media (max-width: 720px) {
-  .hl-block       { --hl-inset-r: -18vw; }
-  .hl-block--b    { --hl-inset-l: -18vw; }
-  .hl-block--c    { --hl-inset-r: -22vw; }
-  .hl-block--d    { --hl-inset-l: -18vw; --hl-inset-r: -22vw; }
-  .hl-block--gold { --hl-inset-l: -20vw; }
-  .hl-block--green    { --hl-inset-r: -22vw; }
-  .hl-block--green-b  { --hl-inset-l: -22vw; }
+  .hl-block {
+    --hl-inset-r: -18vw;
+  }
+  .hl-block--b {
+    --hl-inset-l: -18vw;
+  }
+  .hl-block--c {
+    --hl-inset-r: -22vw;
+  }
+  .hl-block--d {
+    --hl-inset-l: -18vw;
+    --hl-inset-r: -22vw;
+  }
+  .hl-block--gold {
+    --hl-inset-l: -20vw;
+  }
+  .hl-block--green {
+    --hl-inset-r: -22vw;
+  }
+  .hl-block--green-b {
+    --hl-inset-l: -22vw;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hl-block::before { transition: none; transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale)); }
+  .hl-block::before {
+    transition: none;
+    transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale));
+  }
 }
 
 /* Focus styles for keyboard navigation */
@@ -1116,27 +1723,54 @@ strong { font-weight: 600; color: inherit; }
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: .5rem;
-  padding: .8rem 1.3rem;
+  gap: 0.5rem;
+  padding: 0.8rem 1.3rem;
   font-family: var(--font-sans);
-  font-size: .95rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   border-radius: 4px;
   border: 1px solid var(--navy);
   cursor: pointer;
-  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+  transition:
+    background 0.15s var(--ease),
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
   background: var(--navy);
   color: var(--white);
   text-decoration: none;
 }
-.btn:hover { background: var(--navy2); border-color: var(--navy2); }
-.btn--ghost { background: transparent; color: var(--navy); border-color: var(--rule-strong); }
-.btn--ghost:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
-.btn--invert { background: var(--white); color: var(--navy); border-color: var(--white); }
-.btn--invert:hover { background: rgba(255,255,255,.9); }
-.btn--invert-ghost { background: transparent; color: var(--white); border-color: rgba(255, 255, 255, .35); }
-.btn--invert-ghost:hover { background: rgba(255, 255, 255, .08); border-color: var(--white); }
+.btn:hover {
+  background: var(--navy2);
+  border-color: var(--navy2);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--navy);
+  border-color: var(--rule-strong);
+}
+.btn--ghost:hover {
+  background: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+}
+.btn--invert {
+  background: var(--white);
+  color: var(--navy);
+  border-color: var(--white);
+}
+.btn--invert:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+.btn--invert-ghost {
+  background: transparent;
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.btn--invert-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--white);
+}
 
 /* Scroll progress indicator. Lives at the very top of the viewport;
    the teal rail itself is painted by the nav (border-top) so there's
@@ -1150,7 +1784,7 @@ strong { font-weight: 600; color: inherit; }
   background: var(--accent-btn-hover);
   z-index: 9999;
   pointer-events: none;
-  transition: width .1s linear;
+  transition: width 0.1s linear;
 }
 
 /* Back to top button */
@@ -1162,7 +1796,7 @@ strong { font-weight: 600; color: inherit; }
   height: 42px;
   border-radius: 50%;
   background: var(--navy);
-  border: 1.5px solid rgba(255, 252, 247, .12);
+  border: 1.5px solid rgba(255, 252, 247, 0.12);
   color: var(--accent-text);
   cursor: pointer;
   z-index: 999;
@@ -1170,10 +1804,10 @@ strong { font-weight: 600; color: inherit; }
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transform: translateY(12px) scale(.85);
+  transform: translateY(12px) scale(0.85);
   pointer-events: none;
-  transition: all .4s var(--ease);
-  box-shadow: 0 4px 20px rgba(45, 45, 63, .18);
+  transition: all 0.4s var(--ease);
+  box-shadow: 0 4px 20px rgba(45, 45, 63, 0.18);
 }
 .back-to-top.visible {
   opacity: 1;
@@ -1199,28 +1833,37 @@ strong { font-weight: 600; color: inherit; }
   opacity: 0;
   animation: btt-pulse 2.5s ease-in-out infinite;
 }
-.back-to-top.visible::before { opacity: 1; }
+.back-to-top.visible::before {
+  opacity: 1;
+}
 @keyframes btt-pulse {
-  0%, 100% { transform: scale(1); opacity: 0; }
-  50% { transform: scale(1.15); opacity: .3; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.3;
+  }
 }
 
 /* Form success overlay */
 .form-success-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(45, 106, 79, .95);
+  background: rgba(45, 106, 79, 0.95);
   backdrop-filter: blur(8px);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: .8rem;
+  gap: 0.8rem;
   opacity: 0;
-  transform: scale(.95);
+  transform: scale(0.95);
   pointer-events: none;
-  transition: all .5s var(--ease);
+  transition: all 0.5s var(--ease);
   z-index: 5;
 }
 .form-success-overlay.show {
@@ -1237,7 +1880,7 @@ strong { font-weight: 600; color: inherit; }
   align-items: center;
   justify-content: center;
   transform: scale(0);
-  transition: transform .5s var(--ease) .15s;
+  transition: transform 0.5s var(--ease) 0.15s;
 }
 .form-success-overlay.show .form-success-check {
   transform: scale(1);
@@ -1250,43 +1893,47 @@ strong { font-weight: 600; color: inherit; }
   fill: none;
   stroke-dasharray: 30;
   stroke-dashoffset: 30;
-  transition: stroke-dashoffset .5s ease .4s;
+  transition: stroke-dashoffset 0.5s ease 0.4s;
 }
 .form-success-overlay.show .form-success-check svg {
   stroke-dashoffset: 0;
 }
 .form-success-text {
   color: var(--white);
-  font-size: .88rem;
+  font-size: 0.88rem;
   font-weight: 700;
   opacity: 0;
   transform: translateY(8px);
-  transition: all .4s var(--ease) .5s;
+  transition: all 0.4s var(--ease) 0.5s;
 }
 .form-success-overlay.show .form-success-text {
   opacity: 1;
   transform: none;
 }
 .form-success-sub {
-  color: rgba(255, 252, 247, .6);
-  font-size: .72rem;
+  color: rgba(255, 252, 247, 0.6);
+  font-size: 0.72rem;
   font-weight: 500;
   opacity: 0;
-  transition: opacity .4s var(--ease) .65s;
+  transition: opacity 0.4s var(--ease) 0.65s;
 }
 .form-success-overlay.show .form-success-sub {
   opacity: 1;
 }
 .form-validation-error {
-  font-size: .64rem;
+  font-size: 0.64rem;
   color: var(--error-color);
   font-weight: 600;
-  margin-top: -.5rem;
-  margin-bottom: .5rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
   display: none;
 }
-.form-validation-error.show { display: block; }
-.cta-form input.error, .cta-form select.error, .cta-form textarea.error {
+.form-validation-error.show {
+  display: block;
+}
+.cta-form input.error,
+.cta-form select.error,
+.cta-form textarea.error {
   border-color: var(--error-color);
 }
 
@@ -1295,26 +1942,26 @@ strong { font-weight: 600; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: .5rem;
-  padding: .4rem .8rem;
-  border-top: 1px solid rgba(45, 45, 63, .04);
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-top: 1px solid rgba(45, 45, 63, 0.04);
 }
 .chat-ctrl-btn {
   background: none;
-  border: 1px solid rgba(45, 45, 63, .1);
+  border: 1px solid rgba(45, 45, 63, 0.1);
   border-radius: 4px;
   cursor: pointer;
-  padding: .25rem .55rem;
+  padding: 0.25rem 0.55rem;
   font-family: 'Nunito', sans-serif;
-  font-size: .58rem;
+  font-size: 0.58rem;
   font-weight: 700;
   color: var(--graylt);
-  transition: all .25s var(--ease);
+  transition: all 0.25s var(--ease);
   display: flex;
   align-items: center;
-  gap: .25rem;
+  gap: 0.25rem;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: 0.05em;
 }
 .chat-ctrl-btn:hover {
   border-color: var(--accent);
@@ -1326,41 +1973,61 @@ strong { font-weight: 600; color: inherit; }
   color: var(--accent-text);
 }
 .chat-conv-indicator {
-  font-size: .52rem;
+  font-size: 0.52rem;
   font-weight: 600;
   color: var(--graylt);
-  opacity: .6;
+  opacity: 0.6;
 }
 
 /* Chat skeleton loading */
 .chat-skeleton {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
-  padding: .4rem 0;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
 }
 .chat-skeleton-hint {
-  font-size: .58rem;
+  font-size: 0.58rem;
   font-weight: 600;
   color: var(--graylt);
   text-align: center;
-  opacity: .6;
-  margin-bottom: .2rem;
+  opacity: 0.6;
+  margin-bottom: 0.2rem;
   font-style: italic;
 }
 .chat-skeleton-line {
   height: 10px;
   border-radius: 5px;
-  background: linear-gradient(90deg, var(--cream) 25%, rgba(246, 241, 233, .4) 50%, var(--cream) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--cream) 25%,
+    rgba(246, 241, 233, 0.4) 50%,
+    var(--cream) 75%
+  );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
 }
-.chat-skeleton-line:nth-child(1) { width: 65%; }
-.chat-skeleton-line:nth-child(2) { width: 80%; }
-.chat-skeleton-line:nth-child(3) { width: 45%; align-self: flex-end; }
-.chat-skeleton-line:nth-child(4) { width: 70%; }
-.chat-skeleton-line:nth-child(5) { width: 55%; }
+.chat-skeleton-line:nth-child(1) {
+  width: 65%;
+}
+.chat-skeleton-line:nth-child(2) {
+  width: 80%;
+}
+.chat-skeleton-line:nth-child(3) {
+  width: 45%;
+  align-self: flex-end;
+}
+.chat-skeleton-line:nth-child(4) {
+  width: 70%;
+}
+.chat-skeleton-line:nth-child(5) {
+  width: 55%;
+}
 @keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

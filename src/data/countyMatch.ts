@@ -38,19 +38,3 @@ export function findContainingCounty(cx: number, cy: number): string | undefined
   }
   return undefined;
 }
-
-/* Find all counties whose bbox intersects a bbox around the point.
-   Useful for reservations that span more than one county — we'd want
-   to highlight the small neighborhood around the centroid. Not used
-   in the v1 single-county-per-reservation render, but kept here for
-   future multi-county expansion. */
-export function findCountiesNear(cx: number, cy: number, radius = 25): string[] {
-  const hits: string[] = [];
-  for (const c of countyEntries) {
-    const [[x0, y0], [x1, y1]] = c.bbox;
-    if (x1 < cx - radius || x0 > cx + radius) continue;
-    if (y1 < cy - radius || y0 > cy + radius) continue;
-    hits.push(c.id);
-  }
-  return hits;
-}

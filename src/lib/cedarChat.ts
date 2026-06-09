@@ -2,9 +2,8 @@
  * Cedar chat runtime.
  *
  * Conversation logic for the persistent Cedar FAB (CedarFAB.astro).
- * The FAB is the only Cedar chat surface today; an earlier homepage
- * inline-chat section was removed, but bootChat() is still written
- * surface-agnostic so a second surface can be added without
+ * The FAB is the only Cedar chat surface today, but bootChat() is
+ * written surface-agnostic so a second surface can be added without
  * touching this module.
  *
  * What this module owns:
@@ -69,8 +68,7 @@ function getConversationId(): string {
 function generateId(): string {
   // crypto.randomUUID is available in all modern browsers; fall back
   // to a quick rand+time hex for older runtimes.
-  const c: Crypto | undefined =
-    typeof crypto !== 'undefined' ? crypto : undefined;
+  const c: Crypto | undefined = typeof crypto !== 'undefined' ? crypto : undefined;
   if (c && typeof c.randomUUID === 'function') return c.randomUUID();
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
@@ -144,14 +142,19 @@ function saveState(id: string, state: ConvoState): void {
    The same scoring rules the inline scripts used, lifted out so
    there's one implementation to debug and improve. */
 function normalize(s: string): string {
-  return ' ' + (s || '').toLowerCase()
-    // Strip apostrophes/backticks so contractions collapse the way people
-    // type them: "i'm" / "i’m" / "im" all normalize to "im", and a trigger
-    // stored as "i'm five" becomes "im five" instead of the broken "i m five".
-    .replace(/['’`]/g, '')
-    .replace(/[?!.,;:"()\[\]]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim() + ' ';
+  return (
+    ' ' +
+    (s || '')
+      .toLowerCase()
+      // Strip apostrophes/backticks so contractions collapse the way people
+      // type them: "i'm" / "i’m" / "im" all normalize to "im", and a trigger
+      // stored as "i'm five" becomes "im five" instead of the broken "i m five".
+      .replace(/['’`]/g, '')
+      .replace(/[?!.,;:"()\[\]]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim() +
+    ' '
+  );
 }
 
 export interface IntentMatch {
@@ -195,7 +198,10 @@ export function topMatches(rawText: string): IntentMatch {
    tight threshold plus a length guard keep it from hijacking genuinely
    out-of-scope input (which is also gated behind the OOS check that runs
    before this). */
-interface TriggerToken { w: string; idx: number; }
+interface TriggerToken {
+  w: string;
+  idx: number;
+}
 const FUZZY_TOKENS: TriggerToken[] = (() => {
   const seen = new Set<string>();
   const out: TriggerToken[] = [];
@@ -226,7 +232,10 @@ const fuzzyFuse = new Fuse(FUZZY_TOKENS, {
 });
 
 function fuzzyMatch(rawText: string): CedarIntent | null {
-  const tokens = normalize(rawText).trim().split(' ').filter((t) => t.length >= 5);
+  const tokens = normalize(rawText)
+    .trim()
+    .split(' ')
+    .filter((t) => t.length >= 5);
   if (!tokens.length) return null;
   let best: { idx: number; score: number } | null = null;
   for (const tok of tokens) {
@@ -234,8 +243,12 @@ function fuzzyMatch(rawText: string): CedarIntent | null {
     // Tight gates so a random 5-letter token can't find a neighbour: low
     // Fuse score AND a similar word length (a real typo barely changes
     // length). Keeps it a strict superset of the old one-edit matcher.
-    if (hit && typeof hit.score === 'number' && hit.score <= FUZZY_THRESHOLD
-        && Math.abs(hit.item.w.length - tok.length) <= 2) {
+    if (
+      hit &&
+      typeof hit.score === 'number' &&
+      hit.score <= FUZZY_THRESHOLD &&
+      Math.abs(hit.item.w.length - tok.length) <= 2
+    ) {
       if (!best || hit.score < best.score) best = { idx: hit.item.idx, score: hit.score };
     }
   }
@@ -331,7 +344,10 @@ async function resolveAnswer(
       trackEvent('cedar.api.success', { surface });
       return { text: result.data.answer, fromApi: true };
     }
-    trackEvent('cedar.api.fallback', { surface, reason: result.ok ? 'empty-answer' : result.reason });
+    trackEvent('cedar.api.fallback', {
+      surface,
+      reason: result.ok ? 'empty-answer' : result.reason,
+    });
     return { text: localFallback, fromApi: false };
   } catch (err: unknown) {
     trackError(err, { where: 'cedarChat.resolveAnswer', surface });
@@ -343,14 +359,16 @@ async function resolveAnswer(
    Keep the typing indicator up briefly so a reply reads as composed
    rather than precomputed. Scales with answer length and collapses to
    near-instant when the visitor prefers reduced motion. */
-const sleep = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 const prefersReducedMotion = (): boolean =>
   typeof window !== 'undefined' &&
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// "Cedar is thinking" pause before the reply streams in. Scales with
+// answer length so longer answers feel considered, clamped to 0.7–1.8s
+// so short answers don't feel instant and long ones don't stall.
 function thinkingPause(answer: string): number {
   if (prefersReducedMotion()) return 200;
   return Math.min(1800, Math.max(700, 480 + answer.length * 4));
@@ -395,9 +413,18 @@ function renderRich(text: string): string {
 /* Reveal a reply word-by-word so it reads as Cedar composing rather
    than a block of text snapping in, then finalize to the rich (linked)
    markup. Instant under reduced motion. */
-async function streamText(transcript: HTMLElement, bubble: HTMLElement, text: string): Promise<void> {
-  if (prefersReducedMotion()) { bubble.innerHTML = renderRich(text); return; }
+async function streamText(
+  transcript: HTMLElement,
+  bubble: HTMLElement,
+  text: string,
+): Promise<void> {
+  if (prefersReducedMotion()) {
+    bubble.innerHTML = renderRich(text);
+    return;
+  }
   const tokens = text.split(/(\s+)/);
+  // Streaming cadence: long answers stream faster so the total wait
+  // stays comfortable; short answers stream slower so they read as typed.
   const perWord = tokens.length > 90 ? 8 : 15;
   bubble.textContent = '';
   // The transcript is an aria-live log; mark it busy while we append
@@ -502,8 +529,14 @@ const AUDIENCE_INTENT: Record<string, string> = {
 const AUDIENCE_PATTERNS: Array<{ key: string; words: string[] }> = [
   { key: 'tribal', words: ['tribe', 'tribal', 'native', 'reservation', 'casino'] },
   { key: 'city', words: ['city', 'cities', 'county', 'counties', 'municipal', 'mayor', 'town'] },
-  { key: 'state', words: ['state agency', 'state dot', 'legislature', 'department of', 'state of'] },
-  { key: 'foundation', words: ['foundation', 'grantmaker', 'grantmaking', 'philanthropy', 'donor'] },
+  {
+    key: 'state',
+    words: ['state agency', 'state dot', 'legislature', 'department of', 'state of'],
+  },
+  {
+    key: 'foundation',
+    words: ['foundation', 'grantmaker', 'grantmaking', 'philanthropy', 'donor'],
+  },
   { key: 'university', words: ['university', 'college', 'campus', 'higher ed'] },
   { key: 'nonprofit', words: ['nonprofit', 'non profit', 'non-profit', ' ngo', 'cdfi', 'charity'] },
 ];
@@ -535,7 +568,9 @@ function attachFeedback(bubble: HTMLElement, surface: CedarSurface): void {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       trackEvent('cedar.feedback', { value: v, surface });
-      row.querySelectorAll('button').forEach((b) => { (b as HTMLButtonElement).disabled = true; });
+      row.querySelectorAll('button').forEach((b) => {
+        (b as HTMLButtonElement).disabled = true;
+      });
       btn.classList.add('is-selected');
     });
     row.appendChild(btn);
@@ -544,7 +579,11 @@ function attachFeedback(bubble: HTMLElement, surface: CedarSurface): void {
 }
 
 /* ----- Context follow-up chips (#10) -------------------------------- */
-interface FollowUp { label: string; text: string; intent?: CedarIntent }
+interface FollowUp {
+  label: string;
+  text: string;
+  intent?: CedarIntent;
+}
 function followUpsFor(
   matched: CedarIntent | null,
   isDrillDown: boolean,
@@ -557,7 +596,8 @@ function followUpsFor(
     const it = INTENTS.find((x) => x.id === id);
     // Carry the intent so the click routes straight to it (its chip
     // label may not contain its own trigger phrases).
-    if (it?.chip && !out.some((o) => o.text === it.chip)) out.push({ label: it.chip, text: it.chip, intent: it });
+    if (it?.chip && !out.some((o) => o.text === it.chip))
+      out.push({ label: it.chip, text: it.chip, intent: it });
   };
   if (!isDrillDown && matched && typeof matched.expanded === 'string') {
     // No intent: "tell me more" routes through the drill-down path.
@@ -649,8 +689,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
          saw the handoff doesn't get a second one after navigating.
        - audience: remembered use case, biasing follow-ups (#6). */
   const savedState = loadState(conversationId);
-  let priorIntent: CedarIntent | null =
-    savedState.priorIntentId ? (INTENTS.find((i) => i.id === savedState.priorIntentId) ?? null) : null;
+  let priorIntent: CedarIntent | null = savedState.priorIntentId
+    ? (INTENTS.find((i) => i.id === savedState.priorIntentId) ?? null)
+    : null;
   let misses = typeof savedState.misses === 'number' ? savedState.misses : 0;
   let audience: string | null = savedState.audience ?? null;
   const persistState = () => {
@@ -703,7 +744,13 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     const clarified = !forcedIntent && !isDrillDown && ambiguousCandidates(rawText).length >= 2;
     // Whether the *local* classifier failed to find anything. This only
     // becomes a real "miss" if the backend didn't answer either (below).
-    const localMiss = !forcedIntent && !isDrillDown && !clarified && topMatches(rawText).score < 1 && !isOutOfScope(rawText) && !fuzzyMatch(rawText);
+    const localMiss =
+      !forcedIntent &&
+      !isDrillDown &&
+      !clarified &&
+      topMatches(rawText).score < 1 &&
+      !isOutOfScope(rawText) &&
+      !fuzzyMatch(rawText);
     const aud = detectAudience(rawText);
     if (aud) audience = aud;
 
@@ -757,7 +804,8 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
       trackEvent('cedar.unmatched', { surface, text: rawText.slice(0, 120) });
       misses += 1;
       if (misses === 2) {
-        const handoff = 'I might be missing what you need, and the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.';
+        const handoff =
+          'I might be missing what you need, and the team can help directly. Email contact@lumecon.ai or use the contact form and a person will pick it up.';
         appendMessage(transcript, 'bot', handoff);
         record('bot', handoff);
       }

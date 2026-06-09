@@ -21,15 +21,31 @@ type StateInfo = { name: string; cx: number; cy: number; code: string };
 type TribalLand = { name: string; cx: number; cy: number; fips: string; countyFips?: string };
 type SearchEntry =
   | { type: 'state'; id: string; name: string; sub: string; cx: number; cy: number }
-  | { type: 'county'; id: string; name: string; sub: string; cx: number; cy: number; stateFips: string }
+  | {
+      type: 'county';
+      id: string;
+      name: string;
+      sub: string;
+      cx: number;
+      cy: number;
+      stateFips: string;
+    }
   | { type: 'tribal'; id: string; name: string; sub: string; cx: number; cy: number; fips: string };
-const states: Record<string, StateInfo> = JSON.parse((document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}');
-const tribalLookup: Record<string, TribalLand> = JSON.parse((document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}');
+const states: Record<string, StateInfo> = JSON.parse(
+  (document.getElementById('heroStates') as HTMLScriptElement).textContent || '{}',
+);
+const tribalLookup: Record<string, TribalLand> = JSON.parse(
+  (document.getElementById('heroTribal') as HTMLScriptElement).textContent || '{}',
+);
 // FIPS → centroid for every U.S. county, computed at build time from
 // the same albers-USA projection the map uses. Lets a county-level
 // study put the source dot on the actual county.
-const countyCentroids: Record<string, { cx: number; cy: number }> = JSON.parse((document.getElementById('heroCounties') as HTMLScriptElement)?.textContent || '{}');
-const searchIndex: SearchEntry[] = JSON.parse((document.getElementById('heroSearch') as HTMLScriptElement)?.textContent || '[]');
+const countyCentroids: Record<string, { cx: number; cy: number }> = JSON.parse(
+  (document.getElementById('heroCounties') as HTMLScriptElement)?.textContent || '{}',
+);
+const searchIndex: SearchEntry[] = JSON.parse(
+  (document.getElementById('heroSearch') as HTMLScriptElement)?.textContent || '[]',
+);
 
 // Shared scene catalog imported from src/data/scenes.ts so the
 // homepage demo and the static /demo/[slug] pages stay in sync.
@@ -41,15 +57,15 @@ import { SCENES, STATE_SCENES, COUNTY_SCENES, RESERVATION_SCENES } from '../data
 import { trackEvent } from '../lib/observability';
 
 const ACTIVITIES = [
-  { id: 'build',   label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9  },
-  { id: 'payroll', label: 'operations payroll',   indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
-  { id: 'grant',   label: 'grant pass-through',   indirect: 0.35, induced: 0.55, jobsPerM: 6.2  },
-  { id: 'tourism', label: 'visitor spending',     indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
-  { id: 'energy',  label: 'energy project',       indirect: 0.58, induced: 0.42, jobsPerM: 7.6  },
+  { id: 'build', label: 'capital construction', indirect: 0.62, induced: 0.38, jobsPerM: 8.9 },
+  { id: 'payroll', label: 'operations payroll', indirect: 0.48, induced: 0.71, jobsPerM: 11.4 },
+  { id: 'grant', label: 'grant pass-through', indirect: 0.35, induced: 0.55, jobsPerM: 6.2 },
+  { id: 'tourism', label: 'visitor spending', indirect: 0.51, induced: 0.63, jobsPerM: 13.1 },
+  { id: 'energy', label: 'energy project', indirect: 0.58, induced: 0.42, jobsPerM: 7.6 },
 ] as const;
 const AMOUNTS = [
-  { v: 1_000_000,  label: '$1M'  },
-  { v: 5_000_000,  label: '$5M'  },
+  { v: 1_000_000, label: '$1M' },
+  { v: 5_000_000, label: '$5M' },
   { v: 12_000_000, label: '$12M' },
   { v: 20_000_000, label: '$20M' },
   { v: 50_000_000, label: '$50M' },
@@ -73,7 +89,7 @@ const JITTER_RANGE = 0.6;
 /** Choropleth opacity boost. The raw share is divided by this
  *  threshold and raised to SHARE_BOOST_POWER, so the dimmest
  *  neighbors don't fade out entirely. */
-const SHARE_BOOST_THRESHOLD = 0.30;
+const SHARE_BOOST_THRESHOLD = 0.3;
 const SHARE_BOOST_POWER = 0.6;
 /** Curvature factor for the bezier flow lines from source to
  *  neighbors. Multiplied by the source-to-neighbor distance to
@@ -90,22 +106,21 @@ const RESERVATION_HIGHLIGHT_MAX_DIST = 35;
  *  polygon. Small positive number so edge-touching counties match. */
 const COUNTY_OVERLAP_PAD = 0.5;
 
-const stage   = document.getElementById('heroStage') as HTMLElement | null;
+const stage = document.getElementById('heroStage') as HTMLElement | null;
 const tooltip = document.getElementById('heroTooltip') as HTMLElement | null;
-const ttName  = document.getElementById('ttName');
-const ttHint  = document.getElementById('ttHint');
-const source  = document.getElementById('heroSource');
-const figD    = document.getElementById('figDirect');
-const figI    = document.getElementById('figIndirect');
-const figU    = document.getElementById('figInduced');
-const figT    = document.getElementById('figTotal');
-const figJ    = document.getElementById('figJobs');
+const ttName = document.getElementById('ttName');
+const ttHint = document.getElementById('ttHint');
+const source = document.getElementById('heroSource');
+const figD = document.getElementById('figDirect');
+const figI = document.getElementById('figIndirect');
+const figU = document.getElementById('figInduced');
+const figT = document.getElementById('figTotal');
+const figJ = document.getElementById('figJobs');
 const figTotalCell = document.getElementById('figTotalCell');
-const figJobsCell  = document.getElementById('figJobsCell');
+const figJobsCell = document.getElementById('figJobsCell');
 
 if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName) {
-
-  const wait = (ms: number) => new Promise<void>(r => window.setTimeout(r, ms));
+  const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
   const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
   /**
@@ -116,9 +131,11 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    * Trailing zeros after the decimal are stripped so "5.00M" reads as "5M".
    */
   const fmt = (n: number) =>
-    n >= 1_000_000 ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.?0+$/, '') + 'M'
-    : n >= 1_000   ? '$' + Math.round(n / 1_000) + 'K'
-    :                '$' + Math.round(n);
+    n >= 1_000_000
+      ? '$' + (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2).replace(/\.?0+$/, '') + 'M'
+      : n >= 1_000
+        ? '$' + Math.round(n / 1_000) + 'K'
+        : '$' + Math.round(n);
 
   /**
    * Animate a number into an element using the cubic-out ease.
@@ -155,7 +172,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
      below are an abstract metaphor; the table beneath the map is
      where the actual breakdown lives. */
   const lightSource = (id: string) => {
-    stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+    stage.querySelectorAll<HTMLElement>('.hero-state').forEach((el) => {
       if (el.dataset.id === id) el.dataset.ring = '0';
       else el.removeAttribute('data-ring');
     });
@@ -178,12 +195,19 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    * @param seedSalt Optional salt for the deterministic jitter.
    * @returns Map of regionId → share (0..1) summing to 1.
    */
-  const computeShares = (srcCx: number, srcCy: number, regions: Array<{ id: string; cx: number; cy: number }>, topN: number, decay: number = 1.6, seedSalt: number = 0): Map<string, number> => {
+  const computeShares = (
+    srcCx: number,
+    srcCy: number,
+    regions: Array<{ id: string; cx: number; cy: number }>,
+    topN: number,
+    decay: number = 1.6,
+    seedSalt: number = 0,
+  ): Map<string, number> => {
     // Deterministic jitter so neighbors don't fall in perfect rings
     const rand = seededRandom(Math.floor(srcCx * 911 + srcCy * 113 + seedSalt));
     const scored = regions
-      .filter(r => r.id !== '' && Number.isFinite(r.cx) && Number.isFinite(r.cy))
-      .map(r => {
+      .filter((r) => r.id !== '' && Number.isFinite(r.cx) && Number.isFinite(r.cy))
+      .map((r) => {
         const dx = r.cx - srcCx;
         const dy = r.cy - srcCy;
         const d = Math.hypot(dx, dy);
@@ -210,7 +234,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    */
   const applyChoropleth = (shares: Map<string, number>, selector: string) => {
     // Clear old impact tints first
-    stage.querySelectorAll<HTMLElement>(`${selector}[data-impact]`).forEach(el => {
+    stage.querySelectorAll<HTMLElement>(`${selector}[data-impact]`).forEach((el) => {
       el.removeAttribute('data-impact');
       el.style.removeProperty('--impact-share');
     });
@@ -227,10 +251,12 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   };
 
   const clearChoropleth = () => {
-    stage.querySelectorAll<HTMLElement>('.hero-state[data-impact], .hero-county[data-impact]').forEach(el => {
-      el.removeAttribute('data-impact');
-      el.style.removeProperty('--impact-share');
-    });
+    stage
+      .querySelectorAll<HTMLElement>('.hero-state[data-impact], .hero-county[data-impact]')
+      .forEach((el) => {
+        el.removeAttribute('data-impact');
+        el.style.removeProperty('--impact-share');
+      });
   };
 
   /**
@@ -247,7 +273,18 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    * @param src Source point used to bias chip placement away from
    *   the source's NE callout.
    */
-  const renderValueChips = (top: Array<{ id: string; cx: number; cy: number; amount: number; label: string; name: string; kind?: 'local' | 'leak' }>, src: { cx: number; cy: number }) => {
+  const renderValueChips = (
+    top: Array<{
+      id: string;
+      cx: number;
+      cy: number;
+      amount: number;
+      label: string;
+      name: string;
+      kind?: 'local' | 'leak';
+    }>,
+    src: { cx: number; cy: number },
+  ) => {
     const vlayer = document.getElementById('heroValueLayer');
     if (!vlayer) return;
     vlayer.innerHTML = '';
@@ -258,24 +295,32 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     };
     const placed: Array<{ x: number; y: number; w: number; h: number }> = [];
     const collides = (x: number, y: number, w: number, h: number) =>
-      placed.some(p => !(x + w < p.x - 4 || x - 4 > p.x + p.w || y + h < p.y - 4 || y - 4 > p.y + p.h));
+      placed.some(
+        (p) => !(x + w < p.x - 4 || x - 4 > p.x + p.w || y + h < p.y - 4 || y - 4 > p.y + p.h),
+      );
     const offsets = [
-      [22, -18], [-22, -18], [22, 18], [-22, 18],
-      [32, 0], [-32, 0], [0, -24], [0, 24],
+      [22, -18],
+      [-22, -18],
+      [22, 18],
+      [-22, 18],
+      [32, 0],
+      [-32, 0],
+      [0, -24],
+      [0, 24],
     ];
     for (const r of top) {
       const isLocal = r.kind === 'local';
       // Local chip prefers the SW position so it doesn't collide
       // with the source spark / callout sitting NE of the centroid.
-      const fromSrcX = isLocal ? -1 : (Math.sign(r.cx - src.cx) || 1);
-      const fromSrcY = isLocal ?  1 : (Math.sign(r.cy - src.cy) || -1);
-      const sortedOffsets = [...offsets].sort((a, b) =>
-        Math.abs(Math.sign(a[0]) - fromSrcX) + Math.abs(Math.sign(a[1]) - fromSrcY) -
-        (Math.abs(Math.sign(b[0]) - fromSrcX) + Math.abs(Math.sign(b[1]) - fromSrcY))
+      const fromSrcX = isLocal ? -1 : Math.sign(r.cx - src.cx) || 1;
+      const fromSrcY = isLocal ? 1 : Math.sign(r.cy - src.cy) || -1;
+      const sortedOffsets = [...offsets].sort(
+        (a, b) =>
+          Math.abs(Math.sign(a[0]) - fromSrcX) +
+          Math.abs(Math.sign(a[1]) - fromSrcY) -
+          (Math.abs(Math.sign(b[0]) - fromSrcX) + Math.abs(Math.sign(b[1]) - fromSrcY)),
       );
-      const labelText = isLocal
-        ? `${r.name} ${fmt(r.amount)} local`
-        : `${r.name} ${fmt(r.amount)}`;
+      const labelText = isLocal ? `${r.name} ${fmt(r.amount)} local` : `${r.name} ${fmt(r.amount)}`;
       const fontPx = isLocal ? 11 : 9.5;
       const chipH = isLocal ? 14 : 12;
       const chipW = Math.max(48, labelText.length * (fontPx * 0.55) + 10);
@@ -285,7 +330,8 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
         const tx = r.cx + o[0];
         const ty = r.cy + o[1];
         if (!collides(tx - chipW / 2, ty - chipH / 2, chipW, chipH)) {
-          cx2 = tx; cy2 = ty;
+          cx2 = tx;
+          cy2 = ty;
           break;
         }
       }
@@ -327,7 +373,11 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    * @param src Source point — origin of every flow line.
    * @param maxAmount Used to normalize stroke widths.
    */
-  const renderFlowLines = (top: Array<{ cx: number; cy: number; amount: number }>, src: { cx: number; cy: number }, maxAmount: number) => {
+  const renderFlowLines = (
+    top: Array<{ cx: number; cy: number; amount: number }>,
+    src: { cx: number; cy: number },
+    maxAmount: number,
+  ) => {
     const flowLayer = document.getElementById('heroFlowLayer');
     if (!flowLayer) return;
     flowLayer.innerHTML = '';
@@ -356,13 +406,6 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     }
   };
 
-  /* Kept for backward-compat with other call sites: light the source
-     region only. The neighbor pass is now handled by computeShares
-     + applyChoropleth, called explicitly from runStudy. */
-  const shadeNeighbors = (id: string) => {
-    lightSource(id);
-  };
-
   /* ---------- viewBox zoom tween ---------- */
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const svgEl = document.getElementById('heroMap') as unknown as SVGSVGElement | null;
@@ -370,12 +413,17 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   // initial viewBox attribute; we read them back here at runtime
   // so the client doesn't need the server constants.
   const initialVB = (svgEl?.getAttribute('viewBox') || '-60 5 1020 610').split(/\s+/).map(Number);
-  const overviewVB = [initialVB[0], initialVB[1], initialVB[2], initialVB[3]] as [number, number, number, number];
+  const overviewVB = [initialVB[0], initialVB[1], initialVB[2], initialVB[3]] as [
+    number,
+    number,
+    number,
+    number,
+  ];
   let zoomFrame: number | undefined;
   const setVB = (vb: [number, number, number, number]) => {
     svgEl?.setAttribute('viewBox', vb.join(' '));
   };
-  const easeInOut = (t: number) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
   /**
    * Tween the SVG viewBox from its current value to `target` over
    * `dur` ms with an ease-in-out curve. Cancels any in-flight zoom
@@ -387,9 +435,11 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    */
   const tweenVB = (target: [number, number, number, number], dur = 700) => {
     if (!svgEl) return Promise.resolve();
-    const cur = (svgEl.getAttribute('viewBox') || overviewVB.join(' ')).split(/\s+/).map(Number) as [number, number, number, number];
+    const cur = (svgEl.getAttribute('viewBox') || overviewVB.join(' '))
+      .split(/\s+/)
+      .map(Number) as [number, number, number, number];
     const t0 = performance.now();
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       const step = (now: number) => {
         const t = Math.min(1, (now - t0) / dur);
         const e = easeInOut(t);
@@ -435,12 +485,16 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    */
   const seededRandom = (seed: number) => {
     let s = seed;
-    return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    return () => {
+      s = (s * 9301 + 49297) % 233280;
+      return s / 233280;
+    };
   };
 
   const clearDetail = () => {
-    ['heroFlowLayer', 'heroValueLayer'].forEach(id => {
-      const el = document.getElementById(id); if (el) el.innerHTML = '';
+    ['heroFlowLayer', 'heroValueLayer'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '';
     });
     clearChoropleth();
   };
@@ -450,7 +504,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    * four circles share the same center so they're moved together.
    */
   const moveSource = (cx: number, cy: number) => {
-    source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
+    source.querySelectorAll<SVGCircleElement>('circle').forEach((c) => {
       c.setAttribute('cx', String(cx));
       c.setAttribute('cy', String(cy));
     });
@@ -458,10 +512,10 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   // Base radii (state-level study). Per-level study calls scaleSource()
   // so the dot, halo and rings shrink for county/reservation zooms.
   const SOURCE_BASE_R: Record<string, number> = {
-    'hero-spark':       6,
+    'hero-spark': 6,
     'hero-spark__core': 2.4,
-    'hero-ring':       14,
-    'hero-glow':      120,
+    'hero-ring': 14,
+    'hero-glow': 120,
   };
   /**
    * Scale the source dot + halo + ring + glow uniformly. Used to
@@ -471,7 +525,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
    * @param scale Multiplier applied to each circle's base radius.
    */
   const scaleSource = (scale: number) => {
-    source.querySelectorAll<SVGCircleElement>('circle').forEach(c => {
+    source.querySelectorAll<SVGCircleElement>('circle').forEach((c) => {
       for (const cls of Array.from(c.classList)) {
         const base = SOURCE_BASE_R[cls];
         if (base != null) {
@@ -502,8 +556,10 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   };
 
   const runStudy = async (stateId: string, opts?: RunOpts) => {
-    runId += 1; const me = runId;
-    const s = states[stateId]; if (!s) return;
+    runId += 1;
+    const me = runId;
+    const s = states[stateId];
+    if (!s) return;
 
     const studyIdEl = document.getElementById('workspaceStudyId');
     if (studyIdEl) studyIdEl.textContent = `STUDY ${String(runId).padStart(3, '0')}`;
@@ -519,14 +575,16 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     stage.dataset.studyLevel = opts?.level ?? (opts?.sourcePoint ? 'reservation' : 'state');
 
     const activity = opts?.activity ?? ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-    const amount   = opts?.amount   ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-    const src      = opts?.sourcePoint ?? { cx: s.cx, cy: s.cy };
+    const amount = opts?.amount ?? AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+    const src = opts?.sourcePoint ?? { cx: s.cx, cy: s.cy };
 
     stage.dataset.run = '';
     stage.dataset.ring = '';
     figTotalCell?.classList.remove('is-filled');
     figJobsCell?.classList.remove('is-filled');
-    [figD, figI, figU, figT, figJ].forEach(el => { if (el) el.textContent = '-'; });
+    [figD, figI, figU, figT, figJ].forEach((el) => {
+      if (el) el.textContent = '-';
+    });
 
     // Clear any prior value labels + callout
     const vlayer = document.getElementById('heroValueLayer');
@@ -534,7 +592,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     const callout = document.getElementById('heroSourceCallout');
     if (callout) callout.classList.remove('is-on');
 
-    shadeNeighbors(stateId);
+    lightSource(stateId);
     moveSource(src.cx, src.cy);
     clearDetail();
     stage.dataset.run = '1';
@@ -557,8 +615,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
        chain or workforce living on-reservation, and the indirect
        portion (specialized suppliers) often crosses state lines. */
     const _level: 'state' | 'county' | 'reservation' =
-      opts?.level
-      ?? (opts?.sourcePoint ? 'reservation' : 'state');
+      opts?.level ?? (opts?.sourcePoint ? 'reservation' : 'state');
     // What fraction of the spillover stays inside the source REGION
     // (state for state studies, county for county studies, reservation
     // for reservation studies).
@@ -568,12 +625,12 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     // same state). For state studies this is 0 by definition.
     const ESCAPE_TO_STATE = { state: 0, county: 0.72, reservation: 0.62 } as const;
 
-    const spilloverTotal = (amount.v) * (activity.indirect + activity.induced);
-    const localToRegion   = spilloverTotal * REGION_RETENTION[_level];
-    const beyondRegion    = spilloverTotal - localToRegion;
+    const spilloverTotal = amount.v * (activity.indirect + activity.induced);
+    const localToRegion = spilloverTotal * REGION_RETENTION[_level];
+    const beyondRegion = spilloverTotal - localToRegion;
     const inStateOffRegion = beyondRegion * ESCAPE_TO_STATE[_level];
     const externalSpillover = beyondRegion - inStateOffRegion;
-    const totalLocal       = amount.v + localToRegion + inStateOffRegion;
+    const totalLocal = amount.v + localToRegion + inStateOffRegion;
 
     // Distance-decay distribution across non-source states. Sharper
     // decay (2.2) than before so leakage concentrates in the
@@ -590,8 +647,15 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       .sort((a, b) => b[1] - a[1])
       .slice(0, chipN);
     const chipData = topShares.map(([id, share]) => {
-      const region = statePool.find(r => r.id === id)!;
-      return { id, cx: region.cx, cy: region.cy, amount: share * externalSpillover, label: 'spillover', name: region.name };
+      const region = statePool.find((r) => r.id === id)!;
+      return {
+        id,
+        cx: region.cx,
+        cy: region.cy,
+        amount: share * externalSpillover,
+        label: 'spillover',
+        name: region.name,
+      };
     });
     const maxChipAmount = chipData[0]?.amount ?? 1;
     // Inject a "local retention" chip on the source state showing
@@ -622,8 +686,8 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     // source state + edges of adjacent ones. Reservation: tightest
     // crop on the polygon itself.
     const level = _level;
-    const zoomSpan  = level === 'state' ? 700 : level === 'county' ? 320 : 160;
-    const srcScale  = level === 'state' ? .75 : level === 'county' ? .45 : .26;
+    const zoomSpan = level === 'state' ? 700 : level === 'county' ? 320 : 160;
+    const srcScale = level === 'state' ? 0.75 : level === 'county' ? 0.45 : 0.26;
     scaleSource(srcScale);
     zoomTo(src.cx, src.cy, zoomSpan);
 
@@ -634,9 +698,9 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     if (wsStatus) wsStatus.dataset.state = 'running';
     if (wsLabel) wsLabel.textContent = 'Running';
     const chipText = opts?.chip ?? `${amount.label} ${activity.label} in ${s.name}`;
-    // The header region used to show just the state name; we now
-    // show the full chip there (LEVEL · Project · Location · year)
-    // because the bottom workspace-activity duplicate was removed.
+    // The header region shows the full chip (LEVEL · Project · Location ·
+    // year); #workspaceActivity is a visually-hidden duplicate that keeps
+    // screen readers announcing each new study.
     if (wsRegion) wsRegion.textContent = chipText;
     if (wsActivity) {
       wsActivity.textContent = chipText;
@@ -652,8 +716,9 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
         txt.textContent = s.name;
         const tx = src.cx + 18;
         const ty = src.cy - 18;
-        const w = (s.name.length * 6.6) + 16;
-        bg.setAttribute('x', String(tx)); bg.setAttribute('y', String(ty - 11));
+        const w = s.name.length * 6.6 + 16;
+        bg.setAttribute('x', String(tx));
+        bg.setAttribute('y', String(ty - 11));
         bg.setAttribute('width', String(w));
         txt.setAttribute('x', String(tx + 8));
         txt.setAttribute('y', String(ty));
@@ -709,20 +774,16 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   /* Run a single scene. State and county scenes use the state centroid;
      reservation scenes resolve to a tribal-land centroid pulled from
      the AIANNH lookup so the source point lands on the actual polygon.
-     Also encodes the scene's slug in the URL hash so shared links
-     replay the exact same study. Multi-region highlight: state always
-     lights up (via runStudy's shadeNeighbors), county lights up when
-     scene.countyFips is set, reservation polygon lights up by tribal
-     name match. */
-  // (Live scene state used to be encoded in the URL hash so people
-  // could 'share the exact study they're watching'. That ended up
-  // polluting the URL with a string that search engines don't crawl
-  // anyway. Shareable scenes already live at /demo/<slug> — those
-  // are real, prerendered, SEO-indexed URLs. The homepage URL
-  // stays clean.)
+     Multi-region highlight: the state always lights up (via runStudy's
+     lightSource), the county lights up when scene.countyFips is set,
+     and the reservation polygon lights up by tribal name match.
+
+     Scene state is deliberately NOT encoded in the homepage URL hash;
+     shareable scenes live at /demo/<slug>, which are real, prerendered,
+     SEO-indexed URLs. */
   let pendingReservationTribalKey: string | undefined;
   const clearReservationHighlight = () => {
-    stage.querySelectorAll<HTMLElement>('.hero-aiannh[data-active="1"]').forEach(el => {
+    stage.querySelectorAll<HTMLElement>('.hero-aiannh[data-active="1"]').forEach((el) => {
       el.removeAttribute('data-active');
     });
   };
@@ -753,7 +814,10 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
         const cx = bb.x + bb.width / 2;
         const cy = bb.y + bb.height / 2;
         return Math.hypot(cx - t.cx, cy - t.cy);
-      } catch { return Infinity; }
+      } catch {
+        // getBBox() throws if the polygon isn't rendered; rank it last.
+        return Infinity;
+      }
     };
 
     const nameMatches: SVGGraphicsElement[] = [];
@@ -774,13 +838,19 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       // Among name matches, pick the one closest to the source.
       for (const el of nameMatches) {
         const d = dist(el);
-        if (d < bestDist) { bestDist = d; best = el; }
+        if (d < bestDist) {
+          bestDist = d;
+          best = el;
+        }
       }
     } else {
       // No name match — accept the nearest polygon if it's close.
       for (const el of candidates) {
         const d = dist(el);
-        if (d < bestDist) { bestDist = d; best = el; }
+        if (d < bestDist) {
+          bestDist = d;
+          best = el;
+        }
       }
     }
     if (best && bestDist <= RESERVATION_HIGHLIGHT_MAX_DIST) {
@@ -795,13 +865,10 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
         const px = bb.x + bb.width / 2;
         const py = bb.y + bb.height / 2;
         moveSource(px, py);
-      } catch {}
-      // Light up every county whose bounding box overlaps the
-      // reservation. Bbox overlap is an over-estimate (it can match
-      // counties whose actual polygon doesn't intersect), but at
-      // this map scale the visual reads cleanly: visitors see all
-      // the counties the reservation crosses, instead of just the
-      // one containing its centroid.
+      } catch {
+        // getBBox() throws if the polygon isn't rendered; keep the
+        // lookup centroid in that case.
+      }
       highlightCountiesOverlappingAiannh(best);
       return true;
     }
@@ -822,7 +889,12 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   const highlightCountiesOverlappingAiannh = (aiannhEl: SVGGraphicsElement) => {
     const apply = () => {
       let rb: DOMRect | null = null;
-      try { rb = aiannhEl.getBBox(); } catch { return; }
+      try {
+        rb = aiannhEl.getBBox();
+      } catch {
+        // Unrendered polygon — nothing to highlight against.
+        return;
+      }
       if (!rb) return;
       countyByFips.forEach((countyEl) => {
         try {
@@ -833,7 +905,9 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
             cb.y < rb.y + rb.height + COUNTY_OVERLAP_PAD &&
             cb.y + cb.height > rb.y - COUNTY_OVERLAP_PAD;
           if (overlaps) countyEl.setAttribute('data-active', '1');
-        } catch {}
+        } catch {
+          // Skip counties that aren't rendered yet.
+        }
       });
     };
     if (countyLayer && countyLayer.dataset.loaded === '1') apply();
@@ -846,7 +920,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     loadAiannh();
     applyReservationHighlight();
   };
-  const runScene = async (scene: typeof SCENES[number]) => {
+  const runScene = async (scene: (typeof SCENES)[number]) => {
     // Apply layered highlights for this scene before runStudy fires.
     // For county scenes, scene.countyFips. For reservation scenes,
     // pull the precomputed containing-county FIPS from tribalLookup
@@ -875,9 +949,8 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       // centroid (falling back to the state centroid if we don't
       // have the FIPS). 'level' drives zoom + dot scaling.
       const isCounty = scene.level === 'county';
-      const countyCenter = isCounty && scene.countyFips
-        ? countyCentroids[scene.countyFips]
-        : undefined;
+      const countyCenter =
+        isCounty && scene.countyFips ? countyCentroids[scene.countyFips] : undefined;
       await runStudy(scene.state, {
         activity: scene.activity,
         amount: scene.amount,
@@ -913,9 +986,9 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     autoCycleOrders[idx].push(...arr);
   };
   // Auto-cycle interval. Each run takes ~3s to land all the live
-   // figures + scatter dots; the rest of the delay is "breathing
-   // room" so the result sticks long enough to read before the
-   // next study fires.
+  // figures + scatter dots; the rest of the delay is "breathing
+  // room" so the result sticks long enough to read before the
+  // next study fires.
   const scheduleNext = (delay = 10000) => {
     if (pausedByHover) return;
     if (Date.now() < pausedUntil) return;
@@ -958,8 +1031,8 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       y = (e as MouseEvent).clientY - rect.top;
     } else {
       const t = (e.target as Element).getBoundingClientRect();
-      x = (t.left + t.width / 2) - rect.left;
-      y = (t.top + t.height / 2) - rect.top;
+      x = t.left + t.width / 2 - rect.left;
+      y = t.top + t.height / 2 - rect.top;
     }
     tooltip.style.transform = `translate(${x}px, ${y}px)`;
   };
@@ -970,12 +1043,12 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   };
 
   /* ---------- Layer filters (States / Counties / Tribal) ---------- */
-  document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(btn => {
+  document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach((btn) => {
     btn.addEventListener('click', () => {
       const layer = btn.dataset.layer || 'states';
       // Map interaction analytics (#83) — which layers visitors explore.
       trackEvent('map.layer', { layer });
-      document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach(b => {
+      document.querySelectorAll<HTMLButtonElement>('.wfilter').forEach((b) => {
         const on = b === btn;
         b.classList.toggle('is-active', on);
         b.setAttribute('aria-selected', on ? 'true' : 'false');
@@ -1013,7 +1086,10 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   if (workspaceEl) {
     const enter = () => {
       pausedByHover = true;
-      if (cycleTimer) { window.clearTimeout(cycleTimer); cycleTimer = undefined; }
+      if (cycleTimer) {
+        window.clearTimeout(cycleTimer);
+        cycleTimer = undefined;
+      }
     };
     const leave = () => {
       if (!pausedByHover) return;
@@ -1076,9 +1152,10 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   });
 
   /* ---------- state click + hover ---------- */
-  stage.querySelectorAll<HTMLElement>('.hero-state').forEach(el => {
+  stage.querySelectorAll<HTMLElement>('.hero-state').forEach((el) => {
     el.addEventListener('mouseenter', (e) => {
-      const id = el.dataset.id; if (!id) return;
+      const id = el.dataset.id;
+      if (!id) return;
       setTooltip(states[id]?.name || '', 'click to run a study here');
       tooltip.classList.add('is-on');
       placeTooltip(e);
@@ -1088,7 +1165,8 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     el.addEventListener('mousemove', (e) => placeTooltip(e));
     el.addEventListener('mouseleave', () => tooltip.classList.remove('is-on'));
     el.addEventListener('focus', (e) => {
-      const id = el.dataset.id; if (!id) return;
+      const id = el.dataset.id;
+      if (!id) return;
       setTooltip(states[id]?.name || '', 'press Enter to run a study here');
       tooltip.classList.add('is-on');
       placeTooltip(e);
@@ -1096,15 +1174,24 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     el.addEventListener('blur', () => tooltip.classList.remove('is-on'));
 
     const start = async () => {
-      const id = el.dataset.id; if (!id) return;
+      const id = el.dataset.id;
+      if (!id) return;
       if (cycleTimer) window.clearTimeout(cycleTimer);
       await runStudy(id);
+      // Resume the auto-cycle a little sooner than the idle 10s default:
+      // the visitor has just read this result, so the usual breathing
+      // room can be shorter. Deliberately not scheduleNext(), which
+      // would skip scheduling entirely while the pointer is still over
+      // the map.
       cycleTimer = window.setTimeout(cycle, 6800);
     };
     el.addEventListener('click', start);
     el.addEventListener('keydown', (e) => {
       const k = (e as KeyboardEvent).key;
-      if (k === 'Enter' || k === ' ') { e.preventDefault(); start(); }
+      if (k === 'Enter' || k === ' ') {
+        e.preventDefault();
+        start();
+      }
     });
   });
 
@@ -1122,16 +1209,26 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
          on an explicit interaction, so the states map stays fully usable
          without pulling the heavy layers uninvited. */
   let mapFetchAbort = new AbortController();
-  const abortMapFetches = () => { try { mapFetchAbort.abort(); } catch { /* noop */ } };
+  const abortMapFetches = () => {
+    try {
+      mapFetchAbort.abort();
+    } catch {
+      /* noop */
+    }
+  };
   // Registered (not { once: true }) so a bfcache restore — which makes a
   // fresh controller below — is still covered on the *next* navigation
   // away. abort() is idempotent, so firing on both pagehide and a view
   // swap is harmless.
   window.addEventListener('pagehide', abortMapFetches);
   document.addEventListener('astro:before-swap', abortMapFetches);
-  const netConn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-  const liteMode = !!netConn && (netConn.saveData === true || /(^|-)2g$/.test(netConn.effectiveType || ''));
-  const isAbortError = (err: unknown): boolean => err instanceof DOMException && err.name === 'AbortError';
+  const netConn = (
+    navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }
+  ).connection;
+  const liteMode =
+    !!netConn && (netConn.saveData === true || /(^|-)2g$/.test(netConn.effectiveType || ''));
+  const isAbortError = (err: unknown): boolean =>
+    err instanceof DOMException && err.name === 'AbortError';
 
   const countyLayer = document.getElementById('heroCountyLayer');
   let countyLoading: Promise<void> | null = null;
@@ -1140,8 +1237,11 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   const loadCounties = (): Promise<void> => {
     if (!countyLayer || countyLayer.dataset.loaded === '1') return Promise.resolve();
     if (countyLoading) return countyLoading;
-    countyLoading = fetch('/data/counties.json', { credentials: 'same-origin', signal: mapFetchAbort.signal })
-      .then(r => r.ok ? r.json() : [])
+    countyLoading = fetch('/data/counties.json', {
+      credentials: 'same-origin',
+      signal: mapFetchAbort.signal,
+    })
+      .then((r) => (r.ok ? r.json() : []))
       .then((polys: any[]) => {
         if (!countyLayer || countyLayer.dataset.loaded === '1') return;
         const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1175,7 +1275,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     return countyLoading;
   };
   const clearCountyHighlight = () => {
-    countyByFips.forEach(el => el.removeAttribute('data-active'));
+    countyByFips.forEach((el) => el.removeAttribute('data-active'));
   };
   const highlightCounty = (fips: string | undefined) => {
     clearCountyHighlight();
@@ -1199,8 +1299,11 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   const loadAiannh = (): Promise<void> => {
     if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return Promise.resolve();
     if (aiannhLoading) return aiannhLoading;
-    aiannhLoading = fetch('/data/aiannh.json', { credentials: 'same-origin', signal: mapFetchAbort.signal })
-      .then(r => r.ok ? r.json() : [])
+    aiannhLoading = fetch('/data/aiannh.json', {
+      credentials: 'same-origin',
+      signal: mapFetchAbort.signal,
+    })
+      .then((r) => (r.ok ? r.json() : []))
       .then((polys: any[]) => {
         if (!aiannhLayer || aiannhLayer.dataset.loaded === '1') return;
         const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1249,29 +1352,46 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
 
   // Trigger lazy-load on first stage interaction (always — an explicit
   // hover/focus means the visitor wants the overlays, lite mode or not).
-  const triggerLoadOnce = () => { loadAiannh(); loadCounties(); };
+  const triggerLoadOnce = () => {
+    loadAiannh();
+    loadCounties();
+  };
   stage.addEventListener('pointerenter', triggerLoadOnce, { once: true });
   stage.addEventListener('focusin', triggerLoadOnce, { once: true });
 
   // Automatic prefetch so even visitors who never touch the map get the
   // layers ready — but only once the map is actually on screen (#36) and
   // only when the connection isn't asking us to conserve data (#37).
-  const w = window as unknown as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void };
+  const w = window as unknown as Window & {
+    requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void;
+  };
   const idlePrefetch = () => {
     if (typeof w.requestIdleCallback === 'function') {
-      w.requestIdleCallback(() => { loadAiannh(); loadCounties(); }, { timeout: 4000 });
+      w.requestIdleCallback(
+        () => {
+          loadAiannh();
+          loadCounties();
+        },
+        { timeout: 4000 },
+      );
     } else {
-      w.setTimeout(() => { loadAiannh(); loadCounties(); }, 2500);
+      w.setTimeout(() => {
+        loadAiannh();
+        loadCounties();
+      }, 2500);
     }
   };
   if (!liteMode) {
     if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries, obs) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          obs.disconnect();
-          idlePrefetch();
-        }
-      }, { rootMargin: '200px' });
+      const io = new IntersectionObserver(
+        (entries, obs) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            obs.disconnect();
+            idlePrefetch();
+          }
+        },
+        { rootMargin: '200px' },
+      );
       io.observe(stage);
     } else {
       idlePrefetch();
@@ -1284,15 +1404,26 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   const coachmark = document.getElementById('heroCoachmark');
   if (coachmark) {
     let seen = false;
-    try { seen = localStorage.getItem('lumecon:map:coachmark') === '1'; } catch { seen = false; }
+    try {
+      seen = localStorage.getItem('lumecon:map:coachmark') === '1';
+    } catch {
+      seen = false;
+    }
     if (!seen) {
       coachmark.hidden = false;
       const dismissCoach = () => {
         if (coachmark.hidden) return;
         coachmark.hidden = true;
-        try { localStorage.setItem('lumecon:map:coachmark', '1'); } catch { /* storage disabled — fine */ }
+        try {
+          localStorage.setItem('lumecon:map:coachmark', '1');
+        } catch {
+          /* storage disabled — fine */
+        }
       };
-      document.getElementById('heroCoachmarkClose')?.addEventListener('click', (e) => { e.stopPropagation(); dismissCoach(); });
+      document.getElementById('heroCoachmarkClose')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dismissCoach();
+      });
       stage.addEventListener('pointerdown', dismissCoach, { once: true });
       stage.addEventListener('focusin', dismissCoach, { once: true });
       window.setTimeout(dismissCoach, 7000);
@@ -1307,7 +1438,8 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     return el;
   };
   aiannhLayer?.addEventListener('pointerover', (e) => {
-    const el = aiannhFromEvent(e); if (!el) return;
+    const el = aiannhFromEvent(e);
+    if (!el) return;
     setTooltip(el.dataset.name || 'Tribal land', 'click to run a tribal-economy study');
     tooltip.classList.add('is-on');
     placeTooltip(e as MouseEvent);
@@ -1317,21 +1449,23 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
   });
   aiannhLayer?.addEventListener('pointerout', () => tooltip.classList.remove('is-on'));
   aiannhLayer?.addEventListener('focusin', (e) => {
-    const el = aiannhFromEvent(e); if (!el) return;
+    const el = aiannhFromEvent(e);
+    if (!el) return;
     setTooltip(el.dataset.name || 'Tribal land', 'press Enter to run a tribal-economy study');
     tooltip.classList.add('is-on');
     placeTooltip(e as FocusEvent);
   });
   aiannhLayer?.addEventListener('focusout', () => tooltip.classList.remove('is-on'));
   const startTribal = async (el: HTMLElement) => {
-    const fips = el.dataset.fips; if (!fips) return;
+    const fips = el.dataset.fips;
+    if (!fips) return;
     const cx = parseFloat(el.dataset.cx || '0');
     const cy = parseFloat(el.dataset.cy || '0');
     const tribalName = el.dataset.short || el.dataset.name || 'a tribal land';
     if (cycleTimer) window.clearTimeout(cycleTimer);
     const activity = ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)];
-    const amount   = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
-    const framing  = `A ${amount.label} tribal project on the ${tribalName}.`;
+    const amount = AMOUNTS[1 + Math.floor(Math.random() * (AMOUNTS.length - 1))];
+    const framing = `A ${amount.label} tribal project on the ${tribalName}.`;
     const chip = `${tribalName} · ${amount.label} ${activity.label}`;
     // Light the polygon + overlapping counties for the click path too.
     clearReservationHighlight();
@@ -1341,15 +1475,22 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     scheduleNext();
   };
   aiannhLayer?.addEventListener('click', (e) => {
-    const el = aiannhFromEvent(e); if (el) startTribal(el);
+    const el = aiannhFromEvent(e);
+    if (el) startTribal(el);
   });
   aiannhLayer?.addEventListener('keydown', (e) => {
-    const el = aiannhFromEvent(e); if (!el) return;
+    const el = aiannhFromEvent(e);
+    if (!el) return;
     const k = (e as KeyboardEvent).key;
-    if (k === 'Enter' || k === ' ') { e.preventDefault(); startTribal(el); }
+    if (k === 'Enter' || k === ' ') {
+      e.preventDefault();
+      startTribal(el);
+    }
   });
   // Also load eagerly when the Tribal lands filter chip activates.
-  document.querySelector('.wfilter[data-layer="tribal"]')?.addEventListener('click', () => loadAiannh(), { once: true });
+  document
+    .querySelector('.wfilter[data-layer="tribal"]')
+    ?.addEventListener('click', () => loadAiannh(), { once: true });
 
   /* First study kickoff.
 
@@ -1369,7 +1510,11 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
      server-side (Cloudflare/AWS edge headers) so no third-party
      lookup is needed. */
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const s = states['53']; if (s) { moveSource(s.cx, s.cy); shadeNeighbors('53'); }
+    const s = states['53'];
+    if (s) {
+      moveSource(s.cx, s.cy);
+      lightSource('53');
+    }
     figD!.textContent = fmt(5_000_000);
   } else {
     scheduleNext(900);
@@ -1380,30 +1525,39 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
      a button. Activating it expands a tiny info block with a
      one-sentence definition + the live multiplier used in this run. */
   const FIG_DEFS: Record<string, string> = {
-    direct:   'First-round spending that lands in the analysis region. Capital expenditure (construction, equipment), operating payroll, and contracts paid to local vendors all count. Taxes paid out to federal or non-local governments do not (they leak out of the region; fiscal impact is a separate analysis).',
-    indirect: 'Supplier spending. Money the direct recipients spend with vendors, contractors, and suppliers inside the region.',
-    induced:  'Household spending. Wages earned by direct and indirect workers, spent locally on rent, groceries, services.',
-    total:    'Direct + Indirect + Induced. The full economic impact across the region.',
-    jobs:     'Estimated jobs supported across direct, indirect, and induced activity, derived from a per-million-dollars factor for the scenario\'s activity type.',
+    direct:
+      'First-round spending that lands in the analysis region. Capital expenditure (construction, equipment), operating payroll, and contracts paid to local vendors all count. Taxes paid out to federal or non-local governments do not (they leak out of the region; fiscal impact is a separate analysis).',
+    indirect:
+      'Supplier spending. Money the direct recipients spend with vendors, contractors, and suppliers inside the region.',
+    induced:
+      'Household spending. Wages earned by direct and indirect workers, spent locally on rent, groceries, services.',
+    total: 'Direct + Indirect + Induced. The full economic impact across the region.',
+    jobs: "Estimated jobs supported across direct, indirect, and induced activity, derived from a per-million-dollars factor for the scenario's activity type.",
   };
   // Level-specific assumption notes. Hint at how the model adapts
   // for smaller regions without giving away the full methodology.
   const LEVEL_NOTES: Record<string, Record<string, string>> = {
     direct: {
-      county:      'County scope: only spending inside the county counts. Inter-county transfers in the same metro are treated as leakage.',
-      reservation: 'On-reservation only. Federal contracts assigned to a tribal entity count even when executed off-reservation.',
+      county:
+        'County scope: only spending inside the county counts. Inter-county transfers in the same metro are treated as leakage.',
+      reservation:
+        'On-reservation only. Federal contracts assigned to a tribal entity count even when executed off-reservation.',
     },
     indirect: {
-      county:      'Multipliers are FLQ-adjusted downward for the thinner local supplier base. Out-of-county supplier spend is leakage.',
-      reservation: 'Reservation supply chains are typically shallow, so indirect effects leak heavily to the containing county and across state lines. Adjusted accordingly.',
+      county:
+        'Multipliers are FLQ-adjusted downward for the thinner local supplier base. Out-of-county supplier spend is leakage.',
+      reservation:
+        'Reservation supply chains are typically shallow, so indirect effects leak heavily to the containing county and across state lines. Adjusted accordingly.',
     },
     induced: {
-      county:      'Workers\' household spending inside the county only. Commuter spend in adjacent counties is leakage.',
-      reservation: 'Split between on-reservation households and commuters from off-reservation, weighted by employment patterns for the industry.',
+      county:
+        "Workers' household spending inside the county only. Commuter spend in adjacent counties is leakage.",
+      reservation:
+        'Split between on-reservation households and commuters from off-reservation, weighted by employment patterns for the industry.',
     },
   };
   const figureButtons = document.querySelectorAll<HTMLElement>('.hero-fig');
-  figureButtons.forEach(cell => {
+  figureButtons.forEach((cell) => {
     const key = cell.dataset.k;
     if (!key || !FIG_DEFS[key]) return;
     const dt = cell.querySelector('dt');
@@ -1430,10 +1584,14 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       // exposes them; this is the public hero.
       let mult = '';
       const al = stage.dataset.actLabel;
-      if (key === 'indirect' && al)     mult = `Calibrated to the supplier mix of a typical <strong>${al}</strong>.`;
-      else if (key === 'induced' && al) mult = `Calibrated to the worker-spending pattern of a typical <strong>${al}</strong>.`;
-      else if (key === 'jobs' && al)    mult = `Employment per dollar of activity is sector-specific; this run uses the <strong>${al}</strong> profile.`;
-      else if (key === 'total' && al)   mult = `Sum of the three rounds for this <strong>${al}</strong>.`;
+      if (key === 'indirect' && al)
+        mult = `Calibrated to the supplier mix of a typical <strong>${al}</strong>.`;
+      else if (key === 'induced' && al)
+        mult = `Calibrated to the worker-spending pattern of a typical <strong>${al}</strong>.`;
+      else if (key === 'jobs' && al)
+        mult = `Employment per dollar of activity is sector-specific; this run uses the <strong>${al}</strong> profile.`;
+      else if (key === 'total' && al)
+        mult = `Sum of the three rounds for this <strong>${al}</strong>.`;
       // Level-specific note: shows when the current study is at
       // county or reservation level and the figure has a note for
       // that level. State-level studies don't get an addendum
@@ -1441,16 +1599,16 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       const lvl = stage.dataset.studyLevel || 'state';
       const lvlNote = LEVEL_NOTES[key]?.[lvl] ?? '';
       panel.innerHTML =
-        `<p>${def}</p>`
-        + (lvlNote ? `<p class="hero-fig__note">${lvlNote}</p>` : '')
-        + (mult ? `<p class="hero-fig__mult">${mult}</p>` : '');
+        `<p>${def}</p>` +
+        (lvlNote ? `<p class="hero-fig__note">${lvlNote}</p>` : '') +
+        (mult ? `<p class="hero-fig__mult">${mult}</p>` : '');
     };
 
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const open = panel.hidden;
       // Close any other open panels.
-      figureButtons.forEach(other => {
+      figureButtons.forEach((other) => {
         if (other === cell) return;
         const p = other.querySelector<HTMLElement>('.hero-fig__expl');
         const b = other.querySelector<HTMLButtonElement>('.hero-fig__info');
@@ -1466,7 +1624,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     // Close all panels when clicking outside.
     const t = e.target as Element | null;
     if (t && t.closest('.hero-fig')) return;
-    figureButtons.forEach(cell => {
+    figureButtons.forEach((cell) => {
       const p = cell.querySelector<HTMLElement>('.hero-fig__expl');
       const b = cell.querySelector<HTMLButtonElement>('.hero-fig__info');
       if (p) p.hidden = true;
@@ -1487,16 +1645,23 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     let matches: SearchEntry[] = [];
     let activeIdx = -1;
 
-    const escapeHtml = (s: string) => s.replace(/[&<>"']/g, c => (
-      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string
-    ));
+    const escapeHtml = (s: string) =>
+      s.replace(
+        /[&<>"']/g,
+        (c) =>
+          ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
+      );
     const highlight = (text: string, q: string) => {
       if (!q) return escapeHtml(text);
       const i = text.toLowerCase().indexOf(q.toLowerCase());
       if (i < 0) return escapeHtml(text);
-      return escapeHtml(text.slice(0, i))
-        + '<mark>' + escapeHtml(text.slice(i, i + q.length)) + '</mark>'
-        + escapeHtml(text.slice(i + q.length));
+      return (
+        escapeHtml(text.slice(0, i)) +
+        '<mark>' +
+        escapeHtml(text.slice(i, i + q.length)) +
+        '</mark>' +
+        escapeHtml(text.slice(i + q.length))
+      );
     };
 
     const rank = (q: string): SearchEntry[] => {
@@ -1508,7 +1673,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
         let s = 0;
         if (nl === ql) s = 100;
         else if (nl.startsWith(ql)) s = 60;
-        else if (nl.split(/\s+/).some(w => w.startsWith(ql))) s = 40;
+        else if (nl.split(/\s+/).some((w) => w.startsWith(ql))) s = 40;
         else if (nl.includes(ql)) s = 20;
         else if (e.sub.toLowerCase().includes(ql)) s = 8;
         if (s > 0) {
@@ -1520,7 +1685,7 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
         }
       }
       scored.sort((a, b) => b.s - a.s || a.e.name.length - b.e.name.length);
-      return scored.slice(0, 8).map(x => x.e);
+      return scored.slice(0, 8).map((x) => x.e);
     };
 
     const closePanel = () => {
@@ -1533,24 +1698,33 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       searchInput.setAttribute('aria-expanded', 'true');
     };
     const renderPanel = (q: string) => {
-      if (!matches.length) { closePanel(); return; }
-      const html = matches.map((m, i) => `
+      if (!matches.length) {
+        closePanel();
+        return;
+      }
+      const html = matches
+        .map(
+          (m, i) => `
         <li class="workspace-search__item ${i === activeIdx ? 'is-active' : ''}"
             role="option"
             aria-selected="${i === activeIdx}"
             data-idx="${i}">
           <span class="workspace-search__kind workspace-search__kind--${m.type}" aria-hidden="true">
-            ${m.type === 'state'
-              ? '<svg viewBox="0 0 16 16"><path d="M2 4 L7 2 L12 4 L14 7 L13 12 L8 14 L3 12 L1 8 Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>'
-              : m.type === 'county'
-              ? '<svg viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2.5" y1="8" x2="13.5" y2="8" stroke="currentColor" stroke-width="1"/><line x1="8" y1="2.5" x2="8" y2="13.5" stroke="currentColor" stroke-width="1"/></svg>'
-              : '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>'}
+            ${
+              m.type === 'state'
+                ? '<svg viewBox="0 0 16 16"><path d="M2 4 L7 2 L12 4 L14 7 L13 12 L8 14 L3 12 L1 8 Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>'
+                : m.type === 'county'
+                  ? '<svg viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2.5" y1="8" x2="13.5" y2="8" stroke="currentColor" stroke-width="1"/><line x1="8" y1="2.5" x2="8" y2="13.5" stroke="currentColor" stroke-width="1"/></svg>'
+                  : '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>'
+            }
           </span>
           <span class="workspace-search__meta">
             <span class="workspace-search__name">${highlight(m.name, q)}</span>
             <span class="workspace-search__sub">${escapeHtml(m.sub)}</span>
           </span>
-        </li>`).join('');
+        </li>`,
+        )
+        .join('');
       searchPanel.innerHTML = html;
       openPanel();
     };
@@ -1564,7 +1738,10 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
       // the click moves focus out of the search input, plus clear
       // any pending cycleTimer that was already scheduled.
       pausedUntil = Date.now() + 25_000;
-      if (cycleTimer) { window.clearTimeout(cycleTimer); cycleTimer = undefined; }
+      if (cycleTimer) {
+        window.clearTimeout(cycleTimer);
+        cycleTimer = undefined;
+      }
       if (m.type === 'state') {
         runStudy(m.id, { level: 'state' });
       } else if (m.type === 'county') {
@@ -1623,9 +1800,18 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
     });
 
     searchInput.addEventListener('keydown', (e) => {
-      if (searchPanel.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp') && searchInput.value) {
+      if (
+        searchPanel.hidden &&
+        (e.key === 'ArrowDown' || e.key === 'ArrowUp') &&
+        searchInput.value
+      ) {
         matches = rank(searchInput.value);
-        if (matches.length) { activeIdx = 0; renderPanel(searchInput.value); e.preventDefault(); return; }
+        if (matches.length) {
+          activeIdx = 0;
+          renderPanel(searchInput.value);
+          e.preventDefault();
+          return;
+        }
       }
       if (!matches.length) return;
       if (e.key === 'ArrowDown') {
@@ -1647,13 +1833,17 @@ if (stage && source && figD && figI && figU && figT && figJ && tooltip && ttName
 
     searchPanel.addEventListener('mousedown', (e) => {
       // mousedown not click so we beat the input's blur handler
-      const li = (e.target as Element | null)?.closest('.workspace-search__item') as HTMLElement | null;
+      const li = (e.target as Element | null)?.closest(
+        '.workspace-search__item',
+      ) as HTMLElement | null;
       if (!li) return;
       const idx = Number(li.dataset.idx);
       if (Number.isFinite(idx) && matches[idx]) fireMatch(matches[idx]);
     });
     searchPanel.addEventListener('mousemove', (e) => {
-      const li = (e.target as Element | null)?.closest('.workspace-search__item') as HTMLElement | null;
+      const li = (e.target as Element | null)?.closest(
+        '.workspace-search__item',
+      ) as HTMLElement | null;
       if (!li) return;
       const idx = Number(li.dataset.idx);
       if (Number.isFinite(idx) && idx !== activeIdx) {
