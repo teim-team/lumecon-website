@@ -359,15 +359,6 @@ nav.nav--static {
     position: relative;
     z-index: 1100;
   }
-  /* On the home page the hero carries the wordmark — don't double up. */
-  .home-page .logo {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-  .home-page nav.scrolled .logo {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
 }
 
 /* ---------- Dark mode ----------

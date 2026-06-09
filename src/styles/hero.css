@@ -993,9 +993,12 @@
   stroke-width: 0.4;
   stroke-opacity: 0.35;
 }
-.hero-aiannh:hover,
-.hero-aiannh:focus-visible {
-  fill-opacity: 0.8 !important;
+/* The .hero-stage prefix keeps this competitive with the layer-filter
+   and stage-hover rules above (all 0,3,0); source order resolves the
+   ties, so this hover/focus brighten wins over the stage-hover dim. */
+.hero-stage .hero-aiannh:hover,
+.hero-stage .hero-aiannh:focus-visible {
+  fill-opacity: 0.8;
   fill: var(--map-tribal);
 }
 .hero-aiannh--otsa {
@@ -1156,9 +1159,11 @@
 /* Active reservation polygon, the brightest layer. Amber-gold so it
    pops against the pale-gold state and the teal spillover while
    staying in the same warm family as the source. */
-.hero-aiannh[data-active='1'] {
-  fill: var(--map-tribal) !important;
-  fill-opacity: 0.9 !important;
+.hero-stage .hero-aiannh[data-active='1'] {
+  /* Same 0,3,0 specificity as the layer-filter / hover rules earlier
+     in the file; being last, the active state wins every tie. */
+  fill: var(--map-tribal);
+  fill-opacity: 0.9;
   stroke: var(--map-tribal-deep);
   stroke-width: 0.8;
   stroke-opacity: 0.9;
