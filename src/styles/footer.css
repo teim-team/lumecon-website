@@ -65,13 +65,14 @@
   color: var(--navy);
 }
 /* Contact link picks up the teal accent so it reads as the most
-   actionable item in the column. */
-.footer-col__contact {
-  color: var(--accent-text) !important;
-  font-weight: 600 !important;
+   actionable item in the column. (a.footer-col__contact so it
+   out-specifies the generic .footer-col a rules above.) */
+.footer-col a.footer-col__contact {
+  color: var(--accent-text);
+  font-weight: 600;
 }
-.footer-col__contact:hover {
-  color: var(--accent-btn-hover) !important;
+.footer-col a.footer-col__contact:hover {
+  color: var(--accent-btn-hover);
 }
 
 /* Thin navy strip at the very bottom: just the copyright row + email.
