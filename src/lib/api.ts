@@ -47,7 +47,12 @@ const DEFAULT_TIMEOUT_MS = 8000;
 
 export type ApiResult<T> =
   | { ok: true; data: T }
-  | { ok: false; reason: 'api-unconfigured' | 'network' | 'timeout' | 'http' | 'parse'; status?: number; message?: string };
+  | {
+      ok: false;
+      reason: 'api-unconfigured' | 'network' | 'timeout' | 'http' | 'parse';
+      status?: number;
+      message?: string;
+    };
 
 /** Inputs the marketing site can send to the future API. */
 export interface ContactRequest {
@@ -134,12 +139,19 @@ const request = async <T>(path: string, init: RequestInit): Promise<ApiResult<T>
     const res = await fetch(`${API_BASE}${path}`, {
       ...init,
       signal: ctrl.signal,
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...(init.headers ?? {}) },
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        ...(init.headers ?? {}),
+      },
     });
     if (!res.ok) return { ok: false, reason: 'http', status: res.status, message: res.statusText };
     let data: T;
-    try { data = (await res.json()) as T; }
-    catch { return { ok: false, reason: 'parse' }; }
+    try {
+      data = (await res.json()) as T;
+    } catch {
+      return { ok: false, reason: 'parse' };
+    }
     return { ok: true, data };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'unknown error';

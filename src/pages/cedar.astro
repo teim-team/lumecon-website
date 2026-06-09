@@ -21,6 +21,7 @@ import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/cedar-page.css';
 ---
+
 <BaseLayout
   title="Cedar | Lumecon"
   description="Cedar is Lumecon's AI analyst. It reads messy data, surfaces every modeling assumption, and reshapes the same study for every audience. Trained and tailored on established data and a curated library of studies, so answers stay grounded in real sources."
@@ -31,39 +32,60 @@ import '../styles/cedar-page.css';
 >
   <Nav />
   <main class="cedar-page">
-
     <!-- Hero: what Cedar is, in a sentence, with the call-to-action
          to engage the inline chat below. -->
     <header class="cedar-page__hero">
       <p class="cedar-page__eyebrow">Cedar</p>
-      <h1 class="cedar-page__title reveal-soft hl-block hl-block--green">Built for the tedious parts of economic impact analysis.</h1>
+      <h1 class="cedar-page__title reveal-soft hl-block hl-block--green">
+        Built for the tedious parts of economic impact analysis.
+      </h1>
       <p class="cedar-page__lede">
-        Cedar is Lumecon's AI analyst and thought partner. It reads messy data, surfaces every assumption for your sign-off, and helps you shape the write-up for the audience in front of you. Because Cedar is trained and tailored on established data and a curated library of studies and reference materials, with your own past studies folded in as your workspace grows, its answers stay grounded in real sources rather than generic model output. Cedar does the heavy lift and helps you brainstorm, edit, and polish; your team stays in control of what the study says.
+        Cedar is Lumecon's AI analyst and thought partner. It reads messy data, surfaces every
+        assumption for your sign-off, and helps you shape the write-up for the audience in front of
+        you. Because Cedar is trained and tailored on established data and a curated library of
+        studies and reference materials, with your own past studies folded in as your workspace
+        grows, its answers stay grounded in real sources rather than generic model output. Cedar
+        does the heavy lift and helps you brainstorm, edit, and polish; your team stays in control
+        of what the study says.
       </p>
       <p class="cedar-page__call">
-        Try the inline Cedar below, or open Cedar from the Lumecon mark in the bottom-right corner of any page.
+        Try the inline Cedar below, or open Cedar from the Lumecon mark in the bottom-right corner
+        of any page.
       </p>
     </header>
 
     <!-- What Cedar does — three-step explainer. -->
     <section class="cedar-page__how" aria-labelledby="cedar-how-title">
       <p class="cedar-page__kicker">How Cedar works</p>
-      <h2 class="cedar-page__h2 reveal-soft hl-block hl-block--b" id="cedar-how-title">Three things, well.</h2>
+      <h2 class="cedar-page__h2 reveal-soft hl-block hl-block--b" id="cedar-how-title">
+        Three things, well.
+      </h2>
       <ol class="cedar-page__steps" aria-label="What Cedar does">
         <li class="cedar-page__step">
           <span class="cedar-page__step-icon"><IconUpload /></span>
           <h3 class="cedar-page__step-head">Works with the data you actually have</h3>
-          <p class="cedar-page__step-body">Budgets, payroll, council agendas, board reports, audits, and grant filings. Cedar turns messy departmental files into usable study inputs, no matter what shape they arrive in.</p>
+          <p class="cedar-page__step-body">
+            Budgets, payroll, council agendas, board reports, audits, and grant filings. Cedar turns
+            messy departmental files into usable study inputs, no matter what shape they arrive in.
+          </p>
         </li>
         <li class="cedar-page__step">
           <span class="cedar-page__step-icon"><IconSurfaceAssumption /></span>
           <h3 class="cedar-page__step-head">Shows its work before it runs</h3>
-          <p class="cedar-page__step-body">Every multiplier, regional bridge, and base-year choice is named with a plain-English rationale. You confirm, adjust, or override, and every assumption stays clear as the study moves.</p>
+          <p class="cedar-page__step-body">
+            Every multiplier, regional bridge, and base-year choice is named with a plain-English
+            rationale. You confirm, adjust, or override, and every assumption stays clear as the
+            study moves.
+          </p>
         </li>
         <li class="cedar-page__step">
           <span class="cedar-page__step-icon"><IconSourceRecord /></span>
           <h3 class="cedar-page__step-head">Adapts the same analysis to every audience</h3>
-          <p class="cedar-page__step-body">Council meeting, grant filing, board memo, or public release. Cedar redraws the same result for the next use case, without your team copying numbers across five different decks.</p>
+          <p class="cedar-page__step-body">
+            Council meeting, grant filing, board memo, or public release. Cedar redraws the same
+            result for the next use case, without your team copying numbers across five different
+            decks.
+          </p>
         </li>
       </ol>
     </section>
@@ -75,9 +97,13 @@ import '../styles/cedar-page.css';
     <section class="cedar-page__try" aria-labelledby="cedar-try-title">
       <div class="cedar-page__try-intro">
         <p class="cedar-page__kicker">Try it</p>
-        <h2 class="cedar-page__h2 reveal-soft hl-block hl-block--gold" id="cedar-try-title">Ask Cedar a question.</h2>
+        <h2 class="cedar-page__h2 reveal-soft hl-block hl-block--gold" id="cedar-try-title">
+          Ask Cedar a question.
+        </h2>
         <p class="cedar-page__deck">
-          This is the same Cedar that lives behind the Lumecon mark in the bottom-right corner of every page. Ask anything about Lumecon, the platforms, the data, the team, or the pricing. Pick a starter question or type your own.
+          This is the same Cedar that lives behind the Lumecon mark in the bottom-right corner of
+          every page. Ask anything about Lumecon, the platforms, the data, the team, or the pricing.
+          Pick a starter question or type your own.
         </p>
       </div>
 
@@ -85,7 +111,6 @@ import '../styles/cedar-page.css';
         <CedarChat />
       </div>
     </section>
-
   </main>
 
   <script>

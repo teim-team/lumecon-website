@@ -17,20 +17,29 @@
 .person-page__back {
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
+  gap: 0.4rem;
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .12em;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--ink-3);
   text-decoration: none;
-  transition: color .15s var(--ease);
+  transition: color 0.15s var(--ease);
 }
-.person-page__back:hover { color: var(--accent-text); }
-.person-page__back span { transition: transform .15s var(--ease); display: inline-block; }
-.person-page__back:hover span { transform: translateX(-3px); }
-.person-page__back--bottom { margin-top: clamp(2rem, 4vw, 3rem); }
+.person-page__back:hover {
+  color: var(--accent-text);
+}
+.person-page__back span {
+  transition: transform 0.15s var(--ease);
+  display: inline-block;
+}
+.person-page__back:hover span {
+  transform: translateX(-3px);
+}
+.person-page__back--bottom {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
 
 /* Header: avatar + name/role, side by side. */
 .person-page__head {
@@ -52,7 +61,7 @@
   font-size: 1.5rem;
   color: var(--navy);
   background: var(--paper);
-  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .18));
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, 0.18));
   position: relative;
 }
 .person-page__avatar::after {
@@ -61,30 +70,30 @@
   inset: -4px;
   border-radius: 50%;
   border: 1px solid var(--accent);
-  opacity: .4;
+  opacity: 0.4;
 }
 .person-page__kicker {
   font-family: var(--font-mono);
-  font-size: .7rem;
-  letter-spacing: .14em;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
-  margin: 0 0 .35rem;
+  margin: 0 0 0.35rem;
 }
 .person-page__name {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(1.9rem, 4vw, 2.6rem);
   line-height: 1.05;
-  letter-spacing: -.02em;
+  letter-spacing: -0.02em;
   color: var(--navy);
-  margin: 0 0 .35rem;
+  margin: 0 0 0.35rem;
 }
 .person-page__role {
   font-family: var(--font-mono);
-  font-size: .74rem;
-  letter-spacing: .1em;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-2);
   font-weight: 600;
@@ -94,7 +103,7 @@
 .person-page__links {
   display: flex;
   align-items: center;
-  gap: .7rem;
+  gap: 0.7rem;
   flex-wrap: wrap;
   margin: 0 0 1.8rem;
   padding-bottom: 1.6rem;
@@ -102,13 +111,18 @@
 }
 .person-page__email {
   font-family: var(--font-mono);
-  font-size: .82rem;
+  font-size: 0.82rem;
   color: var(--ink-2);
   text-decoration: none;
   border-bottom: 1px solid var(--rule);
-  transition: color .15s var(--ease), border-color .15s var(--ease);
+  transition:
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
 }
-.person-page__email:hover { color: var(--accent-text); border-bottom-color: var(--accent); }
+.person-page__email:hover {
+  color: var(--accent-text);
+  border-bottom-color: var(--accent);
+}
 .person-page__social {
   display: inline-flex;
   align-items: center;
@@ -117,11 +131,22 @@
   height: 28px;
   flex-shrink: 0;
   color: var(--ink-3);
-  border: 1px solid var(--rule-strong, rgba(14, 21, 48, .18));
-  transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
+  border: 1px solid var(--rule-strong, rgba(14, 21, 48, 0.18));
+  transition:
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease),
+    background 0.15s var(--ease);
 }
-.person-page__social svg { width: 15px; height: 15px; display: block; }
-.person-page__social:hover { color: var(--accent-text); border-color: var(--accent); background: var(--accent-rgba-08); }
+.person-page__social svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+.person-page__social:hover {
+  color: var(--accent-text);
+  border-color: var(--accent);
+  background: var(--accent-rgba-08);
+}
 
 .person-page__bio {
   display: flex;
@@ -132,7 +157,9 @@
   line-height: 1.62;
   color: var(--ink-2);
 }
-.person-page__bio p { margin: 0; }
+.person-page__bio p {
+  margin: 0;
+}
 
 /* Selected work — one card per publication, gold left rule to set the
    research apart from the bio above it. */
@@ -143,8 +170,8 @@
 }
 .person-page__sub {
   font-family: var(--font-mono);
-  font-size: .7rem;
-  letter-spacing: .14em;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
@@ -167,11 +194,11 @@
 }
 .person-pub__venue {
   font-family: var(--font-mono);
-  font-size: .66rem;
-  letter-spacing: .04em;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink-3);
-  margin: 0 0 .35rem;
+  margin: 0 0 0.35rem;
   line-height: 1.4;
 }
 .person-pub__title {
@@ -179,29 +206,44 @@
   font-weight: 600;
   font-size: 1.04rem;
   line-height: 1.3;
-  letter-spacing: -.012em;
+  letter-spacing: -0.012em;
   color: var(--navy);
-  margin: 0 0 .3rem;
+  margin: 0 0 0.3rem;
 }
-.person-pub__title a { color: var(--navy); text-decoration: none; transition: color .15s var(--ease); }
-.person-pub__title a:hover { color: var(--accent-text); }
+.person-pub__title a {
+  color: var(--navy);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.person-pub__title a:hover {
+  color: var(--accent-text);
+}
 .person-pub__authors {
   font-family: var(--font-sans);
-  font-size: .82rem;
+  font-size: 0.82rem;
   line-height: 1.45;
   color: var(--ink-3);
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
 }
-.person-pub__authors strong { color: var(--navy); font-weight: 600; }
+.person-pub__authors strong {
+  color: var(--navy);
+  font-weight: 600;
+}
 .person-pub__summary {
   font-family: var(--font-sans);
-  font-size: .9rem;
+  font-size: 0.9rem;
   line-height: 1.5;
   color: var(--ink-2);
   margin: 0;
 }
 
 @media (max-width: 520px) {
-  .person-page__head { gap: .9rem; }
-  .person-page__avatar { width: 60px; height: 60px; font-size: 1.2rem; }
+  .person-page__head {
+    gap: 0.9rem;
+  }
+  .person-page__avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2rem;
+  }
 }

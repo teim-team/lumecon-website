@@ -19,9 +19,17 @@ interface Props {
 }
 
 const {
-  title, description, canonical, keywords,
-  ogTitle, ogDescription, ogImage, ogImageAlt,
-  bodyClass, jsonLd, noindex = false,
+  title,
+  description,
+  canonical,
+  keywords,
+  ogTitle,
+  ogDescription,
+  ogImage,
+  ogImageAlt,
+  bodyClass,
+  jsonLd,
+  noindex = false,
 } = Astro.props;
 const robotsValue = noindex
   ? 'noindex, nofollow'
@@ -29,27 +37,30 @@ const robotsValue = noindex
 const ogT = ogTitle || title;
 const ogD = ogDescription || description;
 const ogI = ogImage || 'https://lumecon.ai/lumecon-og-image-1200x630.png';
-const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for governments, enterprises, and mission-driven organizations.';
+const ogIA =
+  ogImageAlt ||
+  'Lumecon. Economic Impact Analysis Software for governments, enterprises, and mission-driven organizations.';
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>{title}</title>
-<meta name="description" content={description}>
-<meta name="keywords" content={keywords}>
-<meta name="robots" content={robotsValue}>
-<meta name="googlebot" content={robotsValue}>
-<meta name="bingbot" content={robotsValue}>
-<meta name="author" content="Lumecon Inc.">
-<meta name="publisher" content="Lumecon Inc.">
-<meta name="copyright" content="Lumecon Inc.">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="format-detection" content="telephone=no">
-<meta name="color-scheme" content="light dark">
-<link rel="canonical" href={canonical}>
-<!-- Content Security Policy. Static-host friendly (meta-tag enforced).
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="robots" content={robotsValue} />
+    <meta name="googlebot" content={robotsValue} />
+    <meta name="bingbot" content={robotsValue} />
+    <meta name="author" content="Lumecon Inc." />
+    <meta name="publisher" content="Lumecon Inc." />
+    <meta name="copyright" content="Lumecon Inc." />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href={canonical} />
+    <!-- Content Security Policy. Static-host friendly (meta-tag enforced).
      'unsafe-inline' on script/style is required because Astro inlines
      per-page hydration shims and the JSON-LD blob below; revisit when
      we move off GitHub Pages and can set this as an HTTP header with
@@ -66,168 +77,211 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
      static hosting (GitHub Pages) cannot emit. They are not enforced
      until a header-capable layer (Cloudflare, the API origin, etc.)
      fronts the site; add `X-Frame-Options: DENY` there. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests">
-<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests"
+    />
+    <meta
+      http-equiv="Permissions-Policy"
+      content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()"
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
-<!-- Favicons + app icons -->
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
-<link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#0FB5A5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0F1530" media="(prefers-color-scheme: dark)">
-<meta name="msapplication-TileColor" content="#0FB5A5">
-<meta name="msapplication-TileImage" content="/android-chrome-192x192.png">
-<meta name="apple-mobile-web-app-title" content="Lumecon">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="application-name" content="Lumecon">
+    <!-- Favicons + app icons -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0FB5A5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0F1530" media="(prefers-color-scheme: dark)" />
+    <meta name="msapplication-TileColor" content="#0FB5A5" />
+    <meta name="msapplication-TileImage" content="/android-chrome-192x192.png" />
+    <meta name="apple-mobile-web-app-title" content="Lumecon" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="application-name" content="Lumecon" />
 
-<!-- Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews -->
-<meta property="og:type" content="website">
-<meta property="og:url" content={canonical}>
-<meta property="og:title" content={ogT}>
-<meta property="og:description" content={ogD}>
-<meta property="og:site_name" content="Lumecon Inc.">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content={ogI}>
-<meta property="og:image:secure_url" content={ogI}>
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content={ogIA}>
+    <!-- Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={ogT} />
+    <meta property="og:description" content={ogD} />
+    <meta property="og:site_name" content="Lumecon Inc." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogI} />
+    <meta property="og:image:secure_url" content={ogI} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogIA} />
 
-<!-- Twitter / X card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content={ogT}>
-<meta name="twitter:description" content={ogD}>
-<meta name="twitter:image" content={ogI}>
-<meta name="twitter:image:alt" content={ogIA}>
-<meta name="twitter:domain" content="lumecon.ai">
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogT} />
+    <meta name="twitter:description" content={ogD} />
+    <meta name="twitter:image" content={ogI} />
+    <meta name="twitter:image:alt" content={ogIA} />
+    <meta name="twitter:domain" content="lumecon.ai" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap" rel="stylesheet"></noscript>
-{/* ClientRouter (Astro view transitions) intentionally NOT enabled.
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript
+      ><link
+        href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap"
+        rel="stylesheet"
+      /></noscript
+    >
+    {
+      /* ClientRouter (Astro view transitions) intentionally NOT enabled.
     On iOS Safari the cross-page DOM swap interacted poorly with
     scroll-snap + dvh sections and could cause apparent "page
     resets" mid-scroll. Full reloads on internal links are simpler,
     more predictable on mobile, and the visual cost (no fade
-    between pages) is negligible on a four-page marketing site. */}
-{jsonLd && (
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-)}
-</head>
-<body class={bodyClass}>
-<a href="#top" class="skip-link">Skip to main content</a>
-<slot />
-<CedarFAB />
-<ComingSoonBanner />
-<ConsentBanner />
+    between pages) is negligible on a four-page marketing site. */
+    }
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class={bodyClass}>
+    <a href="#top" class="skip-link">Skip to main content</a>
+    <slot />
+    <CedarFAB />
+    <ComingSoonBanner />
+    <ConsentBanner />
 
-<script>
-  /* Observability boot — consent-gated (#89). Analytics initialises only
+    <script>
+      /* Observability boot — consent-gated (#89). Analytics initialises only
      after the visitor accepts via the ConsentBanner; until then
      initObservability() is never called, so the client stays a no-op,
      no RUM beacon fires, and no cookie is set. Re-checks on view
      transitions and when consent is granted live. Still no-op overall
      until PUBLIC_DATADOG_* env vars + the SDK are configured. */
-  import { initObservability, trackEvent, captureGlobalErrors } from '../lib/observability';
-  import { hasAnalyticsConsent, CONSENT_EVENT } from '../lib/consent';
-  // Registering global error capture is consent-neutral: trackError is a
-  // no-op until observability initialises (which requires consent), so
-  // nothing leaves the page before then.
-  captureGlobalErrors();
-  const bootAnalytics = () => {
-    if (!hasAnalyticsConsent()) return;
-    void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
-  };
+      import { initObservability, trackEvent, captureGlobalErrors } from '../lib/observability';
+      import { hasAnalyticsConsent, CONSENT_EVENT } from '../lib/consent';
+      // Registering global error capture is consent-neutral: trackError is a
+      // no-op until observability initialises (which requires consent), so
+      // nothing leaves the page before then.
+      captureGlobalErrors();
+      const bootAnalytics = () => {
+        if (!hasAnalyticsConsent()) return;
+        void initObservability().then(() => trackEvent('page.view', { path: location.pathname }));
+      };
 
-  /* Scroll-depth milestones (#84) — 25/50/75/100%, once each per page,
+      /* Scroll-depth milestones (#84) — 25/50/75/100%, once each per page,
      reset on view transition. Only wired after consent so there's no
      scroll listener running for visitors who declined. */
-  let scrollWired = false;
-  const wireScrollDepth = () => {
-    if (scrollWired || !hasAnalyticsConsent()) return;
-    scrollWired = true;
-    const depths = [25, 50, 75, 100];
-    let maxFired = 0;
-    window.addEventListener('scroll', () => {
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollable <= 0) return;
-      const pct = Math.min(100, Math.round((window.scrollY / scrollable) * 100));
-      for (const d of depths) {
-        if (pct >= d && d > maxFired) { maxFired = d; trackEvent('scroll.depth', { pct: d, path: location.pathname }); }
-      }
-    }, { passive: true });
-    document.addEventListener('astro:page-load', () => { maxFired = 0; });
-  };
+      let scrollWired = false;
+      const wireScrollDepth = () => {
+        if (scrollWired || !hasAnalyticsConsent()) return;
+        scrollWired = true;
+        const depths = [25, 50, 75, 100];
+        let maxFired = 0;
+        window.addEventListener(
+          'scroll',
+          () => {
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            if (scrollable <= 0) return;
+            const pct = Math.min(100, Math.round((window.scrollY / scrollable) * 100));
+            for (const d of depths) {
+              if (pct >= d && d > maxFired) {
+                maxFired = d;
+                trackEvent('scroll.depth', { pct: d, path: location.pathname });
+              }
+            }
+          },
+          { passive: true },
+        );
+        document.addEventListener('astro:page-load', () => {
+          maxFired = 0;
+        });
+      };
 
-  bootAnalytics();
-  wireScrollDepth();
-  document.addEventListener('astro:page-load', bootAnalytics);
-  window.addEventListener(CONSENT_EVENT, (e) => {
-    if ((e as CustomEvent).detail === 'granted') { bootAnalytics(); wireScrollDepth(); }
-  });
-</script>
-
-<script is:inline>
-  // Scroll-reveal: anything with class="reveal" (or reveal-left/right/
-  // diagonal) fades + slides into place the first time it crosses
-  // into the viewport. Optional data-stagger='N' delays by N * 90ms.
-  // Respects prefers-reduced-motion. Re-binds on Astro view transitions.
-  (function () {
-    var STAGGER_STEP = 90;
-    function bind() {
-      var selector = '.reveal:not(.seen),.reveal-soft:not(.seen),.reveal-left:not(.seen),.reveal-right:not(.seen),.reveal-diagonal:not(.seen)';
-      var els = document.querySelectorAll(selector);
-      if (!els.length) return;
-      var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReduced || !('IntersectionObserver' in window)) {
-        for (var i = 0; i < els.length; i++) els[i].classList.add('seen');
-        return;
-      }
-      var io = new IntersectionObserver(function (entries) {
-        for (var i = 0; i < entries.length; i++) {
-          var entry = entries[i];
-          if (!entry.isIntersecting) continue;
-          var el = entry.target;
-          var stagger = parseInt(el.getAttribute('data-stagger') || '0', 10);
-          if (stagger > 0) {
-            setTimeout(function (n) { return function () { n.classList.add('seen'); }; }(el), stagger * STAGGER_STEP);
-          } else {
-            el.classList.add('seen');
-          }
-          io.unobserve(el);
+      bootAnalytics();
+      wireScrollDepth();
+      document.addEventListener('astro:page-load', bootAnalytics);
+      window.addEventListener(CONSENT_EVENT, (e) => {
+        if ((e as CustomEvent).detail === 'granted') {
+          bootAnalytics();
+          wireScrollDepth();
         }
-      }, { rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
-      // Elements that are ALREADY above the current viewport on load
-      // (e.g. anchor jump, scroll restoration after back-nav, deep
-      // link) would otherwise stay at opacity:0 forever because the
-      // observer only fires when they re-enter the viewport. Reveal
-      // them immediately so a visitor never sees blank space above
-      // their scroll position.
-      for (var j = 0; j < els.length; j++) {
-        var rj = els[j].getBoundingClientRect();
-        if (rj.bottom < 0) { els[j].classList.add('seen'); continue; }
-        io.observe(els[j]);
-      }
-    }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', bind);
-    } else {
-      bind();
-    }
-    document.addEventListener('astro:page-load', bind);
-  })();
+      });
+    </script>
 
-  /* Clean-URL anchor handler. The site uses in-page anchors for
+    <script is:inline>
+      // Scroll-reveal: anything with class="reveal" (or reveal-left/right/
+      // diagonal) fades + slides into place the first time it crosses
+      // into the viewport. Optional data-stagger='N' delays by N * 90ms.
+      // Respects prefers-reduced-motion. Re-binds on Astro view transitions.
+      (function () {
+        var STAGGER_STEP = 90;
+        function bind() {
+          var selector =
+            '.reveal:not(.seen),.reveal-soft:not(.seen),.reveal-left:not(.seen),.reveal-right:not(.seen),.reveal-diagonal:not(.seen)';
+          var els = document.querySelectorAll(selector);
+          if (!els.length) return;
+          var prefersReduced =
+            window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (prefersReduced || !('IntersectionObserver' in window)) {
+            for (var i = 0; i < els.length; i++) els[i].classList.add('seen');
+            return;
+          }
+          var io = new IntersectionObserver(
+            function (entries) {
+              for (var i = 0; i < entries.length; i++) {
+                var entry = entries[i];
+                if (!entry.isIntersecting) continue;
+                var el = entry.target;
+                var stagger = parseInt(el.getAttribute('data-stagger') || '0', 10);
+                if (stagger > 0) {
+                  setTimeout(
+                    (function (n) {
+                      return function () {
+                        n.classList.add('seen');
+                      };
+                    })(el),
+                    stagger * STAGGER_STEP,
+                  );
+                } else {
+                  el.classList.add('seen');
+                }
+                io.unobserve(el);
+              }
+            },
+            { rootMargin: '0px 0px -6% 0px', threshold: 0.08 },
+          );
+          // Elements that are ALREADY above the current viewport on load
+          // (e.g. anchor jump, scroll restoration after back-nav, deep
+          // link) would otherwise stay at opacity:0 forever because the
+          // observer only fires when they re-enter the viewport. Reveal
+          // them immediately so a visitor never sees blank space above
+          // their scroll position.
+          for (var j = 0; j < els.length; j++) {
+            var rj = els[j].getBoundingClientRect();
+            if (rj.bottom < 0) {
+              els[j].classList.add('seen');
+              continue;
+            }
+            io.observe(els[j]);
+          }
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', bind);
+        } else {
+          bind();
+        }
+        document.addEventListener('astro:page-load', bind);
+      })();
+
+      /* Clean-URL anchor handler. The site uses in-page anchors for
      navigation (#cedar, #contact, #workspace, #how, etc.). Search
      engines don't index URL fragments as separate pages, and the
      trailing "#section" in the address bar reads as URL clutter,
@@ -236,79 +290,85 @@ const ogIA = ogImageAlt || 'Lumecon. Economic Impact Analysis Software for gover
      On initial page load (or hash navigation from another page),
      it scrolls to the target if present, then strips the hash
      via replaceState so the URL ends up clean. */
-  (function () {
-    function smoothScrollTo(el) {
-      const prefersReduced = window.matchMedia
-        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      el.scrollIntoView({
-        behavior: prefersReduced ? 'auto' : 'smooth',
-        block: 'start',
-      });
-    }
-    /* Cross-page landing (e.g. clicking /#how from /pricing) jumps
+      (function () {
+        function smoothScrollTo(el) {
+          const prefersReduced =
+            window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          el.scrollIntoView({
+            behavior: prefersReduced ? 'auto' : 'smooth',
+            block: 'start',
+          });
+        }
+        /* Cross-page landing (e.g. clicking /#how from /pricing) jumps
        to the target INSTANTLY rather than smooth-scrolling through
        every intermediate section. The smooth animation made the
        browser sail past Products on its way to Why, which felt
        like the link was misrouted. */
-    function jumpScrollTo(el) {
-      el.scrollIntoView({ behavior: 'auto', block: 'start' });
-    }
-    function stripHash() {
-      try {
-        history.replaceState(null, '', location.pathname + location.search);
-      } catch (_) {}
-    }
-    function handleLandingHash() {
-      const h = location.hash;
-      if (!h || h.length < 2) return;
-      // Only attempt to scroll to safe id selectors (no special chars).
-      if (!/^#[A-Za-z][\w-]*$/.test(h)) { stripHash(); return; }
-      const target = document.querySelector(h);
-      if (target) {
-        // Defer one frame so layout is settled before scroll-to.
-        requestAnimationFrame(() => {
-          jumpScrollTo(target);
-          stripHash();
+        function jumpScrollTo(el) {
+          el.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+        function stripHash() {
+          try {
+            history.replaceState(null, '', location.pathname + location.search);
+          } catch (_) {}
+        }
+        function handleLandingHash() {
+          const h = location.hash;
+          if (!h || h.length < 2) return;
+          // Only attempt to scroll to safe id selectors (no special chars).
+          if (!/^#[A-Za-z][\w-]*$/.test(h)) {
+            stripHash();
+            return;
+          }
+          const target = document.querySelector(h);
+          if (target) {
+            // Defer one frame so layout is settled before scroll-to.
+            requestAnimationFrame(() => {
+              jumpScrollTo(target);
+              stripHash();
+            });
+          } else {
+            stripHash();
+          }
+        }
+        document.addEventListener('click', function (e) {
+          // Skip if a modifier key is held (user wants to open in new tab/etc).
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+          const a = e.target.closest && e.target.closest('a[href]');
+          if (!a) return;
+          const href = a.getAttribute('href') || '';
+          if (!href.includes('#')) return;
+          let url;
+          try {
+            url = new URL(href, location.href);
+          } catch (_) {
+            return;
+          }
+          // Only intercept SAME-page anchor clicks. Cross-path hashes
+          // (e.g., '/#contact' from /join) still navigate normally;
+          // handleLandingHash() will clean the URL on arrival.
+          if (url.origin !== location.origin) return;
+          if (url.pathname !== location.pathname) return;
+          if (!url.hash || url.hash.length < 2) return;
+          if (!/^#[A-Za-z][\w-]*$/.test(url.hash)) return;
+          const target = document.querySelector(url.hash);
+          if (!target) return;
+          e.preventDefault();
+          smoothScrollTo(target);
+          // Don't pushState — the URL stays as-is, no fragment added.
         });
-      } else {
-        stripHash();
-      }
-    }
-    document.addEventListener('click', function (e) {
-      // Skip if a modifier key is held (user wants to open in new tab/etc).
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      const a = e.target.closest && e.target.closest('a[href]');
-      if (!a) return;
-      const href = a.getAttribute('href') || '';
-      if (!href.includes('#')) return;
-      let url;
-      try { url = new URL(href, location.href); } catch (_) { return; }
-      // Only intercept SAME-page anchor clicks. Cross-path hashes
-      // (e.g., '/#contact' from /join) still navigate normally;
-      // handleLandingHash() will clean the URL on arrival.
-      if (url.origin !== location.origin) return;
-      if (url.pathname !== location.pathname) return;
-      if (!url.hash || url.hash.length < 2) return;
-      if (!/^#[A-Za-z][\w-]*$/.test(url.hash)) return;
-      const target = document.querySelector(url.hash);
-      if (!target) return;
-      e.preventDefault();
-      smoothScrollTo(target);
-      // Don't pushState — the URL stays as-is, no fragment added.
-    });
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', handleLandingHash);
-    } else {
-      handleLandingHash();
-    }
-    document.addEventListener('astro:page-load', handleLandingHash);
-    document.addEventListener('astro:after-swap', handleLandingHash);
-    // Catch any hash that gets added later (e.g., browser back/forward,
-    // a third-party script, or an Astro view transition that preserves
-    // the hash from the previous URL).
-    window.addEventListener('hashchange', handleLandingHash);
-  })();
-
-</script>
-</body>
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', handleLandingHash);
+        } else {
+          handleLandingHash();
+        }
+        document.addEventListener('astro:page-load', handleLandingHash);
+        document.addEventListener('astro:after-swap', handleLandingHash);
+        // Catch any hash that gets added later (e.g., browser back/forward,
+        // a third-party script, or an Astro view transition that preserves
+        // the hash from the previous URL).
+        window.addEventListener('hashchange', handleLandingHash);
+      })();
+    </script>
+  </body>
 </html>

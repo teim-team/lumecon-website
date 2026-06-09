@@ -1,0 +1,4 @@
+# These data files use hand-aligned, table-style formatting that is easier
+# to scan and review than Prettier's one-field-per-line output.
+src/data/scenes.ts
+src/data/tribalLookup.ts

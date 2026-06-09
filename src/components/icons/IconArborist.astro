@@ -1,22 +1,49 @@
 ---
 const { class: className = '' } = Astro.props as { class?: string };
 ---
-<svg class={`icon icon--arborist ${className}`} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+
+<svg
+  class={`icon icon--arborist ${className}`}
+  viewBox="0 0 24 24"
+  fill="currentColor"
+  aria-hidden="true"
+>
   <!-- Filled panel body so the whole tile transitions colour on
        hover, matching IconLocal / IconTribal / IconGlobal. The
        white cut-out is a small tree held inside an A-frame
        support (two angled stakes with a horizontal tie). The
        gold dot at the tie position is the "tending" mark and
        pulses to make the icon read as alive at 24px. -->
-  <rect x="3" y="4" width="18" height="16" rx=".4"/>
+  <rect x="3" y="4" width="18" height="16" rx=".4"></rect>
   <!-- Canopy + trunk (white cut-out) -->
-  <circle cx="12" cy="9" r="3" fill="var(--white)"/>
-  <rect x="11.4" y="11" width="1.2" height="5" fill="var(--white)"/>
+  <circle cx="12" cy="9" r="3" fill="var(--white)"></circle>
+  <rect x="11.4" y="11" width="1.2" height="5" fill="var(--white)"></rect>
   <!-- A-frame support stakes -->
-  <line x1="8.5"  y1="17.5" x2="11"   y2="12.5" stroke="var(--white)" stroke-width="1.3" stroke-linecap="butt"/>
-  <line x1="15.5" y1="17.5" x2="13"   y2="12.5" stroke="var(--white)" stroke-width="1.3" stroke-linecap="butt"/>
+  <line
+    x1="8.5"
+    y1="17.5"
+    x2="11"
+    y2="12.5"
+    stroke="var(--white)"
+    stroke-width="1.3"
+    stroke-linecap="butt"></line>
+  <line
+    x1="15.5"
+    y1="17.5"
+    x2="13"
+    y2="12.5"
+    stroke="var(--white)"
+    stroke-width="1.3"
+    stroke-linecap="butt"></line>
   <!-- Horizontal tie binding the stakes to the trunk -->
-  <line x1="9.5" y1="14.8" x2="14.5" y2="14.8" stroke="var(--white)" stroke-width="1" stroke-linecap="butt"/>
+  <line
+    x1="9.5"
+    y1="14.8"
+    x2="14.5"
+    y2="14.8"
+    stroke="var(--white)"
+    stroke-width="1"
+    stroke-linecap="butt"></line>
   <!-- Gold "tending" accent — pulses to signal the arborist's care -->
-  <circle class="icon-arborist__dot" cx="12" cy="14.8" r="1.1" fill="#0FB5A5"/>
+  <circle class="icon-arborist__dot" cx="12" cy="14.8" r="1.1" fill="#0FB5A5"></circle>
 </svg>

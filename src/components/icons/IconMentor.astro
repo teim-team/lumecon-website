@@ -1,6 +1,7 @@
 ---
 const { class: className = '' } = Astro.props as { class?: string };
 ---
+
 <svg class={`icon icon--mentor ${className}`} viewBox="0 0 100 100" fill="none" aria-hidden="true">
   <!-- Mentor (gold, anchored left) is connected by a line to a
        mentee (navy, right) that grows over time. Echoes the team
@@ -8,11 +9,20 @@ const { class: className = '' } = Astro.props as { class?: string };
        holds steady; the new node materializes as the line draws
        toward it. -->
   <!-- Connecting line — stroke-draws from mentor to mentee. -->
-  <line class="icon-mentor__line" x1="30" y1="50" x2="74" y2="50"
-        stroke="currentColor" stroke-width="1.6" stroke-linecap="butt"
-        pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+  <line
+    class="icon-mentor__line"
+    x1="30"
+    y1="50"
+    x2="74"
+    y2="50"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="butt"
+    pathLength="100"
+    stroke-dasharray="100"
+    stroke-dashoffset="100"></line>
   <!-- Mentor (gold, anchored, always visible, pulses gently) -->
-  <circle class="icon-mentor__mentor" cx="30" cy="50" r="10" fill="#0FB5A5"/>
+  <circle class="icon-mentor__mentor" cx="30" cy="50" r="10" fill="#0FB5A5"></circle>
   <!-- Mentee (navy, grows from small to full size, brief gold flash on appearance) -->
-  <circle class="icon-mentor__mentee" cx="74" cy="50" r="7" fill="currentColor"/>
+  <circle class="icon-mentor__mentee" cx="74" cy="50" r="7" fill="currentColor"></circle>
 </svg>

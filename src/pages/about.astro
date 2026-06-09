@@ -22,7 +22,14 @@ import { site } from '../config';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { TEAM, TEAM_BY_GROUP, TEAM_BY_SLUG, WORKING_AREAS, personPath, type Person } from '../data/team';
+import {
+  TEAM,
+  TEAM_BY_GROUP,
+  TEAM_BY_SLUG,
+  WORKING_AREAS,
+  personPath,
+  type Person,
+} from '../data/team';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -39,23 +46,23 @@ const team = TEAM_BY_GROUP.team;
 function personJsonLd(p: Person) {
   const personUrl = `${site.url}${personPath(p.slug)}`;
   const node: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "@id": personUrl,
-    "name": p.name,
-    "url": personUrl,
-    "jobTitle": p.title,
-    "description": p.summary,
-    "worksFor": { "@type": "Organization", "@id": `${site.url}#org`, "name": site.legalName },
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': personUrl,
+    name: p.name,
+    url: personUrl,
+    jobTitle: p.title,
+    description: p.summary,
+    worksFor: { '@type': 'Organization', '@id': `${site.url}#org`, name: site.legalName },
   };
   if (p.email) node.email = `mailto:${p.email}`;
   const sameAs = [p.linkedin, p.scholar].filter(Boolean);
   if (sameAs.length) node.sameAs = sameAs;
   if (p.alumniOf && p.alumniOf.length) {
-    node.alumniOf = p.alumniOf.map((n) => ({ "@type": "EducationalOrganization", "name": n }));
+    node.alumniOf = p.alumniOf.map((n) => ({ '@type': 'EducationalOrganization', name: n }));
   }
   if (p.prevAffiliations && p.prevAffiliations.length) {
-    node.affiliation = p.prevAffiliations.map((n) => ({ "@type": "Organization", "name": n }));
+    node.affiliation = p.prevAffiliations.map((n) => ({ '@type': 'Organization', name: n }));
   }
   return node;
 }
@@ -64,33 +71,43 @@ const founders = TEAM.filter((p) => p.founder);
 
 const jsonLd = [
   {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "url": `${site.url}/about`,
-    "name": "About Lumecon",
-    "description": "Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. The team builds economic impact analysis software for governments, tribal nations, foundations, and community-serving organizations.",
-    "isPartOf": { "@type": "WebSite", "@id": `${site.url}#website` },
-    "about": { "@type": "Organization", "@id": `${site.url}#org` },
-    "mainEntity": {
-      "@type": "Organization",
-      "@id": `${site.url}#org`,
-      "name": site.legalName,
-      "url": site.url,
-      "founder": founders.map((p) => ({ "@type": "Person", "@id": `${site.url}${personPath(p.slug)}`, "name": p.name })),
-      "employee": team.map((p) => ({ "@type": "Person", "@id": `${site.url}${personPath(p.slug)}`, "name": p.name })),
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    url: `${site.url}/about`,
+    name: 'About Lumecon',
+    description:
+      'Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. The team builds economic impact analysis software for governments, tribal nations, foundations, and community-serving organizations.',
+    isPartOf: { '@type': 'WebSite', '@id': `${site.url}#website` },
+    about: { '@type': 'Organization', '@id': `${site.url}#org` },
+    mainEntity: {
+      '@type': 'Organization',
+      '@id': `${site.url}#org`,
+      name: site.legalName,
+      url: site.url,
+      founder: founders.map((p) => ({
+        '@type': 'Person',
+        '@id': `${site.url}${personPath(p.slug)}`,
+        name: p.name,
+      })),
+      employee: team.map((p) => ({
+        '@type': 'Person',
+        '@id': `${site.url}${personPath(p.slug)}`,
+        name: p.name,
+      })),
     },
   },
   {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": site.url },
-      { "@type": "ListItem", "position": 2, "name": "About", "item": `${site.url}/about` },
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'About', item: `${site.url}/about` },
     ],
   },
   ...TEAM.map(personJsonLd),
 ];
 ---
+
 <BaseLayout
   title="About | Lumecon"
   description="Lumecon was founded by brothers Elijah and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation, to make economic impact analysis accessible, transparent, and useful for governments, tribal nations, foundations, and community-serving organizations. Team: Cornell, Dartmouth, Duke, Oxford, MIT, Wisconsin–Madison, Maryland, Illinois Urbana-Champaign. Prior experience at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), National Congress of American Indians, Federal Reserve Bank of Philadelphia, Federal Reserve Board of Governors, Modsy, Chime."
@@ -103,13 +120,17 @@ const jsonLd = [
 >
   <Nav />
   <main class="about-page">
-
     <header class="about-page__hero">
       <div class="about-page__inner">
         <p class="about-page__kicker">About</p>
-        <h1 class="about-page__title reveal-soft hl-block hl-block--green">Built with the communities it serves.</h1>
+        <h1 class="about-page__title reveal-soft hl-block hl-block--green">
+          Built with the communities it serves.
+        </h1>
         <p class="about-page__lede">
-          Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. The company began with their own savings and a shared belief that economic impact analysis should be more accessible, transparent, and useful for the communities too often priced out of it.
+          Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the
+          Coastal Band of the Chumash Nation. The company began with their own savings and a shared
+          belief that economic impact analysis should be more accessible, transparent, and useful
+          for the communities too often priced out of it.
         </p>
         <details class="about-page__more">
           <summary class="about-page__more-summary">
@@ -117,13 +138,31 @@ const jsonLd = [
             <span class="about-page__chev" aria-hidden="true"></span>
           </summary>
           <div class="about-page__more-body">
-            <p>Economic impact analysis is powerful, but too often it is expensive, opaque, and difficult to adapt to the communities being studied. Lumecon builds software that helps organizations turn real administrative, financial, and program data into credible economic impact analysis, with clear assumptions, reusable source records, and outputs designed for decision-making.</p>
-            <p class="about-page__belief">Our work starts from a simple belief: communities should not need massive consulting budgets, or advanced degrees in economics, to understand and communicate the economic value they create.</p>
-            <p>Lumecon combines economic research, public policy, software, data infrastructure, and responsible AI to help organizations produce analysis that is easier to run, easier to audit, and easier to explain. We are especially focused on communities and institutions whose economic impact is real but largely invisible to standard data tools.</p>
+            <p>
+              Economic impact analysis is powerful, but too often it is expensive, opaque, and
+              difficult to adapt to the communities being studied. Lumecon builds software that
+              helps organizations turn real administrative, financial, and program data into
+              credible economic impact analysis, with clear assumptions, reusable source records,
+              and outputs designed for decision-making.
+            </p>
+            <p class="about-page__belief">
+              Our work starts from a simple belief: communities should not need massive consulting
+              budgets, or advanced degrees in economics, to understand and communicate the economic
+              value they create.
+            </p>
+            <p>
+              Lumecon combines economic research, public policy, software, data infrastructure, and
+              responsible AI to help organizations produce analysis that is easier to run, easier to
+              audit, and easier to explain. We are especially focused on communities and
+              institutions whose economic impact is real but largely invisible to standard data
+              tools.
+            </p>
           </div>
         </details>
         <p class="about-page__ecosystem">
-          Supported by Cornell&rsquo;s entrepreneurship ecosystem, including the Human Spirit Entrepreneurship Fellows program through Cornell eHub and the Cornell Law School Entrepreneurship Law Clinic.
+          Supported by Cornell&rsquo;s entrepreneurship ecosystem, including the Human Spirit
+          Entrepreneurship Fellows program through Cornell eHub and the Cornell Law School
+          Entrepreneurship Law Clinic.
         </p>
       </div>
     </header>
@@ -137,49 +176,67 @@ const jsonLd = [
     <section class="about-page__how-we-work" aria-labelledby="about-how-title">
       <div class="about-page__inner">
         <p class="about-page__kicker">How we work</p>
-        <h2 class="about-page__h2 reveal-soft hl-block hl-block--smear" id="about-how-title">Cross-functional, by design.</h2>
+        <h2 class="about-page__h2 reveal-soft hl-block hl-block--smear" id="about-how-title">
+          Cross-functional, by design.
+        </h2>
         <p class="about-page__lede about-page__lede--how">
-          Lumecon is built by a cross-functional team where each person has a clear lead area, but no part of the product is developed in isolation. Economic impact software only works when the economics, platform, data systems, and user workflow are designed together. Each team member has a primary role, and the company is intentionally collaborative across these areas.
+          Lumecon is built by a cross-functional team where each person has a clear lead area, but
+          no part of the product is developed in isolation. Economic impact software only works when
+          the economics, platform, data systems, and user workflow are designed together. Each team
+          member has a primary role, and the company is intentionally collaborative across these
+          areas.
         </p>
         <ul class="about-page__areas" aria-label="Working areas">
-          {WORKING_AREAS.map((area, i) => {
-            const lead = TEAM_BY_SLUG[area.leadSlug];
-            const advisory = (area.advisorySlugs ?? []).map((s) => TEAM_BY_SLUG[s]).filter(Boolean);
-            const contributors = (area.contributorSlugs ?? []).map((s) => TEAM_BY_SLUG[s]).filter(Boolean);
-            return (
-              <li class="reveal-soft" data-stagger={i + 1}>
-                <details class="area-card" id={area.slug}>
-                  <summary class="area-card__head">
-                    <span class="area-card__name">{area.name}</span>
-                    <span class="area-card__roster">
-                      <span class="area-card__role">
-                        <span class="area-card__role-label">Lead</span>{' '}
-                        <a class="area-card__person" href={personPath(lead.slug)}>{lead.name}</a>
+          {
+            WORKING_AREAS.map((area, i) => {
+              const lead = TEAM_BY_SLUG[area.leadSlug];
+              const advisory = (area.advisorySlugs ?? [])
+                .map((s) => TEAM_BY_SLUG[s])
+                .filter(Boolean);
+              const contributors = (area.contributorSlugs ?? [])
+                .map((s) => TEAM_BY_SLUG[s])
+                .filter(Boolean);
+              return (
+                <li class="reveal-soft" data-stagger={i + 1}>
+                  <details class="area-card" id={area.slug}>
+                    <summary class="area-card__head">
+                      <span class="area-card__name">{area.name}</span>
+                      <span class="area-card__roster">
+                        <span class="area-card__role">
+                          <span class="area-card__role-label">Lead</span>{' '}
+                          <a class="area-card__person" href={personPath(lead.slug)}>
+                            {lead.name}
+                          </a>
+                        </span>
+                        {advisory.length > 0 && (
+                          <span class="area-card__role">
+                            <span class="area-card__role-label">Advisory</span>{' '}
+                            {advisory.map((p) => (
+                              <a class="area-card__person" href={personPath(p.slug)}>
+                                {p.name}
+                              </a>
+                            ))}
+                          </span>
+                        )}
+                        {contributors.length > 0 && (
+                          <span class="area-card__role">
+                            <span class="area-card__role-label">Contributors</span>{' '}
+                            {contributors.map((p) => (
+                              <a class="area-card__person" href={personPath(p.slug)}>
+                                {p.name}
+                              </a>
+                            ))}
+                          </span>
+                        )}
                       </span>
-                      {advisory.length > 0 && (
-                        <span class="area-card__role">
-                          <span class="area-card__role-label">Advisory</span>{' '}
-                          {advisory.map((p) => (
-                            <a class="area-card__person" href={personPath(p.slug)}>{p.name}</a>
-                          ))}
-                        </span>
-                      )}
-                      {contributors.length > 0 && (
-                        <span class="area-card__role">
-                          <span class="area-card__role-label">Contributors</span>{' '}
-                          {contributors.map((p) => (
-                            <a class="area-card__person" href={personPath(p.slug)}>{p.name}</a>
-                          ))}
-                        </span>
-                      )}
-                    </span>
-                    <span class="area-card__chev" aria-hidden="true"></span>
-                  </summary>
-                  <p class="area-card__desc">{area.description}</p>
-                </details>
-              </li>
-            );
-          })}
+                      <span class="area-card__chev" aria-hidden="true" />
+                    </summary>
+                    <p class="area-card__desc">{area.description}</p>
+                  </details>
+                </li>
+              );
+            })
+          }
         </ul>
       </div>
     </section>
@@ -191,11 +248,14 @@ const jsonLd = [
     <aside class="about-bridge" aria-label="Join the team">
       <div class="about-page__inner">
         <p class="about-bridge__kicker">Want to build with us?</p>
-        <p class="about-bridge__copy">We are a six-person team hiring across software engineering, machine learning, data, economic impact modeling, marketing, and sales. The /join page has the role-by-role breakdown and a short application.</p>
+        <p class="about-bridge__copy">
+          We are a six-person team hiring across software engineering, machine learning, data,
+          economic impact modeling, marketing, and sales. The /join page has the role-by-role
+          breakdown and a short application.
+        </p>
         <a href="/join" class="btn">Join the team &rarr;</a>
       </div>
     </aside>
-
   </main>
   <Footer />
 </BaseLayout>

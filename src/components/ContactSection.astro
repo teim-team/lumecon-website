@@ -2,23 +2,32 @@
 import { site } from '../config';
 import '../styles/cta.css';
 ---
+
 <section class="cta" id="contact" aria-labelledby="cta-display">
   <div class="cta-inner">
     <div class="cta-left">
       <p class="cta-eyebrow">Work with us</p>
-      <h2 id="cta-display" class="cta-display reveal delay-1 hl-block hl-block--green-b">Let&rsquo;s prove your impact, together.</h2>
-      <p class="cta-lede reveal delay-2">Built for governments, enterprises, and mission-driven organizations: councils, grant programs, reservation economies, foundations, and university research labs.</p>
+      <h2 id="cta-display" class="cta-display reveal delay-1 hl-block hl-block--green-b">
+        Let&rsquo;s prove your impact, together.
+      </h2>
+      <p class="cta-lede reveal delay-2">
+        Built for governments, enterprises, and mission-driven organizations: councils, grant
+        programs, reservation economies, foundations, and university research labs.
+      </p>
       <a href={`mailto:${site.email}`} class="cta-email reveal delay-3">{site.email}</a>
     </div>
     <div class="cta-form reveal delay-2">
       <label for="fname">Name</label>
-      <input type="text" id="fname" name="name" placeholder="Your name" required>
+      <input type="text" id="fname" name="name" placeholder="Your name" required />
       <div class="form-validation-error" id="fnameError">Please enter your name</div>
       <label for="femail">Email</label>
-      <input type="email" id="femail" name="email" placeholder="you@organization.com" required>
+      <input type="email" id="femail" name="email" placeholder="you@organization.com" required />
       <div class="form-validation-error" id="femailError">Please enter a valid email</div>
       <label for="fmsg">Message</label>
-      <textarea id="fmsg" name="message" placeholder="Briefly: who you are and what brought you here."></textarea>
+      <textarea
+        id="fmsg"
+        name="message"
+        placeholder="Briefly: who you are and what brought you here."></textarea>
 
       <!-- Honeypot (#95): hidden from people, tempting to bots. A real
            visitor never sees or fills it; if it arrives filled we drop
@@ -34,7 +43,7 @@ import '../styles/cta.css';
 
       <div class="form-success-overlay" id="formSuccess">
         <div class="form-success-check">
-          <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
+          <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg>
         </div>
         <div class="form-success-text">Message sent!</div>
         <div class="form-success-sub">We'll be in touch soon.</div>
@@ -60,7 +69,7 @@ import '../styles/cta.css';
   const SUCCESS_SHOW_DELAY = 800; // ms after mailto opens
   const FORM_RESET_DELAY = 6000; // ms before form clears
 
-  (function() {
+  (function () {
     const sendBtn = document.getElementById('formSend') as HTMLAnchorElement | null;
     const formSuccess = document.getElementById('formSuccess');
     const nameInput = document.getElementById('fname') as HTMLInputElement | null;
@@ -117,9 +126,11 @@ import '../styles/cta.css';
       const original = sendBtn.textContent;
       sendBtn.textContent = 'Opening\u2026';
 
-      window.location.href = 'mailto:contact@lumecon.ai?subject=' +
+      window.location.href =
+        'mailto:contact@lumecon.ai?subject=' +
         encodeURIComponent('Lumecon inquiry') +
-        '&body=' + encodeURIComponent('Name: ' + n + '\nEmail: ' + e + '\n\n' + m);
+        '&body=' +
+        encodeURIComponent('Name: ' + n + '\nEmail: ' + e + '\n\n' + m);
 
       setTimeout(() => {
         formSuccess.classList.add('show');
@@ -136,7 +147,13 @@ import '../styles/cta.css';
       }, FORM_RESET_DELAY);
     });
 
-    nameInput.addEventListener('input', () => { nameInput.classList.remove('error'); nameError.classList.remove('show'); });
-    emailInput.addEventListener('input', () => { emailInput.classList.remove('error'); emailError.classList.remove('show'); });
+    nameInput.addEventListener('input', () => {
+      nameInput.classList.remove('error');
+      nameError.classList.remove('show');
+    });
+    emailInput.addEventListener('input', () => {
+      emailInput.classList.remove('error');
+      emailError.classList.remove('show');
+    });
   })();
 </script>

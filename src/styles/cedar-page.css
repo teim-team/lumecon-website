@@ -20,8 +20,8 @@
 }
 .cedar-page__eyebrow {
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--cedar-text);
   font-weight: 600;
@@ -32,7 +32,7 @@
   font-weight: 600;
   font-size: clamp(2.2rem, 5vw, 3.6rem);
   line-height: 1.06;
-  letter-spacing: -.025em;
+  letter-spacing: -0.025em;
   color: var(--navy);
   margin: 0 0 1.4rem;
   max-width: 22ch;
@@ -48,13 +48,13 @@
 }
 .cedar-page__call {
   font-family: var(--font-mono);
-  font-size: .82rem;
-  letter-spacing: .04em;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
   color: var(--cedar-text);
   margin: 0;
-  padding: .6rem .85rem;
+  padding: 0.6rem 0.85rem;
   border-left: 2px solid var(--cedar);
-  background: var(--cedar-mist, #E0F2E7);
+  background: var(--cedar-mist, #e0f2e7);
   display: inline-block;
 }
 
@@ -78,19 +78,19 @@
 }
 .cedar-page__kicker {
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
-  margin: 0 0 .8rem;
+  margin: 0 0 0.8rem;
 }
 .cedar-page__h2 {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(1.8rem, 3.4vw, 2.6rem);
   line-height: 1.1;
-  letter-spacing: -.022em;
+  letter-spacing: -0.022em;
   color: var(--navy);
   margin: 0 0 1.6rem;
   max-width: 28ch;
@@ -116,20 +116,24 @@
   align-items: center;
   justify-content: center;
   color: var(--navy);
-  margin-bottom: .9rem;
+  margin-bottom: 0.9rem;
 }
-.cedar-page__step-icon :global(svg) { width: 100%; height: 100%; display: block; }
+.cedar-page__step-icon :global(svg) {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 .cedar-page__step-head {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.12rem;
   color: var(--navy);
-  letter-spacing: -.012em;
-  margin: 0 0 .6rem;
+  letter-spacing: -0.012em;
+  margin: 0 0 0.6rem;
 }
 .cedar-page__step-body {
   font-family: var(--font-sans);
-  font-size: .95rem;
+  font-size: 0.95rem;
   line-height: 1.55;
   color: var(--ink-2);
   font-weight: 400;
@@ -156,8 +160,13 @@
     column-gap: clamp(2rem, 4vw, 3.5rem);
     align-items: start;
   }
-  .cedar-page__try-intro { position: sticky; top: 88px; }
-  .cedar-page__chat-panel { margin-top: 0; }
+  .cedar-page__try-intro {
+    position: sticky;
+    top: 88px;
+  }
+  .cedar-page__chat-panel {
+    margin-top: 0;
+  }
 }
 .cedar-page__deck {
   font-family: var(--font-sans);
@@ -176,8 +185,8 @@
   border-radius: 14px;
   background: var(--white);
   box-shadow:
-    0 1px 2px rgba(10, 15, 38, .04),
-    0 14px 36px -22px rgba(10, 15, 38, .18);
+    0 1px 2px rgba(10, 15, 38, 0.04),
+    0 14px 36px -22px rgba(10, 15, 38, 0.18);
   overflow: hidden;
 }
 .cedar-page__chat-panel .cedar-chat {
@@ -189,16 +198,31 @@
 }
 
 @media (max-width: 600px) {
-  .cedar-page__steps { grid-template-columns: 1fr; }
-  .cedar-page__chat-panel .cedar-chat { min-height: 420px; }
+  .cedar-page__steps {
+    grid-template-columns: 1fr;
+  }
+  .cedar-page__chat-panel .cedar-chat {
+    min-height: 420px;
+  }
 }
 
 /* Desktop readability: scale the kicker, step icons, headings, body,
    and deck up on large screens so nothing reads as mobile-small. */
 @media (min-width: 1024px) {
-  .cedar-page__kicker { font-size: .8rem; }
-  .cedar-page__step-icon { width: 46px; height: 46px; }
-  .cedar-page__step-head { font-size: 1.24rem; }
-  .cedar-page__step-body { font-size: 1.04rem; }
-  .cedar-page__deck { font-size: 1.12rem; }
+  .cedar-page__kicker {
+    font-size: 0.8rem;
+  }
+  .cedar-page__step-icon {
+    width: 46px;
+    height: 46px;
+  }
+  .cedar-page__step-head {
+    font-size: 1.24rem;
+  }
+  .cedar-page__step-body {
+    font-size: 1.04rem;
+  }
+  .cedar-page__deck {
+    font-size: 1.12rem;
+  }
 }

@@ -7,6 +7,7 @@ import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/legal.css';
 ---
+
 <BaseLayout
   title="Page Not Found | Lumecon"
   description="That page doesn't exist. Return to Lumecon's economic impact analysis software for governments, enterprises, and mission-driven organizations."
@@ -16,7 +17,9 @@ import '../styles/legal.css';
   noindex={true}
 >
   <Nav isHome={false} />
-  <main style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <main
+    style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;"
+  >
     <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: .5rem;">404</h1>
     <p style="margin-bottom: 2rem;">The page you're looking for doesn't exist.</p>
     <a href="/" class="btn">Back to Home</a>

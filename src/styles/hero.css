@@ -6,9 +6,17 @@
   display: grid;
   gap: clamp(2rem, 5vw, 4rem);
 }
-.hero > * { position: relative; z-index: 1; }
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
 .hero-brand,
-.workspace { max-width: 1200px; margin-left: auto; margin-right: auto; width: 100%; }
+.workspace {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
 
 /* ---------- brand statement ---------- */
 .hero-brand {
@@ -28,33 +36,55 @@
    `animation-fill-mode: backwards` holds each element invisible
    until its delay fires so nothing flashes pre-animation. */
 @keyframes hero-rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .hero-brand > * {
-  animation: hero-rise .7s var(--ease) backwards;
+  animation: hero-rise 0.7s var(--ease) backwards;
 }
 /* Stagger order matches the hero-brand children in source order:
    headline → workflow → sub → plain-language line → proof → path tiles
    → data-sources strip. Keep one delay per child so a newly inserted
    block doesn't drop to 0s and animate out of sequence. */
-.hero-brand > :nth-child(1) { animation-delay: .05s; }
-.hero-brand > :nth-child(2) { animation-delay: .20s; }
-.hero-brand > :nth-child(3) { animation-delay: .35s; }
-.hero-brand > :nth-child(4) { animation-delay: .50s; }
-.hero-brand > :nth-child(5) { animation-delay: .65s; }
-.hero-brand > :nth-child(6) { animation-delay: .80s; }
-.hero-brand > :nth-child(7) { animation-delay: .95s; }
+.hero-brand > :nth-child(1) {
+  animation-delay: 0.05s;
+}
+.hero-brand > :nth-child(2) {
+  animation-delay: 0.2s;
+}
+.hero-brand > :nth-child(3) {
+  animation-delay: 0.35s;
+}
+.hero-brand > :nth-child(4) {
+  animation-delay: 0.5s;
+}
+.hero-brand > :nth-child(5) {
+  animation-delay: 0.65s;
+}
+.hero-brand > :nth-child(6) {
+  animation-delay: 0.8s;
+}
+.hero-brand > :nth-child(7) {
+  animation-delay: 0.95s;
+}
 @media (prefers-reduced-motion: reduce) {
-  .hero-brand > * { animation: none; }
+  .hero-brand > * {
+    animation: none;
+  }
 }
 /* Tagline eyebrow: small mono uppercase up top, replacing the
    previous oversized hero wordmark. The luminate emphasis still
    pops via the shared .lumin class. */
 .hero-tagline {
   font-family: var(--font-mono);
-  font-size: .82rem;
-  letter-spacing: .14em;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 500;
@@ -62,9 +92,9 @@
 }
 .hero-tagline em.lumin {
   font-size: 1.15em;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   text-transform: lowercase;
-  padding: 0 .1em;
+  padding: 0 0.1em;
 }
 /* Hero headline. Clamp's lower bound dips to 2rem so the headline
    doesn't push every CTA below the fold on the smallest practical
@@ -74,7 +104,7 @@
   font-weight: 600;
   font-size: clamp(2rem, 5.5vw, 4.4rem);
   line-height: 1.08;
-  letter-spacing: -.025em;
+  letter-spacing: -0.025em;
   color: var(--accent-text);
   margin: 0;
   max-width: 24ch;
@@ -104,27 +134,40 @@
     align-items: flex-start;
     gap: 2.2rem;
   }
-  .hero-sub { flex: 1 1 auto; }
-  .hero-eia { flex: 0 0 clamp(15rem, 23vw, 19rem); padding-top: .1rem; }
+  .hero-sub {
+    flex: 1 1 auto;
+  }
+  .hero-eia {
+    flex: 0 0 clamp(15rem, 23vw, 19rem);
+    padding-top: 0.1rem;
+  }
 }
 /* Teal collapsible "New to this?" — mirrors the network disclosure. */
-.hero-eia { margin: 0; }
+.hero-eia {
+  margin: 0;
+}
 .hero-eia__summary {
   list-style: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: .55rem;
+  gap: 0.55rem;
   font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
-  padding: .35rem 0;
+  padding: 0.35rem 0;
 }
-.hero-eia__summary::-webkit-details-marker { display: none; }
-.hero-eia__summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+.hero-eia__summary::-webkit-details-marker {
+  display: none;
+}
+.hero-eia__summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
 .hero-eia__chev {
   width: 22px;
   height: 22px;
@@ -134,7 +177,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background .2s var(--ease), border-color .2s var(--ease);
+  transition:
+    background 0.2s var(--ease),
+    border-color 0.2s var(--ease);
 }
 .hero-eia__chev::before {
   content: '';
@@ -143,44 +188,58 @@
   border-right: 1.4px solid var(--navy);
   border-bottom: 1.4px solid var(--navy);
   transform: rotate(45deg) translate(-1px, -1px);
-  transition: transform .25s var(--ease);
+  transition: transform 0.25s var(--ease);
 }
-.hero-eia[open] .hero-eia__chev { background: var(--accent); border-color: var(--accent); }
+.hero-eia[open] .hero-eia__chev {
+  background: var(--accent);
+  border-color: var(--accent);
+}
 .hero-eia[open] .hero-eia__chev::before {
   transform: rotate(225deg) translate(-1px, -1px);
   border-color: var(--white);
 }
 .hero-eia__body {
-  margin: .7rem 0 0;
+  margin: 0.7rem 0 0;
   font-size: var(--type-base);
   line-height: 1.55;
   color: var(--ink-2);
   font-weight: 400;
   max-width: 38ch;
-  padding-left: .9rem;
+  padding-left: 0.9rem;
   border-left: 2px solid var(--accent);
-  animation: hero-eia-in .3s var(--ease);
+  animation: hero-eia-in 0.3s var(--ease);
 }
-.hero-eia__body strong { font-weight: 600; color: var(--navy); }
+.hero-eia__body strong {
+  font-weight: 600;
+  color: var(--navy);
+}
 @keyframes hero-eia-in {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-eia__body { animation: none; }
+  .hero-eia__body {
+    animation: none;
+  }
 }
 /* Trusted data sources strip (#22) — a quiet credibility band under
    the path tiles: small mono label, then the source links. */
 .hero-sources {
-  margin-top: .4rem;
+  margin-top: 0.4rem;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 .hero-sources__label {
   font-family: var(--font-mono);
-  font-size: .64rem;
-  letter-spacing: .12em;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 500;
@@ -189,9 +248,9 @@
 /* Parenthetical aside under the headline — softer and sentence-case so
    it reads as the quiet follow-on, not a second label. */
 .hero-sources__note {
-  margin-top: -.2rem;
+  margin-top: -0.2rem;
   font-family: var(--font-sans);
-  font-size: .82rem;
+  font-size: 0.82rem;
   line-height: 1.45;
   color: var(--ink-2);
   font-weight: 400;
@@ -201,43 +260,48 @@
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: .4rem .9rem;
+  gap: 0.4rem 0.9rem;
   padding: 0;
   margin: 0;
 }
 .hero-sources__list a {
   font-family: var(--font-sans);
-  font-size: .82rem;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--ink-2);
   text-decoration: none;
   border-bottom: 1px solid var(--rule-strong);
   padding-bottom: 1px;
-  transition: color .15s var(--ease), border-color .15s var(--ease);
+  transition:
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
 }
 .hero-sources__list a:hover {
   color: var(--accent-text);
   border-color: var(--accent);
 }
-.hero-sources__list a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.hero-sources__list a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 .hero-proof {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem .9rem;
+  gap: 0.5rem 0.9rem;
   padding: 0;
-  margin: .2rem 0 0;
+  margin: 0.2rem 0 0;
 }
 .hero-proof li {
   font-family: var(--font-mono);
-  font-size: .68rem;
-  letter-spacing: .06em;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 .hero-proof li + li::before {
   content: '';
@@ -246,13 +310,13 @@
   border-radius: 50%;
   background: var(--ink-4);
   display: inline-block;
-  margin-right: .4rem;
+  margin-right: 0.4rem;
 }
 .hero-cta {
   display: flex;
-  gap: .7rem;
+  gap: 0.7rem;
   flex-wrap: wrap;
-  margin-top: .4rem;
+  margin-top: 0.4rem;
 }
 
 /* Three substantial "path" tiles replacing the old hero-cta row.
@@ -265,8 +329,8 @@
 .hero-paths {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .8rem;
-  margin: .4rem 0 0;
+  gap: 0.8rem;
+  margin: 0.4rem 0 0;
   list-style: none;
   padding: 0;
   max-width: 880px;
@@ -274,20 +338,24 @@
 .hero-path {
   display: flex;
   flex-direction: column;
-  gap: .45rem;
+  gap: 0.45rem;
   padding: 1.1rem 1.15rem 1.25rem;
   background: var(--white);
   border: 1px solid var(--rule);
   border-radius: 12px;
   color: var(--navy);
   text-decoration: none;
-  transition: border-color .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+  transition:
+    border-color 0.18s var(--ease),
+    transform 0.18s var(--ease),
+    box-shadow 0.18s var(--ease),
+    background 0.18s var(--ease);
 }
 .hero-path:hover,
 .hero-path:focus-visible {
   border-color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -12px rgba(14, 21, 48, .18);
+  box-shadow: 0 8px 24px -12px rgba(14, 21, 48, 0.18);
 }
 .hero-path:active {
   border-color: var(--accent);
@@ -304,24 +372,30 @@
   width: 34px;
   height: 34px;
   color: var(--ink-3);
-  margin-bottom: .25rem;
-  transition: color .18s var(--ease);
+  margin-bottom: 0.25rem;
+  transition: color 0.18s var(--ease);
 }
-.hero-path__icon svg { width: 100%; height: 100%; display: block; }
+.hero-path__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 .hero-path:hover .hero-path__icon,
 .hero-path:focus-visible .hero-path__icon,
-.hero-path:active .hero-path__icon { color: var(--accent-text); }
+.hero-path:active .hero-path__icon {
+  color: var(--accent-text);
+}
 .hero-path__title {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.1rem;
-  letter-spacing: -.012em;
+  letter-spacing: -0.012em;
   color: var(--navy);
   line-height: 1.15;
 }
 .hero-path__sub {
   font-family: var(--font-sans);
-  font-size: .85rem;
+  font-size: 0.85rem;
   line-height: 1.4;
   color: var(--ink-2);
   font-weight: 400;
@@ -330,13 +404,24 @@
    secondary text and the path-tile icons up so nothing reads as
    mobile-small on a large screen. */
 @media (min-width: 1024px) {
-  .hero-proof li { font-size: .76rem; }
-  .hero-path__icon { width: 40px; height: 40px; }
-  .hero-path__title { font-size: 1.22rem; }
-  .hero-path__sub { font-size: .95rem; }
+  .hero-proof li {
+    font-size: 0.76rem;
+  }
+  .hero-path__icon {
+    width: 40px;
+    height: 40px;
+  }
+  .hero-path__title {
+    font-size: 1.22rem;
+  }
+  .hero-path__sub {
+    font-size: 0.95rem;
+  }
 }
 @media (min-width: 1100px) {
-  .hero-paths { max-width: 1040px; }
+  .hero-paths {
+    max-width: 1040px;
+  }
 }
 /* The hero tile grid is intentionally three equal-weight cards;
    none is primary because Sign-up — the actual primary conversion
@@ -345,17 +430,20 @@
    "learn more" entries at this stage. */
 
 @media (max-width: 720px) {
-  .hero-paths { grid-template-columns: 1fr; gap: .55rem; }
+  .hero-paths {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
   /* Two-column grid per tile on mobile: icon on the left (rowspan
      2), title and sub stacked on the right. Keeps the title from
      fighting the sub for horizontal space when both flex-row. */
   .hero-path {
-    padding: .9rem 1rem 1rem;
+    padding: 0.9rem 1rem 1rem;
     display: grid;
     grid-template-columns: 28px 1fr;
     grid-template-rows: auto auto;
-    column-gap: .85rem;
-    row-gap: .15rem;
+    column-gap: 0.85rem;
+    row-gap: 0.15rem;
     align-items: start;
   }
   .hero-path__icon {
@@ -366,8 +454,16 @@
     height: 28px;
     align-self: center;
   }
-  .hero-path__title { grid-column: 2; grid-row: 1; font-size: 1rem; }
-  .hero-path__sub   { grid-column: 2; grid-row: 2; font-size: .82rem; }
+  .hero-path__title {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 1rem;
+  }
+  .hero-path__sub {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.82rem;
+  }
 }
 
 /* ---------- workspace panel (product UI) ---------- */
@@ -377,8 +473,8 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow:
-    0 1px 2px rgba(14, 21, 48, .04),
-    0 8px 24px -8px rgba(14, 21, 48, .08);
+    0 1px 2px rgba(14, 21, 48, 0.04),
+    0 8px 24px -8px rgba(14, 21, 48, 0.08);
   scroll-snap-align: start;
 }
 .workspace__bar {
@@ -386,19 +482,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: .65rem 1rem;
+  padding: 0.65rem 1rem;
   border-bottom: 1px solid var(--rule);
   background: var(--paper);
 }
 .workspace__title {
   display: inline-flex;
   align-items: center;
-  gap: .55rem;
+  gap: 0.55rem;
   font-family: var(--font-sans);
   font-weight: 600;
   color: var(--navy);
-  font-size: .9rem;
-  letter-spacing: -.01em;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
 }
 .workspace__mark {
   width: 22px;
@@ -408,12 +504,12 @@
 .workspace__sub {
   display: inline-flex;
   align-items: center;
-  gap: .45rem;
+  gap: 0.45rem;
 }
 .workspace__study-id {
   font-family: var(--font-mono);
-  font-size: .62rem;
-  letter-spacing: .14em;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 600;
@@ -421,25 +517,26 @@
 }
 .workspace__sub-text {
   font-family: var(--font-mono);
-  font-size: .65rem;
-  letter-spacing: .14em;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 500;
 }
-.workspace__divider, .workspace__sub-divider {
+.workspace__divider,
+.workspace__sub-divider {
   width: 1px;
   height: 14px;
   background: var(--rule-strong);
-  margin: 0 .35rem;
+  margin: 0 0.35rem;
   display: inline-block;
 }
 .workspace__region {
   font-family: var(--font-sans);
-  font-size: .85rem;
+  font-size: 0.85rem;
   color: var(--ink-2);
   font-weight: 500;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -449,49 +546,53 @@
   background: transparent;
   border: 0;
   font-family: var(--font-mono);
-  font-size: .62rem;
-  letter-spacing: .14em;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--navy);
   cursor: pointer;
-  padding: .25rem .4rem;
+  padding: 0.25rem 0.4rem;
   font-weight: 600;
-  transition: color .15s;
+  transition: color 0.15s;
 }
-.workspace__again:hover { color: var(--gold); }
+.workspace__again:hover {
+  color: var(--gold);
+}
 .workspace__foot {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: .65rem 1rem;
+  padding: 0.65rem 1rem;
   background: var(--cream);
   border-top: 1px solid var(--rule);
   font-family: var(--font-mono);
-  font-size: .62rem;
+  font-size: 0.62rem;
   color: var(--ink-3);
-  letter-spacing: -.002em;
+  letter-spacing: -0.002em;
   flex-wrap: wrap;
 }
 .workspace-legend {
   display: inline-flex;
   align-items: flex-start;
-  gap: .4rem;
+  gap: 0.4rem;
   flex-wrap: nowrap;
   font-family: var(--font-sans);
-  font-size: .76rem;
+  font-size: 0.76rem;
   line-height: 1.45;
   text-transform: none;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   font-weight: 400;
   color: var(--ink-2);
   max-width: 70%;
 }
-.workspace-legend__sw { margin-top: .35rem; }
+.workspace-legend__sw {
+  margin-top: 0.35rem;
+}
 .workspace-legend__key {
   display: inline-flex;
   align-items: center;
-  gap: .75rem;
+  gap: 0.75rem;
   flex-wrap: nowrap;
   white-space: nowrap;
 }
@@ -500,11 +601,11 @@
 .workspace-legend__item {
   display: inline-flex;
   align-items: center;
-  gap: .35rem;
+  gap: 0.35rem;
   white-space: nowrap;
 }
 .workspace-legend__note {
-  margin-left: .25rem;
+  margin-left: 0.25rem;
   font-style: italic;
   color: var(--ink-3);
 }
@@ -513,47 +614,71 @@
   height: 9px;
   border-radius: 50%;
   background: var(--gold);
-  margin-right: .15rem;
-  margin-left: .55rem;
+  margin-right: 0.15rem;
+  margin-left: 0.55rem;
   flex-shrink: 0;
   display: inline-block;
 }
-.workspace-legend__sw:first-child { margin-left: 0; }
+.workspace-legend__sw:first-child {
+  margin-left: 0;
+}
 /* Legend swatches mirror the map shapes:
    - Activity: gold square (the project itself)
    - Suppliers: terra diamond (rotated square — firms in the chain)
    - Households: cedar circle (people who spend wages locally) */
-.workspace-legend__sw--source    { background: var(--gold); border-radius: 2px; width: 10px; height: 10px; }
-.workspace-legend__sw--spillover { background: var(--accent); border-radius: 2px; width: 10px; height: 10px; opacity: .6; }
-.workspace-attr { letter-spacing: .04em; text-transform: none; }
+.workspace-legend__sw--source {
+  background: var(--gold);
+  border-radius: 2px;
+  width: 10px;
+  height: 10px;
+}
+.workspace-legend__sw--spillover {
+  background: var(--accent);
+  border-radius: 2px;
+  width: 10px;
+  height: 10px;
+  opacity: 0.6;
+}
+.workspace-attr {
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
 .workspace-activity {
   font-family: var(--font-sans);
-  font-size: .92rem;
+  font-size: 0.92rem;
   color: var(--ink-2);
-  margin: .2rem 0 0;
+  margin: 0.2rem 0 0;
   min-height: 1.4em;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
 }
-.workspace-activity strong { color: var(--navy); font-weight: 600; }
-.workspace-activity:empty::before { content: ''; }
+.workspace-activity strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+.workspace-activity:empty::before {
+  content: '';
+}
 .workspace__dot {
-  width: 7px; height: 7px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--ink-4);
-  transition: background .25s var(--ease), box-shadow .25s var(--ease);
+  transition:
+    background 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
 }
-.workspace__dot[data-state="running"] {
+.workspace__dot[data-state='running'] {
   background: var(--gold);
-  box-shadow: 0 0 0 3px rgba(182, 138, 46, .18);
+  box-shadow: 0 0 0 3px rgba(182, 138, 46, 0.18);
 }
-.workspace__dot[data-state="complete"] {
+.workspace__dot[data-state='complete'] {
   background: var(--cedar-light);
-  box-shadow: 0 0 0 3px rgba(63, 136, 102, .18);
+  box-shadow: 0 0 0 3px rgba(63, 136, 102, 0.18);
 }
 .workspace__body {
   padding: clamp(1rem, 2vw, 1.5rem);
   display: grid;
-  gap: clamp(.9rem, 1.4vw, 1.3rem);
+  gap: clamp(0.9rem, 1.4vw, 1.3rem);
 }
 
 /* ---------- stage / map — saturated, product-grade ---------- */
@@ -562,9 +687,19 @@
   position: relative;
   min-height: 0;
 }
-.hero-map { width: 100%; height: auto; display: block; max-height: 56vh; }
-.hero-map__fill { fill: var(--paper); }
-.hero-map__grid { opacity: .55; pointer-events: none; }
+.hero-map {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 56vh;
+}
+.hero-map__fill {
+  fill: var(--paper);
+}
+.hero-map__grid {
+  opacity: 0.55;
+  pointer-events: none;
+}
 /* All-county borders mesh stays hidden by default. The mesh of
    3,000+ boundaries would dominate the map visually if always shown.
    It surfaces in three cases:
@@ -578,15 +713,17 @@
 .hero-map__county-borders {
   fill: none;
   stroke: var(--navy);
-  stroke-width: .35;
-  stroke-opacity: .22;
+  stroke-width: 0.35;
+  stroke-opacity: 0.22;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
   display: none;
 }
-.hero-stage[data-layer="counties"] .hero-map__county-borders,
-.hero-stage[data-study-level="county"] .hero-map__county-borders,
-.hero-stage[data-study-level="reservation"] .hero-map__county-borders { display: block; }
+.hero-stage[data-layer='counties'] .hero-map__county-borders,
+.hero-stage[data-study-level='county'] .hero-map__county-borders,
+.hero-stage[data-study-level='reservation'] .hero-map__county-borders {
+  display: block;
+}
 
 /* Top controls row: layer filters on the left, search on the right. */
 .workspace-controls {
@@ -604,13 +741,13 @@
 .workspace-filters {
   display: inline-flex;
   align-items: center;
-  gap: .2rem;
-  padding: .3rem;
+  gap: 0.2rem;
+  padding: 0.3rem;
   background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: 999px;
   width: fit-content;
-  box-shadow: inset 0 1px 2px rgba(10, 15, 38, .06);
+  box-shadow: inset 0 1px 2px rgba(10, 15, 38, 0.06);
 }
 
 /* Search box — same pill-shape as the filter row, lives next to it. */
@@ -623,7 +760,7 @@
 }
 .workspace-search__icon {
   position: absolute;
-  left: .8rem;
+  left: 0.8rem;
   top: 50%;
   transform: translateY(-50%);
   width: 14px;
@@ -634,18 +771,25 @@
 .workspace-search__input {
   width: 100%;
   font-family: var(--font-sans);
-  font-size: .88rem;
+  font-size: 0.88rem;
   font-weight: 400;
   color: var(--navy);
   background: var(--cream);
   border: 1px solid var(--rule);
   border-radius: 999px;
-  padding: .55rem 2.2rem .55rem 2rem;
-  letter-spacing: -.005em;
-  transition: border-color .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+  padding: 0.55rem 2.2rem 0.55rem 2rem;
+  letter-spacing: -0.005em;
+  transition:
+    border-color 0.15s var(--ease),
+    box-shadow 0.15s var(--ease),
+    background 0.15s var(--ease);
 }
-.workspace-search__input::placeholder { color: var(--ink-3); }
-.workspace-search__input:hover { border-color: var(--rule-strong); }
+.workspace-search__input::placeholder {
+  color: var(--ink-3);
+}
+.workspace-search__input:hover {
+  border-color: var(--rule-strong);
+}
 .workspace-search__input:focus {
   outline: none;
   border-color: var(--accent);
@@ -654,7 +798,7 @@
 }
 .workspace-search__clear {
   position: absolute;
-  right: .55rem;
+  right: 0.55rem;
   top: 50%;
   transform: translateY(-50%);
   width: 20px;
@@ -670,9 +814,11 @@
   line-height: 1;
   cursor: pointer;
   padding: 0;
-  transition: background .15s var(--ease);
+  transition: background 0.15s var(--ease);
 }
-.workspace-search__clear:hover { background: var(--rule-strong); }
+.workspace-search__clear:hover {
+  background: var(--rule-strong);
+}
 
 .workspace-search__panel {
   position: absolute;
@@ -681,11 +827,13 @@
   right: 0;
   list-style: none;
   margin: 0;
-  padding: .35rem;
+  padding: 0.35rem;
   background: var(--white);
   border: 1px solid var(--rule);
   border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(10, 15, 38, .14), 0 2px 6px rgba(10, 15, 38, .06);
+  box-shadow:
+    0 12px 32px rgba(10, 15, 38, 0.14),
+    0 2px 6px rgba(10, 15, 38, 0.06);
   z-index: 50;
   max-height: 360px;
   overflow-y: auto;
@@ -693,13 +841,15 @@
 .workspace-search__item {
   display: flex;
   align-items: center;
-  gap: .6rem;
-  padding: .5rem .65rem;
+  gap: 0.6rem;
+  padding: 0.5rem 0.65rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: background .12s var(--ease);
+  transition: background 0.12s var(--ease);
 }
-.workspace-search__item.is-active { background: var(--paper); }
+.workspace-search__item.is-active {
+  background: var(--paper);
+}
 .workspace-search__kind {
   flex: 0 0 auto;
   width: 22px;
@@ -709,8 +859,13 @@
   justify-content: center;
   color: var(--ink-3);
 }
-.workspace-search__kind svg { width: 16px; height: 16px; }
-.workspace-search__item.is-active .workspace-search__kind { color: var(--accent-text); }
+.workspace-search__kind svg {
+  width: 16px;
+  height: 16px;
+}
+.workspace-search__item.is-active .workspace-search__kind {
+  color: var(--accent-text);
+}
 .workspace-search__meta {
   display: flex;
   flex-direction: column;
@@ -719,10 +874,10 @@
 }
 .workspace-search__name {
   font-family: var(--font-sans);
-  font-size: .88rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--navy);
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   line-height: 1.2;
 }
 .workspace-search__name mark {
@@ -732,63 +887,87 @@
 }
 .workspace-search__sub {
   font-family: var(--font-mono);
-  font-size: .65rem;
+  font-size: 0.65rem;
   color: var(--ink-3);
   margin-top: 2px;
-  letter-spacing: .02em;
+  letter-spacing: 0.02em;
 }
 .wfilter {
   background: transparent;
   border: 0;
-  padding: .42rem .95rem;
+  padding: 0.42rem 0.95rem;
   font-family: var(--font-sans);
-  font-size: .82rem;
+  font-size: 0.82rem;
   font-weight: 500;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   color: var(--ink-3);
   cursor: pointer;
   border-radius: 999px;
   position: relative;
-  transition: background .2s var(--ease), color .2s var(--ease), transform .12s var(--ease);
+  transition:
+    background 0.2s var(--ease),
+    color 0.2s var(--ease),
+    transform 0.12s var(--ease);
 }
-.wfilter:hover { color: var(--navy); }
-.wfilter:active { transform: scale(.97); }
+.wfilter:hover {
+  color: var(--navy);
+}
+.wfilter:active {
+  transform: scale(0.97);
+}
 .wfilter.is-active {
   background: var(--white);
   color: var(--navy);
   box-shadow:
-    0 1px 1px rgba(10, 15, 38, .08),
-    0 2px 6px rgba(10, 15, 38, .06),
-    inset 0 0 0 1px rgba(10, 15, 38, .04);
+    0 1px 1px rgba(10, 15, 38, 0.08),
+    0 2px 6px rgba(10, 15, 38, 0.06),
+    inset 0 0 0 1px rgba(10, 15, 38, 0.04);
 }
 
 /* Tribal layer: reservation polygons are the visual hero. The
    surrounding state stays faint so the reservation pops; nested
    highlight order on a tribal study is reservation > county > state. */
-.hero-stage[data-layer="tribal"] .hero-aiannh { fill-opacity: .35; stroke: var(--map-tribal-deep); stroke-opacity: .55; stroke-width: .5; }
-.hero-stage[data-layer="tribal"] .hero-state { cursor: default; pointer-events: none; }
-.hero-stage[data-layer="tribal"] .hero-aiannh { pointer-events: auto; }
+.hero-stage[data-layer='tribal'] .hero-aiannh {
+  fill-opacity: 0.35;
+  stroke: var(--map-tribal-deep);
+  stroke-opacity: 0.55;
+  stroke-width: 0.5;
+}
+.hero-stage[data-layer='tribal'] .hero-state {
+  cursor: default;
+  pointer-events: none;
+}
+.hero-stage[data-layer='tribal'] .hero-aiannh {
+  pointer-events: auto;
+}
 /* In tribal mode the source state tint is muted so the active
    reservation reads as the strongest layer. */
-.hero-stage[data-layer="tribal"] .hero-state[data-ring="0"] { fill-opacity: .35; }
+.hero-stage[data-layer='tribal'] .hero-state[data-ring='0'] {
+  fill-opacity: 0.35;
+}
 
 /* Counties layer: state click still works (county-level click would
    require 3000+ paths; we surface the county MESH as visual context
    and keep state-level click as the action). */
-.hero-stage[data-layer="counties"] .hero-aiannh { fill-opacity: 0; pointer-events: none; }
-.hero-stage:not([data-layer="tribal"]) .hero-aiannh { pointer-events: auto; }
+.hero-stage[data-layer='counties'] .hero-aiannh {
+  fill-opacity: 0;
+  pointer-events: none;
+}
+.hero-stage:not([data-layer='tribal']) .hero-aiannh {
+  pointer-events: auto;
+}
 .hero-map__borders {
   fill: none;
   stroke: var(--navy);
-  stroke-width: .7;
-  stroke-opacity: .2;
+  stroke-width: 0.7;
+  stroke-opacity: 0.2;
   vector-effect: non-scaling-stroke;
 }
 .hero-map__outline {
   fill: none;
   stroke: var(--navy);
   stroke-width: 1.1;
-  stroke-opacity: .4;
+  stroke-opacity: 0.4;
   vector-effect: non-scaling-stroke;
 }
 
@@ -803,15 +982,25 @@
   stroke-opacity: 0;
   vector-effect: non-scaling-stroke;
   cursor: pointer;
-  transition: fill-opacity .15s var(--ease), stroke-width .15s var(--ease), stroke-opacity .15s var(--ease);
+  transition:
+    fill-opacity 0.15s var(--ease),
+    stroke-width 0.15s var(--ease),
+    stroke-opacity 0.15s var(--ease);
   outline: none;
 }
-.hero-stage:hover .hero-aiannh { fill-opacity: .14; stroke-width: .4; stroke-opacity: .35; }
-.hero-aiannh:hover, .hero-aiannh:focus-visible {
-  fill-opacity: .8 !important;
+.hero-stage:hover .hero-aiannh {
+  fill-opacity: 0.14;
+  stroke-width: 0.4;
+  stroke-opacity: 0.35;
+}
+.hero-aiannh:hover,
+.hero-aiannh:focus-visible {
+  fill-opacity: 0.8 !important;
   fill: var(--map-tribal);
 }
-.hero-aiannh--otsa { /* same default */ }
+.hero-aiannh--otsa {
+  /* same default */
+}
 
 /* State paths — only the SOURCE state (data-ring="0") is lit gold.
    Neighboring states are not shaded by "ring" because indirect
@@ -825,11 +1014,19 @@
   fill: transparent;
   fill-opacity: 0;
   cursor: pointer;
-  transition: fill-opacity .35s var(--ease), fill .35s var(--ease);
+  transition:
+    fill-opacity 0.35s var(--ease),
+    fill 0.35s var(--ease);
   outline: none;
 }
-.hero-state:hover { fill: var(--navy); fill-opacity: .08; }
-.hero-state:focus-visible { fill: var(--gold); fill-opacity: .2; }
+.hero-state:hover {
+  fill: var(--navy);
+  fill-opacity: 0.08;
+}
+.hero-state:focus-visible {
+  fill: var(--gold);
+  fill-opacity: 0.2;
+}
 /* Tiered highlight: state is the BASE tint of the layered hierarchy
    (state → county → reservation). Lighter than the active county or
    reservation polygon so they read on top. */
@@ -838,7 +1035,10 @@
    (terra, brightest). Each tier reads as a distinct shade so a
    reservation-inside-county-inside-state scene shows all three
    nested layers clearly. */
-.hero-state[data-ring="0"] { fill: var(--goldbar); fill-opacity: .85; }
+.hero-state[data-ring='0'] {
+  fill: var(--goldbar);
+  fill-opacity: 0.85;
+}
 
 /* Choropleth tint for the indirect + induced spillover. Each impacted
    state/county gets --impact-share (0..1) and the CSS multiplies it
@@ -848,11 +1048,16 @@
 .hero-state[data-impact],
 .hero-county[data-impact] {
   fill: var(--accent);
-  fill-opacity: calc(var(--impact-share, 0) * .6);
-  transition: fill-opacity .5s var(--ease), fill .35s var(--ease);
+  fill-opacity: calc(var(--impact-share, 0) * 0.6);
+  transition:
+    fill-opacity 0.5s var(--ease),
+    fill 0.35s var(--ease);
 }
 /* Source region's ring=0 wins over the choropleth tint */
-.hero-state[data-ring="0"][data-impact] { fill: var(--goldbar); fill-opacity: .85; }
+.hero-state[data-ring='0'][data-impact] {
+  fill: var(--goldbar);
+  fill-opacity: 0.85;
+}
 
 /* Value chips — small pills placed on top-N impacted regions.
    The "local" chip on the source region reveals with the Direct
@@ -860,54 +1065,56 @@
    Indirect+Induced tick (ring=2). */
 .hero-value-chip {
   opacity: 0;
-  transition: opacity .35s var(--ease);
+  transition: opacity 0.35s var(--ease);
   pointer-events: none;
 }
-.hero-stage[data-ring="1"] .hero-value-chip[data-kind="local"],
-.hero-stage[data-ring="2"] .hero-value-chip,
-.hero-stage[data-ring="3"] .hero-value-chip,
-.hero-stage[data-ring="4"] .hero-value-chip { opacity: 1; }
+.hero-stage[data-ring='1'] .hero-value-chip[data-kind='local'],
+.hero-stage[data-ring='2'] .hero-value-chip,
+.hero-stage[data-ring='3'] .hero-value-chip,
+.hero-stage[data-ring='4'] .hero-value-chip {
+  opacity: 1;
+}
 .hero-value-chip__leader {
   stroke: var(--navy);
-  stroke-opacity: .35;
-  stroke-width: .6;
+  stroke-opacity: 0.35;
+  stroke-width: 0.6;
   vector-effect: non-scaling-stroke;
   fill: none;
 }
 .hero-value-chip__bg {
   fill: var(--white);
   stroke: var(--accent);
-  stroke-opacity: .55;
-  stroke-width: .6;
+  stroke-opacity: 0.55;
+  stroke-width: 0.6;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 1px 1.5px rgba(10, 15, 38, .12));
+  filter: drop-shadow(0 1px 1.5px rgba(10, 15, 38, 0.12));
 }
 .hero-value-chip__txt {
   font-family: var(--font-mono);
   font-size: 9.5px;
   font-weight: 600;
   fill: var(--navy);
-  letter-spacing: -.01em;
+  letter-spacing: -0.01em;
   dominant-baseline: middle;
   text-anchor: middle;
 }
 /* Local-retention chip: the dominant chip on the map. Gold stroke
    ties it to the source region; larger font; thicker leader. */
-.hero-value-chip[data-kind="local"] .hero-value-chip__bg {
+.hero-value-chip[data-kind='local'] .hero-value-chip__bg {
   stroke: var(--gold);
-  stroke-opacity: .9;
+  stroke-opacity: 0.9;
   stroke-width: 1;
   fill: var(--white);
-  filter: drop-shadow(0 2px 3px rgba(10, 15, 38, .18));
+  filter: drop-shadow(0 2px 3px rgba(10, 15, 38, 0.18));
 }
-.hero-value-chip[data-kind="local"] .hero-value-chip__txt {
+.hero-value-chip[data-kind='local'] .hero-value-chip__txt {
   font-size: 11px;
   fill: var(--navy);
 }
-.hero-value-chip[data-kind="local"] .hero-value-chip__leader {
+.hero-value-chip[data-kind='local'] .hero-value-chip__leader {
   stroke: var(--gold);
-  stroke-opacity: .7;
-  stroke-width: .9;
+  stroke-opacity: 0.7;
+  stroke-width: 0.9;
 }
 
 /* Flow lines — curved beziers from source to top-impacted regions.
@@ -915,60 +1122,89 @@
 .hero-flow-line {
   fill: none;
   stroke: var(--accent);
-  stroke-opacity: .5;
+  stroke-opacity: 0.5;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
   stroke-dasharray: var(--len, 100);
   stroke-dashoffset: var(--len, 100);
   transition: stroke-dashoffset 1.2s var(--ease);
 }
-.hero-stage[data-ring="1"] .hero-flow-line,
-.hero-stage[data-ring="2"] .hero-flow-line,
-.hero-stage[data-ring="3"] .hero-flow-line,
-.hero-stage[data-ring="4"] .hero-flow-line { stroke-dashoffset: 0; }
+.hero-stage[data-ring='1'] .hero-flow-line,
+.hero-stage[data-ring='2'] .hero-flow-line,
+.hero-stage[data-ring='3'] .hero-flow-line,
+.hero-stage[data-ring='4'] .hero-flow-line {
+  stroke-dashoffset: 0;
+}
 
 .hero-county {
   fill: var(--gold);
   fill-opacity: 0;
   stroke: var(--navy);
-  stroke-width: .8;
+  stroke-width: 0.8;
   stroke-opacity: 0;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
-  transition: fill-opacity .35s var(--ease), stroke-opacity .35s var(--ease);
+  transition:
+    fill-opacity 0.35s var(--ease),
+    stroke-opacity 0.35s var(--ease);
 }
-.hero-county[data-active="1"] {
-  fill-opacity: .9;
-  stroke-opacity: .85;
+.hero-county[data-active='1'] {
+  fill-opacity: 0.9;
+  stroke-opacity: 0.85;
 }
 
 /* Active reservation polygon, the brightest layer. Amber-gold so it
    pops against the pale-gold state and the teal spillover while
    staying in the same warm family as the source. */
-.hero-aiannh[data-active="1"] {
+.hero-aiannh[data-active='1'] {
   fill: var(--map-tribal) !important;
-  fill-opacity: .9 !important;
+  fill-opacity: 0.9 !important;
   stroke: var(--map-tribal-deep);
-  stroke-width: .8;
-  stroke-opacity: .9;
+  stroke-width: 0.8;
+  stroke-opacity: 0.9;
 }
 
 /* Source point — a real product pin */
-.hero-source { opacity: 0; transition: opacity .35s var(--ease); }
-.hero-stage[data-run="1"] .hero-source { opacity: 1; }
-.hero-glow { opacity: 0; transition: opacity .4s var(--ease); }
-.hero-stage[data-run="1"] .hero-glow { opacity: .55; }
+.hero-source {
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.hero-stage[data-run='1'] .hero-source {
+  opacity: 1;
+}
+.hero-glow {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.hero-stage[data-run='1'] .hero-glow {
+  opacity: 0.55;
+}
 .hero-spark {
   fill: var(--navy);
-  filter: drop-shadow(0 0 4px rgba(212, 165, 46, .8));
+  filter: drop-shadow(0 0 4px rgba(212, 165, 46, 0.8));
 }
 .hero-spark__core {
   fill: var(--gold-light);
   stroke: var(--navy);
-  stroke-width: .8;
+  stroke-width: 0.8;
 }
 
-@keyframes heroRippleA { 0% { r: 14; opacity: 1; stroke-width: 2.4; } 90% { r: 320; opacity: 0; stroke-width: .4; } 100% { r: 320; opacity: 0; } }
+@keyframes heroRippleA {
+  0% {
+    r: 14;
+    opacity: 1;
+    stroke-width: 2.4;
+  }
+  90% {
+    r: 320;
+    opacity: 0;
+    stroke-width: 0.4;
+  }
+  100% {
+    r: 320;
+    opacity: 0;
+  }
+}
 .hero-ring {
   fill: none;
   stroke: var(--navy);
@@ -976,84 +1212,101 @@
   vector-effect: non-scaling-stroke;
   opacity: 0;
 }
-.hero-ring[data-ring="1"] { stroke: var(--gold); }
-.hero-ring[data-ring="2"] { stroke: var(--terra); }
-.hero-ring[data-ring="3"] { stroke: var(--cedar); }
-.hero-stage[data-ring="1"] .hero-ring[data-ring="1"],
-.hero-stage[data-ring="2"] .hero-ring[data-ring="1"],
-.hero-stage[data-ring="2"] .hero-ring[data-ring="2"],
-.hero-stage[data-ring="3"] .hero-ring[data-ring="1"],
-.hero-stage[data-ring="3"] .hero-ring[data-ring="2"],
-.hero-stage[data-ring="3"] .hero-ring[data-ring="3"] { animation: heroRippleA 3s var(--ease) 0s 1 both; }
-.hero-stage[data-ring="4"] .hero-ring { opacity: 0; }
+.hero-ring[data-ring='1'] {
+  stroke: var(--gold);
+}
+.hero-ring[data-ring='2'] {
+  stroke: var(--terra);
+}
+.hero-ring[data-ring='3'] {
+  stroke: var(--cedar);
+}
+.hero-stage[data-ring='1'] .hero-ring[data-ring='1'],
+.hero-stage[data-ring='2'] .hero-ring[data-ring='1'],
+.hero-stage[data-ring='2'] .hero-ring[data-ring='2'],
+.hero-stage[data-ring='3'] .hero-ring[data-ring='1'],
+.hero-stage[data-ring='3'] .hero-ring[data-ring='2'],
+.hero-stage[data-ring='3'] .hero-ring[data-ring='3'] {
+  animation: heroRippleA 3s var(--ease) 0s 1 both;
+}
+.hero-stage[data-ring='4'] .hero-ring {
+  opacity: 0;
+}
 
 /* Hover tooltip — the same product-styling */
 .hero-tooltip {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   pointer-events: none;
   background: var(--navy);
   color: var(--white);
-  padding: .4rem .65rem .5rem;
+  padding: 0.4rem 0.65rem 0.5rem;
   font-family: var(--font-sans);
-  font-size: .82rem;
+  font-size: 0.82rem;
   line-height: 1.25;
   transform: translate(-9999px, -9999px);
   opacity: 0;
-  transition: opacity .15s var(--ease);
+  transition: opacity 0.15s var(--ease);
   z-index: 10;
   margin-left: 14px;
   margin-top: 14px;
   max-width: 240px;
   border-radius: 4px;
 }
-.hero-tooltip.is-on { opacity: 1; }
+.hero-tooltip.is-on {
+  opacity: 1;
+}
 .hero-tooltip__name {
   display: block;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: .92rem;
+  font-size: 0.92rem;
   line-height: 1.2;
 }
 .hero-tooltip__hint {
   display: block;
   font-family: var(--font-mono);
-  font-size: .56rem;
-  color: rgba(255, 255, 255, .55);
-  letter-spacing: .12em;
-  margin-top: .25rem;
+  font-size: 0.56rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.12em;
+  margin-top: 0.25rem;
   text-transform: uppercase;
   font-weight: 500;
 }
 
 /* Hidden narration line (kept for JS compatibility, never shown) */
-.hero-narration { display: none; }
+.hero-narration {
+  display: none;
+}
 
 /* First-visit coachmark — a one-time navy pill near the top of the map
    telling the visitor it's interactive. Matches the tooltip's navy /
    white treatment; the teal dot ties it to the brand accent. */
 .hero-coachmark {
   position: absolute;
-  top: .75rem;
+  top: 0.75rem;
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
-  gap: .55rem;
+  gap: 0.55rem;
   max-width: calc(100% - 1.5rem);
   background: var(--navy);
   color: var(--white);
-  padding: .42rem .5rem .42rem .75rem;
+  padding: 0.42rem 0.5rem 0.42rem 0.75rem;
   border-radius: 999px;
   font-family: var(--font-sans);
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 500;
   line-height: 1.2;
-  box-shadow: 0 10px 28px -10px rgba(10, 15, 38, .5);
+  box-shadow: 0 10px 28px -10px rgba(10, 15, 38, 0.5);
   z-index: 12;
-  animation: hero-coachmark-in .3s var(--ease) both;
+  animation: hero-coachmark-in 0.3s var(--ease) both;
 }
-.hero-coachmark[hidden] { display: none; }
+.hero-coachmark[hidden] {
+  display: none;
+}
 .hero-coachmark__dot {
   width: 7px;
   height: 7px;
@@ -1065,62 +1318,89 @@
 .hero-coachmark__close {
   flex-shrink: 0;
   border: 0;
-  background: rgba(255, 255, 255, .14);
+  background: rgba(255, 255, 255, 0.14);
   color: var(--white);
   font-family: inherit;
-  font-size: .72rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  padding: .22rem .55rem;
+  padding: 0.22rem 0.55rem;
   border-radius: 999px;
   cursor: pointer;
-  transition: background .15s var(--ease);
+  transition: background 0.15s var(--ease);
 }
-.hero-coachmark__close:hover { background: rgba(255, 255, 255, .26); }
-.hero-coachmark__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hero-coachmark__close:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+.hero-coachmark__close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 @keyframes hero-coachmark-in {
-  from { opacity: 0; transform: translate(-50%, -6px); }
-  to   { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 @keyframes hero-coachmark-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 var(--accent-rgba-18); }
-  50%      { box-shadow: 0 0 0 5px rgba(15, 181, 165, 0); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--accent-rgba-18);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(15, 181, 165, 0);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-coachmark { animation: none; }
-  .hero-coachmark__dot { animation: none; }
+  .hero-coachmark {
+    animation: none;
+  }
+  .hero-coachmark__dot {
+    animation: none;
+  }
 }
 
 /* ---------- figure marginalia ---------- */
 .hero-figs {
   display: grid;
-  grid-template-columns: 1.15fr 1.15fr 1.15fr .95fr .8fr;
+  grid-template-columns: 1.15fr 1.15fr 1.15fr 0.95fr 0.8fr;
   gap: 0;
   margin: 0;
-  padding-top: .8rem;
+  padding-top: 0.8rem;
   border-top: 1px solid var(--rule);
 }
 .hero-fig {
   padding: 1rem 1.4rem 1rem 0;
   border-right: 1px solid var(--rule);
-  transition: opacity .5s var(--ease);
+  transition: opacity 0.5s var(--ease);
 }
-.hero-fig:last-child { border-right: 0; padding-right: 0; }
-.hero-fig--derived { opacity: .38; }
-.hero-fig--derived.is-filled { opacity: 1; }
+.hero-fig:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.hero-fig--derived {
+  opacity: 0.38;
+}
+.hero-fig--derived.is-filled {
+  opacity: 1;
+}
 .hero-fig dt {
   font-family: var(--font-sans);
-  font-size: .82rem;
-  letter-spacing: -.005em;
+  font-size: 0.82rem;
+  letter-spacing: -0.005em;
   color: var(--ink-3);
   font-weight: 500;
-  margin-bottom: .45rem;
+  margin-bottom: 0.45rem;
 }
 .hero-fig dd {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(1.3rem, 2.1vw, 1.85rem);
   color: var(--navy);
-  letter-spacing: -.022em;
+  letter-spacing: -0.022em;
   line-height: 1;
   margin: 0;
   font-variant-numeric: tabular-nums;
@@ -1131,7 +1411,7 @@
 .hero-fig dt {
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
+  gap: 0.4rem;
 }
 .hero-fig__info {
   appearance: none;
@@ -1143,45 +1423,59 @@
   border-radius: 50%;
   padding: 0;
   font-family: var(--font-mono);
-  font-size: .58rem;
+  font-size: 0.58rem;
   font-weight: 700;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+  transition:
+    background 0.15s var(--ease),
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
   font-style: italic;
 }
-.hero-fig__info:hover, .hero-fig__info[aria-expanded="true"] {
+.hero-fig__info:hover,
+.hero-fig__info[aria-expanded='true'] {
   background: var(--navy);
   border-color: var(--navy);
   color: var(--white);
 }
 .hero-fig__expl {
-  margin-top: .65rem;
-  padding: .55rem .7rem;
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.7rem;
   background: var(--paper);
   border-left: 2px solid var(--gold);
   font-family: var(--font-sans);
-  font-size: .78rem;
+  font-size: 0.78rem;
   line-height: 1.5;
   color: var(--ink-2);
   font-weight: 400;
-  letter-spacing: -.002em;
+  letter-spacing: -0.002em;
 }
-.hero-fig__expl p { margin: 0; }
-.hero-fig__expl p + p { margin-top: .35rem; }
-.hero-fig__mult { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
-.hero-fig__mult strong { color: var(--navy); }
+.hero-fig__expl p {
+  margin: 0;
+}
+.hero-fig__expl p + p {
+  margin-top: 0.35rem;
+}
+.hero-fig__mult {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-3);
+}
+.hero-fig__mult strong {
+  color: var(--navy);
+}
 /* Level-specific assumption note — sits between the base definition
    and the multiplier line. Slightly different background so it reads
    as "what we changed for this level" without competing with the
    primary definition above. */
 .hero-fig__note {
-  font-size: .78rem;
+  font-size: 0.78rem;
   color: var(--ink-2);
-  padding: .45rem .55rem;
+  padding: 0.45rem 0.55rem;
   background: var(--accent-rgba-08);
   border-left: 2px solid var(--accent);
   border-radius: 0 3px 3px 0;
@@ -1190,42 +1484,56 @@
 /* Overview button — visible only while zoomed in */
 .hero-zoomout {
   position: absolute;
-  top: .8rem;
-  left: .8rem;
+  top: 0.8rem;
+  left: 0.8rem;
   background: var(--navy);
   color: var(--white);
   border: 0;
-  padding: .4rem .7rem;
+  padding: 0.4rem 0.7rem;
   font-family: var(--font-sans);
-  font-size: .78rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   border-radius: 4px;
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .25s var(--ease);
+  transition: opacity 0.25s var(--ease);
   z-index: 8;
 }
-.hero-stage[data-zoom="1"] .hero-zoomout { opacity: 1; pointer-events: auto; }
-.hero-zoomout:hover { background: var(--navy2); }
+.hero-stage[data-zoom='1'] .hero-zoomout {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hero-zoomout:hover {
+  background: var(--navy2);
+}
 
 /* When zoomed in, hide the AIANNH overlay's hover behavior so it
    doesn't trigger from background polygons that happen to fall under
    the zoomed view. */
-.hero-stage[data-zoom="1"] .hero-aiannh { pointer-events: none; }
+.hero-stage[data-zoom='1'] .hero-aiannh {
+  pointer-events: none;
+}
 
 /* ---------- Floating value labels on lit states ---------- */
-@keyframes vlIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vlIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .hero-vlabel {
   opacity: 0;
-  animation: vlIn .5s var(--ease) var(--vd, 0ms) both;
+  animation: vlIn 0.5s var(--ease) var(--vd, 0ms) both;
   pointer-events: none;
 }
 .hero-vlabel rect {
   fill: var(--navy);
   stroke: var(--white);
-  stroke-width: .8;
+  stroke-width: 0.8;
   vector-effect: non-scaling-stroke;
 }
 .hero-vlabel text {
@@ -1233,10 +1541,12 @@
   font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: -.01em;
+  letter-spacing: -0.01em;
   pointer-events: none;
 }
-.hero-vlabel--r2 rect { fill: var(--terra-dark); }
+.hero-vlabel--r2 rect {
+  fill: var(--terra-dark);
+}
 
 /* ---------- Source callout — disabled. The workspace bar region and
    the activity chip already name the location; the on-map pill was
@@ -1247,10 +1557,10 @@
 }
 .hero-callout__leader {
   stroke: var(--navy);
-  stroke-width: .9;
+  stroke-width: 0.9;
   stroke-dasharray: 2 2;
   vector-effect: non-scaling-stroke;
-  opacity: .55;
+  opacity: 0.55;
 }
 .hero-callout__bg {
   fill: var(--navy);
@@ -1263,62 +1573,170 @@
   font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: -.01em;
+  letter-spacing: -0.01em;
   pointer-events: none;
 }
 
 /* responsive */
 @media (max-width: 880px) {
-  .hero-statement { font-size: clamp(1.7rem, 7vw, 2.4rem); letter-spacing: -.02em; }
-  .hero-sub { font-size: .95rem; line-height: 1.55; }
-  .hero-proof { gap: .35rem .55rem; }
-  .hero-proof li { font-size: .58rem; letter-spacing: .04em; }
-  .hero-cta .btn { font-size: .85rem; padding: .65rem 1rem; }
-  .hero-figs { grid-template-columns: 1fr 1fr; }
-  .hero-fig { padding: .7rem .8rem .7rem 0; }
-  .hero-fig:nth-child(odd) { border-right: 1px solid var(--rule); }
-  .hero-fig:nth-child(even) { border-right: 0; padding-right: 0; }
-  .hero-fig dd { font-size: 1.1rem; }
-  .workspace__bar { padding: .65rem .8rem; flex-wrap: wrap; gap: .5rem; }
-  .workspace__title { font-size: .82rem; min-width: 0; flex: 1 1 auto; }
-  .workspace__title-text { display: none; }
-  .workspace__divider { display: none; }
+  .hero-statement {
+    font-size: clamp(1.7rem, 7vw, 2.4rem);
+    letter-spacing: -0.02em;
+  }
+  .hero-sub {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .hero-proof {
+    gap: 0.35rem 0.55rem;
+  }
+  .hero-proof li {
+    font-size: 0.58rem;
+    letter-spacing: 0.04em;
+  }
+  .hero-cta .btn {
+    font-size: 0.85rem;
+    padding: 0.65rem 1rem;
+  }
+  .hero-figs {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-fig {
+    padding: 0.7rem 0.8rem 0.7rem 0;
+  }
+  .hero-fig:nth-child(odd) {
+    border-right: 1px solid var(--rule);
+  }
+  .hero-fig:nth-child(even) {
+    border-right: 0;
+    padding-right: 0;
+  }
+  .hero-fig dd {
+    font-size: 1.1rem;
+  }
+  .workspace__bar {
+    padding: 0.65rem 0.8rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .workspace__title {
+    font-size: 0.82rem;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .workspace__title-text {
+    display: none;
+  }
+  .workspace__divider {
+    display: none;
+  }
   /* On mobile the chip text is the focal piece, so keep it visible
      (the parent 'Live economic impact study' label collapses). */
-  .workspace__region { font-size: .82rem; }
-  .workspace__sub { font-size: .68rem; gap: .35rem; flex-shrink: 0; }
-  .workspace__sub-divider { display: none; }
-  .workspace__study-id { display: none; }
-  .workspace__again { font-size: .55rem; padding: .2rem .3rem; }
-  .workspace__sub-text { font-size: .58rem; }
-  .workspace__body { padding: .8rem; }
-  .hero-map { max-height: 50vh; }
-  .workspace__foot { padding: .55rem .8rem; font-size: .58rem; }
-  .workspace-legend { max-width: 100%; font-size: .68rem; }
-  .workspace-attr { display: none; }
-  .workspace-filters { width: 100%; justify-content: center; }
+  .workspace__region {
+    font-size: 0.82rem;
+  }
+  .workspace__sub {
+    font-size: 0.68rem;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+  .workspace__sub-divider {
+    display: none;
+  }
+  .workspace__study-id {
+    display: none;
+  }
+  .workspace__again {
+    font-size: 0.55rem;
+    padding: 0.2rem 0.3rem;
+  }
+  .workspace__sub-text {
+    font-size: 0.58rem;
+  }
+  .workspace__body {
+    padding: 0.8rem;
+  }
+  .hero-map {
+    max-height: 50vh;
+  }
+  .workspace__foot {
+    padding: 0.55rem 0.8rem;
+    font-size: 0.58rem;
+  }
+  .workspace-legend {
+    max-width: 100%;
+    font-size: 0.68rem;
+  }
+  .workspace-attr {
+    display: none;
+  }
+  .workspace-filters {
+    width: 100%;
+    justify-content: center;
+  }
 }
 @media (max-width: 600px) {
   /* On phones the search input sits below the filter chips on its
      own row so neither has to compress to fit beside the other. */
-  .workspace-controls { flex-direction: column; align-items: stretch; gap: .55rem; }
-  .workspace-filters { width: 100%; justify-content: space-around; }
-  .workspace-search { width: 100%; }
-  .workspace-search__input { font-size: 16px; /* prevents iOS zoom */ }
+  .workspace-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+  }
+  .workspace-filters {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .workspace-search {
+    width: 100%;
+  }
+  .workspace-search__input {
+    font-size: 16px; /* prevents iOS zoom */
+  }
 }
 @media (max-width: 420px) {
-  .hero-figs { grid-template-columns: 1fr 1fr; }
-  .hero-fig { padding: .55rem .65rem .55rem 0; }
-  .hero-fig:nth-child(odd) { border-right: 1px solid var(--rule); }
-  .hero-fig:nth-child(even) { border-right: 0; padding-right: 0; }
-  .hero-fig:nth-child(5) { grid-column: 1 / -1; border-right: 0; }
-  .hero-fig dd { font-size: 1rem; }
-  .workspace-legend__note { display: block; margin-top: .25rem; margin-left: 0; }
-  .workspace-legend__key { flex-wrap: wrap; }
+  .hero-figs {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-fig {
+    padding: 0.55rem 0.65rem 0.55rem 0;
+  }
+  .hero-fig:nth-child(odd) {
+    border-right: 1px solid var(--rule);
+  }
+  .hero-fig:nth-child(even) {
+    border-right: 0;
+    padding-right: 0;
+  }
+  .hero-fig:nth-child(5) {
+    grid-column: 1 / -1;
+    border-right: 0;
+  }
+  .hero-fig dd {
+    font-size: 1rem;
+  }
+  .workspace-legend__note {
+    display: block;
+    margin-top: 0.25rem;
+    margin-left: 0;
+  }
+  .workspace-legend__key {
+    flex-wrap: wrap;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-state, .hero-source, .hero-glow, .hero-aiannh { transition: none; }
-  .hero-ring { animation: none !important; opacity: 0; }
-  .hero-tooltip { transition: none; }
+  .hero-state,
+  .hero-source,
+  .hero-glow,
+  .hero-aiannh {
+    transition: none;
+  }
+  .hero-ring {
+    animation: none !important;
+    opacity: 0;
+  }
+  .hero-tooltip {
+    transition: none;
+  }
 }

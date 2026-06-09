@@ -25,6 +25,7 @@
  * All line-art, all CSS animations, respects prefers-reduced-motion.
  */
 ---
+
 <figure class="hero-flow" aria-label="How a Lumecon study runs">
   <svg
     class="hero-flow__svg"
@@ -33,28 +34,54 @@
     role="img"
     aria-hidden="true"
   >
-    {/* Platform container — reinforces that the four stations are
+    {
+      /* Platform container — reinforces that the four stations are
         one system (the Lumecon Economic Impact Analysis Platform),
         not four loose icons. Thin rounded border + a small mono
-        label up top, generous padding so it doesn't feel boxy. */}
-    <rect class="hf-platform" x="14" y="14" width="932" height="132" rx="6"
-          fill="none" stroke="var(--rule-strong, rgba(14,21,48,.16))" stroke-width=".8" stroke-dasharray="2 4"/>
+        label up top, generous padding so it doesn't feel boxy. */
+    }
+    <rect
+      class="hf-platform"
+      x="14"
+      y="14"
+      width="932"
+      height="132"
+      rx="6"
+      fill="none"
+      stroke="var(--rule-strong, rgba(14,21,48,.16))"
+      stroke-width=".8"
+      stroke-dasharray="2 4"></rect>
     <g class="hf-platform__label">
-      <rect x="32" y="6" width="240" height="16" rx="3" fill="var(--white)"/>
-      <text x="40" y="17" font-family="JetBrains Mono, ui-monospace, monospace" font-weight="600" font-size="7" letter-spacing=".14em" fill="var(--ink-3)">LUMECON · ECONOMIC IMPACT PLATFORM</text>
+      <rect x="32" y="6" width="240" height="16" rx="3" fill="var(--white)"></rect>
+      <text
+        x="40"
+        y="17"
+        font-family="JetBrains Mono, ui-monospace, monospace"
+        font-weight="600"
+        font-size="7"
+        letter-spacing=".14em"
+        fill="var(--ink-3)">LUMECON · ECONOMIC IMPACT PLATFORM</text
+      >
     </g>
 
-    <line class="hf-rail" x1="80" y1="80" x2="880" y2="80"
-          stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"
-          stroke-dasharray="3 6" />
+    <line
+      class="hf-rail"
+      x1="80"
+      y1="80"
+      x2="880"
+      y2="80"
+      stroke="var(--accent)"
+      stroke-width="1.4"
+      stroke-linecap="round"
+      stroke-dasharray="3 6"></line>
 
-    <circle class="hf-tick hf-tick--a" cx="80" cy="80" r="3" fill="var(--accent)"/>
-    <circle class="hf-tick hf-tick--b" cx="80" cy="80" r="3" fill="var(--accent)"/>
-    <circle class="hf-tick hf-tick--c" cx="80" cy="80" r="3" fill="var(--accent)"/>
+    <circle class="hf-tick hf-tick--a" cx="80" cy="80" r="3" fill="var(--accent)"></circle>
+    <circle class="hf-tick hf-tick--b" cx="80" cy="80" r="3" fill="var(--accent)"></circle>
+    <circle class="hf-tick hf-tick--c" cx="80" cy="80" r="3" fill="var(--accent)"></circle>
 
     <!-- ===== Station 1: three sheets merge + transform into one ===== -->
     <g class="hf-station hf-station--src" transform="translate(80 80)">
-      <circle class="hf-station__halo" r="42" fill="var(--accent)" opacity="0"/>
+      <circle class="hf-station__halo" r="42" fill="var(--accent)" opacity="0"></circle>
 
       <!-- Three input sheets, each a different size + orientation
            + tilt so they read as messy / non-uniform data. The
@@ -64,63 +91,253 @@
            and rendering the papers flat. -->
       <g transform="rotate(-6 -22 -20)">
         <g class="hf-in hf-in--a">
-          <rect x="-34" y="-26" width="20" height="11" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-          <line x1="-31" y1="-22.5" x2="-17" y2="-22.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-31" y1="-20"   x2="-21" y2="-20"   stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-31" y1="-17.5" x2="-19" y2="-17.5" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/>
+          <rect
+            x="-34"
+            y="-26"
+            width="20"
+            height="11"
+            rx="1.5"
+            fill="var(--white)"
+            stroke="var(--navy)"
+            stroke-width="1.3"
+            stroke-linejoin="miter"></rect>
+          <line
+            x1="-31"
+            y1="-22.5"
+            x2="-17"
+            y2="-22.5"
+            stroke="var(--gold)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-31"
+            y1="-20"
+            x2="-21"
+            y2="-20"
+            stroke="var(--gold)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-31"
+            y1="-17.5"
+            x2="-19"
+            y2="-17.5"
+            stroke="var(--gold)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
         </g>
       </g>
       <g transform="rotate(4 -24 0)">
         <g class="hf-in hf-in--b">
-          <rect x="-34" y="-9" width="14" height="14" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-          <line x1="-31" y1="-5" x2="-22" y2="-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-31" y1="-2" x2="-25" y2="-2" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-31" y1="1"  x2="-23" y2="1"  stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <rect
+            x="-34"
+            y="-9"
+            width="14"
+            height="14"
+            rx="1.5"
+            fill="var(--white)"
+            stroke="var(--navy)"
+            stroke-width="1.3"
+            stroke-linejoin="miter"></rect>
+          <line
+            x1="-31"
+            y1="-5"
+            x2="-22"
+            y2="-5"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-31"
+            y1="-2"
+            x2="-25"
+            y2="-2"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-31"
+            y1="1"
+            x2="-23"
+            y2="1"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
         </g>
       </g>
       <g transform="rotate(-3 -25 18)">
         <g class="hf-in hf-in--c">
-          <rect x="-32" y="9" width="12" height="18" rx="1.5" fill="var(--white)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-          <line x1="-29" y1="12" x2="-22" y2="12" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-29" y1="15" x2="-24" y2="15" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-29" y1="18" x2="-22" y2="18" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-29" y1="21" x2="-26" y2="21" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-29" y1="24" x2="-22" y2="24" stroke="var(--cedar)" stroke-width="1.5" stroke-linecap="round"/>
+          <rect
+            x="-32"
+            y="9"
+            width="12"
+            height="18"
+            rx="1.5"
+            fill="var(--white)"
+            stroke="var(--navy)"
+            stroke-width="1.3"
+            stroke-linejoin="miter"></rect>
+          <line
+            x1="-29"
+            y1="12"
+            x2="-22"
+            y2="12"
+            stroke="var(--cedar)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-29"
+            y1="15"
+            x2="-24"
+            y2="15"
+            stroke="var(--cedar)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-29"
+            y1="18"
+            x2="-22"
+            y2="18"
+            stroke="var(--cedar)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-29"
+            y1="21"
+            x2="-26"
+            y2="21"
+            stroke="var(--cedar)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
+          <line
+            x1="-29"
+            y1="24"
+            x2="-22"
+            y2="24"
+            stroke="var(--cedar)"
+            stroke-width="1.5"
+            stroke-linecap="round"></line>
         </g>
       </g>
 
       <g class="hf-out">
-        <rect x="-4" y="-26" width="36" height="52" rx="2" fill="var(--white)" stroke="var(--navy)" stroke-width="1.5" stroke-linejoin="miter"/>
-        <rect x="-4" y="-26" width="36" height="6" fill="var(--accent)" opacity=".22" stroke="none"/>
-        <line x1="8"  y1="-20" x2="8"  y2="26" stroke="var(--navy)" stroke-width=".7" stroke-opacity=".35"/>
-        <line x1="20" y1="-20" x2="20" y2="26" stroke="var(--navy)" stroke-width=".7" stroke-opacity=".35"/>
-        <rect class="hf-out__row hf-out__row--1" x="-1" y="-17" width="34" height="2.5" rx=".4" fill="var(--gold)" opacity="0"/>
-        <rect class="hf-out__row hf-out__row--2" x="-1" y="-12" width="34" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
-        <rect class="hf-out__row hf-out__row--3" x="-1" y="-7"  width="34" height="2.5" rx=".4" fill="var(--cedar)" opacity="0"/>
-        <rect class="hf-out__row hf-out__row--4" x="-1" y="-2"  width="34" height="2.5" rx=".4" fill="var(--gold)" opacity="0"/>
-        <rect class="hf-out__row hf-out__row--5" x="-1" y="3"   width="34" height="2.5" rx=".4" fill="var(--accent)" opacity="0"/>
-        <rect class="hf-out__row hf-out__row--6" x="-1" y="8"   width="34" height="2.5" rx=".4" fill="var(--cedar)" opacity="0"/>
+        <rect
+          x="-4"
+          y="-26"
+          width="36"
+          height="52"
+          rx="2"
+          fill="var(--white)"
+          stroke="var(--navy)"
+          stroke-width="1.5"
+          stroke-linejoin="miter"></rect>
+        <rect x="-4" y="-26" width="36" height="6" fill="var(--accent)" opacity=".22" stroke="none"
+        ></rect>
+        <line
+          x1="8"
+          y1="-20"
+          x2="8"
+          y2="26"
+          stroke="var(--navy)"
+          stroke-width=".7"
+          stroke-opacity=".35"></line>
+        <line
+          x1="20"
+          y1="-20"
+          x2="20"
+          y2="26"
+          stroke="var(--navy)"
+          stroke-width=".7"
+          stroke-opacity=".35"></line>
+        <rect
+          class="hf-out__row hf-out__row--1"
+          x="-1"
+          y="-17"
+          width="34"
+          height="2.5"
+          rx=".4"
+          fill="var(--gold)"
+          opacity="0"></rect>
+        <rect
+          class="hf-out__row hf-out__row--2"
+          x="-1"
+          y="-12"
+          width="34"
+          height="2.5"
+          rx=".4"
+          fill="var(--accent)"
+          opacity="0"></rect>
+        <rect
+          class="hf-out__row hf-out__row--3"
+          x="-1"
+          y="-7"
+          width="34"
+          height="2.5"
+          rx=".4"
+          fill="var(--cedar)"
+          opacity="0"></rect>
+        <rect
+          class="hf-out__row hf-out__row--4"
+          x="-1"
+          y="-2"
+          width="34"
+          height="2.5"
+          rx=".4"
+          fill="var(--gold)"
+          opacity="0"></rect>
+        <rect
+          class="hf-out__row hf-out__row--5"
+          x="-1"
+          y="3"
+          width="34"
+          height="2.5"
+          rx=".4"
+          fill="var(--accent)"
+          opacity="0"></rect>
+        <rect
+          class="hf-out__row hf-out__row--6"
+          x="-1"
+          y="8"
+          width="34"
+          height="2.5"
+          rx=".4"
+          fill="var(--cedar)"
+          opacity="0"></rect>
       </g>
     </g>
 
     <!-- ===== Station 2: Cedar processes inside a monitor ===== -->
     <g class="hf-station hf-station--cedar" transform="translate(346 80)">
-      <circle class="hf-station__halo" r="48" fill="var(--cedar)" opacity="0"/>
+      <circle class="hf-station__halo" r="48" fill="var(--cedar)" opacity="0"></circle>
 
-      <g class="hf-cedar" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter" fill="none">
-        <rect x="-38" y="-30" width="76" height="46" rx="2" fill="var(--white)"/>
-        <line x1="0" y1="16" x2="0" y2="22" stroke-width="2" stroke-linecap="butt"/>
-        <line x1="-12" y1="22" x2="12" y2="22" stroke-width="2" stroke-linecap="round"/>
-        <line x1="-38" y1="-23" x2="38" y2="-23" stroke-width="1"/>
-        <circle cx="-33" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"/>
-        <circle cx="-29" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"/>
-        <circle cx="-25" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"/>
+      <g
+        class="hf-cedar"
+        stroke="var(--navy)"
+        stroke-width="1.4"
+        stroke-linejoin="miter"
+        fill="none"
+      >
+        <rect x="-38" y="-30" width="76" height="46" rx="2" fill="var(--white)"></rect>
+        <line x1="0" y1="16" x2="0" y2="22" stroke-width="2" stroke-linecap="butt"></line>
+        <line x1="-12" y1="22" x2="12" y2="22" stroke-width="2" stroke-linecap="round"></line>
+        <line x1="-38" y1="-23" x2="38" y2="-23" stroke-width="1"></line>
+        <circle cx="-33" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"></circle>
+        <circle cx="-29" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"></circle>
+        <circle cx="-25" cy="-26.5" r=".9" fill="var(--navy)" stroke="none"></circle>
       </g>
 
       <!-- Cedar tree on the LEFT side of the monitor. -->
-      <g class="hf-cedar__tree" fill="var(--cedar)" stroke="var(--cedar)" stroke-width="1.4" stroke-linejoin="miter">
-        <path d="M-22 -16 L-26 -10 L-24 -10 L-27 -5 L-25 -5 L-29 0 L-15 0 L-19 -5 L-17 -5 L-20 -10 L-18 -10 Z"/>
-        <rect x="-23" y="0" width="2" height="3" stroke="none"/>
+      <g
+        class="hf-cedar__tree"
+        fill="var(--cedar)"
+        stroke="var(--cedar)"
+        stroke-width="1.4"
+        stroke-linejoin="miter"
+      >
+        <path
+          d="M-22 -16 L-26 -10 L-24 -10 L-27 -5 L-25 -5 L-29 0 L-15 0 L-19 -5 L-17 -5 L-20 -10 L-18 -10 Z"
+        ></path>
+        <rect x="-23" y="0" width="2" height="3" stroke="none"></rect>
       </g>
 
       <!-- Cedar's monitor screen cycles through three frames so each
@@ -134,36 +351,95 @@
            per-element delays — so the sequence stays in lockstep
            with Stations 1 and 3. -->
       <g class="hf-compute" stroke="none">
-
         <!-- Frame 1: mini spreadsheet (uploaded harmonized data).
              Colors match Station 1's hf-out so the visual
              continuity reads as the same data arriving in Cedar. -->
         <g class="hf-mini-sheet">
-          <rect x="2" y="-19" width="30" height="28" rx=".6" fill="var(--white)" stroke="var(--navy)" stroke-width=".7" stroke-linejoin="miter"/>
-          <rect x="2" y="-19" width="30" height="3.6" fill="var(--accent)" opacity=".22"/>
-          <line x1="12" y1="-15.4" x2="12" y2="9"  stroke="var(--navy)" stroke-width=".4" stroke-opacity=".3"/>
-          <line x1="22" y1="-15.4" x2="22" y2="9"  stroke="var(--navy)" stroke-width=".4" stroke-opacity=".3"/>
-          <rect x="3.4" y="-13.6" width="27.2" height="2" rx=".25" fill="var(--gold)"/>
-          <rect x="3.4" y="-10.4" width="27.2" height="2" rx=".25" fill="var(--accent)"/>
-          <rect x="3.4" y="-7.2"  width="27.2" height="2" rx=".25" fill="var(--cedar)"/>
-          <rect x="3.4" y="-4"    width="27.2" height="2" rx=".25" fill="var(--gold)"/>
-          <rect x="3.4" y="-0.8"  width="27.2" height="2" rx=".25" fill="var(--accent)"/>
-          <rect x="3.4" y="2.4"   width="27.2" height="2" rx=".25" fill="var(--cedar)"/>
-          <rect x="3.4" y="5.6"   width="27.2" height="2" rx=".25" fill="var(--gold)"/>
+          <rect
+            x="2"
+            y="-19"
+            width="30"
+            height="28"
+            rx=".6"
+            fill="var(--white)"
+            stroke="var(--navy)"
+            stroke-width=".7"
+            stroke-linejoin="miter"></rect>
+          <rect x="2" y="-19" width="30" height="3.6" fill="var(--accent)" opacity=".22"></rect>
+          <line
+            x1="12"
+            y1="-15.4"
+            x2="12"
+            y2="9"
+            stroke="var(--navy)"
+            stroke-width=".4"
+            stroke-opacity=".3"></line>
+          <line
+            x1="22"
+            y1="-15.4"
+            x2="22"
+            y2="9"
+            stroke="var(--navy)"
+            stroke-width=".4"
+            stroke-opacity=".3"></line>
+          <rect x="3.4" y="-13.6" width="27.2" height="2" rx=".25" fill="var(--gold)"></rect>
+          <rect x="3.4" y="-10.4" width="27.2" height="2" rx=".25" fill="var(--accent)"></rect>
+          <rect x="3.4" y="-7.2" width="27.2" height="2" rx=".25" fill="var(--cedar)"></rect>
+          <rect x="3.4" y="-4" width="27.2" height="2" rx=".25" fill="var(--gold)"></rect>
+          <rect x="3.4" y="-0.8" width="27.2" height="2" rx=".25" fill="var(--accent)"></rect>
+          <rect x="3.4" y="2.4" width="27.2" height="2" rx=".25" fill="var(--cedar)"></rect>
+          <rect x="3.4" y="5.6" width="27.2" height="2" rx=".25" fill="var(--gold)"></rect>
         </g>
 
         <!-- Frame 2: loading. Computer-style indeterminate progress
              bar + animated dots, reads as Cedar processing. -->
         <g class="hf-loading">
-          <text x="13" y="-6" font-family="JetBrains Mono, ui-monospace, monospace" font-weight="600" font-size="3.4" letter-spacing=".12em" fill="var(--ink-2)" text-anchor="middle">LOADING</text>
-          <g class="hf-load-dots" font-family="JetBrains Mono, ui-monospace, monospace" font-weight="700" font-size="3.4" fill="var(--cedar)">
+          <text
+            x="13"
+            y="-6"
+            font-family="JetBrains Mono, ui-monospace, monospace"
+            font-weight="600"
+            font-size="3.4"
+            letter-spacing=".12em"
+            fill="var(--ink-2)"
+            text-anchor="middle">LOADING</text
+          >
+          <g
+            class="hf-load-dots"
+            font-family="JetBrains Mono, ui-monospace, monospace"
+            font-weight="700"
+            font-size="3.4"
+            fill="var(--cedar)"
+          >
             <text class="hf-load-dot hf-load-dot--a" x="22" y="-6">.</text>
             <text class="hf-load-dot hf-load-dot--b" x="23.5" y="-6">.</text>
             <text class="hf-load-dot hf-load-dot--c" x="25" y="-6">.</text>
           </g>
-          <rect x="1" y="-2" width="24" height="3.5" rx="1.2" fill="var(--paper)" stroke="var(--rule)" stroke-width=".6"/>
-          <rect class="hf-load-fill" x="1" y="-2" width="10" height="3.5" rx="1.2" fill="var(--cedar)"/>
-          <g class="hf-load-pct" font-family="JetBrains Mono, ui-monospace, monospace" font-weight="600" font-size="3" fill="var(--ink-3)" text-anchor="middle">
+          <rect
+            x="1"
+            y="-2"
+            width="24"
+            height="3.5"
+            rx="1.2"
+            fill="var(--paper)"
+            stroke="var(--rule)"
+            stroke-width=".6"></rect>
+          <rect
+            class="hf-load-fill"
+            x="1"
+            y="-2"
+            width="10"
+            height="3.5"
+            rx="1.2"
+            fill="var(--cedar)"></rect>
+          <g
+            class="hf-load-pct"
+            font-family="JetBrains Mono, ui-monospace, monospace"
+            font-weight="600"
+            font-size="3"
+            fill="var(--ink-3)"
+            text-anchor="middle"
+          >
             <text x="13" y="9">42%</text>
           </g>
         </g>
@@ -173,14 +449,44 @@
              the result of Cedar's processing as the impact map
              before Station 3 actually builds it out. -->
         <g class="hf-mini-map">
-          <path d="M-2 -16 L8 -18 L18 -17 L28 -15 L31 -8 L30 2 L26 8 L18 10 L8 9 L-1 6 L-3 -2 L-2 -10 Z"
-                fill="var(--paper)" stroke="var(--navy)" stroke-width=".8" stroke-opacity=".7" stroke-linejoin="miter"/>
-          <line x1="-2" y1="-3" x2="30" y2="-3" stroke="var(--ink-3)" stroke-width=".4" stroke-dasharray="1.6 1.6" stroke-opacity=".7"/>
-          <rect x="3" y="-13" width="7" height="6" rx=".3" fill="var(--white)" stroke="var(--navy)" stroke-width=".55"/>
-          <rect x="3" y="-13" width="7" height="1.4" fill="var(--gold)"/>
-          <rect x="19" y="-10" width="8" height="4" rx=".3" fill="var(--gold)" stroke="var(--navy)" stroke-width=".55"/>
-          <circle cx="6" cy="-10" r="1.2" fill="var(--gold)"/>
-          <circle class="hf-mini-map__pulse" cx="6" cy="-10" r="3" fill="var(--gold)" opacity=".25"/>
+          <path
+            d="M-2 -16 L8 -18 L18 -17 L28 -15 L31 -8 L30 2 L26 8 L18 10 L8 9 L-1 6 L-3 -2 L-2 -10 Z"
+            fill="var(--paper)"
+            stroke="var(--navy)"
+            stroke-width=".8"
+            stroke-opacity=".7"
+            stroke-linejoin="miter"></path>
+          <line
+            x1="-2"
+            y1="-3"
+            x2="30"
+            y2="-3"
+            stroke="var(--ink-3)"
+            stroke-width=".4"
+            stroke-dasharray="1.6 1.6"
+            stroke-opacity=".7"></line>
+          <rect
+            x="3"
+            y="-13"
+            width="7"
+            height="6"
+            rx=".3"
+            fill="var(--white)"
+            stroke="var(--navy)"
+            stroke-width=".55"></rect>
+          <rect x="3" y="-13" width="7" height="1.4" fill="var(--gold)"></rect>
+          <rect
+            x="19"
+            y="-10"
+            width="8"
+            height="4"
+            rx=".3"
+            fill="var(--gold)"
+            stroke="var(--navy)"
+            stroke-width=".55"></rect>
+          <circle cx="6" cy="-10" r="1.2" fill="var(--gold)"></circle>
+          <circle class="hf-mini-map__pulse" cx="6" cy="-10" r="3" fill="var(--gold)" opacity=".25"
+          ></circle>
         </g>
       </g>
     </g>
@@ -189,14 +495,19 @@
                           station, with dollars trickling up faster
                           as the density grows. ===== -->
     <g class="hf-station hf-station--map" transform="translate(612 80)">
-      <circle class="hf-station__halo" r="48" fill="var(--gold)" opacity="0"/>
+      <circle class="hf-station__halo" r="48" fill="var(--gold)" opacity="0"></circle>
 
       <!-- Region outline (the empty land). Always visible; the
            cycle starts with this and nothing else, so the eye
            reads a blank parcel before anything is built. -->
-      <path class="hf-imp__region"
-            d="M-36 -26 L-22 -30 L-8 -28 L8 -30 L24 -26 L36 -18 L40 -4 L38 10 L30 22 L14 28 L-2 26 L-18 28 L-32 22 L-40 6 L-38 -8 Z"
-            fill="var(--paper)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter" stroke-opacity=".55"/>
+      <path
+        class="hf-imp__region"
+        d="M-36 -26 L-22 -30 L-8 -28 L8 -30 L24 -26 L36 -18 L40 -4 L38 10 L30 22 L14 28 L-2 26 L-18 28 L-32 22 L-40 6 L-38 -8 Z"
+        fill="var(--paper)"
+        stroke="var(--navy)"
+        stroke-width="1.3"
+        stroke-linejoin="miter"
+        stroke-opacity=".55"></path>
 
       <!-- Windy S-shaped road threading the parcel. The S separates
            the casino (upper-left) from the gas station (lower-right)
@@ -207,22 +518,33 @@
            the right of the gas station. -->
       <g class="hf-road">
         <!-- Outer dark hairline (read as the road border). -->
-        <path class="hf-road__edge"
-              d="M -40 4 C -16 4, -22 -12 -4 -12 C 12 -12, 16 12 40 12"
-              fill="none" stroke="var(--navy)" stroke-width="4.4"
-              stroke-opacity=".25" stroke-linecap="butt"/>
+        <path
+          class="hf-road__edge"
+          d="M -40 4 C -16 4, -22 -12 -4 -12 C 12 -12, 16 12 40 12"
+          fill="none"
+          stroke="var(--navy)"
+          stroke-width="4.4"
+          stroke-opacity=".25"
+          stroke-linecap="butt"></path>
         <!-- Inner paper-coloured stroke covers most of the border,
              leaving a hairline edge — visually reads as "asphalt with
              curb." -->
-        <path class="hf-road__surface"
-              d="M -40 4 C -16 4, -22 -12 -4 -12 C 12 -12, 16 12 40 12"
-              fill="none" stroke="var(--paper)" stroke-width="4"
-              stroke-linecap="butt"/>
+        <path
+          class="hf-road__surface"
+          d="M -40 4 C -16 4, -22 -12 -4 -12 C 12 -12, 16 12 40 12"
+          fill="none"
+          stroke="var(--paper)"
+          stroke-width="4"
+          stroke-linecap="butt"></path>
         <!-- Centre stripe (dashed). -->
-        <path class="hf-road__center"
-              d="M -40 4 C -16 4, -22 -12 -4 -12 C 12 -12, 16 12 40 12"
-              fill="none" stroke="var(--ink-3)" stroke-width=".4"
-              stroke-dasharray="2 2" stroke-opacity=".55"/>
+        <path
+          class="hf-road__center"
+          d="M -40 4 C -16 4, -22 -12 -4 -12 C 12 -12, 16 12 40 12"
+          fill="none"
+          stroke="var(--ink-3)"
+          stroke-width=".4"
+          stroke-dasharray="2 2"
+          stroke-opacity=".55"></path>
       </g>
 
       <!-- ===== Casino: the source of activity. Builds in chunks:
@@ -231,40 +553,133 @@
       <g class="hf-imp__src">
         <!-- Foundation slab — sits the casino on the parcel so it
              doesn't look like it floats above the road. -->
-        <rect class="hf-casino__base" x="-33" y="4.5" width="26" height="2" rx=".3"
-              fill="var(--ink-5, #c6c8d0)" stroke="var(--navy)" stroke-width=".5" stroke-opacity=".55"/>
+        <rect
+          class="hf-casino__base"
+          x="-33"
+          y="4.5"
+          width="26"
+          height="2"
+          rx=".3"
+          fill="var(--ink-5, #c6c8d0)"
+          stroke="var(--navy)"
+          stroke-width=".5"
+          stroke-opacity=".55"></rect>
 
         <!-- Main body. -->
-        <rect class="hf-casino__body" x="-32" y="-17.5" width="24" height="22" rx=".5"
-              fill="var(--white)" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter"/>
+        <rect
+          class="hf-casino__body"
+          x="-32"
+          y="-17.5"
+          width="24"
+          height="22"
+          rx=".5"
+          fill="var(--white)"
+          stroke="var(--navy)"
+          stroke-width="1.4"
+          stroke-linejoin="miter"></rect>
 
         <!-- Marquee band with the lit "CASINO" wordmark. -->
-        <rect class="hf-casino__marquee" x="-32" y="-22" width="24" height="4.8"
-              fill="var(--gold)" stroke="var(--navy)" stroke-width="1.3"/>
-        <text class="hf-casino__name" x="-20" y="-18.4"
-              font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="3.9" letter-spacing=".14em"
-              fill="var(--navy)" text-anchor="middle">CASINO</text>
+        <rect
+          class="hf-casino__marquee"
+          x="-32"
+          y="-22"
+          width="24"
+          height="4.8"
+          fill="var(--gold)"
+          stroke="var(--navy)"
+          stroke-width="1.3"></rect>
+        <text
+          class="hf-casino__name"
+          x="-20"
+          y="-18.4"
+          font-family="Inter, system-ui, sans-serif"
+          font-weight="800"
+          font-size="3.9"
+          letter-spacing=".14em"
+          fill="var(--navy)"
+          text-anchor="middle">CASINO</text
+        >
 
         <!-- Window grid: 2 rows of 4. Each window lights up in sequence
              so the building reads as opening floor by floor. -->
         <g class="hf-casino__windows">
-          <rect class="hf-casino__win hf-casino__win--1" x="-29" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--2" x="-24" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--3" x="-19" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--4" x="-14" y="-14" width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--5" x="-29" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--6" x="-24" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--7" x="-19" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
-          <rect class="hf-casino__win hf-casino__win--8" x="-14" y="-9"  width="2.6" height="2.6" rx=".15" fill="var(--ink-3)"/>
+          <rect
+            class="hf-casino__win hf-casino__win--1"
+            x="-29"
+            y="-14"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
+          <rect
+            class="hf-casino__win hf-casino__win--2"
+            x="-24"
+            y="-14"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
+          <rect
+            class="hf-casino__win hf-casino__win--3"
+            x="-19"
+            y="-14"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
+          <rect
+            class="hf-casino__win hf-casino__win--4"
+            x="-14"
+            y="-14"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
+          <rect
+            class="hf-casino__win hf-casino__win--5"
+            x="-29"
+            y="-9"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
+          <rect
+            class="hf-casino__win hf-casino__win--6"
+            x="-24"
+            y="-9"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
+          <rect
+            class="hf-casino__win hf-casino__win--7"
+            x="-19"
+            y="-9"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
+          <rect
+            class="hf-casino__win hf-casino__win--8"
+            x="-14"
+            y="-9"
+            width="2.6"
+            height="2.6"
+            rx=".15"
+            fill="var(--ink-3)"></rect>
         </g>
 
         <!-- Arched grand entrance with a curved teal awning + dark
              door. Slim gold step at the base for the polished look. -->
         <g class="hf-casino__door">
-          <path d="M-25 4.5 L-25 -1 A 5 4 0 0 1 -15 -1 L-15 4.5 Z"
-                fill="var(--accent)" stroke="var(--navy)" stroke-width="1.2" stroke-linejoin="miter"/>
-          <rect x="-22.5" y=".5" width="5" height="4" fill="var(--navy)"/>
-          <rect x="-22.5" y="2.4" width="5" height=".5" fill="var(--gold)" stroke="none"/>
+          <path
+            d="M-25 4.5 L-25 -1 A 5 4 0 0 1 -15 -1 L-15 4.5 Z"
+            fill="var(--accent)"
+            stroke="var(--navy)"
+            stroke-width="1.2"
+            stroke-linejoin="miter"></path>
+          <rect x="-22.5" y=".5" width="5" height="4" fill="var(--navy)"></rect>
+          <rect x="-22.5" y="2.4" width="5" height=".5" fill="var(--gold)" stroke="none"></rect>
         </g>
       </g>
 
@@ -280,39 +695,108 @@
                 group is composed relative to the outer attribute,
                 so animation and SVG positioning don't fight. ===== -->
       <g class="hf-grow hf-grow--lot">
-        <rect x="-34" y="5.5" width="28" height="4.5" rx=".4" fill="var(--ink-5, #c6c8d0)" stroke="var(--navy)" stroke-width=".5" stroke-opacity=".55"/>
+        <rect
+          x="-34"
+          y="5.5"
+          width="28"
+          height="4.5"
+          rx=".4"
+          fill="var(--ink-5, #c6c8d0)"
+          stroke="var(--navy)"
+          stroke-width=".5"
+          stroke-opacity=".55"></rect>
         <g stroke="var(--white)" stroke-width=".8" stroke-opacity=".95">
-          <line x1="-32" y1="5.8" x2="-32" y2="9.7"/>
-          <line x1="-24" y1="5.8" x2="-24" y2="9.7"/>
-          <line x1="-16" y1="5.8" x2="-16" y2="9.7"/>
-          <line x1="-8"  y1="5.8" x2="-8"  y2="9.7"/>
+          <line x1="-32" y1="5.8" x2="-32" y2="9.7"></line>
+          <line x1="-24" y1="5.8" x2="-24" y2="9.7"></line>
+          <line x1="-16" y1="5.8" x2="-16" y2="9.7"></line>
+          <line x1="-8" y1="5.8" x2="-8" y2="9.7"></line>
         </g>
       </g>
       <g transform="translate(-28 8.5)">
         <g class="hf-car hf-car--lot-a">
-          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8"/>
-          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--terra)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
-          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
-          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+          <rect
+            x="-3"
+            y="-1.5"
+            width="6"
+            height="2.5"
+            rx=".7"
+            fill="var(--terra)"
+            stroke="var(--navy)"
+            stroke-width=".8"></rect>
+          <path
+            d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5"
+            fill="var(--terra)"
+            stroke="var(--navy)"
+            stroke-width=".8"
+            stroke-linejoin="miter"></path>
+          <rect
+            x="-1.8"
+            y="-2.4"
+            width="3.6"
+            height="1"
+            rx=".2"
+            fill="rgba(255,255,255,.55)"
+            stroke="none"></rect>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
+          <circle cx="1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
         </g>
       </g>
       <g transform="translate(-20 8.5)">
         <g class="hf-car hf-car--lot-b">
-          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8"/>
-          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--accent)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
-          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
-          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+          <rect
+            x="-3"
+            y="-1.5"
+            width="6"
+            height="2.5"
+            rx=".7"
+            fill="var(--accent)"
+            stroke="var(--navy)"
+            stroke-width=".8"></rect>
+          <path
+            d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5"
+            fill="var(--accent)"
+            stroke="var(--navy)"
+            stroke-width=".8"
+            stroke-linejoin="miter"></path>
+          <rect
+            x="-1.8"
+            y="-2.4"
+            width="3.6"
+            height="1"
+            rx=".2"
+            fill="rgba(255,255,255,.55)"
+            stroke="none"></rect>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
+          <circle cx="1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
         </g>
       </g>
       <g transform="translate(-12 8.5)">
         <g class="hf-car hf-car--lot-c">
-          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--purple)" stroke="var(--navy)" stroke-width=".8"/>
-          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--purple)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
-          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
-          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+          <rect
+            x="-3"
+            y="-1.5"
+            width="6"
+            height="2.5"
+            rx=".7"
+            fill="var(--purple)"
+            stroke="var(--navy)"
+            stroke-width=".8"></rect>
+          <path
+            d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5"
+            fill="var(--purple)"
+            stroke="var(--navy)"
+            stroke-width=".8"
+            stroke-linejoin="miter"></path>
+          <rect
+            x="-1.8"
+            y="-2.4"
+            width="3.6"
+            height="1"
+            rx=".2"
+            fill="rgba(255,255,255,.55)"
+            stroke="none"></rect>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
+          <circle cx="1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
         </g>
       </g>
 
@@ -330,27 +814,84 @@
                 tapers in the lower-right. ===== -->
       <!-- Concrete pad under the canopy + pump island. -->
       <g class="hf-build hf-build--gas-pad">
-        <rect x="12" y="13" width="24" height="9" rx=".5" fill="var(--ink-5, #c6c8d0)" stroke="var(--navy)" stroke-width=".5" stroke-opacity=".55"/>
+        <rect
+          x="12"
+          y="13"
+          width="24"
+          height="9"
+          rx=".5"
+          fill="var(--ink-5, #c6c8d0)"
+          stroke="var(--navy)"
+          stroke-width=".5"
+          stroke-opacity=".55"></rect>
       </g>
       <!-- Canopy: wide flat gold roof on two slim posts. GAS sign
            runs along the front edge. -->
       <g class="hf-build hf-build--gas-canopy">
-        <rect x="11" y="7" width="26" height="4" rx=".4" fill="var(--gold)" stroke="var(--navy)" stroke-width="1.3" stroke-linejoin="miter"/>
-        <text x="24" y="9.9" font-family="Inter, sans-serif" font-weight="800" font-size="3" letter-spacing=".18em" fill="var(--navy)" text-anchor="middle">GAS</text>
-        <line x1="14" y1="11" x2="14" y2="22" stroke="var(--navy)" stroke-width="1.3"/>
-        <line x1="34" y1="11" x2="34" y2="22" stroke="var(--navy)" stroke-width="1.3"/>
+        <rect
+          x="11"
+          y="7"
+          width="26"
+          height="4"
+          rx=".4"
+          fill="var(--gold)"
+          stroke="var(--navy)"
+          stroke-width="1.3"
+          stroke-linejoin="miter"></rect>
+        <text
+          x="24"
+          y="9.9"
+          font-family="Inter, sans-serif"
+          font-weight="800"
+          font-size="3"
+          letter-spacing=".18em"
+          fill="var(--navy)"
+          text-anchor="middle">GAS</text
+        >
+        <line x1="14" y1="11" x2="14" y2="22" stroke="var(--navy)" stroke-width="1.3"></line>
+        <line x1="34" y1="11" x2="34" y2="22" stroke="var(--navy)" stroke-width="1.3"></line>
       </g>
       <!-- Two fuel pumps standing on the concrete pad between the
            posts. Each pump is a small navy column with a gold cap
            (the screen / nozzle holder). -->
       <g class="hf-build hf-build--gas-pumps">
         <g>
-          <rect x="17.2" y="15" width="2.6" height="5" rx=".3" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
-          <rect x="17.2" y="15" width="2.6" height="1.4" fill="var(--gold)" stroke="var(--navy)" stroke-width=".7"/>
+          <rect
+            x="17.2"
+            y="15"
+            width="2.6"
+            height="5"
+            rx=".3"
+            fill="var(--white)"
+            stroke="var(--navy)"
+            stroke-width=".8"></rect>
+          <rect
+            x="17.2"
+            y="15"
+            width="2.6"
+            height="1.4"
+            fill="var(--gold)"
+            stroke="var(--navy)"
+            stroke-width=".7"></rect>
         </g>
         <g>
-          <rect x="28.2" y="15" width="2.6" height="5" rx=".3" fill="var(--white)" stroke="var(--navy)" stroke-width=".8"/>
-          <rect x="28.2" y="15" width="2.6" height="1.4" fill="var(--gold)" stroke="var(--navy)" stroke-width=".7"/>
+          <rect
+            x="28.2"
+            y="15"
+            width="2.6"
+            height="5"
+            rx=".3"
+            fill="var(--white)"
+            stroke="var(--navy)"
+            stroke-width=".8"></rect>
+          <rect
+            x="28.2"
+            y="15"
+            width="2.6"
+            height="1.4"
+            fill="var(--gold)"
+            stroke="var(--navy)"
+            stroke-width=".7"></rect>
         </g>
       </g>
       <!-- Car driving through the canopy: enters from the right, ends
@@ -358,26 +899,57 @@
            the slide-in animation composes with the outer position. -->
       <g transform="translate(24 19)">
         <g class="hf-car hf-car--gas">
-          <rect x="-3" y="-1.5" width="6" height="2.5" rx=".7" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8"/>
-          <path d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5" fill="var(--cedar)" stroke="var(--navy)" stroke-width=".8" stroke-linejoin="miter"/>
-          <rect x="-1.8" y="-2.4" width="3.6" height="1" rx=".2" fill="rgba(255,255,255,.55)" stroke="none"/>
-          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"/>
-          <circle cx="1.8"  cy="1.1" r=".9" fill="var(--navy)"/>
+          <rect
+            x="-3"
+            y="-1.5"
+            width="6"
+            height="2.5"
+            rx=".7"
+            fill="var(--cedar)"
+            stroke="var(--navy)"
+            stroke-width=".8"></rect>
+          <path
+            d="M-2 -1.5 L-1 -2.6 L1 -2.6 L2 -1.5"
+            fill="var(--cedar)"
+            stroke="var(--navy)"
+            stroke-width=".8"
+            stroke-linejoin="miter"></path>
+          <rect
+            x="-1.8"
+            y="-2.4"
+            width="3.6"
+            height="1"
+            rx=".2"
+            fill="rgba(255,255,255,.55)"
+            stroke="none"></rect>
+          <circle cx="-1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
+          <circle cx="1.8" cy="1.1" r=".9" fill="var(--navy)"></circle>
         </g>
       </g>
 
       <!-- ===== Dollar signs trickling up. Eight individual $
                 tags with staggered rises and varying sizes; the
                 stream accelerates toward the end of the cycle. ===== -->
-      <g class="hf-imp__dollars" font-family="JetBrains Mono, ui-monospace, monospace" font-weight="700">
-        <text class="hf-dollar hf-dollar--1" x="-20" y="-2"  font-size="5"   fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--2" x="-6"  y="-4"  font-size="6"   fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--3" x="10"  y="-4"  font-size="5.5" fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--4" x="22"  y="-6"  font-size="6.5" fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--5" x="-14" y="0"   font-size="4.5" fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--6" x="2"   y="-8"  font-size="5"   fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--7" x="20"  y="2"   font-size="5"   fill="var(--gold)">$</text>
-        <text class="hf-dollar hf-dollar--8" x="32"  y="0"   font-size="6"   fill="var(--gold)">$</text>
+      <g
+        class="hf-imp__dollars"
+        font-family="JetBrains Mono, ui-monospace, monospace"
+        font-weight="700"
+      >
+        <text class="hf-dollar hf-dollar--1" x="-20" y="-2" font-size="5" fill="var(--gold)">$</text
+        >
+        <text class="hf-dollar hf-dollar--2" x="-6" y="-4" font-size="6" fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--3" x="10" y="-4" font-size="5.5" fill="var(--gold)"
+          >$</text
+        >
+        <text class="hf-dollar hf-dollar--4" x="22" y="-6" font-size="6.5" fill="var(--gold)"
+          >$</text
+        >
+        <text class="hf-dollar hf-dollar--5" x="-14" y="0" font-size="4.5" fill="var(--gold)"
+          >$</text
+        >
+        <text class="hf-dollar hf-dollar--6" x="2" y="-8" font-size="5" fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--7" x="20" y="2" font-size="5" fill="var(--gold)">$</text>
+        <text class="hf-dollar hf-dollar--8" x="32" y="0" font-size="6" fill="var(--gold)">$</text>
       </g>
     </g>
 
@@ -389,28 +961,56 @@
                           Stations 2 and 3 — it's the same study, now
                           in deliverable form. ===== -->
     <g class="hf-station hf-station--report" transform="translate(880 80)">
-      <circle class="hf-station__halo" r="48" fill="var(--accent)" opacity="0"/>
+      <circle class="hf-station__halo" r="48" fill="var(--accent)" opacity="0"></circle>
 
       <!-- One complete report (PPT-style slide with a mini map + a
            mini bar chart) appears, holds, then DISAPPEARS before the
            smaller chunks emerge. Visitor never sees the main slide
            and the chunks at the same time — clean transformation. -->
       <g class="hf-report__main">
-        <rect x="-22" y="-22" width="44" height="36" rx="1.4" fill="var(--white)" stroke="var(--navy)" stroke-width="1.4" stroke-linejoin="miter"/>
-        <rect x="-22" y="-22" width="44" height="5" fill="var(--accent)" opacity=".28"/>
-        <rect x="-19" y="-19.6" width="14" height="1.4" rx=".2" fill="var(--navy)"/>
-        <rect x="-19" y="-17.4" width="20" height=".8"  rx=".2" fill="var(--ink-3)" opacity=".5"/>
+        <rect
+          x="-22"
+          y="-22"
+          width="44"
+          height="36"
+          rx="1.4"
+          fill="var(--white)"
+          stroke="var(--navy)"
+          stroke-width="1.4"
+          stroke-linejoin="miter"></rect>
+        <rect x="-22" y="-22" width="44" height="5" fill="var(--accent)" opacity=".28"></rect>
+        <rect x="-19" y="-19.6" width="14" height="1.4" rx=".2" fill="var(--navy)"></rect>
+        <rect x="-19" y="-17.4" width="20" height=".8" rx=".2" fill="var(--ink-3)" opacity=".5"
+        ></rect>
         <!-- Mini geography (left half) — echoes Station 3. -->
-        <path d="M-18 -12 L-12 -13.5 L-7 -12.5 L-5 -9 L-6 -3 L-9 -1 L-13 -2 L-18 -4 Z"
-              fill="var(--paper)" stroke="var(--navy)" stroke-width=".55" stroke-linejoin="miter"/>
-        <rect x="-15" y="-9" width="2.5" height="2.2" fill="var(--gold)"/>
-        <line x1="-16" y1="-6.5" x2="-6" y2="-6.5" stroke="var(--ink-3)" stroke-width=".3" stroke-dasharray="1 1"/>
+        <path
+          d="M-18 -12 L-12 -13.5 L-7 -12.5 L-5 -9 L-6 -3 L-9 -1 L-13 -2 L-18 -4 Z"
+          fill="var(--paper)"
+          stroke="var(--navy)"
+          stroke-width=".55"
+          stroke-linejoin="miter"></path>
+        <rect x="-15" y="-9" width="2.5" height="2.2" fill="var(--gold)"></rect>
+        <line
+          x1="-16"
+          y1="-6.5"
+          x2="-6"
+          y2="-6.5"
+          stroke="var(--ink-3)"
+          stroke-width=".3"
+          stroke-dasharray="1 1"></line>
         <!-- Mini bar chart (right half) — echoes Cedar's bars. -->
-        <line x1="-1" y1="10" x2="19" y2="10" stroke="var(--navy)" stroke-width=".4" stroke-opacity=".5"/>
-        <rect x="0"   y="5"  width="3" height="5"  fill="var(--accent)"/>
-        <rect x="4.5" y="2"  width="3" height="8"  fill="var(--accent)"/>
-        <rect x="9"   y="-1" width="3" height="11" fill="var(--accent)"/>
-        <rect x="13.5" y="1" width="3" height="9"  fill="var(--accent)"/>
+        <line
+          x1="-1"
+          y1="10"
+          x2="19"
+          y2="10"
+          stroke="var(--navy)"
+          stroke-width=".4"
+          stroke-opacity=".5"></line>
+        <rect x="0" y="5" width="3" height="5" fill="var(--accent)"></rect>
+        <rect x="4.5" y="2" width="3" height="8" fill="var(--accent)"></rect>
+        <rect x="9" y="-1" width="3" height="11" fill="var(--accent)"></rect>
+        <rect x="13.5" y="1" width="3" height="9" fill="var(--accent)"></rect>
       </g>
 
       <!-- Three smaller chunks: mini copies of the same slide that
@@ -418,22 +1018,88 @@
            clustered at the original slide center, then flow outward
            to the right ("shipped out" to different audiences). -->
       <g class="hf-chunk hf-chunk--a">
-        <rect x="-7" y="-15" width="14" height="10" rx="1" fill="var(--white)" stroke="var(--navy)" stroke-width=".9"/>
-        <rect x="-7" y="-15" width="14" height="1.8" fill="var(--accent)" opacity=".45"/>
-        <line x1="-5" y1="-11" x2="5" y2="-11" stroke="var(--ink-3)" stroke-width=".4" stroke-opacity=".7"/>
-        <line x1="-5" y1="-9.5" x2="2" y2="-9.5" stroke="var(--ink-3)" stroke-width=".4" stroke-opacity=".7"/>
+        <rect
+          x="-7"
+          y="-15"
+          width="14"
+          height="10"
+          rx="1"
+          fill="var(--white)"
+          stroke="var(--navy)"
+          stroke-width=".9"></rect>
+        <rect x="-7" y="-15" width="14" height="1.8" fill="var(--accent)" opacity=".45"></rect>
+        <line
+          x1="-5"
+          y1="-11"
+          x2="5"
+          y2="-11"
+          stroke="var(--ink-3)"
+          stroke-width=".4"
+          stroke-opacity=".7"></line>
+        <line
+          x1="-5"
+          y1="-9.5"
+          x2="2"
+          y2="-9.5"
+          stroke="var(--ink-3)"
+          stroke-width=".4"
+          stroke-opacity=".7"></line>
       </g>
       <g class="hf-chunk hf-chunk--b">
-        <rect x="-7" y="-4" width="14" height="10" rx="1" fill="var(--white)" stroke="var(--navy)" stroke-width=".9"/>
-        <rect x="-7" y="-4" width="14" height="1.8" fill="var(--accent)" opacity=".45"/>
-        <line x1="-5" y1="0" x2="5" y2="0" stroke="var(--ink-3)" stroke-width=".4" stroke-opacity=".7"/>
-        <line x1="-5" y1="1.5" x2="2" y2="1.5" stroke="var(--ink-3)" stroke-width=".4" stroke-opacity=".7"/>
+        <rect
+          x="-7"
+          y="-4"
+          width="14"
+          height="10"
+          rx="1"
+          fill="var(--white)"
+          stroke="var(--navy)"
+          stroke-width=".9"></rect>
+        <rect x="-7" y="-4" width="14" height="1.8" fill="var(--accent)" opacity=".45"></rect>
+        <line
+          x1="-5"
+          y1="0"
+          x2="5"
+          y2="0"
+          stroke="var(--ink-3)"
+          stroke-width=".4"
+          stroke-opacity=".7"></line>
+        <line
+          x1="-5"
+          y1="1.5"
+          x2="2"
+          y2="1.5"
+          stroke="var(--ink-3)"
+          stroke-width=".4"
+          stroke-opacity=".7"></line>
       </g>
       <g class="hf-chunk hf-chunk--c">
-        <rect x="-7" y="7" width="14" height="10" rx="1" fill="var(--white)" stroke="var(--navy)" stroke-width=".9"/>
-        <rect x="-7" y="7" width="14" height="1.8" fill="var(--accent)" opacity=".45"/>
-        <line x1="-5" y1="11" x2="5" y2="11" stroke="var(--ink-3)" stroke-width=".4" stroke-opacity=".7"/>
-        <line x1="-5" y1="12.5" x2="2" y2="12.5" stroke="var(--ink-3)" stroke-width=".4" stroke-opacity=".7"/>
+        <rect
+          x="-7"
+          y="7"
+          width="14"
+          height="10"
+          rx="1"
+          fill="var(--white)"
+          stroke="var(--navy)"
+          stroke-width=".9"></rect>
+        <rect x="-7" y="7" width="14" height="1.8" fill="var(--accent)" opacity=".45"></rect>
+        <line
+          x1="-5"
+          y1="11"
+          x2="5"
+          y2="11"
+          stroke="var(--ink-3)"
+          stroke-width=".4"
+          stroke-opacity=".7"></line>
+        <line
+          x1="-5"
+          y1="12.5"
+          x2="2"
+          y2="12.5"
+          stroke="var(--ink-3)"
+          stroke-width=".4"
+          stroke-opacity=".7"></line>
       </g>
     </g>
   </svg>
@@ -465,17 +1131,22 @@
      rows) is legible instead of squint-small, and bump the station
      labels up from their compact mobile size. */
   @media (min-width: 1100px) {
-    .hero-flow { max-width: 1040px; }
-    .hero-flow__label { font-size: .82rem; letter-spacing: .06em; }
+    .hero-flow {
+      max-width: 1040px;
+    }
+    .hero-flow__label {
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+    }
   }
 
   .hero-flow__labels {
     list-style: none;
     padding: 0;
-    margin: .35rem 0 0;
+    margin: 0.35rem 0 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: .6rem;
+    gap: 0.6rem;
   }
   /* Each label highlights once per 8s cycle when its station is
      active. Start time is encoded in each label's own keyframe so
@@ -483,8 +1154,8 @@
      the highlight sequence replays cleanly every cycle. */
   .hero-flow__label {
     font-family: var(--font-mono);
-    font-size: .66rem;
-    letter-spacing: .08em;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink-3);
     text-align: center;
@@ -494,37 +1165,103 @@
     animation-iteration-count: infinite;
     text-shadow: 0 0 0 transparent;
   }
-  .hero-flow__label:nth-child(1) { animation-name: hf-label-glow-1; }
-  .hero-flow__label:nth-child(2) { animation-name: hf-label-glow-2; --label-accent: var(--cedar); }
-  .hero-flow__label:nth-child(3) { animation-name: hf-label-glow-3; --label-accent: var(--gold); }
-  .hero-flow__label:nth-child(4) { animation-name: hf-label-glow-4; --label-accent: var(--accent); }
+  .hero-flow__label:nth-child(1) {
+    animation-name: hf-label-glow-1;
+  }
+  .hero-flow__label:nth-child(2) {
+    animation-name: hf-label-glow-2;
+    --label-accent: var(--cedar);
+  }
+  .hero-flow__label:nth-child(3) {
+    animation-name: hf-label-glow-3;
+    --label-accent: var(--gold);
+  }
+  .hero-flow__label:nth-child(4) {
+    animation-name: hf-label-glow-4;
+    --label-accent: var(--accent);
+  }
   /* Label 1: glows at 0% (= 0s into 8s) */
   @keyframes hf-label-glow-1 {
-    0%        { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
-    4%        { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
-    14%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
-    22%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    0% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
+    4% {
+      color: var(--navy);
+      text-shadow: 0 0 12px var(--label-accent, var(--accent));
+    }
+    14% {
+      color: var(--navy);
+      text-shadow: 0 0 4px var(--label-accent, var(--accent));
+    }
+    22%,
+    100% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
   }
   /* Label 2: glows at 22.5% (= 1.8s) */
   @keyframes hf-label-glow-2 {
-    0%, 22%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
-    27%       { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
-    37%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
-    45%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    0%,
+    22% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
+    27% {
+      color: var(--navy);
+      text-shadow: 0 0 12px var(--label-accent, var(--accent));
+    }
+    37% {
+      color: var(--navy);
+      text-shadow: 0 0 4px var(--label-accent, var(--accent));
+    }
+    45%,
+    100% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
   }
   /* Label 3: glows at 50% (= 4.0s) */
   @keyframes hf-label-glow-3 {
-    0%, 50%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
-    54%       { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
-    64%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
-    72%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    0%,
+    50% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
+    54% {
+      color: var(--navy);
+      text-shadow: 0 0 12px var(--label-accent, var(--accent));
+    }
+    64% {
+      color: var(--navy);
+      text-shadow: 0 0 4px var(--label-accent, var(--accent));
+    }
+    72%,
+    100% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
   }
   /* Label 4: glows at 76.25% (= 6.1s) */
   @keyframes hf-label-glow-4 {
-    0%, 76%   { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
-    80%       { color: var(--navy);  text-shadow: 0 0 12px var(--label-accent, var(--accent)); }
-    90%       { color: var(--navy);  text-shadow: 0 0 4px var(--label-accent, var(--accent)); }
-    98%, 100% { color: var(--ink-3); text-shadow: 0 0 0 transparent; }
+    0%,
+    76% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
+    80% {
+      color: var(--navy);
+      text-shadow: 0 0 12px var(--label-accent, var(--accent));
+    }
+    90% {
+      color: var(--navy);
+      text-shadow: 0 0 4px var(--label-accent, var(--accent));
+    }
+    98%,
+    100% {
+      color: var(--ink-3);
+      text-shadow: 0 0 0 transparent;
+    }
   }
 
   /* ---------- Traveling ticks ----------
@@ -543,30 +1280,87 @@
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
-  .hf-tick--a { animation-name: hf-tick-a; }
-  .hf-tick--b { animation-name: hf-tick-b; }
-  .hf-tick--c { animation-name: hf-tick-c; }
+  .hf-tick--a {
+    animation-name: hf-tick-a;
+  }
+  .hf-tick--b {
+    animation-name: hf-tick-b;
+  }
+  .hf-tick--c {
+    animation-name: hf-tick-c;
+  }
   @keyframes hf-tick-a {
-    0%        { transform: translateX(0);    opacity: 0; r: 2.4; }
-    8%        {                              opacity: 1;        }
-    33%       {                                          r: 3.4; }
-    58%       {                              opacity: 1;        }
-    66%       { transform: translateX(800px); opacity: 0; r: 2.4; }
-    66%, 100% { transform: translateX(800px); opacity: 0; r: 2.4; }
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+      r: 2.4;
+    }
+    8% {
+      opacity: 1;
+    }
+    33% {
+      r: 3.4;
+    }
+    58% {
+      opacity: 1;
+    }
+    66% {
+      transform: translateX(800px);
+      opacity: 0;
+      r: 2.4;
+    }
+    66%,
+    100% {
+      transform: translateX(800px);
+      opacity: 0;
+      r: 2.4;
+    }
   }
   @keyframes hf-tick-b {
-    0%, 33%   { transform: translateX(0);    opacity: 0; r: 2.4; }
-    41%       {                              opacity: 1;        }
-    66%       {                                          r: 3.4; }
-    91%       {                              opacity: 1;        }
-    99%, 100% { transform: translateX(800px); opacity: 0; r: 2.4; }
+    0%,
+    33% {
+      transform: translateX(0);
+      opacity: 0;
+      r: 2.4;
+    }
+    41% {
+      opacity: 1;
+    }
+    66% {
+      r: 3.4;
+    }
+    91% {
+      opacity: 1;
+    }
+    99%,
+    100% {
+      transform: translateX(800px);
+      opacity: 0;
+      r: 2.4;
+    }
   }
   @keyframes hf-tick-c {
-    0%, 16%   { transform: translateX(0);    opacity: 0; r: 2.4; }
-    24%       {                              opacity: 1;        }
-    50%       {                                          r: 3.4; }
-    75%       {                              opacity: 1;        }
-    83%, 100% { transform: translateX(800px); opacity: 0; r: 2.4; }
+    0%,
+    16% {
+      transform: translateX(0);
+      opacity: 0;
+      r: 2.4;
+    }
+    24% {
+      opacity: 1;
+    }
+    50% {
+      r: 3.4;
+    }
+    75% {
+      opacity: 1;
+    }
+    83%,
+    100% {
+      transform: translateX(800px);
+      opacity: 0;
+      r: 2.4;
+    }
   }
 
   /* ---------- Halo pulses ----------
@@ -581,26 +1375,76 @@
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
-  .hf-station--src   .hf-station__halo { animation-name: hf-halo-src; }
-  .hf-station--cedar .hf-station__halo { animation-name: hf-halo-cedar; }
-  .hf-station--map   .hf-station__halo { animation-name: hf-halo-map; }
-  @keyframes hf-halo-src {     /* pulses at 0% (= 0s into 8s) */
-    0%        { opacity: 0;   transform: scale(.6);  }
-    4%        { opacity: .2;  transform: scale(1);   }
-    14%       { opacity: 0;   transform: scale(1.18);}
-    25%, 100% { opacity: 0;   transform: scale(.6);  }
+  .hf-station--src .hf-station__halo {
+    animation-name: hf-halo-src;
   }
-  @keyframes hf-halo-cedar {   /* pulses at 20% (= 1.6s) */
-    0%, 20%   { opacity: 0;   transform: scale(.6);  }
-    24%       { opacity: .2;  transform: scale(1);   }
-    34%       { opacity: 0;   transform: scale(1.18);}
-    45%, 100% { opacity: 0;   transform: scale(.6);  }
+  .hf-station--cedar .hf-station__halo {
+    animation-name: hf-halo-cedar;
   }
-  @keyframes hf-halo-map {     /* pulses at 47.5% (= 3.8s) */
-    0%, 47%   { opacity: 0;   transform: scale(.6);  }
-    51%       { opacity: .2;  transform: scale(1);   }
-    61%       { opacity: 0;   transform: scale(1.18);}
-    72%, 100% { opacity: 0;   transform: scale(.6);  }
+  .hf-station--map .hf-station__halo {
+    animation-name: hf-halo-map;
+  }
+  @keyframes hf-halo-src {
+    /* pulses at 0% (= 0s into 8s) */
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    4% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+    14% {
+      opacity: 0;
+      transform: scale(1.18);
+    }
+    25%,
+    100% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+  @keyframes hf-halo-cedar {
+    /* pulses at 20% (= 1.6s) */
+    0%,
+    20% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    24% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+    34% {
+      opacity: 0;
+      transform: scale(1.18);
+    }
+    45%,
+    100% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+  @keyframes hf-halo-map {
+    /* pulses at 47.5% (= 3.8s) */
+    0%,
+    47% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    51% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+    61% {
+      opacity: 0;
+      transform: scale(1.18);
+    }
+    72%,
+    100% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
   }
 
   /* ---------- Sequential pipeline timing across a 7s loop ----
@@ -650,40 +1494,97 @@
     transform-box: fill-box;
     transform-origin: center;
     animation-duration: 8s;
-    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
     animation-iteration-count: infinite;
     animation-fill-mode: backwards;
   }
-  .hf-in--a { animation-name: hf-in-merge-a; }
-  .hf-in--b { animation-name: hf-in-merge-b; }
-  .hf-in--c { animation-name: hf-in-merge-c; }
+  .hf-in--a {
+    animation-name: hf-in-merge-a;
+  }
+  .hf-in--b {
+    animation-name: hf-in-merge-b;
+  }
+  .hf-in--c {
+    animation-name: hf-in-merge-c;
+  }
 
   /* Sheet A: tilted -6° outer, starts upper-left (centre ~ -24,-20).
      Counter-rotates +6° as it migrates to (14, 0). */
   @keyframes hf-in-merge-a {
-    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1)    rotate(0deg); }
-    22%       { opacity: 1; transform: translate(19px, 10px)  scale(1.25) rotate(3deg); }
-    30%       { opacity: 1; transform: translate(38px, 20px)  scale(1.5)  rotate(6deg); }
-    37%, 95%  { opacity: 0; transform: translate(38px, 20px)  scale(1.5)  rotate(6deg); }
-    100%      { opacity: 0; transform: translate(0, 0)        scale(1)    rotate(0deg); }
+    0%,
+    12% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    22% {
+      opacity: 1;
+      transform: translate(19px, 10px) scale(1.25) rotate(3deg);
+    }
+    30% {
+      opacity: 1;
+      transform: translate(38px, 20px) scale(1.5) rotate(6deg);
+    }
+    37%,
+    95% {
+      opacity: 0;
+      transform: translate(38px, 20px) scale(1.5) rotate(6deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
   }
   /* Sheet B: tilted +4° outer, starts mid-left (centre ~ -27, -2).
      Counter-rotates -4° as it migrates to (14, 0). */
   @keyframes hf-in-merge-b {
-    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1)    rotate(0deg); }
-    22%       { opacity: 1; transform: translate(20px, 1px)   scale(1.25) rotate(-2deg); }
-    30%       { opacity: 1; transform: translate(41px, 2px)   scale(1.5)  rotate(-4deg); }
-    37%, 95%  { opacity: 0; transform: translate(41px, 2px)   scale(1.5)  rotate(-4deg); }
-    100%      { opacity: 0; transform: translate(0, 0)        scale(1)    rotate(0deg); }
+    0%,
+    12% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    22% {
+      opacity: 1;
+      transform: translate(20px, 1px) scale(1.25) rotate(-2deg);
+    }
+    30% {
+      opacity: 1;
+      transform: translate(41px, 2px) scale(1.5) rotate(-4deg);
+    }
+    37%,
+    95% {
+      opacity: 0;
+      transform: translate(41px, 2px) scale(1.5) rotate(-4deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
   }
   /* Sheet C: tilted -3° outer, starts lower-left (centre ~ -26, 18).
      Counter-rotates +3° as it migrates to (14, 0). */
   @keyframes hf-in-merge-c {
-    0%, 12%   { opacity: 1; transform: translate(0, 0)        scale(1)    rotate(0deg); }
-    22%       { opacity: 1; transform: translate(20px, -9px)  scale(1.25) rotate(1deg); }
-    30%       { opacity: 1; transform: translate(40px, -18px) scale(1.5)  rotate(3deg); }
-    37%, 95%  { opacity: 0; transform: translate(40px, -18px) scale(1.5)  rotate(3deg); }
-    100%      { opacity: 0; transform: translate(0, 0)        scale(1)    rotate(0deg); }
+    0%,
+    12% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    22% {
+      opacity: 1;
+      transform: translate(20px, -9px) scale(1.25) rotate(1deg);
+    }
+    30% {
+      opacity: 1;
+      transform: translate(40px, -18px) scale(1.5) rotate(3deg);
+    }
+    37%,
+    95% {
+      opacity: 0;
+      transform: translate(40px, -18px) scale(1.5) rotate(3deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
   }
 
   /* Output document: fades in DURING the sheets' final approach
@@ -697,9 +1598,21 @@
     animation: hf-out-show 8s ease-in-out infinite;
   }
   @keyframes hf-out-show {
-    0%, 28%   { opacity: 0; transform: scale(.9); }
-    40%, 82%  { opacity: 1; transform: scale(1); }
-    92%, 100% { opacity: 0; transform: scale(.97); }
+    0%,
+    28% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    40%,
+    82% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      transform: scale(0.97);
+    }
   }
   /* Six output rows materialize sequentially after the document is
      visible, sweeping top to bottom. Each row's start time is
@@ -714,41 +1627,131 @@
     animation-iteration-count: infinite;
     opacity: 0;
   }
-  .hf-out__row--1 { animation-name: hf-out-row-1; }
-  .hf-out__row--2 { animation-name: hf-out-row-2; }
-  .hf-out__row--3 { animation-name: hf-out-row-3; }
-  .hf-out__row--4 { animation-name: hf-out-row-4; }
-  .hf-out__row--5 { animation-name: hf-out-row-5; }
-  .hf-out__row--6 { animation-name: hf-out-row-6; }
-  @keyframes hf-out-row-1 {   /* row 1 appears at 37.5% (= 3.00s) */
-    0%, 37%   { opacity: 0; transform: scaleX(0); }
-    41%, 87%  { opacity: 1; transform: scaleX(1); }
-    93%, 100% { opacity: 0; transform: scaleX(0); }
+  .hf-out__row--1 {
+    animation-name: hf-out-row-1;
   }
-  @keyframes hf-out-row-2 {   /* row 2 at 39% (= 3.12s) */
-    0%, 39%   { opacity: 0; transform: scaleX(0); }
-    43%, 88%  { opacity: 1; transform: scaleX(1); }
-    94%, 100% { opacity: 0; transform: scaleX(0); }
+  .hf-out__row--2 {
+    animation-name: hf-out-row-2;
   }
-  @keyframes hf-out-row-3 {   /* row 3 at 40.5% (= 3.24s) */
-    0%, 40%   { opacity: 0; transform: scaleX(0); }
-    44%, 89%  { opacity: 1; transform: scaleX(1); }
-    95%, 100% { opacity: 0; transform: scaleX(0); }
+  .hf-out__row--3 {
+    animation-name: hf-out-row-3;
   }
-  @keyframes hf-out-row-4 {   /* row 4 at 42% (= 3.36s) */
-    0%, 42%   { opacity: 0; transform: scaleX(0); }
-    46%, 90%  { opacity: 1; transform: scaleX(1); }
-    96%, 100% { opacity: 0; transform: scaleX(0); }
+  .hf-out__row--4 {
+    animation-name: hf-out-row-4;
   }
-  @keyframes hf-out-row-5 {   /* row 5 at 43.5% (= 3.48s) */
-    0%, 43%   { opacity: 0; transform: scaleX(0); }
-    47%, 91%  { opacity: 1; transform: scaleX(1); }
-    97%, 100% { opacity: 0; transform: scaleX(0); }
+  .hf-out__row--5 {
+    animation-name: hf-out-row-5;
   }
-  @keyframes hf-out-row-6 {   /* row 6 at 45% (= 3.60s) */
-    0%, 45%   { opacity: 0; transform: scaleX(0); }
-    49%, 92%  { opacity: 1; transform: scaleX(1); }
-    98%, 100% { opacity: 0; transform: scaleX(0); }
+  .hf-out__row--6 {
+    animation-name: hf-out-row-6;
+  }
+  @keyframes hf-out-row-1 {
+    /* row 1 appears at 37.5% (= 3.00s) */
+    0%,
+    37% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    41%,
+    87% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    93%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+  }
+  @keyframes hf-out-row-2 {
+    /* row 2 at 39% (= 3.12s) */
+    0%,
+    39% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    43%,
+    88% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    94%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+  }
+  @keyframes hf-out-row-3 {
+    /* row 3 at 40.5% (= 3.24s) */
+    0%,
+    40% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    44%,
+    89% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    95%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+  }
+  @keyframes hf-out-row-4 {
+    /* row 4 at 42% (= 3.36s) */
+    0%,
+    42% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    46%,
+    90% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    96%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+  }
+  @keyframes hf-out-row-5 {
+    /* row 5 at 43.5% (= 3.48s) */
+    0%,
+    43% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    47%,
+    91% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    97%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+  }
+  @keyframes hf-out-row-6 {
+    /* row 6 at 45% (= 3.60s) */
+    0%,
+    45% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    49%,
+    92% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    98%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
   }
 
   /* ---------- Station 2: hourglass → bars → output lines ----
@@ -783,8 +1786,15 @@
     animation: hf-cedar-pulse 8s ease-in-out infinite;
   }
   @keyframes hf-cedar-pulse {
-    0%, 22%, 30%, 100% { transform: scale(1);    }
-    25%                { transform: scale(1.1);  }
+    0%,
+    22%,
+    30%,
+    100% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1.1);
+    }
   }
 
   /* Frame 1: the harmonized spreadsheet "lands" inside Cedar. Slides
@@ -794,13 +1804,27 @@
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-mini-sheet-show 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-mini-sheet-show 8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
   @keyframes hf-mini-sheet-show {
-    0%, 20%   { opacity: 0; transform: translateX(-6px) scale(.92); }
-    25%       { opacity: 1; transform: translateX(0)    scale(1);   }
-    36%       { opacity: 1; transform: translateX(0)    scale(1);   }
-    40%, 100% { opacity: 0; transform: translateX(4px)  scale(.94); }
+    0%,
+    20% {
+      opacity: 0;
+      transform: translateX(-6px) scale(0.92);
+    }
+    25% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+    36% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+    40%,
+    100% {
+      opacity: 0;
+      transform: translateX(4px) scale(0.94);
+    }
   }
 
   /* Frame 2: loading state. */
@@ -811,10 +1835,24 @@
     animation: hf-loading-show 8s ease-in-out infinite;
   }
   @keyframes hf-loading-show {
-    0%, 38%   { opacity: 0; transform: scale(.85); }
-    41%       { opacity: 1; transform: scale(1);   }
-    48%       { opacity: 1; transform: scale(1);   }
-    52%, 100% { opacity: 0; transform: scale(.92); }
+    0%,
+    38% {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    41% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    48% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    52%,
+    100% {
+      opacity: 0;
+      transform: scale(0.92);
+    }
   }
   /* Indeterminate progress fill: slides left-to-right and back,
      ~1.4s loop so the motion reads as active loading inside the
@@ -825,9 +1863,15 @@
     animation: hf-load-fill 1.4s ease-in-out infinite;
   }
   @keyframes hf-load-fill {
-    0%   { transform: translateX(0)    scaleX(1); }
-    50%  { transform: translateX(14px) scaleX(1); }
-    100% { transform: translateX(0)    scaleX(1); }
+    0% {
+      transform: translateX(0) scaleX(1);
+    }
+    50% {
+      transform: translateX(14px) scaleX(1);
+    }
+    100% {
+      transform: translateX(0) scaleX(1);
+    }
   }
   /* Trailing dots after "LOADING" — each blinks in sequence. Each
      dot's peak time is encoded in its own keyframe (peak at 50%,
@@ -839,23 +1883,55 @@
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
-  .hf-load-dot--a { animation-name: hf-load-dot-a; }
-  .hf-load-dot--b { animation-name: hf-load-dot-b; }
-  .hf-load-dot--c { animation-name: hf-load-dot-c; }
-  @keyframes hf-load-dot-a {   /* peaks at 50% */
-    0%, 30%   { opacity: .25; }
-    50%       { opacity: 1;   }
-    80%, 100% { opacity: .25; }
+  .hf-load-dot--a {
+    animation-name: hf-load-dot-a;
   }
-  @keyframes hf-load-dot-b {   /* peaks at 62.5% (= 50% + 12.5%) */
-    0%, 42%   { opacity: .25; }
-    62%       { opacity: 1;   }
-    92%, 100% { opacity: .25; }
+  .hf-load-dot--b {
+    animation-name: hf-load-dot-b;
   }
-  @keyframes hf-load-dot-c {   /* peaks at 75% (= 50% + 25%) */
-    0%, 55%   { opacity: .25; }
-    75%       { opacity: 1;   }
-    100%      { opacity: .25; }
+  .hf-load-dot--c {
+    animation-name: hf-load-dot-c;
+  }
+  @keyframes hf-load-dot-a {
+    /* peaks at 50% */
+    0%,
+    30% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
+    80%,
+    100% {
+      opacity: 0.25;
+    }
+  }
+  @keyframes hf-load-dot-b {
+    /* peaks at 62.5% (= 50% + 12.5%) */
+    0%,
+    42% {
+      opacity: 0.25;
+    }
+    62% {
+      opacity: 1;
+    }
+    92%,
+    100% {
+      opacity: 0.25;
+    }
+  }
+  @keyframes hf-load-dot-c {
+    /* peaks at 75% (= 50% + 25%) */
+    0%,
+    55% {
+      opacity: 0.25;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.25;
+    }
   }
 
   /* Frame 3: mini map preview — Cedar's output. Scales up like the
@@ -864,13 +1940,27 @@
     transform-box: fill-box;
     transform-origin: center;
     opacity: 0;
-    animation: hf-mini-map-show 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-mini-map-show 8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
   @keyframes hf-mini-map-show {
-    0%, 51%   { opacity: 0; transform: scale(.82); }
-    55%       { opacity: 1; transform: scale(1);   }
-    65%       { opacity: 1; transform: scale(1);   }
-    69%, 100% { opacity: 0; transform: scale(.92); }
+    0%,
+    51% {
+      opacity: 0;
+      transform: scale(0.82);
+    }
+    55% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    65% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    69%,
+    100% {
+      opacity: 0;
+      transform: scale(0.92);
+    }
   }
   .hf-mini-map__pulse {
     transform-box: fill-box;
@@ -878,8 +1968,14 @@
     animation: hf-mini-map-pulse 1.6s ease-out infinite;
   }
   @keyframes hf-mini-map-pulse {
-    0%   { opacity: .35; transform: scale(.5); }
-    100% { opacity: 0;   transform: scale(1.6); }
+    0% {
+      opacity: 0.35;
+      transform: scale(0.5);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
   }
 
   /* ---------- Station 3: build-in sequence over the 8s cycle ------
@@ -939,9 +2035,18 @@
     animation-timing-function: ease-out;
   }
   @keyframes hf-road-show {
-    0%, 2%    { opacity: 0; }
-    8%, 90%   { opacity: 1; }
-    97%, 100% { opacity: 0; }
+    0%,
+    2% {
+      opacity: 0;
+    }
+    8%,
+    90% {
+      opacity: 1;
+    }
+    97%,
+    100% {
+      opacity: 0;
+    }
   }
 
   /* Casino: outer .hf-imp__src group is always present (its
@@ -962,28 +2067,82 @@
   .hf-casino__body,
   .hf-casino__door {
     opacity: 0;
-    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .hf-casino__base { animation-name: hf-stage-base; }
-  .hf-casino__body { animation-name: hf-stage-body; }
-  .hf-casino__door { animation-name: hf-stage-door; }
-  @keyframes hf-stage-base {     /* appears at 12.5% (= 1.0s into 8s) */
-    0%, 12%   { opacity: 0; transform: scale(.7); }
-    18%       { opacity: 1; transform: scale(1);  }
-    20%, 90%  { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
+  .hf-casino__base {
+    animation-name: hf-stage-base;
   }
-  @keyframes hf-stage-body {     /* appears at 15% (= 1.2s) */
-    0%, 15%   { opacity: 0; transform: scale(.7); }
-    21%       { opacity: 1; transform: scale(1);  }
-    23%, 90%  { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
+  .hf-casino__body {
+    animation-name: hf-stage-body;
   }
-  @keyframes hf-stage-door {     /* appears at 25% (= 2.0s) */
-    0%, 25%   { opacity: 0; transform: scale(.7); }
-    31%       { opacity: 1; transform: scale(1);  }
-    33%, 90%  { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
+  .hf-casino__door {
+    animation-name: hf-stage-door;
+  }
+  @keyframes hf-stage-base {
+    /* appears at 12.5% (= 1.0s into 8s) */
+    0%,
+    12% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    18% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    20%,
+    90% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    97%,
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+  }
+  @keyframes hf-stage-body {
+    /* appears at 15% (= 1.2s) */
+    0%,
+    15% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    21% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    23%,
+    90% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    97%,
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+  }
+  @keyframes hf-stage-door {
+    /* appears at 25% (= 2.0s) */
+    0%,
+    25% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    31% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    33%,
+    90% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    97%,
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
   }
 
   /* Marquee fills gold once the body is up. Driven separately so
@@ -996,10 +2155,25 @@
     animation-timing-function: ease-out;
   }
   @keyframes hf-stage-marquee {
-    0%, 16%   { opacity: 0; fill: var(--ink-3); }
-    20%       { opacity: 1; fill: var(--ink-3); }
-    24%, 85%  { opacity: 1; fill: var(--gold);  }
-    92%, 100% { opacity: 0; fill: var(--ink-3); }
+    0%,
+    16% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
+    20% {
+      opacity: 1;
+      fill: var(--ink-3);
+    }
+    24%,
+    85% {
+      opacity: 1;
+      fill: var(--gold);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
   }
   /* CASINO wordmark fades in at 19% (= 1.5s). */
   .hf-casino__name {
@@ -1008,9 +2182,18 @@
     animation-timing-function: ease-out;
   }
   @keyframes hf-stage-name {
-    0%, 19%   { opacity: 0; }
-    23%, 85%  { opacity: 1; }
-    92%, 100% { opacity: 0; }
+    0%,
+    19% {
+      opacity: 0;
+    }
+    23%,
+    85% {
+      opacity: 1;
+    }
+    92%,
+    100% {
+      opacity: 0;
+    }
   }
 
   /* Windows light up in four staggered waves (a/b/c/d) at 21/22/23/24%
@@ -1022,36 +2205,104 @@
     animation-timing-function: ease-out;
   }
   .hf-casino__win--1,
-  .hf-casino__win--5 { animation-name: hf-stage-window-a; }
+  .hf-casino__win--5 {
+    animation-name: hf-stage-window-a;
+  }
   .hf-casino__win--2,
-  .hf-casino__win--6 { animation-name: hf-stage-window-b; }
+  .hf-casino__win--6 {
+    animation-name: hf-stage-window-b;
+  }
   .hf-casino__win--3,
-  .hf-casino__win--7 { animation-name: hf-stage-window-c; }
+  .hf-casino__win--7 {
+    animation-name: hf-stage-window-c;
+  }
   .hf-casino__win--4,
-  .hf-casino__win--8 { animation-name: hf-stage-window-d; }
+  .hf-casino__win--8 {
+    animation-name: hf-stage-window-d;
+  }
   @keyframes hf-stage-window-a {
-    0%, 21%   { opacity: 0; fill: var(--ink-3); }
-    26%       { opacity: 1; fill: var(--ink-3); }
-    30%, 85%  { opacity: 1; fill: var(--gold);  }
-    92%, 100% { opacity: 0; fill: var(--ink-3); }
+    0%,
+    21% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
+    26% {
+      opacity: 1;
+      fill: var(--ink-3);
+    }
+    30%,
+    85% {
+      opacity: 1;
+      fill: var(--gold);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
   }
   @keyframes hf-stage-window-b {
-    0%, 22%   { opacity: 0; fill: var(--ink-3); }
-    27%       { opacity: 1; fill: var(--ink-3); }
-    31%, 85%  { opacity: 1; fill: var(--gold);  }
-    92%, 100% { opacity: 0; fill: var(--ink-3); }
+    0%,
+    22% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
+    27% {
+      opacity: 1;
+      fill: var(--ink-3);
+    }
+    31%,
+    85% {
+      opacity: 1;
+      fill: var(--gold);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
   }
   @keyframes hf-stage-window-c {
-    0%, 23%   { opacity: 0; fill: var(--ink-3); }
-    28%       { opacity: 1; fill: var(--ink-3); }
-    32%, 85%  { opacity: 1; fill: var(--gold);  }
-    92%, 100% { opacity: 0; fill: var(--ink-3); }
+    0%,
+    23% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
+    28% {
+      opacity: 1;
+      fill: var(--ink-3);
+    }
+    32%,
+    85% {
+      opacity: 1;
+      fill: var(--gold);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
   }
   @keyframes hf-stage-window-d {
-    0%, 24%   { opacity: 0; fill: var(--ink-3); }
-    29%       { opacity: 1; fill: var(--ink-3); }
-    33%, 85%  { opacity: 1; fill: var(--gold);  }
-    92%, 100% { opacity: 0; fill: var(--ink-3); }
+    0%,
+    24% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
+    29% {
+      opacity: 1;
+      fill: var(--ink-3);
+    }
+    33%,
+    85% {
+      opacity: 1;
+      fill: var(--gold);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      fill: var(--ink-3);
+    }
   }
 
   /* Parking lot pavement fades in at 27.5% (= 2.2s). */
@@ -1059,11 +2310,22 @@
     opacity: 0;
     animation-timing-function: ease-out;
   }
-  .hf-grow--lot { animation-name: hf-stage-lot; }
+  .hf-grow--lot {
+    animation-name: hf-stage-lot;
+  }
   @keyframes hf-stage-lot {
-    0%, 27%   { opacity: 0; }
-    32%, 90%  { opacity: 1; }
-    97%, 100% { opacity: 0; }
+    0%,
+    27% {
+      opacity: 0;
+    }
+    32%,
+    90% {
+      opacity: 1;
+    }
+    97%,
+    100% {
+      opacity: 0;
+    }
   }
 
   /* Gas station: pad → canopy → pumps. After the first traffic
@@ -1071,28 +2333,82 @@
      arrives → gas station gets built to serve that traffic." */
   .hf-build {
     opacity: 0;
-    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .hf-build--gas-pad    { animation-name: hf-stage-gas-pad; }
-  .hf-build--gas-canopy { animation-name: hf-stage-gas-canopy; }
-  .hf-build--gas-pumps  { animation-name: hf-stage-gas-pumps; }
-  @keyframes hf-stage-gas-pad {    /* appears at 37.5% (= 3.0s) */
-    0%, 37%   { opacity: 0; transform: scale(.7); }
-    43%       { opacity: 1; transform: scale(1);  }
-    45%, 90%  { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
+  .hf-build--gas-pad {
+    animation-name: hf-stage-gas-pad;
   }
-  @keyframes hf-stage-gas-canopy { /* appears at 39% (= 3.15s) */
-    0%, 39%   { opacity: 0; transform: scale(.7); }
-    45%       { opacity: 1; transform: scale(1);  }
-    47%, 90%  { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
+  .hf-build--gas-canopy {
+    animation-name: hf-stage-gas-canopy;
   }
-  @keyframes hf-stage-gas-pumps {  /* appears at 42% (= 3.35s) */
-    0%, 42%   { opacity: 0; transform: scale(.7); }
-    48%       { opacity: 1; transform: scale(1);  }
-    50%, 90%  { opacity: 1; transform: scale(1);  }
-    97%, 100% { opacity: 0; transform: scale(.7); }
+  .hf-build--gas-pumps {
+    animation-name: hf-stage-gas-pumps;
+  }
+  @keyframes hf-stage-gas-pad {
+    /* appears at 37.5% (= 3.0s) */
+    0%,
+    37% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    43% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    45%,
+    90% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    97%,
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+  }
+  @keyframes hf-stage-gas-canopy {
+    /* appears at 39% (= 3.15s) */
+    0%,
+    39% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    47%,
+    90% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    97%,
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+  }
+  @keyframes hf-stage-gas-pumps {
+    /* appears at 42% (= 3.35s) */
+    0%,
+    42% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    48% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50%,
+    90% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    97%,
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
   }
 
   /* Cars use a two-group pattern: the OUTER <g transform="translate">
@@ -1104,42 +2420,112 @@
      cars share the same 8s cycle boundary. */
   .hf-car {
     opacity: 0;
-    animation-timing-function: cubic-bezier(.2, .8, .25, 1);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.25, 1);
   }
-  .hf-car--lot-a { animation-name: hf-stage-car-lot-a; } /* 30% = 2.4s */
-  .hf-car--lot-b { animation-name: hf-stage-car-lot-b; } /* 32% = 2.55s */
-  .hf-car--lot-c { animation-name: hf-stage-car-lot-c; } /* 34% = 2.7s */
-  .hf-car--gas   { animation-name: hf-stage-car-gas;   } /* 45% = 3.6s */
+  .hf-car--lot-a {
+    animation-name: hf-stage-car-lot-a;
+  } /* 30% = 2.4s */
+  .hf-car--lot-b {
+    animation-name: hf-stage-car-lot-b;
+  } /* 32% = 2.55s */
+  .hf-car--lot-c {
+    animation-name: hf-stage-car-lot-c;
+  } /* 34% = 2.7s */
+  .hf-car--gas {
+    animation-name: hf-stage-car-gas;
+  } /* 45% = 3.6s */
   @keyframes hf-stage-car-lot-a {
-    0%, 30%   { opacity: 0; transform: translateX(-30px); }
-    34%       { opacity: 1; }
-    42%, 80%  { opacity: 1; transform: translateX(0); }
-    90%, 100% { opacity: 0; transform: translateX(0); }
+    0%,
+    30% {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    34% {
+      opacity: 1;
+    }
+    42%,
+    80% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    90%,
+    100% {
+      opacity: 0;
+      transform: translateX(0);
+    }
   }
   @keyframes hf-stage-car-lot-b {
-    0%, 32%   { opacity: 0; transform: translateX(-30px); }
-    36%       { opacity: 1; }
-    44%, 80%  { opacity: 1; transform: translateX(0); }
-    90%, 100% { opacity: 0; transform: translateX(0); }
+    0%,
+    32% {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    36% {
+      opacity: 1;
+    }
+    44%,
+    80% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    90%,
+    100% {
+      opacity: 0;
+      transform: translateX(0);
+    }
   }
   @keyframes hf-stage-car-lot-c {
-    0%, 34%   { opacity: 0; transform: translateX(-30px); }
-    38%       { opacity: 1; }
-    46%, 80%  { opacity: 1; transform: translateX(0); }
-    90%, 100% { opacity: 0; transform: translateX(0); }
+    0%,
+    34% {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    38% {
+      opacity: 1;
+    }
+    46%,
+    80% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    90%,
+    100% {
+      opacity: 0;
+      transform: translateX(0);
+    }
   }
   @keyframes hf-stage-car-gas {
-    0%, 45%   { opacity: 0; transform: translateX(28px); }
-    49%       { opacity: 1; }
-    57%, 80%  { opacity: 1; transform: translateX(0); }
-    90%, 100% { opacity: 0; transform: translateX(0); }
+    0%,
+    45% {
+      opacity: 0;
+      transform: translateX(28px);
+    }
+    49% {
+      opacity: 1;
+    }
+    57%,
+    80% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    90%,
+    100% {
+      opacity: 0;
+      transform: translateX(0);
+    }
   }
 
   /* Whole-casino cycle-out: applied to the .hf-imp__src wrapper so
      the whole building fades together at the cycle reset. */
   @keyframes hf-cycle-out {
-    0%, 90%   { opacity: 1; }
-    97%, 100% { opacity: 0; }
+    0%,
+    90% {
+      opacity: 1;
+    }
+    97%,
+    100% {
+      opacity: 0;
+    }
   }
 
   /* Dollar signs trickle continuously, so the parcel always feels
@@ -1151,19 +2537,47 @@
     transform-origin: center;
     animation: hf-dollar-rise 4s ease-out infinite;
   }
-  .hf-dollar--1 { animation-delay:  0s;   }
-  .hf-dollar--2 { animation-delay: -.5s;  }
-  .hf-dollar--3 { animation-delay: -1.0s; }
-  .hf-dollar--4 { animation-delay: -1.5s; }
-  .hf-dollar--5 { animation-delay: -2.0s; }
-  .hf-dollar--6 { animation-delay: -2.5s; }
-  .hf-dollar--7 { animation-delay: -3.0s; }
-  .hf-dollar--8 { animation-delay: -3.5s; }
+  .hf-dollar--1 {
+    animation-delay: 0s;
+  }
+  .hf-dollar--2 {
+    animation-delay: -0.5s;
+  }
+  .hf-dollar--3 {
+    animation-delay: -1s;
+  }
+  .hf-dollar--4 {
+    animation-delay: -1.5s;
+  }
+  .hf-dollar--5 {
+    animation-delay: -2s;
+  }
+  .hf-dollar--6 {
+    animation-delay: -2.5s;
+  }
+  .hf-dollar--7 {
+    animation-delay: -3s;
+  }
+  .hf-dollar--8 {
+    animation-delay: -3.5s;
+  }
   @keyframes hf-dollar-rise {
-    0%       { opacity: 0; transform: translateY(0)     scale(.4); }
-    20%      { opacity: 1; transform: translateY(-4px)  scale(1);  }
-    60%      { opacity: 1; transform: translateY(-12px) scale(1);  }
-    100%     { opacity: 0; transform: translateY(-22px) scale(.7); }
+    0% {
+      opacity: 0;
+      transform: translateY(0) scale(0.4);
+    }
+    20% {
+      opacity: 1;
+      transform: translateY(-4px) scale(1);
+    }
+    60% {
+      opacity: 1;
+      transform: translateY(-12px) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-22px) scale(0.7);
+    }
   }
 
   /* ---------- Station 4: study packaged, then shipped out ----------
@@ -1193,17 +2607,31 @@
     transform-box: fill-box;
     transform-origin: center;
     opacity: 1;
-    animation: hf-report-main 8s cubic-bezier(.22, 1, .36, 1) infinite;
+    animation: hf-report-main 8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
   /* Slide fades to chunks earlier in the 8s cycle so the chunks
      have room to (a) stand alone as three distinct cards and
      (b) actually fly away. Old timing collapsed both phases into the
      last ~1s and the eye couldn't catch either one. */
   @keyframes hf-report-main {
-    0%, 60%   { opacity: 1; transform: scale(1); }
-    64%       { opacity: .35; transform: scale(.96); }
-    67%, 91%  { opacity: 0; transform: scale(.92); }
-    100%      { opacity: 1; transform: scale(1); }
+    0%,
+    60% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    64% {
+      opacity: 0.35;
+      transform: scale(0.96);
+    }
+    67%,
+    91% {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   /* Chunks. Shared base — each chunk has its own keyframe with a
@@ -1214,13 +2642,19 @@
     transform-origin: center;
     opacity: 0;
     animation-duration: 8s;
-    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
     animation-iteration-count: infinite;
     animation-fill-mode: backwards;
   }
-  .hf-chunk--a { animation-name: hf-chunk-fly-a; }
-  .hf-chunk--b { animation-name: hf-chunk-fly-b; }
-  .hf-chunk--c { animation-name: hf-chunk-fly-c; }
+  .hf-chunk--a {
+    animation-name: hf-chunk-fly-a;
+  }
+  .hf-chunk--b {
+    animation-name: hf-chunk-fly-b;
+  }
+  .hf-chunk--c {
+    animation-name: hf-chunk-fly-c;
+  }
 
   /* Four-phase chunk timing within the 8s cycle. The chunks start
      AT the slide's center at slide-size scale (scale ~3, translate
@@ -1247,71 +2681,215 @@
   /* Chunk A: SVG centre (0,-10). Slide centre offset translate(0, 6).
      Flies off upper-right after the standalone hold. */
   @keyframes hf-chunk-fly-a {
-    0%, 60%   { opacity: 0;   transform: translate(0,  6px) scale(3); }
-    64%       { opacity: .5;  transform: translate(0,  6px) scale(3); }
-    67%       { opacity: 1;   transform: translate(0,  6px) scale(3); }
-    72%       { opacity: 1;   transform: translate(0,  4px) scale(2); }
-    77%, 83%  { opacity: 1;   transform: translate(0,  0)     scale(1)   rotate(0deg); }
-    90%       { opacity: 1;   transform: translate(15px, -7px)  scale(.94) rotate(-5deg); }
-    96%       { opacity: 0;   transform: translate(30px, -13px) scale(.8)  rotate(-8deg); }
-    100%      { opacity: 0;   transform: translate(0,  6px) scale(3); }
+    0%,
+    60% {
+      opacity: 0;
+      transform: translate(0, 6px) scale(3);
+    }
+    64% {
+      opacity: 0.5;
+      transform: translate(0, 6px) scale(3);
+    }
+    67% {
+      opacity: 1;
+      transform: translate(0, 6px) scale(3);
+    }
+    72% {
+      opacity: 1;
+      transform: translate(0, 4px) scale(2);
+    }
+    77%,
+    83% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    90% {
+      opacity: 1;
+      transform: translate(15px, -7px) scale(0.94) rotate(-5deg);
+    }
+    96% {
+      opacity: 0;
+      transform: translate(30px, -13px) scale(0.8) rotate(-8deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(0, 6px) scale(3);
+    }
   }
 
   /* Chunk B: SVG centre (0,1). Slide centre offset translate(0, -5).
      Flies off nearly straight right with a softer wobble. */
   @keyframes hf-chunk-fly-b {
-    0%, 60%   { opacity: 0;   transform: translate(0, -5px) scale(3); }
-    64%       { opacity: .5;  transform: translate(0, -5px) scale(3); }
-    67%       { opacity: 1;   transform: translate(0, -5px) scale(3); }
-    72%       { opacity: 1;   transform: translate(0, -3px) scale(2); }
-    77%, 83%  { opacity: 1;   transform: translate(0,  0)    scale(1)   rotate(0deg); }
-    90%       { opacity: 1;   transform: translate(15px, 1px)  scale(.94) rotate(3deg); }
-    96%       { opacity: 0;   transform: translate(30px, 2px)  scale(.8)  rotate(5deg); }
-    100%      { opacity: 0;   transform: translate(0, -5px) scale(3); }
+    0%,
+    60% {
+      opacity: 0;
+      transform: translate(0, -5px) scale(3);
+    }
+    64% {
+      opacity: 0.5;
+      transform: translate(0, -5px) scale(3);
+    }
+    67% {
+      opacity: 1;
+      transform: translate(0, -5px) scale(3);
+    }
+    72% {
+      opacity: 1;
+      transform: translate(0, -3px) scale(2);
+    }
+    77%,
+    83% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    90% {
+      opacity: 1;
+      transform: translate(15px, 1px) scale(0.94) rotate(3deg);
+    }
+    96% {
+      opacity: 0;
+      transform: translate(30px, 2px) scale(0.8) rotate(5deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(0, -5px) scale(3);
+    }
   }
 
   /* Chunk C: SVG centre (0,12). Slide centre offset translate(0, -16).
      Flies off lower-right after the standalone hold. */
   @keyframes hf-chunk-fly-c {
-    0%, 60%   { opacity: 0;   transform: translate(0, -16px) scale(3); }
-    64%       { opacity: .5;  transform: translate(0, -16px) scale(3); }
-    67%       { opacity: 1;   transform: translate(0, -16px) scale(3); }
-    72%       { opacity: 1;   transform: translate(0, -10px) scale(2); }
-    77%, 83%  { opacity: 1;   transform: translate(0,  0)     scale(1)   rotate(0deg); }
-    90%       { opacity: 1;   transform: translate(15px, 7px)  scale(.94) rotate(6deg); }
-    96%       { opacity: 0;   transform: translate(30px, 13px) scale(.8)  rotate(9deg); }
-    100%      { opacity: 0;   transform: translate(0, -16px) scale(3); }
+    0%,
+    60% {
+      opacity: 0;
+      transform: translate(0, -16px) scale(3);
+    }
+    64% {
+      opacity: 0.5;
+      transform: translate(0, -16px) scale(3);
+    }
+    67% {
+      opacity: 1;
+      transform: translate(0, -16px) scale(3);
+    }
+    72% {
+      opacity: 1;
+      transform: translate(0, -10px) scale(2);
+    }
+    77%,
+    83% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    90% {
+      opacity: 1;
+      transform: translate(15px, 7px) scale(0.94) rotate(6deg);
+    }
+    96% {
+      opacity: 0;
+      transform: translate(30px, 13px) scale(0.8) rotate(9deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(0, -16px) scale(3);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hf-tick, .hf-station__halo,
-    .hf-in, .hf-out, .hf-out__row,
-    .hf-cedar__tree, .hf-mini-sheet, .hf-mini-map, .hf-mini-map__pulse,
-    .hf-loading, .hf-load-fill, .hf-load-dot,
-    .hf-imp__src, .hf-casino__base, .hf-casino__body, .hf-casino__door,
-    .hf-casino__marquee, .hf-casino__name, .hf-casino__win,
-    .hf-build, .hf-grow, .hf-car, .hf-dollar,
-    .hf-report__main, .hf-chunk, .hf-road,
-    .hero-flow__label { animation: none; }
-    .hf-tick { opacity: 0; }
-    .hf-in    { opacity: 1; transform: none; }
-    .hf-out   { opacity: 1; }
-    .hf-mini-sheet { opacity: 1; transform: none; }
-    .hf-mini-map   { opacity: 0; }
-    .hf-loading    { opacity: 0; }
-    .hf-imp__src, .hf-casino__base, .hf-casino__body, .hf-casino__door,
-    .hf-build, .hf-grow, .hf-car, .hf-road { opacity: 1; transform: none; }
-    .hf-casino__marquee { opacity: 1; fill: var(--gold); }
-    .hf-casino__name    { opacity: 1; }
-    .hf-casino__win { opacity: 1; fill: var(--gold); }
-    .hf-dollar { opacity: 0; }
-    .hf-report__main { opacity: 1; transform: none; }
-    .hf-chunk { opacity: 0; }
-    .hero-flow__label { color: var(--ink-3); }
+    .hf-tick,
+    .hf-station__halo,
+    .hf-in,
+    .hf-out,
+    .hf-out__row,
+    .hf-cedar__tree,
+    .hf-mini-sheet,
+    .hf-mini-map,
+    .hf-mini-map__pulse,
+    .hf-loading,
+    .hf-load-fill,
+    .hf-load-dot,
+    .hf-imp__src,
+    .hf-casino__base,
+    .hf-casino__body,
+    .hf-casino__door,
+    .hf-casino__marquee,
+    .hf-casino__name,
+    .hf-casino__win,
+    .hf-build,
+    .hf-grow,
+    .hf-car,
+    .hf-dollar,
+    .hf-report__main,
+    .hf-chunk,
+    .hf-road,
+    .hero-flow__label {
+      animation: none;
+    }
+    .hf-tick {
+      opacity: 0;
+    }
+    .hf-in {
+      opacity: 1;
+      transform: none;
+    }
+    .hf-out {
+      opacity: 1;
+    }
+    .hf-mini-sheet {
+      opacity: 1;
+      transform: none;
+    }
+    .hf-mini-map {
+      opacity: 0;
+    }
+    .hf-loading {
+      opacity: 0;
+    }
+    .hf-imp__src,
+    .hf-casino__base,
+    .hf-casino__body,
+    .hf-casino__door,
+    .hf-build,
+    .hf-grow,
+    .hf-car,
+    .hf-road {
+      opacity: 1;
+      transform: none;
+    }
+    .hf-casino__marquee {
+      opacity: 1;
+      fill: var(--gold);
+    }
+    .hf-casino__name {
+      opacity: 1;
+    }
+    .hf-casino__win {
+      opacity: 1;
+      fill: var(--gold);
+    }
+    .hf-dollar {
+      opacity: 0;
+    }
+    .hf-report__main {
+      opacity: 1;
+      transform: none;
+    }
+    .hf-chunk {
+      opacity: 0;
+    }
+    .hero-flow__label {
+      color: var(--ink-3);
+    }
   }
 
   @media (max-width: 600px) {
-    .hero-flow__labels { gap: .3rem; margin-top: .25rem; }
-    .hero-flow__label { font-size: .56rem; letter-spacing: .05em; }
+    .hero-flow__labels {
+      gap: 0.3rem;
+      margin-top: 0.25rem;
+    }
+    .hero-flow__label {
+      font-size: 0.56rem;
+      letter-spacing: 0.05em;
+    }
   }
 </style>

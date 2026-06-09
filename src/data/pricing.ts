@@ -24,10 +24,10 @@ export interface PricingTier {
   id: 'starter' | 'standard' | 'leader';
   name: string;
   priceAnnual: number;
-  price: string;          // formatted display price
-  period: string;         // e.g. "/ year"
+  price: string; // formatted display price
+  period: string; // e.g. "/ year"
   tagline: string;
-  ctaSubject: string;     // mailto subject
+  ctaSubject: string; // mailto subject
   highlights: string[];
   features: Array<string | { text: string; accent: 'gold' }>;
   featured?: boolean;
@@ -66,7 +66,10 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
       'High-frequency alternative data (mobility signals) where available',
       'Standard PDF report, structured CSV export, and slide deck',
       'Full assumption ledger on every export',
-      { text: 'Monthly or quarterly payment plans, no upcharge (12-month commitment)', accent: 'gold' },
+      {
+        text: 'Monthly or quarterly payment plans, no upcharge (12-month commitment)',
+        accent: 'gold',
+      },
     ],
   },
   {
@@ -75,7 +78,8 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For teams that want Cedar to process their messy data, structure it for the model, and act as a thought partner on the write-up.',
+    tagline:
+      'For teams that want Cedar to process their messy data, structure it for the model, and act as a thought partner on the write-up.',
     ctaSubject: 'Sapling tier',
     highlights: [
       'Everything in Sprout',
@@ -85,8 +89,14 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     features: [
       'Everything in Sprout',
       'Up to 5 users',
-      { text: 'Full Cedar access: upload PDFs, CSVs, and XLSX files, with more formats expanding over time', accent: 'gold' },
-      { text: 'Cedar structures the inputs, surfaces every assumption, and acts as a thought partner on the write-up', accent: 'gold' },
+      {
+        text: 'Full Cedar access: upload PDFs, CSVs, and XLSX files, with more formats expanding over time',
+        accent: 'gold',
+      },
+      {
+        text: 'Cedar structures the inputs, surfaces every assumption, and acts as a thought partner on the write-up',
+        accent: 'gold',
+      },
       'Review queues for HR, payroll, finance, and compliance inputs',
     ],
   },
@@ -96,7 +106,8 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     priceAnnual: 0,
     price: '',
     period: '',
-    tagline: 'For organizations that want custom-branded outputs, data harmonized across every study, complementary administrative datasets that show how socioeconomic outcomes are actually changing on the ground, and compliance-ready reporting on top of everything in Sapling.',
+    tagline:
+      'For organizations that want custom-branded outputs, data harmonized across every study, complementary administrative datasets that show how socioeconomic outcomes are actually changing on the ground, and compliance-ready reporting on top of everything in Sapling.',
     ctaSubject: 'Tree tier',
     featured: true,
     highlights: [
@@ -107,10 +118,22 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
     features: [
       'Everything in Sapling',
       'Up to 10 users',
-      { text: 'Custom branding: upload your logos, colors, and images once and every output (PDF report, deck, executive summary) picks them up automatically', accent: 'gold' },
-      { text: 'Cedar Grove: your data stays harmonized across every study, so the second study is easier than the first and the tenth is easier than the second', accent: 'gold' },
-      { text: 'Complementary administrative data layered alongside your own, showing how local socioeconomic outcomes are actually changing. Reinforces the economic-impact narrative with real outcome evidence.', accent: 'gold' },
-      { text: 'Compliance-ready reporting for grants, federal submissions, and audited annual reports', accent: 'gold' },
+      {
+        text: 'Custom branding: upload your logos, colors, and images once and every output (PDF report, deck, executive summary) picks them up automatically',
+        accent: 'gold',
+      },
+      {
+        text: 'Cedar Grove: your data stays harmonized across every study, so the second study is easier than the first and the tenth is easier than the second',
+        accent: 'gold',
+      },
+      {
+        text: 'Complementary administrative data layered alongside your own, showing how local socioeconomic outcomes are actually changing. Reinforces the economic-impact narrative with real outcome evidence.',
+        accent: 'gold',
+      },
+      {
+        text: 'Compliance-ready reporting for grants, federal submissions, and audited annual reports',
+        accent: 'gold',
+      },
     ],
   },
 ];
@@ -125,10 +148,11 @@ export const PUBLIC_PRICING_TIERS: PricingTier[] = [
 export const CONSULTANT_TIER: PricingTier = {
   id: 'starter', // schema slot; the page renders by name, not id
   name: 'Arborist',
-  priceAnnual: 0,  // pulled from PLATFORMS.consultant.tierPrices.flat at render time
+  priceAnnual: 0, // pulled from PLATFORMS.consultant.tierPrices.flat at render time
   price: '',
   period: '',
-  tagline: 'If your firm runs economic impact studies for outside clients, the Arborist plan is built for that. You pay $15K for two projects together, one project per client, and when those wrap up you book the next engagement as a fresh $15K with the next two clients.',
+  tagline:
+    'If your firm runs economic impact studies for outside clients, the Arborist plan is built for that. You pay $15K for two projects together, one project per client, and when those wrap up you book the next engagement as a fresh $15K with the next two clients.',
   ctaSubject: 'Arborist plan for Consultant',
   highlights: [
     'Two projects in one engagement, one client per project',
@@ -157,9 +181,9 @@ export const CONSULTANT_TIER: PricingTier = {
 export interface AddOn {
   id: 'toolbox';
   name: string;
-  priceLabel: string;     // "+$15K"
-  priceAnnual: number;    // 15000
-  period: string;         // "fixed-price add-on, per study"
+  priceLabel: string; // "+$15K"
+  priceAnnual: number; // 15000
+  period: string; // "fixed-price add-on, per study"
   tagline: string;
   highlights: string[];
   features: string[];
@@ -172,7 +196,8 @@ export const TOOLBOX_ADDON: AddOn = {
   priceLabel: '+$15K',
   priceAnnual: 15000,
   period: 'fixed-price add-on, per study',
-  tagline: 'Add our team to any Lumecon subscription. We turn your platform outputs into a finished economic impact package, branded with your visual identity and your own images so the deliverable reads as yours.',
+  tagline:
+    'Add our team to any Lumecon subscription. We turn your platform outputs into a finished economic impact package, branded with your visual identity and your own images so the deliverable reads as yours.',
   highlights: [
     'Full written report, deck, and executive summary',
     'Three rounds of revisions',
@@ -227,12 +252,39 @@ export interface ComparisonRow {
  *      they earn a row by shipping
  */
 export const COMPARISON_ROWS: ComparisonRow[] = [
-  { capability: 'Users',                                                                                                sprout: '1',                                  sapling: 'Up to 5',                          tree: 'Up to 10' },
-  { capability: 'Geographies',                                                                                          sprout: 'All included',                       sapling: 'All included',                     tree: 'All included' },
-  { capability: 'Cedar: upload messy data and act as a thought partner',                                                sprout: 'none',                               sapling: 'yes',                              tree: 'yes' },
-  { capability: 'Custom branding: upload your logos, colors, and images, automatically formatted into every output',    sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
-  { capability: 'Cedar Grove: harmonized data + complementary administrative datasets + compliance-ready reporting',    sprout: 'none',                               sapling: 'none',                             tree: 'yes' },
-  { capability: 'Payment cadence',                                                                                      sprout: 'Annual, monthly, or quarterly',      sapling: 'Annual',                           tree: 'Annual' },
+  { capability: 'Users', sprout: '1', sapling: 'Up to 5', tree: 'Up to 10' },
+  {
+    capability: 'Geographies',
+    sprout: 'All included',
+    sapling: 'All included',
+    tree: 'All included',
+  },
+  {
+    capability: 'Cedar: upload messy data and act as a thought partner',
+    sprout: 'none',
+    sapling: 'yes',
+    tree: 'yes',
+  },
+  {
+    capability:
+      'Custom branding: upload your logos, colors, and images, automatically formatted into every output',
+    sprout: 'none',
+    sapling: 'none',
+    tree: 'yes',
+  },
+  {
+    capability:
+      'Cedar Grove: harmonized data + complementary administrative datasets + compliance-ready reporting',
+    sprout: 'none',
+    sapling: 'none',
+    tree: 'yes',
+  },
+  {
+    capability: 'Payment cadence',
+    sprout: 'Annual, monthly, or quarterly',
+    sapling: 'Annual',
+    tree: 'Annual',
+  },
 ];
 
 /* ---------- Prepayment ladder ---------- */
@@ -245,9 +297,19 @@ export interface PrepaymentTier {
 }
 
 export const ANNUAL_SUBSCRIPTION_DISCOUNTS: PrepaymentTier[] = [
-  { years: 1, label: 'Annual',         discountPct: 0,  note: 'Standard annual subscription.' },
-  { years: 2, label: '2-year prepaid', discountPct: 10, note: 'Recommended for multi-year continuity and budget certainty.' },
-  { years: 3, label: '3-year prepaid', discountPct: 15, note: 'Best value; locks pricing for three years.' },
+  { years: 1, label: 'Annual', discountPct: 0, note: 'Standard annual subscription.' },
+  {
+    years: 2,
+    label: '2-year prepaid',
+    discountPct: 10,
+    note: 'Recommended for multi-year continuity and budget certainty.',
+  },
+  {
+    years: 3,
+    label: '3-year prepaid',
+    discountPct: 15,
+    note: 'Best value; locks pricing for three years.',
+  },
 ];
 
 /* ---------- Promo codes ---------- */
@@ -266,9 +328,25 @@ export interface DiscountCode {
  *  before any code is publicly distributed — these client-side
  *  values are user-visible in the bundle. */
 export const PRODUCT_DISCOUNT_CODES: DiscountCode[] = [
-  { code: 'CONF10',          label: 'Conference code',       discountPct: 10,  audience: 'Conference, webinar, and partner-event offers' },
-  { code: 'PARTNER25',       label: 'Partner code',          discountPct: 25,  audience: 'Approved partner and early-access organizations' },
-  { code: 'LUMECONTEST100',  label: 'Internal testing comp', discountPct: 100, audience: 'Internal checkout and QA testing only', internalOnly: true },
+  {
+    code: 'CONF10',
+    label: 'Conference code',
+    discountPct: 10,
+    audience: 'Conference, webinar, and partner-event offers',
+  },
+  {
+    code: 'PARTNER25',
+    label: 'Partner code',
+    discountPct: 25,
+    audience: 'Approved partner and early-access organizations',
+  },
+  {
+    code: 'LUMECONTEST100',
+    label: 'Internal testing comp',
+    discountPct: 100,
+    audience: 'Internal checkout and QA testing only',
+    internalOnly: true,
+  },
 ];
 
 export const normalizeDiscountCode = (raw: string): string => raw.trim().toUpperCase();
