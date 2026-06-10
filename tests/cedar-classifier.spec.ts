@@ -59,6 +59,11 @@ test('cedar routes representative questions to the right intent', async ({ page,
     { q: 'can I see a demo', expect: 'Happy to set one up' },
     { q: 'what is cedar', expect: 'I handle the data wrangling and the polish' },
     { q: 'how is this different from implan', expect: 'Same underlying economics' },
+    { q: 'what is indian country', expect: '18 U.S.C.' },
+    { q: 'what does federally recognized mean', expect: 'currently 574' },
+    { q: 'tell me about the dawes act', expect: 'patchwork of ownership' },
+    { q: 'how do alaska native corporations work', expect: 'Alaska Native Claims Settlement Act' },
+    { q: 'what is a CEDS', expect: 'Comprehensive Economic Development Strategy' },
   ];
 
   for (const c of cases) {
