@@ -27,6 +27,12 @@ export interface CedarIntent {
    *  with "tell me more" / "go deeper" while this intent was the last
    *  topic. Keeps Cedar feeling context-aware without an LLM. */
   expanded?: string;
+  /** Optional alternate phrasings of the answer. The runtime rotates
+   *  through these on repeat hits so conversational filler (greeting,
+   *  thanks, "ok") never replies with the exact same line twice in a
+   *  row — the single biggest "this is canned" tell. First hit always
+   *  serves the canonical `answer`. */
+  variants?: string[];
   /** Curated related-question chips shown after this answer (intent ids,
    *  in priority order). They deepen the CURRENT topic instead of falling
    *  back to the generic demo/pricing/contact rail on every reply. Targets
@@ -2876,6 +2882,11 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "You're welcome. Anything else I can help with, like pricing, geographies, a demo, or the workflow?",
+    variants: [
+      'Anytime. What else can I cover?',
+      'Glad it helped. Want to keep going on this thread, or switch topics?',
+      "Of course. I'm here if anything else comes up.",
+    ],
   },
   {
     id: 'compliment',
@@ -2902,6 +2913,10 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "That's kind of you to say. If it's useful, I can keep going on pricing, the methodology, who uses Lumecon, or set up a demo. What would help most?",
+    variants: [
+      'Appreciate that. What else can I help with?',
+      "Thanks — happy to keep earning it. What's next?",
+    ],
   },
   {
     id: 'goodbye',
@@ -2942,6 +2957,10 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Good. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow, or who else uses Lumecon?',
+    variants: [
+      'Great. Should we keep pulling on this thread, or look at something else — pricing, a demo, the methodology?',
+      "Good to hear. What's next?",
+    ],
   },
   {
     id: 'negative',
@@ -2949,6 +2968,10 @@ export const INTENTS: CedarIntent[] = [
     triggers: ['no', 'nope', 'not really', 'not yet', 'not now', 'maybe later'],
     answer:
       "No problem. If something else is on your mind (methodology, geographies, a specific use case), say the word and we'll route there. Otherwise the contact form is here whenever you're ready.",
+    variants: [
+      "All good. I'm here if something else comes up.",
+      'Fair enough. The contact form and contact@lumecon.ai are both monitored whenever you want a person instead.',
+    ],
   },
   {
     id: 'confused',
@@ -3260,6 +3283,11 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "Hey, I'm Cedar, Lumecon's site assistant. I can answer questions about what Lumecon does, who uses it, how the math works, what a study costs, or how to reach the team. What brings you in today?",
+    variants: [
+      'Hi again. Where should we take it — pricing, methodology, geographies, or a demo?',
+      "Still here. Ask me anything about Lumecon, or describe what you're working on and I'll point you somewhere useful.",
+      "Hello again. We can pick up where we left off, or start somewhere new — what's on your mind?",
+    ],
   },
 ];
 

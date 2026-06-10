@@ -44,7 +44,10 @@ async function ask(panel: Locator, text: string): Promise<Locator> {
 }
 
 test('cedar routes representative questions to the right intent', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Routing is engine-independent; headless WebKit is unreliable in CI.');
+  test.skip(
+    browserName !== 'chromium',
+    'Routing is engine-independent; headless WebKit is unreliable in CI.',
+  );
   const panel = await openCedar(page);
 
   const cases: Array<{ q: string; expect: string }> = [
@@ -60,19 +63,33 @@ test('cedar routes representative questions to the right intent', async ({ page,
 
   for (const c of cases) {
     const bubble = await ask(panel, c.q);
-    await expect(bubble, `"${c.q}" should route to its intent`).toContainText(c.expect, { timeout: 6000 });
+    await expect(bubble, `"${c.q}" should route to its intent`).toContainText(c.expect, {
+      timeout: 6000,
+    });
   }
 });
 
-test('cedar sends an off-topic question to the out-of-scope reply', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Routing is engine-independent; headless WebKit is unreliable in CI.');
+test('cedar sends an off-topic question to the out-of-scope reply', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(
+    browserName !== 'chromium',
+    'Routing is engine-independent; headless WebKit is unreliable in CI.',
+  );
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'who is the president of mexico');
   await expect(bubble).toContainText("I'm Cedar, Lumecon's site assistant, so I'm best");
 });
 
-test('cedar asks to clarify when a message is genuinely ambiguous', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Routing is engine-independent; headless WebKit is unreliable in CI.');
+test('cedar asks to clarify when a message is genuinely ambiguous', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(
+    browserName !== 'chromium',
+    'Routing is engine-independent; headless WebKit is unreliable in CI.',
+  );
   const panel = await openCedar(page);
   // Cedar only clarifies on genuine ambiguity now: a weak two-way tie on a
   // single bare word just answers the declaration-order winner. "tribal
@@ -83,15 +100,24 @@ test('cedar asks to clarify when a message is genuinely ambiguous', async ({ pag
 });
 
 test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Routing is engine-independent; headless WebKit is unreliable in CI.');
+  test.skip(
+    browserName !== 'chromium',
+    'Routing is engine-independent; headless WebKit is unreliable in CI.',
+  );
   const panel = await openCedar(page);
   // "pricng" is one edit from the "pricing" trigger.
   const bubble = await ask(panel, 'pricng');
   await expect(bubble).toContainText('per-study or per-geography');
 });
 
-test('every starter chip routes to its own intent, never the fallback', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Routing is engine-independent; headless WebKit is unreliable in CI.');
+test('every starter chip routes to its own intent, never the fallback', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(
+    browserName !== 'chromium',
+    'Routing is engine-independent; headless WebKit is unreliable in CI.',
+  );
   await page.emulateMedia({ reducedMotion: 'reduce' });
   // A chip is an explicit intent choice. Some labels (e.g. "How long
   // does a study take?") don't contain their own trigger phrases, so
@@ -111,10 +137,13 @@ test('every starter chip routes to its own intent, never the fallback', async ({
       el?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }, id);
     const reply = panel.locator('.cedar-msg--bot .cedar-msg__bubble').last();
-    await expect(reply, `chip "${id}" should answer with its own intent`)
-      .toContainText(intent.answer.slice(0, 30), { timeout: 6000 });
-    await expect(reply, `chip "${id}" must not fall back`)
-      .not.toContainText(FALLBACK_ANSWER.slice(0, 30));
+    await expect(reply, `chip "${id}" should answer with its own intent`).toContainText(
+      intent.answer.slice(0, 30),
+      { timeout: 6000 },
+    );
+    await expect(reply, `chip "${id}" must not fall back`).not.toContainText(
+      FALLBACK_ANSWER.slice(0, 30),
+    );
   }
 });
 
@@ -141,6 +170,76 @@ test('cedar handles rapid back-to-back submits without breaking', async ({ page,
   await expect(panel.locator('.cedar-msg--user')).toHaveCount(2, { timeout: 8000 });
   await expect(panel.locator('.cedar-msg--bot')).toHaveCount(3, { timeout: 12000 });
   // The aria-busy flag is released once streaming settles (never stuck).
-  await expect(panel.locator('[data-cedar-transcript]')).toHaveAttribute('aria-busy', 'false', { timeout: 12000 });
+  await expect(panel.locator('[data-cedar-transcript]')).toHaveAttribute('aria-busy', 'false', {
+    timeout: 12000,
+  });
   expect(errs).toEqual([]);
+});
+
+test('asking the same question twice goes deeper instead of repeating verbatim', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+  const panel = await openCedar(page);
+  const first = await ask(panel, 'how much does it cost');
+  await expect(first).toContainText('per-study or per-geography');
+  // The repeat should acknowledge the earlier answer and bridge into the
+  // deeper (expanded) version rather than replaying the same paragraph.
+  const second = await ask(panel, 'how much does it cost');
+  await expect(second).toContainText('We touched on this earlier');
+});
+
+test('conversational filler rotates phrasing instead of replying identically', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+  const panel = await openCedar(page);
+  const g1 = await ask(panel, 'hello');
+  // Wait out the typing indicator: the bubble exists before its text lands.
+  await expect(g1).toContainText(/\S/);
+  const g1Text = (await g1.textContent()) ?? '';
+  const g2 = await ask(panel, 'hello');
+  await expect(g2).toContainText(/\S/);
+  const g2Text = (await g2.textContent()) ?? '';
+  expect(g2Text.length).toBeGreaterThan(0);
+  expect(g2Text).not.toBe(g1Text);
+});
+
+test('a compound question answers the primary topic and chips the second', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+  const panel = await openCedar(page);
+  const bubble = await ask(panel, 'how much does it cost and also is my data safe');
+  // Primary: pricing.
+  await expect(bubble).toContainText('per-study or per-geography');
+  // The second half of the question surfaces as the first follow-up chip.
+  const firstChip = panel.locator('.cedar-followups').last().locator('button').first();
+  await expect(firstChip).toHaveText('Is my data safe?');
+});
+
+test('a returning visitor gets a welcome-back line tied to their last topic', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  // Simulate a previous visit (topic marker) + a fresh session (new tab).
+  await page.evaluate(() => {
+    localStorage.setItem(
+      'lumecon:cedar:lastTopic',
+      JSON.stringify({ id: 'pricing', ts: Date.now() }),
+    );
+    sessionStorage.clear();
+  });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  const panel = page.locator('#cedarFabPanel');
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
+  await expect(panel.locator('.cedar-msg--bot').last()).toContainText('Welcome back', {
+    timeout: 5000,
+  });
 });
