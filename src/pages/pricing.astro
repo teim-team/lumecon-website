@@ -94,9 +94,7 @@ const description =
               visually distinguished (teal left-edge accent + a
               "For consultants" corner tag) so the internal-vs-
               external distinction still reads at a glance. -->
-        <p class="pricing-platform-prelude">
-          Three platforms for your team. One plan for consulting firms.
-        </p>
+        <p class="pricing-platform-prelude">Pick your platform</p>
         <ul class="pricing-platform-grid" aria-label="Platform picker">
           {
             platforms.map((p) => (
@@ -718,7 +716,7 @@ const description =
     const scope = tile?.dataset.geographyScope || '';
     if (show && platformKind === 'service') {
       if (headline)
-        headline.textContent = 'One plan. Two projects. Project-based, not a subscription.';
+        headline.textContent = 'A project-based plan: two client projects per engagement.';
       if (deck)
         deck.textContent = `The Arborist plan is built for consulting firms running studies for outside clients. Every geography is included (${scope.toLowerCase()}). Cedar, Cedar Grove, and the Toolbox add-on stay with the customer subscriptions, so they are not part of this plan.`;
     } else if (show) {
