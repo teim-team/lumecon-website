@@ -27,6 +27,12 @@ export interface CedarIntent {
    *  with "tell me more" / "go deeper" while this intent was the last
    *  topic. Keeps Cedar feeling context-aware without an LLM. */
   expanded?: string;
+  /** Optional alternate phrasings of the answer. The runtime rotates
+   *  through these on repeat hits so conversational filler (greeting,
+   *  thanks, "ok") never replies with the exact same line twice in a
+   *  row — the single biggest "this is canned" tell. First hit always
+   *  serves the canonical `answer`. */
+  variants?: string[];
   /** Curated related-question chips shown after this answer (intent ids,
    *  in priority order). They deepen the CURRENT topic instead of falling
    *  back to the generic demo/pricing/contact rail on every reply. Targets
@@ -1926,10 +1932,145 @@ export const INTENTS: CedarIntent[] = [
       'checkerboarded',
       'does it force us into a county',
       'indian country geography',
-      'indian country',
     ],
     answer:
       'Trust land is a fully supported geography in the Tribal platform, not an afterthought. Reservation land, off-reservation trust parcels, restricted-fee and allotted land, Alaska Native Regional and Village Corporation lands, and Native Hawaiian Home Lands are all modeled directly, so a study reflects where activity actually happens instead of being flattened into a surrounding county. If your lands are checkerboarded across county lines, the study still treats them as one geography. Want to walk through your specific land base with the team?',
+    followUps: ['indian_country', 'checkerboarding', 'tribal_platform'],
+  },
+
+  /* --- Tribal & regional civics. Knowledge questions a tribal or
+     local-government visitor plausibly brings to the site (the kind
+     covered by the Minneapolis Fed's "What is Indian Country?"
+     explainer). Answers stay factual and cite the statute or case so
+     they hold up in a grant-office or council conversation, with a
+     light tie back to the product at the end. --- */
+  {
+    id: 'indian_country',
+    chip: 'What is Indian Country?',
+    triggers: [
+      'what is indian country',
+      'indian country',
+      'define indian country',
+      'indian country definition',
+      'indian country mean',
+      '18 usc 1151',
+      'usc 1151',
+      'section 1151',
+      'dependent indian community',
+      'dependent indian communities',
+    ],
+    answer:
+      'Indian Country is a precise legal term. Federal law (18 U.S.C. § 1151) defines it as three kinds of land: all land within the limits of any Indian reservation, including rights-of-way; all dependent Indian communities; and all Indian allotments whose Indian titles have not been extinguished. The definition draws real lines: which government has jurisdiction, which federal rules apply, and where a tribal economy’s study boundary should sit. Lumecon models these geographies directly instead of flattening them into a surrounding county.',
+    expanded:
+      '"Dependent Indian communities" covers land set aside for a tribe under federal superintendence even without formal reservation status; the New Mexico pueblos are the classic example. Allotments are the parcels left over from the allotment era (ask me about checkerboarding for that story). Reservation boundaries are also durable: in McGirt v. Oklahoma (2020) the Supreme Court affirmed that a reservation persists until Congress explicitly disestablishes it. One caution for grant work: Indian Country is a jurisdictional definition, and individual federal programs can define eligible land their own way, so check the program statute when funding is on the line.',
+    followUps: ['checkerboarding', 'tribal_sovereignty', 'tribal_platform'],
+  },
+  {
+    id: 'checkerboarding',
+    chip: 'What is checkerboarding?',
+    triggers: [
+      'what is checkerboarding',
+      'checkerboarding',
+      'dawes act',
+      'general allotment act',
+      'allotment era',
+      'fractionation',
+      'fractionated',
+      'mixed land ownership',
+    ],
+    answer:
+      'Checkerboarding is the patchwork of ownership inside many reservation boundaries: trust parcels, restricted-fee parcels, and fee-simple parcels (often non-Indian owned) sitting side by side like squares on a board. It traces to the General Allotment (Dawes) Act of 1887, which broke communally held reservations into individual allotments and opened the "surplus" to sale. Tribal landholdings fell from roughly 138 million acres to about 48 million before the Indian Reorganization Act of 1934 ended the policy. The effect today is jurisdictional and statistical: county lines and Census geographies slice right through a land base. Lumecon’s Tribal platform treats a checkerboarded land base as one geography, so the study follows the tribe’s actual footprint.',
+    expanded:
+      'The other allotment legacy is fractionation. Allotted parcels passed to multiple heirs each generation, so a single parcel can now have dozens or even hundreds of co-owners, which complicates leasing and development; federal land buy-back programs have consolidated some of it. For analysis the upshot is simple: parcel-level ownership rarely matches any standard data geography, which is exactly why the platform models the land base directly instead of approximating it with a county.',
+    followUps: ['indian_country', 'tribal_sovereignty', 'tribal_platform'],
+  },
+  {
+    id: 'alaska_native_corporations',
+    chip: 'How does Alaska Native land work?',
+    triggers: [
+      'alaska native',
+      'ancsa',
+      'alaska native claims',
+      'native corporation',
+      'native corporations',
+      'regional corporation',
+      'village corporation',
+      'alaska tribes',
+      'work in alaska',
+      'alaska',
+    ],
+    answer:
+      'Alaska works differently from the lower 48. The Alaska Native Claims Settlement Act of 1971 settled aboriginal land claims with roughly 44 million acres and $962.5 million, and the land went to for-profit corporations owned by Alaska Native shareholders rather than to reservations: twelve regional corporations plus roughly 200 village corporations. Alaska is also home to more federally recognized tribes than any other state, nearly 40 percent of the national list. Because ANCSA lands are mostly fee land, the Supreme Court held in the Venetie decision (1998) that they are generally not Indian Country; Metlakatla’s Annette Islands Reserve is the state’s one reservation. Lumecon models Alaska Native Regional and Village Corporation lands directly, so a study follows the corporation’s actual footprint.',
+    followUps: ['indian_country', 'tribal_platform', 'geographies'],
+  },
+  {
+    id: 'federally_recognized',
+    chip: 'What does federally recognized mean?',
+    triggers: [
+      'federally recognized',
+      'federal recognition',
+      'recognized tribe',
+      'recognized tribes',
+      'how many tribes',
+      'how many federally recognized',
+      'list of tribes',
+      'state recognized',
+      'state-recognized',
+      'acknowledgment process',
+      'part 83',
+    ],
+    answer:
+      'A federally recognized tribe is one the United States acknowledges as a sovereign tribal nation with a government-to-government relationship. The Bureau of Indian Affairs publishes the official list in the Federal Register; the January 2026 list names 575 tribal entities. Recognition carries the federal trust responsibility and eligibility for BIA, IHS, and most tribal set-aside funding. Tribes arrived on the list by treaty, act of Congress, the administrative acknowledgment process (25 C.F.R. Part 83), or court decision. State-recognized tribes have standing with their state but not the same federal status or funding eligibility.',
+    expanded:
+      'In economic work this matters because most federal tribal programs, and many philanthropic ones, key eligibility to the Federal Register list, and funders want the applicant’s governmental status stated plainly. An impact study for a federally recognized tribe can also lean on the government-to-government framing: a sovereign government reporting the performance of its economy. Backed by defensible numbers, that framing changes how the room reads the ask.',
+    followUps: ['tribal_sovereignty', 'indian_country', 'grant_applications'],
+  },
+  {
+    id: 'tribal_sovereignty',
+    chip: 'What is tribal sovereignty?',
+    triggers: [
+      'tribal sovereignty',
+      'sovereignty',
+      'sovereign nation',
+      'sovereign nations',
+      'government to government',
+      'trust responsibility',
+      'domestic dependent',
+      'treaty rights',
+      'treaty',
+      'treaties',
+      'self determination',
+      'self-determination',
+      'self governance',
+    ],
+    answer:
+      'Tribal sovereignty is the inherent authority of tribal nations to govern themselves. Inherent means it predates the U.S. Constitution and was not granted by it; the Supreme Court described tribes as "domestic dependent nations" in Cherokee Nation v. Georgia (1831), sovereign governments in a direct, government-to-government relationship with the United States, backed by treaties and the federal trust responsibility. In practice sovereignty looks like tribal courts, taxation and regulation, gaming compacts, and control over land and enrollment. Defensible economic data has become part of how it gets exercised: a tribe negotiating a compact or a funding formula is in a stronger position when its own numbers carry the room.',
+    expanded:
+      'Two distinctions come up a lot. Sovereignty versus jurisdiction: sovereignty is the governing authority itself, while jurisdiction is the parcel-by-parcel question of whose law applies where, which is why Indian Country’s legal definition and checkerboarding matter so much. Political versus racial classification: under Morton v. Mancari (1974), tribal status is a political classification based on citizenship in a sovereign nation, not a racial one, which is why tribal programs stand on distinct legal footing. The same principle is why data sovereignty is a design requirement in our Tribal platform: a tribe’s data belongs to the tribe.',
+    followUps: ['data_sovereignty', 'federally_recognized', 'tribal_platform'],
+  },
+
+  /* --- Local & regional government civics --- */
+  {
+    id: 'eda_districts',
+    chip: 'What is an EDA district?',
+    triggers: [
+      'economic development district',
+      'eda district',
+      'edd',
+      'ceds',
+      'comprehensive economic development strategy',
+      'council of governments',
+      'councils of government',
+      'regional planning commission',
+      'regional commission',
+      'metropolitan planning organization',
+      'mpo',
+      'regional council',
+    ],
+    answer:
+      'An Economic Development District is a multi-county region designated by the U.S. Economic Development Administration; there are roughly 400 of them, each anchored by a regional planning organization and a CEDS, the Comprehensive Economic Development Strategy the district keeps current. A current CEDS is the ticket to most EDA funding (public works, economic adjustment), and EDDs, councils of governments, and MPOs are usually the bodies actually producing regional economic analysis. If you sit in one of those seats, Lumecon is built for exactly that work: impact studies that drop into a CEDS update or an EDA application without a consulting engagement.',
+    followUps: ['grant_applications', 'county_city_use', 'pricing'],
   },
   {
     id: 'per_cap',
@@ -2876,6 +3017,11 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "You're welcome. Anything else I can help with, like pricing, geographies, a demo, or the workflow?",
+    variants: [
+      'Anytime. What else can I cover?',
+      'Glad it helped. Want to keep going on this thread, or switch topics?',
+      "Of course. I'm here if anything else comes up.",
+    ],
   },
   {
     id: 'compliment',
@@ -2902,6 +3048,10 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "That's kind of you to say. If it's useful, I can keep going on pricing, the methodology, who uses Lumecon, or set up a demo. What would help most?",
+    variants: [
+      'Appreciate that. What else can I help with?',
+      "Thanks — happy to keep earning it. What's next?",
+    ],
   },
   {
     id: 'goodbye',
@@ -2942,6 +3092,10 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Good. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow, or who else uses Lumecon?',
+    variants: [
+      'Great. Should we keep pulling on this thread, or look at something else — pricing, a demo, the methodology?',
+      "Good to hear. What's next?",
+    ],
   },
   {
     id: 'negative',
@@ -2949,6 +3103,10 @@ export const INTENTS: CedarIntent[] = [
     triggers: ['no', 'nope', 'not really', 'not yet', 'not now', 'maybe later'],
     answer:
       "No problem. If something else is on your mind (methodology, geographies, a specific use case), say the word and we'll route there. Otherwise the contact form is here whenever you're ready.",
+    variants: [
+      "All good. I'm here if something else comes up.",
+      'Fair enough. The contact form and contact@lumecon.ai are both monitored whenever you want a person instead.',
+    ],
   },
   {
     id: 'confused',
@@ -3260,6 +3418,11 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "Hey, I'm Cedar, Lumecon's site assistant. I can answer questions about what Lumecon does, who uses it, how the math works, what a study costs, or how to reach the team. What brings you in today?",
+    variants: [
+      'Hi again. Where should we take it — pricing, methodology, geographies, or a demo?',
+      "Still here. Ask me anything about Lumecon, or describe what you're working on and I'll point you somewhere useful.",
+      "Hello again. We can pick up where we left off, or start somewhere new — what's on your mind?",
+    ],
   },
 ];
 
@@ -3303,6 +3466,8 @@ export const CHIP_IDS = [
   'competitors',
   'cedar_identity',
   'cedar_tiers',
+  'indian_country',
+  'eda_districts',
 ] as const;
 
 // Curated subset for the static <details> fallback and the FAQPage

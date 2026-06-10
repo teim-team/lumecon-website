@@ -8,10 +8,17 @@
  *
  * What this module owns:
  *   - Conversation state (transcript, quick-reply chip collapse)
- *   - Message classification + answer resolution
- *   - Optional Cedar API call with graceful fallback to the local
- *     keyword classifier (production-ready seam — when the backend
+ *   - Message classification + answer resolution, local-first: the
+ *     intent bank answers everything it confidently matches at zero
+ *     backend cost; only genuine misses escalate to the Cedar API
+ *     when configured (production-ready seam — when the backend
  *     ships, no component changes required)
+ *   - Conversation memory: drill-downs, repeat-question awareness
+ *     (deeper answer or acknowledged restatement instead of verbatim
+ *     replay), compound-question follow-ups, audience bias, a
+ *     cross-visit "welcome back" topic marker, and a one-shot idle
+ *     nudge — all scripted locally so Cedar reads as live without
+ *     spending a token
  *   - Observability hooks (trackEvent / trackError)
  *   - Idempotent boot — safe to re-run on astro:page-load
  *
@@ -118,6 +125,13 @@ interface ConvoState {
   priorIntentId?: string | null;
   misses?: number;
   audience?: string | null;
+  /** Intent ids already answered this conversation (repeat detection). */
+  answered?: string[];
+  /** Intent ids whose expanded answer has been shown (so a repeat
+   *  doesn't serve the same deep dive twice). */
+  expandedShown?: string[];
+  /** Whether the one-per-conversation idle nudge has fired. */
+  nudged?: boolean;
 }
 function loadState(id: string): ConvoState {
   if (typeof sessionStorage === 'undefined') return {};
@@ -165,15 +179,11 @@ export interface IntentMatch {
   intents: CedarIntent[];
 }
 
-/* Score every intent by its trigger hits (longer phrases weigh more)
-   and return the top-scoring intents. Exposing the tie set lets the
-   runtime ask the visitor to clarify when confidence is low instead of
-   committing to a guess. */
-export function topMatches(rawText: string): IntentMatch {
+/* Score every intent by its trigger hits (longer phrases weigh more). */
+function scoreIntents(rawText: string): Array<{ intent: CedarIntent; score: number }> {
   const text = normalize(rawText);
-  if (text.trim() === '') return { score: 0, intents: [] };
+  if (text.trim() === '') return [];
   const scored: Array<{ intent: CedarIntent; score: number }> = [];
-  let best = 0;
   for (const intent of INTENTS) {
     let score = 0;
     for (const trig of intent.triggers) {
@@ -182,12 +192,35 @@ export function topMatches(rawText: string): IntentMatch {
       // Longer phrases beat single-word hits.
       if (text.indexOf(norm) !== -1) score += Math.max(1, norm.trim().split(' ').length);
     }
-    if (score > 0) {
-      scored.push({ intent, score });
-      if (score > best) best = score;
-    }
+    if (score > 0) scored.push({ intent, score });
   }
+  return scored;
+}
+
+/* Return the top-scoring intents. Exposing the tie set lets the
+   runtime ask the visitor to clarify when confidence is low instead of
+   committing to a guess. */
+export function topMatches(rawText: string): IntentMatch {
+  const scored = scoreIntents(rawText);
+  let best = 0;
+  for (const s of scored) if (s.score > best) best = s.score;
   return { score: best, intents: scored.filter((s) => s.score === best).map((s) => s.intent) };
+}
+
+/* Compound-question detection: a strong runner-up topic distinct from
+   the primary match (e.g. "how much does it cost and is my data safe"
+   scores pricing first, security second). The runtime answers the
+   primary and surfaces the runner-up as the first follow-up chip, so
+   both halves of the question get acknowledged. Requires a multi-word
+   trigger hit (score >= 2) so a stray single keyword can't hijack a
+   chip slot. */
+export function secondaryMatch(rawText: string, primaryId: string): CedarIntent | null {
+  const scored = scoreIntents(rawText)
+    .filter(
+      (s) => s.intent.id !== primaryId && s.intent.chip && !NON_TOPIC_INTENTS.has(s.intent.id),
+    )
+    .sort((a, b) => b.score - a.score);
+  return scored.length && scored[0].score >= 2 ? scored[0].intent : null;
 }
 
 /* Fuzzy typo fallback (Fuse.js). Runs only when nothing matched exactly
@@ -317,10 +350,13 @@ export function localAnswer(rawText: string): string {
   return FALLBACK_ANSWER;
 }
 
-/* ----- API-first / local-fallback resolver -------------------------
-   When PUBLIC_API_URL is set and the Cedar endpoint responds OK, use
-   its answer. Otherwise fall back to the local classifier. Either
-   way the visitor gets a sensible reply — the seam is invisible.
+/* ----- Local-first resolver with API escalation --------------------
+   The local classifier answers everything it confidently matches —
+   zero backend tokens spent on the ~95% of traffic the intent bank
+   already covers. Only a genuine local miss (no exact match, no fuzzy
+   rescue, not out-of-scope) escalates to the Cedar API when
+   PUBLIC_API_URL is set; if the backend can't answer either, the
+   visitor gets the local fallback. Either way the seam is invisible.
 
    `fromApi` reports whether the text came from a successful backend
    response (vs. the local fallback). The caller needs this so it
@@ -368,10 +404,12 @@ const prefersReducedMotion = (): boolean =>
 
 // "Cedar is thinking" pause before the reply streams in. Scales with
 // answer length so longer answers feel considered, clamped to 0.7–1.8s
-// so short answers don't feel instant and long ones don't stall.
+// so short answers don't feel instant and long ones don't stall. A
+// ±15% jitter keeps the rhythm from feeling metronomic across turns.
 function thinkingPause(answer: string): number {
   if (prefersReducedMotion()) return 200;
-  return Math.min(1800, Math.max(700, 480 + answer.length * 4));
+  const base = Math.min(1800, Math.max(700, 480 + answer.length * 4));
+  return Math.round(base * (0.85 + Math.random() * 0.3));
 }
 
 /* Render a *bot* answer with light, safe formatting: clickable email +
@@ -426,6 +464,16 @@ async function streamText(
   // Streaming cadence: long answers stream faster so the total wait
   // stays comfortable; short answers stream slower so they read as typed.
   const perWord = tokens.length > 90 ? 8 : 15;
+  // Composed-prose rhythm: a beat after each sentence, a smaller one
+  // after clause punctuation, and per-word jitter so the cadence never
+  // reads as a metronome. These are the cues people subconsciously use
+  // to judge "is something actually composing this?"
+  const pauseAfter = (tok: string): number => {
+    const jittered = perWord * (0.6 + Math.random() * 0.8);
+    if (/[.!?]['")]?$/.test(tok)) return jittered + 110;
+    if (/[,;:]['")]?$/.test(tok)) return jittered + 40;
+    return jittered;
+  };
   bubble.textContent = '';
   // The transcript is an aria-live log; mark it busy while we append
   // word-by-word so a screen reader announces the finished answer once
@@ -435,7 +483,7 @@ async function streamText(
     for (const tok of tokens) {
       bubble.textContent += tok;
       transcript.scrollTo({ top: transcript.scrollHeight });
-      if (tok.trim()) await sleep(perWord);
+      if (tok.trim()) await sleep(pauseAfter(tok));
     }
     // Swap the streamed plain text for the linked/bolded markup once the
     // full answer has landed (keeps the composing animation, adds polish).
@@ -471,6 +519,66 @@ const NON_TOPIC_INTENTS = new Set([
   'rude',
   'greeting',
 ]);
+
+/* ----- Repeat-question handling -------------------------------------
+   Replaying the identical paragraph when a visitor asks the same thing
+   twice is the loudest "this is canned" tell. Instead:
+     - first repeat with an unseen `expanded` answer → bridge into the
+       deeper version (the repeat reads as intent to know more);
+     - otherwise → acknowledge the repeat with a rotating bridge line,
+       then restate the answer.
+   Conversational filler (greeting / thanks / "ok") rotates through its
+   authored `variants` instead, so back-to-back pleasantries never
+   render verbatim-identical. All of this is local — zero tokens. */
+const REPEAT_DEEPEN_BRIDGE = 'We touched on this earlier, so let me go a level deeper. ';
+const REPEAT_BRIDGES = [
+  'Coming back around to this one — here it is again. ',
+  'Happy to run this one back. ',
+  'Same ground as before, in case a second pass helps. ',
+];
+
+function repeatAnswer(intent: CedarIntent, timesAnswered: number, expandedSeen: boolean): string {
+  if (intent.variants?.length) {
+    // Filler intents: rotate variants; deterministic by repeat count so
+    // the rotation is stable within a conversation.
+    return intent.variants[(timesAnswered - 1) % intent.variants.length];
+  }
+  if (typeof intent.expanded === 'string' && !expandedSeen) {
+    return REPEAT_DEEPEN_BRIDGE + intent.expanded;
+  }
+  return REPEAT_BRIDGES[(timesAnswered - 1) % REPEAT_BRIDGES.length] + intent.answer;
+}
+
+/* ----- Cross-visit topic memory --------------------------------------
+   sessionStorage scopes the transcript to a tab; this one localStorage
+   marker (a topic id + timestamp, nothing else) lets a NEW visit open
+   with "welcome back — we were on X" instead of the cold greeting.
+   The marker is consumed when shown so it stays a moment, not a nag. */
+const LAST_TOPIC_KEY = 'lumecon:cedar:lastTopic';
+const LAST_TOPIC_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+function saveLastTopic(intentId: string): void {
+  try {
+    localStorage.setItem(LAST_TOPIC_KEY, JSON.stringify({ id: intentId, ts: Date.now() }));
+  } catch {
+    /* storage disabled — fine */
+  }
+}
+
+function takeLastTopic(): CedarIntent | null {
+  try {
+    const raw = localStorage.getItem(LAST_TOPIC_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { id?: string; ts?: number };
+    localStorage.removeItem(LAST_TOPIC_KEY);
+    if (!parsed?.id || typeof parsed.ts !== 'number') return null;
+    if (Date.now() - parsed.ts > LAST_TOPIC_TTL_MS) return null;
+    const intent = INTENTS.find((i) => i.id === parsed.id);
+    return intent?.chip ? intent : null;
+  } catch {
+    return null;
+  }
+}
 
 /* ----- DOM bootstrapping -------------------------------------------
    bootChat() finds the four required descendants under `root` and
@@ -588,6 +696,7 @@ function followUpsFor(
   matched: CedarIntent | null,
   isDrillDown: boolean,
   audience: string | null,
+  second: CedarIntent | null = null,
 ): FollowUp[] {
   const out: FollowUp[] = [];
   const push = (id: string) => {
@@ -599,6 +708,9 @@ function followUpsFor(
     if (it?.chip && !out.some((o) => o.text === it.chip))
       out.push({ label: it.chip, text: it.chip, intent: it });
   };
+  // The other half of a compound question comes first: the visitor
+  // literally just asked it.
+  if (second) push(second.id);
   if (!isDrillDown && matched && typeof matched.expanded === 'string') {
     // No intent: "tell me more" routes through the drill-down path.
     out.push({ label: 'Tell me more', text: 'tell me more' });
@@ -670,6 +782,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
   const els = queryEls(root);
   if (!els) return false;
   root.dataset.cedarBooted = '1';
+  // Non-null alias so closures (the idle nudge's visibility check) can
+  // use it without re-narrowing.
+  const panelRoot: HTMLElement = root;
 
   const { transcript, chips, form, input } = els;
   const conversationId = getConversationId();
@@ -694,9 +809,22 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     : null;
   let misses = typeof savedState.misses === 'number' ? savedState.misses : 0;
   let audience: string | null = savedState.audience ?? null;
+  const answered: string[] = Array.isArray(savedState.answered) ? savedState.answered : [];
+  const expandedShown: string[] = Array.isArray(savedState.expandedShown)
+    ? savedState.expandedShown
+    : [];
+  let nudged = savedState.nudged === true;
   const persistState = () => {
-    saveState(conversationId, { priorIntentId: priorIntent?.id ?? null, misses, audience });
+    saveState(conversationId, {
+      priorIntentId: priorIntent?.id ?? null,
+      misses,
+      audience,
+      answered: answered.slice(-60),
+      expandedShown: expandedShown.slice(-60),
+      nudged,
+    });
   };
+  const timesAnswered = (id: string) => answered.filter((a) => a === id).length;
 
   /* Restore the conversation: replay saved turns after the static
      welcome so reopening the panel or changing pages keeps the thread. */
@@ -711,6 +839,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
   }
 
   const sendMessage = async (rawText: string, echoText?: string, forcedIntent?: CedarIntent) => {
+    clearIdleNudge();
     appendMessage(transcript, 'user', echoText ?? rawText);
     record('user', echoText ?? rawText);
     trackEvent('cedar.message.sent', { surface, length: rawText.length });
@@ -732,7 +861,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
       (matched?.id === 'tell_me_more' || matched?.id === 'affirmative') &&
       priorIntent != null &&
       typeof priorIntent.expanded === 'string';
-    const localFallback = forcedIntent
+    let localText = forcedIntent
       ? forcedIntent.answer
       : isDrillDown
         ? priorIntent!.expanded!
@@ -754,7 +883,39 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     const aud = detectAudience(rawText);
     if (aud) audience = aud;
 
-    const resolved = await resolveAnswer(rawText, surface, conversationId, localFallback);
+    // Repeat awareness: when we're about to replay an answer the visitor
+    // has already seen, swap in the deeper version or an acknowledged
+    // restatement instead of the verbatim paragraph.
+    if (matched && localText === matched.answer) {
+      const seen = timesAnswered(matched.id);
+      if (seen > 0) {
+        localText = repeatAnswer(matched, seen, expandedShown.includes(matched.id));
+        if (
+          !matched.variants?.length &&
+          typeof matched.expanded === 'string' &&
+          !expandedShown.includes(matched.id)
+        ) {
+          expandedShown.push(matched.id);
+        }
+      }
+      answered.push(matched.id);
+    }
+    if (isDrillDown && priorIntent && !expandedShown.includes(priorIntent.id)) {
+      expandedShown.push(priorIntent.id);
+    }
+
+    // Compound question: a strong second topic in the same message gets
+    // acknowledged via the follow-up rail below.
+    const second =
+      !forcedIntent && !isDrillDown && !clarified && matched
+        ? secondaryMatch(rawText, matched.id)
+        : null;
+
+    // Local-first: only a genuine local miss spends backend tokens. The
+    // intent bank confidently covers everything else at zero cost.
+    const resolved = localMiss
+      ? await resolveAnswer(rawText, surface, conversationId, localText)
+      : { text: localText, fromApi: false };
     const answer = resolved.text;
     // A genuine miss is when neither the backend nor the local classifier
     // produced an answer. If the API answered, it's not a miss, so we
@@ -780,6 +941,9 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // answered, or a later "tell me more" drills into the wrong thing.
     if (!clarified && matched && !NON_TOPIC_INTENTS.has(matched.id)) {
       priorIntent = matched;
+      // Cross-visit memory: a future visit can open with "welcome back —
+      // we were on X" (see takeLastTopic at boot).
+      saveLastTopic(matched.id);
     }
 
     const isFiller = !!(matched && NON_TOPIC_INTENTS.has(matched.id));
@@ -792,7 +956,7 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // the chips are built from the local `matched` guess; rendering them
     // for a locally-ambiguous query would show off-topic chips.
     if (!clarified && !missed && (isDrillDown || (matched != null && !isFiller))) {
-      renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience), (t, it) => {
+      renderFollowUps(transcript, followUpsFor(matched, isDrillDown, audience, second), (t, it) => {
         collapseChips();
         void sendMessage(t, t, it);
       });
@@ -816,7 +980,60 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     // Persist the conversation memory (priorIntent / misses / audience)
     // so it survives navigation, matching the transcript's durability.
     persistState();
+
+    // Re-arm the one-shot idle nudge after a clean answer (a miss
+    // already triggers its own handoff path — don't pile on).
+    if (!missed) armIdleNudge();
   };
+
+  /* ----- One-shot idle nudge ----------------------------------------
+     If the visitor leaves the thread hanging with the panel open,
+     Cedar offers a direction — once per conversation. Armed after each
+     reply, cleared on the next send. Fires only when the tab and panel
+     are actually visible and the visitor isn't mid-typing; otherwise
+     it retries a few times and then gives up quietly. */
+  const IDLE_NUDGE_MS = 50_000;
+  const IDLE_RETRY_MS = 30_000;
+  const IDLE_MAX_RETRIES = 4;
+  let idleTimer: number | undefined;
+  let idleRetries = 0;
+  function clearIdleNudge(): void {
+    if (idleTimer) {
+      window.clearTimeout(idleTimer);
+      idleTimer = undefined;
+    }
+  }
+  function fireIdleNudge(): void {
+    idleTimer = undefined;
+    if (nudged || misses > 0) return;
+    const visible = document.visibilityState === 'visible' && panelRoot.offsetParent !== null;
+    if (!visible || input.value) {
+      if (idleRetries < IDLE_MAX_RETRIES) {
+        idleRetries += 1;
+        idleTimer = window.setTimeout(fireIdleNudge, IDLE_RETRY_MS);
+      }
+      return;
+    }
+    nudged = true;
+    persistState();
+    const nudge =
+      audience && AUDIENCE_INTENT[audience]
+        ? 'Still here if you need me. Given your use case I can go deeper on the platform fit, pricing, or set up a demo — or just ask me anything.'
+        : "Still here if you need me. The quickest next steps are usually pricing or a live demo — or describe what you're working on and I'll point you somewhere useful.";
+    appendMessage(transcript, 'bot', nudge);
+    record('bot', nudge);
+    trackEvent('cedar.idle_nudge', { surface });
+    renderFollowUps(transcript, followUpsFor(null, false, audience), (t, it) => {
+      collapseChips();
+      void sendMessage(t, t, it);
+    });
+  }
+  function armIdleNudge(): void {
+    clearIdleNudge();
+    if (nudged) return;
+    idleRetries = 0;
+    idleTimer = window.setTimeout(fireIdleNudge, IDLE_NUDGE_MS);
+  }
 
   chips.addEventListener('click', (e) => {
     const target = e.target;
@@ -853,6 +1070,24 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
     collapseChips();
     void sendMessage(q);
   });
+
+  /* Welcome back (cross-visit): a fresh conversation in a browser that
+     has chatted before opens with a thread-aware line under the static
+     welcome instead of a cold start. The localStorage marker is
+     consumed on read, so it greets once — a moment, not a nag. */
+  if (!history.length) {
+    const lastTopic = takeLastTopic();
+    if (lastTopic) {
+      const wb = `Welcome back — last time you were asking about "${lastTopic.chip}". Want to pick that back up, or start somewhere new?`;
+      appendMessage(transcript, 'bot', wb);
+      record('bot', wb);
+      trackEvent('cedar.welcome_back', { surface, intent: lastTopic.id });
+      renderFollowUps(transcript, followUpsFor(null, false, audience, lastTopic), (t, it) => {
+        collapseChips();
+        void sendMessage(t, t, it);
+      });
+    }
+  }
 
   // Cycle the placeholder through example prompts while the field is
   // idle and empty (skipped under reduced motion).
