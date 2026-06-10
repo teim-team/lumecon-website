@@ -248,3 +248,28 @@ test('a returning visitor gets a welcome-back line tied to their last topic', as
     timeout: 5000,
   });
 });
+
+test('the idle nudge fires on the open FAB panel (position: fixed)', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+  // Fake timers so the 50s idle window can be fast-forwarded.
+  await page.clock.install();
+  const panel = await openCedar(page);
+  const input = panel.locator('[data-cedar-input]');
+  await input.fill('how much does it cost');
+  await input.press('Enter');
+  // Flush the thinking pause + streaming (short under reduced motion).
+  await page.clock.runFor(3000);
+  await expect(panel.locator('.cedar-msg--bot .cedar-msg__bubble').last()).toContainText(
+    'per-study',
+  );
+  // Leave the open panel idle past the nudge delay. The panel is
+  // position: fixed, so this guards against visibility checks (like
+  // offsetParent) that misreport fixed elements as hidden.
+  await page.clock.runFor(55_000);
+  await expect(panel.locator('.cedar-msg--bot .cedar-msg__bubble').last()).toContainText(
+    'Still here if you need me',
+  );
+});

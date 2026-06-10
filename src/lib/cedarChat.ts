@@ -1006,7 +1006,12 @@ export function bootChat(root: HTMLElement | null, opts: BootOptions): boolean {
   function fireIdleNudge(): void {
     idleTimer = undefined;
     if (nudged || misses > 0) return;
-    const visible = document.visibilityState === 'visible' && panelRoot.offsetParent !== null;
+    // Panel visibility: the FAB panel is position: fixed, and fixed
+    // elements report offsetParent === null even when shown — so check
+    // the hidden state and rendered boxes instead. Works for both the
+    // FAB (hidden attribute toggled on close) and the inline surface.
+    const panelShown = !panelRoot.hidden && panelRoot.getClientRects().length > 0;
+    const visible = document.visibilityState === 'visible' && panelShown;
     if (!visible || input.value) {
       if (idleRetries < IDLE_MAX_RETRIES) {
         idleRetries += 1;
