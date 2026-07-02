@@ -267,7 +267,7 @@ export const INTENTS: CedarIntent[] = [
       'who use it',
     ],
     answer:
-      'Mostly governments, enterprises, and mission-driven organizations: tribal nations, state and local agencies, universities, foundations, ports, transit agencies, large nonprofits, and community development financial institutions. The common thread is they need to defend their numbers to a council, a board, or a funder, and they need that defense to hold up to scrutiny. We build Lumecon with these organizations, not just for them. Where do you sit?',
+      'Mostly governments, enterprises and mission-driven organizations: tribal nations, state and local agencies, universities, foundations, ports, transit agencies, large nonprofits and community development financial institutions. The common thread is they need to defend their numbers to a council, a board or a funder, and they need that defense to hold up to scrutiny. We build Lumecon together with these organizations. Where do you sit?',
     expanded:
       'Breaking it down: tribal nations and tribal enterprises (gaming, energy, government services, cultural institutions) use the Tribal Economic Impact platform. Cities, counties, state DOTs, departments of commerce, workforce boards, and treasury offices use the Local Economic Impact platform, typically for capital project justification, grant rounds, bond measures, and annual impact reports. Universities use it for the community ripple of operations, research, construction, and student spending. Foundations use it to show donors and boards what grantmaking actually moved. Ports, airports, and transit agencies use it for capital plans. CDFIs and community lenders use it for portfolio-level place-based impact.',
   },
@@ -438,7 +438,7 @@ export const INTENTS: CedarIntent[] = [
       'quickbooks',
     ],
     answer:
-      "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in alternative data where it helps (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own signals built in-house: regional multipliers refined across thousands of past studies, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you. What does your data look like right now?",
+      "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in alternative data where it helps (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own signals built in-house: regional multipliers developed in-house and built to sharpen as studies accumulate, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you. What does your data look like right now?",
     expanded:
       'More on data: you bring administrative records (budgets, payroll, program rosters, vendor and contract spend) in whatever shape they arrive (spreadsheets, PDFs, exports). Cedar matches them to NAICS codes, geographies, and time periods, flags anything ambiguous for you to confirm, and joins them to the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, and County Business Patterns, plus higher-frequency alternative signals where they sharpen the estimate. Messy and scattered-across-departments is the normal starting point, not a blocker.',
   },
@@ -1181,7 +1181,7 @@ export const INTENTS: CedarIntent[] = [
       'who is behind',
     ],
     answer:
-      "Built at Ivy League and peer schools: Cornell, Dartmouth, Duke, Oxford, MIT, and Yale across the team's academic background, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.",
+      "Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and engineers, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.",
   },
   {
     id: 'grant_applications',
@@ -1652,7 +1652,7 @@ export const INTENTS: CedarIntent[] = [
       'web scraped',
     ],
     answer:
-      'Yes. Alongside the official sources every serious model uses (ACS, BEA, LODES, QCEW, County Business Patterns), Lumecon layers in alternative data: higher-frequency public feeds, anonymized mobility, satellite land use, USASpending, and the regional Fed banks, plus our own signals built in-house from thousands of past studies through federated learning. We also bring modern econometric and machine-learning methods to the input-output core, so a study can track a fast-moving economy between the slow official releases. We use the extra data and methods only where they measurably improve the estimate.',
+      'Yes. Alongside the official sources every serious model uses (ACS, BEA, LODES, QCEW, County Business Patterns), Lumecon layers in alternative data: higher-frequency public feeds, anonymized mobility, satellite land use, USASpending, and the regional Fed banks, plus our own signals built in-house and refined through federated learning as studies accumulate. We also bring modern econometric and machine-learning methods to the input-output core, so a study can track a fast-moving economy between the slow official releases. We use the extra data and methods only where they measurably improve the estimate.',
   },
   {
     id: 'cedar_grove',
@@ -1908,7 +1908,7 @@ export const INTENTS: CedarIntent[] = [
       'do you support international',
     ],
     answer:
-      "Today Lumecon covers the United States end to end: every county, state, tribal nation, and the national rollup. International coverage is the Global Economic Impact platform, on the roadmap next: the engine and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
+      "Today Lumecon covers the United States end to end: every county, state, tribal nation, and the national rollup. International coverage is the Global Economic Impact platform, on the roadmap next: the model and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
   },
   /* ===== Depth pack: niche, vocabulary-specific intents surfaced by a
      panel of buyer-persona tests. All chip:null (reachable via free-text,
@@ -2190,7 +2190,7 @@ export const INTENTS: CedarIntent[] = [
       'compare two projects',
     ],
     answer:
-      'Because every study runs on the same engine and the same public data, projects come out measured the same way, so you can line them up on equal footing for a council packet or a capital plan instead of trusting numbers each consultant built differently. That apples-to-apples comparison is one of the most common reasons offices bring this in-house. Want to see two of your projects compared?',
+      'Because every study runs on the same model and the same public data, projects come out measured the same way, so you can line them up on equal footing for a council packet or a capital plan instead of trusting numbers each consultant built differently. That apples-to-apples comparison is one of the most common reasons offices bring this in-house. Want to see two of your projects compared?',
   },
 
   /* --- State agency / procurement --- */
@@ -2235,7 +2235,7 @@ export const INTENTS: CedarIntent[] = [
       'compare grantees',
     ],
     answer:
-      'Running every study on the same engine and the same public data is exactly what makes results comparable: across grantees in a competitive round, across projects in a capital plan, and across years in a recurring report. A reviewer can score applicants on the same basis instead of refereeing methodologies that differ from one consultant to the next. That consistency is a core reason agencies bring this in-house. Want the team to show it on a grant round you run?',
+      'Running every study on the same model and the same public data is exactly what makes results comparable: across grantees in a competitive round, across projects in a capital plan, and across years in a recurring report. A reviewer can score applicants on the same basis instead of refereeing methodologies that differ from one consultant to the next. That consistency is a core reason agencies bring this in-house. Want the team to show it on a grant round you run?',
   },
   {
     id: 'transportation',
@@ -2661,7 +2661,7 @@ export const INTENTS: CedarIntent[] = [
       'welfare analysis',
     ],
     answer:
-      'We do not pretend input-output models are something they are not. The classic input-output core assumes fixed production coefficients, effectively elastic supply, and linearity, treats people as perfectly rational, and tends to treat geography as a fixed administrative boundary, so on its own it is a short-run, static estimate rather than a forecast. That core is the shared starting point for the whole field, and it is not wrong, it is incomplete. Lumecon keeps its strengths and layers on what economics has learned since: behavioral and causal methods, spatial tools, higher-frequency data, and machine learning, so the estimate better reflects how economies actually work. Where the underlying assumptions still matter for your case, the study surfaces them so a reviewer can weigh them honestly.',
+      'We are direct about what input-output models can and cannot do. The classic input-output core assumes fixed production coefficients, effectively elastic supply, and linearity, treats people as perfectly rational, and tends to treat geography as a fixed administrative boundary, so on its own it is a short-run, static estimate rather than a forecast. That core is the shared starting point for the whole field, and it is incomplete on its own. Lumecon keeps its strengths and layers on what economics has learned since: behavioral and causal methods, spatial tools, higher-frequency data, and machine learning, so the estimate better reflects how economies actually work. Where the underlying assumptions still matter for your case, the study surfaces them so a reviewer can weigh them honestly.',
   },
 
   /* --- Procurement / IT / security --- */
@@ -2916,7 +2916,7 @@ export const INTENTS: CedarIntent[] = [
       'who is the ceo',
     ],
     answer:
-      'Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Elijah is the CEO; the broader team leads economics, the platform, the input-output engine, Cedar, and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, Duke, Oxford, MIT, and Yale. The About page has each person and their work. Want the link, or an introduction to the team?',
+      'Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Elijah is the CEO; the broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. The About page has each person and their work. Want the link, or an introduction to the team?',
   },
   {
     id: 'press_media',
@@ -3050,7 +3050,7 @@ export const INTENTS: CedarIntent[] = [
       "That's kind of you to say. If it's useful, I can keep going on pricing, the methodology, who uses Lumecon, or set up a demo. What would help most?",
     variants: [
       'Appreciate that. What else can I help with?',
-      "Thanks — happy to keep earning it. What's next?",
+      "Thanks, happy to keep earning it. What's next?",
     ],
   },
   {
@@ -3093,7 +3093,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Good. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow, or who else uses Lumecon?',
     variants: [
-      'Great. Should we keep pulling on this thread, or look at something else — pricing, a demo, the methodology?',
+      'Great. Should we keep pulling on this thread, or look at something else: pricing, a demo, the methodology?',
       "Good to hear. What's next?",
     ],
   },
@@ -3419,9 +3419,9 @@ export const INTENTS: CedarIntent[] = [
     answer:
       "Hey, I'm Cedar, Lumecon's site assistant. I can answer questions about what Lumecon does, who uses it, how the math works, what a study costs, or how to reach the team. What brings you in today?",
     variants: [
-      'Hi again. Where should we take it — pricing, methodology, geographies, or a demo?',
+      'Hi again. Where should we take it: pricing, methodology, geographies or a demo?',
       "Still here. Ask me anything about Lumecon, or describe what you're working on and I'll point you somewhere useful.",
-      "Hello again. We can pick up where we left off, or start somewhere new — what's on your mind?",
+      "Hello again. We can pick up where we left off, or start somewhere new. What's on your mind?",
     ],
   },
 ];

@@ -105,7 +105,7 @@
   font-size: clamp(2rem, 5.5vw, 4.4rem);
   line-height: 1.08;
   letter-spacing: -0.025em;
-  color: var(--accent-text);
+  color: var(--ink);
   margin: 0;
   max-width: 24ch;
 }
@@ -311,6 +311,24 @@
   background: var(--ink-4);
   display: inline-block;
   margin-right: 0.4rem;
+}
+/* Credibility strip variants: the full school list where the line has
+   room, the shorter role-based form on small screens. Selectors carry
+   the li so they outrank the `.hero-proof li` display above. */
+.hero-proof li.hero-proof__short {
+  display: none;
+}
+@media (max-width: 640px) {
+  .hero-proof li.hero-proof__long {
+    display: none;
+  }
+  .hero-proof li.hero-proof__short {
+    display: inline-flex;
+  }
+  /* The short item follows a hidden sibling; drop its leading dot. */
+  .hero-proof li.hero-proof__short::before {
+    display: none;
+  }
 }
 .hero-cta {
   display: flex;

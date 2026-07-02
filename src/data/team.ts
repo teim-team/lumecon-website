@@ -231,7 +231,7 @@ export const TEAM: Person[] = [
         venue:
           'Federal Reserve Bank of Minneapolis, Center for Indian Country Development Working Paper Series (2023-02)',
         summary:
-          'Uses confidential U.S. Census microdata and a database of tribal government–owned casinos to estimate how tribal gaming affects local labor markets across different markets, time horizons, and subgroups. It finds that tribal gaming drives sustained gains in reservation employment and wages — with American Indians benefiting the most — and that while it raises average housing rents, the increase is smaller than the wage gains, implying net local benefits.',
+          'Uses confidential U.S. Census microdata and a database of tribal government–owned casinos to estimate how tribal gaming affects local labor markets across different markets, time horizons and subgroups. It finds that tribal gaming drives sustained gains in reservation employment and wages, with American Indians benefiting the most, and that while it raises average housing rents, the increase is smaller than the wage gains, implying net local benefits.',
         url: 'https://www.minneapolisfed.org/research/cicd-working-paper-series/more-than-chance-the-local-labor-market-effects-of-tribal-gaming',
       },
     ],
@@ -241,13 +241,13 @@ export const TEAM: Person[] = [
     name: 'Isabella Agnes',
     initials: 'IA',
     group: 'team',
-    title: 'Input/Output Engine Lead',
+    title: 'Input/Output Models Lead',
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
     summary:
-      "Leads the multiplier system and input/output engine. Holds bachelor's degrees in Mathematics and Economics from Wisconsin–Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
+      "Leads the multiplier system and input/output models. Holds bachelor's degrees in Mathematics and Economics from Wisconsin–Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
     bio: [
-      "Isabella Agnes leads work on Lumecon's multiplier system and input/output engine, including the tools that translate source data into economic impact estimates and integrate the engine into the website. She holds bachelor's degrees in Mathematics and Economics from the University of Wisconsin–Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
+      "Isabella Agnes leads work on Lumecon's multiplier system and input/output models, including the tools that translate source data into economic impact estimates and connect the models to the website. She holds bachelor's degrees in Mathematics and Economics from the University of Wisconsin–Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
       'Before Lumecon, Isabella was a research assistant at the Federal Reserve Bank of Philadelphia and a data scientist at the Board of Governors of the Federal Reserve System.',
     ],
     alumniOf: ['University of Wisconsin–Madison', 'University of Maryland, College Park'],
@@ -430,9 +430,9 @@ export const WORKING_AREAS: WorkingArea[] = [
   },
   {
     slug: 'io-engine',
-    name: 'Input/Output Engine',
+    name: 'Input/Output Models',
     description:
-      'This area focuses on the multiplier system and analytical engine that translate source data into economic impact estimates. The goal is to connect user inputs, regional data, and economic assumptions into a clear, auditable modeling workflow.',
+      'This area focuses on the multiplier system and modeling core that translate source data into economic impact estimates. The goal is to connect user inputs, regional data and economic assumptions into a clear, auditable modeling workflow.',
     leadSlug: 'isabella-agnes',
     advisorySlugs: ['vod-vilfort'],
     contributorSlugs: ['francesca-agnes', 'laurel-wheeler', 'elijah-moreno'],

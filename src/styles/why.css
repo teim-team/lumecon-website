@@ -39,6 +39,16 @@
   margin: 0;
   max-width: 26ch;
 }
+/* Lede under the title: the three-questions framing (analysis,
+   compliance, operations) that sets up the three cards below. */
+.why-header__lede {
+  font-family: var(--font-sans);
+  font-size: clamp(1.02rem, 1.35vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 62ch;
+}
 /* Card grid: three cards in a row on desktop, each laid out as a
    vertical stack (icon on top, headline below, chevron at the
    bottom). The body stays hidden until the card is opened, so the
