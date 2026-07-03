@@ -719,10 +719,14 @@ const jsonLd = [
   }
 
   /* ---------- Credentials strip below the hero ---------- */
+  /* The strip is a direct child of main.join, so it needs the same
+     container width + horizontal padding the section bands get, or
+     it runs flush to the viewport edge. */
   .join-cred {
     list-style: none;
-    margin: 1.6rem 0 0;
-    padding: 0;
+    max-width: 1200px;
+    margin: 1.6rem auto 0;
+    padding: 0 var(--container-pad);
     display: flex;
     flex-wrap: wrap;
     gap: 0.35rem 0.8rem;

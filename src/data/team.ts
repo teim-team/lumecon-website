@@ -79,10 +79,10 @@ export const TEAM: Person[] = [
     scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
     founder: true,
     summary:
-      "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians, and the Taylor Policy Group.",
+      "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians and the Taylor Policy Group.",
     bio: [
-      "Elijah Moreno is the co-founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University, and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments, and institutions.",
-      'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians, and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset, and conducted extensive research on Native-entity federal contracting.',
+      "Elijah Moreno is the co-founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments and institutions.",
+      'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting.',
     ],
     alumniOf: ['Cornell University', 'Dartmouth College', 'Michigan State University'],
     prevAffiliations: [
@@ -100,7 +100,7 @@ export const TEAM: Person[] = [
         venue: 'Ash Center for Democratic Governance and Innovation, Harvard Kennedy School',
         type: 'book',
         summary:
-          'Three decades of Census and American Community Survey data tracking how life on American Indian reservations changed across fourteen socioeconomic indicators from 1990 to 2020, documenting real gains in employment, education, and housing while mapping the gaps that still persist.',
+          'Three decades of Census and American Community Survey data tracking how life on American Indian reservations changed across fourteen socioeconomic indicators from 1990 to 2020, documenting real gains in employment, education and housing while mapping the gaps that still persist.',
         url: 'https://ash.harvard.edu/wp-content/uploads/2025/09/Databook-Third-Edition-2025-09-07-1.pdf',
       },
       {
@@ -110,7 +110,7 @@ export const TEAM: Person[] = [
         year: '2021',
         venue: 'Regional Educational Laboratory Northwest / IES (REL 2021-088)',
         summary:
-          'Examines the population of Alaska Native students classified as English learner (EL) students and how EL policies function for them across identification, classification, service provision, and reclassification. Drawing on Alaska state data from 2011/12 to 2018/19, it finds that about a quarter of Alaska Native kindergartners were classified as EL students, speaking 24 different home languages, and that these students had lower measured English proficiency and higher rates of economic disadvantage than their non–Alaska Native EL peers.',
+          'Examines the population of Alaska Native students classified as English learner (EL) students and how EL policies function for them across identification, classification, service provision and reclassification. Drawing on Alaska state data from 2011/12 to 2018/19, it finds that about a quarter of Alaska Native kindergartners were classified as EL students, speaking 24 different home languages, and that these students had lower measured English proficiency and higher rates of economic disadvantage than their non–Alaska Native EL peers.',
         url: 'https://files.eric.ed.gov/fulltext/ED612515.pdf',
       },
     ],
@@ -156,7 +156,7 @@ export const TEAM: Person[] = [
     summary:
       'Leads economic theory and tribal adaptation. PhD in Economics from Duke. Before Lumecon, she was an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).',
     bio: [
-      "Laurel Wheeler leads Lumecon's economic theory and tribal adaptation work, helping ensure the platform reflects credible economic reasoning and the institutional realities of the communities it serves. She holds a bachelor's degree in Political Science from the University of Florida, a master's in Economics for Development from the University of Oxford, and a master's and PhD in Economics from Duke University.",
+      "Laurel Wheeler leads Lumecon's economic theory and tribal adaptation work, helping ensure the platform reflects credible economic reasoning and the institutional realities of the communities it serves. She holds a bachelor's degree in Political Science from the University of Florida, a master's in Economics for Development from the University of Oxford and a master's and PhD in Economics from Duke University.",
       'Before Lumecon, Laurel was an economist at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis.',
     ],
     alumniOf: ['University of Florida', 'University of Oxford', 'Duke University'],
@@ -170,7 +170,7 @@ export const TEAM: Person[] = [
         year: '2026',
         venue: 'Community Development',
         summary:
-          'One of the most detailed empirical portraits of the Native CDFI industry, using survey data from 49 certified and emerging Native CDFIs. It documents variation in age, size, geography, strategic goals, risk-assessment practices, product offerings, development services, and institutional challenges, and uses cluster analysis to identify four distinct Native CDFI profiles.',
+          'One of the most detailed empirical portraits of the Native CDFI industry, using survey data from 49 certified and emerging Native CDFIs. It documents variation in age, size, geography, strategic goals, risk-assessment practices, product offerings, development services and institutional challenges and uses cluster analysis to identify four distinct Native CDFI profiles.',
         url: 'https://doi.org/10.1080/15575330.2026.2631398',
       },
       {
@@ -180,7 +180,7 @@ export const TEAM: Person[] = [
         year: '2025',
         venue: 'American Indian Culture and Research Journal',
         summary:
-          'Uses interviews with Native CDFI leaders to examine how they design lending practices, development services, partnerships, and success metrics around the communities they serve. It emphasizes person-centered lending, strategic partnerships, customized financial products, inclusive measures of success, and the role of cultural fit in expanding financial inclusion.',
+          'Uses interviews with Native CDFI leaders to examine how they design lending practices, development services, partnerships and success metrics around the communities they serve. It emphasizes person-centered lending, strategic partnerships, customized financial products, inclusive measures of success and the role of cultural fit in expanding financial inclusion.',
         url: 'https://www.minneapolisfed.org/research/cicd-working-paper-series/fostering-financial-inclusion-by-ensuring-cultural-fit-the-case-of-the-ncdfi-industry',
       },
       {
@@ -199,7 +199,7 @@ export const TEAM: Person[] = [
         year: '2025',
         venue: 'Journal of Economics, Race, and Policy',
         summary:
-          'Develops a relational approach to economics instruction informed by Indigenous pedagogies from North America. It connects inclusive teaching practices with belonging, community, reciprocity, and contextual learning, arguing that economics becomes more accessible and rigorous when students understand economic questions through relationships, lived experience, and place.',
+          'Develops a relational approach to economics instruction informed by Indigenous pedagogies from North America. It connects inclusive teaching practices with belonging, community, reciprocity and contextual learning, arguing that economics becomes more accessible and rigorous when students understand economic questions through relationships, lived experience and place.',
         url: 'https://doi.org/10.1007/s41996-024-00158-y',
       },
       {
@@ -210,7 +210,7 @@ export const TEAM: Person[] = [
         year: '2024',
         venue: 'Annals of Public and Cooperative Economics',
         summary:
-          'Uses loan-level data from eleven Native CDFI loan funds to study how Native CDFIs lend, whom they serve, and what predicts delinquency. It shows that Native CDFIs provide small and varied loans across diverse borrower circumstances, relying on both conventional risk measures and community-informed, character-based measures of creditworthiness.',
+          'Uses loan-level data from eleven Native CDFI loan funds to study how Native CDFIs lend, whom they serve and what predicts delinquency. It shows that Native CDFIs provide small and varied loans across diverse borrower circumstances, relying on both conventional risk measures and community-informed, character-based measures of creditworthiness.',
         url: 'https://doi.org/10.1111/apce.12453',
       },
       {
@@ -262,7 +262,7 @@ export const TEAM: Person[] = [
         year: '2025',
         venue: 'Federal Reserve Board, Finance and Economics Discussion Series (2025-040)',
         summary:
-          'Examines how labor market conditions vary across U.S. counties, showing that national averages often hide large differences in employment, wages, labor force participation, and job availability. Using county-level indicators and Lightcast job postings, it connects local labor market tightness to income growth and pandemic recovery while documenting the role of racial composition and geography in shaping labor market inequality.',
+          'Examines how labor market conditions vary across U.S. counties, showing that national averages often hide large differences in employment, wages, labor force participation and job availability. Using county-level indicators and Lightcast job postings, it connects local labor market tightness to income growth and pandemic recovery while documenting the role of racial composition and geography in shaping labor market inequality.',
         url: 'https://www.federalreserve.gov/econres/feds/place-based-labor-market-inequality.htm',
       },
     ],
@@ -279,7 +279,7 @@ export const TEAM: Person[] = [
     summary:
       "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Holds a bachelor's in Biology from the University of Illinois Urbana-Champaign.",
     bio: [
-      "Francesca Agnes leads development of Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions, and helping users move from messy data to usable analysis. She holds a bachelor's degree in Biology from the University of Illinois Urbana-Champaign.",
+      "Francesca Agnes leads development of Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions and helping users move from messy data to usable analysis. She holds a bachelor's degree in Biology from the University of Illinois Urbana-Champaign.",
     ],
     alumniOf: ['University of Illinois Urbana-Champaign'],
   },
@@ -290,9 +290,9 @@ export const TEAM: Person[] = [
     group: 'advisor',
     title: 'Technical Advisor',
     summary:
-      "Advises on software architecture, engineering systems, and scalability, and contributes on Cedar and data security. Holds a bachelor's in Economics from Dartmouth. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
+      "Advises on software architecture, engineering systems and scalability and contributes on Cedar and data security. Holds a bachelor's in Economics from Dartmouth. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
     bio: [
-      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability, and technical development, and also contributes on Cedar's AI workflow and on data security and research operations. He holds a bachelor's degree in Economics from Dartmouth College. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
+      "Brian Kim advises Lumecon on software architecture, engineering systems, scalability and technical development and also contributes on Cedar's AI workflow and on data security and research operations. He holds a bachelor's degree in Economics from Dartmouth College. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
     ],
     alumniOf: ['Dartmouth College'],
     prevAffiliations: ['Modsy', 'Chime'],
@@ -306,9 +306,9 @@ export const TEAM: Person[] = [
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
     scholar: 'https://scholar.google.com/citations?user=vETE-QYAAAAJ&hl=en&oi=ao',
     summary:
-      'Advises on product direction, data governance, privacy, and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.',
+      'Advises on product direction, data governance, privacy and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.',
     bio: [
-      "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction, and responsible infrastructure. She holds a bachelor's degree in Education from the University of Wisconsin–Whitewater, a master's in Urban Education Policy from Brown University, and a PhD in Statistics and Policy in Education from the University of Alaska Fairbanks. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations, and working with sensitive administrative datasets.",
+      "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction and responsible infrastructure. She holds a bachelor's degree in Education from the University of Wisconsin–Whitewater, a master's in Urban Education Policy from Brown University and a PhD in Statistics and Policy in Education from the University of Alaska Fairbanks. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations and working with sensitive administrative datasets.",
     ],
     alumniOf: [
       'University of Alaska Fairbanks',
@@ -323,7 +323,7 @@ export const TEAM: Person[] = [
         year: '2021',
         venue: 'Regional Educational Laboratory Northwest / IES (REL 2021-094)',
         summary:
-          'Traces Washington’s teacher preparation and employment pipeline, focusing on where candidates move through or leave the path from testing to certification, employment, and retention. It shows how these pathways differ across racial and ethnic groups, identifying points where candidates of color face lower progression rates or longer timelines.',
+          'Traces Washington’s teacher preparation and employment pipeline, focusing on where candidates move through or leave the path from testing to certification, employment and retention. It shows how these pathways differ across racial and ethnic groups, identifying points where candidates of color face lower progression rates or longer timelines.',
         url: 'https://ies.ed.gov/use-work/resource-library/report/descriptive-study/pathways-teaching-teacher-diversity-testing-certification-and-employment-washington-state',
       },
       {
@@ -333,7 +333,7 @@ export const TEAM: Person[] = [
         year: '2020',
         venue: 'Regional Educational Laboratory Northwest / IES (REL 2020-020)',
         summary:
-          'Examines Washington’s rollout of more demanding career- and college-ready graduation requirements: how districts implemented them, how students accessed the required coursework, and how the policy changes translated into actual student pathways.',
+          'Examines Washington’s rollout of more demanding career- and college-ready graduation requirements: how districts implemented them, how students accessed the required coursework and how the policy changes translated into actual student pathways.',
         url: 'https://ies.ed.gov/use-work/resource-library/report/descriptive-study/implementation-career-and-college-ready-requirements-high-school-graduation-washington',
       },
       {
@@ -343,7 +343,7 @@ export const TEAM: Person[] = [
         year: '2018',
         venue: 'University of Alaska / Education Northwest evaluation report',
         summary:
-          'Evaluates Alaska mining workforce training programs developed with industry input and built around short-term, hands-on occupational training. It examines program design, employer partnerships, student supports, completion, employment, and wage outcomes, finding high completion rates in the shorter programs and strong post-program employment among graduates.',
+          'Evaluates Alaska mining workforce training programs developed with industry input and built around short-term, hands-on occupational training. It examines program design, employer partnerships, student supports, completion, employment and wage outcomes, finding high completion rates in the shorter programs and strong post-program employment among graduates.',
         url: 'https://www.uaf.edu/mapts/about/AK_TAACCCT_Report_093018.pdf',
       },
       {
@@ -353,7 +353,7 @@ export const TEAM: Person[] = [
         year: '2016',
         venue: 'Regional Educational Laboratory Northwest / IES',
         summary:
-          'Follows Alaska public high school students into college, in-state employment, and early-career earnings. It documents more than 3,000 distinct postsecondary pathways and shows how students’ routes after high school differ by rurality, gender, Alaska Native status, graduation status, education level, employment, and wages.',
+          'Follows Alaska public high school students into college, in-state employment and early-career earnings. It documents more than 3,000 distinct postsecondary pathways and shows how students’ routes after high school differ by rurality, gender, Alaska Native status, graduation status, education level, employment and wages.',
         url: 'https://ies.ed.gov/use-work/resource-library/report/descriptive-study/alaska-students-pathways-high-school-postsecondary-education-and-employment',
       },
     ],
@@ -366,9 +366,9 @@ export const TEAM: Person[] = [
     title: 'Methodology Advisor',
     scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
     summary:
-      "Advises on empirical methodology, econometrics, model design, and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
+      "Advises on empirical methodology, econometrics, model design and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
     bio: [
-      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design, and research standards. He holds a bachelor's degree in Mathematics and Economics from Yale University and is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
+      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design and research standards. He holds a bachelor's degree in Mathematics and Economics from Yale University and is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
     ],
     alumniOf: ['Yale University', 'Massachusetts Institute of Technology'],
     publications: [
@@ -414,7 +414,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     slug: 'platform-product',
     name: 'Platform & Product',
     description:
-      'This area focuses on the customer-facing platform: how users move through a study, upload data, review assumptions, understand results, and produce outputs. The goal is to make complex economic analysis feel organized, usable, and credible for real institutional users.',
+      'This area focuses on the customer-facing platform: how users move through a study, upload data, review assumptions, understand results and produce outputs. The goal is to make complex economic analysis feel organized, usable and credible for real institutional users.',
     leadSlug: 'kaylyn-lee',
     advisorySlugs: ['brian-kim', 'havala-hanson'],
     contributorSlugs: ['francesca-agnes', 'isabella-agnes', 'elijah-moreno'],
@@ -423,7 +423,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     slug: 'economic-modeling',
     name: 'Economic Modeling & Tribal Adaptation',
     description:
-      "This area focuses on the economic logic behind Lumecon's models, including theory, model assumptions, tribal adaptation, and empirical credibility. The goal is to make sure Lumecon's analysis reflects both rigorous economic reasoning and the institutional realities of the communities being studied.",
+      "This area focuses on the economic logic behind Lumecon's models, including theory, model assumptions, tribal adaptation and empirical credibility. The goal is to make sure Lumecon's analysis reflects both rigorous economic reasoning and the institutional realities of the communities being studied.",
     leadSlug: 'laurel-wheeler',
     advisorySlugs: ['vod-vilfort'],
     contributorSlugs: ['elijah-moreno', 'isabella-agnes', 'francesca-agnes', 'havala-hanson'],
@@ -441,7 +441,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     slug: 'cedar-ai',
     name: 'Cedar & AI Workflow',
     description:
-      "This area focuses on Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions, and helping users move from messy data to usable analysis. The goal is to use AI carefully: making analysis faster and more accessible without removing human judgment, transparency, or accountability.",
+      "This area focuses on Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions and helping users move from messy data to usable analysis. The goal is to use AI carefully: making analysis faster and more accessible without removing human judgment, transparency or accountability.",
     leadSlug: 'francesca-agnes',
     advisorySlugs: ['havala-hanson', 'brian-kim'],
     contributorSlugs: ['kaylyn-lee', 'isabella-agnes', 'elijah-moreno'],
@@ -450,7 +450,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     slug: 'data-governance',
     name: 'Data Governance, Security & Research Operations',
     description:
-      'This area focuses on responsible data handling, privacy, documentation, and research operations. The goal is to make sure Lumecon can support organizations working with sensitive administrative, financial, institutional, and community data.',
+      'This area focuses on responsible data handling, privacy, documentation and research operations. The goal is to make sure Lumecon can support organizations working with sensitive administrative, financial, institutional and community data.',
     leadSlug: 'havala-hanson',
     contributorSlugs: [
       'elijah-moreno',
@@ -464,7 +464,7 @@ export const WORKING_AREAS: WorkingArea[] = [
     slug: 'business-development',
     name: 'Business Development & Sales',
     description:
-      'This area focuses on bringing Lumecon to the governments, tribal nations, foundations, and institutions it serves: partnerships, outreach, and the relationships that turn interest into adoption. The goal is to grow the customer base deliberately, matching the platform to the organizations that need it most.',
+      'This area focuses on bringing Lumecon to the governments, tribal nations, foundations and institutions it serves: partnerships, outreach and the relationships that turn interest into adoption. The goal is to grow the customer base deliberately, matching the platform to the organizations that need it most.',
     leadSlug: 'elijah-moreno',
     advisorySlugs: ['havala-hanson'],
     contributorSlugs: ['laurel-wheeler'],

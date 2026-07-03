@@ -1682,6 +1682,11 @@
   .hero-map {
     max-height: 50vh;
   }
+  /* At phone sizes the paper-on-white land fill all but disappears;
+     deepen it a touch so the country reads before a study runs. */
+  .hero-map__fill {
+    fill: rgba(10, 15, 38, 0.06);
+  }
   .workspace__foot {
     padding: 0.55rem 0.8rem;
     font-size: 0.58rem;
