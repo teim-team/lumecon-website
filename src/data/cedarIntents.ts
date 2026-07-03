@@ -879,7 +879,7 @@ export const INTENTS: CedarIntent[] = [
       'join lumecon',
     ],
     answer:
-      'We are a six-person team hiring across software engineering, machine learning, data, economic impact modeling, marketing and sales, including internships. These are hands-on, high-ownership roles, and we mentor people who are persistent. The /join page has the full breakdown and the current details on each role, or you can email contact@lumecon.ai with a résumé and a paragraph on what draws you to the work.',
+      'We are a six-person team and interest is always welcome. Email contact@lumecon.ai with a résumé, the kind of work you want to do and a paragraph on what draws you to the work, and the team will reach back when a fit opens.',
   },
   {
     id: 'technical',

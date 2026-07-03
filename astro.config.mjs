@@ -8,5 +8,9 @@ export default defineConfig({
     format: 'directory'
   },
   trailingSlash: 'never',
+  // /join is retired for now; keep the old URL landing somewhere sensible.
+  redirects: {
+    '/join': '/about'
+  },
   integrations: [sitemap()]
 });
