@@ -6,7 +6,7 @@ mission-driven organizations, starting with economic impact analysis.
 Built as a static [Astro](https://astro.build) site and deployed to GitHub
 Pages at [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
 authenticated product and its data layer live in sibling repositories (see
-[The TEIM ecosystem](#where-this-fits-the-teim-ecosystem)).
+[The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
 The homepage carries the one-system narrative (capture the data once; the
 same record powers analysis, compliance and operations; economic impact
@@ -202,7 +202,7 @@ Notes: corners are **rounded** (cards/chips/inputs); headline highlights use
 the `.hl-block` smear system with rotating tints; a `prefers-color-scheme: dark`
 block in `global.css` flips the surface/ink tokens (teal/gold stay put).
 
-## Where this fits: the TEIM ecosystem
+## Where this fits: the product ecosystem
 
 Lumecon is a **standalone brand**, and this repository is its public
 marketing site — its own design system, its own deploy, intentionally
@@ -211,7 +211,7 @@ product and the data it runs on live in sibling `teim-team` repositories:
 
 | Repo | What it is | Relationship to this site |
 | --- | --- | --- |
-| **`teim-app`** | The authenticated product: TEIM (Tribal Economic Impact Model), a React 19 + Vite SPA with a Fastify backend. It also carries its own in-app marketing surface under a separate "TEIM by Lumecon" brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate brands** — do not cross-import styles or tokens. |
+| **`teim-app`** | The authenticated product: the **Tribal Economic Impact** platform, a React 19 + Vite SPA with a Fastify backend. ("TEIM" survives only in repo/DB/resource names, never as user-facing branding.) It also carries its own in-app marketing surface under a separate visual brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate visual brands** — do not cross-import styles or tokens. |
 | **`cedar`** | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents and keeps only compressed chat memory; it never stores project data, files, or results. | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a *separate*, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
 | **`teim-engine`** | The economic-accounts data layer: EPA `stateior` StateIO supply/use tables shipped as CSV. | Upstream of the impact math the site describes. Keep the homepage "foundational data" strip consistent with the public sources the engine actually draws on. |
 

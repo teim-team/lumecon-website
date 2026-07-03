@@ -186,7 +186,7 @@ export const submitContact = (req: ContactRequest): Promise<ApiResult<ContactRes
  *    camelCase { requestId, threadId?, user{id,email?}, project{id,name,...},
  *    context?, projectContext?, message{id,text} } → { messageId, threadId,
  *    answer, contextUsed, unavailable }. `conversationId` here maps to
- *    Cedar's `threadId` (persist + replay it). See README → "The TEIM
+ *    Cedar's `threadId` (persist + replay it). See README → "the product
  *    ecosystem" for the full contract. */
 export const cedarChat = (req: CedarChatRequest): Promise<ApiResult<CedarChatResponse>> =>
   request<CedarChatResponse>('/v1/cedar/chat', { method: 'POST', body: JSON.stringify(req) });
