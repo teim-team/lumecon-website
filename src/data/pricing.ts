@@ -211,7 +211,7 @@ export const TOOLBOX_ADDON: AddOn = {
     'One tailored memo or media-ready findings sheet',
     'Three rounds of revisions on every deliverable',
     'Branded deliverables aligned to your visual identity (logo, colors, typography)',
-    'Drop in your own images, photography, and charts so the report reads as yours, not ours',
+    'Drop in your own images, photography and charts so the report reads as your organization\'s own',
     'Press- and publication-ready outputs',
     'Flat fee, taxes included',
   ],

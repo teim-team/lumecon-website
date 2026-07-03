@@ -1105,10 +1105,30 @@
   </svg>
 
   <ol class="hero-flow__labels" aria-label="Study stages">
-    <li class="hero-flow__label">Harmonize your economic data</li>
-    <li class="hero-flow__label">Cedar runs the economic impact analysis</li>
-    <li class="hero-flow__label">Quantify your economic impact</li>
-    <li class="hero-flow__label">Shape reports for the audiences you care about</li>
+    <li class="hero-flow__label">
+      Harmonize data
+      <span class="hero-flow__support"
+        >Your intake forms and public data, cleaned and matched to one geography.</span
+      >
+    </li>
+    <li class="hero-flow__label">
+      Run Cedar
+      <span class="hero-flow__support"
+        >Cedar structures the inputs and runs the regional model.</span
+      >
+    </li>
+    <li class="hero-flow__label">
+      Quantify impact
+      <span class="hero-flow__support"
+        >Direct, indirect and induced effects, never collapsed into one number.</span
+      >
+    </li>
+    <li class="hero-flow__label">
+      Shape reports
+      <span class="hero-flow__support"
+        >A branded study, deck and summary, each figure traced to a source.</span
+      >
+    </li>
   </ol>
 </figure>
 
@@ -1164,6 +1184,26 @@
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     text-shadow: 0 0 0 transparent;
+  }
+  /* One-line plain-language support sentence under each two-word
+     label. Desktop-only: mobile keeps just the two-word labels so
+     the strip never wraps into a heavy multi-line block. */
+  .hero-flow__support {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .hero-flow__support {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--ink-3);
+      line-height: 1.45;
+      margin-top: 0.4rem;
+      text-shadow: none;
+    }
   }
   .hero-flow__label:nth-child(1) {
     animation-name: hf-label-glow-1;

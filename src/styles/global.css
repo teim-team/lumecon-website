@@ -80,14 +80,14 @@
 
   color-scheme: light dark;
 
-  /* Type system — Inter for everything except mono marginalia.
-     A modern software brand uses one sans aggressively across all
-     scales; weight + scale carry the hierarchy, not a serif/sans
-     pairing. Spectral retained only as a fallback for the brand
-     wordmark fragments since the logo PNG is the brand mark. */
+  /* Type system — two families only, per the brand lock: Inter for
+     display and body, JetBrains Mono for labels and system chrome.
+     Weight + scale carry the hierarchy, not a serif/sans pairing.
+     The serif token stays defined for legacy references but resolves
+     to system serifs; nothing ships a third webfont. */
   --font-sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
   --font-display: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --type-xs: 0.75rem;
   --type-sm: 0.875rem;
@@ -1279,15 +1279,15 @@ html {
   color: var(--gold);
 }
 
-/* Brand emphasis — the cursive gold "luminate" wordplay that runs
-   through the site. Spectral italic gives the calligraphic flourish
-   the brand needs; the glow keyframe pulses softly so the word
+/* Brand emphasis — the italic gold "luminate" wordplay that runs
+   through the site, set in Inter italic so the brand ships exactly
+   two font families. The glow keyframe pulses softly so the word
    literally luminates. Applied via the .lumin class wherever the
    emphasis appears (logo wordmark, hero headlines, footer tagline). */
 .lumin {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--gold);
   animation: luminate-glow 3.4s ease-in-out infinite;
 }

@@ -25,6 +25,20 @@
   .network-inner {
     grid-template-columns: 1fr;
   }
+  /* On small screens the forced full-viewport height reads as a long
+     blank band (short column content, tall dvh). Size to content. */
+  .network {
+    min-block-size: 0;
+  }
+  /* The animated diagram is decorative and spends most of its loop
+     faded, so on mobile it renders as more dead space. Hide it and
+     let the methodology note carry the column. */
+  .network-diagram .netv2 {
+    display: none;
+  }
+  .network-diagram__note {
+    margin-top: 0;
+  }
 }
 
 .network-kicker {

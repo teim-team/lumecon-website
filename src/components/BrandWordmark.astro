@@ -90,9 +90,9 @@ const classes = [
      transitional serif did, but in the brand's living type system. */
   .brandmark__name {
     font-family: var(--font-sans);
-    font-weight: 700;
+    font-weight: 800;
     font-size: 1em;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--navy);
     line-height: 1;
@@ -137,14 +137,10 @@ const classes = [
   }
 
   /* Mobile: scale the hero variant down so the wordmark fits a 360-
-     400px viewport, and tighten the letter-spacing slightly so
-     "LUMECON" doesn't push out of the line. */
+     400px viewport. The brand tracking (0.14em) already holds. */
   @media (max-width: 540px) {
     .brandmark--lg {
       font-size: 1.95rem;
-    }
-    .brandmark--lg .brandmark__name {
-      letter-spacing: 0.14em;
     }
   }
 

@@ -1,23 +1,26 @@
 # Lumecon
 
-Public marketing site for **Lumecon Inc.** — economic impact analysis
-software for governments, enterprises, and mission-driven organizations.
+Public marketing site for **Lumecon Inc.** — one system for the recurring
+analysis, compliance and operations work of governments, enterprises and
+mission-driven organizations, starting with economic impact analysis.
 Built as a static [Astro](https://astro.build) site and deployed to GitHub
 Pages at [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
 authenticated product and its data layer live in sibling repositories (see
-[The TEIM ecosystem](#where-this-fits-the-teim-ecosystem)).
+[The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
-The site explains the three Lumecon platforms (Local, Tribal, and Global
-Economic Impact), demonstrates the workflow through an interactive US map,
-introduces Cedar (the AI assistant), and carries the pricing, about/team,
-and join-the-team pages. On the static deploy (no backend configured),
+The homepage carries the one-system narrative (capture the data once; the
+same record powers analysis, compliance and operations; economic impact
+analysis is where the product starts). The site also explains the three
+Lumecon platforms (Local, Tribal, and Global Economic Impact), demonstrates
+the workflow through an interactive US map, introduces Cedar (the AI
+assistant), and carries the pricing, about/team, and join-the-team pages. On the static deploy (no backend configured),
 Cedar's chat is answered entirely by a local keyword classifier and calls
 no upstream provider; when `PUBLIC_API_URL` is set it calls the Cedar
 backend and falls back to the local classifier on any error.
 
 ## Tech stack
 
-- **Astro 5** (`output: 'static'`) — zero-JS-by-default, per-island scripts
+- **Astro 7** (`output: 'static'`) — zero-JS-by-default, per-island scripts
 - **d3-geo + topojson-client + us-atlas** — the interactive impact map
 - **@astrojs/sitemap** — sitemap generation at build time
 - **TypeScript** (`astro/tsconfigs/strict`)
@@ -127,15 +130,25 @@ on color and font, but the type scale and spacing are a good shared baseline.
 
 ### Fonts
 
-Loaded from Google Fonts in `BaseLayout.astro`:
+Loaded from Google Fonts in `BaseLayout.astro`. Exactly **two families**
+ship (per the brand lock):
 
 | Role | Family (token) | Weights loaded |
 | --- | --- | --- |
-| Display + UI sans (almost everything) | **Inter** (`--font-sans`, `--font-display`) | 400, 500, 600, 700, 800 |
+| Display + UI sans (almost everything) | **Inter** (`--font-sans`, `--font-display`) | 400, 500, 600, 700, 800 + 400/500 italic |
 | Mono labels / eyebrows / data chips | **JetBrains Mono** (`--font-mono`) | 400, 500, 700 |
-| Serif fallback for the wordmark only | **Spectral** (`--font-serif`) | 300–800 + italics |
 
-One sans (Inter) carries the hierarchy via weight + size, not a serif/sans pairing.
+One sans (Inter) carries the hierarchy via weight + size. The italic gold
+*luminate* emphasis (`.lumin`) is Inter italic; `--font-serif` resolves to
+system serifs and no serif webfont is loaded.
+
+### Logo / lockup
+
+The only logo image is the **mark** (`public/brand/lumecon-logo-mark-*.png`,
+concentric rings + gold arc). The word LUMECON is always **typeset text**
+(Inter caps, weight 800, ~0.14em tracking) next to the mark — see
+`BrandWordmark.astro`. The old serif horizontal wordmark PNGs are retired;
+do not reintroduce a word-bearing logo image.
 
 ### Type scale
 
@@ -189,7 +202,7 @@ Notes: corners are **rounded** (cards/chips/inputs); headline highlights use
 the `.hl-block` smear system with rotating tints; a `prefers-color-scheme: dark`
 block in `global.css` flips the surface/ink tokens (teal/gold stay put).
 
-## Where this fits: the TEIM ecosystem
+## Where this fits: the product ecosystem
 
 Lumecon is a **standalone brand**, and this repository is its public
 marketing site — its own design system, its own deploy, intentionally
@@ -198,7 +211,7 @@ product and the data it runs on live in sibling `teim-team` repositories:
 
 | Repo | What it is | Relationship to this site |
 | --- | --- | --- |
-| **`teim-app`** | The authenticated product: TEIM (Tribal Economic Impact Model), a React 19 + Vite SPA with a Fastify backend. It also carries its own in-app marketing surface under a separate "TEIM by Lumecon" brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate brands** — do not cross-import styles or tokens. |
+| **`teim-app`** | The authenticated product: the **Tribal Economic Impact** platform, a React 19 + Vite SPA with a Fastify backend. ("TEIM" survives only in repo/DB/resource names, never as user-facing branding.) It also carries its own in-app marketing surface under a separate visual brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate visual brands** — do not cross-import styles or tokens. |
 | **`cedar`** | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents and keeps only compressed chat memory; it never stores project data, files, or results. | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a *separate*, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
 | **`teim-engine`** | The economic-accounts data layer: EPA `stateior` StateIO supply/use tables shipped as CSV. | Upstream of the impact math the site describes. Keep the homepage "foundational data" strip consistent with the public sources the engine actually draws on. |
 

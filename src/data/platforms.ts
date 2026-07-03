@@ -118,7 +118,7 @@ export const PLATFORMS: readonly Platform[] = [
     status: 'In active development',
     comingSoon: false,
     badgeKind: 'active',
-    tag: 'Modeled on tribal terms, not adapted from a state model.',
+    tag: 'Modeled on tribal terms, with reservations and trust lands as first-class geographies.',
     desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs, and Native-entity federal contractors, with Indigenous data sovereignty a design priority from the start rather than an afterthought.',
     audience:
       'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',

@@ -426,15 +426,17 @@
   padding: 0.2rem 0.55rem;
   border-radius: 3px;
 }
+/* White label text on a filled chip needs the deep tokens: the bright
+   --accent / --cedar fills fail AA under white text at this size. */
 .pricing-tier-card--featured .pricing-tier-card__tag {
   color: var(--white);
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-chip);
+  border-color: var(--accent-chip);
 }
 .pricing-tier-card--coming-soon .pricing-tier-card__tag {
   color: var(--white);
-  background: var(--cedar);
-  border-color: var(--cedar);
+  background: var(--cedar-text);
+  border-color: var(--cedar-text);
 }
 
 .pricing-tier-card__price-row {

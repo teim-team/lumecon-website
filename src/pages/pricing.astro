@@ -787,6 +787,9 @@ const description =
     const tiles = document.querySelectorAll<HTMLButtonElement>('.pricing-platform-tile');
     const prompt = document.querySelector<HTMLElement>('[data-platform-prompt]');
     let active: HTMLButtonElement | null = null;
+    /* True only during the initial auto-select below, so the page
+       doesn't lurch to the tier section before the visitor scrolls. */
+    let suppressScroll = false;
 
     tiles.forEach((tile) => {
       tile.addEventListener('click', () => {
@@ -829,12 +832,31 @@ const description =
         /* Scroll the tier section into view so the visitor doesn't
            have to hunt for what just appeared. requestAnimationFrame
            lets the hidden=false flip paint first. */
+        const skipScroll = suppressScroll;
         requestAnimationFrame(() => {
+          if (skipScroll) return;
           const next = document.querySelector<HTMLElement>('[data-platform-section]:not([hidden])');
           next?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
     });
+
+    /* Default selection so prices are visible on load (the intro
+       promises "the pricing is right here"). Honor ?platform= from
+       the URL (slug or short name), else start on Local. */
+    const param = new URLSearchParams(location.search).get('platform')?.toLowerCase();
+    const all = Array.from(tiles);
+    const initial =
+      all.find(
+        (t) =>
+          t.dataset.platformComingSoon !== 'true' &&
+          (t.dataset.platformSlug === param || t.dataset.platformShort?.toLowerCase() === param),
+      ) || all.find((t) => t.dataset.platformSlug === 'local');
+    if (initial) {
+      suppressScroll = true;
+      initial.click();
+      suppressScroll = false;
+    }
   }
 
   function setupDiscount(): void {

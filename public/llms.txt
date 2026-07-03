@@ -43,7 +43,7 @@ Economic impact analysis, input-output modeling, direct effects, indirect effect
 
 ## Origin
 
-Built at Ivy League and peer schools (Cornell, Dartmouth, Oxford, MIT, Yale across the team's academic background) with counsel from the Cornell Law School Entrepreneurship Law Clinic. Supported by Cornell's entrepreneurship ecosystem, including the Human Spirit Entrepreneurship Fellows program through Cornell eHub.
+Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and engineers, with counsel from the Cornell Law School Entrepreneurship Law Clinic. Supported by Cornell's entrepreneurship ecosystem, including the Human Spirit Entrepreneurship Fellows program through Cornell eHub.
 
 ## Contact
 

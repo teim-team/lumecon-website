@@ -15,7 +15,7 @@ export const site = {
      descriptions should expand from this phrase rather than inventing
      variants ("economic and policy analysis software," etc.). */
   pitch:
-    'Economic impact analysis software for governments, enterprises, and mission-driven organizations.',
+    'One system for the recurring analysis, compliance and operations work of governments, enterprises and mission-driven organizations, starting with economic impact analysis.',
   url: 'https://lumecon.ai',
   email: 'contact@lumecon.ai',
   legalEntity: 'Lumecon Inc.',

@@ -406,7 +406,7 @@
   touch-action: manipulation;
 }
 .cedar-followup:hover:not(:disabled) {
-  background: var(--accent);
+  background: var(--accent-chip);
   color: var(--white);
   transform: translateY(-1px);
 }

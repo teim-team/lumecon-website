@@ -51,7 +51,6 @@ const prefix = isHome ? '' : '/';
         <div class="footer-col">
           <div class="footer-col__head mono">Company</div>
           <a href="/about">About</a>
-          <a href="/join">Join the team</a>
           <a class="footer-col__contact" href={`${prefix}#contact`}>Contact</a>
           <a
             href="https://www.linkedin.com/company/lumecon-ai"
@@ -75,8 +74,8 @@ const prefix = isHome ? '' : '/';
     <div class="footer-w">
       <div class="footer-bottom">
         <div class="footer-legal">
-          &copy; <span id="copyrightYear">{site.copyrightYear}</span>
-          {site.legalEntity} &middot; All rights reserved.
+          &copy; <span id="copyrightYear">{site.copyrightYear}</span>{' '}{site.legalEntity} &middot;
+          All rights reserved.
         </div>
         <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
       </div>

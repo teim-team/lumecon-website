@@ -16,23 +16,23 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 const TERMS: Array<{ term: string; abbr?: string; def: string }> = [
   {
     term: 'Economic impact analysis',
-    def: 'A method for measuring the full economic footprint of an organization, project, or program: not just what it spends, but the additional activity that spending sets off across a region.',
+    def: 'A method for measuring the full economic footprint of an organization, project or program: its own spending plus the additional activity that spending sets off across a region.',
   },
   {
     term: 'Direct effect',
-    def: 'The activity of the project itself: its own spending, wages, and jobs.',
+    def: 'The activity of the project itself: its own spending, wages and jobs.',
   },
   {
     term: 'Indirect effect',
-    def: 'The activity at the suppliers a project buys from: the vendors, contractors, and businesses in its supply chain.',
+    def: 'The activity at the suppliers a project buys from: the vendors, contractors and businesses in its supply chain.',
   },
   {
     term: 'Induced effect',
-    def: 'The activity created when workers from the direct and indirect activity spend their wages locally: groceries, rent, healthcare, and the rest of household spending.',
+    def: 'The activity created when workers from the direct and indirect activity spend their wages locally: groceries, rent, healthcare and the rest of household spending.',
   },
   {
     term: 'Total impact',
-    def: 'Direct, indirect, and induced effects added together, the headline number, with each layer shown separately so a reviewer can see where it comes from.',
+    def: 'Direct, indirect and induced effects added together, the headline number, with each layer shown separately so a reviewer can see where it comes from.',
   },
   {
     term: 'Multiplier',
@@ -54,7 +54,7 @@ const TERMS: Array<{ term: string; abbr?: string; def: string }> = [
   },
   {
     term: 'Labor income',
-    def: 'Wages, salaries, and benefits paid to workers, reported alongside jobs and output as one of the headline figures.',
+    def: 'Wages, salaries and benefits paid to workers, reported alongside jobs and output as one of the headline figures.',
   },
   {
     term: 'Output',
@@ -62,7 +62,7 @@ const TERMS: Array<{ term: string; abbr?: string; def: string }> = [
   },
   {
     term: 'Jobs (FTE)',
-    def: 'Employment supported by the activity, usually reported as full-time-equivalent positions across the direct, indirect, and induced layers.',
+    def: 'Employment supported by the activity, usually reported as full-time-equivalent positions across the direct, indirect and induced layers.',
   },
 ];
 
@@ -84,7 +84,7 @@ const definedTermSet = {
 
 <LegalLayout
   title="Glossary | Lumecon"
-  description="Plain-language definitions of economic impact analysis terms: direct, indirect, and induced effects, multipliers, regional purchase coefficients (RPC), input-output models, base year, labor income, output, and jobs."
+  description="Plain-language definitions of economic impact analysis terms: direct, indirect and induced effects, multipliers, regional purchase coefficients (RPC), input-output models, base year, labor income, output and jobs."
   canonical="https://lumecon.ai/glossary"
   keywords="economic impact glossary, what is a multiplier, regional purchase coefficient, RPC, direct indirect induced effects, input-output model, economic impact analysis terms, labor income, FTE jobs"
 >
@@ -143,6 +143,9 @@ const definedTermSet = {
     margin: 0 0 0.5rem;
   }
   .gloss-title {
+    /* The hl-block smear extends ~0.28em above the headline; keep
+       enough top margin that it never paints over the kicker. */
+    margin-top: 0.55em;
     margin-bottom: 1.4rem;
   }
 
