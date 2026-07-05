@@ -212,6 +212,20 @@ export const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
   aquinnah:         ['Wampanoag-Aquinnah', 'Aquinnah'],
   narragansett:     ['Narragansett'],
   miccosukee:       ['Miccosukee'],
+  // Added to align breadth with the product region catalog. Candidates are
+  // the exact Census TIGER/Line AIANNH feature names so each resolves.
+  barona:           ['Barona Reservation', 'Barona'],
+  fort_mojave:      ['Fort Mojave Reservation', 'Fort Mojave'],
+  jemez:            ['Jemez Pueblo'],
+  santa_clara_nm:   ['Santa Clara Pueblo'],
+  san_ildefonso:    ['San Ildefonso Pueblo'],
+  santo_domingo:    ['Santo Domingo Pueblo'],
+  nambe:            ['Nambe Pueblo'],
+  metlakatla:       ['Annette Island Reserve', 'Annette Island'],
+  pawnee:           ['Pawnee OTSA', 'Pawnee'],
+  tuscarora:        ['Tuscarora Nation Reservation', 'Tuscarora'],
+  skull_valley:     ['Skull Valley Reservation', 'Skull Valley'],
+  houlton_maliseet: ['Houlton Maliseet Off-Reservation Trust Land', 'Houlton Maliseet'],
 };
 
 export const MANUAL_TRIBES: Record<string, ManualTribe> = {
