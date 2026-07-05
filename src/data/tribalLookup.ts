@@ -212,6 +212,20 @@ export const TRIBAL_SCENE_KEYS: Record<string, string[]> = {
   aquinnah:         ['Wampanoag-Aquinnah', 'Aquinnah'],
   narragansett:     ['Narragansett'],
   miccosukee:       ['Miccosukee'],
+  // Added to align breadth with the product region catalog. Candidates are
+  // the exact Census TIGER/Line AIANNH feature names so each resolves.
+  barona:           ['Barona Reservation', 'Barona'],
+  fort_mojave:      ['Fort Mojave Reservation', 'Fort Mojave'],
+  jemez:            ['Jemez Pueblo'],
+  santa_clara_nm:   ['Santa Clara Pueblo'],
+  san_ildefonso:    ['San Ildefonso Pueblo'],
+  santo_domingo:    ['Santo Domingo Pueblo'],
+  nambe:            ['Nambe Pueblo'],
+  metlakatla:       ['Annette Island Reserve', 'Annette Island'],
+  pawnee:           ['Pawnee OTSA', 'Pawnee'],
+  tuscarora:        ['Tuscarora Nation Reservation', 'Tuscarora'],
+  skull_valley:     ['Skull Valley Reservation', 'Skull Valley'],
+  houlton_maliseet: ['Houlton Maliseet Off-Reservation Trust Land', 'Houlton Maliseet'],
 };
 
 export const MANUAL_TRIBES: Record<string, ManualTribe> = {
@@ -268,4 +282,11 @@ export const MANUAL_TRIBES: Record<string, ManualTribe> = {
   // Native Hawaiian Organizations (NHOs). Anchored at Honolulu, Oahu.
   nakupuna:           { name: 'Nakupuna Companies',  cx: 266.9, cy: 549.1, fips: '15' },
   kamehameha_schools: { name: 'Kamehameha Schools',  cx: 266.9, cy: 549.1, fips: '15' },
+
+  // Product-catalog tribes whose lands are not in Census TIGER/Line 2018
+  // AIANNH, hand-anchored via geoAlbersUsa().scale(1300).translate([487.5,305]).
+  san_manuel:    { name: 'San Manuel Band of Mission Indians', cx: 106.4, cy: 365.8, fips: '06' }, // Highland, CA (Yaamava')
+  shinnecock:    { name: 'Shinnecock Indian Nation',           cx: 894.6, cy: 206.0, fips: '36' }, // Southampton, Long Island NY
+  tunica_biloxi: { name: 'Tunica-Biloxi Tribe of Louisiana',   cx: 574.1, cy: 476.6, fips: '22' }, // Marksville, LA (Paragon)
+  keweenaw_bay:  { name: 'Keweenaw Bay Indian Community',       cx: 615.5, cy: 116.1, fips: '26' }, // Baraga, MI UP (Ojibwa)
 };
