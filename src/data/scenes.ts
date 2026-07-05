@@ -972,6 +972,20 @@ export const RESERVATION_SCENES: Scene[] = [
   { level: 'reservation', tribalKey: 'houlton_maliseet', amount: { v: 4_600_000, label: '$4.6M' }, activity: ACT.broadband,
     chip: 'RESERVATION · Tribal broadband + health services · Houlton Band of Maliseet · 2026',
     sentence: 'The Houlton Band of Maliseet Indians funds a $4.6M tribal broadband buildout and health services expansion on Maliseet trust lands in Aroostook County, Maine.' },
+
+  // ---------- Hand-anchored tribes (not in Census AIANNH 2018) ----------
+  { level: 'reservation', tribalKey: 'san_manuel', amount: { v: 22_000_000, label: '$22M' }, activity: ACT.tourism,
+    chip: 'RESERVATION · Yaamava’ Resort & Casino expansion · San Manuel · 2026',
+    sentence: 'The San Manuel Band of Mission Indians funds a $22M hospitality and entertainment expansion at Yaamava’ Resort & Casino on the San Manuel Reservation in Highland, California.' },
+  { level: 'reservation', tribalKey: 'shinnecock', amount: { v: 7_500_000, label: '$7.5M' }, activity: ACT.build,
+    chip: 'RESERVATION · Commerce + community facilities · Shinnecock Nation · 2026',
+    sentence: 'The Shinnecock Indian Nation funds a $7.5M commerce and community-facilities project on the Shinnecock Reservation in Southampton on Long Island, New York.' },
+  { level: 'reservation', tribalKey: 'tunica_biloxi', amount: { v: 11_000_000, label: '$11M' }, activity: ACT.tourism,
+    chip: 'RESERVATION · Paragon Casino Resort upgrade · Tunica-Biloxi · 2026',
+    sentence: 'The Tunica-Biloxi Tribe of Louisiana funds an $11M hospitality and events upgrade at Paragon Casino Resort on the Tunica-Biloxi Reservation in Marksville, Louisiana.' },
+  { level: 'reservation', tribalKey: 'keweenaw_bay', amount: { v: 6_400_000, label: '$6.4M' }, activity: ACT.ops,
+    chip: 'RESERVATION · Ojibwa Casino + health services · Keweenaw Bay · 2026',
+    sentence: 'The Keweenaw Bay Indian Community funds a $6.4M Ojibwa Casino and health-services upgrade on the L’Anse Reservation in Baraga, Michigan.' },
 ];
 
 export const SCENES: Scene[] = [...STATE_SCENES, ...COUNTY_SCENES, ...RESERVATION_SCENES];

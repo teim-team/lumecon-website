@@ -282,4 +282,11 @@ export const MANUAL_TRIBES: Record<string, ManualTribe> = {
   // Native Hawaiian Organizations (NHOs). Anchored at Honolulu, Oahu.
   nakupuna:           { name: 'Nakupuna Companies',  cx: 266.9, cy: 549.1, fips: '15' },
   kamehameha_schools: { name: 'Kamehameha Schools',  cx: 266.9, cy: 549.1, fips: '15' },
+
+  // Product-catalog tribes whose lands are not in Census TIGER/Line 2018
+  // AIANNH, hand-anchored via geoAlbersUsa().scale(1300).translate([487.5,305]).
+  san_manuel:    { name: 'San Manuel Band of Mission Indians', cx: 106.4, cy: 365.8, fips: '06' }, // Highland, CA (Yaamava')
+  shinnecock:    { name: 'Shinnecock Indian Nation',           cx: 894.6, cy: 206.0, fips: '36' }, // Southampton, Long Island NY
+  tunica_biloxi: { name: 'Tunica-Biloxi Tribe of Louisiana',   cx: 574.1, cy: 476.6, fips: '22' }, // Marksville, LA (Paragon)
+  keweenaw_bay:  { name: 'Keweenaw Bay Indian Community',       cx: 615.5, cy: 116.1, fips: '26' }, // Baraga, MI UP (Ojibwa)
 };
