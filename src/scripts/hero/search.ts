@@ -149,12 +149,29 @@ export const initSearch = (deps: SearchDeps) => {
       // happens lazily, so kick off the load and apply once ready.
       deps.clearReservationHighlight();
       void deps.loadAiannh().then(() => {
-        const el = deps.stage.querySelector<SVGGraphicsElement>(
-          `.hero-aiannh[data-fips="${m.fips}"]`,
+        // Among reservations in this state (data-fips is the 2-digit state
+        // FIPS), light the one whose centroid is closest to the searched
+        // point. An AIANNH result resolves to its own polygon (distance ~0);
+        // a hand-anchored tribe has no polygon, so nothing close is found and
+        // the highlight is skipped rather than lighting an unrelated one.
+        const candidates = Array.from(
+          deps.stage.querySelectorAll<SVGGraphicsElement>(`.hero-aiannh[data-fips="${m.fips}"]`),
         );
-        if (el) {
-          el.setAttribute('data-active', '1');
-          deps.highlightCountiesOverlappingAiannh(el);
+        let best: SVGGraphicsElement | null = null;
+        let bestDist = Infinity;
+        for (const c of candidates) {
+          const cx = Number(c.getAttribute('data-cx'));
+          const cy = Number(c.getAttribute('data-cy'));
+          if (!Number.isFinite(cx) || !Number.isFinite(cy)) continue;
+          const d = Math.hypot(cx - m.cx, cy - m.cy);
+          if (d < bestDist) {
+            bestDist = d;
+            best = c;
+          }
+        }
+        if (best && bestDist < 12) {
+          best.setAttribute('data-active', '1');
+          deps.highlightCountiesOverlappingAiannh(best);
         }
       });
       void deps.runStudy(m.fips, {
