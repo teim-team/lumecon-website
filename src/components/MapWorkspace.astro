@@ -202,6 +202,17 @@ const searchIndex: SearchEntry[] = [
     cy: t.y,
     fips: t.fips,
   })),
+  // Hand-anchored tribes (not in Census AIANNH) are searchable too. They have
+  // no polygon of their own; on select, the study runs at their centroid.
+  ...Object.entries(MANUAL_TRIBES).map(([key, t]: [string, any]) => ({
+    type: 'tribal' as const,
+    id: `manual-${key}`,
+    name: t.name,
+    sub: `Tribal land${stateNameByFips[t.fips] ? ` · ${stateNameByFips[t.fips]}` : ''}`,
+    cx: t.cx,
+    cy: t.cy,
+    fips: t.fips,
+  })),
 ];
 const searchIndexJson = JSON.stringify(searchIndex);
 
