@@ -171,6 +171,11 @@ body {
     --rule-strong: rgba(255, 255, 255, 0.22);
     --accent-rgba-08: rgba(15, 181, 165, 0.14);
     --accent-rgba-18: rgba(15, 181, 165, 0.26);
+    /* Light mode's --accent-bar is an opaque pale mint (#b8ede6) that reads
+       as a soft highlighter on white. On the dark surface it would glare as
+       a bright band over light text, so use a translucent teal wash that
+       keeps headline text readable (matches the .hl-block teal variants). */
+    --accent-bar: rgba(15, 181, 165, 0.32);
     /* On a dark surface, the deeper chip teal (#0A7F74) only gets 3.68:1
        and fails AA for body text. Switch the text-accent token to the
        lighter teal, which lands at 10.66:1 on the dark navy surface. */
@@ -1148,7 +1153,7 @@ html {
 }
 .kb-hint__list dd {
   margin: 0;
-  color: rgba(255, 255, 255, 0.82);
+  color: color-mix(in srgb, var(--white) 82%, transparent);
 }
 .kb-hint kbd {
   font-family: var(--font-mono);
