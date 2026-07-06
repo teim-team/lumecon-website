@@ -846,7 +846,7 @@
   border-color: var(--white);
 }
 .pricing-terms .btn:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--white) 90%, transparent);
 }
 .pricing-terms__grid {
   display: grid;
@@ -854,7 +854,10 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 .pricing-terms__block {
-  color: rgba(255, 255, 255, 0.82);
+  /* Track the band's --white foreground so it inverts to a dark, readable
+     color in dark mode (the --navy band flips to light). A plain
+     rgba(255,255,255,…) would stay white and vanish on the light band. */
+  color: color-mix(in srgb, var(--white) 82%, transparent);
 }
 .pricing-terms__block h3 {
   font-family: var(--font-display);

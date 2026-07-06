@@ -95,7 +95,7 @@
     font-family: var(--font-sans);
     font-size: 0.84rem;
     line-height: 1.5;
-    color: rgba(255, 255, 255, 0.86);
+    color: color-mix(in srgb, var(--white) 86%, transparent);
   }
   .consent__text a {
     color: var(--accent-light);
@@ -121,11 +121,11 @@
   }
   .consent__btn--ghost {
     background: transparent;
-    color: rgba(255, 255, 255, 0.82);
-    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: color-mix(in srgb, var(--white) 82%, transparent);
+    border: 1px solid color-mix(in srgb, var(--white) 28%, transparent);
   }
   .consent__btn--ghost:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--white) 10%, transparent);
     color: var(--white);
   }
   .consent__btn--accept {
