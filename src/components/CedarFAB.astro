@@ -85,7 +85,6 @@ import CedarChat from './CedarChat.astro';
     Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm
     happy to help.
   </p>
-  <button type="button" class="cedar-nudge__cta" id="cedarNudgeCta">Ask a question</button>
 </div>
 
 <!-- Self-contained Cedar chat panel. Hidden until the FAB opens it.
@@ -191,15 +190,7 @@ import CedarChat from './CedarChat.astro';
     // Show the nudge a few seconds after load, once per session. Skipped
     // on /cedar, where the inline chat already fills the page.
     if (nudge && !window.location.pathname.startsWith('/cedar')) {
-      const cta = document.getElementById('cedarNudgeCta');
       const dismiss = document.getElementById('cedarNudgeDismiss');
-      cta?.addEventListener('click', (e) => {
-        // Stop the click reaching the document-level outside-click
-        // handler, which would immediately close the panel open() shows.
-        e.stopPropagation();
-        trackEvent('cedar.nudge.open');
-        open(); // open() records the nudge as seen and hides it
-      });
       dismiss?.addEventListener('click', () => {
         markNudgeSeen();
         const returnFocus = nudge.contains(document.activeElement);
@@ -466,32 +457,11 @@ import CedarChat from './CedarChat.astro';
     }
   }
   .cedar-nudge__text {
-    margin: 0 1.25rem 0.65rem 0;
+    margin: 0 1.25rem 0 0;
     font-family: var(--font-sans);
     font-size: 0.88rem;
     line-height: 1.45;
     color: var(--ink);
-  }
-  .cedar-nudge__cta {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.4rem 0.9rem;
-    background: var(--accent-chip);
-    color: #ffffff;
-    border: 0;
-    border-radius: 999px;
-    font-family: var(--font-sans);
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s var(--ease);
-  }
-  .cedar-nudge__cta:hover {
-    background: var(--accent-chip-hover);
-  }
-  .cedar-nudge__cta:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
   }
   .cedar-nudge__dismiss {
     position: absolute;
