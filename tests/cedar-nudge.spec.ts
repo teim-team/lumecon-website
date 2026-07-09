@@ -1,17 +1,19 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * The Cedar helper nudge: a one-time-per-session bubble above the
- * launcher pill that offers help with any questions. Covers the three
- * behaviours that matter: it appears after the delay, its CTA opens
- * the chat, and dismissing it (or opening the chat) keeps it away for
+ * The Cedar helper nudge: a one-time-per-session speech bubble above
+ * the launcher pill that offers help with any questions. Covers the
+ * behaviours that matter: it appears after the delay, opening the chat
+ * hides it, and dismissing it (or opening the chat) keeps it away for
  * the rest of the session.
  *
  * The show delay is 4s (NUDGE_DELAY_MS in CedarFAB.astro), so the
  * visibility waits use a 10s timeout instead of the default.
  */
 
-test('nudge appears, CTA opens the chat, and it stays away for the session', async ({ page }) => {
+test('nudge appears, opening the chat hides it, and it stays away for the session', async ({
+  page,
+}) => {
   // Two networkidle loads plus the 4s show delay and the 6s "stays
   // hidden" window do not fit the 30s default budget.
   test.setTimeout(60_000);
@@ -20,7 +22,8 @@ test('nudge appears, CTA opens the chat, and it stays away for the session', asy
   const nudge = page.locator('#cedarNudge');
   await expect(nudge).toBeVisible({ timeout: 10_000 });
 
-  await page.locator('#cedarNudgeCta').click();
+  // The pill itself is the affordance; opening the chat hides the nudge.
+  await page.locator('#cedarFab').click();
   await expect(page.locator('#cedarFabPanel')).toBeVisible();
   await expect(nudge).toBeHidden();
 
