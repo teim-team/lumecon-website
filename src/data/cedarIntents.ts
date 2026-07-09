@@ -601,7 +601,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Lumecon runs on a flat annual subscription, not per-study or per-geography. Local starts at $7.5K a year (covering county, state and national), Tribal at $10K (reservation, county, state and national). Each platform has three tiers (Sprout, Sapling, Tree) that top out at $20K for Local and $25K for Tribal. You can run as many studies as you want, and we recommend refreshing your data at least quarterly so each study reflects current conditions. Studies can zoom into specific sub-entities, projects or scenario plans, and you can look backward more than one year to understand impact over time or forward to forecast. Sprout supports monthly or quarterly payment plans on a 12-month commitment, with no upcharge, so smaller orgs can align payments with their budget cycles. For comparison, the legacy stack is commonly cited at $50K to $150K per study. The full grid is on the pricing page, no demo call required. Want me to break down what each tier includes?',
     expanded:
-      "More on pricing. Local Sprout is $7.5K, Sapling $15K, Tree $20K, covering county, state and national geographies. Tribal Sprout is $10K, Sapling $17.5K, Tree $25K, covering reservation, county, state and national. You can run as many studies as you want at any tier, and we encourage refreshing data at least quarterly so the analysis tracks what's actually happening on the ground. Cedar comes with Sapling and above. On those tiers Cedar uploads and processes your data (PDFs, CSVs and XLSX files today, with more formats expanding over time), structures it for the model and acts as a thought partner on the write-up. Tree adds three things on top of Sapling. First, custom branding: you upload your logos, colors and images once and every output (PDF report, deck, executive summary) picks them up automatically. Second, Cedar Grove: your data stays harmonized across every study, and complementary administrative datasets sit alongside your own so you can show how local socioeconomic outcomes are actually changing on the ground. That reinforces the economic-impact narrative with real outcome evidence, not just modeled multipliers. Third, compliance-ready reporting for grants, federal submissions and audited annual reports. Cedar Grove is not available as a standalone subscription. The Toolbox add-on is +$15K when you want our team to produce the finished package directly. The Consultant plan is project-based, not a subscription: $15K flat for two projects (one project per distinct client entity), renewable as new engagements when those wrap up, and it does not include Cedar, Cedar Grove or Toolbox. Seats scale by tier: one on Sprout, up to five on Sapling, up to ten on Tree.",
+      "More on pricing. Local Sprout is $7.5K, Sapling $15K, Tree $20K, covering county, state and national geographies. Tribal Sprout is $10K, Sapling $17.5K, Tree $25K, covering reservation, county, state and national. You can run as many studies as you want at any tier, and we encourage refreshing data at least quarterly so the analysis tracks what's actually happening on the ground. Cedar comes with Sapling and above. On those tiers Cedar uploads and processes your data (PDFs, CSVs and XLSX files today, with more formats expanding over time), structures it for the model and acts as a thought partner on the write-up. Tree adds three things on top of Sapling. First, custom branding: you upload your logos, colors and images once and every output (PDF report, deck, executive summary) picks them up automatically. Second, Cedar Grove: your data stays harmonized across every study, and complementary administrative datasets sit alongside your own so you can show how local socioeconomic outcomes are actually changing on the ground. That reinforces the economic-impact narrative with real outcome evidence, not just modeled multipliers. Third, compliance-ready reporting for grants, federal submissions and audited annual reports. Cedar Grove is not available as a standalone subscription. The Toolbox add-on is +$15K when you want our team to produce the finished package directly. The Consultant plan (Arborist on the pricing page) is project-based, not a subscription: $15K flat for two projects (one project per distinct client entity), renewable as new engagements when those wrap up, and it does not include Cedar, Cedar Grove or Toolbox. Seats scale by tier: one on Sprout, up to five on Sapling, up to ten on Tree.",
   },
   {
     id: 'payment_plans',
@@ -725,7 +725,7 @@ export const INTENTS: CedarIntent[] = [
       'for outside organizations',
     ],
     answer:
-      "Yes, there's a plan built specifically for consulting firms running studies on behalf of outside clients. It's project-based rather than an auto-renewing subscription, and the deal is straightforward. You pay $15K flat for two projects in one engagement, one client per project and every geography is included (reservation, county, state and national). When those two projects wrap up, the next engagement is a fresh $15K with the next two clients. Each project has to be a single entity, so you can't roll several clients into one consortium project. Cedar, Cedar Grove and the Toolbox add-on stay with customer subscriptions where they belong, so they aren't part of this plan. If your volume is larger or you want to white-label, email contact@lumecon.ai and the team will scope a partner arrangement.",
+      "Yes, there's a plan built specifically for consulting firms running studies on behalf of outside clients: the pricing page calls it the Arborist plan. It's project-based rather than an auto-renewing subscription, and the deal is straightforward. You pay $15K flat for two projects in one engagement, one client per project and every geography is included (reservation, county, state and national). When those two projects wrap up, the next engagement is a fresh $15K with the next two clients. Each project has to be a single entity, so you can't roll several clients into one consortium project. Cedar, Cedar Grove and the Toolbox add-on stay with customer subscriptions where they belong, so they aren't part of this plan. If your volume is larger or you want to white-label, email contact@lumecon.ai and the team will scope a partner arrangement.",
     expanded:
       "The plan is shaped the way it is because the right fit for a consulting firm is different from a city or a tribal government. You're producing your own deliverables for your own clients, and you're working through a relatively bounded set of projects in any given engagement, so the structure is built around that rhythm. The flat $15K covers the model, the data and full geography coverage for both projects together, with the constraint that each project is a single entity (no consortia). Cedar and Cedar Grove stay inside customer subscriptions, because the AI workflow and the harmonized data layer are part of the customer's data sovereignty story rather than something to be resold. Toolbox isn't part of the plan either, because the writing and presentation side is your firm's value-add and we shouldn't be competing with you there. When the two projects wrap up, you renew with a fresh $15K. There's no auto-billing line that keeps charging after the work is done.",
   },
@@ -790,6 +790,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'contact',
+    followUps: ['demo', 'pricing', 'hiring'],
     chip: 'How do I contact you?',
     triggers: [
       'how do i contact',
@@ -841,6 +842,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'partnerships',
+    followUps: ['consultant_plan', 'contact', 'demo'],
     chip: "I'm an investor or partner",
     triggers: [
       "i'm an investor",
@@ -861,6 +863,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'hiring',
+    followUps: ['where_built', 'mission', 'contact'],
     chip: 'Are you hiring?',
     triggers: [
       'are you hiring',
@@ -879,10 +882,11 @@ export const INTENTS: CedarIntent[] = [
       'join lumecon',
     ],
     answer:
-      'We are a six-person team and interest is always welcome. Email contact@lumecon.ai with a résumé, the kind of work you want to do and a paragraph on what draws you to the work, and the team will reach back when a fit opens.',
+      'We are a small team of nine and interest is always welcome. Email contact@lumecon.ai with a résumé, the kind of work you want to do and a paragraph on what draws you to the work, and the team will reach back when a fit opens.',
   },
   {
     id: 'technical',
+    followUps: ['security', 'data_residency', 'data_inputs'],
     chip: 'Tech stack and integrations?',
     triggers: [
       'tech stack',
@@ -912,6 +916,8 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Lumecon is a modern web platform with support for structured data, guided workflows and organization-level use. For integrations, team access, uploads or API questions, the best next step is to contact the Lumecon team directly.',
+    expanded:
+      'A bit more detail: the platform is a modern cloud web application with single-tenant workspaces, role-based access and US-region hosting. Data comes in through guided uploads (PDFs, CSVs and XLSX files today) and Cedar structures it against the public sources the model uses. Seats scale by tier: one on Sprout, up to five on Sapling and up to ten on Tree. For API access or a specific integration question, email contact@lumecon.ai and the team will walk through what is available now and what is planned.',
   },
   {
     id: 'security',
@@ -944,6 +950,8 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Lumecon is built so each organization gets a single-tenant workspace with encryption in transit and at rest, role-based access controls and US-region cloud. The team handled PII and sensitive government data at the Federal Reserve Banks of Minneapolis and Philadelphia and at the Federal Reserve Board, so production-grade data handling is not a learning curve for us. For tribal data, the approach is designed so your data stays your data, every assumption is shown, and your records are not used to train a shared model. We are happy to confirm the specifics before anything sensitive moves.',
+    expanded:
+      "More specifics: workspaces are single-tenant, so your records never share a database with another customer's. Encryption applies in transit and at rest, access is role-based and you control who is on the account. Your raw records are not used to train a shared model; cross-study learning runs only on anonymized, aggregated signals. The team's background includes handling PII and sensitive government data at the Federal Reserve. For a security questionnaire, a data-processing agreement or a council review, email contact@lumecon.ai and the specifics get confirmed in writing before anything sensitive moves.",
   },
   {
     id: 'accuracy',
@@ -996,6 +1004,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'calculate_now',
+    followUps: ['demo', 'time_to_study', 'data_inputs'],
     chip: null,
     triggers: [
       'calculate my',
@@ -1059,6 +1068,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'explain_simple',
+    followUps: ['effects_explained', 'multipliers', 'examples'],
     chip: 'Explain economic impact like I am five',
     triggers: [
       'explain like',
@@ -1116,9 +1126,12 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Lumecon covers every federally recognized tribal nation and reservation, every Alaska Native Regional Corporation, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the country as a whole. Multi-region and overlapping-geography studies work the same way, so a project that crosses three counties or sits on a reservation that overlaps two counties is still one study rather than three. The whole geographic footprint is included in the flat annual subscription, and we do not charge per geography.',
+    expanded:
+      'Going deeper: coverage means every federally recognized tribal nation and reservation, Alaska Native Regional Corporations, Native Hawaiian Home Lands, every U.S. county, every state and the nation as a whole. Overlap is handled the way analysts need it: a reservation crossing two counties, a service area spanning three counties or a statewide program is still a single study. There is no per-geography charge at any tier, so comparing regions side by side costs nothing extra.',
   },
   {
     id: 'historical_forward',
+    followUps: ['data_inputs', 'examples', 'time_to_study'],
     chip: 'Historical or forward-looking?',
     triggers: [
       'historical',
@@ -1181,7 +1194,7 @@ export const INTENTS: CedarIntent[] = [
       'who is behind',
     ],
     answer:
-      "Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and engineers, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.",
+      'Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and engineers, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC, which is where we learned what serious data handling and economic analysis are supposed to look like.',
   },
   {
     id: 'grant_applications',
@@ -1562,9 +1575,12 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "A single legacy impact study is commonly cited in the $50K to $150K range and ships months later. Lumecon starts at $7.5K a year for Local and $10K for Tribal, with unlimited studies across every geography on a flat annual subscription. The legacy price tag is what a workflow looks like after fifty years of the same software owning the category; it's not a measure of how hard the work actually is. The math is mainstream economics; the BEA accounts behind it are public and free. In practice it tends to pay for itself within a study or two, after which the subscription is producing analyses the organization could not have afforded one-off.",
+    expanded:
+      'To make the comparison concrete: at Local Sprout ($7.5K a year) one study already costs a fraction of the commonly cited $50K to $150K legacy engagement, and every additional study that year is included. An organization that runs an annual impact study, two grant narratives and a council update in the same subscription year has produced four deliverables on one flat price. Your own past quotes are the best benchmark: bring one and the team will walk the numbers with you.',
   },
   {
     id: 'data_residency',
+    followUps: ['security', 'data_sovereignty', 'technical'],
     chip: 'Where is the data hosted?',
     triggers: [
       'where is the data hosted',
@@ -1607,6 +1623,8 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "Short kick-off call to scope the first study, then your team uploads the data you already have (budgets, payroll, program records, vendor lists). Cedar walks you through harmonization and surfaces every assumption before the first study runs. First defensible study comes back in minutes once the data's in. We usually do the first one alongside you so you see how the workspace handles your data, then your team takes the reins.",
+    expanded:
+      'A typical first month: week one is the kick-off call and your initial uploads (budgets, payroll, program records, vendor lists in whatever shape they are in). Cedar harmonizes those against the public sources and lists every assumption for sign-off, which is where the human judgment happens. The first study usually runs within the first week or two, and we sit alongside your team for it. After that, refreshes are routine: update the data, rerun, and the study reflects current conditions.',
   },
   {
     id: 'effects_explained',
@@ -1636,6 +1654,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'alternative_data',
+    followUps: ['data_inputs', 'modern_methods', 'accuracy'],
     chip: 'Do you use alternative data?',
     triggers: [
       'alternative data',
@@ -1698,6 +1717,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'sectors_industries',
+    followUps: ['data_inputs', 'examples', 'geographies'],
     chip: 'What industries does it cover?',
     triggers: [
       'what industries',
@@ -1745,9 +1765,12 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'The interactive map on the See your impact page (/map) runs live example studies: click any state, county or reservation and direct, indirect, induced and total impact, jobs and labor income update in seconds. Those figures are illustrative, to show the workflow; a real study uses your actual data. For a walkthrough with numbers close to your use case, the team is one email away.',
+    expanded:
+      "More on the example numbers: the map's figures come from live model runs over public data, so they demonstrate the real mechanics (direct, indirect, induced and total impact, jobs and labor income) rather than mocked-up screenshots. They are labelled illustrative because a real study starts from your records: your payroll, spending and programs change the inputs, and the result is specific to your organization. If you want the workflow against a scenario close to yours, ask for a demo and the team will run one in your geography.",
   },
   {
     id: 'team_access',
+    followUps: ['pricing', 'onboarding', 'security'],
     chip: 'How many people can use it?',
     triggers: [
       'how many users',
@@ -1796,6 +1819,8 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "Yes. Indigenous data sovereignty is a design priority for the Tribal platform from the start, not an afterthought. Your data stays yours: a single-tenant workspace, you control what's uploaded and shared, and we do not sell, syndicate or use your raw records to train models. Cross-study learning runs only on anonymized, aggregated signals. For specific governance frameworks (CARE, OCAP) or council requirements, we'll walk through the specifics before any data moves.",
+    expanded:
+      'Going deeper on governance: you decide what is uploaded, what stays internal and what appears in any shared output. Nothing you upload is sold, syndicated or used to train shared models, and cross-study learning runs only on anonymized, aggregated signals. The platform is built to line up with CARE and OCAP-style principles, and the team will put the specifics in writing for a council or data-governance review before any records move. Sovereignty language in a contract is treated as a normal part of working together.',
   },
   {
     id: 'jobs_employment',
@@ -1886,6 +1911,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'global_platform',
+    followUps: ['geographies', 'tribal_platform', 'contact'],
     chip: 'Does it work outside the US?',
     triggers: [
       'international',
@@ -2074,6 +2100,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'per_cap',
+    followUps: ['tribal_platform', 'tribal_sovereignty', 'examples'],
     chip: null,
     triggers: [
       'per-cap',
@@ -2092,6 +2119,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'tribal_federal_reporting',
+    followUps: ['grant_applications', 'tribal_platform', 'reports_outputs'],
     chip: null,
     triggers: [
       '638 contract',
@@ -2113,6 +2141,7 @@ export const INTENTS: CedarIntent[] = [
   /* --- Local government / EDO --- */
   {
     id: 'tif_abatement',
+    followUps: ['bond_measure', 'county_city_use', 'examples'],
     chip: null,
     triggers: [
       'tif',
@@ -2131,6 +2160,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'fiscal_impact',
+    followUps: ['county_city_use', 'bond_measure', 'examples'],
     chip: null,
     triggers: [
       'fiscal impact',
@@ -2156,9 +2186,12 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Economic impact (jobs, wages and output across a region) and fiscal impact (the revenue and cost to one specific government) are related but distinct, and Lumecon is built around the economic-impact side with the supporting detail a fiscal analysis draws on. For a straight tax-revenue or net-fiscal question tied to your budget, tell the team your jurisdiction and project and they will walk through what the platform covers and where it stops.',
+    expanded:
+      "A bit more on the boundary: an economic impact study answers what activity a project supports across a region, while a fiscal impact study answers what one government collects and spends because of it (tax revenue in, service costs out). Lumecon's outputs carry much of what a fiscal analysis needs (jobs, wages, output and tax-relevant detail), and the team is straightforward about where a dedicated fiscal model is the better tool. If the question in front of your council is strictly budgetary, say so and they will point you honestly.",
   },
   {
     id: 'business_attraction',
+    followUps: ['county_city_use', 'state_agency_use', 'examples'],
     chip: null,
     triggers: [
       'business attraction',
@@ -2177,6 +2210,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'compare_projects',
+    followUps: ['examples', 'reports_outputs', 'time_to_study'],
     chip: null,
     triggers: [
       'compare projects',
@@ -2196,6 +2230,7 @@ export const INTENTS: CedarIntent[] = [
   /* --- State agency / procurement --- */
   {
     id: 'procurement',
+    followUps: ['state_agency_use', 'contact', 'security'],
     chip: null,
     triggers: [
       'sole source',
@@ -2221,6 +2256,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'comparability',
+    followUps: ['accuracy', 'examples', 'multipliers'],
     chip: null,
     triggers: [
       'comparability',
@@ -2239,6 +2275,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'transportation',
+    followUps: ['county_city_use', 'state_agency_use', 'examples'],
     chip: null,
     triggers: [
       'corridor study',
@@ -2257,6 +2294,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'data_freshness',
+    followUps: ['data_inputs', 'historical_forward', 'accuracy'],
     chip: null,
     triggers: [
       'how current is the data',
@@ -2280,11 +2318,14 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'The official accounts every serious model uses (BEA, ACS, LODES, QCEW, County Business Patterns) update on their own public release cycles, and Lumecon tracks the latest available data and tells you the base year behind any study. Between those slower official releases, we layer in higher-frequency public and alternative signals so a study reflects current conditions rather than data that is several years stale. The base year and how recent the data is are shown in the study, so a reviewer can see exactly what it is based on.',
+    expanded:
+      'On timing specifics: BEA regional accounts and the ACS release annually, QCEW quarterly, LODES on a lagged annual cycle, and each study states the base year it used. The higher-frequency public and alternative signals layered between official releases narrow the gap between the world and the data describing it. If a reviewer asks why a figure reflects a prior year, the answer is on the study itself: official sources publish on a lag, and the study names its vintage rather than presenting old data as current.',
   },
 
   /* --- University --- */
   {
     id: 'research_impact',
+    followUps: ['university_use', 'examples', 'accuracy'],
     chip: null,
     triggers: [
       'sponsored research',
@@ -2303,6 +2344,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'system_vs_campus',
+    followUps: ['university_use', 'team_access', 'pricing'],
     chip: null,
     triggers: [
       'system vs campus',
@@ -2321,6 +2363,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'accreditation',
+    followUps: ['university_use', 'reports_outputs', 'examples'],
     chip: null,
     triggers: [
       'accreditation',
@@ -2340,6 +2383,7 @@ export const INTENTS: CedarIntent[] = [
   /* --- Foundation / philanthropy --- */
   {
     id: 'attribution',
+    followUps: ['accuracy', 'effects_explained', 'examples'],
     chip: null,
     triggers: [
       'over-claiming',
@@ -2357,6 +2401,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'theory_of_change',
+    followUps: ['nonprofit_use', 'foundation_use', 'examples'],
     chip: null,
     triggers: [
       'theory of change',
@@ -2370,6 +2415,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'anchor_institution',
+    followUps: ['university_use', 'nonprofit_use', 'examples'],
     chip: null,
     triggers: [
       'anchor institution',
@@ -2384,6 +2430,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'sroi_concept',
+    followUps: ['nonprofit_use', 'accuracy', 'examples'],
     chip: null,
     triggers: [
       'what is sroi',
@@ -2400,6 +2447,7 @@ export const INTENTS: CedarIntent[] = [
   /* --- CDFI / community lending --- */
   {
     id: 'cdfi_metrics',
+    followUps: ['nonprofit_use', 'grant_applications', 'examples'],
     chip: null,
     triggers: [
       'deployment ratio',
@@ -2417,6 +2465,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'compliance_frameworks',
+    followUps: ['grant_applications', 'reports_outputs', 'security'],
     chip: null,
     triggers: [
       'cra',
@@ -2435,6 +2484,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'technical_assistance',
+    followUps: ['onboarding', 'contact', 'demo'],
     chip: null,
     triggers: [
       'technical assistance',
@@ -2450,6 +2500,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'underserved_geo',
+    followUps: ['geographies', 'tribal_platform', 'examples'],
     chip: null,
     triggers: [
       'census tract',
@@ -2469,7 +2520,8 @@ export const INTENTS: CedarIntent[] = [
   /* --- Grants / consultants --- */
   {
     id: 'reseller',
-    chip: null,
+    followUps: ['consultant_plan', 'contact', 'pricing'],
+    chip: 'Can I resell or white-label it?',
     triggers: [
       'resell',
       'reseller',
@@ -2495,6 +2547,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'bca',
+    followUps: ['modern_methods', 'accuracy', 'examples'],
     chip: null,
     triggers: [
       'benefit cost',
@@ -2531,11 +2584,17 @@ export const INTENTS: CedarIntent[] = [
   /* --- Methodology (for the skeptical economist) --- */
   {
     id: 'net_vs_gross',
+    followUps: ['accuracy', 'effects_explained', 'examples'],
     chip: null,
     triggers: [
       'net vs gross',
       'net versus gross',
       'gross vs net',
+      'net and gross',
+      'net or gross',
+      'net impact',
+      'gross impact',
+      'difference between net',
       'displacement',
       'displacement effects',
       'substitution effects',
@@ -2548,9 +2607,12 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Fair challenge, and an important one. A standard input-output study reports gross activity associated with the spending in scope; it does not automatically net out displacement, substitution or the opportunity cost of public funds. Lumecon handles this by letting you scope the study to net-new activity and by surfacing the assumptions, so you can present a gross figure and a more conservative net framing rather than hiding the distinction. For a project where displacement is central, the team can walk through how to bound it.',
+    expanded:
+      'Deeper on the distinction: gross impact counts all activity tied to the spending in scope; net impact asks what would have happened anyway and subtracts it. Netting requires judgment calls (how much local demand is displaced, how much spending is genuinely new to the region) and those calls should be visible, which is why the study surfaces them as named assumptions instead of burying them. A pattern reviewers tend to respect: lead with the net framing, show the gross figure alongside it and state the displacement assumption in one line.',
   },
   {
     id: 'significance_vs_impact',
+    followUps: ['accuracy', 'examples', 'modern_methods'],
     chip: null,
     triggers: [
       'economic significance',
@@ -2566,6 +2628,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'multiplier_type',
+    followUps: ['multipliers', 'effects_explained', 'accuracy'],
     chip: null,
     triggers: [
       'type i multiplier',
@@ -2596,9 +2659,12 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Lumecon uses the standard input-output framework, so the Type I versus Type II distinction works as you would expect: Type I captures direct and indirect effects, while Type II and SAM add induced effects by closing the model on households. The multipliers come from the BEA make-and-use tables, regionalized to your geography and calibrated as we built, not parameters we invent. Each study states which it used, so the induced layer is never a black box. If you need a specific convention to match prior work, the team can set that.',
+    expanded:
+      'More detail: Type I multipliers close the model on industries only, so they capture the supply-chain (indirect) round but leave out household respending. Type II and SAM approaches close on households, adding the induced round, which produces larger totals and is the more common convention in public-facing studies. Whichever the study uses is stated on its face, along with the base-year data behind the regionalization, so a reviewer can retrace the logic. If a funder or agency requires one convention, set it once and every study follows it.',
   },
   {
     id: 'rpc_method',
+    followUps: ['multipliers', 'accuracy', 'modern_methods'],
     chip: null,
     triggers: [
       'regional purchase coefficient',
@@ -2623,6 +2689,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'io_assumptions',
+    followUps: ['modern_methods', 'accuracy', 'multipliers'],
     chip: null,
     triggers: [
       'fixed coefficients',
@@ -2662,11 +2729,14 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'We are direct about what input-output models can and cannot do. The classic input-output core assumes fixed production coefficients, effectively elastic supply and linearity, treats people as perfectly rational and tends to treat geography as a fixed administrative boundary, so on its own it is a short-run, static estimate rather than a forecast. That core is the shared starting point for the whole field, and it is incomplete on its own. Lumecon keeps its strengths and layers on what economics has learned since: behavioral and causal methods, spatial tools, higher-frequency data and machine learning, so the estimate better reflects how economies actually work. Where the underlying assumptions still matter for your case, the study surfaces them so a reviewer can weigh them honestly.',
+    expanded:
+      'One level deeper: fixed coefficients mean the model assumes producers keep the same recipe as demand changes, which overstates impact when supply is tight. Linearity means twice the spending shows twice the impact, which is least reliable for very large projects relative to the local economy. The static, short-run frame means the number is a snapshot, and treating boundaries as fixed misses commuting and cross-border spending unless the regionalization handles it. These are the places a sharp reviewer will push, and the study shows the assumption behind each so you can answer directly instead of defending a black box.',
   },
 
   /* --- Procurement / IT / security --- */
   {
     id: 'compliance_certs',
+    followUps: ['security', 'data_residency', 'contact'],
     chip: null,
     triggers: [
       'soc 2',
@@ -2696,6 +2766,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'sso_auth',
+    followUps: ['security', 'team_access', 'technical'],
     chip: null,
     triggers: [
       'sso',
@@ -2718,6 +2789,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'sla_support',
+    followUps: ['onboarding', 'contact', 'security'],
     chip: null,
     triggers: [
       'sla',
@@ -2736,6 +2808,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'contracts_legal',
+    followUps: ['pricing', 'contact', 'security'],
     chip: null,
     triggers: [
       'msa',
@@ -2757,6 +2830,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'billing_cancellation',
+    followUps: ['pricing', 'payment_plans', 'contact'],
     chip: null,
     triggers: [
       'billing',
@@ -2780,6 +2854,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'data_retention',
+    followUps: ['security', 'data_sovereignty', 'data_residency'],
     chip: null,
     triggers: [
       'data retention',
@@ -2799,6 +2874,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'accessibility',
+    followUps: ['reports_outputs', 'technical', 'contact'],
     chip: null,
     triggers: [
       'accessibility',
@@ -2819,6 +2895,7 @@ export const INTENTS: CedarIntent[] = [
 
   {
     id: 'security_operations',
+    followUps: ['security', 'data_residency', 'technical'],
     chip: null,
     triggers: [
       'pen test',
@@ -2855,6 +2932,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'local_capture',
+    followUps: ['multipliers', 'effects_explained', 'examples'],
     chip: null,
     triggers: [
       'dollars stay local',
@@ -2882,6 +2960,7 @@ export const INTENTS: CedarIntent[] = [
   /* --- Trust / people / press --- */
   {
     id: 'legitimacy',
+    followUps: ['accuracy', 'where_built', 'examples'],
     chip: null,
     triggers: [
       'is this legit',
@@ -2900,6 +2979,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'leadership',
+    followUps: ['where_built', 'mission', 'contact'],
     chip: null,
     triggers: [
       'who owns this',
@@ -2920,6 +3000,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'press_media',
+    followUps: ['contact', 'mission', 'where_built'],
     chip: null,
     triggers: [
       'im a reporter',
@@ -3072,6 +3153,10 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       'Take care, and if something else comes up the contact form and contact@lumecon.ai are both monitored, so feel free to drop a line anytime.',
+    variants: [
+      'Talk soon. If a question surfaces later, the contact form and contact@lumecon.ai are both monitored.',
+      'Take care. The pricing page and the live map on /map are worth a look on your way out, and contact@lumecon.ai reaches the team anytime.',
+    ],
   },
   {
     id: 'affirmative',
@@ -3150,9 +3235,14 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "No problem. The easiest starting points are what Lumecon does, who uses it, how a study works or what it costs. If you've got a specific project in mind like a grant, a bond or an annual impact report, tell me about it and I'll point us at the right answer.",
+    variants: [
+      "Let me try a different angle. Tell me who you are (a tribal nation, a city, a foundation, a university) and I'll start from what Lumecon does for organizations like yours.",
+      "Happy to reset. In one line: Lumecon turns records you already keep into a defensible economic impact study. Ask about cost, timing, data or the model and I'll go from there.",
+    ],
   },
   {
     id: 'econ_measures',
+    followUps: ['jobs_employment', 'effects_explained', 'examples'],
     chip: null,
     triggers: [
       'gdp',
@@ -3290,6 +3380,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'guarantees',
+    followUps: ['accuracy', 'demo', 'pricing'],
     chip: null,
     triggers: [
       'guarantee',
@@ -3390,6 +3481,10 @@ export const INTENTS: CedarIntent[] = [
     ],
     answer:
       "Doing well, thanks for asking. I'm Cedar, and I'm at my best helping you get to know Lumecon. Want the quick version of what it does, who it's for (tribal nations, governments, foundations) or to watch a live impact study run?",
+    variants: [
+      "I'm well, thanks. More usefully: I can explain what Lumecon does, what it costs or how a study runs. What would help?",
+      "Doing fine, thank you. If you're browsing, the live map on /map is the fastest way to see what this platform actually does.",
+    ],
   },
   {
     id: 'greeting',
