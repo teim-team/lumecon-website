@@ -12,6 +12,9 @@ import { test, expect } from '@playwright/test';
  */
 
 test('nudge appears, CTA opens the chat, and it stays away for the session', async ({ page }) => {
+  // Two networkidle loads plus the 4s show delay and the 6s "stays
+  // hidden" window do not fit the 30s default budget.
+  test.setTimeout(60_000);
   await page.goto('/', { waitUntil: 'networkidle' });
 
   const nudge = page.locator('#cedarNudge');

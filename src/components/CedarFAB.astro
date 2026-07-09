@@ -82,7 +82,8 @@ import CedarChat from './CedarChat.astro';
     </svg>
   </button>
   <p class="cedar-nudge__text">
-    Hi, I'm Cedar. If you have any questions about Lumecon or TEIM, I'm happy to help.
+    Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm
+    happy to help.
   </p>
   <button type="button" class="cedar-nudge__cta" id="cedarNudgeCta">Ask a question</button>
 </div>
@@ -427,7 +428,7 @@ import CedarChat from './CedarChat.astro';
   .cedar-nudge {
     position: fixed;
     right: calc(clamp(0.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-right, 0px));
-    bottom: calc(clamp(0.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-bottom, 0px) + 4.4rem);
+    bottom: calc(clamp(0.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-bottom, 0px) + 4.15rem);
     z-index: 79;
     width: min(280px, calc(100vw - 1.8rem));
     padding: 0.9rem 1rem 0.85rem;
@@ -439,6 +440,22 @@ import CedarChat from './CedarChat.astro';
       0 12px 32px rgba(10, 15, 38, 0.14),
       0 4px 12px rgba(10, 15, 38, 0.08);
     animation: cedar-pop-in 0.25s var(--ease);
+  }
+  /* Speech-bubble tail: a rotated square hanging off the bottom edge,
+     pointing down at the launcher pill. It shares the bubble's surface
+     and border so the two read as one shape; the half that overlaps the
+     bubble covers the border line behind it. */
+  .cedar-nudge::after {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    right: 30px;
+    width: 12px;
+    height: 12px;
+    background: var(--white);
+    border-right: 1px solid var(--rule-strong);
+    border-bottom: 1px solid var(--rule-strong);
+    transform: rotate(45deg);
   }
   .cedar-nudge[hidden] {
     display: none;
