@@ -1,10 +1,16 @@
 ---
 /**
- * Persistent Cedar FAB — round floating action button anchored to
- * the bottom-right of every page. Click toggles a self-contained
- * Cedar chat panel that lives entirely inside this component, so
- * it works the same on the homepage, /join, /privacy, /terms, and
- * the prerendered /demo/* scenes.
+ * Persistent Cedar launcher pill anchored to the bottom-right of every
+ * page, styled to match the Ask Cedar launcher in the TEIM app (status
+ * dot + "Ask Cedar" label + context line on a bordered surface card).
+ * Click toggles a self-contained Cedar chat panel that lives entirely
+ * inside this component, so it works the same on the homepage, /join,
+ * /privacy, /terms, and the prerendered /demo/* scenes.
+ *
+ * A one-time-per-session nudge bubble (#cedarNudge) pops up above the
+ * pill a few seconds after load, offering help with any questions. It
+ * is skipped on /cedar (the inline chat page), hides as soon as the
+ * chat opens, and stays dismissed for the rest of the session.
  *
  * The chat conversation logic itself (classification, API call,
  * transcript rendering) lives in src/lib/cedarChat.ts. This
@@ -29,9 +35,7 @@ import CedarChat from './CedarChat.astro';
   aria-controls="cedarFabPanel"
   title="Ask Cedar"
 >
-  <span class="cedar-fab__icon cedar-fab__icon--mark" aria-hidden="true">
-    <img src="/brand/lumecon-logo-mark-transparent.png" alt="" width="20" height="20" />
-  </span>
+  <span class="cedar-fab__dot" aria-hidden="true"></span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg
       viewBox="0 0 24 24"
@@ -46,9 +50,42 @@ import CedarChat from './CedarChat.astro';
       <line x1="18" y1="6" x2="6" y2="18"></line>
     </svg>
   </span>
-  <span class="cedar-fab__label cedar-fab__label--ask">Ask Cedar</span>
+  <span class="cedar-fab__copy">
+    <span class="cedar-fab__label cedar-fab__label--ask">Ask Cedar</span>
+    <span class="cedar-fab__context">Questions about Lumecon</span>
+  </span>
   <span class="cedar-fab__label cedar-fab__label--close">Close</span>
 </button>
+
+<!-- One-time-per-session helper nudge. Hidden until the timer in the
+     script below shows it; role="status" announces the offer politely
+     to screen readers when it appears. -->
+<div class="cedar-nudge" id="cedarNudge" role="status" hidden>
+  <button
+    type="button"
+    class="cedar-nudge__dismiss"
+    id="cedarNudgeDismiss"
+    aria-label="Dismiss this message"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="14"
+      height="14"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+    </svg>
+  </button>
+  <p class="cedar-nudge__text">
+    Hi, I'm Cedar. If you have any questions about Lumecon or TEIM, I'm happy to help.
+  </p>
+  <button type="button" class="cedar-nudge__cta" id="cedarNudgeCta">Ask a question</button>
+</div>
 
 <!-- Self-contained Cedar chat panel. Hidden until the FAB opens it.
      Class-scoped (cedar-fab-panel + child .cedar-chat etc.) so it
@@ -85,7 +122,31 @@ import CedarChat from './CedarChat.astro';
     if ((fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound) return;
     (fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound = true;
 
+    // ---- Helper nudge (one per browser session) ----
+    const nudge = document.getElementById('cedarNudge');
+    const NUDGE_KEY = 'lumecon-cedar-nudge-seen';
+    const NUDGE_DELAY_MS = 4000;
+    const nudgeSeen = (): boolean => {
+      try {
+        return sessionStorage.getItem(NUDGE_KEY) === '1';
+      } catch {
+        return true; // storage unavailable: never show rather than nag every load
+      }
+    };
+    const markNudgeSeen = (): void => {
+      try {
+        sessionStorage.setItem(NUDGE_KEY, '1');
+      } catch {
+        /* storage unavailable */
+      }
+    };
+    const hideNudge = (): void => {
+      if (nudge && !nudge.hidden) nudge.hidden = true;
+    };
+
     const open = () => {
+      markNudgeSeen();
+      hideNudge();
       panel.hidden = false;
       panel.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cedar-popped');
@@ -125,6 +186,33 @@ import CedarChat from './CedarChat.astro';
       if (document.body.classList.contains('cedar-popped')) close();
       else open();
     });
+
+    // Show the nudge a few seconds after load, once per session. Skipped
+    // on /cedar, where the inline chat already fills the page.
+    if (nudge && !window.location.pathname.startsWith('/cedar')) {
+      const cta = document.getElementById('cedarNudgeCta');
+      const dismiss = document.getElementById('cedarNudgeDismiss');
+      cta?.addEventListener('click', (e) => {
+        // Stop the click reaching the document-level outside-click
+        // handler, which would immediately close the panel open() shows.
+        e.stopPropagation();
+        trackEvent('cedar.nudge.open');
+        open(); // open() records the nudge as seen and hides it
+      });
+      dismiss?.addEventListener('click', () => {
+        markNudgeSeen();
+        const returnFocus = nudge.contains(document.activeElement);
+        hideNudge();
+        if (returnFocus) (fab as HTMLElement).focus({ preventScroll: true });
+        trackEvent('cedar.nudge.dismiss');
+      });
+      window.setTimeout(() => {
+        if (nudgeSeen()) return;
+        if (document.body.classList.contains('cedar-popped')) return;
+        nudge.hidden = false;
+        trackEvent('cedar.nudge.show');
+      }, NUDGE_DELAY_MS);
+    }
     document.addEventListener('keydown', (e) => {
       if (!document.body.classList.contains('cedar-popped')) return;
       if (e.key === 'Escape') {
@@ -183,21 +271,70 @@ import CedarChat from './CedarChat.astro';
     z-index: 80;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0;
-    background: transparent;
-    color: var(--white);
-    border: 0;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--white);
+    color: var(--ink);
+    border: 1px solid var(--rule-strong);
+    border-radius: 0.875rem;
+    box-shadow:
+      0 4px 12px rgba(10, 15, 38, 0.08),
+      0 8px 24px rgba(10, 15, 38, 0.04);
     cursor: pointer;
     font-family: var(--font-sans);
     font-size: 0.88rem;
     font-weight: 600;
     letter-spacing: -0.005em;
+    transition:
+      background 0.2s var(--ease),
+      box-shadow 0.2s var(--ease),
+      transform 0.2s var(--ease);
+  }
+  /* Closed state = the launcher pill from the TEIM app: a bordered
+     surface card with the green status dot and two lines of copy. */
+  .cedar-fab:hover {
+    background: var(--cream);
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 16px rgba(10, 15, 38, 0.1),
+      0 12px 32px rgba(10, 15, 38, 0.06);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cedar-fab {
+      transition: none;
+    }
+    .cedar-fab:hover {
+      transform: none;
+    }
   }
   .cedar-fab:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 4px;
-    border-radius: 999px;
+  }
+  .cedar-fab__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 1px var(--rule-strong);
+    flex: 0 0 auto;
+  }
+  .cedar-fab__copy {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  .cedar-fab__label--ask {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .cedar-fab__context {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--ink-3);
+    line-height: 1.2;
+    margin-top: 0.1rem;
   }
   .cedar-fab__icon {
     display: inline-flex;
@@ -205,52 +342,10 @@ import CedarChat from './CedarChat.astro';
     justify-content: center;
     flex-shrink: 0;
   }
-  .cedar-fab__icon svg,
-  .cedar-fab__icon img {
+  .cedar-fab__icon svg {
     display: block;
   }
-
-  /* Closed state = the logo mark on a solid white disc so it stands
-     out on any background, lifted by a soft shadow and a gentle bob so
-     it still reads as floating. */
-  .cedar-fab__icon--mark {
-    width: 58px;
-    height: 58px;
-    background: var(--white);
-    border-radius: 50%;
-    box-shadow:
-      0 8px 20px rgba(10, 15, 38, 0.22),
-      0 2px 5px rgba(10, 15, 38, 0.12);
-    animation: cedar-fab-float 4.2s ease-in-out infinite;
-    transition: box-shadow 0.2s var(--ease);
-  }
-  .cedar-fab__icon--mark img {
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
-    transition: transform 0.18s var(--ease);
-  }
-  .cedar-fab:hover .cedar-fab__icon--mark img {
-    transform: scale(1.06);
-  }
-  @keyframes cedar-fab-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-6px);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cedar-fab__icon--mark {
-      animation: none;
-    }
-  }
-
-  /* The "Ask Cedar" label is dropped — the floating mark is the cue. */
   .cedar-fab__icon--close,
-  .cedar-fab__label--ask,
   .cedar-fab__label--close {
     display: none;
   }
@@ -259,17 +354,22 @@ import CedarChat from './CedarChat.astro';
     height: 22px;
   }
 
-  /* Open state = a clear navy "Close" pill (the mark steps aside). */
+  /* Open state = a clear navy "Close" pill (the launcher steps aside). */
   body.cedar-popped .cedar-fab {
     background: var(--navy);
+    color: var(--white);
+    border-color: transparent;
+    gap: 0.5rem;
     padding: 0.7rem 1.05rem;
     border-radius: 999px;
     box-shadow: 0 6px 16px rgba(10, 15, 38, 0.3);
   }
   body.cedar-popped .cedar-fab:hover {
     background: var(--navy2);
+    transform: none;
   }
-  body.cedar-popped .cedar-fab__icon--mark {
+  body.cedar-popped .cedar-fab__dot,
+  body.cedar-popped .cedar-fab__copy {
     display: none;
   }
   body.cedar-popped .cedar-fab__icon--close {
@@ -323,8 +423,86 @@ import CedarChat from './CedarChat.astro';
     }
   }
 
+  /* ---------- The helper nudge ---------- */
+  .cedar-nudge {
+    position: fixed;
+    right: calc(clamp(0.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-right, 0px));
+    bottom: calc(clamp(0.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-bottom, 0px) + 4.4rem);
+    z-index: 79;
+    width: min(280px, calc(100vw - 1.8rem));
+    padding: 0.9rem 1rem 0.85rem;
+    background: var(--white);
+    color: var(--ink);
+    border: 1px solid var(--rule-strong);
+    border-radius: 0.875rem;
+    box-shadow:
+      0 12px 32px rgba(10, 15, 38, 0.14),
+      0 4px 12px rgba(10, 15, 38, 0.08);
+    animation: cedar-pop-in 0.25s var(--ease);
+  }
+  .cedar-nudge[hidden] {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cedar-nudge {
+      animation: none;
+    }
+  }
+  .cedar-nudge__text {
+    margin: 0 1.25rem 0.65rem 0;
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .cedar-nudge__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.9rem;
+    background: var(--accent-chip);
+    color: #ffffff;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s var(--ease);
+  }
+  .cedar-nudge__cta:hover {
+    background: var(--accent-chip-hover);
+  }
+  .cedar-nudge__cta:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .cedar-nudge__dismiss {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background: transparent;
+    color: var(--ink-3);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .cedar-nudge__dismiss:hover {
+    color: var(--ink);
+    background: var(--cream);
+  }
+  .cedar-nudge__dismiss:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
   /* Mobile: cap the panel so it doesn't fill the screen edge to edge
-     on a phone. The closed FAB is already just the floating mark. */
+     on a phone. The closed FAB is already a compact pill. */
   @media (max-width: 600px) {
     /* Cap the panel so it doesn't fill the screen edge to edge on a
        phone. */
