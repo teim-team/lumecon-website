@@ -1,0 +1,126 @@
+---
+/* Unlisted film page. Hosts the product films referenced from reports,
+   decks and updates, so a reader can click straight through and watch.
+   Deliberately kept out of the sitemap (see astro.config.mjs), out of the
+   nav, and marked noindex; share the link directly. */
+import { site } from '../config';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+
+const FILMS = [
+  {
+    id: 'tallgrass',
+    title: 'Tribal Economic Impact · the product film',
+    meta: '1:01 · July 2026',
+    src: '/films/tallgrass-demo-v11.mp4',
+    poster: '/films/tallgrass-demo-poster.jpg',
+    caption:
+      'Three documents go in, Cedar drafts and cites the intake, and a completed study lands with every number traceable. The demonstration uses the fictional Tallgrass River Nation; all figures are invented.',
+    downloadLabel: 'Download the film (MP4, 7.6 MB)',
+  },
+];
+---
+
+<BaseLayout
+  title="Product films | Lumecon Inc."
+  description="Short films of the Lumecon product in motion, for readers of our reports and updates."
+  canonical={`${site.url}/film`}
+  keywords="lumecon product film, lumecon demo video"
+  noindex={true}
+>
+  <Nav />
+  <main class="films">
+    <div class="films__inner">
+      <p class="kicker">Product films</p>
+      <h1>The product, in motion</h1>
+      <p class="films__intro">
+        Short films of the real product, made for readers of our reports and updates. This page is
+        unlisted; share the link directly.
+      </p>
+      {
+        FILMS.map((f) => (
+          <section class="film" id={f.id}>
+            <h2 class="film__title">{f.title}</h2>
+            <p class="film__meta mono">{f.meta}</p>
+            <video class="film__player" controls preload="metadata" poster={f.poster}>
+              <source src={f.src} type="video/mp4" />
+              Your browser does not support embedded video.
+              <a href={f.src}>Download the film instead.</a>
+            </video>
+            <p class="film__caption">{f.caption}</p>
+            <p class="film__download">
+              <a href={f.src} download>
+                {f.downloadLabel}
+              </a>
+            </p>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .films {
+    background: var(--white);
+  }
+  .films__inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 7.5rem 1.5rem 5rem;
+  }
+  .films h1 {
+    font-size: clamp(2rem, 4.5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0.75rem 0 0.9rem;
+  }
+  .films__intro {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 46rem;
+    margin: 0 0 3rem;
+  }
+  .film {
+    border-top: 1px solid rgba(10, 15, 38, 0.12);
+    padding-top: 2rem;
+    margin-top: 2rem;
+  }
+  .film__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .film__meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin: 0.4rem 0 1.1rem;
+  }
+  .film__player {
+    width: 100%;
+    display: block;
+    background: var(--navy);
+    border: 1px solid rgba(10, 15, 38, 0.12);
+  }
+  .film__caption {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-3);
+    margin: 0.9rem 0 0.4rem;
+  }
+  .film__download {
+    margin: 0.2rem 0 0;
+    font-size: 0.92rem;
+  }
+</style>
