@@ -46,7 +46,7 @@ const FILMS = [
           <section class="film" id={f.id}>
             <h2 class="film__title">{f.title}</h2>
             <p class="film__meta mono">{f.meta}</p>
-            <video class="film__player" controls preload="metadata" poster={f.poster}>
+            <video class="film__player" controls playsinline preload="metadata" poster={f.poster}>
               <source src={f.src} type="video/mp4" />
               Your browser does not support embedded video.
               <a href={f.src}>Download the film instead.</a>
