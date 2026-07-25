@@ -12,11 +12,6 @@
   overflow: hidden;
   padding: clamp(6.5rem, 12vh, 9rem) var(--container-pad) clamp(1.5rem, 3vh, 2.5rem);
 }
-.pr-hero .rings--tr {
-  top: -260px;
-  right: -240px;
-  opacity: 0.3;
-}
 .pr-hero__inner {
   position: relative;
   z-index: 1;
@@ -214,23 +209,69 @@
   white-space: nowrap;
 }
 
-/* ---------- competitive offer ---------- */
+/* ---------- competitive offer (framed panel, no colored slab) ---------- */
+.pr-offer {
+  padding: clamp(1rem, 3vh, 2rem) var(--container-pad) clamp(3rem, 7vh, 5rem);
+}
+.pr-offer__panel {
+  position: relative;
+  overflow: hidden;
+  max-width: 1240px;
+  margin: 0 auto;
+  border: 1px solid var(--accent-bar);
+  background: var(--accent-rgba-08);
+  border-radius: 18px;
+  padding: clamp(1.8rem, 4vw, 3rem);
+  display: grid;
+  gap: 1.2rem;
+}
+.markart--offer {
+  top: -140px;
+  right: -140px;
+}
+.pr-offer__head {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.6rem;
+}
+.pr-offer__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0;
+  max-width: 26ch;
+}
 .pr-offer__big {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(1.9rem, 4.4vw, 3.2rem);
   letter-spacing: -0.025em;
   line-height: 1.05;
-  color: #fff;
-  margin: 0.4rem 0 0.8rem;
+  color: var(--accent-text);
+  margin: 0;
+}
+.pr-offer__lede {
+  font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0.3rem 0 0;
+  max-width: 68ch;
 }
 .pr-offer__cta {
   display: flex;
+  position: relative;
+  z-index: 1;
 }
 .pr-offer__fine {
+  position: relative;
+  z-index: 1;
   font-size: 0.8rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.66);
+  color: var(--ink-3);
   margin: 0;
   max-width: 78ch;
 }

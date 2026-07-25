@@ -1,8 +1,8 @@
 ---
 /**
- * Cedar — presented as a workflow (source material in, reporting
- * out), not a chat box. Five-step pipeline with Cedar as the green
- * center step.
+ * Cedar — the workflow (source material in, reporting out) plus the
+ * widget actually working: a board-ready summary written from live
+ * study results. Dark mode swaps in the dark capture.
  */
 import '../styles/home.css';
 
@@ -10,7 +10,7 @@ const STEPS = [
   { k: 'You bring', t: 'PDFs, spreadsheets, CSVs' },
   { k: 'Cedar', t: 'Reads and structures', hero: true },
   { k: 'Lumecon', t: 'Analysis-ready inputs' },
-  { k: 'The engine', t: 'Economic analysis' },
+  { k: 'The model', t: 'Economic analysis' },
   { k: 'You get', t: 'Reporting and exports' },
 ];
 ---
@@ -44,5 +44,23 @@ const STEPS = [
         ))
       }
     </div>
+
+    <figure class="cedar-shot">
+      <picture>
+        <source srcset="/app/cedar-dark.webp" media="(prefers-color-scheme: dark)" />
+        <img
+          src="/app/cedar.webp"
+          alt="The Cedar panel open over a Lumecon results page, answering the request to explain results in plain language for a board with a summary of jobs, output, GDP, labor income and tax impacts."
+          width="1600"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+      <figcaption>
+        Cedar writing a board-ready summary straight from a study&rsquo;s results, shown with sample
+        data.
+      </figcaption>
+    </figure>
   </div>
 </section>

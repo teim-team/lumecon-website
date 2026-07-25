@@ -16,10 +16,10 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
 
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
-  // The homepage hero leads with a framed screenshot of the app's
-  // results page; the interactive map lives on /map (exercised by
-  // the tests below).
-  await expect(page.locator('.hero2-shot img')).toBeVisible();
+  // The homepage hero leads with the trio money shot (results front,
+  // dashboard and lineage behind); the interactive map lives on /map
+  // (exercised by the tests below).
+  await expect(page.locator('.trio-main img')).toBeVisible();
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
@@ -192,7 +192,7 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
 test('pricing carries the competitive transition offer and consultant CTA', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
   const offer = page.locator('#switch');
-  await expect(offer).toContainText('Already paying for economic modeling software?');
+  await expect(offer).toContainText('Already paying for economic impact analysis software?');
   await expect(offer.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
   // Consultant licensing is custom-priced: a CTA, not a public tier.
   const consult = page.locator('#consultants');

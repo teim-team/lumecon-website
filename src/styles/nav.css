@@ -387,3 +387,107 @@ nav.nav--static {
     background: var(--accent-light);
   }
 }
+
+/* ---------- v3: single Menu button + full-screen overlay ----------
+   The link row is gone on every viewport; the nav is brand + Menu.
+   Old .nav-links / .hamburger rules above are inert (no markup uses
+   them) and kept only to avoid churning this file's history. */
+.navm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 10px;
+  padding: 0.5rem 0.95rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--navy);
+  transition: border-color 0.15s var(--ease);
+}
+.navm-btn:hover {
+  border-color: var(--accent);
+}
+.navm-btn__bars {
+  display: grid;
+  gap: 4px;
+}
+.navm-btn__bars span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--navy);
+  transition:
+    transform 0.2s var(--ease),
+    opacity 0.2s var(--ease);
+}
+.navm-btn.on .navm-btn__bars span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.navm-btn.on .navm-btn__bars span:nth-child(2) {
+  opacity: 0;
+}
+.navm-btn.on .navm-btn__bars span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.navm {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--white);
+  overflow-y: auto;
+}
+/* Keep the brand + Menu button painted above the open overlay so the
+   toggle (now an X) stays reachable. */
+.nav-w {
+  position: relative;
+  z-index: 100;
+}
+html.navm-open {
+  overflow: hidden;
+}
+.navm-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: clamp(7rem, 16vh, 10rem) var(--container-pad) 3rem;
+  display: grid;
+  gap: 2.5rem;
+}
+.navm-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.navm-list a {
+  display: block;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.navm-list a:hover {
+  color: var(--accent-text);
+}
+.navm-list__cta {
+  color: var(--accent-text) !important;
+}
+.navm-contact {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  text-decoration: none;
+}
+.navm-contact:hover {
+  color: var(--accent-text);
+}

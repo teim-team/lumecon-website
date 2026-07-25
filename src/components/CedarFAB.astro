@@ -82,8 +82,8 @@ import CedarChat from './CedarChat.astro';
     </svg>
   </button>
   <p class="cedar-nudge__text">
-    Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm
-    happy to help.
+    Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to
+    help.
   </p>
 </div>
 
@@ -198,12 +198,11 @@ import CedarChat from './CedarChat.astro';
         if (returnFocus) (fab as HTMLElement).focus({ preventScroll: true });
         trackEvent('cedar.nudge.dismiss');
       });
-      window.setTimeout(() => {
-        if (nudgeSeen()) return;
-        if (document.body.classList.contains('cedar-popped')) return;
-        nudge.hidden = false;
-        trackEvent('cedar.nudge.show');
-      }, NUDGE_DELAY_MS);
+      /* The auto-show timer is disabled: unprompted popups read as
+         spam next to the quieter v3 design. The bubble markup stays
+         (dismiss handler above) in case a future surface opens it
+         deliberately, but nothing pops on its own. */
+      void NUDGE_DELAY_MS;
     }
     document.addEventListener('keydown', (e) => {
       if (!document.body.classList.contains('cedar-popped')) return;

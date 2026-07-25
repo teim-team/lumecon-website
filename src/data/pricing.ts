@@ -35,7 +35,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'I do economic analysis.',
     tagline:
-      'One user with the full modeling engine, Cedar, every supported U.S. geography and unlimited analysis.',
+      'One user with the full Lumecon model, Cedar, every supported U.S. geography and unlimited analysis.',
     users: '1 user',
     ctaLabel: 'Start with Sprout',
     ctaHref: '/signup?tier=starter',
@@ -80,7 +80,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   { label: 'Users', values: ['1', 'Up to 10', 'Unlimited within one organization'] },
   {
     label: 'Economic modeling',
-    values: ['Unlimited projects and analyses on the full Lumecon modeling engine', 'Same', 'Same'],
+    values: ['Unlimited projects and analyses on the full Lumecon model', 'Same', 'Same'],
   },
   {
     label: 'U.S. geographies',
@@ -130,9 +130,9 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
 
 /** The 50% competitive transition offer. */
 export const COMPETITIVE_OFFER = {
-  headline: 'Already paying for economic modeling software?',
+  headline: 'Already paying for economic impact analysis software?',
   subhead: 'We’ll cut that cost in half.',
-  body: 'Show us what your organization spent on qualifying economic modeling software during the previous 12 months. Eligible organizations can receive their first annual Lumecon license for 50% of that documented spend, subject to the applicable Lumecon plan and promotional terms.',
+  body: 'Show us what your organization spent on qualifying economic impact analysis or economic modeling software during the previous 12 months. Eligible organizations can receive their first annual Lumecon license for 50% of that documented spend, subject to the applicable Lumecon plan and promotional terms.',
   ctaLabel: 'See if you qualify',
   ctaSubject: 'Competitive transition offer: see if we qualify',
   finePrint:

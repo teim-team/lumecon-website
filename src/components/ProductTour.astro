@@ -1,36 +1,22 @@
 ---
 /**
- * Product tour — Implan-pattern feature rows built from real
- * screenshots of the Lumecon workspace (captured from the app with
- * sample study data), plus a coverage band and a wide map strip.
- *
- * The section header intentionally has no marker highlight: the
- * page's three highlight colors are already spent on the hero
- * (green), platforms (gold) and why (teal), and the brand rule is
- * one highlight color per page, no repeats.
+ * Product tour — alternating feature rows built from real
+ * screenshots of the Lumecon workspace (sample study data), each
+ * with a dark-mode capture of the app's own dark theme, plus a wide
+ * region-map strip. The rows showcase screens the hero trio only
+ * hints at: number lineage, comparison and the living workspace.
  */
 import '../styles/tour.css';
 
 const ROWS = [
-  {
-    id: 'scopes',
-    kicker: 'One study, every lens',
-    title: 'Statewide and homelands results, side by side',
-    body: 'A whole-nation study reads as one sentence up top: jobs and output, in plain language. Switch scope to see the same study on homelands, with the subset relationship spelled out so nobody double-counts.',
-    img: '/app/homelands.webp',
-    w: 1600,
-    h: 1000,
-    alt: 'Lumecon results page on the Homelands scope tab, estimating 1,928 jobs and $496,200,000 in economic output on homelands, with four key figures below.',
-  },
   {
     id: 'trace',
     kicker: 'Defensible by design',
     title: 'Trace any number back to its layers',
     body: 'Every figure carries a Trace this number button. One click opens the lineage: direct, indirect and induced effects, the operations that generate them and the industries they land in, each with its share.',
     img: '/app/trace.webp',
-    w: 1600,
-    h: 1000,
-    alt: 'Lumecon lineage panel titled Where $1,240,500,000 comes from, breaking economic output into direct, indirect and induced layers, by operation and by industry with share bars.',
+    imgDark: '/app/trace-dark.webp',
+    alt: 'Lumecon lineage panel titled Where $214,300,000 comes from, breaking economic output into direct, indirect and induced layers, by operation and by industry with share bars.',
   },
   {
     id: 'compare',
@@ -38,9 +24,8 @@ const ROWS = [
     title: 'Compare studies across years and scenarios',
     body: 'Put two studies side by side and the change column does the arithmetic: jobs, GDP contribution, labor income, output and tax impacts, each with its percentage change. Renewal season starts from a table you already have.',
     img: '/app/compare.webp',
-    w: 1600,
-    h: 1000,
-    alt: 'Lumecon compare view of FY2024 against FY2025 studies, showing jobs, GDP contribution, labor income, economic output and tax impacts with green percentage-change values.',
+    imgDark: '/app/compare-dark.webp',
+    alt: 'Lumecon compare view of two community college expansion studies, showing jobs, GDP contribution, labor income, economic output and tax impacts with green percentage-change values.',
   },
   {
     id: 'workspace',
@@ -48,9 +33,8 @@ const ROWS = [
     title: 'Studies stay live, from first draft to finished report',
     body: 'The workspace keeps every study in one place: drafts to continue, runs in progress and completed results ready to open, compare or export as a workbook, CSV tables or a printable summary.',
     img: '/app/dashboard.webp',
-    w: 1600,
-    h: 1000,
-    alt: 'Lumecon workspace home with lanes for starting, in-progress and completed studies, including three completed nation economic footprint studies with jobs and output headlines.',
+    imgDark: '/app/dashboard-dark.webp',
+    alt: 'Lumecon workspace home with lanes for starting, in-progress and completed studies, including completed studies with jobs and output headlines.',
   },
 ];
 ---
@@ -63,8 +47,8 @@ const ROWS = [
         The numbers each room respects, from software you run yourself.
       </h2>
       <p class="tour-lede reveal-soft" data-stagger="2">
-        These are screenshots of the Lumecon workspace running a sample whole-nation study, captured
-        straight from the product.
+        These are screenshots of the Lumecon workspace running sample studies, captured straight
+        from the product.
       </p>
     </header>
 
@@ -78,14 +62,17 @@ const ROWS = [
               <p class="tour-row__body">{row.body}</p>
             </div>
             <figure class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}>
-              <img
-                src={row.img}
-                alt={row.alt}
-                width={row.w}
-                height={row.h}
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source srcset={row.imgDark} media="(prefers-color-scheme: dark)" />
+                <img
+                  src={row.img}
+                  alt={row.alt}
+                  width="1600"
+                  height="1000"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </figure>
           </article>
         ))
@@ -93,17 +80,20 @@ const ROWS = [
     </div>
 
     <figure class="tour-map reveal-soft">
-      <img
-        src="/app/map-card.webp"
-        alt="Lumecon region map of Washington with tribal homelands outlined and labeled, beside a panel reading Statewide, Washington: the statewide result with Tulalip, WA at its heart."
-        width="1600"
-        height="402"
-        loading="lazy"
-        decoding="async"
-      />
+      <picture>
+        <source srcset="/app/map-card-dark.webp" media="(prefers-color-scheme: dark)" />
+        <img
+          src="/app/map-card.webp"
+          alt="Lumecon region map of Connecticut with county boundaries, beside a panel reading Statewide, Connecticut: the statewide result."
+          width="1600"
+          height="458"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
       <figcaption>
-        Geographies follow the real economy: reservations, trust lands and overlapping jurisdictions
-        are treated as first-class regions.
+        Geographies follow the real economy: counties, states, the nation, reservations and trust
+        lands are all first-class regions.
       </figcaption>
     </figure>
   </div>

@@ -1,23 +1,24 @@
 ---
 /**
- * Whole Nation — the signature capability, shown as a convergence
- * diagram (government + enterprises + other activity flowing into
- * one integrated result) with the real KPI strip from the app
- * underneath.
+ * Whole Nation — a signature capability alongside the general
+ * platform: government + enterprises + other activity converging
+ * into one integrated result, with the real scope-tab screenshot
+ * (statewide and homelands side by side) underneath.
  */
-import Rings from './Rings.astro';
+import MarkArt from './MarkArt.astro';
 import '../styles/home.css';
 ---
 
 <section class="flowsec" id="whole-nation" aria-labelledby="wn-title">
   <div class="flowsec-inner">
     <header class="flowsec-head">
-      <p class="h-kicker">Whole Nation analysis</p>
+      <p class="h-kicker">For Tribal Nations: Whole Nation analysis</p>
       <h2 class="flowsec-title" id="wn-title">See the whole Nation, not just one enterprise.</h2>
       <p class="flowsec-lede">
-        Whole Nation analysis brings tribal government and tribal enterprises together in one
-        integrated economic analysis, a more complete picture of a Nation&rsquo;s economic footprint
-        than studying each piece on its own.
+        Tribal government, tribal enterprise and Whole Nation analysis are part of Lumecon&rsquo;s
+        core architecture, included in every plan. Whole Nation analysis brings government and
+        enterprises together in one integrated study, a more complete picture of a Nation&rsquo;s
+        economic footprint than studying each piece on its own.
       </p>
     </header>
 
@@ -40,7 +41,7 @@ import '../styles/home.css';
       </div>
       <div class="wn-join" aria-hidden="true">&rarr;</div>
       <div class="wn-result">
-        <Rings class="rings rings--card" size={300} />
+        <MarkArt class="markart markart--card" size={280} />
         <p class="wn-result__k">One integrated study</p>
         <h3 class="wn-result__t">Whole Nation economic impact</h3>
         <p class="wn-result__b">
@@ -51,14 +52,17 @@ import '../styles/home.css';
     </div>
 
     <figure class="wn-shot">
-      <img
-        src="/app/kpis.webp"
-        alt="Four key figures from a Lumecon whole-nation study: 4,820 jobs supported, $612,400,000 GDP contribution, $388,900,000 labor income and $1,240,500,000 economic output, each with a Trace this number button."
-        width="1600"
-        height="297"
-        loading="lazy"
-        decoding="async"
-      />
+      <picture>
+        <source srcset="/app/homelands-dark.webp" media="(prefers-color-scheme: dark)" />
+        <img
+          src="/app/homelands.webp"
+          alt="Lumecon results page on the Homelands scope tab, estimating 1,928 jobs and $496,200,000 in economic output on homelands, with statewide and homelands tabs above four key figures."
+          width="1600"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
     </figure>
   </div>
 </section>

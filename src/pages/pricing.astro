@@ -21,7 +21,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import Rings from '../components/Rings.astro';
+import MarkArt from '../components/MarkArt.astro';
 import WholeNation from '../components/WholeNation.astro';
 import CedarFlow from '../components/CedarFlow.astro';
 import { site } from '../config';
@@ -33,7 +33,7 @@ import '../styles/home.css';
 import '../styles/pricing.css';
 
 const description =
-  'One platform for economic impact analysis, organizational data and reporting. Every plan includes the Lumecon modeling engine, Cedar, unlimited analysis and every supported U.S. geography. Plans from $500 a year.';
+  'One platform for economic impact analysis, organizational data and reporting. Every plan includes the Lumecon model, Cedar, unlimited analysis and every supported U.S. geography. Plans from $500 a year.';
 
 const offerMailto = `mailto:${site.email}?subject=${encodeURIComponent(COMPETITIVE_OFFER.ctaSubject)}`;
 const consultantMailto = `mailto:${site.email}?subject=${encodeURIComponent(CONSULTANT.ctaSubject)}`;
@@ -69,7 +69,7 @@ const jsonLd = [
   <main class="pr">
     <!-- 1. Hero -->
     <section class="pr-hero">
-      <Rings class="rings rings--tr" size={640} />
+      <MarkArt class="markart markart--tr" size={620} />
       <div class="pr-hero__inner">
         <p class="h-kicker">Pricing</p>
         <h1 class="pr-hero__title">
@@ -77,8 +77,7 @@ const jsonLd = [
         </h1>
         <p class="pr-hero__lede">
           One platform for economic impact analysis, organizational data and reporting. Every plan
-          includes the Lumecon modeling engine, Cedar, unlimited analysis and every supported U.S.
-          geography.
+          includes the Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.
         </p>
         <p class="pr-hero__callout">Starting at $500 a year.</p>
       </div>
@@ -139,23 +138,24 @@ const jsonLd = [
         </table>
       </div>
       <p class="pr-plans__note">
-        Every plan runs the same modeling engine on the same data foundation. Higher plans add
-        collaboration, organizational memory and scale.
+        Every plan runs the same model on the same data foundation. Higher plans add collaboration,
+        organizational memory and scale.
       </p>
     </section>
 
-    <!-- 3. Competitive transition offer -->
-    <section class="band pr-offer" id="switch" aria-labelledby="offer-title">
-      <Rings class="rings rings--r" size={620} />
-      <div class="band-inner">
-        <header>
-          <p class="band-kicker">Competitive transition offer</p>
-          <h2 class="band-title" id="offer-title">{COMPETITIVE_OFFER.headline}</h2>
+    <!-- 3. Competitive transition offer: a major program, framed as a
+         large bordered panel on the white surface (no colored slab). -->
+    <section class="pr-offer" id="switch" aria-labelledby="offer-title">
+      <div class="pr-offer__panel">
+        <MarkArt class="markart markart--offer" size={520} />
+        <header class="pr-offer__head">
+          <p class="h-kicker">Competitive transition offer</p>
+          <h2 class="pr-offer__title" id="offer-title">{COMPETITIVE_OFFER.headline}</h2>
           <p class="pr-offer__big">{COMPETITIVE_OFFER.subhead}</p>
-          <p class="band-lede">{COMPETITIVE_OFFER.body}</p>
+          <p class="pr-offer__lede">{COMPETITIVE_OFFER.body}</p>
         </header>
         <div class="pr-offer__cta">
-          <a class="btn2 btn2--card" href={offerMailto}>
+          <a class="btn2 btn2--primary" href={offerMailto}>
             {COMPETITIVE_OFFER.ctaLabel}
             <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>

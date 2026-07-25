@@ -1,4 +1,10 @@
 ---
+/**
+ * Nav — brand on the left, a single Menu button on the right, on
+ * every viewport (the pattern the refreshed IMPLAN site uses).
+ * The menu opens a full-screen overlay with the four destinations
+ * that matter: Pricing, Methodology, Log in, Sign up.
+ */
 import { site } from '../config';
 import BrandWordmark from './BrandWordmark.astro';
 interface Props {
@@ -15,56 +21,61 @@ const { isHome = false } = Astro.props;
       <span class="nav-brand__desc">Economic impact analysis software</span>
     </div>
 
-    <div class="nav-links" id="navLinks">
-      <a href="/pricing">Pricing</a>
-      <a href="/about">About</a>
-      <span class="nav-auth" aria-hidden="false">
-        <a class="nav-ghost" href="/login">Log in</a>
-        <a class="nav-cta" href="/signup">Sign up</a>
-      </span>
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
+    <button
+      class="navm-btn"
+      id="navMenuBtn"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="navMenu"
+    >
+      <span class="navm-btn__label">Menu</span>
+      <span class="navm-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>
     </button>
+  </div>
+
+  <div class="navm" id="navMenu" hidden>
+    <div class="navm-inner">
+      <ul class="navm-list">
+        <li><a href="/pricing">Pricing</a></li>
+        <li><a href="/methodology">Methodology</a></li>
+        <li><a href="/login">Log in</a></li>
+        <li><a class="navm-list__cta" href="/signup">Sign up</a></li>
+      </ul>
+      <a class="navm-contact" href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
   </div>
 </nav>
 
 <script>
   (function () {
-    const hb = document.getElementById('hamburger');
-    const nl = document.getElementById('navLinks');
-    if (!hb || !nl) return;
+    const btn = document.getElementById('navMenuBtn');
+    const menu = document.getElementById('navMenu');
+    if (!btn || !menu) return;
 
-    const openMenu = () => {
-      nl.classList.add('open');
-      hb.classList.add('on');
-      hb.setAttribute('aria-expanded', 'true');
-      const firstLink = nl.querySelector('a');
-      if (firstLink) (firstLink as HTMLElement).focus();
+    const open = () => {
+      menu.hidden = false;
+      btn.classList.add('on');
+      btn.setAttribute('aria-expanded', 'true');
+      document.documentElement.classList.add('navm-open');
+      const first = menu.querySelector('a');
+      if (first) (first as HTMLElement).focus();
+    };
+    const close = (refocus = true) => {
+      menu.hidden = true;
+      btn.classList.remove('on');
+      btn.setAttribute('aria-expanded', 'false');
+      document.documentElement.classList.remove('navm-open');
+      if (refocus) btn.focus();
     };
 
-    const closeMenu = () => {
-      nl.classList.remove('open');
-      hb.classList.remove('on');
-      hb.setAttribute('aria-expanded', 'false');
-      hb.focus();
-    };
-
-    hb.addEventListener('click', () => {
-      nl.classList.contains('open') ? closeMenu() : openMenu();
-    });
-
-    nl.querySelectorAll('a').forEach((a) => {
-      a.addEventListener('click', closeMenu);
-    });
-
+    btn.addEventListener('click', () => (menu.hidden ? open() : close()));
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => close(false)));
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && nl.classList.contains('open')) closeMenu();
+      if (e.key === 'Escape' && !menu.hidden) close();
     });
-
-    nl.addEventListener('keydown', (e) => {
-      if (e.key !== 'Tab' || !nl.classList.contains('open')) return;
-      const focusable = nl.querySelectorAll('a');
+    menu.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || menu.hidden) return;
+      const focusable = menu.querySelectorAll('a');
       const first = focusable[0] as HTMLElement;
       const last = focusable[focusable.length - 1] as HTMLElement;
       if (e.shiftKey && document.activeElement === first) {

@@ -1,22 +1,20 @@
 ---
 /**
- * Hero v3 — centered promise, gradient CTA, and the product itself
- * as one large framed screenshot with floating stat chips (the
- * pattern the major analysis platforms lead with). Emphasis inside
- * the headline is colored text; the marker-highlight slabs are gone
- * from the homepage. The concentric-ring mark appears as cropped
- * background art, echoing the app's card artwork.
- *
- * The screenshot is captured from the app with sample study data
- * (see the caption under the frame).
+ * Hero v3 — centered promise, gradient CTA, and the trio money shot:
+ * three real app screenshots stacked the way the refreshed IMPLAN
+ * hero stacks its product panels. Results front and center (a
+ * general-audience Connecticut study), dashboard and number-lineage
+ * tucked behind. Every screenshot swaps to a dark capture of the
+ * app's own dark mode via <picture>. The actual Lumecon mark sits
+ * cropped at the section edges as background art.
  */
-import Rings from './Rings.astro';
+import MarkArt from './MarkArt.astro';
 import '../styles/home.css';
 ---
 
 <section class="hero2" id="top">
-  <Rings class="rings rings--tr" size={720} />
-  <Rings class="rings rings--bl" size={640} />
+  <MarkArt class="markart markart--tr" size={640} />
+  <MarkArt class="markart markart--bl" size={560} />
   <div class="hero2-inner">
     <p class="h-kicker">Economic impact analysis software</p>
 
@@ -44,35 +42,34 @@ import '../styles/home.css';
       engineers &middot; Patent pending
     </p>
 
-    <figure class="hero2-shot">
-      <div class="hero2-frame">
-        <div class="hero2-chrome" aria-hidden="true">
-          <span class="hero2-dot"></span>
-          <span class="hero2-dot"></span>
-          <span class="hero2-dot"></span>
-          <span class="hero2-url">app.lumecon.ai</span>
-        </div>
-        <img
-          src="/app/hero-results.webp"
-          alt="Lumecon results page for a whole-nation impact study: a headline sentence estimating 4,820 jobs and $1,240,500,000 in economic output, four key figures with Trace this number buttons, and a three-year impact timeline."
-          width="1600"
-          height="1000"
-          fetchpriority="high"
-          decoding="async"
-        />
+    <figure class="trio">
+      <div class="trio-frame trio-side trio-side--l" aria-hidden="true">
+        <picture>
+          <source srcset="/app/dashboard-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img src="/app/dashboard.webp" alt="" width="1600" height="1000" decoding="async" />
+        </picture>
       </div>
-      <div class="hero2-chips-mobile">
-        <div class="hero2-chip hero2-chip--a">
-          <span class="hero2-chip__k">Impact over time</span>
-          <span class="hero2-chip__v">+34% economic output across three years</span>
-        </div>
-        <div class="hero2-chip hero2-chip--b">
-          <span class="hero2-chip__k">Tax impacts</span>
-          <span class="hero2-chip__v">$148,860,000 across federal, state and tribal</span>
-        </div>
+      <div class="trio-frame trio-main">
+        <picture>
+          <source srcset="/app/college-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img
+            src="/app/college.webp"
+            alt="Lumecon results page for a community college expansion study in Connecticut: a headline sentence estimating 1,140 jobs and $214,300,000 in economic output, four key figures with Trace this number buttons, and a county map of the state."
+            width="1600"
+            height="1000"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
       </div>
-      <figcaption class="hero2-caption">
-        The results page of a whole-nation impact study in the Lumecon workspace, shown with sample
+      <div class="trio-frame trio-side trio-side--r" aria-hidden="true">
+        <picture>
+          <source srcset="/app/trace-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img src="/app/trace.webp" alt="" width="1600" height="1000" decoding="async" />
+        </picture>
+      </div>
+      <figcaption class="trio-caption">
+        The Lumecon workspace: results, workspace home and number lineage, shown with sample study
         data.
       </figcaption>
     </figure>
