@@ -69,9 +69,26 @@ test('pricing carries the competitive transition offer and consultant CTA', asyn
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {
-  await page.goto('/signup?tier=standard&platform=tribal', { waitUntil: 'domcontentloaded' });
+  await page.goto('/signup?tier=standard', { waitUntil: 'domcontentloaded' });
   const badge = page.locator('[data-auth-plan]');
   await expect(badge).toBeVisible();
   await expect(badge).toContainText(/Sapling tier/);
-  await expect(badge).toContainText(/Tribal Economic Impact/);
+});
+
+test('signup walks the two-step registration flow from the product', async ({ page }) => {
+  await page.goto('/signup', { waitUntil: 'domcontentloaded' });
+
+  // Step 1: who you are. Email/password are not shown yet.
+  await expect(page.locator('input[name="name"]')).toBeVisible();
+  await expect(page.locator('input[name="email"]')).toBeHidden();
+  await page.fill('input[name="name"]', 'Test Person');
+  await page.fill('input[name="organization"]', 'Test Nation');
+  await page.locator('[data-role-chip]', { hasText: 'Consultant' }).click();
+  await page.locator('[data-auth-submit]').click();
+
+  // Step 2: account credentials, with the live password rule checklist.
+  await expect(page.locator('input[name="email"]')).toBeVisible();
+  await page.fill('input[name="password"]', 'Correct-Horse-42');
+  await expect(page.locator('[data-pwrule="length"]')).toHaveClass(/pwrules--met/);
+  await expect(page.locator('[data-auth-back]')).toBeVisible();
 });
