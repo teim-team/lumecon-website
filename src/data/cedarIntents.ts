@@ -3061,7 +3061,7 @@ export const INTENTS: CedarIntent[] = [
       'cost of cedar',
     ],
     answer:
-      "The Cedar you're talking to here is the free, lightweight site assistant. I answer questions about Lumecon, who it's for, the methodology, pricing and how to reach the team. The full Cedar inside the platform comes with every plan, Sprout included. There it uploads and processes your documents (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), interprets them, maps them into the model, assists with setup and interpretation and acts as a thought partner on the write-up, while the substance and local context come from you. You can also try it before paying anything: the free trial lets you create an account, bring your documents and build an analysis end to end, with full results unlocking on any paid plan. Want me to point you to pricing or the trial?",
+      "I'm Cedar, Lumecon's AI economic analyst; here on the site you get a lightweight version of me. I answer questions about Lumecon, who it's for, the methodology, pricing and how to reach the team. The full Cedar inside the platform comes with every plan, Sprout included. There it uploads and processes your documents (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), interprets them, maps them into the model, assists with setup and interpretation and acts as a thought partner on the write-up, while the substance and local context come from you. You can also try it before paying anything: the free trial lets you create an account, bring your documents and build an analysis end to end, with full results unlocking on any paid plan. Want me to point you to pricing or the trial?",
     expanded:
       'More on the split: this site Cedar is a free, keyword-based assistant that never touches your data and exists to help you learn what Lumecon does. The product Cedar works on your actual records: it ingests budgets, financial statements, payroll and program data, matches them to the right industries and geographies, fits the model and flags every assumption for your sign-off, then helps shape a council memo, a grant narrative or a board deck while you supply the local context only you have. Every plan includes it. The Tree plan goes further with Cedar Grove, a persistent organizational data library reused across future analyses and reporting, and hands-on calibration so Cedar picks up your terminology, workflows and recurring reports. The pricing page lays out the plans.',
   },
@@ -3438,7 +3438,7 @@ export const INTENTS: CedarIntent[] = [
       'screw this',
     ],
     answer:
-      "I'm Cedar, Lumecon's site assistant, and I want to keep this respectful and helpful. If you're going through something serious, please reach out to someone who can help directly. For anything about Lumecon, I'm here, or the team reads everything sent to contact@lumecon.ai.",
+      "I'm Cedar, Lumecon's AI economic analyst, and I want to keep this respectful and helpful. If you're going through something serious, please reach out to someone who can help directly. For anything about Lumecon, I'm here, or the team reads everything sent to contact@lumecon.ai.",
   },
   {
     id: 'rude',
@@ -3514,7 +3514,7 @@ export const INTENTS: CedarIntent[] = [
       'wsg',
     ],
     answer:
-      "Hey, I'm Cedar, Lumecon's site assistant. I can answer questions about what Lumecon does, who uses it, how the math works, what an analysis costs or how to reach the team. What brings you in today?",
+      "Hey, I'm Cedar, Lumecon's AI economic analyst. On the site I can answer questions about what Lumecon does, who uses it, how the math works, what an analysis costs or how to reach the team. What brings you in today?",
     variants: [
       'Hi again. Where should we take it: pricing, methodology, geographies or a demo?',
       "Still here. Ask me anything about Lumecon, or describe what you're working on and I'll point you somewhere useful.",
@@ -3525,7 +3525,7 @@ export const INTENTS: CedarIntent[] = [
 
 // Catch-all responses for input that doesn't match any intent above.
 export const OUT_OF_SCOPE_ANSWER =
-  "I'm Cedar, Lumecon's site assistant, so I'm best at answering questions about Lumecon, economic impact reporting and how to connect with the team. Try asking me what Lumecon does, who the platform is for or how economic impact analysis works.";
+  "I'm Cedar, Lumecon's AI economic analyst; on this site I'm best at answering questions about Lumecon, economic impact reporting and how to connect with the team. Try asking me what Lumecon does, who the platform is for or how economic impact analysis works.";
 
 export const FALLBACK_ANSWER =
   'Let me point you the right way. I\'m a focused assistant, so I\'m sharpest on Lumecon itself. I can cover what Lumecon does and who it\'s for (tribal nations, cities and counties, state agencies, foundations, universities, nonprofits), how an analysis works and how the math holds up, grants and federal funding (EDA, HUD, DOT, EPA, USDA and more), pricing, geographies, jobs or how to reach the team. Try a word or two like "pricing," "tribal," "EPA grant," "jobs," or "demo," or email contact@lumecon.ai for anything specific.';

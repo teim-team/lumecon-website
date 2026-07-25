@@ -6,8 +6,9 @@
  *
  *   paid plan  -> /checkout?tier=X (checkout already knows the plan)
  *   start free -> /welcome?plan=free when the visitor arrived from
- *                 signup (account exists; email= is carried), else
- *                 /signup?tier=free to create the free account first
+ *                 signup (account exists; flow state in
+ *                 sessionStorage), else /signup?tier=free to create
+ *                 the free account first
  *
  * Predominantly teal: the second step of the flow's progression
  * from the white public site into the product (see flow.css).
@@ -82,20 +83,16 @@ import '../styles/flow.css';
     </div>
   </main>
 
-  <script is:inline>
-    /* Carry the signup handoff through the flow. When email= is
-       present the account already exists, so Start free goes
-       straight to the welcome page instead of back through signup. */
-    (function () {
-      var qs = new URLSearchParams(window.location.search);
-      var email = qs.get('email');
-      if (!email) return;
-      document.querySelectorAll('[data-plan-link]').forEach(function (a) {
-        a.href += '&email=' + encodeURIComponent(email);
-      });
-      var free = document.querySelector('[data-free-link]');
+  <script>
+    import { getFlowEmail } from '../lib/flowState';
+    /* The signup handoff travels as sessionStorage flow state, never
+       in the URL. When it is present the account already exists, so
+       Start free goes straight to the welcome page instead of back
+       through signup; checkout reads the same state for its prefill. */
+    if (getFlowEmail()) {
+      const free = document.querySelector<HTMLAnchorElement>('[data-free-link]');
       if (free) free.href = '/welcome?plan=free';
-    })();
+    }
   </script>
 
   <Footer />

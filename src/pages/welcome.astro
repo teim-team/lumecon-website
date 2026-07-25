@@ -13,6 +13,10 @@ import Contours from '../components/Contours.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/flow.css';
+
+/* Once the production app origin is configured, Open Lumecon goes
+   straight into the product; until then, /login is the door. */
+const appUrl = (import.meta.env.PUBLIC_APP_URL || '').replace(/\/+$/, '') || '/login';
 ---
 
 <BaseLayout
@@ -35,7 +39,7 @@ import '../styles/flow.css';
           Build an analysis end to end; full results unlock on any plan.
         </span>
       </p>
-      <a class="welc-btn" href="/login">
+      <a class="welc-btn" href={appUrl}>
         Open Lumecon <span aria-hidden="true">&rarr;</span>
       </a>
       <p class="welc-note">Log in with the email and password you just created.</p>

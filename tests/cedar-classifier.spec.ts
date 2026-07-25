@@ -84,7 +84,7 @@ test('cedar sends an off-topic question to the out-of-scope reply', async ({
   );
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'who is the president of mexico');
-  await expect(bubble).toContainText("I'm Cedar, Lumecon's site assistant, so I'm best");
+  await expect(bubble).toContainText("I'm Cedar, Lumecon's AI economic analyst; on this site I'm best");
 });
 
 test('cedar asks to clarify when a message is genuinely ambiguous', async ({

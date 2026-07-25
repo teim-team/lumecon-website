@@ -133,6 +133,7 @@ const INCLUDED = [
 <script>
   import { submitCheckout, submitContact, apiConfigured } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
+  import { getFlowEmail, rememberFlowEmail } from '../lib/flowState';
 
   const VALID_TIERS = ['starter', 'standard', 'leader'];
 
@@ -151,20 +152,17 @@ const INCLUDED = [
 
     const qs = new URLSearchParams(window.location.search);
     const tier = qs.get('tier') || '';
-    const emailFromFlow = qs.get('email') || '';
+    // Email travels as sessionStorage flow state, never in the URL.
+    const emailFromFlow = getFlowEmail();
 
     /* One job: payment. Anything that is not a payable plan gets
        routed to the step that handles it. */
     if (tier === 'free') {
-      window.location.replace(
-        `/signup?tier=free${emailFromFlow ? `&email=${encodeURIComponent(emailFromFlow)}` : ''}`,
-      );
+      window.location.replace('/signup?tier=free');
       return;
     }
     if (!VALID_TIERS.includes(tier)) {
-      window.location.replace(
-        `/choose-plan${emailFromFlow ? `?email=${encodeURIComponent(emailFromFlow)}` : ''}`,
-      );
+      window.location.replace('/choose-plan');
       return;
     }
 
@@ -180,11 +178,6 @@ const INCLUDED = [
     const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
     if (emailInput && emailFromFlow) emailInput.value = emailFromFlow;
 
-    // Keep the flow context on the quiet Change plan link.
-    const changeLink = document.querySelector<HTMLAnchorElement>('[data-co-change]');
-    if (changeLink && emailFromFlow)
-      changeLink.href = `/choose-plan?email=${encodeURIComponent(emailFromFlow)}`;
-
     // The code itself is validated by the backend at payment time;
     // this control just confirms it will be carried through.
     form.querySelector('[data-co-apply]')?.addEventListener('click', () => {
@@ -195,7 +188,7 @@ const INCLUDED = [
         codeNote.hidden = true;
         return;
       }
-      codeNote.textContent = `Code ${code} will be applied at payment.`;
+      codeNote.textContent = `We will verify code ${code} at payment.`;
       codeNote.hidden = false;
     });
 
@@ -207,6 +200,7 @@ const INCLUDED = [
         .trim()
         .toUpperCase();
       if (!email) return setStatus(status, 'err', 'Enter your email.');
+      rememberFlowEmail(email);
 
       submitBtn?.setAttribute('disabled', 'true');
       setStatus(status, 'info', 'One moment...');

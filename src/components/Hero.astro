@@ -135,51 +135,21 @@ import '../styles/home.css';
         var root = document.getElementById('heroRotator');
         var trio = document.getElementById('trio');
         if (!root || !trio) return;
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-          return;
 
         var source = root.querySelector('source');
         var img = root.querySelector('img');
         if (!img) return;
-        var i = 0;
-        var paused = false;
-        trio.addEventListener('mouseenter', function () {
-          paused = true;
-        });
-        trio.addEventListener('mouseleave', function () {
-          paused = false;
-        });
 
-        function show(study) {
-          if (source) source.srcset = '/app/' + study[0] + '-dark.webp';
-          img.src = '/app/' + study[0] + '.webp';
-          img.alt = 'Lumecon results page for ' + study[1] + ', shown with sample data.';
-        }
-        function preload(study) {
-          new Image().src = '/app/' + study[0] + '.webp';
-          new Image().src = '/app/' + study[0] + '-dark.webp';
-        }
-
-        preload(STUDIES[1]);
-        setInterval(function () {
-          if (paused || document.hidden) return;
-          i = (i + 1) % STUDIES.length;
-          var next = STUDIES[i];
-          img.style.transition = 'opacity 0.3s ease';
-          img.style.opacity = '0';
-          setTimeout(function () {
-            show(next);
-            if (img.complete) {
-              img.style.opacity = '1';
-            } else {
-              img.onload = function () {
-                img.style.opacity = '1';
-                img.onload = null;
-              };
-            }
-            preload(STUDIES[(i + 1) % STUDIES.length]);
-          }, 320);
-        }, 7000);
+        /* One example per page visit: pick a study once and hold it.
+           The trio's three frames already show that visit's story as
+           three views (map, results, lineage); the underlying example
+           never swaps while the visitor is watching. Per-study map
+           and lineage captures are the follow-up that lets all three
+           frames belong to the chosen study. */
+        var pick = STUDIES[Math.floor(Math.random() * STUDIES.length)];
+        if (source) source.srcset = '/app/' + pick[0] + '-dark.webp';
+        img.src = '/app/' + pick[0] + '.webp';
+        img.alt = 'Lumecon results page for ' + pick[1] + ', shown with sample data.';
       })();
     </script>
   </div>

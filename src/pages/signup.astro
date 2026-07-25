@@ -190,11 +190,6 @@ const ROLE_OPTIONS = [
        badge so the choice visibly carries over. */
     (function () {
       var qs = new URLSearchParams(window.location.search);
-      var email = qs.get('email');
-      if (email) {
-        var emailInput = document.querySelector('input[name="email"]');
-        if (emailInput && !emailInput.value) emailInput.value = email;
-      }
       var tier = qs.get('tier');
       if (!tier) return;
       var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree', free: 'Free trial' };
@@ -216,29 +211,8 @@ const ROLE_OPTIONS = [
 <script>
   import { submitSignup, submitContact, apiConfigured } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
-
-  /* Password rules copied from the product's AuthGate: a password
-     passes when it is 12+ characters AND meets at least three of the
-     four character classes. */
-  const PASSWORD_RULES: Array<{ key: string; test: (pw: string) => boolean }> = [
-    { key: 'length', test: (pw) => pw.length >= 12 },
-    { key: 'case', test: (pw) => /[a-z]/.test(pw) && /[A-Z]/.test(pw) },
-    { key: 'number', test: (pw) => /\d/.test(pw) },
-    { key: 'symbol', test: (pw) => /[^A-Za-z0-9]/.test(pw) },
-  ];
-
-  function evaluatePassword(pw: string): { acceptable: boolean; level: number; label: string } {
-    const results = PASSWORD_RULES.map((r) => r.test(pw));
-    const met = results.filter(Boolean).length;
-    const longEnough = results[0];
-    const acceptable = longEnough && met >= 3;
-    if (!pw) return { acceptable: false, level: 0, label: '' };
-    if (met <= 1) return { acceptable, level: 1, label: 'Weak' };
-    if (met === 2) return { acceptable, level: 2, label: 'Fair' };
-    if (acceptable && met === 3) return { acceptable, level: 3, label: 'Good' };
-    if (acceptable) return { acceptable, level: 4, label: 'Strong' };
-    return { acceptable, level: 2, label: 'Fair' };
-  }
+  import { PASSWORD_RULES, evaluatePassword } from '../lib/passwordRules';
+  import { getFlowEmail, rememberFlowEmail } from '../lib/flowState';
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;
@@ -261,6 +235,11 @@ const ROLE_OPTIONS = [
       2: form.querySelector<HTMLElement>('[data-step-panel="2"]'),
     };
     const markers = document.querySelectorAll<HTMLElement>('[data-step-marker]');
+    // Email carried between flow steps lives in sessionStorage, never
+    // in the URL (PII leaks into history, logs and analytics there).
+    const flowEmail = getFlowEmail();
+    const emailField = form.querySelector<HTMLInputElement>('input[name="email"]');
+    if (emailField && flowEmail && !emailField.value) emailField.value = flowEmail;
     let step: 1 | 2 = 1;
 
     function showStep(next: 1 | 2): void {
@@ -354,19 +333,20 @@ const ROLE_OPTIONS = [
               }, 900);
               return;
             }
+            rememberFlowEmail(email);
             if (tier) {
               // Plan already chosen on /pricing: go straight to the
               // payment step, which knows the plan.
               setStatus(status, 'ok', 'Account created. One step left: payment.');
               setTimeout(() => {
-                window.location.href = `/checkout?tier=${tier}&email=${encodeURIComponent(email)}`;
+                window.location.href = `/checkout?tier=${tier}`;
               }, 900);
               return;
             }
             // No plan yet: the dedicated selection step, not checkout.
             setStatus(status, 'ok', 'Account created. Pick the plan that fits...');
             setTimeout(() => {
-              window.location.href = `/choose-plan?email=${encodeURIComponent(email)}`;
+              window.location.href = '/choose-plan';
             }, 900);
             return;
           }
