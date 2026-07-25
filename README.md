@@ -334,6 +334,15 @@ page-ownership rule); this list records the product/brand calls.
 - **Every AskAI tile must carry the question.** A tile that opens an
   empty composer reads as broken. Gemini has no public prefill
   parameter, so its tile goes through Google AI Mode (udm=50).
+- **Renewal and referrals (billing policy).** Subscriptions renew
+  automatically with transparent notice emails 90 and 30 days ahead
+  (never sneaky); the renewal notice offers preferred pricing for
+  renewing more than one year. Referrals earn one month of
+  subscription time at the customer's current plan per qualifying
+  referral (new customer via the referral link, paid subscription
+  completed), capped at 12 months; credits are time, not dollars.
+  The referral surface lives in the product (Settings > Referrals);
+  the site mentions the program only in the pricing fine print.
 - **Launch blockers owned by the founder:** final Terms/Privacy from the
   Cornell clinic; Stripe backend (`POST /billing/checkout-session` +
   webhook) in teim-app; Google OAuth origin for the website signup;
