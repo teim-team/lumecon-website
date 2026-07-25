@@ -1766,7 +1766,7 @@ export const INTENTS: CedarIntent[] = [
       'live example',
     ],
     answer:
-      'The interactive map on the See your impact page (/map) runs live example analyses: click any state, county or reservation and direct, indirect, induced and total impact, jobs and labor income update in seconds. Those figures are illustrative, to show the workflow; a real analysis uses your actual data. For a walkthrough with numbers close to your use case, the team is one email away.',
+      'The fastest way to see Lumecon is to try it: create a free account, bring your documents and build an analysis end to end. Full results unlock on any plan. For a walkthrough with numbers close to your use case, the team is one email away.',
     expanded:
       "More on the example numbers: the map's figures come from live model runs over public data, so they demonstrate the real mechanics (direct, indirect, induced and total impact, jobs and labor income) rather than mocked-up screenshots. They are labelled illustrative because a real analysis starts from your records: your payroll, spending and programs change the inputs, and the result is specific to your organization. If you want the workflow against a scenario close to yours, ask for a demo and the team will run one in your geography.",
   },
@@ -3018,7 +3018,7 @@ export const INTENTS: CedarIntent[] = [
       'for a story',
     ],
     answer:
-      'Happy to help with a story. The fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline and what you are working on and a person will get back to you. For background, the About page covers the team and the company and the interactive map on the See your impact page (/map) shows a live example analysis you are welcome to reference.',
+      'Happy to help with a story. The fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline and what you are working on and a person will get back to you. For background, the About page covers the team and the company and the methodology page explains how an analysis is built.',
   },
 
   /* --- Upsell: free vs paid Cedar (the one new chip) --- */
@@ -3157,7 +3157,7 @@ export const INTENTS: CedarIntent[] = [
       'Take care, and if something else comes up the contact form and contact@lumecon.ai are both monitored, so feel free to drop a line anytime.',
     variants: [
       'Talk soon. If a question surfaces later, the contact form and contact@lumecon.ai are both monitored.',
-      'Take care. The pricing page and the live map on /map are worth a look on your way out, and contact@lumecon.ai reaches the team anytime.',
+      'Take care. The pricing page and the free trial are worth a look on your way out, and contact@lumecon.ai reaches the team anytime.',
     ],
   },
   {
@@ -3485,7 +3485,7 @@ export const INTENTS: CedarIntent[] = [
       "Doing well, thanks for asking. I'm Cedar, and I'm at my best helping you get to know Lumecon. Want the quick version of what it does, who it's for (tribal nations, governments, foundations) or to watch a live impact analysis run?",
     variants: [
       "I'm well, thanks. More usefully: I can explain what Lumecon does, what it costs or how an analysis runs. What would help?",
-      "Doing fine, thank you. If you're browsing, the live map on /map is the fastest way to see what this platform actually does.",
+      "Doing fine, thank you. If you're browsing, the free trial is the fastest way to see what this platform actually does.",
     ],
   },
   {
