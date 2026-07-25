@@ -4,16 +4,58 @@
  * Linked from the main menu and the footer; the results pages in the
  * product point here for the longer explanation behind "how the
  * model works." Companion page to /glossary, which defines the
- * individual terms used below.
+ * individual terms used below. The FAQ at the bottom ships as a
+ * FAQPage schema through LegalLayout's extraJsonLd.
  */
 import LegalLayout from '../layouts/LegalLayout.astro';
+
+const FAQ = [
+  {
+    q: 'What model does Lumecon use?',
+    a: 'A regionalized input-output model built from the national economic accounts, extended with household and government accounts (a social accounting matrix formulation) so induced effects and the government tax-and-spend cycle can be estimated alongside direct and indirect effects.',
+  },
+  {
+    q: 'Is Lumecon an alternative to IMPLAN or REMI?',
+    a: 'Organizations evaluate Lumecon as an alternative to IMPLAN, RIMS II and REMI. The input-output foundation is shared across the field; Lumecon differs in its fully public, citable data foundation, the per-figure lineage with source tags, reservation and trust-land modeling and flat subscription pricing. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
+  },
+  {
+    q: 'How does Lumecon handle suppressed government data?',
+    a: 'Federal disclosure rules withhold some county-sector figures. Where a suppressed sector clearly exists in a region, Lumecon estimates its employment from wider employment-per-establishment patterns and tags the figure as estimated, so a reviewer can always tell reported values from estimates.',
+  },
+  {
+    q: 'How are reservations and trust lands modeled?',
+    a: 'As modeled geographies constructed from the federal boundary files for American Indian and Alaska Native areas and the data located within them, with regional purchase behavior estimated for the region itself. Household income includes transfer income, which is a meaningful share of income in many reservation economies.',
+  },
+  {
+    q: 'What do direct, indirect and induced effects mean?',
+    a: 'Direct effects are the analyzed activity itself: its spending, wages and jobs. Indirect effects happen at the suppliers it buys from. Induced effects come from workers spending their earnings in the region. Lumecon reports the three layers separately and shows how each total is composed.',
+  },
+  {
+    q: 'Are Lumecon results estimates?',
+    a: 'Yes. Results are decision-support estimates and are labeled as such wherever they appear. Every analysis states its data year and assumptions, and exports carry the full tables behind each figure so the estimates can be reviewed.',
+  },
+];
+
+const faqJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': 'https://lumecon.ai/methodology#faq',
+    mainEntity: FAQ.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+];
 ---
 
 <LegalLayout
   title="Methodology | Lumecon"
-  description="How Lumecon builds an economic impact analysis: input-output modeling on authoritative public data, direct, indirect and induced effects, geographies that follow the real economy, and a lineage behind every number."
+  description="How Lumecon builds an economic impact analysis: regionalized input-output modeling on public data, household and government accounts for induced effects, reservation and trust-land geographies, and a lineage behind every result."
   canonical="https://lumecon.ai/methodology"
-  keywords="economic impact methodology, input-output modeling, direct indirect induced effects, BEA input-output accounts, economic multipliers, economic impact analysis methods, traceable results"
+  keywords="economic impact methodology, input-output modeling, direct indirect induced effects, BEA input-output accounts, social accounting matrix, location quotient, RAS balancing, economic multipliers, IMPLAN methodology comparison, REMI comparison, tribal economic impact methodology, traceable results"
+  extraJsonLd={faqJsonLd}
 >
   <h1>Methodology</h1>
   <p class="legal-subhead">How a Lumecon analysis is built, in plain language.</p>
@@ -26,17 +68,31 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     can be followed through the purchases, wages and household spending it sets off.
   </p>
   <p>
-    We keep that proven core and extend it with higher-frequency public signals and modern
-    statistical methods, so an analysis reflects the economy as it is now rather than as it was when
-    a benchmark table was published.
+    We keep that proven core and supplement it with higher-frequency public indicators and newer
+    estimation methods, so an analysis can better reflect current economic conditions rather than
+    relying exclusively on the vintage of the underlying benchmark tables.
   </p>
 
   <h2>The data behind every analysis</h2>
   <p>
-    Lumecon is built on the same authoritative public data as every major economic impact platform:
-    U.S. Census Bureau programs (ACS, LODES, QWI, CBP, TIGER/Line), the Bureau of Economic Analysis
-    Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA. The difference is what
-    we do with it and what we add to it.
+    Lumecon is built from authoritative public datasets widely used in economic and regional
+    analysis: U.S. Census Bureau programs (ACS, LODES, QWI, CBP, TIGER/Line), the Bureau of
+    Economic Analysis Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA. The
+    difference is what we do with it and what we add to it.
+  </p>
+
+  <h2>From national relationships to your region</h2>
+  <p>
+    The industry-to-industry relationships in the national accounts describe how the U.S. economy
+    as a whole buys and sells. To analyze a county, a state or a reservation, those relationships
+    are adjusted to the region: local industry mix, employment and wages come from the regional
+    data listed above, and regional purchase behavior estimates how much of each purchase is met
+    by suppliers inside the region rather than imported from outside it. Regional self-sufficiency
+    is estimated sector by sector with location quotients in the Flegg family, which compare how
+    specialized the region is in each sector with the wider economy, and the adjusted table is
+    then rebalanced with biproportional (RAS) scaling so the accounting identities still hold.
+    Smaller and more specialized regional economies keep less of each dollar, and the model
+    reflects that.
   </p>
 
   <h2>Direct, indirect and induced effects</h2>
@@ -48,6 +104,27 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     faith.
   </p>
 
+  <h2>The household and government accounts</h2>
+  <p>
+    Induced effects come from a social accounting matrix formulation. The input-output table is
+    extended with a household account that receives labor income and spends it back into the
+    region, and a government account that collects taxes and returns them as procurement and
+    transfers. Household income includes transfer income, which matters in regions where
+    transfers are a large share of income, including many reservation economies. Local spending
+    propensities govern how much of each household dollar recirculates in the region rather than
+    leaking out, so induced effects stay tied to the region&rsquo;s real spending patterns.
+  </p>
+
+  <h2>Suppressed and small-area data</h2>
+  <p>
+    Federal disclosure rules withhold some county-sector figures so individual employers cannot
+    be identified. Where a suppressed sector clearly exists in the region, its employment is
+    estimated from wider employment-per-establishment patterns, and wages fall back through a
+    stated hierarchy of sources. Every figure carries a source tag (reported, apportioned or
+    estimated) so a reviewer can see exactly which numbers came straight from the data and which
+    were estimated.
+  </p>
+
   <h2>Geographies that follow the real economy</h2>
   <p>
     Analyses run at the county, state and national level, and reservations and trust lands are
@@ -56,14 +133,74 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     explicitly, so nothing is double-counted.
   </p>
 
+  <h2>Reservations and trust lands as modeled geographies</h2>
+  <p>
+    Reservation and trust-land regions are constructed from the federal boundary files for American
+    Indian and Alaska Native areas and from the employment, industry and demographic data located
+    within those boundaries. They are modeled geographies with their own regional characteristics,
+    and results for a reservation are estimated for that region itself. In this branded context we
+    use homelands as the plain-language umbrella term for reservation and trust-land geographies.
+    Tribal government analysis is an active area of methodological work for us, and this page will
+    grow as that work does.
+  </p>
+
+  <h2>What the headline measures mean</h2>
+  <p>
+    Jobs supported counts the jobs supported by the analyzed activity over the analysis period; it
+    is a job count, and where a conversion basis matters the analysis states it. Labor income is
+    wages, salaries and benefits. GDP contribution is the analysis&rsquo;s value added, the measure
+    that corresponds to a region&rsquo;s contribution to GDP. Economic output is the total value of
+    production the activity supports, which includes value added plus intermediate purchases. Tax
+    impacts are estimates of the revenue the activity supports, reported by level of government:
+    federal, state and local, and tribal government where the analysis includes one.
+  </p>
+
+  <h2>Data vintages</h2>
+  <p>
+    Every analysis states the data year it runs against, and that year is shown with the results
+    (for example, 2025 data). Historical analyses run from 2015 to present where the underlying
+    data support it. Where source datasets carry different vintages, the analysis uses the most
+    recent vintage available for each source at the stated data year.
+  </p>
+
+  <h2>Higher-frequency adjustments</h2>
+  <p>
+    The benchmark input-output tables update on the schedule of the agencies that publish them.
+    Between benchmarks, higher-frequency public series for employment, wages and prices update the
+    levels the model scales against, where the data support it. The structural relationships
+    between industries remain tied to the benchmark tables, so the proven core stays intact while
+    the levels stay current.
+  </p>
+
   <h2>Every number has a lineage</h2>
   <p>
     Each headline figure carries a trace: which effect layer it comes from, which operations
-    generate it and which industries it lands in, each with its share. Automation carries the
-    mechanical work; every assumption is surfaced for human sign-off and results are verified by
-    people before they carry your name. Exports include the full set of tables and the assumptions
-    behind them, so the person defending the number in a council meeting, a board room or a grant
-    review holds the same detail the model used.
+    generate it and which industries it lands in, each with its share. Exports include the full set
+    of tables and the assumptions behind them, so the person defending the number in a council
+    meeting, a boardroom or a grant review holds the same detail the model used.
+  </p>
+
+  <h2>Validation and human review</h2>
+  <p>
+    The software checks that tables cross-foot, that scopes nest correctly and that inputs fall in
+    plausible ranges. Estimated inputs and model outputs are checked against plausibility bounds,
+    including multiplier ranges credible for a small regional economy, and a run that fails a
+    critical check stops rather than shipping a doubtful number. Cedar surfaces the assumptions it
+    makes when structuring inputs and flags gaps it cannot resolve. The person running the
+    analysis reviews and confirms those assumptions before results are finalized: automation
+    carries the mechanical work, and people remain responsible for the analytical decisions.
+  </p>
+
+  <h2>How Lumecon compares</h2>
+  <p>
+    Lumecon shares its analytical foundation with the established tools in the field. IMPLAN and
+    RIMS II are built on the same input-output framework and the same federal statistical system;
+    REMI adds dynamic forecasting models on top of that framework. Lumecon&rsquo;s differences are
+    in construction and delivery: a fully public, citable data foundation; household and
+    government accounts for induced and tax-and-spend effects; a per-figure lineage with source
+    tags; reservations and trust lands as modeled geographies; and one flat subscription covering
+    every supported geography. Lumecon is not affiliated with or endorsed by IMPLAN, REMI or any
+    other platform named here.
   </p>
 
   <h2>What these figures are</h2>
@@ -74,4 +211,14 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     analyses, and write to <a href="mailto:contact@lumecon.ai">contact@lumecon.ai</a> with methodology
     questions.
   </p>
+
+  <h2>Common questions</h2>
+  {
+    FAQ.map((item) => (
+      <>
+        <h3 class="legal-subhead">{item.q}</h3>
+        <p>{item.a}</p>
+      </>
+    ))
+  }
 </LegalLayout>

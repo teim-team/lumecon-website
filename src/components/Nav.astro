@@ -2,8 +2,8 @@
 /**
  * Nav — brand on the left, a single Menu button on the right, on
  * every viewport (the pattern the refreshed IMPLAN site uses).
- * The menu opens a full-screen overlay with the four destinations
- * that matter: Pricing, Methodology, Log in, Sign up.
+ * The menu opens a full-screen overlay with the destinations that
+ * matter: How it works, Pricing, Methodology, Log in, Sign up.
  */
 import { site } from '../config';
 import BrandWordmark from './BrandWordmark.astro';
@@ -36,6 +36,7 @@ const { isHome = false } = Astro.props;
   <div class="navm" id="navMenu" hidden>
     <div class="navm-inner">
       <ul class="navm-list">
+        <li><a href="/#product">How it works</a></li>
         <li><a href="/pricing">Pricing</a></li>
         <li><a href="/methodology">Methodology</a></li>
         <li><a href="/login">Log in</a></li>

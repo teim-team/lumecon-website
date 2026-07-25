@@ -35,6 +35,16 @@ import CedarChat from './CedarChat.astro';
   title="Ask Cedar"
 >
   <span class="cedar-fab__dot" aria-hidden="true"></span>
+  <span class="cedar-fab__icon cedar-fab__icon--mark" aria-hidden="true">
+    <img
+      src="/brand/lumecon-logo-mark-transparent.png"
+      alt=""
+      width="30"
+      height="30"
+      loading="lazy"
+      decoding="async"
+    />
+  </span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg
       viewBox="0 0 24 24"
@@ -266,7 +276,7 @@ import CedarChat from './CedarChat.astro';
     background: var(--white);
     color: var(--ink);
     border: 1px solid var(--rule-strong);
-    border-radius: 0.875rem;
+    border-radius: 0.5rem;
     box-shadow:
       0 4px 12px rgba(10, 15, 38, 0.08),
       0 8px 24px rgba(10, 15, 38, 0.04);
@@ -336,12 +346,53 @@ import CedarChat from './CedarChat.astro';
     display: block;
   }
   .cedar-fab__icon--close,
-  .cedar-fab__label--close {
+  .cedar-fab__label--close,
+  .cedar-fab__icon--mark {
     display: none;
+  }
+  .cedar-fab__icon--mark img {
+    display: block;
+    width: 30px;
+    height: 30px;
   }
   .cedar-fab__icon--close {
     width: 22px;
     height: 22px;
+  }
+
+  /* On small screens the launcher collapses to a compact circle so it
+     never covers CTAs, pricing cards or other page controls. The full
+     two-line pill only exists at desktop widths. */
+  @media (max-width: 760px) {
+    .cedar-fab,
+    body.cedar-popped .cedar-fab {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      gap: 0;
+      border-radius: 50%;
+      justify-content: center;
+      right: calc(0.7rem + env(safe-area-inset-right, 0px));
+      bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    }
+    .cedar-fab__copy,
+    .cedar-fab__label--close {
+      display: none;
+    }
+    .cedar-fab__icon--mark {
+      display: inline-flex;
+    }
+    body.cedar-popped .cedar-fab__icon--mark {
+      display: none;
+    }
+    .cedar-fab__dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+    }
+    body.cedar-popped .cedar-fab__dot {
+      display: none;
+    }
   }
 
   /* Open state = a clear navy "Close" pill (the launcher steps aside). */
@@ -424,7 +475,7 @@ import CedarChat from './CedarChat.astro';
     background: var(--white);
     color: var(--ink);
     border: 1px solid var(--rule-strong);
-    border-radius: 0.875rem;
+    border-radius: 0.5rem;
     box-shadow:
       0 12px 32px rgba(10, 15, 38, 0.14),
       0 4px 12px rgba(10, 15, 38, 0.08);

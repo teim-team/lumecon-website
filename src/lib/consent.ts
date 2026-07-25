@@ -37,3 +37,15 @@ export function setConsent(state: 'granted' | 'denied'): void {
 export function hasAnalyticsConsent(): boolean {
   return getConsent() === 'granted';
 }
+
+/**
+ * Forget the stored choice so the banner can be shown again. Used by
+ * the persistent "Privacy choices" control in the footer.
+ */
+export function clearConsent(): void {
+  try {
+    localStorage.removeItem(KEY);
+  } catch {
+    /* storage disabled — nothing to clear */
+  }
+}

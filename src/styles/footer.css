@@ -64,6 +64,24 @@
 .footer-col a:hover {
   color: var(--navy);
 }
+/* "Privacy choices" is a button (it clears the stored consent choice)
+   but must read exactly like the sibling links. */
+.footer-col .footer-linkbtn {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  transition: color 0.2s var(--ease);
+}
+.footer-col .footer-linkbtn:hover {
+  color: var(--navy);
+}
 /* Contact link picks up the teal accent so it reads as the most
    actionable item in the column. (a.footer-col__contact so it
    out-specifies the generic .footer-col a rules above.) */

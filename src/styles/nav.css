@@ -220,7 +220,7 @@ nav.nav--static {
   min-width: 440px;
   background: var(--white);
   border: 1px solid var(--rule);
-  border-radius: 10px;
+  border-radius: 6px;
   box-shadow:
     0 2px 6px rgba(14, 21, 48, 0.06),
     0 16px 40px rgba(14, 21, 48, 0.14);
@@ -398,7 +398,7 @@ nav.nav--static {
   gap: 0.55rem;
   background: none;
   border: none;
-  border-radius: 10px;
+  border-radius: 6px;
   padding: 0.5rem 0.4rem;
   cursor: pointer;
   font-family: var(--font-sans);

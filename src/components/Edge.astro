@@ -3,9 +3,9 @@
  * The Lumecon edge — the table-stakes capabilities buyers scan for
  * (cloud, security, AI native, authoritative data, data freshness,
  * methodology), each with a line icon drawn in the app's icon style
- * (thin strokes, sharp joins, teal chip). The header carries the
- * provenance story: built at Ivy League and peer schools with former
- * Federal Reserve economists, on modern data and methods.
+ * (thin strokes, sharp joins, teal chip). The header tells the
+ * provenance story in evidence terms: who built it, on what
+ * foundation, and what that makes possible.
  */
 import '../styles/home.css';
 
@@ -18,14 +18,14 @@ const CARDS = [
   },
   {
     k: 'Security',
-    t: 'Encrypted end to end',
-    b: 'Hosted on AWS with encryption in transit and at rest, isolated accounts and least-privilege access to your data.',
+    t: 'Encrypted in transit and at rest',
+    b: 'Hosted on AWS with encryption in transit and at rest, account-level data separation and least-privilege access controls.',
     icon: 'shield',
   },
   {
     k: 'AI native',
     t: 'Cedar is the workflow',
-    b: 'Cedar is built into intake, analysis and reporting from day one. We did not tack a chatbot onto an old tool.',
+    b: 'Cedar is embedded across intake, analysis and reporting rather than added as a separate chat layer.',
     icon: 'spark',
   },
   {
@@ -37,13 +37,13 @@ const CARDS = [
   {
     k: 'Higher-frequency data',
     t: 'Data that keeps up',
-    b: 'Higher-frequency signals layered on the official benchmarks, so an analysis reflects the economy as it is now.',
+    b: 'Higher-frequency economic indicators supplement slower-moving benchmark datasets, helping analyses reflect more recent conditions where the data support it.',
     icon: 'pulse',
   },
   {
     k: 'Trusted methodology',
     t: 'Proven core, modern methods',
-    b: 'Input-output methodology the field has trusted for decades, extended with modern econometrics. The economy changes fast; your tool should keep up.',
+    b: 'Input-output methodology the field has trusted for decades, refreshed with current data and documented assumptions.',
     icon: 'trend',
   },
 ];
@@ -53,13 +53,14 @@ const CARDS = [
   <div class="edge-inner">
     <header class="flowsec-head">
       <p class="h-kicker">The Lumecon edge</p>
-      <h2 class="flowsec-title" id="edge-title">Modern software for a fast-moving economy.</h2>
+      <h2 class="flowsec-title" id="edge-title">Modern software for a changing economy.</h2>
       <p class="flowsec-lede">
-        Other tools lead with decades of history. Lumecon was built at Ivy League and peer schools
-        by former Federal Reserve economists, engineers and academics, on modern data and methods,
-        and the model keeps improving so you get insights others miss, at a fraction of the cost.{
-          ' '
-        }
+        Lumecon was built by economists, engineers and researchers with experience at the Federal
+        Reserve and leading universities. It pairs the proven foundation of input-output analysis
+        with current data, higher-frequency economic signals and software designed for recurring
+        analysis. The result is a platform that is easier to update, easier to audit and within
+        reach of organizations that have historically been priced out of enterprise modeling
+        tools.{' '}
         <a class="inline-link" href="/methodology">Read the methodology</a>.
       </p>
     </header>

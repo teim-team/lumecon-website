@@ -84,7 +84,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   },
   {
     label: 'U.S. geographies',
-    values: ['Counties, states, the nation and reservations', 'Same', 'Same'],
+    values: ['Counties, states, the nation, reservations and trust lands', 'Same', 'Same'],
   },
   {
     label: 'Historical analysis',
@@ -128,11 +128,11 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
 export const COMPETITIVE_OFFER = {
   headline: 'Already paying for economic impact analysis software?',
   subhead: 'We’ll cut that cost in half.',
-  body: 'Show us what your organization spent on qualifying economic impact analysis or economic modeling software during the previous 12 months. Eligible organizations can receive their first annual Lumecon license for 50% of that documented spend, subject to the applicable Lumecon plan and promotional terms.',
+  body: 'Show us what your organization spent on qualifying economic impact analysis or economic modeling software during the previous 12 months. For your first year, eligible organizations can move to Lumecon for 50% of that documented spend, up to the standard price of the applicable Lumecon plan.',
   ctaLabel: 'See if you qualify',
   ctaSubject: 'Competitive transition offer: see if we qualify',
   finePrint:
-    'Qualifying software may include IMPLAN, REMI and other professional economic modeling platforms. Documentation of the prior 12 months of spend is required. The offer applies to the first year; eligibility conditions and minimum license amounts can apply. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
+    'Qualifying software may include IMPLAN, REMI and other professional economic modeling platforms. Documentation of the prior 12 months of spend is required. The offer applies to the first year; minimum plan pricing and other eligibility requirements may apply. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
 };
 
 /** Consultant licensing: custom commercial pricing, no public number. */
@@ -140,7 +140,7 @@ export const CONSULTANT = {
   headline: 'Lumecon for consultants',
   audience: 'We do economic analysis for clients.',
   positioning: 'Spend less time building models. Spend more time advising clients.',
-  body: 'Consultant licenses are for firms and professionals using Lumecon commercially to conduct analysis for outside clients. Use Lumecon across engagements while keeping your client relationships, methodology and deliverables your own. We’ll also work with your firm to calibrate Cedar around how your team performs analysis and produces client reporting.',
+  body: 'Consultant licenses are for firms and professionals using Lumecon commercially to conduct analysis for outside clients. Use Lumecon across engagements while keeping your client relationships, analytical judgment and deliverables your own. We’ll also work with your firm to calibrate Cedar around how your team performs analysis and produces client reporting.',
   points: [
     'The full Lumecon modeling platform and every applicable geography',
     'Commercial and client use',
