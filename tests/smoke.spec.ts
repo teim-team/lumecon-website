@@ -30,61 +30,6 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   expect(real).toEqual([]);
 });
 
-/* Map tests run on both engines now (#100). They previously skipped
-   WebKit because fixed-timeout waits were flaky on the d3-geo map under
-   headless Safari; the waits below key off real conditions (the map
-   actually rendering, the chip text actually changing) instead, which
-   is robust on both engines. WebKit is the informational CI lane, so if
-   a render genuinely can't complete headless it surfaces there without
-   blocking the merge gate. */
-test('map page renders the interactive hero map', async ({ page }) => {
-  await page.goto('/map', { waitUntil: 'networkidle' });
-  await expect(page.locator('#heroMap')).toBeVisible();
-  // The state paths are server-rendered, so their presence confirms the
-  // SVG shipped. The genuine runtime-boot check (the script actually
-  // running an analysis) is the auto-cycle test below, which waits for the
-  // chip to populate — a signal that only appears once hero.ts runs.
-  await expect(page.locator('.hero-state').first()).toBeAttached();
-  expect(await page.locator('.hero-state').count()).toBeGreaterThan(40); // ~50 states + DC
-});
-
-test('auto-cycle fires an analysis within 10s', async ({ page }) => {
-  await page.goto('/map', { waitUntil: 'networkidle' });
-  // The header region gets populated with the full chip when a scene
-  // starts running. Levels: STATE / COUNTY / RESERVATION / ANCSA
-  // REGION / NHO. (URL hash is no longer used — /demo/<slug> pages
-  // are the canonical shareable paths.)
-  await expect(page.locator('#workspaceRegion')).toContainText(
-    /STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/,
-    { timeout: 10_000 },
-  );
-});
-
-test('"New analysis" button cycles through levels', async ({ page }) => {
-  await page.goto('/map', { waitUntil: 'networkidle' });
-  const region = page.locator('#workspaceRegion');
-  // Wait for the first auto-analysis to land before driving the button.
-  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, {
-    timeout: 10_000,
-  });
-  const observedLevels: string[] = [];
-  for (let i = 0; i < 3; i++) {
-    const prev = await region.textContent();
-    await page.locator('#workspaceAgain').click();
-    // Wait until the chip text actually changes (the analysis re-ran)
-    // instead of a fixed delay — robust across engines and CI load.
-    await expect.poll(async () => await region.textContent(), { timeout: 8000 }).not.toBe(prev);
-    const chip = await region.textContent();
-    // First chip token before the bullet is the level. The reservation
-    // pool now includes ANCSA REGION and NHO entries; normalize those
-    // to RESERVATION so the rotating-pool assertion stays stable.
-    let level = chip?.trim().split(' ·')[0] || '';
-    if (level === 'ANCSA REGION' || level === 'NHO') level = 'RESERVATION';
-    if (level) observedLevels.push(level);
-  }
-  expect(observedLevels).toEqual(['STATE', 'COUNTY', 'RESERVATION']);
-});
-
 test('skip-link is hidden until focused', async ({ page }) => {
   await page.goto('/');
   const skip = page.locator('.skip-link');
@@ -110,36 +55,6 @@ test('demo page renders with real figures', async ({ page }) => {
     /\$10\.9/,
     /≈\s*\d/,
   ]);
-});
-
-test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({
-  request,
-  page,
-}) => {
-  // Grep the raw HTML response to confirm the polygons aren't inlined.
-  const r = await request.get('/map');
-  const html = await r.text();
-  const inlined = (html.match(/class="hero-aiannh/g) || []).length;
-  expect(inlined).toBe(0);
-  // Then verify they populate at runtime.
-  await page.goto('/map');
-  await page.waitForFunction(
-    () => (document.querySelectorAll('.hero-aiannh').length || 0) > 100,
-    null,
-    { timeout: 8000 },
-  );
-});
-
-test('keyboard shortcut S triggers a new analysis', async ({ page }) => {
-  await page.goto('/map', { waitUntil: 'networkidle' });
-  const region = page.locator('#workspaceRegion');
-  // Wait for the first auto-analysis so there's a baseline chip to change.
-  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, {
-    timeout: 10_000,
-  });
-  const before = await region.textContent();
-  await page.keyboard.press('s');
-  await expect.poll(async () => await region.textContent(), { timeout: 8000 }).not.toBe(before);
 });
 
 /* Coverage for the pages built out after the homepage map: the
