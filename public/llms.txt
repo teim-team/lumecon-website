@@ -71,8 +71,5 @@ Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researche
 - [Pricing](https://lumecon.ai/pricing/)
 - [Methodology](https://lumecon.ai/methodology/)
 - [Glossary](https://lumecon.ai/glossary/)
-- [Cedar](https://lumecon.ai/cedar/)
-- [About](https://lumecon.ai/about/)
 - [Privacy policy](https://lumecon.ai/privacy/)
 - [Terms of service](https://lumecon.ai/terms/)
-- [Status](https://lumecon.ai/status/)

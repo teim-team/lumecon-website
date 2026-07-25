@@ -2977,7 +2977,7 @@ export const INTENTS: CedarIntent[] = [
       'sounds too good',
     ],
     answer:
-      'Fair to ask. Lumecon is a real company building economic impact analysis software, founded by brothers Elijah and Michael Moreno, with a team that has worked across the Federal Reserve system and trained at schools like Cornell, Dartmouth, Oxford and MIT. The math is mainstream economics and the core data is public, so there is no black box and no catch: the product is the software that makes the analysis fast, usable and auditable. You can read about the team on the About page, or email contact@lumecon.ai with any question.',
+      'Fair to ask. Lumecon is a real company building economic impact analysis software, founded by brothers Elijah and Michael Moreno, with a team that has worked across the Federal Reserve system and trained at schools like Cornell, Dartmouth, Oxford and MIT. The math is mainstream economics and the core data is public, so there is no black box and no catch: the product is the software that makes the analysis fast, usable and auditable. Email contact@lumecon.ai with any question and a person will answer.',
   },
   {
     id: 'leadership',
@@ -2998,7 +2998,7 @@ export const INTENTS: CedarIntent[] = [
       'who is the ceo',
     ],
     answer:
-      'Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Elijah is the CEO; the broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. The About page has each person and their work. Want the link, or an introduction to the team?',
+      'Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Elijah is the CEO; the broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. Want an introduction to the team? contact@lumecon.ai reaches them directly.',
   },
   {
     id: 'press_media',
@@ -3018,7 +3018,7 @@ export const INTENTS: CedarIntent[] = [
       'for a story',
     ],
     answer:
-      'Happy to help with a story. The fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline and what you are working on and a person will get back to you. For background, the About page covers the team and the company and the methodology page explains how an analysis is built.',
+      'Happy to help with a story. The fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline and what you are working on and a person will get back to you. For background, the methodology page explains how an analysis is built.',
   },
 
   /* --- Upsell: free vs paid Cedar (the one new chip) --- */
