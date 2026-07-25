@@ -75,6 +75,22 @@ test('signup reflects a plan carried over from pricing', async ({ page }) => {
   await expect(badge).toContainText(/Sapling tier/);
 });
 
+test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page }) => {
+  // Regression: the overlay used to live inside <nav>, whose
+  // backdrop-filter made it the containing block for position:fixed,
+  // silently confining the "full screen" menu to the nav bar's box.
+  // Inner pages (nav--static) always carry the filter, so open there.
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  await page.locator('#navMenuBtn').click();
+  const menu = page.locator('#navMenu');
+  await expect(menu).toBeVisible();
+  const box = await menu.boundingBox();
+  const viewport = page.viewportSize();
+  if (!box || !viewport) throw new Error('no menu box');
+  expect(box.height).toBeGreaterThan(viewport.height * 0.9);
+  await expect(menu.locator('a', { hasText: 'Methodology' })).toBeVisible();
+});
+
 test('checkout preselects the plan from the query and takes a discount code', async ({ page }) => {
   await page.goto('/checkout?tier=leader', { waitUntil: 'domcontentloaded' });
   const selected = page.locator('.co-plan--on');

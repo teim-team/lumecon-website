@@ -521,3 +521,19 @@
     font-size: 1.65rem;
   }
 }
+
+/* Touch feedback for the auth and checkout controls. */
+.auth-form .btn:active,
+.co-plan:active,
+.auth-chip:active,
+.co-code__apply:active {
+  transform: scale(0.985);
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-form .btn:active,
+  .co-plan:active,
+  .auth-chip:active,
+  .co-code__apply:active {
+    transform: none;
+  }
+}

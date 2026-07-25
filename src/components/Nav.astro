@@ -32,20 +32,25 @@ const { isHome = false } = Astro.props;
       <span class="navm-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>
     </button>
   </div>
-
-  <div class="navm" id="navMenu" hidden>
-    <div class="navm-inner">
-      <ul class="navm-list">
-        <li><a href="/#product">How it works</a></li>
-        <li><a href="/pricing">Pricing</a></li>
-        <li><a href="/methodology">Methodology</a></li>
-        <li><a href="/login">Log in</a></li>
-        <li><a class="navm-list__cta" href="/signup">Sign up</a></li>
-      </ul>
-      <a class="navm-contact" href={`mailto:${site.email}`}>{site.email}</a>
-    </div>
-  </div>
 </nav>
+
+<!-- The overlay must be a SIBLING of <nav>, not a child: the nav bar
+     carries backdrop-filter (always on inner pages, on scroll on the
+     homepage), and a filtered ancestor becomes the containing block
+     for position: fixed descendants. Inside the nav, the "full
+     screen" overlay was silently confined to the bar's own box. -->
+<div class="navm" id="navMenu" hidden>
+  <div class="navm-inner">
+    <ul class="navm-list">
+      <li><a href="/#product">How it works</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/methodology">Methodology</a></li>
+      <li><a href="/login">Log in</a></li>
+      <li><a class="navm-list__cta" href="/signup">Sign up</a></li>
+    </ul>
+    <a class="navm-contact" href={`mailto:${site.email}`}>{site.email}</a>
+  </div>
+</div>
 
 <script>
   (function () {
