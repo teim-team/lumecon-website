@@ -584,23 +584,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  background: var(--accent-rgba-08);
-  border: 1px solid var(--accent-bar);
-  color: var(--ink-2);
-  transition:
-    transform 0.2s var(--ease),
-    color 0.2s var(--ease);
+  height: 34px;
+  /* Official marks, monochrome, in the site accent. Teal on white
+     stays on --accent-text for contrast. */
+  color: var(--accent-text);
+  transition: transform 0.2s var(--ease);
 }
 .askai-tile__ic svg {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
 .askai-tile:hover .askai-tile__ic {
   transform: scale(1.08);
-  color: var(--accent-text);
 }
 .askai-tile__name {
   font-family: var(--font-sans);
