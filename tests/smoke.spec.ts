@@ -9,24 +9,24 @@ import { test, expect } from '@playwright/test';
 
 test('home page loads and renders the hero product shot', async ({ page }) => {
   const errs: string[] = [];
-  page.on('pageerror', e => errs.push(e.message));
-  page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
+  page.on('pageerror', (e) => errs.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errs.push(m.text());
+  });
 
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
   // The homepage hero leads with a framed screenshot of the app's
   // results page; the interactive map lives on /map (exercised by
   // the tests below).
-  await expect(page.locator('.hero-shot img')).toBeVisible();
+  await expect(page.locator('.hero2-shot img')).toBeVisible();
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
   // Filter out a known-harmless console error (TLS cert on the preview host).
   // (The old frame-ancestors meta-CSP warning and the ipapi.co geolocation
   // call were both removed, so they can no longer appear here.)
-  const real = errs.filter(e =>
-    !e.includes('CERT_AUTHORITY_INVALID')
-  );
+  const real = errs.filter((e) => !e.includes('CERT_AUTHORITY_INVALID'));
   expect(real).toEqual([]);
 });
 
@@ -54,15 +54,19 @@ test('auto-cycle fires a study within 10s', async ({ page }) => {
   // starts running. Levels: STATE / COUNTY / RESERVATION / ANCSA
   // REGION / NHO. (URL hash is no longer used — /demo/<slug> pages
   // are the canonical shareable paths.)
-  await expect(page.locator('#workspaceRegion'))
-    .toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, { timeout: 10_000 });
+  await expect(page.locator('#workspaceRegion')).toContainText(
+    /STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/,
+    { timeout: 10_000 },
+  );
 });
 
 test('"New study" button cycles through levels', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
   const region = page.locator('#workspaceRegion');
   // Wait for the first auto-study to land before driving the button.
-  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, { timeout: 10_000 });
+  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, {
+    timeout: 10_000,
+  });
   const observedLevels: string[] = [];
   for (let i = 0; i < 3; i++) {
     const prev = await region.textContent();
@@ -93,14 +97,25 @@ test('skip-link is hidden until focused', async ({ page }) => {
 test('demo page renders with real figures', async ({ page }) => {
   // Use a stable county-level scene whose chip / slug isn't likely to
   // change in copy-tightening passes.
-  await page.goto('/demo/county-community-health-clinic-pierce-county-wa', { waitUntil: 'domcontentloaded' });
+  await page.goto('/demo/county-community-health-clinic-pierce-county-wa', {
+    waitUntil: 'domcontentloaded',
+  });
   await expect(page.locator('h1')).toContainText('Community health clinic');
   await expect(page.locator('.demo-fig dt').first()).toHaveText('Direct');
   await expect(page.locator('.demo-fig--total dt')).toHaveText('Total impact');
-  await expect(page.locator('.demo-fig dd')).toContainText([/\$5M/, /\$2\.3M/, /\$3\.6/, /\$10\.9/, /≈\s*\d/]);
+  await expect(page.locator('.demo-fig dd')).toContainText([
+    /\$5M/,
+    /\$2\.3M/,
+    /\$3\.6/,
+    /\$10\.9/,
+    /≈\s*\d/,
+  ]);
 });
 
-test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({ request, page }) => {
+test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async ({
+  request,
+  page,
+}) => {
   // Grep the raw HTML response to confirm the polygons aren't inlined.
   const r = await request.get('/map');
   const html = await r.text();
@@ -111,7 +126,7 @@ test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async (
   await page.waitForFunction(
     () => (document.querySelectorAll('.hero-aiannh').length || 0) > 100,
     null,
-    { timeout: 8000 }
+    { timeout: 8000 },
   );
 });
 
@@ -119,7 +134,9 @@ test('keyboard shortcut S triggers a new study', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
   const region = page.locator('#workspaceRegion');
   // Wait for the first auto-study so there's a baseline chip to change.
-  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, { timeout: 10_000 });
+  await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, {
+    timeout: 10_000,
+  });
   const before = await region.textContent();
   await page.keyboard.press('s');
   await expect.poll(async () => await region.textContent(), { timeout: 8000 }).not.toBe(before);
@@ -138,7 +155,9 @@ test('about page is just the About and How-we-work sections', async ({ page }) =
   // Six working-area cards, each naming clickable people.
   await expect(page.locator('.area-card')).toHaveCount(6);
   // Names in the working areas link to each person's /team/<slug> page.
-  await expect(page.locator('.area-card__person[href="/team/elijah-moreno"]').first()).toBeAttached();
+  await expect(
+    page.locator('.area-card__person[href="/team/elijah-moreno"]').first(),
+  ).toBeAttached();
 });
 
 test('individual team-member pages render the full bio off the about page', async ({ page }) => {
@@ -152,34 +171,33 @@ test('individual team-member pages render the full bio off the about page', asyn
   await expect(page.locator('.person-pub').first()).toBeVisible();
 });
 
-test('pricing platform pick reveals the three tier cards', async ({ page }) => {
+test('pricing shows three public plans with Sapling recommended', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
-  // The tier grid is gated behind a platform pick.
-  const tierSection = page.locator('[data-platform-section]').first();
-  await expect(tierSection).toBeHidden();
-  await page.locator('.pricing-platform-tile[data-platform-id="tribal-economic-impact"]').click();
-  await expect(tierSection).toBeVisible();
-  // Scoped to the regional grid — the Consultant grid lives in the same
-  // section but stays hidden until the Consultant tile is picked.
-  await expect(page.locator('[data-tier-grid="regional"] .pricing-tier-card')).toHaveCount(3);
-  // Tribal Sprout price (10,000) is wired through the picker.
-  await expect(page.locator('[data-tier-price-slot="starter"]')).toHaveText('$10K');
-  // Active-tier CTA routes into the signup flow with the tier id.
-  await expect(page.locator('[data-tier-grid="regional"] .pricing-tier-card .btn').first()).toHaveAttribute('href', /\/signup\?tier=/);
-  // Toolbox add-on is shown for regional platforms.
-  await expect(page.locator('[data-addon="toolbox"]')).toBeVisible();
+  // One platform, three plans — no platform picker, no gating.
+  await expect(page.locator('.pr-plan')).toHaveCount(3);
+  await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
+  await expect(page.locator('#plan-starter .pr-plan__amount')).toHaveText('$500');
+  await expect(page.locator('#plan-standard .pr-plan__amount')).toHaveText('$2,500');
+  await expect(page.locator('#plan-leader .pr-plan__amount')).toHaveText('$7,500');
+  // Plan CTAs route into signup with the stable tier id.
+  await expect(page.locator('#plan-starter .pr-plan__cta')).toHaveAttribute(
+    'href',
+    /\/signup\?tier=starter/,
+  );
+  // The nine-row detail table renders (Cedar, Team Workspace, Cedar Grove rows included).
+  await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(9);
+  await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
 });
 
-test('pricing consultant pick shows the single Arborist tier without Toolbox', async ({ page }) => {
+test('pricing carries the competitive transition offer and consultant CTA', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
-  await page.locator('.pricing-platform-tile[data-platform-id="consultant-economic-impact"]').click();
-  await expect(page.locator('[data-tier-grid="consultant"] .pricing-tier-card')).toHaveCount(1);
-  // Regional grid is hidden when Consultant is picked.
-  await expect(page.locator('[data-tier-grid="regional"]')).toBeHidden();
-  // Toolbox add-on is hidden — it requires an active subscription.
-  await expect(page.locator('[data-addon="toolbox"]')).toBeHidden();
-  // Arborist flat price (15,000) is wired through the picker.
-  await expect(page.locator('[data-tier-price-slot="flat"]')).toHaveText('$15K');
+  const offer = page.locator('#switch');
+  await expect(offer).toContainText('Already paying for economic modeling software?');
+  await expect(offer.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
+  // Consultant licensing is custom-priced: a CTA, not a public tier.
+  const consult = page.locator('#consultants');
+  await expect(consult).toContainText('Lumecon for consultants');
+  await expect(consult.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
 });
 
 test('cedar page boots the inline chat panel', async ({ page }) => {
@@ -198,4 +216,3 @@ test('signup reflects a plan carried over from pricing', async ({ page }) => {
   await expect(badge).toContainText(/Sapling tier/);
   await expect(badge).toContainText(/Tribal Economic Impact/);
 });
-

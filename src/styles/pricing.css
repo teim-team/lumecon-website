@@ -1,1135 +1,380 @@
-/* /pricing styles. Four-band editorial layout matching the source
-   spec from claude/explore-lumecon-foundation-BDWKd:
-     1. Hero (white)    — h1, lede, tier grid
-     2. Compare (white) — kicker, h2, capability table
-     3. Discount (cream) — single panel with code input
-     4. Terms (navy)    — prepay ladder + exports + price-change notice
+/* /pricing v2 — one platform, three plans. Shares primitives with
+   home.css (.h-kicker, .btn2, .band, .flowsec, .rings); this file
+   holds only the pricing-specific layout. */
 
-   Tree tier carries a `comingSoon` flag — its card greys out, the
-   price is replaced with a "Coming soon" tag, the CTA becomes
-   "Notify me", and its comparison-table cells that describe
-   Tree-only capabilities render "Coming soon" instead of "Included." */
-
-.pricing {
+.pr {
   background: var(--white);
 }
 
-/* Shared editorial-band rhythm. cream + navy bands extend full-bleed
-   via box-shadow + clip-path so the content stays at max-width
-   without restructuring HTML. */
-.editorial-band {
-  padding: clamp(4rem, 8vw, 6rem) 0;
-  border-bottom: 1px solid var(--rule);
+/* ---------- hero ---------- */
+.pr-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(6.5rem, 12vh, 9rem) var(--container-pad) clamp(1.5rem, 3vh, 2.5rem);
 }
-.editorial-band__inner {
+.pr-hero .rings--tr {
+  top: -260px;
+  right: -240px;
+  opacity: 0.3;
+}
+.pr-hero__inner {
+  position: relative;
+  z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--container-pad);
-}
-.editorial-band--cream {
-  background: var(--cream);
-  box-shadow: 0 0 0 50vmax var(--cream);
-  clip-path: inset(0 -50vmax);
-}
-.editorial-band--navy {
-  background: var(--navy);
-  color: var(--white);
-  box-shadow: 0 0 0 50vmax var(--navy);
-  clip-path: inset(0 -50vmax);
-}
-
-/* ---------- Hero band ---------- */
-.pricing-hero {
-  padding-top: clamp(5rem, 10vw, 7rem);
-}
-.pricing-hero__head {
-  max-width: 880px;
-  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
-}
-.editorial-question {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
-  line-height: 1.06;
-  letter-spacing: -0.025em;
-  color: var(--navy);
-  margin: 0 0 1.4rem;
-  max-width: 18ch;
-}
-.pricing-hero__lede {
-  font-family: var(--font-sans);
-  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
-  line-height: 1.55;
-  color: var(--ink-2);
-  font-weight: 400;
-  margin: 0 0 1.1rem;
-  max-width: 64ch;
-}
-.pricing-hero__aside {
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: var(--ink-3);
-  font-style: italic;
-  margin: 0 0 0;
-  max-width: 60ch;
-  padding-left: 1rem;
-  border-left: 2px solid var(--rule-strong, rgba(14, 21, 48, 0.18));
-}
-
-/* ---------- Platform picker ----------
-   Four tiles in one row on desktop so the picker reads as a single
-   set. The Consultant tile (kind === 'service') is visually
-   distinguished via the .pricing-platform-tile--service left-edge
-   accent + a "For consultants" corner tag, so the internal-vs-
-   external distinction still reads at a glance without needing
-   group headers. Below 1100px the grid wraps to 2-up; below 600px
-   it stacks to 1-up. */
-.pricing-platform-prelude {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-  font-weight: 600;
-  margin: 0 0 1.1rem;
-}
-.pricing-platform-grid {
-  list-style: none;
-  margin: 0 0 1.4rem;
-  padding: 0;
   display: grid;
+  justify-items: center;
+  text-align: center;
   gap: 1.1rem;
-  /* Desktop: four-up. Tablet (<1100): 2-up. Phone (<600): 1-up. */
-  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
-@media (max-width: 1100px) {
-  .pricing-platform-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 600px) {
-  .pricing-platform-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.pricing-platform-tile {
-  width: 100%;
-  text-align: left;
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 14px;
-  padding: 1.2rem 1.2rem 1.4rem;
-  /* Stack icon over content on desktop 4-up so each tile has more
-     room for the name and fit text; switch to side-by-side at 2-up
-     and below where horizontal space comes back. */
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  cursor: pointer;
-  font-family: inherit;
-  transition:
-    border-color 0.18s var(--ease),
-    box-shadow 0.18s var(--ease),
-    transform 0.18s var(--ease),
-    background 0.18s var(--ease);
-  position: relative;
-}
-@media (max-width: 1100px) {
-  /* At 2-up the tiles are wider; revert to the icon-left grid so
-     the picker doesn't suddenly look like four giant cards. */
-  .pricing-platform-tile {
-    display: grid;
-    grid-template-columns: 48px 1fr;
-    grid-template-rows: auto auto;
-    column-gap: 1rem;
-    row-gap: 0.55rem;
-    padding: 1.4rem 1.4rem 1.6rem;
-  }
-}
-.pricing-platform-tile:hover,
-.pricing-platform-tile:focus-visible {
-  border-color: var(--accent);
-  box-shadow: 0 6px 18px -6px rgba(14, 21, 48, 0.12);
-  transform: translateY(-2px);
-}
-.pricing-platform-tile:active {
-  border-color: var(--accent);
-  background: var(--accent-rgba-08);
-  transform: translateY(0);
-}
-.pricing-platform-tile.is-active {
-  border-color: var(--accent);
-  background: linear-gradient(0deg, var(--accent-rgba-08) 0%, var(--white) 100%);
-  box-shadow:
-    0 1px 1px rgba(10, 15, 38, 0.04),
-    0 12px 28px -10px rgba(15, 181, 165, 0.25);
-}
-.pricing-platform-tile.is-active::after {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  bottom: -1px;
-  border-radius: 14px;
-  border: 2px solid var(--accent);
-  pointer-events: none;
-}
-.pricing-platform-tile--coming-soon {
-  background: var(--cream);
-  border-style: dashed;
-  border-color: var(--rule-strong, rgba(14, 21, 48, 0.22));
-  cursor: default;
-}
-.pricing-platform-tile--coming-soon:hover {
-  border-color: var(--cedar);
-  background: var(--cedar-mist, #e0f2e7);
-  transform: none;
-  box-shadow: none;
-}
-.pricing-platform-tile__icon {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background: var(--cream);
-  /* Subtle by default; teal on tile hover. Whole filled icon
-     body transitions, not just an outline. */
-  color: var(--ink-3);
-  transition: color 0.18s var(--ease);
-}
-.pricing-platform-tile:hover .pricing-platform-tile__icon,
-.pricing-platform-tile:focus-visible .pricing-platform-tile__icon,
-.pricing-platform-tile:active .pricing-platform-tile__icon {
-  color: var(--accent-text);
-  background: var(--accent-rgba-08);
-}
-.pricing-platform-tile.is-active .pricing-platform-tile__icon {
-  color: var(--accent-text);
-  background: var(--accent-rgba-08);
-}
-.pricing-platform-tile--coming-soon .pricing-platform-tile__icon {
-  background: var(--white);
-  color: var(--ink-3);
-}
-.pricing-platform-tile--coming-soon:hover .pricing-platform-tile__icon {
-  color: var(--cedar-text);
-}
-.pricing-platform-tile__icon :global(svg) {
-  width: 60%;
-  height: 60%;
-  display: block;
-}
-.pricing-platform-tile__name {
-  grid-column: 2;
-  grid-row: 1;
+.pr-hero__title {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.18rem;
-  letter-spacing: -0.014em;
-  color: var(--navy);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--ink);
   margin: 0;
-  align-self: end;
-  /* Reserve room on the right so the absolutely-positioned
-     "Coming soon" tag doesn't sit on top of the title text. */
-  padding-right: 5.5rem;
+  max-width: 24ch;
 }
-.pricing-platform-tile__fit {
-  grid-column: 2;
-  grid-row: 2;
-  font-family: var(--font-sans);
-  font-size: 0.92rem;
-  line-height: 1.45;
+.pr-hero__lede {
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  line-height: 1.6;
   color: var(--ink-2);
-  font-weight: 400;
+  margin: 0;
+  max-width: 62ch;
 }
-.pricing-platform-tile__tag {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.pr-hero__callout {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--white);
-  background: var(--cedar);
-  padding: 0.18rem 0.55rem;
-  border-radius: 3px;
-}
-.pricing-platform-prompt {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  letter-spacing: 0.08em;
-  color: var(--ink-3);
-  margin: 0.6rem 0 0;
-  font-style: italic;
-}
-
-/* Pricing TBD placeholder — replaces the dollar price string when
-   finance hasn't locked numbers yet. Reads as deliberate, not
-   missing-data. */
-.pricing-tier-card__price-tbd {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.4rem;
-  letter-spacing: -0.018em;
-  color: var(--ink-3);
-  font-style: italic;
-}
-
-/* Tier kicker that names the currently-picked platform. */
-.pricing-tiers__head {
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-}
-.pricing-hero__kicker,
-.pricing-tiers__kicker {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
-  font-weight: 600;
-  margin: 0 0 0.8rem;
+  margin: 0;
 }
 
-/* ---------- Tier grid ---------- */
-.pricing-tier-grid {
+/* ---------- plan cards ---------- */
+.pr-plans {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vh, 3rem) var(--container-pad) clamp(3rem, 7vh, 5rem);
   display: grid;
-  gap: 1.4rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  gap: clamp(1.8rem, 4vh, 2.6rem);
 }
-/* Without this, the .pricing-tier-grid display:grid above (specificity
-   0,1,0) ties the user-agent [hidden]{display:none} and wins by source
-   order — leaving "hidden" grids visible. Make the override explicit. */
-.pricing-tier-grid[hidden] {
-  display: none;
-}
-.pricing-tier-card {
-  position: relative;
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 14px;
-  padding: 1.6rem 1.5rem 1.8rem;
-  display: flex;
-  flex-direction: column;
+.pr-plans__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  transition:
-    border-color 0.18s var(--ease),
-    box-shadow 0.18s var(--ease),
-    transform 0.18s var(--ease);
+  align-items: stretch;
 }
-.pricing-tier-card:hover {
+.pr-plan {
+  position: relative;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  background: var(--white);
+  padding: 1.6rem 1.5rem 1.5rem;
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+.pr-plan--featured {
   border-color: var(--accent);
-  box-shadow: 0 6px 18px -6px rgba(14, 21, 48, 0.12);
-  transform: translateY(-2px);
+  box-shadow: 0 24px 56px -30px rgba(10, 127, 116, 0.45);
 }
-.pricing-tier-card--featured {
-  border-color: var(--accent);
-  box-shadow:
-    0 1px 1px rgba(10, 15, 38, 0.04),
-    0 12px 28px -10px rgba(15, 181, 165, 0.25);
-}
-.pricing-tier-card--coming-soon {
-  background: var(--cream);
-  border-style: dashed;
-  border-color: var(--rule-strong, rgba(14, 21, 48, 0.22));
-}
-.pricing-tier-card--coming-soon:hover {
-  border-color: var(--cedar);
-  background: var(--cedar-mist, #e0f2e7);
-  box-shadow: none;
-  transform: none;
-}
-
-.pricing-tier-card__head {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 0.9rem;
-}
-/* Plant tier icon (sprout / sapling / tree). Rises out of the
-   "ground" at the bottom of its own box when the page mounts, so
-   the three tiers read as the same plant growing through its
-   life stages left to right. Pure CSS animation; the stagger is
-   :nth-child below, no JS. Respects prefers-reduced-motion. */
-.pricing-tier-card__icon {
-  display: block;
-  width: 112px;
-  height: 112px;
-  object-fit: contain;
-  object-position: center bottom;
-  margin: 0 0 0.5rem;
-  animation: pricing-tier-grow 1300ms cubic-bezier(0.22, 0.95, 0.28, 1) 150ms both;
-  transform-origin: bottom center;
-}
-@keyframes pricing-tier-grow {
-  0% {
-    clip-path: inset(100% 0 0 0);
-    transform: translateY(6px) scale(0.96);
-    opacity: 0;
-  }
-  25% {
-    opacity: 1;
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-/* Stagger: sapling (2nd) starts ~220ms after sprout, tree (3rd)
-   another ~220ms later, so the row reads as time-lapse growth
-   left to right. */
-.pricing-tier-grid > .pricing-tier-card:nth-child(1) .pricing-tier-card__icon {
-  animation-delay: 120ms;
-}
-.pricing-tier-grid > .pricing-tier-card:nth-child(2) .pricing-tier-card__icon {
-  animation-delay: 340ms;
-}
-.pricing-tier-grid > .pricing-tier-card:nth-child(3) .pricing-tier-card__icon {
-  animation-delay: 560ms;
-}
-@media (prefers-reduced-motion: reduce) {
-  .pricing-tier-card__icon {
-    animation: none;
-    opacity: 1;
-    clip-path: none;
-    transform: none;
-  }
-}
-.pricing-tier-card__name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.4rem;
-  letter-spacing: -0.018em;
-  color: var(--navy);
+.pr-plan__flag {
+  position: absolute;
+  top: -0.8rem;
+  left: 1.2rem;
   margin: 0;
-}
-.pricing-tier-card__tag {
-  margin-left: auto;
   font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, #0fb5a5, #0a7f74);
+  border-radius: 999px;
+  padding: 0.28rem 0.8rem;
+}
+.pr-plan__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.pr-plan__audience {
+  font-size: 0.95rem;
+  font-style: italic;
   color: var(--ink-3);
-  background: var(--white);
-  border: 1px solid var(--rule-strong, rgba(14, 21, 48, 0.18));
-  padding: 0.2rem 0.55rem;
-  border-radius: 3px;
+  margin: 0;
 }
-/* White label text on a filled chip needs the deep tokens: the bright
-   --accent / --cedar fills fail AA under white text at this size. */
-.pricing-tier-card--featured .pricing-tier-card__tag {
-  color: var(--white);
-  background: var(--accent-chip);
-  border-color: var(--accent-chip);
-}
-.pricing-tier-card--coming-soon .pricing-tier-card__tag {
-  color: var(--white);
-  background: var(--cedar-text);
-  border-color: var(--cedar-text);
-}
-
-.pricing-tier-card__price-row {
+.pr-plan__price {
+  margin: 0.3rem 0 0;
   display: flex;
   align-items: baseline;
   gap: 0.4rem;
-  flex-wrap: wrap;
 }
-.pricing-tier-card__price {
+.pr-plan__amount {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 2.2rem;
-  letter-spacing: -0.022em;
-  color: var(--navy);
-  line-height: 1;
+  font-weight: 800;
+  font-size: clamp(2rem, 3.4vw, 2.7rem);
+  letter-spacing: -0.03em;
+  color: var(--ink);
 }
-.pricing-tier-card__period {
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  color: var(--ink-3);
-}
-.pricing-tier-card__discounted {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: var(--cedar-text);
-  margin: 0;
-  display: none;
-}
-.pricing-tier-card.has-discount .pricing-tier-card__discounted {
-  display: block;
-}
-.pricing-tier-card.has-discount .pricing-tier-card__price {
-  text-decoration: line-through;
-  opacity: 0.6;
-  font-size: 1.4rem;
-}
-
-.pricing-tier-card__tagline {
-  font-family: var(--font-sans);
-  font-size: 0.98rem;
-  line-height: 1.5;
-  color: var(--ink-2);
-  margin: 0;
-  font-weight: 400;
-}
-.pricing-tier-card__highlights {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.55rem;
-}
-.pricing-tier-card__highlights li {
-  font-family: var(--font-sans);
-  font-size: 0.92rem;
-  line-height: 1.45;
-  color: var(--ink-2);
-  font-weight: 500;
-  padding-left: 1.3rem;
-  position: relative;
-}
-.pricing-tier-card__highlights li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.35rem;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.pricing-tier-card__details {
-  border-top: 1px solid var(--rule);
-  padding-top: 0.8rem;
-}
-.pricing-tier-card__details summary {
+.pr-plan__period {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-3);
-  font-weight: 600;
-  cursor: pointer;
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
 }
-.pricing-tier-card__details summary::-webkit-details-marker {
-  display: none;
-}
-.pricing-tier-card__details summary::after {
-  content: '+';
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 1rem;
-  color: var(--accent-text);
-}
-.pricing-tier-card__details[open] summary::after {
-  content: '–';
-}
-.pricing-tier-card__details ul {
-  list-style: none;
-  margin: 0.9rem 0 0;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
-}
-.pricing-tier-card__details ul li {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: var(--ink-2);
-  padding-left: 1.2rem;
-  position: relative;
-  font-weight: 400;
-}
-.pricing-tier-card__details ul li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.55rem;
-  width: 6px;
-  height: 1.5px;
-  background: var(--accent);
-  opacity: 0.6;
-}
-.pricing-tier-card__details ul li.is-accent-gold {
-  color: var(--navy);
-  font-weight: 600;
-}
-.pricing-tier-card__details ul li.is-accent-gold::before {
-  background: var(--gold);
-  opacity: 1;
-}
-
-.pricing-tier-card__note {
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  line-height: 1.45;
-  color: var(--ink-3);
-  margin: 0;
-  font-style: italic;
-}
-.pricing-tier-card__cta {
-  margin-top: auto;
-}
-.pricing-tier-card__cta .btn {
-  width: 100%;
-  justify-content: center;
-}
-
-/* ---------- Comparison band ---------- */
-.pricing-compare__kicker {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-  font-weight: 600;
-  margin: 0 0 0.8rem;
-}
-.pricing-compare__h2 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
-  line-height: 1.1;
-  letter-spacing: -0.022em;
-  color: var(--navy);
-  margin: 0 0 0.9rem;
-  max-width: 28ch;
-}
-.pricing-compare__deck {
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--ink-2);
-  margin: 0 0 1.8rem;
-  max-width: 60ch;
-  font-weight: 400;
-}
-/* Comparison band gets a wider inner container on desktop than the
-   rest of the page (1320px vs the default 1200px) and the table
-   switches to fixed layout with explicit column widths so the
-   Capability column can't eat the whole table. Tier columns at
-   ~21% give the short cells like "Annual, monthly, or quarterly"
-   the room they need to sit on one line. Only kicks in above
-   1280px viewport; below that the table reverts to its tablet/
-   phone behaviour (auto-layout + horizontal scroll). */
-@media (min-width: 1280px) {
-  .pricing-compare .editorial-band__inner {
-    max-width: 1320px;
-  }
-  .pricing-compare table {
-    table-layout: fixed;
-  }
-  .pricing-compare thead th:first-child {
-    width: 36%;
-  }
-  .pricing-compare thead th:not(:first-child) {
-    width: 21.33%;
-  }
-}
-
-.pricing-compare__table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  background: var(--white);
-}
-.pricing-compare table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-sans);
-  font-size: 0.92rem;
-  min-width: 720px;
-}
-.pricing-compare th,
-.pricing-compare td {
-  text-align: left;
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid var(--rule);
-  color: var(--ink-2);
-  font-weight: 400;
-  vertical-align: top;
-}
-.pricing-compare thead th {
-  background: var(--cream);
-  color: var(--navy);
-  font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: -0.005em;
-  border-bottom: 1px solid var(--rule-strong, rgba(14, 21, 48, 0.14));
-}
-.pricing-compare tbody tr:last-child th,
-.pricing-compare tbody tr:last-child td {
-  border-bottom: 0;
-}
-.pricing-compare__row-label {
-  color: var(--navy);
-  font-weight: 500;
-}
-.pricing-compare__featured {
-  background: rgba(15, 181, 165, 0.04);
-}
-.pricing-compare__featured-head {
-  color: var(--accent-deep, #0a8a7e);
-}
-.pricing-compare td[data-value='yes'] {
-  color: var(--navy);
-}
-.pricing-compare td[data-value='yes']::before {
-  content: '✓ ';
-  color: var(--accent-text);
-  font-weight: 700;
-  margin-right: 0.2rem;
-}
-.pricing-compare td[data-value='none'] {
-  color: var(--ink-4);
-}
-.pricing-compare td[data-value='soon'] {
-  color: var(--cedar-text);
-  font-style: italic;
-}
-.pricing-compare td[data-value='soon']::before {
-  content: '◌ ';
-  color: var(--cedar-text);
-}
-
-/* Price footer row. Sits at the bottom of the comparison table so
-   the visitor walks the capability rows top-down and lands on the
-   tier's price for the platform they picked. Re-asserts the
-   price-by-tier mapping after the visitor has compared features. */
-.pricing-compare tfoot .pricing-compare__price-row {
-  background: var(--cream);
-}
-.pricing-compare tfoot .pricing-compare__price-row th,
-.pricing-compare tfoot .pricing-compare__price-row td {
-  border-top: 2px solid var(--rule-strong, rgba(14, 21, 48, 0.14));
-  border-bottom: 0;
-  padding-top: 1.1rem;
-  padding-bottom: 1.1rem;
-}
-.pricing-compare tfoot .pricing-compare__row-label {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  font-weight: 600;
-}
-.pricing-compare__price-cell {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.3rem;
-  letter-spacing: -0.018em;
-  color: var(--navy);
-}
-.pricing-compare__price-cell.pricing-compare__featured {
-  color: var(--accent-deep, #0a8a7e);
-}
-
-/* ---------- Discount-code band ---------- */
-.pricing-support__kicker {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-  font-weight: 600;
-  margin: 0 0 0.6rem;
-}
-.discount-code-panel {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 14px;
-  padding: clamp(1.6rem, 3.2vw, 2.2rem);
-  max-width: 560px;
-}
-.discount-code-panel__title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.6rem;
-  letter-spacing: -0.018em;
-  color: var(--navy);
-  margin: 0 0 0.55rem;
-}
-.discount-code-panel__copy {
-  font-family: var(--font-sans);
-  font-size: 0.98rem;
-  line-height: 1.5;
-  color: var(--ink-2);
-  margin: 0 0 1.2rem;
-  font-weight: 400;
-}
-.discount-code-panel__form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-.discount-code-panel__field {
-  display: flex;
-  gap: 0.55rem;
-}
-.discount-code-panel__input {
-  flex: 1;
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid var(--rule-strong, rgba(14, 21, 48, 0.18));
-  border-radius: 8px;
-  background: var(--white);
-  color: var(--navy);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.discount-code-panel__input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-rgba-18);
-}
-.discount-code-panel__apply {
-  padding: 0 1.2rem;
-}
-.discount-code-panel__status {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--ink-3);
-  margin: 0;
-}
-.discount-code-panel__status--valid {
-  color: var(--cedar-text);
-  font-weight: 500;
-}
-.discount-code-panel__status--error {
-  color: var(--error-color);
-  font-weight: 500;
-}
-
-/* ---------- Terms band ---------- */
-.pricing-terms {
-  padding: clamp(4rem, 8vw, 6rem) 0;
-}
-.pricing-terms__head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.4rem;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-  flex-wrap: wrap;
-}
-.pricing-terms__h2 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
-  line-height: 1.1;
-  letter-spacing: -0.022em;
-  color: var(--white);
-  margin: 0;
-  max-width: 22ch;
-}
-.pricing-terms .btn {
-  background: var(--white);
-  color: var(--navy);
-  border-color: var(--white);
-}
-.pricing-terms .btn:hover {
-  background: color-mix(in srgb, var(--white) 90%, transparent);
-}
-.pricing-terms__grid {
-  display: grid;
-  gap: 1.6rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-.pricing-terms__block {
-  /* Track the band's --white foreground so it inverts to a dark, readable
-     color in dark mode (the --navy band flips to light). A plain
-     rgba(255,255,255,…) would stay white and vanish on the light band. */
-  color: color-mix(in srgb, var(--white) 82%, transparent);
-}
-.pricing-terms__block h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.18rem;
-  color: var(--white);
-  letter-spacing: -0.012em;
-  margin: 0 0 0.7rem;
-}
-.pricing-terms__block p,
-.pricing-terms__block li {
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin: 0 0 0.4rem;
-  font-weight: 400;
-}
-.pricing-terms__block ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.pricing-terms__block strong {
-  color: var(--white);
-  font-weight: 600;
-}
-
-/* ---------- Service-platform tile (Consultant) ----------
-   The Consultant tile now shares the exact same chrome as the
-   regional tiles. The earlier teal left-edge accent made the tile
-   read as "selected/active" alongside three quiet siblings, which
-   was misleading. The visual distinction comes from the eyebrow
-   line above the picker ("Three platforms for your team. One plan
-   for consulting firms.") and the tile's own "For Consultants"
-   name, both of which are clearer than a colored stripe. */
-
-/* ---------- Single-card tier grid (Consultant Arborist) ----------
-   Same card visuals as the regional tier cards; the grid itself is
-   capped at one column on desktop so the single Arborist card sits
-   left-aligned at a comfortable tier-card width instead of stretching
-   to full container width. */
-.pricing-tier-grid--single {
-  grid-template-columns: minmax(280px, 420px);
-}
-
-/* ---------- Toolbox add-on card ----------
-   Single full-width card that sits BELOW the tier grid on regional
-   platforms. Hidden on the service platform (Consultant) since the
-   Toolbox add-on requires an active subscription, which the Consultant
-   plan structurally doesn't grant. Visually distinct from the tier
-   cards (cream background, side-by-side icon + body layout) so the
-   visitor reads it as "add-on, not a tier." */
-.pricing-addon {
-  margin-top: clamp(1.6rem, 3vw, 2.4rem);
-}
-.pricing-addon[hidden] {
-  display: none;
-}
-.pricing-addon__card {
-  display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: clamp(1rem, 2vw, 1.6rem);
-  align-items: start;
-  background: var(--cream);
-  border: 1px solid var(--rule);
-  border-radius: 14px;
-  padding: clamp(1.4rem, 2.4vw, 1.8rem);
-  position: relative;
-}
-.pricing-addon__icon {
-  display: block;
-  width: 160px;
-  height: 160px;
-  object-fit: contain;
-  object-position: center bottom;
-  margin: 0;
-}
-.pricing-addon__body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  min-width: 0;
-}
-.pricing-addon__head {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 0.9rem;
-  margin-bottom: 0.2rem;
-}
-.pricing-addon__eyebrow {
+.pr-plan__users {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent-text);
-  font-weight: 600;
   margin: 0;
 }
-.pricing-addon__name {
+.pr-plan__tag {
+  font-size: 0.93rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 0.5rem;
+}
+.pr-plan__cta {
+  justify-self: start;
+  margin-top: auto;
+}
+@media (max-width: 900px) {
+  .pr-plans__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- detail table ---------- */
+.pr-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--white);
+}
+.pr-table {
+  width: 100%;
+  min-width: 780px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.pr-table th,
+.pr-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+.pr-table thead th {
+  border-top: none;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.5rem;
-  letter-spacing: -0.018em;
-  color: var(--navy);
-  margin: 0;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  background: var(--paper);
 }
-.pricing-addon__price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-top: 0.2rem;
-  flex-wrap: wrap;
+.pr-table tbody th {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 500;
+  white-space: nowrap;
 }
-.pricing-addon__price {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.6rem;
-  letter-spacing: -0.018em;
-  color: var(--navy);
+.pr-table td {
+  width: 28%;
 }
-.pricing-addon__period {
-  font-family: var(--font-sans);
+.pr-table__quiet {
+  color: var(--ink-4);
+}
+.pr-plans__note {
   font-size: 0.9rem;
   color: var(--ink-3);
+  margin: 0;
+  text-align: center;
 }
-.pricing-addon__tagline {
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.5;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- competitive offer ---------- */
+.pr-offer__big {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: #fff;
+  margin: 0.4rem 0 0.8rem;
+}
+.pr-offer__cta {
+  display: flex;
+}
+.pr-offer__fine {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.66);
+  margin: 0;
+  max-width: 78ch;
+}
+
+/* ---------- why strip ---------- */
+.pr-why {
+  border-top: 1px solid var(--rule);
+  padding: clamp(2rem, 5vh, 3.2rem) var(--container-pad);
+}
+.pr-why__grid {
+  list-style: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+.pr-why__grid li {
+  display: grid;
+  gap: 0.25rem;
+  align-content: start;
+}
+.pr-why__grid li + li {
+  border-left: 1px solid var(--rule);
+  padding-left: 1.4rem;
+}
+.pr-why__t {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0;
+}
+.pr-why__b {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin: 0;
+}
+@media (max-width: 880px) {
+  .pr-why__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pr-why__grid li + li {
+    border-left: none;
+    padding-left: 0;
+  }
+  .pr-why__grid li:nth-child(even) {
+    border-left: 1px solid var(--rule);
+    padding-left: 1.4rem;
+  }
+}
+
+/* ---------- Team Workspace / Cedar Grove duo ---------- */
+.pr-duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.pr-duo__card {
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 1.6rem 1.5rem;
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+}
+.pr-duo__card--grove {
+  border-color: rgba(14, 139, 79, 0.35);
+  background: var(--cedar-mist);
+}
+.h-kicker--cedar {
+  color: var(--cedar-text);
+}
+.pr-duo__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  margin: 0;
+}
+.pr-duo__body {
+  font-size: 0.95rem;
+  line-height: 1.62;
   color: var(--ink-2);
   margin: 0;
-  font-weight: 400;
 }
-.pricing-addon__highlights {
+@media (max-width: 880px) {
+  .pr-duo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* The mist card hardcodes a light green surface; keep it readable
+   in dark mode with a translucent green wash instead. */
+@media (prefers-color-scheme: dark) {
+  .pr-duo__card--grove {
+    background: rgba(14, 139, 79, 0.16);
+  }
+}
+
+/* ---------- consultants ---------- */
+.pr-consult__audience {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--ink-3);
+  margin: 0;
+}
+.pr-consult__points {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem 1.4rem;
+  max-width: 900px;
 }
-.pricing-addon__highlights li {
-  font-family: var(--font-sans);
-  font-size: 0.92rem;
-  line-height: 1.45;
-  color: var(--ink-2);
-  font-weight: 500;
-  padding-left: 1.3rem;
+.pr-consult__points li {
   position: relative;
+  padding-left: 1.3rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink-2);
 }
-.pricing-addon__highlights li::before {
+.pr-consult__points li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.35rem;
-  width: 8px;
-  height: 8px;
+  top: 0.52em;
+  width: 0.55rem;
+  height: 0.55rem;
   border-radius: 50%;
   background: var(--accent);
 }
-.pricing-addon__details {
-  border-top: 1px solid var(--rule);
-  padding-top: 0.8rem;
-}
-.pricing-addon__details summary {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  font-weight: 600;
-  cursor: pointer;
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.pricing-addon__details summary::-webkit-details-marker {
-  display: none;
-}
-.pricing-addon__details summary::after {
-  content: '+';
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 1rem;
-  color: var(--accent-text);
-}
-.pricing-addon__details[open] summary::after {
-  content: '–';
-}
-.pricing-addon__details ul {
-  list-style: none;
-  margin: 0.9rem 0 0;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
-}
-.pricing-addon__details ul li {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: var(--ink-2);
-  padding-left: 1.2rem;
-  position: relative;
-  font-weight: 400;
-}
-.pricing-addon__details ul li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.55rem;
-  width: 6px;
-  height: 1.5px;
-  background: var(--accent);
-  opacity: 0.6;
-}
-.pricing-addon__note {
-  font-family: var(--font-sans);
+.pr-consult__note {
   font-size: 0.85rem;
-  line-height: 1.45;
   color: var(--ink-3);
   margin: 0;
-  font-style: italic;
+  max-width: 70ch;
 }
-.pricing-addon__cta {
-  margin-top: 0.4rem;
-}
-.pricing-addon__cta .btn {
-  width: auto;
-}
-
-@media (max-width: 980px) {
-  /* Slightly smaller plant icon on tablets / phones so it doesn't
-     dominate the card at narrower widths. */
-  .pricing-tier-card__icon {
-    width: 84px;
-    height: 84px;
-  }
-  .pricing-addon__card {
-    grid-template-columns: 140px 1fr;
-  }
-  .pricing-addon__icon {
-    width: 120px;
-    height: 120px;
-  }
-}
-
-@media (max-width: 600px) {
-  .pricing-tier-grid {
-    grid-template-columns: 1fr;
-  }
-  .pricing-tier-grid--single {
-    grid-template-columns: 1fr;
-  }
-  .discount-code-panel__field {
-    flex-direction: column;
-  }
-  .discount-code-panel__apply {
-    width: 100%;
-  }
-  /* Toolbox: stack icon above body on phones. */
-  .pricing-addon__card {
-    grid-template-columns: 1fr;
-    text-align: left;
-  }
-  .pricing-addon__icon {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto;
-  }
-  .pricing-addon__cta .btn {
-    width: 100%;
+@media (max-width: 720px) {
+  .pr-consult__points {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

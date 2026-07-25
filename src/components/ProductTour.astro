@@ -19,7 +19,7 @@ const ROWS = [
     body: 'A whole-nation study reads as one sentence up top: jobs and output, in plain language. Switch scope to see the same study on homelands, with the subset relationship spelled out so nobody double-counts.',
     img: '/app/homelands.webp',
     w: 1600,
-    h: 1075,
+    h: 1000,
     alt: 'Lumecon results page on the Homelands scope tab, estimating 1,928 jobs and $496,200,000 in economic output on homelands, with four key figures below.',
   },
   {
@@ -53,17 +53,6 @@ const ROWS = [
     alt: 'Lumecon workspace home with lanes for starting, in-progress and completed studies, including three completed nation economic footprint studies with jobs and output headlines.',
   },
 ];
-
-const COVERAGE = [
-  {
-    big: '574',
-    label:
-      'federally recognized tribal nations, plus Alaska Native regions and Native Hawaiian Home Lands',
-  },
-  { big: 'Every', label: 'U.S. county, every state and the nation' },
-  { big: '4', label: 'headline measures per study: jobs, GDP, labor income and output' },
-  { big: '1', label: 'flat annual subscription, unlimited studies, every geography included' },
-];
 ---
 
 <section class="tour" id="product" aria-labelledby="tour-title">
@@ -78,17 +67,6 @@ const COVERAGE = [
         straight from the product.
       </p>
     </header>
-
-    <ul class="tour-coverage" aria-label="Coverage">
-      {
-        COVERAGE.map((c, i) => (
-          <li class="tour-coverage__item reveal-soft" data-stagger={String(i)}>
-            <span class="tour-coverage__big">{c.big}</span>
-            <span class="tour-coverage__label">{c.label}</span>
-          </li>
-        ))
-      }
-    </ul>
 
     <div class="tour-rows">
       {

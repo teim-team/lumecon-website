@@ -1,0 +1,29 @@
+---
+/**
+ * Concentric-ring background art. Echoes the Lumecon mark (nested
+ * rings) the way the app uses it on card headers: cropped, quiet,
+ * strokes only. Color comes from the parent via `currentColor`;
+ * position/opacity from the caller's class.
+ */
+interface Props {
+  class?: string;
+  size?: number;
+}
+const { class: className = 'rings', size = 640 } = Astro.props;
+const rings = [0.16, 0.3, 0.44, 0.58, 0.72, 0.86, 1];
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 200 200"
+  fill="none"
+  aria-hidden="true"
+>
+  {
+    rings.map((r) => (
+      <circle cx="100" cy="100" r={99 * r} stroke="currentColor" stroke-width="0.55" />
+    ))
+  }
+</svg>

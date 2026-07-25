@@ -6,9 +6,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
+import WhyBand from '../components/WhyBand.astro';
 import ProductTour from '../components/ProductTour.astro';
-import WhySection from '../components/WhySection.astro';
-import ProductsSection from '../components/ProductsSection.astro';
+import WholeNation from '../components/WholeNation.astro';
+import CedarFlow from '../components/CedarFlow.astro';
+import OnePlatform from '../components/OnePlatform.astro';
 import ContactSection from '../components/ContactSection.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -144,8 +146,8 @@ const jsonLd = [
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
-      { '@type': 'ListItem', position: 2, name: 'Platforms', item: `${site.url}/#products` },
-      { '@type': 'ListItem', position: 3, name: 'Why Lumecon', item: `${site.url}/#how` },
+      { '@type': 'ListItem', position: 2, name: 'One platform', item: `${site.url}/#platform` },
+      { '@type': 'ListItem', position: 3, name: 'Why Lumecon', item: `${site.url}/#why` },
       { '@type': 'ListItem', position: 4, name: 'See your impact', item: `${site.url}/map` },
       { '@type': 'ListItem', position: 5, name: 'Cedar', item: `${site.url}/cedar` },
       { '@type': 'ListItem', position: 6, name: 'Pricing', item: `${site.url}/pricing` },
@@ -190,9 +192,11 @@ const jsonLd = [
   <Nav isHome={true} />
   <main>
     <Hero />
+    <WhyBand />
     <ProductTour />
-    <ProductsSection />
-    <WhySection />
+    <WholeNation />
+    <CedarFlow />
+    <OnePlatform />
     <ContactSection />
   </main>
   <Footer isHome={true} />

@@ -1,0 +1,57 @@
+---
+/**
+ * Deep-teal story band — the "why Lumecon" positioning in the
+ * dark-section pattern the major platforms use. Four quiet cards:
+ * geography, unlimited analysis, Cedar, tribal architecture.
+ */
+import Rings from './Rings.astro';
+import '../styles/home.css';
+
+const CARDS = [
+  {
+    k: 'Every geography',
+    t: 'County to Nation',
+    b: 'County, state, national, reservation and tribal-government geographies are included in every plan. No geography licenses.',
+  },
+  {
+    k: 'Unlimited analysis',
+    t: 'Run it again, free',
+    b: 'Unlimited projects and analyses on the full modeling engine. No per-project fees and no paying more to ask a second question.',
+  },
+  {
+    k: 'Cedar included',
+    t: 'An AI economic analyst',
+    b: 'Cedar reads your PDFs, spreadsheets and CSVs, maps them into the model, helps interpret results and supports reporting, in every plan.',
+  },
+  {
+    k: 'Built for Tribal Nations',
+    t: 'Core architecture',
+    b: 'Tribal government, tribal enterprise and Whole Nation analysis are part of the platform itself, at no extra charge.',
+  },
+];
+---
+
+<section class="band" id="why" aria-labelledby="band-title">
+  <Rings class="rings rings--r" size={700} />
+  <div class="band-inner">
+    <header>
+      <p class="band-kicker">Why Lumecon</p>
+      <h2 class="band-title" id="band-title">Every plan gets the real platform.</h2>
+      <p class="band-lede">
+        Higher plans add collaboration, organizational memory and scale. The economics stay the
+        same: every customer runs the same modeling engine on the same data foundation.
+      </p>
+    </header>
+    <div class="band-grid">
+      {
+        CARDS.map((c) => (
+          <article class="band-card">
+            <p class="band-card__k">{c.k}</p>
+            <h3 class="band-card__t">{c.t}</h3>
+            <p class="band-card__b">{c.b}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+/**
+ * Cedar — presented as a workflow (source material in, reporting
+ * out), not a chat box. Five-step pipeline with Cedar as the green
+ * center step.
+ */
+import '../styles/home.css';
+
+const STEPS = [
+  { k: 'You bring', t: 'PDFs, spreadsheets, CSVs' },
+  { k: 'Cedar', t: 'Reads and structures', hero: true },
+  { k: 'Lumecon', t: 'Analysis-ready inputs' },
+  { k: 'The engine', t: 'Economic analysis' },
+  { k: 'You get', t: 'Reporting and exports' },
+];
+---
+
+<section class="flowsec" id="cedar" aria-labelledby="cedar-title">
+  <div class="flowsec-inner">
+    <header class="flowsec-head">
+      <p class="h-kicker">Cedar</p>
+      <h2 class="flowsec-title" id="cedar-title">Bring your data. Cedar makes it usable.</h2>
+      <p class="flowsec-lede">
+        Cedar is Lumecon&rsquo;s AI economic analyst, included in every plan. Upload the source
+        material you already have; Cedar interprets it, maps it into the fields the model needs,
+        assists with setup, helps explain results and supports the reporting that follows.
+      </p>
+    </header>
+
+    <div class="cedar-flow" role="list" aria-label="Cedar workflow">
+      {
+        STEPS.map((s, i) => (
+          <>
+            <div class={`cedar-step${s.hero ? ' cedar-step--hero' : ''}`} role="listitem">
+              <span class="cedar-step__k">{s.k}</span>
+              <span class="cedar-step__t">{s.t}</span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <span class="cedar-arrow" aria-hidden="true">
+                &rarr;
+              </span>
+            )}
+          </>
+        ))
+      }
+    </div>
+  </div>
+</section>

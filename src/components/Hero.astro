@@ -1,133 +1,80 @@
 ---
 /**
- * Hero — economic-impact-analysis headline + the product itself.
+ * Hero v3 — centered promise, gradient CTA, and the product itself
+ * as one large framed screenshot with floating stat chips (the
+ * pattern the major analysis platforms lead with). Emphasis inside
+ * the headline is colored text; the marker-highlight slabs are gone
+ * from the homepage. The concentric-ring mark appears as cropped
+ * background art, echoing the app's card artwork.
  *
- * The redesign puts a real screenshot of the Lumecon workspace (the
- * results page of an impact study) where the workflow animation used
- * to be, in the pattern of the major analysis platforms: promise on
- * top, product right under it. The screenshot is captured from the
- * app with sample study data (see the figcaption disclosure).
- *
- * The interactive impact-study map workspace lives on /map; the
- * primary CTA routes there so visitors can run a study themselves.
+ * The screenshot is captured from the app with sample study data
+ * (see the caption under the frame).
  */
-import '../styles/hero.css';
+import Rings from './Rings.astro';
+import '../styles/home.css';
 ---
 
-<section class="hero" id="top">
-  <div class="hero-brand">
-    <p class="hero-tagline">Economic impact analysis software</p>
+<section class="hero2" id="top">
+  <Rings class="rings rings--tr" size={720} />
+  <Rings class="rings rings--bl" size={640} />
+  <div class="hero2-inner">
+    <p class="h-kicker">Economic impact analysis software</p>
 
-    <h1 class="hero-statement hl-block hl-block--green">
-      Measure the economic impact of any project, program or policy.
+    <h1 class="hero2-title">
+      Measure the <span class="hero2-em">economic impact</span> of any decision.
     </h1>
 
-    <!-- Lede row: the product sub-paragraph, with a teal "New to this?"
-         disclosure for first-timers beside it on desktop (stacked on
-         mobile). The disclosure expands to a plain-language definition
-         of economic impact analysis so newcomers aren't assumed to
-         already know the term. -->
-    <div class="hero-lede-row">
-      <p class="hero-sub">
-        Lumecon turns your budgets, payroll and program records into a credible economic impact
-        study in minutes: jobs, labor income, GDP contribution and tax revenue for any U.S.
-        geography, with every number traceable to its source.
-      </p>
-      <details class="hero-eia">
-        <summary class="hero-eia__summary">
-          <span>New to this?</span>
-          <span class="hero-eia__chev" aria-hidden="true"></span>
-        </summary>
-        <p class="hero-eia__body">
-          <strong>Economic impact analysis</strong> shows how one dollar spent can generate more than
-          one dollar in return as it moves through wages, suppliers, tax revenue, and nearby businesses.
-        </p>
-      </details>
+    <p class="hero2-sub">
+      Lumecon turns budgets, payroll and program records into a credible economic impact study in
+      minutes: jobs, labor income, GDP contribution and tax revenue for any U.S. geography,{' '}
+      <strong>with every number traceable to its source</strong>.
+    </p>
+
+    <div class="hero2-cta">
+      <a class="btn2 btn2--primary" href="/map">
+        See a live study <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+      <a class="btn2 btn2--card" href="/pricing">
+        Plans from $500 a year <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+      </a>
     </div>
 
-    <div class="hero-cta">
-      <a class="btn" href="/map">See a live study</a>
-      <a class="btn btn--ghost" href="/pricing">See pricing</a>
-    </div>
+    <p class="hero2-proof">
+      Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and
+      engineers &middot; Patent pending
+    </p>
 
-    <!-- The product, not a promise about the product: the results page
-         of an impact study in the Lumecon workspace. -->
-    <figure class="hero-shot">
-      <div class="hero-shot__chrome" aria-hidden="true">
-        <span class="hero-shot__dot"></span>
-        <span class="hero-shot__dot"></span>
-        <span class="hero-shot__dot"></span>
-        <span class="hero-shot__url">app.lumecon.ai</span>
+    <figure class="hero2-shot">
+      <div class="hero2-frame">
+        <div class="hero2-chrome" aria-hidden="true">
+          <span class="hero2-dot"></span>
+          <span class="hero2-dot"></span>
+          <span class="hero2-dot"></span>
+          <span class="hero2-url">app.lumecon.ai</span>
+        </div>
+        <img
+          src="/app/hero-results.webp"
+          alt="Lumecon results page for a whole-nation impact study: a headline sentence estimating 4,820 jobs and $1,240,500,000 in economic output, four key figures with Trace this number buttons, and a three-year impact timeline."
+          width="1600"
+          height="1000"
+          fetchpriority="high"
+          decoding="async"
+        />
       </div>
-      <img
-        src="/app/results.webp"
-        alt="Lumecon results page for a whole-nation impact study: a headline sentence estimating 4,820 jobs and $1,240,500,000 in economic output, four key figures with Trace this number buttons, and a three-year impact timeline."
-        width="1600"
-        height="1000"
-        fetchpriority="high"
-        decoding="async"
-      />
-      <figcaption class="hero-shot__caption">
+      <div class="hero2-chips-mobile">
+        <div class="hero2-chip hero2-chip--a">
+          <span class="hero2-chip__k">Impact over time</span>
+          <span class="hero2-chip__v">+34% economic output across three years</span>
+        </div>
+        <div class="hero2-chip hero2-chip--b">
+          <span class="hero2-chip__k">Tax impacts</span>
+          <span class="hero2-chip__v">$148,860,000 across federal, state and tribal</span>
+        </div>
+      </div>
+      <figcaption class="hero2-caption">
         The results page of a whole-nation impact study in the Lumecon workspace, shown with sample
         data.
       </figcaption>
     </figure>
-
-    <!-- Credibility strip: the school list where it has room, the
-         shorter role-based form on mobile (same claim, less weight). -->
-    <ul class="hero-proof" aria-label="Proof points">
-      <li class="hero-proof__long">
-        Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and
-        engineers
-      </li>
-      <li class="hero-proof__short">
-        Built by economists, engineers and public-policy researchers
-      </li>
-      <li>Patent pending</li>
-    </ul>
-
-    <!-- Trusted data sources strip (#22): names the authoritative
-         public datasets behind every study and links to the agencies,
-         so the credibility claim is checkable, not just asserted. -->
-    <aside class="hero-sources" aria-label="Data sources">
-      <span class="hero-sources__label"
-        >Built on the same foundational data as every major economic impact platform</span
-      >
-      <span class="hero-sources__note"
-        >The difference is what we do with it and what we add to it.</span
-      >
-      <ul class="hero-sources__list">
-        <li>
-          <a href="https://www.census.gov" target="_blank" rel="noopener noreferrer"
-            >U.S. Census: ACS, LODES, QWI, CBP, TIGER/Line</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://www.bea.gov/industry/input-output-accounts-data"
-            target="_blank"
-            rel="noopener noreferrer">BEA Input-Output Accounts</a
-          >
-        </li>
-        <li>
-          <a href="https://www.bls.gov/cew/" target="_blank" rel="noopener noreferrer">BLS QCEW</a>
-        </li>
-        <li>
-          <a href="https://www.nass.usda.gov" target="_blank" rel="noopener noreferrer">USDA NASS</a
-          >
-        </li>
-        <li>
-          <a href="https://www.usaspending.gov" target="_blank" rel="noopener noreferrer"
-            >USAspending</a
-          >
-        </li>
-        <li>
-          <a href="https://fred.stlouisfed.org" target="_blank" rel="noopener noreferrer"
-            >FRED (St. Louis Fed)</a
-          >
-        </li>
-        <li><a href="https://www.noaa.gov" target="_blank" rel="noopener noreferrer">NOAA</a></li>
-      </ul>
-    </aside>
   </div>
 </section>

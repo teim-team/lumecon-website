@@ -1,0 +1,64 @@
+---
+/**
+ * Whole Nation — the signature capability, shown as a convergence
+ * diagram (government + enterprises + other activity flowing into
+ * one integrated result) with the real KPI strip from the app
+ * underneath.
+ */
+import Rings from './Rings.astro';
+import '../styles/home.css';
+---
+
+<section class="flowsec" id="whole-nation" aria-labelledby="wn-title">
+  <div class="flowsec-inner">
+    <header class="flowsec-head">
+      <p class="h-kicker">Whole Nation analysis</p>
+      <h2 class="flowsec-title" id="wn-title">See the whole Nation, not just one enterprise.</h2>
+      <p class="flowsec-lede">
+        Whole Nation analysis brings tribal government and tribal enterprises together in one
+        integrated economic analysis, a more complete picture of a Nation&rsquo;s economic footprint
+        than studying each piece on its own.
+      </p>
+    </header>
+
+    <div class="wn-flow">
+      <div class="wn-parts">
+        <div class="wn-part">
+          <span class="wn-part__t">Tribal government</span>
+          <span class="wn-part__s"
+            >Departments, programs, employment and public-sector activity</span
+          >
+        </div>
+        <div class="wn-part">
+          <span class="wn-part__t">Tribal enterprises</span>
+          <span class="wn-part__s">One enterprise or the whole portfolio</span>
+        </div>
+        <div class="wn-part">
+          <span class="wn-part__t">Other Nation economic activity</span>
+          <span class="wn-part__s">The included activity that rounds out the footprint</span>
+        </div>
+      </div>
+      <div class="wn-join" aria-hidden="true">&rarr;</div>
+      <div class="wn-result">
+        <Rings class="rings rings--card" size={300} />
+        <p class="wn-result__k">One integrated study</p>
+        <h3 class="wn-result__t">Whole Nation economic impact</h3>
+        <p class="wn-result__b">
+          Jobs, labor income, GDP contribution, output and tax impacts for the combined footprint,
+          with statewide and homelands scopes side by side.
+        </p>
+      </div>
+    </div>
+
+    <figure class="wn-shot">
+      <img
+        src="/app/kpis.webp"
+        alt="Four key figures from a Lumecon whole-nation study: 4,820 jobs supported, $612,400,000 GDP contribution, $388,900,000 labor income and $1,240,500,000 economic output, each with a Trace this number button."
+        width="1600"
+        height="297"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  </div>
+</section>
