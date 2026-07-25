@@ -1,8 +1,8 @@
 # Lumecon Inc.
 
-> Lumecon is economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible economic impact studies in minutes, with every number traceable to its source. Built at Ivy League and peer schools by former Federal Reserve economists, engineers and academics, on modern data and methods. Plans start at $500 a year, every plan runs the same model, and the app is free to try (results unlock on a paid plan).
+> Lumecon is economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible economic impact analyses in minutes, with every number traceable to its source. Built at Ivy League and peer schools by former Federal Reserve economists, engineers and academics, on modern data and methods. Plans start at $500 a year, every plan runs the same model, and the app is free to try (results unlock on a paid plan).
 
-Lumecon replaces the pairing of expensive modeling software plus an expensive consulting engagement with one affordable annual subscription. Every study separates direct, indirect and induced effects, carries a full lineage ("Trace this number" on every figure), and exports with its assumptions so a council member, board or federal grant reviewer can verify the result.
+Lumecon replaces the pairing of expensive modeling software plus an expensive consulting engagement with one affordable annual subscription. Every analysis separates direct, indirect and induced effects, carries a full lineage ("Trace this number" on every figure), and exports with its assumptions so a council member, board or federal grant reviewer can verify the result.
 
 ## Category
 
@@ -17,17 +17,17 @@ There is one Lumecon application. It learns what kind of organization the custom
 - Sprout: $500/year. One user. Full model, Cedar, every supported U.S. geography, unlimited analysis.
 - Sapling: $2,500/year. Up to 10 users. Everything in Sprout plus Team Workspace (shared projects, collaborative analysis, review workflows). Most popular.
 - Tree: $7,500/year. Unlimited users in one organization. Everything in Sapling plus Cedar Grove (a persistent organizational data library) and hands-on Cedar calibration.
-- Free trial: create an account, bring your documents and build a study end to end; full results unlock on any plan.
+- Free trial: create an account, bring your documents and build an analysis end to end; full results unlock on any plan.
 - Competitive transition offer: organizations already paying for qualifying economic impact analysis or economic modeling software can receive their first annual Lumecon license for 50% of their documented prior-12-month spend, subject to plan and promotional terms.
 - Consultants: custom commercial licensing for firms running analysis for outside clients, including Cedar calibrated to the firm's workflow. No public price.
 
 ## Cedar
 
-Cedar is Lumecon's AI economic analyst, included in every plan. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records); Cedar interprets the material, maps it into the model, assists with setup and interpretation, and helps turn results into board-ready reporting. Cedar Grove (Tree plan) is the organizational memory: administrative data, recurring datasets and prior analyses in one persistent library, reusable across future studies.
+Cedar is Lumecon's AI economic analyst, included in every plan. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records); Cedar interprets the material, maps it into the model, assists with setup and interpretation, and helps turn results into board-ready reporting. Cedar Grove (Tree plan) is the organizational memory: administrative data, recurring datasets and prior analyses in one persistent library, reusable across future analyses.
 
 ## Methodology
 
-Input-output modeling on authoritative public data: U.S. Census (ACS, LODES, QWI, CBP, TIGER/Line), BEA Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA, extended with higher-frequency signals and modern econometrics so studies reflect the economy as it is now. Full write-up: https://lumecon.ai/methodology
+Input-output modeling on authoritative public data: U.S. Census (ACS, LODES, QWI, CBP, TIGER/Line), BEA Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA, extended with higher-frequency signals and modern econometrics so analyses reflect the economy as it is now. Full write-up: https://lumecon.ai/methodology
 
 ## Capabilities
 

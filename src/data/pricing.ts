@@ -8,7 +8,7 @@
  * has no public tier. The old per-platform price matrix, the
  * Arborist consultant tier and the Toolbox add-on are gone: the
  * platform no longer sells geography, and Lumecon does not sell
- * finished studies against its own consultant customers.
+ * finished analyses against its own consultant customers.
  */
 
 export interface Plan {

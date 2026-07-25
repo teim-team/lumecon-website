@@ -42,13 +42,13 @@ test('map page renders the interactive hero map', async ({ page }) => {
   await expect(page.locator('#heroMap')).toBeVisible();
   // The state paths are server-rendered, so their presence confirms the
   // SVG shipped. The genuine runtime-boot check (the script actually
-  // running a study) is the auto-cycle test below, which waits for the
+  // running an analysis) is the auto-cycle test below, which waits for the
   // chip to populate — a signal that only appears once hero.ts runs.
   await expect(page.locator('.hero-state').first()).toBeAttached();
   expect(await page.locator('.hero-state').count()).toBeGreaterThan(40); // ~50 states + DC
 });
 
-test('auto-cycle fires a study within 10s', async ({ page }) => {
+test('auto-cycle fires an analysis within 10s', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
   // The header region gets populated with the full chip when a scene
   // starts running. Levels: STATE / COUNTY / RESERVATION / ANCSA
@@ -60,10 +60,10 @@ test('auto-cycle fires a study within 10s', async ({ page }) => {
   );
 });
 
-test('"New study" button cycles through levels', async ({ page }) => {
+test('"New analysis" button cycles through levels', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
   const region = page.locator('#workspaceRegion');
-  // Wait for the first auto-study to land before driving the button.
+  // Wait for the first auto-analysis to land before driving the button.
   await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, {
     timeout: 10_000,
   });
@@ -71,7 +71,7 @@ test('"New study" button cycles through levels', async ({ page }) => {
   for (let i = 0; i < 3; i++) {
     const prev = await region.textContent();
     await page.locator('#workspaceAgain').click();
-    // Wait until the chip text actually changes (the study re-ran)
+    // Wait until the chip text actually changes (the analysis re-ran)
     // instead of a fixed delay — robust across engines and CI load.
     await expect.poll(async () => await region.textContent(), { timeout: 8000 }).not.toBe(prev);
     const chip = await region.textContent();
@@ -130,10 +130,10 @@ test('aiannh polygons are not inlined in SSR HTML; populate at runtime', async (
   );
 });
 
-test('keyboard shortcut S triggers a new study', async ({ page }) => {
+test('keyboard shortcut S triggers a new analysis', async ({ page }) => {
   await page.goto('/map', { waitUntil: 'networkidle' });
   const region = page.locator('#workspaceRegion');
-  // Wait for the first auto-study so there's a baseline chip to change.
+  // Wait for the first auto-analysis so there's a baseline chip to change.
   await expect(region).toContainText(/STATE|COUNTY|RESERVATION|ANCSA REGION|NHO/, {
     timeout: 10_000,
   });

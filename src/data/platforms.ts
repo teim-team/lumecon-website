@@ -82,8 +82,8 @@ export const PLATFORMS: readonly Platform[] = [
     status: 'In active development',
     comingSoon: false,
     badgeKind: 'active',
-    tag: 'Turn your budget data into an economic impact study you can present.',
-    desc: 'For cities, counties, state agencies, enterprises, foundations, universities and the nonprofits that work alongside them. Run grant, council and board-ready studies in-house, in minutes instead of months.',
+    tag: 'Turn your budget data into an economic impact analysis you can present.',
+    desc: 'For cities, counties, state agencies, enterprises, foundations, universities and the nonprofits that work alongside them. Run grant, council and board-ready analyses in-house, in minutes instead of months.',
     audience:
       'Municipalities, state agencies, enterprises, foundations, universities and nonprofits',
     scope: 'Local & regional economic impact analysis',
@@ -138,10 +138,10 @@ export const PLATFORMS: readonly Platform[] = [
     status: 'In active development',
     comingSoon: false,
     badgeKind: 'active',
-    tag: 'Lumecon for consultants delivering studies to outside clients.',
+    tag: 'Lumecon for consultants delivering analyses to outside clients.',
     desc: 'For consulting firms and independent professionals using Lumecon commercially for outside clients. Custom commercial licensing covers the full platform, all applicable geographies, commercial and client use, client and project workspaces and Cedar calibrated to the firm’s analytical and reporting workflow.',
     audience:
-      'Consulting firms and independent professionals running economic impact studies on behalf of outside clients',
+      'Consulting firms and independent professionals running economic impact analyses on behalf of outside clients',
     scope: 'Reservation, county, state and national economic impact analysis',
     iconId: 'consultant',
     kind: 'service',

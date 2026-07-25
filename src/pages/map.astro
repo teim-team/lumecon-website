@@ -1,6 +1,6 @@
 ---
 /**
- * /map — the interactive impact-study map.
+ * /map — the interactive impact-analysis map.
  *
  * The interactive workspace used to share the homepage hero with
  * the brand block and workflow animation. Now it has its own page
@@ -27,11 +27,11 @@ import '../styles/map-page.css';
 
 <BaseLayout
   title="Map | Lumecon"
-  description="Run a live economic-impact study on any state, county or tribal land. Hover any region to inspect; click to run a study with Cedar AI. US coverage today, international scope on the roadmap."
+  description="Run a live economic-impact analysis on any state, county or tribal land. Hover any region to inspect; click to run an analysis with Cedar AI. US coverage today, international scope on the roadmap."
   canonical="https://lumecon.ai/map"
   keywords="Lumecon map, interactive economic impact map, state economic impact, county economic impact, tribal economic impact, AIANNH boundaries, alternative data economic analysis, high-frequency data, AI for government, AI for tribes, IMPLAN alternative, Implan, RIMS II alternative, RIMS 2, REMI alternative, Remi, BEA RIMS"
-  ogTitle="Lumecon map: live economic-impact studies on every state, county and tribal land"
-  ogDescription="Hover or click any region to run a live example economic impact study. Covers every US geography today, with international scope on the roadmap."
+  ogTitle="Lumecon map: live economic-impact analyses on every state, county and tribal land"
+  ogDescription="Hover or click any region to run a live example economic impact analysis. Covers every US geography today, with international scope on the roadmap."
 >
   <Nav />
   <main class="map-page">
@@ -42,10 +42,10 @@ import '../styles/map-page.css';
       <div class="map-page__header-inner">
         <p class="map-page__kicker">Interactive demo</p>
         <h1 class="map-page__title reveal-soft hl-block hl-block--green-b">
-          Run an economic impact study.
+          Run an economic impact analysis.
         </h1>
         <p class="map-page__sub">
-          Hover any region to inspect it, or click to run a study with Cedar across full
+          Hover any region to inspect it, or click to run an analysis with Cedar across full
           reservation, county, state and national scope in minutes.
         </p>
         <p class="map-page__roadmap">US coverage today; international scope is on the roadmap.</p>
@@ -54,23 +54,23 @@ import '../styles/map-page.css';
 
     <MapWorkspace />
 
-    <!-- "What kickstarts a study." Four input tiles naming the
+    <!-- "What kickstarts an analysis." Four input tiles naming the
          records Cedar takes: financial records, the things your
          org spends on, the time window, and the place. Lobbying
          and marketing are NOT inputs — those are use cases for the
-         study (handled in "Why it matters" below). Icons come
+         analysis (handled in "Why it matters" below). Icons come
          first, then the explainer text mentioning the public
          datasets Cedar pulls alongside what you supply. -->
     <section class="map-page__inputs" aria-labelledby="map-inputs-title">
       <div class="map-page__about-inner">
-        <p class="map-page__about-kicker">What kickstarts a study</p>
+        <p class="map-page__about-kicker">What kickstarts an analysis</p>
         <h2
           class="map-page__about-title reveal-soft hl-block hl-block--gold-b"
           id="map-inputs-title"
         >
           The inputs you already have.
         </h2>
-        <ul class="map-page__inputs-grid" aria-label="Study inputs">
+        <ul class="map-page__inputs-grid" aria-label="Analysis inputs">
           <li class="map-page__input">
             <span class="map-page__input-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
@@ -166,21 +166,21 @@ import '../styles/map-page.css';
           </summary>
           <div class="map-page__inputs-more-body">
             <p class="map-page__inputs-lede">
-              Drop in what you already have. We layer it with the public data the study needs (ACS,
-              BEA, LODES, QCEW, CBP, USASpending, the regional Fed banks), the alternative data
-              modern models draw on (higher-frequency feeds, mobility and other non-traditional
+              Drop in what you already have. We layer it with the public data the analysis needs
+              (ACS, BEA, LODES, QCEW, CBP, USASpending, the regional Fed banks), the alternative
+              data modern models draw on (higher-frequency feeds, mobility and other non-traditional
               signals), and our own multipliers and methodology, developed in-house and built to
-              sharpen as studies accumulate. Every study covers county, state, national and
-              reservation geography on every plan, so wherever your work creates impact, the study
-              finds it. One study can hold many operations at once, a card for each enterprise or
-              government program, so everything from a single business to a whole nation&rsquo;s
-              economy rolls up into one comparable picture.
+              sharpen as analyses accumulate. Every analysis covers county, state, national and
+              reservation geography on every plan, so wherever your work creates impact, the
+              analysis finds it. One analysis can hold many operations at once, a card for each
+              enterprise or government program, so everything from a single business to a whole
+              nation&rsquo;s economy rolls up into one comparable picture.
             </p>
             <p class="map-page__inputs-lede">
               The workspace is built so an organization of any size can actually collect the data as
               well as clean it. Review queues route the pieces to HR, finance, payroll, program and
-              council reviewers, so the study doesn&rsquo;t stall on a single analyst&rsquo;s desk
-              waiting on a file someone else has.
+              council reviewers, so the analysis doesn&rsquo;t stall on a single analyst&rsquo;s
+              desk waiting on a file someone else has.
             </p>
           </div>
         </details>
@@ -196,7 +196,7 @@ import '../styles/map-page.css';
           <summary class="map-page__details-summary">
             <span class="map-page__details-kicker">What you&rsquo;re seeing</span>
             <span class="map-page__details-title" id="map-about-title"
-              >An economic impact study, run live.</span
+              >An economic impact analysis, run live.</span
             >
             <span class="map-page__details-chev" aria-hidden="true"></span>
           </summary>
@@ -204,7 +204,7 @@ import '../styles/map-page.css';
             <div class="map-page__about-card">
               <h3 class="map-page__about-card-head">What it is</h3>
               <p class="map-page__about-card-body">
-                An economic impact study estimates how a project, program, or investment ripples
+                An economic impact analysis estimates how a project, program, or investment ripples
                 through a regional economy: direct spending, supplier purchases, the wages workers
                 earn and then spend, and the jobs and tax revenue all of that supports.
               </p>
@@ -215,14 +215,14 @@ import '../styles/map-page.css';
                 The source region lights up in gold to mark the direct effect, while teal flows
                 trace the indirect and induced spillover into the neighbouring regions. Total
                 impact, jobs, and labour income land in the row beneath the map, and clicking
-                another region runs a fresh study that updates everything in seconds.
+                another region runs a fresh analysis that updates everything in seconds.
               </p>
             </div>
             <div class="map-page__about-card">
               <h3 class="map-page__about-card-head">How fast</h3>
               <p class="map-page__about-card-body">
-                A standard study takes minutes instead of months. The legacy path runs a single
-                consulting engagement per study and ships months later, while Lumecon starts from
+                A standard analysis takes minutes instead of months. The legacy path runs a single
+                consulting engagement per analysis and ships months later, while Lumecon starts from
                 the same mainstream economics and extends it with modern methods, current data, and
                 AI, under a workflow built for the cloud from day one.
               </p>
@@ -291,7 +291,7 @@ import '../styles/map-page.css';
               <li class="map-page__why-room">
                 <h3 class="map-page__why-room-head">Public and press</h3>
                 <p class="map-page__why-room-body">
-                  Reporters and the public get the plain-language version of the same study: how
+                  Reporters and the public get the plain-language version of the same analysis: how
                   much local spending stayed in the region, how many local workers were hired, and
                   what the project bought that would not have been bought otherwise.
                 </p>
@@ -305,8 +305,8 @@ import '../styles/map-page.css';
     <!-- "How the model learns." NetworkSection lives here, at the
          bottom of /map, NOT on the homepage. The reason it makes
          sense in this slot specifically: visitors who've just run
-         a live study are the ones who care how the model behind
-         the study stays accurate. -->
+         a live analysis are the ones who care how the model behind
+         the analysis stays accurate. -->
     <NetworkSection />
 
     <!-- CTA band below the map. Compact, single-row on desktop, so
@@ -315,7 +315,7 @@ import '../styles/map-page.css';
     <section class="map-page__cta" aria-labelledby="map-cta-text">
       <div class="map-page__cta-inner">
         <p class="map-page__cta-text" id="map-cta-text">
-          Like what you see? Sign up to run studies on your own data.
+          Like what you see? Sign up to run analyses on your own data.
         </p>
         <div class="map-page__cta-buttons">
           <a href="/signup" class="btn">Sign up</a>
