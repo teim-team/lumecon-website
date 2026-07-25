@@ -134,3 +134,29 @@ test('signup walks the two-step registration flow from the product', async ({ pa
   await expect(page.locator('[data-pwrule="length"]')).toHaveClass(/pwrules--met/);
   await expect(page.locator('[data-auth-back]')).toBeVisible();
 });
+
+test('methodology page renders equations with spoken readings', async ({ page }) => {
+  await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  const equations = page.locator('.eq[role="math"]');
+  await expect(equations).toHaveCount(6);
+  // Every equation block must carry a plain-language reading for
+  // assistive technology.
+  for (const eq of await equations.all()) {
+    expect(await eq.getAttribute('aria-label')).toBeTruthy();
+  }
+  await expect(equations.nth(1)).toContainText('x = (I − A)−1 f');
+});
+
+test('accessibility statement is published and linked from the footer', async ({ page }) => {
+  await page.goto('/accessibility', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toHaveText('Accessibility');
+  await expect(page.locator('main')).toContainText('WCAG');
+  await expect(page.locator('footer a[href="/accessibility"]')).toHaveText('Accessibility');
+});
+
+test('skip link targets real content on subpages', async ({ page }) => {
+  await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('main#top')).toHaveCount(1);
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('main#top')).toHaveCount(1);
+});

@@ -94,11 +94,13 @@
   left: 1.2rem;
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.7rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #fff;
-  background: linear-gradient(135deg, #0fb5a5, #0a7f74);
+  /* Solid chip teal: the old #0fb5a5 gradient end gave white text
+     only ~2.6:1, below AA. --accent-chip holds 4.88:1. */
+  background: var(--accent-chip);
   border-radius: 999px;
   padding: 0.28rem 0.8rem;
 }
@@ -138,7 +140,7 @@
 }
 .pr-plan__users {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent-text);
@@ -206,7 +208,7 @@
 }
 .pr-table tbody th {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent-text);

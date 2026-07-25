@@ -1,0 +1,73 @@
+---
+/**
+ * /accessibility — the site's accessibility statement. Linked from
+ * the footer's Legal column. States the standard we design to
+ * (WCAG 2.2 AA), the concrete measures on this site, known
+ * limitations and how to reach us. Honest posture: "designed to
+ * conform" and reviewed on a stated date, no certification claims.
+ */
+import LegalLayout from '../layouts/LegalLayout.astro';
+---
+
+<LegalLayout
+  title="Accessibility | Lumecon"
+  description="Lumecon's accessibility statement: the standard we design to (WCAG 2.2 AA), the measures on this site, known limitations and how to report an accessibility problem."
+  canonical="https://lumecon.ai/accessibility"
+  keywords="Lumecon accessibility, accessibility statement, WCAG 2.2 AA, screen reader support, keyboard navigation"
+>
+  <h1>Accessibility</h1>
+  <p class="legal-subhead">We want every visitor to be able to read, navigate and use this site.</p>
+  <p class="date">Last reviewed July 25, 2026</p>
+
+  <h2>Our commitment</h2>
+  <p>
+    Lumecon Inc. is committed to making this website accessible to people with disabilities,
+    including visitors who use screen readers, keyboard navigation, magnification, high-contrast
+    display modes or reduced motion. Accessibility is part of how the site is designed and reviewed,
+    and we treat verified accessibility problems as defects to fix.
+  </p>
+
+  <h2>The standard we design to</h2>
+  <p>
+    This site is designed to conform to the Web Content Accessibility Guidelines (WCAG) 2.2 at level
+    AA. Measures in place on lumecon.ai include:
+  </p>
+  <ul>
+    <li>Semantic headings, landmarks and a skip-to-content link on every page.</li>
+    <li>Full keyboard operability with a visible focus indicator.</li>
+    <li>Color contrast checked against the AA thresholds for text and interactive elements.</li>
+    <li>
+      Text alternatives for informative images; decorative artwork is hidden from assistive
+      technology.
+    </li>
+    <li>Forms with programmatic labels and error messages announced to assistive technology.</li>
+    <li>
+      Support for dark mode, forced-colors (Windows High Contrast) and increased-contrast
+      preferences.
+    </li>
+    <li>Animation reduced or removed when the operating system requests reduced motion.</li>
+    <li>
+      Plain-language readings on the equations of the <a href="/methodology">methodology page</a> so the
+      mathematics is available to screen readers.
+    </li>
+    <li>Layouts that reflow for zoom up to 400 percent and for small screens.</li>
+  </ul>
+
+  <h2>Known limitations</h2>
+  <p>
+    Screenshots of the Lumecon application appear on several pages. They illustrate the product and
+    carry short text alternatives; the data they show is also described in the surrounding text.
+    Content on third-party platforms we link to, such as LinkedIn, is governed by those platforms.
+    This statement covers lumecon.ai; the Lumecon application publishes its own product
+    documentation.
+  </p>
+
+  <h2>Report a problem</h2>
+  <p>
+    If any part of this site is difficult to use with assistive technology, or you spot a barrier we
+    missed, write to{' '}
+    <a href="mailto:contact@lumecon.ai?subject=Accessibility">contact@lumecon.ai</a> with the subject
+    line Accessibility. Please include the page address and a short description of the problem. We review
+    every report.
+  </p>
+</LegalLayout>

@@ -334,6 +334,10 @@ const ogIA =
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
           const a = e.target.closest && e.target.closest('a[href]');
           if (!a) return;
+          // The skip link must keep native anchor behavior: the browser
+          // moves keyboard focus to the target, which scripted smooth
+          // scrolling would not do.
+          if (a.classList.contains('skip-link')) return;
           const href = a.getAttribute('href') || '';
           if (!href.includes('#')) return;
           let url;
