@@ -14,14 +14,21 @@
  * PUBLIC_API_URL is set; otherwise the fallback captures the details
  * through the contact endpoint so early-access requests still reach
  * the team.
+ *
+ * Layout: mirrored split-screen auth, the product's sign-in screen
+ * as the reference. Signup puts the form on the LEFT and the teal
+ * brand panel on the RIGHT, the deliberate mirror of /login. Keep
+ * the two pages visual counterparts when editing either.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import AuthBrandPanel from '../components/AuthBrandPanel.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/auth.css';
+import '../styles/auth-split.css';
 
 // Kept in sync with ROLE_OPTIONS in the product (src/pages/accountModel.js).
 const ROLE_OPTIONS = [
@@ -43,121 +50,150 @@ const ROLE_OPTIONS = [
   keywords="Lumecon signup, Lumecon sign up, Lumecon create account, economic impact analysis account, IMPLAN alternative signup"
 >
   <Nav />
-  <main class="auth" id="top" tabindex="-1">
-    <div class="auth-panel">
-      <p class="auth-eyebrow">Create account</p>
-      <h1 class="auth-title">Create your Lumecon account</h1>
-      <p class="auth-sub">Two quick steps: who you are, then your account credentials.</p>
-      <!-- If /signup arrived from a pricing tier CTA, the URL query
-           carries tier= and this badge reflects the chosen plan back
-           at the visitor. Hidden by default; the inline script below
-           reveals it if the query is present. -->
-      <p class="auth-plan" data-auth-plan hidden>
-        <span class="auth-plan__label">Plan</span>
-        <span class="auth-plan__value" data-auth-plan-value></span>
-        <a class="auth-plan__change" href="/pricing">Change plan</a>
-      </p>
+  <main class="asplit asplit--signup" id="top" tabindex="-1">
+    <div class="asplit-formcol">
+      <div class="asplit-forminner">
+        <span class="asplit-ic" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="10" cy="8" r="4"></circle>
+            <path d="M3 21c0-3.9 3.1-7 7-7 1.2 0 2.4 0.3 3.4 0.9"></path>
+            <path d="M18 14v6"></path>
+            <path d="M15 17h6"></path>
+          </svg>
+        </span>
+        <h1 class="asplit-title">Create your Lumecon account</h1>
+        <p class="asplit-tagline">Two quick steps: who you are, then your account credentials.</p>
+        <!-- If /signup arrived from a pricing tier CTA, the URL query
+             carries tier= and this badge reflects the chosen plan back
+             at the visitor. Hidden by default; the inline script below
+             reveals it if the query is present. -->
+        <p class="auth-plan" data-auth-plan hidden>
+          <span class="auth-plan__label">Plan</span>
+          <span class="auth-plan__value" data-auth-plan-value></span>
+          <a class="auth-plan__change" href="/pricing">Change plan</a>
+        </p>
 
-      <ol class="auth-steps" aria-label="Registration progress">
-        <li class="auth-steps__item auth-steps__item--on" data-step-marker="1">
-          <span class="auth-steps__num">1</span> Who you are
-        </li>
-        <li class="auth-steps__item" data-step-marker="2">
-          <span class="auth-steps__num">2</span> Your account
-        </li>
-      </ol>
+        <ol class="auth-steps" aria-label="Registration progress">
+          <li class="auth-steps__item auth-steps__item--on" data-step-marker="1">
+            <span class="auth-steps__num">1</span> Who you are
+          </li>
+          <li class="auth-steps__item" data-step-marker="2">
+            <span class="auth-steps__num">2</span> Your account
+          </li>
+        </ol>
 
-      <form class="auth-form" data-auth-form data-auth-kind="signup" novalidate>
-        <input type="hidden" name="tier" data-auth-tier />
-        <input type="hidden" name="role" data-auth-role />
+        <form class="auth-form" data-auth-form data-auth-kind="signup" novalidate>
+          <input type="hidden" name="tier" data-auth-tier />
+          <input type="hidden" name="role" data-auth-role />
 
-        <fieldset class="auth-step" data-step-panel="1">
-          <legend class="sr-only">Who you are</legend>
-          <label class="auth-field">
-            <span>Name</span>
-            <input type="text" name="name" required autocomplete="name" maxlength="200" />
-          </label>
-          <label class="auth-field">
-            <span>Organization or nation</span>
-            <input
-              type="text"
-              name="organization"
-              required
-              autocomplete="organization"
-              maxlength="200"
-            />
-          </label>
-          <div class="auth-field">
-            <span>Your role</span>
-            <div class="auth-chips" role="group" aria-label="Your role">
-              {
-                ROLE_OPTIONS.map((role) => (
-                  <button type="button" class="auth-chip" data-role-chip aria-pressed="false">
-                    {role}
-                  </button>
-                ))
-              }
+          <fieldset class="auth-step" data-step-panel="1">
+            <legend class="sr-only">Who you are</legend>
+            <label class="auth-field">
+              <span>Name</span>
+              <input type="text" name="name" required autocomplete="name" maxlength="200" />
+            </label>
+            <label class="auth-field">
+              <span>Organization or nation</span>
+              <input
+                type="text"
+                name="organization"
+                required
+                autocomplete="organization"
+                maxlength="200"
+              />
+            </label>
+            <div class="auth-field">
+              <span>Your role</span>
+              <div class="auth-chips" role="group" aria-label="Your role">
+                {
+                  ROLE_OPTIONS.map((role) => (
+                    <button type="button" class="auth-chip" data-role-chip aria-pressed="false">
+                      {role}
+                    </button>
+                  ))
+                }
+              </div>
             </div>
-          </div>
-        </fieldset>
+          </fieldset>
 
-        <fieldset class="auth-step" data-step-panel="2" hidden>
-          <legend class="sr-only">Your account</legend>
-          <label class="auth-field">
-            <span>Email</span>
-            <input type="email" name="email" autocomplete="email" />
-          </label>
-          <label class="auth-field">
-            <span>Password</span>
-            <input
-              type="password"
-              name="password"
-              autocomplete="new-password"
-              minlength="12"
-              aria-describedby="pwRules"
-            />
-          </label>
-          <div class="pwmeter" data-pwmeter hidden>
-            <div class="pwmeter__bars" data-pwmeter-bars data-level="0">
-              <span></span><span></span><span></span><span></span>
+          <fieldset class="auth-step" data-step-panel="2" hidden>
+            <legend class="sr-only">Your account</legend>
+            <label class="auth-field">
+              <span>Work email</span>
+              <input type="email" name="email" autocomplete="email" />
+            </label>
+            <label class="auth-field">
+              <span>Password</span>
+              <input
+                type="password"
+                name="password"
+                autocomplete="new-password"
+                minlength="12"
+                aria-describedby="pwRules"
+              />
+            </label>
+            <div class="pwmeter" data-pwmeter hidden>
+              <div class="pwmeter__bars" data-pwmeter-bars data-level="0">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <span class="pwmeter__label" data-pwmeter-label></span>
             </div>
-            <span class="pwmeter__label" data-pwmeter-label></span>
+            <ul class="pwrules" id="pwRules">
+              <li data-pwrule="length">12 characters or more</li>
+              <li data-pwrule="case">Upper and lower case</li>
+              <li data-pwrule="number">A number</li>
+              <li data-pwrule="symbol">A symbol</li>
+            </ul>
+          </fieldset>
+
+          <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
+
+          <div class="auth-actions">
+            <button type="submit" class="btn" data-auth-submit>Continue</button>
+            <button type="button" class="auth-back" data-auth-back hidden>Back</button>
           </div>
-          <ul class="pwrules" id="pwRules">
-            <li data-pwrule="length">12 characters or more</li>
-            <li data-pwrule="case">Upper and lower case</li>
-            <li data-pwrule="number">A number</li>
-            <li data-pwrule="symbol">A symbol</li>
-          </ul>
-        </fieldset>
+        </form>
 
-        <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
-
-        <div class="auth-actions">
-          <button type="submit" class="btn" data-auth-submit>Continue</button>
-          <button type="button" class="auth-back" data-auth-back hidden>Back</button>
-        </div>
-      </form>
-
-      <p class="auth-legal">
-        By continuing, you acknowledge that you understand and agree to the{' '}
-        <a href="/terms">Terms of Service</a>{' '}and{' '}<a href="/privacy">Privacy Policy</a>.
-      </p>
-      <p class="auth-foot">
-        Already have an account? <a href="/login">Log in</a>
-      </p>
-      <p class="auth-foot">
-        Want to compare plans first? <a href="/pricing">See pricing &rarr;</a>
-      </p>
+        <p class="auth-legal">
+          By continuing, you acknowledge that you understand and agree to the{' '}
+          <a href="/terms">Terms of Service</a>{' '}and{' '}<a href="/privacy">Privacy Policy</a>.
+        </p>
+        <p class="asplit-foot">
+          Already have an account? <a href="/login">Log in</a>{' '}&middot;{' '}
+          <a href="/pricing">Compare plans</a>
+        </p>
+      </div>
     </div>
+    <AuthBrandPanel
+      headline="Start with the full platform."
+      lede="Every plan runs the same economic model. Bring your documents, build an analysis end to end and choose a plan when you are ready to unlock full results."
+      points={[
+        { icon: 'rings', text: 'Every supported geography' },
+        { icon: 'loop', text: 'Unlimited analysis on paid plans' },
+        { icon: 'sprout', text: 'Cedar included from the beginning' },
+      ]}
+    />
   </main>
 
   <script is:inline>
     /* Pricing -> Signup handoff. The pricing tier CTA links to
-       /signup?tier=X. Read the query, fill the hidden field, and
-       surface the plan badge so the choice visibly carries over. */
+       /signup?tier=X (checkout's free path also carries email=).
+       Read the query, fill the hidden field, and surface the plan
+       badge so the choice visibly carries over. */
     (function () {
       var qs = new URLSearchParams(window.location.search);
+      var email = qs.get('email');
+      if (email) {
+        var emailInput = document.querySelector('input[name="email"]');
+        if (emailInput && !emailInput.value) emailInput.value = email;
+      }
       var tier = qs.get('tier');
       if (!tier) return;
       var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree', free: 'Free trial' };

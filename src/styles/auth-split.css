@@ -1,0 +1,331 @@
+/* Mirrored split-screen auth (/login, /signup).
+   Visual reference: the product's sign-in screen (teim-app), so the
+   two surfaces read as one authentication system. Login puts the
+   teal brand panel on the LEFT with the form on the right; signup
+   mirrors it, form left and teal panel right. The mirroring is
+   deliberate: the pages are counterparts, not variations.
+
+   The form primitives (.auth-field, .pwmeter, .auth-steps, chips)
+   come from auth.css; this file owns the composition. Checkout
+   keeps the centered .auth-panel layout from auth.css. */
+
+.asplit {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: stretch;
+  /* Fill the viewport below the sticky nav (~64px tall). */
+  min-height: calc(100dvh - 64px);
+  background: var(--white);
+}
+.asplit--signup {
+  grid-template-columns: 1fr 1.05fr;
+}
+
+/* ---------- teal brand panel ---------- */
+.asplit-brand {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: clamp(2.5rem, 5vw, 5rem);
+  color: #fff;
+  /* The app's teal ramp, deepened so white body copy holds AA
+     contrast on the site (the accessibility statement applies
+     here too). */
+  background: linear-gradient(150deg, #0c9d8d 0%, #0a8577 42%, #06635a 100%);
+}
+.asplit-brand__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(46px);
+  pointer-events: none;
+}
+.asplit-brand__glow--a {
+  width: 24rem;
+  height: 24rem;
+  top: -8rem;
+  right: -6rem;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%);
+}
+.asplit-brand__glow--b {
+  width: 20rem;
+  height: 20rem;
+  bottom: -7rem;
+  left: -5rem;
+  background: radial-gradient(circle, rgba(5, 60, 54, 0.55), rgba(5, 60, 54, 0) 70%);
+}
+.asplit-brand__contours {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  opacity: 0.08;
+  pointer-events: none;
+}
+/* The real mark, white-filtered, bleeding off the top corner that
+   faces away from the form. Login and signup mirror it. */
+.asplit-brand__mark {
+  position: absolute;
+  top: -14%;
+  width: 30rem;
+  max-width: 65%;
+  height: auto;
+  pointer-events: none;
+  filter: brightness(0) invert(1);
+  opacity: 0.12;
+}
+.asplit--login .asplit-brand__mark {
+  right: -16%;
+}
+.asplit--signup .asplit-brand__mark {
+  left: -16%;
+  transform: scaleX(-1);
+}
+.asplit-brand__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 30rem;
+}
+.asplit-brand__headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 3.4vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 0 0 1.1rem;
+}
+.asplit-brand__lede {
+  font-family: var(--font-sans);
+  font-size: clamp(1.02rem, 1.3vw, 1.14rem);
+  font-weight: 500;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.96);
+  max-width: 26rem;
+  margin: 0 0 2rem;
+}
+/* Proof points: quiet rows, hairline separators, no cards. */
+.asplit-brand__points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 26rem;
+}
+.asplit-brand__point {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.85rem 0;
+  font-family: var(--font-sans);
+  font-size: 0.97rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.97);
+}
+.asplit-brand__point + .asplit-brand__point {
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+}
+.asplit-brand__point-ic {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 0.1rem;
+  color: #fff;
+}
+.asplit-brand__point-ic svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- form column ---------- */
+.asplit-formcol {
+  display: flex;
+  background: var(--white);
+}
+.asplit-forminner {
+  width: min(100%, 30rem);
+  margin: auto;
+  padding: clamp(2.2rem, 5vh, 3.2rem) clamp(1.25rem, 4vw, 2rem);
+}
+.asplit-ic {
+  width: 50px;
+  height: 50px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: var(--accent-rgba-08);
+  color: var(--accent-text);
+  margin-bottom: 0.9rem;
+}
+.asplit-ic svg {
+  width: 26px;
+  height: 26px;
+}
+.asplit-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--navy);
+  margin: 0 0 0.4rem;
+}
+.asplit-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 1.5rem;
+}
+/* Larger, calmer fields than the compact checkout panel. */
+.asplit .auth-field > input {
+  padding: 0.78rem 0.95rem;
+  border-radius: 10px;
+}
+.asplit .auth-form .btn {
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  /* The product's sign-in primary is teal; use the site's dark teal
+     token so white label text keeps AA contrast. */
+  background: var(--accent-text);
+  border-color: var(--accent-text);
+  color: #fff;
+}
+.asplit .auth-form .btn:hover {
+  background: #086a61;
+  border-color: #086a61;
+}
+
+/* "or" divider + Google, secondary to the primary action. Hidden
+   until the page script confirms the API origin is configured. */
+.asplit-sso[hidden] {
+  display: none;
+}
+.asplit-or {
+  display: flex;
+  align-items: center;
+  margin: 1.3rem 0 1.1rem;
+}
+.asplit-or::before,
+.asplit-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.asplit-or span {
+  padding: 0 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1;
+}
+.asplit-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--rule-strong);
+  border-radius: 10px;
+  color: var(--navy);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+.asplit-google:hover {
+  background: var(--accent-rgba-08);
+  border-color: var(--accent);
+}
+
+/* Quiet footer links, low in the hierarchy. */
+.asplit-foot {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--ink-3);
+  margin: 1.5rem 0 0;
+}
+.asplit-foot a {
+  color: var(--navy);
+  font-weight: 600;
+  border-bottom: 1px solid var(--rule-strong);
+}
+.asplit-foot a:hover {
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+.asplit .auth-legal {
+  font-size: 0.78rem;
+  margin-top: 1.4rem;
+}
+
+/* Gentle entrance, mirrored from the app's sign-in screen. */
+@media (prefers-reduced-motion: no-preference) {
+  .asplit-brand__inner,
+  .asplit-forminner {
+    animation: asplit-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .asplit-brand__inner {
+    animation-delay: 0.05s;
+  }
+}
+@keyframes asplit-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- responsive ---------- */
+/* Tablet: give the form side a little more room. */
+@media (max-width: 1080px) {
+  .asplit {
+    grid-template-columns: 0.85fr 1fr;
+  }
+  .asplit--signup {
+    grid-template-columns: 1fr 0.85fr;
+  }
+}
+/* Mobile: no side-by-side. DOM order keeps the mirrored intent:
+   login leads with a compact teal band then the form; signup leads
+   with the form and closes on a compact teal reassurance band. */
+@media (max-width: 880px) {
+  .asplit,
+  .asplit--signup {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .asplit-brand {
+    padding: 2.1rem clamp(1.25rem, 5vw, 2rem) 2.3rem;
+  }
+  .asplit-brand__headline {
+    font-size: clamp(1.85rem, 7vw, 2.3rem);
+  }
+  .asplit-brand__lede {
+    margin-bottom: 1.1rem;
+  }
+  .asplit-brand__point {
+    padding: 0.6rem 0;
+    font-size: 0.92rem;
+  }
+  .asplit-brand__mark {
+    width: 17rem;
+  }
+  .asplit-forminner {
+    padding: 2rem clamp(1.25rem, 5vw, 2rem) 2.4rem;
+  }
+}
