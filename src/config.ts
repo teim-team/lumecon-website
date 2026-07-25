@@ -1,10 +1,7 @@
 // Site-wide configuration — single source of truth for the site's
-// brand, contact, and meta fields. Product/platform data lives in
-// src/data/platforms.ts; site.products re-exports the lookup table
-// from there so legacy `site.products.local.url`-style accesses
-// keep working without copy duplicated across files.
-
-import { PLATFORM_BY_SLUG } from './data/platforms';
+// brand, contact, and meta fields. The marketing-door domain data
+// (localeconomicimpact.com etc.) lives in src/data/platforms.ts and
+// feeds the homepage Service JSON-LD.
 
 export const site = {
   name: 'Lumecon',
@@ -24,5 +21,4 @@ export const site = {
   // Computed at build time, so every deploy stamps the current year.
   copyrightYear: new Date().getFullYear(),
   maxWidth: '1100px',
-  products: PLATFORM_BY_SLUG,
 } as const;

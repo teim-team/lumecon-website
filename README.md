@@ -11,11 +11,13 @@ authenticated product and its data layer live in sibling repositories (see
 
 The homepage leads with a rotating money shot (one of ten sample analyses,
 captured from the app in light and dark themes), the why cards, a product
-tour with real screenshots, the Lumecon edge grid, the Cedar workflow and
-an ask-any-AI strip. The site also carries pricing (Sprout $500 / Sapling
-$2,500 / Tree $7,500 a year, a free trial and the competitive transition
-offer), a methodology page, glossary, about/team pages and the interactive
-US map on /map. There is one Lumecon platform; the localeconomicimpact.com,
+tour with real screenshots, the Lumecon edge grid, the Whole Nation and
+Cedar sections and the AI-research strip. Beyond the homepage the site
+carries pricing (Sprout $500 / Sapling $2,500 / Tree $7,500 a year, a free
+trial and the competitive transition offer), a methodology page with an
+FAQ, a glossary, sign-up and log-in pages, terms/privacy/404 and an
+unlisted /film page (reachable by direct link only, kept out of the
+sitemap). There is one Lumecon platform; the localeconomicimpact.com,
 tribaleconomicimpact.com and globaleconomicimpact.com domains are audience
 entry points into the same application. On the static deploy (no backend
 configured), Cedar's chat is answered entirely by a local keyword
@@ -26,15 +28,14 @@ error.
 ## Tech stack
 
 - **Astro 7** (`output: 'static'`) — zero-JS-by-default, per-island scripts
-- **d3-geo + topojson-client + us-atlas** — the interactive impact map
 - **@astrojs/sitemap** — sitemap generation at build time
 - **TypeScript** (`astro/tsconfigs/strict`)
 - **Prettier** (with `prettier-plugin-astro`) for formatting
 - **Playwright** for smoke tests; **Lighthouse CI** for performance budgets
 
 No runtime framework (React/Vue/etc.) and no client database — every page is
-prerendered HTML with small inline scripts for the interactive pieces (map,
-Cedar chat, nav, scroll reveals).
+prerendered HTML with small inline scripts for the interactive pieces (the
+hero trio rotation, Cedar chat, nav, scroll reveals).
 
 ## Requirements
 
@@ -63,45 +64,54 @@ npm run dev        # local dev server at http://localhost:4321
 
 ```
 src/
-  components/   Astro components (Hero, Nav, Footer, MapWorkspace, CedarFAB, ...)
-  pages/        One file per route (index, about, cedar, map, pricing, join,
-                  login, signup, status, privacy, terms, 404), dynamic routes
-                  (team/[slug], demo/[slug]), and JSON endpoints
-                  (data/aiannh.json.ts, data/counties.json.ts)
+  components/   Astro components (Hero, WhyBand, ProductTour, Edge,
+                  WholeNation, CedarFlow, AskAI, FinalCta, Nav, Footer,
+                  CedarFAB, CedarChat, ConsentBanner, MarkArt,
+                  BrandWordmark)
+  pages/        One file per route: index, pricing, methodology, glossary,
+                  signup, login, terms, privacy, 404 and the unlisted film
   layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
-                LegalLayout.astro — privacy/terms wrapper
+                LegalLayout.astro — legal/reference wrapper (methodology,
+                glossary, terms, privacy)
   data/         Single sources of truth:
+                  pricing.ts      plans, comparison rows, the competitive
+                                  offer, consultant licensing
                   platforms.ts    the entry-point domain data (one platform)
-                  team.ts         team + advisors + working areas
-                  pricing.ts      tiers, comparison rows, discount codes
+                  team.ts         team + advisors (feeds founder JSON-LD)
                   cedarIntents.ts Cedar chat intent bank
-                  countyMatch.ts, tribalLookup.ts, scenes.ts  map + demo data
+  assets/       Build-time inlined assets (the AI assistant brand marks)
   lib/          api.ts (ApiResult fallback), cedarChat.ts (chat runtime),
-                observability.ts (analytics shim)
-  scripts/      hero.ts and other page-level behavior
+                consent.ts, observability.ts (consent-gated analytics shim)
   styles/       global.css + per-section stylesheets
-public/         Static assets: brand marks, favicons, OG image, robots.txt,
-                llms.txt, sitemap, tier icons
-tests/          Playwright specs (smoke.spec.ts)
+public/         Static assets: brand marks, app screenshots (light + dark),
+                why-card art, favicons, OG image, robots.txt, llms.txt,
+                films
+tests/          Playwright specs (smoke, Cedar chat, consent, a11y)
 ```
 
 ### Where content lives
 
 Page copy is authored directly in the `.astro` files, but structured,
 reused data is centralized in `src/data/` so a change lands in one place and
-flows to the page, the footer, the JSON-LD, and the sitemap. Adding a fourth
-platform, a new teammate, or a pricing tier is a single edit in the relevant
-data file.
+flows to the page, the footer, the JSON-LD, and the sitemap. Changing a
+plan, the competitive offer, or a Cedar chat answer is a single edit in the
+relevant data file.
 
 ## SEO & crawlers
 
 - Per-page `<title>`, meta description, canonical, Open Graph, and Twitter
   card tags are set in `BaseLayout.astro`.
-- JSON-LD (Organization, AboutPage, Person, BreadcrumbList, FAQPage, Service)
-  is emitted from the same data that renders the page.
-- `public/robots.txt` allows search crawlers (with crawl delays for the noisy
-  ones) and blocks AI training crawlers by default.
-- `public/llms.txt` provides an AI-readable site summary.
+- JSON-LD (Organization + SoftwareApplication, BreadcrumbList, FAQPage on
+  the homepage and methodology, Service for the entry-point domains,
+  DefinedTermSet on the glossary) is emitted from the same data that
+  renders the page.
+- `public/robots.txt` explicitly allows search crawlers and the AI
+  assistants' crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot,
+  Google-Extended and peers) so the product is discoverable through AI
+  search.
+- `public/llms.txt` provides an AI-readable site summary kept consistent
+  with the on-page copy; the generated sitemap is `sitemap-index.xml`
+  (there is no hand-maintained sitemap file).
 - A light/dark `theme-color` and `prefers-color-scheme` support adapt the
   site to the visitor's OS appearance without a manual toggle.
 
@@ -172,8 +182,8 @@ ladder (rem):
 | `--type-3xl` | 3rem / 48px | large section headings |
 | `--type-display` | `clamp(2.8rem, 7.5vw, 6rem)` | display / hero |
 
-Headlines are fluid: the homepage hero (`.hero-statement`) is
-`clamp(2rem, 5.5vw, 4.4rem)` at weight 600. Eyebrows / kickers are mono,
+Headlines are fluid: the homepage hero (`.hero2-title`) is
+`clamp(2.3rem, 5.6vw, 4.3rem)` at weight 700. Eyebrows / kickers are mono,
 uppercase, ~0.64–0.82rem with wide letter-spacing.
 Weights: `--weight-regular 400` · `--weight-medium 500` · `--weight-semi 600`
 · `--weight-bold 700` · `--weight-black 800`.
@@ -203,9 +213,11 @@ and **gold** reserved for the brand wordmark.
 | `--error-color` | `#DC2626` | error / validation |
 | `--map-tribal` | `#C77A18` | map: tribal-lands layer |
 
-Notes: corners are **rounded** (cards/chips/inputs); headline highlights use
-the `.hl-block` smear system with rotating tints; a `prefers-color-scheme: dark`
-block in `global.css` flips the surface/ink tokens (teal/gold stay put).
+Notes: corner radii are deliberately tight — a two-step scale of **8px**
+(cards, frames, panels) and **6px** (buttons, chips, small elements);
+headline highlights use the `.hl-block` smear system with rotating tints; a
+`prefers-color-scheme: dark` block in `global.css` flips the surface/ink
+tokens (teal/gold stay put).
 
 ## Where this fits: the product ecosystem
 

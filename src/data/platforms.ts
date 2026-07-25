@@ -149,11 +149,6 @@ export const PLATFORMS: readonly Platform[] = [
   },
 ];
 
-/** Slug -> Platform lookup. */
-export const PLATFORM_BY_SLUG: Record<PlatformSlug, Platform> = Object.fromEntries(
-  PLATFORMS.map((p) => [p.slug, p]),
-) as Record<PlatformSlug, Platform>;
-
 /** Convenience helpers — most surfaces only want one kind of platform.
  *  Homepage product cards and the footer "Platforms" rail show only
  *  regional offerings; the pricing platform-picker shows all of them. */
