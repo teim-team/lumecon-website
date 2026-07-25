@@ -95,7 +95,6 @@ const jsonLd = [
     foundingLocation: { '@type': 'Place', name: site.builtAt },
     founder: FOUNDERS.map((p) => ({
       '@type': 'Person',
-      '@id': `${site.url}/team/${p.slug}`,
       name: p.name,
       jobTitle: p.title,
     })),

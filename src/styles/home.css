@@ -770,18 +770,23 @@
 
 /* ---------- illustrated card art (why cards) ---------- */
 .whyw-art {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 132px;
   margin-bottom: 0.55rem;
   overflow: hidden;
+}
+.whyw-art img {
+  max-height: 100%;
+  width: auto;
+  transition: transform 0.25s var(--ease);
+}
+.whyw-card:hover .whyw-art img {
+  transform: translateY(-2px) scale(1.03);
 }
 .whyw-art svg {
   display: block;
   width: 100%;
   height: auto;
-}
-.whyw-card:hover .whyw-art svg {
-  transform: translateY(-2px);
-}
-.whyw-art svg {
-  transition: transform 0.25s var(--ease);
 }
