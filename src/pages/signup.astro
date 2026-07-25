@@ -1,14 +1,19 @@
 ---
 /**
- * /signup — authenticated-app signup page.
+ * /signup — account creation, mirroring the product's registration
+ * flow (AuthGate in teim-app) so this page can become the one place
+ * accounts are created while the app moves toward login-only:
  *
- * Same placeholder pattern as /login: the form posts through
- * lib/api.ts to `POST /v1/auth/signup` when PUBLIC_API_URL is set,
- * otherwise the submit handler captures the email through the
- * contact endpoint so early-access requests still reach the team.
- * The shared submit handler lives inline below and is mirrored in
- * /login (kept in sync because both pages need the same fallback
- * behaviour and the auth flow is the only thing that varies).
+ *   Step 1 "Who you are"  — name, organization or nation, role chips
+ *   Step 2 "Your account" — email + password (12+ chars, 3 of 4
+ *                            character classes, live strength meter)
+ *
+ * The role list and password rules are copied from the app verbatim
+ * so an account created here is exactly what the product expects.
+ * Submission posts through lib/api.ts to `POST /v1/auth/signup` when
+ * PUBLIC_API_URL is set; otherwise the fallback captures the details
+ * through the contact endpoint so early-access requests still reach
+ * the team.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -17,79 +22,127 @@ import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/auth.css';
+
+// Kept in sync with ROLE_OPTIONS in the product (src/pages/accountModel.js).
+const ROLE_OPTIONS = [
+  'Tribal Council Member or Elected Leader',
+  'Tribal Administrator',
+  'Tribal Treasurer or Finance Officer',
+  'Economic Development Director',
+  'Consultant',
+  'Government Analyst',
+  'Researcher/Academic',
+  'Other',
+];
 ---
 
 <BaseLayout
   title="Sign up | Lumecon"
   description="Create a free Lumecon account and build an economic impact analysis end to end. For governments, universities, nonprofits, businesses and Tribal Nations; full results unlock on any plan."
   canonical="https://lumecon.ai/signup"
-  keywords="Lumecon signup, Lumecon sign up, Lumecon early access, economic impact analysis account, IMPLAN alternative signup"
+  keywords="Lumecon signup, Lumecon sign up, Lumecon create account, economic impact analysis account, IMPLAN alternative signup"
 >
   <Nav />
   <main class="auth">
     <div class="auth-panel">
-      <p class="auth-eyebrow">Account</p>
-      <h1 class="auth-title">Create your account</h1>
-      <p class="auth-sub">
-        Tell us a little about you and your organization, and we'll get you into the workspace.
-      </p>
-      <!-- If /signup arrived from a pricing tier CTA, the URL
-           query carries tier= and platform= and this badge
-           reflects the chosen plan back at the visitor. Hidden
-           by default; the inline script below reveals it if the
-           query is present. -->
+      <p class="auth-eyebrow">Create account</p>
+      <h1 class="auth-title">Create your Lumecon account</h1>
+      <p class="auth-sub">Two quick steps: who you are, then your account credentials.</p>
+      <!-- If /signup arrived from a pricing tier CTA, the URL query
+           carries tier= and this badge reflects the chosen plan back
+           at the visitor. Hidden by default; the inline script below
+           reveals it if the query is present. -->
       <p class="auth-plan" data-auth-plan hidden>
         <span class="auth-plan__label">Plan</span>
         <span class="auth-plan__value" data-auth-plan-value></span>
         <a class="auth-plan__change" href="/pricing">Change plan</a>
       </p>
+
+      <ol class="auth-steps" aria-label="Registration progress">
+        <li class="auth-steps__item auth-steps__item--on" data-step-marker="1">
+          <span class="auth-steps__num">1</span> Who you are
+        </li>
+        <li class="auth-steps__item" data-step-marker="2">
+          <span class="auth-steps__num">2</span> Your account
+        </li>
+      </ol>
+
       <form class="auth-form" data-auth-form data-auth-kind="signup" novalidate>
         <input type="hidden" name="tier" data-auth-tier />
-        <input type="hidden" name="platform" data-auth-platform />
-        <label class="auth-field">
-          <span>Full name</span>
-          <input type="text" name="name" required autocomplete="name" />
-        </label>
-        <label class="auth-field">
-          <span>Work email</span>
-          <input
-            type="email"
-            name="email"
-            required
-            autocomplete="email"
-            placeholder="you@organization.gov"
-          />
-        </label>
-        <label class="auth-field">
-          <span>Organization</span>
-          <input
-            type="text"
-            name="organization"
-            autocomplete="organization"
-            placeholder="City of Springfield / Cherokee Nation / Smith Family Foundation"
-          />
-        </label>
-        <label class="auth-field">
-          <span>What do you plan to use Lumecon for?</span>
-          <input
-            type="text"
-            name="role"
-            placeholder="Grant applications, annual impact reports, board / leadership updates..."
-          />
-        </label>
-        <label class="auth-field">
-          <span>Password</span>
-          <input
-            type="password"
-            name="password"
-            required
-            autocomplete="new-password"
-            minlength="8"
-          />
-        </label>
-        <button type="submit" class="btn">Create account</button>
+        <input type="hidden" name="role" data-auth-role />
+
+        <fieldset class="auth-step" data-step-panel="1">
+          <legend class="sr-only">Who you are</legend>
+          <label class="auth-field">
+            <span>Name</span>
+            <input type="text" name="name" required autocomplete="name" maxlength="200" />
+          </label>
+          <label class="auth-field">
+            <span>Organization or nation</span>
+            <input
+              type="text"
+              name="organization"
+              required
+              autocomplete="organization"
+              maxlength="200"
+            />
+          </label>
+          <div class="auth-field">
+            <span>Your role</span>
+            <div class="auth-chips" role="group" aria-label="Your role">
+              {
+                ROLE_OPTIONS.map((role) => (
+                  <button type="button" class="auth-chip" data-role-chip aria-pressed="false">
+                    {role}
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="auth-step" data-step-panel="2" hidden>
+          <legend class="sr-only">Your account</legend>
+          <label class="auth-field">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" />
+          </label>
+          <label class="auth-field">
+            <span>Password</span>
+            <input
+              type="password"
+              name="password"
+              autocomplete="new-password"
+              minlength="12"
+              aria-describedby="pwRules"
+            />
+          </label>
+          <div class="pwmeter" data-pwmeter hidden>
+            <div class="pwmeter__bars" data-pwmeter-bars data-level="0">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <span class="pwmeter__label" data-pwmeter-label></span>
+          </div>
+          <ul class="pwrules" id="pwRules">
+            <li data-pwrule="length">12 characters or more</li>
+            <li data-pwrule="case">Upper and lower case</li>
+            <li data-pwrule="number">A number</li>
+            <li data-pwrule="symbol">A symbol</li>
+          </ul>
+        </fieldset>
+
         <p class="auth-meta" data-auth-status hidden></p>
+
+        <div class="auth-actions">
+          <button type="submit" class="btn" data-auth-submit>Continue</button>
+          <button type="button" class="auth-back" data-auth-back hidden>Back</button>
+        </div>
       </form>
+
+      <p class="auth-legal">
+        By continuing, you acknowledge that you understand and agree to the{' '}
+        <a href="/terms">Terms of Service</a>{' '}and{' '}<a href="/privacy">Privacy Policy</a>.
+      </p>
       <p class="auth-foot">
         Already have an account? <a href="/login">Log in</a>
       </p>
@@ -101,40 +154,22 @@ import '../styles/auth.css';
 
   <script is:inline>
     /* Pricing -> Signup handoff. The pricing tier CTA links to
-       /signup?tier=X&platform=Y. Read those query params, fill
-       the hidden form fields, and surface a small badge above
-       the form so the visitor sees the plan choice carried over.
-       Tier labels map to the public name (starter -> Sprout etc.). */
+       /signup?tier=X. Read the query, fill the hidden field, and
+       surface the plan badge so the choice visibly carries over. */
     (function () {
       var qs = new URLSearchParams(window.location.search);
       var tier = qs.get('tier');
-      var platform = qs.get('platform');
-      if (!tier && !platform) return;
-      var tierName = {
-        starter: 'Sprout',
-        standard: 'Sapling',
-        leader: 'Tree',
-      };
-      var platformName = {
-        local: 'Local Economic Impact',
-        tribal: 'Tribal Economic Impact',
-        global: 'Global Economic Impact',
-        consultant: 'Consultant licensing',
-      };
-      var parts = [];
-      if (tier && tierName[tier]) parts.push(tierName[tier] + ' tier');
-      if (platform && platformName[platform]) parts.push(platformName[platform]);
-      if (!parts.length) return;
+      if (!tier) return;
+      var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree' };
+      if (!tierName[tier]) return;
       var badge = document.querySelector('[data-auth-plan]');
       var value = document.querySelector('[data-auth-plan-value]');
       var tierInput = document.querySelector('[data-auth-tier]');
-      var platformInput = document.querySelector('[data-auth-platform]');
       if (badge && value) {
-        value.textContent = parts.join(' · ');
+        value.textContent = tierName[tier] + ' tier';
         badge.hidden = false;
       }
-      if (tierInput && tier) tierInput.value = tier;
-      if (platformInput && platform) platformInput.value = platform;
+      if (tierInput) tierInput.value = tier;
     })();
   </script>
 
@@ -142,14 +177,31 @@ import '../styles/auth.css';
 </BaseLayout>
 
 <script>
-  /* Same handler as /login (kept inline rather than imported because
-     the script blocks are intentionally co-located with the markup
-     they drive; if this duplication ever grows beyond the small
-     window it is today, we'll factor it into src/lib/auth.ts). */
-  import { submitLogin, submitSignup, submitContact, apiConfigured } from '../lib/api';
+  import { submitSignup, submitContact, apiConfigured } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
 
-  type AuthKind = 'login' | 'signup';
+  /* Password rules copied from the product's AuthGate: a password
+     passes when it is 12+ characters AND meets at least three of the
+     four character classes. */
+  const PASSWORD_RULES: Array<{ key: string; test: (pw: string) => boolean }> = [
+    { key: 'length', test: (pw) => pw.length >= 12 },
+    { key: 'case', test: (pw) => /[a-z]/.test(pw) && /[A-Z]/.test(pw) },
+    { key: 'number', test: (pw) => /\d/.test(pw) },
+    { key: 'symbol', test: (pw) => /[^A-Za-z0-9]/.test(pw) },
+  ];
+
+  function evaluatePassword(pw: string): { acceptable: boolean; level: number; label: string } {
+    const results = PASSWORD_RULES.map((r) => r.test(pw));
+    const met = results.filter(Boolean).length;
+    const longEnough = results[0];
+    const acceptable = longEnough && met >= 3;
+    if (!pw) return { acceptable: false, level: 0, label: '' };
+    if (met <= 1) return { acceptable, level: 1, label: 'Weak' };
+    if (met === 2) return { acceptable, level: 2, label: 'Fair' };
+    if (acceptable && met === 3) return { acceptable, level: 3, label: 'Good' };
+    if (acceptable) return { acceptable, level: 4, label: 'Strong' };
+    return { acceptable, level: 2, label: 'Fair' };
+  }
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;
@@ -163,29 +215,88 @@ import '../styles/auth.css';
   function setup(): void {
     const form = document.querySelector<HTMLFormElement>('[data-auth-form]');
     if (!form) return;
-    const kind = (form.dataset.authKind as AuthKind) || 'signup';
     const status = form.querySelector<HTMLElement>('[data-auth-status]');
-    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-auth-submit]');
+    const backBtn = form.querySelector<HTMLButtonElement>('[data-auth-back]');
+    const roleInput = form.querySelector<HTMLInputElement>('[data-auth-role]');
+    const panels = {
+      1: form.querySelector<HTMLElement>('[data-step-panel="1"]'),
+      2: form.querySelector<HTMLElement>('[data-step-panel="2"]'),
+    };
+    const markers = document.querySelectorAll<HTMLElement>('[data-step-marker]');
+    let step: 1 | 2 = 1;
 
-    form.querySelectorAll<HTMLAnchorElement>('[data-auth-disabled]').forEach((a) => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        setStatus(status, 'info', 'Email contact@lumecon.ai and the team will help you out.');
+    function showStep(next: 1 | 2): void {
+      step = next;
+      if (panels[1]) panels[1].hidden = next !== 1;
+      if (panels[2]) panels[2].hidden = next !== 2;
+      markers.forEach((m) => {
+        const n = Number(m.dataset.stepMarker);
+        m.classList.toggle('auth-steps__item--on', n === next);
+        m.classList.toggle('auth-steps__item--done', n < next);
+      });
+      if (submitBtn) submitBtn.textContent = next === 1 ? 'Continue' : 'Create account';
+      if (backBtn) backBtn.hidden = next === 1;
+      if (status) status.hidden = true;
+    }
+
+    // Role chips: one selected at a time, mirrored into the hidden field.
+    form.querySelectorAll<HTMLButtonElement>('[data-role-chip]').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        form.querySelectorAll('[data-role-chip]').forEach((c) => {
+          c.classList.remove('auth-chip--on');
+          c.setAttribute('aria-pressed', 'false');
+        });
+        chip.classList.add('auth-chip--on');
+        chip.setAttribute('aria-pressed', 'true');
+        if (roleInput) roleInput.value = chip.textContent?.trim() ?? '';
       });
     });
+
+    // Live strength meter + rule checklist, same tiers as the product.
+    const pwInput = form.querySelector<HTMLInputElement>('input[name="password"]');
+    const meter = form.querySelector<HTMLElement>('[data-pwmeter]');
+    const meterBars = form.querySelector<HTMLElement>('[data-pwmeter-bars]');
+    const meterLabel = form.querySelector<HTMLElement>('[data-pwmeter-label]');
+    pwInput?.addEventListener('input', () => {
+      const pw = pwInput.value;
+      const { level, label } = evaluatePassword(pw);
+      if (meter) meter.hidden = !pw;
+      if (meterBars) meterBars.dataset.level = String(level);
+      if (meterLabel) meterLabel.textContent = label;
+      PASSWORD_RULES.forEach((rule) => {
+        const li = form.querySelector(`[data-pwrule="${rule.key}"]`);
+        li?.classList.toggle('pwrules--met', rule.test(pw));
+      });
+    });
+
+    backBtn?.addEventListener('click', () => showStep(1));
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = new FormData(form);
-      const email = String(data.get('email') ?? '').trim();
-      const password = String(data.get('password') ?? '');
       const name = String(data.get('name') ?? '').trim();
       const organization = String(data.get('organization') ?? '').trim();
       const role = String(data.get('role') ?? '').trim();
 
-      if (!email || !password || (kind === 'signup' && !name)) {
-        setStatus(status, 'err', 'Please fill in every required field.');
+      if (step === 1) {
+        // Step 1 collects the profile; advance rather than submit.
+        if (!name) return setStatus(status, 'err', 'Enter your name.');
+        if (!organization) return setStatus(status, 'err', 'Enter an organization.');
+        if (!role) return setStatus(status, 'err', 'Choose your role.');
+        showStep(2);
         return;
+      }
+
+      const email = String(data.get('email') ?? '').trim();
+      const password = String(data.get('password') ?? '');
+      if (!email) return setStatus(status, 'err', 'Enter your email.');
+      if (!evaluatePassword(password).acceptable) {
+        return setStatus(
+          status,
+          'err',
+          'Strengthen your password to at least 12 characters with a mix of upper case, lower case, numbers or symbols.',
+        );
       }
 
       submitBtn?.setAttribute('disabled', 'true');
@@ -193,23 +304,23 @@ import '../styles/auth.css';
 
       try {
         if (apiConfigured()) {
-          const result =
-            kind === 'signup'
-              ? await submitSignup({ name, email, password, organization, role })
-              : await submitLogin({ email, password });
+          const result = await submitSignup({ name, email, password, organization, role });
           if (result.ok) {
-            trackEvent('auth.success', { kind });
-            setStatus(
-              status,
-              'ok',
-              kind === 'signup'
-                ? 'Account created. Check your inbox to verify your email.'
-                : 'Logged in. Redirecting you to the workspace...',
-            );
+            trackEvent('auth.success', { kind: 'signup', role });
+            setStatus(status, 'ok', 'Account created. Taking you to checkout to pick your plan...');
+            // Hand off to the buy step, carrying the plan chosen on
+            // /pricing (if any) and the email for the receipt.
+            const tier = String(data.get('tier') ?? '').trim();
+            const qs = new URLSearchParams();
+            if (tier) qs.set('tier', tier);
+            qs.set('email', email);
+            setTimeout(() => {
+              window.location.href = `/checkout?${qs.toString()}`;
+            }, 1200);
             return;
           }
           if (result.reason !== 'api-unconfigured') {
-            trackEvent('auth.fail', { kind, reason: result.reason });
+            trackEvent('auth.fail', { kind: 'signup', reason: result.reason });
             setStatus(
               status,
               'err',
@@ -223,11 +334,8 @@ import '../styles/auth.css';
           name: name || 'Lumecon early-access request',
           email,
           organization,
-          message:
-            kind === 'signup'
-              ? `Early-access request via the signup page. Role/use case: ${role || '(not provided)'}`
-              : 'Early-access request via the login page.',
-          source: kind === 'signup' ? 'signup-page' : 'login-page',
+          message: `Early-access request via the signup page. Role: ${role || '(not provided)'}`,
+          source: 'signup-page',
         });
         if (contactRes.ok) {
           setStatus(
@@ -244,7 +352,7 @@ import '../styles/auth.css';
         window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
         setStatus(status, 'info', 'Opening your email client so you can reach us directly...');
       } catch (err: unknown) {
-        trackError(err, { where: 'auth.submit', kind });
+        trackError(err, { where: 'auth.submit', kind: 'signup' });
         setStatus(
           status,
           'err',
@@ -254,6 +362,8 @@ import '../styles/auth.css';
         submitBtn?.removeAttribute('disabled');
       }
     });
+
+    showStep(1);
   }
 
   if (document.readyState === 'loading') {

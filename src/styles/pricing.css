@@ -142,6 +142,19 @@
   justify-self: start;
   margin-top: auto;
 }
+.pr-plan__buy {
+  justify-self: start;
+  margin-top: 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-strong);
+}
+.pr-plan__buy:hover {
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
 @media (max-width: 900px) {
   .pr-plans__grid {
     grid-template-columns: minmax(0, 1fr);
