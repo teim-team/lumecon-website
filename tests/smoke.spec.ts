@@ -182,3 +182,13 @@ test('methodology hosts the AI-research verification block', async ({ page }) =>
   await expect(page.locator('.askai')).toHaveCount(1);
   await expect(page.locator('.askai-tile')).toHaveCount(6);
 });
+
+test('checkout offers the free trial with no payment step', async ({ page }) => {
+  await page.goto('/checkout?tier=free', { waitUntil: 'domcontentloaded' });
+  const selected = page.locator('.co-plan--on');
+  await expect(selected).toHaveCount(1);
+  await expect(selected).toContainText('Free trial');
+  await expect(page.locator('[data-co-total]')).toHaveText('$0');
+  await expect(page.locator('[data-co-submit]')).toHaveText('Start your free trial');
+  await expect(page.locator('input[name="discountCode"]')).toBeHidden();
+});

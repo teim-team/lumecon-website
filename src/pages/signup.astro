@@ -160,7 +160,7 @@ const ROLE_OPTIONS = [
       var qs = new URLSearchParams(window.location.search);
       var tier = qs.get('tier');
       if (!tier) return;
-      var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree' };
+      var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree', free: 'Free trial' };
       if (!tierName[tier]) return;
       var badge = document.querySelector('[data-auth-plan]');
       var value = document.querySelector('[data-auth-plan-value]');
@@ -307,10 +307,23 @@ const ROLE_OPTIONS = [
           const result = await submitSignup({ name, email, password, organization, role });
           if (result.ok) {
             trackEvent('auth.success', { kind: 'signup', role });
+            const tier = String(data.get('tier') ?? '').trim();
+            if (tier === 'free') {
+              // Free trial: no payment step. The account starts on the
+              // free tier (build end to end; results unlock on a plan).
+              setStatus(
+                status,
+                'ok',
+                'Account created. Your free trial is ready; log in and start building.',
+              );
+              setTimeout(() => {
+                window.location.href = '/login';
+              }, 1400);
+              return;
+            }
             setStatus(status, 'ok', 'Account created. Taking you to checkout to pick your plan...');
             // Hand off to the buy step, carrying the plan chosen on
             // /pricing (if any) and the email for the receipt.
-            const tier = String(data.get('tier') ?? '').trim();
             const qs = new URLSearchParams();
             if (tier) qs.set('tier', tier);
             qs.set('email', email);
