@@ -1,0 +1,37 @@
+---
+/**
+ * Backdrop for teal flow surfaces (choose-plan, checkout summary,
+ * welcome): the same drifting glows and topographic contour
+ * linework as the auth brand panels, so every teal field in the
+ * acquisition flow reads as one environment. Decorative only; the
+ * host element needs position: relative and overflow: hidden.
+ */
+---
+
+<span class="tealfield__glow tealfield__glow--a" aria-hidden="true"></span>
+<span class="tealfield__glow tealfield__glow--b" aria-hidden="true"></span>
+<svg
+  class="tealfield__contours"
+  viewBox="0 0 640 640"
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+>
+  <g fill="none" stroke="#ffffff" stroke-width="1.1">
+    {
+      [0.3, 0.46, 0.62, 0.78, 0.94, 1.1, 1.26, 1.42].map((s) => (
+        <path
+          transform={`translate(150 180) scale(${s})`}
+          d="M0,-150 C74,-150 152,-64 150,4 C148,84 58,152 -6,150 C-86,147 -152,66 -150,-14 C-148,-86 -74,-150 0,-150 Z"
+        />
+      ))
+    }
+    {
+      [0.3, 0.48, 0.66, 0.84, 1.02, 1.2, 1.38].map((s) => (
+        <path
+          transform={`translate(470 460) scale(${s})`}
+          d="M0,-130 C66,-134 138,-58 132,10 C127,78 52,136 -12,130 C-84,123 -134,54 -130,-18 C-126,-84 -62,-126 0,-130 Z"
+        />
+      ))
+    }
+  </g>
+</svg>

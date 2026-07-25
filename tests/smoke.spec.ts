@@ -92,19 +92,31 @@ test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page 
   await expect(menu.locator('a', { hasText: 'Methodology' })).toBeVisible();
 });
 
-test('checkout preselects the plan from the query and takes a discount code', async ({ page }) => {
+test('checkout is payment-only: knows the plan, no plan picker', async ({ page }) => {
   await page.goto('/checkout?tier=leader', { waitUntil: 'domcontentloaded' });
-  const selected = page.locator('.co-plan--on');
-  await expect(selected).toHaveCount(1);
-  await expect(selected).toContainText('Tree');
-  await expect(page.locator('[data-co-total]')).toHaveText('$7,500');
-
-  await page.locator('[data-co-plan="starter"]').click();
-  await expect(page.locator('[data-co-total]')).toHaveText('$500');
+  // The order summary reflects the already-chosen plan.
+  const summary = page.locator('[data-co-summary="leader"]');
+  await expect(summary).toBeVisible();
+  await expect(summary).toContainText('Tree');
+  await expect(summary.locator('[data-co-total]')).toHaveText('$7,500');
+  await expect(summary).toContainText('Taxes and fees included');
+  // One job: no selectable plan cards, just a quiet change-plan link.
+  await expect(page.locator('.co-plan')).toHaveCount(0);
+  await expect(page.locator('h1')).toContainText('Complete your subscription');
+  await expect(page.locator('[data-co-change]')).toHaveAttribute('href', /\/choose-plan/);
 
   await page.fill('input[name="discountCode"]', 'welcome25');
   await page.locator('[data-co-apply]').click();
   await expect(page.locator('[data-co-code-note]')).toContainText('WELCOME25');
+});
+
+test('checkout routes non-payable states to the right step', async ({ page }) => {
+  // Free never sees a payment page.
+  await page.goto('/checkout?tier=free', { waitUntil: 'domcontentloaded' });
+  await page.waitForURL(/\/signup\?tier=free/);
+  // No plan chosen yet: the dedicated selection step.
+  await page.goto('/checkout', { waitUntil: 'domcontentloaded' });
+  await page.waitForURL(/\/choose-plan/);
 });
 
 test('login offers the forgot-password flow from the product', async ({ page }) => {
@@ -183,12 +195,21 @@ test('methodology hosts the AI-research verification block', async ({ page }) =>
   await expect(page.locator('.askai-tile')).toHaveCount(6);
 });
 
-test('checkout offers the free trial with no payment step', async ({ page }) => {
-  await page.goto('/checkout?tier=free', { waitUntil: 'domcontentloaded' });
-  const selected = page.locator('.co-plan--on');
-  await expect(selected).toHaveCount(1);
-  await expect(selected).toContainText('Free trial');
-  await expect(page.locator('[data-co-total]')).toHaveText('$0');
-  await expect(page.locator('[data-co-submit]')).toHaveText('Start your free trial');
-  await expect(page.locator('input[name="discountCode"]')).toBeHidden();
+test('choose-plan offers the three plans and a free start', async ({ page }) => {
+  await page.goto('/choose-plan', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('How will you use Lumecon?');
+  await expect(page.locator('[data-plan-link]')).toHaveCount(3);
+  await expect(page.locator('[data-plan-link="standard"]')).toContainText('Sapling');
+  // Without a signup handoff, Start free routes through account creation.
+  await expect(page.locator('[data-free-link]')).toHaveAttribute('href', /\/signup\?tier=free/);
+  // The transactional flow keeps one obvious action: no Cedar launcher.
+  await expect(page.locator('.cedar-fab')).toHaveCount(0);
+});
+
+test('welcome closes the flow in full teal with one action', async ({ page }) => {
+  await page.goto('/welcome?plan=free', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText(/You.re in\./);
+  await expect(page.locator('[data-welcome-kicker]')).toHaveText('Free trial ready');
+  await expect(page.locator('a.welc-btn')).toHaveAttribute('href', '/login');
+  await expect(page.locator('.cedar-fab')).toHaveCount(0);
 });

@@ -15,6 +15,11 @@ interface Props {
   jsonLd?: object;
   /** Set true on admin/info/error pages we don't want in search. */
   noindex?: boolean;
+  /** The acquisition flow (signup, choose-plan, checkout, welcome)
+      hides the Ask Cedar launcher: one obvious next action, no
+      escape hatches over transactional UI. Cedar greets people
+      inside the product instead. */
+  cedar?: boolean;
 }
 
 const {
@@ -29,6 +34,7 @@ const {
   bodyClass,
   jsonLd,
   noindex = false,
+  cedar = true,
 } = Astro.props;
 const robotsValue = noindex
   ? 'noindex, nofollow'
@@ -153,7 +159,7 @@ const ogIA =
   <body class={bodyClass}>
     <a href="#top" class="skip-link">Skip to main content</a>
     <slot />
-    <CedarFAB />
+    {cedar && <CedarFAB />}
     <ConsentBanner />
 
     <script>

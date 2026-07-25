@@ -1,130 +1,130 @@
 ---
 /**
- * /checkout — the buy step between pricing/signup and Stripe.
+ * /checkout — the payment step, and only the payment step. The plan
+ * was chosen earlier (pricing, signup handoff or /choose-plan), so
+ * this page performs one job: complete the subscription. Teal order
+ * summary on the left, white transactional column on the right (the
+ * third stage of the flow's teal progression; see flow.css).
  *
- * Reads ?tier= (starter | standard | leader) from the pricing or
- * signup handoff, lets the visitor confirm or switch the plan, take
- * a discount code, and continue to payment. The continue action
- * posts to the upcoming Stripe integration's endpoint
- * (`POST /billing/checkout-session`, via lib/api.ts) and redirects
- * to the returned Stripe-hosted checkout URL. Until PUBLIC_API_URL
- * is set, the fallback captures the order intent through the
- * contact channel so no buyer is dropped.
+ * Routing rules enforced by the inline script:
+ *   - no tier / unknown tier -> /choose-plan (nothing to pay for yet)
+ *   - tier=free              -> /signup?tier=free (the free trial
+ *     never passes through a payment page)
+ *
+ * The continue action posts to the upcoming Stripe integration's
+ * endpoint (`POST /billing/checkout-session`, via lib/api.ts) and
+ * redirects to the returned Stripe-hosted checkout URL. Until
+ * PUBLIC_API_URL is set, the fallback captures the order intent
+ * through the contact channel so no buyer is dropped.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import Contours from '../components/Contours.astro';
 import { PLANS } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/auth.css';
+import '../styles/flow.css';
+
+/* What every plan includes; the differentiation the buyer is
+   confirming, phrased the way pricing phrases it. */
+const INCLUDED = [
+  'Full Lumecon model',
+  'Every supported U.S. geography',
+  'Unlimited analysis',
+  'Cedar included',
+];
 ---
 
 <BaseLayout
   title="Checkout | Lumecon"
-  description="Choose your Lumecon plan and continue to secure payment. Every plan includes the full model, Cedar, unlimited analysis and every supported U.S. geography."
+  description="Complete your Lumecon subscription. Prices are annual and include taxes and fees."
   canonical="https://lumecon.ai/checkout"
-  keywords="Lumecon checkout, Lumecon buy, Lumecon subscribe, economic impact analysis software pricing"
+  keywords="Lumecon checkout, Lumecon subscribe, economic impact analysis software pricing"
+  cedar={false}
+  noindex={true}
 >
   <Nav />
-  <main class="auth" id="top" tabindex="-1">
-    <div class="auth-panel auth-panel--wide">
-      <p class="auth-eyebrow">Checkout</p>
-      <h1 class="auth-title">Choose your plan</h1>
-      <p class="auth-sub">
-        Annual subscription, every plan on the same model.{' '}
-        <a class="co-link" href="/pricing">Compare plans in detail</a>.
-      </p>
-
-      <form class="auth-form" data-co-form novalidate>
-        <div class="co-plans" role="radiogroup" aria-label="Plan">
-          {
-            PLANS.map((p) => (
-              <button
-                type="button"
-                class="co-plan"
-                role="radio"
-                aria-checked="false"
-                data-co-plan={p.id}
-                data-co-price={p.priceAnnual}
-                data-co-name={p.name}
-              >
-                <span class="co-plan__head">
-                  <span class="co-plan__name">{p.name}</span>
-                  <span class="co-plan__price">
-                    {p.price}
-                    <span class="co-plan__per"> / year</span>
-                  </span>
-                </span>
-                <span class="co-plan__users">{p.users}</span>
-              </button>
-            ))
-          }
-          <button
-            type="button"
-            class="co-plan co-plan--free"
-            role="radio"
-            aria-checked="false"
-            data-co-plan="free"
-            data-co-price="0"
-            data-co-name="Free trial"
-          >
-            <span class="co-plan__head">
-              <span class="co-plan__name">Free trial</span>
-              <span class="co-plan__price">$0</span>
-            </span>
-            <span class="co-plan__users">
-              Build an analysis end to end; full results unlock on any plan
-            </span>
-          </button>
-        </div>
-
-        <label class="auth-field">
-          <span>Email for your receipt and account</span>
-          <input
-            type="email"
-            name="email"
-            autocomplete="email"
-            placeholder="you@organization.gov"
-          />
-        </label>
-
-        <div class="auth-field">
-          <span>Discount code</span>
-          <div class="co-code">
-            <input
-              type="text"
-              name="discountCode"
-              autocomplete="off"
-              autocapitalize="characters"
-              placeholder="Optional"
-            />
-            <button type="button" class="co-code__apply" data-co-apply>Apply</button>
+  <main class="co2" id="top" tabindex="-1">
+    <aside class="co2-summary tealfield">
+      <Contours />
+      {
+        PLANS.map((p) => (
+          <div class="co2-summary__inner" data-co-summary={p.id} hidden>
+            <p class="tealfield__kicker">Order summary</p>
+            <p class="co2-summary__plan">{p.name}</p>
+            <p class="co2-summary__users">{p.users}</p>
+            <ul class="co2-summary__features">
+              {INCLUDED.map((f) => (
+                <li>{f}</li>
+              ))}
+            </ul>
+            <div class="co2-summary__due">
+              <span class="co2-summary__due-label">Due today</span>
+              <span class="co2-summary__due-value" data-co-total>
+                {p.price}
+              </span>
+            </div>
+            <p class="co2-summary__fine">
+              Annual subscription. Taxes and fees included. Payment is processed by Stripe; Lumecon
+              does not store card details.
+            </p>
           </div>
-          <p class="co-code__note" data-co-code-note hidden></p>
-        </div>
+        ))
+      }
+    </aside>
 
-        <div class="co-total">
-          <span class="co-total__label">Due today</span>
-          <span class="co-total__value" data-co-total></span>
-        </div>
+    <div class="co2-pay">
+      <div class="co2-pay__inner">
+        <p class="co2-kicker">Secure checkout</p>
+        <h1 class="co2-title">Complete your subscription.</h1>
+        <p class="co2-tagline">Everything you need to start measuring your impact is ready.</p>
 
-        <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
+        <form class="auth-form" data-co-form novalidate>
+          <label class="auth-field">
+            <span>Email for your receipt and account</span>
+            <input
+              type="email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@organization.gov"
+            />
+          </label>
 
-        <div class="auth-actions">
-          <button type="submit" class="btn" data-co-submit> Continue to secure payment </button>
-        </div>
-      </form>
+          <div class="auth-field">
+            <span>Discount code</span>
+            <div class="co-code">
+              <input
+                type="text"
+                name="discountCode"
+                autocomplete="off"
+                autocapitalize="characters"
+                placeholder="Optional"
+              />
+              <button type="button" class="co-code__apply" data-co-apply>Apply</button>
+            </div>
+            <p class="co-code__note" data-co-code-note hidden></p>
+          </div>
 
-      <p class="auth-legal">
-        Payment is processed by Stripe; Lumecon does not store card details. Prices are annual and
-        include taxes and fees. Switching from qualifying software?{' '}
-        <a href="/pricing#switch">See the competitive transition offer</a>.
-      </p>
-      <p class="auth-foot">
-        Buying for a consultancy? <a href="/pricing#consultants">Consultant licensing</a> is custom-priced.
-      </p>
+          <p class="co2-paylabel">Payment</p>
+          <p class="co2-paynote">
+            Card, bank debit and invoicing options are presented on the next screen, hosted by
+            Stripe.
+          </p>
+
+          <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
+
+          <div class="auth-actions">
+            <button type="submit" class="btn" data-co-submit>Complete purchase</button>
+          </div>
+        </form>
+
+        <p class="co2-change">
+          &larr; <a href="/choose-plan" data-co-change>Change plan</a>
+        </p>
+      </div>
     </div>
   </main>
   <Footer />
@@ -133,6 +133,8 @@ import '../styles/auth.css';
 <script>
   import { submitCheckout, submitContact, apiConfigured } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
+
+  const VALID_TIERS = ['starter', 'standard', 'leader'];
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;
@@ -146,43 +148,42 @@ import '../styles/auth.css';
   function setup(): void {
     const form = document.querySelector<HTMLFormElement>('[data-co-form]');
     if (!form) return;
-    const status = form.querySelector<HTMLElement>('[data-auth-status]');
-    const submitBtn = form.querySelector<HTMLButtonElement>('[data-co-submit]');
-    const total = form.querySelector<HTMLElement>('[data-co-total]');
-    const codeInput = form.querySelector<HTMLInputElement>('input[name="discountCode"]');
-    const codeNote = form.querySelector<HTMLElement>('[data-co-code-note]');
-    const plans = Array.from(form.querySelectorAll<HTMLButtonElement>('[data-co-plan]'));
+
     const qs = new URLSearchParams(window.location.search);
-    let tier = qs.get('tier') || 'standard';
-    if (!plans.some((p) => p.dataset.coPlan === tier)) tier = 'standard';
+    const tier = qs.get('tier') || '';
+    const emailFromFlow = qs.get('email') || '';
 
-    // Prefill the receipt email when the signup handoff carried one.
-    const emailFromSignup = qs.get('email');
-    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
-    if (emailInput && emailFromSignup) emailInput.value = emailFromSignup;
-
-    const codeField = codeInput?.closest<HTMLElement>('.auth-field') ?? null;
-
-    function select(next: string): void {
-      tier = next;
-      let price = 0;
-      plans.forEach((p) => {
-        const on = p.dataset.coPlan === next;
-        p.classList.toggle('co-plan--on', on);
-        p.setAttribute('aria-checked', String(on));
-        if (on) price = Number(p.dataset.coPrice || 0);
-      });
-      if (total) total.textContent = `$${price.toLocaleString('en-US')}`;
-      // Free trial: nothing to pay, so no discount code and a
-      // different call to action.
-      const free = next === 'free';
-      if (codeField) codeField.hidden = free;
-      if (submitBtn)
-        submitBtn.textContent = free ? 'Start your free trial' : 'Continue to secure payment';
+    /* One job: payment. Anything that is not a payable plan gets
+       routed to the step that handles it. */
+    if (tier === 'free') {
+      window.location.replace(
+        `/signup?tier=free${emailFromFlow ? `&email=${encodeURIComponent(emailFromFlow)}` : ''}`,
+      );
+      return;
+    }
+    if (!VALID_TIERS.includes(tier)) {
+      window.location.replace(
+        `/choose-plan${emailFromFlow ? `?email=${encodeURIComponent(emailFromFlow)}` : ''}`,
+      );
+      return;
     }
 
-    plans.forEach((p) => p.addEventListener('click', () => select(p.dataset.coPlan || 'standard')));
-    select(tier);
+    // Reveal the summary panel for the selected plan.
+    document.querySelectorAll<HTMLElement>('[data-co-summary]').forEach((el) => {
+      el.hidden = el.dataset.coSummary !== tier;
+    });
+
+    const status = form.querySelector<HTMLElement>('[data-auth-status]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-co-submit]');
+    const codeInput = form.querySelector<HTMLInputElement>('input[name="discountCode"]');
+    const codeNote = form.querySelector<HTMLElement>('[data-co-code-note]');
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    if (emailInput && emailFromFlow) emailInput.value = emailFromFlow;
+
+    // Keep the flow context on the quiet Change plan link.
+    const changeLink = document.querySelector<HTMLAnchorElement>('[data-co-change]');
+    if (changeLink && emailFromFlow)
+      changeLink.href = `/choose-plan?email=${encodeURIComponent(emailFromFlow)}`;
 
     // The code itself is validated by the backend at payment time;
     // this control just confirms it will be carried through.
@@ -206,23 +207,6 @@ import '../styles/auth.css';
         .trim()
         .toUpperCase();
       if (!email) return setStatus(status, 'err', 'Enter your email.');
-
-      // Free trial: there is no payment step. If the visitor arrived
-      // from signup their account already exists (send them to log
-      // in); otherwise send them to create the free account.
-      if (tier === 'free') {
-        if (emailFromSignup) {
-          trackEvent('checkout.free', { from: 'signup' });
-          setStatus(status, 'ok', 'Your free trial is ready. Taking you to log in...');
-          setTimeout(() => {
-            window.location.href = '/login';
-          }, 1200);
-        } else {
-          trackEvent('checkout.free', { from: 'direct' });
-          window.location.href = `/signup?tier=free&email=${encodeURIComponent(email)}`;
-        }
-        return;
-      }
 
       submitBtn?.setAttribute('disabled', 'true');
       setStatus(status, 'info', 'One moment...');

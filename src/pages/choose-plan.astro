@@ -1,0 +1,92 @@
+---
+/**
+ * /choose-plan — the transitional step between account creation and
+ * payment. Signup hands off here when no tier was carried in; the
+ * page asks one question ("How will you use Lumecon?") and routes:
+ *
+ *   paid plan  -> /checkout?tier=X (checkout already knows the plan)
+ *   start free -> /welcome?plan=free when the visitor arrived from
+ *                 signup (account exists; email= is carried), else
+ *                 /signup?tier=free to create the free account first
+ *
+ * Predominantly teal: the second step of the flow's progression
+ * from the white public site into the product (see flow.css).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Contours from '../components/Contours.astro';
+import { PLANS } from '../data/pricing';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/flow.css';
+---
+
+<BaseLayout
+  title="Choose your plan | Lumecon"
+  description="Pick the Lumecon plan that fits how you work. Every plan runs the same economic model on the same data."
+  canonical="https://lumecon.ai/choose-plan"
+  keywords="Lumecon plans, Lumecon choose plan, economic impact analysis pricing"
+  cedar={false}
+>
+  <Nav />
+  <main class="cpl tealfield" id="top" tabindex="-1">
+    <Contours />
+    <div class="cpl-inner">
+      <p class="tealfield__kicker">Your account is ready</p>
+      <h1 class="cpl-title">How will you use Lumecon?</h1>
+      <p class="cpl-sub">
+        Every plan runs the same economic model on the same data foundation. Pick the size that fits
+        how you work; you can change it whenever you need.
+      </p>
+      <div class="cpl-grid">
+        {
+          PLANS.map((p) => (
+            <a class="cpl-card" href={`/checkout?tier=${p.id}`} data-plan-link={p.id}>
+              {p.featured && <span class="cpl-card__flag">Most popular</span>}
+              <span class="cpl-card__name">{p.name}</span>
+              <span class="cpl-card__audience">&ldquo;{p.audience}&rdquo;</span>
+              <span class="cpl-card__price">
+                {p.price}
+                <span class="cpl-card__per"> / year</span>
+              </span>
+              <span class="cpl-card__users">{p.users}</span>
+              <span class="cpl-card__go" aria-hidden="true">
+                Continue with {p.name} &rarr;
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      <a class="cpl-free" href="/signup?tier=free" data-free-link>
+        <span class="cpl-free__label">Start free &rarr;</span>
+        <span class="cpl-free__note">
+          Build an analysis end to end; full results unlock on any plan.
+        </span>
+      </a>
+      <p class="cpl-foot">
+        Want the detail first? <a href="/pricing">Compare plans</a>. Consultancies use{' '}
+        <a href="/pricing#consultants">custom licensing</a>.
+      </p>
+    </div>
+  </main>
+
+  <script is:inline>
+    /* Carry the signup handoff through the flow. When email= is
+       present the account already exists, so Start free goes
+       straight to the welcome page instead of back through signup. */
+    (function () {
+      var qs = new URLSearchParams(window.location.search);
+      var email = qs.get('email');
+      if (!email) return;
+      document.querySelectorAll('[data-plan-link]').forEach(function (a) {
+        a.href += '&email=' + encodeURIComponent(email);
+      });
+      var free = document.querySelector('[data-free-link]');
+      if (free) free.href = '/welcome?plan=free';
+    })();
+  </script>
+
+  <Footer />
+</BaseLayout>

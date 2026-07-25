@@ -17,10 +17,15 @@ import perplexityMark from '../assets/ai/perplexity.svg?raw';
 const QUESTION = 'What is Lumecon (lumecon.ai), the economic impact analysis software?';
 const q = encodeURIComponent(QUESTION);
 
+/* Every tile must actually carry the question. The Gemini app has no
+   public prefill parameter, so its tile goes through Google AI Mode
+   (udm=50), which is Gemini-answered and accepts q=; do not link a
+   bare assistant homepage here, a tile that opens an empty composer
+   reads as broken. */
 const ASSISTANTS = [
   { name: 'ChatGPT', href: `https://chatgpt.com/?q=${q}`, mark: openaiMark },
   { name: 'Claude', href: `https://claude.ai/new?q=${q}`, mark: claudeMark },
-  { name: 'Gemini', href: 'https://gemini.google.com/app', mark: geminiMark },
+  { name: 'Gemini', href: `https://www.google.com/search?udm=50&q=${q}`, mark: geminiMark },
   { name: 'Copilot', href: `https://copilot.microsoft.com/?q=${q}`, mark: copilotMark },
   { name: 'Grok', href: `https://grok.com/?q=${q}`, mark: grokMark },
   { name: 'Perplexity', href: `https://www.perplexity.ai/search?q=${q}`, mark: perplexityMark },

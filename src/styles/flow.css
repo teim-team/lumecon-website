@@ -1,0 +1,500 @@
+/* The acquisition flow after auth: /choose-plan, /checkout,
+   /welcome. One visual family with the mirrored auth pages
+   (auth-split.css), and a deliberate progression: signup is white
+   left / teal right, plan selection is predominantly teal, payment
+   is teal left / white transactional right, and the success page is
+   full teal. The teal takes over as the visitor moves from the
+   public site into the product. */
+
+/* ---------- shared teal field ---------- */
+.tealfield {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(150deg, #0c9d8d 0%, #0a8577 42%, #06635a 100%);
+}
+.tealfield__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(46px);
+  pointer-events: none;
+}
+.tealfield__glow--a {
+  width: 24rem;
+  height: 24rem;
+  top: -8rem;
+  right: -6rem;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%);
+}
+.tealfield__glow--b {
+  width: 20rem;
+  height: 20rem;
+  bottom: -7rem;
+  left: -5rem;
+  background: radial-gradient(circle, rgba(5, 60, 54, 0.55), rgba(5, 60, 54, 0) 70%);
+}
+.tealfield__contours {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  opacity: 0.08;
+  pointer-events: none;
+}
+.tealfield__kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+  margin: 0 0 0.9rem;
+}
+
+/* ---------- /choose-plan: predominantly teal ---------- */
+.cpl {
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  align-items: center;
+  padding: clamp(2.5rem, 6vh, 4.5rem) var(--container-pad);
+}
+.cpl-inner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 62rem);
+  margin: 0 auto;
+}
+.cpl-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 3.6vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 0 0 0.7rem;
+}
+.cpl-sub {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  font-weight: 500;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.96);
+  max-width: 40rem;
+  margin: 0 0 2.2rem;
+}
+.cpl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 0 0 1rem;
+}
+.cpl-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 1.35rem 1.4rem 1.3rem;
+  text-decoration: none;
+  color: var(--navy);
+  transition:
+    transform 0.16s var(--ease),
+    box-shadow 0.16s var(--ease);
+}
+.cpl-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -18px rgba(4, 45, 40, 0.55);
+}
+.cpl-card__flag {
+  position: absolute;
+  top: -0.7rem;
+  left: 1.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+  background: var(--navy);
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+}
+.cpl-card__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.015em;
+}
+.cpl-card__audience {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  font-style: italic;
+}
+.cpl-card__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  margin-top: 0.5rem;
+}
+.cpl-card__per {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.cpl-card__users {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.cpl-card__go {
+  margin-top: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+/* Start free: a quieter, outlined row under the paid trio. */
+.cpl-free {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border: 1px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 12px;
+  padding: 1.05rem 1.4rem;
+  text-decoration: none;
+  color: #fff;
+  transition:
+    background 0.16s var(--ease),
+    border-color 0.16s var(--ease);
+}
+.cpl-free:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+.cpl-free__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.cpl-free__note {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+}
+.cpl-foot {
+  margin: 1.6rem 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+.cpl-foot a {
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+}
+.cpl-foot a:hover {
+  border-color: #fff;
+}
+
+/* ---------- /checkout: teal summary left, white payment right ---------- */
+.co2 {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  align-items: stretch;
+  min-height: calc(100dvh - 64px);
+  background: var(--white);
+}
+.co2-summary {
+  display: flex;
+  align-items: center;
+  padding: clamp(2.5rem, 5vw, 4.5rem);
+}
+.co2-summary__inner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 24rem);
+  margin: 0 auto;
+}
+.co2-summary__plan {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 2.8vw, 2.6rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin: 0 0 0.25rem;
+  color: #fff;
+}
+.co2-summary__users {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+  margin: 0 0 1.4rem;
+}
+.co2-summary__features {
+  list-style: none;
+  margin: 0 0 1.4rem;
+  padding: 0;
+}
+.co2-summary__features li {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.97);
+  padding: 0.55rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.co2-summary__features li + li {
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+}
+.co2-summary__features li::before {
+  content: '';
+  flex: none;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-0.1rem);
+}
+.co2-summary__due {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  padding-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+.co2-summary__due-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+.co2-summary__due-value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.co2-summary__fine {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+.co2-pay {
+  display: flex;
+  background: var(--white);
+}
+.co2-pay__inner {
+  width: min(100%, 30rem);
+  margin: auto;
+  padding: clamp(2.2rem, 5vh, 3.2rem) clamp(1.25rem, 4vw, 2rem);
+}
+.co2-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+  margin: 0 0 0.8rem;
+}
+.co2-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--navy);
+  margin: 0 0 0.4rem;
+}
+.co2-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 1.5rem;
+}
+.co2-paylabel {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin: 0.4rem 0 0;
+}
+.co2-paynote {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 0.75rem 0.95rem;
+  margin: 0;
+}
+/* Same teal primary as the auth pages: one family, one action. */
+.co2 .auth-form .btn {
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: var(--accent-text);
+  border-color: var(--accent-text);
+  color: #fff;
+}
+.co2 .auth-form .btn:hover {
+  background: #086a61;
+  border-color: #086a61;
+}
+.co2-change {
+  margin: 1.5rem 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--ink-3);
+}
+.co2-change a {
+  color: var(--navy);
+  font-weight: 600;
+  border-bottom: 1px solid var(--rule-strong);
+}
+.co2-change a:hover {
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+/* ---------- /welcome: full teal ---------- */
+.welc {
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(3rem, 8vh, 6rem) var(--container-pad);
+}
+.welc-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 38rem;
+}
+.welc-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 7vw, 5.2rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: #fff;
+  margin: 0 0 1.1rem;
+}
+.welc-sub {
+  font-family: var(--font-sans);
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.97);
+  margin: 0 0 2.2rem;
+}
+.welc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--white);
+  color: var(--navy);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-radius: 12px;
+  padding: 0.95rem 1.8rem;
+  text-decoration: none;
+  transition:
+    transform 0.16s var(--ease),
+    box-shadow 0.16s var(--ease);
+}
+.welc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -16px rgba(4, 45, 40, 0.6);
+}
+.welc-note {
+  margin: 1.4rem 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Entrance, same curve as the auth pages (keyframes duplicated from
+   auth-split.css so this file stands alone on flow pages). */
+@keyframes asplit-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cpl-inner,
+  .co2-summary__inner,
+  .co2-pay__inner,
+  .welc-inner {
+    animation: asplit-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  .cpl-grid {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+  .cpl-card {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.8rem;
+  }
+  .cpl-card__price {
+    margin-top: 0;
+    margin-left: auto;
+  }
+  .cpl-card__users {
+    width: 100%;
+  }
+  .cpl-card__go {
+    display: none;
+  }
+  .co2 {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  /* Mobile keeps the teal-first order: summary band, then payment. */
+  .co2-summary {
+    padding: 2.1rem clamp(1.25rem, 5vw, 2rem) 2.3rem;
+  }
+  .co2-pay__inner {
+    padding: 2rem clamp(1.25rem, 5vw, 2rem) 2.4rem;
+  }
+}
