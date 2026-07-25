@@ -745,3 +745,22 @@
     transition: none;
   }
 }
+
+/* ---------- illustrated card art (why cards) ---------- */
+.whyw-art {
+  display: block;
+  border-radius: 10px;
+  background: linear-gradient(160deg, var(--accent-rgba-08), rgba(15, 181, 165, 0.03));
+  border: 1px solid var(--accent-bar);
+  margin-bottom: 0.55rem;
+  overflow: hidden;
+  transition: background 0.2s var(--ease);
+}
+.whyw-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.whyw-card:hover .whyw-art {
+  background: linear-gradient(160deg, var(--accent-rgba-18), rgba(15, 181, 165, 0.05));
+}
