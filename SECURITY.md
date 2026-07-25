@@ -15,7 +15,7 @@ When reporting, please include:
 
 In scope:
 - `lumecon.ai` and any subdomain that resolves to Lumecon-operated infrastructure.
-- The three platform domains: `localeconomicimpact.com`, `tribaleconomicimpact.com`, `globaleconomicimpact.com`.
+- The audience entry-point domains: `localeconomicimpact.com`, `tribaleconomicimpact.com`, `globaleconomicimpact.com` (marketing doors into the same Lumecon platform).
 - The marketing-page Cedar assistant (local keyword classifier on the static deploy; an optional backend API path exists behind `PUBLIC_API_URL`).
 
 Out of scope:

@@ -84,11 +84,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   },
   {
     label: 'U.S. geographies',
-    values: [
-      'County, state, national, reservation and tribal-government geographies',
-      'Same',
-      'Same',
-    ],
+    values: ['Counties, states, the nation and reservations', 'Same', 'Same'],
   },
   {
     label: 'Historical analysis',

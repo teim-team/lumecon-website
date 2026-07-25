@@ -227,7 +227,7 @@ export const INTENTS: CedarIntent[] = [
       'upload audit',
     ],
     answer:
-      "I'm Cedar, Lumecon's assistant. Inside the platform I upload and process your data (PDFs, CSVs and XLSX files today, with more formats expanding over time), structure it for the impact model, surface every assumption for your sign-off and act as a thought partner on the write-up. The substance and local context come from you. I handle the data wrangling and the polish. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what a study costs or how to reach the team.",
+      "I'm Cedar, Lumecon's assistant. Inside the platform I upload and process your data (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), structure it for the impact model, surface every assumption for your sign-off and act as a thought partner on the write-up. The substance and local context come from you. I handle the data wrangling and the polish. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what a study costs or how to reach the team.",
   },
   {
     id: 'audience',
@@ -269,7 +269,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Mostly governments, enterprises and mission-driven organizations: tribal nations, state and local agencies, universities, foundations, ports, transit agencies, large nonprofits and community development financial institutions. The common thread is they need to defend their numbers to a council, a board or a funder, and they need that defense to hold up to scrutiny. We build Lumecon together with these organizations. Where do you sit?',
     expanded:
-      'Breaking it down: tribal nations and tribal enterprises (gaming, energy, government services, cultural institutions) use the Tribal Economic Impact platform. Cities, counties, state DOTs, departments of commerce, workforce boards and treasury offices use the Local Economic Impact platform, typically for capital project justification, grant rounds, bond measures and annual impact reports. Universities use it for the community ripple of operations, research, construction and student spending. Foundations use it to show donors and boards what grantmaking actually moved. Ports, airports and transit agencies use it for capital plans. CDFIs and community lenders use it for portfolio-level place-based impact.',
+      'Breaking it down: tribal nations and tribal enterprises (gaming, energy, government services, cultural institutions) run tribal government, tribal enterprise and Whole Nation analysis. Cities, counties, state DOTs, departments of commerce, workforce boards and treasury offices use Lumecon for capital project justification, grant rounds, bond measures and annual impact reports. Universities use it for the community ripple of operations, research, construction and student spending. Foundations use it to show donors and boards what grantmaking actually moved. Ports, airports and transit agencies use it for capital plans. CDFIs and community lenders use it for portfolio-level place-based impact. Under all of that sits one Lumecon application: the platform adapts to the kind of organization you are, and localeconomicimpact.com and tribaleconomicimpact.com are different front doors into the same product.',
   },
   {
     id: 'tribal_platform',
@@ -326,7 +326,7 @@ export const INTENTS: CedarIntent[] = [
       'we a tribe',
     ],
     answer:
-      'The Tribal Economic Impact platform is built specifically for tribal nations and tribal enterprises. It handles the geographies the existing tools struggle with: reservations, off-reservation trust land, Alaska Native regional and village corporations and Native Hawaiian Home Lands. It is designed to respect tribal data sovereignty and produces studies you can hand to a council, a federal funder or a casino regulator. The numbers cover jobs, wages, supplier activity and the regional ripple effects. Are you with a tribal nation or a tribal enterprise?',
+      'Yes, deeply. Tribal Nations and tribal enterprises are core users of Lumecon, and tribaleconomicimpact.com is their front door into the same application everyone else uses. Every plan includes tribal government, tribal enterprise and Whole Nation analysis; Whole Nation brings a tribal government and its enterprises together in one integrated study, with statewide and homelands scopes side by side. The platform handles the geographies the existing tools struggle with, reservations included, respects tribal data sovereignty and produces studies you can hand to a council, a federal funder or a casino regulator. Are you with a tribal nation or a tribal enterprise?',
     expanded:
       "Going deeper for tribal nations: the platform treats reservation and off-reservation trust land, Alaska Native Regional and Village Corporations and Native Hawaiian Home Lands as fully supported geographies, not edge cases the legacy tools force into county approximations. Data sovereignty is a design priority: a single-tenant workspace, you control what's uploaded and shared, your records are not used to train a shared model, and cross-study learning runs only on anonymized aggregates. Typical outputs are gaming and enterprise impact studies for a council or a federal funder (NIGC, BIA, Treasury), grant narratives and annual reports showing jobs, wages and the dollars kept in the regional economy.",
   },
@@ -400,7 +400,7 @@ export const INTENTS: CedarIntent[] = [
       'reports does it produce',
     ],
     answer:
-      "Every study gives you a full report PDF, an editable executive summary, the underlying tables and charts and a slide-ready deck as starting points you can edit. With Cedar (Sapling tier and above) it works as a thought partner on the write-up: it suggests structure, edits, takes your feedback and reshapes the framing for the audience you're talking to (funders see the jobs-and-investment narrative, councils see local benefit, boards see strategic context, public meetings get the plain-language version), while the substance, voice and local context come from you. At the Tree tier, custom branding kicks in: you upload your logos, colors and own images once and every output picks them up automatically, so the deliverable reads as yours rather than ours. The numbers are identical across versions; only the framing changes. Who's the audience you need to win over?",
+      "Every study gives you a full report PDF, an editable executive summary, the underlying tables and charts and a slide-ready deck as starting points you can edit. Cedar is included on every plan, and on the write-up it works as a thought partner: it suggests structure, edits, takes your feedback and reshapes the framing for the audience you're talking to (funders see the jobs-and-investment narrative, councils see local benefit, boards see strategic context, public meetings get the plain-language version), while the substance, voice and local context come from you. The numbers are identical across versions; only the framing changes. Who's the audience you need to win over?",
     expanded:
       'On the deliverables: every study exports a full report PDF, an editable executive summary, the underlying tables and charts as CSV and a slide-ready deck. The numbers are identical across versions; only the framing shifts: funders see the jobs-and-investment narrative, councils see local benefit, boards see strategic context, public meetings get the plain-language version. These are editable starting points, not a locked final draft: Cedar helps you brainstorm, tighten and present, and the strongest version always carries the context only you can add. Every figure carries its assumption ledger, so when someone challenges a number you trace it to the multiplier, base year and the data behind it instead of defending a black box.',
   },
@@ -480,7 +480,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'A multiplier estimates how each dollar of activity ripples through an economy. Three layers: direct (the spending itself, like wages, construction, supplies), indirect (the suppliers that get hired by the direct spenders) and induced (the local businesses that get hired when workers spend their paychecks). Add them up and you get total impact. Multipliers differ by industry and geography, which is why a casino in Connecticut has a different ripple than a wind farm in Nebraska.',
     expanded:
-      'Going one layer deeper: multipliers come from input-output models built on the BEA national accounts, regionalized down to your geography. Three things drive whether the ripple is big or small. One, regional purchase coefficients (RPCs): how much of a dollar stays local versus leaks out to suppliers in another state. Two, the industry mix of the spending, since wages in healthcare ripple differently than capital in heavy construction. Three, the wage-to-non-wage split, since worker spending is what drives induced effects. We surface each of those choices in the assumption layer of the report, so a reviewer can trace any number back to where it came from.',
+      'Going one layer deeper: multipliers come from input-output models built on the BEA national accounts, regionalized down to your geography. Three things drive whether the ripple is big or small. One, regional purchase coefficients (RPCs): how much of a dollar stays local versus leaks out to suppliers in another state. Two, the industry mix of the spending, since wages in healthcare ripple differently than capital in heavy construction. Three, the wage-to-non-wage split, since worker spending is what drives induced effects. We surface each of those choices in the assumption layer of the report, so a reviewer can trace any number back to where it came from. The full write-up lives at /methodology.',
   },
   {
     id: 'software_vs_consulting',
@@ -516,7 +516,7 @@ export const INTENTS: CedarIntent[] = [
   },
   {
     id: 'pricing',
-    followUps: ['payment_plans', 'toolbox', 'consultant_plan'],
+    followUps: ['payment_plans', 'consultant_plan', 'demo'],
     chip: 'How much does it cost?',
     triggers: [
       'how much',
@@ -599,13 +599,13 @@ export const INTENTS: CedarIntent[] = [
       'nonprofit discount',
     ],
     answer:
-      'Lumecon runs on a flat annual subscription, not per-study or per-geography. Local starts at $7.5K a year (covering county, state and national), Tribal at $10K (reservation, county, state and national). Each platform has three tiers (Sprout, Sapling, Tree) that top out at $20K for Local and $25K for Tribal. You can run as many studies as you want, and we recommend refreshing your data at least quarterly so each study reflects current conditions. Studies can zoom into specific sub-entities, projects or scenario plans, and you can look backward more than one year to understand impact over time or forward to forecast. Sprout supports monthly or quarterly payment plans on a 12-month commitment, with no upcharge, so smaller orgs can align payments with their budget cycles. For comparison, the legacy stack is commonly cited at $50K to $150K per study. The full grid is on the pricing page, no demo call required. Want me to break down what each tier includes?',
+      'Lumecon has three plans, all flat annual subscriptions with no per-study or per-geography charges. Sprout is $500 a year for one user. Sapling is $2,500 a year for up to 10 users and adds Team Workspace (shared projects, collaborative analysis and review workflows); it is the most popular plan. Tree is $7,500 a year with unlimited users in one organization, adding Cedar Grove, a persistent organizational data library, plus hands-on Cedar calibration to your terminology, workflows and recurring reporting. Every plan includes the full Lumecon model, unlimited projects and analyses, every supported U.S. geography (county, state, national and reservations), historical analysis from 2015 to the present where the data support it, every analysis type and Cedar itself. For comparison, legacy consulting engagements are commonly cited at $50K to $150K per study. The full grid is on the pricing page, no sales call required. Want me to break down what each plan includes?',
     expanded:
-      "More on pricing. Local Sprout is $7.5K, Sapling $15K, Tree $20K, covering county, state and national geographies. Tribal Sprout is $10K, Sapling $17.5K, Tree $25K, covering reservation, county, state and national. You can run as many studies as you want at any tier, and we encourage refreshing data at least quarterly so the analysis tracks what's actually happening on the ground. Cedar comes with Sapling and above. On those tiers Cedar uploads and processes your data (PDFs, CSVs and XLSX files today, with more formats expanding over time), structures it for the model and acts as a thought partner on the write-up. Tree adds three things on top of Sapling. First, custom branding: you upload your logos, colors and images once and every output (PDF report, deck, executive summary) picks them up automatically. Second, Cedar Grove: your data stays harmonized across every study, and complementary administrative datasets sit alongside your own so you can show how local socioeconomic outcomes are actually changing on the ground. That reinforces the economic-impact narrative with real outcome evidence, not just modeled multipliers. Third, compliance-ready reporting for grants, federal submissions and audited annual reports. Cedar Grove is not available as a standalone subscription. The Toolbox add-on is +$15K when you want our team to produce the finished package directly. The Consultant plan (Arborist on the pricing page) is project-based, not a subscription: $15K flat for two projects (one project per distinct client entity), renewable as new engagements when those wrap up, and it does not include Cedar, Cedar Grove or Toolbox. Seats scale by tier: one on Sprout, up to five on Sapling, up to ten on Tree.",
+      'More on what every plan includes: the full Lumecon model, unlimited projects and analyses, every supported U.S. geography (county, state, national and reservations), historical analysis from 2015 to the present where the underlying data support it, and all the analysis types: industry, organization, tribal government, tribal enterprise and Whole Nation analysis. Cedar is included on every plan too. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records) and Cedar interprets them, maps them into the model, assists with setup and interpretation and helps turn the results into reporting. The plans differ in team size and organizational memory: Sprout ($500 a year) is one user, Sapling ($2,500) adds Team Workspace for up to 10 users, and Tree ($7,500) adds unlimited users within one organization, Cedar Grove (a persistent organizational data library reused across future analyses and reporting) and hands-on Cedar calibration. Two more things worth knowing. The free trial: create an account, bring your documents and build a study end to end at no cost; full results unlock on any paid plan. And the competitive transition offer: organizations already paying for qualifying economic impact analysis or economic modeling software (IMPLAN and REMI are common examples; Lumecon is not affiliated with or endorsed by either) can get their first annual license for 50% of documented prior-12-month spend, subject to plan and promotional terms.',
   },
   {
     id: 'payment_plans',
-    followUps: ['pricing', 'toolbox', 'demo'],
+    followUps: ['pricing', 'demo', 'contact'],
     chip: 'Can I pay monthly?',
     triggers: [
       'payment plan',
@@ -638,22 +638,23 @@ export const INTENTS: CedarIntent[] = [
       'pay across the year',
     ],
     answer:
-      "Sprout (the entry tier on Local and Tribal) supports monthly or quarterly payment plans against a 12-month commitment, with no upcharge for paying over time. The intent is to align with smaller orgs' budget cycles (grants land on different schedules than fiscal years) without making the price look bigger. Sapling and Tree are annual-prepay only since they're already low five-figures and most teams at those tiers can run them through a single budget line. The pricing page lists every tier's price, and the team can scope an unusual setup if your situation needs one.",
+      'Lumecon plans are annual licenses: Sprout is $500 a year, Sapling $2,500 and Tree $7,500. At those price points the subscription usually fits a single budget line, which is why there is no separate monthly plan. If you want certainty before spending anything, the free trial lets you create an account, bring your documents and build a study end to end at no cost; full results unlock on any paid plan. And if your procurement or fiscal calendar needs a specific billing arrangement, email contact@lumecon.ai and the team will work with your purchasing office.',
     expanded:
-      "More on payment plans: every plan is a 12-month commitment, so monthly and quarterly are just billing cadences, not month-to-month subscriptions. Picking the cadence that matches your budget cycle (mid-year for a grant-funded department, calendar-year for a council appropriation, fiscal-year for a state agency) means the subscription line shows up in your books when the dollars are actually moving. Annual prepay still gets the same discounts on the pricing page (10% at 2-year prepay, 15% at 3-year). If you need to break the contract early, that's a conversation with the team, not a clean cancel button: the year covers our cost of standing up your workspace, your dedicated source record and the analyst time on first-study setup. Email contact@lumecon.ai if your fiscal calendar needs an arrangement we don't list.",
+      'A bit more context on cost timing: every plan includes unlimited projects and analyses, so the annual license replaces the per-study spending pattern where each new analysis was its own procurement. One line item covers the year. Organizations already paying for qualifying economic impact analysis or economic modeling software can also ask about the competitive transition offer: the first annual license for 50% of documented prior-12-month spend, subject to plan and promotional terms. For purchase orders, invoicing or anything else your finance office needs, contact@lumecon.ai reaches the team directly.',
   },
   {
+    // Repurposed from the retired Toolbox add-on: the real question under
+    // most of these triggers is "will you produce the finished report for
+    // us?", which the answer now handles with the new facts.
     id: 'toolbox',
-    followUps: ['pricing', 'reports_outputs', 'consultant_plan'],
-    chip: 'What is the Toolbox add-on?',
+    followUps: ['reports_outputs', 'consultant_plan', 'pricing'],
+    chip: 'Will your team write the report?',
     triggers: [
-      'toolbox',
-      'tool box',
       'add on',
       'add-on',
       'addon',
-      'study add on',
-      'study add-on',
+      'add ons',
+      'add-ons',
       'study package',
       'done for you',
       'done-for-you',
@@ -676,9 +677,6 @@ export const INTENTS: CedarIntent[] = [
       'our logo',
       'our branding',
       'our brand',
-      'press ready',
-      'press-ready',
-      'media kit',
       'rounds of revision',
       'rounds of revisions',
       'revisions on',
@@ -690,24 +688,28 @@ export const INTENTS: CedarIntent[] = [
       'have your team write',
       'your team write',
       'your team produce',
+      'produce the study for us',
+      'do the study for us',
+      'run the study for us',
     ],
     answer:
-      "Toolbox is a +$15K flat-fee add-on that attaches to an active Lumecon subscription. Our team takes the outputs your platform already produces and turns them into a finished economic impact package: a full written report, presentation deck, executive summary, source record, assumption ledger and one tailored memo or media-ready findings sheet. When Toolbox is paired with the Tree tier (which is the recommended pairing), every deliverable picks up your custom branding automatically (your logos, colors and images), so the package reads as yours rather than ours. Three rounds of revisions are included and the flat fee covers taxes. It's not a standalone product because the heavy lifting happens inside Lumecon; the add-on is the writing, design and presentation polish on top.",
+      'There is no add-on catalog to buy through: every plan already includes the full Lumecon model, unlimited projects and analyses, every supported U.S. geography and Cedar. On the write-up itself, Cedar helps you turn results into reporting: it suggests structure, drafts starting points, edits with you and reshapes the framing for a council, a funder or a board, while the substance and local context come from you. The deliverables are editable starting points, so your team can carry them into your own template and branding before anything goes out. Lumecon deliberately does not sell finished studies, and if you want a firm to run the whole engagement, consulting firms license Lumecon for exactly that kind of client work.',
     expanded:
-      "Why Toolbox is structured this way. A traditional consulting study runs $50K to $150K because the consultant is doing the data work, the modeling, the writing and the design from scratch every time. With Lumecon, the data structuring, source record and modeling are already done inside your subscription, so the writing-and-presentation portion is what's left, and that's what Toolbox covers at the flat $15K. The recommended pairing is Tree, because Tree already includes custom branding (you upload logos and images once and every output picks them up automatically), so Toolbox layers our team's writing and design on top of branded outputs rather than starting from a blank template. Toolbox is not available on the Consultant plan, because that plan is structured around firms producing their own deliverables for their own clients.",
+      'A little more on why it works this way. A traditional consulting study runs $50K to $150K because the consultant is doing the data work, the modeling, the writing and the design from scratch every time. Inside Lumecon the data structuring, source record and modeling are part of the subscription, and Cedar carries much of the remaining writing load with you: brainstorming structure, drafting, editing and tuning the framing per audience. Lumecon stays out of the finished-study business on purpose, since consulting firms are customers too and competing with them on deliverables would be a poor way to treat them. If your team truly wants the engagement handled end to end, a consulting firm working on Lumecon is the right path, and contact@lumecon.ai can point you there.',
   },
   {
     id: 'consultant_plan',
-    followUps: ['pricing', 'reseller', 'toolbox'],
+    followUps: ['reseller', 'pricing', 'contact'],
     chip: 'Is there a plan for consultants?',
     triggers: [
       'consultant plan',
       'consulting plan',
       'plan for consultants',
       'plan for consulting',
-      'arborist',
-      'arborist plan',
-      'arborist tier',
+      'consultant license',
+      'consultant licensing',
+      'commercial license',
+      'commercial licensing',
       'is there a consultant',
       'consultants plan',
       'plan for me as a consultant',
@@ -725,9 +727,9 @@ export const INTENTS: CedarIntent[] = [
       'for outside organizations',
     ],
     answer:
-      "Yes, there's a plan built specifically for consulting firms running studies on behalf of outside clients: the pricing page calls it the Arborist plan. It's project-based rather than an auto-renewing subscription, and the deal is straightforward. You pay $15K flat for two projects in one engagement, one client per project and every geography is included (reservation, county, state and national). When those two projects wrap up, the next engagement is a fresh $15K with the next two clients. Each project has to be a single entity, so you can't roll several clients into one consortium project. Cedar, Cedar Grove and the Toolbox add-on stay with customer subscriptions where they belong, so they aren't part of this plan. If your volume is larger or you want to white-label, email contact@lumecon.ai and the team will scope a partner arrangement.",
+      "Yes. Consultant licensing is its own track: custom commercial licensing for firms and independent professionals using Lumecon to conduct analysis for outside clients. It covers the full platform with all applicable geographies, commercial and client use, client and project workspaces plus Cedar calibrated to your firm's analytical and reporting workflow, so the platform mirrors how your team already produces client deliverables. There is no public price because firms differ in size, volume and scope; the team scopes the license to the practice. Email contact@lumecon.ai with a short note about your firm and the kinds of engagements you run, and they will take it from there.",
     expanded:
-      "The plan is shaped the way it is because the right fit for a consulting firm is different from a city or a tribal government. You're producing your own deliverables for your own clients, and you're working through a relatively bounded set of projects in any given engagement, so the structure is built around that rhythm. The flat $15K covers the model, the data and full geography coverage for both projects together, with the constraint that each project is a single entity (no consortia). Cedar and Cedar Grove stay inside customer subscriptions, because the AI workflow and the harmonized data layer are part of the customer's data sovereignty story rather than something to be resold. Toolbox isn't part of the plan either, because the writing and presentation side is your firm's value-add and we shouldn't be competing with you there. When the two projects wrap up, you renew with a fresh $15K. There's no auto-billing line that keeps charging after the work is done.",
+      "Why it is custom rather than a listed plan: a consulting practice is a different shape from a single organization. Volume varies, client mixes vary and the deliverables carry your firm's name, so the license is scoped to how the practice actually works instead of being forced into a per-organization plan. The pieces are consistent though: full platform access, all applicable geographies, commercial and client use, client and project workspaces and calibration so Cedar matches your firm's analysis and reporting conventions. Your methodology, client relationships and deliverables stay your own, and Lumecon does not sell finished studies, so you are never bidding against your own software vendor. Start the conversation at contact@lumecon.ai.",
   },
   {
     id: 'demo',
@@ -784,9 +786,9 @@ export const INTENTS: CedarIntent[] = [
       'can i see it',
     ],
     answer:
-      'Happy to set one up. The easiest path is the contact form on this site or contact@lumecon.ai with three things included up front: who you are, the kind of impact you want to measure and any timeline you are working with. The demo runs in your geography against a study scenario relevant to your work, so the two minutes spent giving us that context up front pays off quickly. What kind of impact are you hoping to measure?',
+      'Happy to set one up, and you have two easy paths. The free trial is self-serve: create an account, bring the documents you already have and build a study end to end at no cost, with the full results unlocking on any paid plan. For a guided walkthrough, use the contact form on this site or contact@lumecon.ai with three things up front: who you are, the kind of impact you want to measure and any timeline you are working with. The demo runs in your geography against a study scenario relevant to your work, so that context pays off quickly. What kind of impact are you hoping to measure?',
     expanded:
-      "What a demo looks like: tell us your geography and the kind of impact you want to show, and we run a study in your region against a relevant scenario, walking through how Cedar harmonizes inputs, surfaces assumptions and helps you build the write-up. It's concrete, not a slideshow; you see your own use case. Fastest path is the contact form or contact@lumecon.ai with who you are, what you want to measure and any timeline. If there's a grant or council deadline, say so and we'll move to fit it.",
+      "What a guided demo looks like: tell us your geography and the kind of impact you want to show, and we run a study in your region against a relevant scenario, walking through how Cedar processes your documents, surfaces assumptions and helps you build the write-up. It's concrete; you see your own use case. The trial means you never have to wait on a calendar slot either: sign up, upload what you have and build the study yourself for free, then unlock the full results on whichever plan fits. If there's a grant or council deadline, say so and we'll move to fit it.",
   },
   {
     id: 'contact',
@@ -917,7 +919,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Lumecon is a modern web platform with support for structured data, guided workflows and organization-level use. For integrations, team access, uploads or API questions, the best next step is to contact the Lumecon team directly.',
     expanded:
-      'A bit more detail: the platform is a modern cloud web application with single-tenant workspaces, role-based access and US-region hosting. Data comes in through guided uploads (PDFs, CSVs and XLSX files today) and Cedar structures it against the public sources the model uses. Seats scale by tier: one on Sprout, up to five on Sapling and up to ten on Tree. For API access or a specific integration question, email contact@lumecon.ai and the team will walk through what is available now and what is planned.',
+      'A bit more detail: the platform is a modern cloud web application with single-tenant workspaces, role-based access and US-region hosting. Data comes in through guided uploads (PDFs, spreadsheets and CSVs) and Cedar structures it against the public sources the model uses. Access scales by plan: one user on Sprout, up to 10 on Sapling with Team Workspace and unlimited users within one organization on Tree. For API access or a specific integration question, email contact@lumecon.ai and the team will walk through what is available now and what is planned.',
   },
   {
     id: 'security',
@@ -1000,7 +1002,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Three things are designed to keep the numbers defensible. The direct, indirect, induced and total figures are calibrated and benchmarked as we built, so they line up with what a reviewer familiar with the established tools would expect. Cedar pulls from your actual data and the source record rather than guessing. And every assumption (the multiplier, the base year, the scaling) is shown and citable, so a reviewer can trace any number back to where it came from.',
     expanded:
-      "More on how this stays defensible: the source of each number is tracked row by row, so when a study cites a BEA multiplier for NAICS 23 in your county, you can click through to the source table and the year it is from. Assumptions are versioned with the study, so changing the regional purchase coefficient preserves the prior run. Cedar's reasoning steps are logged alongside the numbers, so if anyone asks why we picked a particular industry bridge or wage assumption, the answer is in the report, not in someone's email. We would rather a reviewer challenge a specific number than wave away the whole approach, so the methodology behind any figure is available for review.",
+      "More on how this stays defensible: the source of each number is tracked row by row, so when a study cites a BEA multiplier for NAICS 23 in your county, you can click through to the source table and the year it is from. Assumptions are versioned with the study, so changing the regional purchase coefficient preserves the prior run. Cedar's reasoning steps are logged alongside the numbers, so if anyone asks why we picked a particular industry bridge or wage assumption, the answer is in the report, not in someone's email. We would rather a reviewer challenge a specific number than wave away the whole approach, so the methodology behind any figure is available for review. Inside the product that lineage surfaces as Trace this number, and the full methodology write-up is public at /methodology.",
   },
   {
     id: 'calculate_now',
@@ -1125,9 +1127,9 @@ export const INTENTS: CedarIntent[] = [
       'reservation level',
     ],
     answer:
-      'Lumecon covers every federally recognized tribal nation and reservation, every Alaska Native Regional Corporation, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the country as a whole. Multi-region and overlapping-geography studies work the same way, so a project that crosses three counties or sits on a reservation that overlaps two counties is still one study rather than three. The whole geographic footprint is included in the flat annual subscription, and we do not charge per geography.',
+      'Every plan includes every supported U.S. geography: county, state, national and reservations. That means every U.S. county, every state, the nation as a whole and reservations across the country. Multi-region and overlapping-geography studies work the same way, so a project that crosses three counties or sits on a reservation that overlaps two counties is still one study rather than three. There is no per-geography charge on any plan.',
     expanded:
-      'Going deeper: coverage means every federally recognized tribal nation and reservation, Alaska Native Regional Corporations, Native Hawaiian Home Lands, every U.S. county, every state and the nation as a whole. Overlap is handled the way analysts need it: a reservation crossing two counties, a service area spanning three counties or a statewide program is still a single study. There is no per-geography charge at any tier, so comparing regions side by side costs nothing extra.',
+      'Going deeper: the supported geographies are county, state, national and reservations, and every plan gets all of them. Overlap is handled the way analysts need it: a reservation crossing two counties, a service area spanning three counties or a statewide program is still a single study. Historical analysis runs from 2015 to the present where the underlying data support it, so a geography can be tracked over time as well as at a point in time, and comparing regions side by side costs nothing extra.',
   },
   {
     id: 'historical_forward',
@@ -1168,7 +1170,7 @@ export const INTENTS: CedarIntent[] = [
       'pro forma projection',
     ],
     answer:
-      'Lumecon supports both directions. You can look back to tell the story of what has already happened through annual impact reports and longitudinal studies, or model forward to plan a budget, grant ask or capital project. The same data and methodology work either way and only the framing changes, and studies sharpen over time as more of your data accumulates in the workspace.',
+      'Lumecon supports both directions. Historical analysis runs from 2015 to the present where the underlying data support it, so you can tell the story of what has already happened through annual impact reports and longitudinal studies. You can also model forward to plan a budget, grant ask or capital project. The same data and methodology work either way and only the framing changes, and studies sharpen over time as more of your data accumulates in the workspace.',
   },
   {
     id: 'where_built',
@@ -1574,9 +1576,9 @@ export const INTENTS: CedarIntent[] = [
       'vendor consolidation',
     ],
     answer:
-      "A single legacy impact study is commonly cited in the $50K to $150K range and ships months later. Lumecon starts at $7.5K a year for Local and $10K for Tribal, with unlimited studies across every geography on a flat annual subscription. The legacy price tag is what a workflow looks like after fifty years of the same software owning the category; it's not a measure of how hard the work actually is. The math is mainstream economics; the BEA accounts behind it are public and free. In practice it tends to pay for itself within a study or two, after which the subscription is producing analyses the organization could not have afforded one-off.",
+      "A single legacy impact study is commonly cited in the $50K to $150K range and ships months later. Lumecon starts at $500 a year and tops out at $7,500 for unlimited users in one organization, with unlimited projects and analyses across every supported geography on every plan. The legacy price tag is what a workflow looks like after fifty years of the same software owning the category; it's not a measure of how hard the work actually is. The math is mainstream economics; the BEA accounts behind it are public and free. In practice one subscription year costs a small fraction of a single legacy study and covers as many analyses as your team can run.",
     expanded:
-      'To make the comparison concrete: at Local Sprout ($7.5K a year) one study already costs a fraction of the commonly cited $50K to $150K legacy engagement, and every additional study that year is included. An organization that runs an annual impact study, two grant narratives and a council update in the same subscription year has produced four deliverables on one flat price. Your own past quotes are the best benchmark: bring one and the team will walk the numbers with you.',
+      'To make the comparison concrete: at Sprout ($500 a year) one study already costs a small fraction of the commonly cited $50K to $150K legacy engagement, and every additional study that year is included. An organization that runs an annual impact study, two grant narratives and a council update in the same subscription year has produced four deliverables on one flat price. If you are already paying for qualifying economic impact analysis or economic modeling software, ask about the competitive transition offer: the first annual license for 50% of documented prior-12-month spend, subject to plan and promotional terms. Your own past quotes are the best benchmark: bring one and the team will walk the numbers with you.',
   },
   {
     id: 'data_residency',
@@ -1688,7 +1690,7 @@ export const INTENTS: CedarIntent[] = [
       'data lake',
     ],
     answer:
-      "Cedar Grove is what Cedar grows into across multiple studies. The data your team uploaded for the first study, the public sources it was harmonized against, the assumptions you reviewed and the report templates all stay in your workspace and get reused on the next study. Cedar Grove also layers in complementary administrative data alongside your own (employment shifts, business openings and closures, wage movements, transfer-payment flows and similar outcome series) so you can show how local socioeconomic outcomes are actually changing on the ground. That reinforces the economic-impact narrative with real outcome evidence, not just modeled multipliers. Recurring submissions like annual impact reports, federal grant cycles and audited filings don't start from a blank file; they start from a harmonized, citable base that's already passed your reviewers. Cedar Grove comes with the Tree tier and is not available as a standalone subscription.",
+      "Cedar Grove is the organizational memory that comes with the Tree plan. It is a persistent organizational data library: the documents and datasets your team brings in stay organized in your workspace, integrated with Lumecon and reusable across every future analysis and report. Recurring work like annual impact reports, federal grant cycles and audited filings can start from a base your reviewers have already seen instead of from a blank file. Tree pairs Cedar Grove with hands-on Cedar calibration, so Cedar learns your organization's terminology, workflows and recurring reporting.",
   },
   {
     id: 'ai_vs_chatgpt',
@@ -1787,7 +1789,7 @@ export const INTENTS: CedarIntent[] = [
       'user limit',
     ],
     answer:
-      "Access scales by tier: one user on Sprout, up to five on Sapling, up to ten on Tree, all on one flat annual subscription with no per-seat metering inside the plan. The workspace is built for teams: review queues route data to HR, finance, payroll, program and council reviewers so a study doesn't stall on one analyst's desk. Need more seats than a tier lists? Tell us your size and we'll scope it.",
+      "Access scales by plan: one user on Sprout, up to 10 on Sapling and unlimited users within one organization on Tree, all on flat annual subscriptions with no per-seat metering. Sapling and Tree include Team Workspace: shared projects, collaborative analysis and review workflows, so a study doesn't stall on one analyst's desk. If your whole organization should be in the platform, Tree is built for exactly that.",
   },
   {
     id: 'data_sovereignty',
@@ -1818,7 +1820,7 @@ export const INTENTS: CedarIntent[] = [
       'will you sell our data',
     ],
     answer:
-      "Yes. Indigenous data sovereignty is a design priority for the Tribal platform from the start, not an afterthought. Your data stays yours: a single-tenant workspace, you control what's uploaded and shared, and we do not sell, syndicate or use your raw records to train models. Cross-study learning runs only on anonymized, aggregated signals. For specific governance frameworks (CARE, OCAP) or council requirements, we'll walk through the specifics before any data moves.",
+      "Yes. Indigenous data sovereignty has been a design priority in Lumecon from the start. Your data stays yours: a single-tenant workspace, you control what's uploaded and shared, and we do not sell, syndicate or use your raw records to train models. Cross-study learning runs only on anonymized, aggregated signals. For specific governance frameworks (CARE, OCAP) or council requirements, we'll walk through the specifics before any data moves.",
     expanded:
       'Going deeper on governance: you decide what is uploaded, what stays internal and what appears in any shared output. Nothing you upload is sold, syndicated or used to train shared models, and cross-study learning runs only on anonymized, aggregated signals. The platform is built to line up with CARE and OCAP-style principles, and the team will put the specifics in writing for a council or data-governance review before any records move. Sovereignty language in a contract is treated as a normal part of working together.',
   },
@@ -1934,7 +1936,7 @@ export const INTENTS: CedarIntent[] = [
       'do you support international',
     ],
     answer:
-      "Today Lumecon covers the United States end to end: every county, state, tribal nation and the national rollup. International coverage is the Global Economic Impact platform, on the roadmap next: the model and workflow are built to extend to other countries' national accounts as we add them. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and we'll say where it sits on the timeline.",
+      'Today Lumecon covers the United States end to end: county, state, national and reservations, all included in every plan. On the domains you may have seen: localeconomicimpact.com, tribaleconomicimpact.com and globaleconomicimpact.com are entry points for different audiences, and all of them lead into the same Lumecon application, which adapts to the kind of organization you are. If you have a specific country or a cross-border project in mind, tell the team at contact@lumecon.ai and they will say honestly what is possible today.',
   },
   /* ===== Depth pack: niche, vocabulary-specific intents surfaced by a
      panel of buyer-persona tests. All chip:null (reachable via free-text,
@@ -1960,7 +1962,7 @@ export const INTENTS: CedarIntent[] = [
       'indian country geography',
     ],
     answer:
-      'Trust land is a fully supported geography in the Tribal platform, not an afterthought. Reservation land, off-reservation trust parcels, restricted-fee and allotted land, Alaska Native Regional and Village Corporation lands and Native Hawaiian Home Lands are all modeled directly, so a study reflects where activity actually happens instead of being flattened into a surrounding county. If your lands are checkerboarded across county lines, the study still treats them as one geography. Want to walk through your specific land base with the team?',
+      'Trust land is a fully supported geography in Lumecon. Reservation land, off-reservation trust parcels, restricted-fee and allotted land, Alaska Native Regional and Village Corporation lands and Native Hawaiian Home Lands are all modeled directly, so a study reflects where activity actually happens instead of being flattened into a surrounding county. If your lands are checkerboarded across county lines, the study still treats them as one geography. Want to walk through your specific land base with the team?',
     followUps: ['indian_country', 'checkerboarding', 'tribal_platform'],
   },
 
@@ -2005,7 +2007,7 @@ export const INTENTS: CedarIntent[] = [
       'mixed land ownership',
     ],
     answer:
-      'Checkerboarding is the patchwork of ownership inside many reservation boundaries: trust parcels, restricted-fee parcels and fee-simple parcels (often non-Indian owned) sitting side by side like squares on a board. It traces to the General Allotment (Dawes) Act of 1887, which broke communally held reservations into individual allotments and opened the "surplus" to sale. Tribal landholdings fell from roughly 138 million acres to about 48 million before the Indian Reorganization Act of 1934 ended the policy. The effect today is jurisdictional and statistical: county lines and Census geographies slice right through a land base. Lumecon’s Tribal platform treats a checkerboarded land base as one geography, so the study follows the tribe’s actual footprint.',
+      'Checkerboarding is the patchwork of ownership inside many reservation boundaries: trust parcels, restricted-fee parcels and fee-simple parcels (often non-Indian owned) sitting side by side like squares on a board. It traces to the General Allotment (Dawes) Act of 1887, which broke communally held reservations into individual allotments and opened the "surplus" to sale. Tribal landholdings fell from roughly 138 million acres to about 48 million before the Indian Reorganization Act of 1934 ended the policy. The effect today is jurisdictional and statistical: county lines and Census geographies slice right through a land base. Lumecon treats a checkerboarded land base as one geography, so the study follows the tribe’s actual footprint.',
     expanded:
       'The other allotment legacy is fractionation. Allotted parcels passed to multiple heirs each generation, so a single parcel can now have dozens or even hundreds of co-owners, which complicates leasing and development; federal land buy-back programs have consolidated some of it. For analysis the upshot is simple: parcel-level ownership rarely matches any standard data geography, which is exactly why the platform models the land base directly instead of approximating it with a county.',
     followUps: ['indian_country', 'tribal_sovereignty', 'tribal_platform'],
@@ -2072,7 +2074,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Tribal sovereignty is the inherent authority of tribal nations to govern themselves. Inherent means it predates the U.S. Constitution and was not granted by it; the Supreme Court described tribes as "domestic dependent nations" in Cherokee Nation v. Georgia (1831), sovereign governments in a direct, government-to-government relationship with the United States, backed by treaties and the federal trust responsibility. In practice sovereignty looks like tribal courts, taxation and regulation, gaming compacts and control over land and enrollment. Defensible economic data has become part of how it gets exercised: a tribe negotiating a compact or a funding formula is in a stronger position when its own numbers carry the room.',
     expanded:
-      'Two distinctions come up a lot. Sovereignty versus jurisdiction: sovereignty is the governing authority itself, while jurisdiction is the parcel-by-parcel question of whose law applies where, which is why Indian Country’s legal definition and checkerboarding matter so much. Political versus racial classification: under Morton v. Mancari (1974), tribal status is a political classification based on citizenship in a sovereign nation, not a racial one, which is why tribal programs stand on distinct legal footing. The same principle is why data sovereignty is a design requirement in our Tribal platform: a tribe’s data belongs to the tribe.',
+      'Two distinctions come up a lot. Sovereignty versus jurisdiction: sovereignty is the governing authority itself, while jurisdiction is the parcel-by-parcel question of whose law applies where, which is why Indian Country’s legal definition and checkerboarding matter so much. Political versus racial classification: under Morton v. Mancari (1974), tribal status is a political classification based on citizenship in a sovereign nation, not a racial one, which is why tribal programs stand on distinct legal footing. The same principle is why data sovereignty is a design requirement in Lumecon: a tribe’s data belongs to the tribe.',
     followUps: ['data_sovereignty', 'federally_recognized', 'tribal_platform'],
   },
 
@@ -2541,9 +2543,9 @@ export const INTENTS: CedarIntent[] = [
       'across clients',
     ],
     answer:
-      "There's a plan built for consulting firms running studies on behalf of outside clients, and it's project-based rather than an auto-renewing subscription. The deal is simple: $15K flat covers two projects in one engagement, one client per project, with every geography included (reservation, county, state and national). When those wrap up, the next engagement is a fresh $15K with the next two clients. Each project has to be a single entity, so no rolling several clients into one consortium project. Cedar, Cedar Grove and the Toolbox add-on stay with customer subscriptions and aren't part of this plan. If your volume is bigger, email contact@lumecon.ai and the team will scope a partner arrangement.",
+      "Consulting firms and independent professionals use Lumecon for client work through custom commercial licensing: the full platform, all applicable geographies, commercial and client use, client and project workspaces plus Cedar calibrated to your firm's analytical and reporting workflow. Your client relationships, methodology and deliverables stay yours. White-label and larger partner arrangements are scoped case by case, so email contact@lumecon.ai with a short note on your practice and volume and the team will put a structure together.",
     expanded:
-      "The Consultant plan exists because the right framing for a consulting firm is different from a city or a tribal government. The lower flat rate reflects the constraint set: two distinct outside entities per fiscal year, one project per entity (no rolling up several clients into one consortium engagement), no Cedar or Cedar Grove (those stay inside customer subscriptions because the AI workflow and the harmonized-data layer are part of the customer's data sovereignty story), and no Toolbox (we don't compete with you on the writing-and-presentation side). What you get is the model, the data and the geography coverage that make a Lumecon study a Lumecon study. If you need more than two clients or want to white-label, that's a partner conversation, not the public plan.",
+      "On the reselling question specifically: the consultant license is built so a firm can run engagements for outside clients inside Lumecon, keep each client's work in its own workspace and present its own deliverables on top. Lumecon does not sell finished studies, so your firm's writing, judgment and client relationships remain the value your client is buying. There is no public consultant price; the team scopes the license to the practice, including white-label and higher-volume arrangements. contact@lumecon.ai starts the conversation.",
   },
   {
     id: 'bca',
@@ -3059,9 +3061,9 @@ export const INTENTS: CedarIntent[] = [
       'cost of cedar',
     ],
     answer:
-      "The Cedar you're talking to here is the free, lightweight site assistant. I answer questions about Lumecon, who it's for, the methodology, pricing and how to reach the team. The full Cedar that comes with a subscription is a different thing entirely. Inside the platform it uploads and processes your data (PDFs, CSVs and XLSX files today, with more formats expanding over time), structures the inputs against public data sources, surfaces every modeling assumption for your sign-off and acts as a thought partner on the write-up: helping you brainstorm framing, edit and reshape the report for each audience. Cedar isn't a ghostwriter. The best reports come from the context only you have, and Cedar handles the structure and the polish around what you bring. If you want the version that does the work on your own data, that starts at the Sapling tier. Custom branding (uploading your logos and images so every output picks them up automatically) is part of Tree. Want me to point you to pricing or set up a demo?",
+      "The Cedar you're talking to here is the free, lightweight site assistant. I answer questions about Lumecon, who it's for, the methodology, pricing and how to reach the team. The full Cedar inside the platform comes with every plan, Sprout included. There it uploads and processes your documents (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), interprets them, maps them into the model, assists with setup and interpretation and acts as a thought partner on the write-up, while the substance and local context come from you. You can also try it before paying anything: the free trial lets you create an account, bring your documents and build a study end to end, with full results unlocking on any paid plan. Want me to point you to pricing or the trial?",
     expanded:
-      'More on the split: this site Cedar is a free, keyword-based assistant that never touches your data and exists to help you learn what Lumecon does. The product Cedar is the real engine of the platform. It ingests budgets, payroll, vendor lists and program data, matches them to the right industries and geographies, fits the input-output model and flags every assumption for your sign-off. On the write-up it works as a thought partner, helping you brainstorm structure, draft starting points, edit and shape a council memo, a grant narrative or a board deck, while you supply the local context only you have. The Cedar assistant comes with the Sapling tier and up, and the curated Cedar Grove data layer comes with the top Tree tier. The pricing page lays out exactly what each tier unlocks.',
+      'More on the split: this site Cedar is a free, keyword-based assistant that never touches your data and exists to help you learn what Lumecon does. The product Cedar works on your actual records: it ingests budgets, financial statements, payroll and program data, matches them to the right industries and geographies, fits the model and flags every assumption for your sign-off, then helps shape a council memo, a grant narrative or a board deck while you supply the local context only you have. Every plan includes it. The Tree plan goes further with Cedar Grove, a persistent organizational data library reused across future analyses and reporting, and hands-on calibration so Cedar picks up your terminology, workflows and recurring reports. The pricing page lays out the plans.',
   },
 
   {

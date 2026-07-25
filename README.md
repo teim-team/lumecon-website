@@ -1,22 +1,27 @@
 # Lumecon
 
-Public marketing site for **Lumecon Inc.** — one system for the recurring
-analysis, compliance and operations work of governments, enterprises and
-mission-driven organizations, starting with economic impact analysis.
-Built as a static [Astro](https://astro.build) site and deployed to GitHub
-Pages at [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
+Public marketing site for **Lumecon Inc.**, the economic impact analysis
+software: one platform that turns budgets, financial statements, payroll
+and program records into credible studies in minutes, with Cedar (the AI
+economic analyst) in every plan. Built as a static
+[Astro](https://astro.build) site and deployed to GitHub Pages at
+[lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
 authenticated product and its data layer live in sibling repositories (see
 [The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
-The homepage carries the one-system narrative (capture the data once; the
-same record powers analysis, compliance and operations; economic impact
-analysis is where the product starts). The site also explains the three
-Lumecon platforms (Local, Tribal, and Global Economic Impact), demonstrates
-the workflow through an interactive US map, introduces Cedar (the AI
-assistant), and carries the pricing, about/team, and join-the-team pages. On the static deploy (no backend configured),
-Cedar's chat is answered entirely by a local keyword classifier and calls
-no upstream provider; when `PUBLIC_API_URL` is set it calls the Cedar
-backend and falls back to the local classifier on any error.
+The homepage leads with a rotating money shot (one of ten sample studies,
+captured from the app in light and dark themes), the why cards, a product
+tour with real screenshots, the Lumecon edge grid, the Cedar workflow and
+an ask-any-AI strip. The site also carries pricing (Sprout $500 / Sapling
+$2,500 / Tree $7,500 a year, a free trial and the competitive transition
+offer), a methodology page, glossary, about/team pages and the interactive
+US map on /map. There is one Lumecon platform; the localeconomicimpact.com,
+tribaleconomicimpact.com and globaleconomicimpact.com domains are audience
+entry points into the same application. On the static deploy (no backend
+configured), Cedar's chat is answered entirely by a local keyword
+classifier and calls no upstream provider; when `PUBLIC_API_URL` is set it
+calls the Cedar backend and falls back to the local classifier on any
+error.
 
 ## Tech stack
 
@@ -66,7 +71,7 @@ src/
   layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
                 LegalLayout.astro — privacy/terms wrapper
   data/         Single sources of truth:
-                  platforms.ts    the three product lines
+                  platforms.ts    the entry-point domain data (one platform)
                   team.ts         team + advisors + working areas
                   pricing.ts      tiers, comparison rows, discount codes
                   cedarIntents.ts Cedar chat intent bank
@@ -125,8 +130,8 @@ Never commit a real `.env`.
 The canonical source of truth is the `:root` block in
 [`src/styles/global.css`](./src/styles/global.css) — every value below is a
 CSS custom property defined there. This is the **Lumecon marketing site's**
-system; per-platform product surfaces (Local / Tribal / Global) may diverge
-on color and font, but the type scale and spacing are a good shared baseline.
+system; the entry-point domain landing pages may diverge on color and font,
+but the type scale and spacing are a good shared baseline.
 
 ### Fonts
 

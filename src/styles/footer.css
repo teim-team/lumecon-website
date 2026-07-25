@@ -79,9 +79,8 @@
    Replaces the massive navy slab that used to swallow the whole
    footer. */
 .footer-bar {
-  background: var(--navy);
-  color: var(--cream);
-  padding: 0.7rem 0;
+  background: var(--cream);
+  border-top: 1px solid var(--rule);
 }
 .footer-bottom {
   display: flex;
@@ -92,19 +91,19 @@
 }
 .footer-legal {
   font-size: 0.7rem;
-  color: rgba(246, 241, 233, 0.6);
+  color: var(--ink-3);
   line-height: 1.45;
   letter-spacing: 0.005em;
 }
 .footer-email {
   font-size: 0.7rem;
   letter-spacing: 0.04em;
-  color: rgba(246, 241, 233, 0.75);
+  color: var(--ink-3);
   transition: color 0.2s var(--ease);
   text-decoration: none;
 }
 .footer-email:hover {
-  color: var(--accent-light);
+  color: var(--accent-text);
 }
 
 @media (max-width: 1100px) {

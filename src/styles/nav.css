@@ -397,9 +397,9 @@ nav.nav--static {
   align-items: center;
   gap: 0.55rem;
   background: none;
-  border: 1px solid var(--rule-strong);
+  border: none;
   border-radius: 10px;
-  padding: 0.5rem 0.95rem;
+  padding: 0.5rem 0.4rem;
   cursor: pointer;
   font-family: var(--font-sans);
   font-size: 0.92rem;
@@ -408,7 +408,10 @@ nav.nav--static {
   transition: border-color 0.15s var(--ease);
 }
 .navm-btn:hover {
-  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.navm-btn:hover .navm-btn__bars span {
+  background: var(--accent-text);
 }
 .navm-btn__bars {
   display: grid;
@@ -452,9 +455,9 @@ html.navm-open {
 .navm-inner {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: clamp(7rem, 16vh, 10rem) var(--container-pad) 3rem;
+  padding: clamp(5rem, 11vh, 7.5rem) var(--container-pad) 3rem;
   display: grid;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 .navm-list {
   list-style: none;
@@ -463,9 +466,12 @@ html.navm-open {
   display: grid;
   gap: 0.4rem;
 }
+.navm-list li:last-child a {
+  border-bottom: none;
+}
 .navm-list a {
   display: block;
-  padding: 0.9rem 0;
+  padding: 0.8rem 0;
   border-bottom: 1px solid var(--rule);
   font-family: var(--font-display);
   font-weight: 700;
