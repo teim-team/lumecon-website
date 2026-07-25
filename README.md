@@ -318,6 +318,22 @@ page-ownership rule); this list records the product/brand calls.
   PUBLIC_API_URL is configured. On mobile the split stacks: login
   leads with a compact teal band, signup closes on one. Edit the two
   pages together or not at all.
+- **The acquisition flow is staged, one job per page:** /signup (create
+  the account) -> /choose-plan (pick the size; compact, not /pricing)
+  -> /checkout (payment only: teal order summary left, white
+  transactional column right, quiet Change plan link, never a plan
+  picker) -> /welcome (full teal "You're in.", one action into the
+  product). The free trial never passes through checkout; signup with
+  tier=free goes straight to /welcome?plan=free. Teal progressively
+  takes over across the flow (white/teal -> mostly teal -> teal/white
+  -> full teal): the visitor is moving from the public site into the
+  product. The Ask Cedar launcher is hidden on signup, choose-plan,
+  checkout and welcome (BaseLayout cedar={false}): one obvious next
+  action, no escape hatches; Cedar stays on /login and everywhere
+  else.
+- **Every AskAI tile must carry the question.** A tile that opens an
+  empty composer reads as broken. Gemini has no public prefill
+  parameter, so its tile goes through Google AI Mode (udm=50).
 - **Launch blockers owned by the founder:** final Terms/Privacy from the
   Cornell clinic; Stripe backend (`POST /billing/checkout-session` +
   webhook) in teim-app; Google OAuth origin for the website signup;

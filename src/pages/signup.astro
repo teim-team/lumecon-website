@@ -48,6 +48,7 @@ const ROLE_OPTIONS = [
   description="Create a free Lumecon account and build an economic impact analysis end to end. For governments, universities, nonprofits, businesses and Tribal Nations; full results unlock on any plan."
   canonical="https://lumecon.ai/signup"
   keywords="Lumecon signup, Lumecon sign up, Lumecon create account, economic impact analysis account, IMPLAN alternative signup"
+  cedar={false}
 >
   <Nav />
   <main class="asplit asplit--signup" id="top" tabindex="-1">
@@ -345,27 +346,28 @@ const ROLE_OPTIONS = [
             trackEvent('auth.success', { kind: 'signup', role });
             const tier = String(data.get('tier') ?? '').trim();
             if (tier === 'free') {
-              // Free trial: no payment step. The account starts on the
-              // free tier (build end to end; results unlock on a plan).
-              setStatus(
-                status,
-                'ok',
-                'Account created. Your free trial is ready; log in and start building.',
-              );
+              // Free trial: no payment step, no $0 checkout. Straight
+              // to the success state and into the product.
+              setStatus(status, 'ok', 'Account created. Taking you in...');
               setTimeout(() => {
-                window.location.href = '/login';
-              }, 1400);
+                window.location.href = '/welcome?plan=free';
+              }, 900);
               return;
             }
-            setStatus(status, 'ok', 'Account created. Taking you to checkout to pick your plan...');
-            // Hand off to the buy step, carrying the plan chosen on
-            // /pricing (if any) and the email for the receipt.
-            const qs = new URLSearchParams();
-            if (tier) qs.set('tier', tier);
-            qs.set('email', email);
+            if (tier) {
+              // Plan already chosen on /pricing: go straight to the
+              // payment step, which knows the plan.
+              setStatus(status, 'ok', 'Account created. One step left: payment.');
+              setTimeout(() => {
+                window.location.href = `/checkout?tier=${tier}&email=${encodeURIComponent(email)}`;
+              }, 900);
+              return;
+            }
+            // No plan yet: the dedicated selection step, not checkout.
+            setStatus(status, 'ok', 'Account created. Pick the plan that fits...');
             setTimeout(() => {
-              window.location.href = `/checkout?${qs.toString()}`;
-            }, 1200);
+              window.location.href = `/choose-plan?email=${encodeURIComponent(email)}`;
+            }, 900);
             return;
           }
           if (result.reason !== 'api-unconfigured') {

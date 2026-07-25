@@ -1,0 +1,57 @@
+---
+/**
+ * /welcome — the success state that closes the acquisition flow,
+ * and the visual handoff from the marketing site into the product:
+ * full teal, one action. Reached after a free signup
+ * (?plan=free) or a completed subscription. "Open Lumecon" points
+ * at /login until the production app origin is configured; the
+ * product is login-only, so that is the truthful next door.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Contours from '../components/Contours.astro';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/flow.css';
+---
+
+<BaseLayout
+  title="Welcome to Lumecon"
+  description="Your Lumecon workspace is ready."
+  canonical="https://lumecon.ai/welcome"
+  keywords="Lumecon welcome"
+  cedar={false}
+  noindex={true}
+>
+  <Nav />
+  <main class="welc tealfield" id="top" tabindex="-1">
+    <Contours />
+    <div class="welc-inner">
+      <p class="tealfield__kicker" data-welcome-kicker>Subscription confirmed</p>
+      <h1 class="welc-title">You&rsquo;re in.</h1>
+      <p class="welc-sub">
+        Your Lumecon workspace is ready.{' '}
+        <span data-welcome-free hidden>
+          Build an analysis end to end; full results unlock on any plan.
+        </span>
+      </p>
+      <a class="welc-btn" href="/login">
+        Open Lumecon <span aria-hidden="true">&rarr;</span>
+      </a>
+      <p class="welc-note">Log in with the email and password you just created.</p>
+    </div>
+  </main>
+
+  <script is:inline>
+    /* plan=free arrives from the free-trial path: same page, honest
+       kicker and one extra line about how the free tier works. */
+    (function () {
+      var qs = new URLSearchParams(window.location.search);
+      if (qs.get('plan') !== 'free') return;
+      var kicker = document.querySelector('[data-welcome-kicker]');
+      if (kicker) kicker.textContent = 'Free trial ready';
+      var line = document.querySelector('[data-welcome-free]');
+      if (line) line.hidden = false;
+    })();
+  </script>
+</BaseLayout>
