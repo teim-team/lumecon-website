@@ -335,8 +335,9 @@ page-ownership rule); this list records the product/brand calls.
   empty composer reads as broken. Gemini has no public prefill
   parameter, so its tile goes through Google AI Mode (udm=50).
 - **Renewal and referrals (billing policy).** Subscriptions renew
-  automatically with transparent notice emails 90 and 30 days ahead
-  (never sneaky); the renewal notice offers preferred pricing for
+  automatically by default, with an auto-renew switch the customer
+  controls in the product and transparent notice emails 90 and 30
+  days ahead (never sneaky); the renewal notice offers preferred pricing for
   renewing more than one year. Referrals earn one month of
   subscription time at the customer's current plan per qualifying
   referral (new customer via the referral link, paid subscription
