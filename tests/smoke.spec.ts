@@ -166,7 +166,7 @@ test('cedar page tells the AI story with diagrams and real captures', async ({ p
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('AI built for economic analysis');
   await expect(page.locator('.cedarpg-diagram')).toHaveCount(3);
-  await expect(page.locator('img[src="/app/cedar-intake.webp"]')).toBeVisible();
+  await expect(page.locator('img[src="/app/cedar-wind-intake.webp"]')).toBeVisible();
   await expect(page.locator('#navMenu a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('footer a[href="/cedar"]')).toHaveCount(1);
 });
@@ -181,4 +181,14 @@ test('methodology hosts the AI-research verification block', async ({ page }) =>
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.askai')).toHaveCount(1);
   await expect(page.locator('.askai-tile')).toHaveCount(6);
+});
+
+test('checkout offers the free trial with no payment step', async ({ page }) => {
+  await page.goto('/checkout?tier=free', { waitUntil: 'domcontentloaded' });
+  const selected = page.locator('.co-plan--on');
+  await expect(selected).toHaveCount(1);
+  await expect(selected).toContainText('Free trial');
+  await expect(page.locator('[data-co-total]')).toHaveText('$0');
+  await expect(page.locator('[data-co-submit]')).toHaveText('Start your free trial');
+  await expect(page.locator('input[name="discountCode"]')).toBeHidden();
 });

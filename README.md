@@ -9,21 +9,31 @@ economic analyst) in every plan. Built as a static
 authenticated product and its data layer live in sibling repositories (see
 [The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
-The homepage leads with a rotating money shot (one of ten sample analyses,
-captured from the app in light and dark themes), the why cards, a product
-tour with real screenshots, the Lumecon edge grid, the Whole Nation and
-Cedar sections and the AI-research strip. Beyond the homepage the site
-carries pricing (Sprout $500 / Sapling $2,500 / Tree $7,500 a year, a free
-trial and the competitive transition offer), a methodology page with an
-FAQ, a glossary, sign-up and log-in pages, terms/privacy/404 and an
-unlisted /film page (reachable by direct link only, kept out of the
-sitemap). There is one Lumecon platform; the localeconomicimpact.com,
-tribaleconomicimpact.com and globaleconomicimpact.com domains are audience
-entry points into the same application. On the static deploy (no backend
-configured), Cedar's chat is answered entirely by a local keyword
-classifier and calls no upstream provider; when `PUBLIC_API_URL` is set it
-calls the Cedar backend and falls back to the local classifier on any
-error.
+The site follows a one-argument-per-page architecture: the homepage says
+why Lumecon matters (trio money shot cycling ten sample analyses in the
+center frame only, why cards, product tour, the Lumecon edge, a compact
+Cedar teaser and the mission close); **/cedar** owns the AI story
+(designed-in-from-the-beginning positioning, real captures of the docked
+Cedar panel on two different sample entities, three thin-line diagrams);
+**/pricing** is ruthlessly about pricing (three plans, the creed
+"Complexity belongs in the model. Not the pricing.", multi-year and
+lowest-applicable-price policies, the competitive transition offer,
+Whole Nation, Workspace/Grove and consultant licensing; prices include
+taxes and fees); **/methodology** argues the economics are credible
+(equations, the six-stage flow, the data manifest, validation, lineage,
+comparisons and the AI-research verification block); the glossary
+defines terms and nothing more. Around those: sign-up, log-in and
+checkout wired to the product API, /accessibility (WCAG 2.2 AA
+statement), terms/privacy placeholders awaiting counsel, a 404 and an
+unlisted /film page kept out of the sitemap. There is one Lumecon
+platform; the localeconomicimpact.com, tribaleconomicimpact.com and
+globaleconomicimpact.com domains are audience entry points into the same
+application. On the static deploy (no backend configured), Cedar's chat
+is answered entirely by a local keyword classifier and calls no upstream
+provider; when `PUBLIC_API_URL` is set it calls the Cedar backend and
+falls back to the local classifier on any error. The Cedar launcher
+opens a chat docked to the bottom edge of the viewport (a full-width
+bottom sheet on phones), matching the product's pinned widget.
 
 ## Tech stack
 
@@ -269,6 +279,39 @@ Values are nominal USD. This supply/use base is what the impact multipliers
 the site describes are built on, so the homepage data-sources strip should
 stay consistent with the public sources behind it (Census ACS/LODES/QWI/CBP/
 TIGER, BEA Input-Output, BLS QCEW, USDA NASS, USAspending, FRED, NOAA).
+
+## Standing decisions (2026-07)
+
+Decisions made with the founder that future work must respect. The
+engineering rules live in [`AGENTS.md`](./AGENTS.md) (AI-frontend-tell
+audit, semantic teal, the approved brand-phrase vocabulary and the
+page-ownership rule); this list records the product/brand calls.
+
+- **Positioning.** "Built on decades of economic science. Not frozen in
+  it." answers the incumbency pitch; "We tailor the modeling, not the
+  price." answers consultative pricing. Cedar's line is "AI in the
+  workflow. Economists in the loop." Mission: "Every organization has an
+  economic impact." Reuse these; do not invent new slogans per section.
+- **Pricing policies (public commitments).** Prices include taxes and
+  fees. Multi-year agreements qualify for preferred pricing with prepaid
+  savings; multiple qualifying rates resolve to the lowest applicable
+  price. The competitive transition offer is 50% of documented qualifying
+  spend, capped at the standard plan price, or the existing preferred
+  rate, whichever is lower. Counsel must review the offer, the security
+  claims, the /cedar privacy language and "Patent pending" before launch.
+- **Numbers are used sparingly.** No mono section numbering; equations
+  (Eq. 01…) and ordered flow steps keep their numbers because order is
+  the content.
+- **Screenshots are real captures at a uniform 1600x1000** from teim-app
+  (1440px shell, demo user Wassily Leontief), taken via the mock-route
+  pipeline in the session scratchpad; the hero trio never shuffles
+  positions, only the center frame advances in order.
+- **Cedar chat docks to the bottom edge** when open, on the site and in
+  the product; it is never a floating window.
+- **Launch blockers owned by the founder:** final Terms/Privacy from the
+  Cornell clinic; Stripe backend (`POST /billing/checkout-session` +
+  webhook) in teim-app; Google OAuth origin for the website signup;
+  teim-app migrations 021 and 022 on deploy; counsel review items above.
 
 ## Security
 

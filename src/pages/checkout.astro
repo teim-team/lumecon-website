@@ -61,6 +61,23 @@ import '../styles/auth.css';
               </button>
             ))
           }
+          <button
+            type="button"
+            class="co-plan co-plan--free"
+            role="radio"
+            aria-checked="false"
+            data-co-plan="free"
+            data-co-price="0"
+            data-co-name="Free trial"
+          >
+            <span class="co-plan__head">
+              <span class="co-plan__name">Free trial</span>
+              <span class="co-plan__price">$0</span>
+            </span>
+            <span class="co-plan__users">
+              Build an analysis end to end; full results unlock on any plan
+            </span>
+          </button>
         </div>
 
         <label class="auth-field">
@@ -101,8 +118,8 @@ import '../styles/auth.css';
       </form>
 
       <p class="auth-legal">
-        Payment is processed by Stripe; Lumecon does not store card details. Prices are annual.
-        Switching from qualifying software?{' '}
+        Payment is processed by Stripe; Lumecon does not store card details. Prices are annual and
+        include taxes and fees. Switching from qualifying software?{' '}
         <a href="/pricing#switch">See the competitive transition offer</a>.
       </p>
       <p class="auth-foot">
@@ -144,6 +161,8 @@ import '../styles/auth.css';
     const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
     if (emailInput && emailFromSignup) emailInput.value = emailFromSignup;
 
+    const codeField = codeInput?.closest<HTMLElement>('.auth-field') ?? null;
+
     function select(next: string): void {
       tier = next;
       let price = 0;
@@ -154,6 +173,12 @@ import '../styles/auth.css';
         if (on) price = Number(p.dataset.coPrice || 0);
       });
       if (total) total.textContent = `$${price.toLocaleString('en-US')}`;
+      // Free trial: nothing to pay, so no discount code and a
+      // different call to action.
+      const free = next === 'free';
+      if (codeField) codeField.hidden = free;
+      if (submitBtn)
+        submitBtn.textContent = free ? 'Start your free trial' : 'Continue to secure payment';
     }
 
     plans.forEach((p) => p.addEventListener('click', () => select(p.dataset.coPlan || 'standard')));
@@ -181,6 +206,23 @@ import '../styles/auth.css';
         .trim()
         .toUpperCase();
       if (!email) return setStatus(status, 'err', 'Enter your email.');
+
+      // Free trial: there is no payment step. If the visitor arrived
+      // from signup their account already exists (send them to log
+      // in); otherwise send them to create the free account.
+      if (tier === 'free') {
+        if (emailFromSignup) {
+          trackEvent('checkout.free', { from: 'signup' });
+          setStatus(status, 'ok', 'Your free trial is ready. Taking you to log in...');
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 1200);
+        } else {
+          trackEvent('checkout.free', { from: 'direct' });
+          window.location.href = `/signup?tier=free&email=${encodeURIComponent(email)}`;
+        }
+        return;
+      }
 
       submitBtn?.setAttribute('disabled', 'true');
       setStatus(status, 'info', 'One moment...');

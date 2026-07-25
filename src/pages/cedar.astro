@@ -72,7 +72,7 @@ const jsonLd = [
           >
         </p>
         <div class="cedarpg-cta">
-          <a class="btn2 btn2--primary" href="/signup">
+          <a class="btn2 btn2--primary" href="/signup?tier=free">
             Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
@@ -96,7 +96,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-arch">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">01</span>
           <h2 id="c-arch">AI shouldn&rsquo;t sit on top of the model.</h2>
         </div>
         <div class="meth-cols">
@@ -170,7 +169,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-ingest">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">02</span>
           <h2 id="c-ingest">Bring the work you already have.</h2>
         </div>
         <div class="meth-twoprose">
@@ -192,10 +190,13 @@ const jsonLd = [
         </div>
         <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
           <picture>
-            <source srcset="/app/cedar-intake-dark.webp" media="(prefers-color-scheme: dark)" />
+            <source
+              srcset="/app/cedar-wind-intake-dark.webp"
+              media="(prefers-color-scheme: dark)"
+            />
             <img
-              src="/app/cedar-intake.webp"
-              alt="The Cedar panel reporting on three uploaded documents: a budget book with 14 program line items mapped to model operations, a payroll workbook with wages and benefits separated, a prior impact study used as context, and two flagged gaps to resolve before the analysis runs."
+              src="/app/cedar-wind-intake.webp"
+              alt="A wind energy buildout analysis with the Cedar panel reporting on three uploaded documents: a capital plan with nine construction phases mapped to model operations, a turbine procurement workbook with costs and labor separated, county road-use agreements used to place activity, and one flagged gap to resolve."
               width="1600"
               height="1000"
               loading="lazy"
@@ -203,8 +204,8 @@ const jsonLd = [
             />
           </picture>
           <figcaption>
-            Cedar reporting on three uploaded documents: what it mapped, what it used as context and
-            the gaps it flagged for review. Shown with sample data.
+            Cedar reporting on the three documents behind a wind energy analysis: what it mapped,
+            what it used as context and the gap it flagged for review. Shown with sample data.
           </figcaption>
         </figure>
       </div>
@@ -214,7 +215,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-org">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">03</span>
           <h2 id="c-org">One Cedar. Your organization.</h2>
         </div>
         <div class="meth-cols">
@@ -264,7 +264,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-partner">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">04</span>
           <h2 id="c-partner">Thought partner, not autopilot.</h2>
         </div>
         <div class="meth-cols">
@@ -281,10 +280,13 @@ const jsonLd = [
           </div>
           <figure class="cedar-shot cedarpg-shot">
             <picture>
-              <source srcset="/app/cedar-dark.webp" media="(prefers-color-scheme: dark)" />
+              <source
+                srcset="/app/cedar-wind-partner-dark.webp"
+                media="(prefers-color-scheme: dark)"
+              />
               <img
-                src="/app/cedar.webp"
-                alt="Cedar answering a request to explain analysis results in plain language for a board, with a summary of jobs, output, GDP contribution, labor income and tax impacts."
+                src="/app/cedar-wind-partner.webp"
+                alt="The same wind energy analysis, with Cedar drafting a county-board summary that draws on the results and the three documents uploaded earlier: the capital plan, the turbine procurement workbook and the road-use agreements."
                 width="1600"
                 height="1000"
                 loading="lazy"
@@ -292,7 +294,8 @@ const jsonLd = [
               />
             </picture>
             <figcaption>
-              Cedar turning a finished analysis into board-ready language, shown with sample data.
+              The same analysis, later in the work: Cedar drafts the county-board summary from the
+              results and the documents it read at intake. Shown with sample data.
             </figcaption>
           </figure>
         </div>
@@ -303,7 +306,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-built">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">05</span>
           <h2 id="c-built">Economics isn&rsquo;t handed to engineering after the fact.</h2>
         </div>
         <div class="meth-twoprose">
@@ -330,7 +332,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-better">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">06</span>
           <h2 id="c-better">
             AI shouldn&rsquo;t just make the software easier. It should help us build better models.
           </h2>
@@ -381,7 +382,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-privacy">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">07</span>
           <h2 id="c-privacy">Your work stays yours. The system can still improve.</h2>
         </div>
         <div class="meth-twoprose">
@@ -409,7 +409,6 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-providers">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">08</span>
           <h2 id="c-providers">Built to use the best tools available.</h2>
         </div>
         <div class="meth-prose meth-prose--measure">
@@ -436,7 +435,7 @@ const jsonLd = [
           The model should improve as the evidence improves. So should the software around it.
         </p>
         <div class="meth-mission__cta">
-          <a class="btn2 btn2--primary" href="/signup">
+          <a class="btn2 btn2--primary" href="/signup?tier=free">
             Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
           <a class="btn2 btn2--card" href="/methodology">

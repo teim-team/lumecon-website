@@ -17,6 +17,7 @@ In scope:
 - `lumecon.ai` and any subdomain that resolves to Lumecon-operated infrastructure.
 - The audience entry-point domains: `localeconomicimpact.com`, `tribaleconomicimpact.com`, `globaleconomicimpact.com` (marketing doors into the same Lumecon platform).
 - The marketing-page Cedar assistant (local keyword classifier on the static deploy; an optional backend API path exists behind `PUBLIC_API_URL`).
+- The sign-up, log-in and checkout pages, which post to the Lumecon product API (`/auth/register`, `/auth/login`, `/auth/password-reset-request`, `/auth/password-reset`, and the planned `/billing/checkout-session` Stripe handoff) when a backend is configured.
 
 Out of scope:
 - Findings on third-party services we link to (LinkedIn, font CDNs).

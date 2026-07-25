@@ -37,7 +37,7 @@ import '../styles/home.css';
       <a class="btn2 btn2--primary" href="/pricing">
         Plans from $500 a year <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
       </a>
-      <a class="btn2 btn2--card" href="/signup">
+      <a class="btn2 btn2--card" href="/signup?tier=free">
         Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
       </a>
     </div>
@@ -83,12 +83,12 @@ import '../styles/home.css';
       <figcaption class="trio-caption">Shown with sample data.</figcaption>
     </figure>
     <script is:inline>
-      /* The trio money shot. Two behaviours:
-         1. The results page is one of ten sample analyses, picked at
-            random per page load (stays put while you read).
-         2. The three pages rotate every few seconds so results, the
-            workspace and the lineage each take the front position.
-            Paused on hover and under reduced motion. */
+      /* The trio money shot. The composition never moves: map page
+         left, results front and center, lineage right. Only the
+         center frame advances, in order, through the ten sample
+         analyses with a short crossfade. Paused on hover, off under
+         reduced motion. (The old behaviour also shuffled the three
+         frames' positions, which read as random churn.) */
       (function () {
         var STUDIES = [
           [
@@ -125,51 +125,61 @@ import '../styles/home.css';
           ],
           [
             'hero-09',
-            'a wind energy buildout in Iowa: an estimated 1,900 jobs and $830,000,000 in economic output',
+            'a wind energy buildout in Iowa: an estimated 2,600 jobs and $830,000,000 in economic output',
           ],
           [
             'hero-10',
             'a whole-nation economic footprint for a Tribal Nation: an estimated 4,820 jobs and $1,240,500,000 in economic output',
           ],
         ];
-        var i = Math.floor(Math.random() * STUDIES.length);
         var root = document.getElementById('heroRotator');
-        if (root && i !== 0) {
-          var pick = STUDIES[i];
-          var source = root.querySelector('source');
-          var img = root.querySelector('img');
-          if (source) source.srcset = '/app/' + pick[0] + '-dark.webp';
-          if (img) {
-            img.src = '/app/' + pick[0] + '.webp';
-            img.alt = 'Lumecon results page for ' + pick[1] + ', shown with sample data.';
-          }
-        }
-
         var trio = document.getElementById('trio');
-        if (!trio) return;
+        if (!root || !trio) return;
         if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
           return;
-        var ORDER = ['trio-pos-l', 'trio-pos-c', 'trio-pos-r'];
-        var frames = Array.prototype.slice.call(trio.querySelectorAll('[data-trio]'));
-        var offset = 0;
+
+        var source = root.querySelector('source');
+        var img = root.querySelector('img');
+        if (!img) return;
+        var i = 0;
         var paused = false;
-        function apply() {
-          frames.forEach(function (f, n) {
-            f.classList.remove('trio-pos-l', 'trio-pos-c', 'trio-pos-r');
-            f.classList.add(ORDER[(n + offset) % 3]);
-          });
-        }
         trio.addEventListener('mouseenter', function () {
           paused = true;
         });
         trio.addEventListener('mouseleave', function () {
           paused = false;
         });
+
+        function show(study) {
+          if (source) source.srcset = '/app/' + study[0] + '-dark.webp';
+          img.src = '/app/' + study[0] + '.webp';
+          img.alt = 'Lumecon results page for ' + study[1] + ', shown with sample data.';
+        }
+        function preload(study) {
+          new Image().src = '/app/' + study[0] + '.webp';
+          new Image().src = '/app/' + study[0] + '-dark.webp';
+        }
+
+        preload(STUDIES[1]);
         setInterval(function () {
           if (paused || document.hidden) return;
-          offset = (offset + 2) % 3;
-          apply();
-        }, 6500);
+          i = (i + 1) % STUDIES.length;
+          var next = STUDIES[i];
+          img.style.transition = 'opacity 0.3s ease';
+          img.style.opacity = '0';
+          setTimeout(function () {
+            show(next);
+            if (img.complete) {
+              img.style.opacity = '1';
+            } else {
+              img.onload = function () {
+                img.style.opacity = '1';
+                img.onload = null;
+              };
+            }
+            preload(STUDIES[(i + 1) % STUDIES.length]);
+          }, 320);
+        }, 7000);
       })();
     </script>
   </div>

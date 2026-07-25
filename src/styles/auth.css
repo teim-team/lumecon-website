@@ -418,6 +418,10 @@
 .co-plan:hover {
   border-color: var(--accent);
 }
+/* The free-trial option reads lighter than the paid plans. */
+.co-plan--free {
+  border-style: dashed;
+}
 .co-plan--on {
   border-color: var(--accent);
   background: var(--accent-rgba-08);
