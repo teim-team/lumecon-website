@@ -308,6 +308,16 @@ page-ownership rule); this list records the product/brand calls.
   positions, only the center frame advances in order.
 - **Cedar chat docks to the bottom edge** when open, on the site and in
   the product; it is never a floating window.
+- **Auth pages are mirrored counterparts** built on the product's
+  sign-in screen (teim-app AuthGate): /login puts the teal brand panel
+  left and the form right (continuity: pick up where you left off);
+  /signup mirrors it, form left and teal panel right (forward-looking:
+  start with the full platform). Proof points are quiet icon + text
+  rows with hairline separators, never cards; the primary action is
+  the dark teal token; Google sign-in stays hidden until
+  PUBLIC_API_URL is configured. On mobile the split stacks: login
+  leads with a compact teal band, signup closes on one. Edit the two
+  pages together or not at all.
 - **Launch blockers owned by the founder:** final Terms/Privacy from the
   Cornell clinic; Stripe backend (`POST /billing/checkout-session` +
   webhook) in teim-app; Google OAuth origin for the website signup;

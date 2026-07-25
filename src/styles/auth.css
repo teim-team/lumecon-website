@@ -130,6 +130,11 @@
   color: var(--error-color);
   background: rgba(220, 38, 38, 0.06);
 }
+/* The class display would otherwise defeat the hidden attribute the
+   signup script relies on when no ?tier= is carried in. */
+.auth-plan[hidden] {
+  display: none;
+}
 .auth-plan {
   display: inline-flex;
   align-items: center;

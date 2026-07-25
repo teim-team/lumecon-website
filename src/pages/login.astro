@@ -12,14 +12,21 @@
  * All three post through lib/api.ts when PUBLIC_API_URL is set;
  * while it is unset the handlers fall back to the same friendly
  * early-access capture as /signup.
+ *
+ * Layout: mirrored split-screen auth, the product's sign-in screen
+ * as the reference. Login puts the teal brand panel on the LEFT
+ * (continuity, returning to work); /signup mirrors it. Keep the two
+ * pages visual counterparts when editing either.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import AuthBrandPanel from '../components/AuthBrandPanel.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/auth.css';
+import '../styles/auth-split.css';
 ---
 
 <BaseLayout
@@ -29,51 +36,101 @@ import '../styles/auth.css';
   keywords="Lumecon login, Lumecon sign in, economic impact analysis login"
 >
   <Nav />
-  <main class="auth" id="top" tabindex="-1">
-    <div class="auth-panel">
-      <p class="auth-eyebrow" data-login-eyebrow>Account</p>
-      <h1 class="auth-title" data-login-title>Log in to Lumecon</h1>
-      <p class="auth-sub" data-login-sub>Welcome back. Enter your work email to continue.</p>
+  <main class="asplit asplit--login" id="top" tabindex="-1">
+    <AuthBrandPanel
+      headline="Pick up where you left off."
+      lede="Your analyses, organizational context, Cedar workspace and reporting tools stay together in Lumecon."
+      points={[
+        { icon: 'archive', text: 'Your analyses and prior work stay with your organization' },
+        { icon: 'rings', text: 'Cedar carries approved context across projects' },
+        { icon: 'trace', text: 'Every result remains traceable through the model' },
+      ]}
+    />
+    <div class="asplit-formcol">
+      <div class="asplit-forminner">
+        <span class="asplit-ic" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"></path>
+            <path d="M4 12h11"></path>
+            <path d="M9 8l4 4-4 4"></path>
+          </svg>
+        </span>
+        <h1 class="asplit-title" data-login-title>Log in to Lumecon</h1>
+        <p class="asplit-tagline" data-login-sub>
+          Welcome back. Enter your work email to continue.
+        </p>
 
-      <form class="auth-form" data-login-form novalidate>
-        <label class="auth-field" data-login-field="email">
-          <span>Email</span>
-          <input
-            type="email"
-            name="email"
-            autocomplete="email"
-            placeholder="you@organization.gov"
-          />
-        </label>
-        <label class="auth-field" data-login-field="password">
-          <span data-login-pw-label>Password</span>
-          <input type="password" name="password" autocomplete="current-password" />
-        </label>
-        <div class="pwmeter" data-pwmeter hidden>
-          <div class="pwmeter__bars" data-pwmeter-bars data-level="0">
-            <span></span><span></span><span></span><span></span>
+        <form class="auth-form" data-login-form novalidate>
+          <label class="auth-field" data-login-field="email">
+            <span>Work email</span>
+            <input
+              type="email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@organization.gov"
+            />
+          </label>
+          <label class="auth-field" data-login-field="password">
+            <span data-login-pw-label>Password</span>
+            <input type="password" name="password" autocomplete="current-password" />
+          </label>
+          <div class="pwmeter" data-pwmeter hidden>
+            <div class="pwmeter__bars" data-pwmeter-bars data-level="0">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <span class="pwmeter__label" data-pwmeter-label></span>
           </div>
-          <span class="pwmeter__label" data-pwmeter-label></span>
-        </div>
-        <ul class="pwrules" id="pwRules" data-login-pwrules hidden>
-          <li data-pwrule="length">12 characters or more</li>
-          <li data-pwrule="case">Upper and lower case</li>
-          <li data-pwrule="number">A number</li>
-          <li data-pwrule="symbol">A symbol</li>
-        </ul>
-        <div class="auth-row" data-login-row>
-          <a href="#" data-login-forgot>Forgot password?</a>
-        </div>
-        <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
-        <div class="auth-actions">
-          <button type="submit" class="btn" data-login-submit>Sign in</button>
-          <button type="button" class="auth-back" data-login-back hidden>Back to sign in</button>
-        </div>
-      </form>
+          <ul class="pwrules" id="pwRules" data-login-pwrules hidden>
+            <li data-pwrule="length">12 characters or more</li>
+            <li data-pwrule="case">Upper and lower case</li>
+            <li data-pwrule="number">A number</li>
+            <li data-pwrule="symbol">A symbol</li>
+          </ul>
+          <div class="auth-row" data-login-row>
+            <a href="#" data-login-forgot>Forgot password?</a>
+          </div>
+          <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
+          <div class="auth-actions">
+            <button type="submit" class="btn" data-login-submit>Log in</button>
+            <button type="button" class="auth-back" data-login-back hidden>Back to sign in</button>
+          </div>
+        </form>
 
-      <p class="auth-foot">
-        New to Lumecon? <a href="/signup">Create an account</a>
-      </p>
+        <!-- Google sign-in stays secondary, and stays hidden until
+             PUBLIC_API_URL is configured (the OAuth origin decision
+             is founder-owned; see README). -->
+        <div class="asplit-sso" data-google-wrap hidden>
+          <div class="asplit-or" aria-hidden="true"><span>or</span></div>
+          <a class="asplit-google" data-google-btn href="#">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path
+                d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
+                fill="#4285F4"></path>
+              <path
+                d="M9 18c2.43 0 4.467-.806 5.956-2.185l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+                fill="#34A853"></path>
+              <path
+                d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"
+                fill="#FBBC05"></path>
+              <path
+                d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"
+                fill="#EA4335"></path>
+            </svg>
+            Continue with Google
+          </a>
+        </div>
+
+        <p class="asplit-foot">
+          New to Lumecon? <a href="/signup">Create an account</a>
+        </p>
+      </div>
     </div>
   </main>
   <Footer />
@@ -141,6 +198,15 @@ import '../styles/auth.css';
     const title = document.querySelector<HTMLElement>('[data-login-title]');
     const sub = document.querySelector<HTMLElement>('[data-login-sub]');
 
+    /* Google SSO points at the product API's OAuth entry. Until
+       PUBLIC_API_URL is set for production the button stays hidden
+       so the page never offers a dead sign-in path. */
+    const ssoWrap = document.querySelector<HTMLElement>('[data-google-wrap]');
+    const googleBtn = document.querySelector<HTMLAnchorElement>('[data-google-btn]');
+    const apiBase = (import.meta.env.PUBLIC_API_URL || '').replace(/\/+$/, '');
+    const ssoAvailable = Boolean(apiBase && googleBtn);
+    if (ssoAvailable && googleBtn) googleBtn.href = `${apiBase}/auth/google`;
+
     function apply(next: Mode): void {
       mode = next;
       const isLogin = next === 'login';
@@ -154,9 +220,10 @@ import '../styles/auth.css';
       if (rules) rules.hidden = !isReset;
       if (meter) meter.hidden = true;
       if (backBtn) backBtn.hidden = isLogin;
+      if (ssoWrap) ssoWrap.hidden = !isLogin || !ssoAvailable;
       if (submitBtn)
         submitBtn.textContent = isLogin
-          ? 'Sign in'
+          ? 'Log in'
           : isForgot
             ? 'Send reset link'
             : 'Set new password';
