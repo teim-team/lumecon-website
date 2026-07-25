@@ -821,17 +821,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 132px;
+  height: 172px;
   margin-bottom: 0.55rem;
-  overflow: hidden;
-}
-/* The <picture> wrapper must pass the height constraint through,
-   or the img's max-height resolves against an unconstrained box. */
-.whyw-art picture {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
 }
 .whyw-art img {
   max-height: 100%;

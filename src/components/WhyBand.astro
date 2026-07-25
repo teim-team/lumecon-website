@@ -2,10 +2,8 @@
 /**
  * Why Lumecon — four cards on the white, hairline surface, each
  * headed by a piece of the supplied brand artwork (transparent
- * isometric icon set, served from /art). The geo icon carries a
- * dark-mode variant: its light version relies on white panel fills
- * that read as noise on a dark card, so dark mode gets the
- * line-art build via <picture>.
+ * isometric icon set, served from /art). The icons keep solid white
+ * bodies in their alpha, so one asset works on light and dark cards.
  */
 import '../styles/home.css';
 
@@ -15,7 +13,6 @@ const CARDS = [
     t: 'County to nation',
     b: 'Counties, states, the nation, reservations and trust lands are included in every plan. No geography add-ons.',
     art: 'geo',
-    artDark: 'geo-dark',
   },
   {
     k: 'Unlimited analysis',
@@ -55,22 +52,14 @@ const CARDS = [
         CARDS.map((c) => (
           <article class="whyw-card">
             <span class="whyw-art" aria-hidden="true">
-              <picture>
-                {c.artDark && (
-                  <source
-                    srcset={`/art/why-${c.artDark}.png`}
-                    media="(prefers-color-scheme: dark)"
-                  />
-                )}
-                <img
-                  src={`/art/why-${c.art}.png`}
-                  alt=""
-                  width="300"
-                  height="300"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <img
+                src={`/art/why-${c.art}.png`}
+                alt=""
+                width="300"
+                height="300"
+                loading="lazy"
+                decoding="async"
+              />
             </span>
             <p class="whyw-card__k">{c.k}</p>
             <h3 class="whyw-card__t">{c.t}</h3>
