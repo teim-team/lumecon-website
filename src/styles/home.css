@@ -790,3 +790,53 @@
   width: 100%;
   height: auto;
 }
+
+/* ---------- final CTA (sign-up close) ---------- */
+.fcta {
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(4.5rem, 11vh, 8rem) var(--container-pad);
+}
+.fcta-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 1.1rem;
+}
+.fcta-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  color: var(--ink);
+  margin: 0;
+}
+.fcta-lede {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 56ch;
+}
+.fcta-contact {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0.4rem 0 0;
+}
+.fcta-contact a {
+  color: var(--accent-text);
+  text-decoration: none;
+}
+.fcta-contact a:hover {
+  text-decoration: underline;
+}

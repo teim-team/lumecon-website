@@ -22,7 +22,6 @@ interface Props {
   isHome?: boolean;
 }
 const { isHome = false } = Astro.props;
-const prefix = isHome ? '' : '/';
 ---
 
 <footer class={isHome ? 'footer footer--home' : 'footer'}>
@@ -45,7 +44,7 @@ const prefix = isHome ? '' : '/';
         </div>
         <div class="footer-col">
           <div class="footer-col__head mono">Company</div>
-          <a class="footer-col__contact" href={`${prefix}#contact`}>Contact</a>
+          <a class="footer-col__contact" href={`mailto:${site.email}`}>Contact</a>
           <a
             href="https://www.linkedin.com/company/lumecon-ai"
             target="_blank"

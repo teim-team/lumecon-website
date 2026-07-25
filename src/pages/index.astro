@@ -11,7 +11,7 @@ import ProductTour from '../components/ProductTour.astro';
 import Edge from '../components/Edge.astro';
 import CedarFlow from '../components/CedarFlow.astro';
 import AskAI from '../components/AskAI.astro';
-import ContactSection from '../components/ContactSection.astro';
+import FinalCta from '../components/FinalCta.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -158,7 +158,7 @@ const jsonLd = [
       { '@type': 'ListItem', position: 4, name: 'Methodology', item: `${site.url}/methodology` },
       { '@type': 'ListItem', position: 5, name: 'Cedar', item: `${site.url}/cedar` },
       { '@type': 'ListItem', position: 6, name: 'Pricing', item: `${site.url}/pricing` },
-      { '@type': 'ListItem', position: 7, name: 'Contact', item: `${site.url}/#contact` },
+      { '@type': 'ListItem', position: 7, name: 'Get started', item: `${site.url}/signup` },
     ],
   },
   {
@@ -204,7 +204,7 @@ const jsonLd = [
     <Edge />
     <CedarFlow />
     <AskAI />
-    <ContactSection />
+    <FinalCta />
   </main>
   <Footer isHome={true} />
 </BaseLayout>
