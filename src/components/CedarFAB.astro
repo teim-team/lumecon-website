@@ -108,6 +108,22 @@ import CedarChat from './CedarChat.astro';
   aria-hidden="true"
   hidden
 >
+  <button
+    class="cedar-fab-panel__close"
+    type="button"
+    aria-label="Close Cedar"
+    data-cedar-fab-close
+  >
+    <svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <path d="m3.5 3.5 9 9m0-9-9 9"></path>
+    </svg>
+  </button>
   <CedarChat />
 </div>
 
@@ -187,7 +203,11 @@ import CedarChat from './CedarChat.astro';
       const inPanel = Array.from(panel.querySelectorAll<HTMLElement>(sel)).filter(
         (el) => !el.hidden && el.offsetParent !== null,
       );
-      return [fab as HTMLElement, ...inPanel];
+      // The FAB hides while the docked panel is open; only include it in
+      // the cycle when it is actually visible.
+      return (fab as HTMLElement).offsetParent !== null
+        ? [fab as HTMLElement, ...inPanel]
+        : inPanel;
     };
 
     fab.addEventListener('click', (e) => {
@@ -195,6 +215,8 @@ import CedarChat from './CedarChat.astro';
       if (document.body.classList.contains('cedar-popped')) close();
       else open();
     });
+
+    panel.querySelector('[data-cedar-fab-close]')?.addEventListener('click', () => close());
 
     // Show the nudge a few seconds after load, once per session. Skipped
     // on /cedar, where the inline chat already fills the page.
@@ -420,13 +442,17 @@ import CedarChat from './CedarChat.astro';
     display: inline;
   }
 
-  /* ---------- The self-contained chat panel ---------- */
+  /* ---------- The self-contained chat panel ----------
+     Docked, not floating: the open panel pins flush to the bottom of
+     the viewport like a bottom sheet, top corners only. The FAB hides
+     while the panel is open (the panel carries its own close button),
+     and returns when it closes. */
   .cedar-fab-panel {
     position: fixed;
-    bottom: calc(clamp(4.5rem, 6vw, 5.5rem) + env(safe-area-inset-bottom, 0px));
+    bottom: env(safe-area-inset-bottom, 0px);
     right: calc(clamp(0.9rem, 2.2vw, 1.5rem) + env(safe-area-inset-right, 0px));
     width: min(380px, calc(100vw - 1.8rem));
-    max-height: calc(100dvh - 7.5rem);
+    max-height: calc(100dvh - 5rem);
     z-index: 85;
     display: flex;
     flex-direction: column;
@@ -435,9 +461,43 @@ import CedarChat from './CedarChat.astro';
   .cedar-fab-panel[hidden] {
     display: none;
   }
+  :global(body.cedar-popped) .cedar-fab {
+    display: none;
+  }
+  .cedar-fab-panel__close {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.55rem;
+    z-index: 3;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-3);
+    cursor: pointer;
+  }
+  .cedar-fab-panel__close:hover {
+    background: var(--accent-rgba-08);
+    color: var(--navy);
+  }
+  .cedar-fab-panel__close svg {
+    width: 14px;
+    height: 14px;
+  }
+  /* Leave room for the close button so it never overlaps the Online
+     status in the chat header. */
+  .cedar-fab-panel :global(.cedar-chat__status) {
+    margin-right: 2rem;
+  }
   .cedar-fab-panel :global(.cedar-chat) {
     width: 100%;
-    max-height: calc(100dvh - 7.5rem);
+    border-radius: 8px 8px 0 0;
+    border-bottom: 0;
+    max-height: calc(100dvh - 5rem);
     display: flex;
     flex-direction: column;
     box-shadow:
@@ -537,18 +597,23 @@ import CedarChat from './CedarChat.astro';
     outline-offset: 2px;
   }
 
-  /* Mobile: cap the panel so it doesn't fill the screen edge to edge
-     on a phone. The closed FAB is already a compact pill. */
+  /* Mobile: the docked panel becomes a full-width bottom sheet. */
   @media (max-width: 600px) {
-    /* Cap the panel so it doesn't fill the screen edge to edge on a
-       phone. */
     .cedar-fab-panel {
-      bottom: 5rem;
-      max-height: min(calc(100dvh - 7rem), 520px);
-      width: calc(100vw - 1.4rem);
+      left: 0;
+      right: 0;
+      width: 100%;
+      bottom: 0;
+      max-height: min(78dvh, 560px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      background: var(--white);
+      border-radius: 8px 8px 0 0;
     }
     .cedar-fab-panel :global(.cedar-chat) {
-      max-height: min(calc(100dvh - 7rem), 520px);
+      max-height: min(78dvh, 560px);
+      border-left: 0;
+      border-right: 0;
+      border-radius: 8px 8px 0 0;
     }
     .cedar-fab-panel :global(.cedar-chat__transcript) {
       max-height: 260px;
