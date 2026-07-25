@@ -35,6 +35,20 @@ import CedarChat from './CedarChat.astro';
   title="Ask Cedar"
 >
   <span class="cedar-fab__dot" aria-hidden="true"></span>
+  <span class="cedar-fab__icon cedar-fab__icon--chat" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linejoin="round"
+    >
+      <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H12l-4.5 4v-4h-1A2.5 2.5 0 0 1 4 13.5Z"></path>
+      <path d="M8 8.8h8M8 11.8h5.4" stroke-width="1.3" stroke-linecap="round"></path>
+    </svg>
+  </span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg
       viewBox="0 0 24 24"
@@ -336,12 +350,49 @@ import CedarChat from './CedarChat.astro';
     display: block;
   }
   .cedar-fab__icon--close,
-  .cedar-fab__label--close {
+  .cedar-fab__label--close,
+  .cedar-fab__icon--chat {
     display: none;
   }
   .cedar-fab__icon--close {
     width: 22px;
     height: 22px;
+  }
+
+  /* On small screens the launcher collapses to a compact circle so it
+     never covers CTAs, pricing cards or other page controls. The full
+     two-line pill only exists at desktop widths. */
+  @media (max-width: 760px) {
+    .cedar-fab,
+    body.cedar-popped .cedar-fab {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      gap: 0;
+      border-radius: 50%;
+      justify-content: center;
+      right: calc(0.7rem + env(safe-area-inset-right, 0px));
+      bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    }
+    .cedar-fab__copy,
+    .cedar-fab__label--close {
+      display: none;
+    }
+    .cedar-fab__icon--chat {
+      display: inline-flex;
+      color: var(--accent-text);
+    }
+    body.cedar-popped .cedar-fab__icon--chat {
+      display: none;
+    }
+    .cedar-fab__dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+    }
+    body.cedar-popped .cedar-fab__dot {
+      display: none;
+    }
   }
 
   /* Open state = a clear navy "Close" pill (the launcher steps aside). */
