@@ -63,6 +63,7 @@
   align-items: stretch;
 }
 .pr-plan {
+  cursor: pointer;
   position: relative;
   border: 1px solid var(--rule);
   border-radius: 8px;

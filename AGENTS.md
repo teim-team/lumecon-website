@@ -123,3 +123,9 @@ pricing is different; /methodology says why the economics are
 credible; /cedar says why Lumecon's use of AI is different; the
 glossary defines terms and nothing more. Do not re-explain Cedar on
 other pages beyond a one-line pointer to /cedar.
+
+## No ampersands in displayed copy (2026-07)
+
+Write "and", never "&", anywhere a visitor can read it (founder
+rule; ampersands read as unprofessional). Code identifiers and TS
+types are exempt. Same rule applies in teim-app.
