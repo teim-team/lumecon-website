@@ -490,6 +490,21 @@
   }
 }
 
+/* Hover lifts are motion too: keep color feedback, drop the
+   transforms when the visitor asks for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .cpl-card,
+  .cpl-free,
+  .welc-btn {
+    transition: none;
+  }
+  .cpl-card:hover,
+  .cpl-free:hover,
+  .welc-btn:hover {
+    transform: none;
+  }
+}
+
 /* ---------- responsive ---------- */
 @media (max-width: 980px) {
   .cpl-grid {

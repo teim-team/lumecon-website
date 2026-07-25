@@ -505,3 +505,16 @@
   color: var(--ink-2);
   margin: 0;
 }
+
+/* Renewal transparency and the referral mention: policy fine print
+   under the commitment columns, quiet by design. */
+.pr-commit__notes {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--ink-3);
+  border-top: 1px solid var(--rule);
+  padding-top: 1.1rem;
+  margin: 1.4rem 0 0;
+  max-width: 62rem;
+}
