@@ -148,66 +148,87 @@
 }
 
 /* ---------- trio money shot ----------
-   Three app screenshots, stacked the way the refreshed IMPLAN hero
-   stacks its product panels: results front and center, dashboard and
-   lineage tucked behind. All three swap to dark captures in dark
-   mode via <picture>. */
+   Three app pages stacked the way the refreshed IMPLAN hero stacks
+   its product panels, and they rotate: every few seconds the front
+   page cedes the center to the next one (paused on hover, off under
+   reduced motion). Position classes are swapped by the inline
+   script in Hero.astro; transforms carry the motion. */
 .trio {
   position: relative;
   width: 100%;
   max-width: 1240px;
   margin: clamp(1.6rem, 4vh, 3rem) auto 0;
-  padding-bottom: 1rem;
+  aspect-ratio: 1240 / 545;
 }
 .trio-frame {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 66%;
   border: 1px solid var(--rule);
   border-radius: 14px;
   overflow: hidden;
   background: var(--white);
+  transform-origin: center top;
+  will-change: transform;
+  transition:
+    transform 0.9s var(--ease),
+    box-shadow 0.9s var(--ease),
+    opacity 0.9s var(--ease);
 }
 .trio-frame img {
   display: block;
   width: 100%;
   height: auto;
 }
-.trio-side {
-  position: absolute;
-  top: 7%;
-  width: 44%;
-  z-index: 1;
-  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
-}
-.trio-side--l {
-  left: 0;
-}
-.trio-side--r {
-  right: 0;
-}
-.trio-main {
-  position: relative;
+.trio-pos-c {
+  transform: translateX(-50%);
   z-index: 2;
-  width: 66%;
-  margin: 0 auto;
   box-shadow:
     0 44px 96px -42px rgba(10, 15, 38, 0.5),
     0 14px 30px -18px rgba(10, 15, 38, 0.22);
 }
+.trio-pos-l {
+  transform: translateX(-98%) translateY(4%) scale(0.8);
+  z-index: 1;
+  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+}
+.trio-pos-r {
+  transform: translateX(-2%) translateY(4%) scale(0.8);
+  z-index: 1;
+  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+}
 .trio-caption {
-  position: relative;
-  z-index: 2;
-  margin: 1rem auto 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin: 0.9rem auto 0;
   text-align: center;
   font-size: 0.82rem;
   color: var(--ink-3);
   max-width: 70ch;
 }
+/* Room for the absolutely-positioned caption below the frames. */
+.trio {
+  margin-bottom: 3rem;
+}
 @media (max-width: 760px) {
-  .trio-side {
-    display: none;
+  .trio {
+    aspect-ratio: 1600 / 1010;
   }
-  .trio-main {
+  .trio-frame {
     width: 100%;
-    box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.4);
+  }
+  .trio-pos-c {
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+  .trio-pos-l,
+  .trio-pos-r {
+    transform: translateX(-50%) scale(0.96);
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -532,71 +553,79 @@
   margin: 0;
   max-width: 70ch;
 }
-.askai-list {
+.askai-grid {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.8rem;
 }
-.askai-list a {
+.askai-tile {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 1.1rem 0.8rem 0.95rem;
+  text-decoration: none;
+  color: var(--ink);
+  transition:
+    transform 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+.askai-tile:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 34px -18px rgba(10, 127, 116, 0.35);
+}
+.askai-tile__ic {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  padding: 0.5rem 1.05rem;
-  font-family: var(--font-sans);
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--ink);
-  text-decoration: none;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--accent-rgba-08);
+  border: 1px solid var(--accent-bar);
+  color: var(--ink-2);
   transition:
-    border-color 0.15s var(--ease),
-    color 0.15s var(--ease);
+    transform 0.2s var(--ease),
+    color 0.2s var(--ease);
 }
-.askai-list a:hover {
-  border-color: var(--accent);
+.askai-tile__ic svg {
+  width: 26px;
+  height: 26px;
+}
+.askai-tile:hover .askai-tile__ic {
+  transform: scale(1.08);
   color: var(--accent-text);
 }
-.askai-list a::after {
-  content: '\2197';
-  font-family: var(--font-mono);
-  font-size: 0.8em;
-  color: var(--ink-4);
+.askai-tile__name {
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+@media (max-width: 880px) {
+  .askai-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
-/* ---------- the logo ripple (ported from the app's sign-in hero) ---------- */
-.ripple {
-  position: absolute;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-  color: var(--accent);
-  opacity: 0.1;
-  transform-origin: 42% 46%;
-  animation: contour-drift 46s ease-in-out infinite alternate;
+/* Inline text links inside section ledes. */
+.inline-link {
+  color: var(--accent-text);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-bar);
+  transition: border-color 0.15s var(--ease);
 }
-.ripple--hero {
-  inset: -8%;
-  width: 116%;
-  height: 116%;
+.inline-link:hover {
+  border-bottom-color: var(--accent-text);
 }
-.ripple--panel {
-  inset: -20%;
-  width: 140%;
-  height: 140%;
-  opacity: 0.12;
-}
-@keyframes contour-drift {
-  from {
-    transform: rotate(0deg) scale(1);
-  }
-  to {
-    transform: rotate(4deg) scale(1.06);
-  }
-}
+
 /* The mark keeps the app's slow anchor drift behind the hero. */
 .markart--tr {
   transform-origin: 62% 40%;
@@ -612,15 +641,8 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ripple,
   .markart--tr {
     animation: none;
-  }
-}
-@media (max-width: 760px) {
-  .hero2 .ripple,
-  .pr-hero .ripple {
-    display: none;
   }
 }
 
@@ -744,4 +766,22 @@
   .trio-main {
     transition: none;
   }
+}
+
+/* ---------- illustrated card art (why cards) ---------- */
+.whyw-art {
+  display: block;
+  margin-bottom: 0.55rem;
+  overflow: hidden;
+}
+.whyw-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.whyw-card:hover .whyw-art svg {
+  transform: translateY(-2px);
+}
+.whyw-art svg {
+  transition: transform 0.25s var(--ease);
 }

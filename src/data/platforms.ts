@@ -1,6 +1,10 @@
 /**
- * Platform data — single source of truth for the three Lumecon
- * product lines (Local, Tribal, Global).
+ * Entry-point data — single source of truth for the Lumecon
+ * audience entry points (Local, Tribal, Global) plus the consultant
+ * licensing track. The domains are front doors for different
+ * audiences; all of them lead into the same Lumecon application,
+ * which adapts to the organization type. There is no per-platform
+ * pricing: plans live in src/data/pricing.ts.
  *
  * Consumed by:
  *   - config.ts (re-exports as site.products so legacy lookups
@@ -23,23 +27,10 @@ export type PlatformId =
   | 'global-economic-impact'
   | 'consultant-economic-impact';
 
-/** 'regional' platforms live on the homepage / footer "Platforms" rail
- *  and share the Sprout / Sapling / Tree tier ladder. 'service'
- *  platforms (Consultant) only appear on /pricing, render a single
- *  flat tier instead of the tier ladder, and don't get the Toolbox
- *  add-on (the add-on requires an active subscription, which the
- *  Consultant offering already implicitly includes). */
+/** 'regional' entry points can appear on audience-facing rails;
+ *  the 'service' entry (Consultant) is the custom-licensed
+ *  consultant track and stays off those rails. */
 export type PlatformKind = 'regional' | 'service';
-
-/** Per-tier annual prices for a platform. Regional platforms populate
- *  starter / standard / leader. Service platforms populate `flat`.
- *  Numbers are USD. A 0 means "TBD, not yet priced." */
-export interface PlatformTierPrices {
-  starter?: number;
-  standard?: number;
-  leader?: number;
-  flat?: number;
-}
 
 export interface Platform {
   /** Short token used in CSS classes, icon mappings, and JS lookups. */
@@ -66,22 +57,17 @@ export interface Platform {
   desc: string;
   /** Verbose audience description used in JSON-LD audience field. */
   audience: string;
-  /** "Right fit if..." blurb on the pricing platform-picker tile. */
-  fitIf: string;
   /** Scope of analysis the platform covers (JSON-LD + metadata). */
   scope: string;
   /** Icon component token: 'local' -> IconLocal etc. */
   iconId: PlatformSlug;
-  /** Whether this is a regional product line or a service offering.
-   *  Filters out service platforms from the homepage / footer. */
+  /** Whether this is a regional entry point or a service offering.
+   *  Filters out service entries from the homepage / footer. */
   kind: PlatformKind;
-  /** Public per-tier prices, set per platform. Undefined = TBD. */
-  tierPrices?: PlatformTierPrices;
-  /** Geographies the platform covers, in display order, used in tier
-   *  copy and the comparison table. Local is sub-state (city / county
-   *  / state / national); Tribal is reservation-anchored (no county);
-   *  Global is national + international; Consultant covers the full
-   *  set because consulting firms work across client types. */
+  /** Geographies highlighted for this audience, in display order. All
+   *  plans include every supported U.S. geography (county, state,
+   *  national and reservations); this string only orders the framing
+   *  for the audience the entry point serves. */
   geographyScope: string;
 }
 
@@ -97,16 +83,13 @@ export const PLATFORMS: readonly Platform[] = [
     comingSoon: false,
     badgeKind: 'active',
     tag: 'Turn your budget data into an economic impact study you can present.',
-    desc: 'For cities, counties, state agencies, enterprises, foundations, universities, and the nonprofits that work alongside them. Run grant, council, and board-ready studies in-house, in minutes instead of months.',
+    desc: 'For cities, counties, state agencies, enterprises, foundations, universities and the nonprofits that work alongside them. Run grant, council and board-ready studies in-house, in minutes instead of months.',
     audience:
-      'Municipalities, state agencies, enterprises, foundations, universities, and nonprofits',
-    fitIf:
-      "You're a municipality, state agency, enterprise, foundation, university, or nonprofit running local or regional impact analysis.",
+      'Municipalities, state agencies, enterprises, foundations, universities and nonprofits',
     scope: 'Local & regional economic impact analysis',
     iconId: 'local',
     kind: 'regional',
-    tierPrices: { starter: 7500, standard: 15000, leader: 20000 },
-    geographyScope: 'County, state, and national',
+    geographyScope: 'County, state and national',
   },
   {
     slug: 'tribal',
@@ -122,13 +105,10 @@ export const PLATFORMS: readonly Platform[] = [
     desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs, and Native-entity federal contractors, with Indigenous data sovereignty a design priority from the start rather than an afterthought.',
     audience:
       'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
-    fitIf:
-      "You're a tribal government or department within one, a Native non-profit, intertribal org, tribal college, ANC, NHO, tribal enterprise, Native CDFI, state-recognized tribe, or Native-entity federal contractor making the case for reservation, state, or federal funding.",
     scope: 'Reservation, state, national economic impact analysis',
     iconId: 'tribal',
     kind: 'regional',
-    tierPrices: { starter: 10000, standard: 17500, leader: 25000 },
-    geographyScope: 'Reservation, county, state, and national',
+    geographyScope: 'Reservation, county, state and national',
   },
   {
     slug: 'global',
@@ -141,14 +121,12 @@ export const PLATFORMS: readonly Platform[] = [
     comingSoon: true,
     badgeKind: 'future',
     tag: 'For organizations whose work crosses borders.',
-    desc: 'For governments, multinationals, NGOs, and foundations whose work crosses borders, with the same modeling backbone running underneath so a project in one country is directly comparable to a project in another.',
-    audience: 'Organizations needing broader market, supply-chain, or international analysis',
-    fitIf:
-      'You need national, international, supply-chain, or cross-border analysis. Launching after Local and Tribal stabilize.',
+    desc: 'For governments, multinationals, NGOs and foundations whose work crosses borders, with the same Lumecon application running underneath so a project in one place is directly comparable to a project in another.',
+    audience: 'Organizations needing broader market, supply-chain or international analysis',
     scope: 'National, international, cross-border analysis',
     iconId: 'global',
     kind: 'regional',
-    geographyScope: 'National, international, and cross-border',
+    geographyScope: 'National, international and cross-border',
   },
   {
     slug: 'consultant',
@@ -161,16 +139,13 @@ export const PLATFORMS: readonly Platform[] = [
     comingSoon: false,
     badgeKind: 'active',
     tag: 'Lumecon for consultants delivering studies to outside clients.',
-    desc: 'For independent consultants and consulting firms running economic impact studies on behalf of two distinct client entities in a single fiscal year. All geographies included; Cedar and the Toolbox add-on are not available on this plan.',
+    desc: 'For consulting firms and independent professionals using Lumecon commercially for outside clients. Custom commercial licensing covers the full platform, all applicable geographies, commercial and client use, client and project workspaces and Cedar calibrated to the firm’s analytical and reporting workflow.',
     audience:
-      'Independent consultants and consulting firms running economic impact studies on behalf of outside clients',
-    fitIf:
-      "You're a consultant running studies for outside clients. Two distinct entities, one fiscal year, all geographies (reservation, county, state, national). No consortium projects.",
-    scope: 'Reservation, county, state, and national economic impact analysis',
+      'Consulting firms and independent professionals running economic impact studies on behalf of outside clients',
+    scope: 'Reservation, county, state and national economic impact analysis',
     iconId: 'consultant',
     kind: 'service',
-    tierPrices: { flat: 15000 },
-    geographyScope: 'Reservation, county, state, and national',
+    geographyScope: 'Reservation, county, state and national',
   },
 ];
 

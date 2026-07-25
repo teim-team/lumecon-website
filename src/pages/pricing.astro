@@ -22,7 +22,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MarkArt from '../components/MarkArt.astro';
-import Ripple from '../components/Ripple.astro';
 import WholeNation from '../components/WholeNation.astro';
 import CedarFlow from '../components/CedarFlow.astro';
 import { site } from '../config';
@@ -81,7 +80,6 @@ const jsonLd = [
   <main class="pr">
     <!-- 1. Hero -->
     <section class="pr-hero">
-      <Ripple class="ripple ripple--hero" />
       <MarkArt class="markart markart--tr" size={620} />
       <div class="pr-hero__inner">
         <p class="h-kicker">Pricing</p>
@@ -174,7 +172,7 @@ const jsonLd = [
          large bordered panel on the white surface (no colored slab). -->
     <section class="pr-offer" id="switch" aria-labelledby="offer-title">
       <div class="pr-offer__panel">
-        <Ripple class="ripple ripple--panel" />
+        <MarkArt class="markart markart--offer" size={520} />
         <header class="pr-offer__head">
           <p class="h-kicker">Competitive transition offer</p>
           <h2 class="pr-offer__title" id="offer-title">{COMPETITIVE_OFFER.headline}</h2>
@@ -196,7 +194,7 @@ const jsonLd = [
       <ul class="pr-why__grid">
         <li>
           <p class="pr-why__t">Every geography.</p>
-          <p class="pr-why__b">County, state, national, reservation and tribal government.</p>
+          <p class="pr-why__b">Counties, states, the nation and reservations.</p>
         </li>
         <li>
           <p class="pr-why__t">Unlimited analysis.</p>

@@ -6,7 +6,7 @@ Lumecon replaces the pairing of expensive modeling software plus an expensive co
 
 ## Category
 
-Economic impact analysis software. The same field as IMPLAN, RIMS II (Bureau of Economic Analysis), REMI and Lightcast/EMSI. What is different about Lumecon: one flat annual subscription (no geography licenses, no per-project fees); Cedar, an AI economic analyst included in every plan; higher-frequency data and modern econometrics layered on the trusted input-output core; reservations, trust lands and tribal-government geographies as first-class regions; and a lineage behind every number.
+Economic impact analysis software. The same field as IMPLAN, RIMS II (Bureau of Economic Analysis), REMI and Lightcast/EMSI. What is different about Lumecon: one flat annual subscription (no geography licenses, no per-project fees); Cedar, an AI economic analyst included in every plan; higher-frequency data and modern econometrics layered on the trusted input-output core; reservations and trust lands as first-class regions; and a lineage behind every number.
 
 ## One platform
 

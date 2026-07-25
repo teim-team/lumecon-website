@@ -9,12 +9,10 @@
  * cropped at the section edges as background art.
  */
 import MarkArt from './MarkArt.astro';
-import Ripple from './Ripple.astro';
 import '../styles/home.css';
 ---
 
 <section class="hero2" id="top">
-  <Ripple class="ripple ripple--hero" />
   <MarkArt class="markart markart--tr" size={640} />
   <div class="hero2-inner">
     <p class="h-kicker">Economic impact analysis software</p>
@@ -31,34 +29,38 @@ import '../styles/home.css';
     </p>
 
     <div class="hero2-cta">
-      <a class="btn2 btn2--primary" href="/map">
-        See a live study <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+      <a class="btn2 btn2--primary" href="/pricing">
+        Plans from $500 a year <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
       </a>
       <a class="btn2 btn2--card" href="/signup">
-        Still deciding? Try Lumecon for free <span class="btn2-arrow" aria-hidden="true"
-          >&rarr;</span
-        >
+        Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
       </a>
     </div>
 
     <p class="hero2-proof">
       Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and
-      engineers &middot; Patent pending &middot; Plans from $500 a year
+      engineers &middot; Patent pending
     </p>
 
-    <figure class="trio">
-      <div class="trio-frame trio-side trio-side--l" aria-hidden="true">
+    <figure class="trio" id="trio">
+      <div class="trio-frame trio-pos-l" data-trio>
         <picture>
           <source srcset="/app/dashboard-dark.webp" media="(prefers-color-scheme: dark)" />
-          <img src="/app/dashboard.webp" alt="" width="1600" height="1000" decoding="async" />
+          <img
+            src="/app/dashboard.webp"
+            alt="Lumecon workspace home with lanes for starting, in-progress and completed studies."
+            width="1600"
+            height="1000"
+            decoding="async"
+          />
         </picture>
       </div>
-      <div class="trio-frame trio-main">
+      <div class="trio-frame trio-pos-c" data-trio id="heroRotator">
         <picture>
-          <source srcset="/app/college-dark.webp" media="(prefers-color-scheme: dark)" />
+          <source srcset="/app/hero-01-dark.webp" media="(prefers-color-scheme: dark)" />
           <img
-            src="/app/college.webp"
-            alt="Lumecon results page for a community college expansion study in Connecticut: a headline sentence estimating 1,140 jobs and $214,300,000 in economic output, four key figures with Trace this number buttons, and a county map of the state."
+            src="/app/hero-01.webp"
+            alt="Lumecon results page for a community college expansion study in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output, with four key figures and a county map."
             width="1600"
             height="1000"
             fetchpriority="high"
@@ -66,16 +68,109 @@ import '../styles/home.css';
           />
         </picture>
       </div>
-      <div class="trio-frame trio-side trio-side--r" aria-hidden="true">
+      <div class="trio-frame trio-pos-r" data-trio>
         <picture>
           <source srcset="/app/trace-dark.webp" media="(prefers-color-scheme: dark)" />
-          <img src="/app/trace.webp" alt="" width="1600" height="1000" decoding="async" />
+          <img
+            src="/app/trace.webp"
+            alt="Lumecon lineage panel breaking economic output into direct, indirect and induced layers."
+            width="1600"
+            height="1000"
+            decoding="async"
+          />
         </picture>
       </div>
-      <figcaption class="trio-caption">
-        The Lumecon workspace: results, workspace home and number lineage, shown with sample study
-        data.
-      </figcaption>
+      <figcaption class="trio-caption">Shown with sample study data.</figcaption>
     </figure>
+    <script is:inline>
+      /* The trio money shot. Two behaviours:
+         1. The results page is one of ten sample studies, picked at
+            random per page load (stays put while you read).
+         2. The three pages rotate every few seconds so results, the
+            workspace and the lineage each take the front position.
+            Paused on hover and under reduced motion. */
+      (function () {
+        var STUDIES = [
+          [
+            'hero-01',
+            'a community college expansion in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output',
+          ],
+          [
+            'hero-02',
+            'hyperscale data center construction in Georgia: an estimated 4,150 jobs and $1,420,000,000 in economic output',
+          ],
+          [
+            'hero-03',
+            'a tribal hospital construction study at Warm Springs, Oregon: an estimated 1,240 jobs and $186,400,000 in economic output, with statewide and homelands scopes',
+          ],
+          [
+            'hero-04',
+            'a semiconductor fab expansion in Texas: an estimated 7,800 jobs and $2,860,000,000 in economic output',
+          ],
+          [
+            'hero-05',
+            'a port modernization program in California: an estimated 5,200 jobs and $1,150,000,000 in economic output',
+          ],
+          [
+            'hero-06',
+            'a childcare subsidy expansion in Michigan: an estimated 6,800 jobs and $640,000,000 in economic output',
+          ],
+          [
+            'hero-07',
+            'a hurricane recovery and rebuild program in Florida: an estimated 6,100 jobs and $980,000,000 in economic output',
+          ],
+          [
+            'hero-08',
+            'a university research campus in Ohio: an estimated 3,050 jobs and $720,000,000 in economic output',
+          ],
+          [
+            'hero-09',
+            'a wind energy buildout in Iowa: an estimated 1,900 jobs and $830,000,000 in economic output',
+          ],
+          [
+            'hero-10',
+            'a whole-nation economic footprint for a Tribal Nation: an estimated 4,820 jobs and $1,240,500,000 in economic output',
+          ],
+        ];
+        var i = Math.floor(Math.random() * STUDIES.length);
+        var root = document.getElementById('heroRotator');
+        if (root && i !== 0) {
+          var pick = STUDIES[i];
+          var source = root.querySelector('source');
+          var img = root.querySelector('img');
+          if (source) source.srcset = '/app/' + pick[0] + '-dark.webp';
+          if (img) {
+            img.src = '/app/' + pick[0] + '.webp';
+            img.alt = 'Lumecon results page for ' + pick[1] + ', shown with sample data.';
+          }
+        }
+
+        var trio = document.getElementById('trio');
+        if (!trio) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+          return;
+        var ORDER = ['trio-pos-l', 'trio-pos-c', 'trio-pos-r'];
+        var frames = Array.prototype.slice.call(trio.querySelectorAll('[data-trio]'));
+        var offset = 0;
+        var paused = false;
+        function apply() {
+          frames.forEach(function (f, n) {
+            f.classList.remove('trio-pos-l', 'trio-pos-c', 'trio-pos-r');
+            f.classList.add(ORDER[(n + offset) % 3]);
+          });
+        }
+        trio.addEventListener('mouseenter', function () {
+          paused = true;
+        });
+        trio.addEventListener('mouseleave', function () {
+          paused = false;
+        });
+        setInterval(function () {
+          if (paused || document.hidden) return;
+          offset = (offset + 2) % 3;
+          apply();
+        }, 6500);
+      })();
+    </script>
   </div>
 </section>

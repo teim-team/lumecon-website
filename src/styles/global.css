@@ -229,13 +229,8 @@ body {
   /* Footer-bar: the dark stripe at the very bottom of every page
      stays a deeper navy so it still reads as a defined band rather
      than blending into the page. */
-  .footer-bar {
-    background-color: #050920;
-    color: #bcc1d8;
-  }
-  .footer-email {
-    color: rgba(241, 243, 250, 0.75);
-  }
+  /* Footer bar is a light hairline strip now; the token flip
+     handles it, no navy override needed. */
   .footer-email:hover {
     color: var(--accent-text);
   }
