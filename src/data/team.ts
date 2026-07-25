@@ -1,10 +1,11 @@
 /**
  * Team data — single source of truth for the team.
  *
- * The /about page names everyone in the "How we work" grid (linking
- * to each person's page); the full bio, links, and selected work
- * render on /team/<slug>. `group` partitions Team vs. Advisors &
- * Contributors. Order within each section is the order listed below.
+ * The site no longer renders team pages; this data feeds the founder
+ * entries in the homepage JSON-LD and stays the canonical record for
+ * bios used off-site (llms.txt, reports). `group` partitions Team vs.
+ * Advisors & Contributors. Order within each section is the order
+ * listed below.
  */
 
 export type PersonGroup = 'team' | 'advisor';
@@ -387,99 +388,3 @@ export const TEAM: Person[] = [
 
 /** Co-founders, used by the homepage Organization.founder JSON-LD. */
 export const FOUNDERS = TEAM.filter((p) => p.founder);
-
-/**
- * Working areas — the five lanes Lumecon's work splits across.
- * Each lane names a single Lead and the people who contribute or
- * advise so that visitors reading the About page see the overlap
- * as deliberate cross-functional structure rather than fuzzy
- * roles. Slugs match TEAM entries so the page can resolve names
- * and link straight to each person's bio card.
- */
-export interface WorkingArea {
-  slug: string;
-  name: string;
-  /** One paragraph describing the area's goal. */
-  description: string;
-  /** Person who carries primary responsibility. */
-  leadSlug: string;
-  /** People who contribute material work to the area. */
-  contributorSlugs?: string[];
-  /** Advisors who shape the area without owning day-to-day work. */
-  advisorySlugs?: string[];
-}
-
-export const WORKING_AREAS: WorkingArea[] = [
-  {
-    slug: 'platform-product',
-    name: 'Platform & Product',
-    description:
-      'This area focuses on the customer-facing platform: how users move through a study, upload data, review assumptions, understand results and produce outputs. The goal is to make complex economic analysis feel organized, usable and credible for real institutional users.',
-    leadSlug: 'kaylyn-lee',
-    advisorySlugs: ['brian-kim', 'havala-hanson'],
-    contributorSlugs: ['francesca-agnes', 'isabella-agnes', 'elijah-moreno'],
-  },
-  {
-    slug: 'economic-modeling',
-    name: 'Economic Modeling & Tribal Adaptation',
-    description:
-      "This area focuses on the economic logic behind Lumecon's models, including theory, model assumptions, tribal adaptation and empirical credibility. The goal is to make sure Lumecon's analysis reflects both rigorous economic reasoning and the institutional realities of the communities being studied.",
-    leadSlug: 'laurel-wheeler',
-    advisorySlugs: ['vod-vilfort'],
-    contributorSlugs: ['elijah-moreno', 'isabella-agnes', 'francesca-agnes', 'havala-hanson'],
-  },
-  {
-    slug: 'io-engine',
-    name: 'Input/Output Models',
-    description:
-      'This area focuses on the multiplier system and modeling core that translate source data into economic impact estimates. The goal is to connect user inputs, regional data and economic assumptions into a clear, auditable modeling workflow.',
-    leadSlug: 'isabella-agnes',
-    advisorySlugs: ['vod-vilfort'],
-    contributorSlugs: ['francesca-agnes', 'laurel-wheeler', 'elijah-moreno'],
-  },
-  {
-    slug: 'cedar-ai',
-    name: 'Cedar & AI Workflow',
-    description:
-      "This area focuses on Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions and helping users move from messy data to usable analysis. The goal is to use AI carefully: making analysis faster and more accessible without removing human judgment, transparency or accountability.",
-    leadSlug: 'francesca-agnes',
-    advisorySlugs: ['havala-hanson', 'brian-kim'],
-    contributorSlugs: ['kaylyn-lee', 'isabella-agnes', 'elijah-moreno'],
-  },
-  {
-    slug: 'data-governance',
-    name: 'Data Governance, Security & Research Operations',
-    description:
-      'This area focuses on responsible data handling, privacy, documentation and research operations. The goal is to make sure Lumecon can support organizations working with sensitive administrative, financial, institutional and community data.',
-    leadSlug: 'havala-hanson',
-    contributorSlugs: [
-      'elijah-moreno',
-      'kaylyn-lee',
-      'francesca-agnes',
-      'isabella-agnes',
-      'brian-kim',
-    ],
-  },
-  {
-    slug: 'business-development',
-    name: 'Business Development & Sales',
-    description:
-      'This area focuses on bringing Lumecon to the governments, tribal nations, foundations and institutions it serves: partnerships, outreach and the relationships that turn interest into adoption. The goal is to grow the customer base deliberately, matching the platform to the organizations that need it most.',
-    leadSlug: 'elijah-moreno',
-    advisorySlugs: ['havala-hanson'],
-    contributorSlugs: ['laurel-wheeler'],
-  },
-];
-
-/** Slug -> Person lookup used when rendering working-area people. */
-export const TEAM_BY_SLUG: Record<string, Person> = Object.fromEntries(
-  TEAM.map((p) => [p.slug, p]),
-);
-
-export const TEAM_BY_GROUP: Record<PersonGroup, Person[]> = {
-  team: TEAM.filter((p) => p.group === 'team'),
-  advisor: TEAM.filter((p) => p.group === 'advisor'),
-};
-
-/** Canonical URL path for a person's profile page. */
-export const personPath = (slug: string): string => `/team/${slug}`;
