@@ -288,21 +288,24 @@
 .whyw-head {
   display: grid;
   gap: 0.9rem;
-  max-width: 62ch;
+  max-width: 900px;
 }
 .whyw-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0;
 }
 .whyw-card {
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  background: var(--white);
-  padding: 1.25rem 1.2rem;
+  padding: 0.4rem 1.6rem;
   display: grid;
   gap: 0.5rem;
   align-content: start;
+}
+.whyw-card:first-child {
+  padding-left: 0;
+}
+.whyw-card + .whyw-card {
+  border-left: 1px solid var(--rule);
 }
 .whyw-card__k {
   font-family: var(--font-mono);
@@ -329,11 +332,28 @@
 @media (max-width: 980px) {
   .whyw-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2.2rem;
+  }
+  .whyw-card + .whyw-card {
+    border-left: none;
+  }
+  .whyw-card:nth-child(even) {
+    border-left: 1px solid var(--rule);
+  }
+  .whyw-card:nth-child(odd) {
+    padding-left: 0;
   }
 }
 @media (max-width: 560px) {
   .whyw-grid {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: 2rem;
+  }
+  .whyw-card,
+  .whyw-card:nth-child(even) {
+    border-left: none;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -352,7 +372,7 @@
 .flowsec-head {
   display: grid;
   gap: 0.9rem;
-  max-width: 62ch;
+  max-width: 900px;
 }
 .flowsec-title,
 .whyw-title {
@@ -711,16 +731,19 @@
 .edge-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 2.2rem 0;
 }
 .edge-card {
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  background: var(--white);
-  padding: 1.25rem 1.2rem;
+  padding: 0.2rem 1.6rem;
   display: grid;
   gap: 0.5rem;
   align-content: start;
+}
+.edge-card:nth-child(3n + 1) {
+  padding-left: 0;
+}
+.edge-card:not(:nth-child(3n + 1)) {
+  border-left: 1px solid var(--rule);
 }
 .edge-ic {
   display: inline-flex;
@@ -745,16 +768,28 @@
   .edge-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .edge-card,
+  .edge-card:not(:nth-child(3n + 1)) {
+    border-left: none;
+    padding-left: 0;
+  }
+  .edge-card:nth-child(even) {
+    border-left: 1px solid var(--rule);
+    padding-left: 1.6rem;
+  }
 }
 @media (max-width: 560px) {
   .edge-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+  .edge-card,
+  .edge-card:nth-child(even) {
+    border-left: none;
+    padding-left: 0;
+  }
 }
 
 /* ---------- interactive hover states (the app's card feel) ---------- */
-.edge-card,
-.whyw-card,
 .wn-part,
 .cedar-step,
 .oneplat-orgs li {
@@ -763,12 +798,6 @@
     border-color 0.2s var(--ease),
     box-shadow 0.2s var(--ease),
     background 0.2s var(--ease);
-}
-.edge-card:hover,
-.whyw-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-  box-shadow: 0 14px 34px -18px rgba(10, 127, 116, 0.35);
 }
 .edge-card:hover .edge-ic {
   transform: scale(1.08);
@@ -821,17 +850,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 132px;
-  margin-bottom: 0.55rem;
-  overflow: hidden;
-}
-/* The <picture> wrapper must pass the height constraint through,
-   or the img's max-height resolves against an unconstrained box. */
-.whyw-art picture {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  height: 198px;
+  margin-bottom: 0.8rem;
 }
 .whyw-art img {
   max-height: 100%;
@@ -905,8 +925,6 @@
    satisfying click-down. Guarded for reduced motion below. */
 .btn2:active,
 .askai-tile:active,
-.whyw-card:active,
-.edge-card:active,
 .wn-part:active,
 .cedar-step:active,
 .pr-plan:active {
@@ -916,8 +934,6 @@
 @media (prefers-reduced-motion: reduce) {
   .btn2:active,
   .askai-tile:active,
-  .whyw-card:active,
-  .edge-card:active,
   .wn-part:active,
   .cedar-step:active,
   .pr-plan:active {

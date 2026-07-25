@@ -19,7 +19,7 @@
 .tour-head {
   display: grid;
   gap: 0.9rem;
-  max-width: 62ch;
+  max-width: 900px;
 }
 .tour-kicker,
 .tour-row__kicker {
