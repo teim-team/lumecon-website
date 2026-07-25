@@ -875,6 +875,15 @@
   height: 205px;
   margin-bottom: 0.8rem;
 }
+/* The <picture> wrapper must pass the constraints through, or the
+   img sizes against an unconstrained box. */
+.whyw-art picture {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
 .whyw-card[data-art='cedar'] .whyw-art img,
 .whyw-card[data-art='orgs'] .whyw-art img {
   width: 100%;
