@@ -67,3 +67,37 @@ After changes, compare before/after screenshots at multiple widths
 and revert any technically elegant change that makes the actual
 composition worse. Cleaner code is not evidence of better design;
 only the rendered result is.
+
+## Standing instruction: teal is semantic
+
+Teal has semantic meaning in the Lumecon visual language. Do not use
+teal merely to make a page more colorful. Teal identifies three
+things: interactive links and actions, economically important
+concepts such as "economic impact", and the short recurring brand
+phrases we deliberately want the reader to remember (`.brand-em` in
+global.css).
+
+Treat teal emphasis as editorial highlighting. On any viewport, a
+reader who skims only the teal language should encounter a coherent
+version of the Lumecon story. Reserve the emphasis for a small
+vocabulary of recurring ideas; prefer intentional repetition of
+established phrases over inventing new highlighted slogans per page.
+
+The approved recurring brand phrases (founder-approved 2026-07;
+these are sanctioned exceptions to the no-antithesis and
+no-fragment copy rules, verbatim only):
+
+- "economic impact" / "make it visible"
+- "Every organization has an economic impact."
+- "Built on decades of economic science. Not frozen in it."
+- "We invest in the model, not just the software."
+- "We tailor the modeling, not the price."
+- "Complexity belongs in the model. Not the pricing."
+- "AI in the workflow. Economists in the loop."
+- "Economic judgment stays human."
+
+Do not turn these into badges, pills, cards, callouts or gradients;
+the emphasis comes from color within the existing composition. Never
+make whole paragraphs teal; emphasize the smallest phrase that
+carries the idea. Review test: if someone remembers only the teal
+phrases, do they understand what makes Lumecon different?

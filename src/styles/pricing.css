@@ -227,6 +227,60 @@
   margin: 0;
   text-align: center;
 }
+/* The pricing creed under the table: a single set line, not a card. */
+.pr-plans__creed {
+  margin: 0.2rem 0 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--navy);
+}
+
+/* ---------- commitment policies ---------- */
+.pr-commit {
+  border-top: 1px solid var(--rule);
+  padding: clamp(2.4rem, 5vh, 3.6rem) var(--container-pad);
+}
+.pr-commit__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.pr-commit__title {
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.4rem;
+}
+.pr-commit__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.6rem, 4vw, 4rem);
+}
+.pr-commit__cols p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 34rem;
+}
+.pr-commit__creed {
+  margin: 1.8rem 0 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  max-width: 44rem;
+}
+@media (max-width: 760px) {
+  .pr-commit__cols {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
 .visually-hidden {
   position: absolute;
   width: 1px;

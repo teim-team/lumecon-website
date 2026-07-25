@@ -132,7 +132,7 @@ export const COMPETITIVE_OFFER = {
   ctaLabel: 'See if you qualify',
   ctaSubject: 'Competitive transition offer: see if we qualify',
   finePrint:
-    'Qualifying software may include IMPLAN, REMI and other professional economic modeling platforms. Documentation of the prior 12 months of spend is required. The offer applies to the first year; minimum plan pricing and other eligibility requirements may apply. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
+    'Qualifying software may include IMPLAN, REMI and other professional economic modeling platforms. Documentation of the prior 12 months of spend is required. The offer applies to the first year; minimum plan pricing and other eligibility requirements may apply. If your organization already qualifies for a lower contracted, partner or program rate, you receive the lower price. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
 };
 
 /** Consultant licensing: custom commercial pricing, no public number. */

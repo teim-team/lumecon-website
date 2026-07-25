@@ -6,13 +6,15 @@ Lumecon replaces the pairing of expensive modeling software plus an expensive co
 
 ## Category
 
-Economic impact analysis software, and an alternative to traditional economic modeling tools such as IMPLAN, RIMS II (Bureau of Economic Analysis) and REMI. What is different about Lumecon: one flat annual subscription (no geography add-ons, no per-project fees); Cedar, an AI economic analyst included in every plan; higher-frequency public indicators supplementing the benchmark datasets on the trusted input-output core; reservations and trust lands as first-class regions; and a lineage behind every result. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.
+Economic impact analysis software, and an alternative to traditional economic modeling tools such as IMPLAN, RIMS II (Bureau of Economic Analysis) and REMI. What is different about Lumecon: one flat annual subscription (no geography add-ons, no per-project fees); Cedar, an AI economic analyst included in every plan; higher-frequency public indicators supplementing the benchmark datasets on the trusted input-output core; reservations and trust lands as first-class regions; and a lineage behind every result. Lumecon's position: built on decades of economic science, not frozen in it; the modeling is tailored to each organization, the price is not. AI assists inside the workflow while trained economists remain responsible for assumptions, methods and validation. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.
 
 ## One platform
 
 There is one Lumecon application. It learns what kind of organization the customer is (city, county, state agency, university, nonprofit, business, economic development organization, Tribal Nation, tribal enterprise, consulting firm) and adapts geographies, workflows, terminology and analysis types. The domains localeconomicimpact.com, tribaleconomicimpact.com and globaleconomicimpact.com are audience-specific entry points into the same application.
 
 ## Pricing (public)
+
+Prices include taxes and fees. Multi-year agreements are eligible for preferred pricing, with additional savings for prepaid commitments. An organization that qualifies for more than one program or rate receives the lowest applicable price.
 
 - Sprout: $500/year. One user. Full model, Cedar, every supported U.S. geography, unlimited analysis.
 - Sapling: $2,500/year. Up to 10 users. Everything in Sprout plus Team Workspace (shared projects, collaborative analysis, review workflows). Most popular.
