@@ -5,13 +5,22 @@
  * RPC, direct/indirect/induced, etc.). Gives first-timers a reference
  * and gives Cedar a stable page to point people to.
  *
- * Styled to echo the Lumecon proposal deck: teal small-caps kickers,
- * a cyan title band, soft mint / cyan callout panels, and clean
- * hairline-divided definition rows. Built on LegalLayout for the shared
- * chrome; the term list is a semantic <dl> so it reads well to both
- * people and crawlers.
+ * Presented in the methodology page's design language: wide hero,
+ * hairline definition rows with the term on the left and the
+ * definition on the right, mono tags, no tinted panels or highlight
+ * smears. The term list is a semantic <dl> so it reads well to both
+ * people and crawlers, and each row keeps its anchor id.
  */
-import LegalLayout from '../layouts/LegalLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import MarkArt from '../components/MarkArt.astro';
+import { site as siteConfig } from '../config';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
 
 const TERMS: Array<{ term: string; abbr?: string; def: string }> = [
   {
@@ -71,172 +80,123 @@ const TERMS: Array<{ term: string; abbr?: string; def: string }> = [
 ];
 
 const site = 'https://lumecon.ai';
-const definedTermSet = {
-  '@context': 'https://schema.org',
-  '@type': 'DefinedTermSet',
-  '@id': `${site}/glossary`,
-  name: 'Economic impact analysis glossary',
-  url: `${site}/glossary`,
-  hasDefinedTerm: TERMS.map((t) => ({
-    '@type': 'DefinedTerm',
-    name: t.abbr ? `${t.term} (${t.abbr})` : t.term,
-    description: t.def,
-    inDefinedTermSet: `${site}/glossary`,
-  })),
-};
+const description =
+  'Plain-language definitions of economic impact analysis terms: direct, indirect and induced effects, multipliers, regional purchase coefficients (RPC), input-output models, base year, labor income, economic output, jobs supported and GDP contribution.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Glossary | Lumecon',
+    url: `${site}/glossary`,
+    description,
+    isPartOf: { '@id': `${siteConfig.url}#website` },
+    publisher: { '@id': `${siteConfig.url}#org` },
+    inLanguage: 'en-US',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+      { '@type': 'ListItem', position: 2, name: 'Glossary', item: `${site}/glossary` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${site}/glossary`,
+    name: 'Economic impact analysis glossary',
+    url: `${site}/glossary`,
+    hasDefinedTerm: TERMS.map((t) => ({
+      '@type': 'DefinedTerm',
+      name: t.abbr ? `${t.term} (${t.abbr})` : t.term,
+      description: t.def,
+      inDefinedTermSet: `${site}/glossary`,
+    })),
+  },
+];
 ---
 
-<LegalLayout
+<BaseLayout
   title="Glossary | Lumecon"
-  description="Plain-language definitions of economic impact analysis terms: direct, indirect and induced effects, multipliers, regional purchase coefficients (RPC), input-output models, base year, labor income, economic output, jobs supported and GDP contribution."
+  description={description}
   canonical="https://lumecon.ai/glossary"
   keywords="economic impact glossary, what is a multiplier, regional purchase coefficient, RPC, direct indirect induced effects, input-output model, economic impact analysis terms, labor income, jobs supported, GDP contribution, value added"
+  jsonLd={jsonLd}
 >
-  <p class="gloss-kicker">Reference</p>
-  <h1 class="gloss-title hl-block hl-block--c">Glossary</h1>
+  <Nav isHome={false} />
+  <main class="meth" id="top" tabindex="-1">
+    <header class="meth-hero">
+      <MarkArt class="markart markart--tr" size={620} />
+      <div class="meth-w">
+        <p class="h-kicker">Reference</p>
+        <h1 class="meth-hero__title">
+          The language of <span class="brand-em">economic impact</span>.
+        </h1>
+        <p class="meth-hero__lede">
+          The terms that come up most across economic impact analysis, and across Lumecon and Cedar.
+          Defined in plain language, no economics degree required. For the mathematics behind them,
+          read the <a class="gloss-link" href="/methodology">methodology</a>.
+        </p>
+      </div>
+    </header>
 
-  <div class="gloss-intro">
-    <p class="gloss-kicker gloss-kicker--on-tint">Plain-language definitions</p>
-    <p class="gloss-intro__text">
-      The terms that come up most across economic impact analysis, and across Lumecon and Cedar.
-      Defined in plain language, no economics degree required.
-    </p>
-  </div>
-
-  <dl class="gloss">
-    {
-      TERMS.map((t) => (
-        <div
-          class="gloss__row"
-          id={t.term
-            .toLowerCase()
-            .replace(/[^a-z]+/g, '-')
-            .replace(/^-|-$/g, '')}
-        >
-          <dt class="gloss__term">
-            <span class="gloss__name">{t.term}</span>
-            {t.abbr && <span class="gloss__abbr">{t.abbr}</span>}
-          </dt>
-          <dd class="gloss__def">{t.def}</dd>
-        </div>
-      ))
-    }
-  </dl>
-
-  <aside class="gloss-cta">
-    <p class="gloss-kicker gloss-kicker--on-tint">See it in motion</p>
-    <p class="gloss-cta__text">
-      Read <a href="/methodology">how an analysis is built</a>, or ask Cedar (the assistant in the
-      corner) to explain any of these in plain language.
-    </p>
-  </aside>
-
-  <script type="application/ld+json" set:html={JSON.stringify(definedTermSet)} is:inline />
-</LegalLayout>
+    <section class="meth-sec" aria-label="Definitions">
+      <div class="meth-w">
+        <dl class="meth-defs gloss-defs">
+          {
+            TERMS.map((t) => (
+              <div
+                class="meth-defs__row"
+                id={t.term
+                  .toLowerCase()
+                  .replace(/[^a-z]+/g, '-')
+                  .replace(/^-|-$/g, '')}
+              >
+                <dt>
+                  {t.term}
+                  {t.abbr && <span class="gloss-abbr">{t.abbr}</span>}
+                </dt>
+                <dd>{t.def}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="gloss-foot">
+          Read <a class="gloss-link" href="/methodology">how an analysis is built</a>, or ask Cedar
+          (the assistant in the corner) to explain any of these in plain language.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer isHome={false} />
+</BaseLayout>
 
 <style>
-  /* Teal small-caps kicker — the proposal deck's section-label device. */
-  .gloss-kicker {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent-text);
-    margin: 0 0 0.5rem;
-  }
-  .gloss-title {
-    /* The hl-block smear extends ~0.28em above the headline; keep
-       enough top margin that it never paints over the kicker. */
-    margin-top: 0.55em;
-    margin-bottom: 1.4rem;
-  }
-
-  /* Soft mint intro panel, echoing the proposal's summary boxes. */
-  .gloss-intro {
-    background: var(--cedar-mist);
-    border-radius: 12px;
-    padding: 1.1rem 1.25rem 1.2rem;
-    margin: 0 0 2.4rem;
-  }
-  .gloss-kicker--on-tint {
-    margin-bottom: 0.35rem;
-  }
-  .gloss-intro__text {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--ink-2);
-    font-weight: 500;
-  }
-
-  /* Definition rows — clean hairline-divided entries like the deck's
-     comparison tables. Term in the display face, abbreviation as a
-     quiet teal tag, definition in body ink. */
-  .gloss {
-    margin: 0;
-    border-top: 1px solid var(--rule);
-  }
-  .gloss__row {
-    padding: 1.15rem 0;
-    border-bottom: 1px solid var(--rule);
+  /* Glossary-specific refinements on the methodology vocabulary. */
+  .gloss-defs .meth-defs__row {
     scroll-margin-top: 6rem;
   }
-  .gloss__term {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.35rem;
-  }
-  .gloss__name {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.05rem;
-    letter-spacing: -0.01em;
-    color: var(--navy);
-  }
-  .gloss__abbr {
+  .gloss-abbr {
     font-family: var(--font-mono);
-    font-size: 0.66rem;
+    font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent-text);
-    background: var(--accent-rgba-08);
-    padding: 0.15rem 0.45rem;
-    border-radius: 5px;
-    transform: translateY(-1px);
+    margin-left: 0.6rem;
   }
-  .gloss__def {
-    margin: 0;
-    font-size: 1rem;
+  .gloss-foot {
+    margin: 2rem 0 0;
+    font-size: 0.98rem;
     line-height: 1.7;
     color: var(--ink-2);
-    font-weight: 400;
+    max-width: 44rem;
   }
-
-  /* Closing cyan panel with the cross-links — the deck's highlight box. */
-  .gloss-cta {
-    background: var(--accent-bar);
-    border-radius: 12px;
-    padding: 1.1rem 1.25rem 1.2rem;
-    margin-top: 2.5rem;
-  }
-  .gloss-cta__text {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--navy);
-    font-weight: 500;
-  }
-  .gloss-cta__text a {
+  .gloss-link {
     color: var(--accent-text);
-    font-weight: 700;
     text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .gloss-cta__text a:hover {
-    color: var(--navy);
+    text-underline-offset: 0.16em;
   }
 </style>

@@ -4,7 +4,7 @@ body.legal-page {
   min-height: 100dvh;
 }
 body.legal-page main {
-  max-width: 760px;
+  max-width: 840px;
   margin: 0 auto;
   padding: 5rem clamp(1.5rem, 4vw, 2.5rem) 4rem;
   flex: 1;

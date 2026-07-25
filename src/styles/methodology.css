@@ -25,7 +25,9 @@
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.06;
-  max-width: 20ch;
+  /* No character cap: the title uses the full container width and
+     balances its own lines. */
+  text-wrap: balance;
   margin: 0 0 1.2rem;
 }
 .meth-hero__lede {

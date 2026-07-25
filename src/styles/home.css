@@ -391,6 +391,13 @@
   display: grid;
   gap: clamp(1.6rem, 4vh, 2.6rem);
 }
+/* Any child whose min-content width exceeds the viewport (the Cedar
+   step pipeline was one) would otherwise inflate the shared grid
+   track and drag every sibling wider than the screen, clipping the
+   heading and screenshot on phones. */
+.flowsec-inner > * {
+  min-width: 0;
+}
 .flowsec-head {
   display: grid;
   gap: 0.9rem;
@@ -583,6 +590,17 @@
   }
   .cedar-arrow {
     display: none;
+  }
+}
+/* Phones get their own composition: the pipeline becomes a single
+   readable column of full-width steps instead of a clipped row. */
+@media (max-width: 640px) {
+  .cedar-flow {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .cedar-step {
+    min-width: 0;
   }
 }
 
