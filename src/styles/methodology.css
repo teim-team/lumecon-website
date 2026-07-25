@@ -1,0 +1,473 @@
+/* /methodology — a designed methodology narrative on the full page
+   width. Sections are separated by hairlines and numbered in mono;
+   prose keeps a readable measure inside wide grids while equations,
+   the flow diagram and the data manifest use the horizontal space.
+   No cards, pills or decorative fills: the mathematics, the sources
+   and the linework are the visual vocabulary. */
+
+.meth {
+  background: var(--white);
+}
+.meth-w {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+/* ---------- hero ---------- */
+.meth-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(6.5rem, 12vh, 9rem) 0 0;
+}
+.meth-hero__title {
+  font-size: clamp(2rem, 4.6vw, 3.3rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  max-width: 20ch;
+  margin: 0 0 1.2rem;
+}
+.meth-hero__lede {
+  font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 46rem;
+  margin: 0 0 3rem;
+}
+/* Three principles: hairline-separated columns, no boxes. */
+.meth-principles {
+  list-style: none;
+  margin: 0;
+  padding: 1.6rem 0 2.6rem;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.4rem, 3vw, 3rem);
+}
+.meth-principles__k {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin: 0 0 0.5rem;
+}
+.meth-principles__b {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 30rem;
+}
+
+/* ---------- numbered sections ---------- */
+.meth-sec {
+  border-top: 1px solid var(--rule);
+  padding: clamp(2.6rem, 5vw, 4rem) 0 clamp(2.8rem, 5vw, 4.2rem);
+}
+.meth-sec__head {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  margin-bottom: clamp(1.6rem, 3vw, 2.4rem);
+}
+.meth-sec__num {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--accent-text);
+}
+.meth-sec__head h2 {
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0;
+  max-width: 30ch;
+}
+.meth-sec__lede {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 44rem;
+  margin: -0.6rem 0 2rem;
+}
+
+/* Prose + equations grid: text keeps its measure, the section keeps
+   the width. */
+.meth-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(2.2rem, 5vw, 5rem);
+  align-items: start;
+}
+.meth-prose p {
+  font-size: 1.0325rem;
+  line-height: 1.75;
+  color: var(--ink-2);
+  margin: 0 0 1rem;
+  max-width: 38rem;
+}
+.meth-prose p:last-child {
+  margin-bottom: 0;
+}
+.meth-prose h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  margin: 1.8rem 0 0.55rem;
+}
+.meth-prose h3:first-child {
+  margin-top: 0;
+}
+.meth-prose--measure p {
+  max-width: 44rem;
+}
+/* Two parallel prose columns for paired topics. */
+.meth-twoprose {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 4.5vw, 4.5rem);
+  align-items: start;
+}
+.meth-twoprose--tight {
+  margin-top: 2.2rem;
+}
+
+/* ---------- equations as designed objects ---------- */
+.meth-eqs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.9rem;
+  /* Hairline column rule ties the equation stack to the prose the
+     way the app's lineage panel sits beside results. */
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(1.4rem, 2.5vw, 2.4rem);
+}
+.eqobj {
+  margin: 0;
+}
+.eqobj__k {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin: 0 0 0.55rem;
+}
+.eqobj__c {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--ink-3);
+  margin: 0.6rem 0 0;
+  max-width: 30rem;
+}
+.eqobj__c var {
+  font-style: italic;
+}
+/* The equation line itself. Inter like the prose, larger, navy. */
+.eq {
+  font-size: 1.18rem;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 2;
+  overflow-x: auto;
+}
+.eq var {
+  font-family: inherit;
+  font-style: italic;
+  font-weight: 500;
+}
+.eq sub,
+.eq sup {
+  font-size: 0.68em;
+  line-height: 1;
+}
+.eq .eq-line {
+  display: block;
+  white-space: nowrap;
+}
+.eq .eq-line + .eq-line {
+  margin-top: 0.55rem;
+}
+.eq .eq-frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 0.2em;
+  font-size: 0.92em;
+  line-height: 1.5;
+  text-align: center;
+}
+.eq .eq-frac > span {
+  padding: 0 0.3em;
+}
+.eq .eq-frac > span + span {
+  border-top: 1px solid currentColor;
+}
+
+/* ---------- the flow diagram ---------- */
+.meth-flow {
+  list-style: none;
+  margin: 0 0 clamp(2.2rem, 4vw, 3.2rem);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  counter-reset: flow;
+}
+.meth-flow li {
+  counter-increment: flow;
+  position: relative;
+  padding: 0.9rem 1.4rem 0 0;
+}
+.meth-flow li + li {
+  border-left: 1px solid var(--rule);
+  padding-left: 1.4rem;
+}
+/* Step index + a directional tick along the top rule. */
+.meth-flow li::before {
+  content: counter(flow, decimal-leading-zero);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--accent-text);
+  margin-bottom: 0.55rem;
+}
+.meth-flow li:not(:last-child)::after {
+  content: '\2192';
+  position: absolute;
+  top: 0.82rem;
+  right: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--ink-4);
+}
+.meth-flow__k {
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  margin: 0 0 0.3rem;
+}
+.meth-flow__b {
+  font-size: 0.87rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+/* ---------- the data manifest ---------- */
+.meth-manifest {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.meth-manifest__row {
+  display: grid;
+  grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 0.78rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.meth-manifest__name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+}
+.meth-manifest__what {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.meth-manifest__role {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.meth-manifest__role--hf {
+  color: var(--accent-text);
+}
+
+/* ---------- measures ---------- */
+.meth-defs {
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+.meth-defs__row {
+  display: grid;
+  grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.meth-defs__row dt {
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+.meth-defs__row dd {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 44rem;
+}
+
+/* ---------- mission close ---------- */
+.meth-mission {
+  border-top: 1px solid var(--rule);
+  padding: clamp(3.2rem, 7vw, 5.5rem) 0;
+}
+.meth-mission__title {
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.12;
+  max-width: 24ch;
+  margin: 0 0 1.1rem;
+}
+.meth-mission__lede {
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 44rem;
+  margin: 0 0 1.8rem;
+}
+.meth-mission__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 2.2rem;
+}
+.meth-mission__fine {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--ink-3);
+  max-width: 44rem;
+  margin: 0;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--rule);
+}
+.meth-mission__fine a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+/* ---------- FAQ ---------- */
+.meth-faq__list {
+  border-top: 1px solid var(--rule);
+}
+.meth-faq__row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1.2rem, 3vw, 3rem);
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.meth-faq__row h3 {
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  margin: 0;
+}
+.meth-faq__row p {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1024px) {
+  .meth-flow {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 1.6rem;
+  }
+  /* In a 3x2 wrap the left edge of each row loses its divider
+     naturally; suppress the arrow at each row's end. */
+  .meth-flow li:nth-child(4) {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .meth-flow li:nth-child(3)::after {
+    content: '';
+  }
+}
+@media (max-width: 900px) {
+  .meth-cols {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .meth-eqs {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.8rem;
+  }
+  .meth-twoprose {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+}
+@media (max-width: 700px) {
+  .meth-principles {
+    grid-template-columns: 1fr;
+    gap: 1.3rem;
+  }
+  .meth-flow {
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+  .meth-flow li,
+  .meth-flow li + li,
+  .meth-flow li:nth-child(4) {
+    border-left: 0;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .meth-flow li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .meth-flow li:not(:last-child)::after {
+    content: none;
+  }
+  .meth-manifest__row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+  .meth-manifest__role {
+    order: -1;
+  }
+  .meth-defs__row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+  .meth-faq__row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .meth-sec__head {
+    gap: 0.8rem;
+  }
+  .eq {
+    font-size: 1.05rem;
+  }
+}

@@ -1373,6 +1373,17 @@ strong {
   font-family: var(--font-mono);
 }
 
+/* Semantic teal emphasis. Teal is not decoration on this site: it
+   marks interactive elements, economically important concepts and
+   the small vocabulary of recurring brand phrases (see AGENTS.md,
+   "Teal is semantic"). Applied to the smallest phrase that carries
+   the idea, never to whole paragraphs, and never as a badge, pill
+   or callout. */
+.brand-em {
+  color: var(--accent-text);
+  font-style: normal;
+}
+
 /* Container utility */
 .container {
   max-width: var(--container-max);

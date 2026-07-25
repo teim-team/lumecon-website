@@ -1,13 +1,30 @@
 ---
 /**
- * /methodology — how a Lumecon analysis is built, in plain language.
- * Linked from the main menu and the footer; the results pages in the
- * product point here for the longer explanation behind "how the
- * model works." Companion page to /glossary, which defines the
- * individual terms used below. The FAQ at the bottom ships as a
- * FAQPage schema through LegalLayout's extraJsonLd.
+ * /methodology — the Lumecon methodology as a designed narrative,
+ * not a document in a column. The page argues one position: proven
+ * input-output foundations, continuously improved with today's data,
+ * methods and computing, with economists responsible for judgment.
+ *
+ * Structure: hero + three principles, then numbered sections that
+ * alternate wide prose/equation grids, a six-stage flow diagram, a
+ * data-source manifest, the built-to-evolve and AI-role sections,
+ * lineage, measures, comparison, a mission close and the FAQ
+ * (FAQPage schema preserved). All six equations keep role="math"
+ * with spoken readings; visual layout inside is aria-hidden.
  */
-import LegalLayout from '../layouts/LegalLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import MarkArt from '../components/MarkArt.astro';
+import { site } from '../config';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
+
+const description =
+  'How Lumecon builds an economic impact analysis: proven input-output foundations regionalized with current public data, higher-frequency signals and modern estimation methods, with economists responsible for assumptions and validation and a lineage behind every result.';
 
 const FAQ = [
   {
@@ -36,7 +53,113 @@ const FAQ = [
   },
 ];
 
-const faqJsonLd = [
+/* The data manifest. `role` distinguishes the benchmark base from
+   higher-frequency signals, geography files and supplementary sources. */
+const SOURCES = [
+  {
+    name: 'BEA Input-Output Accounts',
+    what: 'The national industry-to-industry benchmark tables the model is built from.',
+    role: 'Benchmark',
+  },
+  {
+    name: 'BLS QCEW',
+    what: 'Employment and wages by county and industry, the backbone of regionalization.',
+    role: 'Benchmark',
+  },
+  {
+    name: 'Census ACS',
+    what: 'Demographics, income and housing that shape regional household profiles.',
+    role: 'Benchmark',
+  },
+  {
+    name: 'Census CBP',
+    what: 'Establishment counts by county, industry and size class.',
+    role: 'Benchmark',
+  },
+  {
+    name: 'Census LODES',
+    what: 'Where people live and where they work, for commuting and earnings flows.',
+    role: 'Benchmark',
+  },
+  {
+    name: 'USDA NASS',
+    what: 'Agricultural production detail for farm-heavy regional economies.',
+    role: 'Benchmark',
+  },
+  {
+    name: 'Census TIGER/Line',
+    what: 'Boundary files for counties, states and American Indian and Alaska Native areas.',
+    role: 'Geography',
+  },
+  {
+    name: 'Census QWI',
+    what: 'Quarterly workforce indicators that track employment between benchmarks.',
+    role: 'Higher-frequency',
+  },
+  {
+    name: 'FRED',
+    what: 'Higher-frequency series for employment, wages and prices.',
+    role: 'Higher-frequency',
+  },
+  {
+    name: 'USAspending',
+    what: 'Federal award and spending flows into regions and programs.',
+    role: 'Supplementary',
+  },
+  {
+    name: 'NOAA',
+    what: 'Environmental context for analyses where weather and climate matter.',
+    role: 'Supplementary',
+  },
+];
+
+const MEASURES = [
+  {
+    term: 'Jobs supported',
+    def: 'The jobs supported by the analyzed activity over the analysis period. It is a job count, and where a conversion basis matters the analysis states it.',
+  },
+  {
+    term: 'Labor income',
+    def: 'Wages, salaries and benefits.',
+  },
+  {
+    term: 'GDP contribution',
+    def: 'The analysis&rsquo;s value added, the measure that corresponds to a region&rsquo;s contribution to GDP.',
+  },
+  {
+    term: 'Economic output',
+    def: 'The total value of production the activity supports: value added plus intermediate purchases.',
+  },
+  {
+    term: 'Tax impacts',
+    def: 'Estimates of the revenue the activity supports, reported by level of government: federal, state and local, and tribal government where the analysis includes one.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Methodology | Lumecon',
+    url: 'https://lumecon.ai/methodology',
+    description,
+    isPartOf: { '@id': `${site.url}#website` },
+    publisher: { '@id': `${site.url}#org` },
+    inLanguage: 'en-US',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Methodology',
+        item: 'https://lumecon.ai/methodology',
+      },
+    ],
+  },
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -50,288 +173,595 @@ const faqJsonLd = [
 ];
 ---
 
-<LegalLayout
+<BaseLayout
   title="Methodology | Lumecon"
-  description="How Lumecon builds an economic impact analysis: regionalized input-output modeling on public data, household and government accounts for induced effects, reservation and trust-land geographies, and a lineage behind every result."
+  description={description}
   canonical="https://lumecon.ai/methodology"
   keywords="economic impact methodology, input-output modeling, direct indirect induced effects, BEA input-output accounts, social accounting matrix, location quotient, RAS balancing, economic multipliers, IMPLAN methodology comparison, REMI comparison, tribal economic impact methodology, traceable results"
-  extraJsonLd={faqJsonLd}
+  jsonLd={jsonLd}
 >
-  <h1>Methodology</h1>
-  <p class="legal-subhead">
-    How a Lumecon analysis is built, in plain language and in the equations behind it.
-  </p>
+  <Nav isHome={false} />
+  <main class="meth" id="top" tabindex="-1">
+    <!-- Hero: the methodological position, then three principles. -->
+    <header class="meth-hero">
+      <MarkArt class="markart markart--tr" size={620} />
+      <div class="meth-w">
+        <p class="h-kicker">Methodology</p>
+        <h1 class="meth-hero__title">
+          Proven foundations. <span class="brand-em">Better inputs.</span> A model that keeps improving.
+        </h1>
+        <p class="meth-hero__lede">
+          Input-output analysis carries nearly a century of economic research, and Lumecon builds on
+          all of it. The proven core stays. Around it we bring current public data, higher-frequency
+          signals, modern estimation methods and economist review, so the model reflects the economy
+          as it is now. <span class="brand-em"
+            >Built on decades of economic science, not frozen in it.</span
+          >
+        </p>
+        <ol class="meth-principles" aria-label="Three principles">
+          <li>
+            <p class="meth-principles__k">Proven foundations</p>
+            <p class="meth-principles__b">
+              Regionalized input-output modeling with household and government accounts, the
+              framework the field has trusted for decades.
+            </p>
+          </li>
+          <li>
+            <p class="meth-principles__k">Modern evidence</p>
+            <p class="meth-principles__b">
+              Current public datasets and higher-frequency indicators keep the model close to
+              present conditions where the data support it.
+            </p>
+          </li>
+          <li>
+            <p class="meth-principles__k">Continuous improvement</p>
+            <p class="meth-principles__b">
+              We invest in the model, not just the software. Data, methods and validation keep
+              advancing as the evidence does.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </header>
 
-  <h2>The core model</h2>
-  <p>
-    Lumecon analyses are built on input-output modeling, the same analytical foundation used across
-    the economic impact field for decades. An input-output model maps how industries in a region buy
-    from and sell to each other, so a change in one place (a new program, an expansion, a budget)
-    can be followed through the purchases, wages and household spending it sets off.
-  </p>
-  <p>
-    We keep that proven core and supplement it with higher-frequency public indicators and newer
-    estimation methods, so an analysis can better reflect current economic conditions rather than
-    relying exclusively on the vintage of the underlying benchmark tables.
-  </p>
-  <p>
-    In matrix form the model is compact. Each industry&rsquo;s production recipe is summarized by a
-    technical coefficient, the amount it purchases from every other industry per dollar of its own
-    output:
-  </p>
-  <div class="eq" role="math" aria-label="a sub i j equals z sub i j divided by x sub j">
-    <span aria-hidden="true"
-      ><var>a</var><sub>ij</sub> = <span class="eq-frac"
-        ><span><var>z</var><sub>ij</sub></span><span><var>x</var><sub>j</sub></span></span
-      ></span
-    >
-  </div>
-  <p>
-    where <var>z</var><sub>ij</sub> is what industry <var>j</var> buys from industry{' '}
-    <var>i</var> and <var>x</var><sub>j</sub> is industry <var>j</var>&rsquo;s total output.
-    Collecting the coefficients into the matrix <var>A</var>, the total output{' '}
-    <var>x</var> required to satisfy a change in final demand <var>f</var> solves the Leontief system:
-  </p>
-  <div
-    class="eq"
-    role="math"
-    aria-label="x equals the inverse of the quantity I minus A, multiplied by f"
-  >
-    <span aria-hidden="true"
-      ><var>x</var> = (<var>I</var> &minus; <var>A</var>)<sup>&minus;1</sup>{' '}
-      <var>f</var></span
-    >
-  </div>
-  <p>
-    The inverse matrix (<var>I</var> &minus; <var>A</var>)<sup>&minus;1</sup> is the Leontief inverse.
-    It carries every round of purchasing at once: the direct requirement, the suppliers&rsquo; requirements,
-    the suppliers&rsquo; suppliers and so on. Extending the table with household and government accounts,
-    described below, lets the same arithmetic carry induced effects.
-  </p>
+    <!-- 01 · The core model -->
+    <section class="meth-sec" aria-labelledby="m-core">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">01</span>
+          <h2 id="m-core">The core model</h2>
+        </div>
+        <div class="meth-cols">
+          <div class="meth-prose">
+            <p>
+              Lumecon analyses are built on input-output modeling, the same analytical foundation
+              used across the economic impact field for decades. An input-output model maps how
+              industries in a region buy from and sell to each other, so a change in one place (a
+              new program, an expansion, a budget) can be followed through the purchases, wages and
+              household spending it sets off.
+            </p>
+            <p>
+              The mathematics is compact. Each industry&rsquo;s production recipe is summarized by a
+              technical coefficient, the amount it purchases from every other industry per dollar of
+              its own output. Collecting those coefficients into a matrix, a single inversion
+              carries every round of purchasing at once: the direct requirement, the
+              suppliers&rsquo; requirements, the suppliers&rsquo; suppliers and so on. That inverse
+              is the Leontief system, and it is the arithmetic at the center of every impact
+              estimate.
+            </p>
+            <p>
+              We keep that proven core and supplement it with higher-frequency public indicators and
+              newer estimation methods, so an analysis can better reflect current economic
+              conditions rather than relying exclusively on the vintage of the underlying benchmark
+              tables.
+            </p>
+          </div>
+          <div class="meth-eqs">
+            <figure class="eqobj">
+              <figcaption class="eqobj__k">Eq. 01 &middot; Technical coefficients</figcaption>
+              <div
+                class="eq"
+                role="math"
+                aria-label="a sub i j equals z sub i j divided by x sub j"
+              >
+                <span aria-hidden="true"
+                  ><var>a</var><sub>ij</sub> = <span class="eq-frac"
+                    ><span><var>z</var><sub>ij</sub></span><span><var>x</var><sub>j</sub></span
+                    ></span
+                  ></span
+                >
+              </div>
+              <p class="eqobj__c">
+                <var>z</var><sub>ij</sub> is what industry <var>j</var> buys from industry{' '}
+                <var>i</var>; <var>x</var><sub>j</sub> is industry <var>j</var>&rsquo;s total
+                output.
+              </p>
+            </figure>
+            <figure class="eqobj">
+              <figcaption class="eqobj__k">Eq. 02 &middot; The Leontief system</figcaption>
+              <div
+                class="eq"
+                role="math"
+                aria-label="x equals the inverse of the quantity I minus A, multiplied by f"
+              >
+                <span aria-hidden="true"
+                  ><var>x</var> = (<var>I</var> &minus; <var>A</var>)<sup>&minus;1</sup>{' '}
+                  <var>f</var></span
+                >
+              </div>
+              <p class="eqobj__c">
+                <var>x</var> is the total output required to satisfy a change in final demand{' '}
+                <var>f</var>. The inverse of <var>I</var> &minus; <var>A</var> is the Leontief inverse.
+              </p>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>The data behind every analysis</h2>
-  <p>
-    Lumecon is built from authoritative public datasets widely used in economic and regional
-    analysis: U.S. Census Bureau programs (ACS, LODES, QWI, CBP, TIGER/Line), the Bureau of Economic
-    Analysis Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA. The difference
-    is what we do with it and what we add to it.
-  </p>
+    <!-- 02 · Regionalization -->
+    <section class="meth-sec" aria-labelledby="m-region">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">02</span>
+          <h2 id="m-region">From national relationships to your region</h2>
+        </div>
+        <div class="meth-cols">
+          <div class="meth-prose">
+            <p>
+              The industry-to-industry relationships in the national accounts describe how the U.S.
+              economy as a whole buys and sells. To analyze a county, a state or a reservation,
+              those relationships are adjusted to the region: local industry mix, employment and
+              wages come from the regional data listed below, and regional purchase behavior
+              estimates how much of each purchase is met by suppliers inside the region rather than
+              imported from outside it. Regional self-sufficiency is estimated sector by sector with
+              location quotients in the Flegg family, and the adjusted table is then rebalanced with
+              biproportional (RAS) scaling so the accounting identities still hold. Smaller and more
+              specialized regional economies keep less of each dollar, and the model reflects that.
+            </p>
+            <h3>Suppressed and small-area data</h3>
+            <p>
+              Federal disclosure rules withhold some county-sector figures so individual employers
+              cannot be identified. Where a suppressed sector clearly exists in the region, its
+              employment is estimated from wider employment-per-establishment patterns, and wages
+              fall back through a stated hierarchy of sources. Every figure carries a source tag
+              (reported, apportioned or estimated) so a reviewer can see exactly which numbers came
+              straight from the data and which were estimated.
+            </p>
+          </div>
+          <div class="meth-eqs">
+            <figure class="eqobj">
+              <figcaption class="eqobj__k">Eq. 03 &middot; Simple location quotient</figcaption>
+              <div
+                class="eq"
+                role="math"
+                aria-label="S L Q sub i equals e sub i superscript r over e superscript r, all divided by e sub i superscript n over e superscript n"
+              >
+                <span aria-hidden="true"
+                  >SLQ<sub>i</sub> = <span class="eq-frac"
+                    ><span><var>e</var><sub>i</sub><sup>r</sup> / <var>e</var><sup>r</sup></span
+                    ><span><var>e</var><sub>i</sub><sup>n</sup> / <var>e</var><sup>n</sup></span
+                    ></span
+                  ></span
+                >
+              </div>
+              <p class="eqobj__c">
+                <var>e</var> counts employment; <var>i</var> indexes the sector; <var>r</var> and{
+                  ' '
+                }
+                <var>n</var> mark the region and the nation.
+              </p>
+            </figure>
+            <figure class="eqobj">
+              <figcaption class="eqobj__k">Eq. 04 &middot; Flegg-family refinement</figcaption>
+              <div
+                class="eq"
+                role="math"
+                aria-label="F L Q sub i j equals C I L Q sub i j times lambda star, where C I L Q sub i j equals S L Q sub i over S L Q sub j, and lambda star equals the logarithm base 2 of 1 plus e superscript r over e superscript n, all raised to the power delta"
+              >
+                <span class="eq-line" aria-hidden="true"
+                  >FLQ<sub>ij</sub> = CILQ<sub>ij</sub> &times; &lambda;*, where CILQ<sub>ij</sub> ={
+                    ' '
+                  }
+                  <span class="eq-frac"
+                    ><span>SLQ<sub>i</sub></span><span>SLQ<sub>j</sub></span></span
+                  ></span
+                >
+                <span class="eq-line" aria-hidden="true"
+                  >&lambda;* = [log<sub>2</sub>(1 + <var>e</var><sup>r</sup> / <var>e</var><sup
+                    >n</sup
+                  >)]<sup>&delta;</sup></span
+                >
+              </div>
+              <p class="eqobj__c">
+                The exponent &delta; sets how strongly regional smallness discounts local
+                purchasing. It is calibrated against observed regional data rather than fixed by
+                assumption, and every coefficient is capped so no local share exceeds one.
+              </p>
+            </figure>
+            <figure class="eqobj">
+              <figcaption class="eqobj__k">Eq. 05 &middot; RAS rebalancing</figcaption>
+              <div
+                class="eq"
+                role="math"
+                aria-label="A superscript k plus 1 equals R superscript k, times A superscript k, times S superscript k"
+              >
+                <span aria-hidden="true"
+                  ><var>A</var><sup>(k+1)</sup> = <var>R</var><sup>(k)</sup>{' '}
+                  <var>A</var><sup>(k)</sup>{' '}
+                  <var>S</var><sup>(k)</sup></span
+                >
+              </div>
+              <p class="eqobj__c">
+                <var>R</var> and <var>S</var> are diagonal scaling matrices, updated each round until
+                the regional table converges on its control totals.
+              </p>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>From national relationships to your region</h2>
-  <p>
-    The industry-to-industry relationships in the national accounts describe how the U.S. economy as
-    a whole buys and sells. To analyze a county, a state or a reservation, those relationships are
-    adjusted to the region: local industry mix, employment and wages come from the regional data
-    listed above, and regional purchase behavior estimates how much of each purchase is met by
-    suppliers inside the region rather than imported from outside it. Regional self-sufficiency is
-    estimated sector by sector with location quotients in the Flegg family, which compare how
-    specialized the region is in each sector with the wider economy, and the adjusted table is then
-    rebalanced with biproportional (RAS) scaling so the accounting identities still hold. Smaller
-    and more specialized regional economies keep less of each dollar, and the model reflects that.
-  </p>
-  <p>
-    The starting point is the simple location quotient, which compares a sector&rsquo;s share of
-    regional employment with its share nationally:
-  </p>
-  <div
-    class="eq"
-    role="math"
-    aria-label="S L Q sub i equals e sub i superscript r over e superscript r, all divided by e sub i superscript n over e superscript n"
-  >
-    <span aria-hidden="true"
-      >SLQ<sub>i</sub> = <span class="eq-frac"
-        ><span><var>e</var><sub>i</sub><sup>r</sup> / <var>e</var><sup>r</sup></span><span
-          ><var>e</var><sub>i</sub><sup>n</sup> / <var>e</var><sup>n</sup></span
-        ></span
-      ></span
-    >
-  </div>
-  <p>
-    where <var>e</var> counts employment, <var>i</var> indexes the sector, and{' '}
-    <var>r</var> and <var>n</var> mark the region and the nation. The Flegg-family refinements Lumecon
-    uses compare selling and purchasing sectors pair by pair and discount local purchasing by regional
-    size:
-  </p>
-  <div
-    class="eq"
-    role="math"
-    aria-label="F L Q sub i j equals C I L Q sub i j times lambda star, where C I L Q sub i j equals S L Q sub i over S L Q sub j, and lambda star equals the logarithm base 2 of 1 plus e superscript r over e superscript n, all raised to the power delta"
-  >
-    <span class="eq-line" aria-hidden="true"
-      >FLQ<sub>ij</sub> = CILQ<sub>ij</sub> &times; &lambda;*, where CILQ<sub>ij</sub> ={' '}
-      <span class="eq-frac"><span>SLQ<sub>i</sub></span><span>SLQ<sub>j</sub></span></span></span
-    >
-    <span class="eq-line" aria-hidden="true"
-      >&lambda;* = [log<sub>2</sub>(1 + <var>e</var><sup>r</sup> / <var>e</var><sup>n</sup>)]<sup
-        >&delta;</sup
-      ></span
-    >
-  </div>
-  <p>
-    The exponent &delta; (delta) sets how strongly a smaller regional economy discounts local
-    purchasing. It is calibrated against observed regional data rather than fixed by assumption, and
-    every regional coefficient is capped so no local share exceeds one. After regionalization, the
-    biproportional (RAS) step rescales the table iteratively:
-  </p>
-  <div
-    class="eq"
-    role="math"
-    aria-label="A superscript k plus 1 equals R superscript k, times A superscript k, times S superscript k"
-  >
-    <span aria-hidden="true"
-      ><var>A</var><sup>(k+1)</sup> = <var>R</var><sup>(k)</sup>{' '}
-      <var>A</var><sup>(k)</sup>{' '}
-      <var>S</var><sup>(k)</sup></span
-    >
-  </div>
-  <p>
-    where <var>R</var> and <var>S</var> are diagonal matrices of row and column scaling factors, updated
-    each round until the table converges on the regional control totals. The result is a regional table
-    whose accounting identities hold just as they do in the national one.
-  </p>
+    <!-- 03 · The three layers, as one analytical system -->
+    <section class="meth-sec" aria-labelledby="m-layers">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">03</span>
+          <h2 id="m-layers">From one change to total impact</h2>
+        </div>
+        <ol class="meth-flow" aria-label="How a change becomes a total impact">
+          <li>
+            <p class="meth-flow__k">National accounts</p>
+            <p class="meth-flow__b">The benchmark industry-to-industry relationships.</p>
+          </li>
+          <li>
+            <p class="meth-flow__k">Your region</p>
+            <p class="meth-flow__b">Regionalized with local data, location quotients and RAS.</p>
+          </li>
+          <li>
+            <p class="meth-flow__k">Direct effects</p>
+            <p class="meth-flow__b">The analyzed activity itself: spending, wages, jobs.</p>
+          </li>
+          <li>
+            <p class="meth-flow__k">Indirect effects</p>
+            <p class="meth-flow__b">The suppliers it buys from, and their suppliers.</p>
+          </li>
+          <li>
+            <p class="meth-flow__k">Induced effects</p>
+            <p class="meth-flow__b">Workers spending their earnings back into the region.</p>
+          </li>
+          <li>
+            <p class="meth-flow__k">Total impact</p>
+            <p class="meth-flow__b">Reported layer by layer, with a lineage behind every figure.</p>
+          </li>
+        </ol>
+        <div class="meth-cols">
+          <div class="meth-prose">
+            <p>
+              Every result separates the three layers of activity. Direct effects are the
+              project&rsquo;s own spending, wages and jobs. Indirect effects happen at the suppliers
+              the project buys from. Induced effects come from workers spending their earnings
+              locally. The layers are always shown separately, so a reviewer can see how the total
+              is composed rather than taking one number on faith.
+            </p>
+            <p>
+              Induced effects come from a social accounting matrix formulation. The input-output
+              table is extended with a household account that receives labor income and spends it
+              back into the region, and a government account that collects taxes and returns them as
+              procurement and transfers. Household income includes transfer income, which matters in
+              regions where transfers are a large share of income, including many reservation
+              economies. Local spending propensities govern how much of each household dollar
+              recirculates in the region rather than leaking out, so induced effects stay tied to
+              the region&rsquo;s real spending patterns.
+            </p>
+          </div>
+          <div class="meth-eqs">
+            <figure class="eqobj">
+              <figcaption class="eqobj__k">Eq. 06 &middot; Multipliers</figcaption>
+              <div
+                class="eq"
+                role="math"
+                aria-label="The Type 1 multiplier equals direct plus indirect effects, divided by direct effects. The Type 2 multiplier equals direct plus indirect plus induced effects, divided by direct effects."
+              >
+                <span class="eq-line" aria-hidden="true"
+                  >Type I = <span class="eq-frac"
+                    ><span>direct + indirect</span><span>direct</span></span
+                  ></span
+                >
+                <span class="eq-line" aria-hidden="true"
+                  >Type II ={' '}
+                  <span class="eq-frac"
+                    ><span>direct + indirect + induced</span><span>direct</span></span
+                  ></span
+                >
+              </div>
+              <p class="eqobj__c">
+                Lumecon reports the layers themselves rather than leading with a single multiplier,
+                and validation flags any multiplier outside the ranges credible for an economy of
+                the region&rsquo;s size.
+              </p>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>Direct, indirect and induced effects</h2>
-  <p>
-    Every result separates the three layers of activity. Direct effects are the project's own
-    spending, wages and jobs. Indirect effects happen at the suppliers the project buys from.
-    Induced effects come from workers spending their earnings locally. The layers are always shown
-    separately, so a reviewer can see how the total is composed rather than taking one number on
-    faith.
-  </p>
-  <p>The multipliers used across the field summarize the same decomposition:</p>
-  <div
-    class="eq"
-    role="math"
-    aria-label="The Type 1 multiplier equals direct plus indirect effects, divided by direct effects. The Type 2 multiplier equals direct plus indirect plus induced effects, divided by direct effects."
-  >
-    <span class="eq-line" aria-hidden="true"
-      >Type I = <span class="eq-frac"><span>direct + indirect</span><span>direct</span></span></span
-    >
-    <span class="eq-line" aria-hidden="true"
-      >Type II ={' '}
-      <span class="eq-frac"><span>direct + indirect + induced</span><span>direct</span></span></span
-    >
-  </div>
-  <p>
-    Lumecon reports the layers themselves rather than leading with a single multiplier, and
-    validation checks flag any multiplier outside the ranges credible for an economy of the
-    region&rsquo;s size.
-  </p>
+    <!-- 04 · Geographies -->
+    <section class="meth-sec" aria-labelledby="m-geo">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">04</span>
+          <h2 id="m-geo">Geographies that follow the real economy</h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              Analyses run at the county, state and national level, and reservations and trust lands
+              are treated as first-class regions rather than approximations. Where an analysis
+              covers both a state and homelands, the two scopes are reported side by side with the
+              subset relationship stated explicitly, so nothing is double-counted.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              Reservation and trust-land regions are constructed from the federal boundary files for
+              American Indian and Alaska Native areas and from the employment, industry and
+              demographic data located within those boundaries. They are modeled geographies with
+              their own regional characteristics, and results for a reservation are estimated for
+              that region itself. We use homelands as the plain-language umbrella term for
+              reservation and trust-land geographies. Tribal government analysis is an active area
+              of methodological work for us, and this page will grow as that work does.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>The household and government accounts</h2>
-  <p>
-    Induced effects come from a social accounting matrix formulation. The input-output table is
-    extended with a household account that receives labor income and spends it back into the region,
-    and a government account that collects taxes and returns them as procurement and transfers.
-    Household income includes transfer income, which matters in regions where transfers are a large
-    share of income, including many reservation economies. Local spending propensities govern how
-    much of each household dollar recirculates in the region rather than leaking out, so induced
-    effects stay tied to the region&rsquo;s real spending patterns.
-  </p>
+    <!-- 05 · The data manifest -->
+    <section class="meth-sec" aria-labelledby="m-data">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">05</span>
+          <h2 id="m-data">The data behind every analysis</h2>
+        </div>
+        <p class="meth-sec__lede">
+          Lumecon is built from authoritative public datasets widely used in economic and regional
+          analysis. Benchmark sources set the model&rsquo;s structure; higher-frequency sources keep
+          its levels current; every source is citable.
+        </p>
+        <ul class="meth-manifest">
+          {
+            SOURCES.map((s) => (
+              <li class="meth-manifest__row">
+                <span class="meth-manifest__name">{s.name}</span>
+                <span class="meth-manifest__what">{s.what}</span>
+                <span
+                  class={`meth-manifest__role${s.role === 'Higher-frequency' ? ' meth-manifest__role--hf' : ''}`}
+                >
+                  {s.role}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="meth-twoprose meth-twoprose--tight">
+          <div class="meth-prose">
+            <h3>Data vintages</h3>
+            <p>
+              Every analysis states the data year it runs against, and that year is shown with the
+              results (for example, 2025 data). Historical analyses run from 2015 to present where
+              the underlying data support it. Where source datasets carry different vintages, the
+              analysis uses the most recent vintage available for each source at the stated data
+              year.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <h3>Between benchmarks</h3>
+            <p>
+              The benchmark input-output tables update on the schedule of the agencies that publish
+              them. Between benchmarks, higher-frequency public series for employment, wages and
+              prices update the levels the model scales against, where the data support it. The
+              structural relationships between industries remain tied to the benchmark tables, so
+              the proven core stays intact while the levels stay current.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>Suppressed and small-area data</h2>
-  <p>
-    Federal disclosure rules withhold some county-sector figures so individual employers cannot be
-    identified. Where a suppressed sector clearly exists in the region, its employment is estimated
-    from wider employment-per-establishment patterns, and wages fall back through a stated hierarchy
-    of sources. Every figure carries a source tag (reported, apportioned or estimated) so a reviewer
-    can see exactly which numbers came straight from the data and which were estimated.
-  </p>
+    <!-- 06 · Built to evolve -->
+    <section class="meth-sec" aria-labelledby="m-evolve">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">06</span>
+          <h2 id="m-evolve">
+            Built on decades of economic science. <span class="brand-em">Not frozen in it.</span>
+          </h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              Economic modeling is a living discipline. The input-output foundation is shared across
+              the field and carries nearly a century of research; no one owns it, and it does not
+              need reinventing. What can keep improving is everything around it: the data the model
+              draws on, how national relationships are regionalized, how estimates are made for
+              small and suppressed geographies, how results are validated and how the work is
+              documented.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              So we continually evaluate better public data sources, improve how we model different
+              geographies and economies, incorporate higher-frequency signals where they add
+              information and use modern computing to process data that once took enormous manual
+              effort. A model should not stop evolving because it works. <span class="brand-em"
+                >We invest in the model, not just the software around it.</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>Geographies that follow the real economy</h2>
-  <p>
-    Analyses run at the county, state and national level, and reservations and trust lands are
-    treated as first-class regions rather than approximations. Where an analysis covers both a state
-    and homelands, the two scopes are reported side by side with the subset relationship stated
-    explicitly, so nothing is double-counted.
-  </p>
+    <!-- 07 · AI's role -->
+    <section class="meth-sec" aria-labelledby="m-ai">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">07</span>
+          <h2 id="m-ai">
+            AI in the workflow. <span class="brand-em">Economists in the loop.</span>
+          </h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              Lumecon uses AI where it makes the work better and faster: reading documents,
+              structuring inputs, harmonizing and classifying data, drafting documentation and
+              helping interpret results. Cedar carries that work inside the product, and it surfaces
+              the assumptions it makes and flags gaps it cannot resolve.
+            </p>
+            <p>
+              AI does not set economic assumptions. The model&rsquo;s relationships, regionalization
+              choices and estimation methods are economically grounded, documented and reviewed by
+              trained economists, and the person running an analysis confirms the assumptions before
+              results are finalized. <span class="brand-em">Economic judgment stays human.</span>
+            </p>
+          </div>
+          <div class="meth-prose">
+            <h3>Validation and human review</h3>
+            <p>
+              The software checks that tables cross-foot, that scopes nest correctly and that inputs
+              fall in plausible ranges. Estimated inputs and model outputs are checked against
+              plausibility bounds, including multiplier ranges credible for a small regional
+              economy, and a run that fails a critical check stops rather than shipping a doubtful
+              number. Automation carries the mechanical work, and people remain responsible for the
+              analytical decisions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>Reservations and trust lands as modeled geographies</h2>
-  <p>
-    Reservation and trust-land regions are constructed from the federal boundary files for American
-    Indian and Alaska Native areas and from the employment, industry and demographic data located
-    within those boundaries. They are modeled geographies with their own regional characteristics,
-    and results for a reservation are estimated for that region itself. In this branded context we
-    use homelands as the plain-language umbrella term for reservation and trust-land geographies.
-    Tribal government analysis is an active area of methodological work for us, and this page will
-    grow as that work does.
-  </p>
+    <!-- 08 · Lineage -->
+    <section class="meth-sec" aria-labelledby="m-lineage">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">08</span>
+          <h2 id="m-lineage">Every number has a lineage</h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              Each headline figure carries a trace: which effect layer it comes from, which
+              operations generate it and which industries it lands in, each with its share. The same
+              traceability runs through the inputs, where every figure carries its source tag
+              (reported, apportioned or estimated).
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              Exports carry the source references, the assumptions, the model inputs and the full
+              set of tables behind each figure, so the person defending the number in a council
+              meeting, a boardroom or a grant review holds the same detail the model used.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <h2>What the headline measures mean</h2>
-  <p>
-    Jobs supported counts the jobs supported by the analyzed activity over the analysis period; it
-    is a job count, and where a conversion basis matters the analysis states it. Labor income is
-    wages, salaries and benefits. GDP contribution is the analysis&rsquo;s value added, the measure
-    that corresponds to a region&rsquo;s contribution to GDP. Economic output is the total value of
-    production the activity supports, which includes value added plus intermediate purchases. Tax
-    impacts are estimates of the revenue the activity supports, reported by level of government:
-    federal, state and local, and tribal government where the analysis includes one.
-  </p>
+    <!-- 09 · Measures -->
+    <section class="meth-sec" aria-labelledby="m-measures">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">09</span>
+          <h2 id="m-measures">What the headline measures mean</h2>
+        </div>
+        <dl class="meth-defs">
+          {
+            MEASURES.map((m) => (
+              <div class="meth-defs__row">
+                <dt>{m.term}</dt>
+                <dd set:html={m.def} />
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
 
-  <h2>Data vintages</h2>
-  <p>
-    Every analysis states the data year it runs against, and that year is shown with the results
-    (for example, 2025 data). Historical analyses run from 2015 to present where the underlying data
-    support it. Where source datasets carry different vintages, the analysis uses the most recent
-    vintage available for each source at the stated data year.
-  </p>
+    <!-- 10 · Comparison -->
+    <section class="meth-sec" aria-labelledby="m-compare">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">10</span>
+          <h2 id="m-compare">How Lumecon compares</h2>
+        </div>
+        <div class="meth-prose meth-prose--measure">
+          <p>
+            Lumecon shares its analytical foundation with the established tools in the field. IMPLAN
+            and RIMS II are built on the same input-output framework and the same federal
+            statistical system; REMI adds dynamic forecasting models on top of that framework.
+            Lumecon&rsquo;s differences are in construction and delivery: a fully public, citable
+            data foundation; household and government accounts for induced and tax-and-spend
+            effects; a per-figure lineage with source tags; reservations and trust lands as modeled
+            geographies; and one flat subscription covering every supported geography. Lumecon is
+            not affiliated with or endorsed by IMPLAN, REMI or any other platform named here.
+          </p>
+        </div>
+      </div>
+    </section>
 
-  <h2>Higher-frequency adjustments</h2>
-  <p>
-    The benchmark input-output tables update on the schedule of the agencies that publish them.
-    Between benchmarks, higher-frequency public series for employment, wages and prices update the
-    levels the model scales against, where the data support it. The structural relationships between
-    industries remain tied to the benchmark tables, so the proven core stays intact while the levels
-    stay current.
-  </p>
+    <!-- Mission close + estimates disclaimer -->
+    <section class="meth-mission" aria-labelledby="m-mission">
+      <div class="meth-w">
+        <h2 class="meth-mission__title" id="m-mission">
+          Every organization has an economic impact. <span class="brand-em"
+            >Every organization should be able to see it.</span
+          >
+        </h2>
+        <p class="meth-mission__lede">
+          Better economic modeling should not be reserved for organizations that can afford a
+          consulting engagement or geography-by-geography licensing. Businesses, governments,
+          universities, nonprofits and Tribal Nations all create value in the places around them.
+          Our job is to make that impact visible.
+        </p>
+        <div class="meth-mission__cta">
+          <a class="btn2 btn2--primary" href="/pricing">
+            See pricing <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn2 btn2--card" href="/signup">
+            Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+        <p class="meth-mission__fine">
+          Lumecon results are decision-support estimates. They describe likely economic
+          relationships given the data and assumptions stated in each analysis, and they are labeled
+          as estimates everywhere they appear. See the <a href="/glossary">glossary</a> for the terms
+          used across analyses, and write to{' '}
+          <a href="mailto:contact@lumecon.ai">contact@lumecon.ai</a> with methodology questions.
+        </p>
+      </div>
+    </section>
 
-  <h2>Every number has a lineage</h2>
-  <p>
-    Each headline figure carries a trace: which effect layer it comes from, which operations
-    generate it and which industries it lands in, each with its share. Exports include the full set
-    of tables and the assumptions behind them, so the person defending the number in a council
-    meeting, a boardroom or a grant review holds the same detail the model used.
-  </p>
-
-  <h2>Validation and human review</h2>
-  <p>
-    The software checks that tables cross-foot, that scopes nest correctly and that inputs fall in
-    plausible ranges. Estimated inputs and model outputs are checked against plausibility bounds,
-    including multiplier ranges credible for a small regional economy, and a run that fails a
-    critical check stops rather than shipping a doubtful number. Cedar surfaces the assumptions it
-    makes when structuring inputs and flags gaps it cannot resolve. The person running the analysis
-    reviews and confirms those assumptions before results are finalized: automation carries the
-    mechanical work, and people remain responsible for the analytical decisions.
-  </p>
-
-  <h2>How Lumecon compares</h2>
-  <p>
-    Lumecon shares its analytical foundation with the established tools in the field. IMPLAN and
-    RIMS II are built on the same input-output framework and the same federal statistical system;
-    REMI adds dynamic forecasting models on top of that framework. Lumecon&rsquo;s differences are
-    in construction and delivery: a fully public, citable data foundation; household and government
-    accounts for induced and tax-and-spend effects; a per-figure lineage with source tags;
-    reservations and trust lands as modeled geographies; and one flat subscription covering every
-    supported geography. Lumecon is not affiliated with or endorsed by IMPLAN, REMI or any other
-    platform named here.
-  </p>
-
-  <h2>What these figures are</h2>
-  <p>
-    Lumecon results are decision-support estimates. They describe likely economic relationships
-    given the data and assumptions stated in each analysis; they are estimates, and they are labeled
-    as such everywhere they appear. See the <a href="/glossary">glossary</a> for the terms used across
-    analyses, and write to <a href="mailto:contact@lumecon.ai">contact@lumecon.ai</a> with methodology
-    questions.
-  </p>
-
-  <h2>Common questions</h2>
-  {
-    FAQ.map((item) => (
-      <>
-        <h3 class="legal-subhead">{item.q}</h3>
-        <p>{item.a}</p>
-      </>
-    ))
-  }
-</LegalLayout>
+    <!-- FAQ -->
+    <section class="meth-sec meth-faq" aria-labelledby="m-faq">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">11</span>
+          <h2 id="m-faq">Common questions</h2>
+        </div>
+        <div class="meth-faq__list">
+          {
+            FAQ.map((item) => (
+              <div class="meth-faq__row">
+                <h3>{item.q}</h3>
+                <p>{item.a}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer isHome={false} />
+</BaseLayout>
