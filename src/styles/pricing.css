@@ -227,15 +227,45 @@
   margin: 0;
   text-align: center;
 }
-/* The pricing creed under the table: a single set line, not a card. */
-.pr-plans__creed {
-  margin: 0.2rem 0 0;
+/* The pricing creed under the table: the philosophy, set large,
+   with the three concrete "no"s underneath. Not a card. */
+.pr-creed {
+  margin: 1.2rem auto 0.4rem;
+  max-width: 780px;
   text-align: center;
+  display: grid;
+  gap: 0.7rem;
+}
+.pr-plans__creed {
+  margin: 0;
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--navy);
+}
+.pr-creed__trio {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.pr-offer__guarantee {
+  margin: 0.9rem 0 0;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--accent-text);
+}
+.pr-duo__creed {
+  margin: 0.4rem 0 0;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--rule);
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  max-width: 44rem;
 }
 
 /* ---------- commitment policies ---------- */
@@ -264,16 +294,6 @@
   color: var(--ink-2);
   margin: 0;
   max-width: 34rem;
-}
-.pr-commit__creed {
-  margin: 1.8rem 0 0;
-  padding-top: 1.4rem;
-  border-top: 1px solid var(--rule);
-  font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--navy);
-  max-width: 44rem;
 }
 @media (max-width: 760px) {
   .pr-commit__cols {
@@ -355,57 +375,6 @@
   color: var(--ink-3);
   margin: 0;
   max-width: 78ch;
-}
-
-/* ---------- why strip ---------- */
-.pr-why {
-  border-top: 1px solid var(--rule);
-  padding: clamp(2rem, 5vh, 3.2rem) var(--container-pad);
-}
-.pr-why__grid {
-  list-style: none;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.4rem;
-}
-.pr-why__grid li {
-  display: grid;
-  gap: 0.25rem;
-  align-content: start;
-}
-.pr-why__grid li + li {
-  border-left: 1px solid var(--rule);
-  padding-left: 1.4rem;
-}
-.pr-why__t {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  margin: 0;
-}
-.pr-why__b {
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: var(--ink-3);
-  margin: 0;
-}
-@media (max-width: 880px) {
-  .pr-why__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .pr-why__grid li + li {
-    border-left: none;
-    padding-left: 0;
-  }
-  .pr-why__grid li:nth-child(even) {
-    border-left: 1px solid var(--rule);
-    padding-left: 1.4rem;
-  }
 }
 
 /* ---------- Team Workspace / Cedar Grove duo ---------- */

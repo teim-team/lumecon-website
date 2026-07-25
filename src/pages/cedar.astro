@@ -1,0 +1,450 @@
+---
+/**
+ * /cedar — the Cedar product page. This page owns the AI story so
+ * the homepage, pricing and methodology stop re-explaining it. One
+ * argument: Cedar was designed into the economic-analysis workflow
+ * from the beginning, and Lumecon's implementation is different
+ * because the model, data, software and AI are developed together.
+ *
+ * Visuals: real product captures (the Cedar panel over live results)
+ * plus three thin-line SVG diagrams in the site's linework style.
+ * No vendor logos, no chat-bubble clichés.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import MarkArt from '../components/MarkArt.astro';
+import { site } from '../config';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
+import '../styles/cedar-page.css';
+
+const description =
+  'Cedar is Lumecon&rsquo;s AI economic analyst, designed into the workflow from the beginning: reading source documents, structuring model-ready inputs, surfacing gaps, supporting interpretation and helping communicate findings. AI in the workflow, economists in the loop.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Cedar | Lumecon',
+    url: 'https://lumecon.ai/cedar',
+    description,
+    isPartOf: { '@id': `${site.url}#website` },
+    publisher: { '@id': `${site.url}#org` },
+    inLanguage: 'en-US',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Cedar', item: 'https://lumecon.ai/cedar' },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Cedar, the AI economic analyst | Lumecon"
+  description={description}
+  canonical="https://lumecon.ai/cedar"
+  keywords="Cedar AI, AI economic analyst, AI economic impact analysis, AI for economic modeling, document ingestion economic analysis, AI assisted input-output modeling, economic analysis AI assistant, Lumecon Cedar"
+  jsonLd={jsonLd}
+>
+  <Nav isHome={false} />
+  <main class="meth cedarpg" id="top" tabindex="-1">
+    <!-- Hero -->
+    <header class="meth-hero">
+      <MarkArt class="markart markart--tr" size={620} />
+      <div class="meth-w">
+        <p class="h-kicker">Cedar</p>
+        <h1 class="meth-hero__title">
+          AI built for economic analysis, <span class="brand-em">from the beginning.</span>
+        </h1>
+        <p class="meth-hero__lede">
+          Cedar is Lumecon&rsquo;s AI economic analyst. It works across intake, analysis,
+          interpretation and reporting, helping turn organizational knowledge and source documents
+          into usable economic analysis. <span class="brand-em"
+            >Not a chatbot added to old software. Part of how Lumecon works.</span
+          >
+        </p>
+        <div class="cedarpg-cta">
+          <a class="btn2 btn2--primary" href="/signup">
+            Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+        <figure class="cedar-shot cedarpg-shot">
+          <picture>
+            <source srcset="/app/cedar-dark.webp" media="(prefers-color-scheme: dark)" />
+            <img
+              src="/app/cedar.webp"
+              alt="The Cedar panel open over a Lumecon results page, writing a board-ready summary of jobs, output, GDP contribution, labor income and tax impacts."
+              width="1600"
+              height="1000"
+              decoding="async"
+            />
+          </picture>
+          <figcaption>Cedar working inside a live analysis, shown with sample data.</figcaption>
+        </figure>
+      </div>
+    </header>
+
+    <!-- 01 · Not a chatbot -->
+    <section class="meth-sec" aria-labelledby="c-arch">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">01</span>
+          <h2 id="c-arch">AI shouldn&rsquo;t sit on top of the model.</h2>
+        </div>
+        <div class="meth-cols">
+          <div class="meth-prose">
+            <p>
+              The common pattern bolts an assistant onto finished software: the data goes in, the
+              model runs, the results come out, and a chatbot answers questions about them
+              afterward. Cedar participates throughout the workflow instead: reading source
+              material, structuring inputs, surfacing gaps, supporting interpretation and helping
+              communicate findings.
+            </p>
+          </div>
+          <div class="cedarpg-fig">
+            <figure
+              class="cedarpg-diagram"
+              aria-label="Two architectures compared. The legacy pattern: data flows to model to results, with a chatbot attached only to results. Lumecon: Cedar connects to every stage, from data to model to results to reporting."
+            >
+              <p class="cedarpg-diagram__k" aria-hidden="true">The legacy pattern</p>
+              <svg viewBox="0 0 520 96" aria-hidden="true">
+                <g class="dg-box">
+                  <rect x="8" y="10" width="110" height="34" rx="4"></rect>
+                  <rect x="205" y="10" width="110" height="34" rx="4"></rect>
+                  <rect x="402" y="10" width="110" height="34" rx="4"></rect>
+                  <rect x="402" y="66" width="110" height="26" rx="4" class="dg-box--dash"></rect>
+                </g>
+                <g class="dg-label">
+                  <text x="63" y="31">DATA</text>
+                  <text x="260" y="31">MODEL</text>
+                  <text x="457" y="31">RESULTS</text>
+                  <text x="457" y="83" class="dg-label--muted">CHATBOT</text>
+                </g>
+                <g class="dg-line">
+                  <path d="M118 27h80m-8-4 8 4-8 4"></path>
+                  <path d="M315 27h80m-8-4 8 4-8 4"></path>
+                  <path d="M457 44v22" class="dg-line--dash"></path>
+                </g>
+              </svg>
+              <p class="cedarpg-diagram__k" aria-hidden="true">Lumecon</p>
+              <svg viewBox="0 0 520 132" aria-hidden="true">
+                <g class="dg-box">
+                  <rect x="205" y="8" width="110" height="34" rx="4" class="dg-box--cedar"></rect>
+                  <rect x="8" y="88" width="110" height="34" rx="4"></rect>
+                  <rect x="140" y="88" width="110" height="34" rx="4"></rect>
+                  <rect x="272" y="88" width="110" height="34" rx="4"></rect>
+                  <rect x="404" y="88" width="110" height="34" rx="4"></rect>
+                </g>
+                <g class="dg-label">
+                  <text x="260" y="29" class="dg-label--cedar">CEDAR</text>
+                  <text x="63" y="109">DATA</text>
+                  <text x="195" y="109">MODEL</text>
+                  <text x="327" y="109">RESULTS</text>
+                  <text x="459" y="109">REPORTING</text>
+                </g>
+                <g class="dg-line">
+                  <path d="M118 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
+                  <path d="M250 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
+                  <path d="M382 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
+                  <path d="M230 42 74 86" class="dg-line--cedar"></path>
+                  <path d="M252 42l-52 44" class="dg-line--cedar"></path>
+                  <path d="M268 42l52 44" class="dg-line--cedar"></path>
+                  <path d="M290 42l156 44" class="dg-line--cedar"></path>
+                </g>
+              </svg>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Document ingestion -->
+    <section class="meth-sec" aria-labelledby="c-ingest">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">02</span>
+          <h2 id="c-ingest">Bring the work you already have.</h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              <span class="brand-em">Your existing work becomes context, not baggage.</span> Upload supported
+              PDFs, spreadsheets, CSVs, prior studies and recurring organizational materials. Cedar helps
+              identify the relevant information and map it into the analysis workflow, and it flags the
+              gaps it cannot resolve rather than papering over them.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              Moving from another platform? Prior studies and reporting examples help Cedar
+              understand how your organization already works: the terminology you use, the
+              geographies you care about and the format your reporting takes.
+            </p>
+          </div>
+        </div>
+        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
+          <picture>
+            <source srcset="/app/cedar-intake-dark.webp" media="(prefers-color-scheme: dark)" />
+            <img
+              src="/app/cedar-intake.webp"
+              alt="The Cedar panel reporting on three uploaded documents: a budget book with 14 program line items mapped to model operations, a payroll workbook with wages and benefits separated, a prior impact study used as context, and two flagged gaps to resolve before the analysis runs."
+              width="1600"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+          <figcaption>
+            Cedar reporting on three uploaded documents: what it mapped, what it used as context and
+            the gaps it flagged for review. Shown with sample data.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 03 · Organizational context -->
+    <section class="meth-sec" aria-labelledby="c-org">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">03</span>
+          <h2 id="c-org">One Cedar. Your organization.</h2>
+        </div>
+        <div class="meth-cols">
+          <div class="meth-prose">
+            <p>
+              Cedar can carry approved organizational context across projects, helping teams build
+              on prior work rather than starting from zero each time. For larger organizations,
+              Cedar can be calibrated around terminology, recurring workflows, analytical
+              conventions and reporting preferences, and Cedar Grove on the Tree plan gives that
+              context a durable home.
+            </p>
+          </div>
+          <div class="cedarpg-fig">
+            <figure
+              class="cedarpg-diagram"
+              aria-label="Diagram: the organization informs Cedar, and Cedar carries that context into project A, project B and project C."
+            >
+              <svg viewBox="0 0 520 190" aria-hidden="true">
+                <g class="dg-box">
+                  <rect x="185" y="8" width="150" height="34" rx="4"></rect>
+                  <rect x="205" y="78" width="110" height="34" rx="4" class="dg-box--cedar"></rect>
+                  <rect x="24" y="148" width="130" height="34" rx="4"></rect>
+                  <rect x="195" y="148" width="130" height="34" rx="4"></rect>
+                  <rect x="366" y="148" width="130" height="34" rx="4"></rect>
+                </g>
+                <g class="dg-label">
+                  <text x="260" y="29">ORGANIZATION</text>
+                  <text x="260" y="99" class="dg-label--cedar">CEDAR</text>
+                  <text x="89" y="169">PROJECT A</text>
+                  <text x="260" y="169">PROJECT B</text>
+                  <text x="431" y="169">PROJECT C</text>
+                </g>
+                <g class="dg-line">
+                  <path d="M260 42v36m-4-8 4 8 4-8"></path>
+                  <path d="M238 112 105 146" class="dg-line--cedar"></path>
+                  <path d="M260 112v34" class="dg-line--cedar"></path>
+                  <path d="M282 112l133 34" class="dg-line--cedar"></path>
+                </g>
+              </svg>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · Thought partner -->
+    <section class="meth-sec" aria-labelledby="c-partner">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">04</span>
+          <h2 id="c-partner">Thought partner, not autopilot.</h2>
+        </div>
+        <div class="meth-cols">
+          <div class="meth-prose">
+            <p>
+              Cedar can suggest, question, organize, explain and draft. It can help an analyst
+              explain the same finding differently for a board, a policymaker, a tribal council, a
+              grantmaker or an executive. It does not remove the analyst from the work: Cedar
+              surfaces the assumptions it makes, and the person running the analysis confirms them
+              before results are finalized. <span class="brand-em"
+                >AI in the workflow. Economists in the loop.</span
+              >
+            </p>
+          </div>
+          <figure class="cedar-shot cedarpg-shot">
+            <picture>
+              <source srcset="/app/cedar-dark.webp" media="(prefers-color-scheme: dark)" />
+              <img
+                src="/app/cedar.webp"
+                alt="Cedar answering a request to explain analysis results in plain language for a board, with a summary of jobs, output, GDP contribution, labor income and tax impacts."
+                width="1600"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <figcaption>
+              Cedar turning a finished analysis into board-ready language, shown with sample data.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 · Built differently -->
+    <section class="meth-sec" aria-labelledby="c-built">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">05</span>
+          <h2 id="c-built">Economics isn&rsquo;t handed to engineering after the fact.</h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              Lumecon is developed collaboratively across economics, social science, data science
+              and software engineering. Modeling decisions shape the software. New data changes what
+              can be estimated. Software and AI make new analytical workflows possible.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              That is why Cedar behaves like part of the analysis rather than a layer over it:
+              <span class="brand-em"
+                >the model, data infrastructure, software and AI evolve together.</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · Better models, not just easier software -->
+    <section class="meth-sec" aria-labelledby="c-better">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">06</span>
+          <h2 id="c-better">
+            AI shouldn&rsquo;t just make the software easier. It should help us build better models.
+          </h2>
+        </div>
+        <div class="meth-cols">
+          <div class="meth-prose">
+            <p>
+              Modern AI makes larger and more varied datasets practical to process, harmonize,
+              classify and validate. That helps Lumecon expand the evidence available to the model,
+              including alternative and higher-frequency sources where they improve the analysis.
+              The economics of the model stay grounded in the <a
+                class="gloss-link"
+                href="/methodology">documented methodology</a
+              >; what grows is the evidence behind it.
+            </p>
+          </div>
+          <div class="cedarpg-fig">
+            <figure
+              class="cedarpg-diagram"
+              aria-label="Diagram: better tools lead to more usable data, which leads to better modeling, which leads to better analysis."
+            >
+              <svg viewBox="0 0 520 150" aria-hidden="true">
+                <g class="dg-box">
+                  <rect x="8" y="14" width="236" height="40" rx="4"></rect>
+                  <rect x="276" y="14" width="236" height="40" rx="4"></rect>
+                  <rect x="8" y="96" width="236" height="40" rx="4"></rect>
+                  <rect x="276" y="96" width="236" height="40" rx="4"></rect>
+                </g>
+                <g class="dg-label">
+                  <text x="126" y="38">BETTER TOOLS</text>
+                  <text x="394" y="38">MORE USABLE DATA</text>
+                  <text x="394" y="120">BETTER MODELING</text>
+                  <text x="126" y="120">BETTER ANALYSIS</text>
+                </g>
+                <g class="dg-line">
+                  <path d="M244 34h24m-7-4 7 4-7 4"></path>
+                  <path d="M394 54v34m-4-8 4 8 4-8"></path>
+                  <path d="M276 116h-24m7-4-7 4 7 4"></path>
+                </g>
+              </svg>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 · Privacy and learning -->
+    <section class="meth-sec" aria-labelledby="c-privacy">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">07</span>
+          <h2 id="c-privacy">Your work stays yours. The system can still improve.</h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              Customer proprietary source material is not made available to other organizations.
+              Improvements to Lumecon&rsquo;s processing and modeling can be informed by aggregated
+              or appropriately processed information without exposing another customer&rsquo;s
+              underlying data.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              You benefit from a platform that keeps learning without sharing another
+              organization&rsquo;s proprietary work. The <a class="gloss-link" href="/privacy"
+                >privacy policy</a
+              > governs the details.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 · Model providers -->
+    <section class="meth-sec" aria-labelledby="c-providers">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <span class="meth-sec__num" aria-hidden="true">08</span>
+          <h2 id="c-providers">Built to use the best tools available.</h2>
+        </div>
+        <div class="meth-prose meth-prose--measure">
+          <p>
+            Cedar&rsquo;s architecture is designed to take advantage of leading AI capabilities as
+            the field improves, rather than tying Lumecon&rsquo;s product to a single model
+            generation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Close -->
+    <section class="meth-mission" aria-labelledby="c-close">
+      <div class="meth-w">
+        <h2 class="meth-mission__title" id="c-close">
+          Cedar isn&rsquo;t finished. <span class="brand-em"
+            >Neither are the data, models or methods.</span
+          >
+        </h2>
+        <p class="meth-mission__lede">
+          We are continually expanding the formats Cedar can understand, the workflows it can
+          support, the context it can use and the ways modern data can strengthen economic analysis.
+          The model should improve as the evidence improves. So should the software around it.
+        </p>
+        <div class="meth-mission__cta">
+          <a class="btn2 btn2--primary" href="/signup">
+            Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn2 btn2--card" href="/methodology">
+            Read the methodology <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer isHome={false} />
+</BaseLayout>

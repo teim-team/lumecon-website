@@ -5,54 +5,21 @@
  * into one integrated result, with the real scope-tab screenshot
  * (statewide and homelands side by side) underneath.
  */
-import MarkArt from './MarkArt.astro';
 import '../styles/home.css';
 ---
 
 <section class="flowsec" id="whole-nation" aria-labelledby="wn-title">
   <div class="flowsec-inner">
     <header class="flowsec-head">
-      <p class="h-kicker">For Tribal Nations: Whole Nation analysis</p>
+      <p class="h-kicker">For Tribal Nations</p>
       <h2 class="flowsec-title" id="wn-title">See the whole Nation, not just one enterprise.</h2>
       <p class="flowsec-lede">
-        Tribal government, tribal enterprise and Whole Nation analysis are part of Lumecon&rsquo;s
-        core architecture, included in every plan. Whole Nation analysis brings government and
-        enterprises together in one integrated analysis, a more complete picture of a Nation&rsquo;s
-        economic footprint than studying each piece on its own.
+        Model tribal government and enterprises together in one integrated analysis, with statewide
+        and homelands results available side by side. Whole Nation analysis is part of
+        Lumecon&rsquo;s core architecture and available across standard plans.{' '}
+        <a class="inline-link" href="/methodology">Learn about Tribal analysis</a>.
       </p>
     </header>
-
-    <div class="wn-flow">
-      <div class="wn-parts">
-        <div class="wn-part">
-          <span class="wn-part__t">Tribal government</span>
-          <span class="wn-part__s"
-            >Departments, programs, employment and public-sector activity</span
-          >
-        </div>
-        <div class="wn-part">
-          <span class="wn-part__t">Tribal enterprises</span>
-          <span class="wn-part__s">One enterprise or the whole portfolio</span>
-        </div>
-        <div class="wn-part">
-          <span class="wn-part__t">Other Nation economic activity</span>
-          <span class="wn-part__s"
-            >Additional Nation-controlled programs, entities or operations included in the analysis
-            scope</span
-          >
-        </div>
-      </div>
-      <div class="wn-join" aria-hidden="true">&rarr;</div>
-      <div class="wn-result">
-        <MarkArt class="markart markart--card" size={280} />
-        <p class="wn-result__k">One integrated analysis</p>
-        <h3 class="wn-result__t">Whole Nation economic impact</h3>
-        <p class="wn-result__b">
-          Jobs, labor income, GDP contribution, economic output and tax impacts for the combined
-          footprint, with statewide and homelands scopes side by side.
-        </p>
-      </div>
-    </div>
 
     <figure class="wn-shot">
       <picture>

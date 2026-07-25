@@ -25,7 +25,7 @@ Prices include taxes and fees. Multi-year agreements are eligible for preferred 
 
 ## Cedar
 
-Cedar is Lumecon's AI economic analyst, included in every plan. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records); Cedar interprets the material, maps it into the model, assists with setup and interpretation, and helps turn results into board-ready reporting. Cedar Grove (Tree plan) is the data library: it comes stocked with the clean, harmonized datasets behind the Lumecon model, and organizations augment it with their own administrative data, recurring datasets and prior analyses to extend what future analyses can draw on.
+Cedar is Lumecon's AI economic analyst, included in every plan and designed into the workflow from the beginning rather than added as a chat layer. It works across intake, analysis, interpretation and reporting: upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records, prior studies); Cedar identifies the relevant information, maps it into the model, flags gaps for review, assists with interpretation and helps turn results into board-ready reporting. AI assists inside the workflow; economists remain responsible for assumptions, methods and validation. Full detail at https://lumecon.ai/cedar. Cedar Grove (Tree plan) is the organizational data library: Lumecon's analysis-ready datasets combined with approved internal data and reusable organizational context.
 
 ## Methodology
 
@@ -71,6 +71,7 @@ Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researche
 ## Optional
 
 - [Pricing](https://lumecon.ai/pricing/)
+- [Cedar](https://lumecon.ai/cedar/)
 - [Methodology](https://lumecon.ai/methodology/)
 - [Glossary](https://lumecon.ai/glossary/)
 - [Privacy policy](https://lumecon.ai/privacy/)
