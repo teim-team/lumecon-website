@@ -157,16 +157,3 @@ User-facing word choices, everywhere a customer reads:
 
 The full reconciliation tracker lives in
 docs/reconciliation-roadmap.md.
-
-## Vocabulary standard (2026-07, both repos)
-
-Mirror of the standard in lumecon-website/AGENTS.md: user-facing
-copy says "analysis/analyses" (project is the backend object, study
-is reserved for formal deliverables); "organization" over
-"organization or nation" except where the distinction matters;
-Account/Organization/Workspace/Analysis/Run have fixed meanings;
-"Cedar" never "AI assistant"; "GDP contribution" for value added;
-"Log in" and "Continue with Google" match the site exactly; "Team
-App" is repository shorthand and never customer-facing. The
-cross-repo reconciliation tracker lives in
-lumecon-website/docs/reconciliation-roadmap.md.
