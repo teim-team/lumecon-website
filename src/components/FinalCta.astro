@@ -1,0 +1,33 @@
+---
+/**
+ * Final CTA — the homepage closes on the free trial, the way it
+ * opened: try the product, compare plans, and a quiet email line
+ * for anyone who wants a person first.
+ */
+import { site } from '../config';
+import MarkArt from './MarkArt.astro';
+import '../styles/home.css';
+---
+
+<section class="fcta" id="get-started" aria-labelledby="fcta-title">
+  <MarkArt class="markart markart--tr" size={520} />
+  <div class="fcta-inner">
+    <p class="h-kicker">Get started</p>
+    <h2 class="fcta-title" id="fcta-title">Prove your impact.</h2>
+    <p class="fcta-lede">
+      Create a free account, bring your documents and build an analysis end to end. Full results
+      unlock on any plan.
+    </p>
+    <div class="hero2-cta">
+      <a class="btn2 btn2--primary" href="/signup">
+        Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+      <a class="btn2 btn2--card" href="/pricing">
+        Compare plans <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+    <p class="fcta-contact">
+      Prefer to talk to a person first? <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+  </div>
+</section>

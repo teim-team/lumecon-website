@@ -343,7 +343,7 @@ const ogIA =
             return;
           }
           // Only intercept SAME-page anchor clicks. Cross-path hashes
-          // (e.g., '/#contact' from /join) still navigate normally;
+          // (e.g., '/#why' from /pricing) still navigate normally;
           // handleLandingHash() will clean the URL on arrival.
           if (url.origin !== location.origin) return;
           if (url.pathname !== location.pathname) return;
