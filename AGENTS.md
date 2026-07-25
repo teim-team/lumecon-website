@@ -129,3 +129,44 @@ other pages beyond a one-line pointer to /cedar.
 Write "and", never "&", anywhere a visitor can read it (founder
 rule; ampersands read as unprofessional). Code identifiers and TS
 types are exempt. Same rule applies in teim-app.
+
+## Vocabulary standard (2026-07, both repos)
+
+User-facing word choices, everywhere a customer reads:
+- "analysis / analyses", not "study/studies" ("project" is the
+  backend object; "study" is reserved for a formal deliverable).
+- "organization" (use "organization or nation" only where the
+  distinction earns its place). Account = authentication identity;
+  Organization = customer entity; Workspace = the collaborative
+  space; Analysis = the analytical project; Run = an immutable model
+  execution.
+- "Cedar", never "AI assistant"; Cedar is Lumecon's AI economic
+  analyst on every surface, and the site chat is a lightweight
+  Cedar, never a downgraded "site assistant" in schema or copy.
+- "GDP contribution" for the primary value-added metric; "economic
+  output" not "sales"; results vocabulary (Jobs supported, Labor
+  income, GDP contribution, Economic output, Tax impacts, Direct,
+  Indirect, Induced) is shared with the product verbatim.
+- "every supported U.S. geography" generally; enumerate "counties,
+  states, the nation, reservations and trust lands" when precision
+  helps. Every geography ships in every plan; analysis types may
+  depend on organizational context.
+- "Log in" and "Continue with Google", identical on both surfaces.
+- To the customer everything is Lumecon; "Team App" is repository
+  shorthand only.
+
+The full reconciliation tracker lives in
+docs/reconciliation-roadmap.md.
+
+## Vocabulary standard (2026-07, both repos)
+
+Mirror of the standard in lumecon-website/AGENTS.md: user-facing
+copy says "analysis/analyses" (project is the backend object, study
+is reserved for formal deliverables); "organization" over
+"organization or nation" except where the distinction matters;
+Account/Organization/Workspace/Analysis/Run have fixed meanings;
+"Cedar" never "AI assistant"; "GDP contribution" for value added;
+"Log in" and "Continue with Google" match the site exactly; "Team
+App" is repository shorthand and never customer-facing. The
+cross-repo reconciliation tracker lives in
+lumecon-website/docs/reconciliation-roadmap.md.
