@@ -50,7 +50,7 @@ const CARDS = [
     <div class="whyw-grid">
       {
         CARDS.map((c) => (
-          <article class="whyw-card">
+          <article class="whyw-card" data-art={c.art}>
             <span class="whyw-art" aria-hidden="true">
               <img
                 src={`/art/why-${c.art}.png`}

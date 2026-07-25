@@ -134,6 +134,24 @@
   font-size: clamp(1rem, 1.35vw, 1.15rem);
   margin-top: -0.4rem;
 }
+.hero2-cta {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+.hero2-proof {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 72ch;
+  line-height: 1.9;
+}
+
 @media (max-width: 560px) {
   /* Compact hero: on a phone the headline + body + CTAs must land
      inside the first screen with room to spare, and the CTA stack
@@ -169,23 +187,6 @@
     padding: 0.75rem 1.2rem;
     font-size: 0.95rem;
   }
-}
-.hero2-cta {
-  display: flex;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 0.4rem;
-}
-.hero2-proof {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin: 0;
-  max-width: 72ch;
-  line-height: 1.9;
 }
 
 /* ---------- trio money shot ----------
@@ -329,10 +330,10 @@
   color: var(--ink-2);
   margin: 0;
 }
-@media (max-width: 980px) {
+@media (max-width: 1199px) {
   .whyw-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 2.2rem;
+    row-gap: 2.6rem;
   }
   .whyw-card + .whyw-card {
     border-left: none;
@@ -344,16 +345,37 @@
     padding-left: 0;
   }
 }
-@media (max-width: 560px) {
+@media (max-width: 759px) {
   .whyw-grid {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: 2rem;
+    row-gap: 0;
   }
   .whyw-card,
   .whyw-card:nth-child(even) {
     border-left: none;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0;
+  }
+  /* Editorial sequence: eyebrow first, then the illustration large
+     and centered, then left-aligned copy; hairline rules between
+     features instead of vertical separators. */
+  .whyw-card + .whyw-card {
+    border-top: 1px solid var(--rule);
+    margin-top: 1.8rem;
+    padding-top: 1.8rem;
+  }
+  .whyw-card__k {
+    order: -1;
+  }
+  .whyw-art {
+    height: auto;
+    margin: 0.2rem auto 0.4rem;
+    width: 62%;
+  }
+  .whyw-card[data-art='cedar'] .whyw-art {
+    width: 88%;
+  }
+  .whyw-card[data-art='geo'] .whyw-art img {
+    max-height: 230px;
   }
 }
 
@@ -848,10 +870,14 @@
 /* ---------- illustrated card art (why cards) ---------- */
 .whyw-art {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  height: 198px;
+  height: 205px;
   margin-bottom: 0.8rem;
+}
+.whyw-card[data-art='cedar'] .whyw-art img,
+.whyw-card[data-art='orgs'] .whyw-art img {
+  width: 100%;
 }
 .whyw-art img {
   max-height: 100%;
@@ -938,5 +964,17 @@
   .cedar-step:active,
   .pr-plan:active {
     transform: none;
+  }
+}
+
+/* ---------- mobile density ----------
+   Desktop breathing room scaled down: phone sections keep the rhythm
+   without scrolling through near-empty screens. */
+@media (max-width: 759px) {
+  .whyw,
+  .flowsec,
+  .edge {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 }

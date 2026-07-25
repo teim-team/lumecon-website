@@ -119,7 +119,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     values: [
       'Not included',
       'Not included',
-      'Included. A persistent organizational data library, integrated with Lumecon and reusable across every future analysis and report.',
+      'Included. The data library: the clean, harmonized datasets behind the model, ready to use, which your organization can augment with its own data to extend every future analysis and report.',
     ],
   },
 ];
