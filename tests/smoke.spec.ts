@@ -7,16 +7,19 @@ import { test, expect } from '@playwright/test';
  * covered by Lighthouse CI, not here.
  */
 
-test('home page loads and renders the hero workflow', async ({ page }) => {
+test('home page loads and renders the hero product shot', async ({ page }) => {
   const errs: string[] = [];
   page.on('pageerror', e => errs.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
 
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
-  // The homepage hero is the workflow diagram; the interactive map now
-  // lives on /map (exercised by the tests below).
-  await expect(page.locator('.hero-flow')).toBeVisible();
+  // The homepage hero leads with a framed screenshot of the app's
+  // results page; the interactive map lives on /map (exercised by
+  // the tests below).
+  await expect(page.locator('.hero-shot img')).toBeVisible();
+  // The product tour renders its screenshot rows below the hero.
+  expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
   // Filter out a known-harmless console error (TLS cert on the preview host).
   // (The old frame-ancestors meta-CSP warning and the ipapi.co geolocation

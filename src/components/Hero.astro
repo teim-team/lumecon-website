@@ -1,29 +1,26 @@
 ---
 /**
- * Hero — homepage brand block + workflow animation + CTAs.
+ * Hero — economic-impact-analysis headline + the product itself.
  *
- * The interactive impact-study map workspace used to live here too,
- * but it was split into its own component (MapWorkspace.astro) and
- * its own page (/map) so the homepage hero can stay focused on the
- * headline + workflow animation, and the map gets the space it
- * deserves on its own page. From the homepage, "See the map" routes
- * the visitor to /map.
+ * The redesign puts a real screenshot of the Lumecon workspace (the
+ * results page of an impact study) where the workflow animation used
+ * to be, in the pattern of the major analysis platforms: promise on
+ * top, product right under it. The screenshot is captured from the
+ * app with sample study data (see the figcaption disclosure).
+ *
+ * The interactive impact-study map workspace lives on /map; the
+ * primary CTA routes there so visitors can run a study themselves.
  */
-import HeroWorkflow from './HeroWorkflow.astro';
 import '../styles/hero.css';
 ---
 
 <section class="hero" id="top">
   <div class="hero-brand">
-    <!-- Headline first so the visitor reads the promise before the
-         workflow that proves it. -->
-    <h1 class="hero-statement hl-block hl-block--green">
-      The recurring work of organizations, built as one system.
-    </h1>
+    <p class="hero-tagline">Economic impact analysis software</p>
 
-    <!-- Three-step workflow: harmonize → Cedar runs → see impact.
-         Wordmark lives in the nav, so we don't repeat it here. -->
-    <HeroWorkflow />
+    <h1 class="hero-statement hl-block hl-block--green">
+      Measure the economic impact of any project, program or policy.
+    </h1>
 
     <!-- Lede row: the product sub-paragraph, with a teal "New to this?"
          disclosure for first-timers beside it on desktop (stacked on
@@ -32,10 +29,9 @@ import '../styles/hero.css';
          already know the term. -->
     <div class="hero-lede-row">
       <p class="hero-sub">
-        Lumecon does the recurring analysis, compliance and operations work you now pay consultants
-        for, all on one dataset. We start with economic impact analysis: Cedar AI turns your budget
-        and program data into credible evidence for grant applications, council packets, board
-        memos and funder reports.
+        Lumecon turns your budgets, payroll and program records into a credible economic impact
+        study in minutes: jobs, labor income, GDP contribution and tax revenue for any U.S.
+        geography, with every number traceable to its source.
       </p>
       <details class="hero-eia">
         <summary class="hero-eia__summary">
@@ -48,6 +44,35 @@ import '../styles/hero.css';
         </p>
       </details>
     </div>
+
+    <div class="hero-cta">
+      <a class="btn" href="/map">See a live study</a>
+      <a class="btn btn--ghost" href="/pricing">See pricing</a>
+    </div>
+
+    <!-- The product, not a promise about the product: the results page
+         of an impact study in the Lumecon workspace. -->
+    <figure class="hero-shot">
+      <div class="hero-shot__chrome" aria-hidden="true">
+        <span class="hero-shot__dot"></span>
+        <span class="hero-shot__dot"></span>
+        <span class="hero-shot__dot"></span>
+        <span class="hero-shot__url">app.lumecon.ai</span>
+      </div>
+      <img
+        src="/app/results.webp"
+        alt="Lumecon results page for a whole-nation impact study: a headline sentence estimating 4,820 jobs and $1,240,500,000 in economic output, four key figures with Trace this number buttons, and a three-year impact timeline."
+        width="1600"
+        height="1000"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <figcaption class="hero-shot__caption">
+        The results page of a whole-nation impact study in the Lumecon workspace, shown with sample
+        data.
+      </figcaption>
+    </figure>
+
     <!-- Credibility strip: the school list where it has room, the
          shorter role-based form on mobile (same claim, less weight). -->
     <ul class="hero-proof" aria-label="Proof points">
@@ -60,75 +85,6 @@ import '../styles/hero.css';
       </li>
       <li>Patent pending</li>
     </ul>
-    <!-- Three "path" tiles instead of plain buttons. Each is a
-         substantial card with an icon, title, and one-line subtitle
-         so the visitor's next-step options read as visually
-         distinct entries rather than another row of small CTAs.
-         Signup is intentionally NOT a hero tile — signing up is the
-         last action in the funnel, not the first ask. The hero
-         points at See-a-study, Meet-Cedar, and Pricing instead;
-         Sign Up surfaces from /pricing and from the nav. -->
-    <nav class="hero-paths" aria-label="Explore Lumecon">
-      <a class="hero-path" href="/map">
-        <span class="hero-path__icon" aria-hidden="true">
-          <!-- Filled folded-map silhouette so the whole shape
-               (not just an outline) transitions from grey to teal
-               on hover. The three "panel" cutouts use the cream
-               page background so the folded structure reads at
-               icon size, and the dots are coloured locations. -->
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M2.6 6.4 L9 4 L15 6.4 L21.4 4 L21.4 17.6 L15 20 L9 17.6 L2.6 20 Z"></path>
-            <circle cx="6.6" cy="11.4" r="1.05" fill="var(--white)"></circle>
-            <circle cx="13.4" cy="10.4" r="1.05" fill="var(--white)"></circle>
-            <circle cx="17.4" cy="14.2" r="1.05" fill="var(--white)"></circle>
-          </svg>
-        </span>
-        <span class="hero-path__title">See a live economic impact study</span>
-        <span class="hero-path__sub"
-          >Click any region. Watch an economic impact study run in seconds.</span
-        >
-      </a>
-      <a class="hero-path" href="/cedar">
-        <span class="hero-path__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z"
-            ></path>
-            <line
-              x1="12"
-              y1="20"
-              x2="12"
-              y2="22"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="butt"></line>
-          </svg>
-        </span>
-        <span class="hero-path__title">Meet Cedar</span>
-        <span class="hero-path__sub"
-          >The AI analyst that turns your records into analysis-ready inputs.</span
-        >
-      </a>
-      <a class="hero-path" href="/pricing">
-        <span class="hero-path__icon" aria-hidden="true">
-          <!-- Filled price-tag silhouette — bold shape so the
-               whole icon transitions on hover, not just a thin
-               outline. White punch-out is the tag's grommet
-               hole. -->
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M3 3.4 H13 L21 11.4 L13 19.4 H3 Z"
-              stroke="currentColor"
-              stroke-width=".4"
-              stroke-linejoin="miter"></path>
-            <circle cx="7.2" cy="7.6" r="1.7" fill="var(--white)"></circle>
-          </svg>
-        </span>
-        <span class="hero-path__title">See pricing</span>
-        <span class="hero-path__sub"
-          >Annual subscriptions for governments, tribal nations and mission-driven organizations.</span
-        >
-      </a>
-    </nav>
 
     <!-- Trusted data sources strip (#22): names the authoritative
          public datasets behind every study and links to the agencies,
