@@ -35,19 +35,15 @@ import CedarChat from './CedarChat.astro';
   title="Ask Cedar"
 >
   <span class="cedar-fab__dot" aria-hidden="true"></span>
-  <span class="cedar-fab__icon cedar-fab__icon--chat" aria-hidden="true">
-    <svg
-      viewBox="0 0 24 24"
-      width="22"
-      height="22"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.6"
-      stroke-linejoin="round"
-    >
-      <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H12l-4.5 4v-4h-1A2.5 2.5 0 0 1 4 13.5Z"></path>
-      <path d="M8 8.8h8M8 11.8h5.4" stroke-width="1.3" stroke-linecap="round"></path>
-    </svg>
+  <span class="cedar-fab__icon cedar-fab__icon--mark" aria-hidden="true">
+    <img
+      src="/brand/lumecon-logo-mark-transparent.png"
+      alt=""
+      width="30"
+      height="30"
+      loading="lazy"
+      decoding="async"
+    />
   </span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg
@@ -351,8 +347,13 @@ import CedarChat from './CedarChat.astro';
   }
   .cedar-fab__icon--close,
   .cedar-fab__label--close,
-  .cedar-fab__icon--chat {
+  .cedar-fab__icon--mark {
     display: none;
+  }
+  .cedar-fab__icon--mark img {
+    display: block;
+    width: 30px;
+    height: 30px;
   }
   .cedar-fab__icon--close {
     width: 22px;
@@ -378,11 +379,10 @@ import CedarChat from './CedarChat.astro';
     .cedar-fab__label--close {
       display: none;
     }
-    .cedar-fab__icon--chat {
+    .cedar-fab__icon--mark {
       display: inline-flex;
-      color: var(--accent-text);
     }
-    body.cedar-popped .cedar-fab__icon--chat {
+    body.cedar-popped .cedar-fab__icon--mark {
       display: none;
     }
     .cedar-fab__dot {
