@@ -93,3 +93,30 @@ state; end-to-end accessibility tests.
 "Team App" is repository shorthand only. To the customer everything
 is Lumecon: the website is Lumecon, the app is Lumecon, Cedar is
 inside Lumecon (brief item 58).
+
+## Legal framework actions (2026-07)
+
+Source: docs/legal/legal-framework-review.md (Part 5). Required
+reviewer: Havala, in addition to the Cornell clinic. Statuses as
+above.
+
+| Item | Status | Notes |
+| --- | --- | --- |
+| 1. Kill the agree-to-placeholder contradiction | Done | Signup and app login no longer assert agreement; signup says the documents are being finalized and will be presented for acceptance. Acceptance language returns with the real documents. |
+| 2. Real acceptance mechanics | Partial | Unchecked required attestation checkbox at signup (18+, authority) ships now; the agree/acknowledge clause plus server-side version/timestamp/method records activate when counsel delivers the documents and the register endpoint stores them. |
+| 3. Checkout disclosure block | Done | Plan, amount due, billed annually, automatic renewal with 90/30-day notice, and how to cancel, immediately above Complete purchase. |
+| 4. Tax statement decision | Founder | One decision with accounting (Stripe Tax, nexus); then pricing page, checkout, Terms Section 6 and invoices align. Site currently says taxes and fees included per founder policy. |
+| 5. Renewal notices system | Backend | Scheduler must exist or the copy comes out; Terms reference as courtesy only. |
+| 6. Canonical legal pages | Partial | App links point at lumecon.ai; the in-app /terms and /privacy routes still render their own text and should redirect when the canonical documents exist. |
+| 7. Marketing claims audit | Founder | Line-by-line counsel sign-off; list enumerated in the review. |
+| 8. Analytics claim vs implementation | Partial | No analytics run pre-consent by design; Google Fonts still loads from a CDN pre-consent, so either self-host the fonts or scope the claim to tracking/analytics precisely. DNT/GPC disclosure goes in the Privacy Policy with the real document. |
+| 9. 18+ representation | Done | In the signup attestation checkbox; no DOB collected. |
+| 10. Close-account copy | Done | App copy distinguishes closing from deletion and links the Privacy Policy; Terms 33 and the Privacy retention section must tell the same story when drafted. |
+| 11. Tribal authority acknowledgment | P1 | Requires the shared organization-type taxonomy at signup; never pre-checked; Order Form path for higher-value tribal accounts. |
+| 12-16. Legal hub, Cedar disclosure link, GPC, terms-change infrastructure, server-quoted upgrade confirmation | P1/Backend | Sequenced after the documents exist. |
+| 17-21. /security, /subprocessors, DPA, VPAT/ACR, retention schedule, enterprise template, insurance | P2/Founder | Quarter-scale build-out. |
+
+Referral terms deltas from Part 4 are live in the product rules
+text (verification, expiry at account closure, void where
+prohibited); the plan-mismatch rule for earned months awaits the
+billing decision.

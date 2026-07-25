@@ -154,6 +154,14 @@ const ROLE_OPTIONS = [
             </ul>
           </fieldset>
 
+          <label class="auth-attest" data-auth-attest-row hidden>
+            <input type="checkbox" name="attest" data-auth-attest />
+            <span>
+              I am at least 18 years old and have authority to act for the organization identified
+              above.
+            </span>
+          </label>
+
           <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
 
           <div class="auth-actions">
@@ -162,9 +170,17 @@ const ROLE_OPTIONS = [
           </div>
         </form>
 
+        <!-- Acceptance language is deliberately absent until counsel
+             delivers the final documents: a signup flow must never
+             claim agreement to Terms whose page says they are being
+             prepared. When the documents ship, this line becomes the
+             agree/acknowledge clause inside the attestation checkbox
+             (with terms/privacy version stamping); see
+             docs/legal/legal-framework-review.md, Part 5 items 1-2. -->
         <p class="auth-legal">
-          By continuing, you acknowledge that you understand and agree to the{' '}
-          <a href="/terms">Terms of Service</a>{' '}and{' '}<a href="/privacy">Privacy Policy</a>.
+          Our <a href="/terms">Terms of Service</a>{' '}and{' '}
+          <a href="/privacy">Privacy Policy</a> are being finalized with counsel; you will be asked to
+          accept them before they take effect.
         </p>
         <p class="asplit-foot">
           Already have an account? <a href="/login">Log in</a>{' '}&middot;{' '}
@@ -252,6 +268,8 @@ const ROLE_OPTIONS = [
         m.classList.toggle('auth-steps__item--done', n < next);
       });
       if (submitBtn) submitBtn.textContent = next === 1 ? 'Continue' : 'Create account';
+      const attestRow = form.querySelector<HTMLElement>('[data-auth-attest-row]');
+      if (attestRow) attestRow.hidden = next !== 2;
       if (backBtn) backBtn.hidden = next === 1;
       if (status) status.hidden = true;
     }
@@ -312,6 +330,14 @@ const ROLE_OPTIONS = [
           status,
           'err',
           'Strengthen your password to at least 12 characters with a mix of upper case, lower case, numbers or symbols.',
+        );
+      }
+      const attest = form.querySelector<HTMLInputElement>('[data-auth-attest]');
+      if (attest && !attest.checked) {
+        return setStatus(
+          status,
+          'err',
+          'Confirm that you are at least 18 and authorized to act for your organization.',
         );
       }
 

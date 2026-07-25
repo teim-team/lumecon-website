@@ -114,6 +114,11 @@ const INCLUDED = [
             Stripe.
           </p>
 
+          <!-- Point-of-sale disclosure (legal framework review, Part 5
+               item 3): plan, amount, frequency, auto-renewal and how
+               to cancel, immediately above the purchase action. -->
+          <p class="co2-disclose" data-co-disclose></p>
+
           <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
 
           <div class="auth-actions">
@@ -167,9 +172,28 @@ const INCLUDED = [
     }
 
     // Reveal the summary panel for the selected plan.
+    let planName = '';
+    let planPrice = '';
     document.querySelectorAll<HTMLElement>('[data-co-summary]').forEach((el) => {
-      el.hidden = el.dataset.coSummary !== tier;
+      const on = el.dataset.coSummary === tier;
+      el.hidden = !on;
+      if (on) {
+        planName = el.querySelector('.co2-summary__plan')?.textContent?.trim() ?? '';
+        planPrice = el.querySelector('[data-co-total]')?.textContent?.trim() ?? '';
+      }
     });
+
+    // Auto-renewal disclosed at the point of sale, never only in the
+    // Terms: plan, amount due, billing frequency, renewal behavior
+    // and how to cancel.
+    const disclose = document.querySelector<HTMLElement>('[data-co-disclose]');
+    if (disclose) {
+      disclose.textContent =
+        `You are purchasing the ${planName} plan: ${planPrice} due today, billed annually. ` +
+        'Your subscription renews automatically one year from purchase at the standard ' +
+        'annual price; we email you 90 days and 30 days before each renewal, and you can ' +
+        'cancel or turn off auto-renew at any time from Settings inside Lumecon.';
+    }
 
     const status = form.querySelector<HTMLElement>('[data-auth-status]');
     const submitBtn = form.querySelector<HTMLButtonElement>('[data-co-submit]');
