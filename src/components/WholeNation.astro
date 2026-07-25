@@ -1,0 +1,68 @@
+---
+/**
+ * Whole Nation — a signature capability alongside the general
+ * platform: government + enterprises + other activity converging
+ * into one integrated result, with the real scope-tab screenshot
+ * (statewide and homelands side by side) underneath.
+ */
+import MarkArt from './MarkArt.astro';
+import '../styles/home.css';
+---
+
+<section class="flowsec" id="whole-nation" aria-labelledby="wn-title">
+  <div class="flowsec-inner">
+    <header class="flowsec-head">
+      <p class="h-kicker">For Tribal Nations: Whole Nation analysis</p>
+      <h2 class="flowsec-title" id="wn-title">See the whole Nation, not just one enterprise.</h2>
+      <p class="flowsec-lede">
+        Tribal government, tribal enterprise and Whole Nation analysis are part of Lumecon&rsquo;s
+        core architecture, included in every plan. Whole Nation analysis brings government and
+        enterprises together in one integrated study, a more complete picture of a Nation&rsquo;s
+        economic footprint than studying each piece on its own.
+      </p>
+    </header>
+
+    <div class="wn-flow">
+      <div class="wn-parts">
+        <div class="wn-part">
+          <span class="wn-part__t">Tribal government</span>
+          <span class="wn-part__s"
+            >Departments, programs, employment and public-sector activity</span
+          >
+        </div>
+        <div class="wn-part">
+          <span class="wn-part__t">Tribal enterprises</span>
+          <span class="wn-part__s">One enterprise or the whole portfolio</span>
+        </div>
+        <div class="wn-part">
+          <span class="wn-part__t">Other Nation economic activity</span>
+          <span class="wn-part__s">The included activity that rounds out the footprint</span>
+        </div>
+      </div>
+      <div class="wn-join" aria-hidden="true">&rarr;</div>
+      <div class="wn-result">
+        <MarkArt class="markart markart--card" size={280} />
+        <p class="wn-result__k">One integrated study</p>
+        <h3 class="wn-result__t">Whole Nation economic impact</h3>
+        <p class="wn-result__b">
+          Jobs, labor income, GDP contribution, output and tax impacts for the combined footprint,
+          with statewide and homelands scopes side by side.
+        </p>
+      </div>
+    </div>
+
+    <figure class="wn-shot">
+      <picture>
+        <source srcset="/app/homelands-dark.webp" media="(prefers-color-scheme: dark)" />
+        <img
+          src="/app/homelands.webp"
+          alt="Lumecon results page on the Homelands scope tab, estimating 1,928 jobs and $496,200,000 in economic output on homelands, with statewide and homelands tabs above four key figures."
+          width="1600"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+    </figure>
+  </div>
+</section>

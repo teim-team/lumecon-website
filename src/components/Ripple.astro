@@ -1,0 +1,43 @@
+---
+/**
+ * The Lumecon logo ripple — the exact topographic contour art from
+ * the app's sign-in hero (AuthGate) and the studio report templates:
+ * two nested-contour "rises" built from the mark's organic ring
+ * geometry, drifting very slowly. Path data and scale rings are
+ * ported verbatim from the app so the site and the product share
+ * one piece of spatial branding. Color via currentColor; placement
+ * and opacity via the caller's class.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = 'ripple' } = Astro.props;
+const riseA = [0.3, 0.46, 0.62, 0.78, 0.94, 1.1, 1.26, 1.42];
+const riseB = [0.3, 0.48, 0.66, 0.84, 1.02, 1.2, 1.38];
+---
+
+<svg
+  class={className}
+  viewBox="0 0 640 640"
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+>
+  <g fill="none" stroke="currentColor" stroke-width="1.1">
+    {
+      riseA.map((s) => (
+        <path
+          transform={`translate(150 180) scale(${s})`}
+          d="M0,-150 C74,-150 152,-64 150,4 C148,84 58,152 -6,150 C-86,147 -152,66 -150,-14 C-148,-86 -74,-150 0,-150 Z"
+        />
+      ))
+    }
+    {
+      riseB.map((s) => (
+        <path
+          transform={`translate(470 460) scale(${s})`}
+          d="M0,-130 C66,-134 138,-58 132,10 C127,78 52,136 -12,130 C-84,123 -134,54 -130,-18 C-126,-84 -62,-126 0,-130 Z"
+        />
+      ))
+    }
+  </g>
+</svg>

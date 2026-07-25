@@ -6,8 +6,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
-import WhySection from '../components/WhySection.astro';
-import ProductsSection from '../components/ProductsSection.astro';
+import WhyBand from '../components/WhyBand.astro';
+import ProductTour from '../components/ProductTour.astro';
+import WholeNation from '../components/WholeNation.astro';
+import Edge from '../components/Edge.astro';
+import CedarFlow from '../components/CedarFlow.astro';
+import OnePlatform from '../components/OnePlatform.astro';
+import AskAI from '../components/AskAI.astro';
 import ContactSection from '../components/ContactSection.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -43,12 +48,20 @@ const FAQ_ITEMS = [
     a: 'Lumecon covers all federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country. All of it is included in one annual subscription, not priced per geography.',
   },
   {
+    q: 'How much does Lumecon cost?',
+    a: 'Lumecon has three public plans: Sprout at $500 a year for one user, Sapling at $2,500 a year for up to 10 users with Team Workspace, and Tree at $7,500 a year with unlimited organizational users, Cedar Grove and hands-on Cedar calibration. Every plan includes the full model, Cedar, unlimited analysis and every supported U.S. geography. Organizations already paying for qualifying economic impact analysis software can ask about the competitive transition offer: the first annual license for 50% of their documented prior-year spend.',
+  },
+  {
+    q: 'Can I try Lumecon for free?',
+    a: 'Yes. You can create an account, bring your documents and build a study end to end for free. Full results unlock when you choose a plan.',
+  },
+  {
     q: 'What is Cedar?',
     a: "I'm Cedar, Lumecon's site assistant. I can help explain what Lumecon does, who the platform is for, how economic impact reporting works, and how to get in touch with the team. I'm here to point you in the right direction, not replace a conversation with the Lumecon team.",
   },
   {
     q: 'Where was Lumecon built?',
-    a: "Lumecon Inc. was built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and engineers, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.",
+    a: 'Lumecon Inc. was built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and engineers, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.',
   },
 ];
 
@@ -143,8 +156,8 @@ const jsonLd = [
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
-      { '@type': 'ListItem', position: 2, name: 'Platforms', item: `${site.url}/#products` },
-      { '@type': 'ListItem', position: 3, name: 'Why Lumecon', item: `${site.url}/#how` },
+      { '@type': 'ListItem', position: 2, name: 'One platform', item: `${site.url}/#platform` },
+      { '@type': 'ListItem', position: 3, name: 'Why Lumecon', item: `${site.url}/#why` },
       { '@type': 'ListItem', position: 4, name: 'See your impact', item: `${site.url}/map` },
       { '@type': 'ListItem', position: 5, name: 'Cedar', item: `${site.url}/cedar` },
       { '@type': 'ListItem', position: 6, name: 'Pricing', item: `${site.url}/pricing` },
@@ -189,8 +202,13 @@ const jsonLd = [
   <Nav isHome={true} />
   <main>
     <Hero />
-    <ProductsSection />
-    <WhySection />
+    <WhyBand />
+    <ProductTour />
+    <Edge />
+    <CedarFlow />
+    <WholeNation />
+    <OnePlatform />
+    <AskAI />
     <ContactSection />
   </main>
   <Footer isHome={true} />

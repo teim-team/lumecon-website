@@ -1,0 +1,42 @@
+---
+/**
+ * Ask any AI about Lumecon — links that open the major assistants
+ * with a Lumecon question prefilled (where the platform supports a
+ * query parameter). People increasingly research software through
+ * assistants; this makes that path a first-class one.
+ */
+import '../styles/home.css';
+
+const QUESTION = 'What is Lumecon (lumecon.ai), the economic impact analysis software?';
+const q = encodeURIComponent(QUESTION);
+
+const ASSISTANTS = [
+  { name: 'ChatGPT', href: `https://chatgpt.com/?q=${q}` },
+  { name: 'Claude', href: `https://claude.ai/new?q=${q}` },
+  { name: 'Gemini', href: 'https://gemini.google.com/app' },
+  { name: 'Copilot', href: `https://copilot.microsoft.com/?q=${q}` },
+  { name: 'Grok', href: `https://grok.com/?q=${q}` },
+  { name: 'Perplexity', href: `https://www.perplexity.ai/search?q=${q}` },
+];
+---
+
+<section class="askai" aria-labelledby="askai-title">
+  <div class="askai-inner">
+    <p class="h-kicker" id="askai-title">Ask any AI about Lumecon</p>
+    <p class="askai-note">
+      Researching tools through an assistant? Ask yours about Lumecon and compare what it says with
+      what you see here.
+    </p>
+    <ul class="askai-list">
+      {
+        ASSISTANTS.map((a) => (
+          <li>
+            <a href={a.href} target="_blank" rel="noopener noreferrer">
+              {a.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

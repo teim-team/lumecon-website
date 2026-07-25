@@ -1,177 +1,81 @@
 ---
 /**
- * Hero — homepage brand block + workflow animation + CTAs.
- *
- * The interactive impact-study map workspace used to live here too,
- * but it was split into its own component (MapWorkspace.astro) and
- * its own page (/map) so the homepage hero can stay focused on the
- * headline + workflow animation, and the map gets the space it
- * deserves on its own page. From the homepage, "See the map" routes
- * the visitor to /map.
+ * Hero v3 — centered promise, gradient CTA, and the trio money shot:
+ * three real app screenshots stacked the way the refreshed IMPLAN
+ * hero stacks its product panels. Results front and center (a
+ * general-audience Connecticut study), dashboard and number-lineage
+ * tucked behind. Every screenshot swaps to a dark capture of the
+ * app's own dark mode via <picture>. The actual Lumecon mark sits
+ * cropped at the section edges as background art.
  */
-import HeroWorkflow from './HeroWorkflow.astro';
-import '../styles/hero.css';
+import MarkArt from './MarkArt.astro';
+import Ripple from './Ripple.astro';
+import '../styles/home.css';
 ---
 
-<section class="hero" id="top">
-  <div class="hero-brand">
-    <!-- Headline first so the visitor reads the promise before the
-         workflow that proves it. -->
-    <h1 class="hero-statement hl-block hl-block--green">
-      The recurring work of organizations, built as one system.
+<section class="hero2" id="top">
+  <Ripple class="ripple ripple--hero" />
+  <MarkArt class="markart markart--tr" size={640} />
+  <div class="hero2-inner">
+    <p class="h-kicker">Economic impact analysis software</p>
+
+    <h1 class="hero2-title">
+      Measure the <span class="hero2-em">economic impact</span> of any decision.
     </h1>
 
-    <!-- Three-step workflow: harmonize → Cedar runs → see impact.
-         Wordmark lives in the nav, so we don't repeat it here. -->
-    <HeroWorkflow />
+    <p class="hero2-sub">
+      Lumecon turns budgets, financial statements, payroll and program records into a credible
+      economic impact study in minutes: jobs, labor income, GDP contribution and tax revenue for any
+      U.S. geography,{' '}
+      <strong>with every number traceable to its source</strong>.
+    </p>
 
-    <!-- Lede row: the product sub-paragraph, with a teal "New to this?"
-         disclosure for first-timers beside it on desktop (stacked on
-         mobile). The disclosure expands to a plain-language definition
-         of economic impact analysis so newcomers aren't assumed to
-         already know the term. -->
-    <div class="hero-lede-row">
-      <p class="hero-sub">
-        Lumecon does the recurring analysis, compliance and operations work you now pay consultants
-        for, all on one dataset. We start with economic impact analysis: Cedar AI turns your budget
-        and program data into credible evidence for grant applications, council packets, board
-        memos and funder reports.
-      </p>
-      <details class="hero-eia">
-        <summary class="hero-eia__summary">
-          <span>New to this?</span>
-          <span class="hero-eia__chev" aria-hidden="true"></span>
-        </summary>
-        <p class="hero-eia__body">
-          <strong>Economic impact analysis</strong> shows how one dollar spent can generate more than
-          one dollar in return as it moves through wages, suppliers, tax revenue, and nearby businesses.
-        </p>
-      </details>
+    <div class="hero2-cta">
+      <a class="btn2 btn2--primary" href="/map">
+        See a live study <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+      <a class="btn2 btn2--card" href="/signup">
+        Still deciding? Try Lumecon for free <span class="btn2-arrow" aria-hidden="true"
+          >&rarr;</span
+        >
+      </a>
     </div>
-    <!-- Credibility strip: the school list where it has room, the
-         shorter role-based form on mobile (same claim, less weight). -->
-    <ul class="hero-proof" aria-label="Proof points">
-      <li class="hero-proof__long">
-        Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and
-        engineers
-      </li>
-      <li class="hero-proof__short">
-        Built by economists, engineers and public-policy researchers
-      </li>
-      <li>Patent pending</li>
-    </ul>
-    <!-- Three "path" tiles instead of plain buttons. Each is a
-         substantial card with an icon, title, and one-line subtitle
-         so the visitor's next-step options read as visually
-         distinct entries rather than another row of small CTAs.
-         Signup is intentionally NOT a hero tile — signing up is the
-         last action in the funnel, not the first ask. The hero
-         points at See-a-study, Meet-Cedar, and Pricing instead;
-         Sign Up surfaces from /pricing and from the nav. -->
-    <nav class="hero-paths" aria-label="Explore Lumecon">
-      <a class="hero-path" href="/map">
-        <span class="hero-path__icon" aria-hidden="true">
-          <!-- Filled folded-map silhouette so the whole shape
-               (not just an outline) transitions from grey to teal
-               on hover. The three "panel" cutouts use the cream
-               page background so the folded structure reads at
-               icon size, and the dots are coloured locations. -->
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M2.6 6.4 L9 4 L15 6.4 L21.4 4 L21.4 17.6 L15 20 L9 17.6 L2.6 20 Z"></path>
-            <circle cx="6.6" cy="11.4" r="1.05" fill="var(--white)"></circle>
-            <circle cx="13.4" cy="10.4" r="1.05" fill="var(--white)"></circle>
-            <circle cx="17.4" cy="14.2" r="1.05" fill="var(--white)"></circle>
-          </svg>
-        </span>
-        <span class="hero-path__title">See a live economic impact study</span>
-        <span class="hero-path__sub"
-          >Click any region. Watch an economic impact study run in seconds.</span
-        >
-      </a>
-      <a class="hero-path" href="/cedar">
-        <span class="hero-path__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3 L8 9 L10 9 L7 14 L9.5 14 L5 20 L19 20 L14.5 14 L17 14 L14 9 L16 9 Z"
-            ></path>
-            <line
-              x1="12"
-              y1="20"
-              x2="12"
-              y2="22"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="butt"></line>
-          </svg>
-        </span>
-        <span class="hero-path__title">Meet Cedar</span>
-        <span class="hero-path__sub"
-          >The AI analyst that turns your records into analysis-ready inputs.</span
-        >
-      </a>
-      <a class="hero-path" href="/pricing">
-        <span class="hero-path__icon" aria-hidden="true">
-          <!-- Filled price-tag silhouette — bold shape so the
-               whole icon transitions on hover, not just a thin
-               outline. White punch-out is the tag's grommet
-               hole. -->
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M3 3.4 H13 L21 11.4 L13 19.4 H3 Z"
-              stroke="currentColor"
-              stroke-width=".4"
-              stroke-linejoin="miter"></path>
-            <circle cx="7.2" cy="7.6" r="1.7" fill="var(--white)"></circle>
-          </svg>
-        </span>
-        <span class="hero-path__title">See pricing</span>
-        <span class="hero-path__sub"
-          >Annual subscriptions for governments, tribal nations and mission-driven organizations.</span
-        >
-      </a>
-    </nav>
 
-    <!-- Trusted data sources strip (#22): names the authoritative
-         public datasets behind every study and links to the agencies,
-         so the credibility claim is checkable, not just asserted. -->
-    <aside class="hero-sources" aria-label="Data sources">
-      <span class="hero-sources__label"
-        >Built on the same foundational data as every major economic impact platform</span
-      >
-      <span class="hero-sources__note"
-        >The difference is what we do with it and what we add to it.</span
-      >
-      <ul class="hero-sources__list">
-        <li>
-          <a href="https://www.census.gov" target="_blank" rel="noopener noreferrer"
-            >U.S. Census: ACS, LODES, QWI, CBP, TIGER/Line</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://www.bea.gov/industry/input-output-accounts-data"
-            target="_blank"
-            rel="noopener noreferrer">BEA Input-Output Accounts</a
-          >
-        </li>
-        <li>
-          <a href="https://www.bls.gov/cew/" target="_blank" rel="noopener noreferrer">BLS QCEW</a>
-        </li>
-        <li>
-          <a href="https://www.nass.usda.gov" target="_blank" rel="noopener noreferrer">USDA NASS</a
-          >
-        </li>
-        <li>
-          <a href="https://www.usaspending.gov" target="_blank" rel="noopener noreferrer"
-            >USAspending</a
-          >
-        </li>
-        <li>
-          <a href="https://fred.stlouisfed.org" target="_blank" rel="noopener noreferrer"
-            >FRED (St. Louis Fed)</a
-          >
-        </li>
-        <li><a href="https://www.noaa.gov" target="_blank" rel="noopener noreferrer">NOAA</a></li>
-      </ul>
-    </aside>
+    <p class="hero2-proof">
+      Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and
+      engineers &middot; Patent pending &middot; Plans from $500 a year
+    </p>
+
+    <figure class="trio">
+      <div class="trio-frame trio-side trio-side--l" aria-hidden="true">
+        <picture>
+          <source srcset="/app/dashboard-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img src="/app/dashboard.webp" alt="" width="1600" height="1000" decoding="async" />
+        </picture>
+      </div>
+      <div class="trio-frame trio-main">
+        <picture>
+          <source srcset="/app/college-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img
+            src="/app/college.webp"
+            alt="Lumecon results page for a community college expansion study in Connecticut: a headline sentence estimating 1,140 jobs and $214,300,000 in economic output, four key figures with Trace this number buttons, and a county map of the state."
+            width="1600"
+            height="1000"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+      </div>
+      <div class="trio-frame trio-side trio-side--r" aria-hidden="true">
+        <picture>
+          <source srcset="/app/trace-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img src="/app/trace.webp" alt="" width="1600" height="1000" decoding="async" />
+        </picture>
+      </div>
+      <figcaption class="trio-caption">
+        The Lumecon workspace: results, workspace home and number lineage, shown with sample study
+        data.
+      </figcaption>
+    </figure>
   </div>
 </section>

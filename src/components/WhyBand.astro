@@ -1,0 +1,56 @@
+---
+/**
+ * Why Lumecon — four quiet cards on a white, hairline-separated
+ * surface (the app's own card grammar; no colored slabs). Every
+ * plan gets the full platform; higher plans add collaboration,
+ * organizational memory and scale.
+ */
+import '../styles/home.css';
+
+const CARDS = [
+  {
+    k: 'Every geography',
+    t: 'County to nation',
+    b: 'County, state, national, reservation and tribal-government geographies are included in every plan. No geography licenses.',
+  },
+  {
+    k: 'Unlimited analysis',
+    t: 'Run it again, free',
+    b: 'Unlimited projects and analyses on the full Lumecon model. No per-project fees and no paying more to ask a second question.',
+  },
+  {
+    k: 'Cedar included',
+    t: 'An AI economic analyst',
+    b: 'Cedar reads your PDFs, spreadsheets and CSVs, maps them into the model, helps interpret results and supports reporting, in every plan.',
+  },
+  {
+    k: 'Every kind of organization',
+    t: 'Built to adapt',
+    b: 'Governments, universities, nonprofits, businesses and Tribal Nations all get workflows fit to how they work, in one application.',
+  },
+];
+---
+
+<section class="whyw" id="why" aria-labelledby="whyw-title">
+  <div class="whyw-inner">
+    <header class="whyw-head">
+      <p class="h-kicker">Why Lumecon</p>
+      <h2 class="whyw-title" id="whyw-title">Every plan gets the real platform.</h2>
+      <p class="whyw-lede">
+        Higher plans add collaboration, organizational memory and scale. The economics stay the
+        same: every customer runs the same model on the same data foundation.
+      </p>
+    </header>
+    <div class="whyw-grid">
+      {
+        CARDS.map((c) => (
+          <article class="whyw-card">
+            <p class="whyw-card__k">{c.k}</p>
+            <h3 class="whyw-card__t">{c.t}</h3>
+            <p class="whyw-card__b">{c.b}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

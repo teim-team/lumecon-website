@@ -1,0 +1,192 @@
+/* Product tour — screenshot feature rows + coverage band + map strip.
+   White surface, hairline separation, teal mono kickers: the standard
+   section grammar. Screenshots reuse the quiet framed treatment from
+   the hero shot (hairline border, small radius, soft shadow). */
+
+.tour {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(3.5rem, 8vh, 6.5rem) var(--container-pad);
+}
+.tour-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(2.5rem, 6vh, 4.5rem);
+}
+
+/* ---------- header ---------- */
+.tour-head {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 62ch;
+}
+.tour-kicker,
+.tour-row__kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 500;
+  margin: 0;
+}
+.tour-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.tour-lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* ---------- coverage band ---------- */
+.tour-coverage {
+  list-style: none;
+  margin: 0;
+  padding: 1.6rem 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+.tour-coverage__item {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+}
+.tour-coverage__item + .tour-coverage__item {
+  border-left: 1px solid var(--rule);
+  padding-left: 1.4rem;
+}
+.tour-coverage__big {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--accent-text);
+}
+.tour-coverage__label {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+@media (max-width: 880px) {
+  .tour-coverage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 1.6rem;
+  }
+  /* On the 2x2 grid only the second column gets a hairline. */
+  .tour-coverage__item + .tour-coverage__item {
+    border-left: none;
+    padding-left: 0;
+  }
+  .tour-coverage__item:nth-child(even) {
+    border-left: 1px solid var(--rule);
+    padding-left: 1.4rem;
+  }
+}
+
+/* ---------- feature rows ---------- */
+.tour-rows {
+  display: grid;
+  gap: clamp(2.8rem, 7vh, 5rem);
+}
+.tour-row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1.6rem, 4vw, 3.2rem);
+  align-items: center;
+}
+.tour-row--flip {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+/* Keep text first in source order for screen readers; swap visually. */
+.tour-row--flip .tour-row__text {
+  order: 2;
+}
+.tour-row--flip .tour-row__shot {
+  order: 1;
+}
+.tour-row__text {
+  display: grid;
+  gap: 0.7rem;
+  align-content: center;
+}
+.tour-row__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  margin: 0;
+}
+.tour-row__body {
+  font-size: clamp(0.98rem, 1.3vw, 1.08rem);
+  line-height: 1.62;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 46ch;
+}
+.tour-row__shot {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow:
+    0 20px 48px -26px rgba(10, 15, 38, 0.32),
+    0 5px 14px -8px rgba(10, 15, 38, 0.16);
+}
+.tour-row__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 880px) {
+  .tour-row,
+  .tour-row--flip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Stack text above its screenshot on mobile, in both row variants. */
+  .tour-row--flip .tour-row__text {
+    order: 1;
+  }
+  .tour-row--flip .tour-row__shot {
+    order: 2;
+  }
+}
+
+/* ---------- map strip ---------- */
+.tour-map {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow:
+    0 20px 48px -26px rgba(10, 15, 38, 0.32),
+    0 5px 14px -8px rgba(10, 15, 38, 0.16);
+}
+.tour-map img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.tour-map figcaption {
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+}

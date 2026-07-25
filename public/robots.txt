@@ -1,12 +1,14 @@
 # Lumecon Inc. — robots policy
-# Search engines and well-behaved crawlers welcome.
+# Search engines, AI assistants and well-behaved crawlers welcome.
+# People increasingly research software through AI assistants; this
+# site is written to be read by them. AI-readable summary: /llms.txt
 
 User-agent: *
 Allow: /
 Disallow: /404
 Disallow: /404/
 
-# Slow down high-volume crawlers
+# Slow down high-volume SEO crawlers
 User-agent: AhrefsBot
 Crawl-delay: 10
 
@@ -19,38 +21,58 @@ Crawl-delay: 10
 User-agent: DotBot
 Crawl-delay: 10
 
-# AI training crawlers: opt out by default. Lumecon Inc. does not
-# grant permission to use this site for model training without
-# written agreement. Contact: contact@lumecon.ai.
+# AI crawlers and assistants: explicitly welcome. We want assistants
+# to know what Lumecon is and answer questions about it accurately.
 User-agent: GPTBot
-Disallow: /
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
 
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
 
 User-agent: anthropic-ai
-Disallow: /
+Allow: /
 
 User-agent: ClaudeBot
-Disallow: /
+Allow: /
 
 User-agent: Claude-Web
-Disallow: /
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
 
 User-agent: PerplexityBot
-Disallow: /
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
 
 User-agent: Google-Extended
-Disallow: /
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
 
 User-agent: CCBot
-Disallow: /
+Allow: /
 
 User-agent: Bytespider
-Disallow: /
+Allow: /
 
-User-agent: ImagesiftBot
-Disallow: /
+User-agent: Meta-ExternalAgent
+Allow: /
 
 # AI-readable site summary
 # https://llmstxt.org/

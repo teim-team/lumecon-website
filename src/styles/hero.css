@@ -337,6 +337,64 @@
   margin-top: 0.4rem;
 }
 
+/* ---------- hero product shot ----------
+   Browser-framed screenshot of the app's results page. The frame is
+   deliberately quiet (hairline chrome, mono URL chip) so the study
+   inside carries the color. Screenshots are captured light-mode; in
+   dark mode the hairline + shadow keep the light panel reading as a
+   framed window rather than a glare patch. */
+.hero-shot {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0.6rem 0 0;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--white);
+  box-shadow:
+    0 24px 60px -28px rgba(10, 15, 38, 0.35),
+    0 6px 18px -10px rgba(10, 15, 38, 0.18);
+  overflow: hidden;
+}
+.hero-shot__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.hero-shot__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--rule-strong);
+}
+.hero-shot__url {
+  margin-left: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.12rem 0.7rem;
+  background: var(--white);
+}
+.hero-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hero-shot__caption {
+  padding: 0.55rem 0.9rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
 /* Three substantial "path" tiles replacing the old hero-cta row.
    Each tile is a link-card: icon, title, one-line subtitle. The
    tile treatment breaks up the homepage text density — visitors

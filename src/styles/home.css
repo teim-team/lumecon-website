@@ -1,0 +1,747 @@
+/* Homepage v3 — the teim-app visual language on the marketing site:
+   white surfaces with hairlines, teal as the working accent, quiet
+   rounded cards, mono kickers, and the actual Lumecon mark used
+   asymmetrically as cropped background art. No colored slabs; dark
+   mode is a token flip plus dark app screenshots via <picture>. */
+
+/* ---------- shared primitives ---------- */
+.h-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 500;
+  margin: 0;
+}
+.btn2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  transition:
+    transform 0.15s var(--ease),
+    box-shadow 0.15s var(--ease),
+    background 0.15s var(--ease);
+}
+.btn2--primary {
+  background: linear-gradient(135deg, #0fb5a5 0%, #0a7f74 100%);
+  color: #fff;
+  box-shadow: 0 10px 24px -12px rgba(10, 127, 116, 0.55);
+}
+.btn2--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -12px rgba(10, 127, 116, 0.65);
+}
+.btn2--card {
+  background: var(--white);
+  color: var(--navy);
+  border: 1px solid var(--rule);
+  box-shadow: 0 8px 20px -14px rgba(10, 15, 38, 0.35);
+}
+.btn2--card:hover {
+  transform: translateY(-1px);
+  border-color: var(--rule-strong);
+}
+.btn2 .btn2-arrow {
+  font-weight: 400;
+  transition: transform 0.15s var(--ease);
+}
+.btn2:hover .btn2-arrow {
+  transform: translateX(3px);
+}
+
+/* The real Lumecon mark as background art: cropped at the section
+   edge, quiet, never behind text. Dark mode re-lights the strokes. */
+.markart {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  opacity: 0.09;
+}
+@media (prefers-color-scheme: dark) {
+  .markart {
+    filter: invert(1) hue-rotate(180deg);
+    opacity: 0.13;
+  }
+}
+@media (max-width: 760px) {
+  .hero2 .markart,
+  .pr-hero .markart {
+    display: none;
+  }
+}
+
+/* ---------- hero ---------- */
+.hero2 {
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+  padding: clamp(6.5rem, 12vh, 9.5rem) var(--container-pad) clamp(3rem, 6vh, 4.5rem);
+}
+.markart--tr {
+  top: -190px;
+  right: -230px;
+}
+.markart--bl {
+  bottom: -260px;
+  left: -280px;
+  opacity: 0.06;
+}
+.hero2-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 1.3rem;
+}
+.hero2-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.3rem, 5.6vw, 4.3rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+  max-width: 22ch;
+}
+.hero2-em {
+  color: var(--accent-text);
+}
+.hero2-sub {
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 62ch;
+}
+.hero2-sub strong {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.hero2-cta {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+.hero2-proof {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 72ch;
+  line-height: 1.9;
+}
+
+/* ---------- trio money shot ----------
+   Three app screenshots, stacked the way the refreshed IMPLAN hero
+   stacks its product panels: results front and center, dashboard and
+   lineage tucked behind. All three swap to dark captures in dark
+   mode via <picture>. */
+.trio {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  margin: clamp(1.6rem, 4vh, 3rem) auto 0;
+  padding-bottom: 1rem;
+}
+.trio-frame {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--white);
+}
+.trio-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.trio-side {
+  position: absolute;
+  top: 7%;
+  width: 44%;
+  z-index: 1;
+  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+}
+.trio-side--l {
+  left: 0;
+}
+.trio-side--r {
+  right: 0;
+}
+.trio-main {
+  position: relative;
+  z-index: 2;
+  width: 66%;
+  margin: 0 auto;
+  box-shadow:
+    0 44px 96px -42px rgba(10, 15, 38, 0.5),
+    0 14px 30px -18px rgba(10, 15, 38, 0.22);
+}
+.trio-caption {
+  position: relative;
+  z-index: 2;
+  margin: 1rem auto 0;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--ink-3);
+  max-width: 70ch;
+}
+@media (max-width: 760px) {
+  .trio-side {
+    display: none;
+  }
+  .trio-main {
+    width: 100%;
+    box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.4);
+  }
+}
+
+/* ---------- why (white, hairline, teim-app cards) ---------- */
+.whyw {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+}
+.whyw-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1.6rem, 4vh, 2.4rem);
+}
+.whyw-head {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 62ch;
+}
+.whyw-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.whyw-card {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--white);
+  padding: 1.25rem 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+.whyw-card__k {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin: 0;
+}
+.whyw-card__t {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0;
+}
+.whyw-card__b {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+}
+@media (max-width: 980px) {
+  .whyw-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .whyw-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- flow sections (Whole Nation, Cedar) ---------- */
+.flowsec {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+}
+.flowsec-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1.6rem, 4vh, 2.6rem);
+}
+.flowsec-head {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 62ch;
+}
+.flowsec-title,
+.whyw-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.flowsec-lede,
+.whyw-lede {
+  font-size: clamp(1rem, 1.4vw, 1.13rem);
+  line-height: 1.62;
+  color: var(--ink-2);
+  margin: 0;
+}
+/* Whole Nation: three inputs converge into one result card. */
+.wn-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) auto minmax(0, 6fr);
+  gap: 1.2rem;
+  align-items: center;
+}
+.wn-parts {
+  display: grid;
+  gap: 0.7rem;
+}
+.wn-part {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem;
+  display: grid;
+  gap: 0.15rem;
+  background: var(--white);
+}
+.wn-part__t {
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.wn-part__s {
+  font-size: 0.84rem;
+  color: var(--ink-3);
+}
+.wn-join {
+  font-family: var(--font-mono);
+  color: var(--accent-text);
+  font-size: 1.5rem;
+  text-align: center;
+}
+.wn-result {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--accent-bar);
+  background: var(--accent-rgba-08);
+  border-radius: 16px;
+  padding: 1.5rem 1.5rem 1.4rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.wn-result .markart--card {
+  top: -90px;
+  right: -90px;
+  width: 280px;
+  height: 280px;
+}
+.wn-result__k {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin: 0;
+}
+.wn-result__t {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.wn-result__b {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+.wn-shot {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 48px -26px rgba(10, 15, 38, 0.32);
+}
+.wn-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 880px) {
+  .wn-flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wn-join {
+    transform: rotate(90deg);
+    justify-self: center;
+  }
+}
+/* Cedar: five-step horizontal pipeline + the widget in action. */
+.cedar-flow {
+  display: grid;
+  grid-template-columns: repeat(9, auto);
+  align-items: stretch;
+  justify-content: start;
+  gap: 0.6rem;
+}
+.cedar-step {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 0.8rem 1.05rem;
+  display: grid;
+  gap: 0.15rem;
+  align-content: center;
+  background: var(--white);
+  min-width: 9.5rem;
+}
+.cedar-step--hero {
+  border-color: var(--cedar);
+  background: var(--cedar-mist);
+}
+@media (prefers-color-scheme: dark) {
+  .cedar-step--hero {
+    background: rgba(14, 139, 79, 0.18);
+  }
+}
+.cedar-step__k {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.cedar-step--hero .cedar-step__k {
+  color: var(--cedar-text);
+}
+.cedar-step__t {
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.cedar-arrow {
+  align-self: center;
+  font-family: var(--font-mono);
+  color: var(--ink-4);
+  font-size: 1.05rem;
+}
+.cedar-shot {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+}
+.cedar-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cedar-shot figcaption {
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+@media (max-width: 1080px) {
+  .cedar-flow {
+    grid-template-columns: repeat(3, auto);
+  }
+  .cedar-arrow {
+    display: none;
+  }
+}
+
+/* ---------- one platform ---------- */
+.oneplat {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+}
+.oneplat-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.2rem;
+}
+.oneplat-orgs {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.oneplat-orgs li {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.38rem 0.85rem;
+  background: var(--white);
+}
+
+/* ---------- ask any AI ---------- */
+.askai {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(2rem, 5vh, 3.2rem) var(--container-pad);
+}
+.askai-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: 0.9rem;
+}
+.askai-note {
+  font-size: 0.92rem;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 70ch;
+}
+.askai-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.askai-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.5rem 1.05rem;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    border-color 0.15s var(--ease),
+    color 0.15s var(--ease);
+}
+.askai-list a:hover {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.askai-list a::after {
+  content: '\2197';
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  color: var(--ink-4);
+}
+
+/* ---------- the logo ripple (ported from the app's sign-in hero) ---------- */
+.ripple {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  color: var(--accent);
+  opacity: 0.1;
+  transform-origin: 42% 46%;
+  animation: contour-drift 46s ease-in-out infinite alternate;
+}
+.ripple--hero {
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+}
+.ripple--panel {
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  opacity: 0.12;
+}
+@keyframes contour-drift {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(4deg) scale(1.06);
+  }
+}
+/* The mark keeps the app's slow anchor drift behind the hero. */
+.markart--tr {
+  transform-origin: 62% 40%;
+  animation: mark-drift 26s ease-in-out infinite;
+}
+@keyframes mark-drift {
+  0%,
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  50% {
+    transform: rotate(6deg) translate(-1rem, 0.8rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ripple,
+  .markart--tr {
+    animation: none;
+  }
+}
+@media (max-width: 760px) {
+  .hero2 .ripple,
+  .pr-hero .ripple {
+    display: none;
+  }
+}
+
+/* ---------- the edge grid ---------- */
+.edge {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+}
+.edge-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1.6rem, 4vh, 2.4rem);
+}
+.edge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.edge-card {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--white);
+  padding: 1.25rem 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+.edge-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--accent-rgba-08);
+  border: 1px solid var(--accent-bar);
+  color: var(--accent-text);
+  margin-bottom: 0.3rem;
+  transition:
+    transform 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+.edge-ic svg {
+  width: 24px;
+  height: 24px;
+}
+@media (max-width: 980px) {
+  .edge-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .edge-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- interactive hover states (the app's card feel) ---------- */
+.edge-card,
+.whyw-card,
+.wn-part,
+.cedar-step,
+.oneplat-orgs li {
+  transition:
+    transform 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+.edge-card:hover,
+.whyw-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 34px -18px rgba(10, 127, 116, 0.35);
+}
+.edge-card:hover .edge-ic {
+  transform: scale(1.08);
+  background: var(--accent-rgba-18);
+}
+.wn-part:hover,
+.cedar-step:hover {
+  transform: translateX(6px);
+  border-color: var(--accent);
+}
+.oneplat-orgs li:hover {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.tour-row__shot,
+.wn-shot,
+.cedar-shot,
+.tour-map {
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.tour-row__shot:hover,
+.wn-shot:hover,
+.cedar-shot:hover,
+.tour-map:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 60px -30px rgba(10, 15, 38, 0.45);
+}
+.trio-main {
+  transition: transform 0.25s var(--ease);
+}
+.trio:hover .trio-main {
+  transform: translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .edge-card,
+  .whyw-card,
+  .wn-part,
+  .cedar-step,
+  .tour-row__shot,
+  .wn-shot,
+  .cedar-shot,
+  .tour-map,
+  .trio-main {
+    transition: none;
+  }
+}
