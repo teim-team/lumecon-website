@@ -17,6 +17,15 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Contours from '../components/Contours.astro';
 import { PLANS } from '../data/pricing';
+
+/* One line of value differentiation per card, so the choice reads
+   as capability, not just seat count (Tree is Cedar Grove, not
+   merely unlimited users). */
+const PLAN_DIFF: Record<string, string> = {
+  starter: 'The full Lumecon model, Cedar and every supported geography',
+  standard: 'Adds Team Workspace: shared projects and collaborative review',
+  leader: 'Adds Cedar Grove, the organizational data library, and Cedar calibration',
+};
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -52,6 +61,7 @@ import '../styles/flow.css';
                 <span class="cpl-card__per"> / year</span>
               </span>
               <span class="cpl-card__users">{p.users}</span>
+              <span class="cpl-card__diff">{PLAN_DIFF[p.id]}</span>
               <span class="cpl-card__go" aria-hidden="true">
                 Continue with {p.name} &rarr;
               </span>

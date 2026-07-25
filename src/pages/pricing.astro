@@ -98,7 +98,11 @@ const jsonLd = [
       <div class="pr-plans__grid">
         {
           PLANS.map((p) => (
-            <article class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`} id={`plan-${p.id}`}>
+            <article
+              class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`}
+              id={`plan-${p.id}`}
+              data-plan-card={p.ctaHref}
+            >
               {p.featured && <p class="pr-plan__flag">Most popular</p>}
               <h2 class="pr-plan__name">{p.name}</h2>
               <p class="pr-plan__audience">&ldquo;{p.audience}&rdquo;</p>
@@ -180,6 +184,18 @@ const jsonLd = [
         </a>
       </aside>
     </section>
+
+    <script is:inline>
+      /* The whole plan card is a click target for its primary CTA; the
+     links inside keep working as themselves. */
+      document.querySelectorAll('[data-plan-card]').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('a')) return;
+          var href = card.getAttribute('data-plan-card');
+          if (href) window.location.href = href;
+        });
+      });
+    </script>
 
     <!-- 2b. Commitment policies: published ways to pay less, so the
          page stays "here is the price" rather than "contact us for a
