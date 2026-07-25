@@ -12,8 +12,14 @@ import { test, expect } from '@playwright/test';
  * WebKit is unreliable in CI (see playwright.config.ts).
  */
 
-test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Focus semantics are engine-independent; headless WebKit is unreliable in CI.');
+test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(
+    browserName !== 'chromium',
+    'Focus semantics are engine-independent; headless WebKit is unreliable in CI.',
+  );
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 

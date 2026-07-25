@@ -15,7 +15,7 @@ export const site = {
      descriptions should expand from this phrase rather than inventing
      variants ("economic and policy analysis software," etc.). */
   pitch:
-    'Economic impact analysis software for governments, universities, nonprofits, businesses and Tribal Nations: one platform that turns budgets, financial statements, payroll and program records into credible studies in minutes, with every number traceable to its source.',
+    'Economic impact analysis software for governments, universities, nonprofits, businesses and Tribal Nations: one platform that turns budgets, financial statements, payroll and program records into credible analyses in minutes, with every number traceable to its source.',
   url: 'https://lumecon.ai',
   email: 'contact@lumecon.ai',
   legalEntity: 'Lumecon Inc.',

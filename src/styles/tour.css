@@ -6,7 +6,7 @@
 .tour {
   background: var(--white);
   border-top: 1px solid var(--rule);
-  padding: clamp(3.5rem, 8vh, 6.5rem) var(--container-pad);
+  padding: clamp(4rem, 9vh, 7.5rem) var(--container-pad);
 }
 .tour-inner {
   max-width: 1200px;

@@ -1,7 +1,7 @@
 ---
 /**
  * Product tour — alternating feature rows built from real
- * screenshots of the Lumecon workspace (sample study data), each
+ * screenshots of the Lumecon workspace (sample analysis data), each
  * with a dark-mode capture of the app's own dark theme, plus a wide
  * region-map strip. The rows showcase screens the hero trio only
  * hints at: number lineage, comparison and the living workspace.
@@ -21,20 +21,20 @@ const ROWS = [
   {
     id: 'compare',
     kicker: 'Progress you can show',
-    title: 'Compare studies across years and scenarios',
-    body: 'Put two studies side by side and the change column does the arithmetic: jobs, GDP contribution, labor income, output and tax impacts, each with its percentage change. Renewal season starts from a table you already have.',
+    title: 'Compare analyses across years and scenarios',
+    body: 'Put two analyses side by side and the change column does the arithmetic: jobs, GDP contribution, labor income, output and tax impacts, each with its percentage change. Renewal season starts from a table you already have.',
     img: '/app/compare.webp',
     imgDark: '/app/compare-dark.webp',
-    alt: 'Lumecon compare view of two community college expansion studies, showing jobs, GDP contribution, labor income, economic output and tax impacts with green percentage-change values.',
+    alt: 'Lumecon compare view of two community college expansion analyses, showing jobs, GDP contribution, labor income, economic output and tax impacts with green percentage-change values.',
   },
   {
     id: 'workspace',
     kicker: 'A living workspace',
-    title: 'Studies stay live, from first draft to finished report',
-    body: 'The workspace keeps every study in one place: drafts to continue, runs in progress and completed results ready to open, compare or export as a workbook, CSV tables or a printable summary.',
+    title: 'Analyses stay live, from first draft to finished report',
+    body: 'The workspace keeps every analysis in one place: drafts to continue, runs in progress and completed results ready to open, compare or export as a workbook, CSV tables or a printable summary.',
     img: '/app/dashboard.webp',
     imgDark: '/app/dashboard-dark.webp',
-    alt: 'Lumecon workspace home with lanes for starting, in-progress and completed studies, including completed studies with jobs and output headlines.',
+    alt: 'Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.',
   },
 ];
 ---
@@ -44,11 +44,12 @@ const ROWS = [
     <header class="tour-head">
       <p class="tour-kicker reveal-soft">Inside the product</p>
       <h2 class="tour-title reveal-soft" id="tour-title" data-stagger="1">
-        The numbers each room respects, from software you run yourself.
+        Analysis that stands up to review.
       </h2>
       <p class="tour-lede reveal-soft" data-stagger="2">
-        A lineage behind every number, comparisons that do the arithmetic and a workspace built
-        for recurring work.
+        Built to be defensible in council chambers, board rooms and federal grant reviews: a lineage
+        behind every number, comparisons that do the arithmetic and a workspace built for recurring
+        work.
       </p>
     </header>
 

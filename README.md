@@ -2,14 +2,14 @@
 
 Public marketing site for **Lumecon Inc.**, the economic impact analysis
 software: one platform that turns budgets, financial statements, payroll
-and program records into credible studies in minutes, with Cedar (the AI
+and program records into credible analyses in minutes, with Cedar (the AI
 economic analyst) in every plan. Built as a static
 [Astro](https://astro.build) site and deployed to GitHub Pages at
 [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
 authenticated product and its data layer live in sibling repositories (see
 [The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
-The homepage leads with a rotating money shot (one of ten sample studies,
+The homepage leads with a rotating money shot (one of ten sample analyses,
 captured from the app in light and dark themes), the why cards, a product
 tour with real screenshots, the Lumecon edge grid, the Cedar workflow and
 an ask-any-AI strip. The site also carries pricing (Sprout $500 / Sapling

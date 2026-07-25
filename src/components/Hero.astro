@@ -3,7 +3,7 @@
  * Hero v3 — centered promise, gradient CTA, and the trio money shot:
  * three real app screenshots stacked the way the refreshed IMPLAN
  * hero stacks its product panels. Results front and center (a
- * general-audience Connecticut study), dashboard and number-lineage
+ * general-audience Connecticut analysis), dashboard and number-lineage
  * tucked behind. Every screenshot swaps to a dark capture of the
  * app's own dark mode via <picture>. The actual Lumecon mark sits
  * cropped at the section edges as background art.
@@ -22,9 +22,9 @@ import '../styles/home.css';
     </h1>
 
     <p class="hero2-sub">
-      Lumecon turns budgets, financial statements, payroll and program records into a credible
-      economic impact study in minutes: jobs, labor income, GDP contribution and tax revenue for any
-      U.S. geography,{' '}
+      Credible economic impact analysis for governments, universities, nonprofits, businesses and
+      Tribal Nations: jobs, labor income, GDP contribution and tax revenue for any U.S. geography,
+      built from your budgets, financial statements, payroll and program records,{' '}
       <strong>with every number traceable to its source</strong>.
     </p>
 
@@ -37,18 +37,13 @@ import '../styles/home.css';
       </a>
     </div>
 
-    <p class="hero2-proof">
-      Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and
-      engineers &middot; Patent pending
-    </p>
-
     <figure class="trio" id="trio">
       <div class="trio-frame trio-pos-l" data-trio>
         <picture>
-          <source srcset="/app/dashboard-dark.webp" media="(prefers-color-scheme: dark)" />
+          <source srcset="/app/mappage-dark.webp" media="(prefers-color-scheme: dark)" />
           <img
-            src="/app/dashboard.webp"
-            alt="Lumecon workspace home with lanes for starting, in-progress and completed studies."
+            src="/app/mappage.webp"
+            alt="Lumecon results page centered on a county map of Connecticut beside the statewide result, with four key figures above."
             width="1600"
             height="1000"
             decoding="async"
@@ -60,7 +55,7 @@ import '../styles/home.css';
           <source srcset="/app/hero-01-dark.webp" media="(prefers-color-scheme: dark)" />
           <img
             src="/app/hero-01.webp"
-            alt="Lumecon results page for a community college expansion study in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output, with four key figures and a county map."
+            alt="Lumecon results page for a community college expansion analysis in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output, with four key figures and a county map."
             width="1600"
             height="1000"
             fetchpriority="high"
@@ -80,11 +75,11 @@ import '../styles/home.css';
           />
         </picture>
       </div>
-      <figcaption class="trio-caption">Shown with sample study data.</figcaption>
+      <figcaption class="trio-caption">Shown with sample data.</figcaption>
     </figure>
     <script is:inline>
       /* The trio money shot. Two behaviours:
-         1. The results page is one of ten sample studies, picked at
+         1. The results page is one of ten sample analyses, picked at
             random per page load (stays put while you read).
          2. The three pages rotate every few seconds so results, the
             workspace and the lineage each take the front position.
@@ -101,7 +96,7 @@ import '../styles/home.css';
           ],
           [
             'hero-03',
-            'a tribal hospital construction study at Warm Springs, Oregon: an estimated 1,240 jobs and $186,400,000 in economic output, with statewide and homelands scopes',
+            'a tribal hospital construction analysis at Warm Springs, Oregon: an estimated 1,240 jobs and $186,400,000 in economic output, with statewide and homelands scopes',
           ],
           [
             'hero-04',

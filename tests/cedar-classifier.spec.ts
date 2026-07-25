@@ -52,10 +52,10 @@ test('cedar routes representative questions to the right intent', async ({ page,
 
   const cases: Array<{ q: string; expect: string }> = [
     { q: 'what does lumecon do', expect: 'a council memo, a grant narrative' },
-    { q: 'how much does it cost', expect: 'per-study or per-geography' },
+    { q: 'how much does it cost', expect: 'per-analysis or per-geography' },
     { q: 'does this work for tribal nations', expect: 'Whole Nation' },
     { q: 'EPA grant', expect: 'one of the most common uses of Lumecon' },
-    { q: 'how long does it take', expect: 'A standard study takes minutes' },
+    { q: 'how long does it take', expect: 'A standard analysis takes minutes' },
     { q: 'can I see a demo', expect: 'Happy to set one up' },
     { q: 'what is cedar', expect: 'I handle the data wrangling and the polish' },
     { q: 'how is this different from implan', expect: 'Same underlying economics' },
@@ -112,7 +112,7 @@ test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
   const panel = await openCedar(page);
   // "pricng" is one edit from the "pricing" trigger.
   const bubble = await ask(panel, 'pricng');
-  await expect(bubble).toContainText('per-study or per-geography');
+  await expect(bubble).toContainText('per-analysis or per-geography');
 });
 
 test('every starter chip routes to its own intent, never the fallback', async ({
@@ -125,7 +125,7 @@ test('every starter chip routes to its own intent, never the fallback', async ({
   );
   await page.emulateMedia({ reducedMotion: 'reduce' });
   // A chip is an explicit intent choice. Some labels (e.g. "How long
-  // does a study take?") don't contain their own trigger phrases, so
+  // does an analysis take?") don't contain their own trigger phrases, so
   // re-classifying the label used to drop them to the generic fallback.
   // Fire each chip's click handler and confirm it answers with its own
   // intent. We dispatch the click directly (rather than driving the
@@ -188,7 +188,7 @@ test('asking the same question twice goes deeper instead of repeating verbatim',
   test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
   const panel = await openCedar(page);
   const first = await ask(panel, 'how much does it cost');
-  await expect(first).toContainText('per-study or per-geography');
+  await expect(first).toContainText('per-analysis or per-geography');
   // The repeat should acknowledge the earlier answer and bridge into the
   // deeper (expanded) version rather than replaying the same paragraph.
   const second = await ask(panel, 'how much does it cost');
@@ -220,7 +220,7 @@ test('a compound question answers the primary topic and chips the second', async
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'how much does it cost and also is my data safe');
   // Primary: pricing.
-  await expect(bubble).toContainText('per-study or per-geography');
+  await expect(bubble).toContainText('per-analysis or per-geography');
   // The second half of the question surfaces as the first follow-up chip.
   const firstChip = panel.locator('.cedar-followups').last().locator('button').first();
   await expect(firstChip).toHaveText('Is my data safe?');
@@ -263,7 +263,7 @@ test('the idle nudge fires on the open FAB panel (position: fixed)', async ({
   // Flush the thinking pause + streaming (short under reduced motion).
   await page.clock.runFor(3000);
   await expect(panel.locator('.cedar-msg--bot .cedar-msg__bubble').last()).toContainText(
-    'per-study',
+    'per-analysis',
   );
   // Leave the open panel idle past the nudge delay. The panel is
   // position: fixed, so this guards against visibility checks (like

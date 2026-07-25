@@ -236,7 +236,7 @@
 .whyw {
   background: var(--white);
   border-top: 1px solid var(--rule);
-  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+  padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .whyw-inner {
   max-width: 1240px;
@@ -300,7 +300,7 @@
 .flowsec {
   background: var(--white);
   border-top: 1px solid var(--rule);
-  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+  padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .flowsec-inner {
   max-width: 1240px;
@@ -507,7 +507,7 @@
 .oneplat {
   background: var(--white);
   border-top: 1px solid var(--rule);
-  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+  padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .oneplat-inner {
   max-width: 1240px;
@@ -650,7 +650,7 @@
 .edge {
   background: var(--white);
   border-top: 1px solid var(--rule);
-  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+  padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .edge-inner {
   max-width: 1240px;
