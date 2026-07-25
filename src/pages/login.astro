@@ -29,7 +29,7 @@ import '../styles/auth.css';
   keywords="Lumecon login, Lumecon sign in, economic impact analysis login"
 >
   <Nav />
-  <main class="auth">
+  <main class="auth" id="top" tabindex="-1">
     <div class="auth-panel">
       <p class="auth-eyebrow" data-login-eyebrow>Account</p>
       <h1 class="auth-title" data-login-title>Log in to Lumecon</h1>
@@ -64,7 +64,7 @@ import '../styles/auth.css';
         <div class="auth-row" data-login-row>
           <a href="#" data-login-forgot>Forgot password?</a>
         </div>
-        <p class="auth-meta" data-auth-status hidden></p>
+        <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
         <div class="auth-actions">
           <button type="submit" class="btn" data-login-submit>Sign in</button>
           <button type="button" class="auth-back" data-login-back hidden>Back to sign in</button>

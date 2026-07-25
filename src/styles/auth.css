@@ -26,7 +26,7 @@
 }
 .auth-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
@@ -146,7 +146,7 @@
 }
 .auth-plan__label {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
@@ -208,7 +208,7 @@
   align-items: center;
   gap: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-3);
@@ -222,7 +222,7 @@
   height: 1.35rem;
   border-radius: 50%;
   border: 1px solid var(--rule-strong);
-  font-size: 0.66rem;
+  font-size: 0.7rem;
 }
 .auth-steps__item--on {
   color: var(--accent-text);
@@ -311,7 +311,7 @@
 }
 .pwmeter__label {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-3);
@@ -498,7 +498,7 @@
 }
 .co-total__label {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);

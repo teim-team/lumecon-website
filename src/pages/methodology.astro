@@ -58,7 +58,9 @@ const faqJsonLd = [
   extraJsonLd={faqJsonLd}
 >
   <h1>Methodology</h1>
-  <p class="legal-subhead">How a Lumecon analysis is built, in plain language.</p>
+  <p class="legal-subhead">
+    How a Lumecon analysis is built, in plain language and in the equations behind it.
+  </p>
 
   <h2>The core model</h2>
   <p>
@@ -71,6 +73,40 @@ const faqJsonLd = [
     We keep that proven core and supplement it with higher-frequency public indicators and newer
     estimation methods, so an analysis can better reflect current economic conditions rather than
     relying exclusively on the vintage of the underlying benchmark tables.
+  </p>
+  <p>
+    In matrix form the model is compact. Each industry&rsquo;s production recipe is summarized by a
+    technical coefficient, the amount it purchases from every other industry per dollar of its own
+    output:
+  </p>
+  <div class="eq" role="math" aria-label="a sub i j equals z sub i j divided by x sub j">
+    <span aria-hidden="true"
+      ><var>a</var><sub>ij</sub> = <span class="eq-frac"
+        ><span><var>z</var><sub>ij</sub></span><span><var>x</var><sub>j</sub></span></span
+      ></span
+    >
+  </div>
+  <p>
+    where <var>z</var><sub>ij</sub> is what industry <var>j</var> buys from industry{' '}
+    <var>i</var> and <var>x</var><sub>j</sub> is industry <var>j</var>&rsquo;s total output.
+    Collecting the coefficients into the matrix <var>A</var>, the total output{' '}
+    <var>x</var> required to satisfy a change in final demand <var>f</var> solves the Leontief system:
+  </p>
+  <div
+    class="eq"
+    role="math"
+    aria-label="x equals the inverse of the quantity I minus A, multiplied by f"
+  >
+    <span aria-hidden="true"
+      ><var>x</var> = (<var>I</var> &minus; <var>A</var>)<sup>&minus;1</sup>{' '}
+      <var>f</var></span
+    >
+  </div>
+  <p>
+    The inverse matrix (<var>I</var> &minus; <var>A</var>)<sup>&minus;1</sup> is the Leontief inverse.
+    It carries every round of purchasing at once: the direct requirement, the suppliers&rsquo; requirements,
+    the suppliers&rsquo; suppliers and so on. Extending the table with household and government accounts,
+    described below, lets the same arithmetic carry induced effects.
   </p>
 
   <h2>The data behind every analysis</h2>
@@ -93,6 +129,66 @@ const faqJsonLd = [
     rebalanced with biproportional (RAS) scaling so the accounting identities still hold. Smaller
     and more specialized regional economies keep less of each dollar, and the model reflects that.
   </p>
+  <p>
+    The starting point is the simple location quotient, which compares a sector&rsquo;s share of
+    regional employment with its share nationally:
+  </p>
+  <div
+    class="eq"
+    role="math"
+    aria-label="S L Q sub i equals e sub i superscript r over e superscript r, all divided by e sub i superscript n over e superscript n"
+  >
+    <span aria-hidden="true"
+      >SLQ<sub>i</sub> = <span class="eq-frac"
+        ><span><var>e</var><sub>i</sub><sup>r</sup> / <var>e</var><sup>r</sup></span><span
+          ><var>e</var><sub>i</sub><sup>n</sup> / <var>e</var><sup>n</sup></span
+        ></span
+      ></span
+    >
+  </div>
+  <p>
+    where <var>e</var> counts employment, <var>i</var> indexes the sector, and{' '}
+    <var>r</var> and <var>n</var> mark the region and the nation. The Flegg-family refinements Lumecon
+    uses compare selling and purchasing sectors pair by pair and discount local purchasing by regional
+    size:
+  </p>
+  <div
+    class="eq"
+    role="math"
+    aria-label="F L Q sub i j equals C I L Q sub i j times lambda star, where C I L Q sub i j equals S L Q sub i over S L Q sub j, and lambda star equals the logarithm base 2 of 1 plus e superscript r over e superscript n, all raised to the power delta"
+  >
+    <span class="eq-line" aria-hidden="true"
+      >FLQ<sub>ij</sub> = CILQ<sub>ij</sub> &times; &lambda;*, where CILQ<sub>ij</sub> ={' '}
+      <span class="eq-frac"><span>SLQ<sub>i</sub></span><span>SLQ<sub>j</sub></span></span></span
+    >
+    <span class="eq-line" aria-hidden="true"
+      >&lambda;* = [log<sub>2</sub>(1 + <var>e</var><sup>r</sup> / <var>e</var><sup>n</sup>)]<sup
+        >&delta;</sup
+      ></span
+    >
+  </div>
+  <p>
+    The exponent &delta; (delta) sets how strongly a smaller regional economy discounts local
+    purchasing. It is calibrated against observed regional data rather than fixed by assumption, and
+    every regional coefficient is capped so no local share exceeds one. After regionalization, the
+    biproportional (RAS) step rescales the table iteratively:
+  </p>
+  <div
+    class="eq"
+    role="math"
+    aria-label="A superscript k plus 1 equals R superscript k, times A superscript k, times S superscript k"
+  >
+    <span aria-hidden="true"
+      ><var>A</var><sup>(k+1)</sup> = <var>R</var><sup>(k)</sup>{' '}
+      <var>A</var><sup>(k)</sup>{' '}
+      <var>S</var><sup>(k)</sup></span
+    >
+  </div>
+  <p>
+    where <var>R</var> and <var>S</var> are diagonal matrices of row and column scaling factors, updated
+    each round until the table converges on the regional control totals. The result is a regional table
+    whose accounting identities hold just as they do in the national one.
+  </p>
 
   <h2>Direct, indirect and induced effects</h2>
   <p>
@@ -101,6 +197,25 @@ const faqJsonLd = [
     Induced effects come from workers spending their earnings locally. The layers are always shown
     separately, so a reviewer can see how the total is composed rather than taking one number on
     faith.
+  </p>
+  <p>The multipliers used across the field summarize the same decomposition:</p>
+  <div
+    class="eq"
+    role="math"
+    aria-label="The Type 1 multiplier equals direct plus indirect effects, divided by direct effects. The Type 2 multiplier equals direct plus indirect plus induced effects, divided by direct effects."
+  >
+    <span class="eq-line" aria-hidden="true"
+      >Type I = <span class="eq-frac"><span>direct + indirect</span><span>direct</span></span></span
+    >
+    <span class="eq-line" aria-hidden="true"
+      >Type II ={' '}
+      <span class="eq-frac"><span>direct + indirect + induced</span><span>direct</span></span></span
+    >
+  </div>
+  <p>
+    Lumecon reports the layers themselves rather than leading with a single multiplier, and
+    validation checks flag any multiplier outside the ranges credible for an economy of the
+    region&rsquo;s size.
   </p>
 
   <h2>The household and government accounts</h2>

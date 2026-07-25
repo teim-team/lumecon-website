@@ -28,7 +28,7 @@ import '../styles/auth.css';
   keywords="Lumecon checkout, Lumecon buy, Lumecon subscribe, economic impact analysis software pricing"
 >
   <Nav />
-  <main class="auth">
+  <main class="auth" id="top" tabindex="-1">
     <div class="auth-panel auth-panel--wide">
       <p class="auth-eyebrow">Checkout</p>
       <h1 class="auth-title">Choose your plan</h1>
@@ -93,7 +93,7 @@ import '../styles/auth.css';
           <span class="co-total__value" data-co-total></span>
         </div>
 
-        <p class="auth-meta" data-auth-status hidden></p>
+        <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
 
         <div class="auth-actions">
           <button type="submit" class="btn" data-co-submit> Continue to secure payment </button>

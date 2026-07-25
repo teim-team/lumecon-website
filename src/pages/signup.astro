@@ -43,7 +43,7 @@ const ROLE_OPTIONS = [
   keywords="Lumecon signup, Lumecon sign up, Lumecon create account, economic impact analysis account, IMPLAN alternative signup"
 >
   <Nav />
-  <main class="auth">
+  <main class="auth" id="top" tabindex="-1">
     <div class="auth-panel">
       <p class="auth-eyebrow">Create account</p>
       <h1 class="auth-title">Create your Lumecon account</h1>
@@ -131,7 +131,7 @@ const ROLE_OPTIONS = [
           </ul>
         </fieldset>
 
-        <p class="auth-meta" data-auth-status hidden></p>
+        <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
 
         <div class="auth-actions">
           <button type="submit" class="btn" data-auth-submit>Continue</button>

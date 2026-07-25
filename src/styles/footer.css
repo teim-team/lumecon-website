@@ -47,7 +47,7 @@
   gap: 0.35rem;
 }
 .footer-col__head {
-  font-size: 0.64rem;
+  font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
@@ -108,13 +108,13 @@
   align-items: center;
 }
 .footer-legal {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   color: var(--ink-3);
   line-height: 1.45;
   letter-spacing: 0.005em;
 }
 .footer-email {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   letter-spacing: 0.04em;
   color: var(--ink-3);
   transition: color 0.2s var(--ease);
