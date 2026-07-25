@@ -7,23 +7,21 @@
  * what kind of organization the customer is. This page follows the
  * hierarchy from the pricing note:
  *
- *   1. Hero: economic analysis without enterprise software pricing.
- *   2. Three plan cards (Sapling recommended) + the 9-row detail
- *      table (kept deliberately readable; capabilities live inside
- *      Cedar, Team Workspace and Cedar Grove rather than as 25
- *      feature rows).
- *   3. The 50% competitive transition offer, presented as a major
- *      program immediately below the table.
- *   4. Why Lumecon is different, Whole Nation, Cedar, Team
- *      Workspace and Cedar Grove.
- *   5. Consultant licensing (custom pricing, no public number).
+ *   1. Hero: we tailor the modeling, not the price.
+ *   2. Plan cards + the detail table, then the pricing creed and the
+ *      commitment policies (multi-year, lowest applicable price).
+ *   3. The competitive transition offer.
+ *   4. Whole Nation (differentiated capability), Workspace + Grove
+ *      under one philosophy, consultant licensing.
+ *
+ * Cedar is explained on /cedar, not here; this page only states
+ * that it is included.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MarkArt from '../components/MarkArt.astro';
 import WholeNation from '../components/WholeNation.astro';
-import CedarFlow from '../components/CedarFlow.astro';
 import { site } from '../config';
 import { PLANS, PLAN_TABLE_ROWS, COMPETITIVE_OFFER, CONSULTANT } from '../data/pricing';
 import '../styles/global.css';
@@ -87,12 +85,11 @@ const jsonLd = [
           We tailor the modeling, <span class="hero2-em">not the price.</span>
         </h1>
         <p class="pr-hero__lede">
-          Your geography, organization and use case shape how your analysis works, not what we
-          decide to charge you. One platform for economic impact analysis, organizational data and
-          reporting; every plan includes the Lumecon model, Cedar, unlimited analysis and every
+          Your organization, geography and use case shape the analysis, not what we decide to charge
+          you. Every plan includes the full Lumecon model, Cedar, unlimited analysis and every
           supported U.S. geography.
         </p>
-        <p class="pr-hero__callout">Starting at $500 a year, taxes and fees included.</p>
+        <p class="pr-hero__callout">Starting at $500 a year. Taxes and fees included.</p>
       </div>
     </section>
 
@@ -154,12 +151,20 @@ const jsonLd = [
         </table>
       </div>
       <p class="pr-plans__note">
-        Every plan runs the same model on the same data foundation. Higher plans add collaboration,
-        organizational memory and scale. Prices include taxes and fees.
+        Every plan runs the same model on the same data foundation. Prices include taxes and fees.{
+          ' '
+        }
+        <a class="inline-link" href="/cedar">Learn what Cedar does</a>.
       </p>
-      <p class="pr-plans__creed">
-        Complexity belongs in the model. <span class="brand-em">Not the pricing.</span>
-      </p>
+      <div class="pr-creed">
+        <p class="pr-plans__creed">
+          Complexity belongs in the model. <span class="brand-em">Not the pricing.</span>
+        </p>
+        <p class="pr-creed__trio">
+          No geography-by-geography pricing. No per-analysis fees. No quote that changes because
+          your organization sounds complicated.
+        </p>
+      </div>
 
       <!-- Free trial: the app is free to try; results unlock on a plan. -->
       <aside class="pr-trial" aria-label="Free trial">
@@ -181,24 +186,17 @@ const jsonLd = [
          quote". -->
     <section class="pr-commit" aria-labelledby="commit-title">
       <div class="pr-commit__inner">
-        <h2 class="pr-commit__title" id="commit-title">
-          Straightforward pricing gets better with commitment.
-        </h2>
+        <h2 class="pr-commit__title" id="commit-title">Commit longer. Pay less.</h2>
         <div class="pr-commit__cols">
           <p>
-            Planning for the long term? So are we. Multi-year agreements are eligible for preferred
-            pricing, with additional savings available for prepaid commitments.
+            Multi-year agreements qualify for preferred pricing, with additional savings available
+            for prepaid commitments.
           </p>
           <p>
-            And qualifying for one program never prices you out of another: if your organization
-            qualifies for more than one rate, including the transition offer below, you receive the
-            lowest applicable price.
+            If you qualify for multiple discounts or preferred rates, you receive the{' '}
+            <span class="brand-em">lowest applicable price</span>.
           </p>
         </div>
-        <p class="pr-commit__creed">
-          No geography-by-geography pricing. No per-analysis fees. No mystery quote based on how
-          complicated your organization sounds.
-        </p>
       </div>
     </section>
 
@@ -212,6 +210,7 @@ const jsonLd = [
           <h2 class="pr-offer__title" id="offer-title">{COMPETITIVE_OFFER.headline}</h2>
           <p class="pr-offer__big">{COMPETITIVE_OFFER.subhead}</p>
           <p class="pr-offer__lede">{COMPETITIVE_OFFER.body}</p>
+          <p class="pr-offer__guarantee">{COMPETITIVE_OFFER.guarantee}</p>
         </header>
         <div class="pr-offer__cta">
           <a class="btn2 btn2--primary" href={offerMailto}>
@@ -223,64 +222,38 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 4. Why different -->
-    <section class="pr-why" aria-label="Why Lumecon is different">
-      <ul class="pr-why__grid">
-        <li>
-          <p class="pr-why__t">Every geography.</p>
-          <p class="pr-why__b">Counties, states, the nation and reservations.</p>
-        </li>
-        <li>
-          <p class="pr-why__t">Unlimited analysis.</p>
-          <p class="pr-why__b">No per-project fees and no geography add-ons.</p>
-        </li>
-        <li>
-          <p class="pr-why__t">Cedar included.</p>
-          <p class="pr-why__b">AI-assisted data intake, analysis and reporting in every plan.</p>
-        </li>
-        <li>
-          <p class="pr-why__t">Built for Tribal Nations too.</p>
-          <p class="pr-why__b">
-            Tribal government, tribal enterprise and Whole Nation analysis are core architecture.
-          </p>
-        </li>
-      </ul>
-    </section>
-
-    <!-- 5. Whole Nation + Cedar (shared homepage components) -->
+    <!-- 4. Whole Nation: a genuinely differentiated capability. -->
     <WholeNation />
-    <CedarFlow />
 
-    <!-- 6. Team Workspace and Cedar Grove -->
-    <section class="flowsec" id="workspace-grove" aria-label="Team Workspace and Cedar Grove">
+    <!-- 5. Team Workspace and Cedar Grove, under one philosophy. -->
+    <section class="flowsec" id="workspace-grove" aria-labelledby="wg-title">
       <div class="flowsec-inner">
+        <header class="flowsec-head">
+          <h2 class="flowsec-title" id="wg-title">
+            Higher plans add collaboration and memory, <span class="brand-em"
+              >not a better economic model.</span
+            >
+          </h2>
+        </header>
         <div class="pr-duo">
           <article class="pr-duo__card">
-            <p class="h-kicker">Team Workspace &middot; Sapling and up</p>
-            <h2 class="pr-duo__title">Economic analysis becomes collaborative.</h2>
+            <p class="h-kicker">Team Workspace &middot; Sapling</p>
             <p class="pr-duo__body">
-              Work from shared projects and inputs, collaborate on analyses, manage the work, review
-              results and keep everyone in the same analytical environment. Sprout is for an
-              individual. Sapling is for a team.
+              Shared projects, collaborative analysis, review and project management.
             </p>
           </article>
           <article class="pr-duo__card pr-duo__card--grove">
             <p class="h-kicker h-kicker--cedar">Cedar Grove &middot; Tree</p>
-            <h2 class="pr-duo__title">Your organization&rsquo;s economic data library.</h2>
             <p class="pr-duo__body">
-              Cedar Grove is a data library in the fullest sense. It starts stocked: the clean,
-              harmonized public datasets behind the Lumecon model, current and analysis-ready, the
-              way established platforms sell a data library. Then it grows with you: add
-              administrative data, recurring internal datasets, prior analyses and other approved
-              sources to extend what your analyses can draw on, reusable across projects and
-              recurring reporting.
-            </p>
-            <p class="pr-duo__body">
-              Cedar understands the analysis you&rsquo;re working on. Cedar Grove remembers the
-              organization you&rsquo;re working for.
+              A reusable organizational data and context layer combining Lumecon&rsquo;s
+              analysis-ready datasets with your approved internal information.
             </p>
           </article>
         </div>
+        <p class="pr-duo__creed">
+          The economics stay the same. What changes is how much of your organization can work around
+          them.
+        </p>
       </div>
     </section>
 
@@ -302,10 +275,7 @@ const jsonLd = [
             <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
-        <p class="pr-consult__note">
-          Consultant licensing is custom because commercial use, client workflows, support and Cedar
-          calibration differ firm to firm. Standard customers keep the public plans above.
-        </p>
+        <p class="pr-consult__note">{CONSULTANT.note}</p>
       </div>
     </section>
   </main>

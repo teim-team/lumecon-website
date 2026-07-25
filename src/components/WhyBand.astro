@@ -14,26 +14,27 @@ const CARDS = [
   {
     k: 'Every geography',
     t: 'County to nation',
-    b: 'Counties, states, the nation, reservations and trust lands are included in every plan. No geography add-ons.',
+    b: 'Counties, states, the nation, reservations and trust lands. No geography add-ons.',
     art: 'geo',
     artDark: 'geo-dark',
   },
   {
     k: 'Unlimited analysis',
     t: 'No per-analysis fees',
-    b: 'Run unlimited projects and analyses on the full Lumecon model with one annual subscription.',
+    b: 'Run as many projects and analyses as you need with one annual subscription.',
     art: 'rerun',
   },
   {
     k: 'Cedar included',
-    t: 'An AI economic analyst',
-    b: 'Cedar reads PDFs, spreadsheets and CSVs, structures the inputs the model needs, helps interpret results and supports reporting. It is included in every plan.',
+    t: 'AI built into the workflow',
+    b: 'Cedar helps turn source documents into model-ready inputs, supports analysis and helps communicate results.',
     art: 'cedar',
+    link: { href: '/cedar', label: 'Meet Cedar' },
   },
   {
     k: 'Every kind of organization',
     t: 'Built to adapt',
-    b: 'One platform, with workflows built for governments, universities, nonprofits, businesses, Tribal Nations and consultants.',
+    b: 'Workflows for governments, universities, nonprofits, businesses, Tribal Nations and consultants.',
     art: 'orgs',
   },
 ];
@@ -45,8 +46,8 @@ const CARDS = [
       <p class="h-kicker">Why Lumecon</p>
       <h2 class="whyw-title" id="whyw-title">Every plan gets the real platform.</h2>
       <p class="whyw-lede">
-        Higher plans add collaboration, organizational memory and scale. The economics stay the
-        same: every customer runs the same model on the same data foundation.{' '}
+        The economics don&rsquo;t change with the price. Every customer runs the same model on the
+        same data foundation; higher plans add collaboration, organizational memory and scale.{' '}
         <a class="inline-link" href="/pricing">Compare plans</a>{' '}or{' '}
         <a class="inline-link" href="/signup">start free</a>.
       </p>
@@ -75,7 +76,18 @@ const CARDS = [
             </span>
             <p class="whyw-card__k">{c.k}</p>
             <h3 class="whyw-card__t">{c.t}</h3>
-            <p class="whyw-card__b">{c.b}</p>
+            <p class="whyw-card__b">
+              {c.b}
+              {c.link && (
+                <>
+                  {' '}
+                  <a class="inline-link" href={c.link.href}>
+                    {c.link.label}
+                  </a>
+                  .
+                </>
+              )}
+            </p>
           </article>
         ))
       }

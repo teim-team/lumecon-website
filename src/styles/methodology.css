@@ -138,6 +138,9 @@
 .meth-twoprose--tight {
   margin-top: 2.2rem;
 }
+.meth-twoprose--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
 
 /* ---------- equations as designed objects ---------- */
 .meth-eqs {
@@ -365,7 +368,8 @@
   padding-top: 1.3rem;
   border-top: 1px solid var(--rule);
 }
-.meth-mission__fine a {
+.meth-mission__fine a,
+.gloss-link {
   color: var(--accent-text);
   text-decoration: underline;
   text-underline-offset: 0.16em;

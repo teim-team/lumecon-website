@@ -85,19 +85,41 @@ established phrases over inventing new highlighted slogans per page.
 
 The approved recurring brand phrases (founder-approved 2026-07;
 these are sanctioned exceptions to the no-antithesis and
-no-fragment copy rules, verbatim only):
+no-fragment copy rules, verbatim only). Do not invent a new teal
+slogan for every section: teal represents Lumecon ideas we
+deliberately want people to remember, so reuse this established
+language across pages where appropriate.
 
-- "economic impact" / "make it visible"
-- "Every organization has an economic impact."
-- "Built on decades of economic science. Not frozen in it."
-- "We invest in the model, not just the software."
-- "We tailor the modeling, not the price."
-- "Complexity belongs in the model. Not the pricing."
-- "AI in the workflow. Economists in the loop."
-- "Economic judgment stays human."
+Homepage: "economic impact" / "every result is traceable" /
+"not frozen in it" / "make it visible" ("Make yours visible.")
+
+Pricing: "We tailor the modeling, not the price." / "Complexity
+belongs in the model. Not the pricing." / "lowest applicable price"
+
+Methodology: "proven foundations" / "better inputs" / "the model
+keeps improving" / "every number has a lineage" / "Built on decades
+of economic science. Not frozen in it." / "Economic judgment stays
+human."
+
+Cedar: "AI built for economic analysis, from the beginning." /
+"Not a chatbot added to old software. Part of how Lumecon works." /
+"Your existing work becomes context, not baggage." / "Thought
+partner, not autopilot." / "AI in the workflow. Economists in the
+loop." / "the model, data infrastructure, software and AI evolve
+together"
+
+Shared: "Every organization has an economic impact." / "We invest
+in the model, not just the software (around it)."
 
 Do not turn these into badges, pills, cards, callouts or gradients;
 the emphasis comes from color within the existing composition. Never
 make whole paragraphs teal; emphasize the smallest phrase that
 carries the idea. Review test: if someone remembers only the teal
 phrases, do they understand what makes Lumecon different?
+
+Page ownership (keep each page making one argument): the homepage
+says why Lumecon matters; /pricing says what it costs and why the
+pricing is different; /methodology says why the economics are
+credible; /cedar says why Lumecon's use of AI is different; the
+glossary defines terms and nothing more. Do not re-explain Cedar on
+other pages beyond a one-line pointer to /cedar.

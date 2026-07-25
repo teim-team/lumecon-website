@@ -420,81 +420,6 @@
   color: var(--ink-2);
   margin: 0;
 }
-/* Whole Nation: three inputs converge into one result card. */
-.wn-flow {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) auto minmax(0, 6fr);
-  gap: 1.2rem;
-  align-items: center;
-}
-.wn-parts {
-  display: grid;
-  gap: 0.7rem;
-}
-.wn-part {
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 0.85rem 1.1rem;
-  display: grid;
-  gap: 0.15rem;
-  background: var(--white);
-}
-.wn-part__t {
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-.wn-part__s {
-  font-size: 0.84rem;
-  color: var(--ink-3);
-}
-.wn-join {
-  font-family: var(--font-mono);
-  color: var(--accent-text);
-  font-size: 1.5rem;
-  text-align: center;
-}
-.wn-result {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--accent-bar);
-  background: var(--accent-rgba-08);
-  border-radius: 8px;
-  padding: 1.5rem 1.5rem 1.4rem;
-  display: grid;
-  gap: 0.5rem;
-}
-.wn-result .markart--card {
-  top: -90px;
-  right: -90px;
-  width: 280px;
-  height: 280px;
-}
-.wn-result__k {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-  margin: 0;
-}
-.wn-result__t {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.45rem;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  margin: 0;
-}
-.wn-result__b {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--ink-2);
-  margin: 0;
-  position: relative;
-  z-index: 1;
-}
 .wn-shot {
   margin: 0;
   border: 1px solid var(--rule);
@@ -507,64 +432,8 @@
   width: 100%;
   height: auto;
 }
-@media (max-width: 880px) {
-  .wn-flow {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .wn-join {
-    transform: rotate(90deg);
-    justify-self: center;
-  }
-}
-/* Cedar: five-step horizontal pipeline + the widget in action. */
-.cedar-flow {
-  display: grid;
-  grid-template-columns: repeat(9, auto);
-  align-items: stretch;
-  justify-content: start;
-  gap: 0.6rem;
-}
-.cedar-step {
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 0.8rem 1.05rem;
-  display: grid;
-  gap: 0.15rem;
-  align-content: center;
-  background: var(--white);
-  min-width: 9.5rem;
-}
-.cedar-step--hero {
-  border-color: var(--cedar);
-  background: var(--cedar-mist);
-}
-@media (prefers-color-scheme: dark) {
-  .cedar-step--hero {
-    background: rgba(14, 139, 79, 0.18);
-  }
-}
-.cedar-step__k {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-.cedar-step--hero .cedar-step__k {
-  color: var(--cedar-text);
-}
-.cedar-step__t {
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-.cedar-arrow {
-  align-self: center;
-  font-family: var(--font-mono);
-  color: var(--ink-4);
-  font-size: 1.05rem;
-}
+/* Cedar teaser: one position statement + one real capture. The old
+   five-step pipeline moved to /cedar as a diagram. */
 .cedar-shot {
   margin: 0;
   border: 1px solid var(--rule);
@@ -584,26 +453,6 @@
   line-height: 1.55;
   color: var(--ink-3);
 }
-@media (max-width: 1080px) {
-  .cedar-flow {
-    grid-template-columns: repeat(3, auto);
-  }
-  .cedar-arrow {
-    display: none;
-  }
-}
-/* Phones get their own composition: the pipeline becomes a single
-   readable column of full-width steps instead of a clipped row. */
-@media (max-width: 640px) {
-  .cedar-flow {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-  .cedar-step {
-    min-width: 0;
-  }
-}
-
 /* ---------- one platform ---------- */
 .oneplat {
   background: var(--white);
@@ -830,8 +679,6 @@
 }
 
 /* ---------- interactive hover states (the app's card feel) ---------- */
-.wn-part,
-.cedar-step,
 .oneplat-orgs li {
   transition:
     transform 0.2s var(--ease),
@@ -842,11 +689,6 @@
 .edge-card:hover .edge-ic {
   transform: scale(1.08);
   background: var(--accent-rgba-18);
-}
-.wn-part:hover,
-.cedar-step:hover {
-  transform: translateX(6px);
-  border-color: var(--accent);
 }
 .oneplat-orgs li:hover {
   border-color: var(--accent);
@@ -874,8 +716,6 @@
 @media (prefers-reduced-motion: reduce) {
   .edge-card,
   .whyw-card,
-  .wn-part,
-  .cedar-step,
   .tour-row__shot,
   .wn-shot,
   .cedar-shot,
@@ -978,8 +818,6 @@
    satisfying click-down. Guarded for reduced motion below. */
 .btn2:active,
 .askai-tile:active,
-.wn-part:active,
-.cedar-step:active,
 .pr-plan:active {
   transform: scale(0.985);
   transition-duration: 0.06s;
@@ -987,8 +825,6 @@
 @media (prefers-reduced-motion: reduce) {
   .btn2:active,
   .askai-tile:active,
-  .wn-part:active,
-  .cedar-step:active,
   .pr-plan:active {
     transform: none;
   }

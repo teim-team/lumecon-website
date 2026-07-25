@@ -34,8 +34,7 @@ export const PLANS: Plan[] = [
     price: '$500',
     period: '/ year',
     audience: 'I do economic analysis.',
-    tagline:
-      'One user with the full Lumecon model, Cedar, every supported U.S. geography and unlimited analysis.',
+    tagline: 'Full Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.',
     users: '1 user',
     ctaLabel: 'Start with Sprout',
     ctaHref: '/signup?tier=starter',
@@ -48,7 +47,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'We do economic analysis.',
     tagline:
-      'Everything in Sprout plus Team Workspace: shared projects, collaborative analysis and review workflows for up to 10 users.',
+      'Everything in Sprout, plus shared projects, collaborative analysis and team review workflows.',
     users: 'Up to 10 users',
     featured: true,
     ctaLabel: 'Start with Sapling',
@@ -62,7 +61,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'Our organization runs economic analysis through Lumecon.',
     tagline:
-      'Everything in Sapling plus Cedar Grove, hands-on Cedar calibration and unlimited users within one organization.',
+      'Everything in Sapling, plus Cedar Grove, organizational memory, hands-on Cedar calibration and unlimited users.',
     users: 'Unlimited users in one organization',
     ctaLabel: 'Start with Tree',
     ctaHref: '/signup?tier=leader',
@@ -101,9 +100,9 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   {
     label: 'Cedar',
     values: [
-      'Included. Upload PDFs, spreadsheets and CSVs; Cedar interprets the material, maps it into the model, assists with setup and interpretation and helps turn results into reporting.',
-      'Included, with usage sized for a multi-user team.',
-      'Included, with organizational usage and hands-on calibration to your terminology, workflows and recurring reporting.',
+      'Included',
+      'Included, with team usage',
+      'Included, with organizational context and calibration',
     ],
   },
   {
@@ -119,16 +118,17 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     values: [
       'Not included',
       'Not included',
-      'Included. The data library: the clean, harmonized datasets behind the model, ready to use, which your organization can augment with its own data to extend every future analysis and report.',
+      'Included. Organizational data library combining Lumecon&rsquo;s analysis-ready datasets with approved internal data and reusable organizational context.',
     ],
   },
 ];
 
 /** The 50% competitive transition offer. */
 export const COMPETITIVE_OFFER = {
-  headline: 'Already paying for economic impact analysis software?',
-  subhead: 'We’ll cut that cost in half.',
-  body: 'Show us what your organization spent on qualifying economic impact analysis or economic modeling software during the previous 12 months. For your first year, eligible organizations can move to Lumecon for 50% of that documented spend, up to the standard price of the applicable Lumecon plan.',
+  headline: 'Switching economic impact software?',
+  subhead: 'We’ll cut your current cost in half.',
+  body: 'Eligible organizations can receive their first year of Lumecon for 50% of documented qualifying economic modeling software spend, up to the standard price of the applicable Lumecon plan.',
+  guarantee: '50% off, or your existing preferred Lumecon rate, whichever is lower.',
   ctaLabel: 'See if you qualify',
   ctaSubject: 'Competitive transition offer: see if we qualify',
   finePrint:
@@ -141,6 +141,7 @@ export const CONSULTANT = {
   audience: 'We do economic analysis for clients.',
   positioning: 'Spend less time building models. Spend more time advising clients.',
   body: 'Consultant licenses are for firms and professionals using Lumecon commercially to conduct analysis for outside clients. Use Lumecon across engagements while keeping your client relationships, analytical judgment and deliverables your own. We’ll also work with your firm to calibrate Cedar around how your team performs analysis and produces client reporting.',
+  note: 'Consultant licensing is separate from standard organizational pricing because it covers commercial client use, multi-client workflows, support and firm-level Cedar calibration. Standard customers keep the public plans above.',
   points: [
     'The full Lumecon modeling platform and every applicable geography',
     'Commercial and client use',

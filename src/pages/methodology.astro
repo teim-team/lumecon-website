@@ -16,6 +16,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MarkArt from '../components/MarkArt.astro';
+import AskAI from '../components/AskAI.astro';
 import { site } from '../config';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -191,10 +192,9 @@ const jsonLd = [
           Proven foundations. <span class="brand-em">Better inputs.</span> A model that keeps improving.
         </h1>
         <p class="meth-hero__lede">
-          Input-output analysis carries nearly a century of economic research, and Lumecon builds on
-          all of it. The proven core stays. Around it we bring current public data, higher-frequency
-          signals, modern estimation methods and economist review, so the model reflects the economy
-          as it is now. <span class="brand-em"
+          Input-output analysis carries nearly a century of economic research. Lumecon builds on
+          that foundation with current public data, modern regionalization, higher-frequency
+          evidence where appropriate and transparent validation. <span class="brand-em"
             >Built on decades of economic science, not frozen in it.</span
           >
         </p>
@@ -544,7 +544,7 @@ const jsonLd = [
             ))
           }
         </ul>
-        <div class="meth-twoprose meth-twoprose--tight">
+        <div class="meth-twoprose meth-twoprose--tight meth-twoprose--three">
           <div class="meth-prose">
             <h3>Data vintages</h3>
             <p>
@@ -565,88 +565,53 @@ const jsonLd = [
               the proven core stays intact while the levels stay current.
             </p>
           </div>
+          <div class="meth-prose">
+            <h3>Built to evolve</h3>
+            <p>
+              The model is continually evaluated and improved as better data, regionalization
+              approaches and validation evidence become available.{' '}
+              <a class="gloss-link" href="/cedar">How Cedar supports that workflow</a>.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 06 · Built to evolve -->
-    <section class="meth-sec" aria-labelledby="m-evolve">
+    <!-- 06 · Validation and human review -->
+    <section class="meth-sec" aria-labelledby="m-review">
       <div class="meth-w">
         <div class="meth-sec__head">
           <span class="meth-sec__num" aria-hidden="true">06</span>
-          <h2 id="m-evolve">
-            Built on decades of economic science. <span class="brand-em">Not frozen in it.</span>
-          </h2>
+          <h2 id="m-review">Validation and human review</h2>
         </div>
         <div class="meth-twoprose">
           <div class="meth-prose">
-            <p>
-              Economic modeling is a living discipline. The input-output foundation is shared across
-              the field and carries nearly a century of research; no one owns it, and it does not
-              need reinventing. What can keep improving is everything around it: the data the model
-              draws on, how national relationships are regionalized, how estimates are made for
-              small and suppressed geographies, how results are validated and how the work is
-              documented.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p>
-              So we continually evaluate better public data sources, improve how we model different
-              geographies and economies, incorporate higher-frequency signals where they add
-              information and use modern computing to process data that once took enormous manual
-              effort. A model should not stop evolving because it works. <span class="brand-em"
-                >We invest in the model, not just the software around it.</span
-              >
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 07 · AI's role -->
-    <section class="meth-sec" aria-labelledby="m-ai">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">07</span>
-          <h2 id="m-ai">
-            AI in the workflow. <span class="brand-em">Economists in the loop.</span>
-          </h2>
-        </div>
-        <div class="meth-twoprose">
-          <div class="meth-prose">
-            <p>
-              Lumecon uses AI where it makes the work better and faster: reading documents,
-              structuring inputs, harmonizing and classifying data, drafting documentation and
-              helping interpret results. Cedar carries that work inside the product, and it surfaces
-              the assumptions it makes and flags gaps it cannot resolve.
-            </p>
-            <p>
-              AI does not set economic assumptions. The model&rsquo;s relationships, regionalization
-              choices and estimation methods are economically grounded, documented and reviewed by
-              trained economists, and the person running an analysis confirms the assumptions before
-              results are finalized. <span class="brand-em">Economic judgment stays human.</span>
-            </p>
-          </div>
-          <div class="meth-prose">
-            <h3>Validation and human review</h3>
             <p>
               The software checks that tables cross-foot, that scopes nest correctly and that inputs
               fall in plausible ranges. Estimated inputs and model outputs are checked against
               plausibility bounds, including multiplier ranges credible for a small regional
               economy, and a run that fails a critical check stops rather than shipping a doubtful
-              number. Automation carries the mechanical work, and people remain responsible for the
-              analytical decisions.
+              number.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              Automation assists with data processing, quality checks and documentation. Economic
+              assumptions, regionalization choices and model design remain economically grounded and
+              subject to human review, and the person running an analysis confirms the assumptions
+              before results are finalized.{' '}
+              <a class="gloss-link" href="/cedar">Learn how Cedar works</a>.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 08 · Lineage -->
+    <!-- 07 · Lineage -->
     <section class="meth-sec" aria-labelledby="m-lineage">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">08</span>
+          <span class="meth-sec__num" aria-hidden="true">07</span>
           <h2 id="m-lineage">Every number has a lineage</h2>
         </div>
         <div class="meth-twoprose">
@@ -669,11 +634,11 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 09 · Measures -->
+    <!-- 08 · Measures -->
     <section class="meth-sec" aria-labelledby="m-measures">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">09</span>
+          <span class="meth-sec__num" aria-hidden="true">08</span>
           <h2 id="m-measures">What the headline measures mean</h2>
         </div>
         <dl class="meth-defs">
@@ -693,23 +658,28 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="m-compare">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">10</span>
-          <h2 id="m-compare">How Lumecon compares</h2>
+          <span class="meth-sec__num" aria-hidden="true">09</span>
+          <h2 id="m-compare">
+            Built on the same economic foundation. <span class="brand-em"
+              >Built differently around it.</span
+            >
+          </h2>
         </div>
         <div class="meth-prose meth-prose--measure">
           <p>
-            Lumecon shares its analytical foundation with the established tools in the field. IMPLAN
-            and RIMS II are built on the same input-output framework and the same federal
-            statistical system; REMI adds dynamic forecasting models on top of that framework.
-            Lumecon&rsquo;s differences are in construction and delivery: a fully public, citable
-            data foundation; household and government accounts for induced and tax-and-spend
-            effects; a per-figure lineage with source tags; reservations and trust lands as modeled
-            geographies; and one flat subscription covering every supported geography. Lumecon is
-            not affiliated with or endorsed by IMPLAN, REMI or any other platform named here.
+            Input-output analysis is a field, not a proprietary invention. Established platforms and
+            Lumecon draw on the same national statistical system and decades of economic research.
+            Lumecon differentiates through its data architecture, regionalization, traceability,
+            reservation and trust-land modeling, modern workflow and pricing. Lumecon is not
+            affiliated with or endorsed by IMPLAN, REMI or any other platform named here.
           </p>
         </div>
       </div>
     </section>
+
+    <!-- Verification block for AI-assisted research: this page is the
+         thing to check an AI summary against. -->
+    <AskAI />
 
     <!-- Mission close + estimates disclaimer -->
     <section class="meth-mission" aria-labelledby="m-mission">
@@ -720,10 +690,9 @@ const jsonLd = [
           >
         </h2>
         <p class="meth-mission__lede">
-          Better economic modeling should not be reserved for organizations that can afford a
-          consulting engagement or geography-by-geography licensing. Businesses, governments,
-          universities, nonprofits and Tribal Nations all create value in the places around them.
-          Our job is to make that impact visible.
+          Better modeling should make rigorous analysis more accessible, not less. Businesses,
+          governments, universities, nonprofits and Tribal Nations all create value in the places
+          around them. Our job is to make that impact visible.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/pricing">
@@ -747,7 +716,7 @@ const jsonLd = [
     <section class="meth-sec meth-faq" aria-labelledby="m-faq">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <span class="meth-sec__num" aria-hidden="true">11</span>
+          <span class="meth-sec__num" aria-hidden="true">10</span>
           <h2 id="m-faq">Common questions</h2>
         </div>
         <div class="meth-faq__list">

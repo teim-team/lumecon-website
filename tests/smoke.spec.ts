@@ -60,7 +60,8 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
 test('pricing carries the competitive transition offer and consultant CTA', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
   const offer = page.locator('#switch');
-  await expect(offer).toContainText('Already paying for economic impact analysis software?');
+  await expect(offer).toContainText('Switching economic impact software?');
+  await expect(offer).toContainText('whichever is lower');
   await expect(offer.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
   // Consultant licensing is custom-priced: a CTA, not a public tier.
   const consult = page.locator('#consultants');
@@ -159,4 +160,25 @@ test('skip link targets real content on subpages', async ({ page }) => {
   await expect(page.locator('main#top')).toHaveCount(1);
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('main#top')).toHaveCount(1);
+});
+
+test('cedar page tells the AI story with diagrams and real captures', async ({ page }) => {
+  await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('AI built for economic analysis');
+  await expect(page.locator('.cedarpg-diagram')).toHaveCount(3);
+  await expect(page.locator('img[src="/app/cedar-intake.webp"]')).toBeVisible();
+  await expect(page.locator('#navMenu a[href="/cedar"]')).toHaveCount(1);
+  await expect(page.locator('footer a[href="/cedar"]')).toHaveCount(1);
+});
+
+test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#cedar a[href="/cedar"]')).toHaveCount(1);
+  await expect(page.locator('.askai')).toHaveCount(0);
+});
+
+test('methodology hosts the AI-research verification block', async ({ page }) => {
+  await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.askai')).toHaveCount(1);
+  await expect(page.locator('.askai-tile')).toHaveCount(6);
 });
