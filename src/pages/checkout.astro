@@ -1,0 +1,251 @@
+---
+/**
+ * /checkout — the buy step between pricing/signup and Stripe.
+ *
+ * Reads ?tier= (starter | standard | leader) from the pricing or
+ * signup handoff, lets the visitor confirm or switch the plan, take
+ * a discount code, and continue to payment. The continue action
+ * posts to the upcoming Stripe integration's endpoint
+ * (`POST /billing/checkout-session`, via lib/api.ts) and redirects
+ * to the returned Stripe-hosted checkout URL. Until PUBLIC_API_URL
+ * is set, the fallback captures the order intent through the
+ * contact channel so no buyer is dropped.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { PLANS } from '../data/pricing';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/auth.css';
+---
+
+<BaseLayout
+  title="Checkout | Lumecon"
+  description="Choose your Lumecon plan and continue to secure payment. Every plan includes the full model, Cedar, unlimited analysis and every supported U.S. geography."
+  canonical="https://lumecon.ai/checkout"
+  keywords="Lumecon checkout, Lumecon buy, Lumecon subscribe, economic impact analysis software pricing"
+>
+  <Nav />
+  <main class="auth">
+    <div class="auth-panel auth-panel--wide">
+      <p class="auth-eyebrow">Checkout</p>
+      <h1 class="auth-title">Choose your plan</h1>
+      <p class="auth-sub">
+        Annual subscription, every plan on the same model.{' '}
+        <a class="co-link" href="/pricing">Compare plans in detail</a>.
+      </p>
+
+      <form class="auth-form" data-co-form novalidate>
+        <div class="co-plans" role="radiogroup" aria-label="Plan">
+          {
+            PLANS.map((p) => (
+              <button
+                type="button"
+                class="co-plan"
+                role="radio"
+                aria-checked="false"
+                data-co-plan={p.id}
+                data-co-price={p.priceAnnual}
+                data-co-name={p.name}
+              >
+                <span class="co-plan__head">
+                  <span class="co-plan__name">{p.name}</span>
+                  <span class="co-plan__price">
+                    {p.price}
+                    <span class="co-plan__per"> / year</span>
+                  </span>
+                </span>
+                <span class="co-plan__users">{p.users}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <label class="auth-field">
+          <span>Email for your receipt and account</span>
+          <input
+            type="email"
+            name="email"
+            autocomplete="email"
+            placeholder="you@organization.gov"
+          />
+        </label>
+
+        <div class="auth-field">
+          <span>Discount code</span>
+          <div class="co-code">
+            <input
+              type="text"
+              name="discountCode"
+              autocomplete="off"
+              autocapitalize="characters"
+              placeholder="Optional"
+            />
+            <button type="button" class="co-code__apply" data-co-apply>Apply</button>
+          </div>
+          <p class="co-code__note" data-co-code-note hidden></p>
+        </div>
+
+        <div class="co-total">
+          <span class="co-total__label">Due today</span>
+          <span class="co-total__value" data-co-total></span>
+        </div>
+
+        <p class="auth-meta" data-auth-status hidden></p>
+
+        <div class="auth-actions">
+          <button type="submit" class="btn" data-co-submit> Continue to secure payment </button>
+        </div>
+      </form>
+
+      <p class="auth-legal">
+        Payment is processed by Stripe; Lumecon does not store card details. Prices are annual.
+        Switching from qualifying software?{' '}
+        <a href="/pricing#switch">See the competitive transition offer</a>.
+      </p>
+      <p class="auth-foot">
+        Buying for a consultancy? <a href="/pricing#consultants">Consultant licensing</a> is custom-priced.
+      </p>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  import { submitCheckout, submitContact, apiConfigured } from '../lib/api';
+  import { trackEvent, trackError } from '../lib/observability';
+
+  function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
+    if (!el) return;
+    el.textContent = text;
+    el.hidden = false;
+    el.classList.remove('auth-meta--ok', 'auth-meta--err');
+    if (variant === 'ok') el.classList.add('auth-meta--ok');
+    if (variant === 'err') el.classList.add('auth-meta--err');
+  }
+
+  function setup(): void {
+    const form = document.querySelector<HTMLFormElement>('[data-co-form]');
+    if (!form) return;
+    const status = form.querySelector<HTMLElement>('[data-auth-status]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-co-submit]');
+    const total = form.querySelector<HTMLElement>('[data-co-total]');
+    const codeInput = form.querySelector<HTMLInputElement>('input[name="discountCode"]');
+    const codeNote = form.querySelector<HTMLElement>('[data-co-code-note]');
+    const plans = Array.from(form.querySelectorAll<HTMLButtonElement>('[data-co-plan]'));
+    const qs = new URLSearchParams(window.location.search);
+    let tier = qs.get('tier') || 'standard';
+    if (!plans.some((p) => p.dataset.coPlan === tier)) tier = 'standard';
+
+    // Prefill the receipt email when the signup handoff carried one.
+    const emailFromSignup = qs.get('email');
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    if (emailInput && emailFromSignup) emailInput.value = emailFromSignup;
+
+    function select(next: string): void {
+      tier = next;
+      let price = 0;
+      plans.forEach((p) => {
+        const on = p.dataset.coPlan === next;
+        p.classList.toggle('co-plan--on', on);
+        p.setAttribute('aria-checked', String(on));
+        if (on) price = Number(p.dataset.coPrice || 0);
+      });
+      if (total) total.textContent = `$${price.toLocaleString('en-US')}`;
+    }
+
+    plans.forEach((p) => p.addEventListener('click', () => select(p.dataset.coPlan || 'standard')));
+    select(tier);
+
+    // The code itself is validated by the backend at payment time;
+    // this control just confirms it will be carried through.
+    form.querySelector('[data-co-apply]')?.addEventListener('click', () => {
+      const code = codeInput?.value.trim().toUpperCase() ?? '';
+      if (codeInput) codeInput.value = code;
+      if (!codeNote) return;
+      if (!code) {
+        codeNote.hidden = true;
+        return;
+      }
+      codeNote.textContent = `Code ${code} will be applied at payment.`;
+      codeNote.hidden = false;
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const email = String(data.get('email') ?? '').trim();
+      const discountCode = String(data.get('discountCode') ?? '')
+        .trim()
+        .toUpperCase();
+      if (!email) return setStatus(status, 'err', 'Enter your email.');
+
+      submitBtn?.setAttribute('disabled', 'true');
+      setStatus(status, 'info', 'One moment...');
+
+      try {
+        if (apiConfigured()) {
+          const res = await submitCheckout({
+            tier,
+            email,
+            ...(discountCode ? { discountCode } : {}),
+          });
+          if (res.ok && res.data.url) {
+            trackEvent('checkout.redirect', { tier, hasCode: Boolean(discountCode) });
+            setStatus(status, 'ok', 'Taking you to secure payment...');
+            window.location.href = res.data.url;
+            return;
+          }
+          if (!res.ok && res.reason !== 'api-unconfigured') {
+            trackEvent('checkout.fail', { tier, reason: res.reason });
+            setStatus(
+              status,
+              'err',
+              'We could not start the payment. Try again, or email contact@lumecon.ai.',
+            );
+            return;
+          }
+        }
+
+        /* Payments not wired yet: capture the order intent. */
+        const contactRes = await submitContact({
+          name: 'Lumecon purchase request',
+          email,
+          message: `Purchase request via checkout. Plan: ${tier}. Discount code: ${discountCode || '(none)'}.`,
+          source: 'checkout-page',
+        });
+        if (contactRes.ok) {
+          setStatus(
+            status,
+            'ok',
+            "Online payment is almost ready. We've got your order details and the team will complete your subscription by email, usually the same day.",
+          );
+          return;
+        }
+        const subject = encodeURIComponent('Lumecon subscription');
+        const body = encodeURIComponent(
+          `Hi Lumecon team,\n\nI'd like to subscribe.\n\nPlan: ${tier}\nEmail: ${email}\n${discountCode ? 'Discount code: ' + discountCode + '\n' : ''}`,
+        );
+        window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
+        setStatus(status, 'info', 'Opening your email client so you can reach us directly...');
+      } catch (err: unknown) {
+        trackError(err, { where: 'checkout.submit', tier });
+        setStatus(
+          status,
+          'err',
+          'Something went wrong on our end. Try again in a moment, or email contact@lumecon.ai.',
+        );
+      } finally {
+        submitBtn?.removeAttribute('disabled');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+</script>

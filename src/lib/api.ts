@@ -191,16 +191,63 @@ export const submitContact = (req: ContactRequest): Promise<ApiResult<ContactRes
 export const cedarChat = (req: CedarChatRequest): Promise<ApiResult<CedarChatResponse>> =>
   request<CedarChatResponse>('/v1/cedar/chat', { method: 'POST', body: JSON.stringify(req) });
 
-/** Submit a login. Future endpoint: `POST /v1/auth/login`. The
- *  marketing-site /login page renders the friendly "auth not yet
- *  live" message when this returns 'api-unconfigured'. */
+/** Submit a login. Path matches the teim-app backend's real endpoint
+ *  (`POST /auth/login`) so pointing PUBLIC_API_URL at the product
+ *  backend wires this page with no code change. The /login page
+ *  renders the friendly "auth not yet live" fallback when this
+ *  returns 'api-unconfigured'. */
 export const submitLogin = (req: LoginRequest): Promise<ApiResult<LoginResponse>> =>
-  request<LoginResponse>('/v1/auth/login', { method: 'POST', body: JSON.stringify(req) });
+  request<LoginResponse>('/auth/login', { method: 'POST', body: JSON.stringify(req) });
 
-/** Submit a signup. Future endpoint: `POST /v1/auth/signup`. Same
- *  graceful fallback as submitLogin when the backend isn't wired. */
+/** Submit a signup. Path matches the teim-app backend's real endpoint
+ *  (`POST /auth/register`). Same graceful fallback as submitLogin. */
 export const submitSignup = (req: SignupRequest): Promise<ApiResult<SignupResponse>> =>
-  request<SignupResponse>('/v1/auth/signup', { method: 'POST', body: JSON.stringify(req) });
+  request<SignupResponse>('/auth/register', { method: 'POST', body: JSON.stringify(req) });
+
+/** Ask the backend to email a password-reset link. Mirrors the
+ *  product's `POST /auth/password-reset-request`. The response body
+ *  deliberately says the same thing whether or not the email has an
+ *  account. */
+export const requestPasswordReset = (email: string): Promise<ApiResult<{ message?: string }>> =>
+  request<{ message?: string }>('/auth/password-reset-request', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+
+/** Complete a password reset from an emailed token. Mirrors the
+ *  product's `POST /auth/password-reset`. */
+export const resetPassword = (
+  token: string,
+  password: string,
+): Promise<ApiResult<{ message?: string }>> =>
+  request<{ message?: string }>('/auth/password-reset', {
+    method: 'POST',
+    body: JSON.stringify({ token, password }),
+  });
+
+/* ---------- billing (Stripe) ---------- */
+
+/** The upcoming Stripe integration's contract: the backend creates a
+ *  Stripe Checkout session for the chosen plan (applying a discount
+ *  code server-side, where codes are validated) and returns the
+ *  hosted checkout URL to redirect to. */
+export interface CheckoutRequest {
+  /** Plan id: 'starter' | 'standard' | 'leader'. */
+  tier: string;
+  /** Optional discount / promotion code, validated server-side. */
+  discountCode?: string;
+  /** Email to prefill in Stripe Checkout, when known. */
+  email?: string;
+}
+export interface CheckoutResponse {
+  /** Stripe-hosted checkout URL to redirect the visitor to. */
+  url: string;
+}
+export const submitCheckout = (req: CheckoutRequest): Promise<ApiResult<CheckoutResponse>> =>
+  request<CheckoutResponse>('/billing/checkout-session', {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
 
 /* ---------- env helpers ---------- */
 

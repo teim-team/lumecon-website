@@ -75,6 +75,32 @@ test('signup reflects a plan carried over from pricing', async ({ page }) => {
   await expect(badge).toContainText(/Sapling tier/);
 });
 
+test('checkout preselects the plan from the query and takes a discount code', async ({ page }) => {
+  await page.goto('/checkout?tier=leader', { waitUntil: 'domcontentloaded' });
+  const selected = page.locator('.co-plan--on');
+  await expect(selected).toHaveCount(1);
+  await expect(selected).toContainText('Tree');
+  await expect(page.locator('[data-co-total]')).toHaveText('$7,500');
+
+  await page.locator('[data-co-plan="starter"]').click();
+  await expect(page.locator('[data-co-total]')).toHaveText('$500');
+
+  await page.fill('input[name="discountCode"]', 'welcome25');
+  await page.locator('[data-co-apply]').click();
+  await expect(page.locator('[data-co-code-note]')).toContainText('WELCOME25');
+});
+
+test('login offers the forgot-password flow from the product', async ({ page }) => {
+  await page.goto('/login', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('input[name="password"]')).toBeVisible();
+  await page.locator('[data-login-forgot]').click();
+  await expect(page.locator('[data-login-title]')).toHaveText('Reset your password');
+  await expect(page.locator('input[name="password"]')).toBeHidden();
+  await expect(page.locator('[data-login-submit]')).toHaveText('Send reset link');
+  await page.locator('[data-login-back]').click();
+  await expect(page.locator('[data-login-title]')).toHaveText('Log in to Lumecon');
+});
+
 test('signup walks the two-step registration flow from the product', async ({ page }) => {
   await page.goto('/signup', { waitUntil: 'domcontentloaded' });
 

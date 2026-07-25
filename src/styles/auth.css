@@ -247,8 +247,13 @@
   flex-direction: column;
   gap: 1rem;
 }
-/* The class display would otherwise defeat the hidden attribute. */
-.auth-step[hidden] {
+/* The class displays would otherwise defeat the hidden attribute on
+   every togglable element of the auth forms. */
+.auth-step[hidden],
+.auth-field[hidden],
+.auth-row[hidden],
+.pwmeter[hidden],
+.pwrules[hidden] {
   display: none;
 }
 .auth-chips {
@@ -376,6 +381,135 @@
 .auth-legal a:hover {
   color: var(--accent-text);
   border-color: var(--accent);
+}
+
+/* ---------- checkout ---------- */
+.auth-panel--wide {
+  max-width: 560px;
+}
+.co-link {
+  color: var(--accent-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+.co-link:hover {
+  text-decoration: underline;
+}
+.co-plans {
+  display: grid;
+  gap: 0.55rem;
+}
+.co-plan {
+  appearance: none;
+  font-family: var(--font-sans);
+  text-align: left;
+  background: var(--white);
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  padding: 0.75rem 0.9rem;
+  display: grid;
+  gap: 0.2rem;
+  cursor: pointer;
+  transition:
+    border-color 0.15s var(--ease),
+    background 0.15s var(--ease),
+    box-shadow 0.15s var(--ease);
+}
+.co-plan:hover {
+  border-color: var(--accent);
+}
+.co-plan--on {
+  border-color: var(--accent);
+  background: var(--accent-rgba-08);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.co-plan__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+.co-plan__name {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 1rem;
+}
+.co-plan__price {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 0.98rem;
+}
+.co-plan__per {
+  font-weight: 500;
+  color: var(--ink-3);
+  font-size: 0.8rem;
+}
+.co-plan__users {
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+.co-code {
+  display: flex;
+  gap: 0.5rem;
+}
+.co-code input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--navy);
+}
+.co-code input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-rgba-18);
+}
+.co-code__apply {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--white);
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  padding: 0 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease);
+}
+.co-code__apply:hover {
+  border-color: var(--accent);
+}
+.co-code__note {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.co-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.9rem;
+}
+.co-total__label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.co-total__value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--navy);
+  letter-spacing: -0.02em;
 }
 
 @media (max-width: 480px) {

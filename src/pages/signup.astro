@@ -307,7 +307,16 @@ const ROLE_OPTIONS = [
           const result = await submitSignup({ name, email, password, organization, role });
           if (result.ok) {
             trackEvent('auth.success', { kind: 'signup', role });
-            setStatus(status, 'ok', 'Account created. Check your inbox to verify your email.');
+            setStatus(status, 'ok', 'Account created. Taking you to checkout to pick your plan...');
+            // Hand off to the buy step, carrying the plan chosen on
+            // /pricing (if any) and the email for the receipt.
+            const tier = String(data.get('tier') ?? '').trim();
+            const qs = new URLSearchParams();
+            if (tier) qs.set('tier', tier);
+            qs.set('email', email);
+            setTimeout(() => {
+              window.location.href = `/checkout?${qs.toString()}`;
+            }, 1200);
             return;
           }
           if (result.reason !== 'api-unconfigured') {
