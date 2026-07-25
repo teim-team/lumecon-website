@@ -584,19 +584,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  border: 1px solid var(--rule);
-  /* The official marks carry their own brand colors; the two
-     monochrome ones (OpenAI, Grok) inherit ink and flip with the
-     theme. Keep the chip neutral so neither register clashes. */
-  color: var(--ink);
+  height: 34px;
+  /* Official marks, monochrome, in the site accent. Teal on white
+     stays on --accent-text for contrast. */
+  color: var(--accent-text);
   transition: transform 0.2s var(--ease);
 }
 .askai-tile__ic svg {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
 .askai-tile:hover .askai-tile__ic {
   transform: scale(1.08);
