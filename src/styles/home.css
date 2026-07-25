@@ -785,16 +785,14 @@
 }
 .tour-row__shot,
 .wn-shot,
-.cedar-shot,
-.tour-map {
+.cedar-shot {
   transition:
     transform 0.25s var(--ease),
     box-shadow 0.25s var(--ease);
 }
 .tour-row__shot:hover,
 .wn-shot:hover,
-.cedar-shot:hover,
-.tour-map:hover {
+.cedar-shot:hover {
   transform: translateY(-4px);
   box-shadow: 0 28px 60px -30px rgba(10, 15, 38, 0.45);
 }
@@ -889,4 +887,30 @@
 }
 .fcta-contact a:hover {
   text-decoration: underline;
+}
+
+/* ---------- touch feedback ----------
+   Hover never fires on touch devices, so every interactive surface
+   gets a visible press state; on desktop the same press reads as a
+   satisfying click-down. Guarded for reduced motion below. */
+.btn2:active,
+.askai-tile:active,
+.whyw-card:active,
+.edge-card:active,
+.wn-part:active,
+.cedar-step:active,
+.pr-plan:active {
+  transform: scale(0.985);
+  transition-duration: 0.06s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn2:active,
+  .askai-tile:active,
+  .whyw-card:active,
+  .edge-card:active,
+  .wn-part:active,
+  .cedar-step:active,
+  .pr-plan:active {
+    transform: none;
+  }
 }

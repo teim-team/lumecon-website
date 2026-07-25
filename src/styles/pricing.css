@@ -71,10 +71,22 @@
   display: grid;
   gap: 0.55rem;
   align-content: start;
+  transition:
+    transform 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+.pr-plan:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 18px 44px -24px rgba(10, 127, 116, 0.4);
 }
 .pr-plan--featured {
   border-color: var(--accent);
   box-shadow: 0 24px 56px -30px rgba(10, 127, 116, 0.45);
+}
+.pr-plan--featured:hover {
+  box-shadow: 0 28px 64px -30px rgba(10, 127, 116, 0.55);
 }
 .pr-plan__flag {
   position: absolute;

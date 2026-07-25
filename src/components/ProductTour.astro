@@ -2,9 +2,11 @@
 /**
  * Product tour — alternating feature rows built from real
  * screenshots of the Lumecon workspace (sample analysis data), each
- * with a dark-mode capture of the app's own dark theme, plus a wide
- * region-map strip. The rows showcase screens the hero trio only
- * hints at: number lineage, comparison and the living workspace.
+ * with a dark-mode capture of the app's own dark theme. The rows
+ * showcase screens the hero trio only hints at: number lineage,
+ * comparison and the living workspace. (The old wide map strip is
+ * gone: the map page already fronts the hero trio, and on mobile
+ * the strip read as an orphaned fragment.)
  */
 import '../styles/tour.css';
 
@@ -79,23 +81,5 @@ const ROWS = [
         ))
       }
     </div>
-
-    <figure class="tour-map reveal-soft">
-      <picture>
-        <source srcset="/app/map-card-dark.webp" media="(prefers-color-scheme: dark)" />
-        <img
-          src="/app/map-card.webp"
-          alt="Lumecon region map of Connecticut with county boundaries, beside a panel reading Statewide, Connecticut: the statewide result."
-          width="1600"
-          height="458"
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
-      <figcaption>
-        Geographies follow the real economy: counties, states, the nation, reservations and trust
-        lands are all first-class regions.
-      </figcaption>
-    </figure>
   </div>
 </section>
