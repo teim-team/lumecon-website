@@ -23,7 +23,7 @@ There is one Lumecon application. It learns what kind of organization the custom
 
 ## Cedar
 
-Cedar is Lumecon's AI economic analyst, included in every plan. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records); Cedar interprets the material, maps it into the model, assists with setup and interpretation, and helps turn results into board-ready reporting. Cedar Grove (Tree plan) is the organizational memory: administrative data, recurring datasets and prior analyses in one persistent library, reusable across future analyses.
+Cedar is Lumecon's AI economic analyst, included in every plan. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records); Cedar interprets the material, maps it into the model, assists with setup and interpretation, and helps turn results into board-ready reporting. Cedar Grove (Tree plan) is the data library: it comes stocked with the clean, harmonized datasets behind the Lumecon model, and organizations augment it with their own administrative data, recurring datasets and prior analyses to extend what future analyses can draw on.
 
 ## Methodology
 
