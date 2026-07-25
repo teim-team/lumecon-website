@@ -141,7 +141,7 @@
 .tour-row__shot {
   margin: 0;
   border: 1px solid var(--rule);
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
   background: var(--white);
   box-shadow:
@@ -171,7 +171,7 @@
 .tour-map {
   margin: 0;
   border: 1px solid var(--rule);
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
   background: var(--white);
   box-shadow:

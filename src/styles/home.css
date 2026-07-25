@@ -19,7 +19,7 @@
   align-items: center;
   gap: 0.55rem;
   padding: 0.85rem 1.5rem;
-  border-radius: 10px;
+  border-radius: 6px;
   font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
@@ -166,7 +166,7 @@
   left: 50%;
   width: 66%;
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 8px;
   overflow: hidden;
   background: var(--white);
   transform-origin: center top;
@@ -256,7 +256,7 @@
 }
 .whyw-card {
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--white);
   padding: 1.25rem 1.2rem;
   display: grid;
@@ -343,7 +343,7 @@
 }
 .wn-part {
   border: 1px solid var(--rule);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 0.85rem 1.1rem;
   display: grid;
   gap: 0.15rem;
@@ -370,7 +370,7 @@
   overflow: hidden;
   border: 1px solid var(--accent-bar);
   background: var(--accent-rgba-08);
-  border-radius: 16px;
+  border-radius: 8px;
   padding: 1.5rem 1.5rem 1.4rem;
   display: grid;
   gap: 0.5rem;
@@ -408,7 +408,7 @@
 .wn-shot {
   margin: 0;
   border: 1px solid var(--rule);
-  border-radius: 12px;
+  border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 20px 48px -26px rgba(10, 15, 38, 0.32);
 }
@@ -436,7 +436,7 @@
 }
 .cedar-step {
   border: 1px solid var(--rule);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 0.8rem 1.05rem;
   display: grid;
   gap: 0.15rem;
@@ -478,7 +478,7 @@
 .cedar-shot {
   margin: 0;
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
 }
@@ -566,7 +566,7 @@
   justify-items: center;
   gap: 0.5rem;
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 1.1rem 0.8rem 0.95rem;
   text-decoration: none;
   color: var(--ink);
@@ -660,7 +660,7 @@
 }
 .edge-card {
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--white);
   padding: 1.25rem 1.2rem;
   display: grid;
@@ -673,7 +673,7 @@
   justify-content: center;
   width: 46px;
   height: 46px;
-  border-radius: 12px;
+  border-radius: 6px;
   background: var(--accent-rgba-08);
   border: 1px solid var(--accent-bar);
   color: var(--accent-text);
