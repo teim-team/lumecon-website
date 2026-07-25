@@ -41,6 +41,24 @@
   opacity: 0.08;
   pointer-events: none;
 }
+/* The asymmetric mark, white-filtered, bleeding off the top corner
+   like the auth brand panels. Default right; --mark-left mirrors. */
+.tealfield__mark {
+  position: absolute;
+  top: -14%;
+  right: -16%;
+  width: 30rem;
+  max-width: 65%;
+  height: auto;
+  pointer-events: none;
+  filter: brightness(0) invert(1);
+  opacity: 0.12;
+}
+.tealfield--mark-left .tealfield__mark {
+  right: auto;
+  left: -16%;
+  transform: scaleX(-1);
+}
 .tealfield__kicker {
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -161,36 +179,37 @@
   font-weight: 600;
   color: var(--accent-text);
 }
-/* Start free: a quieter, outlined row under the paid trio. */
+/* Start free: compact and solid, quieter than the paid trio by
+   size, not by outline. */
 .cpl-free {
-  display: flex;
+  display: inline-flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
-  border: 1px dashed rgba(255, 255, 255, 0.55);
+  background: var(--white);
   border-radius: 12px;
-  padding: 1.05rem 1.4rem;
+  padding: 0.85rem 1.3rem;
   text-decoration: none;
-  color: #fff;
+  color: var(--navy);
   transition:
-    background 0.16s var(--ease),
-    border-color 0.16s var(--ease);
+    transform 0.16s var(--ease),
+    box-shadow 0.16s var(--ease);
 }
 .cpl-free:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -16px rgba(4, 45, 40, 0.55);
 }
 .cpl-free__label {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  color: var(--navy);
 }
 .cpl-free__note {
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--ink-2);
 }
 .cpl-foot {
   margin: 1.6rem 0 0;

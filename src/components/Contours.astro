@@ -1,11 +1,14 @@
 ---
 /**
  * Backdrop for teal flow surfaces (choose-plan, checkout summary,
- * welcome): the same drifting glows and topographic contour
- * linework as the auth brand panels, so every teal field in the
- * acquisition flow reads as one environment. Decorative only; the
- * host element needs position: relative and overflow: hidden.
+ * welcome): the same drifting glows, topographic contour linework
+ * AND the asymmetric mark bleeding off a corner as the auth brand
+ * panels, so every teal field in the acquisition flow reads as one
+ * environment. Decorative only; the host element needs
+ * position: relative and overflow: hidden. The host page positions
+ * the mark via .tealfield--mark-left / default right.
  */
+import MarkArt from './MarkArt.astro';
 ---
 
 <span class="tealfield__glow tealfield__glow--a" aria-hidden="true"></span>
@@ -35,3 +38,4 @@
     }
   </g>
 </svg>
+<MarkArt class="tealfield__mark" size={520} />
