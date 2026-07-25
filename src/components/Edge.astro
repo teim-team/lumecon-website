@@ -1,0 +1,126 @@
+---
+/**
+ * The Lumecon edge — the table-stakes capabilities buyers scan for
+ * (cloud, security, AI native, authoritative data, data freshness,
+ * methodology), each with a line icon drawn in the app's icon style
+ * (thin strokes, sharp joins, teal chip). The header carries the
+ * provenance story: built at Ivy League and peer schools with former
+ * Federal Reserve economists, on modern data and methods.
+ */
+import '../styles/home.css';
+
+const CARDS = [
+  {
+    k: 'Cloud',
+    t: 'Runs in your browser',
+    b: 'Nothing to install and nothing to maintain. Studies, exports and your library follow your account on any machine.',
+    icon: 'cloud',
+  },
+  {
+    k: 'Security',
+    t: 'Encrypted end to end',
+    b: 'Hosted on AWS with encryption in transit and at rest, isolated accounts and least-privilege access to your data.',
+    icon: 'shield',
+  },
+  {
+    k: 'AI native',
+    t: 'Cedar is the workflow',
+    b: 'Cedar is built into intake, analysis and reporting from day one. We did not tack a chatbot onto an old tool.',
+    icon: 'spark',
+  },
+  {
+    k: 'Authoritative sources',
+    t: 'Census, BEA, BLS and more',
+    b: 'Every study starts from the authoritative public data the field trusts: Census, BEA, BLS, USDA, USAspending and FRED.',
+    icon: 'bank',
+  },
+  {
+    k: 'Higher-frequency data',
+    t: 'Data that keeps up',
+    b: 'Higher-frequency signals layered on the official benchmarks, so a study reflects the economy as it is now.',
+    icon: 'pulse',
+  },
+  {
+    k: 'Trusted methodology',
+    t: 'Proven core, modern methods',
+    b: 'Input-output methodology the field has trusted for decades, extended with modern econometrics. The economy changes fast; your tool should keep up.',
+    icon: 'trend',
+  },
+];
+---
+
+<section class="edge" id="edge" aria-labelledby="edge-title">
+  <div class="edge-inner">
+    <header class="flowsec-head">
+      <p class="h-kicker">The Lumecon edge</p>
+      <h2 class="flowsec-title" id="edge-title">Modern software for a fast-moving economy.</h2>
+      <p class="flowsec-lede">
+        Other tools lead with decades of history. Lumecon was built at Ivy League and peer schools
+        by former Federal Reserve economists, engineers and academics, on modern data and methods,
+        and the model keeps improving so you get insights others miss, at a fraction of the cost.
+      </p>
+    </header>
+
+    <div class="edge-grid">
+      {
+        CARDS.map((c) => (
+          <article class="edge-card">
+            <span class="edge-ic" aria-hidden="true">
+              {c.icon === 'cloud' && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M7 17.5h10a4 4 0 0 0 .9-7.9 5.5 5.5 0 0 0-10.7-1A4.2 4.2 0 0 0 7 17.5Z" />
+                  <path d="M12 13.5v-4M10 11l2-1.9 2 1.9" stroke-width="1.25" />
+                </svg>
+              )}
+              {c.icon === 'shield' && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 3 19 5.8v5.1c0 4.5-3 7.6-7 9.1-4-1.5-7-4.6-7-9.1V5.8Z" />
+                  <path d="m8.8 11.8 2.2 2.2 4.2-4.2" stroke-width="1.4" />
+                </svg>
+              )}
+              {c.icon === 'spark' && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="6.5" y="6.5" width="11" height="11" />
+                  <path
+                    d="M9.5 3.5v3M14.5 3.5v3M9.5 17.5v3M14.5 17.5v3M3.5 9.5h3M3.5 14.5h3M17.5 9.5h3M17.5 14.5h3"
+                    stroke-width="1.2"
+                  />
+                  <path
+                    d="M12 9.4l.8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8Z"
+                    stroke-width="1.2"
+                  />
+                </svg>
+              )}
+              {c.icon === 'bank' && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 9.2 12 4l8 5.2" />
+                  <path d="M5.5 9.5V17M9.8 9.5V17M14.2 9.5V17M18.5 9.5V17" stroke-width="1.25" />
+                  <path d="M4 17.5h16M4 20h16" stroke-width="1.4" />
+                </svg>
+              )}
+              {c.icon === 'pulse' && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 12.5h3.6l2-5.4 3.8 9.8 2-5.4H21" />
+                  <path d="M17.5 5.5v2.8M16.1 6.9h2.8" stroke-width="1.2" />
+                </svg>
+              )}
+              {c.icon === 'trend' && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 4v16h16" />
+                  <circle cx="8.2" cy="14.6" r="0.9" fill="currentColor" stroke="none" />
+                  <circle cx="12" cy="12.8" r="0.9" fill="currentColor" stroke="none" />
+                  <circle cx="15.2" cy="10" r="0.9" fill="currentColor" stroke="none" />
+                  <circle cx="18.6" cy="8.4" r="0.9" fill="currentColor" stroke="none" />
+                  <path d="M6.5 16.5 20 6.5" stroke-width="1.2" stroke-dasharray="2.4 2" />
+                </svg>
+              )}
+            </span>
+            <p class="whyw-card__k">{c.k}</p>
+            <h3 class="whyw-card__t">{c.t}</h3>
+            <p class="whyw-card__b">{c.b}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

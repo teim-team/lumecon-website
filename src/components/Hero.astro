@@ -9,12 +9,13 @@
  * cropped at the section edges as background art.
  */
 import MarkArt from './MarkArt.astro';
+import Ripple from './Ripple.astro';
 import '../styles/home.css';
 ---
 
 <section class="hero2" id="top">
+  <Ripple class="ripple ripple--hero" />
   <MarkArt class="markart markart--tr" size={640} />
-  <MarkArt class="markart markart--bl" size={560} />
   <div class="hero2-inner">
     <p class="h-kicker">Economic impact analysis software</p>
 
@@ -23,8 +24,9 @@ import '../styles/home.css';
     </h1>
 
     <p class="hero2-sub">
-      Lumecon turns budgets, payroll and program records into a credible economic impact study in
-      minutes: jobs, labor income, GDP contribution and tax revenue for any U.S. geography,{' '}
+      Lumecon turns budgets, financial statements, payroll and program records into a credible
+      economic impact study in minutes: jobs, labor income, GDP contribution and tax revenue for any
+      U.S. geography,{' '}
       <strong>with every number traceable to its source</strong>.
     </p>
 
@@ -32,14 +34,16 @@ import '../styles/home.css';
       <a class="btn2 btn2--primary" href="/map">
         See a live study <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
       </a>
-      <a class="btn2 btn2--card" href="/pricing">
-        Plans from $500 a year <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+      <a class="btn2 btn2--card" href="/signup">
+        Still deciding? Try Lumecon for free <span class="btn2-arrow" aria-hidden="true"
+          >&rarr;</span
+        >
       </a>
     </div>
 
     <p class="hero2-proof">
       Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and
-      engineers &middot; Patent pending
+      engineers &middot; Patent pending &middot; Plans from $500 a year
     </p>
 
     <figure class="trio">

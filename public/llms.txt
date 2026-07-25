@@ -1,30 +1,45 @@
 # Lumecon Inc.
 
-> Lumecon Inc. is economic impact analysis software for governments, enterprises, and mission-driven organizations. Built by alumni of the Federal Reserve System, Cornell, Dartmouth, Oxford, MIT, and Duke for teams that demand credible data and models at a price that lets them integrate impact analysis into their everyday workflow rather than treating it as a once-a-year consulting expense. Three platforms (Local Economic Impact, Tribal Economic Impact, and Global Economic Impact) sit on a shared modeling backbone with Cedar, an AI assistant that reads administrative data, surfaces every assumption, and writes the source record for each run.
+> Lumecon is economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible economic impact studies in minutes, with every number traceable to its source. Built at Ivy League and peer schools by former Federal Reserve economists, engineers and academics, on modern data and methods. Plans start at $500 a year, every plan runs the same model, and the app is free to try (results unlock on a paid plan).
 
-Lumecon collapses what used to be an expensive software subscription plus an expensive consulting engagement into one annual subscription that any size organization can afford. Each run ships with the full assumption ledger, source records, and methodology so a council member, board, or federal grant reviewer can verify the result. We use AI to reduce the data-cleaning bottleneck that has kept impact analysis to a once-a-year luxury, not as a marketing decoration.
+Lumecon replaces the pairing of expensive modeling software plus an expensive consulting engagement with one affordable annual subscription. Every study separates direct, indirect and induced effects, carries a full lineage ("Trace this number" on every figure), and exports with its assumptions so a council member, board or federal grant reviewer can verify the result.
 
 ## Category
 
-Economic impact analysis software. Same underlying economics as IMPLAN, RIMS II (Bureau of Economic Analysis), REMI Policy Insight, and Lightcast/EMSI. What's different: pricing structure (flat annual rather than per-geography per-user per-tier), workflow (Cedar harmonizes inputs in minutes rather than analysts hand-cleaning for weeks), geographies (reservations, off-reservation trust land, Alaska Native regional and village corporations, Native Hawaiian Home Lands all first-class), data freshness (high-frequency public feeds plus our own proprietary signals layered on the BEA accounts), and audit trail (every assumption surfaced and citable).
+Economic impact analysis software. The same field as IMPLAN, RIMS II (Bureau of Economic Analysis), REMI and Lightcast/EMSI. What is different about Lumecon: one flat annual subscription (no geography licenses, no per-project fees); Cedar, an AI economic analyst included in every plan; higher-frequency data and modern econometrics layered on the trusted input-output core; reservations, trust lands and tribal-government geographies as first-class regions; and a lineage behind every number.
 
-## Platforms
+## One platform
 
-- [Local Economic Impact](https://localeconomicimpact.com/): For US municipalities, state agencies, enterprises, foundations, universities, and nonprofits. In active development.
-- [Tribal Economic Impact](https://tribaleconomicimpact.com/): For tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, and Native-entity federal contractors. Indigenous data sovereignty built in, not added on. In active development.
-- [Global Economic Impact](https://globaleconomicimpact.com/): For multinationals, NGOs, governments, and foundations whose work crosses borders. Future development.
+There is one Lumecon application. It learns what kind of organization the customer is (city, county, state agency, university, nonprofit, business, economic development organization, Tribal Nation, tribal enterprise, consulting firm) and adapts geographies, workflows, terminology and analysis types. The domains localeconomicimpact.com, tribaleconomicimpact.com and globaleconomicimpact.com are audience-specific entry points into the same application.
+
+## Pricing (public)
+
+- Sprout: $500/year. One user. Full model, Cedar, every supported U.S. geography, unlimited analysis.
+- Sapling: $2,500/year. Up to 10 users. Everything in Sprout plus Team Workspace (shared projects, collaborative analysis, review workflows). Most popular.
+- Tree: $7,500/year. Unlimited users in one organization. Everything in Sapling plus Cedar Grove (a persistent organizational data library) and hands-on Cedar calibration.
+- Free trial: create an account, bring your documents and build a study end to end; full results unlock on any plan.
+- Competitive transition offer: organizations already paying for qualifying economic impact analysis or economic modeling software can receive their first annual Lumecon license for 50% of their documented prior-12-month spend, subject to plan and promotional terms.
+- Consultants: custom commercial licensing for firms running analysis for outside clients, including Cedar calibrated to the firm's workflow. No public price.
 
 ## Cedar
 
-Cedar is the AI assistant inside every Lumecon platform. It reads user uploads (audited financials, payroll detail, council agendas, chapter audits, federal grant filings), surfaces each assumption the model is about to use, prompts the user to confirm or override, and writes a record of every source, method, and multiplier as the run completes. Marketing-page Cedar is keyword-scoped to questions about the demo and does not call any upstream provider.
+Cedar is Lumecon's AI economic analyst, included in every plan. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records); Cedar interprets the material, maps it into the model, assists with setup and interpretation, and helps turn results into board-ready reporting. Cedar Grove (Tree plan) is the organizational memory: administrative data, recurring datasets and prior analyses in one persistent library, reusable across future studies.
+
+## Methodology
+
+Input-output modeling on authoritative public data: U.S. Census (ACS, LODES, QWI, CBP, TIGER/Line), BEA Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA, extended with higher-frequency signals and modern econometrics so studies reflect the economy as it is now. Full write-up: https://lumecon.ai/methodology
+
+## Capabilities
+
+Cloud (runs in the browser, nothing to install). Security (hosted on AWS, encryption in transit and at rest, isolated accounts). AI native (Cedar is built into intake, analysis and reporting). Analysis types: industry, organization, tribal government, tribal enterprise and Whole Nation analysis (a Tribal Nation's combined economic footprint, statewide and homelands scopes side by side). Historical analysis 2015 to present where the underlying data support it. Exports: workbook (XLSX), CSV tables, printable summary.
 
 ## Audience
 
-Governments and mission-driven organizations: tribal nations and tribal enterprises, municipal governments, state agencies, federal programs, universities and research labs, foundations, Community Development Financial Institutions (CDFIs), economic development organizations, ports and transit agencies.
+Governments and mission-driven organizations: cities, counties, state agencies, federal programs, universities and research labs, foundations, nonprofits, businesses, CDFIs, economic development organizations, ports and transit agencies, Tribal Nations and tribal enterprises, and consulting firms serving all of the above.
 
 ## Concepts the site covers
 
-Economic impact analysis, input-output modeling, direct effects, indirect effects, induced effects, fiscal multipliers, jobs supported, output, earnings, value added, regional purchase coefficients, IMPLAN, RIMS II, REMI, BEA RIMS, Lightcast, EMSI, tribal economics, reservation economics, AIANNH geography, ANCSA regional corporations, Native Hawaiian Home Lands, CDFI lending, foundation reporting, federal grant pass-through, economic development organizations, public-sector analytics, federated learning on coarse data.
+Economic impact analysis, input-output modeling, direct effects, indirect effects, induced effects, multipliers, jobs supported, economic output, labor income, GDP contribution, tax impacts, IMPLAN alternative, RIMS II alternative, REMI alternative, tribal economics, reservation economics, AIANNH geography, Whole Nation analysis, economic development, public-sector analytics.
 
 ## Founders & team
 
@@ -53,11 +68,12 @@ Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researche
 
 ## Optional
 
-- [About](https://lumecon.ai/about/)
+- [Pricing](https://lumecon.ai/pricing/)
+- [Methodology](https://lumecon.ai/methodology/)
+- [Glossary](https://lumecon.ai/glossary/)
 - [Map](https://lumecon.ai/map/)
 - [Cedar](https://lumecon.ai/cedar/)
-- [Pricing](https://lumecon.ai/pricing/)
+- [About](https://lumecon.ai/about/)
 - [Privacy policy](https://lumecon.ai/privacy/)
 - [Terms of service](https://lumecon.ai/terms/)
 - [Status](https://lumecon.ai/status/)
-- [Security disclosure](https://lumecon.ai/.well-known/security.txt)

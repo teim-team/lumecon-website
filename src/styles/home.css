@@ -566,3 +566,182 @@
   font-size: 0.8em;
   color: var(--ink-4);
 }
+
+/* ---------- the logo ripple (ported from the app's sign-in hero) ---------- */
+.ripple {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  color: var(--accent);
+  opacity: 0.1;
+  transform-origin: 42% 46%;
+  animation: contour-drift 46s ease-in-out infinite alternate;
+}
+.ripple--hero {
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+}
+.ripple--panel {
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  opacity: 0.12;
+}
+@keyframes contour-drift {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(4deg) scale(1.06);
+  }
+}
+/* The mark keeps the app's slow anchor drift behind the hero. */
+.markart--tr {
+  transform-origin: 62% 40%;
+  animation: mark-drift 26s ease-in-out infinite;
+}
+@keyframes mark-drift {
+  0%,
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  50% {
+    transform: rotate(6deg) translate(-1rem, 0.8rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ripple,
+  .markart--tr {
+    animation: none;
+  }
+}
+@media (max-width: 760px) {
+  .hero2 .ripple,
+  .pr-hero .ripple {
+    display: none;
+  }
+}
+
+/* ---------- the edge grid ---------- */
+.edge {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  padding: clamp(3.5rem, 8vh, 6rem) var(--container-pad);
+}
+.edge-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1.6rem, 4vh, 2.4rem);
+}
+.edge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.edge-card {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--white);
+  padding: 1.25rem 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+.edge-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--accent-rgba-08);
+  border: 1px solid var(--accent-bar);
+  color: var(--accent-text);
+  margin-bottom: 0.3rem;
+  transition:
+    transform 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+.edge-ic svg {
+  width: 24px;
+  height: 24px;
+}
+@media (max-width: 980px) {
+  .edge-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .edge-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- interactive hover states (the app's card feel) ---------- */
+.edge-card,
+.whyw-card,
+.wn-part,
+.cedar-step,
+.oneplat-orgs li {
+  transition:
+    transform 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+.edge-card:hover,
+.whyw-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 34px -18px rgba(10, 127, 116, 0.35);
+}
+.edge-card:hover .edge-ic {
+  transform: scale(1.08);
+  background: var(--accent-rgba-18);
+}
+.wn-part:hover,
+.cedar-step:hover {
+  transform: translateX(6px);
+  border-color: var(--accent);
+}
+.oneplat-orgs li:hover {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.tour-row__shot,
+.wn-shot,
+.cedar-shot,
+.tour-map {
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.tour-row__shot:hover,
+.wn-shot:hover,
+.cedar-shot:hover,
+.tour-map:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 60px -30px rgba(10, 15, 38, 0.45);
+}
+.trio-main {
+  transition: transform 0.25s var(--ease);
+}
+.trio:hover .trio-main {
+  transform: translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .edge-card,
+  .whyw-card,
+  .wn-part,
+  .cedar-step,
+  .tour-row__shot,
+  .wn-shot,
+  .cedar-shot,
+  .tour-map,
+  .trio-main {
+    transition: none;
+  }
+}

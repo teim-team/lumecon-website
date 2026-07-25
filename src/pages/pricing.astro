@@ -22,6 +22,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MarkArt from '../components/MarkArt.astro';
+import Ripple from '../components/Ripple.astro';
 import WholeNation from '../components/WholeNation.astro';
 import CedarFlow from '../components/CedarFlow.astro';
 import { site } from '../config';
@@ -45,13 +46,24 @@ const jsonLd = [
     name: 'Lumecon',
     description,
     brand: { '@type': 'Brand', name: 'Lumecon' },
-    offers: PLANS.map((p) => ({
-      '@type': 'Offer',
-      name: `${p.name} plan`,
-      price: p.priceAnnual,
-      priceCurrency: 'USD',
-      url: `https://lumecon.ai/pricing#plans`,
-    })),
+    offers: [
+      ...PLANS.map((p) => ({
+        '@type': 'Offer',
+        name: `${p.name} plan`,
+        price: p.priceAnnual,
+        priceCurrency: 'USD',
+        url: `https://lumecon.ai/pricing#plans`,
+      })),
+      {
+        '@type': 'Offer',
+        name: 'Free trial',
+        price: 0,
+        priceCurrency: 'USD',
+        description:
+          'Create an account, bring your documents and build a study end to end. Full results unlock on any paid plan.',
+        url: 'https://lumecon.ai/signup',
+      },
+    ],
   },
 ];
 ---
@@ -69,6 +81,7 @@ const jsonLd = [
   <main class="pr">
     <!-- 1. Hero -->
     <section class="pr-hero">
+      <Ripple class="ripple ripple--hero" />
       <MarkArt class="markart markart--tr" size={620} />
       <div class="pr-hero__inner">
         <p class="h-kicker">Pricing</p>
@@ -141,13 +154,27 @@ const jsonLd = [
         Every plan runs the same model on the same data foundation. Higher plans add collaboration,
         organizational memory and scale.
       </p>
+
+      <!-- Free trial: the app is free to try; results unlock on a plan. -->
+      <aside class="pr-trial" aria-label="Free trial">
+        <div class="pr-trial__text">
+          <p class="pr-trial__t">Still deciding? Try Lumecon for free.</p>
+          <p class="pr-trial__b">
+            Create an account, bring your documents and build a study end to end. Full results
+            unlock the moment you pick a plan.
+          </p>
+        </div>
+        <a class="btn2 btn2--primary" href="/signup">
+          Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </aside>
     </section>
 
     <!-- 3. Competitive transition offer: a major program, framed as a
          large bordered panel on the white surface (no colored slab). -->
     <section class="pr-offer" id="switch" aria-labelledby="offer-title">
       <div class="pr-offer__panel">
-        <MarkArt class="markart markart--offer" size={520} />
+        <Ripple class="ripple ripple--panel" />
         <header class="pr-offer__head">
           <p class="h-kicker">Competitive transition offer</p>
           <h2 class="pr-offer__title" id="offer-title">{COMPETITIVE_OFFER.headline}</h2>
