@@ -76,21 +76,13 @@ const jsonLd = [
             Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
-        <figure class="cedar-shot cedarpg-shot">
-          <picture>
-            <source srcset="/app/cedar-dark.webp" media="(prefers-color-scheme: dark)" />
-            <img
-              src="/app/cedar.webp"
-              alt="The Cedar panel open over a Lumecon results page, writing a board-ready summary of jobs, output, GDP contribution, labor income and tax impacts."
-              width="1600"
-              height="1000"
-              decoding="async"
-            />
-          </picture>
-          <figcaption>Cedar working inside a live analysis, shown with sample data.</figcaption>
-        </figure>
       </div>
     </header>
+
+    <!-- The page's three screenshots are one story, told in order below:
+         source documents uploading, the operations Cedar set up from them
+         with its ask on the open panel, and the board notes it drafts from
+         the finished results. No screenshot appears twice. -->
 
     <!-- 01 · Not a chatbot -->
     <section class="meth-sec" aria-labelledby="c-arch">
@@ -211,12 +203,12 @@ const jsonLd = [
         <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
           <picture>
             <source
-              srcset="/app/cedar-wind-intake-dark.webp"
+              srcset="/app/cedar-wind-entities-dark.webp"
               media="(prefers-color-scheme: dark)"
             />
             <img
-              src="/app/cedar-wind-intake.webp"
-              alt="A wind energy buildout analysis with the Cedar panel reporting on three uploaded documents: a capital plan with nine construction phases mapped to model operations, a turbine procurement workbook with costs and labor separated, county road-use agreements used to place activity, and one flagged gap to resolve."
+              src="/app/cedar-wind-entities.webp"
+              alt="The operations step of the wind analysis: three entity cards with their sector icons, turbine and storage installation, grid interconnection and operations and maintenance, beside the open Cedar panel reporting that two operations are model ready and asking to fill the missing sales figure from the procurement workbook."
               width="1600"
               height="1000"
               loading="lazy"
@@ -224,8 +216,9 @@ const jsonLd = [
             />
           </picture>
           <figcaption>
-            The same documents after Cedar has read them, on the finished analysis: what it mapped,
-            what it used as context and the gap it flagged for review. Shown with sample data.
+            The same documents turned into operations, each carded with its industry. Cedar reports
+            what is model ready and asks about the one figure still missing. Shown with sample
+            data.
           </figcaption>
         </figure>
       </div>
@@ -314,8 +307,8 @@ const jsonLd = [
               />
             </picture>
             <figcaption>
-              The same analysis, later in the work: Cedar drafts the county-board summary from the
-              results and the documents it read at intake. Shown with sample data.
+              The same analysis, later in the work: Cedar drafts the board notes from the results
+              and the documents it read at intake. Shown with sample data.
             </figcaption>
           </figure>
         </div>

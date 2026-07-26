@@ -89,15 +89,26 @@ for (const theme of ['light', 'dark']) {
     await stripChrome(page);
     await page.screenshot({ path: `${OUT}/ex-${t.id}-results${suffix}.png` });
 
-    // Map crop: KPI row pinned at the top, full county map centered,
-    // breakdown content below, so the frame reads map-first.
+    // Map crop: the geography leads the frame. No repeated KPI row (the
+    // results frame already owns it); the map panel sits at the top with
+    // the breakdown below. Tribal examples switch to the Homelands scope
+    // first, so the map zooms to the reservation and its overlapping
+    // counties: across the set the visitor sees eight different statewide
+    // county maps, a multi-county reservation (Warm Springs) and a
+    // single-county homeland (Tulalip), not ten copies of one map.
+    if (t.example.reservationShare) {
+      await page.locator('button:has-text("Homelands")').first().click();
+      await page.waitForTimeout(1800);
+    }
     await page.evaluate(() => {
-      const label = [...document.querySelectorAll('*')].find(
-        (el) => el.children.length === 0 && (el.textContent || '').trim() === 'JOBS SUPPORTED',
-      );
-      if (label) {
-        const r = label.getBoundingClientRect();
-        window.scrollTo({ top: r.top + window.scrollY - 60, behavior: 'instant' });
+      let best = null;
+      for (const svg of document.querySelectorAll('svg')) {
+        const n = svg.querySelectorAll('path').length;
+        if (!best || n > best.n) best = { n, svg };
+      }
+      if (best) {
+        const r = best.svg.getBoundingClientRect();
+        window.scrollTo({ top: r.top + window.scrollY - 40, behavior: 'instant' });
       }
     });
     await page.waitForTimeout(700);
