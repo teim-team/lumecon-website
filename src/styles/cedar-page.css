@@ -107,3 +107,111 @@
     max-width: none;
   }
 }
+
+/* ---- Diagram motion (dg2) -------------------------------------------
+   The diagrams draw themselves in when scrolled into view: nodes rise in
+   sequence, connectors draw, then a dotted flow runs along them and the
+   Cedar node ripples like the mark. Everything here is decorative; under
+   reduced motion the finished diagram simply shows, still. */
+.cedarpg-diagram svg {
+  overflow: visible;
+}
+.dg2-node {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+  transition-delay: var(--d, 0s);
+}
+.dg2-in .dg2-node {
+  opacity: 1;
+  transform: none;
+}
+.dg-line .dg2-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.8s var(--ease);
+  transition-delay: var(--d, 0.35s);
+}
+.dg2-in .dg-line .dg2-draw {
+  stroke-dashoffset: 0;
+}
+.dg2-ic {
+  color: var(--ink-3);
+}
+.dg2-ic--cedar {
+  color: var(--accent-text);
+}
+.dg2-ic--muted {
+  color: var(--ink-4);
+}
+.dg2-ripple {
+  fill: none;
+  stroke: var(--accent-text);
+  stroke-width: 1;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.dg2-in .dg2-ripple {
+  animation: dg2ripple 4.5s var(--ease) infinite;
+  animation-delay: var(--rd, 0s);
+}
+.dg-flow path {
+  fill: none;
+  stroke: var(--accent-text);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-dasharray: 0.5 9.5;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease) 1s;
+}
+.dg2-in .dg-flow path {
+  opacity: 0.85;
+  animation: dg2flow 1.5s linear infinite;
+}
+.dg-flow .dg-flow--quiet {
+  stroke: var(--ink-4);
+}
+.dg2-in .dg-flow .dg-flow--quiet {
+  opacity: 0.5;
+}
+@keyframes dg2flow {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+@keyframes dg2ripple {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  30% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.16);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dg2-node {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .dg-line .dg2-draw {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .dg2-ripple,
+  .dg2-in .dg2-ripple {
+    animation: none;
+    opacity: 0;
+  }
+  .dg-flow path,
+  .dg2-in .dg-flow path {
+    display: none;
+  }
+}

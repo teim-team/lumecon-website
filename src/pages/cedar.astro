@@ -56,6 +56,98 @@ const jsonLd = [
 >
   <Nav isHome={false} />
   <main class="meth cedarpg" id="top" tabindex="-1">
+    <!-- Shared thin-line icon symbols for the three diagrams below. -->
+    <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0">
+      <defs>
+        <symbol id="dg2-data" viewBox="0 0 24 24">
+          <ellipse cx="12" cy="6" rx="7" ry="3" fill="none" stroke="currentColor" stroke-width="1.5"
+          ></ellipse>
+          <path
+            d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"></path>
+        </symbol>
+        <symbol id="dg2-model" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"
+          ></circle>
+          <circle
+            cx="12"
+            cy="12"
+            r="5.8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            opacity="0.65"></circle>
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            opacity="0.35"></circle>
+        </symbol>
+        <symbol id="dg2-results" viewBox="0 0 24 24">
+          <path
+            d="M4 20h16M6 16v-5M11 16V4M16 16V9M21 16v-3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="dg2-report" viewBox="0 0 24 24">
+          <path
+            d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="dg2-chat" viewBox="0 0 24 24">
+          <path
+            d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-4 4v-4H6a2 2 0 0 1-2-2z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="dg2-sprout" viewBox="0 0 24 24">
+          <path
+            d="M12 21v-8M12 13c0-3.3 2.4-6 6-6 0 3.3-2.4 6-6 6zM12 13c0-3.3-2.4-6-6-6 0 3.3 2.4 6 6 6z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="dg2-org" viewBox="0 0 24 24">
+          <path
+            d="M3 21h18M5 21V10M9.5 21V10M14.5 21V10M19 21V10M3 10l9-6 9 6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="dg2-folder" viewBox="0 0 24 24">
+          <path
+            d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="dg2-tools" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"
+          ></circle>
+          <path
+            d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"></path>
+        </symbol>
+      </defs>
+    </svg>
     <!-- Hero -->
     <header class="meth-hero">
       <MarkArt class="markart markart--tr" size={620} />
@@ -103,52 +195,135 @@ const jsonLd = [
           <div class="cedarpg-fig">
             <figure
               class="cedarpg-diagram"
-              aria-label="Two architectures compared. The legacy pattern: data flows to model to results, with a chatbot attached only to results. Lumecon: Cedar connects to every stage, from data to model to results to reporting."
+              data-diagram
+              aria-label="Two architectures compared. The legacy pattern: data flows to model to results, with a chatbot attached only to results as a dead end. Lumecon: Cedar connects to every stage, from data to model to results to reporting."
             >
               <p class="cedarpg-diagram__k" aria-hidden="true">The legacy pattern</p>
-              <svg viewBox="0 0 520 96" aria-hidden="true">
+              <svg viewBox="0 0 520 150" aria-hidden="true">
                 <g class="dg-box">
-                  <rect x="8" y="10" width="110" height="34" rx="4"></rect>
-                  <rect x="205" y="10" width="110" height="34" rx="4"></rect>
-                  <rect x="402" y="10" width="110" height="34" rx="4"></rect>
-                  <rect x="402" y="66" width="110" height="26" rx="4" class="dg-box--dash"></rect>
+                  <g class="dg2-node" style="--d:0s">
+                    <rect x="8" y="8" width="120" height="60" rx="7"></rect>
+                    <use href="#dg2-data" class="dg2-ic" width="22" height="22" x="57" y="16"></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.08s">
+                    <rect x="200" y="8" width="120" height="60" rx="7"></rect>
+                    <use href="#dg2-model" class="dg2-ic" width="22" height="22" x="249" y="16"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.16s">
+                    <rect x="392" y="8" width="120" height="60" rx="7"></rect>
+                    <use href="#dg2-results" class="dg2-ic" width="22" height="22" x="441" y="16"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.32s">
+                    <rect x="392" y="112" width="120" height="30" rx="7" class="dg-box--dash"
+                    ></rect>
+                    <use
+                      href="#dg2-chat"
+                      class="dg2-ic dg2-ic--muted"
+                      width="14"
+                      height="14"
+                      x="410"
+                      y="120"></use>
+                  </g>
                 </g>
                 <g class="dg-label">
-                  <text x="63" y="31">DATA</text>
-                  <text x="260" y="31">MODEL</text>
-                  <text x="457" y="31">RESULTS</text>
-                  <text x="457" y="83" class="dg-label--muted">CHATBOT</text>
+                  <text x="68" y="59" class="dg2-node" style="--d:0s">DATA</text>
+                  <text x="260" y="59" class="dg2-node" style="--d:0.08s">MODEL</text>
+                  <text x="452" y="59" class="dg2-node" style="--d:0.16s">RESULTS</text>
+                  <text x="460" y="131" class="dg-label--muted dg2-node" style="--d:0.32s"
+                    >CHATBOT</text
+                  >
                 </g>
                 <g class="dg-line">
-                  <path d="M118 27h80m-8-4 8 4-8 4"></path>
-                  <path d="M315 27h80m-8-4 8 4-8 4"></path>
-                  <path d="M457 44v22" class="dg-line--dash"></path>
+                  <path d="M128 38h64m-8-4 8 4-8 4" class="dg2-draw" pathLength="1" style="--d:0.2s"
+                  ></path>
+                  <path d="M320 38h64m-8-4 8 4-8 4" class="dg2-draw" pathLength="1" style="--d:0.3s"
+                  ></path>
+                  <path
+                    d="M452 68v44"
+                    class="dg-line--dash dg2-draw"
+                    pathLength="1"
+                    style="--d:0.45s"></path>
+                </g>
+                <g class="dg-flow">
+                  <path d="M128 38h64" class="dg-flow--quiet"></path>
+                  <path d="M320 38h64" class="dg-flow--quiet"></path>
                 </g>
               </svg>
               <p class="cedarpg-diagram__k" aria-hidden="true">Lumecon</p>
-              <svg viewBox="0 0 520 132" aria-hidden="true">
+              <svg viewBox="0 0 520 218" aria-hidden="true">
+                <g class="dg2-ripples">
+                  <circle cx="260" cy="50" r="38" class="dg2-ripple" style="--rd:0s"></circle>
+                  <circle cx="260" cy="50" r="50" class="dg2-ripple" style="--rd:0.9s"></circle>
+                  <circle cx="260" cy="50" r="62" class="dg2-ripple" style="--rd:1.8s"></circle>
+                </g>
                 <g class="dg-box">
-                  <rect x="205" y="8" width="110" height="34" rx="4" class="dg-box--cedar"></rect>
-                  <rect x="8" y="88" width="110" height="34" rx="4"></rect>
-                  <rect x="140" y="88" width="110" height="34" rx="4"></rect>
-                  <rect x="272" y="88" width="110" height="34" rx="4"></rect>
-                  <rect x="404" y="88" width="110" height="34" rx="4"></rect>
+                  <g class="dg2-node" style="--d:0s">
+                    <rect x="200" y="20" width="120" height="60" rx="7" class="dg-box--cedar"
+                    ></rect>
+                    <use
+                      href="#dg2-sprout"
+                      class="dg2-ic dg2-ic--cedar"
+                      width="22"
+                      height="22"
+                      x="249"
+                      y="28"></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.12s">
+                    <rect x="8" y="150" width="116" height="60" rx="7"></rect>
+                    <use href="#dg2-data" class="dg2-ic" width="22" height="22" x="55" y="158"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.2s">
+                    <rect x="140" y="150" width="116" height="60" rx="7"></rect>
+                    <use href="#dg2-model" class="dg2-ic" width="22" height="22" x="187" y="158"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.28s">
+                    <rect x="272" y="150" width="116" height="60" rx="7"></rect>
+                    <use href="#dg2-results" class="dg2-ic" width="22" height="22" x="319" y="158"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.36s">
+                    <rect x="404" y="150" width="116" height="60" rx="7"></rect>
+                    <use href="#dg2-report" class="dg2-ic" width="22" height="22" x="451" y="158"
+                    ></use>
+                  </g>
                 </g>
                 <g class="dg-label">
-                  <text x="260" y="29" class="dg-label--cedar">CEDAR</text>
-                  <text x="63" y="109">DATA</text>
-                  <text x="195" y="109">MODEL</text>
-                  <text x="327" y="109">RESULTS</text>
-                  <text x="459" y="109">REPORTING</text>
+                  <text x="260" y="71" class="dg-label--cedar dg2-node" style="--d:0s">CEDAR</text>
+                  <text x="66" y="201" class="dg2-node" style="--d:0.12s">DATA</text>
+                  <text x="198" y="201" class="dg2-node" style="--d:0.2s">MODEL</text>
+                  <text x="330" y="201" class="dg2-node" style="--d:0.28s">RESULTS</text>
+                  <text x="462" y="201" class="dg2-node" style="--d:0.36s">REPORTING</text>
                 </g>
                 <g class="dg-line">
-                  <path d="M118 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
-                  <path d="M250 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
-                  <path d="M382 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
-                  <path d="M230 42 74 86" class="dg-line--cedar"></path>
-                  <path d="M252 42l-52 44" class="dg-line--cedar"></path>
-                  <path d="M268 42l52 44" class="dg-line--cedar"></path>
-                  <path d="M290 42l156 44" class="dg-line--cedar"></path>
+                  <path
+                    d="M124 180h14m-6-4 6 4-6 4"
+                    class="dg-line--quiet dg2-draw"
+                    pathLength="1"
+                    style="--d:0.4s"></path>
+                  <path
+                    d="M256 180h14m-6-4 6 4-6 4"
+                    class="dg-line--quiet dg2-draw"
+                    pathLength="1"
+                    style="--d:0.45s"></path>
+                  <path
+                    d="M388 180h14m-6-4 6 4-6 4"
+                    class="dg-line--quiet dg2-draw"
+                    pathLength="1"
+                    style="--d:0.5s"></path>
+                  <path d="M228 80 70 148" class="dg-line--cedar dg2-draw" pathLength="1"></path>
+                  <path d="M249 80l-49 68" class="dg-line--cedar dg2-draw" pathLength="1"></path>
+                  <path d="M271 80l49 68" class="dg-line--cedar dg2-draw" pathLength="1"></path>
+                  <path d="M292 80l158 68" class="dg-line--cedar dg2-draw" pathLength="1"></path>
+                </g>
+                <g class="dg-flow">
+                  <path d="M228 80 70 148"></path>
+                  <path d="M249 80l-49 68"></path>
+                  <path d="M271 80l49 68"></path>
+                  <path d="M292 80l158 68"></path>
                 </g>
               </svg>
             </figure>
@@ -217,8 +392,7 @@ const jsonLd = [
           </picture>
           <figcaption>
             The same documents turned into operations, each carded with its industry. Cedar reports
-            what is model ready and asks about the one figure still missing. Shown with sample
-            data.
+            what is model ready and asks about the one figure still missing. Shown with sample data.
           </figcaption>
         </figure>
       </div>
@@ -243,28 +417,67 @@ const jsonLd = [
           <div class="cedarpg-fig">
             <figure
               class="cedarpg-diagram"
+              data-diagram
               aria-label="Diagram: the organization informs Cedar, and Cedar carries that context into project A, project B and project C."
             >
-              <svg viewBox="0 0 520 190" aria-hidden="true">
+              <svg viewBox="0 0 520 236" aria-hidden="true">
+                <g class="dg2-ripples">
+                  <circle cx="260" cy="126" r="38" class="dg2-ripple" style="--rd:0s"></circle>
+                  <circle cx="260" cy="126" r="50" class="dg2-ripple" style="--rd:0.9s"></circle>
+                  <circle cx="260" cy="126" r="62" class="dg2-ripple" style="--rd:1.8s"></circle>
+                </g>
                 <g class="dg-box">
-                  <rect x="185" y="8" width="150" height="34" rx="4"></rect>
-                  <rect x="205" y="78" width="110" height="34" rx="4" class="dg-box--cedar"></rect>
-                  <rect x="24" y="148" width="130" height="34" rx="4"></rect>
-                  <rect x="195" y="148" width="130" height="34" rx="4"></rect>
-                  <rect x="366" y="148" width="130" height="34" rx="4"></rect>
+                  <g class="dg2-node" style="--d:0s">
+                    <rect x="180" y="8" width="160" height="60" rx="7"></rect>
+                    <use href="#dg2-org" class="dg2-ic" width="22" height="22" x="249" y="16"></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.14s">
+                    <rect x="200" y="96" width="120" height="60" rx="7" class="dg-box--cedar"
+                    ></rect>
+                    <use
+                      href="#dg2-sprout"
+                      class="dg2-ic dg2-ic--cedar"
+                      width="22"
+                      height="22"
+                      x="249"
+                      y="104"></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.28s">
+                    <rect x="10" y="196" width="140" height="32" rx="7"></rect>
+                    <use href="#dg2-folder" class="dg2-ic" width="14" height="14" x="28" y="205"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.36s">
+                    <rect x="190" y="196" width="140" height="32" rx="7"></rect>
+                    <use href="#dg2-folder" class="dg2-ic" width="14" height="14" x="208" y="205"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.44s">
+                    <rect x="370" y="196" width="140" height="32" rx="7"></rect>
+                    <use href="#dg2-folder" class="dg2-ic" width="14" height="14" x="388" y="205"
+                    ></use>
+                  </g>
                 </g>
                 <g class="dg-label">
-                  <text x="260" y="29">ORGANIZATION</text>
-                  <text x="260" y="99" class="dg-label--cedar">CEDAR</text>
-                  <text x="89" y="169">PROJECT A</text>
-                  <text x="260" y="169">PROJECT B</text>
-                  <text x="431" y="169">PROJECT C</text>
+                  <text x="260" y="59" class="dg2-node" style="--d:0s">ORGANIZATION</text>
+                  <text x="260" y="147" class="dg-label--cedar dg2-node" style="--d:0.14s"
+                    >CEDAR</text
+                  >
+                  <text x="88" y="217" class="dg2-node" style="--d:0.28s">PROJECT A</text>
+                  <text x="268" y="217" class="dg2-node" style="--d:0.36s">PROJECT B</text>
+                  <text x="448" y="217" class="dg2-node" style="--d:0.44s">PROJECT C</text>
                 </g>
                 <g class="dg-line">
-                  <path d="M260 42v36m-4-8 4 8 4-8"></path>
-                  <path d="M238 112 105 146" class="dg-line--cedar"></path>
-                  <path d="M260 112v34" class="dg-line--cedar"></path>
-                  <path d="M282 112l133 34" class="dg-line--cedar"></path>
+                  <path d="M260 68v24m-4-8 4 8 4-8" class="dg2-draw" pathLength="1" style="--d:0.1s"
+                  ></path>
+                  <path d="M234 156 90 194" class="dg-line--cedar dg2-draw" pathLength="1"></path>
+                  <path d="M260 156v38" class="dg-line--cedar dg2-draw" pathLength="1"></path>
+                  <path d="M286 156l144 38" class="dg-line--cedar dg2-draw" pathLength="1"></path>
+                </g>
+                <g class="dg-flow">
+                  <path d="M234 156 90 194"></path>
+                  <path d="M260 156v38"></path>
+                  <path d="M286 156l144 38"></path>
                 </g>
               </svg>
             </figure>
@@ -364,25 +577,59 @@ const jsonLd = [
           <div class="cedarpg-fig">
             <figure
               class="cedarpg-diagram"
-              aria-label="Diagram: better tools lead to more usable data, which leads to better modeling, which leads to better analysis."
+              data-diagram
+              aria-label="Diagram: better tools lead to more usable data, which leads to better modeling, which leads to better analysis, which motivates better tools again. The cycle is closed."
             >
-              <svg viewBox="0 0 520 150" aria-hidden="true">
+              <svg viewBox="0 0 520 190" aria-hidden="true">
                 <g class="dg-box">
-                  <rect x="8" y="14" width="236" height="40" rx="4"></rect>
-                  <rect x="276" y="14" width="236" height="40" rx="4"></rect>
-                  <rect x="8" y="96" width="236" height="40" rx="4"></rect>
-                  <rect x="276" y="96" width="236" height="40" rx="4"></rect>
+                  <g class="dg2-node" style="--d:0s">
+                    <rect x="30" y="8" width="200" height="60" rx="7"></rect>
+                    <use href="#dg2-tools" class="dg2-ic" width="22" height="22" x="119" y="16"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.1s">
+                    <rect x="290" y="8" width="200" height="60" rx="7"></rect>
+                    <use href="#dg2-data" class="dg2-ic" width="22" height="22" x="379" y="16"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.2s">
+                    <rect x="290" y="122" width="200" height="60" rx="7"></rect>
+                    <use href="#dg2-model" class="dg2-ic" width="22" height="22" x="379" y="130"
+                    ></use>
+                  </g>
+                  <g class="dg2-node" style="--d:0.3s">
+                    <rect x="30" y="122" width="200" height="60" rx="7"></rect>
+                    <use href="#dg2-results" class="dg2-ic" width="22" height="22" x="119" y="130"
+                    ></use>
+                  </g>
                 </g>
                 <g class="dg-label">
-                  <text x="126" y="38">BETTER TOOLS</text>
-                  <text x="394" y="38">MORE USABLE DATA</text>
-                  <text x="394" y="120">BETTER MODELING</text>
-                  <text x="126" y="120">BETTER ANALYSIS</text>
+                  <text x="130" y="59" class="dg2-node" style="--d:0s">BETTER TOOLS</text>
+                  <text x="390" y="59" class="dg2-node" style="--d:0.1s">MORE USABLE DATA</text>
+                  <text x="390" y="173" class="dg2-node" style="--d:0.2s">BETTER MODELING</text>
+                  <text x="130" y="173" class="dg2-node" style="--d:0.3s">BETTER ANALYSIS</text>
                 </g>
                 <g class="dg-line">
-                  <path d="M244 34h24m-7-4 7 4-7 4"></path>
-                  <path d="M394 54v34m-4-8 4 8 4-8"></path>
-                  <path d="M276 116h-24m7-4-7 4 7 4"></path>
+                  <path d="M230 38h56m-8-4 8 4-8 4" class="dg2-draw" pathLength="1" style="--d:0.1s"
+                  ></path>
+                  <path d="M390 68v50m-4-8 4 8 4-8" class="dg2-draw" pathLength="1" style="--d:0.2s"
+                  ></path>
+                  <path
+                    d="M290 152h-56m8-4-8 4 8 4"
+                    class="dg2-draw"
+                    pathLength="1"
+                    style="--d:0.3s"></path>
+                  <path
+                    d="M130 122V72m-4 8 4-8 4 8"
+                    class="dg2-draw"
+                    pathLength="1"
+                    style="--d:0.4s"></path>
+                </g>
+                <g class="dg-flow">
+                  <path d="M230 38h56"></path>
+                  <path d="M390 68v50"></path>
+                  <path d="M290 152h-56"></path>
+                  <path d="M130 122V72"></path>
                 </g>
               </svg>
             </figure>
@@ -457,6 +704,35 @@ const jsonLd = [
         </div>
       </div>
     </section>
+    <script is:inline>
+      /* Diagrams draw in when they enter the viewport: nodes rise, lines
+         draw, then the ripples and connector flow start. Decorative only;
+         under reduced motion the CSS shows the finished diagram and this
+         class changes nothing. */
+      (function () {
+        var figs = document.querySelectorAll('[data-diagram]');
+        if (!('IntersectionObserver' in window)) {
+          figs.forEach(function (f) {
+            f.classList.add('dg2-in');
+          });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('dg2-in');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.3 },
+        );
+        figs.forEach(function (f) {
+          io.observe(f);
+        });
+      })();
+    </script>
   </main>
   <Footer isHome={false} />
 </BaseLayout>
