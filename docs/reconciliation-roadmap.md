@@ -99,6 +99,21 @@ state; end-to-end accessibility tests.
 - Dev gallery excluded from production and rebranded (item 39);
   account export downloads as lumecon-account-export.json (item 38).
 
+## Sector thumbnails (2026-07, awaiting founder photographs)
+
+The /naics page ships with duotone placeholder fields; the founder is
+supplying real photographs for study thumbnails. When they arrive, run
+`node scripts/naics/duotone.mjs <dir-of-photos>` (filenames start with
+the sector slug from scripts/naics/sectors.mjs, e.g.
+`construction-crane.jpg`). The pipeline smart-crops every image to the
+same 3:2 frame, grayscales it and applies the sector's brand wash
+(teal, ink, amber, cedar in NAICS order), then writes webps into
+public/naics/ that the page picks up automatically on the next build.
+Visually inspect each `.gray.png` crop and the washed webps before
+committing; confirm rights to every photograph first (the NACA
+proposal photographs belong to CICD and member companies and must not
+be reused here).
+
 ## Standing naming rule
 
 "Team App" is repository shorthand only. To the customer everything

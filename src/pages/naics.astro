@@ -1,0 +1,250 @@
+---
+/**
+ * /naics — every two-digit NAICS sector Lumecon classifies against, plus
+ * the platform's tribal government category, each as a brand-washed tile
+ * whose plain-language description reveals on hover or focus.
+ *
+ * Data comes from scripts/naics/sectors.mjs, the same file the duotone
+ * thumbnail pipeline reads, so tile colors and copy cannot drift from the
+ * generated study thumbnails. Until a sector has a processed photograph
+ * in public/naics/<slug>-sm.webp, its tile renders as a duotone field in
+ * the sector's wash; the build picks up each photo automatically once the
+ * pipeline has produced it.
+ */
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import MarkArt from '../components/MarkArt.astro';
+import { site as siteConfig } from '../config';
+import { SECTORS, TRIBAL_GOVERNMENT, WASHES } from '../../scripts/naics/sectors.mjs';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
+
+const site = siteConfig.url;
+const description =
+  'The two-digit NAICS sectors Lumecon classifies economic activity against, in plain language, plus the tribal government category and why two-digit coverage keeps analyses defensible.';
+
+const publicDir = fileURLToPath(new URL('../../public', import.meta.url));
+const tiles = [...SECTORS, TRIBAL_GOVERNMENT].map((s) => ({
+  ...s,
+  colors: WASHES[s.wash],
+  photo: existsSync(`${publicDir}/naics/${s.slug}-sm.webp`) ? `/naics/${s.slug}-sm.webp` : null,
+}));
+
+const rgb = (c: number[]) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+      { '@type': 'ListItem', position: 2, name: 'Industry sectors', item: `${site}/naics` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${site}/naics`,
+    name: 'Two-digit NAICS sectors',
+    url: `${site}/naics`,
+    hasDefinedTerm: tiles.map((t) => ({
+      '@type': 'DefinedTerm',
+      termCode: t.code,
+      name: t.title,
+      description: t.description,
+      inDefinedTermSet: `${site}/naics`,
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title="Industry sectors | Lumecon"
+  description={description}
+  canonical="https://lumecon.ai/naics"
+  keywords="NAICS sectors, two-digit NAICS, NAICS 2 digit list, industry classification economic impact, NAICS 23 construction, NAICS 62 health care, tribal government classification"
+  jsonLd={jsonLd}
+>
+  <Nav isHome={false} />
+  <main class="meth" id="top" tabindex="-1">
+    <header class="meth-hero">
+      <MarkArt class="markart markart--tr" size={620} />
+      <div class="meth-w">
+        <p class="h-kicker">Reference</p>
+        <h1 class="meth-hero__title">
+          The sectors behind <span class="brand-em">every number</span>.
+        </h1>
+        <p class="meth-hero__lede">
+          Lumecon classifies economic activity at the two-digit NAICS sector level, where federal
+          administrative data is most complete. Complete data means fewer assumptions standing in
+          for missing values, so every multiplier rests on published figures. Hover over a sector
+          to see what belongs to it, and read{' '}
+          <a class="gloss-link" href="/methodology#m-naics">why two digits</a> in the methodology.
+        </p>
+      </div>
+    </header>
+
+    <section class="meth-sec" aria-label="Sectors">
+      <div class="meth-w">
+        <ul class="naics-grid" role="list">
+          {
+            tiles.map((t) => (
+              <li
+                class="naics-tile"
+                id={`naics-${t.slug}`}
+                tabindex="0"
+                style={`--wash-shadow: ${rgb(t.colors.shadow)}; --wash-mid: ${rgb(t.colors.mid)}; --wash-paper: ${rgb(t.colors.paper)};`}
+              >
+                <div class="naics-tile__media" aria-hidden="true">
+                  {t.photo ? (
+                    <img src={t.photo} alt="" width="600" height="400" loading="lazy" />
+                  ) : (
+                    <div class="naics-tile__field" />
+                  )}
+                  <span class="naics-tile__code">{t.code}</span>
+                </div>
+                <div class="naics-tile__bar">
+                  <h2 class="naics-tile__title">{t.title}</h2>
+                </div>
+                <p class="naics-tile__desc">{t.description}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="gloss-foot">
+          Tribal Government is a Lumecon category rather than a NAICS sector: tribal nations
+          operate as governments, employers and enterprise owners at once, so we track that
+          activity together instead of scattering it across codes. For definitions of the terms
+          used in results, see the <a class="gloss-link" href="/glossary">glossary</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer isHome={false} />
+</BaseLayout>
+
+<style>
+  .naics-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+    gap: 1.1rem;
+  }
+  .naics-tile {
+    position: relative;
+    border: 1px solid var(--rule, rgba(10, 15, 38, 0.12));
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--white, #fff);
+    outline: none;
+  }
+  .naics-tile:focus-visible {
+    box-shadow: 0 0 0 3px rgba(15, 181, 165, 0.35);
+  }
+  .naics-tile__media {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+  .naics-tile__media img,
+  .naics-tile__field {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Placeholder until the sector's processed photograph exists: the same
+     duotone ramp the pipeline applies, as a quiet field. */
+  .naics-tile__field {
+    background:
+      radial-gradient(120% 150% at 18% 0%, var(--wash-paper) 0%, transparent 42%),
+      linear-gradient(158deg, var(--wash-mid) 0%, var(--wash-shadow) 96%);
+  }
+  .naics-tile__code {
+    position: absolute;
+    left: 0.85rem;
+    bottom: 0.55rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: 0.04em;
+    color: var(--wash-paper);
+    text-shadow: 0 1px 8px rgba(7, 10, 26, 0.35);
+  }
+  .naics-tile__bar {
+    border-top: 2px solid var(--wash-mid);
+    padding: 0.7rem 0.85rem 0.75rem;
+    /* Stays above the hover overlay so the sector name never dims. */
+    position: relative;
+    z-index: 1;
+    background: var(--white, #fff);
+  }
+  .naics-tile__title {
+    margin: 0;
+    font-size: 0.86rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: var(--ink, #0a0f26);
+  }
+  /* The description slides over the media on hover or keyboard focus. */
+  .naics-tile__desc {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0.95rem 1rem;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--wash-paper);
+    background: color-mix(in srgb, var(--wash-shadow) 94%, transparent);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    display: flex;
+    align-items: flex-start;
+    overflow-y: auto;
+    pointer-events: none;
+  }
+  .naics-tile:hover .naics-tile__desc,
+  .naics-tile:focus-visible .naics-tile__desc,
+  .naics-tile:focus-within .naics-tile__desc {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .naics-tile__desc {
+      transition: none;
+    }
+  }
+  /* Touch screens have no hover: show the description under the tile. */
+  @media (hover: none) {
+    .naics-tile__desc {
+      position: static;
+      opacity: 1;
+      pointer-events: auto;
+      background: none;
+      color: var(--ink-2, #353b5c);
+      padding: 0 0.85rem 0.9rem;
+    }
+  }
+  .gloss-foot {
+    margin: 2.2rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--ink-2);
+    max-width: 46rem;
+  }
+  .gloss-link {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+  }
+</style>

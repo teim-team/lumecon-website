@@ -22,7 +22,7 @@ import '../styles/footer.css';
 import '../styles/home.css';
 import '../styles/methodology.css';
 
-const TERMS: Array<{ term: string; abbr?: string; def: string }> = [
+const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; linkText?: string }> = [
   {
     term: 'Economic impact analysis',
     def: 'A method for estimating the economic footprint of an organization, project or program: its own spending plus the additional activity that spending sets off across a region.',
@@ -56,6 +56,13 @@ const TERMS: Array<{ term: string; abbr?: string; def: string }> = [
     term: 'Input-output model',
     abbr: 'I-O',
     def: 'The economic framework behind impact analysis: a matrix of how industries buy from and sell to one another, used to trace how spending flows through an economy. Lumecon builds its model from national economic accounts and regionalizes those relationships to the geography being analyzed.',
+  },
+  {
+    term: 'NAICS sector',
+    abbr: 'NAICS',
+    def: 'The North American Industry Classification System, the federal standard for grouping economic activity by industry. Lumecon classifies at the two-digit sector level, where administrative data coverage is most complete.',
+    href: '/naics',
+    linkText: 'See all sectors',
   },
   {
     term: 'Base year',
@@ -158,7 +165,18 @@ const jsonLd = [
                   {t.term}
                   {t.abbr && <span class="gloss-abbr">{t.abbr}</span>}
                 </dt>
-                <dd>{t.def}</dd>
+                <dd>
+                  {t.def}
+                  {t.href && (
+                    <>
+                      {' '}
+                      <a class="gloss-link" href={t.href}>
+                        {t.linkText || 'Learn more'}
+                      </a>
+                      .
+                    </>
+                  )}
+                </dd>
               </div>
             ))
           }

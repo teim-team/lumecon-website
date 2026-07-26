@@ -204,6 +204,25 @@ test('methodology page renders equations with spoken readings', async ({ page })
   await expect(equations.nth(1)).toContainText('x = (I − A)−1 f');
 });
 
+test('naics page lists all 20 sectors plus tribal government', async ({ page }) => {
+  await page.goto('/naics', { waitUntil: 'domcontentloaded' });
+  const tiles = page.locator('.naics-tile');
+  await expect(tiles).toHaveCount(21);
+  // The methodology's why-two-digits section is the page's companion.
+  await expect(page.locator('.meth-hero__lede a[href="/methodology#m-naics"]')).toBeVisible();
+  // Hover text exists in the DOM for every tile, manufacturing included.
+  await expect(page.locator('#naics-manufacturing .naics-tile__desc')).toContainText('materials');
+  await expect(page.locator('#naics-tribalgov .naics-tile__desc')).toContainText('Lumecon category');
+});
+
+test('methodology explains the two-digit NAICS choice', async ({ page }) => {
+  await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  const sec = page.locator('section[aria-labelledby="m-naics"]');
+  await expect(sec.locator('h2')).toHaveText('Industries at the two-digit NAICS level');
+  await expect(sec).toContainText('administrative data coverage is strongest');
+  await expect(sec.locator('a[href="/naics"]')).toBeVisible();
+});
+
 test('accessibility statement is published and linked from the footer', async ({ page }) => {
   await page.goto('/accessibility', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toHaveText('Accessibility');
