@@ -23,6 +23,8 @@ interface Props {
   taglineHidden?: boolean;
   /** Render on a dark surface (footer). Flips the text colors to cream. */
   invert?: boolean;
+  /** All-teal treatment on a light surface: teal mark + teal wordmark. */
+  teal?: boolean;
 }
 const {
   size = 'md',
@@ -30,21 +32,26 @@ const {
   ariaLabel = 'Lumecon home',
   taglineHidden = false,
   invert = false,
+  teal = false,
 } = Astro.props;
 const classes = [
   'brandmark',
   `brandmark--${size}`,
   invert ? 'brandmark--invert' : '',
+  teal ? 'brandmark--teal' : '',
   taglineHidden ? 'brandmark--no-tag' : '',
 ]
   .filter(Boolean)
   .join(' ');
+const markSrc = teal
+  ? '/brand/lumecon-logo-mark-teal.png'
+  : '/brand/lumecon-logo-mark-transparent.png';
 ---
 
 <a class={classes} href={href} aria-label={ariaLabel}>
   <img
     class="brandmark__seal"
-    src="/brand/lumecon-logo-mark-transparent.png"
+    src={markSrc}
     alt=""
     aria-hidden="true"
     width="64"
@@ -164,6 +171,22 @@ const classes = [
   }
   .brandmark--invert .brandmark__tag em {
     color: var(--gold-light);
+  }
+
+  /* All-teal treatment: teal mark (asset already teal) + teal wordmark.
+     Uses --dteal (#0A7F74), the contrast-safe teal for text on white. */
+  .brandmark--teal .brandmark__name {
+    color: var(--accent-text);
+  }
+  .brandmark--teal .brandmark__tag {
+    color: var(--accent-text);
+    opacity: 0.72;
+  }
+  .brandmark--teal .brandmark__tag em.lumin {
+    color: var(--accent-text);
+  }
+  .brandmark--teal:hover .brandmark__name {
+    color: var(--accent-text);
   }
 
   .brandmark:hover .brandmark__name {
