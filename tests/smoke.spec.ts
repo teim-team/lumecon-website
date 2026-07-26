@@ -96,7 +96,7 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
     'href',
     /\/signup\?tier=starter/,
   );
-  // The nine-row detail table renders (Cedar, Team Workspace, Cedar Grove rows included).
+  // The nine-row detail table renders (Cedar, Cedar Commons, Cedar Grove rows included).
   await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(9);
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
 });

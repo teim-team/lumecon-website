@@ -47,7 +47,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'We do economic analysis.',
     tagline:
-      'Everything in Sprout, plus Team Workspace for shared projects, collaboration, review and organizational and client data collection.',
+      'Everything in Sprout, plus Cedar Commons, a collaborative environment for shared projects, project notes, data collection and external collaborators.',
     users: 'Up to 10 users',
     featured: true,
     ctaLabel: 'Start with Sapling',
@@ -106,10 +106,10 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     ],
   },
   {
-    label: 'Team Workspace',
+    label: 'Cedar Commons',
     values: [
       'Not included',
-      'Included. Shared projects, collaborative analysis, project management and review workflows.',
+      'Included. A collaborative environment for shared projects, project notes, data collection and external collaborators.',
       'Included across the organization.',
     ],
   },
@@ -142,7 +142,7 @@ export const COMPETITIVE_OFFER = {
 export const CONSULTANT_BAND = {
   kicker: 'Using Lumecon for client work?',
   headline: 'Commercial use starts with Sapling.',
-  body: 'Sapling’s Team Workspace doubles as a secure client intake and project workspace. Invite clients and collaborators to provide the materials an analysis needs, keep project data together and manage the analysis in one place, with 10 seats you can reassign as engagements change. Tree serves larger consulting organizations with unlimited organizational users, Cedar calibration and Cedar Grove.',
+  body: 'Sapling’s Cedar Commons doubles as a secure client intake and project workspace. Invite clients and collaborators to provide the materials an analysis needs, keep project data together and manage the analysis in one place, with 10 seats you can reassign as engagements change. Tree serves larger consulting organizations with unlimited organizational users, Cedar calibration and Cedar Grove.',
   value: 'Spend less time assembling the analysis and more time on the work only you can do.',
   ctaLabel: 'Talk to us about client work',
   ctaSubject: 'Using Lumecon for client work',
@@ -199,7 +199,7 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'Can a faculty member buy Lumecon?',
     a: [
-      'Yes. The public plans are open to anyone, and Sprout is priced so an individual analyst, faculty member or researcher can subscribe without an institutional procurement process. When a department or research group needs shared projects, Sapling adds Team Workspace.',
+      'Yes. The public plans are open to anyone, and Sprout is priced so an individual analyst, faculty member or researcher can subscribe without an institutional procurement process. When a department or research group needs shared projects, Sapling adds Cedar Commons.',
     ],
   },
   {
