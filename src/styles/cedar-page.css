@@ -215,3 +215,27 @@
     display: none;
   }
 }
+
+/* Content layer for the diagrams: each stage says what happens there. */
+.dg2-sub text {
+  font-family: var(--font-sans, inherit);
+  font-size: 9.5px;
+  fill: var(--ink-3);
+  text-anchor: middle;
+}
+.dg2-sub .dg2-sub--muted {
+  fill: var(--ink-4);
+}
+.dg-box .dg-box--chip {
+  fill: var(--accent-soft, rgba(15, 181, 165, 0.08));
+  stroke: var(--accent-text);
+  stroke-opacity: 0.45;
+}
+.dg2-chiplbl text {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  fill: var(--accent-text);
+  text-anchor: middle;
+}
