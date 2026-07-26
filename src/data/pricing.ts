@@ -47,7 +47,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'We do economic analysis.',
     tagline:
-      'Everything in Sprout, plus shared projects, collaborative analysis and team review workflows.',
+      'Everything in Sprout, plus Team Workspace for shared projects, collaboration, review and organizational and client data collection.',
     users: 'Up to 10 users',
     featured: true,
     ctaLabel: 'Start with Sapling',
@@ -61,7 +61,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'Our organization runs economic analysis through Lumecon.',
     tagline:
-      'Everything in Sapling, plus Cedar Grove, organizational memory, hands-on Cedar calibration and unlimited users.',
+      'Everything in Sapling, plus Cedar Grove, organizational context and calibration, and capabilities designed for analysis at organizational scale.',
     users: 'Unlimited users in one organization',
     ctaLabel: 'Start with Tree',
     ctaHref: '/signup?tier=leader',
@@ -125,8 +125,8 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
 
 /** The 50% competitive transition offer. */
 export const COMPETITIVE_OFFER = {
-  headline: 'Switching economic impact software?',
-  subhead: 'We’ll cut your current cost in half.',
+  headline: 'Already paying for economic impact software?',
+  subhead: 'We’ll cut that cost in half.',
   body: 'Eligible organizations can receive their first year of Lumecon for 50% of documented qualifying economic modeling software spend, up to the standard price of the applicable Lumecon plan.',
   guarantee: '50% off, or your existing preferred Lumecon rate, whichever is lower.',
   ctaLabel: 'See if you qualify',
@@ -135,19 +135,79 @@ export const COMPETITIVE_OFFER = {
     'Qualifying software may include IMPLAN, REMI and other professional economic modeling platforms. Documentation of the prior 12 months of spend is required. The offer applies to the first year; minimum plan pricing and other eligibility requirements may apply. If your organization already qualifies for a lower contracted, partner or program rate, you receive the lower price. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
 };
 
-/** Consultant licensing: custom commercial pricing, no public number. */
-export const CONSULTANT = {
-  headline: 'Lumecon for consultants',
-  audience: 'We do economic analysis for clients.',
-  positioning: 'Spend less time building models. Spend more time advising clients.',
-  body: 'Consultant licenses are for firms and professionals using Lumecon commercially to conduct analysis for outside clients. Use Lumecon across engagements while keeping your client relationships, analytical judgment and deliverables your own. We’ll also work with your firm to calibrate Cedar around how your team performs analysis and produces client reporting.',
-  note: 'Consultant licensing is separate from standard organizational pricing because it covers commercial client use, multi-client workflows, support and firm-level Cedar calibration. Standard customers keep the public plans above.',
-  points: [
-    'The full Lumecon modeling platform and every applicable geography',
-    'Commercial and client use',
-    'Client and project workspaces',
-    'Cedar calibrated to your firm’s analytical and reporting workflow',
-  ],
-  ctaLabel: 'Talk to us about consultant access',
-  ctaSubject: 'Consultant access',
+/**
+ * Consultants use the same public plans, no separate edition: a band
+ * under the plan cards instead of a custom-priced product.
+ */
+export const CONSULTANT_BAND = {
+  kicker: 'Using Lumecon for client work?',
+  headline: 'Commercial use starts with Sapling.',
+  body: 'Team Workspace doubles as a client intake and project management environment. Bring your team and the people providing client data into the same workflow, collect the documents an analysis needs, see what has arrived and what is missing, and keep source material connected to the work it supports. Sapling’s 10 active seats can be reassigned as engagements change, and Tree serves larger firms with unlimited organizational users and Cedar Grove.',
+  value: 'Spend less time assembling the study. More time doing the work only you can do.',
+  valueBody: 'Your expertise remains the valuable part. Lumecon reduces the data wrangling, repetitive setup, file chasing and mechanical work around it, in a workflow purpose-built for the analysis.',
+  ctaLabel: 'Talk to us about client work',
+  ctaSubject: 'Using Lumecon for client work',
 };
+
+/** The pricing FAQ: the skepticism the plans and table cannot answer. */
+export interface PricingFaq {
+  q: string;
+  a: string[];
+}
+
+export const PRICING_FAQ: PricingFaq[] = [
+  {
+    q: 'Why does Lumecon cost less than traditional economic impact software?',
+    a: [
+      'Because the economics of delivering analytical software changed. Modern infrastructure allows us to operate efficiently at scale while continuing to invest in economists, engineers, data scientists, data and model development.',
+    ],
+  },
+  {
+    q: 'Is the model less capable because Lumecon costs less?',
+    a: [
+      'No. Every paid plan runs the same underlying Lumecon economic model. Higher tiers add collaboration, organizational data capabilities and scale.',
+      'Price isn’t a methodology.',
+    ],
+  },
+  {
+    q: 'Couldn’t an economist just buy multipliers and do this themselves?',
+    a: [
+      'Yes. Experienced economists can perform many economic impact calculations themselves; the arithmetic is rarely the hardest part.',
+      'Lumecon handles much of the surrounding data engineering, regionalization, validation, documentation, maintenance and workflow, so economists can spend more time exercising economic judgment.',
+    ],
+  },
+  {
+    q: 'Why don’t complicated analyses cost more?',
+    a: [
+      'Because analytical complexity is exactly what the software is supposed to handle. Multiple geographies, years, projects and scenarios shouldn’t become separate licensing events.',
+      'Complexity belongs in the model. Not the pricing.',
+    ],
+  },
+  {
+    q: 'Why are your prices public?',
+    a: [
+      'Because customers should be able to determine whether software fits their budget without sitting through a sales process. Our standard plans have standard prices.',
+      'We tailor the modeling, not the price.',
+    ],
+  },
+  {
+    q: 'Can I actually try Lumecon before paying?',
+    a: [
+      'Yes. Create a free account without entering a credit card. Bring your documents, use Cedar and work through an analysis yourself. Complete results unlock when you choose a paid plan.',
+      'No credit card. No sales call. No obligation.',
+    ],
+  },
+  {
+    q: 'What happens when Lumecon improves?',
+    a: [
+      'Improvements to capabilities already included in your plan are included with your subscription. Entirely new products or higher-tier capabilities may be offered separately.',
+      'You don’t buy a model and watch it age.',
+    ],
+  },
+  {
+    q: 'What if another platform has a feature Lumecon doesn’t?',
+    a: [
+      'Tell us what would make the work better. We deliberately focus on capabilities that improve economic impact analysis rather than adding complexity to make a feature list longer. Useful workflows, visualizations, data and analytical capabilities will continue to evolve with the platform.',
+    ],
+  },
+];

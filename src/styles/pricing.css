@@ -39,6 +39,16 @@
   margin: 0;
   max-width: 62ch;
 }
+.pr-hero__sub {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  color: var(--navy);
+  margin: 0;
+  max-width: 40ch;
+}
 .pr-hero__callout {
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -46,6 +56,30 @@
   text-transform: uppercase;
   color: var(--accent-text);
   margin: 0;
+}
+.pr-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.3rem;
+}
+.pr-hero__nocard {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+.pr-hero__try {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0.4rem 0 0;
+  max-width: 66ch;
+  border-top: 1px solid var(--rule);
+  padding-top: 1.1rem;
 }
 
 /* ---------- plan cards ---------- */
@@ -228,28 +262,50 @@
   margin: 0;
   text-align: center;
 }
-/* The pricing creed under the table: the philosophy, set large,
-   with the three concrete "no"s underneath. Not a card. */
-.pr-creed {
-  margin: 1.2rem auto 0.4rem;
-  max-width: 780px;
-  text-align: center;
+/* ---------- consultant band (between cards and table) ---------- */
+.pr-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+  flex-wrap: wrap;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: clamp(1.4rem, 3vw, 2rem) clamp(1.4rem, 3vw, 2.2rem);
+  transition: border-color 0.2s var(--ease);
+}
+.pr-band:hover {
+  border-color: var(--accent);
+}
+.pr-band__main {
   display: grid;
-  gap: 0.7rem;
+  gap: 0.55rem;
+  max-width: 62rem;
 }
-.pr-plans__creed {
-  margin: 0;
+.pr-band__title {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--navy);
-}
-.pr-creed__trio {
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  letter-spacing: -0.018em;
+  color: var(--ink);
   margin: 0;
-  font-size: 1.02rem;
-  line-height: 1.6;
+}
+.pr-band__body {
+  font-size: 0.95rem;
+  line-height: 1.62;
   color: var(--ink-2);
+  margin: 0;
+  max-width: 72ch;
+}
+.pr-band__value {
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  margin: 0.2rem 0 0;
+}
+.pr-band__cta {
+  flex-shrink: 0;
 }
 .pr-offer__guarantee {
   margin: 0.9rem 0 0;
@@ -258,15 +314,33 @@
   letter-spacing: -0.01em;
   color: var(--accent-text);
 }
-.pr-duo__creed {
-  margin: 0.4rem 0 0;
-  padding-top: 1.3rem;
+/* ---------- philosophy columns (why / economics / selling) ---------- */
+.pr-why__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.6rem, 4vw, 4rem);
+}
+.pr-why__cols p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 38rem;
+}
+@media (max-width: 760px) {
+  .pr-why__cols {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+.pr-better {
+  margin: clamp(1.4rem, 3vh, 2rem) 0 0;
+  padding-top: 1.2rem;
   border-top: 1px solid var(--rule);
-  font-size: 1.08rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--navy);
-  max-width: 44rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 62rem;
 }
 
 /* ---------- commitment policies ---------- */
@@ -426,84 +500,60 @@
   }
 }
 
-/* ---------- consultants ---------- */
-.pr-consult__audience {
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--ink-3);
+/* ---------- pricing FAQ ---------- */
+.pr-faq__list {
   margin: 0;
-}
-.pr-consult__points {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem 1.4rem;
-  max-width: 900px;
+  gap: 0;
 }
-.pr-consult__points li {
-  position: relative;
-  padding-left: 1.3rem;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-}
-.pr-consult__points li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.52em;
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background: var(--accent);
-}
-.pr-consult__note {
-  font-size: 0.85rem;
-  color: var(--ink-3);
-  margin: 0;
-  max-width: 70ch;
-}
-@media (max-width: 720px) {
-  .pr-consult__points {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* ---------- free trial strip ---------- */
-.pr-trial {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: 1.3rem 1.5rem;
-  transition: border-color 0.2s var(--ease);
-}
-.pr-trial:hover {
-  border-color: var(--accent);
-}
-.pr-trial__text {
+.pr-faq__row {
   display: grid;
-  gap: 0.25rem;
-  max-width: 62ch;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: clamp(1.2rem, 2.5vh, 1.7rem) 0;
+  border-top: 1px solid var(--rule);
 }
-.pr-trial__t {
+.pr-faq__row:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.pr-faq__row dt {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
   letter-spacing: -0.015em;
+  line-height: 1.35;
   color: var(--ink);
   margin: 0;
+  max-width: 34ch;
 }
-.pr-trial__b {
-  font-size: 0.92rem;
-  line-height: 1.55;
+.pr-faq__row dd {
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+.pr-faq__row dd p {
+  font-size: 0.97rem;
+  line-height: 1.68;
   color: var(--ink-2);
   margin: 0;
+  max-width: 64ch;
+}
+@media (max-width: 760px) {
+  .pr-faq__row {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+}
+.pr-faq__foot {
+  margin: clamp(1.8rem, 4vh, 2.6rem) auto 0;
+  max-width: 760px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  letter-spacing: -0.015em;
+  line-height: 1.5;
+  color: var(--navy);
 }
 
 /* Renewal transparency and the referral mention: policy fine print

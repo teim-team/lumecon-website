@@ -101,16 +101,23 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
 });
 
-test('pricing carries the competitive transition offer and consultant CTA', async ({ page }) => {
+test('pricing carries the competitive transition offer and consultant band', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
+  // The free CTA leads, above the plans, with the no-card line beside it.
+  const hero = page.locator('.pr-hero');
+  await expect(hero).toContainText('Plans start at $500 a year');
+  await expect(hero).toContainText('No credit card. No sales call. No obligation.');
+  await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
   const offer = page.locator('#switch');
-  await expect(offer).toContainText('Switching economic impact software?');
+  await expect(offer).toContainText('Already paying for economic impact software?');
   await expect(offer).toContainText('whichever is lower');
   await expect(offer.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
-  // Consultant licensing is custom-priced: a CTA, not a public tier.
-  const consult = page.locator('#consultants');
-  await expect(consult).toContainText('Lumecon for consultants');
-  await expect(consult.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
+  // Consultants use the public plans: a band under the cards, no separate edition.
+  const band = page.locator('.pr-band');
+  await expect(band).toContainText('Commercial use starts with Sapling.');
+  await expect(band.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
+  // The FAQ carries the skepticism the table cannot.
+  await expect(page.locator('.pr-faq__row')).toHaveCount(8);
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {

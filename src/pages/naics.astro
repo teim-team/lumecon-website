@@ -34,7 +34,7 @@ const description =
 const publicDir = `${process.cwd()}/public`;
 const tiles = [...SECTORS, TRIBAL_GOVERNMENT].map((s) => ({
   ...s,
-  colors: WASHES[s.wash],
+  colors: WASHES[s.wash as keyof typeof WASHES],
   photo: existsSync(`${publicDir}/naics/${s.slug}-sm.webp`) ? `/naics/${s.slug}-sm.webp` : null,
 }));
 
