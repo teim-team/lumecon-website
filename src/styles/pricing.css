@@ -72,14 +72,84 @@
   color: var(--ink-3);
   margin: 0;
 }
-.pr-hero__try {
-  font-size: 0.95rem;
-  line-height: 1.65;
+/* Mobile: the centered-poster effect reads badly on a phone. The
+   headline stays centered; everything explanatory beneath it goes
+   left-aligned so the hero scans like a product page. */
+@media (max-width: 640px) {
+  .pr-hero__inner {
+    justify-items: start;
+    text-align: left;
+  }
+  .pr-hero__inner .h-kicker,
+  .pr-hero__title {
+    justify-self: center;
+    text-align: center;
+  }
+  .pr-hero__ctas {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- free-account band (before the paid tiers) ---------- */
+.pr-free {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+  flex-wrap: wrap;
+  border: 1px solid var(--accent-bar);
+  background: var(--accent-rgba-08);
+  border-radius: 8px;
+  padding: clamp(1.4rem, 3vw, 2rem) clamp(1.4rem, 3vw, 2.2rem);
+}
+.pr-free__main {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 60rem;
+  flex: 1 1 32rem;
+}
+.pr-free__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.pr-free__body {
+  font-size: 0.97rem;
+  line-height: 1.62;
   color: var(--ink-2);
-  margin: 0.4rem 0 0;
-  max-width: 66ch;
-  border-top: 1px solid var(--rule);
-  padding-top: 1.1rem;
+  margin: 0;
+  max-width: 68ch;
+}
+.pr-free__side {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+  flex-shrink: 0;
+}
+.pr-free__terms {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  /* The side block must be allowed to shrink to the viewport; its
+     natural width is the one-line terms text, which is wider than a
+     phone. */
+  .pr-free__side {
+    flex: 1 1 100%;
+    min-width: 0;
+    justify-items: start;
+  }
+  .pr-free__terms {
+    white-space: normal;
+  }
 }
 
 /* ---------- plan cards ---------- */
@@ -333,14 +403,49 @@
     gap: 1rem;
   }
 }
-.pr-better {
-  margin: clamp(1.4rem, 3vh, 2rem) 0 0;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--rule);
-  font-size: 1rem;
+.pr-why__single {
+  font-size: 1.05rem;
   line-height: 1.7;
   color: var(--ink-2);
-  max-width: 62rem;
+  margin: 0;
+  max-width: 62ch;
+}
+
+/* The three-item proof row under the complexity argument. */
+.pr-trio {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.pr-trio__item {
+  border-top: 2px solid var(--accent);
+  padding: 1rem 0 0;
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+}
+.pr-trio__t {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.08rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0;
+}
+.pr-trio__b {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+}
+@media (max-width: 720px) {
+  .pr-trio {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.2rem;
+  }
 }
 
 /* ---------- commitment policies ---------- */
@@ -450,54 +555,6 @@
   color: var(--ink-3);
   margin: 0;
   max-width: 78ch;
-}
-
-/* ---------- Team Workspace / Cedar Grove duo ---------- */
-.pr-duo {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-.pr-duo__card {
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: 1.6rem 1.5rem;
-  display: grid;
-  gap: 0.7rem;
-  align-content: start;
-}
-.pr-duo__card--grove {
-  border-color: rgba(14, 139, 79, 0.35);
-  background: var(--cedar-mist);
-}
-.h-kicker--cedar {
-  color: var(--cedar-text);
-}
-.pr-duo__title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
-  letter-spacing: -0.018em;
-  color: var(--ink);
-  margin: 0;
-}
-.pr-duo__body {
-  font-size: 0.95rem;
-  line-height: 1.62;
-  color: var(--ink-2);
-  margin: 0;
-}
-@media (max-width: 880px) {
-  .pr-duo {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-/* The mist card hardcodes a light green surface; keep it readable
-   in dark mode with a translucent green wash instead. */
-@media (prefers-color-scheme: dark) {
-  .pr-duo__card--grove {
-    background: rgba(14, 139, 79, 0.16);
-  }
 }
 
 /* ---------- pricing FAQ ---------- */

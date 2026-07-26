@@ -6,18 +6,16 @@
  * is less expensive because it was built recently, on modern
  * infrastructure, around a simpler business model, without the
  * licensing constraints and commercial overhead that historically
- * surrounded professional economic modeling. The page structure from
- * the consolidated rewrite direction:
+ * surrounded professional economic modeling. The page structure after
+ * the founder's shortening pass (each proposition argued exactly once):
  *
- *   1. Hero: simplicity as the opening argument, free trial visible.
- *   2. Three understandable plans + the detail table.
- *   3. Consultant band under the cards (no separate edition).
- *   4. Complexity belongs in the model (why pricing works this way).
- *   5. Workspace and Grove, concrete.
- *   6. Better economics made better pricing possible (once, well).
- *   7. Less spent selling; built to get better; the plan gets better.
- *   8. Competitive transition offer (secondary), commitment pricing.
- *   9. Pricing FAQ carries the skepticism; the table carries features.
+ *   1. Hero: simplicity as the opening argument.
+ *   2. Free-account band: "don't take our word for it", before the tiers.
+ *   3. Three understandable plans, consultant band, detail table.
+ *   4. Complexity belongs in the model (product side, with the trio).
+ *   5. Better economics made better pricing possible (the candid why).
+ *   6. Competitive transition offer (secondary), commitment pricing.
+ *   7. Pricing FAQ carries the skepticism; the table carries features.
  *
  * The reader should leave knowing: the model is serious, the pricing is
  * simple, they can verify the product free without a card, the plan
@@ -121,17 +119,32 @@ const jsonLd = [
           <a class="btn2 btn2--card" href="#plans">Compare plans</a>
         </div>
         <p class="pr-hero__nocard">No credit card. No sales call. No obligation.</p>
-        <p class="pr-hero__try">
-          The free account is the real product: bring your own material, use Cedar, set up an
-          analysis and experience the workflow. Complete results unlock when you subscribe, and
-          nothing counts down while you decide. See the price. Try the platform. Decide for
-          yourself.
-        </p>
       </div>
     </section>
 
-    <!-- 2. Three understandable plans. -->
+    <!-- 2. The free account, promoted: don't take our word for it. -->
     <section class="pr-plans" id="plans" aria-label="Plans">
+      <aside class="pr-free" aria-labelledby="free-title">
+        <div class="pr-free__main">
+          <p class="h-kicker">The free account is the real product</p>
+          <h2 class="pr-free__title" id="free-title">Don&rsquo;t take our word for it.</h2>
+          <p class="pr-free__body">
+            Create a free account and use the actual Lumecon platform. Bring your documents,
+            work with Cedar and build an analysis end to end. There is no credit card, countdown
+            or sales call. Full results unlock when you choose a paid plan.
+          </p>
+        </div>
+        <div class="pr-free__side">
+          <a class="btn2 btn2--primary" href="/signup?tier=free">
+            Try Lumecon free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          <p class="pr-free__terms">
+            No credit card &middot; No expiration &middot; No obligation
+          </p>
+        </div>
+      </aside>
+
+      <!-- 3. Three understandable plans. -->
       <div class="pr-plans__grid">
         {
           PLANS.map((p) => (
@@ -163,14 +176,13 @@ const jsonLd = [
         }
       </div>
 
-      <!-- 3. Consultants: same plans, no separate edition. -->
+      <!-- Consultants: same plans, no separate edition. -->
       <aside class="pr-band" aria-labelledby="band-title">
         <div class="pr-band__main">
           <p class="h-kicker">{CONSULTANT_BAND.kicker}</p>
           <h2 class="pr-band__title" id="band-title">{CONSULTANT_BAND.headline}</h2>
           <p class="pr-band__body">{CONSULTANT_BAND.body}</p>
           <p class="pr-band__value">{CONSULTANT_BAND.value}</p>
-          <p class="pr-band__body">{CONSULTANT_BAND.valueBody}</p>
         </div>
         <a class="btn2 btn2--card pr-band__cta" href={bandMailto}>
           {CONSULTANT_BAND.ctaLabel} <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
@@ -222,7 +234,7 @@ const jsonLd = [
       });
     </script>
 
-    <!-- 4. Why the pricing works. -->
+    <!-- 4. The product side: complexity is what the software is for. -->
     <section class="flowsec" aria-labelledby="why-title">
       <div class="flowsec-inner">
         <header class="flowsec-head">
@@ -230,63 +242,34 @@ const jsonLd = [
             Complexity belongs in the model. <span class="brand-em">Not the pricing.</span>
           </h2>
           <p class="flowsec-lede">
-            Economic impact analysis can involve multiple years, multiple geographies, multiple
-            enterprises, complicated organizations and repeated scenarios. Lumecon doesn&rsquo;t
-            charge more because the analytical question became more interesting.
+            Complex organizations can involve multiple years, multiple geographies, multiple
+            enterprises, complicated organizational structures and specialized analyses. Lumecon
+            doesn&rsquo;t charge more because the underlying question is harder.
           </p>
         </header>
-        <div class="pr-why__cols">
-          <p>
-            Run longitudinal analyses. Compare projects over time. Examine different geographic
-            scopes. Analyze complex organizations. Run another scenario when the assumptions
-            change. That is what analytical software is supposed to do.
-          </p>
-          <p>
-            Higher plans cost more for understandable reasons: more people using the platform,
-            more collaboration, more organizational context, greater storage and compute
-            requirements, and additional data capabilities. We don&rsquo;t make the model harder
-            to access just to create something else to sell you.
-          </p>
-        </div>
+        <p class="pr-why__single">
+          Every paid plan uses the same economic modeling foundation. Higher plans reflect
+          things that actually increase with organizational use: more people, collaboration,
+          storage, data capabilities and support.
+        </p>
+        <ul class="pr-trio" role="list">
+          <li class="pr-trio__item">
+            <h3 class="pr-trio__t">One model</h3>
+            <p class="pr-trio__b">The same economic foundation across every paid plan.</p>
+          </li>
+          <li class="pr-trio__item">
+            <h3 class="pr-trio__t">Any supported geography</h3>
+            <p class="pr-trio__b">No county, state or homelands add-ons.</p>
+          </li>
+          <li class="pr-trio__item">
+            <h3 class="pr-trio__t">Unlimited analysis</h3>
+            <p class="pr-trio__b">Complexity doesn&rsquo;t create another invoice.</p>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- 5. Workspace and Grove, concrete. -->
-    <section class="flowsec" id="workspace-grove" aria-labelledby="wg-title">
-      <div class="flowsec-inner">
-        <header class="flowsec-head">
-          <h2 class="flowsec-title" id="wg-title">
-            Higher plans add organizational capability, <span class="brand-em"
-              >not a better economic model.</span
-            >
-          </h2>
-        </header>
-        <div class="pr-duo">
-          <article class="pr-duo__card">
-            <p class="h-kicker">Team Workspace &middot; Sapling</p>
-            <p class="pr-duo__body">
-              Shared projects, collaborative analysis, review workflows and organizational and
-              client data collection: the documents an analysis needs, who has provided what, and
-              source material connected to the work it supports.
-            </p>
-          </article>
-          <article class="pr-duo__card pr-duo__card--grove">
-            <p class="h-kicker h-kicker--cedar">Cedar Grove &middot; Tree</p>
-            <p class="pr-duo__body">
-              Studies frequently need demographic, workforce, socioeconomic, industry and
-              historical context beyond the final impact estimates, and Lumecon already maintains
-              much of that information. Cedar Grove makes harmonized, analysis-ready data
-              available alongside the modeling workflow, so the same public datasets don&rsquo;t
-              have to be found, cleaned and reconciled again for every analysis. For consultants
-              that makes client work faster; for organizations it becomes reusable analytical
-              infrastructure of record.
-            </p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. The economics behind the price, once. -->
+    <!-- 5. The candid why, once. -->
     <section class="flowsec pr-economics" aria-labelledby="econ-title">
       <div class="flowsec-inner">
         <header class="flowsec-head">
@@ -294,72 +277,30 @@ const jsonLd = [
             Better economics made <span class="brand-em">better pricing</span> possible.
           </h2>
           <p class="flowsec-lede">
-            Input-output analysis is established economic science. The underlying mathematics is
-            not a proprietary secret, and we don&rsquo;t believe opacity makes a model more
-            sophisticated.
+            Economic impact analysis is established economic science. The expensive part is
+            building and maintaining a reliable system around it: integrating changing datasets,
+            cleaning and harmonizing them, regionalizing the model correctly, protecting
+            organizational data and continuously validating the results.
           </p>
         </header>
         <div class="pr-why__cols">
           <p>
-            The difficult part is everything required to turn that economics into reliable
-            software: integrating changing data sources, understanding their idiosyncrasies,
-            cleaning and harmonizing them, modeling different geographies, handling missing and
-            suppressed observations, validating outputs, securing organizational information and
-            keeping the system current. That still requires economists, software engineers, data
-            scientists and subject-matter expertise.
-          </p>
-          <p>
-            What changed is the technology around them. Modern cloud computing, data engineering
-            and AI-assisted processing make it possible to build and maintain analytical systems
-            far more efficiently than was practical a decade ago. Lumecon was built around that
-            reality from the beginning. Lower cost shouldn&rsquo;t require lower standards; the
-            methods are public at{' '}
+            Modern cloud infrastructure and computing make that system dramatically less
+            expensive to operate than it once was. We built Lumecon around that reality from the
+            beginning, and lower cost never means lower standards: the methods are public at{' '}
             <a class="inline-link" href="/methodology">lumecon.ai/methodology</a>.
           </p>
+          <p>
+            We also keep the buying process simple. Our prices are public. You can try the
+            actual product without a credit card. You don&rsquo;t need a sales call before you
+            know what it costs. That means we can spend less selling the platform and more
+            improving it.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- 7. Where else the savings come from, and what improves. -->
-    <section class="flowsec" aria-labelledby="sell-title">
-      <div class="flowsec-inner">
-        <header class="flowsec-head">
-          <h2 class="flowsec-title" id="sell-title">
-            Less spent selling the platform. <span class="brand-em">More invested in it.</span>
-          </h2>
-        </header>
-        <div class="pr-why__cols">
-          <p>
-            Our standard prices are public, and you can go further than reading them: create a
-            free account and use Lumecon yourself before deciding whether to subscribe. If you
-            want to talk to us, we&rsquo;re here, and a sales conversation is never a prerequisite
-            for evaluating the product. The website, methodology, documentation, real product
-            screenshots and the product itself are designed to answer the questions that
-            traditionally required a sales process. We would rather invest disproportionately in
-            the model, data, economists, engineers and product than build commercial machinery
-            around them. The product should do more of the selling.
-          </p>
-          <p>
-            That is also the business logic. Modern infrastructure lowers delivery costs,
-            self-service lowers commercial overhead, and straightforward pricing makes Lumecon
-            accessible to more organizations. More customers support greater investment in
-            economists, engineers, data, methods and infrastructure, the model and platform
-            improve, and customers receive those improvements. When the capabilities in your plan
-            get better, your plan gets better. You don&rsquo;t buy a model and watch it age.
-          </p>
-        </div>
-        <p class="pr-better">
-          Another platform may have a dashboard, visualization or workflow Lumecon doesn&rsquo;t
-          have today. We&rsquo;re hyper-focused on improving economic impact analysis: when
-          additional views, workflows, datasets or capabilities materially improve that work, the
-          architecture is designed to let us add them, and we adopt new technology thoughtfully
-          rather than because it is new. We don&rsquo;t add complexity to justify the price. We
-          add capability when it improves the work.
-        </p>
-      </div>
-    </section>
-
-    <!-- 8. Competitive transition offer, secondary to public pricing. -->
+    <!-- 6. Competitive transition offer, secondary to public pricing. -->
     <section class="pr-offer" id="switch" aria-labelledby="offer-title">
       <div class="pr-offer__panel">
         <MarkArt class="markart markart--offer" size={520} />
@@ -384,7 +325,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 9. Commitment pricing, kept simple. -->
+    <!-- 7. Commitment pricing, kept simple. -->
     <section class="pr-commit" aria-labelledby="commit-title">
       <div class="pr-commit__inner">
         <h2 class="pr-commit__title" id="commit-title">
@@ -409,7 +350,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 10. The FAQ carries the skepticism. -->
+    <!-- 8. The FAQ carries the skepticism. -->
     <section class="flowsec pr-faq" id="faq" aria-labelledby="faq-title">
       <div class="flowsec-inner">
         <header class="flowsec-head">

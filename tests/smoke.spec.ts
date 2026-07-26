@@ -112,12 +112,16 @@ test('pricing carries the competitive transition offer and consultant band', asy
   await expect(offer).toContainText('Already paying for economic impact software?');
   await expect(offer).toContainText('whichever is lower');
   await expect(offer.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
+  // The free-account band sits before the paid tiers.
+  const free = page.locator('.pr-free');
+  await expect(free).toContainText('take our word for it');
+  await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // Consultants use the public plans: a band under the cards, no separate edition.
   const band = page.locator('.pr-band');
   await expect(band).toContainText('Commercial use starts with Sapling.');
   await expect(band.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
   // The FAQ carries the skepticism the table cannot.
-  await expect(page.locator('.pr-faq__row')).toHaveCount(8);
+  await expect(page.locator('.pr-faq__row')).toHaveCount(9);
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {

@@ -142,9 +142,8 @@ export const COMPETITIVE_OFFER = {
 export const CONSULTANT_BAND = {
   kicker: 'Using Lumecon for client work?',
   headline: 'Commercial use starts with Sapling.',
-  body: 'Team Workspace doubles as a client intake and project management environment. Bring your team and the people providing client data into the same workflow, collect the documents an analysis needs, see what has arrived and what is missing, and keep source material connected to the work it supports. Sapling’s 10 active seats can be reassigned as engagements change, and Tree serves larger firms with unlimited organizational users and Cedar Grove.',
+  body: 'Sapling’s Team Workspace doubles as a secure client intake and project workspace. Invite clients and collaborators to provide the materials an analysis needs, keep project data together and manage the analysis in one place, with 10 seats you can reassign as engagements change. Tree serves larger consulting organizations with unlimited organizational users, Cedar calibration and Cedar Grove.',
   value: 'Spend less time assembling the study. More time doing the work only you can do.',
-  valueBody: 'Your expertise remains the valuable part. Lumecon reduces the data wrangling, repetitive setup, file chasing and mechanical work around it, in a workflow purpose-built for the analysis.',
   ctaLabel: 'Talk to us about client work',
   ctaSubject: 'Using Lumecon for client work',
 };
@@ -198,9 +197,15 @@ export const PRICING_FAQ: PricingFaq[] = [
     ],
   },
   {
+    q: 'Can a faculty member buy Lumecon?',
+    a: [
+      'Yes. The public plans are open to anyone, and Sprout is priced so an individual analyst, faculty member or researcher can subscribe without an institutional procurement process. When a department or research group needs shared projects, Sapling adds Team Workspace.',
+    ],
+  },
+  {
     q: 'What happens when Lumecon improves?',
     a: [
-      'Improvements to capabilities already included in your plan are included with your subscription. Entirely new products or higher-tier capabilities may be offered separately.',
+      'You benefit from improvements to what your plan already includes. We continually update Lumecon’s data, modeling, workflow and product capabilities. We may introduce new capabilities associated with particular plans, but we don’t intend to turn routine improvements to an existing feature into a new add-on every time the platform gets better.',
       'You don’t buy a model and watch it age.',
     ],
   },
