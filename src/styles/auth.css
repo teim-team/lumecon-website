@@ -67,6 +67,18 @@
   color: var(--navy);
   letter-spacing: -0.005em;
 }
+/* Required-field marker and legend: dark teal for contrast on white (gold is
+   brand-only; the palette carries no red). */
+.auth-req {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+.auth-reqnote {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--muted, #6b6f8a);
+  margin: 0 0 1rem;
+}
 .auth-field > input,
 .auth-field > textarea {
   font-family: var(--font-sans);

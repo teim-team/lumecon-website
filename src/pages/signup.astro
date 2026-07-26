@@ -90,6 +90,9 @@ const ROLE_OPTIONS = [
           </li>
         </ol>
 
+        <p class="auth-reqnote">
+          Fields marked <span class="auth-req" aria-hidden="true">*</span> are required.
+        </p>
         <form class="auth-form" data-auth-form data-auth-kind="signup" novalidate>
           <input type="hidden" name="tier" data-auth-tier />
           <input type="hidden" name="role" data-auth-role />
@@ -97,11 +100,11 @@ const ROLE_OPTIONS = [
           <fieldset class="auth-step" data-step-panel="1">
             <legend class="sr-only">Who you are</legend>
             <label class="auth-field">
-              <span>Name</span>
+              <span>Name <span class="auth-req" aria-hidden="true">*</span></span>
               <input type="text" name="name" required autocomplete="name" maxlength="200" />
             </label>
             <label class="auth-field">
-              <span>Organization or nation</span>
+              <span>Organization or nation <span class="auth-req" aria-hidden="true">*</span></span>
               <input
                 type="text"
                 name="organization"
@@ -111,7 +114,7 @@ const ROLE_OPTIONS = [
               />
             </label>
             <div class="auth-field">
-              <span>Your role</span>
+              <span>Your role <span class="auth-req" aria-hidden="true">*</span></span>
               <div class="auth-chips" role="group" aria-label="Your role">
                 {
                   ROLE_OPTIONS.map((role) => (
@@ -127,11 +130,11 @@ const ROLE_OPTIONS = [
           <fieldset class="auth-step" data-step-panel="2" hidden>
             <legend class="sr-only">Your account</legend>
             <label class="auth-field">
-              <span>Work email</span>
+              <span>Work email <span class="auth-req" aria-hidden="true">*</span></span>
               <input type="email" name="email" autocomplete="email" />
             </label>
             <label class="auth-field">
-              <span>Password</span>
+              <span>Password <span class="auth-req" aria-hidden="true">*</span></span>
               <input
                 type="password"
                 name="password"
