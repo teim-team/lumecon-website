@@ -209,7 +209,10 @@ const ROLE_OPTIONS = [
       var tier = qs.get('tier');
       if (!tier) return;
       var tierName = { starter: 'Sprout', standard: 'Sapling', leader: 'Tree', free: 'Free trial' };
-      if (!tierName[tier]) return;
+      // hasOwnProperty, not truthiness: a bare `tierName[tier]` resolves
+      // inherited members like `constructor`/`__proto__` and would render
+      // them into the badge. Only the four real tiers pass.
+      if (!Object.prototype.hasOwnProperty.call(tierName, tier)) return;
       var badge = document.querySelector('[data-auth-plan]');
       var value = document.querySelector('[data-auth-plan-value]');
       var tierInput = document.querySelector('[data-auth-tier]');

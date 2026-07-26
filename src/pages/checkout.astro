@@ -237,9 +237,26 @@ const INCLUDED = [
             ...(discountCode ? { discountCode } : {}),
           });
           if (res.ok && res.data.url) {
-            trackEvent('checkout.redirect', { tier, hasCode: Boolean(discountCode) });
-            setStatus(status, 'ok', 'Taking you to secure payment...');
-            window.location.href = res.data.url;
+            // Only navigate to an https Stripe URL. res.data.url comes from
+            // our own backend, but validating before assigning location.href
+            // means a backend bug or a javascript:/other-host value can never
+            // become an open redirect or same-origin script execution.
+            var dest = null;
+            try {
+              var parsed = new URL(res.data.url, window.location.origin);
+              if (parsed.protocol === 'https:' && /(^|\.)stripe\.com$/.test(parsed.hostname)) {
+                dest = parsed.href;
+              }
+            } catch (e) {
+              dest = null;
+            }
+            if (dest) {
+              trackEvent('checkout.redirect', { tier, hasCode: Boolean(discountCode) });
+              setStatus(status, 'ok', 'Taking you to secure payment...');
+              window.location.href = dest;
+              return;
+            }
+            setStatus(status, 'err', 'Could not open secure payment. Try again in a moment.');
             return;
           }
           if (!res.ok && res.reason !== 'api-unconfigured') {
