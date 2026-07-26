@@ -36,11 +36,10 @@ mkdirSync(OUT, { recursive: true });
 const ALL = [...SECTORS, TRIBAL_GOVERNMENT];
 const bySlug = (name) => ALL.find((s) => name === s.slug || name.startsWith(s.slug + '-'));
 
-/** Map a grayscale byte through the wash ramp: shadow -> mid -> paper. */
+/** Map a grayscale byte through the wash ramp, shadow -> highlight, the
+ *  same linear per-channel lookup the NACA proposal's duotone() applies. */
 function ramp(g, wash) {
-  const t = g / 255;
-  const [a, b, w] = t < 0.5 ? [wash.shadow, wash.mid, t * 2] : [wash.mid, wash.paper, (t - 0.5) * 2];
-  return [0, 1, 2].map((i) => Math.round(a[i] + (b[i] - a[i]) * w));
+  return [0, 1, 2].map((i) => Math.round(wash.shadow[i] + ((wash.highlight[i] - wash.shadow[i]) * g) / 255));
 }
 
 async function processOne(file) {

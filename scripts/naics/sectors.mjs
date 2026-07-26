@@ -6,23 +6,31 @@
  * drift between surfaces.
  *
  * WASH COLOR RULE (deterministic, no per-image judgment): sectors are
- * ordered by NAICS code and washed in a repeating four-color cycle of
- * brand colors: teal, ink, amber, cedar. If two sector thumbnails ever sit
- * side by side in code order, their washes differ. Gold is brand-only per
- * BRAND.md and is never used as a wash.
+ * ordered by NAICS code and washed in a repeating four-color cycle:
+ * teal, bronze, gold, green. If two sector thumbnails ever sit side by
+ * side in code order, their washes differ. These are the four duotone
+ * schemes from the NACA proposal's imgsystem.py, sampled from its cover
+ * photographs; the "gold" ramp is the amber data-accent family, not the
+ * brand-only wordmark gold (BRAND.md).
  */
 
-// Duotone ramps: every wash maps grayscale into [shadow -> mid -> paper].
-// Shadows carry the hue's deepest usable shade, highlights stay just off
-// paper so tiles read as one family with the white site around them.
+// Duotone ramps, shadow -> highlight, exactly as the proposal maps the
+// 0-255 tone ramp. Highlights stay muted (no white point), which is what
+// gives the treatment its matte, printed feel. `mid` is the ramp's
+// midpoint, precomputed for UI accents like tile bars.
+const ramp2 = (shadow, highlight) => ({
+  shadow,
+  highlight,
+  mid: shadow.map((s, i) => Math.round(s + (highlight[i] - s) / 2)),
+});
 export const WASHES = {
-  teal: { shadow: [6, 51, 47], mid: [15, 156, 143], paper: [235, 250, 248] },
-  ink: { shadow: [7, 10, 26], mid: [58, 66, 106], paper: [237, 239, 246] },
-  amber: { shadow: [61, 36, 6], mid: [186, 117, 32], paper: [250, 243, 232] },
-  cedar: { shadow: [5, 43, 25], mid: [17, 128, 76], paper: [234, 247, 239] },
+  teal: ramp2([9, 68, 74], [134, 191, 186]), // #09444A -> #86BFBA
+  bronze: ramp2([49, 32, 34], [170, 151, 142]), // #312022 -> #AA978E
+  gold: ramp2([117, 87, 34], [241, 210, 147]), // #755722 -> #F1D293
+  green: ramp2([31, 60, 54], [133, 160, 146]), // #1F3C36 -> #85A092
 };
 
-const CYCLE = ['teal', 'ink', 'amber', 'cedar'];
+const CYCLE = ['teal', 'bronze', 'gold', 'green'];
 
 // Descriptions are the hover text on /naics: plain language about what an
 // organization in the sector actually does, written to the site copy rules.

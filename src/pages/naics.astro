@@ -12,7 +12,6 @@
  * pipeline has produced it.
  */
 import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -29,7 +28,10 @@ const site = siteConfig.url;
 const description =
   'The two-digit NAICS sectors Lumecon classifies economic activity against, in plain language, plus the tribal government category and why two-digit coverage keeps analyses defensible.';
 
-const publicDir = fileURLToPath(new URL('../../public', import.meta.url));
+// process.cwd() is the project root under both `astro dev` and `astro
+// build`; import.meta.url points at the compiled chunk during build and
+// would miss public/ entirely.
+const publicDir = `${process.cwd()}/public`;
 const tiles = [...SECTORS, TRIBAL_GOVERNMENT].map((s) => ({
   ...s,
   colors: WASHES[s.wash],
@@ -99,7 +101,7 @@ const jsonLd = [
                 class="naics-tile"
                 id={`naics-${t.slug}`}
                 tabindex="0"
-                style={`--wash-shadow: ${rgb(t.colors.shadow)}; --wash-mid: ${rgb(t.colors.mid)}; --wash-paper: ${rgb(t.colors.paper)};`}
+                style={`--wash-shadow: ${rgb(t.colors.shadow)}; --wash-mid: ${rgb(t.colors.mid)}; --wash-hi: ${rgb(t.colors.highlight)};`}
               >
                 <div class="naics-tile__media" aria-hidden="true">
                   {t.photo ? (
@@ -166,7 +168,7 @@ const jsonLd = [
      duotone ramp the pipeline applies, as a quiet field. */
   .naics-tile__field {
     background:
-      radial-gradient(120% 150% at 18% 0%, var(--wash-paper) 0%, transparent 42%),
+      radial-gradient(120% 150% at 18% 0%, var(--wash-hi) 0%, transparent 42%),
       linear-gradient(158deg, var(--wash-mid) 0%, var(--wash-shadow) 96%);
   }
   .naics-tile__code {
@@ -177,7 +179,7 @@ const jsonLd = [
     font-weight: 700;
     font-size: 1.7rem;
     letter-spacing: 0.04em;
-    color: var(--wash-paper);
+    color: var(--wash-hi);
     text-shadow: 0 1px 8px rgba(7, 10, 26, 0.35);
   }
   .naics-tile__bar {
@@ -204,7 +206,7 @@ const jsonLd = [
     padding: 0.95rem 1rem;
     font-size: 0.86rem;
     line-height: 1.55;
-    color: var(--wash-paper);
+    color: var(--wash-hi);
     background: color-mix(in srgb, var(--wash-shadow) 94%, transparent);
     opacity: 0;
     transition: opacity 0.22s ease;
