@@ -84,12 +84,12 @@ import '../styles/flow.css';
   </main>
 
   <script>
-    import { getFlowEmail } from '../lib/flowState';
+    import { hasSignedUp } from '../lib/flowState';
     /* The signup handoff travels as sessionStorage flow state, never
-       in the URL. When it is present the account already exists, so
-       Start free goes straight to the welcome page instead of back
-       through signup; checkout reads the same state for its prefill. */
-    if (getFlowEmail()) {
+       in the URL. Only a completed signup (not a checkout prefill email)
+       proves the account exists, so Start free skips straight to the
+       welcome page instead of routing back through signup. */
+    if (hasSignedUp()) {
       const free = document.querySelector<HTMLAnchorElement>('[data-free-link]');
       if (free) free.href = '/welcome?plan=free';
     }

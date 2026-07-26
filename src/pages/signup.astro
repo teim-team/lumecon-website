@@ -231,7 +231,7 @@ const ROLE_OPTIONS = [
   import { submitSignup, submitContact, apiConfigured } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
   import { PASSWORD_RULES, evaluatePassword } from '../lib/passwordRules';
-  import { getFlowEmail, rememberFlowEmail } from '../lib/flowState';
+  import { getFlowEmail, rememberFlowEmail, markSignedUp } from '../lib/flowState';
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;
@@ -352,6 +352,9 @@ const ROLE_OPTIONS = [
           const result = await submitSignup({ name, email, password, organization, role });
           if (result.ok) {
             trackEvent('auth.success', { kind: 'signup', role });
+            // The account now exists. Record signup proof separately from the
+            // checkout prefill email so /choose-plan can trust it.
+            markSignedUp();
             const tier = String(data.get('tier') ?? '').trim();
             if (tier === 'free') {
               // Free trial: no payment step, no $0 checkout. Straight
