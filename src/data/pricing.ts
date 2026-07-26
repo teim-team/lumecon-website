@@ -118,7 +118,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     values: [
       'Not included',
       'Not included',
-      'Included. Organizational data library combining Lumecon&rsquo;s analysis-ready datasets with approved internal data and reusable organizational context.',
+      'Included. Organizational data library combining Lumecon’s analysis-ready datasets with approved internal data and reusable organizational context.',
     ],
   },
 ];
@@ -143,7 +143,7 @@ export const CONSULTANT_BAND = {
   kicker: 'Using Lumecon for client work?',
   headline: 'Commercial use starts with Sapling.',
   body: 'Sapling’s Team Workspace doubles as a secure client intake and project workspace. Invite clients and collaborators to provide the materials an analysis needs, keep project data together and manage the analysis in one place, with 10 seats you can reassign as engagements change. Tree serves larger consulting organizations with unlimited organizational users, Cedar calibration and Cedar Grove.',
-  value: 'Spend less time assembling the study. More time doing the work only you can do.',
+  value: 'Spend less time assembling the analysis and more time on the work only you can do.',
   ctaLabel: 'Talk to us about client work',
   ctaSubject: 'Using Lumecon for client work',
 };

@@ -6,7 +6,7 @@ Lumecon replaces the pairing of expensive modeling software plus an expensive co
 
 ## Category
 
-Economic impact analysis software, and an alternative to traditional economic modeling tools such as IMPLAN, RIMS II (Bureau of Economic Analysis) and REMI. What is different about Lumecon: one flat annual subscription (no geography add-ons, no per-project fees); Cedar, an AI economic analyst included in every plan; higher-frequency public indicators supplementing the benchmark datasets on the trusted input-output core; reservations and trust lands as first-class regions; and a lineage behind every result. Lumecon's position: built on decades of economic science, not frozen in it; the modeling is tailored to each organization, the price is not. AI assists inside the workflow while trained economists remain responsible for assumptions, methods and validation. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.
+Economic impact analysis software, and an alternative to traditional economic modeling tools such as IMPLAN, RIMS II (Bureau of Economic Analysis) and REMI. What is different about Lumecon: one flat annual subscription (no geography add-ons, no per-analysis fees); Cedar, an AI economic analyst included in every plan; higher-frequency public indicators supplementing the benchmark datasets on the trusted input-output core; reservations and trust lands as first-class regions; and a lineage behind every result. Lumecon's position: built on decades of economic science, not frozen in it; the modeling is tailored to each organization, the price is not. AI assists inside the workflow while trained economists remain responsible for assumptions, methods and validation. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.
 
 ## One platform
 
@@ -25,7 +25,7 @@ Prices include taxes and fees. Multi-year agreements are eligible for preferred 
 
 ## Cedar
 
-Cedar is Lumecon's AI economic analyst, included in every plan and designed into the workflow from the beginning rather than added as a chat layer. It works across intake, analysis, interpretation and reporting: upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records, prior studies); Cedar identifies the relevant information, maps it into the model, flags gaps for review, assists with interpretation and helps turn results into board-ready reporting. AI assists inside the workflow; economists remain responsible for assumptions, methods and validation. Full detail at https://lumecon.ai/cedar. Cedar Grove (Tree plan) is the organizational data library: Lumecon's analysis-ready datasets combined with approved internal data and reusable organizational context.
+Cedar is Lumecon's AI economic analyst, included in every plan and designed into the workflow from the beginning rather than added as a chat layer. It works across intake, analysis, interpretation and reporting: upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records, prior analyses); Cedar identifies the relevant information, maps it into the model, flags gaps for review, assists with interpretation and helps turn results into board-ready reporting. AI assists inside the workflow; economists remain responsible for assumptions, methods and validation. Full detail at https://lumecon.ai/cedar. Cedar Grove (Tree plan) is the organizational data library: Lumecon's analysis-ready datasets combined with approved internal data and reusable organizational context.
 
 ## Methodology
 
@@ -43,19 +43,19 @@ Governments and mission-driven organizations: cities, counties, state agencies, 
 
 Economic impact analysis, input-output modeling, direct effects, indirect effects, induced effects, multipliers, jobs supported, economic output, labor income, GDP contribution, tax impacts, IMPLAN alternative, RIMS II alternative, REMI alternative, tribal economics, reservation economics, AIANNH geography, Whole Nation analysis, economic development, public-sector analytics.
 
-## Founders & team
+## Founders and team
 
-- Elijah Moreno, Co-Founder & CEO. PhD candidate in Public Policy at Cornell University; A.B. Dartmouth College; M.P.P. Cornell. Previously Senior Research Assistant at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), Wilma Mankiller Fellow at the National Congress of American Indians, research analyst at Taylor Policy Group, Inc. Enrolled member of the Coastal Band of the Chumash Nation.
-- Michael Moreno, Co-Founder & Founding Investor. Enrolled member of the Coastal Band of the Chumash Nation.
+- Elijah Moreno, Co-Founder and CEO. PhD candidate in Public Policy at Cornell University; A.B. Dartmouth College; M.P.P. Cornell. Previously Senior Research Assistant at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), Wilma Mankiller Fellow at the National Congress of American Indians, research analyst at Taylor Policy Group, Inc. Enrolled member of the Coastal Band of the Chumash Nation.
+- Michael Moreno, Co-Founder and Founding Investor. Enrolled member of the Coastal Band of the Chumash Nation.
 - Kaylyn Lee, Platform Lead. B.S. Computer Science with a minor in Business, Cornell University.
 - Laurel Wheeler, Economics Lead. B.A. Political Science (Florida), M.S. Economics for Development (Oxford), M.A. and Ph.D. Economics (Duke). Previously economist at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis).
-- Isabella Agnes, Input/Output Engine Lead. B.S. Mathematics and Computer Science (Wisconsin–Madison), doctoral training in Economics (Maryland). Previously research assistant at the Federal Reserve Bank of Philadelphia and data scientist at the Board of Governors of the Federal Reserve System.
+- Isabella Agnes, Input/Output Models Lead. B.S. Mathematics and Economics (Wisconsin-Madison), doctoral training in Economics (Maryland). Previously research assistant at the Federal Reserve Bank of Philadelphia and data scientist at the Board of Governors of the Federal Reserve System.
 - Francesca Agnes, Cedar Lead. Biology, University of Illinois Urbana-Champaign.
 
-## Advisors & Contributors
+## Advisors and Contributors
 
 - Brian Kim, Technical Advisor. Previously senior software engineer at Modsy and Chime.
-- Havala Hanson, Data Security Advisor. Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin–Whitewater).
+- Havala Hanson, Product, Data Security and Research Operations Advisor. Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin-Whitewater).
 - Vod Vilfort, Methodology Advisor. PhD candidate in Economics at MIT, focused on econometrics.
 
 ## Origin

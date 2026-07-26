@@ -389,74 +389,6 @@
 }
 
 /* ---------- checkout ---------- */
-.auth-panel--wide {
-  max-width: 560px;
-}
-.co-link {
-  color: var(--accent-text);
-  font-weight: 600;
-  text-decoration: none;
-}
-.co-link:hover {
-  text-decoration: underline;
-}
-.co-plans {
-  display: grid;
-  gap: 0.55rem;
-}
-.co-plan {
-  appearance: none;
-  font-family: var(--font-sans);
-  text-align: left;
-  background: var(--white);
-  border: 1px solid var(--rule-strong);
-  border-radius: 6px;
-  padding: 0.75rem 0.9rem;
-  display: grid;
-  gap: 0.2rem;
-  cursor: pointer;
-  transition:
-    border-color 0.15s var(--ease),
-    background 0.15s var(--ease),
-    box-shadow 0.15s var(--ease);
-}
-.co-plan:hover {
-  border-color: var(--accent);
-}
-/* The free-trial option reads lighter than the paid plans. */
-.co-plan--free {
-  border-style: dashed;
-}
-.co-plan--on {
-  border-color: var(--accent);
-  background: var(--accent-rgba-08);
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.co-plan__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.8rem;
-}
-.co-plan__name {
-  font-weight: 700;
-  color: var(--navy);
-  font-size: 1rem;
-}
-.co-plan__price {
-  font-weight: 700;
-  color: var(--navy);
-  font-size: 0.98rem;
-}
-.co-plan__per {
-  font-weight: 500;
-  color: var(--ink-3);
-  font-size: 0.8rem;
-}
-.co-plan__users {
-  font-size: 0.82rem;
-  color: var(--ink-2);
-}
 .co-code {
   display: flex;
   gap: 0.5rem;
@@ -505,21 +437,6 @@
   border-top: 1px solid var(--rule);
   padding-top: 0.9rem;
 }
-.co-total__label {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  font-weight: 600;
-}
-.co-total__value {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--navy);
-  letter-spacing: -0.02em;
-}
 
 @media (max-width: 480px) {
   .auth-panel {
@@ -533,14 +450,12 @@
 
 /* Touch feedback for the auth and checkout controls. */
 .auth-form .btn:active,
-.co-plan:active,
 .auth-chip:active,
 .co-code__apply:active {
   transform: scale(0.985);
 }
 @media (prefers-reduced-motion: reduce) {
   .auth-form .btn:active,
-  .co-plan:active,
   .auth-chip:active,
   .co-code__apply:active {
     transform: none;

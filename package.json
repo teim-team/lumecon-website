@@ -13,7 +13,10 @@
     "check": "astro check",
     "format": "prettier --write 'src/**/*.{astro,ts,css,json}'",
     "format:check": "prettier --check 'src/**/*.{astro,ts,css,json}'",
-    "test:smoke": "playwright test"
+    "test:smoke": "playwright test",
+    "naics:duotone": "node scripts/naics/duotone.mjs scripts/naics/sources",
+    "naics:export-app": "node scripts/naics/export-app.mjs",
+    "shots:examples": "node scripts/screenshots/capture-examples.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

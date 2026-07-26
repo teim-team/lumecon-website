@@ -22,11 +22,3 @@ export function getFlowEmail(): string {
     return '';
   }
 }
-
-export function clearFlowEmail(): void {
-  try {
-    sessionStorage.removeItem(EMAIL_KEY);
-  } catch {
-    /* nothing to clear */
-  }
-}

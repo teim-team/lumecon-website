@@ -157,3 +157,35 @@ User-facing word choices, everywhere a customer reads:
 
 The full reconciliation tracker lives in
 docs/reconciliation-roadmap.md.
+
+## Generators and pipelines (2026-07)
+
+Nothing in `scripts/` runs at build time; each is a generator whose
+output is committed. Run them when their inputs change.
+
+- Sector thumbnails (duotone): `scripts/naics/sectors.mjs` is the
+  single source for the 20 NAICS sectors + the Tribal Government
+  category, their descriptions and wash colors; `/naics` and the
+  thumbnail pipeline both read it, so tiles and images cannot drift.
+  `node scripts/naics/duotone.mjs scripts/naics/sources` regenerates
+  `public/naics/*.webp` (three crops per sector: 1200x800, 600x400
+  `-sm`, 1500x600 `-wide`). Sources are licensed Shutterstock
+  originals named `<slug>_shutterstock_<imageID>_<downloadID>.jpeg`;
+  the licensing record is `scripts/naics/LICENSES.md`. Never use the
+  NACA proposal photos.
+- App handoff: `node scripts/naics/export-app.mjs >
+  ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
+  data, and the full-size + `-wide` webps in `public/naics/` exist
+  for the app to copy (the site itself only renders `-sm`). Edit
+  sectors.mjs, never naicsSectors.js directly.
+- Hero example screenshots: `scripts/screenshots/capture-examples.mjs`
+  captures the 60 `public/app/ex-*.webp` hero images from a running
+  teim-app dev server; `optimize-examples.mjs` compresses them.
+- Smoke tests: `npm run test:smoke` (Playwright; CI runs chromium +
+  webkit). In a sandbox without Google Fonts the home smoke test
+  fails on a blocked font request; every other failure is real.
+
+Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
+originals) is tracked in git. Moving it to external storage is a
+history decision for the founder; do not delete it casually, the
+filenames encode the Shutterstock license IDs.

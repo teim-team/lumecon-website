@@ -227,7 +227,7 @@ export const INTENTS: CedarIntent[] = [
       'upload audit',
     ],
     answer:
-      "I'm Cedar, Lumecon's assistant. Inside the platform I upload and process your data (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), structure it for the impact model, surface every assumption for your sign-off and act as a thought partner on the write-up. The substance and local context come from you. I handle the data wrangling and the polish. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what an analysis costs or how to reach the team.",
+      "I'm Cedar, Lumecon's AI economic analyst. Inside the platform I upload and process your data (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), structure it for the impact model, surface every assumption for your sign-off and act as a thought partner on the write-up. The substance and local context come from you. I handle the data wrangling and the polish. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what an analysis costs or how to reach the team.",
   },
   {
     id: 'audience',
@@ -326,7 +326,7 @@ export const INTENTS: CedarIntent[] = [
       'we a tribe',
     ],
     answer:
-      'Yes, deeply. Tribal Nations and tribal enterprises are core users of Lumecon, and tribaleconomicimpact.com is their front door into the same application everyone else uses. Every plan includes tribal government, tribal enterprise and Whole Nation analysis; Whole Nation brings a tribal government and its enterprises together in one integrated analysis, with statewide and homelands scopes side by side. The platform handles the geographies the existing tools struggle with, reservations included, respects tribal data sovereignty and produces analyses you can hand to a council, a federal funder or a casino regulator. Are you with a tribal nation or a tribal enterprise?',
+      'Yes, deeply. Tribal Nations and tribal enterprises are core users of Lumecon, and tribaleconomicimpact.com is their front door into the same application everyone else uses. Every plan includes tribal government, tribal enterprise and Whole Nation analysis; Whole Nation brings a tribal government and its enterprises together in one integrated analysis, with statewide and homelands scopes side by side. The platform handles the geographies the existing tools struggle with, reservations included, respects tribal data sovereignty and produces analyses you can hand to a council, a federal funder or a casino regulator. Are you with a Tribal Nation or a tribal enterprise?',
     expanded:
       "Going deeper for tribal nations: the platform treats reservation and off-reservation trust land, Alaska Native Regional and Village Corporations and Native Hawaiian Home Lands as fully supported geographies, not edge cases the legacy tools force into county approximations. Data sovereignty is a design priority: a single-tenant workspace, you control what's uploaded and shared, your records are not used to train a shared model, and cross-analysis learning runs only on anonymized aggregates. Typical outputs are gaming and enterprise impact analyses for a council or a federal funder (NIGC, BIA, Treasury), grant narratives and annual reports showing jobs, wages and the dollars kept in the regional economy.",
   },
@@ -1342,7 +1342,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'A standard analysis takes minutes once the data is in. The legacy path takes months because the analyst is harmonizing data by hand and re-running scenarios from scratch every time, while Cedar does the harmonization in minutes so the slow part becomes the judgment calls (which assumptions to surface, which scenario to model) rather than the spreadsheet work. Are you working against a deadline?',
     expanded:
-      "Why it's minutes, not months: the legacy timeline is dominated by an analyst hand-cleaning data and re-keying it into a tool whose workflow predates the internet, then re-running from scratch for each scenario. Cedar harmonizes and pre-fits the model the moment your data lands, so the only human time left is judgment: which assumptions to surface, which scenario to model, what to override. The first defensible analysis comes back the same session the data's in; revisions are a re-run, not a re-engagement. Against a council vote or grant deadline, that's the difference between making it and missing it.",
+      "Why it takes minutes instead of months: the legacy timeline is dominated by an analyst hand-cleaning data and re-keying it into a tool whose workflow predates the internet, then re-running from scratch for each scenario. Cedar harmonizes and pre-fits the model the moment your data lands, so the only human time left is judgment: which assumptions to surface, which scenario to model, what to override. The first defensible analysis comes back the same session the data's in; revisions are a re-run rather than a new engagement. Against a council vote or grant deadline, that's the difference between making it and missing it.",
   },
   {
     id: 'no_economist',
@@ -1626,7 +1626,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       "Short kick-off call to scope the first analysis, then your team uploads the data you already have (budgets, payroll, program records, vendor lists). Cedar walks you through harmonization and surfaces every assumption before the first analysis runs. First defensible analysis comes back in minutes once the data's in. We usually do the first one alongside you so you see how the workspace handles your data, then your team takes the reins.",
     expanded:
-      'A typical first month: week one is the kick-off call and your initial uploads (budgets, payroll, program records, vendor lists in whatever shape they are in). Cedar harmonizes those against the public sources and lists every assumption for sign-off, which is where the human judgment happens. The first analysis usually runs within the first week or two, and we sit alongside your team for it. After that, refreshes are routine: update the data, rerun, and the analysis reflects current conditions.',
+      'A typical first month: week one is the kick-off call and your initial uploads (budgets, payroll, program records, vendor lists in whatever shape they are in). Cedar harmonizes those against the public sources and lists every assumption for sign-off, which is where the human judgment happens. The first analysis usually runs within the first week or two, and we sit alongside your team for it. After that, refreshes are routine: update the data and rerun; the analysis reflects current conditions.',
   },
   {
     id: 'effects_explained',
@@ -1715,7 +1715,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'No. Cedar is trained and tailored on established economic data and a curated library of analyses and reference materials, with your own past analyses folded in as your workspace grows, so it answers from real sources rather than free-typing like a general chatbot. It does the data wrangling and surfaces every assumption for your sign-off; it does not invent the numbers. The economic math starts from mainstream input-output modeling and extends it with modern econometric and machine-learning methods, calibrated as we built, and a person approves each assumption before an analysis ships. The AI speeds the work without taking over the judgment.',
     expanded:
-      "The distinction in practice: a general chatbot generates plausible text and can confidently state a wrong number. Cedar is constrained to retrieve from established public data tables and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows), then map them into the model, so its outputs trace back to a source row rather than a guess. Anything ambiguous (an unclear vendor, an industry code that could go two ways) is flagged for a human to confirm rather than silently resolved. And the final figures aren't Cedar's opinion; they're the input-output model's output, calibrated and benchmarked as we built. So the AI is a fast, careful research assistant, not the thing deciding your impact number.",
+      "The distinction in practice: a general chatbot generates plausible text and can confidently state a wrong number. Cedar is constrained to retrieve from established public data tables and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows), then map them into the model, so its outputs trace back to a source row rather than a guess. Anything ambiguous (an unclear vendor, an industry code that could go two ways) is flagged for a human to confirm rather than silently resolved. And the final figures aren't Cedar's opinion; they're the input-output model's output, calibrated and benchmarked as we built. The AI works as a fast, careful research assistant; your impact number comes from the model.",
   },
   {
     id: 'sectors_industries',
@@ -3063,7 +3063,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       "I'm Cedar, Lumecon's AI economic analyst; here on the site you get a lightweight version of me. I answer questions about Lumecon, who it's for, the methodology, pricing and how to reach the team. The full Cedar inside the platform comes with every plan, Sprout included. There it uploads and processes your documents (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), interprets them, maps them into the model, assists with setup and interpretation and acts as a thought partner on the write-up, while the substance and local context come from you. You can also try it before paying anything: the free trial lets you create an account, bring your documents and build an analysis end to end, with full results unlocking on any paid plan. Want me to point you to pricing or the trial?",
     expanded:
-      'More on the split: this site Cedar is a free, keyword-based assistant that never touches your data and exists to help you learn what Lumecon does. The product Cedar works on your actual records: it ingests budgets, financial statements, payroll and program data, matches them to the right industries and geographies, fits the model and flags every assumption for your sign-off, then helps shape a council memo, a grant narrative or a board deck while you supply the local context only you have. Every plan includes it. The Tree plan goes further with Cedar Grove, a persistent organizational data library reused across future analyses and reporting, and hands-on calibration so Cedar picks up your terminology, workflows and recurring reports. The pricing page lays out the plans.',
+      'More on the split: on this site Cedar is a free, lightweight version that never touches your data and exists to help you learn what Lumecon does. The product Cedar works on your actual records: it ingests budgets, financial statements, payroll and program data, matches them to the right industries and geographies, fits the model and flags every assumption for your sign-off, then helps shape a council memo, a grant narrative or a board deck while you supply the local context only you have. Every plan includes it. The Tree plan goes further with Cedar Grove, a persistent organizational data library reused across future analyses and reporting, and hands-on calibration so Cedar picks up your terminology, workflows and recurring reports. The pricing page lays out the plans.',
   },
 
   {
@@ -3311,7 +3311,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Yes, and that is a real difference. The input-output core is the shared foundation for the whole field, and we start there on the standard public data so the numbers stay recognizable. On top of it we layer what economics has learned since: behavioral and causal methods, spatial tools, higher-frequency data and machine learning, with federated learning across analyses, all calibrated and benchmarked as we built. The idea is to start where everyone starts, then reflect how economies actually work, instead of assuming perfectly rational actors in clean markets the way a model frozen in 1930s-era input-output does. Where a method or assumption matters for your result, the analysis shows it.',
     expanded:
-      'The foundation traces to Wassily Leontief, who built input-output analysis to show how industries depend on one another through flows of goods and spending. That idea still matters, but it was developed before satellites, the internet, mobile data, cloud computing, modern administrative data, behavioral economics at scale and many of the causal tools now used to analysis effects across time and place. The field has since learned that consumers are not always perfectly rational, that workers and places respond in idiosyncratic ways, and that a local economy is a network of people, businesses, governments and institutions, not just a sector table. So we treat input-output as the foundation, not the final form: keep its strengths, and extend it with what economics knows now. That does not make traditional analysis wrong. It makes it more complete.',
+      'The foundation traces to Wassily Leontief, who built input-output analysis to show how industries depend on one another through flows of goods and spending. That idea still matters, but it was developed before satellites, the internet, mobile data, cloud computing, modern administrative data, behavioral economics at scale and many of the causal tools now used to analyze effects across time and place. The field has since learned that consumers are not always perfectly rational, that workers and places respond in idiosyncratic ways, and that a local economy is a network of people, businesses, governments and institutions, not just a sector table. So we treat input-output as the foundation to build on: keep its strengths, and extend it with what economics knows now. Traditional analysis stays valid; this makes it more complete.',
   },
   {
     id: 'cedar_thought_partner',
@@ -3360,7 +3360,7 @@ export const INTENTS: CedarIntent[] = [
       'what is rag based',
     ],
     answer:
-      "Short version: it's what keeps Cedar honest. Instead of answering from memory the way a typical chatbot does, Cedar is trained and tailored on trusted sources (established public data and a curated library of analyses and reference materials, with your own past analyses folded in as your workspace grows) and looks the facts up there before answering, with a trail back to where each piece came from. That is why Cedar's numbers trace to a real source rather than a guess. Think of a careful research assistant that looks things up, not one that free-types a plausible answer. (The technical name for this is retrieval-augmented generation, or RAG.)",
+      "Short version: it's what keeps Cedar honest. Instead of answering from memory the way a typical chatbot does, Cedar is trained and tailored on trusted sources (established public data and a curated library of analyses and reference materials, with your own past analyses folded in as your workspace grows) and looks the facts up there before answering, with a trail back to where each piece came from. That is why Cedar's numbers trace to a real source rather than a guess. It works like a careful research assistant: it looks the facts up instead of improvising a plausible answer. (The technical name for this is retrieval-augmented generation, or RAG.)",
   },
   {
     id: 'what_is_chatbot',
@@ -3378,7 +3378,7 @@ export const INTENTS: CedarIntent[] = [
       'what is a chat bot',
     ],
     answer:
-      'A chatbot is a program you talk to in plain language, like this. Most chatbots generate text from patterns they learned, which is handy but means they can sound confident while being wrong. I am a chatbot too, but a constrained one: here on the site I answer from a fixed set of Lumecon topics, and inside the platform Cedar answers from established public data and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows) with a source trail, not from guesswork. So think careful research assistant, not free-typing.',
+      'A chatbot is a program you talk to in plain language, like this. Most chatbots generate text from patterns they learned, which is handy but means they can sound confident while being wrong. I am a chatbot too, but a constrained one: here on the site I answer from a fixed set of Lumecon topics, and inside the platform Cedar answers from established public data and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows) with a source trail, not from guesswork. So it behaves like a careful research assistant that looks things up.',
   },
   {
     id: 'guarantees',
@@ -3566,32 +3566,3 @@ export const CHIP_IDS = [
   'indian_country',
   'eda_districts',
 ] as const;
-
-// Curated subset for the static <details> fallback and the FAQPage
-// JSON-LD on the homepage. The question wording differs from the chip
-// label (these target search queries, the chips target conversation).
-export const STATIC_FAQ_IDS = [
-  'company_overview',
-  'audience',
-  'tribal_platform',
-  'local_platform',
-  'multipliers',
-  'effects_explained',
-  'geographies',
-  'cedar_identity',
-  'ai_vs_chatgpt',
-  'where_built',
-] as const;
-
-export const STATIC_FAQ_QUESTIONS: Record<string, string> = {
-  company_overview: 'What is Lumecon?',
-  audience: 'Who uses Lumecon?',
-  tribal_platform: 'How does Lumecon support tribal nations?',
-  local_platform: 'Can cities, counties and other organizations use Lumecon?',
-  multipliers: 'What are economic multipliers?',
-  effects_explained: 'What are direct, indirect and induced economic effects?',
-  geographies: 'What geographies does Lumecon cover?',
-  cedar_identity: 'What is Cedar?',
-  ai_vs_chatgpt: 'Is Cedar just ChatGPT, and can the AI be trusted?',
-  where_built: 'Where was Lumecon built?',
-};

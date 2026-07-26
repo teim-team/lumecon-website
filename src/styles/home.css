@@ -90,11 +90,6 @@
   top: -190px;
   right: -230px;
 }
-.markart--bl {
-  bottom: -260px;
-  left: -280px;
-  opacity: 0.06;
-}
 .hero2-inner {
   position: relative;
   z-index: 1;
@@ -141,17 +136,6 @@
   justify-content: center;
   margin-top: 0.4rem;
 }
-.hero2-proof {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin: 0;
-  max-width: 72ch;
-  line-height: 1.9;
-}
-
 @media (max-width: 560px) {
   /* Compact hero: on a phone the headline + body + CTAs must land
      inside the first screen with room to spare, and the CTA stack
@@ -167,11 +151,6 @@
     font-size: 0.94rem;
     line-height: 1.5;
     max-width: 36ch;
-  }
-  /* On a phone the sub keeps the audience and the measures; the
-     document-inputs clause returns at tablet width and up. */
-  .hero2-sub__inputs {
-    display: none;
   }
   .hero2-sub--em {
     font-size: 0.94rem;
@@ -420,18 +399,6 @@
   color: var(--ink-2);
   margin: 0;
 }
-.wn-shot {
-  margin: 0;
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 20px 48px -26px rgba(10, 15, 38, 0.32);
-}
-.wn-shot img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
 /* Cedar teaser: one position statement + one real capture. The old
    five-step pipeline moved to /cedar as a diagram. */
 .cedar-shot {
@@ -453,38 +420,6 @@
   line-height: 1.55;
   color: var(--ink-3);
 }
-/* ---------- one platform ---------- */
-.oneplat {
-  background: var(--white);
-  border-top: 1px solid var(--rule);
-  padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
-}
-.oneplat-inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  display: grid;
-  gap: 1.2rem;
-}
-.oneplat-orgs {
-  list-style: none;
-  margin: 0.4rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.oneplat-orgs li {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  padding: 0.38rem 0.85rem;
-  background: var(--white);
-}
-
 /* ---------- ask any AI ---------- */
 .askai {
   background: var(--white);
@@ -679,48 +614,26 @@
 }
 
 /* ---------- interactive hover states (the app's card feel) ---------- */
-.oneplat-orgs li {
-  transition:
-    transform 0.2s var(--ease),
-    border-color 0.2s var(--ease),
-    box-shadow 0.2s var(--ease),
-    background 0.2s var(--ease);
-}
 .edge-card:hover .edge-ic {
   transform: scale(1.08);
   background: var(--accent-rgba-18);
 }
-.oneplat-orgs li:hover {
-  border-color: var(--accent);
-  color: var(--accent-text);
-}
 .tour-row__shot,
-.wn-shot,
 .cedar-shot {
   transition:
     transform 0.25s var(--ease),
     box-shadow 0.25s var(--ease);
 }
 .tour-row__shot:hover,
-.wn-shot:hover,
 .cedar-shot:hover {
   transform: translateY(-4px);
   box-shadow: 0 28px 60px -30px rgba(10, 15, 38, 0.45);
-}
-.trio-main {
-  transition: transform 0.25s var(--ease);
-}
-.trio:hover .trio-main {
-  transform: translateY(-4px);
 }
 @media (prefers-reduced-motion: reduce) {
   .edge-card,
   .whyw-card,
   .tour-row__shot,
-  .wn-shot,
-  .cedar-shot,
-  .tour-map,
-  .trio-main {
+  .cedar-shot {
     transition: none;
   }
 }

@@ -30,23 +30,23 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Who uses Lumecon?',
-    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits, and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue, or local development, Lumecon can help make that impact easier to understand.',
+    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue or local development, Lumecon can help make that impact easier to understand.',
   },
   {
-    q: 'How does Lumecon support tribal nations?',
+    q: 'How does Lumecon support Tribal Nations?',
     a: 'Tribal government, tribal enterprise and Whole Nation analysis are part of Lumecon itself, included in every plan. Whole Nation analysis brings a tribal government and its enterprises together in one integrated analysis, with statewide and homelands results side by side, so a Nation can show its combined economic footprint with clear, data-backed reports.',
   },
   {
-    q: 'Can cities, counties, and other organizations use Lumecon?',
-    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers, and other organizations. The platform can help explain how a project, institution, investment, or program affects a local or regional economy.',
+    q: 'Can cities, counties and other organizations use Lumecon?',
+    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers and other organizations. The platform can help explain how a project, institution, investment or program affects a local or regional economy.',
   },
   {
     q: 'What are economic multipliers?',
-    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies, or funds construction, that activity directly supports jobs and spending. Then suppliers, workers, and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.',
+    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies or funds construction, that activity directly supports jobs and spending. Then suppliers, workers and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.',
   },
   {
     q: 'What geographies does Lumecon cover?',
-    a: 'Lumecon covers all federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country. All of it is included in one annual subscription, not priced per geography.',
+    a: 'Lumecon covers all federally recognized Tribal Nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state and the entire country. All of it is included in one annual subscription, not priced per geography.',
   },
   {
     q: 'How much does Lumecon cost?',
@@ -120,8 +120,8 @@ const jsonLd = [
       'Alaska Native Corporations',
       'Native Hawaiian Organizations',
       'AIANNH geography',
-      'Direct, Indirect, and Induced Effects',
-      'Jobs, Output, and Earnings',
+      'Direct, Indirect and Induced Effects',
+      'Jobs, Output and Earnings',
       'Economic Development Organizations',
       'Municipal Finance',
       'State and Local Government Software',
@@ -223,7 +223,6 @@ const jsonLd = [
   const STAGGER_DELAY_PER_ITEM = 150; // ms between staggered reveals
   const REVEAL_THRESHOLD = 0.08;
   const REVEAL_ROOT_MARGIN = '0px 0px -30px 0px';
-  const SECTION_ACTIVE_ROOT_MARGIN = '-40% 0px -55% 0px';
 
   // Scroll progress indicator + nav scroll state
   (function () {
@@ -274,25 +273,4 @@ const jsonLd = [
     .querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal')
     .forEach((el) => obs.observe(el));
 
-  // Active section highlighting in nav
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a[href^="#"], .nav-links a[href^="/#"]');
-  const sectionObs = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          navLinks.forEach((link) => {
-            const href = link.getAttribute('href') || '';
-            const match = href === '#' + id || href === '/#' + id;
-            link.classList.toggle('nav-active', match);
-            if (match) link.setAttribute('aria-current', 'location');
-            else link.removeAttribute('aria-current');
-          });
-        }
-      });
-    },
-    { threshold: 0, rootMargin: SECTION_ACTIVE_ROOT_MARGIN },
-  );
-  sections.forEach((s) => sectionObs.observe(s));
 </script>
