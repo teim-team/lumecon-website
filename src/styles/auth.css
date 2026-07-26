@@ -79,6 +79,26 @@
   color: var(--muted, #6b6f8a);
   margin: 0 0 1rem;
 }
+/* Sticky-footer column: the auth split fills exactly the space between the
+   nav and the slim footer, so the footer sits flush at the bottom of the
+   viewport with no leftover white band above it. Without this the split's
+   own min-height overshot the viewport and pushed the footer past the fold,
+   leaving a gap once the big marketing footer was replaced by the slim one. */
+.auth-body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.auth-body > main {
+  flex: 1 0 auto;
+}
+.auth-body .asplit {
+  min-height: 0;
+}
+.auth-body > .auth-foot {
+  flex: 0 0 auto;
+}
+
 /* Auth pages get a slim legal strip instead of the full marketing footer:
    the goal here is to finish signing up, not to browse the site map. */
 .auth-foot {

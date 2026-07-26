@@ -10,7 +10,7 @@
  *
  * The role list and password rules are copied from the app verbatim
  * so an account created here is exactly what the product expects.
- * Submission posts through lib/api.ts to `POST /v1/auth/signup` when
+ * Submission posts through lib/api.ts to `POST /auth/register` when
  * PUBLIC_API_URL is set; otherwise the fallback captures the details
  * through the contact endpoint so early-access requests still reach
  * the team.
@@ -27,7 +27,6 @@ import AuthBrandPanel from '../components/AuthBrandPanel.astro';
 const authYear = new Date().getFullYear();
 import '../styles/global.css';
 import '../styles/nav.css';
-import '../styles/footer.css';
 import '../styles/auth.css';
 import '../styles/auth-split.css';
 
@@ -66,6 +65,7 @@ const ORGANIZATION_TYPE_OPTIONS = [
   canonical="https://lumecon.ai/signup"
   keywords="Lumecon signup, Lumecon sign up, Lumecon create account, economic impact analysis account, IMPLAN alternative signup"
   cedar={false}
+  bodyClass="auth-body"
 >
   <Nav />
   <main class="asplit asplit--signup" id="top" tabindex="-1">
