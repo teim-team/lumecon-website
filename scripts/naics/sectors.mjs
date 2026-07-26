@@ -68,15 +68,17 @@ export const SECTORS = RAW.map(([code, slug, title, description, wash]) => ({
   wash,
 }));
 
-// Lumecon's own category, alongside NAICS rather than inside it. Tribal
-// governments blend public administration with enterprise operations and
-// community services, so a single NAICS 92 label would understate them.
-// Teal: the regalia photograph carries the brand color best.
+// Lumecon's own category, alongside NAICS rather than inside it. NAICS
+// files tribal governments under local government within Public
+// Administration (92); Lumecon tracks them as their own category because
+// a nation runs administration, enterprises, housing, health, education
+// and cultural programs at once, and a local government line would
+// understate that. Teal: the regalia photograph carries the brand color.
 export const TRIBAL_GOVERNMENT = {
   code: 'TG',
   slug: 'tribalgov',
   title: 'Tribal Government',
   description:
-    'A Lumecon category for tribal nations as operating governments: administration, enterprises, housing, health, education and cultural programs, tracked together rather than scattered across NAICS codes.',
+    'A Lumecon category for tribal nations as operating governments: administration, enterprises, housing, health, education and cultural programs, tracked as their own category rather than filed under local government within Public Administration.',
   wash: 'teal',
 };
