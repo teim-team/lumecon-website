@@ -119,6 +119,12 @@ export interface SignupRequest {
   organization?: string;
   /** Free text describing the role / use case; drives onboarding. */
   role?: string;
+  /** Account-level organization type (ORGANIZATION_TYPE_ENUM on the server).
+   *  Collected at signup so the account is fully onboarded and skips the
+   *  in-app "complete your profile" step. */
+  organizationType?: string;
+  /** Only meaningful for consulting firms; gates Whole Nation analysis. */
+  servesTribalClients?: boolean;
 }
 export interface SignupResponse {
   user: { id: string; name: string; email: string };

@@ -79,6 +79,27 @@
   color: var(--muted, #6b6f8a);
   margin: 0 0 1rem;
 }
+/* Auth pages get a slim legal strip instead of the full marketing footer:
+   the goal here is to finish signing up, not to browse the site map. */
+.auth-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  border-top: 1px solid var(--hairline, #e6e8ef);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--muted, #6b6f8a);
+}
+.auth-foot a {
+  color: var(--muted, #6b6f8a);
+  text-decoration: none;
+}
+.auth-foot a:hover {
+  color: var(--accent-text);
+  text-decoration: underline;
+}
 .auth-field > input,
 .auth-field > textarea {
   font-family: var(--font-sans);

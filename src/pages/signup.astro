@@ -22,8 +22,9 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
 import AuthBrandPanel from '../components/AuthBrandPanel.astro';
+
+const authYear = new Date().getFullYear();
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -40,6 +41,22 @@ const ROLE_OPTIONS = [
   'Government Analyst',
   'Researcher/Academic',
   'Other',
+];
+
+// Kept in sync with ORGANIZATION_TYPE_OPTIONS (src/pages/accountModel.js) and
+// ORGANIZATION_TYPE_ENUM (server/index.js). Collected here so a self-serve
+// signup is fully onboarded: the account never lands on a second
+// "complete your profile" screen for the one field signup used to omit.
+const ORGANIZATION_TYPE_OPTIONS = [
+  { value: 'tribal_nation', label: 'Tribal Nation or tribal government entity' },
+  { value: 'alaska_native_corporation', label: 'Alaska Native Corporation' },
+  { value: 'native_hawaiian_organization', label: 'Native Hawaiian Organization' },
+  { value: 'government', label: 'City, county, state or federal government' },
+  { value: 'university_research', label: 'University or research institution' },
+  { value: 'nonprofit', label: 'Nonprofit or foundation' },
+  { value: 'business', label: 'Business' },
+  { value: 'consulting_firm', label: 'Consulting firm' },
+  { value: 'other', label: 'Other' },
 ];
 ---
 
@@ -112,6 +129,25 @@ const ROLE_OPTIONS = [
                 autocomplete="organization"
                 maxlength="200"
               />
+            </label>
+            <label class="auth-field">
+              <span>Organization type <span class="auth-req" aria-hidden="true">*</span></span>
+              <select name="organizationType" required data-auth-orgtype>
+                <option value="">Select an organization type</option>
+                {
+                  ORGANIZATION_TYPE_OPTIONS.map((opt) => (
+                    <option value={opt.value}>{opt.label}</option>
+                  ))
+                }
+              </select>
+            </label>
+            <label class="auth-field" data-auth-tribal-row hidden>
+              <span>Do you provide services for tribal clients? <span class="auth-req" aria-hidden="true">*</span></span>
+              <select name="servesTribalClients" data-auth-tribal>
+                <option value="">Select one</option>
+                <option value="yes">Yes, we serve tribal clients</option>
+                <option value="no">No</option>
+              </select>
             </label>
             <div class="auth-field">
               <span>Your role <span class="auth-req" aria-hidden="true">*</span></span>
@@ -227,7 +263,12 @@ const ROLE_OPTIONS = [
     })();
   </script>
 
-  <Footer />
+  <footer class="auth-foot">
+    <span>© {authYear} Lumecon Inc.</span>
+    <a href="/terms">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="mailto:contact@lumecon.ai">Contact</a>
+  </footer>
 </BaseLayout>
 
 <script>
@@ -293,6 +334,18 @@ const ROLE_OPTIONS = [
       });
     });
 
+    // Organization type drives one conditional: consulting firms are asked
+    // whether they serve tribal clients (it gates Whole Nation analysis and
+    // is the affiliation signal). The row is hidden for every other type.
+    const orgTypeSelect = form.querySelector<HTMLSelectElement>('[data-auth-orgtype]');
+    const tribalRow = form.querySelector<HTMLElement>('[data-auth-tribal-row]');
+    const tribalSelect = form.querySelector<HTMLSelectElement>('[data-auth-tribal]');
+    orgTypeSelect?.addEventListener('change', () => {
+      const isConsulting = orgTypeSelect.value === 'consulting_firm';
+      if (tribalRow) tribalRow.hidden = !isConsulting;
+      if (!isConsulting && tribalSelect) tribalSelect.value = '';
+    });
+
     // Live strength meter + rule checklist, same tiers as the product.
     const pwInput = form.querySelector<HTMLInputElement>('input[name="password"]');
     const meter = form.querySelector<HTMLElement>('[data-pwmeter]');
@@ -318,11 +371,18 @@ const ROLE_OPTIONS = [
       const name = String(data.get('name') ?? '').trim();
       const organization = String(data.get('organization') ?? '').trim();
       const role = String(data.get('role') ?? '').trim();
+      const organizationType = String(data.get('organizationType') ?? '').trim();
+      const tribalRaw = String(data.get('servesTribalClients') ?? '').trim();
+      const servesTribalClients =
+        organizationType === 'consulting_firm' ? tribalRaw === 'yes' : undefined;
 
       if (step === 1) {
         // Step 1 collects the profile; advance rather than submit.
         if (!name) return setStatus(status, 'err', 'Enter your name.');
         if (!organization) return setStatus(status, 'err', 'Enter an organization.');
+        if (!organizationType) return setStatus(status, 'err', 'Select an organization type.');
+        if (organizationType === 'consulting_firm' && !tribalRaw)
+          return setStatus(status, 'err', 'Let us know whether you serve tribal clients.');
         if (!role) return setStatus(status, 'err', 'Choose your role.');
         showStep(2);
         return;
@@ -352,7 +412,15 @@ const ROLE_OPTIONS = [
 
       try {
         if (apiConfigured()) {
-          const result = await submitSignup({ name, email, password, organization, role });
+          const result = await submitSignup({
+            name,
+            email,
+            password,
+            organization,
+            role,
+            organizationType,
+            ...(servesTribalClients !== undefined ? { servesTribalClients } : {}),
+          });
           if (result.ok) {
             trackEvent('auth.success', { kind: 'signup', role });
             // The account now exists. Record signup proof separately from the
