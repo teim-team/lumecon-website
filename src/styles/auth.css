@@ -97,6 +97,10 @@
 }
 .auth-body > .auth-foot {
   flex: 0 0 auto;
+  /* A global flow rule adds a top margin to footers; zero it here so the
+     footer sits flush against the split and `main` grows to fill instead of
+     leaving a white band above the footer. */
+  margin-top: 0;
 }
 
 /* Auth pages get a slim legal strip instead of the full marketing footer:
