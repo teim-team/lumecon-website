@@ -158,14 +158,14 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'Why does Lumecon cost less than traditional economic impact software?',
     a: [
-      'Because the economics of delivering analytical software changed. Modern infrastructure allows us to operate efficiently at scale while continuing to invest in economists, engineers, data scientists, data and model development.',
+      'Because the economics of delivering analytical software changed. Modern cloud computing lets us operate efficiently at scale while continuing to invest in economists, engineers, data scientists, data and model development.',
     ],
   },
   {
     q: 'Is the model less capable because Lumecon costs less?',
     a: [
       'No. Every paid plan runs the same underlying Lumecon economic model. Higher tiers add collaboration, organizational data capabilities and scale.',
-      'Price isn’t a methodology.',
+      'The price reflects users and organizational scale, and every plan runs the same model.',
     ],
   },
   {
@@ -179,21 +179,21 @@ export const PRICING_FAQ: PricingFaq[] = [
     q: 'Why don’t complicated analyses cost more?',
     a: [
       'Because analytical complexity is exactly what the software is supposed to handle. Multiple geographies, years, projects and scenarios shouldn’t become separate licensing events.',
-      'Complexity belongs in the model. Not the pricing.',
+      'Complexity belongs in the model, and the pricing stays simple.',
     ],
   },
   {
     q: 'Why are your prices public?',
     a: [
       'Because customers should be able to determine whether software fits their budget without sitting through a sales process. Our standard plans have standard prices.',
-      'We tailor the modeling, not the price.',
+      'We tailor the modeling, and pricing stays standard.',
     ],
   },
   {
     q: 'Can I actually try Lumecon before paying?',
     a: [
       'Yes. Create a free account without entering a credit card. Bring your documents, use Cedar and work through an analysis yourself. Complete results unlock when you choose a paid plan.',
-      'No credit card. No sales call. No obligation.',
+      'No credit card, sales call or obligation.',
     ],
   },
   {

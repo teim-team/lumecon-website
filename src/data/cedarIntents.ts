@@ -510,7 +510,7 @@ export const INTENTS: CedarIntent[] = [
       'do i still need a consultant',
     ],
     answer:
-      'Lumecon is software, not consulting. The whole bet is that economic impact analysis should not be a months-long consulting engagement and should instead be something your team can run any time you need it. Cedar handles the data wrangling and the modeling while your team makes the judgment calls, and the Lumecon team will walk you through complex first-time analyses or unusual data situations even though the steady state is your team using the platform without us in the loop. Does your team have an economist on staff?',
+      'Lumecon is software your team runs, with support when you need it. The whole bet is that economic impact analysis should be something your team can run any time you need it, instead of a months-long consulting engagement. Cedar handles the data wrangling and the modeling while your team makes the judgment calls, and the Lumecon team will walk you through complex first-time analyses or unusual data situations even though the steady state is your team using the platform without us in the loop. Does your team have an economist on staff?',
     expanded:
       "On software vs. consulting: the steady state is your team running analyses in the platform whenever you need one, with no per-analysis fee and no waiting on an outside firm. You don't need an economist on staff; Cedar picks defaults matched to your geography and project type and explains each one in plain English for your sign-off. The Lumecon team is there for a first analysis, an unusual data situation or a methodology-sensitive project, but the capability lives with you, not on a consultant's calendar.",
   },
