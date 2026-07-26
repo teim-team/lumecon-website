@@ -268,7 +268,7 @@ const ROLE_OPTIONS = [
         m.classList.toggle('auth-steps__item--done', n < next);
       });
       if (submitBtn) submitBtn.textContent = next === 1 ? 'Continue' : 'Create account';
-      const attestRow = form.querySelector<HTMLElement>('[data-auth-attest-row]');
+      const attestRow = form?.querySelector<HTMLElement>('[data-auth-attest-row]');
       if (attestRow) attestRow.hidden = next !== 2;
       if (backBtn) backBtn.hidden = next === 1;
       if (status) status.hidden = true;

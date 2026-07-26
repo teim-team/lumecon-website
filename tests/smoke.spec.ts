@@ -16,10 +16,17 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
 
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
-  // The homepage hero leads with the trio money shot (results front,
-  // dashboard and lineage behind); the interactive map lives on /map
-  // (exercised by the tests below).
-  await expect(page.locator('#heroRotator img')).toBeVisible();
+  // The hero trio: one example locked for the visit, its three
+  // archetypes (results, map, comparison) each on screen exactly once.
+  await expect(page.locator('#trio .trio-pos-c img')).toBeVisible();
+  const srcs = await page
+    .locator('#trio [data-trio] img')
+    .evaluateAll((imgs) => imgs.map((img) => (img as HTMLImageElement).getAttribute('src') || ''));
+  const parsed = srcs.map((s) => s.match(/^\/app\/ex-([a-z]+)-(results|map|compare)\.webp$/));
+  expect(parsed.every(Boolean)).toBe(true);
+  expect(new Set(parsed.map((m) => m![1])).size).toBe(1); // one example only
+  expect(new Set(parsed.map((m) => m![2])).size).toBe(3); // all three archetypes
+  await expect(page.locator('#trioCaption')).toContainText('Shown with sample data:');
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
@@ -28,6 +35,43 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   // call were both removed, so they can no longer appear here.)
   const real = errs.filter((e) => !e.includes('CERT_AUTHORITY_INVALID'));
   expect(real).toEqual([]);
+});
+
+const readTrioState = (page: import('@playwright/test').Page) =>
+  page.locator('#trio [data-trio]').evaluateAll((frames) =>
+    frames.map((f) => ({
+      src: f.querySelector('img')?.getAttribute('src') || '',
+      center: f.classList.contains('trio-pos-c'),
+    })),
+  );
+
+test('hero opens on the money shot and holds still under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(400);
+  const before = await readTrioState(page);
+  // The example's declared money shot opens the cycle: results or map,
+  // never comparison. Under reduced motion nothing advances, ever.
+  expect(before.find((f) => f.center)?.src).toMatch(/-(results|map)\.webp$/);
+  await page.waitForTimeout(7600);
+  expect(await readTrioState(page)).toEqual(before);
+});
+
+test('hero rotates archetypes but never the example during a visit', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(400);
+  const before = await readTrioState(page);
+  const centerBefore = before.find((f) => f.center)?.src;
+  // Let the timer advance at least once (6.5s interval).
+  await page.waitForTimeout(7600);
+  const after = await readTrioState(page);
+  // Sources never change once assigned: the example is locked and each
+  // frame keeps its archetype. Only the position classes move.
+  expect(after.map((f) => f.src)).toEqual(before.map((f) => f.src));
+  const centerAfter = after.find((f) => f.center)?.src;
+  expect(centerAfter).not.toEqual(centerBefore);
+  const example = (s?: string) => s?.match(/ex-([a-z]+)-/)?.[1];
+  expect(example(centerAfter)).toEqual(example(centerBefore));
 });
 
 test('skip-link is hidden until focused', async ({ page }) => {
