@@ -12,12 +12,15 @@
  * and therefore the wash color; the color rule lives in sectors.mjs, not
  * here, so it cannot be improvised per image.
  *
- * Every image is smart-cropped (sharp attention crop) to the same 3:2
- * frame and written twice under public/naics/:
- *   <slug>.webp        1200x800, page and study-thumbnail size
- *   <slug>-sm.webp     600x400, grid and card size
- * A grayscale copy of the crop is kept next to the source as
- * <name>.gray.png so the pre-wash framing can be inspected.
+ * Every image is smart-cropped (sharp attention crop) and written three
+ * times under public/naics/:
+ *   <slug>.webp        1200x800 (3:2), page and detail size
+ *   <slug>-sm.webp     600x400 (3:2), grid and tile size
+ *   <slug>-wide.webp   1500x600 (5:2), study-card banner crop
+ * The wide crop is cut independently from the original, not from the
+ * 3:2 frame, so the banner keeps the subject too. A grayscale copy of
+ * the 3:2 crop is kept next to the source as <name>.gray.png so the
+ * pre-wash framing can be inspected.
  */
 import { readdirSync, mkdirSync } from 'node:fs';
 import { join, dirname, basename, extname } from 'node:path';
@@ -50,23 +53,33 @@ async function processOne(file) {
     return;
   }
   const wash = WASHES[sector.wash];
-  // Same frame for every thumbnail; attention crop keeps the subject.
-  const cropped = sharp(join(IN, file)).rotate().resize(1200, 800, { fit: 'cover', position: 'attention' });
-  const gray = await cropped.clone().grayscale().normalise().raw().toBuffer({ resolveWithObject: true });
-  await sharp(gray.data, { raw: gray.info }).png().toFile(join(IN, `${name}.gray.png`));
 
-  // Duotone: one lookup table application over the normalized grayscale.
-  const px = gray.data;
-  const outBuf = Buffer.alloc((px.length / gray.info.channels) * 3);
-  for (let i = 0, o = 0; i < px.length; i += gray.info.channels, o += 3) {
-    const [r, g2, b] = ramp(px[i], wash);
-    outBuf[o] = r;
-    outBuf[o + 1] = g2;
-    outBuf[o + 2] = b;
-  }
-  const washed = sharp(outBuf, { raw: { width: 1200, height: 800, channels: 3 } });
-  await washed.clone().webp({ quality: 86 }).toFile(join(OUT, `${sector.slug}.webp`));
-  await washed.resize(600, 400).webp({ quality: 84 }).toFile(join(OUT, `${sector.slug}-sm.webp`));
+  // Duotone a crop: normalized grayscale through the wash lookup table.
+  const washCrop = async (w, h) => {
+    const gray = await sharp(join(IN, file))
+      .rotate()
+      .resize(w, h, { fit: 'cover', position: 'attention' })
+      .grayscale()
+      .normalise()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    const px = gray.data;
+    const outBuf = Buffer.alloc((px.length / gray.info.channels) * 3);
+    for (let i = 0, o = 0; i < px.length; i += gray.info.channels, o += 3) {
+      const [r, g2, b] = ramp(px[i], wash);
+      outBuf[o] = r;
+      outBuf[o + 1] = g2;
+      outBuf[o + 2] = b;
+    }
+    return { washed: sharp(outBuf, { raw: { width: w, height: h, channels: 3 } }), gray };
+  };
+
+  const main = await washCrop(1200, 800);
+  await sharp(main.gray.data, { raw: main.gray.info }).png().toFile(join(IN, `${name}.gray.png`));
+  await main.washed.clone().webp({ quality: 86 }).toFile(join(OUT, `${sector.slug}.webp`));
+  await main.washed.resize(600, 400).webp({ quality: 84 }).toFile(join(OUT, `${sector.slug}-sm.webp`));
+  const wide = await washCrop(1500, 600);
+  await wide.washed.webp({ quality: 84 }).toFile(join(OUT, `${sector.slug}-wide.webp`));
   console.log(`${file} -> ${sector.slug}.webp (${sector.wash})`);
 }
 
