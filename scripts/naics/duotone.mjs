@@ -56,7 +56,22 @@ const CROP_OVERRIDES = {
   education: { wide: 'top' },
   healthcare: { wide: 'top' },
   publicadmin: { wide: 'bottom' },
+  // v2 photos (second photograph per sector), reviewed 2026-07-27: the
+  // attention crop beheads the janitor and both scaffold workers in the
+  // 5:2 banner. Keys prefix-match the source basename, so these apply to
+  // the *_v2_* sources only and leave each sector's first photo alone.
+  administrative_v2: { wide: 'top' },
+  construction_v2: { wide: 'top' },
 };
+
+/** Longest override key that prefix-matches the source basename, else the
+ *  sector slug, else nothing. */
+function cropOverridesFor(name, slug) {
+  const prefixKey = Object.keys(CROP_OVERRIDES)
+    .filter((k) => name === k || name.startsWith(k + '_') || name.startsWith(k + '-'))
+    .sort((a, b) => b.length - a.length)[0];
+  return CROP_OVERRIDES[prefixKey] || CROP_OVERRIDES[slug] || {};
+}
 
 /** Map a grayscale byte through the wash ramp, shadow -> highlight, the
  *  same linear per-channel lookup the NACA proposal's duotone() applies. */
@@ -98,7 +113,7 @@ async function processOne(file, variantIndex = 0) {
     return { washed: sharp(outBuf, { raw: { width: w, height: h, channels: 3 } }), gray };
   };
 
-  const overrides = CROP_OVERRIDES[name] || CROP_OVERRIDES[sector.slug] || {};
+  const overrides = cropOverridesFor(name, sector.slug);
   const main = await washCrop(1200, 800, overrides.main || 'attention');
   await sharp(main.gray.data, { raw: main.gray.info }).png().toFile(join(IN, `${name}.gray.png`));
   await main.washed.clone().webp({ quality: 86 }).toFile(join(OUT, `${outName}.webp`));
@@ -112,14 +127,26 @@ const files = readdirSync(IN)
   .filter((f) => /\.(jpe?g|png|webp|tiff?|avif)$/i.test(f) && !f.endsWith('.gray.png'))
   .sort();
 if (!files.length) console.warn(`no images found in ${IN}`);
-// Group per sector so a second photo for a sector becomes its -v2 variant
-// instead of silently overwriting the first. Alphabetical order keeps the
-// variant assignment stable across re-runs.
+// A sector's second and later photos become -v2/-v3 variants instead of
+// silently overwriting the first. The variant index comes from an explicit
+// `_v2_`/`-v2-` marker in the source name when present, so re-running the
+// pipeline on a partial directory can never demote a v2 photo into the
+// sector's primary slot; unmarked extra files fall back to alphabetical
+// order within the run.
+const variantFromName = (name, slug) => {
+  const m = name.slice(slug.length).match(/^[-_]v(\d+)[-_]/);
+  return m ? Math.max(parseInt(m[1], 10) - 1, 0) : null;
+};
 const seenPerSlug = new Map();
 for (const f of files) {
-  const sector = bySlug(basename(f, extname(f)).toLowerCase());
-  const idx = sector ? (seenPerSlug.get(sector.slug) || 0) : 0;
+  const name = basename(f, extname(f)).toLowerCase();
+  const sector = bySlug(name);
+  let idx = 0;
+  if (sector) {
+    const marked = variantFromName(name, sector.slug);
+    idx = marked !== null ? marked : seenPerSlug.get(sector.slug) || 0;
+    seenPerSlug.set(sector.slug, Math.max(seenPerSlug.get(sector.slug) || 0, idx) + 1);
+  }
   await processOne(f, idx);
-  if (sector) seenPerSlug.set(sector.slug, idx + 1);
 }
 console.log('done');
