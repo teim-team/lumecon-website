@@ -727,9 +727,9 @@ export const INTENTS: CedarIntent[] = [
       'for outside organizations',
     ],
     answer:
-      "Yes. Consultant licensing is its own track: custom commercial licensing for firms and independent professionals using Lumecon to conduct analysis for outside clients. It covers the full platform with all applicable geographies, commercial and client use, client and project workspaces plus Cedar calibrated to your firm's analytical and reporting workflow, so the platform mirrors how your team already produces client deliverables. There is no public price because firms differ in size, volume and scope; the team scopes the license to the practice. Email contact@lumecon.ai with a short note about your firm and the kinds of engagements you run, and they will take it from there.",
+      "Yes. Consultants use the same public plans as everyone else; commercial use starts with Sapling at $2,500 a year. Cedar Commons doubles as client intake and project workspaces, with up to 10 seats you can reassign as engagements change, and Tree at $7,500 a year serves larger practices with unlimited organizational users, Cedar Grove and Cedar calibrated to your firm's analytical and reporting workflow. Your methodology, client relationships and deliverables stay your own, and Lumecon does not sell finished analyses, so you are never bidding against your own software vendor.",
     expanded:
-      "Why it is custom rather than a listed plan: a consulting practice is a different shape from a single organization. Volume varies, client mixes vary and the deliverables carry your firm's name, so the license is scoped to how the practice actually works instead of being forced into a per-organization plan. The pieces are consistent though: full platform access, all applicable geographies, commercial and client use, client and project workspaces and calibration so Cedar matches your firm's analysis and reporting conventions. Your methodology, client relationships and deliverables stay your own, and Lumecon does not sell finished analyses, so you are never bidding against your own software vendor. Start the conversation at contact@lumecon.ai.",
+      "How the plans map to a practice: Sapling covers a firm running client engagements with a small team, keeping each client's work in its own shared project with project-scoped external collaborators when a client should see their own study. Tree removes the seat ceiling and adds Cedar Grove, the organizational data library, plus hands-on Cedar calibration to your firm's analysis and reporting conventions. White-label and higher-volume partner arrangements are scoped case by case; email contact@lumecon.ai with a short note on your practice and volume and the team will put a structure together.",
   },
   {
     id: 'demo',
@@ -2543,9 +2543,9 @@ export const INTENTS: CedarIntent[] = [
       'across clients',
     ],
     answer:
-      "Consulting firms and independent professionals use Lumecon for client work through custom commercial licensing: the full platform, all applicable geographies, commercial and client use, client and project workspaces plus Cedar calibrated to your firm's analytical and reporting workflow. Your client relationships, methodology and deliverables stay yours. White-label and larger partner arrangements are scoped case by case, so email contact@lumecon.ai with a short note on your practice and volume and the team will put a structure together.",
+      "Consulting firms and independent professionals use Lumecon for client work on the public plans; commercial use starts with Sapling. The full platform, every supported geography, commercial and client use, client and project workspaces and Cedar come with it, and Tree adds unlimited organizational users, Cedar Grove and calibration to your firm's analytical and reporting workflow. Your client relationships, methodology and deliverables stay yours. White-label and larger partner arrangements are scoped case by case, so email contact@lumecon.ai with a short note on your practice and volume.",
     expanded:
-      "On the reselling question specifically: the consultant license is built so a firm can run engagements for outside clients inside Lumecon, keep each client's work in its own workspace and present its own deliverables on top. Lumecon does not sell finished analyses, so your firm's writing, judgment and client relationships remain the value your client is buying. There is no public consultant price; the team scopes the license to the practice, including white-label and higher-volume arrangements. contact@lumecon.ai starts the conversation.",
+      "On the reselling question specifically: commercial use is a right of the Sapling and Tree plans, so a firm can run engagements for outside clients inside Lumecon, keep each client's work in its own shared project and present its own deliverables on top. Lumecon does not sell finished analyses, so your firm's writing, judgment and client relationships remain the value your client is buying. White-label and higher-volume partner arrangements are scoped case by case at contact@lumecon.ai.",
   },
   {
     id: 'bca',
@@ -3378,7 +3378,7 @@ export const INTENTS: CedarIntent[] = [
       'what is a chat bot',
     ],
     answer:
-      'A chatbot is a program you talk to in plain language, like this. Most chatbots generate text from patterns they learned, which is handy but means they can sound confident while being wrong. I am a chatbot too, but a constrained one: here on the site I answer from a fixed set of Lumecon topics, and inside the platform Cedar answers from established public data and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows) with a source trail, not from guesswork. So it behaves like a careful research assistant that looks things up.',
+      'A chatbot is a program you talk to in plain language. Most chatbots generate text from patterns they learned, which is handy but means they can sound confident while being wrong. What you are using here is a lightweight version of Cedar, constrained to a fixed set of Lumecon topics. Inside the platform, Cedar is an AI economic analyst: it answers from established public data and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows), with a source trail rather than guesswork.',
   },
   {
     id: 'guarantees',

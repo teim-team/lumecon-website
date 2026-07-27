@@ -139,7 +139,7 @@ const PLATFORMS: readonly Platform[] = [
     comingSoon: false,
     badgeKind: 'active',
     tag: 'Lumecon for consultants delivering analyses to outside clients.',
-    desc: 'For consulting firms and independent professionals using Lumecon commercially for outside clients. Custom commercial licensing covers the full platform, all applicable geographies, commercial and client use, client and project workspaces and Cedar calibrated to the firm’s analytical and reporting workflow.',
+    desc: 'For consulting firms and independent professionals using Lumecon commercially for outside clients. Commercial use starts with Sapling: Cedar Commons doubles as client intake and project workspaces, with seats the firm can reassign as engagements change, and Tree serves larger practices with unlimited organizational users, Cedar Grove and Cedar calibration.',
     audience:
       'Consulting firms and independent professionals running economic impact analyses on behalf of outside clients',
     scope: 'Reservation, county, state and national economic impact analysis',

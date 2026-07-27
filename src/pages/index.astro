@@ -88,13 +88,7 @@ const jsonLd = [
     slogan: site.tagline,
     naics: '541512',
     industry: 'Economic Impact Analysis Software',
-    sameAs: [
-      'https://www.linkedin.com/company/lumecon-ai',
-      'https://lumecon.ai',
-      'https://localeconomicimpact.com',
-      'https://tribaleconomicimpact.com',
-      'https://globaleconomicimpact.com',
-    ],
+    sameAs: ['https://www.linkedin.com/company/lumecon-ai', 'https://lumecon.ai'],
     foundingLocation: { '@type': 'Place', name: site.builtAt },
     founder: FOUNDERS.map((p) => ({
       '@type': 'Person',
@@ -141,16 +135,22 @@ const jsonLd = [
       target: `mailto:${site.email}`,
     },
   },
-  ...REGIONAL_PLATFORMS.map((p) => ({
+  // One product, one Service. The audiences the old per-platform entries
+  // described are variants of the same Lumecon application, not separate
+  // products with their own names and domains.
+  {
     '@context': 'https://schema.org',
     '@type': 'Service',
     serviceType: 'Economic Impact Analysis Software',
-    name: p.name,
-    url: p.url,
+    name: 'Lumecon',
+    url: site.url,
     provider: { '@type': 'Organization', name: site.legalName },
-    ...(p.slug === 'global' ? {} : { areaServed: { '@type': 'Country', name: 'United States' } }),
-    audience: { '@type': 'Audience', audienceType: p.audience },
-  })),
+    areaServed: { '@type': 'Country', name: 'United States' },
+    audience: {
+      '@type': 'Audience',
+      audienceType: REGIONAL_PLATFORMS.map((p) => p.audience).join('; '),
+    },
+  },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
