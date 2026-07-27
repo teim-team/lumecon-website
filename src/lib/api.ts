@@ -108,10 +108,9 @@ export interface LoginResponse {
 }
 
 /* NOTE on integration: account creation/auth is owned by the `teim-app`
-   backend, whose account model splits the name (name_first / name_last)
-   and carries organization + account_id. If this form is ever wired to
-   real auth, align it to teim-app's contract (likely first/last name +
-   account_id) rather than this single-`name` placeholder. */
+   backend. Its /auth/register contract takes a single `name` plus
+   email/password/organization/role/organizationType, matching this shape
+   (see server/index.js in teim-app). */
 export interface SignupRequest {
   name: string;
   email: string;
@@ -145,6 +144,11 @@ const request = async <T>(path: string, init: RequestInit): Promise<ApiResult<T>
     const res = await fetch(`${API_BASE}${path}`, {
       ...init,
       signal: ctrl.signal,
+      // The app backend authenticates with the HttpOnly teim_session cookie.
+      // Cross-origin fetches discard Set-Cookie without credentials mode, so
+      // login/signup from lumecon.ai could never establish a product session.
+      // Requires the API's CORS allowlist (ALLOWED_ORIGINS) to name this site.
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -238,7 +242,7 @@ export const resetPassword = (
  *  code server-side, where codes are validated) and returns the
  *  hosted checkout URL to redirect to. */
 export interface CheckoutRequest {
-  /** Plan id: 'starter' | 'standard' | 'leader'. */
+  /** Plan id: 'sprout' | 'sapling' | 'tree'. */
   tier: string;
   /** Optional discount / promotion code, validated server-side. */
   discountCode?: string;

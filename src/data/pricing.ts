@@ -2,9 +2,10 @@
  * Pricing data — single source of truth for the /pricing page.
  *
  * One Lumecon platform, three public plans. Tier ids
- * ('starter' | 'standard' | 'leader') stay stable so the
- * signup handoff (/signup?tier=starter) keeps working even as
- * public names change. Consultant licensing is custom-priced and
+ * ('sprout' | 'sapling' | 'tree') match the product's tier
+ * vocabulary (server/lib/tierCapabilities.js in the Team App), so
+ * the signup handoff (/signup?tier=sprout) and the product agree on
+ * plan identity end to end. Consultant licensing is custom-priced and
  * has no public tier. The old per-platform price matrix, the
  * Arborist consultant tier and the Toolbox add-on are gone: the
  * platform no longer sells geography, and Lumecon does not sell
@@ -12,7 +13,7 @@
  */
 
 export interface Plan {
-  id: 'starter' | 'standard' | 'leader';
+  id: 'sprout' | 'sapling' | 'tree';
   name: 'Sprout' | 'Sapling' | 'Tree';
   priceAnnual: number;
   price: string;
@@ -28,7 +29,7 @@ export interface Plan {
 
 export const PLANS: Plan[] = [
   {
-    id: 'starter',
+    id: 'sprout',
     name: 'Sprout',
     priceAnnual: 500,
     price: '$500',
@@ -37,10 +38,10 @@ export const PLANS: Plan[] = [
     tagline: 'Full Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.',
     users: '1 user',
     ctaLabel: 'Start with Sprout',
-    ctaHref: '/signup?tier=starter',
+    ctaHref: '/signup?tier=sprout',
   },
   {
-    id: 'standard',
+    id: 'sapling',
     name: 'Sapling',
     priceAnnual: 2500,
     price: '$2,500',
@@ -51,10 +52,10 @@ export const PLANS: Plan[] = [
     users: 'Up to 10 users',
     featured: true,
     ctaLabel: 'Start with Sapling',
-    ctaHref: '/signup?tier=standard',
+    ctaHref: '/signup?tier=sapling',
   },
   {
-    id: 'leader',
+    id: 'tree',
     name: 'Tree',
     priceAnnual: 7500,
     price: '$7,500',
@@ -64,7 +65,7 @@ export const PLANS: Plan[] = [
       'Everything in Sapling, plus Cedar Grove, organizational context and calibration, and capabilities designed for analysis at organizational scale.',
     users: 'Unlimited users in one organization',
     ctaLabel: 'Start with Tree',
-    ctaHref: '/signup?tier=leader',
+    ctaHref: '/signup?tier=tree',
   },
 ];
 
@@ -76,7 +77,7 @@ export interface PlanRow {
 
 export const PLAN_TABLE_ROWS: PlanRow[] = [
   { label: 'Annual price', values: ['$500', '$2,500', '$7,500'] },
-  { label: 'Users', values: ['1', 'Up to 10', 'Unlimited within one organization'] },
+  { label: 'Users', values: ['1', 'Up to 10', 'Unlimited users in one organization'] },
   {
     label: 'Economic modeling',
     values: ['Unlimited projects and analyses on the full Lumecon model', 'Same', 'Same'],
@@ -101,7 +102,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     label: 'Cedar',
     values: [
       'Included',
-      'Included, with team usage',
+      'Included for every collaborator',
       'Included, with organizational context and calibration',
     ],
   },

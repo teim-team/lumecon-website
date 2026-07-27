@@ -39,6 +39,18 @@ const {
 const robotsValue = noindex
   ? 'noindex, nofollow'
   : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+// connect-src must name the app backend's origin or every auth/checkout call
+// from this site is blocked by CSP before it leaves the browser. Derived from
+// PUBLIC_API_URL at build time so the policy and the client always agree.
+const apiOrigin = (() => {
+  const raw = import.meta.env.PUBLIC_API_URL || '';
+  try {
+    return raw ? new URL(raw).origin : '';
+  } catch {
+    return '';
+  }
+})();
+const connectSrc = ["'self'", apiOrigin].filter(Boolean).join(' ');
 const ogT = ogTitle || title;
 const ogD = ogDescription || description;
 const ogI = ogImage || 'https://lumecon.ai/lumecon-og-image-1200x630.png';
@@ -84,7 +96,7 @@ const ogIA =
      fronts the site; add `X-Frame-Options: DENY` there. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests"
+      content={`default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src ${connectSrc}; upgrade-insecure-requests`}
     />
     <meta
       http-equiv="Permissions-Policy"

@@ -140,7 +140,7 @@ const INCLUDED = [
   import { trackEvent, trackError } from '../lib/observability';
   import { getFlowEmail, rememberFlowEmail } from '../lib/flowState';
 
-  const VALID_TIERS = ['starter', 'standard', 'leader'];
+  const VALID_TIERS = ['sprout', 'sapling', 'tree'];
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;

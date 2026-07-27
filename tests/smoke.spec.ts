@@ -88,13 +88,13 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
   // One platform, three plans — no platform picker, no gating.
   await expect(page.locator('.pr-plan')).toHaveCount(3);
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
-  await expect(page.locator('#plan-starter .pr-plan__amount')).toHaveText('$500');
-  await expect(page.locator('#plan-standard .pr-plan__amount')).toHaveText('$2,500');
-  await expect(page.locator('#plan-leader .pr-plan__amount')).toHaveText('$7,500');
+  await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$500');
+  await expect(page.locator('#plan-sapling .pr-plan__amount')).toHaveText('$2,500');
+  await expect(page.locator('#plan-tree .pr-plan__amount')).toHaveText('$7,500');
   // Plan CTAs route into signup with the stable tier id.
-  await expect(page.locator('#plan-starter .pr-plan__cta')).toHaveAttribute(
+  await expect(page.locator('#plan-sprout .pr-plan__cta')).toHaveAttribute(
     'href',
-    /\/signup\?tier=starter/,
+    /\/signup\?tier=sprout/,
   );
   // The nine-row detail table renders (Cedar, Cedar Commons, Cedar Grove rows included).
   await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(9);
@@ -106,7 +106,6 @@ test('pricing carries the competitive transition offer and consultant band', asy
   // The free CTA leads, above the plans, with the no-card line beside it.
   const hero = page.locator('.pr-hero');
   await expect(hero).toContainText('Plans start at $500 a year');
-  await expect(hero).toContainText('No credit card. No sales call. No obligation.');
   await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
   const offer = page.locator('#switch');
   await expect(offer).toContainText('Already paying for economic impact software?');
@@ -115,6 +114,7 @@ test('pricing carries the competitive transition offer and consultant band', asy
   // The free-account band sits before the paid tiers.
   const free = page.locator('.pr-free');
   await expect(free).toContainText('take our word for it');
+  await expect(free).toContainText('No credit card');
   await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // Consultants use the public plans: a band under the cards, no separate edition.
   const band = page.locator('.pr-band');
@@ -125,7 +125,7 @@ test('pricing carries the competitive transition offer and consultant band', asy
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {
-  await page.goto('/signup?tier=standard', { waitUntil: 'domcontentloaded' });
+  await page.goto('/signup?tier=sapling', { waitUntil: 'domcontentloaded' });
   const badge = page.locator('[data-auth-plan]');
   await expect(badge).toBeVisible();
   await expect(badge).toContainText(/Sapling tier/);
@@ -148,9 +148,9 @@ test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page 
 });
 
 test('checkout is payment-only: knows the plan, no plan picker', async ({ page }) => {
-  await page.goto('/checkout?tier=leader', { waitUntil: 'domcontentloaded' });
+  await page.goto('/checkout?tier=tree', { waitUntil: 'domcontentloaded' });
   // The order summary reflects the already-chosen plan.
-  const summary = page.locator('[data-co-summary="leader"]');
+  const summary = page.locator('[data-co-summary="tree"]');
   await expect(summary).toBeVisible();
   await expect(summary).toContainText('Tree');
   await expect(summary.locator('[data-co-total]')).toHaveText('$7,500');
@@ -193,6 +193,7 @@ test('signup walks the two-step registration flow from the product', async ({ pa
   await expect(page.locator('input[name="email"]')).toBeHidden();
   await page.fill('input[name="name"]', 'Test Person');
   await page.fill('input[name="organization"]', 'Test Nation');
+  await page.selectOption('select[name="organizationType"]', 'tribal_nation');
   await page.locator('[data-role-chip]', { hasText: 'Consultant' }).click();
   await page.locator('[data-auth-submit]').click();
 
@@ -255,7 +256,8 @@ test('cedar page tells the AI story with three real captures, no diagrams', asyn
   // board notes. Diagrams were removed by design; no screenshot repeats.
   await expect(page.locator('.cedarpg-diagram')).toHaveCount(0);
   const shots = page.locator('.cedarpg-shot img');
-  await expect(shots).toHaveCount(3);
+  await expect(shots).toHaveCount(4);
+  await expect(page.locator('img[src="/app/cedar-context.webp"]')).toHaveCount(1);
   await expect(page.locator('img[src="/app/cedar-wind-upload.webp"]')).toHaveCount(1);
   await expect(page.locator('img[src="/app/cedar-wind-entities.webp"]')).toHaveCount(1);
   await expect(page.locator('img[src="/app/cedar-wind-partner.webp"]')).toHaveCount(1);
@@ -279,7 +281,7 @@ test('choose-plan offers the three plans and a free start', async ({ page }) => 
   await page.goto('/choose-plan', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('How will you use Lumecon?');
   await expect(page.locator('[data-plan-link]')).toHaveCount(3);
-  await expect(page.locator('[data-plan-link="standard"]')).toContainText('Sapling');
+  await expect(page.locator('[data-plan-link="sapling"]')).toContainText('Sapling');
   // Without a signup handoff, Start free routes through account creation.
   await expect(page.locator('[data-free-link]')).toHaveAttribute('href', /\/signup\?tier=free/);
   // The transactional flow keeps one obvious action: no Cedar launcher.
