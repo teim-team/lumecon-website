@@ -8,7 +8,21 @@
  *
  * Run it after any change to sectors.mjs and commit both repos together.
  */
+import { readdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { SECTORS, TRIBAL_GOVERNMENT, WASHES } from './sectors.mjs';
+
+// How many photographs each sector actually ships, counted from the
+// generated files (slug-sm.webp plus slug-v2-sm.webp, slug-v3-sm.webp, ...)
+// so the app's variety rotation always matches what exists on disk.
+const NAICS_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 'naics');
+const generated = new Set(readdirSync(NAICS_DIR));
+const photoVariants = (slug) => {
+  let n = generated.has(`${slug}-sm.webp`) ? 1 : 0;
+  while (generated.has(`${slug}-v${n + 1}-sm.webp`)) n += 1;
+  return Math.max(n, 1);
+};
 
 const rgb = (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
 const entry = (s) => ({
@@ -20,6 +34,7 @@ const entry = (s) => ({
   shadow: rgb(WASHES[s.wash].shadow),
   mid: rgb(WASHES[s.wash].mid),
   highlight: rgb(WASHES[s.wash].highlight),
+  photoVariants: photoVariants(s.slug),
 });
 
 const out = `// GENERATED FILE, do not edit by hand.

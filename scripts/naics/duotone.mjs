@@ -37,7 +37,26 @@ const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 
 mkdirSync(OUT, { recursive: true });
 
 const ALL = [...SECTORS, TRIBAL_GOVERNMENT];
-const bySlug = (name) => ALL.find((s) => name === s.slug || name.startsWith(s.slug + '-'));
+const bySlug = (name) =>
+  ALL.find((s) => name === s.slug || name.startsWith(s.slug + '-') || name.startsWith(s.slug + '_'));
+
+/**
+ * Per-sector crop gravity overrides, checked against the rendered output.
+ * The default sharp 'attention' crop is right most of the time, but it has
+ * decapitated subjects near the top of the frame (education, healthcare) and
+ * locked onto cloud texture instead of the Capitol dome (publicadmin). Keys
+ * are `main` (the 3:2 crops) and `wide` (the 5:2 banner crop); values are
+ * sharp gravity strings ('top', 'bottom', 'left', 'right', ...). Add an
+ * entry here when a contact-sheet review shows a bad crop; never fix it by
+ * editing the generated webp. With several photos per sector, a key may
+ * also be a full source basename (e.g. 'retail-checkout') to override one
+ * photo without touching the sector's others.
+ */
+const CROP_OVERRIDES = {
+  education: { wide: 'top' },
+  healthcare: { wide: 'top' },
+  publicadmin: { wide: 'bottom' },
+};
 
 /** Map a grayscale byte through the wash ramp, shadow -> highlight, the
  *  same linear per-channel lookup the NACA proposal's duotone() applies. */
@@ -45,7 +64,7 @@ function ramp(g, wash) {
   return [0, 1, 2].map((i) => Math.round(wash.shadow[i] + ((wash.highlight[i] - wash.shadow[i]) * g) / 255));
 }
 
-async function processOne(file) {
+async function processOne(file, variantIndex = 0) {
   const name = basename(file, extname(file)).toLowerCase();
   const sector = bySlug(name);
   if (!sector) {
@@ -53,12 +72,17 @@ async function processOne(file) {
     return;
   }
   const wash = WASHES[sector.wash];
+  // A sector can ship several photographs so repeated projects in the same
+  // sector get visual variety. The first (alphabetical) source keeps the
+  // bare slug name, so nothing that references `<slug>-sm.webp` breaks;
+  // later sources become `<slug>-v2`, `<slug>-v3`, ...
+  const outName = variantIndex === 0 ? sector.slug : `${sector.slug}-v${variantIndex + 1}`;
 
   // Duotone a crop: normalized grayscale through the wash lookup table.
-  const washCrop = async (w, h) => {
+  const washCrop = async (w, h, position = 'attention') => {
     const gray = await sharp(join(IN, file))
       .rotate()
-      .resize(w, h, { fit: 'cover', position: 'attention' })
+      .resize(w, h, { fit: 'cover', position })
       .grayscale()
       .normalise()
       .raw()
@@ -74,16 +98,28 @@ async function processOne(file) {
     return { washed: sharp(outBuf, { raw: { width: w, height: h, channels: 3 } }), gray };
   };
 
-  const main = await washCrop(1200, 800);
+  const overrides = CROP_OVERRIDES[name] || CROP_OVERRIDES[sector.slug] || {};
+  const main = await washCrop(1200, 800, overrides.main || 'attention');
   await sharp(main.gray.data, { raw: main.gray.info }).png().toFile(join(IN, `${name}.gray.png`));
-  await main.washed.clone().webp({ quality: 86 }).toFile(join(OUT, `${sector.slug}.webp`));
-  await main.washed.resize(600, 400).webp({ quality: 84 }).toFile(join(OUT, `${sector.slug}-sm.webp`));
-  const wide = await washCrop(1500, 600);
-  await wide.washed.webp({ quality: 84 }).toFile(join(OUT, `${sector.slug}-wide.webp`));
-  console.log(`${file} -> ${sector.slug}.webp (${sector.wash})`);
+  await main.washed.clone().webp({ quality: 86 }).toFile(join(OUT, `${outName}.webp`));
+  await main.washed.resize(600, 400).webp({ quality: 84 }).toFile(join(OUT, `${outName}-sm.webp`));
+  const wide = await washCrop(1500, 600, overrides.wide || 'attention');
+  await wide.washed.webp({ quality: 84 }).toFile(join(OUT, `${outName}-wide.webp`));
+  console.log(`${file} -> ${outName}.webp (${sector.wash})`);
 }
 
-const files = readdirSync(IN).filter((f) => /\.(jpe?g|png|webp|tiff?|avif)$/i.test(f) && !f.endsWith('.gray.png'));
+const files = readdirSync(IN)
+  .filter((f) => /\.(jpe?g|png|webp|tiff?|avif)$/i.test(f) && !f.endsWith('.gray.png'))
+  .sort();
 if (!files.length) console.warn(`no images found in ${IN}`);
-for (const f of files) await processOne(f);
+// Group per sector so a second photo for a sector becomes its -v2 variant
+// instead of silently overwriting the first. Alphabetical order keeps the
+// variant assignment stable across re-runs.
+const seenPerSlug = new Map();
+for (const f of files) {
+  const sector = bySlug(basename(f, extname(f)).toLowerCase());
+  const idx = sector ? (seenPerSlug.get(sector.slug) || 0) : 0;
+  await processOne(f, idx);
+  if (sector) seenPerSlug.set(sector.slug, idx + 1);
+}
 console.log('done');
