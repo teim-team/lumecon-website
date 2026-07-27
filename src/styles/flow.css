@@ -539,3 +539,16 @@
     padding: 2rem clamp(1.25rem, 5vw, 2rem) 2.4rem;
   }
 }
+
+/* Point-of-sale disclosure above the purchase button. */
+.co2-disclose {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 0.8rem 0.95rem;
+  margin: 0;
+}

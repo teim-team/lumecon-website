@@ -166,12 +166,6 @@ export function captureGlobalErrors(): void {
   });
 }
 
-/** Identify the current visitor (call after the visitor authenticates
- *  against the future API). Until then, calling this is a no-op. */
-export function identifyUser(props: { id?: string; email?: string; name?: string } & Attrs): void {
-  (client ?? NOOP).setUser(props);
-}
-
 /** Test/escape hatch — lets tests inject a fake client. */
 export function __setObservabilityClient(c: ObservabilityClient | null): void {
   client = c ?? NOOP;

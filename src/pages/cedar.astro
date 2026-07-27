@@ -6,9 +6,9 @@
  * from the beginning, and Lumecon's implementation is different
  * because the model, data, software and AI are developed together.
  *
- * Visuals: real product captures (the Cedar panel over live results)
- * plus three thin-line SVG diagrams in the site's linework style.
- * No vendor logos, no chat-bubble clichés.
+ * Visuals: three real product captures telling one story in order
+ * (upload, operations with Cedar's ask, board notes). No diagrams,
+ * no vendor logos, no chat-bubble clichés.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -51,7 +51,7 @@ const jsonLd = [
   title="Cedar, the AI economic analyst | Lumecon"
   description={description}
   canonical="https://lumecon.ai/cedar"
-  keywords="Cedar AI, AI economic analyst, AI economic impact analysis, AI for economic modeling, document ingestion economic analysis, AI assisted input-output modeling, economic analysis AI assistant, Lumecon Cedar"
+  keywords="Cedar AI, AI economic analyst, AI economic impact analysis, AI for economic modeling, document ingestion economic analysis, AI assisted input-output modeling, Lumecon Cedar"
   jsonLd={jsonLd}
 >
   <Nav isHome={false} />
@@ -62,13 +62,13 @@ const jsonLd = [
       <div class="meth-w">
         <p class="h-kicker">Cedar</p>
         <h1 class="meth-hero__title">
-          AI built for economic analysis, <span class="brand-em">from the beginning.</span>
+          AI built for economic analysis <span class="brand-em">from the beginning.</span>
         </h1>
         <p class="meth-hero__lede">
           Cedar is Lumecon&rsquo;s AI economic analyst. It works across intake, analysis,
           interpretation and reporting, helping turn organizational knowledge and source documents
           into usable economic analysis. <span class="brand-em"
-            >Not a chatbot added to old software. Part of how Lumecon works.</span
+            >It is part of how Lumecon works, present from intake through reporting.</span
           >
         </p>
         <div class="cedarpg-cta">
@@ -76,21 +76,13 @@ const jsonLd = [
             Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
-        <figure class="cedar-shot cedarpg-shot">
-          <picture>
-            <source srcset="/app/cedar-dark.webp" media="(prefers-color-scheme: dark)" />
-            <img
-              src="/app/cedar.webp"
-              alt="The Cedar panel open over a Lumecon results page, writing a board-ready summary of jobs, output, GDP contribution, labor income and tax impacts."
-              width="1600"
-              height="1000"
-              decoding="async"
-            />
-          </picture>
-          <figcaption>Cedar working inside a live analysis, shown with sample data.</figcaption>
-        </figure>
       </div>
     </header>
+
+    <!-- The page's three screenshots are one story, told in order below:
+         source documents uploading, the operations Cedar set up from them
+         with its ask on the open panel, and the board notes it drafts from
+         the finished results. No screenshot appears twice. -->
 
     <!-- 01 · Not a chatbot -->
     <section class="meth-sec" aria-labelledby="c-arch">
@@ -98,7 +90,7 @@ const jsonLd = [
         <div class="meth-sec__head">
           <h2 id="c-arch">AI shouldn&rsquo;t sit on top of the model.</h2>
         </div>
-        <div class="meth-cols">
+        <div class="meth-prose meth-prose--measure">
           <div class="meth-prose">
             <p>
               The common pattern bolts an assistant onto finished software: the data goes in, the
@@ -107,59 +99,6 @@ const jsonLd = [
               material, structuring inputs, surfacing gaps, supporting interpretation and helping
               communicate findings.
             </p>
-          </div>
-          <div class="cedarpg-fig">
-            <figure
-              class="cedarpg-diagram"
-              aria-label="Two architectures compared. The legacy pattern: data flows to model to results, with a chatbot attached only to results. Lumecon: Cedar connects to every stage, from data to model to results to reporting."
-            >
-              <p class="cedarpg-diagram__k" aria-hidden="true">The legacy pattern</p>
-              <svg viewBox="0 0 520 96" aria-hidden="true">
-                <g class="dg-box">
-                  <rect x="8" y="10" width="110" height="34" rx="4"></rect>
-                  <rect x="205" y="10" width="110" height="34" rx="4"></rect>
-                  <rect x="402" y="10" width="110" height="34" rx="4"></rect>
-                  <rect x="402" y="66" width="110" height="26" rx="4" class="dg-box--dash"></rect>
-                </g>
-                <g class="dg-label">
-                  <text x="63" y="31">DATA</text>
-                  <text x="260" y="31">MODEL</text>
-                  <text x="457" y="31">RESULTS</text>
-                  <text x="457" y="83" class="dg-label--muted">CHATBOT</text>
-                </g>
-                <g class="dg-line">
-                  <path d="M118 27h80m-8-4 8 4-8 4"></path>
-                  <path d="M315 27h80m-8-4 8 4-8 4"></path>
-                  <path d="M457 44v22" class="dg-line--dash"></path>
-                </g>
-              </svg>
-              <p class="cedarpg-diagram__k" aria-hidden="true">Lumecon</p>
-              <svg viewBox="0 0 520 132" aria-hidden="true">
-                <g class="dg-box">
-                  <rect x="205" y="8" width="110" height="34" rx="4" class="dg-box--cedar"></rect>
-                  <rect x="8" y="88" width="110" height="34" rx="4"></rect>
-                  <rect x="140" y="88" width="110" height="34" rx="4"></rect>
-                  <rect x="272" y="88" width="110" height="34" rx="4"></rect>
-                  <rect x="404" y="88" width="110" height="34" rx="4"></rect>
-                </g>
-                <g class="dg-label">
-                  <text x="260" y="29" class="dg-label--cedar">CEDAR</text>
-                  <text x="63" y="109">DATA</text>
-                  <text x="195" y="109">MODEL</text>
-                  <text x="327" y="109">RESULTS</text>
-                  <text x="459" y="109">REPORTING</text>
-                </g>
-                <g class="dg-line">
-                  <path d="M118 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
-                  <path d="M250 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
-                  <path d="M382 105h14m-6-4 6 4-6 4" class="dg-line--quiet"></path>
-                  <path d="M230 42 74 86" class="dg-line--cedar"></path>
-                  <path d="M252 42l-52 44" class="dg-line--cedar"></path>
-                  <path d="M268 42l52 44" class="dg-line--cedar"></path>
-                  <path d="M290 42l156 44" class="dg-line--cedar"></path>
-                </g>
-              </svg>
-            </figure>
           </div>
         </div>
       </div>
@@ -174,15 +113,15 @@ const jsonLd = [
         <div class="meth-twoprose">
           <div class="meth-prose">
             <p>
-              <span class="brand-em">Your existing work becomes context, not baggage.</span> Upload supported
-              PDFs, spreadsheets, CSVs, prior studies and recurring organizational materials. Cedar helps
+              <span class="brand-em">Your existing work becomes context for the analysis.</span> Upload supported
+              PDFs, spreadsheets, CSVs, prior analyses and recurring organizational materials. Cedar helps
               identify the relevant information and map it into the analysis workflow, and it flags the
               gaps it cannot resolve rather than papering over them.
             </p>
           </div>
           <div class="meth-prose">
             <p>
-              Moving from another platform? Prior studies and reporting examples help Cedar
+              Moving from another platform? Prior analyses and reporting examples help Cedar
               understand how your organization already works: the terminology you use, the
               geographies you care about and the format your reporting takes.
             </p>
@@ -204,19 +143,19 @@ const jsonLd = [
             />
           </picture>
           <figcaption>
-            Where every analysis starts: the wind study&rsquo;s source documents uploading to Cedar,
+            Where every analysis starts: the wind project&rsquo;s source documents uploading to Cedar,
             with a note about what to watch for. Shown with sample data.
           </figcaption>
         </figure>
         <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
           <picture>
             <source
-              srcset="/app/cedar-wind-intake-dark.webp"
+              srcset="/app/cedar-wind-entities-dark.webp"
               media="(prefers-color-scheme: dark)"
             />
             <img
-              src="/app/cedar-wind-intake.webp"
-              alt="A wind energy buildout analysis with the Cedar panel reporting on three uploaded documents: a capital plan with nine construction phases mapped to model operations, a turbine procurement workbook with costs and labor separated, county road-use agreements used to place activity, and one flagged gap to resolve."
+              src="/app/cedar-wind-entities.webp"
+              alt="The operations step of the wind analysis: three entity cards with their sector icons, turbine and storage installation, grid interconnection and operations and maintenance, beside the open Cedar panel reporting that two operations are model ready and asking to fill the missing sales figure from the procurement workbook."
               width="1600"
               height="1000"
               loading="lazy"
@@ -224,8 +163,8 @@ const jsonLd = [
             />
           </picture>
           <figcaption>
-            The same documents after Cedar has read them, on the finished analysis: what it mapped,
-            what it used as context and the gap it flagged for review. Shown with sample data.
+            The same documents turned into operations, each carded with its industry. Cedar reports
+            what is model ready and asks about the one figure still missing. Shown with sample data.
           </figcaption>
         </figure>
       </div>
@@ -235,9 +174,9 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-org">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <h2 id="c-org">One Cedar. Your organization.</h2>
+          <h2 id="c-org">One Cedar, shaped to your organization.</h2>
         </div>
-        <div class="meth-cols">
+        <div class="meth-prose meth-prose--measure">
           <div class="meth-prose">
             <p>
               Cedar can carry approved organizational context across projects, helping teams build
@@ -246,37 +185,36 @@ const jsonLd = [
               conventions and reporting preferences, and Cedar Grove on the Tree plan gives that
               context a durable home.
             </p>
-          </div>
-          <div class="cedarpg-fig">
-            <figure
-              class="cedarpg-diagram"
-              aria-label="Diagram: the organization informs Cedar, and Cedar carries that context into project A, project B and project C."
-            >
-              <svg viewBox="0 0 520 190" aria-hidden="true">
-                <g class="dg-box">
-                  <rect x="185" y="8" width="150" height="34" rx="4"></rect>
-                  <rect x="205" y="78" width="110" height="34" rx="4" class="dg-box--cedar"></rect>
-                  <rect x="24" y="148" width="130" height="34" rx="4"></rect>
-                  <rect x="195" y="148" width="130" height="34" rx="4"></rect>
-                  <rect x="366" y="148" width="130" height="34" rx="4"></rect>
-                </g>
-                <g class="dg-label">
-                  <text x="260" y="29">ORGANIZATION</text>
-                  <text x="260" y="99" class="dg-label--cedar">CEDAR</text>
-                  <text x="89" y="169">PROJECT A</text>
-                  <text x="260" y="169">PROJECT B</text>
-                  <text x="431" y="169">PROJECT C</text>
-                </g>
-                <g class="dg-line">
-                  <path d="M260 42v36m-4-8 4 8 4-8"></path>
-                  <path d="M238 112 105 146" class="dg-line--cedar"></path>
-                  <path d="M260 112v34" class="dg-line--cedar"></path>
-                  <path d="M282 112l133 34" class="dg-line--cedar"></path>
-                </g>
-              </svg>
-            </figure>
+            <p>
+              Cedar Commons is the shared layer where that work lives together: one board of
+              projects a team returns to, each with its own collaborators, notes and a Cedar that
+              understands the project it sits in. Internal collaborators work across the
+              organization, and external partners are given access to a single project and nothing
+              more.
+            </p>
           </div>
         </div>
+        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
+          <picture>
+            <source
+              srcset="/app/cedar-context-dark.webp"
+              media="(prefers-color-scheme: dark)"
+            />
+            <img
+              src="/app/cedar-context.webp"
+              alt="The Cedar Commons board with the Cedar panel open on a shared project, answering 'What changed since my last visit?' with who re-ran the analysis, how the jobs and output figures moved, and the note an external reviewer left, scoped to that project."
+              width="1600"
+              height="760"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+          <figcaption>
+            Cedar Commons is a shared board of projects, and Cedar answers from inside any one of
+            them: who re-ran what, how the figures moved, what a reviewer flagged, scoped to the
+            project it sits in. Shown with sample data.
+          </figcaption>
+        </figure>
       </div>
     </section>
 
@@ -284,7 +222,7 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-partner">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <h2 id="c-partner">Thought partner, not autopilot.</h2>
+          <h2 id="c-partner">A thought partner you stay in control of.</h2>
         </div>
         <div class="meth-cols">
           <div class="meth-prose">
@@ -314,8 +252,8 @@ const jsonLd = [
               />
             </picture>
             <figcaption>
-              The same analysis, later in the work: Cedar drafts the county-board summary from the
-              results and the documents it read at intake. Shown with sample data.
+              The same analysis, later in the work: Cedar drafts the board notes from the results
+              and the documents it read at intake. Shown with sample data.
             </figcaption>
           </figure>
         </div>
@@ -326,21 +264,21 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="c-built">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <h2 id="c-built">Economics isn&rsquo;t handed to engineering after the fact.</h2>
+          <h2 id="c-built">Economics and engineering are developed together.</h2>
         </div>
         <div class="meth-twoprose">
           <div class="meth-prose">
             <p>
               Lumecon is developed collaboratively across economics, social science, data science
-              and software engineering. Modeling decisions shape the software. New data changes what
-              can be estimated. Software and AI make new analytical workflows possible.
+              and software engineering, where modeling decisions shape the software, new data
+              changes what can be estimated, and software and AI open new analytical workflows.
             </p>
           </div>
           <div class="meth-prose">
             <p>
               That is why Cedar behaves like part of the analysis rather than a layer over it:
               <span class="brand-em"
-                >the model, data infrastructure, software and AI evolve together.</span
+                >the model, data pipeline, software and AI evolve together.</span
               >
             </p>
           </div>
@@ -353,10 +291,10 @@ const jsonLd = [
       <div class="meth-w">
         <div class="meth-sec__head">
           <h2 id="c-better">
-            AI shouldn&rsquo;t just make the software easier. It should help us build better models.
+            We use AI to build better models, and better software around them.
           </h2>
         </div>
-        <div class="meth-cols">
+        <div class="meth-prose meth-prose--measure">
           <div class="meth-prose">
             <p>
               Modern AI makes larger and more varied datasets practical to process, harmonize,
@@ -365,34 +303,8 @@ const jsonLd = [
               The economics of the model stay grounded in the <a
                 class="gloss-link"
                 href="/methodology">documented methodology</a
-              >; what grows is the evidence behind it.
+              >. What grows is the evidence behind it.
             </p>
-          </div>
-          <div class="cedarpg-fig">
-            <figure
-              class="cedarpg-diagram"
-              aria-label="Diagram: better tools lead to more usable data, which leads to better modeling, which leads to better analysis."
-            >
-              <svg viewBox="0 0 520 150" aria-hidden="true">
-                <g class="dg-box">
-                  <rect x="8" y="14" width="236" height="40" rx="4"></rect>
-                  <rect x="276" y="14" width="236" height="40" rx="4"></rect>
-                  <rect x="8" y="96" width="236" height="40" rx="4"></rect>
-                  <rect x="276" y="96" width="236" height="40" rx="4"></rect>
-                </g>
-                <g class="dg-label">
-                  <text x="126" y="38">BETTER TOOLS</text>
-                  <text x="394" y="38">MORE USABLE DATA</text>
-                  <text x="394" y="120">BETTER MODELING</text>
-                  <text x="126" y="120">BETTER ANALYSIS</text>
-                </g>
-                <g class="dg-line">
-                  <path d="M244 34h24m-7-4 7 4-7 4"></path>
-                  <path d="M394 54v34m-4-8 4 8 4-8"></path>
-                  <path d="M276 116h-24m7-4-7 4 7 4"></path>
-                </g>
-              </svg>
-            </figure>
           </div>
         </div>
       </div>
@@ -451,8 +363,8 @@ const jsonLd = [
         </h2>
         <p class="meth-mission__lede">
           We are continually expanding the formats Cedar can understand, the workflows it can
-          support, the context it can use and the ways modern data can strengthen economic analysis.
-          The model should improve as the evidence improves. So should the software around it.
+          support, the context it can use and the ways modern data can strengthen economic
+          analysis.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/signup?tier=free">

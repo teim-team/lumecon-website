@@ -29,7 +29,7 @@ const { isHome = false } = Astro.props;
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-brand__wordmark">
-          <BrandWordmark size="md" ariaLabel={`${site.legalName} home`} />
+          <BrandWordmark size="md" teal ariaLabel={`${site.legalName} home`} />
         </div>
         <div class="footer-brand-pitch">{site.pitch}</div>
       </div>
@@ -58,6 +58,7 @@ const { isHome = false } = Astro.props;
           <a href="/terms">Terms of Service</a>
           <a href="/privacy">Privacy Policy</a>
           <a href="/glossary">Glossary</a>
+          <a href="/naics">Industry sectors</a>
           <a href="/accessibility">Accessibility</a>
           <button type="button" class="footer-linkbtn" id="privacyChoices">Privacy choices</button>
         </div>

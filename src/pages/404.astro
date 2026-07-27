@@ -17,6 +17,13 @@ import '../styles/legal.css';
   noindex={true}
 >
   <Nav isHome={false} />
+  <script>
+    // GitHub Pages serves no dynamic routes, so referral links use the
+    // pretty lumecon.ai/r/<code> shape and land on this page. Forward them
+    // into the signup flow with the code preserved.
+    const referral = window.location.pathname.match(/^\/r\/([A-Za-z0-9_-]{1,64})\/?$/);
+    if (referral) window.location.replace(`/signup?ref=${referral[1]}`);
+  </script>
   <main
     id="top"
     tabindex="-1"

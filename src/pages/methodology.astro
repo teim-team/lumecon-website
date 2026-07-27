@@ -108,6 +108,26 @@ const SOURCES = [
     role: 'Supplementary',
   },
   {
+    name: 'Federal Audit Clearinghouse',
+    what: 'Single Audit filings: audited federal award spending and findings for organizations that receive federal funding.',
+    role: 'Supplementary',
+  },
+  {
+    name: 'CICD Native Community Data Profiles',
+    what: 'The Center for Indian Country Development’s harmonized profiles and Tribal Economic Zones, with their own documented source list, for Native community context.',
+    role: 'Supplementary',
+  },
+  {
+    name: 'NaNDA',
+    what: 'The National Neighborhood Data Archive (ISR, University of Michigan): contextual measures of place used where neighborhood conditions matter.',
+    role: 'Supplementary',
+  },
+  {
+    name: 'BIA Federal Register list',
+    what: 'The Bureau of Indian Affairs list of federally recognized tribes, maintained current from the Federal Register, for identifying and validating Native entities.',
+    role: 'Geography',
+  },
+  {
     name: 'NOAA',
     what: 'Environmental context for analyses where weather and climate matter.',
     role: 'Supplementary',
@@ -117,7 +137,7 @@ const SOURCES = [
 const MEASURES = [
   {
     term: 'Jobs supported',
-    def: 'The jobs supported by the analyzed activity over the analysis period. It is a job count, and where a conversion basis matters the analysis states it.',
+    def: 'The count of jobs supported by the activity across the direct, indirect and induced layers over the analysis period. It is a job count; where a conversion basis matters, the analysis states it.',
   },
   {
     term: 'Labor income',
@@ -125,7 +145,7 @@ const MEASURES = [
   },
   {
     term: 'GDP contribution',
-    def: 'The analysis&rsquo;s value added, the measure that corresponds to a region&rsquo;s contribution to GDP.',
+    def: 'The value added by the analyzed activity: the measure that corresponds to a region&rsquo;s contribution to GDP. Lumecon uses GDP contribution as the plain-language label for value added.',
   },
   {
     term: 'Economic output',
@@ -189,13 +209,13 @@ const jsonLd = [
       <div class="meth-w">
         <p class="h-kicker">Methodology</p>
         <h1 class="meth-hero__title">
-          Proven foundations. <span class="brand-em">Better inputs.</span> A model that keeps improving.
+          Proven foundations, <span class="brand-em">better inputs</span> and a model that keeps improving.
         </h1>
         <p class="meth-hero__lede">
           Input-output analysis carries nearly a century of economic research. Lumecon builds on
           that foundation with current public data, modern regionalization, higher-frequency
           evidence where appropriate and transparent validation. <span class="brand-em"
-            >Built on decades of economic science, not frozen in it.</span
+            >Built on decades of economic science and kept current with the economy.</span
           >
         </p>
         <ol class="meth-principles" aria-label="Three principles">
@@ -216,8 +236,8 @@ const jsonLd = [
           <li>
             <p class="meth-principles__k">Continuous improvement</p>
             <p class="meth-principles__b">
-              We invest in the model, not just the software. Data, methods and validation keep
-              advancing as the evidence does.
+              We invest in the model itself, and in the software around it. Data, methods and
+              validation keep advancing as the evidence does.
             </p>
           </li>
         </ol>
@@ -513,6 +533,39 @@ const jsonLd = [
       </div>
     </section>
 
+    <section class="meth-sec" aria-labelledby="m-naics">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="m-naics">Industries at the two-digit NAICS level</h2>
+        </div>
+        <div class="meth-twoprose">
+          <div class="meth-prose">
+            <p>
+              Every dollar in an analysis is classified against the North American Industry
+              Classification System at the two-digit sector level, from Agriculture (11) to Public
+              Administration (92). Two digits is where administrative data coverage is strongest:
+              the federal employment, wage and output series that anchor the model are published
+              nearly complete at this level for counties and states, while finer detail is often
+              suppressed for confidentiality in smaller geographies. Working where the data is
+              complete means fewer imputed values and fewer assumptions between a source and a
+              multiplier.
+            </p>
+          </div>
+          <div class="meth-prose">
+            <p>
+              As our client base and data coverage grow, we intend to extend classification beyond
+              two digits where published sources support it, and each analysis will state the
+              level it uses. Tribal governments are tracked as their own Lumecon category rather
+              than as local government within Public Administration (92), because a nation that
+              runs administration, enterprises, housing, health and education programs is
+              understated by that single line. The full sector list, in plain language, is at{' '}
+              <a class="gloss-link" href="/naics">lumecon.ai/naics</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 05 · The data manifest -->
     <section class="meth-sec" aria-labelledby="m-data">
       <div class="meth-w">
@@ -658,7 +711,7 @@ const jsonLd = [
         </div>
         <div class="meth-prose meth-prose--measure">
           <p>
-            Input-output analysis is a field, not a proprietary invention. Established platforms and
+            Input-output analysis is an established, openly published field. Established platforms and
             Lumecon draw on the same national statistical system and decades of economic research.
             Lumecon differentiates through its data architecture, regionalization, traceability,
             reservation and trust-land modeling, modern workflow and pricing. Lumecon is not
@@ -681,9 +734,9 @@ const jsonLd = [
           >
         </h2>
         <p class="meth-mission__lede">
-          Better modeling should make rigorous analysis more accessible, not less. Businesses,
-          governments, universities, nonprofits and Tribal Nations all create value in the places
-          around them. Our job is to make that impact visible.
+          Better modeling should widen access to rigorous analysis. Businesses, governments,
+          universities, nonprofits and Tribal Nations shape the economies around them. Our job is
+          to make that impact visible.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/pricing">

@@ -145,6 +145,14 @@ gracefully when `PUBLIC_API_URL` and analytics keys are unset (the
 `api-unconfigured` path), so the static marketing site works on its own.
 Never commit a real `.env`.
 
+In production the site-to-product handoff needs two build-time values,
+passed by `.github/workflows/deploy.yml` from repository variables:
+`PUBLIC_APP_URL` (the product origin; login redirect and the welcome page's
+Open Lumecon button) and `PUBLIC_API_URL` (the product API base; auth and
+checkout calls, and the CSP `connect-src` is derived from it). The product
+API must list this site's origin in its `ALLOWED_ORIGINS` for those calls to
+succeed. See "Product handoff contract" in `AGENTS.md`.
+
 ## Design system (colors, type, fonts)
 
 The canonical source of truth is the `:root` block in

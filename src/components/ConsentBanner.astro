@@ -18,8 +18,7 @@
   hidden
 >
   <p class="consent__text">
-    We&rsquo;d like to use privacy-friendly analytics to see what&rsquo;s useful and improve the
-    site. Nothing runs unless you accept. See our <a href="/privacy">Privacy Policy</a>.
+    We use optional analytics to improve Lumecon. <a href="/privacy">Privacy Policy</a>
   </p>
   <div class="consent__actions">
     <button type="button" class="consent__btn consent__btn--ghost" data-consent="denied"
@@ -149,6 +148,28 @@
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+  /* On phones the banner sits over the page's opening proposition, so
+     it stays one compact row: text left, buttons right. */
+  @media (max-width: 640px) {
+    .consent {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.7rem 0.8rem;
+      width: calc(100vw - 1.8rem);
+    }
+    .consent__text {
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+    .consent__actions {
+      flex-shrink: 0;
+    }
+    .consent__btn {
+      font-size: 0.78rem;
+      padding: 0.4rem 0.7rem;
     }
   }
   @media (prefers-reduced-motion: reduce) {

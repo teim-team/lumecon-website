@@ -99,19 +99,19 @@ export interface LoginRequest {
   password: string;
 }
 export interface LoginResponse {
-  /** Session token / JWT — opaque to the front-end. */
-  token: string;
-  /** ISO 8601 token expiry. */
-  expiresAt: string;
-  /** Authenticated user info for greeting / role-based UI. */
-  user: { id: string; name: string; email: string; orgId?: string };
+  /** The authenticated user, as POST /auth/login returns it. The session
+   *  itself travels as an HttpOnly cookie the fetch stores via
+   *  credentials: 'include'; there is no token in the body. */
+  id: string;
+  email: string;
+  name: string | null;
+  workspaceTier?: string;
 }
 
 /* NOTE on integration: account creation/auth is owned by the `teim-app`
-   backend, whose account model splits the name (name_first / name_last)
-   and carries organization + account_id. If this form is ever wired to
-   real auth, align it to teim-app's contract (likely first/last name +
-   account_id) rather than this single-`name` placeholder. */
+   backend. Its /auth/register contract takes a single `name` plus
+   email/password/organization/role/organizationType, matching this shape
+   (see server/index.js in teim-app). */
 export interface SignupRequest {
   name: string;
   email: string;
@@ -119,12 +119,20 @@ export interface SignupRequest {
   organization?: string;
   /** Free text describing the role / use case; drives onboarding. */
   role?: string;
+  /** Account-level organization type (ORGANIZATION_TYPE_ENUM on the server).
+   *  Collected at signup so the account is fully onboarded and skips the
+   *  in-app "complete your profile" step. */
+  organizationType?: string;
+  /** Only meaningful for consulting firms; gates Whole Nation analysis. */
+  servesTribalClients?: boolean;
 }
 export interface SignupResponse {
-  user: { id: string; name: string; email: string };
-  /** Whether the signup flow requires email verification before the
-   *  user can log in. The marketing-site form branches on this. */
-  emailVerificationRequired: boolean;
+  /** The created user, as POST /auth/register returns it (201). The
+   *  session cookie is set on the same response. */
+  id: string;
+  email: string;
+  name: string | null;
+  workspaceTier?: string;
 }
 
 /* ---------- internals ---------- */
@@ -139,6 +147,11 @@ const request = async <T>(path: string, init: RequestInit): Promise<ApiResult<T>
     const res = await fetch(`${API_BASE}${path}`, {
       ...init,
       signal: ctrl.signal,
+      // The app backend authenticates with the HttpOnly teim_session cookie.
+      // Cross-origin fetches discard Set-Cookie without credentials mode, so
+      // login/signup from lumecon.ai could never establish a product session.
+      // Requires the API's CORS allowlist (ALLOWED_ORIGINS) to name this site.
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -232,7 +245,7 @@ export const resetPassword = (
  *  code server-side, where codes are validated) and returns the
  *  hosted checkout URL to redirect to. */
 export interface CheckoutRequest {
-  /** Plan id: 'starter' | 'standard' | 'leader'. */
+  /** Plan id: 'sprout' | 'sapling' | 'tree'. */
   tier: string;
   /** Optional discount / promotion code, validated server-side. */
   discountCode?: string;
