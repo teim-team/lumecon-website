@@ -189,3 +189,27 @@ Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
 originals) is tracked in git. Moving it to external storage is a
 history decision for the founder; do not delete it casually, the
 filenames encode the Shutterstock license IDs.
+
+## Product handoff contract (2026-07, final integration pass)
+
+- **Plan ids are the product's tier vocabulary:** `free | sprout | sapling |
+  tree` (matching `server/lib/tierCapabilities.js` in teim-app). They appear
+  in `/signup?tier=`, `/checkout?tier=` and `src/data/pricing.ts`. Never
+  reintroduce the old `starter/standard/leader` aliases; the server silently
+  normalizes unknown tiers to sprout, which would hand a Tree buyer a Sprout
+  account.
+- **Build-time env (inlined by Astro, passed by deploy.yml from repository
+  variables):** `PUBLIC_APP_URL` (product origin; login redirect and the
+  welcome page's Open Lumecon) and `PUBLIC_API_URL` (product API base; auth,
+  checkout session and the CSP's connect-src are derived from it). Unset,
+  the site builds "login-only": auth forms degrade to the contact-email path.
+- **App-side prerequisites the site depends on:** the product API's
+  `ALLOWED_ORIGINS` must include this site's origin (the auth fetches send
+  `credentials: 'include'`), and `AUTH_ALLOWLIST_EMAILS` must be empty for
+  public signup to accept registrations (the pilot lockdown 403s them).
+- **Referral links:** the app shares `lumecon.ai/r/<code>`. GitHub Pages has
+  no dynamic routes, so `src/pages/404.astro` forwards `/r/<code>` to
+  `/signup?ref=<code>`. Keep that forwarding if the 404 page is reworked.
+- Signup does not transmit the chosen tier to the server: every self-serve
+  account starts Free and paid tiers land with billing. The tier query only
+  routes the visitor between signup, checkout and welcome.
