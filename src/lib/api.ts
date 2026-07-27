@@ -99,12 +99,13 @@ export interface LoginRequest {
   password: string;
 }
 export interface LoginResponse {
-  /** Session token / JWT — opaque to the front-end. */
-  token: string;
-  /** ISO 8601 token expiry. */
-  expiresAt: string;
-  /** Authenticated user info for greeting / role-based UI. */
-  user: { id: string; name: string; email: string; orgId?: string };
+  /** The authenticated user, as POST /auth/login returns it. The session
+   *  itself travels as an HttpOnly cookie the fetch stores via
+   *  credentials: 'include'; there is no token in the body. */
+  id: string;
+  email: string;
+  name: string | null;
+  workspaceTier?: string;
 }
 
 /* NOTE on integration: account creation/auth is owned by the `teim-app`
@@ -126,10 +127,12 @@ export interface SignupRequest {
   servesTribalClients?: boolean;
 }
 export interface SignupResponse {
-  user: { id: string; name: string; email: string };
-  /** Whether the signup flow requires email verification before the
-   *  user can log in. The marketing-site form branches on this. */
-  emailVerificationRequired: boolean;
+  /** The created user, as POST /auth/register returns it (201). The
+   *  session cookie is set on the same response. */
+  id: string;
+  email: string;
+  name: string | null;
+  workspaceTier?: string;
 }
 
 /* ---------- internals ---------- */

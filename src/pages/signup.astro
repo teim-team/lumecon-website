@@ -455,11 +455,16 @@ const ORGANIZATION_TYPE_OPTIONS = [
           }
           if (result.reason !== 'api-unconfigured') {
             trackEvent('auth.fail', { kind: 'signup', reason: result.reason });
-            setStatus(
-              status,
-              'err',
-              'We could not complete that. Try again, or email contact@lumecon.ai.',
-            );
+            // The server distinguishes these; relaying them stops the visitor
+            // retrying forever against a state that will not change.
+            var failStatus = result.reason === 'http' ? result.status : 0;
+            var failMessage =
+              failStatus === 403
+                ? 'Lumecon is in a limited pilot right now, so new accounts are invitation-only. Email contact@lumecon.ai and we will let you know the moment signups open.'
+                : failStatus === 409
+                  ? 'That email already has a Lumecon account. Log in instead, or reset your password from the login page.'
+                  : 'We could not complete that. Try again, or email contact@lumecon.ai.';
+            setStatus(status, 'err', failMessage);
             return;
           }
         }

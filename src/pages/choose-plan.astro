@@ -54,7 +54,7 @@ import '../styles/flow.css';
         {
           PLANS.map((p) => (
             <a class="cpl-card" href={`/checkout?tier=${p.id}`} data-plan-link={p.id}>
-              {p.featured && <span class="cpl-card__flag">Most popular</span>}
+              {p.featured && <span class="cpl-card__flag">Recommended</span>}
               <span class="cpl-card__name">{p.name}</span>
               <span class="cpl-card__audience">&ldquo;{p.audience}&rdquo;</span>
               <span class="cpl-card__price">
