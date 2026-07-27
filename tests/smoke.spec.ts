@@ -17,8 +17,7 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
   // The homepage hero leads with the trio money shot (results front,
-  // dashboard and lineage behind); the interactive map lives on /map
-  // (exercised by the tests below).
+  // dashboard and lineage behind).
   await expect(page.locator('#heroRotator img')).toBeVisible();
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
