@@ -44,7 +44,7 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
   // One platform, three plans — no platform picker, no gating.
   await expect(page.locator('.pr-plan')).toHaveCount(3);
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
-  await expect(page.locator('#plan-starter .pr-plan__amount')).toHaveText('$500');
+  await expect(page.locator('#plan-starter .pr-plan__amount')).toHaveText('$1,000');
   await expect(page.locator('#plan-standard .pr-plan__amount')).toHaveText('$2,500');
   await expect(page.locator('#plan-leader .pr-plan__amount')).toHaveText('$7,500');
   // Plan CTAs route into signup with the stable tier id.

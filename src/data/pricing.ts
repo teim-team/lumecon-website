@@ -31,7 +31,7 @@ export const PLANS: Plan[] = [
     id: 'starter',
     name: 'Sprout',
     priceAnnual: 500,
-    price: '$500',
+    price: '$1,000',
     period: '/ year',
     audience: 'I do economic analysis.',
     tagline: 'Full Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.',
@@ -75,7 +75,7 @@ export interface PlanRow {
 }
 
 export const PLAN_TABLE_ROWS: PlanRow[] = [
-  { label: 'Annual price', values: ['$500', '$2,500', '$7,500'] },
+  { label: 'Annual price', values: ['$1,000', '$2,500', '$7,500'] },
   { label: 'Users', values: ['1', 'Up to 10', 'Unlimited within one organization'] },
   {
     label: 'Economic modeling',
