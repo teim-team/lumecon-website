@@ -58,6 +58,16 @@ npm install
 npm run dev        # local dev server at http://localhost:4321
 ```
 
+**Lockfile gotcha:** some npm versions strip the `"libc"` field from the
+platform-specific optional packages (the Astro compiler and satteri gnu/musl
+Linux binaries) whenever they rewrite `package-lock.json`, including during
+`npm install` and `npm audit fix`. Without that field a Linux `npm ci`
+cannot tell the glibc and musl builds apart and extracts a binary for the
+wrong libc. If a lockfile diff shows removed `"libc"` lines you did not
+intend, restore them before committing (`git diff main -- package-lock.json`
+makes the drops easy to spot). `npm ci` itself never rewrites the lock, so
+CI is safe once the fields are in place.
+
 ## Scripts
 
 | Script | What it does |
