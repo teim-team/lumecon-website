@@ -118,7 +118,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     values: [
       'Not included',
       'Not included',
-      'Included. Organizational data library combining Lumecon&rsquo;s analysis-ready datasets with approved internal data and reusable organizational context.',
+      'Included. Organizational data library combining Lumecon’s analysis-ready datasets with approved internal data and reusable organizational context.',
     ],
   },
 ];
