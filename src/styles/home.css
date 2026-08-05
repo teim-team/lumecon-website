@@ -677,9 +677,23 @@
   height: 205px;
   margin-bottom: 0.8rem;
 }
-.whyw-card[data-art='cedar'] .whyw-art img,
 .whyw-card[data-art='orgs'] .whyw-art img {
   width: 100%;
+}
+/* The Cedar illustration is a wide, short strip (about 3.6:1, against ~1.4:1
+   for the other three), so at the card's own width it renders barely a third
+   as tall as its neighbours and reads as a smaller, lesser icon. It takes the
+   full card including the horizontal padding, and centres in the box rather
+   than sitting on its floor, so it holds its own in the row. It still cannot
+   match their height without being wider than the card; that is the drawing's
+   proportion, not the layout's. */
+.whyw-card[data-art='cedar'] .whyw-art {
+  align-items: center;
+}
+.whyw-card[data-art='cedar'] .whyw-art img {
+  width: calc(100% + 3.2rem);
+  max-width: calc(100% + 3.2rem);
+  margin-inline: -1.6rem;
 }
 .whyw-art img {
   max-height: 100%;
