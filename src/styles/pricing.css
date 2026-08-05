@@ -38,7 +38,7 @@
   letter-spacing: -0.025em;
   color: var(--ink);
   margin: 0;
-  max-width: 24ch;
+  max-width: 32ch;
 }
 .pr-hero__lede {
   font-size: clamp(1.02rem, 1.5vw, 1.2rem);
@@ -55,7 +55,7 @@
   line-height: 1.35;
   color: var(--navy);
   margin: 0;
-  max-width: 40ch;
+  max-width: 52ch;
 }
 .pr-hero__callout {
   font-family: var(--font-mono);
@@ -502,7 +502,7 @@
   line-height: 1.35;
   color: var(--ink);
   margin: 0;
-  max-width: 34ch;
+  max-width: 44ch;
 }
 .pr-faq__row dd {
   margin: 0;

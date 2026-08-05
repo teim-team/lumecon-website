@@ -87,7 +87,7 @@
   line-height: 1.62;
   color: var(--ink-2);
   margin: 0;
-  max-width: 46ch;
+  max-width: 56ch;
 }
 .tour-row__shot {
   margin: 0;
@@ -103,6 +103,32 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Hover on the three product rows. These are showcase blocks rather than
+   links, so the response is a lift on the screenshot itself, matching the
+   pricing cards' vocabulary (rise + teal border + teal-cast shadow) without
+   the pointer cue that would imply somewhere to click. */
+.tour-row__shot {
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.tour-row:hover .tour-row__shot {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow:
+    0 28px 60px -28px rgba(10, 127, 116, 0.4),
+    0 8px 20px -10px rgba(10, 15, 38, 0.18);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-row__shot {
+    transition: none;
+  }
+  .tour-row:hover .tour-row__shot {
+    transform: none;
+  }
 }
 @media (max-width: 880px) {
   .tour-row,

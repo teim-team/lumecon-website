@@ -108,7 +108,7 @@
   letter-spacing: -0.025em;
   color: var(--ink);
   margin: 0;
-  max-width: 22ch;
+  max-width: 30ch;
 }
 .hero2-em {
   color: var(--accent-text);
