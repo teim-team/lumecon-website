@@ -1,11 +1,15 @@
-/* Footer: light dominant surface so the page doesn't end on a slab
+/* Footer: deliberately short. It closes the page rather than adding another
+   section to it, so the type steps down, the rows tighten, and the navy bar
+   at the very bottom is what actually terminates the document.
+
+   Light dominant surface so the page doesn't end on a slab
    of navy. Only a thin navy bar at the very bottom carries the
    copyright + email. Cream background, teal accents on column heads
    and the Contact CTA tie the footer to the rest of the brand. */
 .footer {
   background: var(--cream);
   color: var(--ink);
-  padding: clamp(2rem, 4vw, 2.8rem) 0 0;
+  padding: clamp(1.3rem, 2.4vw, 1.8rem) 0 0;
   position: relative;
   border-top: 1px solid var(--rule);
 }
@@ -17,13 +21,13 @@
 .footer-top {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(1.5rem, 3.5vw, 2.8rem);
-  padding-bottom: clamp(1.4rem, 2.8vw, 2rem);
+  gap: clamp(1.2rem, 2.6vw, 2rem);
+  padding-bottom: clamp(0.9rem, 1.8vw, 1.3rem);
 }
 .footer-brand {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.3rem;
   align-items: flex-start;
 }
 .footer-brand__wordmark {
@@ -31,10 +35,10 @@
   align-items: center;
 }
 .footer-brand-pitch {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--ink-3);
-  max-width: 24rem;
-  line-height: 1.5;
+  max-width: 26rem;
+  line-height: 1.45;
 }
 .footer-cols {
   display: grid;
@@ -44,7 +48,7 @@
 .footer-col {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.22rem;
 }
 .footer-col__head {
   font-size: 0.72rem;

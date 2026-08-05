@@ -24,7 +24,10 @@
   display: flex;
   align-items: flex-start;
   padding: 1.05rem 1.15rem;
-  background: #0f9488;
+  /* Was a one-off #0f9488, a teal that exists nowhere else in the system and
+     did not match the app's Cedar header. --accent-deep is #0a8a7e, the same
+     value teim-app uses as --teal-dark, so the two panels now agree. */
+  background: var(--accent-deep);
 }
 .cedar-chat__heading {
   display: grid;
@@ -54,7 +57,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #52d9a4;
+  background: var(--accent-light);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
   flex: 0 0 auto;
 }
@@ -221,7 +224,7 @@
   width: 100%;
   padding: 0.55rem 0.9rem;
   background: var(--white);
-  border: 1px solid var(--dteal, #0a7f74);
+  border: 1px solid var(--dteal, var(--accent-text));
   border-radius: 6px;
   font-family: var(--font-sans);
   /* 16px floor on font-size prevents iOS Safari zoom on focus. */
@@ -248,7 +251,7 @@
   flex-shrink: 0;
   /* Matches the app's send control: quiet gray circle that turns teal
      on hover, instead of a solid teal button. */
-  background: #e9edf0;
+  background: var(--rule-strong);
   color: var(--ink-2);
   border: none;
   border-radius: 50%;
@@ -262,7 +265,7 @@
   touch-action: manipulation;
 }
 .cedar-chat__send:hover {
-  background: var(--dteal, #0a7f74);
+  background: var(--dteal, var(--accent-text));
   color: #fff;
   transform: translateY(-1px);
 }
