@@ -9,7 +9,7 @@
   padding: clamp(4rem, 9vh, 7.5rem) var(--container-pad);
 }
 .tour-inner {
-  max-width: 1200px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   gap: clamp(2.5rem, 6vh, 4.5rem);
@@ -19,7 +19,7 @@
 .tour-head {
   display: grid;
   gap: 0.9rem;
-  max-width: 900px;
+  max-width: var(--head-max);
 }
 .tour-kicker,
 .tour-row__kicker {
@@ -87,7 +87,7 @@
   line-height: 1.62;
   color: var(--ink-2);
   margin: 0;
-  max-width: 56ch;
+  max-width: 72ch;
 }
 .tour-row__shot {
   margin: 0;

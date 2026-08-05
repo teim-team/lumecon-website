@@ -9,7 +9,7 @@
 .footer {
   background: var(--cream);
   color: var(--ink);
-  padding: clamp(1.3rem, 2.4vw, 1.8rem) 0 0;
+  padding: clamp(0.9rem, 1.6vw, 1.2rem) 0 0;
   position: relative;
   border-top: 1px solid var(--rule);
 }
@@ -20,9 +20,10 @@
 }
 .footer-top {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(1.2rem, 2.6vw, 2rem);
-  padding-bottom: clamp(0.9rem, 1.8vw, 1.3rem);
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 2rem);
+  align-items: center;
+  padding-bottom: clamp(0.6rem, 1.2vw, 0.85rem);
 }
 .footer-brand {
   display: flex;
@@ -35,42 +36,37 @@
   align-items: center;
 }
 .footer-brand-pitch {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   color: var(--ink-3);
-  max-width: 26rem;
-  line-height: 1.45;
+  /* The pitch is the tallest thing in the band, so its measure sets the
+     footer's height. Wide enough for three lines rather than four. */
+  max-width: 42rem;
+  line-height: 1.4;
 }
-.footer-cols {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1rem, 2vw, 1.6rem);
-}
-.footer-col {
+/* One wrapping row rather than labelled columns. Right-aligned so the
+   links close against the page edge opposite the wordmark and the band
+   reads as a rule under the page, not a grid of lists. */
+.footer-links {
   display: flex;
-  flex-direction: column;
-  gap: 0.22rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.3rem 1.15rem;
 }
-.footer-col__head {
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-  margin-bottom: 0.25rem;
-  font-weight: 600;
-}
-.footer-col a {
-  font-size: 0.85rem;
+.footer-links a {
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--ink-2);
   transition: color 0.2s var(--ease);
   text-decoration: none;
+  white-space: nowrap;
 }
-.footer-col a:hover {
+.footer-links a:hover {
   color: var(--navy);
 }
 /* "Privacy choices" is a button (it clears the stored consent choice)
    but must read exactly like the sibling links. */
-.footer-col .footer-linkbtn {
+.footer-links .footer-linkbtn {
   appearance: none;
   background: none;
   border: 0;
@@ -78,28 +74,27 @@
   text-align: left;
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--ink-2);
   transition: color 0.2s var(--ease);
+  white-space: nowrap;
 }
-.footer-col .footer-linkbtn:hover {
+.footer-links .footer-linkbtn:hover {
   color: var(--navy);
 }
-/* Contact link picks up the teal accent so it reads as the most
-   actionable item in the column. (a.footer-col__contact so it
-   out-specifies the generic .footer-col a rules above.) */
-.footer-col a.footer-col__contact {
+/* Contact picks up the teal accent so it reads as the most actionable
+   item in the row. (a.footer-links__contact so it out-specifies the
+   generic .footer-links a rules above.) */
+.footer-links a.footer-links__contact {
   color: var(--accent-text);
   font-weight: 600;
 }
-.footer-col a.footer-col__contact:hover {
+.footer-links a.footer-links__contact:hover {
   color: var(--accent-btn-hover);
 }
 
-/* Thin navy strip at the very bottom: just the copyright row + email.
-   Replaces the massive navy slab that used to swallow the whole
-   footer. */
+/* Thin strip at the very bottom: just the copyright row + email. */
 .footer-bar {
   background: var(--cream);
   border-top: 1px solid var(--rule);
@@ -128,27 +123,21 @@
   color: var(--accent-text);
 }
 
-@media (max-width: 1100px) {
-  .footer-cols {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.2rem;
-  }
-}
+/* Below the two-up breakpoint the wordmark stacks over the links and the
+   row left-aligns under it, so it stays one band rather than becoming a
+   ragged right edge under a left-aligned brand. */
 @media (max-width: 900px) {
   .footer-top {
     grid-template-columns: 1fr;
+    align-items: start;
   }
-  .footer-cols {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+  .footer-links {
+    justify-content: flex-start;
   }
 }
 @media (max-width: 600px) {
   .footer-w {
     padding: 0 var(--mobile-pad);
-  }
-  .footer-cols {
-    grid-template-columns: 1fr 1fr;
   }
   .footer-bottom {
     flex-direction: column;

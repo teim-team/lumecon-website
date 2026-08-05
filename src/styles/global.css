@@ -61,7 +61,19 @@
   --rule: rgba(10, 15, 38, 0.12);
   --rule-strong: rgba(10, 15, 38, 0.24);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --container-max: 1240px;
+  /* One shell width for the whole site: nav, home bands, tour, pricing
+     and methodology all measure from this, so the wordmark, the section
+     headings and the card rows share a left edge. Raised from 1240px,
+     which was set for prose and left a wide empty gutter on the sections
+     that carry cards, tables and screenshots. Legal pages keep their own
+     narrower prose measure in legal.css. */
+  --container-max: 1360px;
+  /* Cap for a section header block (kicker + title + lede). Section heads
+     used to sit at a hard 900px, which stopped a heading well short of the
+     content it introduced even when the section itself ran to 1240px. The
+     per-element `ch` measures still govern the line length; this only stops
+     the block from being the binding constraint. */
+  --head-max: 1180px;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
   --error-color: #dc2626;
@@ -692,4 +704,3 @@ strong {
   pointer-events: none;
   transition: width 0.1s linear;
 }
-

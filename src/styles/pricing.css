@@ -1,9 +1,11 @@
 /* Page shell width. The pricing page carries a three-card row and a
-   four-column comparison, so it runs wider than the default site container
-   (1240px). One token, so the hero, cards, table and lower sections cannot
-   drift apart. */
+   four-column comparison, so it needs the full site shell. It kept its own
+   token while that shell was 1240px; now that --container-max is the one
+   width the whole site measures from, this aliases it so the hero, cards,
+   table and lower sections line up with the nav and footer rather than
+   drifting a few dozen pixels wider. */
 :root {
-  --pr-wide: 1400px;
+  --pr-wide: var(--container-max);
 }
 
 /* /pricing v2 — one platform, three plans. Shares primitives with
@@ -45,7 +47,7 @@
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  max-width: 62ch;
+  max-width: 82ch;
 }
 .pr-hero__sub {
   font-family: var(--font-display);
@@ -55,7 +57,7 @@
   line-height: 1.35;
   color: var(--navy);
   margin: 0;
-  max-width: 52ch;
+  max-width: 68ch;
 }
 .pr-hero__callout {
   font-family: var(--font-mono);
@@ -129,7 +131,7 @@
   line-height: 1.62;
   color: var(--ink-2);
   margin: 0;
-  max-width: 68ch;
+  max-width: 86ch;
 }
 .pr-free__side {
   display: grid;
@@ -360,7 +362,7 @@
   line-height: 1.62;
   color: var(--ink-2);
   margin: 0;
-  max-width: 72ch;
+  max-width: 90ch;
 }
 .pr-band__value {
   font-weight: 600;
@@ -396,7 +398,7 @@
   line-height: 1.7;
   color: var(--ink-2);
   margin: 0;
-  max-width: 62ch;
+  max-width: 82ch;
 }
 
 /* The three-item proof row under the complexity argument. */
@@ -502,7 +504,7 @@
   line-height: 1.35;
   color: var(--ink);
   margin: 0;
-  max-width: 44ch;
+  max-width: 60ch;
 }
 .pr-faq__row dd {
   margin: 0;
@@ -514,7 +516,7 @@
   line-height: 1.68;
   color: var(--ink-2);
   margin: 0;
-  max-width: 64ch;
+  max-width: 84ch;
 }
 @media (max-width: 760px) {
   .pr-faq__row {
@@ -546,7 +548,6 @@
   margin: 1.4rem 0 0;
   max-width: 62rem;
 }
-
 
 /* ---------- progressive disclosure ----------
    Native <details>: the plan cards answer the question for most readers, so

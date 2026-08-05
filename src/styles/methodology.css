@@ -80,7 +80,7 @@
   font-weight: 650;
   letter-spacing: -0.02em;
   margin: 0;
-  max-width: 40ch;
+  max-width: 54ch;
 }
 .meth-sec__lede {
   font-size: 1.05rem;
@@ -336,7 +336,7 @@
   font-weight: 700;
   letter-spacing: -0.022em;
   line-height: 1.12;
-  max-width: 32ch;
+  max-width: 44ch;
   margin: 0 0 1.1rem;
 }
 .meth-mission__lede {

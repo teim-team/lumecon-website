@@ -4,11 +4,15 @@
    On mobile this matches the theme-color teal iOS paints behind
    the URL bar so the address bar and the page top read as one
    continuous header. */
-nav {
+/* Scoped to #nav, the site header, rather than the bare `nav` element.
+   As a bare element selector this painted the teal rail and the header
+   padding onto every other <nav> on the page (the footer link row, for
+   one), which read as a stray teal border mid-page. */
+#nav {
   padding: 1.1rem 0;
   border-top: 4px solid var(--accent);
 }
-nav.nav--fixed {
+#nav.nav--fixed {
   position: fixed;
   top: 0;
   width: 100%;
@@ -21,14 +25,14 @@ nav.nav--fixed {
     border-bottom-color 0.25s var(--ease);
   border-bottom: 1px solid transparent;
 }
-nav.nav--fixed.scrolled {
+#nav.nav--fixed.scrolled {
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 0.75rem 0;
   border-bottom-color: var(--rule-strong);
 }
-nav.nav--static {
+#nav.nav--static {
   position: sticky;
   top: 0;
   z-index: 100;
@@ -88,11 +92,11 @@ nav.nav--static {
    in nav.css (not global.css) because nav.css loads later and an
    equal-specificity rule in global.css loses the cascade. */
 @media (prefers-color-scheme: dark) {
-  nav.nav--fixed {
+  #nav.nav--fixed {
     background: linear-gradient(180deg, rgba(10, 15, 38, 0.94), rgba(10, 15, 38, 0));
   }
-  nav.nav--fixed.scrolled,
-  nav.nav--static {
+  #nav.nav--fixed.scrolled,
+  #nav.nav--static {
     background: rgba(10, 15, 38, 0.94);
     border-bottom-color: var(--rule);
   }
