@@ -1,16 +1,14 @@
-// Convert raw capture PNGs (3840x2160, deviceScaleFactor 2) into the webp
-// assets the homepage serves, written straight into public/app/.
-//
-// 1920 wide is not arbitrary: it is what the <img width="1920" height="1080">
-// attributes on the site declare, so the browser reserves the right box before
-// the image lands. Changing it here means changing them there.
+// Convert the raw Cedar teaser capture (3840x2160, deviceScaleFactor 2) into
+// the webp the homepage and /cedar serve, straight into public/app/.
+// Same 1920 width as the rest of the /app series, which is what the
+// <img width="1920" height="1080"> attributes on the site declare.
 import sharp from 'sharp';
 import { readdirSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, basename } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const src = join(here, 'raw');
+const src = join(here, 'raw-cedar');
 const out = join(here, '..', '..', 'public', 'app');
 mkdirSync(out, { recursive: true });
 

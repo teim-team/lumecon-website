@@ -11,6 +11,10 @@
 // database is needed; the module refuses to load if the fictional numbers
 // stop cross-footing. Set PW_CHROMIUM to your Chromium binary if Playwright's
 // default download is unavailable.
+//
+// The frame is 1920x1080 at deviceScaleFactor 2 (3840x2160 raw), which is what
+// optimize-examples.mjs emits and what the <img width/height> attributes on the
+// site declare. It used to be 1600x1000, a 16:10 frame that matched neither.
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -28,6 +32,16 @@ const json = (body) => ({
 const browser = await chromium.launch(
   process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
 );
+
+// Inter and JetBrains Mono decide the width of a `ch`, and several layouts
+// size on `ch` (the results headline is capped at 44ch). Capturing before the
+// faces land measures those caps against the fallback metrics, which moves the
+// headline wrap and can push the export button onto its own row. Two captures
+// of the same page then differ for no reason visible in the diff.
+async function settleFonts(page) {
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(150);
+}
 
 async function stripChrome(page) {
   await page.evaluate(() => {
@@ -52,9 +66,17 @@ async function stripChrome(page) {
 for (const theme of ['light', 'dark']) {
   const suffix = theme === 'dark' ? '-dark' : '';
   const ctx = await browser.newContext({
-    viewport: { width: 1600, height: 1000 },
+    viewport: { width: 1920, height: 1080 },
     deviceScaleFactor: 2,
     colorScheme: theme,
+  });
+  // ResultDetail and Workspace are wrapped in ProtectedSurface, which stamps a
+  // tiled identity watermark and a "Watermarked, access is recorded" flag over
+  // the content. That is correct for a real session and must never reach public
+  // marketing imagery, so the capture harness declares itself. Without this the
+  // captures carry a fake user's address tiled across the screenshot.
+  await ctx.addInitScript(() => {
+    window.__LUMECON_CAPTURE__ = true;
   });
   await ctx.route('**/*', async (route) => {
     const url = new URL(route.request().url());
@@ -86,6 +108,7 @@ for (const theme of ['light', 'dark']) {
       waitUntil: 'networkidle',
     });
     await page.waitForTimeout(2600);
+    await settleFonts(page);
     await stripChrome(page);
     await page.screenshot({ path: `${OUT}/ex-${t.id}-results${suffix}.png` });
 
@@ -124,6 +147,7 @@ for (const theme of ['light', 'dark']) {
       { waitUntil: 'networkidle' },
     );
     await cmp.waitForTimeout(2600);
+    await settleFonts(cmp);
     await stripChrome(cmp);
     await cmp.evaluate(() => {
       document.querySelector('.compare__actions')?.remove();

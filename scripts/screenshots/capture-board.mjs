@@ -26,6 +26,13 @@ const browser = await chromium.launch(
   process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
 );
 
+// See capture-examples.mjs: layouts that size on `ch` measure against fallback
+// metrics until the real faces land, so two runs of the same page can differ.
+async function settleFonts(page) {
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(150);
+}
+
 async function stripChrome(page) {
   await page.evaluate(() => {
     for (const el of document.querySelectorAll('body *')) {
@@ -47,10 +54,11 @@ async function stripChrome(page) {
 
 for (const theme of ['light', 'dark']) {
   const suffix = theme === 'dark' ? '-dark' : '';
-  // 1600x900 at dsf 2 -> 3200x1800 raw; the optimizer emits 1920x1080,
-  // matching the rest of the /app screenshot series.
+  // 1920x1080 at dsf 2 -> 3840x2160 raw; the optimizer emits 1920x1080,
+  // matching the rest of the /app screenshot series. Capturing at 1600x900 and
+  // upscaling to 1920 was throwing away a fifth of the detail in UI text.
   const ctx = await browser.newContext({
-    viewport: { width: 1600, height: 900 },
+    viewport: { width: 1920, height: 1080 },
     deviceScaleFactor: 2,
     colorScheme: theme,
   });
@@ -84,6 +92,7 @@ for (const theme of ['light', 'dark']) {
   const page = await ctx.newPage();
   await page.goto(`${APP}/app`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(2600);
+  await settleFonts(page);
   await stripChrome(page);
   await page.screenshot({ path: `${OUT}/dashboard${suffix}.png` });
   await page.close();
