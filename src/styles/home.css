@@ -124,11 +124,6 @@
   color: var(--accent-text);
   font-weight: 600;
 }
-/* The traceability promise gets its own emphasized line. */
-.hero2-sub--em {
-  font-size: clamp(1rem, 1.35vw, 1.15rem);
-  margin-top: -0.4rem;
-}
 .hero2-cta {
   display: flex;
   gap: 0.8rem;
@@ -151,10 +146,6 @@
     font-size: 0.94rem;
     line-height: 1.5;
     max-width: 36ch;
-  }
-  .hero2-sub--em {
-    font-size: 0.94rem;
-    margin-top: -0.3rem;
   }
   .hero2-inner {
     gap: 0.85rem;

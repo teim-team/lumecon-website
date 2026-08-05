@@ -124,14 +124,24 @@ for (const theme of ['light', 'dark']) {
       await page.waitForTimeout(1800);
     }
     await page.evaluate(() => {
-      let best = null;
-      for (const svg of document.querySelectorAll('svg')) {
-        const n = svg.querySelectorAll('path').length;
-        if (!best || n > best.n) best = { n, svg };
-      }
-      if (best) {
-        const r = best.svg.getBoundingClientRect();
-        window.scrollTo({ top: r.top + window.scrollY - 40, behavior: 'instant' });
+      // Anchor on the .restop row (the geography card and the export panel),
+      // not on the map SVG with a 40px lead-in. That lead-in used to sit on
+      // empty page; now that the map card is compact it catches the bottom
+      // edge of the KPI cards, so the frame opens on a row of sliced cards.
+      // 18px is the row's own top margin: white above it, nothing cut.
+      const row = document.querySelector('.restop');
+      const anchor =
+        row ||
+        [...document.querySelectorAll('svg')].reduce(
+          (best, svg) =>
+            !best || svg.querySelectorAll('path').length > best.querySelectorAll('path').length
+              ? svg
+              : best,
+          null,
+        );
+      if (anchor) {
+        const r = anchor.getBoundingClientRect();
+        window.scrollTo({ top: r.top + window.scrollY - 18, behavior: 'instant' });
       }
     });
     await page.waitForTimeout(700);
