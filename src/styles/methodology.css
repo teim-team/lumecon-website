@@ -346,21 +346,25 @@
   border-top: 1px solid var(--rule);
   padding: clamp(3.2rem, 7vw, 5.5rem) 0;
 }
+/* Title and deck share one measure, in rem rather than ch. A `ch` measure
+   resolves against each element's own font size, so 44ch on a 2.6rem title
+   and 82ch on a 1.08rem deck came out 1230px against 931px and the deck
+   read as a narrower column under a wider heading. */
+.meth-mission__title,
+.meth-mission__lede {
+  max-width: 76rem;
+}
 .meth-mission__title {
   font-size: clamp(1.7rem, 3.4vw, 2.6rem);
   font-weight: 700;
   letter-spacing: -0.022em;
   line-height: 1.12;
-  max-width: 44ch;
   margin: 0 0 1.1rem;
 }
-/* Same deck measure as the hero lede. 44rem left this one visibly narrower
-   than the heading above it, which is the mismatch the hero had. */
 .meth-mission__lede {
   font-size: 1.08rem;
   line-height: 1.7;
   color: var(--ink-2);
-  max-width: 82ch;
   margin: 0 0 1.8rem;
 }
 .meth-mission__cta {
