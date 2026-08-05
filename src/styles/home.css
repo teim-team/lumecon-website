@@ -681,12 +681,16 @@
 .cedar-shot {
   transition:
     transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
     box-shadow 0.25s var(--ease);
 }
+/* Same hover as everything else that lifts, through the shared tokens
+   rather than its own hand-picked pair of numbers. */
 .tour-row__shot:hover,
 .cedar-shot:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 28px 60px -30px rgba(10, 15, 38, 0.45);
+  transform: translateY(var(--lift));
+  border-color: var(--accent);
+  box-shadow: var(--lift-shadow);
 }
 @media (prefers-reduced-motion: reduce) {
   .edge-card,

@@ -30,11 +30,14 @@
   text-wrap: balance;
   margin: 0 0 1.2rem;
 }
+/* The hero deck. 46rem stopped it barely past half the 1360px shell while
+   the title above it ran the full width, so the two read as different
+   columns. It takes the shared deck measure now. */
 .meth-hero__lede {
   font-size: clamp(1.02rem, 1.4vw, 1.18rem);
   line-height: 1.65;
   color: var(--ink-2);
-  max-width: 46rem;
+  max-width: 82ch;
   margin: 0 0 3rem;
 }
 /* Three principles: hairline-separated columns, no boxes. */
@@ -118,9 +121,21 @@
 .meth-prose h3:first-child {
   margin-top: 0;
 }
-.meth-prose--measure p {
-  max-width: 44rem;
+.meth-prose--measure p,
+.meth-onecol p {
+  max-width: 82ch;
 }
+/* One column for prose that is a single argument in two paragraphs. The
+   two-column pair only works when the two sides are genuinely parallel and
+   about the same length; on this page they ran 245 characters against 138,
+   which left the right column half the height of the left and a hole beside
+   it. Stacked, with the deck measure, they read as what they are. */
+.meth-onecol {
+  display: grid;
+  gap: 1rem;
+  max-width: 82ch;
+}
+
 /* Two parallel prose columns for paired topics. */
 .meth-twoprose {
   display: grid;

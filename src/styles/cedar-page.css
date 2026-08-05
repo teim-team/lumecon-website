@@ -30,3 +30,51 @@
     max-width: none;
   }
 }
+
+/* Hovering the teal emphasis phrases marks them out. They carry the page's
+   claims, so this is the one bit of text on a prose page worth pointing at;
+   the underline is offset far enough not to sit on the descenders. */
+.cedarpg .brand-em {
+  text-decoration: underline solid transparent;
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1.5px;
+  transition: text-decoration-color 0.25s var(--ease);
+}
+.cedarpg p:hover > .brand-em,
+.cedarpg h2:hover .brand-em,
+.cedarpg h1:hover .brand-em {
+  text-decoration-color: var(--accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cedarpg .brand-em {
+    transition: none;
+  }
+}
+
+/* ---------- the three acts ----------
+   Each act is a numbered step in one sequence, so the number is the loudest
+   thing before the heading and the rhythm between them is even. */
+.cedarpg-act .meth-sec__head .h-kicker {
+  margin-bottom: 0.35rem;
+}
+
+/* How it is built: three short answers side by side, hairline-free, sized to
+   read as a footnote to the three acts rather than a fourth act. */
+.cedarpg-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+  margin-top: 0.4rem;
+}
+.cedarpg-fact p:not(.h-kicker) {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0.5rem 0 0;
+}
+@media (max-width: 900px) {
+  .cedarpg-facts {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

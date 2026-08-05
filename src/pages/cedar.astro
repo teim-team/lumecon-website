@@ -60,18 +60,18 @@ const jsonLd = [
     <header class="meth-hero">
       <MarkArt class="markart markart--tr" size={620} />
       <div class="meth-w">
-        <p class="h-kicker">Cedar</p>
-        <h1 class="meth-hero__title">
+        <p class="h-kicker reveal-soft">Cedar</p>
+        <h1 class="meth-hero__title reveal-soft" data-stagger="1">
           AI built for economic analysis <span class="brand-em">from the beginning.</span>
         </h1>
-        <p class="meth-hero__lede">
+        <p class="meth-hero__lede reveal-soft" data-stagger="2">
           Cedar is Lumecon&rsquo;s AI economic analyst. It works across intake, analysis,
           interpretation and reporting, helping turn organizational knowledge and source documents
           into usable economic analysis. <span class="brand-em"
             >It is part of how Lumecon works, present from intake through reporting.</span
           >
         </p>
-        <div class="cedarpg-cta">
+        <div class="cedarpg-cta reveal-soft" data-stagger="3">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
             Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
@@ -79,55 +79,44 @@ const jsonLd = [
       </div>
     </header>
 
-    <!-- The page's three screenshots are one story, told in order below:
-         source documents uploading, the operations Cedar set up from them
-         with its ask on the open panel, and the board notes it drafts from
-         the finished results. No screenshot appears twice. -->
+    <!-- Three acts, one screenshot each, in the order the work happens:
+         Cedar reads what you already have, it does the analysis with you,
+         and it carries your organization's context between projects.
 
-    <!-- 01 · Not a chatbot -->
-    <section class="meth-sec" aria-labelledby="c-arch">
+         This replaced nine sections that argued the same three points from
+         different angles: "AI shouldn't sit on top of the model" and
+         "economics and engineering are developed together" were one claim
+         told twice, and "built to use the best tools available" was a
+         34-word section with its own heading. The how-it-is-built material
+         is a three-item band at the end rather than three more sections. -->
+
+    <!-- Act 1 · An economic analyst -->
+    <section class="meth-sec cedarpg-act" aria-labelledby="c-analyst">
       <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-arch">AI shouldn&rsquo;t sit on top of the model.</h2>
+        <div class="meth-sec__head reveal-soft">
+          <p class="h-kicker">One</p>
+          <h2 id="c-analyst">Cedar is an economic analyst.</h2>
         </div>
-        <div class="meth-prose meth-prose--measure">
+        <div class="meth-onecol reveal-soft" data-stagger="1">
           <div class="meth-prose">
             <p>
               The common pattern bolts an assistant onto finished software: the data goes in, the
               model runs, the results come out, and a chatbot answers questions about them
-              afterward. Cedar participates throughout the workflow instead: reading source
-              material, structuring inputs, surfacing gaps, supporting interpretation and helping
-              communicate findings.
+              afterward. Cedar participates throughout the workflow, reading source material,
+              structuring inputs, surfacing gaps, supporting interpretation and helping communicate
+              findings.
             </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 02 · Document ingestion -->
-    <section class="meth-sec" aria-labelledby="c-ingest">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-ingest">Bring the work you already have.</h2>
-        </div>
-        <div class="meth-twoprose">
-          <div class="meth-prose">
             <p>
-              <span class="brand-em">Your existing work becomes context for the analysis.</span> Upload supported
-              PDFs, spreadsheets, CSVs, prior analyses and recurring organizational materials. Cedar helps
-              identify the relevant information and map it into the analysis workflow, and it flags the
-              gaps it cannot resolve rather than papering over them.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p>
-              Moving from another platform? Prior analyses and reporting examples help Cedar
-              understand how your organization already works: the terminology you use, the
-              geographies you care about and the format your reporting takes.
+              It starts where your work already is. Upload supported PDFs, spreadsheets, CSVs, prior
+              analyses and recurring organizational materials, and Cedar helps identify the relevant
+              information and map it into the analysis.{' '}
+              <span class="brand-em"
+                >It flags the gaps it cannot resolve rather than papering over them.</span
+              >
             </p>
           </div>
         </div>
-        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
+        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full reveal-soft">
           <picture>
             <source
               srcset="/app/cedar-wind-upload-dark.webp"
@@ -143,11 +132,36 @@ const jsonLd = [
             />
           </picture>
           <figcaption>
-            Where every analysis starts: the wind project&rsquo;s source documents uploading to Cedar,
-            with a note about what to watch for. Shown with sample data.
+            Where every analysis starts: the wind project&rsquo;s source documents uploading to
+            Cedar, with a note about what to watch for. Shown with sample data.
           </figcaption>
         </figure>
-        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
+      </div>
+    </section>
+
+    <!-- Act 2 · It does the analysis with you -->
+    <section class="meth-sec cedarpg-act" aria-labelledby="c-work">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <p class="h-kicker">Two</p>
+          <h2 id="c-work">It does the analysis with you.</h2>
+        </div>
+        <div class="meth-onecol reveal-soft" data-stagger="1">
+          <div class="meth-prose">
+            <p>
+              Those documents become operations the model can run, each carded with its industry.
+              Cedar can suggest, question, organize, explain and draft, and it can help an analyst
+              explain the same finding differently for a board, a policymaker, a tribal council, a
+              grantmaker or an executive.
+            </p>
+            <p>
+              You stay in control of the work. Cedar surfaces the assumptions it makes, and the
+              person running the analysis confirms them before results are finalized.
+              <span class="brand-em">AI in the workflow. Economists in the loop.</span>
+            </p>
+          </div>
+        </div>
+        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full reveal-soft">
           <picture>
             <source
               srcset="/app/cedar-wind-entities-dark.webp"
@@ -163,27 +177,28 @@ const jsonLd = [
             />
           </picture>
           <figcaption>
-            The same documents turned into operations, each carded with its industry. Cedar reports
-            what is model ready and asks about the one figure still missing. Shown with sample data.
+            The same documents turned into operations. Cedar reports what is model ready and asks
+            about the one figure still missing. Shown with sample data.
           </figcaption>
         </figure>
       </div>
     </section>
 
-    <!-- 03 · Organizational context -->
-    <section class="meth-sec" aria-labelledby="c-org">
+    <!-- Act 3 · Your organization's context -->
+    <section class="meth-sec cedarpg-act" aria-labelledby="c-org">
       <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-org">One Cedar, shaped to your organization.</h2>
+        <div class="meth-sec__head reveal-soft">
+          <p class="h-kicker">Three</p>
+          <h2 id="c-org">It works from your organization&rsquo;s context.</h2>
         </div>
-        <div class="meth-prose meth-prose--measure">
+        <div class="meth-onecol reveal-soft" data-stagger="1">
           <div class="meth-prose">
             <p>
-              Cedar can carry approved organizational context across projects, helping teams build
-              on prior work rather than starting from zero each time. For larger organizations,
-              Cedar can be calibrated around terminology, recurring workflows, analytical
-              conventions and reporting preferences, and Cedar Grove on the Tree plan gives that
-              context a durable home.
+              Cedar can carry approved organizational context across projects, so teams build on
+              prior work rather than starting from zero each time. For larger organizations it can
+              be calibrated around terminology, recurring workflows, analytical conventions and
+              reporting preferences, and Cedar Grove on the Tree plan gives that context a durable
+              home.
             </p>
             <p>
               Cedar Commons is the shared layer where that work lives together: one board of
@@ -194,12 +209,9 @@ const jsonLd = [
             </p>
           </div>
         </div>
-        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full">
+        <figure class="cedar-shot cedarpg-shot cedarpg-shot--full reveal-soft">
           <picture>
-            <source
-              srcset="/app/cedar-context-dark.webp"
-              media="(prefers-color-scheme: dark)"
-            />
+            <source srcset="/app/cedar-context-dark.webp" media="(prefers-color-scheme: dark)" />
             <img
               src="/app/cedar-context.webp"
               alt="The Cedar Commons board with the Cedar panel open on a shared project, answering 'What changed since my last visit?' with who re-ran the analysis, how the jobs and output figures moved, and the note an external reviewer left, scoped to that project."
@@ -211,149 +223,55 @@ const jsonLd = [
           </picture>
           <figcaption>
             Cedar Commons is a shared board of projects, and Cedar answers from inside any one of
-            them: who re-ran what, how the figures moved, what a reviewer flagged, scoped to the
-            project it sits in. Shown with sample data.
+            them: who re-ran what, how the figures moved, what a reviewer flagged. Shown with sample
+            data.
           </figcaption>
         </figure>
       </div>
     </section>
 
-    <!-- 04 · Thought partner -->
-    <section class="meth-sec" aria-labelledby="c-partner">
+    <!-- How it is built. Three short answers to the questions the three acts
+         raise, as a band rather than three more sections with headings. -->
+    <section class="meth-sec cedarpg-band" aria-labelledby="c-built">
       <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-partner">A thought partner you stay in control of.</h2>
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="c-built">How it is built.</h2>
         </div>
-        <div class="meth-cols">
-          <div class="meth-prose">
+        <div class="cedarpg-facts reveal-soft" data-stagger="1">
+          <div class="cedarpg-fact">
+            <p class="h-kicker">Developed together</p>
             <p>
-              Cedar can suggest, question, organize, explain and draft. It can help an analyst
-              explain the same finding differently for a board, a policymaker, a tribal council, a
-              grantmaker or an executive. It does not remove the analyst from the work: Cedar
-              surfaces the assumptions it makes, and the person running the analysis confirms them
-              before results are finalized. <span class="brand-em"
-                >AI in the workflow. Economists in the loop.</span
-              >
+              Lumecon is developed across economics, social science, data science and software
+              engineering, where modeling decisions shape the software and new data changes what can
+              be estimated. The model, data pipeline, software and AI evolve together, which is why
+              Cedar behaves like part of the analysis.
             </p>
           </div>
-          <figure class="cedar-shot cedarpg-shot">
-            <picture>
-              <source
-                srcset="/app/cedar-wind-partner-dark.webp"
-                media="(prefers-color-scheme: dark)"
-              />
-              <img
-                src="/app/cedar-wind-partner.webp"
-                alt="The same wind energy analysis, with Cedar drafting a county-board summary that draws on the results and the three documents uploaded earlier: the capital plan, the turbine procurement workbook and the road-use agreements."
-                width="1920"
-                height="1080"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-            <figcaption>
-              The same analysis, later in the work: Cedar drafts the board notes from the results
-              and the documents it read at intake. Shown with sample data.
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- 05 · Built differently -->
-    <section class="meth-sec" aria-labelledby="c-built">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-built">Economics and engineering are developed together.</h2>
-        </div>
-        <div class="meth-twoprose">
-          <div class="meth-prose">
-            <p>
-              Lumecon is developed collaboratively across economics, social science, data science
-              and software engineering, where modeling decisions shape the software, new data
-              changes what can be estimated, and software and AI open new analytical workflows.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p>
-              That is why Cedar behaves like part of the analysis rather than a layer over it:
-              <span class="brand-em"
-                >the model, data pipeline, software and AI evolve together.</span
-              >
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 06 · Better models, not just easier software -->
-    <section class="meth-sec" aria-labelledby="c-better">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-better">
-            We use AI to build better models, and better software around them.
-          </h2>
-        </div>
-        <div class="meth-prose meth-prose--measure">
-          <div class="meth-prose">
-            <p>
-              Modern AI makes larger and more varied datasets practical to process, harmonize,
-              classify and validate. That helps Lumecon expand the evidence available to the model,
-              including alternative and higher-frequency sources where they improve the analysis.
-              The economics of the model stay grounded in the <a
-                class="gloss-link"
-                href="/methodology">documented methodology</a
-              >. What grows is the evidence behind it.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 07 · Privacy and learning -->
-    <section class="meth-sec" aria-labelledby="c-privacy">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-privacy">Your work stays yours. The system can still improve.</h2>
-        </div>
-        <div class="meth-twoprose">
-          <div class="meth-prose">
+          <div class="cedarpg-fact">
+            <p class="h-kicker">Your work stays yours</p>
             <p>
               Customer proprietary source material is not made available to other organizations.
               Improvements to Lumecon&rsquo;s processing and modeling can be informed by aggregated
               or appropriately processed information without exposing another customer&rsquo;s
-              underlying data.
+              underlying data. The <a class="inline-link" href="/privacy">privacy policy</a> governs the
+              details.
             </p>
           </div>
-          <div class="meth-prose">
+          <div class="cedarpg-fact">
+            <p class="h-kicker">Evidence, not just easier software</p>
             <p>
-              You benefit from a platform that keeps learning without sharing another
-              organization&rsquo;s proprietary work. The <a class="gloss-link" href="/privacy"
-                >privacy policy</a
-              > governs the details.
+              Modern AI makes larger and more varied datasets practical to process, harmonize,
+              classify and validate, which expands the evidence available to the model. The
+              economics stay grounded in the
+              <a class="inline-link" href="/methodology">documented methodology</a>, and
+              Cedar&rsquo;s architecture takes advantage of leading AI capabilities as the field
+              improves.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 08 · Model providers -->
-    <section class="meth-sec" aria-labelledby="c-providers">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="c-providers">Built to use the best tools available.</h2>
-        </div>
-        <div class="meth-prose meth-prose--measure">
-          <p>
-            Cedar&rsquo;s architecture is designed to take advantage of leading AI capabilities as
-            the field improves, rather than tying Lumecon&rsquo;s product to a single model
-            generation.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Close -->
     <section class="meth-mission" aria-labelledby="c-close">
       <div class="meth-w">
         <h2 class="meth-mission__title" id="c-close">
@@ -363,8 +281,7 @@ const jsonLd = [
         </h2>
         <p class="meth-mission__lede">
           We are continually expanding the formats Cedar can understand, the workflows it can
-          support, the context it can use and the ways modern data can strengthen economic
-          analysis.
+          support, the context it can use and the ways modern data can strengthen economic analysis.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
