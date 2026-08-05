@@ -1,6 +1,6 @@
 # Lumecon Inc.
 
-> Lumecon is economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible economic impact analyses in minutes, with every result traceable through the data, assumptions and model layers behind it. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Plans start at $500 a year, every plan runs the same model, and the app is free to try (results unlock on a paid plan).
+> Lumecon is economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible economic impact analyses in minutes, with every result traceable through the data, assumptions and model layers behind it. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Plans start at $1,000 a year, every plan runs the same model, and the app is free to try (results unlock on a paid plan).
 
 Lumecon replaces the pairing of expensive modeling software plus an expensive consulting engagement with one affordable annual subscription. Every analysis separates direct, indirect and induced effects, carries a full lineage ("Trace this number" on every figure), and exports with its assumptions so a council member, board or federal grant reviewer can verify the result.
 
@@ -16,11 +16,10 @@ There is one Lumecon application. It learns what kind of organization the custom
 
 Prices include taxes and fees. Multi-year agreements are eligible for preferred pricing, with additional savings for prepaid commitments. An organization that qualifies for more than one program or rate receives the lowest applicable price.
 
-- Sprout: $500/year. One user. Full model, Cedar, every supported U.S. geography, unlimited analysis.
+- Sprout: $1,000/year. One user. Full model, Cedar, every supported U.S. geography, unlimited analysis.
 - Sapling: $2,500/year. Up to 10 users. Everything in Sprout plus Cedar Commons, a collaborative environment for shared projects, project notes, data collection and external collaborators. Most popular.
 - Tree: $7,500/year. Unlimited users in one organization. Everything in Sapling plus Cedar Grove (a persistent organizational data library) and hands-on Cedar calibration.
 - Free trial: create an account, bring your documents and build an analysis end to end; full results unlock on any plan.
-- Competitive transition offer: organizations already paying for qualifying economic impact analysis or economic modeling software can move to Lumecon for their first year at 50% of their documented prior-12-month spend, up to the standard price of the applicable plan. Minimum plan pricing and other eligibility requirements may apply.
 - Consultants: custom commercial licensing for firms running analysis for outside clients, including Cedar calibrated to the firm's workflow. No public price.
 
 ## Cedar

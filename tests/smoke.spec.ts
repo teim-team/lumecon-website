@@ -88,7 +88,7 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
   // One platform, three plans — no platform picker, no gating.
   await expect(page.locator('.pr-plan')).toHaveCount(3);
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
-  await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$500');
+  await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$1,000');
   await expect(page.locator('#plan-sapling .pr-plan__amount')).toHaveText('$2,500');
   await expect(page.locator('#plan-tree .pr-plan__amount')).toHaveText('$7,500');
   // Plan CTAs route into signup with the stable tier id.
@@ -105,7 +105,7 @@ test('pricing carries the competitive transition offer and consultant band', asy
   await page.goto('/pricing', { waitUntil: 'networkidle' });
   // The free CTA leads, above the plans, with the no-card line beside it.
   const hero = page.locator('.pr-hero');
-  await expect(hero).toContainText('Plans start at $500 a year');
+  await expect(hero).toContainText('Plans start at $1,000 a year');
   await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
   const offer = page.locator('#switch');
   await expect(offer).toContainText('Already paying for economic impact software?');

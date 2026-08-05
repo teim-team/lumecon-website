@@ -31,8 +31,8 @@ export const PLANS: Plan[] = [
   {
     id: 'sprout',
     name: 'Sprout',
-    priceAnnual: 500,
-    price: '$500',
+    priceAnnual: 1000,
+    price: '$1,000',
     period: '/ year',
     audience: 'I do economic analysis.',
     tagline: 'Full Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.',
@@ -76,7 +76,7 @@ export interface PlanRow {
 }
 
 export const PLAN_TABLE_ROWS: PlanRow[] = [
-  { label: 'Annual price', values: ['$500', '$2,500', '$7,500'] },
+  { label: 'Annual price', values: ['$1,000', '$2,500', '$7,500'] },
   { label: 'Users', values: ['1', 'Up to 10', 'Unlimited users in one organization'] },
   {
     label: 'Economic modeling',
@@ -123,18 +123,6 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     ],
   },
 ];
-
-/** The 50% competitive transition offer. */
-export const COMPETITIVE_OFFER = {
-  headline: 'Already paying for economic impact software?',
-  subhead: 'We’ll cut that cost in half.',
-  body: 'Eligible organizations can receive their first year of Lumecon for 50% of documented qualifying economic modeling software spend, up to the standard price of the applicable Lumecon plan.',
-  guarantee: '50% off, or your existing preferred Lumecon rate, whichever is lower.',
-  ctaLabel: 'See if you qualify',
-  ctaSubject: 'Competitive transition offer: see if we qualify',
-  finePrint:
-    'Qualifying software may include IMPLAN, REMI and other professional economic modeling platforms. Documentation of the prior 12 months of spend is required. The offer applies to the first year; minimum plan pricing and other eligibility requirements may apply. If your organization already qualifies for a lower contracted, partner or program rate, you receive the lower price. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
-};
 
 /**
  * Consultants use the same public plans, no separate edition: a band

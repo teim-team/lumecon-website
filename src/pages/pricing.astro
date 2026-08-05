@@ -14,7 +14,7 @@
  *   3. Three understandable plans, consultant band, detail table.
  *   4. Complexity belongs in the model (product side, with the trio).
  *   5. Better economics made better pricing possible (the candid why).
- *   6. Competitive transition offer (secondary), commitment pricing.
+ *   6. Commitment pricing.
  *   7. Pricing FAQ carries the skepticism; the table carries features.
  *
  * The reader should leave knowing: the model is serious, the pricing is
@@ -30,7 +30,6 @@ import { site } from '../config';
 import {
   PLANS,
   PLAN_TABLE_ROWS,
-  COMPETITIVE_OFFER,
   CONSULTANT_BAND,
   PRICING_FAQ,
 } from '../data/pricing';
@@ -41,9 +40,8 @@ import '../styles/home.css';
 import '../styles/pricing.css';
 
 const description =
-  'Every paid Lumecon plan includes the full economic modeling foundation, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add collaboration, organizational data capabilities and scale. Plans start at $500 a year, prices are public and you can try Lumecon free without a credit card.';
+  'Every paid Lumecon plan includes the full economic modeling foundation, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add collaboration, organizational data capabilities and scale. Plans start at $1,000 a year, prices are public and you can try Lumecon free without a credit card.';
 
-const offerMailto = `mailto:${site.email}?subject=${encodeURIComponent(COMPETITIVE_OFFER.ctaSubject)}`;
 const bandMailto = `mailto:${site.email}?subject=${encodeURIComponent(CONSULTANT_BAND.ctaSubject)}`;
 
 const jsonLd = [
@@ -110,7 +108,7 @@ const jsonLd = [
           organizational data capabilities and scale, and every tier runs the same economics.
         </p>
         <p class="pr-hero__callout">
-          Plans start at $500 a year, and every price is on this page.
+          Plans start at $1,000 a year, and every price is on this page.
         </p>
         <div class="pr-hero__ctas">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
@@ -188,7 +186,17 @@ const jsonLd = [
         </a>
       </aside>
 
-      <!-- Detail table for people who want specifics. -->
+      <!-- Detail table, folded away by default. The cards answer the question
+           for most readers; the grid is for someone checking one capability.
+           <details> rather than scripted state: no JavaScript, and keyboard
+           operable for free. -->
+      <details class="pr-more">
+        <summary class="pr-more__summary">
+          <span class="pr-more__label">Compare all plans</span>
+          <span class="pr-more__hint">Every capability, side by side</span>
+          <span class="pr-more__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="pr-more__body">
       <div class="pr-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
         <table class="pr-table" data-plan-table>
           <thead>
@@ -213,6 +221,8 @@ const jsonLd = [
           </tbody>
         </table>
       </div>
+        </div>
+      </details>
       <p class="pr-plans__note">
         Every plan runs the same model on the same data foundation. Prices include taxes and
         fees.{' '}
@@ -296,31 +306,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 6. Competitive transition offer, secondary to public pricing. -->
-    <section class="pr-offer" id="switch" aria-labelledby="offer-title">
-      <div class="pr-offer__panel">
-        <MarkArt class="markart markart--offer" size={520} />
-        <header class="pr-offer__head">
-          <p class="h-kicker">Competitive transition offer</p>
-          <h2 class="pr-offer__title" id="offer-title">{COMPETITIVE_OFFER.headline}</h2>
-          <p class="pr-offer__big">{COMPETITIVE_OFFER.subhead}</p>
-          <p class="pr-offer__lede">{COMPETITIVE_OFFER.body}</p>
-          <p class="pr-offer__guarantee">
-            If you&rsquo;re already paying substantially more for professional economic modeling,
-            we&rsquo;re confident enough in Lumecon to make switching easy.
-            {' '}{COMPETITIVE_OFFER.guarantee}
-          </p>
-        </header>
-        <div class="pr-offer__cta">
-          <a class="btn2 btn2--primary" href={offerMailto}>
-            {COMPETITIVE_OFFER.ctaLabel}
-            <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
-          </a>
-        </div>
-        <p class="pr-offer__fine">{COMPETITIVE_OFFER.finePrint}</p>
-      </div>
-    </section>
-
+    
     <!-- 7. Commitment pricing, kept simple. -->
     <section class="pr-commit" aria-labelledby="commit-title">
       <div class="pr-commit__inner">
@@ -336,13 +322,23 @@ const jsonLd = [
             <span class="brand-em">lowest applicable price</span> according to the program rules.
           </p>
         </div>
-        <p class="pr-commit__notes">
-          Subscriptions renew automatically, and we email you 90 days and 30 days before the
-          renewal date. Auto-renew can be turned off any time from Settings inside Lumecon.
-          Customers can also earn subscription time by referral: when an organization you refer
-          becomes a Lumecon customer, we add a month to your subscription, up to a full year.
-          Referrals are managed inside Lumecon.
-        </p>
+        <details class="pr-more pr-more--inline">
+          <summary class="pr-more__summary">
+            <span class="pr-more__label">Renewal and referrals</span>
+            <span class="pr-more__chev" aria-hidden="true"></span>
+          </summary>
+          <div class="pr-more__body">
+            <p class="pr-commit__notes">
+              Subscriptions renew automatically. We email you 90 days and 30 days before the
+              renewal date, and auto-renew can be turned off any time from Settings inside
+              Lumecon.
+            </p>
+            <p class="pr-commit__notes">
+              Refer an organization and we add a month to your subscription when they become a
+              customer, up to a full year. Referrals are managed inside Lumecon.
+            </p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -352,20 +348,23 @@ const jsonLd = [
         <header class="flowsec-head">
           <h2 class="flowsec-title" id="faq-title">Pricing questions, answered plainly.</h2>
         </header>
-        <dl class="pr-faq__list">
+        <div class="pr-faq__list">
           {
             PRICING_FAQ.map((f) => (
-              <div class="pr-faq__row">
-                <dt>{f.q}</dt>
-                <dd>
+              <details class="pr-more pr-more--faq">
+                <summary class="pr-more__summary">
+                  <span class="pr-more__q">{f.q}</span>
+                  <span class="pr-more__chev" aria-hidden="true" />
+                </summary>
+                <div class="pr-more__body">
                   {f.a.map((para) => (
-                    <p>{para}</p>
+                    <p class="pr-faq__p">{para}</p>
                   ))}
-                </dd>
-              </div>
+                </div>
+              </details>
             ))
           }
-        </dl>
+        </div>
         <p class="pr-faq__foot">
           We are removing the old reasons rigorous economic analysis had to cost so much. What
           is left is the analysis, at a fair price.
