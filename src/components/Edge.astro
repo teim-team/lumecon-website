@@ -6,6 +6,17 @@
  * (thin strokes, sharp joins, teal chip). The header tells the
  * provenance story in evidence terms: who built it, on what
  * foundation, and what that makes possible.
+ *
+ * Six tiles that lead with the icon. At rest each shows its icon, label
+ * and headline; the sentence underneath appears on hover. That is what
+ * takes the density down: six paragraphs is most of the reading on this
+ * part of the page, and a visitor scanning for "do they do security" only
+ * needs the headline until they care.
+ *
+ * The sentence is always in the DOM (opacity, not display), so screen
+ * readers and search engines get the full text either way. The tiles take
+ * tabindex="0" so a keyboard can reach what a pointer can, and on touch,
+ * where there is no hover, the sentences simply always show.
  */
 import '../styles/home.css';
 
@@ -58,8 +69,8 @@ const CARDS = [
       </h2>
       <p class="flowsec-lede">
         Built by economists, engineers and researchers with experience at the Federal Reserve and
-        leading universities, Lumecon combines the established foundation of input-output analysis with
-        current public data, modern estimation methods and software built for recurring
+        leading universities, Lumecon combines the established foundation of input-output analysis
+        with current public data, modern estimation methods and software built for recurring
         analysis. <span class="brand-em"
           >We invest in the model itself, and in the software around it.</span
         >{' '}
@@ -70,7 +81,7 @@ const CARDS = [
     <div class="edge-grid">
       {
         CARDS.map((c) => (
-          <article class="edge-card">
+          <article class="edge-card" tabindex="0">
             <span class="edge-ic" aria-hidden="true">
               {c.icon === 'cloud' && (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -123,7 +134,7 @@ const CARDS = [
             </span>
             <p class="whyw-card__k">{c.k}</p>
             <h3 class="whyw-card__t">{c.t}</h3>
-            <p class="whyw-card__b">{c.b}</p>
+            <p class="whyw-card__b edge-card__reveal">{c.b}</p>
           </article>
         ))
       }
