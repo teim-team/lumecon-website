@@ -192,10 +192,15 @@
   background: var(--white);
   transform-origin: center top;
   will-change: transform;
+  /* transform / box-shadow / opacity carry the 6.5s rotation, so they stay
+     slow. `translate` is reserved for the hover lift below and is the only
+     thing here that moves at pointer speed. */
   transition:
     transform 0.9s var(--ease),
     box-shadow 0.9s var(--ease),
-    opacity 0.9s var(--ease);
+    opacity 0.9s var(--ease),
+    translate 0.25s var(--ease),
+    border-color 0.25s var(--ease);
 }
 .trio-frame img {
   display: block;
@@ -218,6 +223,41 @@
   transform: translateX(-2%) translateY(4%) scale(0.8);
   z-index: 1;
   box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+}
+
+/* Hover on the hero trio. Same vocabulary as the product tour rows
+   (rise + teal border + teal-cast shadow), and the rotation is already
+   paused while the pointer is over the trio, so the lift is not fighting
+   a position change.
+
+   The lift uses the individual `translate` property rather than adding to
+   `transform`. Each position class owns its own transform (the side frames
+   carry a translateX, a translateY and a scale(0.8)), so a shared hover
+   rule cannot append to it without rewriting all three. `translate` is
+   applied outside `transform`, which also means the lift is a true 10px in
+   page space instead of 8px on the scaled side frames.
+
+   z-index raises the hovered frame over its neighbours: the frames overlap,
+   and a side frame lifting *underneath* the center one reads as a glitch. */
+.trio-frame:hover {
+  translate: 0 -10px;
+  border-color: var(--accent);
+  z-index: 3;
+  box-shadow:
+    0 34px 74px -32px rgba(10, 127, 116, 0.42),
+    0 10px 24px -12px rgba(10, 15, 38, 0.2);
+  /* Only on the way in: hover-out falls back to the 0.9s rotation timing
+     above, so a frame that rotates away while the pointer leaves does not
+     snap its shadow. */
+  transition:
+    translate 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .trio-frame:hover {
+    translate: none;
+  }
 }
 .trio-caption {
   position: absolute;
