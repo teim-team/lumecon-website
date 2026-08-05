@@ -31,26 +31,6 @@
   }
 }
 
-/* Hovering the teal emphasis phrases marks them out. They carry the page's
-   claims, so this is the one bit of text on a prose page worth pointing at;
-   the underline is offset far enough not to sit on the descenders. */
-.cedarpg .brand-em {
-  text-decoration: underline solid transparent;
-  text-underline-offset: 0.22em;
-  text-decoration-thickness: 1.5px;
-  transition: text-decoration-color 0.25s var(--ease);
-}
-.cedarpg p:hover > .brand-em,
-.cedarpg h2:hover .brand-em,
-.cedarpg h1:hover .brand-em {
-  text-decoration-color: var(--accent);
-}
-@media (prefers-reduced-motion: reduce) {
-  .cedarpg .brand-em {
-    transition: none;
-  }
-}
-
 /* ---------- the three acts ----------
    Each act is a numbered step in one sequence, so the number is the loudest
    thing before the heading and the rhythm between them is even. */
@@ -71,6 +51,20 @@
   line-height: 1.7;
   color: var(--ink-2);
   margin: 0.5rem 0 0;
+}
+/* With no icon to lift the way the homepage edge tiles have, the label
+   carries the hover: it deepens as its sentence arrives. */
+.cedarpg-fact .h-kicker {
+  transition: color 0.25s var(--ease);
+}
+.cedarpg-fact:hover .h-kicker,
+.cedarpg-fact:focus-visible .h-kicker {
+  color: var(--accent-deep);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cedarpg-fact .h-kicker {
+    transition: none;
+  }
 }
 @media (max-width: 900px) {
   .cedarpg-facts {

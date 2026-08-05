@@ -13,10 +13,8 @@
  * part of the page, and a visitor scanning for "do they do security" only
  * needs the headline until they care.
  *
- * The sentence is always in the DOM (opacity, not display), so screen
- * readers and search engines get the full text either way. The tiles take
- * tabindex="0" so a keyboard can reach what a pointer can, and on touch,
- * where there is no hover, the sentences simply always show.
+ * The reveal is the shared .hover-veil pattern in global.css, which the
+ * Cedar page's "how it is built" facts use too.
  */
 import '../styles/home.css';
 
@@ -81,7 +79,7 @@ const CARDS = [
     <div class="edge-grid">
       {
         CARDS.map((c) => (
-          <article class="edge-card" tabindex="0">
+          <article class="edge-card" data-hover-reveal tabindex="0">
             <span class="edge-ic" aria-hidden="true">
               {c.icon === 'cloud' && (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -134,7 +132,7 @@ const CARDS = [
             </span>
             <p class="whyw-card__k">{c.k}</p>
             <h3 class="whyw-card__t">{c.t}</h3>
-            <p class="whyw-card__b edge-card__reveal">{c.b}</p>
+            <p class="whyw-card__b hover-veil">{c.b}</p>
           </article>
         ))
       }

@@ -354,11 +354,13 @@
   max-width: 44ch;
   margin: 0 0 1.1rem;
 }
+/* Same deck measure as the hero lede. 44rem left this one visibly narrower
+   than the heading above it, which is the mismatch the hero had. */
 .meth-mission__lede {
   font-size: 1.08rem;
   line-height: 1.7;
   color: var(--ink-2);
-  max-width: 44rem;
+  max-width: 82ch;
   margin: 0 0 1.8rem;
 }
 .meth-mission__cta {

@@ -542,6 +542,48 @@ strong {
   font-style: normal;
 }
 
+/* ---------- hover-reveal ----------
+   A block that shows its label at rest and its sentence when the pointer
+   arrives. Used by the homepage edge tiles and the Cedar page's "how it is
+   built" facts; one rule rather than a copy per component.
+
+   The sentence stays in normal flow and is hidden with `opacity`. That is
+   deliberate twice over: `opacity` does not affect layout, so a hidden
+   sentence still occupies its space and revealing one cannot reflow the row
+   or nudge its neighbours; and it is not `display: none` or
+   `visibility: hidden`, so the text stays in the accessibility tree and in
+   the page a crawler reads.
+
+   Give the container `data-hover-reveal` and `tabindex="0"` so a keyboard
+   can reach what a pointer can. */
+[data-hover-reveal] {
+  outline: none;
+}
+.hover-veil {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+[data-hover-reveal]:hover .hover-veil,
+[data-hover-reveal]:focus-visible .hover-veil {
+  opacity: 1;
+  transform: none;
+}
+/* No hover on touch, so there is nothing to reveal with: show the text. */
+@media (hover: none) {
+  .hover-veil {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hover-veil {
+    transition: none;
+  }
+}
+
 /* Container utility */
 .container {
   max-width: var(--container-max);

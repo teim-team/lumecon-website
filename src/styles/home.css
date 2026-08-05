@@ -599,9 +599,6 @@
   gap: 0.5rem;
   align-content: start;
 }
-.edge-card:focus-visible {
-  outline: none;
-}
 /* With no card to light up, the icon chip carries the hover: it takes the
    accent border and lifts, the way the tour screenshots and the hero frames
    do. */
@@ -611,31 +608,8 @@
   background: var(--accent-rgba-18);
   transform: translateY(var(--lift));
 }
-/* Hidden with opacity rather than display or visibility, which keeps the
-   sentence in the accessibility tree and in the page a crawler reads. */
-.edge-card__reveal {
-  opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 0.25s var(--ease),
-    transform 0.25s var(--ease);
-}
-.edge-card:hover .edge-card__reveal,
-.edge-card:focus-visible .edge-card__reveal {
-  opacity: 1;
-  transform: none;
-}
-/* No hover on touch, so there is nothing to reveal with: show the sentences. */
-@media (hover: none) {
-  .edge-card__reveal {
-    opacity: 1;
-    transform: none;
-  }
-}
+/* The sentence itself uses the shared .hover-veil in global.css. */
 @media (prefers-reduced-motion: reduce) {
-  .edge-card__reveal {
-    transition: none;
-  }
   .edge-card:hover .edge-ic {
     transform: none;
   }
