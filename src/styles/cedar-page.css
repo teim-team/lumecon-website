@@ -32,10 +32,20 @@
 }
 
 /* ---------- the three acts ----------
-   Each act is a numbered step in one sequence, so the number is the loudest
-   thing before the heading and the rhythm between them is even. */
-.cedarpg-act .meth-sec__head .h-kicker {
-  margin-bottom: 0.35rem;
+   They use the homepage tour's row wholesale (tour.css): text one side,
+   screenshot the other, alternating. Only two things differ here. The rows
+   are a section of their own rather than sitting under a tour header, and
+   each screenshot carries a caption, which the homepage rows do not. */
+.cedarpg-acts .tour-rows {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+.cedarpg-cap {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+  padding: 0.7rem 0.9rem 0.8rem;
+  border-top: 1px solid var(--rule);
 }
 
 /* How it is built: three short answers side by side, hairline-free, sized to
@@ -71,4 +81,17 @@
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+}
+
+/* Each fact keeps a headline visible at rest. Without one the band was three
+   mono labels over a lot of white, since the sentence below is held back
+   until hover; the homepage edge tiles get away with a bare label because a
+   76px icon is doing that job. */
+.cedarpg-fact__t {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0.3rem 0 0;
 }
