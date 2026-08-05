@@ -20,7 +20,6 @@ Prices include taxes and fees. Multi-year agreements are eligible for preferred 
 - Sapling: $2,500/year. Up to 10 users. Everything in Sprout plus Team Workspace (shared projects, collaborative analysis, review workflows). Most popular.
 - Tree: $7,500/year. Unlimited users in one organization. Everything in Sapling plus Cedar Grove (a persistent organizational data library) and hands-on Cedar calibration.
 - Free trial: create an account, bring your documents and build an analysis end to end; full results unlock on any plan.
-- Competitive transition offer: organizations already paying for qualifying economic impact analysis or economic modeling software can move to Lumecon for their first year at 50% of their documented prior-12-month spend, up to the standard price of the applicable plan. Minimum plan pricing and other eligibility requirements may apply.
 - Consultants: custom commercial licensing for firms running analysis for outside clients, including Cedar calibrated to the firm's workflow. No public price.
 
 ## Cedar

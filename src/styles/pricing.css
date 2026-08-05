@@ -1,3 +1,11 @@
+/* Page shell width. The pricing page carries a three-card row and a
+   four-column comparison, so it runs wider than the default site container
+   (1240px). Kept as one token so the hero, the cards, the table and the
+   sections below cannot drift apart. */
+:root {
+  --pr-wide: 1400px;
+}
+
 /* /pricing v2 — one platform, three plans. Shares primitives with
    home.css (.h-kicker, .btn2, .band, .flowsec, .rings); this file
    holds only the pricing-specific layout. */
@@ -15,7 +23,7 @@
 .pr-hero__inner {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: var(--pr-wide);
   margin: 0 auto;
   display: grid;
   justify-items: center;
@@ -50,7 +58,7 @@
 
 /* ---------- plan cards ---------- */
 .pr-plans {
-  max-width: 1200px;
+  max-width: var(--pr-wide);
   margin: 0 auto;
   padding: clamp(1.5rem, 4vh, 3rem) var(--container-pad) clamp(3rem, 7vh, 5rem);
   display: grid;
@@ -251,13 +259,6 @@
   line-height: 1.6;
   color: var(--ink-2);
 }
-.pr-offer__guarantee {
-  margin: 0.9rem 0 0;
-  font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: -0.01em;
-  color: var(--accent-text);
-}
 .pr-duo__creed {
   margin: 0.4rem 0 0;
   padding-top: 1.3rem;
@@ -275,7 +276,7 @@
   padding: clamp(2.4rem, 5vh, 3.6rem) var(--container-pad);
 }
 .pr-commit__inner {
-  max-width: 1200px;
+  max-width: var(--pr-wide);
   margin: 0 auto;
 }
 .pr-commit__title {
@@ -309,73 +310,6 @@
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
-}
-
-/* ---------- competitive offer (framed panel, no colored slab) ---------- */
-.pr-offer {
-  padding: clamp(1rem, 3vh, 2rem) var(--container-pad) clamp(3rem, 7vh, 5rem);
-}
-.pr-offer__panel {
-  position: relative;
-  overflow: hidden;
-  max-width: 1240px;
-  margin: 0 auto;
-  border: 1px solid var(--accent-bar);
-  background: var(--accent-rgba-08);
-  border-radius: 8px;
-  padding: clamp(1.8rem, 4vw, 3rem);
-  display: grid;
-  gap: 1.2rem;
-}
-.markart--offer {
-  top: -140px;
-  right: -140px;
-}
-.pr-offer__head {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 0.6rem;
-}
-.pr-offer__title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--ink);
-  margin: 0;
-  max-width: 26ch;
-}
-.pr-offer__big {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(1.9rem, 4.4vw, 3.2rem);
-  letter-spacing: -0.025em;
-  line-height: 1.05;
-  color: var(--accent-text);
-  margin: 0;
-}
-.pr-offer__lede {
-  font-size: clamp(0.98rem, 1.4vw, 1.12rem);
-  line-height: 1.6;
-  color: var(--ink-2);
-  margin: 0.3rem 0 0;
-  max-width: 68ch;
-}
-.pr-offer__cta {
-  display: flex;
-  position: relative;
-  z-index: 1;
-}
-.pr-offer__fine {
-  position: relative;
-  z-index: 1;
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--ink-3);
-  margin: 0;
-  max-width: 78ch;
 }
 
 /* ---------- Team Workspace / Cedar Grove duo ---------- */
@@ -517,4 +451,92 @@
   padding-top: 1.1rem;
   margin: 1.4rem 0 0;
   max-width: 62rem;
+}
+
+/* ---------- progressive disclosure ----------
+   Native <details>. The three plan cards answer the question for most
+   readers; the nine-row comparison and the billing fine print are folded
+   behind a summary so the page is scannable, and they cost no JavaScript
+   and stay keyboard operable. */
+.pr-more {
+  /* .pr-plans is a grid, so a <details> placed in it is a grid item and
+     shrink-wraps to its summary text unless it is told to stretch. Without
+     these two lines the bar renders about a third of the card row's width. */
+  justify-self: stretch;
+  width: 100%;
+  max-width: var(--pr-wide);
+  margin: 1.6rem auto 0;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: #fff;
+}
+.pr-more--inline {
+  margin-top: 1.2rem;
+  background: transparent;
+}
+.pr-more__summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.95rem 1.15rem;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 8px;
+}
+/* Safari and Chrome both need their own marker reset. */
+.pr-more__summary::-webkit-details-marker {
+  display: none;
+}
+.pr-more__summary::marker {
+  content: '';
+}
+.pr-more__summary:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+.pr-more__label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+.pr-more__hint {
+  font-size: 0.9rem;
+  color: var(--ink-3);
+}
+/* Chevron drawn in CSS so it needs no asset and inherits colour. */
+.pr-more__chev {
+  margin-left: auto;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--ink-3);
+  border-bottom: 2px solid var(--ink-3);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.18s ease;
+}
+.pr-more[open] .pr-more__chev {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+.pr-more__body {
+  padding: 0 1.15rem 1.15rem;
+}
+.pr-more--inline .pr-more__body {
+  padding-left: 0;
+  padding-right: 0;
+}
+.pr-more[open] .pr-more__summary {
+  border-bottom: 1px solid var(--rule);
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 1.15rem;
+}
+.pr-more--inline[open] .pr-more__summary {
+  border-bottom: 0;
+  margin-bottom: 0.3rem;
+}
+@media (max-width: 620px) {
+  .pr-more__hint {
+    display: none;
+  }
 }

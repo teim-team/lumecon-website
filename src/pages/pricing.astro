@@ -10,7 +10,6 @@
  *   1. Hero: we tailor the modeling, not the price.
  *   2. Plan cards + the detail table, then the pricing creed and the
  *      commitment policies (multi-year, lowest applicable price).
- *   3. The competitive transition offer.
  *   4. Whole Nation (differentiated capability), Workspace + Grove
  *      under one philosophy, consultant licensing.
  *
@@ -23,7 +22,7 @@ import Footer from '../components/Footer.astro';
 import MarkArt from '../components/MarkArt.astro';
 import WholeNation from '../components/WholeNation.astro';
 import { site } from '../config';
-import { PLANS, PLAN_TABLE_ROWS, COMPETITIVE_OFFER, CONSULTANT } from '../data/pricing';
+import { PLANS, PLAN_TABLE_ROWS, CONSULTANT } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -33,7 +32,6 @@ import '../styles/pricing.css';
 const description =
   'One platform for economic impact analysis, organizational data and reporting. Every plan includes the Lumecon model, Cedar, unlimited analysis and every supported U.S. geography. Plans from $1,000 a year.';
 
-const offerMailto = `mailto:${site.email}?subject=${encodeURIComponent(COMPETITIVE_OFFER.ctaSubject)}`;
 const consultantMailto = `mailto:${site.email}?subject=${encodeURIComponent(CONSULTANT.ctaSubject)}`;
 
 const jsonLd = [
@@ -129,36 +127,45 @@ const jsonLd = [
         }
       </div>
 
-      <!-- Detail table: nine rows, readable. -->
-      <div class="pr-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
-        <table class="pr-table" data-plan-table>
-          <thead>
-            <tr>
-              <th scope="col"><span class="visually-hidden">Capability</span></th>
-              {PLANS.map((p) => <th scope="col">{p.name}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              PLAN_TABLE_ROWS.map((row) => (
+      <!-- Detail table, folded away by default. Most readers decide from the
+           three cards; the nine-row grid is for the one who wants to check a
+           specific capability. <details> rather than scripted state, so it
+           works with no JavaScript and is keyboard operable for free. -->
+      <details class="pr-more">
+        <summary class="pr-more__summary">
+          <span class="pr-more__label">Compare all plans</span>
+          <span class="pr-more__hint">Nine capabilities, side by side</span>
+          <span class="pr-more__chev" aria-hidden="true"></span>
+        </summary>
+        <div class="pr-more__body">
+          <div class="pr-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
+            <table class="pr-table" data-plan-table>
+              <thead>
                 <tr>
-                  <th scope="row">{row.label}</th>
-                  {row.values.map((v) => (
-                    <td class={v === 'Same' || v === 'Not included' ? 'pr-table__quiet' : ''}>
-                      {v}
-                    </td>
-                  ))}
+                  <th scope="col"><span class="visually-hidden">Capability</span></th>
+                  {PLANS.map((p) => <th scope="col">{p.name}</th>)}
                 </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {
+                  PLAN_TABLE_ROWS.map((row) => (
+                    <tr>
+                      <th scope="row">{row.label}</th>
+                      {row.values.map((v) => (
+                        <td class={v === 'Same' || v === 'Not included' ? 'pr-table__quiet' : ''}>
+                          {v}
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
       <p class="pr-plans__note">
-        Every plan runs the same model on the same data foundation. Prices include taxes and fees.{
-          ' '
-        }
-        <a class="inline-link" href="/cedar">Learn what Cedar does</a>.
+        Every plan runs the same model. <a class="inline-link" href="/cedar">What Cedar does</a>.
       </p>
       <div class="pr-creed">
         <p class="pr-plans__creed">
@@ -213,35 +220,22 @@ const jsonLd = [
             <span class="brand-em">lowest applicable price</span>.
           </p>
         </div>
-        <p class="pr-commit__notes">
-          Subscriptions renew automatically, and we email you 90 days and 30 days before the renewal
-          date; auto-renew can be turned off any time from Settings inside Lumecon, and renewing for
-          more than one year earns preferred pricing. Customers can also earn subscription time by
-          referral: when an organization you refer becomes a Lumecon customer, we add a month to
-          your subscription, up to a full year. Referrals are managed inside Lumecon.
-        </p>
-      </div>
-    </section>
-
-    <!-- 3. Competitive transition offer: a major program, framed as a
-         large bordered panel on the white surface (no colored slab). -->
-    <section class="pr-offer" id="switch" aria-labelledby="offer-title">
-      <div class="pr-offer__panel">
-        <MarkArt class="markart markart--offer" size={520} />
-        <header class="pr-offer__head">
-          <p class="h-kicker">Competitive transition offer</p>
-          <h2 class="pr-offer__title" id="offer-title">{COMPETITIVE_OFFER.headline}</h2>
-          <p class="pr-offer__big">{COMPETITIVE_OFFER.subhead}</p>
-          <p class="pr-offer__lede">{COMPETITIVE_OFFER.body}</p>
-          <p class="pr-offer__guarantee">{COMPETITIVE_OFFER.guarantee}</p>
-        </header>
-        <div class="pr-offer__cta">
-          <a class="btn2 btn2--primary" href={offerMailto}>
-            {COMPETITIVE_OFFER.ctaLabel}
-            <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
-          </a>
-        </div>
-        <p class="pr-offer__fine">{COMPETITIVE_OFFER.finePrint}</p>
+        <details class="pr-more pr-more--inline">
+          <summary class="pr-more__summary">
+            <span class="pr-more__label">Renewal and referrals</span>
+            <span class="pr-more__chev" aria-hidden="true"></span>
+          </summary>
+          <div class="pr-more__body">
+            <p class="pr-commit__notes">
+              Subscriptions renew automatically. We email you 90 days and 30 days before the renewal
+              date, and auto-renew can be turned off any time from Settings inside Lumecon.
+            </p>
+            <p class="pr-commit__notes">
+              Refer an organization and we add a month to your subscription when they become a
+              customer, up to a full year. Referrals are managed inside Lumecon.
+            </p>
+          </div>
+        </details>
       </div>
     </section>
 
