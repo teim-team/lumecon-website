@@ -116,11 +116,9 @@
     box-shadow 0.25s var(--ease);
 }
 .tour-row:hover .tour-row__shot {
-  transform: translateY(-4px);
+  transform: translateY(var(--lift));
   border-color: var(--accent);
-  box-shadow:
-    0 28px 60px -28px rgba(10, 127, 116, 0.4),
-    0 8px 20px -10px rgba(10, 15, 38, 0.18);
+  box-shadow: var(--lift-shadow);
 }
 @media (prefers-reduced-motion: reduce) {
   .tour-row__shot {

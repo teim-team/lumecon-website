@@ -231,12 +231,12 @@
    z-index raises the hovered frame over its neighbours: the frames overlap,
    and a side frame lifting *underneath* the center one reads as a glitch. */
 .trio-frame:hover {
-  translate: 0 -10px;
+  /* Three times the shared lift: these frames are far larger than a card,
+     so the same 3px would not read at all. */
+  translate: 0 calc(var(--lift) * 3);
   border-color: var(--accent);
   z-index: 3;
-  box-shadow:
-    0 34px 74px -32px rgba(10, 127, 116, 0.42),
-    0 10px 24px -12px rgba(10, 15, 38, 0.2);
+  box-shadow: var(--lift-shadow);
   /* Only on the way in: hover-out falls back to the 0.9s rotation timing
      above, so a frame that rotates away while the pointer leaves does not
      snap its shadow. */
@@ -304,19 +304,17 @@
 .whyw-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
+  /* Column gap does the separating now that the vertical rules are gone. */
+  gap: var(--gutter);
 }
+/* No vertical rules between the cards. The illustrations already read as four
+   distinct things, and a rule beside each one boxed them in. Column gap does
+   the separating instead, which is why the grid below carries one. */
 .whyw-card {
-  padding: 0.4rem 1.6rem;
+  padding: 0.4rem 0;
   display: grid;
   gap: 0.5rem;
   align-content: start;
-}
-.whyw-card:first-child {
-  padding-left: 0;
-}
-.whyw-card + .whyw-card {
-  border-left: 1px solid var(--rule);
 }
 .whyw-card__k {
   font-family: var(--font-mono);
@@ -345,24 +343,13 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 2.6rem;
   }
-  .whyw-card + .whyw-card {
-    border-left: none;
-  }
-  .whyw-card:nth-child(even) {
-    border-left: 1px solid var(--rule);
-  }
-  .whyw-card:nth-child(odd) {
-    padding-left: 0;
-  }
 }
 @media (max-width: 759px) {
   .whyw-grid {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 0;
   }
-  .whyw-card,
-  .whyw-card:nth-child(even) {
-    border-left: none;
+  .whyw-card {
     padding: 0;
   }
   /* Editorial sequence: eyebrow first, then the illustration large
@@ -589,9 +576,9 @@
 .edge-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* Generous gutters, since the tiles have no box of their own to separate
-     them and the hairline below is the only edge between columns. */
-  gap: clamp(2.4rem, 5vh, 3.6rem) 0;
+  /* Gutters do all the separating: no box around a tile, no rule between
+     columns. */
+  gap: clamp(2.4rem, 5vh, 3.6rem) var(--gutter);
 }
 /* Six tiles that lead with the icon, with the sentence held back until the
    pointer arrives.
@@ -607,16 +594,10 @@
    row height, grid stretch equalizes the rest, and nothing needs a magic
    offset that a copy edit would silently break. */
 .edge-card {
-  padding: 0.2rem 2.2rem;
+  padding: 0.2rem 0;
   display: grid;
   gap: 0.5rem;
   align-content: start;
-}
-.edge-card:nth-child(3n + 1) {
-  padding-left: 0;
-}
-.edge-card:not(:nth-child(3n + 1)) {
-  border-left: 1px solid var(--rule);
 }
 .edge-card:focus-visible {
   outline: none;
@@ -628,7 +609,7 @@
 .edge-card:focus-visible .edge-ic {
   border-color: var(--accent);
   background: var(--accent-rgba-18);
-  transform: translateY(-3px);
+  transform: translateY(var(--lift));
 }
 /* Hidden with opacity rather than display or visibility, which keeps the
    sentence in the accessibility tree and in the page a crawler reads. */
@@ -684,24 +665,10 @@
   .edge-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .edge-card,
-  .edge-card:not(:nth-child(3n + 1)) {
-    border-left: none;
-    padding-left: 0;
-  }
-  .edge-card:nth-child(even) {
-    border-left: 1px solid var(--rule);
-    padding-left: 1.6rem;
-  }
 }
 @media (max-width: 560px) {
   .edge-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-  .edge-card,
-  .edge-card:nth-child(even) {
-    border-left: none;
-    padding-left: 0;
   }
 }
 

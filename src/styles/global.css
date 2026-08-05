@@ -74,6 +74,10 @@
      per-element `ch` measures still govern the line length; this only stops
      the block from being the binding constraint. */
   --head-max: 1180px;
+  /* Gutter between columns in a card row (the why cards, the edge tiles).
+     One value so the two rows on the homepage line up with each other
+     rather than each carrying its own clamp. */
+  --gutter: clamp(2rem, 3.4vw, 3.2rem);
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
   --error-color: #dc2626;
@@ -81,6 +85,13 @@
   --gold-btn-hover: #c98906;
   --accent-rgba-08: rgba(15, 181, 165, 0.08);
   --accent-rgba-18: rgba(15, 181, 165, 0.18);
+  /* The hover vocabulary, shared by everything that lifts on hover: the tour
+     screenshots, the hero trio frames, the pricing cards and the edge icons.
+     One rise distance and one teal-cast shadow, so a new hover state is a
+     token reference rather than another hand-picked pair of numbers. */
+  --lift: -3px;
+  --lift-shadow:
+    0 22px 48px -26px rgba(10, 127, 116, 0.36), 0 6px 16px -10px rgba(10, 15, 38, 0.14);
 
   /* Map palette. Source = gold (focal point), tribal = amber-gold
      (warm sibling, deeper than gold so reservations read as a

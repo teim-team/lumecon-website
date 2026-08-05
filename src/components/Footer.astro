@@ -25,11 +25,9 @@ const { isHome = false } = Astro.props;
   <div class="footer-w">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="footer-brand__wordmark">
-          <BrandWordmark size="sm" teal ariaLabel={`${site.legalName} home`} />
-        </div>
-        <div class="footer-brand-pitch">{site.pitch}</div>
+        <BrandWordmark size="sm" teal ariaLabel={`${site.legalName} home`} />
       </div>
+      <div class="footer-brand-pitch">{site.pitch}</div>
 
       <nav class="footer-links" aria-label="Footer">
         <a href="/#product">How it works</a>

@@ -18,18 +18,23 @@
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
+/* Three columns on one line: wordmark, pitch, links. The brand used to
+   stack the wordmark over the pitch and sit beside the links, which made
+   the band as tall as wordmark + pitch (89px) while thirteen links were
+   squeezed into 563px and three rows. Side by side the wordmark costs no
+   height of its own and the two long items split the rest evenly, which
+   measured shorter than any other split: giving either one more width
+   only pushes the other into an extra line. 144px to 120px. */
 .footer-top {
   display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
-  gap: clamp(1rem, 2vw, 2rem);
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 2.4vw, 2.4rem);
   align-items: center;
   padding-bottom: clamp(0.6rem, 1.2vw, 0.85rem);
 }
 .footer-brand {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  align-items: flex-start;
+  align-items: center;
 }
 .footer-brand__wordmark {
   display: inline-flex;
@@ -39,8 +44,9 @@
   font-size: 0.76rem;
   color: var(--ink-3);
   /* The pitch is the tallest thing in the band, so its measure sets the
-     footer's height. Wide enough for three lines rather than four. */
-  max-width: 42rem;
+     footer's height. It gets its own column now rather than sitting under
+     the wordmark, so the cap comes off and the column width governs. */
+  max-width: none;
   line-height: 1.4;
 }
 /* One wrapping row rather than labelled columns. Right-aligned so the
