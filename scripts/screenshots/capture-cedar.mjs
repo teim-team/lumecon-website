@@ -1,14 +1,16 @@
-// Capture the Cedar frames: a results page with the Cedar panel open on a
-// board-ready summary. Two of them:
-//   cedar.webp              the homepage CedarTeaser and the /cedar hero
-//   cedar-wind-partner.webp the /cedar page's "drafting from the results" shot
+// Capture cedar-wind-partner.webp: a results page with the Cedar panel open,
+// drafting a summary from the results. Served by the /cedar page.
 //
-// This script exists because both shipped images had no reproducible source and
+// This script exists because the shipped image had no reproducible source and
 // carried the ProtectedSurface watermark: the tiled stamp of a fake account's
 // address and a "Watermarked, access is recorded" flag, both of which belong in
 // a real session and never in marketing imagery. Setting
 // window.__LUMECON_CAPTURE__ before the app boots turns that overlay off, which
 // is the whole reason the flag exists.
+//
+// It used to build cedar.webp too, for the homepage Cedar teaser. That section
+// is gone: /cedar owns the Cedar story and the why-card links to it from higher
+// up the page, so the teaser was a third telling of it.
 //
 // Usage:
 //   1. Run the app dev server (teim-app): npm run dev  (port 5173)
@@ -41,19 +43,6 @@ const usd = (n) => `$${(n / 1_000_000).toFixed(1)} million`;
 // panel shows. Every figure in the exchange is read off the same RESULTS the
 // page renders beside it, so the summary cannot drift from the numbers.
 const FRAMES = [
-  {
-    name: 'cedar',
-    exampleId: 'college',
-    ask: 'Explain these results in plain language for our board.',
-    reply: (head, direct, place) => [
-      'Here is a board-ready summary.',
-      '',
-      `The expansion supports an estimated **${head.jobs_supported.toLocaleString('en-US')} jobs** across ${place} and **${usd(head.output)}** in economic output. About **${usd(direct.amount)}** comes directly from ${direct.name.toLowerCase()}; the rest ripples outward as suppliers and employees spend locally.`,
-      '',
-      `- **${usd(head.gdp_contribution)}** added to state GDP`,
-      `- **${usd(head.labor_income)}** in labor income`,
-    ],
-  },
   {
     name: 'cedar-wind-partner',
     exampleId: 'wind',
