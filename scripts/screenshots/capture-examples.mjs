@@ -12,9 +12,14 @@
 // stop cross-footing. Set PW_CHROMIUM to your Chromium binary if Playwright's
 // default download is unavailable.
 //
-// The frame is 1920x1080 at deviceScaleFactor 2 (3840x2160 raw), which is what
-// optimize-examples.mjs emits and what the <img width/height> attributes on the
-// site declare. It used to be 1600x1000, a 16:10 frame that matched neither.
+// Every frame lands as 3840x2160 raw, which optimize-examples.mjs emits at
+// 1920x1080 and the <img width/height> attributes on the site declare. It used
+// to be 1600x1000, a 16:10 frame that matched neither.
+//
+// The comparison page uses a smaller viewport at a higher device scale factor
+// to get there. It is a short page: at 1920x1080 its content ends at 847px and
+// the bottom fifth of the frame is blank. 1600x900 puts the same content at 93%
+// of the frame height for the same output pixels.
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -65,20 +70,7 @@ async function stripChrome(page) {
 
 for (const theme of ['light', 'dark']) {
   const suffix = theme === 'dark' ? '-dark' : '';
-  const ctx = await browser.newContext({
-    viewport: { width: 1920, height: 1080 },
-    deviceScaleFactor: 2,
-    colorScheme: theme,
-  });
-  // ResultDetail and Workspace are wrapped in ProtectedSurface, which stamps a
-  // tiled identity watermark and a "Watermarked, access is recorded" flag over
-  // the content. That is correct for a real session and must never reach public
-  // marketing imagery, so the capture harness declares itself. Without this the
-  // captures carry a fake user's address tiled across the screenshot.
-  await ctx.addInitScript(() => {
-    window.__LUMECON_CAPTURE__ = true;
-  });
-  await ctx.route('**/*', async (route) => {
+  const mockApi = async (route) => {
     const url = new URL(route.request().url());
     const p = url.pathname;
     if (p === '/me') return route.fulfill(json(USER));
@@ -99,7 +91,29 @@ for (const theme of ['light', 'dark']) {
       );
     }
     return route.continue();
-  });
+  };
+
+  // Both contexts render the same mocked app; they differ only in how much page
+  // fits the frame. See the header comment.
+  const makeContext = async (width, height, scale) => {
+    const c = await browser.newContext({
+      viewport: { width, height },
+      deviceScaleFactor: scale,
+      colorScheme: theme,
+    });
+    // ResultDetail and Workspace are wrapped in ProtectedSurface, which stamps a
+    // tiled identity watermark and a "Watermarked, access is recorded" flag over
+    // the content. That is correct for a real session and must never reach public
+    // marketing imagery, so the capture harness declares itself. Without this the
+    // captures carry a fake user's address tiled across the screenshot.
+    await c.addInitScript(() => {
+      window.__LUMECON_CAPTURE__ = true;
+    });
+    await c.route('**/*', mockApi);
+    return c;
+  };
+  const ctx = await makeContext(1920, 1080, 2);
+  const cmpCtx = await makeContext(1600, 900, 2.4);
 
   for (const t of CAPTURE_TARGETS) {
     // Results and map share one visit to the current analysis (run B).
@@ -149,9 +163,11 @@ for (const theme of ['light', 'dark']) {
     await page.close();
 
     // Comparison: the earlier analysis against the current one. The
-    // pick-different-studies row is navigation chrome; without it the
-    // bottom edge falls on whitespace instead of sliced buttons.
-    const cmp = await ctx.newPage();
+    // pick-different-studies row stays in frame. It used to be stripped as
+    // navigation chrome, but the comparison table is short and stripping it
+    // left the bottom fifth of the frame blank; with the row, and at the
+    // smaller viewport this context uses, the content reaches the edge.
+    const cmp = await cmpCtx.newPage();
     await cmp.goto(
       `${APP}/app/analyses/compare?a=${t.a.projectId}:${t.a.runId}&b=${t.b.projectId}:${t.b.runId}`,
       { waitUntil: 'networkidle' },
@@ -159,15 +175,13 @@ for (const theme of ['light', 'dark']) {
     await cmp.waitForTimeout(2600);
     await settleFonts(cmp);
     await stripChrome(cmp);
-    await cmp.evaluate(() => {
-      document.querySelector('.compare__actions')?.remove();
-    });
     await cmp.waitForTimeout(250);
     await cmp.screenshot({ path: `${OUT}/ex-${t.id}-compare${suffix}.png` });
     await cmp.close();
     console.log(`ex-${t.id}${suffix}: results, map, compare`);
   }
   await ctx.close();
+  await cmpCtx.close();
 }
 await browser.close();
 console.log('example captures done');
