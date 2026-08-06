@@ -18,85 +18,92 @@
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
-/* Three columns on one line: wordmark, pitch, links. The brand used to
-   stack the wordmark over the pitch and sit beside the links, which made
-   the band as tall as wordmark + pitch (89px) while thirteen links were
-   squeezed into 563px and three rows. Side by side the wordmark costs no
-   height of its own and the two long items split the rest evenly, which
-   measured shorter than any other split: giving either one more width
-   only pushes the other into an extra line. 144px to 120px. */
-.footer-top {
+/* Five link groups across one line. auto-fit rather than a fixed count so
+   the groups reflow themselves as the viewport narrows and no breakpoint
+   has to name how many fit; each track is wide enough for the longest
+   label in it ("Industry sectors"). The height is set by the deepest
+   group, which is four, not by the fourteen-item list one column would
+   make. */
+.footer-groups {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(1rem, 2.4vw, 2.4rem);
-  align-items: center;
-  padding-bottom: clamp(0.6rem, 1.2vw, 0.85rem);
+  /* 8rem, not the 9.5rem the longest label needs, because the track is a
+     minimum and 1fr grows it back. At 9.5rem five tracks plus their gaps
+     came to 832px against 836px of content box at the 900px viewport, so
+     the grid dropped to four and the band gained a whole second row for
+     four pixels. 8rem clears it with room. */
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: clamp(0.9rem, 2vw, 2rem);
+  align-items: start;
+  padding-bottom: clamp(0.9rem, 1.6vw, 1.2rem);
 }
-.footer-brand {
-  display: flex;
-  align-items: center;
+.footer-group__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin: 0 0 0.5rem;
 }
-.footer-brand__wordmark {
-  display: inline-flex;
-  align-items: center;
+.footer-group__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.34rem;
 }
-.footer-brand-pitch {
-  font-size: 0.76rem;
-  color: var(--ink-3);
-  /* The pitch is the tallest thing in the band, so its measure sets the
-     footer's height. It gets its own column now rather than sitting under
-     the wordmark, so the cap comes off and the column width governs. */
-  max-width: none;
-  line-height: 1.4;
+/* The item needs the link's own font-size, not just a tighter ratio. The
+   li inherited the body's 18px and 1.8 line-height, so its strut was
+   27px around a 19px link and every row cost 8px the text did not use.
+   Sizing the li itself makes 1.5 resolve against 12.8px. */
+.footer-group__list li {
+  font-size: 0.8rem;
+  line-height: 1.5;
 }
-/* One wrapping row rather than labelled columns. Right-aligned so the
-   links close against the page edge opposite the wordmark and the band
-   reads as a rule under the page, not a grid of lists. */
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.3rem 1.15rem;
-}
-.footer-links a {
+.footer-group__list a {
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--ink-2);
   transition: color 0.2s var(--ease);
   text-decoration: none;
-  white-space: nowrap;
 }
-.footer-links a:hover {
+.footer-group__list a:hover {
   color: var(--navy);
 }
-/* "Privacy choices" is a button (it clears the stored consent choice)
-   but must read exactly like the sibling links. */
-.footer-links .footer-linkbtn {
+/* "Privacy choices" is a button (it clears the stored consent choice).
+   It sits in the bottom bar beside the email rather than in the Legal
+   group: a preference control is not a page, and moving it took the
+   deepest group from four items to three, which is what sets the
+   height of the whole band. It reads like the email beside it. */
+.footer-linkbtn {
   appearance: none;
   background: none;
   border: 0;
   padding: 0;
-  text-align: left;
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  color: var(--ink-2);
+  color: var(--ink-3);
   transition: color 0.2s var(--ease);
   white-space: nowrap;
 }
-.footer-links .footer-linkbtn:hover {
-  color: var(--navy);
+.footer-linkbtn:hover {
+  color: var(--accent-text);
+}
+.footer-bottom__right {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.6rem);
 }
 /* Contact picks up the teal accent so it reads as the most actionable
-   item in the row. (a.footer-links__contact so it out-specifies the
-   generic .footer-links a rules above.) */
-.footer-links a.footer-links__contact {
+   item in the footer. (a.footer-links__contact so it out-specifies the
+   generic .footer-group__list a rules above.) */
+.footer-group__list a.footer-links__contact {
   color: var(--accent-text);
   font-weight: 600;
 }
-.footer-links a.footer-links__contact:hover {
+.footer-group__list a.footer-links__contact:hover {
   color: var(--accent-btn-hover);
 }
 
@@ -129,16 +136,31 @@
   color: var(--accent-text);
 }
 
-/* Below the two-up breakpoint the wordmark stacks over the links and the
-   row left-aligns under it, so it stays one band rather than becoming a
-   ragged right edge under a left-aligned brand. */
-@media (max-width: 900px) {
-  .footer-top {
-    grid-template-columns: 1fr;
-    align-items: start;
+/* auto-fit reflows the groups down to 900px, where five still fit on one
+   line. Below that they cannot, and grouping stops paying: four tracks
+   over two rows measured 262px and two tracks over three rows measured
+   367px, against 136px for the single line. On a narrow screen the
+   footer is something you scroll past, not scan, so the labels go and
+   the links become one wrapping row, which is what they were before the
+   groups existed. `display: contents` on the group lets each list
+   become a direct child of the flex row, so the groups flow into one
+   another instead of forming five separate rows. */
+@media (max-width: 780px) {
+  .footer-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
   }
-  .footer-links {
-    justify-content: flex-start;
+  .footer-group {
+    display: contents;
+  }
+  .footer-group__label {
+    display: none;
+  }
+  .footer-group__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
   }
 }
 @media (max-width: 600px) {
