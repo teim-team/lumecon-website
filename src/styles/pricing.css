@@ -374,25 +374,6 @@
 .pr-band__cta {
   flex-shrink: 0;
 }
-/* ---------- philosophy columns (why / economics / selling) ---------- */
-.pr-why__cols {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.6rem, 4vw, 4rem);
-}
-.pr-why__cols p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--ink-2);
-  margin: 0;
-  max-width: 38rem;
-}
-@media (max-width: 760px) {
-  .pr-why__cols {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}
 .pr-why__single {
   font-size: 1.05rem;
   line-height: 1.7;
@@ -452,24 +433,6 @@
   font-weight: 650;
   letter-spacing: -0.02em;
   margin: 0 0 1.4rem;
-}
-.pr-commit__cols {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.6rem, 4vw, 4rem);
-}
-.pr-commit__cols p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--ink-2);
-  margin: 0;
-  max-width: 34rem;
-}
-@media (max-width: 760px) {
-  .pr-commit__cols {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
 }
 .visually-hidden {
   position: absolute;

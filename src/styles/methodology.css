@@ -116,11 +116,16 @@
   margin: 0;
   max-width: 54ch;
 }
+/* The deck under each section heading. It was capped at a literal 44rem,
+   which is 704px inside a 1360px wrapper: the heading above it ran nearly
+   the full width and the sentence explaining it stopped just past half,
+   which is the "subheader only takes up half the page" complaint. On the
+   shared deck token it measures ~905px and tracks the heading. */
 .meth-sec__lede {
   font-size: 1.05rem;
   line-height: 1.65;
   color: var(--ink-2);
-  max-width: 44rem;
+  max-width: var(--measure-deck);
   margin: -0.6rem 0 2rem;
 }
 
@@ -157,16 +162,9 @@
 .meth-threeup p {
   max-width: var(--measure-deck);
 }
-/* One column for prose that is a single argument in two paragraphs. Splitting
-   it left the shorter half a hole beside the longer one: on this page the
-   pairs ran 321 characters against 568, and 355 against 181. Stacked at the
-   deck measure they read as what they are. .meth-cols stays for prose beside
-   an equation, which is a genuine pair. */
-.meth-onecol {
-  display: grid;
-  gap: 1rem;
-  max-width: var(--measure-deck);
-}
+/* .meth-onecol is declared in global.css beside .prose-stack: it is the
+   same rule, kept under this name because the methodology markup already
+   uses it. .meth-cols stays for prose beside an equation, a genuine pair. */
 
 /* Three short items side by side: the data sources, which are a list rather
    than an argument, so they stay in columns. */

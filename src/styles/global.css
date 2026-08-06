@@ -592,6 +592,34 @@ strong {
   }
 }
 
+/* Prose that is one argument in consecutive paragraphs.
+   --------------------------------------------------------------------
+   Two prose columns only work when both sides are genuinely parallel and
+   run about the same length. Every text-only pair on this site failed
+   that: 321 characters against 568 and 355 against 181 on methodology,
+   248 against 129 and 65 against 127 on pricing. The short side left a
+   hole beside the long one and the eye had to travel back up the page to
+   start the second half.
+
+   Stacked at the deck measure they read as what they are. This lives in
+   global.css so a page adds `prose-stack` rather than inventing its own
+   `*__cols` grid; .meth-onecol is the same rule under the name the
+   methodology markup already uses. Genuine pairs, prose beside an
+   equation or a question beside its answer, keep their own two-column
+   rules. */
+.prose-stack,
+.meth-onecol {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--measure-deck);
+}
+.prose-stack > p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0;
+}
+
 /* Container utility */
 .container {
   max-width: var(--container-max);

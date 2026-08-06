@@ -27,12 +27,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MarkArt from '../components/MarkArt.astro';
 import { site } from '../config';
-import {
-  PLANS,
-  PLAN_TABLE_ROWS,
-  CONSULTANT_BAND,
-  PRICING_FAQ,
-} from '../data/pricing';
+import { PLANS, PLAN_TABLE_ROWS, CONSULTANT_BAND, PRICING_FAQ } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -126,18 +121,16 @@ const jsonLd = [
           <p class="h-kicker">The free account is the real product</p>
           <h2 class="pr-free__title" id="free-title">Don&rsquo;t take our word for it.</h2>
           <p class="pr-free__body">
-            Create a free account and use the actual Lumecon platform. Bring your documents,
-            work with Cedar and build an analysis end to end. There is no credit card, countdown
-            or sales call. Full results unlock when you choose a paid plan.
+            Create a free account and use the actual Lumecon platform. Bring your documents, work
+            with Cedar and build an analysis end to end. There is no credit card, countdown or sales
+            call. Full results unlock when you choose a paid plan.
           </p>
         </div>
         <div class="pr-free__side">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
             Try Lumecon free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
-          <p class="pr-free__terms">
-            No credit card &middot; No expiration &middot; No obligation
-          </p>
+          <p class="pr-free__terms">No credit card &middot; No expiration &middot; No obligation</p>
         </div>
       </aside>
 
@@ -182,7 +175,8 @@ const jsonLd = [
           <p class="pr-band__value">{CONSULTANT_BAND.value}</p>
         </div>
         <a class="btn2 btn2--card pr-band__cta" href={bandMailto}>
-          {CONSULTANT_BAND.ctaLabel} <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          {CONSULTANT_BAND.ctaLabel}
+          <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
         </a>
       </aside>
 
@@ -197,35 +191,36 @@ const jsonLd = [
           <span class="pr-more__chev" aria-hidden="true"></span>
         </summary>
         <div class="pr-more__body">
-      <div class="pr-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
-        <table class="pr-table" data-plan-table>
-          <thead>
-            <tr>
-              <th scope="col"><span class="visually-hidden">Capability</span></th>
-              {PLANS.map((p) => <th scope="col">{p.name}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              PLAN_TABLE_ROWS.map((row) => (
+          <div class="pr-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
+            <table class="pr-table" data-plan-table>
+              <thead>
                 <tr>
-                  <th scope="row">{row.label}</th>
-                  {row.values.map((v) => (
-                    <td class={v === 'Same' || v === 'Not included' ? 'pr-table__quiet' : ''}>
-                      {v}
-                    </td>
-                  ))}
+                  <th scope="col"><span class="visually-hidden">Capability</span></th>
+                  {PLANS.map((p) => <th scope="col">{p.name}</th>)}
                 </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {
+                  PLAN_TABLE_ROWS.map((row) => (
+                    <tr>
+                      <th scope="row">{row.label}</th>
+                      {row.values.map((v) => (
+                        <td class={v === 'Same' || v === 'Not included' ? 'pr-table__quiet' : ''}>
+                          {v}
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </details>
       <p class="pr-plans__note">
-        Every plan runs the same model on the same data foundation. Prices include taxes and
-        fees.{' '}
+        Every plan runs the same model on the same data foundation. Prices include taxes and fees.{
+          ' '
+        }
         <a class="inline-link" href="/cedar">Learn what Cedar does</a>.
       </p>
     </section>
@@ -247,7 +242,9 @@ const jsonLd = [
       <div class="flowsec-inner">
         <header class="flowsec-head">
           <h2 class="flowsec-title" id="why-title">
-            Complexity belongs in the model, <span class="brand-em">and the pricing stays simple.</span>
+            Complexity belongs in the model, <span class="brand-em"
+              >and the pricing stays simple.</span
+            >
           </h2>
           <p class="flowsec-lede">
             Complex organizations can involve multiple years, multiple geographies, multiple
@@ -256,9 +253,9 @@ const jsonLd = [
           </p>
         </header>
         <p class="pr-why__single">
-          Every paid plan uses the same economic modeling foundation. Higher plans reflect
-          things that actually increase with organizational use: more people, collaboration,
-          storage, data capabilities and support.
+          Every paid plan uses the same economic modeling foundation. Higher plans reflect things
+          that actually increase with organizational use: more people, collaboration, storage, data
+          capabilities and support.
         </p>
         <ul class="pr-trio" role="list">
           <li class="pr-trio__item">
@@ -285,38 +282,35 @@ const jsonLd = [
             Better economics made <span class="brand-em">better pricing</span> possible.
           </h2>
           <p class="flowsec-lede">
-            Economic impact analysis is established economic science. The expensive part is
-            building and maintaining a reliable system around it: integrating changing datasets,
-            cleaning and harmonizing them, regionalizing the model correctly, protecting
-            organizational data and continuously validating the results.
+            Economic impact analysis is established economic science. The expensive part is building
+            and maintaining a reliable system around it: integrating changing datasets, cleaning and
+            harmonizing them, regionalizing the model correctly, protecting organizational data and
+            continuously validating the results.
           </p>
         </header>
-        <div class="pr-why__cols">
+        <div class="prose-stack">
           <p>
-            Modern cloud computing makes that system dramatically less
-            expensive to operate than it once was. We built Lumecon around that reality from the
-            beginning, and lower cost never means lower standards: the methods are public at{' '}
+            Modern cloud computing makes that system dramatically less expensive to operate than it
+            once was. We built Lumecon around that reality from the beginning, and lower cost never
+            means lower standards: the methods are public at{' '}
             <a class="inline-link" href="/methodology">lumecon.ai/methodology</a>.
           </p>
           <p>
-            We also spend less selling the platform and more improving it, which is why the
-            price sits on this page instead of behind a call.
+            We also spend less selling the platform and more improving it, which is why the price
+            sits on this page instead of behind a call.
           </p>
         </div>
       </div>
     </section>
 
-    
     <!-- 7. Commitment pricing, kept simple. -->
     <section class="pr-commit" aria-labelledby="commit-title">
       <div class="pr-commit__inner">
         <h2 class="pr-commit__title" id="commit-title">
           Straightforward pricing gets better with commitment.
         </h2>
-        <div class="pr-commit__cols">
-          <p>
-            Multi-year and prepaid commitments can receive preferred pricing.
-          </p>
+        <div class="prose-stack">
+          <p>Multi-year and prepaid commitments can receive preferred pricing.</p>
           <p>
             If you qualify for multiple discounts or program rates, you receive the{' '}
             <span class="brand-em">lowest applicable price</span> according to the program rules.
@@ -329,9 +323,8 @@ const jsonLd = [
           </summary>
           <div class="pr-more__body">
             <p class="pr-commit__notes">
-              Subscriptions renew automatically. We email you 90 days and 30 days before the
-              renewal date, and auto-renew can be turned off any time from Settings inside
-              Lumecon.
+              Subscriptions renew automatically. We email you 90 days and 30 days before the renewal
+              date, and auto-renew can be turned off any time from Settings inside Lumecon.
             </p>
             <p class="pr-commit__notes">
               Refer an organization and we add a month to your subscription when they become a
@@ -366,8 +359,8 @@ const jsonLd = [
           }
         </div>
         <p class="pr-faq__foot">
-          We are removing the old reasons rigorous economic analysis had to cost so much. What
-          is left is the analysis, at a fair price.
+          We are removing the old reasons rigorous economic analysis had to cost so much. What is
+          left is the analysis, at a fair price.
         </p>
       </div>
     </section>
