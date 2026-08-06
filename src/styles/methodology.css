@@ -157,17 +157,6 @@
 .meth-threeup p {
   max-width: var(--measure-deck);
 }
-/* One column for prose that is a single argument in two paragraphs. The
-   two-column pair only works when the two sides are genuinely parallel and
-   about the same length; on this page they ran 245 characters against 138,
-   which left the right column half the height of the left and a hole beside
-   it. Stacked, with the deck measure, they read as what they are. */
-.meth-onecol {
-  display: grid;
-  gap: 1rem;
-  max-width: 82ch;
-}
-
 /* One column for prose that is a single argument in two paragraphs. Splitting
    it left the shorter half a hole beside the longer one: on this page the
    pairs ran 321 characters against 568, and 355 against 181. Stacked at the
@@ -187,19 +176,8 @@
   gap: var(--gutter);
   align-items: start;
 }
-
-/* Two parallel prose columns for paired topics. */
-.meth-twoprose {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 4.5vw, 4.5rem);
-  align-items: start;
-}
-.meth-twoprose--tight {
+.meth-threeup--tight {
   margin-top: 2.2rem;
-}
-.meth-twoprose--three {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 /* ---------- equations as designed objects ---------- */
@@ -500,7 +478,10 @@
     border-top: 1px solid var(--rule);
     padding-top: 1.8rem;
   }
-  .meth-twoprose {
+  /* The data sources stop being three readable columns well before the
+     phone breakpoint: at 900px each is under 260px, which puts a
+     three-word heading on three lines. Stack them. */
+  .meth-threeup {
     grid-template-columns: 1fr;
     gap: 1.4rem;
   }
