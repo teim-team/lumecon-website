@@ -1,15 +1,29 @@
 /**
  * Pricing data — single source of truth for the /pricing page.
  *
- * One Lumecon platform, three public plans. Tier ids
- * ('sprout' | 'sapling' | 'tree') match the product's tier
- * vocabulary (server/lib/tierCapabilities.js in the Team App), so
- * the signup handoff (/signup?tier=sprout) and the product agree on
- * plan identity end to end. Consultant licensing is custom-priced and
- * has no public tier. The old per-platform price matrix, the
- * Arborist consultant tier and the Toolbox add-on are gone: the
- * platform no longer sells geography, and Lumecon does not sell
- * finished analyses against its own consultant customers.
+ * One Lumecon platform, three public plans plus Cedar Grove, which is
+ * sold on its own. Tier ids ('sprout' | 'sapling' | 'tree') match the
+ * product's tier vocabulary (server/lib/tierCapabilities.js in the Team
+ * App), so the signup handoff (/signup?tier=sprout) and the product
+ * agree on plan identity end to end.
+ *
+ * What each thing is, because the three Cedar names are easy to blur:
+ *
+ *   Cedar          the AI economic analyst. In every plan, including the
+ *                  free account. It reads what you already have, tells
+ *                  you what the data will support and where the gaps
+ *                  are, learns how you work and offers interpretation,
+ *                  so the analysis is not done alone.
+ *   Cedar Commons  the collaborative environment. Sapling and up.
+ *   Cedar Grove    the curated data library: harmonized public data and
+ *                  Lumecon's proprietary datasets. Sold on its own for
+ *                  $2,500 with unlimited users, and included in Tree.
+ *
+ * The page is deliberately pricing and an FAQ. Everything the page used
+ * to argue in prose sections (why it costs less, why complexity is
+ * free, why the prices are public, how consultants license it) is an
+ * FAQ answer now: one sentence to click, the reasoning behind it. The
+ * rest of the site is where the product gets explained.
  */
 
 export interface Plan {
@@ -23,6 +37,14 @@ export interface Plan {
   tagline: string;
   users: string;
   featured?: boolean;
+  /**
+   * Licensed for work delivered to someone else's organization. The
+   * plan cards carry this as a small marker rather than the page
+   * carrying a consultant band: a consultancy or a partner org reading
+   * the cards can see which plans cover client work without reading a
+   * paragraph about it.
+   */
+  clientWork?: boolean;
   ctaLabel: string;
   ctaHref: string;
 }
@@ -35,7 +57,8 @@ export const PLANS: Plan[] = [
     price: '$1,000',
     period: '/ year',
     audience: 'I do economic analysis.',
-    tagline: 'Full Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.',
+    tagline:
+      'The full Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.',
     users: '1 user',
     ctaLabel: 'Start with Sprout',
     ctaHref: '/signup?tier=sprout',
@@ -48,9 +71,10 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'We do economic analysis.',
     tagline:
-      'Everything in Sprout, plus Cedar Commons, a collaborative environment for shared projects, project notes, data collection and external collaborators.',
+      'Everything in Sprout, plus Cedar Commons for shared projects, project notes, data collection and outside collaborators.',
     users: 'Up to 10 users',
     featured: true,
+    clientWork: true,
     ctaLabel: 'Start with Sapling',
     ctaHref: '/signup?tier=sapling',
   },
@@ -62,14 +86,53 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'Our organization runs economic analysis through Lumecon.',
     tagline:
-      'Everything in Sapling, plus Cedar Grove, organizational context and calibration, and capabilities designed for analysis at organizational scale.',
+      'Everything in Sapling, plus Cedar Grove, organizational context and Cedar calibration across the organization.',
     users: 'Unlimited users in one organization',
+    clientWork: true,
     ctaLabel: 'Start with Tree',
     ctaHref: '/signup?tier=tree',
   },
 ];
 
-/** The readable 9-row detail table. `values` align with PLANS order. */
+/** The marker the cards show, and the one line that explains it. */
+export const CLIENT_WORK = {
+  chip: 'Client work',
+  note: 'Consultancies and partner organizations delivering analysis to someone else start at Sapling.',
+};
+
+/**
+ * Cedar Grove, sold on its own. It is the data, not the model: no
+ * economic engine, no Cedar Commons, unlimited people inside your
+ * organization. Included at no extra cost in Tree.
+ */
+export const CEDAR_GROVE = {
+  name: 'Cedar Grove',
+  kicker: 'Available on its own',
+  price: '$2,500',
+  period: '/ year',
+  users: 'Unlimited users',
+  headline: 'The data library, without the model.',
+  body: 'Cedar Grove is where Lumecon’s curated data lives: public datasets cleaned, harmonized and kept analysis-ready, alongside the proprietary datasets we build ourselves. Buy it on its own for the data, or get it with Tree along with the economic model and Cedar Commons.',
+  bullets: [
+    'Harmonized public data, maintained and versioned',
+    'Lumecon’s proprietary datasets, added as they are built',
+    'Unlimited people in your organization',
+  ],
+  ctaLabel: 'Get Cedar Grove',
+  ctaHref: '/signup?product=cedar-grove',
+  /**
+   * The proprietary datasets are in active development. Named entries
+   * go in this array as each one ships, and the section renders the
+   * note alone while it is empty. Nothing here is a forward promise
+   * about a specific dataset: the claim is only that what we build,
+   * you get from us.
+   */
+  proprietaryNote:
+    'We are building datasets you cannot get anywhere else, and they arrive in Cedar Grove as they are finished. A subscription includes what has shipped and what ships during your term.',
+  proprietaryDatasets: [] as { name: string; blurb: string }[],
+};
+
+/** The readable detail table. `values` align with PLANS order. */
 export interface PlanRow {
   label: string;
   values: [string, string, string];
@@ -84,19 +147,11 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   },
   {
     label: 'U.S. geographies',
-    values: ['Counties, states, the nation, reservations and trust lands', 'Same', 'Same'],
+    values: ['Every supported geography, with no add-ons', 'Same', 'Same'],
   },
   {
     label: 'Historical analysis',
     values: ['2015 to present, where the underlying data support it', 'Same', 'Same'],
-  },
-  {
-    label: 'Analysis types',
-    values: [
-      'Industry, organization, tribal government, tribal enterprise and Whole Nation analysis',
-      'Same',
-      'Same',
-    ],
   },
   {
     label: 'Cedar',
@@ -110,34 +165,29 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     label: 'Cedar Commons',
     values: [
       'Not included',
-      'Included. A collaborative environment for shared projects, project notes, data collection and external collaborators.',
+      'Included. Shared projects, project notes, data collection and outside collaborators.',
       'Included across the organization.',
     ],
   },
   {
     label: 'Cedar Grove',
     values: [
-      'Not included',
-      'Not included',
-      'Included. Organizational data library combining Lumecon’s analysis-ready datasets with approved internal data and reusable organizational context.',
+      'Sold separately, $2,500',
+      'Sold separately, $2,500',
+      'Included. Harmonized public data and Lumecon’s proprietary datasets.',
     ],
+  },
+  {
+    label: 'Client work',
+    values: ['Your own organization', 'Included', 'Included'],
   },
 ];
 
 /**
- * Consultants use the same public plans, no separate edition: a band
- * under the plan cards instead of a custom-priced product.
+ * The FAQ carries the page. Each question is one sentence you can read
+ * without opening it, and the answer behind it is the argument the page
+ * used to make in a full-width section.
  */
-export const CONSULTANT_BAND = {
-  kicker: 'Using Lumecon for client work?',
-  headline: 'Commercial use starts with Sapling.',
-  body: 'Sapling’s Cedar Commons doubles as a secure client intake and project workspace. Invite clients and collaborators to provide the materials an analysis needs, keep project data together and manage the analysis in one place, with 10 seats you can reassign as engagements change. Tree serves larger consulting organizations with unlimited organizational users, Cedar calibration and Cedar Grove.',
-  value: 'Spend less time assembling the analysis and more time on the work only you can do.',
-  ctaLabel: 'Talk to us about client work',
-  ctaSubject: 'Using Lumecon for client work',
-};
-
-/** The pricing FAQ: the skepticism the plans and table cannot answer. */
 export interface PricingFaq {
   q: string;
   a: string[];
@@ -147,61 +197,81 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'Why does Lumecon cost less than traditional economic impact software?',
     a: [
-      'Because the economics of delivering analytical software changed. Modern cloud computing lets us operate efficiently at scale while continuing to invest in economists, engineers, data scientists, data and model development.',
+      'Economic impact analysis is established economic science, and the arithmetic is rarely where the cost sits. The expense is in building and maintaining a reliable system around it: integrating changing datasets, cleaning and harmonizing them, regionalizing the model correctly, protecting organizational data and continuously validating results.',
+      'Modern cloud computing makes that system far less expensive to operate than it once was, and we built Lumecon around that from the beginning. Lower cost does not mean lower standards, and the methods are public at lumecon.ai/methodology.',
     ],
   },
   {
     q: 'Is the model less capable because Lumecon costs less?',
     a: [
-      'No. Every paid plan runs the same underlying Lumecon economic model. Higher tiers add collaboration, organizational data capabilities and scale.',
-      'The price reflects users and organizational scale, and every plan runs the same model.',
-    ],
-  },
-  {
-    q: 'Couldn’t an economist just buy multipliers and do this themselves?',
-    a: [
-      'Yes. Experienced economists can perform many economic impact calculations themselves; the arithmetic is rarely the hardest part.',
-      'Lumecon handles much of the surrounding data engineering, regionalization, validation, documentation, maintenance and workflow, so economists can spend more time exercising economic judgment.',
+      'No. Every paid plan runs the same underlying Lumecon economic model on the same data foundation. What the higher plans add is collaboration, organizational data capabilities and scale.',
     ],
   },
   {
     q: 'Why don’t complicated analyses cost more?',
     a: [
-      'Because analytical complexity is exactly what the software is supposed to handle. Multiple geographies, years, projects and scenarios shouldn’t become separate licensing events.',
+      'Because analytical complexity is what the software is for. Multiple geographies, years, projects and scenarios should not become separate licensing events.',
       'Complexity belongs in the model, and the pricing stays simple.',
     ],
   },
   {
     q: 'Why are your prices public?',
     a: [
-      'Because customers should be able to determine whether software fits their budget without sitting through a sales process. Our standard plans have standard prices.',
-      'We tailor the modeling, and pricing stays standard.',
+      'Because you should be able to tell whether software fits your budget without sitting through a sales process. We also spend less selling the platform and more improving it, which is why the price sits on this page instead of behind a call.',
     ],
   },
   {
     q: 'Can I actually try Lumecon before paying?',
     a: [
-      'Yes. Create a free account without entering a credit card. Bring your documents, use Cedar and work through an analysis yourself. Complete results unlock when you choose a paid plan.',
+      'Yes. Create a free account without entering a credit card, bring your documents, work with Cedar and build an analysis end to end. Full results unlock when you choose a paid plan.',
       'No credit card, sales call or obligation.',
     ],
   },
   {
-    q: 'Can a faculty member buy Lumecon?',
+    q: 'Can I use Lumecon for client work?',
     a: [
-      'Yes. The public plans are open to anyone, and Sprout is priced so an individual analyst, faculty member or researcher can subscribe without an institutional procurement process. When a department or research group needs shared projects, Sapling adds Cedar Commons.',
+      'Yes, starting with Sapling. Cedar Commons doubles as a client intake and project workspace: invite clients and collaborators to supply what an analysis needs, keep the project data together and manage the work in one place, with ten seats you can reassign as engagements change.',
+      'Tree serves larger consulting and partner organizations with unlimited organizational users, Cedar calibration and Cedar Grove.',
+    ],
+  },
+  {
+    q: 'What is Cedar Grove, and why is it sold separately?',
+    a: [
+      'Cedar Grove is the curated data library: harmonized public data plus the proprietary datasets we build. It is useful without the model, so you can buy it on its own for $2,500 a year with unlimited users, and it comes with Tree.',
+      'Pricing it separately is also how we show what the economic model and Cedar Commons are worth on their own.',
+    ],
+  },
+  {
+    q: 'Couldn’t an economist just buy multipliers and do this themselves?',
+    a: [
+      'Yes. Experienced economists can perform many of these calculations themselves, and the arithmetic is rarely the hardest part.',
+      'Lumecon handles the surrounding data engineering, regionalization, validation, documentation, maintenance and workflow, so economists spend more time exercising economic judgment.',
+    ],
+  },
+  {
+    q: 'Can an individual researcher or faculty member buy Lumecon?',
+    a: [
+      'Yes. Sprout is priced so an individual analyst, faculty member or researcher can subscribe without an institutional procurement process. When a department or research group needs shared projects, Sapling adds Cedar Commons.',
     ],
   },
   {
     q: 'What happens when Lumecon improves?',
     a: [
-      'You benefit from improvements to what your plan already includes. We continually update Lumecon’s data, modeling, workflow and product capabilities. We may introduce new capabilities associated with particular plans, but we don’t intend to turn routine improvements to an existing feature into a new add-on every time the platform gets better.',
+      'You get the improvements to what your plan already includes. We update Lumecon’s data, modeling, workflow and product capabilities continuously. New capabilities may be associated with particular plans, but routine improvements to an existing feature do not become a new add-on.',
       'You don’t buy a model and watch it age.',
+    ],
+  },
+  {
+    q: 'Do multi-year or prepaid commitments cost less?',
+    a: [
+      'They can. If you qualify for more than one discount or program rate, you receive the lowest applicable price under the program rules.',
+      'Subscriptions renew automatically, we email you 90 days and 30 days beforehand, and auto-renew can be turned off any time in Settings. Refer an organization and we add a month to your subscription when they become a customer, up to a full year.',
     ],
   },
   {
     q: 'What if another platform has a feature Lumecon doesn’t?',
     a: [
-      'Tell us what would make the work better. We deliberately focus on capabilities that improve economic impact analysis rather than adding complexity to make a feature list longer. Useful workflows, visualizations, data and analytical capabilities will continue to evolve with the platform.',
+      'Tell us what would make the work better. We focus on capabilities that improve economic impact analysis rather than adding complexity to make a feature list longer.',
     ],
   },
 ];

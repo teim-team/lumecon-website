@@ -1,33 +1,32 @@
 ---
 /**
- * /pricing — one coherent thesis: standard pricing, tailored modeling.
+ * /pricing — pricing and an FAQ, and very little else.
  *
- * Lumecon is not less expensive because it is a stripped-down tool. It
- * is less expensive because it was built recently, on modern
- * infrastructure, around a simpler business model, without the
- * licensing constraints and commercial overhead that historically
- * surrounded professional economic modeling. The page structure after
- * the founder's shortening pass (each proposition argued exactly once):
+ * Lumecon is meant to be self-serve. Someone deciding can read the
+ * methodology, see the prices, try the product free and have their
+ * remaining objection answered without emailing anyone. So this page
+ * carries the numbers and the objections; the rest of the site carries
+ * the product. The two full-width prose sections that used to argue
+ * "complexity belongs in the model" and "better economics made better
+ * pricing possible" are FAQ answers now, which is where a reader goes
+ * looking for them anyway, and the commitment-pricing section is one
+ * more question rather than a section of its own.
  *
- *   1. Hero: simplicity as the opening argument.
- *   2. Free-account band: "don't take our word for it", before the tiers.
- *   3. Three understandable plans, consultant band, detail table.
- *   4. Complexity belongs in the model (product side, with the trio).
- *   5. Better economics made better pricing possible (the candid why).
- *   6. Commitment pricing.
- *   7. Pricing FAQ carries the skepticism; the table carries features.
+ *   1. Hero: standard pricing, tailored modeling.
+ *   2. Free-account band: don't take our word for it, before the tiers.
+ *   3. Three plans, the client-work marker, and Cedar Grove on its own.
+ *   4. The full comparison table, folded away.
+ *   5. The FAQ: one sentence to click, the argument behind it.
  *
- * The reader should leave knowing: the model is serious, the pricing is
- * simple, they can verify the product free without a card, the plan
- * improves as Lumecon improves, and more of their money goes into the
- * thing they are buying than into the machinery selling it.
+ * The consultant band is gone. A consultancy needed to read a paragraph
+ * to learn which plans cover client work; now the plan cards say so,
+ * which is where the decision is being made.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MarkArt from '../components/MarkArt.astro';
-import { site } from '../config';
-import { PLANS, PLAN_TABLE_ROWS, CONSULTANT_BAND, PRICING_FAQ } from '../data/pricing';
+import { PLANS, PLAN_TABLE_ROWS, CLIENT_WORK, CEDAR_GROVE, PRICING_FAQ } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -35,9 +34,7 @@ import '../styles/home.css';
 import '../styles/pricing.css';
 
 const description =
-  'Every paid Lumecon plan includes the full economic modeling foundation, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add collaboration, organizational data capabilities and scale. Plans start at $1,000 a year, prices are public and you can try Lumecon free without a credit card.';
-
-const bandMailto = `mailto:${site.email}?subject=${encodeURIComponent(CONSULTANT_BAND.ctaSubject)}`;
+  'Every paid Lumecon plan includes the full economic modeling foundation, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add collaboration and scale, and Cedar Grove, the curated data library, is available on its own. Plans start at $1,000 a year, prices are public and you can try Lumecon free without a credit card.';
 
 const jsonLd = [
   {
@@ -54,6 +51,14 @@ const jsonLd = [
         priceCurrency: 'USD',
         url: `https://lumecon.ai/pricing#plans`,
       })),
+      {
+        '@type': 'Offer',
+        name: 'Cedar Grove',
+        price: 2500,
+        priceCurrency: 'USD',
+        description: CEDAR_GROVE.body,
+        url: 'https://lumecon.ai/pricing#cedar-grove',
+      },
       {
         '@type': 'Offer',
         name: 'Free account',
@@ -81,7 +86,7 @@ const jsonLd = [
   title="Pricing | Lumecon"
   description={description}
   canonical="https://lumecon.ai/pricing"
-  keywords="Lumecon pricing, economic impact analysis pricing, economic impact software cost, IMPLAN alternative pricing, REMI alternative pricing, economic modeling software price, Cedar AI pricing, tribal economic impact pricing, annual subscription, free economic impact software trial"
+  keywords="Lumecon pricing, economic impact analysis pricing, economic impact software cost, IMPLAN alternative pricing, REMI alternative pricing, economic modeling software price, Cedar AI pricing, annual subscription, free economic impact software trial"
   ogTitle="Lumecon pricing: standard pricing, tailored modeling"
   ogDescription={description}
   jsonLd={jsonLd}
@@ -96,11 +101,10 @@ const jsonLd = [
         <h1 class="pr-hero__title">
           We tailor the modeling. <span class="hero2-em">Your pricing stays standard.</span>
         </h1>
-        <p class="pr-hero__sub">However complex your organization is, the pricing stays simple.</p>
         <p class="pr-hero__lede">
-          Every paid Lumecon plan includes the full economic modeling foundation, unlimited
-          analysis, every supported U.S. geography and Cedar. Higher plans add collaboration,
-          organizational data capabilities and scale, and every tier runs the same economics.
+          Every paid plan runs the full economic model with unlimited analysis, every supported U.S.
+          geography and Cedar. Higher plans add collaboration and scale. However complex your
+          organization is, the pricing stays simple.
         </p>
         <p class="pr-hero__callout">
           Plans start at $1,000 a year, and every price is on this page.
@@ -145,6 +149,15 @@ const jsonLd = [
             >
               {p.featured && <p class="pr-plan__flag">Recommended</p>}
               <h2 class="pr-plan__name">{p.name}</h2>
+              {/* Always rendered so the three cards keep the same rhythm.
+                  Without the placeholder Sprout's price sat a chip-height
+                  above the other two and the row read as ragged. */}
+              <p
+                class={`pr-plan__chip${p.clientWork ? '' : ' pr-plan__chip--placeholder'}`}
+                aria-hidden={p.clientWork ? undefined : 'true'}
+              >
+                {CLIENT_WORK.chip}
+              </p>
               <p class="pr-plan__audience">&ldquo;{p.audience}&rdquo;</p>
               <p class="pr-plan__price">
                 <span class="pr-plan__amount">{p.price}</span>
@@ -166,18 +179,49 @@ const jsonLd = [
         }
       </div>
 
-      <!-- Consultants: same plans, no separate edition. -->
-      <aside class="pr-band" id="consultants" aria-labelledby="band-title">
-        <div class="pr-band__main">
-          <p class="h-kicker">{CONSULTANT_BAND.kicker}</p>
-          <h2 class="pr-band__title" id="band-title">{CONSULTANT_BAND.headline}</h2>
-          <p class="pr-band__body">{CONSULTANT_BAND.body}</p>
-          <p class="pr-band__value">{CONSULTANT_BAND.value}</p>
+      <!-- One line for what used to be a consultant band. The cards
+           carry the marker; this says what the marker means. -->
+      <p class="pr-plans__clientnote">{CLIENT_WORK.note}</p>
+
+      <!-- Cedar Grove: the data library, sold on its own. It sits after
+           the plans rather than as a fourth card because it is not a
+           fourth tier of the same thing: no economic model, no Cedar
+           Commons, unlimited people. Pricing it here is also what shows
+           the model and Commons are the larger part of Tree. -->
+      <aside class="pr-grove" id="cedar-grove" aria-labelledby="grove-title">
+        <div class="pr-grove__main">
+          <p class="h-kicker">{CEDAR_GROVE.kicker}</p>
+          <h2 class="pr-grove__title" id="grove-title">
+            {CEDAR_GROVE.name}. <span class="brand-em">{CEDAR_GROVE.headline}</span>
+          </h2>
+          <p class="pr-grove__body">{CEDAR_GROVE.body}</p>
+          <ul class="pr-grove__list" role="list">
+            {CEDAR_GROVE.bullets.map((t) => <li>{t}</li>)}
+          </ul>
+          <p class="pr-grove__note">{CEDAR_GROVE.proprietaryNote}</p>
+          {
+            CEDAR_GROVE.proprietaryDatasets.length > 0 && (
+              <ul class="pr-grove__datasets" role="list">
+                {CEDAR_GROVE.proprietaryDatasets.map((d) => (
+                  <li>
+                    <span class="pr-grove__dsname">{d.name}</span> {d.blurb}
+                  </li>
+                ))}
+              </ul>
+            )
+          }
         </div>
-        <a class="btn2 btn2--card pr-band__cta" href={bandMailto}>
-          {CONSULTANT_BAND.ctaLabel}
-          <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
-        </a>
+        <div class="pr-grove__side">
+          <p class="pr-grove__price">
+            <span class="pr-plan__amount">{CEDAR_GROVE.price}</span>
+            <span class="pr-plan__period">{CEDAR_GROVE.period}</span>
+          </p>
+          <p class="pr-grove__users">{CEDAR_GROVE.users}</p>
+          <a class="btn2 btn2--card pr-grove__cta" href={CEDAR_GROVE.ctaHref}>
+            {CEDAR_GROVE.ctaLabel}
+            <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
       </aside>
 
       <!-- Detail table, folded away by default. The cards answer the question
@@ -237,105 +281,9 @@ const jsonLd = [
       });
     </script>
 
-    <!-- 4. The product side: complexity is what the software is for. -->
-    <section class="flowsec" aria-labelledby="why-title">
-      <div class="flowsec-inner">
-        <header class="flowsec-head">
-          <h2 class="flowsec-title" id="why-title">
-            Complexity belongs in the model, <span class="brand-em"
-              >and the pricing stays simple.</span
-            >
-          </h2>
-          <p class="flowsec-lede">
-            Complex organizations can involve multiple years, multiple geographies, multiple
-            enterprises, complicated organizational structures and specialized analyses. Lumecon
-            doesn&rsquo;t charge more because the underlying question is harder.
-          </p>
-        </header>
-        <p class="pr-why__single">
-          Every paid plan uses the same economic modeling foundation. Higher plans reflect things
-          that actually increase with organizational use: more people, collaboration, storage, data
-          capabilities and support.
-        </p>
-        <ul class="pr-trio" role="list">
-          <li class="pr-trio__item">
-            <h3 class="pr-trio__t">One model</h3>
-            <p class="pr-trio__b">The same economic foundation across every paid plan.</p>
-          </li>
-          <li class="pr-trio__item">
-            <h3 class="pr-trio__t">Any supported geography</h3>
-            <p class="pr-trio__b">No county, state or homelands add-ons.</p>
-          </li>
-          <li class="pr-trio__item">
-            <h3 class="pr-trio__t">Unlimited analysis</h3>
-            <p class="pr-trio__b">Complexity doesn&rsquo;t create another invoice.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 5. The candid why, once. -->
-    <section class="flowsec pr-economics" aria-labelledby="econ-title">
-      <div class="flowsec-inner">
-        <header class="flowsec-head">
-          <h2 class="flowsec-title" id="econ-title">
-            Better economics made <span class="brand-em">better pricing</span> possible.
-          </h2>
-          <p class="flowsec-lede">
-            Economic impact analysis is established economic science. The expensive part is building
-            and maintaining a reliable system around it: integrating changing datasets, cleaning and
-            harmonizing them, regionalizing the model correctly, protecting organizational data and
-            continuously validating the results.
-          </p>
-        </header>
-        <div class="prose-stack">
-          <p>
-            Modern cloud computing makes that system dramatically less expensive to operate than it
-            once was. We built Lumecon around that reality from the beginning, and lower cost never
-            means lower standards: the methods are public at{' '}
-            <a class="inline-link" href="/methodology">lumecon.ai/methodology</a>.
-          </p>
-          <p>
-            We also spend less selling the platform and more improving it, which is why the price
-            sits on this page instead of behind a call.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. Commitment pricing, kept simple. -->
-    <section class="pr-commit" aria-labelledby="commit-title">
-      <div class="pr-commit__inner">
-        <h2 class="pr-commit__title" id="commit-title">
-          Straightforward pricing gets better with commitment.
-        </h2>
-        <div class="prose-stack">
-          <p>Multi-year and prepaid commitments can receive preferred pricing.</p>
-          <p>
-            If you qualify for multiple discounts or program rates, you receive the{' '}
-            <span class="brand-em">lowest applicable price</span> according to the program rules.
-          </p>
-        </div>
-        <details class="pr-more pr-more--inline">
-          <summary class="pr-more__summary">
-            <span class="pr-more__label">Renewal and referrals</span>
-            <span class="pr-more__chev" aria-hidden="true"></span>
-          </summary>
-          <div class="pr-more__body">
-            <p class="pr-commit__notes">
-              Subscriptions renew automatically. We email you 90 days and 30 days before the renewal
-              date, and auto-renew can be turned off any time from Settings inside Lumecon.
-            </p>
-            <p class="pr-commit__notes">
-              Refer an organization and we add a month to your subscription when they become a
-              customer, up to a full year. Referrals are managed inside Lumecon.
-            </p>
-          </div>
-        </details>
-      </div>
-    </section>
-
-    <!-- 8. The FAQ carries the skepticism. -->
+    <!-- The FAQ is the body of the page now: everything the two prose
+         sections and the commitment section used to argue is an answer
+         behind a one-sentence question. -->
     <section class="flowsec pr-faq" id="faq" aria-labelledby="faq-title">
       <div class="flowsec-inner">
         <header class="flowsec-head">
