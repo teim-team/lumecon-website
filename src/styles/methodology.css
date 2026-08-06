@@ -37,10 +37,41 @@
   font-size: clamp(1.02rem, 1.4vw, 1.18rem);
   line-height: 1.65;
   color: var(--ink-2);
-  max-width: 82ch;
+  max-width: var(--measure-deck);
   margin: 0 0 3rem;
 }
 /* Three principles: hairline-separated columns, no boxes. */
+/* Each principle keeps a headline visible at rest. Without one the band was
+   three mono labels over a lot of white, since the sentence below is held
+   back until hover. */
+.meth-principles__t {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0.28rem 0 0;
+}
+
+/* Each principle holds its sentence back until the pointer arrives, the same
+   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
+   label deepens as its sentence lands. */
+.meth-principles li {
+  outline: none;
+}
+.meth-principles__k {
+  transition: color 0.25s var(--ease);
+}
+.meth-principles li:hover .meth-principles__k,
+.meth-principles li:focus-visible .meth-principles__k {
+  color: var(--accent-deep);
+}
+@media (prefers-reduced-motion: reduce) {
+  .meth-principles__k {
+    transition: none;
+  }
+}
+
 .meth-principles {
   list-style: none;
   margin: 0;
@@ -106,7 +137,7 @@
   line-height: 1.75;
   color: var(--ink-2);
   margin: 0 0 1rem;
-  max-width: 38rem;
+  max-width: var(--measure-prose);
 }
 .meth-prose p:last-child {
   margin-bottom: 0;
@@ -122,8 +153,9 @@
   margin-top: 0;
 }
 .meth-prose--measure p,
-.meth-onecol p {
-  max-width: 82ch;
+.meth-onecol p,
+.meth-threeup p {
+  max-width: var(--measure-deck);
 }
 /* One column for prose that is a single argument in two paragraphs. The
    two-column pair only works when the two sides are genuinely parallel and
@@ -134,6 +166,26 @@
   display: grid;
   gap: 1rem;
   max-width: 82ch;
+}
+
+/* One column for prose that is a single argument in two paragraphs. Splitting
+   it left the shorter half a hole beside the longer one: on this page the
+   pairs ran 321 characters against 568, and 355 against 181. Stacked at the
+   deck measure they read as what they are. .meth-cols stays for prose beside
+   an equation, which is a genuine pair. */
+.meth-onecol {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--measure-deck);
+}
+
+/* Three short items side by side: the data sources, which are a list rather
+   than an argument, so they stay in columns. */
+.meth-threeup {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
 }
 
 /* Two parallel prose columns for paired topics. */
@@ -179,8 +231,10 @@
   margin: 0.6rem 0 0;
   max-width: 30rem;
 }
+/* Same reasoning as .eq var above. */
 .eqobj__c var {
-  font-style: italic;
+  font-style: normal;
+  font-weight: 600;
 }
 /* The equation line itself. Inter like the prose, larger, navy. */
 .eq {
@@ -190,10 +244,15 @@
   line-height: 2;
   overflow-x: auto;
 }
+/* Variables stay upright. Mathematics conventionally italicises them, but
+   Inter's italic is a true italic with different letterforms (a single-storey
+   `a`, for one), so beside the roman body text the equations read as a second
+   typeface rather than as the same one. Weight and the navy colour do the
+   distinguishing instead. */
 .eq var {
   font-family: inherit;
-  font-style: italic;
-  font-weight: 500;
+  font-style: normal;
+  font-weight: 600;
 }
 .eq sub,
 .eq sup {
@@ -447,6 +506,37 @@
   }
 }
 @media (max-width: 700px) {
+  /* Each principle keeps a headline visible at rest. Without one the band was
+   three mono labels over a lot of white, since the sentence below is held
+   back until hover. */
+  .meth-principles__t {
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0.28rem 0 0;
+  }
+
+  /* Each principle holds its sentence back until the pointer arrives, the same
+   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
+   label deepens as its sentence lands. */
+  .meth-principles li {
+    outline: none;
+  }
+  .meth-principles__k {
+    transition: color 0.25s var(--ease);
+  }
+  .meth-principles li:hover .meth-principles__k,
+  .meth-principles li:focus-visible .meth-principles__k {
+    color: var(--accent-deep);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .meth-principles__k {
+      transition: none;
+    }
+  }
+
   .meth-principles {
     grid-template-columns: 1fr;
     gap: 1.3rem;

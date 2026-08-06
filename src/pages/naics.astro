@@ -85,8 +85,8 @@ const jsonLd = [
         <p class="meth-hero__lede">
           Lumecon classifies economic activity at the two-digit NAICS sector level, where federal
           administrative data is most complete. Complete data means fewer assumptions standing in
-          for missing values, so every multiplier rests on published figures. Hover over a sector
-          to see what belongs to it, and read{' '}
+          for missing values, so every multiplier rests on published figures. Hover over a sector to
+          see what belongs to it, and read{' '}
           <a class="gloss-link" href="/methodology#m-naics">why two digits</a> in the methodology.
         </p>
       </div>
@@ -198,6 +198,12 @@ const jsonLd = [
     letter-spacing: -0.01em;
     line-height: 1.35;
     color: var(--ink, #0a0f26);
+    /* Two lines' worth of room whether the name needs one or two. Sector
+       names run from "Utilities" to "Mining, Quarrying, and Oil and Gas
+       Extraction", so without this the white bar was 44px under the short
+       ones and 62px under the long ones, and a row of tiles ended on a
+       ragged bottom edge. */
+    min-height: calc(2 * 1.35em);
   }
   /* The description slides over the media on hover or keyboard focus. */
   .naics-tile__desc {

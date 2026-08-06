@@ -78,6 +78,14 @@
      One value so the two rows on the homepage line up with each other
      rather than each carrying its own clamp. */
   --gutter: clamp(2rem, 3.4vw, 3.2rem);
+  /* Reading measures. --measure-deck is the page deck and any prose that runs
+     the width of a section; --measure-prose is the narrower one for a column
+     of body copy beside something else. Both in ch, which is the right unit
+     for a measure, but read them from here rather than writing a number per
+     component: a `ch` value resolves against each element's own font size, so
+     the same number gives different widths on a deck and a headline. */
+  --measure-deck: 82ch;
+  --measure-prose: 68ch;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
   --error-color: #dc2626;
