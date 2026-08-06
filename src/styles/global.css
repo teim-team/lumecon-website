@@ -686,12 +686,61 @@ strong {
   opacity: 1;
   transform: none;
 }
+/* Stagger a whole section from one attribute.
+   --------------------------------------------------------------------
+   `data-reveal-group` on a container gives every direct child the soft
+   reveal and steps their delay, so a page gets motion by marking its
+   sections rather than by tagging every heading and paragraph with
+   `reveal-soft` and a hand-counted `data-stagger`. Methodology needed 42
+   of those; these pages need one attribute each.
+
+   The delay is nth-child rather than a data attribute so it is decided
+   at first paint. Doing it in script would mean the content painting,
+   then having opacity:0 applied, then fading back in, which reads as a
+   flicker on a fast connection. The observer only has to see the
+   container, and BaseLayout already adds `.seen` to whatever it
+   observes, so the same machinery drives both. */
+[data-reveal-group] > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+}
+[data-reveal-group].seen > * {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal-group].seen > *:nth-child(1) {
+  transition-delay: 0ms;
+}
+[data-reveal-group].seen > *:nth-child(2) {
+  transition-delay: 90ms;
+}
+[data-reveal-group].seen > *:nth-child(3) {
+  transition-delay: 180ms;
+}
+[data-reveal-group].seen > *:nth-child(4) {
+  transition-delay: 270ms;
+}
+[data-reveal-group].seen > *:nth-child(5) {
+  transition-delay: 360ms;
+}
+[data-reveal-group].seen > *:nth-child(6) {
+  transition-delay: 450ms;
+}
+/* Past six the delay stops growing: an eighth item would otherwise wait
+   two thirds of a second after the section is already on screen. */
+[data-reveal-group].seen > *:nth-child(n + 7) {
+  transition-delay: 450ms;
+}
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-soft,
   .reveal-left,
   .reveal-right,
-  .reveal-diagonal {
+  .reveal-diagonal,
+  [data-reveal-group] > * {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;

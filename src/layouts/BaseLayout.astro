@@ -240,7 +240,7 @@ const ogIA =
         var STAGGER_STEP = 90;
         function bind() {
           var selector =
-            '.reveal:not(.seen),.reveal-soft:not(.seen),.reveal-left:not(.seen),.reveal-right:not(.seen),.reveal-diagonal:not(.seen)';
+            '.reveal:not(.seen),.reveal-soft:not(.seen),.reveal-left:not(.seen),.reveal-right:not(.seen),.reveal-diagonal:not(.seen),[data-reveal-group]:not(.seen)';
           var els = document.querySelectorAll(selector);
           if (!els.length) return;
           var prefersReduced =
