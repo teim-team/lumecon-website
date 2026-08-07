@@ -105,10 +105,13 @@
   height: auto;
 }
 
-/* Hover on the three product rows. These are showcase blocks rather than
-   links, so the response is a lift on the screenshot itself, matching the
-   pricing cards' vocabulary (rise + teal border + teal-cast shadow) without
-   the pointer cue that would imply somewhere to click. */
+/* Hover on the three product rows: a lift on the screenshot itself, matching
+   the pricing cards' vocabulary (rise + teal border + teal-cast shadow).
+
+   The lift used to be the whole response, deliberately without a pointer
+   cue, because there was nowhere to click. The screenshots open in the
+   lightbox now, so the cue is correct: `cursor: zoom-in` and the corner
+   badge come from lightbox.css, and the lift reads as the same gesture. */
 .tour-row__shot {
   transition:
     transform 0.25s var(--ease),

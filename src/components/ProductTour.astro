@@ -63,7 +63,12 @@ const ROWS = [
               <h3 class="tour-row__title">{row.title}</h3>
               <p class="tour-row__body">{row.body}</p>
             </div>
-            <figure class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}>
+            {/* data-zoom: these are 1920px renders shown at a third of that,
+                so clicking one opens it full size. See Lightbox.astro. */}
+            <figure
+              class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
+              data-zoom
+            >
               <picture>
                 <source srcset={row.imgDark} media="(prefers-color-scheme: dark)" />
                 <img

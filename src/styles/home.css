@@ -275,12 +275,26 @@
   .trio-pos-c {
     transform: translateX(-50%);
     opacity: 1;
+    visibility: visible;
   }
+  /* Only the center frame exists on a phone; the other two sit exactly
+     behind it at zero opacity and rotate through.
+
+     `visibility` is here because the screenshots are keyboard controls now:
+     they open the lightbox, so they are in the tab order, and a control
+     nobody can see should not be. The longhand is what lets the 0.9s fade
+     still play, by holding the visibility change until the fade has
+     finished. Setting `transition` in shorthand here would reset it to zero
+     delay and the frame would vanish instead of fading. */
   .trio-pos-l,
   .trio-pos-r {
     transform: translateX(-50%) scale(0.96);
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
+    transition-property: transform, box-shadow, opacity, translate, border-color, visibility;
+    transition-duration: 0.9s, 0.9s, 0.9s, 0.25s, 0.25s, 0s;
+    transition-delay: 0s, 0s, 0s, 0s, 0s, 0.9s;
   }
 }
 
