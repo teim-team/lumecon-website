@@ -65,6 +65,13 @@ import '../styles/lightbox.css';
     var lbHint = document.getElementById('lightboxHint');
     if (!lb || !lbImg || !lbCap || !lbClose || !lbHint) return;
 
+    /* Binding must be safe to attempt twice. A host that stamps this page
+       out of a template and re-runs its scripts would otherwise attach two
+       click listeners to the picture, and two toggles are a no-op: the
+       enlarge-to-full-size click would silently stop working. */
+    if (lb.dataset.bound) return;
+    lb.dataset.bound = '1';
+
     var zones = [].slice.call(document.querySelectorAll('[data-zoom]'));
     if (!zones.length) {
       /* No zoomable picture on this page, so the dialog is dead markup.
@@ -87,13 +94,13 @@ import '../styles/lightbox.css';
       return shared ? shared.textContent.trim() : '';
     }
 
-    /* The file the browser is actually painting for this image.
-       `currentSrc` is the honest answer and needs no knowledge of the
-       markup, but it is empty until the image has loaded, and these are
-       lazy. Rather than fall back to `src` (which in dark mode is the wrong
-       file), resolve the <picture> the way the browser would. */
+    /* The file this image is meant to show, resolved from the markup the
+       way the browser would: the first <source> whose media matches, else
+       the src. Not `currentSrc`: that reports what has finished LOADING,
+       and under the rotating hero it lags one rotation behind `src` while
+       the new file decodes, so a click in that window would enlarge the
+       previous example under the new example's caption. */
     function fileFor(img) {
-      if (img.currentSrc) return img.currentSrc;
       var picture = img.parentElement;
       if (picture && picture.tagName === 'PICTURE') {
         var sources = [].slice.call(picture.querySelectorAll('source'));
@@ -103,7 +110,7 @@ import '../styles/lightbox.css';
           if (set && (!media || window.matchMedia(media).matches)) return set;
         }
       }
-      return img.src;
+      return img.getAttribute('src') || img.currentSrc;
     }
 
     /* Whether the picture has more resolution than the fitted view shows.
