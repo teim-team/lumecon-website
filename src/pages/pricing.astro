@@ -25,7 +25,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import MarkArt from '../components/MarkArt.astro';
 import { PLANS, PLAN_TABLE_ROWS, CLIENT_WORK, CEDAR_GROVE, PRICING_FAQ } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -95,7 +94,6 @@ const jsonLd = [
   <main class="pr" id="top" tabindex="-1">
     <!-- 1. Hero: simplicity is the opening argument. -->
     <section class="pr-hero">
-      <MarkArt class="markart markart--tr" size={620} />
       <div class="pr-hero__inner" data-reveal-group>
         <p class="h-kicker">Pricing</p>
         <h1 class="pr-hero__title">
@@ -306,10 +304,6 @@ const jsonLd = [
             ))
           }
         </div>
-        <p class="pr-faq__foot">
-          We are removing the old reasons rigorous economic analysis had to cost so much. What is
-          left is the analysis, at a fair price.
-        </p>
       </div>
     </section>
   </main>

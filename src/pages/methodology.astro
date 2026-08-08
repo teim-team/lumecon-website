@@ -15,7 +15,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import MarkArt from '../components/MarkArt.astro';
 import AskAI from '../components/AskAI.astro';
 import { site } from '../config';
 import '../styles/global.css';
@@ -205,7 +204,6 @@ const jsonLd = [
   <main class="meth" id="top" tabindex="-1">
     <!-- Hero: the methodological position, then three principles. -->
     <header class="meth-hero">
-      <MarkArt class="markart markart--tr" size={620} />
       <div class="meth-w">
         <p class="h-kicker reveal-soft">Methodology</p>
         <h1 class="meth-hero__title reveal-soft" data-stagger="1">
@@ -507,68 +505,6 @@ const jsonLd = [
     </section>
 
     <!-- 04 · Geographies -->
-    <section class="meth-sec" aria-labelledby="m-geo">
-      <div class="meth-w">
-        <div class="meth-sec__head reveal-soft">
-          <h2 id="m-geo">Geographies that follow the real economy</h2>
-        </div>
-        <div class="meth-onecol">
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="1">
-              Analyses run at the county, state and national level, and reservations and trust lands
-              are treated as first-class regions rather than approximations. Where an analysis
-              covers both a state and homelands, the two scopes are reported side by side with the
-              subset relationship stated explicitly, so nothing is double-counted.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="2">
-              Reservation and trust-land regions are constructed from the federal boundary files for
-              American Indian and Alaska Native areas and from the employment, industry and
-              demographic data located within those boundaries. They are modeled geographies with
-              their own regional characteristics, and results for a reservation are estimated for
-              that region itself. We use homelands as the plain-language umbrella term for
-              reservation and trust-land geographies. Tribal government analysis is an active area
-              of methodological work for us, and this page will grow as that work does.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="meth-sec" aria-labelledby="m-naics">
-      <div class="meth-w">
-        <div class="meth-sec__head reveal-soft">
-          <h2 id="m-naics">Industries at the two-digit NAICS level</h2>
-        </div>
-        <div class="meth-onecol">
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="1">
-              Every dollar in an analysis is classified against the North American Industry
-              Classification System at the two-digit sector level, from Agriculture (11) to Public
-              Administration (92). Two digits is where administrative data coverage is strongest:
-              the federal employment, wage and output series that anchor the model are published
-              nearly complete at this level for counties and states, while finer detail is often
-              suppressed for confidentiality in smaller geographies. Working where the data is
-              complete means fewer imputed values and fewer assumptions between a source and a
-              multiplier.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="2">
-              As our client base and data coverage grow, we intend to extend classification beyond
-              two digits where published sources support it, and each analysis will state the level
-              it uses. Tribal governments are tracked as their own Lumecon category rather than as
-              local government within Public Administration (92), because a nation that runs
-              administration, enterprises, housing, health and education programs is understated by
-              that single line. The full sector list, in plain language, is at{' '}
-              <a class="gloss-link" href="/naics">lumecon.ai/naics</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- 05 · The data manifest -->
     <section class="meth-sec" aria-labelledby="m-data">
       <div class="meth-w">
@@ -628,57 +564,156 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 06 · Validation and human review -->
-    <section class="meth-sec" aria-labelledby="m-review">
+    <!-- The discipline, as cards: five commitments that used to be five
+         near-empty prose sections. Each card leads with its claim and
+         opens in place for the full detail, the same click-to-learn
+         posture as the Cedar Press shelf. An open card takes the full
+         row so the prose gets a real measure. -->
+    <section class="meth-sec meth-deeper" aria-labelledby="m-deeper">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
-          <h2 id="m-review">Validation and human review</h2>
+          <h2 id="m-deeper">The commitments behind every analysis</h2>
         </div>
-        <div class="meth-onecol">
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="1">
-              The software checks that tables cross-foot, that scopes nest correctly and that inputs
-              fall in plausible ranges. Estimated inputs and model outputs are checked against
-              plausibility bounds, including multiplier ranges credible for a small regional
-              economy, and a run that fails a critical check stops rather than shipping a doubtful
-              number.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="2">
-              Automation assists with data processing, quality checks and documentation. Economic
-              assumptions, regionalization choices and model design remain economically grounded and
-              subject to human review, and the person running an analysis confirms the assumptions
-              before results are finalized.{' '}
-              <a class="gloss-link" href="/cedar">Learn how Cedar works</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+        <p class="meth-sec__lede">
+          Five things that hold no matter what you run. Open a card for the full detail.
+        </p>
+        <div class="mcards">
+          <details class="mcard" id="m-geo">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Geography</span>
+              <span class="mcard__title">Geographies that follow the real economy</span>
+              <span class="mcard__hook">
+                Counties, states and the nation, with reservations and trust lands treated as
+                first-class regions rather than approximations.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Analyses run at the county, state and national level, and reservations and trust
+                lands are treated as first-class regions rather than approximations. Where an
+                analysis covers both a state and homelands, the two scopes are reported side by side
+                with the subset relationship stated explicitly, so nothing is double-counted.
+              </p>
+              <p>
+                Reservation and trust-land regions are constructed from the federal boundary files
+                for American Indian and Alaska Native areas and from the employment, industry and
+                demographic data located within those boundaries. They are modeled geographies with
+                their own regional characteristics, and results for a reservation are estimated for
+                that region itself. We use homelands as the plain-language umbrella term for
+                reservation and trust-land geographies. Tribal government analysis is an active area
+                of methodological work for us, and this page will grow as that work does.
+              </p>
+            </div>
+          </details>
 
-    <!-- 07 · Lineage -->
-    <section class="meth-sec" aria-labelledby="m-lineage">
-      <div class="meth-w">
-        <div class="meth-sec__head reveal-soft">
-          <h2 id="m-lineage">Every number has a lineage</h2>
-        </div>
-        <div class="meth-onecol">
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="1">
-              Each headline figure carries a trace: which effect layer it comes from, which
-              operations generate it and which industries it lands in, each with its share. The same
-              traceability runs through the inputs, where every figure carries its source tag
-              (reported, apportioned or estimated).
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p class="reveal-soft" data-stagger="2">
-              Exports carry the source references, the assumptions, the model inputs and the full
-              set of tables behind each figure, so the person defending the number in a council
-              meeting, a boardroom or a grant review holds the same detail the model used.
-            </p>
-          </div>
+          <details class="mcard" id="m-naics">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Industries</span>
+              <span class="mcard__title">Industries at the two-digit NAICS level</span>
+              <span class="mcard__hook">
+                Classification lives where administrative data coverage is strongest, so fewer
+                values are imputed between a source and a multiplier.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Every dollar in an analysis is classified against the North American Industry
+                Classification System at the two-digit sector level, from Agriculture (11) to Public
+                Administration (92). Two digits is where administrative data coverage is strongest:
+                the federal employment, wage and output series that anchor the model are published
+                nearly complete at this level for counties and states, while finer detail is often
+                suppressed for confidentiality in smaller geographies. Working where the data is
+                complete means fewer imputed values and fewer assumptions between a source and a
+                multiplier.
+              </p>
+              <p>
+                As our client base and data coverage grow, we intend to extend classification beyond
+                two digits where published sources support it, and each analysis will state the
+                level it uses. Tribal governments are tracked as their own Lumecon category rather
+                than as local government within Public Administration (92), because a nation that
+                runs administration, enterprises, housing, health and education programs is
+                understated by that single line. The full sector list, in plain language, is at{' '}
+                <a class="gloss-link" href="/naics">lumecon.ai/naics</a>.
+              </p>
+            </div>
+          </details>
+
+          <details class="mcard" id="m-review">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Validation</span>
+              <span class="mcard__title">Validation and human review</span>
+              <span class="mcard__hook">
+                A run that fails a critical check stops rather than shipping a doubtful number, and
+                a person confirms the assumptions before results are finalized.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                The software checks that tables cross-foot, that scopes nest correctly and that
+                inputs fall in plausible ranges. Estimated inputs and model outputs are checked
+                against plausibility bounds, including multiplier ranges credible for a small
+                regional economy, and a run that fails a critical check stops rather than shipping a
+                doubtful number.
+              </p>
+              <p>
+                Automation assists with data processing, quality checks and documentation. Economic
+                assumptions, regionalization choices and model design remain economically grounded
+                and subject to human review, and the person running an analysis confirms the
+                assumptions before results are finalized.{' '}
+                <a class="gloss-link" href="/cedar">Learn how Cedar works</a>.
+              </p>
+            </div>
+          </details>
+
+          <details class="mcard" id="m-lineage">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Traceability</span>
+              <span class="mcard__title">Every number has a lineage</span>
+              <span class="mcard__hook">
+                Each figure traces to its effect layer, operations, industries and source tags, and
+                exports carry the full detail.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Each headline figure carries a trace: which effect layer it comes from, which
+                operations generate it and which industries it lands in, each with its share. The
+                same traceability runs through the inputs, where every figure carries its source tag
+                (reported, apportioned or estimated).
+              </p>
+              <p>
+                Exports carry the source references, the assumptions, the model inputs and the full
+                set of tables behind each figure, so the person defending the number in a council
+                meeting, a boardroom or a grant review holds the same detail the model used.
+              </p>
+            </div>
+          </details>
+
+          <details class="mcard" id="m-compare">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Comparison</span>
+              <span class="mcard__title">The same foundation, built differently around it</span>
+              <span class="mcard__hook">
+                Established platforms and Lumecon draw on the same national statistical system;
+                the differences are architecture, workflow and price.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Input-output analysis is an established, openly published field. Established
+                platforms and Lumecon draw on the same national statistical system and decades of
+                economic research. Lumecon differentiates through its data architecture,
+                regionalization, traceability, reservation and trust-land modeling, modern workflow
+                and pricing. Lumecon is not affiliated with or endorsed by IMPLAN, REMI or any other
+                platform named here.
+              </p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -699,28 +734,6 @@ const jsonLd = [
             ))
           }
         </dl>
-      </div>
-    </section>
-
-    <!-- 10 · Comparison -->
-    <section class="meth-sec" aria-labelledby="m-compare">
-      <div class="meth-w">
-        <div class="meth-sec__head reveal-soft">
-          <h2 id="m-compare">
-            Built on the same economic foundation. <span class="brand-em"
-              >Built differently around it.</span
-            >
-          </h2>
-        </div>
-        <div class="meth-prose meth-prose--measure">
-          <p class="reveal-soft" data-stagger="1">
-            Input-output analysis is an established, openly published field. Established platforms
-            and Lumecon draw on the same national statistical system and decades of economic
-            research. Lumecon differentiates through its data architecture, regionalization,
-            traceability, reservation and trust-land modeling, modern workflow and pricing. Lumecon
-            is not affiliated with or endorsed by IMPLAN, REMI or any other platform named here.
-          </p>
-        </div>
       </div>
     </section>
 

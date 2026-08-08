@@ -14,7 +14,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import MarkArt from '../components/MarkArt.astro';
 import { site as siteConfig } from '../config';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -136,7 +135,6 @@ const jsonLd = [
   <Nav isHome={false} />
   <main class="meth" id="top" tabindex="-1">
     <header class="meth-hero">
-      <MarkArt class="markart markart--tr" size={620} />
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Reference</p>
         <h1 class="meth-hero__title">

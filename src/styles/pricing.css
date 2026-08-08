@@ -552,6 +552,27 @@
 }
 .pr-more--faq {
   margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+}
+.pr-faq__list {
+  border-top: 1px solid var(--rule);
+}
+.pr-more--faq .pr-more__summary {
+  align-items: center;
+  padding: 1.15rem 0.2rem;
+  border-radius: 0;
+}
+.pr-more--faq .pr-more__q {
+  font-size: 1.08rem;
+}
+.pr-more--faq .pr-more__body {
+  padding: 0 0.2rem 1.35rem;
+}
+.pr-more--faq .pr-faq__p {
+  max-width: var(--measure-prose);
 }
 .pr-more__summary {
   display: flex;
@@ -592,19 +613,37 @@
   font-size: 0.9rem;
   color: var(--ink-3);
 }
-/* Chevron drawn in CSS: no asset, inherits colour. */
+/* Plus drawn in CSS: no asset, inherits colour. A plus reads as "there
+   is more here" faster than a chevron, and turning to a multiply sign
+   when open reads as "close". */
 .pr-more__chev {
+  position: relative;
   margin-left: auto;
   flex: 0 0 auto;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-right: 2px solid var(--ink-3);
-  border-bottom: 2px solid var(--ink-3);
-  transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform 0.18s var(--ease);
+  align-self: center;
+  width: 0.85rem;
+  height: 0.85rem;
+  transition: transform 0.2s var(--ease);
+}
+.pr-more__chev::before,
+.pr-more__chev::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--accent-text);
+  border-radius: 1px;
+}
+.pr-more__chev::before {
+  width: 100%;
+  height: 2px;
+}
+.pr-more__chev::after {
+  width: 2px;
+  height: 100%;
 }
 .pr-more[open] .pr-more__chev {
-  transform: rotate(-135deg) translate(-2px, -2px);
+  transform: rotate(45deg);
 }
 @media (prefers-reduced-motion: reduce) {
   .pr-more__chev {

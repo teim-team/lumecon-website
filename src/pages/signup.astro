@@ -1,19 +1,18 @@
 ---
 /**
- * /signup — account creation, mirroring the product's registration
- * flow (AuthGate in teim-app) so this page can become the one place
- * accounts are created while the app moves toward login-only:
+ * /signup — the private-beta request page.
  *
- *   Step 1 "Who you are"  — name, organization or nation, role chips
- *   Step 2 "Your account" — email + password (12+ chars, 3 of 4
- *                            character classes, live strength meter)
+ * Lumecon is in closed beta, so this page deliberately creates no
+ * account and sets no password: a visitor cannot enter the app from
+ * here yet. What it does is capture who is asking and what they want
+ * to measure, so the team can reach out with access. The fields
+ * mirror the product's registration profile (name, organization,
+ * organization type, role) so the interest we capture converts into
+ * a real account with nothing re-asked.
  *
- * The role list and password rules are copied from the app verbatim
- * so an account created here is exactly what the product expects.
- * Submission posts through lib/api.ts to `POST /auth/register` when
- * PUBLIC_API_URL is set; otherwise the fallback captures the details
- * through the contact endpoint so early-access requests still reach
- * the team.
+ * Submission posts through lib/api.ts to `POST /v1/contact` when
+ * PUBLIC_API_URL is set; otherwise it opens a prefilled email to
+ * contact@lumecon.ai so the request still reaches the team.
  *
  * Layout: mirrored split-screen auth, the product's sign-in screen
  * as the reference. Signup puts the form on the LEFT and the teal
@@ -43,9 +42,8 @@ const ROLE_OPTIONS = [
 ];
 
 // Kept in sync with ORGANIZATION_TYPE_OPTIONS (src/pages/accountModel.js) and
-// ORGANIZATION_TYPE_ENUM (server/index.js). Collected here so a self-serve
-// signup is fully onboarded: the account never lands on a second
-// "complete your profile" screen for the one field signup used to omit.
+// ORGANIZATION_TYPE_ENUM (server/index.js), so a captured request carries the
+// same profile the product will ask for when the account is created.
 const ORGANIZATION_TYPE_OPTIONS = [
   { value: 'tribal_nation', label: 'Tribal Nation or tribal government entity' },
   { value: 'alaska_native_corporation', label: 'Alaska Native Corporation' },
@@ -60,10 +58,10 @@ const ORGANIZATION_TYPE_OPTIONS = [
 ---
 
 <BaseLayout
-  title="Sign up | Lumecon"
-  description="Create a free Lumecon account and build an economic impact analysis end to end. For governments, universities, nonprofits, businesses and Tribal Nations; full results unlock on any plan."
+  title="Request beta access | Lumecon"
+  description="Lumecon is in private beta. Tell us who you are and what you want to measure, and the team will reach out with access."
   canonical="https://lumecon.ai/signup"
-  keywords="Lumecon signup, Lumecon sign up, Lumecon create account, economic impact analysis account, IMPLAN alternative signup"
+  keywords="Lumecon signup, Lumecon beta, Lumecon early access, economic impact analysis account, IMPLAN alternative signup"
   cedar={false}
   bodyClass="auth-body"
 >
@@ -86,8 +84,11 @@ const ORGANIZATION_TYPE_OPTIONS = [
             <path d="M15 17h6"></path>
           </svg>
         </span>
-        <h1 class="asplit-title">Create your Lumecon account</h1>
-        <p class="asplit-tagline">Two quick steps: who you are, then your account credentials.</p>
+        <h1 class="asplit-title">Lumecon is in private beta</h1>
+        <p class="asplit-tagline">
+          We are opening access in waves while we finish the work. Tell us who you are and what you
+          want to measure, and the team will reach out with your access.
+        </p>
         <!-- If /signup arrived from a pricing tier CTA, the URL query
              carries tier= and this badge reflects the chosen plan back
              at the visitor. Hidden by default; the inline script below
@@ -98,19 +99,10 @@ const ORGANIZATION_TYPE_OPTIONS = [
           <a class="auth-plan__change" href="/pricing">Change plan</a>
         </p>
 
-        <ol class="auth-steps" aria-label="Registration progress">
-          <li class="auth-steps__item auth-steps__item--on" data-step-marker="1">
-            <span class="auth-steps__num">1</span> Who you are
-          </li>
-          <li class="auth-steps__item" data-step-marker="2">
-            <span class="auth-steps__num">2</span> Your account
-          </li>
-        </ol>
-
         <p class="auth-reqnote">
           Fields marked <span class="auth-req" aria-hidden="true">*</span> are required.
         </p>
-        <form class="auth-form" data-auth-form data-auth-kind="signup" novalidate>
+        <form class="auth-form" data-auth-form data-auth-kind="beta-request" novalidate>
           <input type="hidden" name="tier" data-auth-tier />
           <input type="hidden" name="role" data-auth-role />
 
@@ -119,6 +111,10 @@ const ORGANIZATION_TYPE_OPTIONS = [
             <label class="auth-field">
               <span>Name <span class="auth-req" aria-hidden="true">*</span></span>
               <input type="text" name="name" required autocomplete="name" maxlength="200" />
+            </label>
+            <label class="auth-field">
+              <span>Work email <span class="auth-req" aria-hidden="true">*</span></span>
+              <input type="email" name="email" required autocomplete="email" maxlength="200" />
             </label>
             <label class="auth-field">
               <span>Organization or nation <span class="auth-req" aria-hidden="true">*</span></span>
@@ -161,60 +157,27 @@ const ORGANIZATION_TYPE_OPTIONS = [
                 }
               </div>
             </div>
-          </fieldset>
-
-          <fieldset class="auth-step" data-step-panel="2" hidden>
-            <legend class="sr-only">Your account</legend>
             <label class="auth-field">
-              <span>Work email <span class="auth-req" aria-hidden="true">*</span></span>
-              <input type="email" name="email" autocomplete="email" />
+              <span>What would you measure first?</span>
+              <textarea
+                name="interest"
+                rows="3"
+                maxlength="1000"
+                placeholder="A project, a program, an enterprise, a budget cycle. A sentence is plenty."
+              ></textarea>
             </label>
-            <label class="auth-field">
-              <span>Password <span class="auth-req" aria-hidden="true">*</span></span>
-              <input
-                type="password"
-                name="password"
-                autocomplete="new-password"
-                minlength="12"
-                aria-describedby="pwRules"
-              />
-            </label>
-            <div class="pwmeter" data-pwmeter hidden>
-              <div class="pwmeter__bars" data-pwmeter-bars data-level="0">
-                <span></span><span></span><span></span><span></span>
-              </div>
-              <span class="pwmeter__label" data-pwmeter-label></span>
-            </div>
-            <ul class="pwrules" id="pwRules">
-              <li data-pwrule="length">12 characters or more</li>
-              <li data-pwrule="case">Upper and lower case</li>
-              <li data-pwrule="number">A number</li>
-              <li data-pwrule="symbol">A symbol</li>
-            </ul>
           </fieldset>
-
-          <label class="auth-attest" data-auth-attest-row hidden>
-            <input type="checkbox" name="attest" data-auth-attest />
-            <span>
-              I am at least 18 years old and have authority to act for the organization identified
-              above.
-            </span>
-          </label>
 
           <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
 
           <div class="auth-actions">
-            <button type="submit" class="btn" data-auth-submit>Continue</button>
-            <button type="button" class="auth-back" data-auth-back hidden>Back</button>
+            <button type="submit" class="btn" data-auth-submit>Request access</button>
           </div>
         </form>
 
         <!-- Acceptance language is deliberately absent until counsel
-             delivers the final documents: a signup flow must never
-             claim agreement to Terms whose page says they are being
-             prepared. When the documents ship, this line becomes the
-             agree/acknowledge clause inside the attestation checkbox
-             (with terms/privacy version stamping); see
+             delivers the final documents: no agreement is claimed to
+             Terms whose page says they are being prepared. See
              docs/legal/legal-framework-review.md, Part 5 items 1-2. -->
         <p class="auth-legal">
           Our <a href="/terms">Terms of Service</a>{' '}and{' '}
@@ -222,14 +185,14 @@ const ORGANIZATION_TYPE_OPTIONS = [
           accept them before they take effect.
         </p>
         <p class="asplit-foot">
-          Already have an account? <a href="/login">Log in</a>{' '}&middot;{' '}
+          Already have beta access? <a href="/login">Log in</a>{' '}&middot;{' '}
           <a href="/pricing">Compare plans</a>
         </p>
       </div>
     </div>
     <AuthBrandPanel
-      headline="Start with the full platform."
-      lede="Every plan runs the same economic model. Bring your documents, build an analysis end to end and choose a plan when you are ready to unlock full results."
+      headline="Access is opening in waves."
+      lede="Every request goes to a person, not a queue. When your access is ready you get the full platform: bring your documents, build an analysis end to end and choose a plan when you are ready."
       points={[
         { icon: 'rings', text: 'Every supported geography' },
         { icon: 'loop', text: 'Unlimited analysis on paid plans' },
@@ -240,9 +203,9 @@ const ORGANIZATION_TYPE_OPTIONS = [
 
   <script is:inline>
     /* Pricing -> Signup handoff. The pricing tier CTA links to
-       /signup?tier=X (checkout's free path also carries email=).
-       Read the query, fill the hidden field, and surface the plan
-       badge so the choice visibly carries over. */
+       /signup?tier=X. Read the query, fill the hidden field, and
+       surface the plan badge so the choice visibly carries over
+       into the access request. */
     (function () {
       var qs = new URLSearchParams(window.location.search);
       var tier = qs.get('tier');
@@ -272,10 +235,9 @@ const ORGANIZATION_TYPE_OPTIONS = [
 </BaseLayout>
 
 <script>
-  import { submitSignup, submitContact, apiConfigured } from '../lib/api';
+  import { submitContact, apiConfigured } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
-  import { PASSWORD_RULES, evaluatePassword } from '../lib/passwordRules';
-  import { getFlowEmail, rememberFlowEmail, markSignedUp } from '../lib/flowState';
+  import { getFlowEmail } from '../lib/flowState';
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;
@@ -291,35 +253,13 @@ const ORGANIZATION_TYPE_OPTIONS = [
     if (!form) return;
     const status = form.querySelector<HTMLElement>('[data-auth-status]');
     const submitBtn = form.querySelector<HTMLButtonElement>('[data-auth-submit]');
-    const backBtn = form.querySelector<HTMLButtonElement>('[data-auth-back]');
     const roleInput = form.querySelector<HTMLInputElement>('[data-auth-role]');
-    const panels = {
-      1: form.querySelector<HTMLElement>('[data-step-panel="1"]'),
-      2: form.querySelector<HTMLElement>('[data-step-panel="2"]'),
-    };
-    const markers = document.querySelectorAll<HTMLElement>('[data-step-marker]');
-    // Email carried between flow steps lives in sessionStorage, never
-    // in the URL (PII leaks into history, logs and analytics there).
+
+    // Email carried from an earlier flow step lives in sessionStorage,
+    // never in the URL (PII leaks into history, logs and analytics there).
     const flowEmail = getFlowEmail();
     const emailField = form.querySelector<HTMLInputElement>('input[name="email"]');
     if (emailField && flowEmail && !emailField.value) emailField.value = flowEmail;
-    let step: 1 | 2 = 1;
-
-    function showStep(next: 1 | 2): void {
-      step = next;
-      if (panels[1]) panels[1].hidden = next !== 1;
-      if (panels[2]) panels[2].hidden = next !== 2;
-      markers.forEach((m) => {
-        const n = Number(m.dataset.stepMarker);
-        m.classList.toggle('auth-steps__item--on', n === next);
-        m.classList.toggle('auth-steps__item--done', n < next);
-      });
-      if (submitBtn) submitBtn.textContent = next === 1 ? 'Continue' : 'Create account';
-      const attestRow = form?.querySelector<HTMLElement>('[data-auth-attest-row]');
-      if (attestRow) attestRow.hidden = next !== 2;
-      if (backBtn) backBtn.hidden = next === 1;
-      if (status) status.hidden = true;
-    }
 
     // Role chips: one selected at a time, mirrored into the hidden field.
     form.querySelectorAll<HTMLButtonElement>('[data-role-chip]').forEach((chip) => {
@@ -346,152 +286,70 @@ const ORGANIZATION_TYPE_OPTIONS = [
       if (!isConsulting && tribalSelect) tribalSelect.value = '';
     });
 
-    // Live strength meter + rule checklist, same tiers as the product.
-    const pwInput = form.querySelector<HTMLInputElement>('input[name="password"]');
-    const meter = form.querySelector<HTMLElement>('[data-pwmeter]');
-    const meterBars = form.querySelector<HTMLElement>('[data-pwmeter-bars]');
-    const meterLabel = form.querySelector<HTMLElement>('[data-pwmeter-label]');
-    pwInput?.addEventListener('input', () => {
-      const pw = pwInput.value;
-      const { level, label } = evaluatePassword(pw);
-      if (meter) meter.hidden = !pw;
-      if (meterBars) meterBars.dataset.level = String(level);
-      if (meterLabel) meterLabel.textContent = label;
-      PASSWORD_RULES.forEach((rule) => {
-        const li = form.querySelector(`[data-pwrule="${rule.key}"]`);
-        li?.classList.toggle('pwrules--met', rule.test(pw));
-      });
-    });
-
-    backBtn?.addEventListener('click', () => showStep(1));
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = new FormData(form);
       const name = String(data.get('name') ?? '').trim();
-      const organization = String(data.get('organization') ?? '').trim();
-      const role = String(data.get('role') ?? '').trim();
-      const organizationType = String(data.get('organizationType') ?? '').trim();
-      const tribalRaw = String(data.get('servesTribalClients') ?? '').trim();
-      const servesTribalClients =
-        organizationType === 'consulting_firm' ? tribalRaw === 'yes' : undefined;
-
-      if (step === 1) {
-        // Step 1 collects the profile; advance rather than submit.
-        if (!name) return setStatus(status, 'err', 'Enter your name.');
-        if (!organization) return setStatus(status, 'err', 'Enter an organization.');
-        if (!organizationType) return setStatus(status, 'err', 'Select an organization type.');
-        if (organizationType === 'consulting_firm' && !tribalRaw)
-          return setStatus(status, 'err', 'Let us know whether you serve tribal clients.');
-        if (!role) return setStatus(status, 'err', 'Choose your role.');
-        showStep(2);
-        return;
-      }
-
       const email = String(data.get('email') ?? '').trim();
-      const password = String(data.get('password') ?? '');
-      if (!email) return setStatus(status, 'err', 'Enter your email.');
-      if (!evaluatePassword(password).acceptable) {
-        return setStatus(
-          status,
-          'err',
-          'Strengthen your password to at least 12 characters with a mix of upper case, lower case, numbers or symbols.',
-        );
-      }
-      const attest = form.querySelector<HTMLInputElement>('[data-auth-attest]');
-      if (attest && !attest.checked) {
-        return setStatus(
-          status,
-          'err',
-          'Confirm that you are at least 18 and authorized to act for your organization.',
-        );
-      }
+      const organization = String(data.get('organization') ?? '').trim();
+      const organizationType = String(data.get('organizationType') ?? '').trim();
+      const role = String(data.get('role') ?? '').trim();
+      const interest = String(data.get('interest') ?? '').trim();
+      const tier = String(data.get('tier') ?? '').trim();
+      const tribalRaw = String(data.get('servesTribalClients') ?? '').trim();
+
+      if (!name) return setStatus(status, 'err', 'Enter your name.');
+      if (!email) return setStatus(status, 'err', 'Enter your work email.');
+      if (!organization) return setStatus(status, 'err', 'Enter an organization.');
+      if (!organizationType) return setStatus(status, 'err', 'Select an organization type.');
+      if (organizationType === 'consulting_firm' && !tribalRaw)
+        return setStatus(status, 'err', 'Let us know whether you serve tribal clients.');
+      if (!role) return setStatus(status, 'err', 'Choose your role.');
 
       submitBtn?.setAttribute('disabled', 'true');
       setStatus(status, 'info', 'One moment...');
 
+      // The whole profile rides in the message body so the request is
+      // actionable from the inbox alone, whichever transport carries it.
+      const lines = [
+        'Beta access request via the signup page.',
+        `Role: ${role}`,
+        `Organization type: ${organizationType}`,
+        tribalRaw ? `Serves tribal clients: ${tribalRaw}` : '',
+        tier ? `Plan interest: ${tier}` : '',
+        interest ? `Wants to measure: ${interest}` : '',
+      ].filter(Boolean);
+
       try {
         if (apiConfigured()) {
-          const result = await submitSignup({
+          const res = await submitContact({
             name,
             email,
-            password,
             organization,
-            role,
-            organizationType,
-            ...(servesTribalClients !== undefined ? { servesTribalClients } : {}),
+            message: lines.join('\n'),
+            source: 'signup-page',
           });
-          if (result.ok) {
-            trackEvent('auth.success', { kind: 'signup', role });
-            // The account now exists. Record signup proof separately from the
-            // checkout prefill email so /choose-plan can trust it.
-            markSignedUp();
-            const tier = String(data.get('tier') ?? '').trim();
-            if (tier === 'free') {
-              // Free trial: no payment step, no $0 checkout. Straight
-              // to the success state and into the product.
-              setStatus(status, 'ok', 'Account created. Taking you in...');
-              setTimeout(() => {
-                window.location.href = '/welcome?plan=free';
-              }, 900);
-              return;
-            }
-            rememberFlowEmail(email);
-            if (tier) {
-              // Plan already chosen on /pricing: go straight to the
-              // payment step, which knows the plan.
-              setStatus(status, 'ok', 'Account created. One step left: payment.');
-              setTimeout(() => {
-                window.location.href = `/checkout?tier=${tier}`;
-              }, 900);
-              return;
-            }
-            // No plan yet: the dedicated selection step, not checkout.
-            setStatus(status, 'ok', 'Account created. Pick the plan that fits...');
-            setTimeout(() => {
-              window.location.href = '/choose-plan';
-            }, 900);
-            return;
-          }
-          if (result.reason !== 'api-unconfigured') {
-            trackEvent('auth.fail', { kind: 'signup', reason: result.reason });
-            // The server distinguishes these; relaying them stops the visitor
-            // retrying forever against a state that will not change.
-            var failStatus = result.reason === 'http' ? result.status : 0;
-            var failMessage =
-              failStatus === 403
-                ? 'Lumecon is in a limited pilot right now, so new accounts are invitation-only. Email contact@lumecon.ai and we will let you know the moment signups open.'
-                : failStatus === 409
-                  ? 'That email already has a Lumecon account. Log in instead, or reset your password from the login page.'
-                  : 'We could not complete that. Try again, or email contact@lumecon.ai.';
-            setStatus(status, 'err', failMessage);
+          if (res.ok) {
+            trackEvent('beta.request', { role, organizationType, tier: tier || '(none)' });
+            setStatus(
+              status,
+              'ok',
+              'Thanks, you are on the list. Someone from the team will reach out with your access.',
+            );
+            form.reset();
             return;
           }
         }
-
-        const contactRes = await submitContact({
-          name: name || 'Lumecon early-access request',
-          email,
-          organization,
-          message: `Early-access request via the signup page. Role: ${role || '(not provided)'}`,
-          source: 'signup-page',
-        });
-        if (contactRes.ok) {
-          setStatus(
-            status,
-            'ok',
-            "Thanks, we've got your details. Someone from the team will set you up with access shortly.",
-          );
-          return;
-        }
-        const subject = encodeURIComponent('Lumecon early access');
+        // No backend (or it failed): a prefilled email keeps the request
+        // moving instead of dead-ending the visitor.
+        const subject = encodeURIComponent('Lumecon beta access');
         const body = encodeURIComponent(
-          `Hi Lumecon team,\n\nI'd like to request access to Lumecon. Could you set me up?\n\nEmail: ${email}\n${organization ? 'Organization: ' + organization + '\n' : ''}`,
+          `Hi Lumecon team,\n\nI would like access to the Lumecon beta.\n\nName: ${name}\nEmail: ${email}\nOrganization: ${organization}\n${lines.slice(1).join('\n')}\n`,
         );
         window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
         setStatus(status, 'info', 'Opening your email client so you can reach us directly...');
       } catch (err: unknown) {
-        trackError(err, { where: 'auth.submit', kind: 'signup' });
+        trackError(err, { where: 'beta.request' });
         setStatus(
           status,
           'err',
@@ -501,8 +359,6 @@ const ORGANIZATION_TYPE_OPTIONS = [
         submitBtn?.removeAttribute('disabled');
       }
     });
-
-    showStep(1);
   }
 
   if (document.readyState === 'loading') {
