@@ -750,6 +750,11 @@
 .gloss-defs .meth-defs__row {
   transition: background-color 0.15s var(--ease);
 }
+/* The filter hides rows with the hidden attribute, and the UA's [hidden]
+   rule is less specific than the row's own display, so say it outright. */
+.gloss-defs .meth-defs__row[hidden] {
+  display: none;
+}
 .gloss-defs .meth-defs__row:hover {
   background: var(--teal-tint, rgba(15, 181, 165, 0.06));
 }
