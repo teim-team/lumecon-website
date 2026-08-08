@@ -15,6 +15,13 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4321',
     trace: 'on-first-retry',
+    // Sandboxed/CI-adjacent environments sometimes provide a system
+    // Chromium instead of the exact build this Playwright version pins.
+    // Point PW_CHROMIUM_EXECUTABLE at it to run the suite there; unset
+    // (the normal case, including CI) Playwright uses its own browsers.
+    ...(process.env.PW_CHROMIUM_EXECUTABLE
+      ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_EXECUTABLE } }
+      : {}),
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },

@@ -61,7 +61,31 @@
   --rule: rgba(10, 15, 38, 0.12);
   --rule-strong: rgba(10, 15, 38, 0.24);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --container-max: 1240px;
+  /* One shell width for the whole site: nav, home bands, tour, pricing
+     and methodology all measure from this, so the wordmark, the section
+     headings and the card rows share a left edge. Raised from 1240px,
+     which was set for prose and left a wide empty gutter on the sections
+     that carry cards, tables and screenshots. Legal pages keep their own
+     narrower prose measure in legal.css. */
+  --container-max: 1360px;
+  /* Cap for a section header block (kicker + title + lede). Section heads
+     used to sit at a hard 900px, which stopped a heading well short of the
+     content it introduced even when the section itself ran to 1240px. The
+     per-element `ch` measures still govern the line length; this only stops
+     the block from being the binding constraint. */
+  --head-max: 1180px;
+  /* Gutter between columns in a card row (the why cards, the edge tiles).
+     One value so the two rows on the homepage line up with each other
+     rather than each carrying its own clamp. */
+  --gutter: clamp(2rem, 3.4vw, 3.2rem);
+  /* Reading measures. --measure-deck is the page deck and any prose that runs
+     the width of a section; --measure-prose is the narrower one for a column
+     of body copy beside something else. Both in ch, which is the right unit
+     for a measure, but read them from here rather than writing a number per
+     component: a `ch` value resolves against each element's own font size, so
+     the same number gives different widths on a deck and a headline. */
+  --measure-deck: 82ch;
+  --measure-prose: 68ch;
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
   --error-color: #dc2626;
@@ -69,6 +93,13 @@
   --gold-btn-hover: #c98906;
   --accent-rgba-08: rgba(15, 181, 165, 0.08);
   --accent-rgba-18: rgba(15, 181, 165, 0.18);
+  /* The hover vocabulary, shared by everything that lifts on hover: the tour
+     screenshots, the hero trio frames, the pricing cards and the edge icons.
+     One rise distance and one teal-cast shadow, so a new hover state is a
+     token reference rather than another hand-picked pair of numbers. */
+  --lift: -3px;
+  --lift-shadow:
+    0 22px 48px -26px rgba(10, 127, 116, 0.36), 0 6px 16px -10px rgba(10, 15, 38, 0.14);
 
   /* Map palette. Source = gold (focal point), tribal = amber-gold
      (warm sibling, deeper than gold so reservations read as a
@@ -213,24 +244,6 @@ body {
     border-color: var(--accent);
   }
 
-  /* Nav sign-up button mirrors the primary CTA. */
-  .nav-links .nav-cta {
-    background: var(--accent);
-    color: #0a0f26;
-  }
-  .nav-links .nav-cta:hover {
-    background: var(--accent-light);
-  }
-  .nav-links .nav-ghost:hover {
-    background: var(--accent);
-    color: #0a0f26;
-    border-color: var(--accent);
-  }
-
-  /* Hamburger lines were navy on white nav; now need to show on
-     dark nav. They use background: var(--navy) which we flipped to
-     cream, so they auto-show. Good. */
-
   /* Footer-bar: the dark stripe at the very bottom of every page
      stays a deeper navy so it still reads as a defined band rather
      than blending into the page. */
@@ -238,16 +251,6 @@ body {
      handles it, no navy override needed. */
   .footer-email:hover {
     color: var(--accent-text);
-  }
-
-  /* Form fields: white-on-white in light mode becomes paper-on-
-     surface in dark mode. */
-  .cta-form a#formSend {
-    background: var(--accent);
-    color: #0a0f26;
-  }
-  .cta-form a#formSend:hover {
-    background: var(--accent-light);
   }
 
   /* Cedar FAB stays a saturated green bubble in both modes. */
@@ -263,11 +266,6 @@ body {
     color-scheme: dark;
   }
 
-  /* Pricing platform tile gradient overlay: the soft accent tint
-     reads as too-faint on dark; bump opacity. */
-  .pricing-platform-tile.is-active {
-    background: linear-gradient(0deg, rgba(15, 181, 165, 0.14) 0%, var(--white) 100%);
-  }
   /* The nav surface override lives in nav.css instead — nav.css loads
      after global.css, so an equal-specificity rule here would lose the
      cascade to nav.css's hardcoded-white background. */
@@ -339,25 +337,16 @@ html {
     outline-offset: 2px;
   }
   .btn,
-  .nav-cta,
-  .nav-ghost,
   .cedar-chip,
   .cedar-chip-more,
   .cedar-chat__send,
   .cedar-fab,
   .cedar-feedback__btn,
-  .cedar-followup,
-  .pricing-platform-tile,
-  .pricing-tier-card .btn,
-  .hero-path,
-  .wfilter,
-  .workspace__again,
-  .hero-coachmark__close {
+  .cedar-followup {
     border: 1px solid ButtonText;
   }
   /* Selected / pressed / active states need a non-color cue. */
   [aria-pressed='true'],
-  .wfilter.is-active,
   .cedar-feedback__btn.is-selected {
     outline: 2px solid Highlight;
     outline-offset: 1px;
@@ -386,804 +375,17 @@ html {
   }
 }
 
-/* ---------- Icon animations ----------
-   Subtle, thematic motion so each icon hints at what its section is
-   about. Disabled under prefers-reduced-motion. */
-
-/* Local: white "active locality" dot walks the 3x3 grid of city
-   blocks. The filled panel underneath transitions grey -> teal via
-   the parent's color, so the whole icon body changes — the dot
-   stays white to read against either fill. */
-.icon--local .icon-local__dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-local-scan 8s ease-in-out infinite;
-}
-@keyframes icon-local-scan {
-  0% {
-    transform: translate(0, 0);
-  }
-  20% {
-    transform: translate(4.3px, 0);
-  }
-  40% {
-    transform: translate(4.3px, 4.3px);
-  }
-  60% {
-    transform: translate(0, 4.3px);
-  }
-  80% {
-    transform: translate(-4.3px, 0);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-/* Tribal: three inner nodes pulse in a wave (community heartbeat).
-   Dots use fill="currentColor" so they tint with the parent on
-   hover; the pulse only changes their scale, not the colour. */
-.icon--tribal .icon-tribal__dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-tribal-pulse 2.8s ease-in-out infinite;
-}
-.icon--tribal .icon-tribal__dot--b {
-  animation-delay: 0.25s;
-}
-.icon--tribal .icon-tribal__dot--c {
-  animation-delay: 0.5s;
-}
-@keyframes icon-tribal-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  45% {
-    transform: scale(1.35);
-  }
-  60% {
-    transform: scale(1.15);
-  }
-  80% {
-    transform: scale(1);
-  }
-}
-
-/* Global: the cross-border arc draws in over the filled globe,
-   then the two endpoint dots pulse. The arc + dots stay white so
-   they read against the filled disc; the disc itself transitions
-   colour on parent hover. */
-.icon--global .icon-global__arc {
-  stroke-dashoffset: 100;
-  animation: icon-global-draw 3.6s ease-out infinite;
-}
-.icon--global .icon-global__dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-global-pulse 3.6s ease-in-out infinite;
-}
-.icon--global .icon-global__dot--right {
-  animation-delay: 1.8s;
-}
-@keyframes icon-global-draw {
-  0% {
-    stroke-dashoffset: 100;
-  }
-  40% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes icon-global-pulse {
-  0%,
-  60%,
-  100% {
-    transform: scale(1);
-  }
-  65%,
-  80% {
-    transform: scale(1.4);
-  }
-  85% {
-    transform: scale(1);
-  }
-}
-
-/* Arborist (picker icon for the Consultant plan): the gold "tending"
-   accent at the trunk-tie position pulses gently so the icon reads
-   as alive at 24px. Matches the rhythm of icon-tribal-pulse so the
-   four picker tiles share a visual cadence. */
-.icon--arborist .icon-arborist__dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-arborist-pulse 3s ease-in-out infinite;
-}
-@keyframes icon-arborist-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  45% {
-    transform: scale(1.45);
-    opacity: 0.85;
-  }
-  65% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Upload: the dot moves up into the document (uploading). */
-.icon--upload .icon-upload__dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-upload-rise 2.6s ease-in-out infinite;
-}
-.icon--upload .icon-upload__arrow {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-upload-arrow 2.6s ease-in-out infinite;
-}
-@keyframes icon-upload-rise {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-3.5px);
-    opacity: 1;
-  }
-  60% {
-    transform: translateY(-3.5px);
-    opacity: 0;
-  }
-  61% {
-    transform: translateY(2px);
-    opacity: 0;
-  }
-  75% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes icon-upload-arrow {
-  0%,
-  40% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  60% {
-    transform: translateY(-1.5px);
-    opacity: 0.6;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Surface Assumption: a magnifying glass sweeps left-to-right across
-   the text lines; a gold dot pulses under the lens when it lands on
-   an "assumption" (the second line). */
-.icon--surface .icon-surface__lens {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-surface-sweep 3.8s ease-in-out infinite;
-}
-.icon--surface .icon-surface__hit {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-surface-hit 3.8s ease-in-out infinite;
-}
-@keyframes icon-surface-sweep {
-  0% {
-    transform: translate(-3px, -2px);
-  }
-  25% {
-    transform: translate(-3px, -2px);
-  }
-  45% {
-    transform: translate(0, 0);
-  }
-  70% {
-    transform: translate(3.5px, 2.5px);
-  }
-  100% {
-    transform: translate(-3px, -2px);
-  }
-}
-@keyframes icon-surface-hit {
-  0%,
-  35% {
-    transform: scale(0.4);
-    opacity: 0;
-  }
-  45%,
-  70% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  85%,
-  100% {
-    transform: scale(0.4);
-    opacity: 0;
-  }
-}
-
-/* Source record: each line draws in, then the gold check completes. */
-.icon--source-record .icon-record__line {
-  stroke-dashoffset: 100;
-}
-.icon--source-record .icon-record__line--a {
-  animation: icon-record-line 3.6s ease-out infinite;
-}
-.icon--source-record .icon-record__line--b {
-  animation: icon-record-line 3.6s ease-out infinite 0.25s;
-}
-.icon--source-record .icon-record__check {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-record-check 3.6s ease-in-out infinite;
-}
-@keyframes icon-record-line {
-  0% {
-    stroke-dashoffset: 100;
-  }
-  40% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes icon-record-check {
-  0%,
-  55% {
-    transform: scale(0.65);
-    opacity: 0.35;
-  }
-  70% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-  85% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Code: each bracket / slash draws in sequence as if being typed, then
-   the gold caret blinks at the cursor. */
-.icon--code .icon-code__glyph {
-  stroke-dasharray: 28;
-  stroke-dashoffset: 28;
-  animation: icon-code-draw 3.6s ease-in-out infinite;
-}
-.icon--code .icon-code__glyph--a {
-  animation-delay: 0s;
-}
-.icon--code .icon-code__glyph--b {
-  animation-delay: 0.35s;
-}
-.icon--code .icon-code__glyph--c {
-  animation-delay: 0.7s;
-}
-.icon--code .icon-code__caret {
-  opacity: 0;
-  animation: icon-code-caret 3.6s ease-out infinite;
-}
-@keyframes icon-code-draw {
-  0% {
-    stroke-dashoffset: 28;
-  }
-  30%,
-  85% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 28;
-  }
-}
-@keyframes icon-code-caret {
-  0%,
-  38% {
-    opacity: 0;
-  }
-  42%,
-  50% {
-    opacity: 1;
-  }
-  54%,
-  62% {
-    opacity: 0;
-  }
-  66%,
-  74% {
-    opacity: 1;
-  }
-  78%,
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ML: the three "code lines" type out in sequence; the gold caret
-   blinks on the active line. */
-.icon--ml .icon-ml__line {
-  stroke-dasharray: 12;
-  stroke-dashoffset: 12;
-  animation: icon-ml-type 3.6s ease-in-out infinite;
-}
-.icon--ml .icon-ml__line--a {
-  animation-delay: 0s;
-}
-.icon--ml .icon-ml__line--b {
-  animation-delay: 0.25s;
-}
-.icon--ml .icon-ml__line--c {
-  animation-delay: 0.5s;
-}
-.icon--ml .icon-ml__caret {
-  animation: icon-ml-blink 0.9s steps(2, end) infinite;
-}
-@keyframes icon-ml-type {
-  0% {
-    stroke-dashoffset: 12;
-  }
-  35%,
-  90% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 12;
-  }
-}
-@keyframes icon-ml-blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0.25;
-  }
-}
-
-/* Data: bars stay still; gold fill sweeps across them in sequence. */
-.icon--data .icon-data__bar {
-  fill: transparent;
-  animation: icon-data-sweep 3.2s ease-in-out infinite;
-}
-.icon--data .icon-data__bar--a {
-  animation-delay: 0s;
-}
-.icon--data .icon-data__bar--b {
-  animation-delay: 0.4s;
-}
-.icon--data .icon-data__bar--c {
-  animation-delay: 0.8s;
-}
-.icon--data .icon-data__bar--d {
-  animation-delay: 1.2s;
-}
-@keyframes icon-data-sweep {
-  0%,
-  70%,
-  100% {
-    fill: transparent;
-  }
-  15%,
-  45% {
-    fill: var(--accent);
-  }
-}
-
-/* Economist: scatter points flicker in over time (data getting
-   collected), then the gold regression line draws across them. */
-.icon--economist .icon-econ__pt {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
-  animation: icon-econ-pt 4s ease-out infinite;
-}
-/* Stagger the dots along the X axis (left to right) so the scatter
-   looks like data being collected over time, finishing just before
-   the regression line starts drawing. */
-.icon--economist .icon-econ__pt--a {
-  animation-delay: 0s;
-}
-.icon--economist .icon-econ__pt--b {
-  animation-delay: 0.13s;
-}
-.icon--economist .icon-econ__pt--c {
-  animation-delay: 0.26s;
-}
-.icon--economist .icon-econ__pt--d {
-  animation-delay: 0.39s;
-}
-.icon--economist .icon-econ__pt--e {
-  animation-delay: 0.52s;
-}
-.icon--economist .icon-econ__pt--f {
-  animation-delay: 0.65s;
-}
-.icon--economist .icon-econ__pt--g {
-  animation-delay: 0.78s;
-}
-.icon--economist .icon-econ__pt--h {
-  animation-delay: 0.91s;
-}
-.icon--economist .icon-econ__pt--i {
-  animation-delay: 1.04s;
-}
-.icon--economist .icon-econ__pt--j {
-  animation-delay: 1.17s;
-}
-.icon--economist .icon-econ__fit {
-  animation: icon-econ-fit 4s ease-out infinite;
-}
-@keyframes icon-econ-pt {
-  0% {
-    opacity: 0;
-    transform: scale(0.4);
-  }
-  18% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
-  28%,
-  95% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes icon-econ-fit {
-  0%,
-  35% {
-    stroke-dashoffset: 100;
-  }
-  60%,
-  95% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 100;
-  }
-}
-
-/* Megaphone: two ripples travel outward; the gold dot pulses at the bell.
-   transform-box: view-box (default for SVG) so transform-origin
-   coordinates resolve against the SVG viewBox — origin lands at the
-   megaphone bell tip (17,12), not the path's bbox-local origin which
-   would send the waves scaling toward the bottom-right of the SVG. */
-.icon--megaphone .icon-mega__wave {
-  transform-box: view-box;
-  transform-origin: 17px 12px;
-  animation: icon-mega-wave 2.2s ease-out infinite;
-}
-.icon--megaphone .icon-mega__wave--b {
-  animation-delay: 0.35s;
-}
-.icon--megaphone .icon-mega__dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-mega-dot 2.2s ease-in-out infinite;
-}
-@keyframes icon-mega-wave {
-  0% {
-    opacity: 0;
-    transform: scale(0.55);
-  }
-  30% {
-    opacity: 1;
-    transform: scale(0.85);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.5);
-  }
-}
-@keyframes icon-mega-dot {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.3);
-    opacity: 0.85;
-  }
-}
-
-/* Chat (role-card): the three dots bounce like a typing indicator. */
-.icon--chat-role .icon-chat__dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-chat-bounce 1.4s ease-in-out infinite;
-}
-.icon--chat-role .icon-chat__dot--b {
-  animation-delay: 0.18s;
-}
-.icon--chat-role .icon-chat__dot--c {
-  animation-delay: 0.36s;
-}
-@keyframes icon-chat-bounce {
-  0%,
-  60%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.65;
-  }
-  30% {
-    transform: translateY(-2px);
-    opacity: 1;
-  }
-}
-
-/* Ripple (Join hero): three rings expand outward from a gold center.
-   Staggered delays so a new ring is launching every ~1s. */
-.icon--ripple .icon-ripple__ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-ripple-out 3.6s ease-out infinite;
-}
-.icon--ripple .icon-ripple__ring--a {
-  animation-delay: 0s;
-}
-.icon--ripple .icon-ripple__ring--b {
-  animation-delay: 1.2s;
-}
-.icon--ripple .icon-ripple__ring--c {
-  animation-delay: 2.4s;
-}
-.icon--ripple .icon-ripple__core {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-ripple-core 3.6s ease-in-out infinite;
-}
-@keyframes icon-ripple-out {
-  0% {
-    transform: scale(0.15);
-    opacity: 1;
-    stroke-width: 2;
-  }
-  100% {
-    transform: scale(1.6);
-    opacity: 0;
-    stroke-width: 0.6;
-  }
-}
-@keyframes icon-ripple-core {
-  0%,
-  100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0));
-  }
-  50% {
-    transform: scale(1.18);
-    filter: drop-shadow(0 0 6px rgba(15, 181, 165, 0.55));
-  }
-}
-
-/* Shift (Join transition): the bouncer + box + path animations all
-   live inside IconShift.astro itself now (a self-contained
-   requestAnimationFrame loop) so nothing is needed at the global
-   level. */
-
-/* Mentor (Join team): a large gold mentor node is anchored on the
-   left; the line draws toward the mentee on the right; the mentee
-   scales in with a brief gold flash and then both pulse together. */
-.icon--mentor .icon-mentor__mentor {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-mentor-mentor 4s ease-in-out infinite;
-}
-.icon--mentor .icon-mentor__line {
-  animation: icon-mentor-line 4s ease-out infinite;
-}
-.icon--mentor .icon-mentor__mentee {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: icon-mentor-mentee 4s ease-out infinite;
-}
-@keyframes icon-mentor-mentor {
-  0%,
-  100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 0 rgba(15, 181, 165, 0));
-  }
-  50% {
-    transform: scale(1.08);
-    filter: drop-shadow(0 0 4px rgba(15, 181, 165, 0.55));
-  }
-}
-@keyframes icon-mentor-line {
-  0%,
-  12% {
-    stroke-dashoffset: 100;
-  }
-  40%,
-  90% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 100;
-  }
-}
-@keyframes icon-mentor-mentee {
-  0%,
-  18% {
-    transform: scale(0.2);
-    opacity: 0;
-    fill: var(--accent);
-  }
-  38% {
-    transform: scale(1.15);
-    opacity: 1;
-    fill: var(--accent);
-  }
-  50%,
-  88% {
-    transform: scale(1);
-    opacity: 1;
-    fill: currentColor;
-  }
-  100% {
-    transform: scale(0.2);
-    opacity: 0;
-    fill: currentColor;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .icon--local .icon-local__dot,
-  .icon--tribal .icon-tribal__dot,
-  .icon--global .icon-global__arc,
-  .icon--global .icon-global__dot,
-  .icon--arborist .icon-arborist__dot,
-  .icon--upload .icon-upload__dot,
-  .icon--upload .icon-upload__arrow,
-  .icon--surface .icon-surface__lens,
-  .icon--surface .icon-surface__hit,
-  .icon--source-record .icon-record__line,
-  .icon--source-record .icon-record__check,
-  .icon--code .icon-code__glyph,
-  .icon--code .icon-code__caret,
-  .icon--ml .icon-ml__line,
-  .icon--ml .icon-ml__caret,
-  .icon--data .icon-data__bar,
-  .icon--economist .icon-econ__pt,
-  .icon--economist .icon-econ__fit,
-  .icon--megaphone .icon-mega__wave,
-  .icon--megaphone .icon-mega__dot,
-  .icon--chat-role .icon-chat__dot,
-  .icon--ripple .icon-ripple__ring,
-  .icon--ripple .icon-ripple__core,
-  .icon--mentor .icon-mentor__mentor,
-  .icon--mentor .icon-mentor__line,
-  .icon--mentor .icon-mentor__mentee {
-    animation: none !important;
-  }
-  .icon--ripple .icon-ripple__ring {
-    opacity: 0.35;
-  }
-  .icon--mentor .icon-mentor__line {
-    stroke-dashoffset: 0;
-  }
-  .icon--source-record .icon-record__line,
-  .icon--ml .icon-ml__line,
-  .icon--code .icon-code__glyph,
-  .icon--economist .icon-econ__fit {
-    stroke-dashoffset: 0;
-  }
-  .icon--global .icon-global__arc,
-  .icon--code .icon-code__caret,
-  .icon--economist .icon-econ__pt {
-    opacity: 1;
-  }
-  .icon--surface .icon-surface__hit {
-    opacity: 1;
-    transform: none;
-  }
-  .icon--data .icon-data__bar {
-    fill: var(--accent);
-  }
-}
-
-/* Keyboard-shortcut help overlay, summoned with `?` and dismissed with
-   `?` or Esc. Fixed bottom-right; small product-style affordance. */
-.kb-hint {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 9000;
-  min-width: 220px;
-  background: var(--navy);
-  color: var(--white);
-  border-radius: 6px;
-  padding: 0.8rem 1rem;
-  box-shadow: 0 6px 24px rgba(14, 21, 48, 0.22);
-  opacity: 0;
-  transform: translateY(8px);
-  pointer-events: none;
-  transition:
-    opacity 0.18s var(--ease),
-    transform 0.18s var(--ease);
-}
-.kb-hint.is-on {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-}
-.kb-hint__head {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-  margin-bottom: 0.55rem;
-  font-weight: 600;
-}
-.kb-hint__list {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.4rem 0.8rem;
-  margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.3;
-}
-.kb-hint__list dt {
-  margin: 0;
-}
-.kb-hint__list dd {
-  margin: 0;
-  color: color-mix(in srgb, var(--white) 82%, transparent);
-}
-.kb-hint kbd {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--white);
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-weight: 600;
-}
-
 /* Print stylesheet — produce a clean one-page result document of the
    running study. Hides nav, hero brand, sections below the workspace,
    etc., leaving just the workspace card with figures + attribution. */
 @media print {
   nav,
-  .hero-brand,
   .platforms,
   .why,
-  .cedar-about,
   .cta,
   .footer,
-  .back-to-top,
   .scroll-progress,
-  .kb-hint,
-  .skip-link,
-  .hero-zoomout,
-  .workspace-filters,
-  .workspace__again {
+  .skip-link {
     display: none !important;
   }
   body,
@@ -1198,19 +400,6 @@ html {
     box-shadow: none !important;
     border: 1px solid #000 !important;
     page-break-inside: avoid;
-  }
-  .workspace__bar {
-    background: #fff !important;
-  }
-  .hero-fig--derived {
-    opacity: 1 !important;
-  }
-  .hero-map {
-    max-height: 4in !important;
-  }
-  .hero-supplier,
-  .hero-household {
-    opacity: 1 !important;
   }
 }
 
@@ -1264,13 +453,6 @@ html {
   color: var(--accent-text);
   font-weight: 700;
 }
-.kicker--invert {
-  color: var(--cream);
-  opacity: 0.85;
-}
-.kicker--invert::before {
-  color: var(--accent-light);
-}
 .display {
   font-family: var(--font-display);
   font-variation-settings: 'opsz' 144;
@@ -1321,22 +503,6 @@ html {
   opacity: 0.88;
   max-width: 38rem;
 }
-.rule-h {
-  display: block;
-  width: clamp(120px, 18vw, 220px);
-  height: 1px;
-  background: var(--rule-strong);
-  border: 0;
-  margin: 1rem 0 1.4rem;
-}
-.rule-full {
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: var(--rule);
-  border: 0;
-  margin: 0;
-}
 
 a {
   color: inherit;
@@ -1382,6 +548,76 @@ strong {
 .brand-em {
   color: var(--accent-text);
   font-style: normal;
+}
+
+/* ---------- hover-reveal ----------
+   A block that shows its label at rest and its sentence when the pointer
+   arrives. Used by the homepage edge tiles and the Cedar page's "how it is
+   built" facts; one rule rather than a copy per component.
+
+   The sentence stays in normal flow and is hidden with `opacity`. That is
+   deliberate twice over: `opacity` does not affect layout, so a hidden
+   sentence still occupies its space and revealing one cannot reflow the row
+   or nudge its neighbours; and it is not `display: none` or
+   `visibility: hidden`, so the text stays in the accessibility tree and in
+   the page a crawler reads.
+
+   Give the container `data-hover-reveal` and `tabindex="0"` so a keyboard
+   can reach what a pointer can. */
+[data-hover-reveal] {
+  outline: none;
+}
+.hover-veil {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+[data-hover-reveal]:hover .hover-veil,
+[data-hover-reveal]:focus-visible .hover-veil {
+  opacity: 1;
+  transform: none;
+}
+/* No hover on touch, so there is nothing to reveal with: show the text. */
+@media (hover: none) {
+  .hover-veil {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hover-veil {
+    transition: none;
+  }
+}
+
+/* Prose that is one argument in consecutive paragraphs.
+   --------------------------------------------------------------------
+   Two prose columns only work when both sides are genuinely parallel and
+   run about the same length. Every text-only pair on this site failed
+   that: 321 characters against 568 and 355 against 181 on methodology,
+   248 against 129 and 65 against 127 on pricing. The short side left a
+   hole beside the long one and the eye had to travel back up the page to
+   start the second half.
+
+   Stacked at the deck measure they read as what they are. This lives in
+   global.css so a page adds `prose-stack` rather than inventing its own
+   `*__cols` grid; .meth-onecol is the same rule under the name the
+   methodology markup already uses. Genuine pairs, prose beside an
+   equation or a question beside its answer, keep their own two-column
+   rules. */
+.prose-stack,
+.meth-onecol {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--measure-deck);
+}
+.prose-stack > p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0;
 }
 
 /* Container utility */
@@ -1450,12 +686,61 @@ strong {
   opacity: 1;
   transform: none;
 }
+/* Stagger a whole section from one attribute.
+   --------------------------------------------------------------------
+   `data-reveal-group` on a container gives every direct child the soft
+   reveal and steps their delay, so a page gets motion by marking its
+   sections rather than by tagging every heading and paragraph with
+   `reveal-soft` and a hand-counted `data-stagger`. Methodology needed 42
+   of those; these pages need one attribute each.
+
+   The delay is nth-child rather than a data attribute so it is decided
+   at first paint. Doing it in script would mean the content painting,
+   then having opacity:0 applied, then fading back in, which reads as a
+   flicker on a fast connection. The observer only has to see the
+   container, and BaseLayout already adds `.seen` to whatever it
+   observes, so the same machinery drives both. */
+[data-reveal-group] > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+}
+[data-reveal-group].seen > * {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal-group].seen > *:nth-child(1) {
+  transition-delay: 0ms;
+}
+[data-reveal-group].seen > *:nth-child(2) {
+  transition-delay: 90ms;
+}
+[data-reveal-group].seen > *:nth-child(3) {
+  transition-delay: 180ms;
+}
+[data-reveal-group].seen > *:nth-child(4) {
+  transition-delay: 270ms;
+}
+[data-reveal-group].seen > *:nth-child(5) {
+  transition-delay: 360ms;
+}
+[data-reveal-group].seen > *:nth-child(6) {
+  transition-delay: 450ms;
+}
+/* Past six the delay stops growing: an eighth item would otherwise wait
+   two thirds of a second after the section is already on screen. */
+[data-reveal-group].seen > *:nth-child(n + 7) {
+  transition-delay: 450ms;
+}
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-soft,
   .reveal-left,
   .reveal-right,
-  .reveal-diagonal {
+  .reveal-diagonal,
+  [data-reveal-group] > * {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -1493,234 +778,6 @@ strong {
 .reveal-diagonal.seen {
   opacity: 1;
   transform: none;
-}
-.delay-1 {
-  transition-delay: 0.1s;
-}
-.delay-2 {
-  transition-delay: 0.2s;
-}
-.delay-3 {
-  transition-delay: 0.3s;
-}
-.delay-4 {
-  transition-delay: 0.4s;
-}
-
-/* Asymmetric highlight smear behind key text. Every variant uses
-   a horizontal linear-gradient that fades on both edges (no hard
-   rectangles), with sharp corners (border-radius: 0). Variants
-   differ in:
-     - rotation angle (each headline leans a different way)
-     - inset on each side (some smears extend past the viewport
-       edge — body has overflow-x: hidden so the bleed clips
-       cleanly without adding a horizontal scrollbar)
-     - tint (teal / yellow / green rotate across pages)
-     - mobile-specific inset (highlights are pulled in or pushed
-       out at narrow widths so the asymmetry reads at every
-       breakpoint)
-   ::before wipes in via scaleX from 0 -> var(--hl-scale) when
-   the parent gets .seen (driven by the same IntersectionObserver
-   that powers .reveal-soft). */
-.hl-block {
-  --hl-rot: -1.4deg;
-  --hl-bg: linear-gradient(
-    95deg,
-    transparent 0%,
-    rgba(15, 181, 165, 0.26) 12%,
-    rgba(15, 181, 165, 0.26) 86%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.28em;
-  --hl-inset-r: -10vw;
-  --hl-inset-b: -0.18em;
-  --hl-inset-l: -0.6em;
-  --hl-origin: left center;
-  --hl-scale: 1;
-  position: relative;
-  isolation: isolate;
-  width: fit-content;
-  max-width: 100%;
-}
-.hl-block::before {
-  content: '';
-  position: absolute;
-  inset: var(--hl-inset-t) var(--hl-inset-r) var(--hl-inset-b) var(--hl-inset-l);
-  background: var(--hl-bg);
-  border-radius: 0;
-  transform: rotate(var(--hl-rot)) scaleX(0);
-  transform-origin: var(--hl-origin);
-  transition: transform 0.85s var(--ease) 0.15s;
-  z-index: -1;
-  pointer-events: none;
-}
-.hl-block.seen::before,
-.hl-block:not(.reveal-soft)::before {
-  transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale));
-}
-/* Teal variants. */
-.hl-block--b {
-  --hl-rot: 1.8deg;
-  --hl-bg: linear-gradient(
-    95deg,
-    transparent 0%,
-    rgba(15, 181, 165, 0.3) 8%,
-    rgba(15, 181, 165, 0.3) 82%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.18em;
-  --hl-inset-r: -0.55em;
-  --hl-inset-b: -0.34em;
-  --hl-inset-l: -8vw;
-  --hl-origin: right center;
-  --hl-scale: 0.92;
-}
-.hl-block--c {
-  --hl-rot: -2.6deg;
-  --hl-bg: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--accent-bar) 18%,
-    var(--accent-bar) 80%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.5em;
-  --hl-inset-r: -14vw;
-  --hl-inset-b: 0;
-  --hl-inset-l: -0.4em;
-  --hl-scale: 0.9;
-}
-.hl-block--d {
-  --hl-rot: 0.55deg;
-  --hl-bg: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(15, 181, 165, 0.2) 6%,
-    rgba(15, 181, 165, 0.2) 94%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.08em;
-  --hl-inset-r: -18vw;
-  --hl-inset-b: -0.5em;
-  --hl-inset-l: -10vw;
-}
-/* Gold variants. */
-.hl-block--gold {
-  --hl-rot: 2.3deg;
-  --hl-bg: linear-gradient(
-    95deg,
-    transparent 0%,
-    rgba(240, 169, 26, 0.3) 8%,
-    rgba(240, 169, 26, 0.3) 86%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.22em;
-  --hl-inset-r: -0.45em;
-  --hl-inset-b: -0.32em;
-  --hl-inset-l: -12vw;
-  --hl-origin: right center;
-  --hl-scale: 0.94;
-}
-.hl-block--gold-b {
-  --hl-rot: -1.3deg;
-  --hl-bg: linear-gradient(
-    95deg,
-    transparent 0%,
-    rgba(240, 169, 26, 0.24) 14%,
-    rgba(240, 169, 26, 0.24) 78%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.32em;
-  --hl-inset-r: -8vw;
-  --hl-inset-b: -0.08em;
-  --hl-inset-l: -0.4em;
-  --hl-scale: 0.78;
-}
-/* Green variants. */
-.hl-block--green {
-  --hl-rot: -1.7deg;
-  --hl-bg: linear-gradient(
-    95deg,
-    transparent 0%,
-    rgba(14, 139, 79, 0.24) 10%,
-    rgba(14, 139, 79, 0.24) 85%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.28em;
-  --hl-inset-r: -16vw;
-  --hl-inset-b: -0.14em;
-  --hl-inset-l: -0.55em;
-}
-.hl-block--green-b {
-  --hl-rot: 1.2deg;
-  --hl-bg: linear-gradient(
-    95deg,
-    transparent 0%,
-    rgba(27, 182, 106, 0.24) 12%,
-    rgba(27, 182, 106, 0.24) 84%,
-    transparent 100%
-  );
-  --hl-inset-t: -0.16em;
-  --hl-inset-r: -0.5em;
-  --hl-inset-b: -0.4em;
-  --hl-inset-l: -14vw;
-  --hl-origin: right center;
-  --hl-scale: 0.88;
-}
-/* Smear variant: extra-soft gradient with both edges fading
-   further in from the inset rectangle. Use for the headline you
-   want to break the strongest. */
-.hl-block--smear {
-  --hl-rot: -0.7deg;
-  --hl-bg: linear-gradient(
-    110deg,
-    transparent 0%,
-    rgba(15, 181, 165, 0.3) 22%,
-    rgba(15, 181, 165, 0.3) 70%,
-    transparent 92%
-  );
-  --hl-inset-t: -0.2em;
-  --hl-inset-r: -0.6em;
-  --hl-inset-b: -0.18em;
-  --hl-inset-l: -0.6em;
-}
-.hl-block--right {
-  --hl-origin: right center;
-}
-
-/* Mobile pulls some of the off-screen bleeds in so the highlights
-   feel proportionate to the smaller viewport but still asymmetric
-   from one variant to the next. */
-@media (max-width: 720px) {
-  .hl-block {
-    --hl-inset-r: -18vw;
-  }
-  .hl-block--b {
-    --hl-inset-l: -18vw;
-  }
-  .hl-block--c {
-    --hl-inset-r: -22vw;
-  }
-  .hl-block--d {
-    --hl-inset-l: -18vw;
-    --hl-inset-r: -22vw;
-  }
-  .hl-block--gold {
-    --hl-inset-l: -20vw;
-  }
-  .hl-block--green {
-    --hl-inset-r: -22vw;
-  }
-  .hl-block--green-b {
-    --hl-inset-l: -22vw;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hl-block::before {
-    transition: none;
-    transform: rotate(var(--hl-rot)) scaleX(var(--hl-scale));
-  }
 }
 
 /* Focus styles for keyboard navigation */
@@ -1770,23 +827,6 @@ strong {
   color: var(--white);
   border-color: var(--navy);
 }
-.btn--invert {
-  background: var(--white);
-  color: var(--navy);
-  border-color: var(--white);
-}
-.btn--invert:hover {
-  background: rgba(255, 255, 255, 0.9);
-}
-.btn--invert-ghost {
-  background: transparent;
-  color: var(--white);
-  border-color: rgba(255, 255, 255, 0.35);
-}
-.btn--invert-ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--white);
-}
 
 /* Scroll progress indicator. Lives at the very top of the viewport;
    the teal rail itself is painted by the nav (border-top) so there's
@@ -1801,160 +841,4 @@ strong {
   z-index: 9999;
   pointer-events: none;
   transition: width 0.1s linear;
-}
-
-/* Back to top button */
-.back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--navy);
-  border: 1.5px solid rgba(255, 252, 247, 0.12);
-  color: var(--accent-text);
-  cursor: pointer;
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(12px) scale(0.85);
-  pointer-events: none;
-  transition:
-    opacity 0.4s var(--ease),
-    transform 0.4s var(--ease);
-  box-shadow: 0 4px 20px rgba(45, 45, 63, 0.18);
-}
-.back-to-top.visible {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-}
-.back-to-top:hover {
-  background: var(--accent);
-  color: var(--navy);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 24px var(--accent-rgba-18);
-}
-.back-to-top svg {
-  width: 16px;
-  height: 16px;
-}
-.back-to-top::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  border: 1.5px solid var(--accent);
-  opacity: 0;
-  animation: btt-pulse 2.5s ease-in-out infinite;
-}
-.back-to-top.visible::before {
-  opacity: 1;
-}
-@keyframes btt-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.15);
-    opacity: 0.3;
-  }
-}
-
-/* Form success overlay */
-.form-success-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(45, 106, 79, 0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
-  opacity: 0;
-  transform: scale(0.95);
-  pointer-events: none;
-  transition:
-    opacity 0.5s var(--ease),
-    transform 0.5s var(--ease);
-  z-index: 5;
-}
-.form-success-overlay.show {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-}
-.form-success-check {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: scale(0);
-  transition: transform 0.5s var(--ease) 0.15s;
-}
-.form-success-overlay.show .form-success-check {
-  transform: scale(1);
-}
-.form-success-check svg {
-  width: 24px;
-  height: 24px;
-  stroke: var(--white);
-  stroke-width: 3;
-  fill: none;
-  stroke-dasharray: 30;
-  stroke-dashoffset: 30;
-  transition: stroke-dashoffset 0.5s ease 0.4s;
-}
-.form-success-overlay.show .form-success-check svg {
-  stroke-dashoffset: 0;
-}
-.form-success-text {
-  color: var(--white);
-  font-size: 0.88rem;
-  font-weight: 700;
-  opacity: 0;
-  transform: translateY(8px);
-  transition:
-    opacity 0.4s var(--ease) 0.5s,
-    transform 0.4s var(--ease) 0.5s;
-}
-.form-success-overlay.show .form-success-text {
-  opacity: 1;
-  transform: none;
-}
-.form-success-sub {
-  color: rgba(255, 252, 247, 0.6);
-  font-size: 0.72rem;
-  font-weight: 500;
-  opacity: 0;
-  transition: opacity 0.4s var(--ease) 0.65s;
-}
-.form-success-overlay.show .form-success-sub {
-  opacity: 1;
-}
-.form-validation-error {
-  font-size: 0.78rem;
-  color: var(--error-color);
-  font-weight: 600;
-  margin-top: -0.5rem;
-  margin-bottom: 0.5rem;
-  display: none;
-}
-.form-validation-error.show {
-  display: block;
-}
-.cta-form input.error,
-.cta-form select.error,
-.cta-form textarea.error {
-  border-color: var(--error-color);
 }

@@ -1,6 +1,7 @@
 ---
 import CedarFAB from '../components/CedarFAB.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
+import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
   title: string;
@@ -39,6 +40,18 @@ const {
 const robotsValue = noindex
   ? 'noindex, nofollow'
   : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+// connect-src must name the app backend's origin or every auth/checkout call
+// from this site is blocked by CSP before it leaves the browser. Derived from
+// PUBLIC_API_URL at build time so the policy and the client always agree.
+const apiOrigin = (() => {
+  const raw = import.meta.env.PUBLIC_API_URL || '';
+  try {
+    return raw ? new URL(raw).origin : '';
+  } catch {
+    return '';
+  }
+})();
+const connectSrc = ["'self'", apiOrigin].filter(Boolean).join(' ');
 const ogT = ogTitle || title;
 const ogD = ogDescription || description;
 const ogI = ogImage || 'https://lumecon.ai/lumecon-og-image-1200x630.png';
@@ -84,7 +97,7 @@ const ogIA =
      fronts the site; add `X-Frame-Options: DENY` there. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests"
+      content={`default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src ${connectSrc}; upgrade-insecure-requests`}
     />
     <meta
       http-equiv="Permissions-Policy"
@@ -94,7 +107,6 @@ const ogIA =
 
     <!-- Favicons + app icons -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
@@ -115,7 +127,7 @@ const ogIA =
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={ogT} />
     <meta property="og:description" content={ogD} />
-    <meta property="og:site_name" content="Lumecon Inc." />
+    <meta property="og:site_name" content="Lumecon" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content={ogI} />
     <meta property="og:image:secure_url" content={ogI} />
@@ -154,12 +166,58 @@ const ogIA =
     more predictable on mobile, and the visual cost (no fade
     between pages) is negligible on a four-page marketing site. */
     }
+    <!-- The entity graph, on every page. The full Organization node lives
+         on the homepage; this compact pair rides everywhere so a crawler
+         landing on any page still learns who publishes it, that lumecon.ai
+         is the official source, and where the nodes join (@id). Duplicate
+         @ids merge in linked data, so the homepage's richer node wins. -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify([
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          '@id': 'https://lumecon.ai#org',
+          name: 'Lumecon Inc.',
+          alternateName: 'Lumecon',
+          url: 'https://lumecon.ai',
+          logo: 'https://lumecon.ai/brand/lumecon-logo-mark-transparent.png',
+          email: 'contact@lumecon.ai',
+          mainEntityOfPage: 'https://lumecon.ai',
+          sameAs: [
+            'https://www.linkedin.com/company/lumecon-ai',
+            'https://localeconomicimpact.com',
+            'https://tribaleconomicimpact.com',
+            'https://globaleconomicimpact.com',
+          ],
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          '@id': 'https://lumecon.ai#website',
+          url: 'https://lumecon.ai',
+          name: 'Lumecon Inc.',
+          alternateName: 'Lumecon',
+          description:
+            'The official website of Lumecon Inc. and the authoritative source of information about the Lumecon platform, Cedar, pricing and methodology.',
+          about: { '@id': 'https://lumecon.ai#org' },
+          publisher: { '@id': 'https://lumecon.ai#org' },
+          inLanguage: 'en-US',
+        },
+      ])}
+    />
     {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body class={bodyClass}>
     <a href="#top" class="skip-link">Skip to main content</a>
     <slot />
     {cedar && <CedarFAB />}
+    {
+      /* Every page gets the overlay; it removes itself on pages that have no
+        `data-zoom` picture, so the cost on a legal page is one script. */
+    }
+    <Lightbox />
     <ConsentBanner />
 
     <script>
@@ -229,7 +287,7 @@ const ogIA =
         var STAGGER_STEP = 90;
         function bind() {
           var selector =
-            '.reveal:not(.seen),.reveal-soft:not(.seen),.reveal-left:not(.seen),.reveal-right:not(.seen),.reveal-diagonal:not(.seen)';
+            '.reveal:not(.seen),.reveal-soft:not(.seen),.reveal-left:not(.seen),.reveal-right:not(.seen),.reveal-diagonal:not(.seen),[data-reveal-group]:not(.seen)';
           var els = document.querySelectorAll(selector);
           if (!els.length) return;
           var prefersReduced =

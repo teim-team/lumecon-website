@@ -6,8 +6,9 @@
  *
  *   paid plan  -> /checkout?tier=X (checkout already knows the plan)
  *   start free -> /welcome?plan=free when the visitor arrived from
- *                 signup (account exists; email= is carried), else
- *                 /signup?tier=free to create the free account first
+ *                 signup (account exists; flow state in
+ *                 sessionStorage), else /signup?tier=free to create
+ *                 the free account first
  *
  * Predominantly teal: the second step of the flow's progression
  * from the white public site into the product (see flow.css).
@@ -22,9 +23,9 @@ import { PLANS } from '../data/pricing';
    as capability, not just seat count (Tree is Cedar Grove, not
    merely unlimited users). */
 const PLAN_DIFF: Record<string, string> = {
-  starter: 'The full Lumecon model, Cedar and every supported geography',
-  standard: 'Adds Team Workspace: shared projects and collaborative review',
-  leader: 'Adds Cedar Grove, the organizational data library, and Cedar calibration',
+  sprout: 'The full Lumecon model, Cedar and every supported geography',
+  sapling: 'Adds Cedar Commons: shared projects, project notes and external collaborators',
+  tree: 'Adds Cedar Grove, the organizational data library, and Cedar calibration',
 };
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -53,7 +54,7 @@ import '../styles/flow.css';
         {
           PLANS.map((p) => (
             <a class="cpl-card" href={`/checkout?tier=${p.id}`} data-plan-link={p.id}>
-              {p.featured && <span class="cpl-card__flag">Most popular</span>}
+              {p.featured && <span class="cpl-card__flag">Recommended</span>}
               <span class="cpl-card__name">{p.name}</span>
               <span class="cpl-card__audience">&ldquo;{p.audience}&rdquo;</span>
               <span class="cpl-card__price">
@@ -72,30 +73,26 @@ import '../styles/flow.css';
       <a class="cpl-free" href="/signup?tier=free" data-free-link>
         <span class="cpl-free__label">Start free &rarr;</span>
         <span class="cpl-free__note">
-          Build an analysis end to end; full results unlock on any plan.
+          Full results unlock on any plan.
         </span>
       </a>
       <p class="cpl-foot">
-        Want the detail first? <a href="/pricing">Compare plans</a>. Consultancies use{' '}
-        <a href="/pricing#consultants">custom licensing</a>.
+        Want the detail first? <a href="/pricing">Compare plans</a>. Using Lumecon for client work?{' '}
+        <a href="/pricing#consultants">Commercial use starts with Sapling</a>.
       </p>
     </div>
   </main>
 
-  <script is:inline>
-    /* Carry the signup handoff through the flow. When email= is
-       present the account already exists, so Start free goes
-       straight to the welcome page instead of back through signup. */
-    (function () {
-      var qs = new URLSearchParams(window.location.search);
-      var email = qs.get('email');
-      if (!email) return;
-      document.querySelectorAll('[data-plan-link]').forEach(function (a) {
-        a.href += '&email=' + encodeURIComponent(email);
-      });
-      var free = document.querySelector('[data-free-link]');
+  <script>
+    import { hasSignedUp } from '../lib/flowState';
+    /* The signup handoff travels as sessionStorage flow state, never
+       in the URL. Only a completed signup (not a checkout prefill email)
+       proves the account exists, so Start free skips straight to the
+       welcome page instead of routing back through signup. */
+    if (hasSignedUp()) {
+      const free = document.querySelector<HTMLAnchorElement>('[data-free-link]');
       if (free) free.href = '/welcome?plan=free';
-    })();
+    }
   </script>
 
   <Footer />

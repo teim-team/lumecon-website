@@ -17,51 +17,59 @@
   flex-direction: column;
 }
 
-/* Header: small Cedar identity bar above the transcript. */
+/* Header: the same teal identity band as the in-app Ask Cedar panel
+   (status dot, uppercase title, context line), sampled from the app's
+   rendered header so the two surfaces read identically. */
 .cedar-chat__header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.65rem 1rem;
-  background: var(--white);
-  border-bottom: 1px solid var(--rule);
+  align-items: flex-start;
+  padding: 1.05rem 1.15rem;
+  /* Was a one-off #0f9488, a teal that exists nowhere else in the system and
+     did not match the app's Cedar header. --accent-deep is #0a8a7e, the same
+     value teim-app uses as --teal-dark, so the two panels now agree. */
+  background: var(--accent-deep);
 }
-.cedar-chat__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
+.cedar-chat__heading {
+  display: grid;
+  gap: 0.2rem;
 }
-.cedar-chat__name {
-  font-family: var(--font-display);
+.cedar-chat__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cedar-chat__title {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
   font-weight: 600;
-  font-size: 0.92rem;
-  letter-spacing: -0.01em;
-  color: var(--navy);
-}
-.cedar-chat__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  line-height: 1.2;
+  color: #fff;
+}
+.cedar-chat__context {
+  color: rgba(255, 255, 255, 0.92);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.3;
 }
 .cedar-chat__status-dot {
-  width: 7px;
-  height: 7px;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-rgba-18);
+  background: var(--accent-light);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  flex: 0 0 auto;
 }
 
 .cedar-chat__transcript {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  max-height: 400px;
+  /* Viewport-aware cap: the transcript grows with the conversation up to
+     a ceiling, then scrolls inside itself. min() keeps it from ever
+     pushing the header or composer off a short screen. */
+  max-height: min(400px, 52vh);
   min-height: 220px;
   overflow-y: auto;
   padding: 1.3rem 1.3rem 1rem;
@@ -214,10 +222,10 @@
 .cedar-chat__input {
   flex: 1;
   width: 100%;
-  padding: 0.75rem 1.05rem;
+  padding: 0.55rem 0.9rem;
   background: var(--white);
-  border: 1px solid var(--rule-strong);
-  border-radius: 999px;
+  border: 1px solid var(--dteal, var(--accent-text));
+  border-radius: 6px;
   font-family: var(--font-sans);
   /* 16px floor on font-size prevents iOS Safari zoom on focus. */
   font-size: 16px;
@@ -233,17 +241,19 @@
 }
 .cedar-chat__input:focus {
   outline: none;
-  border-color: var(--navy);
-  box-shadow: 0 0 0 3px rgba(14, 21, 48, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-rgba-18, rgba(15, 181, 165, 0.18));
 }
 .cedar-chat__send {
   width: 44px;
   height: 44px;
   padding: 0;
   flex-shrink: 0;
-  background: var(--accent-chip);
-  color: #fff; /* fixed white on the fixed teal — see user-bubble note */
-  border: 1px solid var(--accent-chip);
+  /* Matches the app's send control: quiet gray circle that turns teal
+     on hover, instead of a solid teal button. */
+  background: var(--rule-strong);
+  color: var(--ink-2);
+  border: none;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -255,7 +265,8 @@
   touch-action: manipulation;
 }
 .cedar-chat__send:hover {
-  background: var(--accent-chip-hover);
+  background: var(--dteal, var(--accent-text));
+  color: #fff;
   transform: translateY(-1px);
 }
 .cedar-chat__send:focus-visible {

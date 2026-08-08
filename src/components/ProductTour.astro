@@ -31,9 +31,9 @@ const ROWS = [
   },
   {
     id: 'workspace',
-    kicker: 'A living workspace',
+    kicker: 'Your Workspace',
     title: 'Keep the work alive',
-    body: 'Drafts, completed analyses, comparisons and exports stay together in one workspace built for recurring analysis, ready to open, compare or export as a workbook, CSV tables or a printable summary.',
+    body: 'Drafts, completed analyses, comparisons and exports stay together in your Workspace, built for recurring analysis and ready to open, compare or export as a workbook, CSV tables or a printable summary.',
     img: '/app/dashboard.webp',
     imgDark: '/app/dashboard-dark.webp',
     alt: 'Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.',
@@ -63,14 +63,19 @@ const ROWS = [
               <h3 class="tour-row__title">{row.title}</h3>
               <p class="tour-row__body">{row.body}</p>
             </div>
-            <figure class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}>
+            {/* data-zoom: these are 1920px renders shown at a third of that,
+                so clicking one opens it full size. See Lightbox.astro. */}
+            <figure
+              class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
+              data-zoom
+            >
               <picture>
                 <source srcset={row.imgDark} media="(prefers-color-scheme: dark)" />
                 <img
                   src={row.img}
                   alt={row.alt}
-                  width="1600"
-                  height="1000"
+                  width="1920"
+                  height="1080"
                   loading="lazy"
                   decoding="async"
                 />

@@ -71,7 +71,7 @@ export interface Platform {
   geographyScope: string;
 }
 
-export const PLATFORMS: readonly Platform[] = [
+const PLATFORMS: readonly Platform[] = [
   {
     slug: 'local',
     id: 'local-economic-impact',
@@ -86,7 +86,7 @@ export const PLATFORMS: readonly Platform[] = [
     desc: 'For cities, counties, state agencies, enterprises, foundations, universities and the nonprofits that work alongside them. Run grant, council and board-ready analyses in-house, in minutes instead of months.',
     audience:
       'Municipalities, state agencies, enterprises, foundations, universities and nonprofits',
-    scope: 'Local & regional economic impact analysis',
+    scope: 'Local and regional economic impact analysis',
     iconId: 'local',
     kind: 'regional',
     geographyScope: 'County, state and national',
@@ -102,9 +102,9 @@ export const PLATFORMS: readonly Platform[] = [
     comingSoon: false,
     badgeKind: 'active',
     tag: 'Modeled on tribal terms, with reservations and trust lands as first-class geographies.',
-    desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs, and Native-entity federal contractors, with Indigenous data sovereignty a design priority from the start rather than an afterthought.',
+    desc: 'For tribal governments and the departments within them, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native nonprofits, Alaska Native Corporations, Native Hawaiian Organizations, tribal enterprises, Native CDFIs and Native-entity federal contractors, with Indigenous data sovereignty a design priority from the start rather than an afterthought.',
     audience:
-      'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native non-profits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
+      'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native nonprofits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
     scope: 'Reservation, state, national economic impact analysis',
     iconId: 'tribal',
     kind: 'regional',
@@ -139,7 +139,7 @@ export const PLATFORMS: readonly Platform[] = [
     comingSoon: false,
     badgeKind: 'active',
     tag: 'Lumecon for consultants delivering analyses to outside clients.',
-    desc: 'For consulting firms and independent professionals using Lumecon commercially for outside clients. Custom commercial licensing covers the full platform, all applicable geographies, commercial and client use, client and project workspaces and Cedar calibrated to the firm’s analytical and reporting workflow.',
+    desc: 'For consulting firms and independent professionals using Lumecon commercially for outside clients. Commercial use starts with Sapling: Cedar Commons doubles as client intake and project workspaces, with seats the firm can reassign as engagements change, and Tree serves larger practices with unlimited organizational users, Cedar Grove and Cedar calibration.',
     audience:
       'Consulting firms and independent professionals running economic impact analyses on behalf of outside clients',
     scope: 'Reservation, county, state and national economic impact analysis',

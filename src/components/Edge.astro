@@ -6,6 +6,15 @@
  * (thin strokes, sharp joins, teal chip). The header tells the
  * provenance story in evidence terms: who built it, on what
  * foundation, and what that makes possible.
+ *
+ * Six tiles that lead with the icon. At rest each shows its icon, label
+ * and headline; the sentence underneath appears on hover. That is what
+ * takes the density down: six paragraphs is most of the reading on this
+ * part of the page, and a visitor scanning for "do they do security" only
+ * needs the headline until they care.
+ *
+ * The reveal is the shared .hover-veil pattern in global.css, which the
+ * Cedar page's "how it is built" facts use too.
  */
 import '../styles/home.css';
 
@@ -25,7 +34,7 @@ const CARDS = [
   {
     k: 'AI native',
     t: 'Cedar, from the beginning',
-    b: 'Cedar was designed into the workflow from the beginning, not added as a chat layer later.',
+    b: 'Cedar was designed into the workflow from the beginning, so it participates at every step from intake to reporting.',
     icon: 'spark',
   },
   {
@@ -43,7 +52,7 @@ const CARDS = [
   {
     k: 'Built to evolve',
     t: 'Improving with the evidence',
-    b: 'The model, data infrastructure and software improve as the evidence does.',
+    b: 'The model, the data behind it and the software improve as the evidence does.',
     icon: 'trend',
   },
 ];
@@ -54,14 +63,14 @@ const CARDS = [
     <header class="flowsec-head">
       <p class="h-kicker">The Lumecon edge</p>
       <h2 class="flowsec-title" id="edge-title">
-        Built on decades of economic science. <span class="brand-em">Not frozen in it.</span>
+        Decades of economic science, <span class="brand-em">kept current with the economy.</span>
       </h2>
       <p class="flowsec-lede">
         Built by economists, engineers and researchers with experience at the Federal Reserve and
-        leading universities, Lumecon combines the proven foundation of input-output analysis with
-        current public data, higher-frequency signals, modern estimation methods and software built
-        for recurring analysis. <span class="brand-em"
-          >We invest in the model, not just the software around it.</span
+        leading universities, Lumecon combines the established foundation of input-output analysis
+        with current public data, modern estimation methods and software built for recurring
+        analysis. <span class="brand-em"
+          >We invest in the model itself, and in the software around it.</span
         >{' '}
         <a class="inline-link" href="/methodology">Read the methodology</a>.
       </p>
@@ -70,7 +79,7 @@ const CARDS = [
     <div class="edge-grid">
       {
         CARDS.map((c) => (
-          <article class="edge-card">
+          <article class="edge-card" data-hover-reveal tabindex="0">
             <span class="edge-ic" aria-hidden="true">
               {c.icon === 'cloud' && (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -123,7 +132,7 @@ const CARDS = [
             </span>
             <p class="whyw-card__k">{c.k}</p>
             <h3 class="whyw-card__t">{c.t}</h3>
-            <p class="whyw-card__b">{c.b}</p>
+            <p class="whyw-card__b hover-veil">{c.b}</p>
           </article>
         ))
       }

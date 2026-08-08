@@ -9,7 +9,6 @@ import Hero from '../components/Hero.astro';
 import WhyBand from '../components/WhyBand.astro';
 import ProductTour from '../components/ProductTour.astro';
 import Edge from '../components/Edge.astro';
-import CedarTeaser from '../components/CedarTeaser.astro';
 import FinalCta from '../components/FinalCta.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -26,31 +25,31 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Is Lumecon an alternative to IMPLAN or REMI?',
-    a: 'Lumecon is economic impact analysis software in the same field as IMPLAN, RIMS II and REMI, and organizations evaluate it as an alternative to traditional economic modeling tools. Lumecon uses input-output modeling to estimate direct, indirect and induced effects, prices by flat annual subscription with no geography add-ons and no per-analysis fees, and includes Cedar, an AI economic analyst, in every plan. Eligible organizations switching from qualifying software can ask about the competitive transition offer. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
+    a: 'Lumecon is economic impact analysis software in the same field as IMPLAN, RIMS II and REMI, and organizations evaluate it as an alternative to traditional economic modeling tools. Lumecon uses input-output modeling to estimate direct, indirect and induced effects, prices by flat annual subscription with no geography add-ons and no per-analysis fees, and includes Cedar, an AI economic analyst, in every plan. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
   },
   {
     q: 'Who uses Lumecon?',
-    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits, and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue, or local development, Lumecon can help make that impact easier to understand.',
+    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue or local development, Lumecon can help make that impact easier to understand.',
   },
   {
-    q: 'How does Lumecon support tribal nations?',
+    q: 'How does Lumecon support Tribal Nations?',
     a: 'Tribal government, tribal enterprise and Whole Nation analysis are part of Lumecon itself, included in every plan. Whole Nation analysis brings a tribal government and its enterprises together in one integrated analysis, with statewide and homelands results side by side, so a Nation can show its combined economic footprint with clear, data-backed reports.',
   },
   {
-    q: 'Can cities, counties, and other organizations use Lumecon?',
-    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers, and other organizations. The platform can help explain how a project, institution, investment, or program affects a local or regional economy.',
+    q: 'Can cities, counties and other organizations use Lumecon?',
+    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers and other organizations. The platform can help explain how a project, institution, investment or program affects a local or regional economy.',
   },
   {
     q: 'What are economic multipliers?',
-    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies, or funds construction, that activity directly supports jobs and spending. Then suppliers, workers, and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.',
+    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies or funds construction, that activity directly supports jobs and spending. Then suppliers, workers and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.',
   },
   {
     q: 'What geographies does Lumecon cover?',
-    a: 'Lumecon covers all federally recognized tribal nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state, and the entire country. All of it is included in one annual subscription, not priced per geography.',
+    a: 'Lumecon covers all federally recognized Tribal Nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state and the entire country. All of it is included in one annual subscription, not priced per geography.',
   },
   {
     q: 'How much does Lumecon cost?',
-    a: 'Lumecon has three public plans: Sprout at $500 a year for one user, Sapling at $2,500 a year for up to 10 users with Team Workspace, and Tree at $7,500 a year with unlimited organizational users, Cedar Grove and hands-on Cedar calibration. Every plan includes the full model, Cedar, unlimited analysis and every supported U.S. geography. Organizations already paying for qualifying economic impact analysis software can ask about the competitive transition offer: the first annual license for 50% of their documented prior-year spend.',
+    a: 'Lumecon has three public plans: Sprout at $1,000 a year for one user, Sapling at $2,500 a year for up to 10 users with Cedar Commons, and Tree at $7,500 a year with unlimited organizational users, Cedar Grove and hands-on Cedar calibration. Every plan includes the full model, Cedar, unlimited analysis and every supported U.S. geography.',
   },
   {
     q: 'Can I try Lumecon for free?',
@@ -58,7 +57,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What is Cedar?',
-    a: "I'm Cedar, Lumecon's site assistant. I can help explain what Lumecon does, who the platform is for, how economic impact reporting works, and how to get in touch with the team. I'm here to point you in the right direction, not replace a conversation with the Lumecon team.",
+    a: "Cedar is Lumecon's AI economic analyst, included in every plan. See lumecon.ai/cedar for how it works. The chat on this site is a lightweight Cedar that answers questions about Lumecon.",
   },
   {
     q: 'Where was Lumecon built?',
@@ -83,14 +82,20 @@ const jsonLd = [
     logo: `${site.url}/brand/lumecon-logo-mark-transparent.png`,
     image: `${site.url}/lumecon-og-image-1200x630.png`,
     description:
-      'Lumecon Inc. builds economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible analyses in minutes, with Cedar AI in every plan. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Plans from $500 a year, free to try.',
+      'Lumecon Inc. builds economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible analyses in minutes, with Cedar AI in every plan. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Plans from $1,000 a year, free to try.',
     email: site.email,
     slogan: site.tagline,
     naics: '541512',
     industry: 'Economic Impact Analysis Software',
+    mainEntityOfPage: site.url,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: site.email,
+      contactType: 'sales and support',
+      availableLanguage: 'English',
+    },
     sameAs: [
       'https://www.linkedin.com/company/lumecon-ai',
-      'https://lumecon.ai',
       'https://localeconomicimpact.com',
       'https://tribaleconomicimpact.com',
       'https://globaleconomicimpact.com',
@@ -120,8 +125,8 @@ const jsonLd = [
       'Alaska Native Corporations',
       'Native Hawaiian Organizations',
       'AIANNH geography',
-      'Direct, Indirect, and Induced Effects',
-      'Jobs, Output, and Earnings',
+      'Direct, Indirect and Induced Effects',
+      'Jobs, Output and Earnings',
       'Economic Development Organizations',
       'Municipal Finance',
       'State and Local Government Software',
@@ -141,16 +146,22 @@ const jsonLd = [
       target: `mailto:${site.email}`,
     },
   },
-  ...REGIONAL_PLATFORMS.map((p) => ({
+  // One product, one Service. The audiences the old per-platform entries
+  // described are variants of the same Lumecon application, not separate
+  // products with their own names and domains.
+  {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    serviceType: 'Economic impact analysis software',
-    name: p.name,
-    url: p.url,
+    serviceType: 'Economic Impact Analysis Software',
+    name: 'Lumecon',
+    url: site.url,
     provider: { '@type': 'Organization', name: site.legalName },
-    ...(p.slug === 'global' ? {} : { areaServed: { '@type': 'Country', name: 'United States' } }),
-    audience: { '@type': 'Audience', audienceType: p.audience },
-  })),
+    areaServed: { '@type': 'Country', name: 'United States' },
+    audience: {
+      '@type': 'Audience',
+      audienceType: REGIONAL_PLATFORMS.map((p) => p.audience).join('; '),
+    },
+  },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -181,6 +192,9 @@ const jsonLd = [
     url: site.url,
     name: 'Lumecon Inc.',
     alternateName: 'Lumecon',
+    description:
+      'The official website of Lumecon Inc. and the authoritative source of information about the Lumecon platform, Cedar, pricing and methodology.',
+    about: { '@id': `${site.url}#org` },
     publisher: { '@id': `${site.url}#org` },
     inLanguage: 'en-US',
   },
@@ -188,13 +202,13 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title="Lumecon | Economic Impact Analysis Software"
-  description="Economic impact analysis software. Lumecon turns budgets, financial statements, payroll and program records into credible analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across counties, states, the nation, reservations and trust lands, with Cedar AI in every plan. Plans from $500 a year, free to try."
+  title="Lumecon | Economic Analysis"
+  description="Economic impact analysis software. Lumecon turns budgets, financial statements, payroll and program records into credible analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across counties, states, the nation, reservations and trust lands, with Cedar AI in every plan. Plans from $1,000 a year, free to try."
   canonical="https://lumecon.ai/"
   keywords="economic impact analysis, economic impact analysis software, economic impact analysis software, how to measure economic impact, IMPLAN, IMPLAN alternative, Implan, Implan alternative, RIMS II, RIMS 2, RIMS II alternative, BEA RIMS, REMI, Remi, REMI alternative, Lightcast, EMSI, Emsi, input-output modeling, fiscal multiplier, economic multipliers, alternative data, AI for government, AI for local government, AI for tribes, AI for tribal governments, AI for economic development, government AI software, tribal economic impact, tribal economic development software, reservation economics, ANCSA regions, Alaska Native Corporations, Native Hawaiian Organizations, AIANNH, Cedar AI, economic impact for grants, grant economic impact report, policy analysis software, government software, public-sector analytics, mission-driven organizations, CDFI, economic development organizations, Bureau of Economic Analysis, direct indirect induced effects, jobs output earnings, Cornell University, Cornell Brooks School, Cornell Law, Dartmouth, Federal Reserve, Center for Indian Country Development"
-  ogTitle="Economic Impact Analysis Software"
-  ogDescription="Credible economic impact analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across supported U.S. geographies, with Cedar AI in every plan. Plans from $500 a year, free to try."
-  ogImageAlt="Lumecon. Economic impact analysis software with Cedar AI in every plan. Plans from $500 a year, free to try."
+  ogTitle="Measure the Economic Impact of Any Decision"
+  ogDescription="Credible economic impact analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across supported U.S. geographies, with Cedar AI in every plan. Plans from $1,000 a year, free to try."
+  ogImageAlt="Lumecon. Economic impact analysis software with Cedar AI in every plan. Plans from $1,000 a year, free to try."
   bodyClass="home-page"
   jsonLd={jsonLd}
 >
@@ -205,7 +219,6 @@ const jsonLd = [
     <WhyBand />
     <ProductTour />
     <Edge />
-    <CedarTeaser />
     <FinalCta />
   </main>
   <Footer isHome={true} />
@@ -223,7 +236,6 @@ const jsonLd = [
   const STAGGER_DELAY_PER_ITEM = 150; // ms between staggered reveals
   const REVEAL_THRESHOLD = 0.08;
   const REVEAL_ROOT_MARGIN = '0px 0px -30px 0px';
-  const SECTION_ACTIVE_ROOT_MARGIN = '-40% 0px -55% 0px';
 
   // Scroll progress indicator + nav scroll state
   (function () {
@@ -274,25 +286,4 @@ const jsonLd = [
     .querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal')
     .forEach((el) => obs.observe(el));
 
-  // Active section highlighting in nav
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a[href^="#"], .nav-links a[href^="/#"]');
-  const sectionObs = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          navLinks.forEach((link) => {
-            const href = link.getAttribute('href') || '';
-            const match = href === '#' + id || href === '/#' + id;
-            link.classList.toggle('nav-active', match);
-            if (match) link.setAttribute('aria-current', 'location');
-            else link.removeAttribute('aria-current');
-          });
-        }
-      });
-    },
-    { threshold: 0, rootMargin: SECTION_ACTIVE_ROOT_MARGIN },
-  );
-  sections.forEach((s) => sectionObs.observe(s));
 </script>

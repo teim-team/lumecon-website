@@ -1,0 +1,264 @@
+---
+/**
+ * Lightbox: click a product screenshot to read it at full size.
+ *
+ * WHY
+ * Every app screenshot on this site is a 1920x1080 render displayed at
+ * roughly a third of that. The figures, the county map and the Cedar panel
+ * are all in the picture and none of them can be read. A reader deciding
+ * whether this software does what they need is exactly the reader who wants
+ * to look closely, and until now the only way was to open the image in a new
+ * tab from the context menu.
+ *
+ * OPT-IN
+ * Nothing is zoomable unless its container carries `data-zoom`. That keeps
+ * the brand mark, the ornamental card art and the sector photographs out of
+ * it: enlarging a 300px decoration gives a reader nothing, and one dead
+ * click teaches them not to try the ones that work.
+ *
+ * ONE OVERLAY FOR THE DOCUMENT
+ * The dialog is rendered once by BaseLayout and reused by every trigger.
+ * There is only ever one picture enlarged, and a dialog per screenshot would
+ * put a dozen of them in the accessibility tree of the home page.
+ *
+ * WHAT IT COPIES FROM THE TRIGGER
+ * `currentSrc` rather than `src`, so a <picture> that has resolved its dark
+ * variant enlarges the dark one. The caption comes from a figcaption inside
+ * the trigger, or failing that from the figure around it, which is how the
+ * hero trio picks up its shared caption without any wiring.
+ *
+ * FIT IS NOT THE END OF IT
+ * These renders are 1920px wide. Fitting one to a laptop window still drops
+ * a quarter of the pixels, and fitting one to a phone lands at the size it
+ * already was in the page, which would make the whole feature a no-op on the
+ * device where reading a screenshot is hardest. So the picture has a second
+ * state at its own resolution and the overlay scrolls. Clicking the picture
+ * toggles between the two; clicking anything else closes, in either state.
+ */
+import '../styles/lightbox.css';
+---
+
+<div
+  class="lb"
+  id="lightbox"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Enlarged screenshot"
+  hidden
+>
+  <button class="lb__close" id="lightboxClose" type="button" aria-label="Close">
+    <span aria-hidden="true">&#10005;</span>
+  </button>
+  <div class="lb__box">
+    <img class="lb__img" id="lightboxImg" src="" alt="" />
+    <p class="lb__cap" id="lightboxCap"></p>
+  </div>
+  <p class="lb__hint" id="lightboxHint" aria-hidden="true">Click anywhere or press Esc to close</p>
+</div>
+
+<script is:inline>
+  (function () {
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lightboxImg');
+    var lbCap = document.getElementById('lightboxCap');
+    var lbClose = document.getElementById('lightboxClose');
+    var lbHint = document.getElementById('lightboxHint');
+    if (!lb || !lbImg || !lbCap || !lbClose || !lbHint) return;
+
+    /* Binding must be safe to attempt twice. A host that stamps this page
+       out of a template and re-runs its scripts would otherwise attach two
+       click listeners to the picture, and two toggles are a no-op: the
+       enlarge-to-full-size click would silently stop working. */
+    if (lb.dataset.bound) return;
+    lb.dataset.bound = '1';
+
+    var zones = [].slice.call(document.querySelectorAll('[data-zoom]'));
+    if (!zones.length) {
+      /* No zoomable picture on this page, so the dialog is dead markup.
+         Remove it rather than leave an empty dialog in the tree. */
+      lb.remove();
+      return;
+    }
+
+    var opener = null;
+
+    /* The caption a reader gets in the overlay. A figcaption inside the
+       trigger is the picture's own; a figcaption in the figure around it
+       belongs to the group, which is how the hero's three frames share one
+       line without being told about it. */
+    function captionFor(zone) {
+      var own = zone.querySelector('figcaption');
+      if (own) return own.textContent.trim();
+      var group = zone.closest('figure');
+      var shared = group && group.querySelector('figcaption');
+      return shared ? shared.textContent.trim() : '';
+    }
+
+    /* The file this image is meant to show, resolved from the markup the
+       way the browser would: the first <source> whose media matches, else
+       the src. Not `currentSrc`: that reports what has finished LOADING,
+       and under the rotating hero it lags one rotation behind `src` while
+       the new file decodes, so a click in that window would enlarge the
+       previous example under the new example's caption. */
+    function fileFor(img) {
+      var picture = img.parentElement;
+      if (picture && picture.tagName === 'PICTURE') {
+        var sources = [].slice.call(picture.querySelectorAll('source'));
+        for (var i = 0; i < sources.length; i++) {
+          var media = sources[i].getAttribute('media');
+          var set = sources[i].getAttribute('srcset');
+          if (set && (!media || window.matchMedia(media).matches)) return set;
+        }
+      }
+      return img.getAttribute('src') || img.currentSrc;
+    }
+
+    /* Whether the picture has more resolution than the fitted view shows.
+       A screenshot already displayed at its own size has nowhere to go, and
+       offering a zoom that changes nothing is worse than not offering one. */
+    function canZoom() {
+      return lbImg.naturalWidth > lbImg.clientWidth + 8;
+    }
+
+    function refreshZoomAffordance() {
+      var full = lb.classList.contains('is-full');
+      var can = canZoom();
+      lb.classList.toggle('lb--zoomable', can && !full);
+      lbHint.textContent = full
+        ? 'Click the image to fit it, or Esc to close'
+        : can
+          ? 'Click the image for full size, or Esc to close'
+          : 'Click anywhere or press Esc to close';
+      /* The picture joins the tab order only when it does something. A
+         keyboard-only reader gets the same full-size view a pointer does,
+         and is not made to tab past a control with no effect. */
+      var interactive = can || full;
+      lbImg.setAttribute('tabindex', interactive ? '0' : '-1');
+      if (interactive) lbImg.setAttribute('role', 'button');
+      else lbImg.removeAttribute('role');
+    }
+
+    function setFull(full) {
+      lb.classList.toggle('is-full', full);
+      if (full) {
+        /* Open on the middle of the picture rather than its top-left
+           corner, which is a window frame on most of these renders. */
+        lb.scrollLeft = (lb.scrollWidth - lb.clientWidth) / 2;
+        lb.scrollTop = 0;
+      }
+      refreshZoomAffordance();
+    }
+
+    function open(zone) {
+      var img = zone.querySelector('img');
+      if (!img) return;
+      opener = img;
+      lb.classList.remove('is-full');
+      lbImg.src = fileFor(img);
+      lbImg.alt = img.alt || '';
+      var cap = captionFor(zone);
+      lbCap.textContent = cap;
+      lbCap.hidden = !cap;
+      /* Replacing the scrollbar's width with padding keeps the page behind
+         the scrim from jumping sideways as it locks. */
+      var bar = window.innerWidth - document.documentElement.clientWidth;
+      if (bar > 0) document.body.style.paddingRight = bar + 'px';
+      document.documentElement.classList.add('lb-open');
+      lb.hidden = false;
+      lbClose.focus();
+      refreshZoomAffordance();
+    }
+
+    function close() {
+      if (lb.hidden) return;
+      lb.hidden = true;
+      lb.classList.remove('is-full', 'lb--zoomable');
+      document.documentElement.classList.remove('lb-open');
+      document.body.style.paddingRight = '';
+      /* Release the file: a 1920px webp held by a hidden img is a megabyte
+         of decoded bitmap for a dialog nobody is looking at. */
+      lbImg.removeAttribute('src');
+      if (opener) {
+        opener.focus();
+        opener = null;
+      }
+    }
+
+    /* naturalWidth is 0 until the file arrives, so the affordance is
+       decided again once it has. */
+    lbImg.addEventListener('load', refreshZoomAffordance);
+    window.addEventListener('resize', function () {
+      if (!lb.hidden) refreshZoomAffordance();
+    });
+
+    zones.forEach(function (zone) {
+      var img = zone.querySelector('img');
+      if (!img) return;
+
+      /* The image becomes the control. A wrapping <button> would be better
+         semantics and would also re-lay-out every screenshot on the site;
+         role plus tabindex gives the same keyboard contract, and the alt
+         text is already the accessible name. */
+      img.setAttribute('role', 'button');
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('aria-haspopup', 'dialog');
+
+      var badge = document.createElement('span');
+      badge.className = 'zoom-badge';
+      badge.setAttribute('aria-hidden', 'true');
+      badge.innerHTML =
+        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" ' +
+        'stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M6 1.4H1.4V6M10 1.4h4.6V6M6 14.6H1.4V10M10 14.6h4.6V10" /></svg>';
+      zone.appendChild(badge);
+
+      img.addEventListener('click', function () {
+        open(zone);
+      });
+      img.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+          event.preventDefault();
+          open(zone);
+        }
+      });
+    });
+
+    /* The picture toggles between fitted and full size. */
+    function toggleFull(event) {
+      event.stopPropagation();
+      if (!lb.classList.contains('is-full') && !canZoom()) return;
+      setFull(!lb.classList.contains('is-full'));
+    }
+    lbImg.addEventListener('click', toggleFull);
+    lbImg.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault();
+        toggleFull(event);
+      }
+    });
+
+    /* Click out. Anything that is not the picture or its caption closes,
+       which includes the scrim, the margins and the close button. */
+    lb.addEventListener('click', function (event) {
+      if (event.target === lbCap) return;
+      close();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (lb.hidden) return;
+      if (event.key === 'Escape') {
+        close();
+        return;
+      }
+      /* Trap Tab inside the dialog. The ring is the close button plus, when
+         the picture has more resolution to give, the picture itself. */
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        var ring = lbImg.getAttribute('tabindex') === '0' ? [lbClose, lbImg] : [lbClose];
+        var at = ring.indexOf(document.activeElement);
+        var step = event.shiftKey ? -1 : 1;
+        ring[(at + step + ring.length) % ring.length].focus();
+      }
+    });
+  })();
+</script>

@@ -67,6 +67,63 @@
   color: var(--navy);
   letter-spacing: -0.005em;
 }
+/* Required-field marker and legend: dark teal for contrast on white (gold is
+   brand-only; the palette carries no red). */
+.auth-req {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+.auth-reqnote {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--muted, #6b6f8a);
+  margin: 0 0 1rem;
+}
+/* Sticky-footer column: the auth split fills exactly the space between the
+   nav and the slim footer, so the footer sits flush at the bottom of the
+   viewport with no leftover white band above it. Without this the split's
+   own min-height overshot the viewport and pushed the footer past the fold,
+   leaving a gap once the big marketing footer was replaced by the slim one. */
+.auth-body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.auth-body > main {
+  flex: 1 0 auto;
+}
+.auth-body .asplit {
+  min-height: 0;
+}
+.auth-body > .auth-foot {
+  flex: 0 0 auto;
+  /* A global flow rule adds a top margin to footers; zero it here so the
+     footer sits flush against the split and `main` grows to fill instead of
+     leaving a white band above the footer. */
+  margin-top: 0;
+}
+
+/* Auth pages get a slim legal strip instead of the full marketing footer:
+   the goal here is to finish signing up, not to browse the site map. */
+.auth-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  border-top: 1px solid var(--hairline, #e6e8ef);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--muted, #6b6f8a);
+}
+.auth-foot a {
+  color: var(--muted, #6b6f8a);
+  text-decoration: none;
+}
+.auth-foot a:hover {
+  color: var(--accent-text);
+  text-decoration: underline;
+}
 .auth-field > input,
 .auth-field > textarea {
   font-family: var(--font-sans);
@@ -389,74 +446,6 @@
 }
 
 /* ---------- checkout ---------- */
-.auth-panel--wide {
-  max-width: 560px;
-}
-.co-link {
-  color: var(--accent-text);
-  font-weight: 600;
-  text-decoration: none;
-}
-.co-link:hover {
-  text-decoration: underline;
-}
-.co-plans {
-  display: grid;
-  gap: 0.55rem;
-}
-.co-plan {
-  appearance: none;
-  font-family: var(--font-sans);
-  text-align: left;
-  background: var(--white);
-  border: 1px solid var(--rule-strong);
-  border-radius: 6px;
-  padding: 0.75rem 0.9rem;
-  display: grid;
-  gap: 0.2rem;
-  cursor: pointer;
-  transition:
-    border-color 0.15s var(--ease),
-    background 0.15s var(--ease),
-    box-shadow 0.15s var(--ease);
-}
-.co-plan:hover {
-  border-color: var(--accent);
-}
-/* The free-trial option reads lighter than the paid plans. */
-.co-plan--free {
-  border-style: dashed;
-}
-.co-plan--on {
-  border-color: var(--accent);
-  background: var(--accent-rgba-08);
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.co-plan__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.8rem;
-}
-.co-plan__name {
-  font-weight: 700;
-  color: var(--navy);
-  font-size: 1rem;
-}
-.co-plan__price {
-  font-weight: 700;
-  color: var(--navy);
-  font-size: 0.98rem;
-}
-.co-plan__per {
-  font-weight: 500;
-  color: var(--ink-3);
-  font-size: 0.8rem;
-}
-.co-plan__users {
-  font-size: 0.82rem;
-  color: var(--ink-2);
-}
 .co-code {
   display: flex;
   gap: 0.5rem;
@@ -505,21 +494,6 @@
   border-top: 1px solid var(--rule);
   padding-top: 0.9rem;
 }
-.co-total__label {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  font-weight: 600;
-}
-.co-total__value {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--navy);
-  letter-spacing: -0.02em;
-}
 
 @media (max-width: 480px) {
   .auth-panel {
@@ -533,16 +507,35 @@
 
 /* Touch feedback for the auth and checkout controls. */
 .auth-form .btn:active,
-.co-plan:active,
 .auth-chip:active,
 .co-code__apply:active {
   transform: scale(0.985);
 }
 @media (prefers-reduced-motion: reduce) {
   .auth-form .btn:active,
-  .co-plan:active,
   .auth-chip:active,
   .co-code__apply:active {
     transform: none;
   }
+}
+
+/* Signup attestation: unchecked by default, revealed on step 2. */
+.auth-attest {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.auth-attest[hidden] {
+  display: none;
+}
+.auth-attest input {
+  margin-top: 0.22rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+  flex: 0 0 auto;
 }

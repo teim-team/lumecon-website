@@ -15,7 +15,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import MarkArt from '../components/MarkArt.astro';
 import AskAI from '../components/AskAI.astro';
 import { site } from '../config';
 import '../styles/global.css';
@@ -108,6 +107,26 @@ const SOURCES = [
     role: 'Supplementary',
   },
   {
+    name: 'Federal Audit Clearinghouse',
+    what: 'Single Audit filings: audited federal award spending and findings for organizations that receive federal funding.',
+    role: 'Supplementary',
+  },
+  {
+    name: 'CICD Native Community Data Profiles',
+    what: 'The Center for Indian Country Development’s harmonized profiles and Tribal Economic Zones, with their own documented source list, for Native community context.',
+    role: 'Supplementary',
+  },
+  {
+    name: 'NaNDA',
+    what: 'The National Neighborhood Data Archive (ISR, University of Michigan): contextual measures of place used where neighborhood conditions matter.',
+    role: 'Supplementary',
+  },
+  {
+    name: 'BIA Federal Register list',
+    what: 'The Bureau of Indian Affairs list of federally recognized tribes, maintained current from the Federal Register, for identifying and validating Native entities.',
+    role: 'Geography',
+  },
+  {
     name: 'NOAA',
     what: 'Environmental context for analyses where weather and climate matter.',
     role: 'Supplementary',
@@ -117,7 +136,7 @@ const SOURCES = [
 const MEASURES = [
   {
     term: 'Jobs supported',
-    def: 'The jobs supported by the analyzed activity over the analysis period. It is a job count, and where a conversion basis matters the analysis states it.',
+    def: 'The count of jobs supported by the activity across the direct, indirect and induced layers over the analysis period. It is a job count; where a conversion basis matters, the analysis states it.',
   },
   {
     term: 'Labor income',
@@ -125,7 +144,7 @@ const MEASURES = [
   },
   {
     term: 'GDP contribution',
-    def: 'The analysis&rsquo;s value added, the measure that corresponds to a region&rsquo;s contribution to GDP.',
+    def: 'The value added by the analyzed activity: the measure that corresponds to a region&rsquo;s contribution to GDP. Lumecon uses GDP contribution as the plain-language label for value added.',
   },
   {
     term: 'Economic output',
@@ -185,39 +204,41 @@ const jsonLd = [
   <main class="meth" id="top" tabindex="-1">
     <!-- Hero: the methodological position, then three principles. -->
     <header class="meth-hero">
-      <MarkArt class="markart markart--tr" size={620} />
       <div class="meth-w">
-        <p class="h-kicker">Methodology</p>
-        <h1 class="meth-hero__title">
-          Proven foundations. <span class="brand-em">Better inputs.</span> A model that keeps improving.
+        <p class="h-kicker reveal-soft">Methodology</p>
+        <h1 class="meth-hero__title reveal-soft" data-stagger="1">
+          Proven foundations, <span class="brand-em">better inputs</span> and a model that keeps improving.
         </h1>
-        <p class="meth-hero__lede">
+        <p class="meth-hero__lede reveal-soft" data-stagger="2">
           Input-output analysis carries nearly a century of economic research. Lumecon builds on
           that foundation with current public data, modern regionalization, higher-frequency
           evidence where appropriate and transparent validation. <span class="brand-em"
-            >Built on decades of economic science, not frozen in it.</span
+            >Built on decades of economic science and kept current with the economy.</span
           >
         </p>
         <ol class="meth-principles" aria-label="Three principles">
-          <li>
+          <li class="reveal-soft" data-stagger="1" data-hover-reveal tabindex="0">
             <p class="meth-principles__k">Proven foundations</p>
-            <p class="meth-principles__b">
+            <h3 class="meth-principles__t">The framework the field trusts</h3>
+            <p class="meth-principles__b hover-veil">
               Regionalized input-output modeling with household and government accounts, the
               framework the field has trusted for decades.
             </p>
           </li>
-          <li>
+          <li class="reveal-soft" data-stagger="2" data-hover-reveal tabindex="0">
             <p class="meth-principles__k">Modern evidence</p>
-            <p class="meth-principles__b">
+            <h3 class="meth-principles__t">Close to present conditions</h3>
+            <p class="meth-principles__b hover-veil">
               Current public datasets and higher-frequency indicators keep the model close to
               present conditions where the data support it.
             </p>
           </li>
-          <li>
+          <li class="reveal-soft" data-stagger="3" data-hover-reveal tabindex="0">
             <p class="meth-principles__k">Continuous improvement</p>
-            <p class="meth-principles__b">
-              We invest in the model, not just the software. Data, methods and validation keep
-              advancing as the evidence does.
+            <h3 class="meth-principles__t">Advancing as the evidence does</h3>
+            <p class="meth-principles__b hover-veil">
+              We invest in the model itself, and in the software around it. Data, methods and
+              validation keep advancing as the evidence does.
             </p>
           </li>
         </ol>
@@ -227,19 +248,19 @@ const jsonLd = [
     <!-- 01 · The core model -->
     <section class="meth-sec" aria-labelledby="m-core">
       <div class="meth-w">
-        <div class="meth-sec__head">
+        <div class="meth-sec__head reveal-soft">
           <h2 id="m-core">The core model</h2>
         </div>
         <div class="meth-cols">
           <div class="meth-prose">
-            <p>
+            <p class="reveal-soft" data-stagger="1">
               Lumecon analyses are built on input-output modeling, the same analytical foundation
               used across the economic impact field for decades. An input-output model maps how
               industries in a region buy from and sell to each other, so a change in one place (a
               new program, an expansion, a budget) can be followed through the purchases, wages and
               household spending it sets off.
             </p>
-            <p>
+            <p class="reveal-soft" data-stagger="2">
               The mathematics is compact. Each industry&rsquo;s production recipe is summarized by a
               technical coefficient, the amount it purchases from every other industry per dollar of
               its own output. Collecting those coefficients into a matrix, a single inversion
@@ -248,7 +269,7 @@ const jsonLd = [
               is the Leontief system, and it is the arithmetic at the center of every impact
               estimate.
             </p>
-            <p>
+            <p class="reveal-soft" data-stagger="3">
               We keep that proven core and supplement it with higher-frequency public indicators and
               newer estimation methods, so an analysis can better reflect current economic
               conditions rather than relying exclusively on the vintage of the underlying benchmark
@@ -256,7 +277,7 @@ const jsonLd = [
             </p>
           </div>
           <div class="meth-eqs">
-            <figure class="eqobj">
+            <figure class="eqobj reveal-soft" data-stagger="2">
               <figcaption class="eqobj__k">Eq. 01 &middot; Technical coefficients</figcaption>
               <div
                 class="eq"
@@ -276,7 +297,7 @@ const jsonLd = [
                 output.
               </p>
             </figure>
-            <figure class="eqobj">
+            <figure class="eqobj reveal-soft" data-stagger="2">
               <figcaption class="eqobj__k">Eq. 02 &middot; The Leontief system</figcaption>
               <div
                 class="eq"
@@ -301,12 +322,12 @@ const jsonLd = [
     <!-- 02 · Regionalization -->
     <section class="meth-sec" aria-labelledby="m-region">
       <div class="meth-w">
-        <div class="meth-sec__head">
+        <div class="meth-sec__head reveal-soft">
           <h2 id="m-region">From national relationships to your region</h2>
         </div>
         <div class="meth-cols">
           <div class="meth-prose">
-            <p>
+            <p class="reveal-soft" data-stagger="1">
               The industry-to-industry relationships in the national accounts describe how the U.S.
               economy as a whole buys and sells. To analyze a county, a state or a reservation,
               those relationships are adjusted to the region: local industry mix, employment and
@@ -318,7 +339,7 @@ const jsonLd = [
               specialized regional economies keep less of each dollar, and the model reflects that.
             </p>
             <h3>Suppressed and small-area data</h3>
-            <p>
+            <p class="reveal-soft" data-stagger="2">
               Federal disclosure rules withhold some county-sector figures so individual employers
               cannot be identified. Where a suppressed sector clearly exists in the region, its
               employment is estimated from wider employment-per-establishment patterns, and wages
@@ -328,7 +349,7 @@ const jsonLd = [
             </p>
           </div>
           <div class="meth-eqs">
-            <figure class="eqobj">
+            <figure class="eqobj reveal-soft" data-stagger="2">
               <figcaption class="eqobj__k">Eq. 03 &middot; Simple location quotient</figcaption>
               <div
                 class="eq"
@@ -350,7 +371,7 @@ const jsonLd = [
                 <var>n</var> mark the region and the nation.
               </p>
             </figure>
-            <figure class="eqobj">
+            <figure class="eqobj reveal-soft" data-stagger="2">
               <figcaption class="eqobj__k">Eq. 04 &middot; Flegg-family refinement</figcaption>
               <div
                 class="eq"
@@ -377,7 +398,7 @@ const jsonLd = [
                 assumption, and every coefficient is capped so no local share exceeds one.
               </p>
             </figure>
-            <figure class="eqobj">
+            <figure class="eqobj reveal-soft" data-stagger="2">
               <figcaption class="eqobj__k">Eq. 05 &middot; RAS rebalancing</figcaption>
               <div
                 class="eq"
@@ -403,7 +424,7 @@ const jsonLd = [
     <!-- 03 · The three layers, as one analytical system -->
     <section class="meth-sec" aria-labelledby="m-layers">
       <div class="meth-w">
-        <div class="meth-sec__head">
+        <div class="meth-sec__head reveal-soft">
           <h2 id="m-layers">From one change to total impact</h2>
         </div>
         <ol class="meth-flow" aria-label="How a change becomes a total impact">
@@ -434,14 +455,14 @@ const jsonLd = [
         </ol>
         <div class="meth-cols">
           <div class="meth-prose">
-            <p>
+            <p class="reveal-soft" data-stagger="1">
               Every result separates the three layers of activity. Direct effects are the
               project&rsquo;s own spending, wages and jobs. Indirect effects happen at the suppliers
               the project buys from. Induced effects come from workers spending their earnings
               locally. The layers are always shown separately, so a reviewer can see how the total
               is composed rather than taking one number on faith.
             </p>
-            <p>
+            <p class="reveal-soft" data-stagger="2">
               Induced effects come from a social accounting matrix formulation. The input-output
               table is extended with a household account that receives labor income and spends it
               back into the region, and a government account that collects taxes and returns them as
@@ -453,7 +474,7 @@ const jsonLd = [
             </p>
           </div>
           <div class="meth-eqs">
-            <figure class="eqobj">
+            <figure class="eqobj reveal-soft" data-stagger="2">
               <figcaption class="eqobj__k">Eq. 06 &middot; Multipliers</figcaption>
               <div
                 class="eq"
@@ -484,39 +505,10 @@ const jsonLd = [
     </section>
 
     <!-- 04 · Geographies -->
-    <section class="meth-sec" aria-labelledby="m-geo">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="m-geo">Geographies that follow the real economy</h2>
-        </div>
-        <div class="meth-twoprose">
-          <div class="meth-prose">
-            <p>
-              Analyses run at the county, state and national level, and reservations and trust lands
-              are treated as first-class regions rather than approximations. Where an analysis
-              covers both a state and homelands, the two scopes are reported side by side with the
-              subset relationship stated explicitly, so nothing is double-counted.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p>
-              Reservation and trust-land regions are constructed from the federal boundary files for
-              American Indian and Alaska Native areas and from the employment, industry and
-              demographic data located within those boundaries. They are modeled geographies with
-              their own regional characteristics, and results for a reservation are estimated for
-              that region itself. We use homelands as the plain-language umbrella term for
-              reservation and trust-land geographies. Tribal government analysis is an active area
-              of methodological work for us, and this page will grow as that work does.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- 05 · The data manifest -->
     <section class="meth-sec" aria-labelledby="m-data">
       <div class="meth-w">
-        <div class="meth-sec__head">
+        <div class="meth-sec__head reveal-soft">
           <h2 id="m-data">The data behind every analysis</h2>
         </div>
         <p class="meth-sec__lede">
@@ -539,10 +531,10 @@ const jsonLd = [
             ))
           }
         </ul>
-        <div class="meth-twoprose meth-twoprose--tight meth-twoprose--three">
-          <div class="meth-prose">
+        <div class="meth-threeup meth-threeup--tight">
+          <div class="meth-prose" data-hover-reveal tabindex="0">
             <h3>Data vintages</h3>
-            <p>
+            <p class="hover-veil">
               Every analysis states the data year it runs against, and that year is shown with the
               results (for example, 2025 data). Historical analyses run from 2015 to present where
               the underlying data support it. Where source datasets carry different vintages, the
@@ -550,9 +542,9 @@ const jsonLd = [
               year.
             </p>
           </div>
-          <div class="meth-prose">
+          <div class="meth-prose" data-hover-reveal tabindex="0">
             <h3>Between benchmarks</h3>
-            <p>
+            <p class="hover-veil">
               The benchmark input-output tables update on the schedule of the agencies that publish
               them. Between benchmarks, higher-frequency public series for employment, wages and
               prices update the levels the model scales against, where the data support it. The
@@ -560,9 +552,9 @@ const jsonLd = [
               the proven core stays intact while the levels stay current.
             </p>
           </div>
-          <div class="meth-prose">
+          <div class="meth-prose" data-hover-reveal tabindex="0">
             <h3>Built to evolve</h3>
-            <p>
+            <p class="hover-veil">
               The model is continually evaluated and improved as better data, regionalization
               approaches and validation evidence become available.{' '}
               <a class="gloss-link" href="/cedar">How Cedar supports that workflow</a>.
@@ -572,57 +564,155 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 06 · Validation and human review -->
-    <section class="meth-sec" aria-labelledby="m-review">
+    <!-- The discipline, as cards: five commitments that used to be five
+         near-empty prose sections. Each card leads with its claim and
+         opens in place for the full detail, the same click-to-learn
+         posture as the Cedar Press shelf. An open card takes the full
+         row so the prose gets a real measure. -->
+    <section class="meth-sec meth-deeper" aria-labelledby="m-deeper">
       <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="m-review">Validation and human review</h2>
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="m-deeper">The commitments behind every analysis</h2>
         </div>
-        <div class="meth-twoprose">
-          <div class="meth-prose">
-            <p>
-              The software checks that tables cross-foot, that scopes nest correctly and that inputs
-              fall in plausible ranges. Estimated inputs and model outputs are checked against
-              plausibility bounds, including multiplier ranges credible for a small regional
-              economy, and a run that fails a critical check stops rather than shipping a doubtful
-              number.
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p>
-              Automation assists with data processing, quality checks and documentation. Economic
-              assumptions, regionalization choices and model design remain economically grounded and
-              subject to human review, and the person running an analysis confirms the assumptions
-              before results are finalized.{' '}
-              <a class="gloss-link" href="/cedar">Learn how Cedar works</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+        <p class="meth-sec__lede">
+          Five things that hold no matter what you run. Open a card for the full detail.
+        </p>
+        <div class="mcards">
+          <details class="mcard" id="m-geo">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Geography</span>
+              <span class="mcard__title">Geographies that follow the real economy</span>
+              <span class="mcard__hook">
+                Counties, states and the nation, with reservations and trust lands treated as
+                first-class regions rather than approximations.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Analyses run at the county, state and national level, and reservations and trust
+                lands are treated as first-class regions rather than approximations. Where an
+                analysis covers both a state and homelands, the two scopes are reported side by side
+                with the subset relationship stated explicitly, so nothing is double-counted.
+              </p>
+              <p>
+                Reservation and trust-land regions are constructed from the federal boundary files
+                for American Indian and Alaska Native areas and from the employment, industry and
+                demographic data located within those boundaries. They are modeled geographies with
+                their own regional characteristics, and results for a reservation are estimated for
+                that region itself. We use homelands as the plain-language umbrella term for
+                reservation and trust-land geographies. Tribal government analysis is an active area
+                of methodological work for us, and this page will grow as that work does.
+              </p>
+            </div>
+          </details>
 
-    <!-- 07 · Lineage -->
-    <section class="meth-sec" aria-labelledby="m-lineage">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="m-lineage">Every number has a lineage</h2>
-        </div>
-        <div class="meth-twoprose">
-          <div class="meth-prose">
-            <p>
-              Each headline figure carries a trace: which effect layer it comes from, which
-              operations generate it and which industries it lands in, each with its share. The same
-              traceability runs through the inputs, where every figure carries its source tag
-              (reported, apportioned or estimated).
-            </p>
-          </div>
-          <div class="meth-prose">
-            <p>
-              Exports carry the source references, the assumptions, the model inputs and the full
-              set of tables behind each figure, so the person defending the number in a council
-              meeting, a boardroom or a grant review holds the same detail the model used.
-            </p>
-          </div>
+          <details class="mcard" id="m-naics">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Industries</span>
+              <span class="mcard__title">Industries at the two-digit NAICS level</span>
+              <span class="mcard__hook">
+                Classification lives where administrative data coverage is strongest, so fewer
+                values are imputed between a source and a multiplier.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Every dollar in an analysis is classified against the North American Industry
+                Classification System at the two-digit sector level, from Agriculture (11) to Public
+                Administration (92). Two digits is where administrative data coverage is strongest:
+                the federal employment, wage and output series that anchor the model are published
+                nearly complete at this level for counties and states, while finer detail is often
+                suppressed for confidentiality in smaller geographies. Working where the data is
+                complete means fewer imputed values and fewer assumptions between a source and a
+                multiplier.
+              </p>
+              <p>
+                As our client base and data coverage grow, we intend to extend classification beyond
+                two digits where published sources support it, and each analysis will state the
+                level it uses. Tribal governments are tracked as their own Lumecon category rather
+                than as local government within Public Administration (92), because a nation that
+                runs administration, enterprises, housing, health and education programs is
+                understated by that single line.
+              </p>
+            </div>
+          </details>
+
+          <details class="mcard" id="m-review">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Validation</span>
+              <span class="mcard__title">Validation and human review</span>
+              <span class="mcard__hook">
+                A run that fails a critical check stops rather than shipping a doubtful number, and
+                a person confirms the assumptions before results are finalized.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                The software checks that tables cross-foot, that scopes nest correctly and that
+                inputs fall in plausible ranges. Estimated inputs and model outputs are checked
+                against plausibility bounds, including multiplier ranges credible for a small
+                regional economy, and a run that fails a critical check stops rather than shipping a
+                doubtful number.
+              </p>
+              <p>
+                Automation assists with data processing, quality checks and documentation. Economic
+                assumptions, regionalization choices and model design remain economically grounded
+                and subject to human review, and the person running an analysis confirms the
+                assumptions before results are finalized.{' '}
+                <a class="gloss-link" href="/cedar">Learn how Cedar works</a>.
+              </p>
+            </div>
+          </details>
+
+          <details class="mcard" id="m-lineage">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Traceability</span>
+              <span class="mcard__title">Every number has a lineage</span>
+              <span class="mcard__hook">
+                Each figure traces to its effect layer, operations, industries and source tags, and
+                exports carry the full detail.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Each headline figure carries a trace: which effect layer it comes from, which
+                operations generate it and which industries it lands in, each with its share. The
+                same traceability runs through the inputs, where every figure carries its source tag
+                (reported, apportioned or estimated).
+              </p>
+              <p>
+                Exports carry the source references, the assumptions, the model inputs and the full
+                set of tables behind each figure, so the person defending the number in a council
+                meeting, a boardroom or a grant review holds the same detail the model used.
+              </p>
+            </div>
+          </details>
+
+          <details class="mcard" id="m-compare">
+            <summary class="mcard__face">
+              <span class="mcard__kicker">Comparison</span>
+              <span class="mcard__title">The same foundation, built differently around it</span>
+              <span class="mcard__hook">
+                Established platforms and Lumecon draw on the same national statistical system;
+                the differences are architecture, workflow and price.
+              </span>
+              <span class="mcard__plus" aria-hidden="true"></span>
+            </summary>
+            <div class="mcard__body">
+              <p>
+                Input-output analysis is an established, openly published field. Established
+                platforms and Lumecon draw on the same national statistical system and decades of
+                economic research. Lumecon differentiates through its data architecture,
+                regionalization, traceability, reservation and trust-land modeling, modern workflow
+                and pricing. Lumecon is not affiliated with or endorsed by IMPLAN, REMI or any other
+                platform named here.
+              </p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -630,7 +720,7 @@ const jsonLd = [
     <!-- 08 · Measures -->
     <section class="meth-sec" aria-labelledby="m-measures">
       <div class="meth-w">
-        <div class="meth-sec__head">
+        <div class="meth-sec__head reveal-soft">
           <h2 id="m-measures">What the headline measures mean</h2>
         </div>
         <dl class="meth-defs">
@@ -643,28 +733,6 @@ const jsonLd = [
             ))
           }
         </dl>
-      </div>
-    </section>
-
-    <!-- 10 · Comparison -->
-    <section class="meth-sec" aria-labelledby="m-compare">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="m-compare">
-            Built on the same economic foundation. <span class="brand-em"
-              >Built differently around it.</span
-            >
-          </h2>
-        </div>
-        <div class="meth-prose meth-prose--measure">
-          <p>
-            Input-output analysis is a field, not a proprietary invention. Established platforms and
-            Lumecon draw on the same national statistical system and decades of economic research.
-            Lumecon differentiates through its data architecture, regionalization, traceability,
-            reservation and trust-land modeling, modern workflow and pricing. Lumecon is not
-            affiliated with or endorsed by IMPLAN, REMI or any other platform named here.
-          </p>
-        </div>
       </div>
     </section>
 
@@ -681,9 +749,9 @@ const jsonLd = [
           >
         </h2>
         <p class="meth-mission__lede">
-          Better modeling should make rigorous analysis more accessible, not less. Businesses,
-          governments, universities, nonprofits and Tribal Nations all create value in the places
-          around them. Our job is to make that impact visible.
+          Better modeling should widen access to rigorous analysis. Businesses, governments,
+          universities, nonprofits and Tribal Nations shape the economies around them. Our job is to
+          make that impact visible.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/pricing">
@@ -706,7 +774,7 @@ const jsonLd = [
     <!-- FAQ -->
     <section class="meth-sec meth-faq" aria-labelledby="m-faq">
       <div class="meth-w">
-        <div class="meth-sec__head">
+        <div class="meth-sec__head reveal-soft">
           <h2 id="m-faq">Common questions</h2>
         </div>
         <div class="meth-faq__list">

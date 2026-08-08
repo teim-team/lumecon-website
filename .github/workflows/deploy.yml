@@ -24,7 +24,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # PUBLIC_* values are inlined at build time. Without them the site
+      # builds "login-only": Open Lumecon falls back to /login and the
+      # auth/checkout forms degrade to the contact-email path. Set the
+      # repository variables to activate the product handoff.
       - run: npm run build
+        env:
+          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
+          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

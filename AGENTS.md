@@ -129,3 +129,87 @@ other pages beyond a one-line pointer to /cedar.
 Write "and", never "&", anywhere a visitor can read it (founder
 rule; ampersands read as unprofessional). Code identifiers and TS
 types are exempt. Same rule applies in teim-app.
+
+## Vocabulary standard (2026-07, both repos)
+
+User-facing word choices, everywhere a customer reads:
+- "analysis / analyses", not "study/studies" ("project" is the
+  backend object; "study" is reserved for a formal deliverable).
+- "organization" (use "organization or nation" only where the
+  distinction earns its place). Account = authentication identity;
+  Organization = customer entity; Workspace = the collaborative
+  space; Analysis = the analytical project; Run = an immutable model
+  execution.
+- "Cedar", never "AI assistant"; Cedar is Lumecon's AI economic
+  analyst on every surface, and the site chat is a lightweight
+  Cedar, never a downgraded "site assistant" in schema or copy.
+- "GDP contribution" for the primary value-added metric; "economic
+  output" not "sales"; results vocabulary (Jobs supported, Labor
+  income, GDP contribution, Economic output, Tax impacts, Direct,
+  Indirect, Induced) is shared with the product verbatim.
+- "every supported U.S. geography" generally; enumerate "counties,
+  states, the nation, reservations and trust lands" when precision
+  helps. Every geography ships in every plan; analysis types may
+  depend on organizational context.
+- "Log in" and "Continue with Google", identical on both surfaces.
+- To the customer everything is Lumecon; "Team App" is repository
+  shorthand only.
+
+The full reconciliation tracker lives in
+docs/reconciliation-roadmap.md.
+
+## Generators and pipelines (2026-07)
+
+Nothing in `scripts/` runs at build time; each is a generator whose
+output is committed. Run them when their inputs change.
+
+- Sector thumbnails (duotone): `scripts/naics/sectors.mjs` is the
+  single source for the 20 NAICS sectors + the Tribal Government
+  category, their descriptions and wash colors; `/naics` and the
+  thumbnail pipeline both read it, so tiles and images cannot drift.
+  `node scripts/naics/duotone.mjs scripts/naics/sources` regenerates
+  `public/naics/*.webp` (three crops per sector: 1200x800, 600x400
+  `-sm`, 1500x600 `-wide`). Sources are licensed Shutterstock
+  originals named `<slug>_shutterstock_<imageID>_<downloadID>.jpeg`;
+  the licensing record is `scripts/naics/LICENSES.md`. Never use the
+  NACA proposal photos.
+- App handoff: `node scripts/naics/export-app.mjs >
+  ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
+  data, and the full-size + `-wide` webps in `public/naics/` exist
+  for the app to copy (the site itself only renders `-sm`). Edit
+  sectors.mjs, never naicsSectors.js directly.
+- Hero example screenshots: `scripts/screenshots/capture-examples.mjs`
+  captures the 60 `public/app/ex-*.webp` hero images from a running
+  teim-app dev server; `optimize-examples.mjs` compresses them.
+- Smoke tests: `npm run test:smoke` (Playwright; CI runs chromium +
+  webkit). In a sandbox without Google Fonts the home smoke test
+  fails on a blocked font request; every other failure is real.
+
+Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
+originals) is tracked in git. Moving it to external storage is a
+history decision for the founder; do not delete it casually, the
+filenames encode the Shutterstock license IDs.
+
+## Product handoff contract (2026-07, final integration pass)
+
+- **Plan ids are the product's tier vocabulary:** `free | sprout | sapling |
+  tree` (matching `server/lib/tierCapabilities.js` in teim-app). They appear
+  in `/signup?tier=`, `/checkout?tier=` and `src/data/pricing.ts`. Never
+  reintroduce the old `starter/standard/leader` aliases; the server silently
+  normalizes unknown tiers to sprout, which would hand a Tree buyer a Sprout
+  account.
+- **Build-time env (inlined by Astro, passed by deploy.yml from repository
+  variables):** `PUBLIC_APP_URL` (product origin; login redirect and the
+  welcome page's Open Lumecon) and `PUBLIC_API_URL` (product API base; auth,
+  checkout session and the CSP's connect-src are derived from it). Unset,
+  the site builds "login-only": auth forms degrade to the contact-email path.
+- **App-side prerequisites the site depends on:** the product API's
+  `ALLOWED_ORIGINS` must include this site's origin (the auth fetches send
+  `credentials: 'include'`), and `AUTH_ALLOWLIST_EMAILS` must be empty for
+  public signup to accept registrations (the pilot lockdown 403s them).
+- **Referral links:** the app shares `lumecon.ai/r/<code>`. GitHub Pages has
+  no dynamic routes, so `src/pages/404.astro` forwards `/r/<code>` to
+  `/signup?ref=<code>`. Keep that forwarding if the 404 page is reworked.
+- Signup does not transmit the chosen tier to the server: every self-serve
+  account starts Free and paid tiers land with billing. The tier query only
+  routes the visitor between signup, checkout and welcome.

@@ -114,6 +114,11 @@ const INCLUDED = [
             Stripe.
           </p>
 
+          <!-- Point-of-sale disclosure (legal framework review, Part 5
+               item 3): plan, amount, frequency, auto-renewal and how
+               to cancel, immediately above the purchase action. -->
+          <p class="co2-disclose" data-co-disclose></p>
+
           <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>
 
           <div class="auth-actions">
@@ -133,8 +138,9 @@ const INCLUDED = [
 <script>
   import { submitCheckout, submitContact, apiConfigured } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
+  import { getFlowEmail, rememberFlowEmail } from '../lib/flowState';
 
-  const VALID_TIERS = ['starter', 'standard', 'leader'];
+  const VALID_TIERS = ['sprout', 'sapling', 'tree'];
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;
@@ -151,27 +157,43 @@ const INCLUDED = [
 
     const qs = new URLSearchParams(window.location.search);
     const tier = qs.get('tier') || '';
-    const emailFromFlow = qs.get('email') || '';
+    // Email travels as sessionStorage flow state, never in the URL.
+    const emailFromFlow = getFlowEmail();
 
     /* One job: payment. Anything that is not a payable plan gets
        routed to the step that handles it. */
     if (tier === 'free') {
-      window.location.replace(
-        `/signup?tier=free${emailFromFlow ? `&email=${encodeURIComponent(emailFromFlow)}` : ''}`,
-      );
+      window.location.replace('/signup?tier=free');
       return;
     }
     if (!VALID_TIERS.includes(tier)) {
-      window.location.replace(
-        `/choose-plan${emailFromFlow ? `?email=${encodeURIComponent(emailFromFlow)}` : ''}`,
-      );
+      window.location.replace('/choose-plan');
       return;
     }
 
     // Reveal the summary panel for the selected plan.
+    let planName = '';
+    let planPrice = '';
     document.querySelectorAll<HTMLElement>('[data-co-summary]').forEach((el) => {
-      el.hidden = el.dataset.coSummary !== tier;
+      const on = el.dataset.coSummary === tier;
+      el.hidden = !on;
+      if (on) {
+        planName = el.querySelector('.co2-summary__plan')?.textContent?.trim() ?? '';
+        planPrice = el.querySelector('[data-co-total]')?.textContent?.trim() ?? '';
+      }
     });
+
+    // Auto-renewal disclosed at the point of sale, never only in the
+    // Terms: plan, amount due, billing frequency, renewal behavior
+    // and how to cancel.
+    const disclose = document.querySelector<HTMLElement>('[data-co-disclose]');
+    if (disclose) {
+      disclose.textContent =
+        `You are purchasing the ${planName} plan: ${planPrice} due today, billed annually. ` +
+        'Your subscription renews automatically one year from purchase at the standard ' +
+        'annual price; we email you 90 days and 30 days before each renewal, and you can ' +
+        'cancel or turn off auto-renew at any time from Settings inside Lumecon.';
+    }
 
     const status = form.querySelector<HTMLElement>('[data-auth-status]');
     const submitBtn = form.querySelector<HTMLButtonElement>('[data-co-submit]');
@@ -179,11 +201,6 @@ const INCLUDED = [
     const codeNote = form.querySelector<HTMLElement>('[data-co-code-note]');
     const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
     if (emailInput && emailFromFlow) emailInput.value = emailFromFlow;
-
-    // Keep the flow context on the quiet Change plan link.
-    const changeLink = document.querySelector<HTMLAnchorElement>('[data-co-change]');
-    if (changeLink && emailFromFlow)
-      changeLink.href = `/choose-plan?email=${encodeURIComponent(emailFromFlow)}`;
 
     // The code itself is validated by the backend at payment time;
     // this control just confirms it will be carried through.
@@ -195,7 +212,7 @@ const INCLUDED = [
         codeNote.hidden = true;
         return;
       }
-      codeNote.textContent = `Code ${code} will be applied at payment.`;
+      codeNote.textContent = `We will verify code ${code} at payment.`;
       codeNote.hidden = false;
     });
 
@@ -207,6 +224,7 @@ const INCLUDED = [
         .trim()
         .toUpperCase();
       if (!email) return setStatus(status, 'err', 'Enter your email.');
+      rememberFlowEmail(email);
 
       submitBtn?.setAttribute('disabled', 'true');
       setStatus(status, 'info', 'One moment...');
@@ -219,9 +237,26 @@ const INCLUDED = [
             ...(discountCode ? { discountCode } : {}),
           });
           if (res.ok && res.data.url) {
-            trackEvent('checkout.redirect', { tier, hasCode: Boolean(discountCode) });
-            setStatus(status, 'ok', 'Taking you to secure payment...');
-            window.location.href = res.data.url;
+            // Only navigate to an https Stripe URL. res.data.url comes from
+            // our own backend, but validating before assigning location.href
+            // means a backend bug or a javascript:/other-host value can never
+            // become an open redirect or same-origin script execution.
+            var dest = null;
+            try {
+              var parsed = new URL(res.data.url, window.location.origin);
+              if (parsed.protocol === 'https:' && /(^|\.)stripe\.com$/.test(parsed.hostname)) {
+                dest = parsed.href;
+              }
+            } catch (e) {
+              dest = null;
+            }
+            if (dest) {
+              trackEvent('checkout.redirect', { tier, hasCode: Boolean(discountCode) });
+              setStatus(status, 'ok', 'Taking you to secure payment...');
+              window.location.href = dest;
+              return;
+            }
+            setStatus(status, 'err', 'Could not open secure payment. Try again in a moment.');
             return;
           }
           if (!res.ok && res.reason !== 'api-unconfigured') {

@@ -1,3 +1,13 @@
+/* Page shell width. The pricing page carries a three-card row and a
+   four-column comparison, so it needs the full site shell. It kept its own
+   token while that shell was 1240px; now that --container-max is the one
+   width the whole site measures from, this aliases it so the hero, cards,
+   table and lower sections line up with the nav and footer rather than
+   drifting a few dozen pixels wider. */
+:root {
+  --pr-wide: var(--container-max);
+}
+
 /* /pricing v2 — one platform, three plans. Shares primitives with
    home.css (.h-kicker, .btn2, .band, .flowsec, .rings); this file
    holds only the pricing-specific layout. */
@@ -15,7 +25,7 @@
 .pr-hero__inner {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: var(--pr-wide);
   margin: 0 auto;
   display: grid;
   justify-items: center;
@@ -30,14 +40,14 @@
   letter-spacing: -0.025em;
   color: var(--ink);
   margin: 0;
-  max-width: 24ch;
+  max-width: 32ch;
 }
 .pr-hero__lede {
   font-size: clamp(1.02rem, 1.5vw, 1.2rem);
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  max-width: 62ch;
+  max-width: 82ch;
 }
 .pr-hero__callout {
   font-family: var(--font-mono);
@@ -47,10 +57,104 @@
   color: var(--accent-text);
   margin: 0;
 }
+.pr-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.3rem;
+}
+.pr-hero__nocard {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+/* Mobile: the centered-poster effect reads badly on a phone. The
+   headline stays centered; everything explanatory beneath it goes
+   left-aligned so the hero scans like a product page. */
+@media (max-width: 640px) {
+  .pr-hero__inner {
+    justify-items: start;
+    text-align: left;
+  }
+  .pr-hero__inner .h-kicker,
+  .pr-hero__title {
+    justify-self: center;
+    text-align: center;
+  }
+  .pr-hero__ctas {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- free-account band (before the paid tiers) ---------- */
+.pr-free {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+  flex-wrap: wrap;
+  border: 1px solid var(--accent-bar);
+  background: var(--accent-rgba-08);
+  border-radius: 8px;
+  padding: clamp(1.4rem, 3vw, 2rem) clamp(1.4rem, 3vw, 2.2rem);
+}
+.pr-free__main {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 60rem;
+  flex: 1 1 32rem;
+}
+.pr-free__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.pr-free__body {
+  font-size: 0.97rem;
+  line-height: 1.62;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 86ch;
+}
+.pr-free__side {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+  flex-shrink: 0;
+}
+.pr-free__terms {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  /* The side block must be allowed to shrink to the viewport; its
+     natural width is the one-line terms text, which is wider than a
+     phone. */
+  .pr-free__side {
+    flex: 1 1 100%;
+    min-width: 0;
+    justify-items: start;
+  }
+  .pr-free__terms {
+    white-space: normal;
+  }
+}
 
 /* ---------- plan cards ---------- */
 .pr-plans {
-  max-width: 1200px;
+  max-width: var(--pr-wide);
   margin: 0 auto;
   padding: clamp(1.5rem, 4vh, 3rem) var(--container-pad) clamp(3rem, 7vh, 5rem);
   display: grid;
@@ -105,6 +209,28 @@
   border-radius: 999px;
   padding: 0.28rem 0.8rem;
 }
+/* "Client work" on the plans that license it. An outline chip, not the
+   filled one "Recommended" uses: it is a fact about the plan, not a
+   recommendation, and Sapling wears both at once. This is what replaced
+   the consultant band. A consultancy scanning the three cards can see
+   where its floor is without reading a paragraph to find out. */
+.pr-plan__chip {
+  justify-self: start;
+  margin: 0 0 0.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.16rem 0.55rem;
+}
+/* `visibility`, not `display: none`, so the slot still occupies its row
+   on the plan that has no marker. */
+.pr-plan__chip--placeholder {
+  visibility: hidden;
+}
 .pr-plan__name {
   font-family: var(--font-display);
   font-weight: 700;
@@ -113,11 +239,15 @@
   color: var(--ink);
   margin: 0;
 }
+/* Two lines' worth of room whether the sentence needs one or two. Tree's
+   identity line wraps and the other two do not, which pushed its price
+   down a line and broke the alignment across the row. */
 .pr-plan__audience {
   font-size: 0.95rem;
   font-style: italic;
   color: var(--ink-3);
   margin: 0;
+  min-height: calc(2 * 1.5em);
 }
 .pr-plan__price {
   margin: 0.3rem 0 0;
@@ -156,19 +286,6 @@
 .pr-plan__cta {
   justify-self: start;
   margin-top: auto;
-}
-.pr-plan__buy {
-  justify-self: start;
-  margin-top: 0.55rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--ink-3);
-  text-decoration: none;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.pr-plan__buy:hover {
-  color: var(--accent-text);
-  border-color: var(--accent);
 }
 @media (max-width: 900px) {
   .pr-plans__grid {
@@ -222,86 +339,128 @@
 .pr-table__quiet {
   color: var(--ink-4);
 }
-.pr-plans__note {
-  font-size: 0.9rem;
+/* ---------- client-work note and Cedar Grove ---------- */
+
+/* One line where a consultant band used to sit. Quiet, because the plan
+   cards already carry the marker it is explaining. */
+.pr-plans__clientnote {
+  margin: 1.4rem 0 0;
+  font-size: 0.92rem;
   color: var(--ink-3);
-  margin: 0;
-  text-align: center;
-}
-/* The pricing creed under the table: the philosophy, set large,
-   with the three concrete "no"s underneath. Not a card. */
-.pr-creed {
-  margin: 1.2rem auto 0.4rem;
-  max-width: 780px;
-  text-align: center;
-  display: grid;
-  gap: 0.7rem;
-}
-.pr-plans__creed {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--navy);
-}
-.pr-creed__trio {
-  margin: 0;
-  font-size: 1.02rem;
-  line-height: 1.6;
-  color: var(--ink-2);
-}
-.pr-offer__guarantee {
-  margin: 0.9rem 0 0;
-  font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: -0.01em;
-  color: var(--accent-text);
-}
-.pr-duo__creed {
-  margin: 0.4rem 0 0;
-  padding-top: 1.3rem;
-  border-top: 1px solid var(--rule);
-  font-size: 1.08rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--navy);
-  max-width: 44rem;
+  max-width: var(--measure-deck);
 }
 
-/* ---------- commitment policies ---------- */
-.pr-commit {
-  border-top: 1px solid var(--rule);
-  padding: clamp(2.4rem, 5vh, 3.6rem) var(--container-pad);
-}
-.pr-commit__inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.pr-commit__title {
-  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  margin: 0 0 1.4rem;
-}
-.pr-commit__cols {
+/* Cedar Grove is a different kind of purchase from the three plans, so
+   it gets a band rather than a fourth card: a fourth column would read
+   as a fourth rung of the same ladder, and this is the data without the
+   model. Text left, price and CTA right, the same split the free-account
+   band above uses. */
+.pr-grove {
+  margin-top: clamp(2rem, 4vw, 3.2rem);
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.6rem, 4vw, 4rem);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.6rem, 4vw, 3.4rem);
+  align-items: center;
+  padding: clamp(1.6rem, 3vw, 2.4rem) clamp(1.4rem, 3vw, 2.4rem);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--cream);
 }
-.pr-commit__cols p {
+.pr-grove__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0.35rem 0 0.7rem;
+  color: var(--navy);
+}
+.pr-grove__body {
+  margin: 0 0 0.9rem;
   font-size: 1rem;
   line-height: 1.7;
   color: var(--ink-2);
+  max-width: var(--measure-deck);
+}
+.pr-grove__list {
+  list-style: none;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+.pr-grove__list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.pr-grove__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+/* The proprietary-dataset note reads as an aside on purpose: it is a
+   statement about what is coming, so it must not out-shout the three
+   things Cedar Grove does today. Named datasets render under it as
+   each one ships. */
+.pr-grove__note {
   margin: 0;
-  max-width: 34rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: var(--measure-deck);
+}
+.pr-grove__datasets {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+.pr-grove__dsname {
+  font-weight: 650;
+  color: var(--navy);
+}
+.pr-grove__side {
+  display: grid;
+  justify-items: end;
+  gap: 0.35rem;
+  text-align: right;
+}
+.pr-grove__price {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+.pr-grove__users {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-3);
 }
 @media (max-width: 760px) {
-  .pr-commit__cols {
+  .pr-grove {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.2rem;
+  }
+  .pr-grove__side {
+    justify-items: start;
+    text-align: left;
   }
 }
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -311,210 +470,214 @@
   white-space: nowrap;
 }
 
-/* ---------- competitive offer (framed panel, no colored slab) ---------- */
-.pr-offer {
-  padding: clamp(1rem, 3vh, 2rem) var(--container-pad) clamp(3rem, 7vh, 5rem);
-}
-.pr-offer__panel {
-  position: relative;
-  overflow: hidden;
-  max-width: 1240px;
-  margin: 0 auto;
-  border: 1px solid var(--accent-bar);
-  background: var(--accent-rgba-08);
-  border-radius: 8px;
-  padding: clamp(1.8rem, 4vw, 3rem);
+/* ---------- pricing FAQ ---------- */
+.pr-faq__list {
+  margin: 0;
   display: grid;
-  gap: 1.2rem;
+  gap: 0;
 }
-.markart--offer {
-  top: -140px;
-  right: -140px;
-}
-.pr-offer__head {
-  position: relative;
-  z-index: 1;
+.pr-faq__row {
   display: grid;
-  gap: 0.6rem;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: clamp(1.2rem, 2.5vh, 1.7rem) 0;
+  border-top: 1px solid var(--rule);
 }
-.pr-offer__title {
+.pr-faq__row:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.pr-faq__row dt {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  letter-spacing: -0.015em;
+  line-height: 1.35;
   color: var(--ink);
   margin: 0;
-  max-width: 26ch;
+  max-width: 60ch;
 }
-.pr-offer__big {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(1.9rem, 4.4vw, 3.2rem);
-  letter-spacing: -0.025em;
-  line-height: 1.05;
-  color: var(--accent-text);
+.pr-faq__row dd {
   margin: 0;
-}
-.pr-offer__lede {
-  font-size: clamp(0.98rem, 1.4vw, 1.12rem);
-  line-height: 1.6;
-  color: var(--ink-2);
-  margin: 0.3rem 0 0;
-  max-width: 68ch;
-}
-.pr-offer__cta {
-  display: flex;
-  position: relative;
-  z-index: 1;
-}
-.pr-offer__fine {
-  position: relative;
-  z-index: 1;
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--ink-3);
-  margin: 0;
-  max-width: 78ch;
-}
-
-/* ---------- Team Workspace / Cedar Grove duo ---------- */
-.pr-duo {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-.pr-duo__card {
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: 1.6rem 1.5rem;
   display: grid;
   gap: 0.7rem;
-  align-content: start;
 }
-.pr-duo__card--grove {
-  border-color: rgba(14, 139, 79, 0.35);
-  background: var(--cedar-mist);
-}
-.h-kicker--cedar {
-  color: var(--cedar-text);
-}
-.pr-duo__title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
-  letter-spacing: -0.018em;
-  color: var(--ink);
-  margin: 0;
-}
-.pr-duo__body {
-  font-size: 0.95rem;
-  line-height: 1.62;
+.pr-faq__row dd p {
+  font-size: 0.97rem;
+  line-height: 1.68;
   color: var(--ink-2);
   margin: 0;
+  max-width: 84ch;
 }
-@media (max-width: 880px) {
-  .pr-duo {
-    grid-template-columns: minmax(0, 1fr);
+@media (max-width: 760px) {
+  .pr-faq__row {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
   }
 }
-/* The mist card hardcodes a light green surface; keep it readable
-   in dark mode with a translucent green wash instead. */
-@media (prefers-color-scheme: dark) {
-  .pr-duo__card--grove {
-    background: rgba(14, 139, 79, 0.16);
-  }
-}
-
-/* ---------- consultants ---------- */
-.pr-consult__audience {
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--ink-3);
-  margin: 0;
-}
-.pr-consult__points {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem 1.4rem;
-  max-width: 900px;
-}
-.pr-consult__points li {
-  position: relative;
-  padding-left: 1.3rem;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-}
-.pr-consult__points li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.52em;
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background: var(--accent);
-}
-.pr-consult__note {
-  font-size: 0.85rem;
-  color: var(--ink-3);
-  margin: 0;
-  max-width: 70ch;
-}
-@media (max-width: 720px) {
-  .pr-consult__points {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* ---------- free trial strip ---------- */
-.pr-trial {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: 1.3rem 1.5rem;
-  transition: border-color 0.2s var(--ease);
-}
-.pr-trial:hover {
-  border-color: var(--accent);
-}
-.pr-trial__text {
-  display: grid;
-  gap: 0.25rem;
-  max-width: 62ch;
-}
-.pr-trial__t {
+.pr-faq__foot {
+  margin: clamp(1.8rem, 4vh, 2.6rem) auto 0;
+  max-width: 760px;
+  text-align: center;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
   letter-spacing: -0.015em;
-  color: var(--ink);
-  margin: 0;
-}
-.pr-trial__b {
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-  margin: 0;
+  line-height: 1.5;
+  color: var(--navy);
 }
 
 /* Renewal transparency and the referral mention: policy fine print
    under the commitment columns, quiet by design. */
-.pr-commit__notes {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  line-height: 1.65;
-  color: var(--ink-3);
+
+/* ---------- progressive disclosure ----------
+   Native <details>: the plan cards answer the question for most readers, so
+   the full comparison, the billing fine print and each FAQ answer are folded
+   behind a summary. No JavaScript, keyboard operable, and the FAQ's JSON-LD
+   schema is built separately from PRICING_FAQ so search visibility is
+   unaffected by the markup change. */
+.pr-more {
+  /* .pr-plans is a grid, so a <details> dropped into it is a grid item and
+     shrink-wraps to its summary text unless told to stretch. */
+  justify-self: stretch;
+  width: 100%;
+  max-width: var(--pr-wide);
+  margin: 1.6rem auto 0;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--white);
+}
+.pr-more--inline {
+  margin-top: 1.2rem;
+  background: transparent;
+}
+.pr-more--faq {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+}
+.pr-faq__list {
   border-top: 1px solid var(--rule);
-  padding-top: 1.1rem;
-  margin: 1.4rem 0 0;
-  max-width: 62rem;
+}
+.pr-more--faq .pr-more__summary {
+  align-items: center;
+  padding: 1.15rem 0.2rem;
+  border-radius: 0;
+}
+.pr-more--faq .pr-more__q {
+  font-size: 1.08rem;
+}
+.pr-more--faq .pr-more__body {
+  padding: 0 0.2rem 1.35rem;
+}
+.pr-more--faq .pr-faq__p {
+  max-width: var(--measure-prose);
+}
+.pr-more__summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.95rem 1.15rem;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 8px;
+}
+.pr-more__summary::-webkit-details-marker {
+  display: none;
+}
+.pr-more__summary::marker {
+  content: '';
+}
+.pr-more__summary:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+.pr-more__label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+.pr-more__q {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.pr-more__hint {
+  font-size: 0.9rem;
+  color: var(--ink-3);
+}
+/* Plus drawn in CSS: no asset, inherits colour. A plus reads as "there
+   is more here" faster than a chevron, and turning to a multiply sign
+   when open reads as "close". */
+.pr-more__chev {
+  position: relative;
+  margin-left: auto;
+  flex: 0 0 auto;
+  align-self: center;
+  width: 0.85rem;
+  height: 0.85rem;
+  transition: transform 0.2s var(--ease);
+}
+.pr-more__chev::before,
+.pr-more__chev::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--accent-text);
+  border-radius: 1px;
+}
+.pr-more__chev::before {
+  width: 100%;
+  height: 2px;
+}
+.pr-more__chev::after {
+  width: 2px;
+  height: 100%;
+}
+.pr-more[open] .pr-more__chev {
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pr-more__chev {
+    transition: none;
+  }
+}
+.pr-more__body {
+  padding: 0 1.15rem 1.15rem;
+}
+.pr-more--inline .pr-more__body {
+  padding-left: 0;
+  padding-right: 0;
+}
+.pr-more[open] .pr-more__summary {
+  border-bottom: 1px solid var(--rule);
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 1.15rem;
+}
+.pr-more--inline[open] .pr-more__summary,
+.pr-more--faq[open] .pr-more__summary {
+  border-bottom: 0;
+  margin-bottom: 0.2rem;
+}
+.pr-faq__p {
+  font-size: 0.97rem;
+  line-height: 1.62;
+  color: var(--ink-2);
+  margin: 0 0 0.7rem;
+}
+.pr-faq__p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 620px) {
+  .pr-more__hint {
+    display: none;
+  }
 }

@@ -69,13 +69,13 @@ export interface Person {
   publications?: Publication[];
 }
 
-export const TEAM: Person[] = [
+const TEAM: Person[] = [
   {
     slug: 'elijah-moreno',
     name: 'Elijah Moreno, MPP',
     initials: 'EM',
     group: 'team',
-    title: 'Co-Founder & CEO',
+    title: 'Co-Founder and CEO',
     email: 'elijah.moreno@lumecon.ai',
     scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
     founder: true,
@@ -111,7 +111,7 @@ export const TEAM: Person[] = [
         year: '2021',
         venue: 'Regional Educational Laboratory Northwest / IES (REL 2021-088)',
         summary:
-          'Examines the population of Alaska Native students classified as English learner (EL) students and how EL policies function for them across identification, classification, service provision and reclassification. Drawing on Alaska state data from 2011/12 to 2018/19, it finds that about a quarter of Alaska Native kindergartners were classified as EL students, speaking 24 different home languages, and that these students had lower measured English proficiency and higher rates of economic disadvantage than their non–Alaska Native EL peers.',
+          'Examines the population of Alaska Native students classified as English learner (EL) students and how EL policies function for them across identification, classification, service provision and reclassification. Drawing on Alaska state data from 2011/12 to 2018/19, it finds that about a quarter of Alaska Native kindergartners were classified as EL students, speaking 24 different home languages, and that these students had lower measured English proficiency and higher rates of economic disadvantage than their EL peers who are not Alaska Native.',
         url: 'https://files.eric.ed.gov/fulltext/ED612515.pdf',
       },
     ],
@@ -121,7 +121,7 @@ export const TEAM: Person[] = [
     name: 'Michael Moreno',
     initials: 'MM',
     group: 'team',
-    title: 'Co-Founder & Founding Investor',
+    title: 'Co-Founder and Founding Investor',
     email: 'michael.moreno@lumecon.ai',
     founder: true,
     summary:
@@ -232,7 +232,7 @@ export const TEAM: Person[] = [
         venue:
           'Federal Reserve Bank of Minneapolis, Center for Indian Country Development Working Paper Series (2023-02)',
         summary:
-          'Uses confidential U.S. Census microdata and a database of tribal government–owned casinos to estimate how tribal gaming affects local labor markets across different markets, time horizons and subgroups. It finds that tribal gaming drives sustained gains in reservation employment and wages, with American Indians benefiting the most, and that while it raises average housing rents, the increase is smaller than the wage gains, implying net local benefits.',
+          'Uses confidential U.S. Census microdata and a database of tribal government-owned casinos to estimate how tribal gaming affects local labor markets across different markets, time horizons and subgroups. It finds that tribal gaming drives sustained gains in reservation employment and wages, with American Indians benefiting the most, and that while it raises average housing rents, the increase is smaller than the wage gains, implying net local benefits.',
         url: 'https://www.minneapolisfed.org/research/cicd-working-paper-series/more-than-chance-the-local-labor-market-effects-of-tribal-gaming',
       },
     ],
@@ -246,12 +246,12 @@ export const TEAM: Person[] = [
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
     summary:
-      "Leads the multiplier system and input/output models. Holds bachelor's degrees in Mathematics and Economics from Wisconsin–Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
+      "Leads the multiplier system and input/output models. Holds bachelor's degrees in Mathematics and Economics from Wisconsin-Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
     bio: [
-      "Isabella Agnes leads work on Lumecon's multiplier system and input/output models, including the tools that translate source data into economic impact estimates and connect the models to the website. She holds bachelor's degrees in Mathematics and Economics from the University of Wisconsin–Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
+      "Isabella Agnes leads work on Lumecon's multiplier system and input/output models, including the tools that translate source data into economic impact estimates and connect the models to the website. She holds bachelor's degrees in Mathematics and Economics from the University of Wisconsin-Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
       'Before Lumecon, Isabella was a research assistant at the Federal Reserve Bank of Philadelphia and a data scientist at the Board of Governors of the Federal Reserve System.',
     ],
-    alumniOf: ['University of Wisconsin–Madison', 'University of Maryland, College Park'],
+    alumniOf: ['University of Wisconsin-Madison', 'University of Maryland, College Park'],
     prevAffiliations: [
       'Federal Reserve Bank of Philadelphia',
       'Board of Governors of the Federal Reserve System',
@@ -303,18 +303,18 @@ export const TEAM: Person[] = [
     name: 'Havala Hanson, PhD',
     initials: 'HH',
     group: 'advisor',
-    title: 'Product, Data Security & Research Operations Advisor',
+    title: 'Product, Data Security and Research Operations Advisor',
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
     scholar: 'https://scholar.google.com/citations?user=vETE-QYAAAAJ&hl=en&oi=ao',
     summary:
       'Advises on product direction, data governance, privacy and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.',
     bio: [
-      "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction and responsible infrastructure. She holds a bachelor's degree in Education from the University of Wisconsin–Whitewater, a master's in Urban Education Policy from Brown University and a PhD in Statistics and Policy in Education from the University of Alaska Fairbanks. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations and working with sensitive administrative datasets.",
+      "Havala Hanson advises Lumecon on data governance, privacy, research operations, product direction and responsible systems design. She holds a bachelor's degree in Education from the University of Wisconsin-Whitewater, a master's in Urban Education Policy from Brown University and a PhD in Statistics and Policy in Education from the University of Alaska Fairbanks. She has extensive experience developing data governance and security procedures, supporting cross-agency data sharing, managing research operations and working with sensitive administrative datasets.",
     ],
     alumniOf: [
       'University of Alaska Fairbanks',
       'Brown University',
-      'University of Wisconsin–Whitewater',
+      'University of Wisconsin-Whitewater',
     ],
     publications: [
       {

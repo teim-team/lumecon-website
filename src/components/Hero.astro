@@ -1,12 +1,15 @@
 ---
 /**
- * Hero v3 — centered promise, gradient CTA, and the trio money shot:
- * three real app screenshots stacked the way the refreshed IMPLAN
- * hero stacks its product panels. Results front and center (a
- * general-audience Connecticut analysis), dashboard and number-lineage
- * tucked behind. Every screenshot swaps to a dark capture of the
- * app's own dark mode via <picture>. The actual Lumecon mark sits
- * cropped at the section edges as background art.
+ * Hero v4 — centered promise, gradient CTA, and the example trio.
+ *
+ * The screenshot system is hierarchical: an EXAMPLE (one organization and
+ * use case) owns three ARCHETYPES (results, map, comparison over time).
+ * One example is selected per page visit and locked; the three frames all
+ * belong to that example and only the archetypes rotate through the center,
+ * starting from the example's strongest money shot. The example never
+ * changes because a timer fired, the viewport changed or the page rendered
+ * again; a fresh visit may pick a different one. Every archetype ships as a
+ * light and dark capture at the same 1600x1000 frame.
  */
 import MarkArt from './MarkArt.astro';
 import '../styles/home.css';
@@ -15,171 +18,265 @@ import '../styles/home.css';
 <section class="hero2" id="top">
   <MarkArt class="markart markart--tr" size={640} />
   <div class="hero2-inner">
-    <p class="h-kicker">Economic impact analysis software</p>
+    <p class="h-kicker reveal-soft">Economic Analysis</p>
 
-    <h1 class="hero2-title">
+    <h1 class="hero2-title reveal-soft" data-stagger="1">
       Measure the <span class="hero2-em">economic impact</span> of any decision.
     </h1>
 
-    <p class="hero2-sub">
+    <!-- One paragraph, not two. This was 62 words across two blocks that
+         repeated each other: the second opened by listing input documents
+         the first had already implied, and the audience list plus the
+         metric list plus the geography claim plus the traceability claim
+         all competed for the same glance. Kept: who it is for, what it
+         measures, and the traceability line, which is the differentiator
+         and stays emphasized. -->
+    <p class="hero2-sub reveal-soft" data-stagger="2">
       Credible economic impact analysis for governments, universities, nonprofits, businesses and
       Tribal Nations. Measure jobs, labor income, GDP contribution, economic output and tax impacts
-      across every supported U.S. geography.
-    </p>
-    <p class="hero2-sub hero2-sub--em">
-      Bring your budgets, payroll, financial statements and program records.
+      across every supported U.S. geography, with{' '}
       <strong
-        >Every result is traceable through the data, assumptions and model layers behind it.</strong
+        >every result traceable through the data, assumptions and model layers behind it.</strong
       >
     </p>
 
-    <div class="hero2-cta">
+    <div class="hero2-cta reveal-soft" data-stagger="3">
       <a class="btn2 btn2--primary" href="/pricing">
-        Plans from $500 a year <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+        Plans from $1,000 a year <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
       </a>
       <a class="btn2 btn2--card" href="/signup?tier=free">
         Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
       </a>
     </div>
 
-    <figure class="trio" id="trio">
-      <div class="trio-frame trio-pos-l" data-trio>
+    <figure class="trio reveal-soft" data-stagger="4" id="trio">
+      <div class="trio-frame trio-pos-l" data-trio data-zoom>
         <picture>
-          <source srcset="/app/mappage-dark.webp" media="(prefers-color-scheme: dark)" />
+          <source srcset="/app/ex-college-map-dark.webp" media="(prefers-color-scheme: dark)" />
           <img
-            src="/app/mappage.webp"
-            alt="Lumecon results page centered on a county map of Connecticut beside the statewide result, with four key figures above."
-            width="1600"
-            height="1000"
+            src="/app/ex-college-map.webp"
+            alt="Lumecon results page framed on the Connecticut county map for a community college campus expansion, with the operations breakdown below."
+            width="1920"
+            height="1080"
             decoding="async"
           />
         </picture>
       </div>
-      <div class="trio-frame trio-pos-c" data-trio id="heroRotator">
+      <div class="trio-frame trio-pos-c" data-trio data-zoom>
         <picture>
-          <source srcset="/app/hero-01-dark.webp" media="(prefers-color-scheme: dark)" />
+          <source srcset="/app/ex-college-results-dark.webp" media="(prefers-color-scheme: dark)" />
           <img
-            src="/app/hero-01.webp"
-            alt="Lumecon results page for a community college expansion analysis in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output, with four key figures and a county map."
-            width="1600"
-            height="1000"
+            src="/app/ex-college-results.webp"
+            alt="Lumecon results page for a community college campus expansion in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output, with four key figures and the county map."
+            width="1920"
+            height="1080"
             fetchpriority="high"
             decoding="async"
           />
         </picture>
       </div>
-      <div class="trio-frame trio-pos-r" data-trio>
+      <div class="trio-frame trio-pos-r" data-trio data-zoom>
         <picture>
-          <source srcset="/app/trace-dark.webp" media="(prefers-color-scheme: dark)" />
+          <source srcset="/app/ex-college-compare-dark.webp" media="(prefers-color-scheme: dark)" />
           <img
-            src="/app/trace.webp"
-            alt="Lumecon lineage panel breaking economic output into direct, indirect and induced layers."
-            width="1600"
-            height="1000"
+            src="/app/ex-college-compare.webp"
+            alt="Lumecon comparison of Campus Renovation (2023) against Campus Expansion (2025) for a Connecticut community college, with the change in jobs, GDP contribution, labor income, economic output and tax impacts."
+            width="1920"
+            height="1080"
             decoding="async"
           />
         </picture>
       </div>
-      <figcaption class="trio-caption">Shown with sample data.</figcaption>
+      <figcaption class="trio-caption" id="trioCaption">
+        Shown with sample data: a community college in Connecticut.
+      </figcaption>
     </figure>
     <script is:inline>
-      /* The trio money shot. The composition never moves: map page
-         left, results front and center, lineage right. Only the
-         center frame advances, in order, through the ten sample
-         analyses with a short crossfade. Paused on hover, off under
-         reduced motion. (The old behaviour also shuffled the three
-         frames' positions, which read as random churn.) */
+      /* One example per visit, locked; only the archetypes rotate.
+         Each frame permanently holds one archetype of the chosen
+         example (its content is set once, below); the rotation swaps
+         POSITION classes, so every archetype is on screen exactly
+         once at any moment and the center advances through the cycle
+         starting at the example's declared money shot. Paused on
+         hover and hidden tabs, off under reduced motion. */
       (function () {
-        var STUDIES = [
-          [
-            'hero-01',
-            'a community college expansion in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output',
-          ],
-          [
-            'hero-02',
-            'hyperscale data center construction in Georgia: an estimated 4,150 jobs and $1,420,000,000 in economic output',
-          ],
-          [
-            'hero-03',
-            'a tribal hospital construction analysis at Warm Springs, Oregon: an estimated 1,240 jobs and $186,400,000 in economic output, with statewide and homelands scopes',
-          ],
-          [
-            'hero-04',
-            'a semiconductor fab expansion in Texas: an estimated 7,800 jobs and $2,860,000,000 in economic output',
-          ],
-          [
-            'hero-05',
-            'a port modernization program in California: an estimated 5,200 jobs and $1,150,000,000 in economic output',
-          ],
-          [
-            'hero-06',
-            'a childcare subsidy expansion in Michigan: an estimated 6,800 jobs and $640,000,000 in economic output',
-          ],
-          [
-            'hero-07',
-            'a hurricane recovery and rebuild program in Florida: an estimated 6,100 jobs and $980,000,000 in economic output',
-          ],
-          [
-            'hero-08',
-            'a university research campus in Ohio: an estimated 3,050 jobs and $720,000,000 in economic output',
-          ],
-          [
-            'hero-09',
-            'a wind energy buildout in Iowa: an estimated 2,600 jobs and $830,000,000 in economic output',
-          ],
-          [
-            'hero-10',
-            'a whole-nation economic footprint for a Tribal Nation: an estimated 4,820 jobs and $1,240,500,000 in economic output',
-          ],
+        var EXAMPLES = [
+          {
+            id: 'college',
+            first: 'results',
+            label: 'a community college in Connecticut',
+            alts: {
+              results:
+                'Lumecon results page for a community college campus expansion in Connecticut: an estimated 1,140 jobs and $214,300,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the Connecticut county map for a community college campus expansion, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Campus Renovation (2023) against Campus Expansion (2025) for a Connecticut community college, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'datacenter',
+            first: 'map',
+            label: 'a data center campus in Georgia',
+            alts: {
+              results:
+                'Lumecon results page for data center campus construction in Georgia: an estimated 4,150 jobs and $1,420,000,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the Georgia county map for data center campus construction, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Data Center Campus Phase I (2023) against Data Center Campus Phase II (2025) in Georgia, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'hospital',
+            first: 'results',
+            label: 'a Tribal health system at Warm Springs, Oregon',
+            alts: {
+              results:
+                'Lumecon results page for a Tribal hospital construction analysis at Warm Springs, Oregon: an estimated 1,240 jobs and $186,400,000 in economic output, with statewide and homelands scopes.',
+              map: 'Lumecon results page on the Homelands scope, zoomed to the Warm Springs reservation across its overlapping Oregon counties, with the homelands operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Health Clinic Construction (2022) against Regional Hospital Construction (2025) at Warm Springs, Oregon, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'fab',
+            first: 'map',
+            label: 'semiconductor fabs in Texas',
+            alts: {
+              results:
+                'Lumecon results page for a semiconductor fab expansion in Texas: an estimated 7,800 jobs and $2,860,000,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the Texas county map for a semiconductor fab expansion, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Fab One Construction (2022) against Fab Two Expansion (2025) in Texas, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'ports',
+            first: 'map',
+            label: 'a port authority in California',
+            alts: {
+              results:
+                'Lumecon results page for a port modernization program in California: an estimated 5,200 jobs and $1,150,000,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the California county map for a port modernization program, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Terminal Modernization Phase I (2022) against Rail Corridor and Terminal Phase II (2025) in California, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'childcare',
+            first: 'results',
+            label: 'an early learning nonprofit in Michigan',
+            alts: {
+              results:
+                'Lumecon results page for a statewide childcare access program in Michigan: an estimated 6,800 jobs and $640,000,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the Michigan county map for a statewide childcare access program, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Childcare Access Pilot (2023) against Statewide Childcare Access Program (2025) in Michigan, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'recovery',
+            first: 'map',
+            label: 'hurricane recovery in Florida',
+            alts: {
+              results:
+                'Lumecon results page for a hurricane rebuild and resilience program in Florida: an estimated 6,100 jobs and $980,000,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the Florida county map for a hurricane rebuild and resilience program, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Emergency Repair Program (2023) against Rebuild and Resilience Program (2025) in Florida, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'research',
+            first: 'results',
+            label: 'a university research campus in Ohio',
+            alts: {
+              results:
+                'Lumecon results page for university research campus operations in Ohio: an estimated 3,050 jobs and $720,000,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the Ohio county map for university research campus operations, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Research Laboratory Construction (2022) against Research Campus Operations (2025) in Ohio, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'wind',
+            first: 'map',
+            label: 'a wind energy developer in Iowa',
+            alts: {
+              results:
+                'Lumecon results page for a wind farm buildout in Iowa: an estimated 2,600 jobs and $830,000,000 in economic output, with four key figures and the county map.',
+              map: 'Lumecon results page framed on the Iowa county map for a wind farm buildout, with the operations breakdown below.',
+              comparison:
+                'Lumecon comparison of Wind Farm Phase I (2022) against Wind Farm Phase II and Storage (2025) in Iowa, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
+          {
+            id: 'nation',
+            first: 'results',
+            label: "a Tribal Nation's whole economy at Tulalip, Washington",
+            alts: {
+              results:
+                'Lumecon results page for a whole-nation economic footprint at Tulalip, Washington: an estimated 4,820 jobs and $1,240,500,000 in economic output, with statewide and homelands scopes.',
+              map: 'Lumecon results page on the Homelands scope, zoomed to the Tulalip reservation in Snohomish County, Washington, with the homelands operations breakdown below.',
+              comparison:
+                'Lumecon comparison of FY2023 Nation Economic Footprint against FY2025 Nation Economic Footprint at Tulalip, Washington, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
+            },
+          },
         ];
-        var root = document.getElementById('heroRotator');
-        var trio = document.getElementById('trio');
-        if (!root || !trio) return;
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-          return;
+        var FILE = { results: 'results', map: 'map', comparison: 'compare' };
+        var POSITIONS = ['trio-pos-c', 'trio-pos-r', 'trio-pos-l'];
 
-        var source = root.querySelector('source');
-        var img = root.querySelector('img');
-        if (!img) return;
-        var i = 0;
-        var paused = false;
+        var trio = document.getElementById('trio');
+        var caption = document.getElementById('trioCaption');
+        var frames = trio ? [].slice.call(trio.querySelectorAll('[data-trio]')) : [];
+        if (frames.length !== 3) return;
+
+        /* Select the example once and lock it for the whole visit. */
+        var example = EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)];
+        var second = example.first === 'map' ? 'results' : 'map';
+        var order = [example.first, second, 'comparison'];
+
+        /* Each frame gets one archetype, set exactly once. From here on
+           the rotation only moves position classes; image sources and
+           alt text never change again, so the example cannot drift. */
+        frames.forEach(function (frame, i) {
+          var arch = order[i];
+          var source = frame.querySelector('source');
+          var img = frame.querySelector('img');
+          if (source) source.srcset = '/app/ex-' + example.id + '-' + FILE[arch] + '-dark.webp';
+          if (img) {
+            img.src = '/app/ex-' + example.id + '-' + FILE[arch] + '.webp';
+            img.alt = example.alts[arch] + ' Shown with sample data.';
+          }
+          frame.className = 'trio-frame ' + POSITIONS[i];
+        });
+        if (caption) caption.textContent = 'Shown with sample data: ' + example.label + '.';
+
+        /* Rotate the archetypes: the next view slides to the center,
+           the center recedes. Frame i sits at position (i + offset) mod 3
+           and the center walks frame 0, 1, 2, so the middle plays the
+           declared order (money shot, the other view, comparison) and a
+           full cycle shows all three views exactly once. */
+        var offset = 0;
+        function advance() {
+          offset = (offset + 2) % 3;
+          frames.forEach(function (frame, i) {
+            frame.className = 'trio-frame ' + POSITIONS[(i + offset) % 3];
+          });
+        }
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var timer = setInterval(advance, 6500);
         trio.addEventListener('mouseenter', function () {
-          paused = true;
+          clearInterval(timer);
         });
         trio.addEventListener('mouseleave', function () {
-          paused = false;
+          clearInterval(timer);
+          timer = setInterval(advance, 6500);
         });
-
-        function show(study) {
-          if (source) source.srcset = '/app/' + study[0] + '-dark.webp';
-          img.src = '/app/' + study[0] + '.webp';
-          img.alt = 'Lumecon results page for ' + study[1] + ', shown with sample data.';
-        }
-        function preload(study) {
-          new Image().src = '/app/' + study[0] + '.webp';
-          new Image().src = '/app/' + study[0] + '-dark.webp';
-        }
-
-        preload(STUDIES[1]);
-        setInterval(function () {
-          if (paused || document.hidden) return;
-          i = (i + 1) % STUDIES.length;
-          var next = STUDIES[i];
-          img.style.transition = 'opacity 0.3s ease';
-          img.style.opacity = '0';
-          setTimeout(function () {
-            show(next);
-            if (img.complete) {
-              img.style.opacity = '1';
-            } else {
-              img.onload = function () {
-                img.style.opacity = '1';
-                img.onload = null;
-              };
-            }
-            preload(STUDIES[(i + 1) % STUDIES.length]);
-          }, 320);
-        }, 7000);
+        document.addEventListener('visibilitychange', function () {
+          clearInterval(timer);
+          if (!document.hidden) timer = setInterval(advance, 6500);
+        });
       })();
     </script>
   </div>
