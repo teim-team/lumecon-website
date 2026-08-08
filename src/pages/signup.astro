@@ -14,6 +14,14 @@
  * PUBLIC_API_URL is set; otherwise it opens a prefilled email to
  * contact@lumecon.ai so the request still reaches the team.
  *
+ * RECONCILIATION (queued): this page and /login are the site's own
+ * stand-ins while the beta is closed. When the product connects, both
+ * should hand off to (or embed) teim-app's AuthGate so there is one
+ * account surface, one password policy and one session, and testing
+ * flows from the marketing site straight into the app. The fields here
+ * already mirror the product's registration profile to make that
+ * reconciliation a swap rather than a rewrite.
+ *
  * Layout: mirrored split-screen auth, the product's sign-in screen
  * as the reference. Signup puts the form on the LEFT and the teal
  * brand panel on the RIGHT, the deliberate mirror of /login. Keep

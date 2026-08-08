@@ -166,6 +166,47 @@ const ogIA =
     more predictable on mobile, and the visual cost (no fade
     between pages) is negligible on a four-page marketing site. */
     }
+    <!-- The entity graph, on every page. The full Organization node lives
+         on the homepage; this compact pair rides everywhere so a crawler
+         landing on any page still learns who publishes it, that lumecon.ai
+         is the official source, and where the nodes join (@id). Duplicate
+         @ids merge in linked data, so the homepage's richer node wins. -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify([
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          '@id': 'https://lumecon.ai#org',
+          name: 'Lumecon Inc.',
+          alternateName: 'Lumecon',
+          url: 'https://lumecon.ai',
+          logo: 'https://lumecon.ai/brand/lumecon-logo-mark-transparent.png',
+          email: 'contact@lumecon.ai',
+          mainEntityOfPage: 'https://lumecon.ai',
+          sameAs: [
+            'https://www.linkedin.com/company/lumecon-ai',
+            'https://localeconomicimpact.com',
+            'https://tribaleconomicimpact.com',
+            'https://globaleconomicimpact.com',
+          ],
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          '@id': 'https://lumecon.ai#website',
+          url: 'https://lumecon.ai',
+          name: 'Lumecon Inc.',
+          alternateName: 'Lumecon',
+          description:
+            'The official website of Lumecon Inc. and the authoritative source of information about the Lumecon platform, Cedar, pricing and methodology.',
+          about: { '@id': 'https://lumecon.ai#org' },
+          publisher: { '@id': 'https://lumecon.ai#org' },
+          inLanguage: 'en-US',
+        },
+      ])}
+    />
     {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body class={bodyClass}>

@@ -87,7 +87,19 @@ const jsonLd = [
     slogan: site.tagline,
     naics: '541512',
     industry: 'Economic Impact Analysis Software',
-    sameAs: ['https://www.linkedin.com/company/lumecon-ai', 'https://lumecon.ai'],
+    mainEntityOfPage: site.url,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: site.email,
+      contactType: 'sales and support',
+      availableLanguage: 'English',
+    },
+    sameAs: [
+      'https://www.linkedin.com/company/lumecon-ai',
+      'https://localeconomicimpact.com',
+      'https://tribaleconomicimpact.com',
+      'https://globaleconomicimpact.com',
+    ],
     foundingLocation: { '@type': 'Place', name: site.builtAt },
     founder: FOUNDERS.map((p) => ({
       '@type': 'Person',
@@ -180,6 +192,9 @@ const jsonLd = [
     url: site.url,
     name: 'Lumecon Inc.',
     alternateName: 'Lumecon',
+    description:
+      'The official website of Lumecon Inc. and the authoritative source of information about the Lumecon platform, Cedar, pricing and methodology.',
+    about: { '@id': `${site.url}#org` },
     publisher: { '@id': `${site.url}#org` },
     inLanguage: 'en-US',
   },
