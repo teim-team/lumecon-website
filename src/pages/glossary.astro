@@ -61,8 +61,6 @@ const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; li
       term: 'NAICS sector',
       abbr: 'NAICS',
       def: 'The North American Industry Classification System, the federal standard for grouping economic activity by industry. Lumecon classifies at the two-digit sector level, where administrative data coverage is most complete.',
-      href: '/naics',
-      linkText: 'See all sectors',
     },
     {
       term: 'Base year',
@@ -150,7 +148,23 @@ const jsonLd = [
 
     <section class="meth-sec" aria-label="Definitions">
       <div class="meth-w" data-reveal-group>
-        <dl class="meth-defs gloss-defs">
+        <!-- The glossary answers a question someone arrived with, so the
+             fastest path is typing the word, not scanning the page. The
+             filter matches the term, its abbreviation and the definition
+             text, and says plainly when nothing matches. -->
+        <div class="gloss-tools">
+          <label class="gloss-search">
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor"
+              stroke-width="1.6" stroke-linecap="round">
+              <circle cx="7" cy="7" r="4.4"></circle>
+              <path d="M10.4 10.4 14 14"></path>
+            </svg>
+            <input type="search" id="glossFilter" placeholder="Find a term"
+              aria-label="Filter glossary terms" autocomplete="off" />
+          </label>
+          <span class="gloss-count" id="glossCount" aria-live="polite"></span>
+        </div>
+        <dl class="meth-defs gloss-defs" id="glossList">
           {
             TERMS.map((t) => (
               <div
@@ -180,10 +194,40 @@ const jsonLd = [
             ))
           }
         </dl>
+        <p class="gloss-none" id="glossNone" hidden>
+          No term matches that. Ask Cedar in the corner of this page, or write to{' '}
+          <a class="gloss-link" href="mailto:contact@lumecon.ai">contact@lumecon.ai</a> and we will
+          add it.
+        </p>
         <p class="gloss-foot">
           Read <a class="gloss-link" href="/methodology">how an analysis is built</a>, or ask Cedar
           (in the corner of this page) to explain any of these in plain language.
         </p>
+        <script is:inline>
+          (function () {
+            var input = document.getElementById('glossFilter');
+            var list = document.getElementById('glossList');
+            var none = document.getElementById('glossNone');
+            var count = document.getElementById('glossCount');
+            if (!input || !list) return;
+            var rows = [].map.call(list.querySelectorAll('.meth-defs__row'), function (row) {
+              return { el: row, text: row.textContent.toLowerCase() };
+            });
+            var total = rows.length;
+            function apply() {
+              var q = input.value.trim().toLowerCase();
+              var shown = 0;
+              rows.forEach(function (r) {
+                var hit = !q || r.text.indexOf(q) !== -1;
+                r.el.hidden = !hit;
+                if (hit) shown++;
+              });
+              if (none) none.hidden = shown !== 0;
+              if (count) count.textContent = q ? shown + ' of ' + total + ' terms' : '';
+            }
+            input.addEventListener('input', apply);
+          })();
+        </script>
       </div>
     </section>
   </main>

@@ -694,3 +694,65 @@
 .mcard__body p:last-child {
   margin-bottom: 0;
 }
+
+/* ---------- glossary tools ----------
+   The filter row above the definitions: a mono search field in the
+   site's chrome register, a live count, and row hover that marks the
+   term being read. */
+.gloss-tools {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.6rem;
+}
+.gloss-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 0 1 24rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink-3);
+  transition: border-color 0.2s var(--ease);
+}
+.gloss-search:focus-within {
+  border-color: var(--accent);
+}
+.gloss-search svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: none;
+}
+.gloss-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.98rem;
+  color: var(--ink);
+}
+.gloss-count {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.gloss-none {
+  font-size: 0.98rem;
+  color: var(--ink-2);
+  padding: 1.2rem 0 0;
+}
+.gloss-defs .meth-defs__row {
+  transition: background-color 0.15s var(--ease);
+}
+.gloss-defs .meth-defs__row:hover {
+  background: var(--teal-tint, rgba(15, 181, 165, 0.06));
+}
+.gloss-defs .meth-defs__row:hover dt {
+  color: var(--accent-text);
+}
