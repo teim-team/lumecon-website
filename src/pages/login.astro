@@ -1,4 +1,11 @@
 ---
+
+/**
+ * RECONCILIATION (queued): this page is the site's stand-in while the
+ * beta is closed. When the product connects, it should hand off to
+ * teim-app's AuthGate (see the matching note in signup.astro) so there
+ * is one account surface and one session across site and app.
+ */
 /**
  * /login — sign in, wired the way the product's AuthGate works:
  *
@@ -20,11 +27,11 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
 import AuthBrandPanel from '../components/AuthBrandPanel.astro';
+
+const authYear = new Date().getFullYear();
 import '../styles/global.css';
 import '../styles/nav.css';
-import '../styles/footer.css';
 import '../styles/auth.css';
 import '../styles/auth-split.css';
 ---
@@ -34,12 +41,13 @@ import '../styles/auth-split.css';
   description="Log in to your Lumecon account."
   canonical="https://lumecon.ai/login"
   keywords="Lumecon login, Lumecon sign in, economic impact analysis login"
+  bodyClass="auth-body"
 >
   <Nav />
   <main class="asplit asplit--login" id="top" tabindex="-1">
     <AuthBrandPanel
       headline="Pick up where you left off."
-      lede="Your analyses, organizational context, Cedar workspace and reporting tools stay together in Lumecon."
+      lede="Your analyses, organizational context, Cedar and reporting tools stay together in Lumecon."
       points={[
         { icon: 'archive', text: 'Your analyses and prior work stay with your organization' },
         { icon: 'rings', text: 'Cedar carries approved context across projects' },
@@ -133,7 +141,12 @@ import '../styles/auth-split.css';
       </div>
     </div>
   </main>
-  <Footer />
+  <footer class="auth-foot">
+    <span>© {authYear} Lumecon Inc.</span>
+    <a href="/terms">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="mailto:contact@lumecon.ai">Contact</a>
+  </footer>
 </BaseLayout>
 
 <script>
@@ -145,28 +158,9 @@ import '../styles/auth-split.css';
     apiConfigured,
   } from '../lib/api';
   import { trackEvent, trackError } from '../lib/observability';
+  import { PASSWORD_RULES, evaluatePassword } from '../lib/passwordRules';
 
   type Mode = 'login' | 'forgot' | 'reset';
-
-  /* Product password rules (see /signup for the registration copy of
-     the same logic): 12+ characters AND three of four classes. */
-  const PASSWORD_RULES: Array<{ key: string; test: (pw: string) => boolean }> = [
-    { key: 'length', test: (pw) => pw.length >= 12 },
-    { key: 'case', test: (pw) => /[a-z]/.test(pw) && /[A-Z]/.test(pw) },
-    { key: 'number', test: (pw) => /\d/.test(pw) },
-    { key: 'symbol', test: (pw) => /[^A-Za-z0-9]/.test(pw) },
-  ];
-  function evaluatePassword(pw: string): { acceptable: boolean; level: number; label: string } {
-    const results = PASSWORD_RULES.map((r) => r.test(pw));
-    const met = results.filter(Boolean).length;
-    const acceptable = results[0] && met >= 3;
-    if (!pw) return { acceptable: false, level: 0, label: '' };
-    if (met <= 1) return { acceptable, level: 1, label: 'Weak' };
-    if (met === 2) return { acceptable, level: 2, label: 'Fair' };
-    if (acceptable && met === 3) return { acceptable, level: 3, label: 'Good' };
-    if (acceptable) return { acceptable, level: 4, label: 'Strong' };
-    return { acceptable, level: 2, label: 'Fair' };
-  }
 
   function setStatus(el: HTMLElement | null, variant: 'ok' | 'err' | 'info', text: string): void {
     if (!el) return;
@@ -308,7 +302,16 @@ import '../styles/auth-split.css';
             const result = await submitLogin({ email, password });
             if (result.ok) {
               trackEvent('auth.success', { kind: 'login' });
-              setStatus(status, 'ok', 'Logged in. Redirecting you to the workspace...');
+              /* The product origin. Only promise a redirect we can
+                 actually perform; PUBLIC_APP_URL is set alongside
+                 PUBLIC_API_URL when the app goes to production. */
+              const appUrl = (import.meta.env.PUBLIC_APP_URL || '').replace(/\/+$/, '');
+              if (appUrl) {
+                setStatus(status, 'ok', 'Logged in. Taking you to your workspace...');
+                window.location.href = appUrl;
+              } else {
+                setStatus(status, 'ok', 'Logged in.');
+              }
               return;
             }
             if (result.reason !== 'api-unconfigured') {

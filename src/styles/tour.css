@@ -9,7 +9,7 @@
   padding: clamp(4rem, 9vh, 7.5rem) var(--container-pad);
 }
 .tour-inner {
-  max-width: 1200px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   gap: clamp(2.5rem, 6vh, 4.5rem);
@@ -19,7 +19,7 @@
 .tour-head {
   display: grid;
   gap: 0.9rem;
-  max-width: 900px;
+  max-width: var(--head-max);
 }
 .tour-kicker,
 .tour-row__kicker {
@@ -45,55 +45,6 @@
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-}
-
-/* ---------- coverage band ---------- */
-.tour-coverage {
-  list-style: none;
-  margin: 0;
-  padding: 1.6rem 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.4rem;
-}
-.tour-coverage__item {
-  display: grid;
-  gap: 0.35rem;
-  align-content: start;
-}
-.tour-coverage__item + .tour-coverage__item {
-  border-left: 1px solid var(--rule);
-  padding-left: 1.4rem;
-}
-.tour-coverage__big {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.7rem, 3vw, 2.4rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--accent-text);
-}
-.tour-coverage__label {
-  font-size: 0.86rem;
-  line-height: 1.5;
-  color: var(--ink-3);
-}
-@media (max-width: 880px) {
-  .tour-coverage {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 1.6rem;
-  }
-  /* On the 2x2 grid only the second column gets a hairline. */
-  .tour-coverage__item + .tour-coverage__item {
-    border-left: none;
-    padding-left: 0;
-  }
-  .tour-coverage__item:nth-child(even) {
-    border-left: 1px solid var(--rule);
-    padding-left: 1.4rem;
-  }
 }
 
 /* ---------- feature rows ---------- */
@@ -136,7 +87,7 @@
   line-height: 1.62;
   color: var(--ink-2);
   margin: 0;
-  max-width: 46ch;
+  max-width: 72ch;
 }
 .tour-row__shot {
   margin: 0;
@@ -152,6 +103,33 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Hover on the three product rows: a lift on the screenshot itself, matching
+   the pricing cards' vocabulary (rise + teal border + teal-cast shadow).
+
+   The lift used to be the whole response, deliberately without a pointer
+   cue, because there was nowhere to click. The screenshots open in the
+   lightbox now, so the cue is correct: `cursor: zoom-in` and the corner
+   badge come from lightbox.css, and the lift reads as the same gesture. */
+.tour-row__shot {
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.tour-row:hover .tour-row__shot {
+  transform: translateY(var(--lift));
+  border-color: var(--accent);
+  box-shadow: var(--lift-shadow);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-row__shot {
+    transition: none;
+  }
+  .tour-row:hover .tour-row__shot {
+    transform: none;
+  }
 }
 @media (max-width: 880px) {
   .tour-row,

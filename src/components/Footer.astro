@@ -1,68 +1,99 @@
 ---
 /**
- * Footer — four lean columns plus a copyright row.
+ * Footer — a single closing band, not another section.
  *
- * The previous layout mixed product lines (Local / Tribal / Global)
- * with feature pages (Cedar / Map / Pricing) under one "Platforms"
- * header, which was conceptually muddled, and stacked 20 link items
- * across four columns. Now:
+ * No brand block. The mark already appears in the header on every page
+ * and again in the hero on most of them, and the company pitch was a
+ * third statement of what the site says at the top; between them they
+ * took a third of the band's width and set its height.
  *
- *   Platforms — the three Lumecon product lines.
- *   Explore   — the three deep feature pages (Map, Cedar, Pricing).
- *   Company   — three company links (no mailto-only items).
- *   Legal     — two pages.
+ * What is left is navigation, grouped. Fourteen links in one wrapping
+ * row read as a run-on sentence: nothing signalled that Terms and
+ * Cedar were different kinds of thing, so the eye had to scan all
+ * fourteen to find one.
  *
- * The cedar tree mark sits next to the wordmark in the brand
- * column so the brand reads as one thing instead of three across
- * the site (FAB + Cedar tile + bare wordmark).
+ * Grouping costs height, because the deepest group sets the band, so
+ * the groups are balanced to three: Methodology sits under Reference
+ * rather than Product, and "Privacy choices" moved to the bottom bar
+ * beside the email, which is where a preference control belongs
+ * anyway. Four rows down to three.
  */
 import { site } from '../config';
-import BrandWordmark from './BrandWordmark.astro';
+
 interface Props {
   isHome?: boolean;
 }
 const { isHome = false } = Astro.props;
+
+const GROUPS: { label: string; links: { href: string; text: string; ext?: boolean }[] }[] = [
+  {
+    label: 'Product',
+    links: [
+      { href: '/#product', text: 'How it works' },
+      { href: '/cedar', text: 'Cedar' },
+      { href: '/pricing', text: 'Pricing' },
+    ],
+  },
+  {
+    label: 'Reference',
+    links: [
+      { href: '/methodology', text: 'Methodology' },
+      { href: '/glossary', text: 'Glossary' },
+    ],
+  },
+  {
+    label: 'Account',
+    links: [
+      { href: '/signup', text: 'Sign up' },
+      { href: '/login', text: 'Log in' },
+    ],
+  },
+  {
+    label: 'Company',
+    links: [{ href: 'https://www.linkedin.com/company/lumecon-ai', text: 'LinkedIn', ext: true }],
+  },
+  {
+    label: 'Legal',
+    links: [
+      { href: '/terms', text: 'Terms' },
+      { href: '/privacy', text: 'Privacy' },
+      { href: '/accessibility', text: 'Accessibility' },
+    ],
+  },
+];
 ---
 
 <footer class={isHome ? 'footer footer--home' : 'footer'}>
   <div class="footer-w">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-brand__wordmark">
-          <BrandWordmark size="md" ariaLabel={`${site.legalName} home`} />
-        </div>
-        <div class="footer-brand-pitch">{site.pitch}</div>
-      </div>
-
-      <div class="footer-cols">
-        <div class="footer-col">
-          <div class="footer-col__head mono">Product</div>
-          <a href="/#product">How it works</a>
-          <a href="/cedar">Cedar</a>
-          <a href="/pricing">Pricing</a>
-          <a href="/methodology">Methodology</a>
-          <a href="/signup">Sign up</a>
-          <a href="/login">Log in</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col__head mono">Company</div>
-          <a class="footer-col__contact" href={`mailto:${site.email}`}>Contact</a>
-          <a
-            href="https://www.linkedin.com/company/lumecon-ai"
-            target="_blank"
-            rel="noopener noreferrer me">LinkedIn</a
-          >
-        </div>
-        <div class="footer-col">
-          <div class="footer-col__head mono">Legal</div>
-          <a href="/terms">Terms of Service</a>
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/glossary">Glossary</a>
-          <a href="/accessibility">Accessibility</a>
-          <button type="button" class="footer-linkbtn" id="privacyChoices">Privacy choices</button>
-        </div>
-      </div>
-    </div>
+    <nav class="footer-groups" aria-label="Footer">
+      {
+        GROUPS.map((g) => (
+          <div class="footer-group">
+            <p class="footer-group__label">{g.label}</p>
+            <ul class="footer-group__list" role="list">
+              {g.links.map((l) => (
+                <li>
+                  {l.ext ? (
+                    <a href={l.href} target="_blank" rel="noopener noreferrer me">
+                      {l.text}
+                    </a>
+                  ) : (
+                    <a href={l.href}>{l.text}</a>
+                  )}
+                </li>
+              ))}
+              {g.label === 'Company' && (
+                <li>
+                  <a class="footer-links__contact" href={`mailto:${site.email}`}>
+                    Contact
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
   </div>
 
   <!-- Compact navy strip for copyright + contact email so the
@@ -75,7 +106,10 @@ const { isHome = false } = Astro.props;
           &copy; <span id="copyrightYear">{site.copyrightYear}</span>{' '}{site.legalEntity} &middot;
           All rights reserved &middot; Patent pending.
         </div>
-        <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
+        <div class="footer-bottom__right">
+          <button type="button" class="footer-linkbtn" id="privacyChoices">Privacy choices</button>
+          <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
+        </div>
       </div>
     </div>
   </div>

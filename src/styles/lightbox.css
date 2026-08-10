@@ -1,0 +1,251 @@
+/* ---------- lightbox ----------
+   Click a product screenshot, see it full size, click out.
+
+   The screenshots on this site are 1920x1080 renders of real app surfaces
+   shown at a third of that width, which means the numbers, the map and the
+   panel copy are all present and none of them are readable. This is the way
+   to read them.
+
+   Opt-in, not automatic: an element carries `data-zoom` and the image inside
+   it becomes zoomable. Brand marks, the decorative card art and the sector
+   photographs deliberately do not, because enlarging a 300px ornament gives
+   a reader nothing and teaches them that clicking pictures is a dead end.
+   ---------------------------------------------------------------- */
+
+/* The trigger. `zoom-in` is the one cursor a browser has for exactly this,
+   and the corner badge is there for a pointer that never hovers first. */
+[data-zoom] {
+  position: relative;
+}
+[data-zoom] img {
+  cursor: zoom-in;
+}
+.zoom-badge {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.55rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 5px;
+  border: 1px solid var(--rule);
+  background: var(--white);
+  color: var(--accent-text);
+  opacity: 0;
+  transform: translateY(3px);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease);
+  pointer-events: none;
+}
+.zoom-badge svg {
+  display: block;
+  width: 0.85rem;
+  height: 0.85rem;
+}
+[data-zoom]:hover .zoom-badge,
+[data-zoom] img:focus-visible ~ .zoom-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* A caption sits under the picture inside the same figure, so the badge has
+   to clear it rather than land on the text. */
+[data-zoom]:has(figcaption) .zoom-badge {
+  bottom: auto;
+  top: 0.55rem;
+}
+[data-zoom] img:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The overlay. One element for the whole document, reused by every trigger:
+   there is only ever one image enlarged, and a per-image overlay would mean
+   a dozen dialogs on the home page waiting to be found by a screen reader. */
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-rows: 1fr;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(10, 15, 38, 0.86);
+  cursor: zoom-out;
+}
+.lb[hidden] {
+  display: none;
+}
+.lb__box {
+  display: grid;
+  gap: 0.7rem;
+  justify-items: center;
+  max-width: min(1600px, 100%);
+  max-height: 100%;
+  cursor: default;
+}
+.lb__img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  /* The caption and the padding come out of the viewport before the picture
+     does, or a long caption pushes the bottom of the image off screen. */
+  max-height: calc(100vh - 10rem);
+  object-fit: contain;
+  border-radius: 6px;
+  background: var(--white);
+  box-shadow: 0 30px 90px -30px rgba(0, 0, 0, 0.7);
+}
+
+/* Fit is not the end of it. Every screenshot here is a 1920px render, and
+   fitting one to a 1440px window still throws away a quarter of the pixels;
+   fitting one to a phone throws away four fifths and lands at the size it
+   already was on the page, which would make this feature do nothing on the
+   device that needs it most.
+
+   So the enlarged picture has a second state at its own resolution, and the
+   overlay scrolls. Clicking the picture toggles; clicking anywhere else
+   still closes, in both states. */
+.lb--zoomable .lb__img {
+  cursor: zoom-in;
+}
+.lb.is-full {
+  display: block;
+  overflow: auto;
+  /* Momentum scrolling, and no browser-level pinch fighting the pan. */
+  overscroll-behavior: contain;
+  /* Clear the close button, which is fixed and would otherwise sit on the
+     top edge of a picture that now runs the full width. */
+  padding-top: 4.4rem;
+}
+.lb.is-full .lb__box {
+  max-width: none;
+  margin: 0 auto;
+  /* min-content keeps the box the width of the picture, so a picture wider
+     than the viewport can be scrolled to rather than centred and clipped. */
+  width: min-content;
+}
+.lb.is-full .lb__img {
+  max-width: none;
+  max-height: none;
+  cursor: zoom-out;
+}
+.lb__cap {
+  max-width: 68ch;
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  text-align: center;
+  /* Fixed light-on-dark: the scrim is painted, so these do not follow the
+     theme the way page text does. */
+  color: rgba(255, 255, 255, 0.82);
+}
+.lb__close {
+  position: fixed;
+  top: clamp(0.6rem, 2vw, 1.2rem);
+  right: clamp(0.6rem, 2vw, 1.2rem);
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 6px;
+  /* Opaque, not a tint. At full size the picture scrolls underneath this
+     button, and most of these screenshots are a white app surface, which a
+     translucent white chip disappears into. */
+  background: rgba(10, 15, 38, 0.92);
+  color: #fff;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.lb__close:hover {
+  background: rgba(10, 15, 38, 1);
+  border-color: rgba(255, 255, 255, 0.62);
+}
+.lb__close:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.lb__hint {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(0.5rem, 2vw, 1rem);
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Opening motion. Short, and only on the picture: the scrim fading is what
+   reads as the page receding, and the image scaling is what reads as the
+   picture coming forward. */
+.lb {
+  animation: lb-in 0.18s var(--ease);
+}
+.lb__box {
+  animation: lb-rise 0.22s var(--ease);
+}
+@keyframes lb-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes lb-rise {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+/* While the overlay is open the page behind it must not scroll. Padding
+   replaces the scrollbar's width so the page underneath does not jump
+   sideways as it is locked. */
+html.lb-open {
+  overflow: hidden;
+}
+/* The scroll indicator lives above everything on the site (z-index 9999,
+   which is correct for a rail that has to clear the nav) and would draw a
+   teal line across the top of the scrim. It reports a page that cannot
+   scroll right now, so it goes away rather than sitting on top. */
+html.lb-open .scroll-progress {
+  opacity: 0;
+}
+
+@media (max-width: 640px) {
+  .lb__img {
+    max-height: calc(100vh - 12rem);
+  }
+  .lb {
+    padding: 3.6rem 0.75rem 3.2rem;
+  }
+  /* No side padding once the picture is at its own size: 0.75rem either
+     side of a 1920px image is 24px of scrollable nothing at each end. */
+  .lb.is-full {
+    padding: 3.6rem 0 3.2rem;
+  }
+  .lb__hint {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb,
+  .lb__box {
+    animation: none;
+  }
+  .zoom-badge {
+    transition: none;
+  }
+}

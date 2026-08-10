@@ -90,15 +90,10 @@
   top: -190px;
   right: -230px;
 }
-.markart--bl {
-  bottom: -260px;
-  left: -280px;
-  opacity: 0.06;
-}
 .hero2-inner {
   position: relative;
   z-index: 1;
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   justify-items: center;
@@ -113,7 +108,7 @@
   letter-spacing: -0.025em;
   color: var(--ink);
   margin: 0;
-  max-width: 22ch;
+  max-width: 42ch;
 }
 .hero2-em {
   color: var(--accent-text);
@@ -123,16 +118,11 @@
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  max-width: 62ch;
+  max-width: 82ch;
 }
 .hero2-sub strong {
   color: var(--accent-text);
   font-weight: 600;
-}
-/* The traceability promise gets its own emphasized line. */
-.hero2-sub--em {
-  font-size: clamp(1rem, 1.35vw, 1.15rem);
-  margin-top: -0.4rem;
 }
 .hero2-cta {
   display: flex;
@@ -141,17 +131,6 @@
   justify-content: center;
   margin-top: 0.4rem;
 }
-.hero2-proof {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin: 0;
-  max-width: 72ch;
-  line-height: 1.9;
-}
-
 @media (max-width: 560px) {
   /* Compact hero: on a phone the headline + body + CTAs must land
      inside the first screen with room to spare, and the CTA stack
@@ -167,15 +146,6 @@
     font-size: 0.94rem;
     line-height: 1.5;
     max-width: 36ch;
-  }
-  /* On a phone the sub keeps the audience and the measures; the
-     document-inputs clause returns at tablet width and up. */
-  .hero2-sub__inputs {
-    display: none;
-  }
-  .hero2-sub--em {
-    font-size: 0.94rem;
-    margin-top: -0.3rem;
   }
   .hero2-inner {
     gap: 0.85rem;
@@ -198,7 +168,7 @@
 .trio {
   position: relative;
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: clamp(1.6rem, 4vh, 3rem) auto 0;
   aspect-ratio: 1240 / 545;
 }
@@ -213,10 +183,15 @@
   background: var(--white);
   transform-origin: center top;
   will-change: transform;
+  /* transform / box-shadow / opacity carry the 6.5s rotation, so they stay
+     slow. `translate` is reserved for the hover lift below and is the only
+     thing here that moves at pointer speed. */
   transition:
     transform 0.9s var(--ease),
     box-shadow 0.9s var(--ease),
-    opacity 0.9s var(--ease);
+    opacity 0.9s var(--ease),
+    translate 0.25s var(--ease),
+    border-color 0.25s var(--ease);
 }
 .trio-frame img {
   display: block;
@@ -240,6 +215,41 @@
   z-index: 1;
   box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
 }
+
+/* Hover on the hero trio. Same vocabulary as the product tour rows
+   (rise + teal border + teal-cast shadow), and the rotation is already
+   paused while the pointer is over the trio, so the lift is not fighting
+   a position change.
+
+   The lift uses the individual `translate` property rather than adding to
+   `transform`. Each position class owns its own transform (the side frames
+   carry a translateX, a translateY and a scale(0.8)), so a shared hover
+   rule cannot append to it without rewriting all three. `translate` is
+   applied outside `transform`, which also means the lift is a true 10px in
+   page space instead of 8px on the scaled side frames.
+
+   z-index raises the hovered frame over its neighbours: the frames overlap,
+   and a side frame lifting *underneath* the center one reads as a glitch. */
+.trio-frame:hover {
+  /* Three times the shared lift: these frames are far larger than a card,
+     so the same 3px would not read at all. */
+  translate: 0 calc(var(--lift) * 3);
+  border-color: var(--accent);
+  z-index: 3;
+  box-shadow: var(--lift-shadow);
+  /* Only on the way in: hover-out falls back to the 0.9s rotation timing
+     above, so a frame that rotates away while the pointer leaves does not
+     snap its shadow. */
+  transition:
+    translate 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .trio-frame:hover {
+    translate: none;
+  }
+}
 .trio-caption {
   position: absolute;
   left: 0;
@@ -249,7 +259,7 @@
   text-align: center;
   font-size: 0.82rem;
   color: var(--ink-3);
-  max-width: 70ch;
+  max-width: 88ch;
 }
 /* Room for the absolutely-positioned caption below the frames. */
 .trio {
@@ -265,12 +275,26 @@
   .trio-pos-c {
     transform: translateX(-50%);
     opacity: 1;
+    visibility: visible;
   }
+  /* Only the center frame exists on a phone; the other two sit exactly
+     behind it at zero opacity and rotate through.
+
+     `visibility` is here because the screenshots are keyboard controls now:
+     they open the lightbox, so they are in the tab order, and a control
+     nobody can see should not be. The longhand is what lets the 0.9s fade
+     still play, by holding the visibility change until the fade has
+     finished. Setting `transition` in shorthand here would reset it to zero
+     delay and the frame would vanish instead of fading. */
   .trio-pos-l,
   .trio-pos-r {
     transform: translateX(-50%) scale(0.96);
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
+    transition-property: transform, box-shadow, opacity, translate, border-color, visibility;
+    transition-duration: 0.9s, 0.9s, 0.9s, 0.25s, 0.25s, 0s;
+    transition-delay: 0s, 0s, 0s, 0s, 0s, 0.9s;
   }
 }
 
@@ -281,7 +305,7 @@
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .whyw-inner {
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   gap: clamp(1.6rem, 4vh, 2.4rem);
@@ -289,24 +313,22 @@
 .whyw-head {
   display: grid;
   gap: 0.9rem;
-  max-width: 900px;
+  max-width: var(--head-max);
 }
 .whyw-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
+  /* Column gap does the separating now that the vertical rules are gone. */
+  gap: var(--gutter);
 }
+/* No vertical rules between the cards. The illustrations already read as four
+   distinct things, and a rule beside each one boxed them in. Column gap does
+   the separating instead, which is why the grid below carries one. */
 .whyw-card {
-  padding: 0.4rem 1.6rem;
+  padding: 0.4rem 0;
   display: grid;
   gap: 0.5rem;
   align-content: start;
-}
-.whyw-card:first-child {
-  padding-left: 0;
-}
-.whyw-card + .whyw-card {
-  border-left: 1px solid var(--rule);
 }
 .whyw-card__k {
   font-family: var(--font-mono);
@@ -335,24 +357,13 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 2.6rem;
   }
-  .whyw-card + .whyw-card {
-    border-left: none;
-  }
-  .whyw-card:nth-child(even) {
-    border-left: 1px solid var(--rule);
-  }
-  .whyw-card:nth-child(odd) {
-    padding-left: 0;
-  }
 }
 @media (max-width: 759px) {
   .whyw-grid {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 0;
   }
-  .whyw-card,
-  .whyw-card:nth-child(even) {
-    border-left: none;
+  .whyw-card {
     padding: 0;
   }
   /* Editorial sequence: eyebrow first, then the illustration large
@@ -386,7 +397,7 @@
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .flowsec-inner {
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   gap: clamp(1.6rem, 4vh, 2.6rem);
@@ -401,7 +412,7 @@
 .flowsec-head {
   display: grid;
   gap: 0.9rem;
-  max-width: 900px;
+  max-width: var(--head-max);
 }
 .flowsec-title,
 .whyw-title {
@@ -419,18 +430,6 @@
   line-height: 1.62;
   color: var(--ink-2);
   margin: 0;
-}
-.wn-shot {
-  margin: 0;
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 20px 48px -26px rgba(10, 15, 38, 0.32);
-}
-.wn-shot img {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 /* Cedar teaser: one position statement + one real capture. The old
    five-step pipeline moved to /cedar as a diagram. */
@@ -453,38 +452,6 @@
   line-height: 1.55;
   color: var(--ink-3);
 }
-/* ---------- one platform ---------- */
-.oneplat {
-  background: var(--white);
-  border-top: 1px solid var(--rule);
-  padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
-}
-.oneplat-inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  display: grid;
-  gap: 1.2rem;
-}
-.oneplat-orgs {
-  list-style: none;
-  margin: 0.4rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.oneplat-orgs li {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  padding: 0.38rem 0.85rem;
-  background: var(--white);
-}
-
 /* ---------- ask any AI ---------- */
 .askai {
   background: var(--white);
@@ -492,7 +459,7 @@
   padding: clamp(2rem, 5vh, 3.2rem) var(--container-pad);
 }
 .askai-inner {
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   gap: 0.9rem;
@@ -501,7 +468,7 @@
   font-size: 0.92rem;
   color: var(--ink-3);
   margin: 0;
-  max-width: 70ch;
+  max-width: 88ch;
 }
 /* The plainly factual paragraph retrieval systems can quote. */
 .askai-fact {
@@ -611,116 +578,113 @@
   border-top: 1px solid var(--rule);
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
+/* Extra air between the section header and the tile grid: the tiles are
+   mostly whitespace at rest, so they need room around them to read as a
+   deliberate row of icons rather than a gap in the page. */
 .edge-inner {
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
-  gap: clamp(1.6rem, 4vh, 2.4rem);
+  gap: clamp(2.6rem, 6vh, 4rem);
 }
 .edge-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2.2rem 0;
+  /* Gutters do all the separating: no box around a tile, no rule between
+     columns. */
+  gap: clamp(2.4rem, 5vh, 3.6rem) var(--gutter);
 }
+/* Six tiles that lead with the icon, with the sentence held back until the
+   pointer arrives.
+
+   No card around them: the site separates with hairlines, not boxes, and a
+   border here drew a rectangle around what is mostly whitespace at rest. The
+   column rule is the same one the why cards use.
+
+   The sentence stays in normal flow. `opacity` does not affect layout, so a
+   hidden sentence still occupies its space and revealing one cannot reflow the
+   row or nudge the tiles beside it. That is also why there is no min-height
+   here and no absolute positioning: the tallest sentence in the set sets the
+   row height, grid stretch equalizes the rest, and nothing needs a magic
+   offset that a copy edit would silently break. */
 .edge-card {
-  padding: 0.2rem 1.6rem;
+  padding: 0.2rem 0;
   display: grid;
   gap: 0.5rem;
   align-content: start;
 }
-.edge-card:nth-child(3n + 1) {
-  padding-left: 0;
+/* With no card to light up, the icon chip carries the hover: it takes the
+   accent border and lifts, the way the tour screenshots and the hero frames
+   do. */
+.edge-card:hover .edge-ic,
+.edge-card:focus-visible .edge-ic {
+  border-color: var(--accent);
+  background: var(--accent-rgba-18);
+  transform: translateY(var(--lift));
 }
-.edge-card:not(:nth-child(3n + 1)) {
-  border-left: 1px solid var(--rule);
+/* The sentence itself uses the shared .hover-veil in global.css. */
+@media (prefers-reduced-motion: reduce) {
+  .edge-card:hover .edge-ic {
+    transform: none;
+  }
 }
 .edge-ic {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 6px;
+  /* The icon leads the tile now that the sentence is held back, so it is
+     sized to be the thing you see first rather than a bullet beside a label. */
+  width: 76px;
+  height: 76px;
+  border-radius: 12px;
   background: var(--accent-rgba-08);
   border: 1px solid var(--accent-bar);
   color: var(--accent-text);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.55rem;
   transition:
     transform 0.2s var(--ease),
     background 0.2s var(--ease);
 }
 .edge-ic svg {
-  width: 24px;
-  height: 24px;
+  width: 38px;
+  height: 38px;
 }
 @media (max-width: 980px) {
   .edge-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .edge-card,
-  .edge-card:not(:nth-child(3n + 1)) {
-    border-left: none;
-    padding-left: 0;
-  }
-  .edge-card:nth-child(even) {
-    border-left: 1px solid var(--rule);
-    padding-left: 1.6rem;
   }
 }
 @media (max-width: 560px) {
   .edge-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .edge-card,
-  .edge-card:nth-child(even) {
-    border-left: none;
-    padding-left: 0;
-  }
 }
 
 /* ---------- interactive hover states (the app's card feel) ---------- */
-.oneplat-orgs li {
-  transition:
-    transform 0.2s var(--ease),
-    border-color 0.2s var(--ease),
-    box-shadow 0.2s var(--ease),
-    background 0.2s var(--ease);
-}
 .edge-card:hover .edge-ic {
   transform: scale(1.08);
   background: var(--accent-rgba-18);
 }
-.oneplat-orgs li:hover {
-  border-color: var(--accent);
-  color: var(--accent-text);
-}
 .tour-row__shot,
-.wn-shot,
 .cedar-shot {
   transition:
     transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
     box-shadow 0.25s var(--ease);
 }
+/* Same hover as everything else that lifts, through the shared tokens
+   rather than its own hand-picked pair of numbers. */
 .tour-row__shot:hover,
-.wn-shot:hover,
 .cedar-shot:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 28px 60px -30px rgba(10, 15, 38, 0.45);
-}
-.trio-main {
-  transition: transform 0.25s var(--ease);
-}
-.trio:hover .trio-main {
-  transform: translateY(-4px);
+  transform: translateY(var(--lift));
+  border-color: var(--accent);
+  box-shadow: var(--lift-shadow);
 }
 @media (prefers-reduced-motion: reduce) {
   .edge-card,
   .whyw-card,
   .tour-row__shot,
-  .wn-shot,
-  .cedar-shot,
-  .tour-map,
-  .trio-main {
+  .cedar-shot {
     transition: none;
   }
 }
@@ -733,18 +697,23 @@
   height: 205px;
   margin-bottom: 0.8rem;
 }
-/* The <picture> wrapper must pass the constraints through, or the
-   img sizes against an unconstrained box. */
-.whyw-art picture {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-}
-.whyw-card[data-art='cedar'] .whyw-art img,
 .whyw-card[data-art='orgs'] .whyw-art img {
   width: 100%;
+}
+/* The Cedar illustration is a wide, short strip (about 3.6:1, against ~1.4:1
+   for the other three), so at the card's own width it renders barely a third
+   as tall as its neighbours and reads as a smaller, lesser icon. It takes the
+   full card including the horizontal padding, and centres in the box rather
+   than sitting on its floor, so it holds its own in the row. It still cannot
+   match their height without being wider than the card; that is the drawing's
+   proportion, not the layout's. */
+.whyw-card[data-art='cedar'] .whyw-art {
+  align-items: center;
+}
+.whyw-card[data-art='cedar'] .whyw-art img {
+  width: calc(100% + 3.2rem);
+  max-width: calc(100% + 3.2rem);
+  margin-inline: -1.6rem;
 }
 .whyw-art img {
   max-height: 100%;
@@ -773,7 +742,7 @@
 .fcta-inner {
   position: relative;
   z-index: 1;
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   justify-items: center;
@@ -794,7 +763,7 @@
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  max-width: 56ch;
+  max-width: 72ch;
 }
 .fcta-contact {
   font-family: var(--font-mono);

@@ -1,11 +1,15 @@
-/* Footer: light dominant surface so the page doesn't end on a slab
+/* Footer: deliberately short. It closes the page rather than adding another
+   section to it, so the type steps down, the rows tighten, and the navy bar
+   at the very bottom is what actually terminates the document.
+
+   Light dominant surface so the page doesn't end on a slab
    of navy. Only a thin navy bar at the very bottom carries the
    copyright + email. Cream background, teal accents on column heads
    and the Contact CTA tie the footer to the rest of the brand. */
 .footer {
   background: var(--cream);
   color: var(--ink);
-  padding: clamp(2rem, 4vw, 2.8rem) 0 0;
+  padding: clamp(0.9rem, 1.6vw, 1.2rem) 0 0;
   position: relative;
   border-top: 1px solid var(--rule);
 }
@@ -14,88 +18,96 @@
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
-.footer-top {
+/* Five link groups across one line. auto-fit rather than a fixed count so
+   the groups reflow themselves as the viewport narrows and no breakpoint
+   has to name how many fit; each track is wide enough for the longest
+   label in it ("Industry sectors"). The height is set by the deepest
+   group, which is four, not by the fourteen-item list one column would
+   make. */
+.footer-groups {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(1.5rem, 3.5vw, 2.8rem);
-  padding-bottom: clamp(1.4rem, 2.8vw, 2rem);
+  /* 8rem, not the 9.5rem the longest label needs, because the track is a
+     minimum and 1fr grows it back. At 9.5rem five tracks plus their gaps
+     came to 832px against 836px of content box at the 900px viewport, so
+     the grid dropped to four and the band gained a whole second row for
+     four pixels. 8rem clears it with room. */
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: clamp(0.9rem, 2vw, 2rem);
+  align-items: start;
+  padding-bottom: clamp(0.9rem, 1.6vw, 1.2rem);
 }
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  align-items: flex-start;
-}
-.footer-brand__wordmark {
-  display: inline-flex;
-  align-items: center;
-}
-.footer-brand-pitch {
-  font-size: 0.85rem;
-  color: var(--ink-3);
-  max-width: 24rem;
-  line-height: 1.5;
-}
-.footer-cols {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1rem, 2vw, 1.6rem);
-}
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.footer-col__head {
-  font-size: 0.72rem;
+.footer-group__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
-  margin-bottom: 0.25rem;
-  font-weight: 600;
+  margin: 0 0 0.5rem;
 }
-.footer-col a {
-  font-size: 0.85rem;
+.footer-group__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.34rem;
+}
+/* The item needs the link's own font-size, not just a tighter ratio. The
+   li inherited the body's 18px and 1.8 line-height, so its strut was
+   27px around a 19px link and every row cost 8px the text did not use.
+   Sizing the li itself makes 1.5 resolve against 12.8px. */
+.footer-group__list li {
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.footer-group__list a {
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--ink-2);
   transition: color 0.2s var(--ease);
   text-decoration: none;
 }
-.footer-col a:hover {
+.footer-group__list a:hover {
   color: var(--navy);
 }
-/* "Privacy choices" is a button (it clears the stored consent choice)
-   but must read exactly like the sibling links. */
-.footer-col .footer-linkbtn {
+/* "Privacy choices" is a button (it clears the stored consent choice).
+   It sits in the bottom bar beside the email rather than in the Legal
+   group: a preference control is not a page, and moving it took the
+   deepest group from four items to three, which is what sets the
+   height of the whole band. It reads like the email beside it. */
+.footer-linkbtn {
   appearance: none;
   background: none;
   border: 0;
   padding: 0;
-  text-align: left;
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  color: var(--ink-2);
+  color: var(--ink-3);
   transition: color 0.2s var(--ease);
+  white-space: nowrap;
 }
-.footer-col .footer-linkbtn:hover {
-  color: var(--navy);
+.footer-linkbtn:hover {
+  color: var(--accent-text);
 }
-/* Contact link picks up the teal accent so it reads as the most
-   actionable item in the column. (a.footer-col__contact so it
-   out-specifies the generic .footer-col a rules above.) */
-.footer-col a.footer-col__contact {
+.footer-bottom__right {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.6rem);
+}
+/* Contact picks up the teal accent so it reads as the most actionable
+   item in the footer. (a.footer-links__contact so it out-specifies the
+   generic .footer-group__list a rules above.) */
+.footer-group__list a.footer-links__contact {
   color: var(--accent-text);
   font-weight: 600;
 }
-.footer-col a.footer-col__contact:hover {
+.footer-group__list a.footer-links__contact:hover {
   color: var(--accent-btn-hover);
 }
 
-/* Thin navy strip at the very bottom: just the copyright row + email.
-   Replaces the massive navy slab that used to swallow the whole
-   footer. */
+/* Thin strip at the very bottom: just the copyright row + email. */
 .footer-bar {
   background: var(--cream);
   border-top: 1px solid var(--rule);
@@ -124,27 +136,36 @@
   color: var(--accent-text);
 }
 
-@media (max-width: 1100px) {
-  .footer-cols {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.2rem;
+/* auto-fit reflows the groups down to 900px, where five still fit on one
+   line. Below that they cannot, and grouping stops paying: four tracks
+   over two rows measured 262px and two tracks over three rows measured
+   367px, against 136px for the single line. On a narrow screen the
+   footer is something you scroll past, not scan, so the labels go and
+   the links become one wrapping row, which is what they were before the
+   groups existed. `display: contents` on the group lets each list
+   become a direct child of the flex row, so the groups flow into one
+   another instead of forming five separate rows. */
+@media (max-width: 780px) {
+  .footer-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
   }
-}
-@media (max-width: 900px) {
-  .footer-top {
-    grid-template-columns: 1fr;
+  .footer-group {
+    display: contents;
   }
-  .footer-cols {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+  .footer-group__label {
+    display: none;
+  }
+  .footer-group__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
   }
 }
 @media (max-width: 600px) {
   .footer-w {
     padding: 0 var(--mobile-pad);
-  }
-  .footer-cols {
-    grid-template-columns: 1fr 1fr;
   }
   .footer-bottom {
     flex-direction: column;

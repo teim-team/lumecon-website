@@ -30,14 +30,48 @@
   text-wrap: balance;
   margin: 0 0 1.2rem;
 }
+/* The hero deck. With the corner mark gone from these pages nothing
+   shares the hero's row, so the deck runs the container like the title
+   above it rather than stopping partway. */
 .meth-hero__lede {
   font-size: clamp(1.02rem, 1.4vw, 1.18rem);
   line-height: 1.65;
   color: var(--ink-2);
-  max-width: 46rem;
+  max-width: none;
   margin: 0 0 3rem;
 }
 /* Three principles: hairline-separated columns, no boxes. */
+/* Each principle keeps a headline visible at rest. Without one the band was
+   three mono labels over a lot of white, since the sentence below is held
+   back until hover. */
+.meth-principles__t {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0.28rem 0 0;
+}
+
+/* Each principle holds its sentence back until the pointer arrives, the same
+   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
+   label deepens as its sentence lands. */
+.meth-principles li {
+  outline: none;
+}
+.meth-principles__k {
+  transition: color 0.25s var(--ease);
+}
+.meth-principles li:hover .meth-principles__k,
+.meth-principles li:focus-visible .meth-principles__k {
+  color: var(--accent-deep);
+}
+@media (prefers-reduced-motion: reduce) {
+  .meth-principles__k {
+    transition: none;
+  }
+}
+
 .meth-principles {
   list-style: none;
   margin: 0;
@@ -80,13 +114,18 @@
   font-weight: 650;
   letter-spacing: -0.02em;
   margin: 0;
-  max-width: 30ch;
+  max-width: 54ch;
 }
+/* The deck under each section heading. It was capped at a literal 44rem,
+   which is 704px inside a 1360px wrapper: the heading above it ran nearly
+   the full width and the sentence explaining it stopped just past half,
+   which is the "subheader only takes up half the page" complaint. On the
+   shared deck token it measures ~905px and tracks the heading. */
 .meth-sec__lede {
   font-size: 1.05rem;
   line-height: 1.65;
   color: var(--ink-2);
-  max-width: 44rem;
+  max-width: var(--measure-deck);
   margin: -0.6rem 0 2rem;
 }
 
@@ -103,7 +142,7 @@
   line-height: 1.75;
   color: var(--ink-2);
   margin: 0 0 1rem;
-  max-width: 38rem;
+  max-width: var(--measure-prose);
 }
 .meth-prose p:last-child {
   margin-bottom: 0;
@@ -118,21 +157,25 @@
 .meth-prose h3:first-child {
   margin-top: 0;
 }
-.meth-prose--measure p {
-  max-width: 44rem;
+.meth-prose--measure p,
+.meth-onecol p,
+.meth-threeup p {
+  max-width: var(--measure-deck);
 }
-/* Two parallel prose columns for paired topics. */
-.meth-twoprose {
+/* .meth-onecol is declared in global.css beside .prose-stack: it is the
+   same rule, kept under this name because the methodology markup already
+   uses it. .meth-cols stays for prose beside an equation, a genuine pair. */
+
+/* Three short items side by side: the data sources, which are a list rather
+   than an argument, so they stay in columns. */
+.meth-threeup {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 4.5vw, 4.5rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
   align-items: start;
 }
-.meth-twoprose--tight {
+.meth-threeup--tight {
   margin-top: 2.2rem;
-}
-.meth-twoprose--three {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 /* ---------- equations as designed objects ---------- */
@@ -164,8 +207,10 @@
   margin: 0.6rem 0 0;
   max-width: 30rem;
 }
+/* Same reasoning as .eq var above. */
 .eqobj__c var {
-  font-style: italic;
+  font-style: normal;
+  font-weight: 600;
 }
 /* The equation line itself. Inter like the prose, larger, navy. */
 .eq {
@@ -175,10 +220,15 @@
   line-height: 2;
   overflow-x: auto;
 }
+/* Variables stay upright. Mathematics conventionally italicises them, but
+   Inter's italic is a true italic with different letterforms (a single-storey
+   `a`, for one), so beside the roman body text the equations read as a second
+   typeface rather than as the same one. Weight and the navy colour do the
+   distinguishing instead. */
 .eq var {
   font-family: inherit;
-  font-style: italic;
-  font-weight: 500;
+  font-style: normal;
+  font-weight: 600;
 }
 .eq sub,
 .eq sup {
@@ -331,19 +381,25 @@
   border-top: 1px solid var(--rule);
   padding: clamp(3.2rem, 7vw, 5.5rem) 0;
 }
+/* Title and deck share one measure, in rem rather than ch. A `ch` measure
+   resolves against each element's own font size, so 44ch on a 2.6rem title
+   and 82ch on a 1.08rem deck came out 1230px against 931px and the deck
+   read as a narrower column under a wider heading. */
+.meth-mission__title,
+.meth-mission__lede {
+  max-width: 76rem;
+}
 .meth-mission__title {
   font-size: clamp(1.7rem, 3.4vw, 2.6rem);
   font-weight: 700;
   letter-spacing: -0.022em;
   line-height: 1.12;
-  max-width: 24ch;
   margin: 0 0 1.1rem;
 }
 .meth-mission__lede {
   font-size: 1.08rem;
   line-height: 1.7;
   color: var(--ink-2);
-  max-width: 44rem;
   margin: 0 0 1.8rem;
 }
 .meth-mission__cta {
@@ -420,12 +476,46 @@
     border-top: 1px solid var(--rule);
     padding-top: 1.8rem;
   }
-  .meth-twoprose {
+  /* The data sources stop being three readable columns well before the
+     phone breakpoint: at 900px each is under 260px, which puts a
+     three-word heading on three lines. Stack them. */
+  .meth-threeup {
     grid-template-columns: 1fr;
     gap: 1.4rem;
   }
 }
 @media (max-width: 700px) {
+  /* Each principle keeps a headline visible at rest. Without one the band was
+   three mono labels over a lot of white, since the sentence below is held
+   back until hover. */
+  .meth-principles__t {
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0.28rem 0 0;
+  }
+
+  /* Each principle holds its sentence back until the pointer arrives, the same
+   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
+   label deepens as its sentence lands. */
+  .meth-principles li {
+    outline: none;
+  }
+  .meth-principles__k {
+    transition: color 0.25s var(--ease);
+  }
+  .meth-principles li:hover .meth-principles__k,
+  .meth-principles li:focus-visible .meth-principles__k {
+    color: var(--accent-deep);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .meth-principles__k {
+      transition: none;
+    }
+  }
+
   .meth-principles {
     grid-template-columns: 1fr;
     gap: 1.3rem;
@@ -469,4 +559,205 @@
   .eq {
     font-size: 1.05rem;
   }
+}
+
+/* ---------- the commitment cards ----------
+   Five prose sections consolidated into one clickable grid: each card
+   leads with its claim, the plus says there is more, and an open card
+   takes the whole row so the detail reads at a real measure. Same
+   posture as the Cedar Press shelf tiles. */
+.meth-deeper .meth-sec__lede {
+  margin-bottom: 2.2rem;
+}
+.mcards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .mcards {
+    grid-template-columns: 1fr;
+  }
+}
+.mcard {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--white);
+  transition:
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.mcard:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -20px rgba(10, 15, 38, 0.28);
+}
+.mcard[open] {
+  grid-column: 1 / -1;
+  transform: none;
+  border-color: var(--accent);
+}
+.mcard__face {
+  position: relative;
+  display: block;
+  padding: 1.35rem 3.4rem 1.35rem 1.5rem;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 10px;
+}
+.mcard__face::-webkit-details-marker {
+  display: none;
+}
+.mcard__face::marker {
+  content: '';
+}
+.mcard__face:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+.mcard__kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.mcard__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.14rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0.5rem 0 0.45rem;
+}
+.mcard__hook {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+/* The plus, drawn in CSS; it turns to a multiply sign when the card is
+   open, which reads as "close". */
+.mcard__plus {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.4rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  transition: transform 0.2s var(--ease);
+}
+.mcard__plus::before,
+.mcard__plus::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--accent-text);
+  border-radius: 1px;
+}
+.mcard__plus::before {
+  width: 100%;
+  height: 2px;
+}
+.mcard__plus::after {
+  width: 2px;
+  height: 100%;
+}
+.mcard[open] .mcard__plus {
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mcard,
+  .mcard__plus {
+    transition: none;
+  }
+  .mcard:hover {
+    transform: none;
+  }
+}
+.mcard__body {
+  padding: 0 1.5rem 1.5rem;
+}
+.mcard__body p {
+  max-width: var(--measure-prose);
+  font-size: 0.99rem;
+  line-height: 1.66;
+  color: var(--ink-2);
+  margin: 0 0 0.9rem;
+}
+.mcard__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- glossary tools ----------
+   The filter row above the definitions: a mono search field in the
+   site's chrome register, a live count, and row hover that marks the
+   term being read. */
+.gloss-tools {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.6rem;
+}
+.gloss-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 0 1 24rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink-3);
+  transition: border-color 0.2s var(--ease);
+}
+.gloss-search:focus-within {
+  border-color: var(--accent);
+}
+.gloss-search svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: none;
+}
+.gloss-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.98rem;
+  color: var(--ink);
+}
+.gloss-count {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.gloss-none {
+  font-size: 0.98rem;
+  color: var(--ink-2);
+  padding: 1.2rem 0 0;
+}
+.gloss-defs .meth-defs__row {
+  transition: background-color 0.15s var(--ease);
+}
+/* The filter hides rows with the hidden attribute, and the UA's [hidden]
+   rule is less specific than the row's own display, so say it outright. */
+.gloss-defs .meth-defs__row[hidden] {
+  display: none;
+}
+.gloss-defs .meth-defs__row:hover {
+  background: var(--teal-tint, rgba(15, 181, 165, 0.06));
+}
+.gloss-defs .meth-defs__row:hover dt {
+  color: var(--accent-text);
 }

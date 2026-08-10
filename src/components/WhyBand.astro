@@ -1,12 +1,13 @@
 ---
 /**
- * Why Lumecon — four cards on the white, hairline surface, each
- * headed by a piece of the supplied brand artwork (transparent
- * isometric icon set, served from /art). The geo illustration ships
- * two builds: light mode uses the original, whose soft translucent
- * fills look best on white; dark mode swaps in the solid-white build
- * via <picture>, since the original's translucency reads as noise on
- * a dark card. Both are framed identically so the swap never shifts.
+ * Why Lumecon — four cards on the white, hairline surface, each headed by a
+ * piece of the brand artwork (transparent isometric icon set, served from
+ * /art, built by scripts/screenshots/optimize-art.mjs).
+ *
+ * One build per card, no dark-mode swap. The previous geo illustration needed
+ * a second, solid-white build because its translucent fills read as noise on
+ * a dark card; the current set's fills are opaque and light enough to hold
+ * against both the white and the dark-mode navy surface, checked on each.
  */
 import '../styles/home.css';
 
@@ -16,7 +17,6 @@ const CARDS = [
     t: 'County to nation',
     b: 'Counties, states, the nation, reservations and trust lands. No geography add-ons.',
     art: 'geo',
-    artDark: 'geo-dark',
   },
   {
     k: 'Unlimited analysis',
@@ -57,22 +57,14 @@ const CARDS = [
         CARDS.map((c) => (
           <article class="whyw-card" data-art={c.art}>
             <span class="whyw-art" aria-hidden="true">
-              <picture>
-                {c.artDark && (
-                  <source
-                    srcset={`/art/why-${c.artDark}.png`}
-                    media="(prefers-color-scheme: dark)"
-                  />
-                )}
-                <img
-                  src={`/art/why-${c.art}.png`}
-                  alt=""
-                  width="300"
-                  height="300"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <img
+                src={`/art/why-${c.art}.png`}
+                alt=""
+                width="300"
+                height="300"
+                loading="lazy"
+                decoding="async"
+              />
             </span>
             <p class="whyw-card__k">{c.k}</p>
             <h3 class="whyw-card__t">{c.t}</h3>
