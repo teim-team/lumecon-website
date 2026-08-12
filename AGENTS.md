@@ -143,6 +143,22 @@ User-facing word choices, everywhere a customer reads:
 - "Cedar", never "AI assistant"; Cedar is Lumecon's AI economic
   analyst on every surface, and the site chat is a lightweight
   Cedar, never a downgraded "site assistant" in schema or copy.
+- "Cedar Impact" (2026-08) is the economic impact modeling. Name it
+  where the modeling itself is the subject: the product-tour rows the
+  screenshots come from, the methodology lede, the pricing note about
+  what a plan runs. Do not rename the site's positioning line or the
+  page titles, which carry the search term customers actually type;
+  "economic impact analysis" stays the category, Cedar Impact is the
+  product that does it. In the app the side rail says Cedar Impact.
+- "Cedar Grove" is the data library and is public. "Cedar Commons"
+  is the workspace. NOT PUBLIC: Cedar Press is unannounced and must
+  not appear anywhere a visitor or a crawler can reach, which
+  includes HTML comments and CSS comments, both of which ship in the
+  built output. It was found in `dist/methodology/index.html` that
+  way in 2026-08. Grep `dist/`, not just `src/`.
+- There is deliberately no platform page. The five product names are
+  introduced where they do work on the pages that already exist, not
+  gathered onto a page of their own.
 - "GDP contribution" for the primary value-added metric; "economic
   output" not "sales"; results vocabulary (Jobs supported, Labor
   income, GDP contribution, Economic output, Tax impacts, Direct,

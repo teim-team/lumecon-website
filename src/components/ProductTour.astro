@@ -13,6 +13,7 @@ import '../styles/tour.css';
 const ROWS = [
   {
     id: 'trace',
+    product: 'Cedar Impact',
     kicker: 'Defensible by design',
     title: 'Trace any number back to its layers',
     body: 'Every figure includes a “Trace this number” control. Follow a result through direct, indirect and induced effects, the operations that generate them and the industries where they land.',
@@ -22,6 +23,7 @@ const ROWS = [
   },
   {
     id: 'compare',
+    product: 'Cedar Impact',
     kicker: 'Progress you can show',
     title: 'Compare analyses over time',
     body: 'Put years or scenarios side by side and see the change in jobs, labor income, GDP contribution, economic output and tax impacts. When the next budget cycle begins, the comparison is already there.',
@@ -31,6 +33,7 @@ const ROWS = [
   },
   {
     id: 'workspace',
+    product: 'Cedar Commons',
     kicker: 'Your Workspace',
     title: 'Keep the work alive',
     body: 'Drafts, completed analyses, comparisons and exports stay together in your Workspace, built for recurring analysis and ready to open, compare or export as a workbook, CSV tables or a printable summary.',
@@ -49,8 +52,9 @@ const ROWS = [
         Analysis that stands up to review.
       </h2>
       <p class="tour-lede reveal-soft" data-stagger="2">
-        Economic impact is only useful if you can explain where the numbers came from. Lumecon is
-        built to be defensible in council chambers, boardrooms and grant reviews.
+        Economic impact is only useful if you can explain where the numbers came from. Cedar
+        Impact, the modeling at the center of Lumecon, is built to be defensible in council
+        chambers, boardrooms and grant reviews.
       </p>
     </header>
 
@@ -59,6 +63,7 @@ const ROWS = [
         ROWS.map((row, i) => (
           <article class={`tour-row${i % 2 === 1 ? ' tour-row--flip' : ''}`} id={`tour-${row.id}`}>
             <div class={`tour-row__text ${i % 2 === 1 ? 'reveal-right' : 'reveal-left'}`}>
+              <p class="tour-row__product">{row.product}</p>
               <p class="tour-row__kicker">{row.kicker}</p>
               <h3 class="tour-row__title">{row.title}</h3>
               <p class="tour-row__body">{row.body}</p>
