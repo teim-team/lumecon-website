@@ -101,27 +101,25 @@ test('pricing shows three public plans with Sapling recommended', async ({ page 
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
 });
 
-test('pricing carries the competitive transition offer and consultant band', async ({ page }) => {
+test('pricing leads with the free account and routes consultants to Sapling', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
   // The free CTA leads, above the plans, with the no-card line beside it.
   const hero = page.locator('.pr-hero');
   await expect(hero).toContainText('Plans start at $1,000 a year');
   await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
-  const offer = page.locator('#switch');
-  await expect(offer).toContainText('Already paying for economic impact software?');
-  await expect(offer).toContainText('whichever is lower');
-  await expect(offer.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
   // The free-account band sits before the paid tiers.
   const free = page.locator('.pr-free');
   await expect(free).toContainText('take our word for it');
   await expect(free).toContainText('No credit card');
   await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
-  // Consultants use the public plans: a band under the cards, no separate edition.
-  const band = page.locator('.pr-band');
-  await expect(band).toContainText('Commercial use starts with Sapling.');
-  await expect(band.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
-  // The FAQ carries the skepticism the table cannot.
-  await expect(page.locator('.pr-faq__row')).toHaveCount(9);
+  // Consultants use the public plans. The signal is one line under the
+  // cards, not a band and not a separate edition.
+  await expect(page.locator('.pr-plans__clientnote')).toContainText('start at Sapling');
+  // Cedar Grove is sold on its own, after the plans rather than as a fourth card.
+  await expect(page.locator('#cedar-grove')).toBeVisible();
+  // The FAQ carries the skepticism the table cannot. Each row is a details
+  // element the reader opens.
+  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(12);
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {
@@ -244,10 +242,16 @@ test('naics page lists all 20 sectors plus tribal government', async ({ page }) 
 
 test('methodology explains the two-digit NAICS choice', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
-  const sec = page.locator('section[aria-labelledby="m-naics"]');
-  await expect(sec.locator('h2')).toHaveText('Industries at the two-digit NAICS level');
-  await expect(sec).toContainText('administrative data coverage is strongest');
-  await expect(sec.locator('a[href="/naics"]')).toBeVisible();
+  // The methodology sections are disclosure cards now: the hook is on the
+  // face, the argument is behind it. The /naics browser is no longer linked
+  // from here by design.
+  const card = page.locator('details#m-naics');
+  await expect(card.locator('.mcard__title')).toHaveText('Industries at the two-digit NAICS level');
+  await expect(card).toContainText('administrative data coverage is strongest');
+  await card.locator('.mcard__face').click();
+  await expect(card.locator('.mcard__body')).toContainText(
+    'North American Industry Classification System',
+  );
 });
 
 test('accessibility statement is published and linked from the footer', async ({ page }) => {
@@ -267,22 +271,25 @@ test('skip link targets real content on subpages', async ({ page }) => {
 test('cedar page tells the AI story with three real captures, no diagrams', async ({ page }) => {
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('AI built for economic analysis');
-  // Exactly the three-shot story: upload, operations with Cedar's ask,
-  // board notes. Diagrams were removed by design; no screenshot repeats.
+  // Exactly the three-shot story, told through the shared product tour:
+  // upload, entities in the loop, partner context. Diagrams were removed by
+  // design; no screenshot repeats.
   await expect(page.locator('.cedarpg-diagram')).toHaveCount(0);
-  const shots = page.locator('.cedarpg-shot img');
-  await expect(shots).toHaveCount(4);
-  await expect(page.locator('img[src="/app/cedar-context.webp"]')).toHaveCount(1);
+  await expect(page.locator('.tour-row__shot img')).toHaveCount(3);
   await expect(page.locator('img[src="/app/cedar-wind-upload.webp"]')).toHaveCount(1);
   await expect(page.locator('img[src="/app/cedar-wind-entities.webp"]')).toHaveCount(1);
-  await expect(page.locator('img[src="/app/cedar-wind-partner.webp"]')).toHaveCount(1);
+  await expect(page.locator('img[src="/app/cedar-context.webp"]')).toHaveCount(1);
   await expect(page.locator('#navMenu a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('footer a[href="/cedar"]')).toHaveCount(1);
 });
 
 test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#cedar a[href="/cedar"]')).toHaveCount(1);
+  // Cedar gets one card in the why band and a link out. The old dedicated
+  // #cedar section and the AI tile block are both gone.
+  const card = page.locator('#why .whyw-card', { hasText: 'Cedar included' });
+  await expect(card).toHaveCount(1);
+  await expect(card.locator('a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('.askai')).toHaveCount(0);
 });
 
