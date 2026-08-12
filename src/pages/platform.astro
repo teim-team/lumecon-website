@@ -1,0 +1,151 @@
+---
+/**
+ * /platform — the five Cedar products as one pipeline, not a product list.
+ *
+ * WHY THIS PAGE EXISTS (founder, 2026-08)
+ * The names had accumulated faster than the story. A visitor could meet
+ * Cedar Grove on /pricing, Cedar on /cedar and "the analysis" on the
+ * homepage without ever learning that they are stages of one system. This
+ * page says the sentence: data flows up. Grove holds the record, Impact
+ * models on it, Commons is where the work happens, Cedar answers across all
+ * of it, and Press publishes back out.
+ *
+ * PAGE OWNERSHIP
+ * Per AGENTS.md each page makes one argument, so this one names the pieces
+ * and their order and stops. Why the economics are credible is /methodology;
+ * why the AI is different is /cedar; what it costs is /pricing. Every stage
+ * below carries one pointer and no re-explanation.
+ *
+ * CEDAR IMPACT
+ * The economic impact modeling is called Cedar Impact. It is the same
+ * modeling the rest of the site describes; the name gives it a place in the
+ * hierarchy instead of leaving it as the unnamed default.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import AskAI from '../components/AskAI.astro';
+import { site } from '../config';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/platform.css';
+
+const description =
+  'The Cedar platform: Cedar Grove holds the Native economy data, Cedar Impact models economic impact on it with tribal multipliers, Cedar Commons is the workspace, Cedar is the AI analyst across all of it and Cedar Press publishes the record back out.';
+
+/* Order is the argument. Read top to bottom and the pipeline reads itself. */
+const STAGES = [
+  {
+    n: '01',
+    name: 'Cedar Grove',
+    role: 'The data foundation',
+    body:
+      'The Native economy data library: federal funding and contracting, deals, enterprise and organizational records, resolved to the tribe, corporation or organization they belong to and maintained as ownership changes.',
+    carries: 'Holds the record everything above it reads from.',
+  },
+  {
+    n: '02',
+    name: 'Cedar Impact',
+    role: 'The modeling',
+    body:
+      'Economic impact modeling built on TEIM, with tribal multipliers derived for the region being studied rather than county-level assumptions borrowed from somewhere else. Jobs, income, output and tax effects, with a lineage behind every figure.',
+    carries: 'Reads Cedar Grove. Runs inside Cedar Commons.',
+    link: { href: '/methodology', label: 'How the modeling works' },
+  },
+  {
+    n: '03',
+    name: 'Cedar Commons',
+    role: 'The workspace',
+    body:
+      'Where a tribal finance office or planning department actually works: analyses in shared projects, documents and assumptions in one place, collaborators invited to the project rather than the whole account, and a record of what changed.',
+    carries: 'Where the modeling is run, reviewed and reported.',
+  },
+  {
+    n: '04',
+    name: 'Cedar',
+    role: 'The analyst',
+    body:
+      'The AI analyst threaded through every stage. Ask in plain language and get an answer from your own data, with the assumption it rests on named. Nobody has to learn modeling software to get a defensible number out of it.',
+    carries: 'Sits across all of it, not on top of one page.',
+    link: { href: '/cedar', label: 'Why this AI is different' },
+  },
+  {
+    n: '05',
+    name: 'Cedar Press',
+    role: 'The published record',
+    body:
+      'The outward-facing arm: published data products and original research drawn from the same record, so the work that establishes credibility and the work an organization runs privately come from one source.',
+    carries: 'Publishes back out to Indian Country.',
+  },
+];
+---
+
+<BaseLayout
+  title="The Cedar platform | Lumecon"
+  description={description}
+  canonical={`${site.url}/platform`}
+  keywords="Cedar platform, Cedar Impact, Cedar Grove, Cedar Commons, Cedar Press, tribal economic impact analysis, tribal multipliers, Native economy data, economic impact modeling for tribal governments"
+>
+  <Nav />
+  <main id="main">
+    <header class="pf-hero">
+      <div class="container">
+        <p class="pf-kicker reveal-soft">The Cedar platform</p>
+        <h1 class="pf-title reveal-soft" data-stagger="1">
+          One platform, one login, five pieces that hand off to each other.
+        </h1>
+        <p class="pf-lede reveal-soft" data-stagger="2">
+          Tribal nations have never been short of data. What has been missing are tools built for
+          them: the modeling software in this field was written for counties and states, and a
+          reservation economy has been made to fit it ever since.{' '}
+          <span class="brand-em">Every organization has an economic impact.</span> Cedar is the
+          system for measuring yours.
+        </p>
+      </div>
+    </header>
+
+    <section class="pf-flow" aria-label="How the pieces connect">
+      <div class="container">
+        <ol class="pf-stages">
+          {
+            STAGES.map((s, i) => (
+              <li class="pf-stage reveal-soft" data-stagger={i + 1}>
+                <div class="pf-stage__mark" aria-hidden="true">
+                  <span class="pf-stage__n">{s.n}</span>
+                </div>
+                <div class="pf-stage__body">
+                  <p class="pf-stage__role">{s.role}</p>
+                  <h2 class="pf-stage__name">{s.name}</h2>
+                  <p class="pf-stage__text">{s.body}</p>
+                  <p class="pf-stage__carries">{s.carries}</p>
+                  {s.link && (
+                    <a class="inline-link" href={s.link.href}>
+                      {s.link.label}
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="pf-close">
+      <div class="container">
+        <p class="pf-close__line">
+          Data flows up. Grove holds the record, Impact models on it, Commons is where the work
+          happens, Cedar answers across all of it, and Press publishes the result back out.
+        </p>
+        <p class="pf-close__sub">
+          Every plan includes Cedar. What changes between plans is how much of the platform an
+          organization turns on. <a class="inline-link" href="/pricing">See the plans</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <AskAI />
+  <Footer />
+</BaseLayout>

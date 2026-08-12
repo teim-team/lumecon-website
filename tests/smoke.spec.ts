@@ -185,23 +185,38 @@ test('login offers the forgot-password flow from the product', async ({ page }) 
   await expect(page.locator('[data-login-title]')).toHaveText('Log in to Lumecon');
 });
 
-test('signup walks the two-step registration flow from the product', async ({ page }) => {
+/* This used to assert a two-step registration with a password checklist and a
+   back button. /signup stopped being that when it became the private-beta
+   request page: there is one panel, no password field and no step 2, so the
+   test had been asserting a flow that does not exist. Rewritten against the
+   page as it is. (Found while acting on Brian's note about viewport and
+   timing on this test, #300.) */
+test('signup collects a beta access request, with no account created', async ({ page }) => {
+  // Pin the width: the split layout and the role chips wrap differently on a
+  // narrow default viewport, and this asserts on their desktop arrangement.
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/signup', { waitUntil: 'domcontentloaded' });
+  // The form says when its wiring is live. Waiting on that beats a sleep:
+  // the chips below do nothing until the script has bound them.
+  await expect(page.locator('[data-auth-form][data-auth-ready]')).toBeAttached();
 
-  // Step 1: who you are. Email/password are not shown yet.
+  await expect(page.locator('[data-auth-form]')).toHaveAttribute('data-auth-kind', 'beta-request');
+  await expect(page.locator('h1')).toHaveText('Lumecon is in private beta');
+
+  // Everything the request needs, on one panel.
   await expect(page.locator('input[name="name"]')).toBeVisible();
-  await expect(page.locator('input[name="email"]')).toBeHidden();
-  await page.fill('input[name="name"]', 'Test Person');
-  await page.fill('input[name="organization"]', 'Test Nation');
-  await page.selectOption('select[name="organizationType"]', 'tribal_nation');
-  await page.locator('[data-role-chip]', { hasText: 'Consultant' }).click();
-  await page.locator('[data-auth-submit]').click();
-
-  // Step 2: account credentials, with the live password rule checklist.
   await expect(page.locator('input[name="email"]')).toBeVisible();
-  await page.fill('input[name="password"]', 'Correct-Horse-42');
-  await expect(page.locator('[data-pwrule="length"]')).toHaveClass(/pwrules--met/);
-  await expect(page.locator('[data-auth-back]')).toBeVisible();
+  await expect(page.locator('input[name="organization"]')).toBeVisible();
+  await expect(page.locator('select[name="organizationType"]')).toBeVisible();
+
+  // No credential is collected while the beta is closed.
+  await expect(page.locator('input[name="password"]')).toHaveCount(0);
+
+  // The role chips are a single-select mirrored into a hidden field.
+  await page.locator('[data-role-chip]', { hasText: 'Consultant' }).click();
+  await expect(page.locator('[data-role-chip][aria-pressed="true"]')).toHaveCount(1);
+
+  await expect(page.locator('[data-auth-submit]')).toHaveText('Request access');
 });
 
 test('methodology page renders equations with spoken readings', async ({ page }) => {

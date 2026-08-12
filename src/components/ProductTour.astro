@@ -71,11 +71,16 @@ const ROWS = [
             >
               <picture>
                 <source srcset={row.imgDark} media="(prefers-color-scheme: dark)" />
+                <!-- width/height are the intrinsic ratio, kept so the browser
+                     reserves the box before the file arrives. The rendered size
+                     is CSS-driven (`.tour-row__shot img`), so the shot scales
+                     with its column instead of sitting at a fixed 1920x1080. -->
                 <img
                   src={row.img}
                   alt={row.alt}
                   width="1920"
                   height="1080"
+                  sizes="(max-width: 900px) 100vw, 50vw"
                   loading="lazy"
                   decoding="async"
                 />

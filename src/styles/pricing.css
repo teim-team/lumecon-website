@@ -206,7 +206,7 @@
   /* Solid chip teal: the old #0fb5a5 gradient end gave white text
      only ~2.6:1, below AA. --accent-chip holds 4.88:1. */
   background: var(--accent-chip);
-  border-radius: 999px;
+  border-radius: 6px;
   padding: 0.28rem 0.8rem;
 }
 /* "Client work" on the plans that license it. An outline chip, not the
@@ -223,7 +223,7 @@
   text-transform: uppercase;
   color: var(--accent-text);
   border: 1px solid var(--rule);
-  border-radius: 999px;
+  border-radius: 6px;
   padding: 0.16rem 0.55rem;
 }
 /* `visibility`, not `display: none`, so the slot still occupies its row
@@ -363,7 +363,7 @@
   align-items: center;
   padding: clamp(1.6rem, 3vw, 2.4rem) clamp(1.4rem, 3vw, 2.4rem);
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--cream);
 }
 .pr-grove__title {

@@ -26,6 +26,30 @@
      rings, hovers, icon highlights, dividers. Gold is reserved for
      the brand wordmark "luminate" so it reads as deliberate brand
      DNA, not a default accent. */
+  /* ---- UI type and space scale (Brian's review, 2026-08) ----
+     The form and panel chrome had these values written out at every use, so
+     a change of mind meant a search-and-replace across a stylesheet. These
+     are exactly the values that were already there: adopting a token is a
+     rename, never a redesign. auth.css is migrated; the rest of the site
+     moves over as each surface is next touched. */
+  --fs-3xs: 0.7rem; /* mono eyebrows, field hints */
+  --fs-2xs: 0.72rem;
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.8rem; /* the workhorse: helper text, meta lines */
+  --fs-sm-2: 0.82rem;
+  --fs-base: 0.88rem; /* body inside forms and panels */
+  --fs-base-2: 0.85rem;
+  --fs-md: 0.9rem;
+  --fs-md-2: 0.92rem;
+  --fs-lg: 1rem;
+  --fs-title: 1.65rem; /* the auth page title */
+
+  --sp-1: 0.35rem;
+  --sp-2: 0.6rem;
+  --sp-3: 0.9rem;
+  --sp-4: 1.2rem;
+  --sp-5: 1.6rem;
+
   --accent: #0fb5a5;
   --accent-light: #5fd9cc;
   --accent-bar: #b8ede6;

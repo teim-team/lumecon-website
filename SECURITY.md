@@ -55,8 +55,20 @@ Needs an infrastructure decision (tracked, not yet done):
   `public/_headers` live and closes the clickjacking exposure on the auth and
   checkout pages. The `connect-src` CSP edit must ship in the same change as
   `PUBLIC_API_URL`, or the API calls will be blocked.
+  *Fallbacks, if Cloudflare is not the answer:* Netlify and Vercel both honor a
+  `_headers` file with no code change, so the existing file ships as written;
+  an Astro Node adapter behind our own reverse proxy gives the same headers at
+  the cost of running a server; and AWS CloudFront with a response-headers
+  policy suits us if the rest of the stack ends up on AWS. Whichever is chosen,
+  the requirement is real HTTP headers, not the vendor.
 - **Self-host Inter and JetBrains Mono.** Google Fonts loads before consent,
   which discloses visitor IPs to a third party and contradicts the privacy
   policy's "no tracking scripts" language; self-hosting removes the third
   party and lets the CSP tighten to `font-src 'self'`.
+  *Fallbacks, if self-hosting is not done first:* proxy the font files through
+  our own origin so no visitor IP reaches Google; or defer the Google Fonts
+  link until after consent and ship the system stack
+  (`ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif`)
+  until then. Both close the disclosure; only self-hosting also lets the CSP
+  tighten, so they are stopgaps rather than substitutes.
 - SHA-pin GitHub Actions (currently tag refs) and pin `@lhci/cli` exactly.

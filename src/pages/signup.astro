@@ -259,6 +259,10 @@ const ORGANIZATION_TYPE_OPTIONS = [
   function setup(): void {
     const form = document.querySelector<HTMLFormElement>('[data-auth-form]');
     if (!form) return;
+    // `data-auth-ready` is stamped on this form once setup returns (see the
+    // bottom of this script). The smoke test waits on it rather than sleeping:
+    // before it appears, step 2's fields are in the document and merely
+    // unstyled, so asserting on them races the script.
     const status = form.querySelector<HTMLElement>('[data-auth-status]');
     const submitBtn = form.querySelector<HTMLButtonElement>('[data-auth-submit]');
     const roleInput = form.querySelector<HTMLInputElement>('[data-auth-role]');
@@ -370,8 +374,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setup);
+    document.addEventListener('DOMContentLoaded', () => {
+      setup();
+      document.querySelector('[data-auth-form]')?.setAttribute('data-auth-ready', 'true');
+    });
   } else {
     setup();
+    document.querySelector('[data-auth-form]')?.setAttribute('data-auth-ready', 'true');
   }
 </script>
