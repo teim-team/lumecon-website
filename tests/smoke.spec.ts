@@ -342,7 +342,7 @@ test('choose-plan offers the three plans and a free start', async ({ page }) => 
 test('welcome closes the flow in full teal with one action', async ({ page }) => {
   await page.goto('/welcome?plan=free', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText(/You.re in\./);
-  await expect(page.locator('[data-welcome-kicker]')).toHaveText('Free trial ready');
+  await expect(page.locator('[data-welcome-kicker]')).toHaveText('Seed account ready');
   await expect(page.locator('a.welc-btn')).toHaveAttribute('href', '/login');
   await expect(page.locator('.cedar-fab')).toHaveCount(0);
 });
