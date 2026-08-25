@@ -2,7 +2,7 @@
 
 **For:** the Claude Code session working in `teim-team/teim-app`
 **From:** the lumecon-website session, on the founder's direction (Elijah Moreno, 2026-08-25)
-**Status:** The marketing site already states this behavior (see "What the site now says" below), so the product is the gap. Ship server-side first.
+**Status:** Implemented in teim-app (per the founder, 2026-08-25); the marketing site states this behavior as shipped. This document remains the contract — verify the acceptance checklist below against the deployed app, and treat any mismatch as an app bug, not a copy bug.
 
 ## The decision
 
@@ -21,8 +21,8 @@ The free account is now a named plan: **Seed**, first of four (Seed, Sprout, Sap
 | Capability | `free` (Seed) | Paid tiers |
 | --- | --- | --- |
 | Build analyses end to end (intake, Cedar, model run) | Yes (unchanged) | Yes |
-| Results page access | **Yes (new)** | Yes |
-| Direct-effect figures (jobs, labor income, GDP contribution, economic output at the direct layer) | **Yes (new)** | Yes |
+| Results page access | Yes | Yes |
+| Direct-effect figures (jobs, labor income, GDP contribution, economic output at the direct layer) | Yes | Yes |
 | Indirect, induced, total impact | **No — withheld by the server** | Yes |
 | Tax impacts | **No — withheld** (computed across layers; a direct-only tax figure would mislead) | Yes |
 | Exports (XLSX workbook, CSV tables, printable summary) | **No** | Yes |
@@ -44,16 +44,16 @@ The free account is now a named plan: **Seed**, first of four (Seed, Sprout, Sap
 - Per the shared vocabulary standard (both repos' AGENTS files): results vocabulary is Jobs supported, Labor income, GDP contribution, Economic output, Tax impacts, Direct, Indirect, Induced — verbatim.
 - Telemetry worth adding while in here: an event when a Seed user views the locked rows and when they click the in-context upgrade CTA, so conversion of this surface is measurable.
 
-## What the site now says (already live on the website branch)
+## What the site says
 
-So the app knows exactly what promise it must meet:
+So the app knows exactly what promise it must keep meeting:
 
 - Pricing card (Seed, first of four): "The real platform, free: bring your documents, work with Cedar, build a full analysis and see your direct effects. Full results unlock on any plan."
 - Comparison table, Results row (Seed column): "Direct effects, on the real results page. Indirect, induced and total unlock on any plan."
 - Comparison table, Exports row (Seed column): "Not included."
 - FAQ/chat variants of: "build an analysis end to end and see your direct effects on the results page; indirect, induced and total impact — and exports — unlock when you choose a paid plan."
 
-Until this ships, the site slightly over-states Seed (today the free account locks all results). This is tracked as reconciliation-roadmap item 15 in lumecon-website; close the gap from the app side promptly.
+The site states this behavior as current. Reconciliation-roadmap item 15 in lumecon-website tracks verifying the deployed app against the acceptance checklist below.
 
 ## Acceptance checklist
 
