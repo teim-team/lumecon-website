@@ -23,10 +23,20 @@ originals and are kept out of `public/` on purpose.
 
 `scripts/naics/export-app.mjs`
 
-Exports the finished sector artwork and its manifest into the shape `teim-app`
-expects, so the same imagery can be used inside the product without the two
-repositories drifting to different crops. Run it after `naics:duotone`, then
-copy the output into the app repository.
+Exports the sector catalog (codes, titles, descriptions, wash colors, photo
+variant counts) as a JS module in the shape `teim-app` expects, so the product
+uses exactly the same sector data as `/naics` without the two repositories
+drifting. The script prints the module to stdout, so redirect it into the app
+repository:
+
+```
+node scripts/naics/export-app.mjs > ../teim-app/src/data/naicsSectors.js
+```
+
+The images travel separately: copy the `-sm.webp` and `-wide.webp` files
+(including the `-v2`, `-v3`, ... variants) from `public/naics/` into
+`teim-app/public/naics/`. Run all of this after `naics:duotone` and commit
+both repositories together.
 
 ## `npm run shots:examples`
 

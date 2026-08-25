@@ -55,12 +55,14 @@ Needs an infrastructure decision (tracked, not yet done):
   `public/_headers` live and closes the clickjacking exposure on the auth and
   checkout pages. The `connect-src` CSP edit must ship in the same change as
   `PUBLIC_API_URL`, or the API calls will be blocked.
-  *Fallbacks, if Cloudflare is not the answer:* Netlify and Vercel both honor a
-  `_headers` file with no code change, so the existing file ships as written;
-  an Astro Node adapter behind our own reverse proxy gives the same headers at
-  the cost of running a server; and AWS CloudFront with a response-headers
-  policy suits us if the rest of the stack ends up on AWS. Whichever is chosen,
-  the requirement is real HTTP headers, not the vendor.
+  *Fallbacks, if Cloudflare is not the answer:* Netlify honors a `_headers`
+  file with no code change, so the existing file ships as written; Vercel does
+  not read `_headers`, so moving there means restating the same headers in a
+  `vercel.json` `headers` block; an Astro Node adapter behind our own reverse
+  proxy gives the same headers at the cost of running a server; and AWS
+  CloudFront with a response-headers policy suits us if the rest of the stack
+  ends up on AWS. Whichever is chosen, the requirement is real HTTP headers,
+  not the vendor.
 - **Self-host Inter and JetBrains Mono.** Google Fonts loads before consent,
   which discloses visitor IPs to a third party and contradicts the privacy
   policy's "no tracking scripts" language; self-hosting removes the third
