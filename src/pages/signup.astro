@@ -38,11 +38,19 @@ import '../styles/auth.css';
 import '../styles/auth-split.css';
 
 // Kept in sync with ROLE_OPTIONS in the product (src/pages/accountModel.js).
-const ROLE_OPTIONS = [
+// One shared role taxonomy for every organization type; the Tribal
+// governance roles join it only when the organization identifies as a
+// Tribal Nation (see the orgtype handler below), so other audiences are
+// not led through another audience's org chart.
+const TRIBAL_ROLE_OPTIONS = [
   'Tribal Council Member or Elected Leader',
   'Tribal Administrator',
   'Tribal Treasurer or Finance Officer',
+];
+const SHARED_ROLE_OPTIONS = [
+  'Executive or Elected Leader',
   'Economic Development Director',
+  'Finance or Budget Officer',
   'Consultant',
   'Government Analyst',
   'Researcher/Academic',
@@ -146,7 +154,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
               </select>
             </label>
             <label class="auth-field" data-auth-tribal-row hidden>
-              <span>Do you provide services for tribal clients? <span class="auth-req" aria-hidden="true">*</span></span>
+              <span
+                >Do you provide services for tribal clients? <span
+                  class="auth-req"
+                  aria-hidden="true">*</span
+                ></span
+              >
               <select name="servesTribalClients" data-auth-tribal>
                 <option value="">Select one</option>
                 <option value="yes">Yes, we serve tribal clients</option>
@@ -157,7 +170,21 @@ const ORGANIZATION_TYPE_OPTIONS = [
               <span>Your role <span class="auth-req" aria-hidden="true">*</span></span>
               <div class="auth-chips" role="group" aria-label="Your role">
                 {
-                  ROLE_OPTIONS.map((role) => (
+                  TRIBAL_ROLE_OPTIONS.map((role) => (
+                    <button
+                      type="button"
+                      class="auth-chip"
+                      data-role-chip
+                      data-tribal-role
+                      aria-pressed="false"
+                      hidden
+                    >
+                      {role}
+                    </button>
+                  ))
+                }
+                {
+                  SHARED_ROLE_OPTIONS.map((role) => (
                     <button type="button" class="auth-chip" data-role-chip aria-pressed="false">
                       {role}
                     </button>
@@ -286,9 +313,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
       });
     });
 
-    // Organization type drives one conditional: consulting firms are asked
+    // Organization type drives two conditionals. Consulting firms are asked
     // whether they serve tribal clients (it gates Whole Nation analysis and
-    // is the affiliation signal). The row is hidden for every other type.
+    // is the affiliation signal); the row is hidden for every other type.
+    // Tribal Nations get the Tribal governance roles added to the shared
+    // role list; if one was selected and the org type changes away, the
+    // selection clears so a hidden chip can't stay silently chosen.
     const orgTypeSelect = form.querySelector<HTMLSelectElement>('[data-auth-orgtype]');
     const tribalRow = form.querySelector<HTMLElement>('[data-auth-tribal-row]');
     const tribalSelect = form.querySelector<HTMLSelectElement>('[data-auth-tribal]');
@@ -296,6 +326,16 @@ const ORGANIZATION_TYPE_OPTIONS = [
       const isConsulting = orgTypeSelect.value === 'consulting_firm';
       if (tribalRow) tribalRow.hidden = !isConsulting;
       if (!isConsulting && tribalSelect) tribalSelect.value = '';
+
+      const isTribalNation = orgTypeSelect.value === 'tribal_nation';
+      form.querySelectorAll<HTMLButtonElement>('[data-tribal-role]').forEach((chip) => {
+        chip.hidden = !isTribalNation;
+        if (!isTribalNation && chip.classList.contains('auth-chip--on')) {
+          chip.classList.remove('auth-chip--on');
+          chip.setAttribute('aria-pressed', 'false');
+          if (roleInput) roleInput.value = '';
+        }
+      });
     });
 
     form.addEventListener('submit', async (e) => {

@@ -30,10 +30,15 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
-  // Filter out a known-harmless console error (TLS cert on the preview host).
-  // (The old frame-ancestors meta-CSP warning and the ipapi.co geolocation
-  // call were both removed, so they can no longer appear here.)
-  const real = errs.filter((e) => !e.includes('CERT_AUTHORITY_INVALID'));
+  // Filter out known-harmless console errors from sandboxed environments,
+  // where the external font fetch fails against an interception proxy
+  // (bad cert) or a closed egress (connection reset). Same-origin assets
+  // are served from localhost and never produce either. (The old
+  // frame-ancestors meta-CSP warning and the ipapi.co geolocation call
+  // were both removed, so they can no longer appear here.)
+  const real = errs.filter(
+    (e) => !e.includes('CERT_AUTHORITY_INVALID') && !e.includes('ERR_CONNECTION_RESET'),
+  );
   expect(real).toEqual([]);
 });
 
@@ -209,6 +214,14 @@ test('signup collects a beta access request, with no account created', async ({ 
 
   // No credential is collected while the beta is closed.
   await expect(page.locator('input[name="password"]')).toHaveCount(0);
+
+  // Tribal governance roles join the shared role list only when the
+  // organization identifies as a Tribal Nation.
+  await expect(page.locator('[data-tribal-role]:visible')).toHaveCount(0);
+  await page.selectOption('select[name="organizationType"]', 'tribal_nation');
+  await expect(page.locator('[data-tribal-role]:visible')).toHaveCount(3);
+  await page.selectOption('select[name="organizationType"]', 'government');
+  await expect(page.locator('[data-tribal-role]:visible')).toHaveCount(0);
 
   // The role chips are a single-select mirrored into a hidden field.
   await page.locator('[data-role-chip]', { hasText: 'Consultant' }).click();
