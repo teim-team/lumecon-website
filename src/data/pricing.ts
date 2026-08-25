@@ -175,7 +175,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   {
     label: 'Results',
     values: [
-      'Direct effects, on the real results page. Indirect, induced and total unlock on any plan.',
+      'Direct effects, on the real results page. Indirect, induced and total unlock on any paid plan.',
       'Complete: direct, indirect, induced and total impact, with tax impacts',
       'Same',
       'Same',
@@ -266,7 +266,7 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'Can I actually try Lumecon before paying?',
     a: [
-      'Yes. Seed, the free account, is the real platform: bring your documents, work with Cedar, build an analysis end to end and see your direct effects on the results page. Indirect, induced and total impact — and exports — unlock when you choose a paid plan.',
+      'Yes. Seed, the free account, is the real platform: bring your documents, work with Cedar, build an analysis end to end and see your direct effects on the results page. Indirect, induced and total impact, and exports, unlock when you choose a paid plan.',
       'No credit card, sales call or obligation.',
     ],
   },

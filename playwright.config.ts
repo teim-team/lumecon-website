@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { defineConfig, devices, chromium } from '@playwright/test';
+import { defineConfig, devices, chromium, webkit } from '@playwright/test';
 
 /**
  * Smoke-test config. Builds the static site, serves it on a local port,
@@ -33,6 +33,20 @@ function chromiumExecutablePath(): string | undefined {
 }
 const chromiumExecutable = chromiumExecutablePath();
 
+/* WebKit has no system fallback, so where its pinned build is not
+ * installed (the sandboxes above), its project is dropped instead of
+ * failing all of its tests before an assertion runs. CI installs both
+ * browsers and keeps full WebKit coverage. */
+function webkitInstalled(): boolean {
+  try {
+    const pinned = webkit.executablePath();
+    return Boolean(pinned && existsSync(pinned));
+  } catch {
+    return false;
+  }
+}
+const includeWebkit = webkitInstalled();
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
@@ -52,7 +66,7 @@ export default defineConfig({
     // engine-specific regressions in the d3-geo map, the Cedar chat,
     // and the scroll/reveal scripts before they reach a phone. CI
     // installs both browsers (see .github/workflows/smoke.yml).
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    ...(includeWebkit ? [{ name: 'webkit', use: { ...devices['Desktop Safari'] } }] : []),
   ],
   webServer: {
     command: 'npm run preview -- --host 127.0.0.1 --port 4321',
