@@ -162,7 +162,8 @@
 }
 .pr-plans__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Four cards: Seed leads, then the three paid tiers. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   align-items: stretch;
 }
@@ -287,7 +288,15 @@
   justify-self: start;
   margin-top: auto;
 }
-@media (max-width: 900px) {
+/* Four across needs more room than three did: pair up on mid-width
+   screens (Seed+Sprout / Sapling+Tree read as natural pairs), then
+   stack on phones. */
+@media (max-width: 1080px) {
+  .pr-plans__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
   .pr-plans__grid {
     grid-template-columns: minmax(0, 1fr);
   }

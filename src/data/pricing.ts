@@ -1,11 +1,18 @@
 /**
  * Pricing data — single source of truth for the /pricing page.
  *
- * One Lumecon platform, three public plans plus Cedar Grove, which is
- * sold on its own. Tier ids ('sprout' | 'sapling' | 'tree') match the
+ * One Lumecon platform, four public plans — Seed, the free account,
+ * then Sprout, Sapling and Tree — plus Cedar Grove, which is sold on
+ * its own. Tier ids ('free' | 'sprout' | 'sapling' | 'tree') match the
  * product's tier vocabulary (server/lib/tierCapabilities.js in the Team
  * App), so the signup handoff (/signup?tier=sprout) and the product
- * agree on plan identity end to end.
+ * agree on plan identity end to end. Seed's display name is marketing;
+ * its id stays 'free' everywhere machines read it.
+ *
+ * Seed shows the direct-effects preview on the results page (indirect,
+ * induced and total unlock on any paid plan, exports too) — the gating
+ * itself lives server-side in the product; see
+ * docs/seed-tier-spec.md for the contract.
  *
  * What each thing is, because the three Cedar names are easy to blur:
  *
@@ -27,8 +34,8 @@
  */
 
 export interface Plan {
-  id: 'sprout' | 'sapling' | 'tree';
-  name: 'Sprout' | 'Sapling' | 'Tree';
+  id: 'free' | 'sprout' | 'sapling' | 'tree';
+  name: 'Seed' | 'Sprout' | 'Sapling' | 'Tree';
   priceAnnual: number;
   price: string;
   period: string;
@@ -48,6 +55,26 @@ export interface Plan {
   ctaLabel: string;
   ctaHref: string;
 }
+
+/**
+ * Seed, the free account, is a real plan with a card and a table
+ * column on /pricing — but it is deliberately NOT in PLANS: choose-plan
+ * and checkout iterate PLANS as the purchasable tiers, and Seed never
+ * passes through checkout (signup?tier=free is its whole flow).
+ */
+export const SEED: Plan = {
+  id: 'free',
+  name: 'Seed',
+  priceAnnual: 0,
+  price: 'Free',
+  period: '',
+  audience: 'I want to see our impact first.',
+  tagline:
+    'The real platform, free: bring your documents, work with Cedar, build a full analysis and see your direct effects. Full results unlock on any plan.',
+  users: '1 user',
+  ctaLabel: 'Start with Seed',
+  ctaHref: '/signup?tier=free',
+};
 
 export const PLANS: Plan[] = [
   {
@@ -132,30 +159,44 @@ export const CEDAR_GROVE = {
   proprietaryDatasets: [] as { name: string; blurb: string }[],
 };
 
-/** The readable detail table. `values` align with PLANS order. */
+/** The readable detail table. `values` align with [SEED, ...PLANS] order. */
 export interface PlanRow {
   label: string;
-  values: [string, string, string];
+  values: [string, string, string, string];
 }
 
 export const PLAN_TABLE_ROWS: PlanRow[] = [
-  { label: 'Annual price', values: ['$1,000', '$2,500', '$7,500'] },
-  { label: 'Users', values: ['1', 'Up to 10', 'Unlimited users in one organization'] },
+  { label: 'Annual price', values: ['Free', '$1,000', '$2,500', '$7,500'] },
+  { label: 'Users', values: ['1', '1', 'Up to 10', 'Unlimited users in one organization'] },
   {
     label: 'Economic modeling',
-    values: ['Unlimited projects and analyses on the full Lumecon model', 'Same', 'Same'],
+    values: ['Unlimited projects and analyses on the full Lumecon model', 'Same', 'Same', 'Same'],
+  },
+  {
+    label: 'Results',
+    values: [
+      'Direct effects, on the real results page. Indirect, induced and total unlock on any plan.',
+      'Complete: direct, indirect, induced and total impact, with tax impacts',
+      'Same',
+      'Same',
+    ],
+  },
+  {
+    label: 'Exports',
+    values: ['Not included', 'Workbook (XLSX), CSV tables and printable summary', 'Same', 'Same'],
   },
   {
     label: 'U.S. geographies',
-    values: ['Every supported geography, with no add-ons', 'Same', 'Same'],
+    values: ['Every supported geography, with no add-ons', 'Same', 'Same', 'Same'],
   },
   {
     label: 'Historical analysis',
-    values: ['2015 to present, where the underlying data support it', 'Same', 'Same'],
+    values: ['2015 to present, where the underlying data support it', 'Same', 'Same', 'Same'],
   },
   {
     label: 'Cedar',
     values: [
+      'Included',
       'Included',
       'Included for every collaborator',
       'Included, with organizational context and calibration',
@@ -164,6 +205,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   {
     label: 'Cedar Commons',
     values: [
+      'Not included',
       'Not included',
       'Included. Shared projects, project notes, data collection and outside collaborators.',
       'Included across the organization.',
@@ -174,12 +216,13 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
     values: [
       'Sold separately, $2,500',
       'Sold separately, $2,500',
+      'Sold separately, $2,500',
       'Included. Harmonized public data and Lumecon’s proprietary datasets.',
     ],
   },
   {
     label: 'Client work',
-    values: ['Your own organization', 'Included', 'Included'],
+    values: ['Evaluation only', 'Your own organization', 'Included', 'Included'],
   },
 ];
 
@@ -223,7 +266,7 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'Can I actually try Lumecon before paying?',
     a: [
-      'Yes. Create a free account without entering a credit card, bring your documents, work with Cedar and build an analysis end to end. Full results unlock when you choose a paid plan.',
+      'Yes. Seed, the free account, is the real platform: bring your documents, work with Cedar, build an analysis end to end and see your direct effects on the results page. Indirect, induced and total impact — and exports — unlock when you choose a paid plan.',
       'No credit card, sales call or obligation.',
     ],
   },

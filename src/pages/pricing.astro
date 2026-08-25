@@ -14,7 +14,8 @@
  *
  *   1. Hero: standard pricing, tailored modeling.
  *   2. Free-account band: don't take our word for it, before the tiers.
- *   3. Three plans, the client-work marker, and Cedar Grove on its own.
+ *   3. Four plans led by Seed, the client-work marker, and Cedar Grove
+ *      on its own.
  *   4. The full comparison table, folded away.
  *   5. The FAQ: one sentence to click, the argument behind it.
  *
@@ -25,7 +26,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { PLANS, PLAN_TABLE_ROWS, CLIENT_WORK, CEDAR_GROVE, PRICING_FAQ } from '../data/pricing';
+import {
+  SEED,
+  PLANS,
+  PLAN_TABLE_ROWS,
+  CLIENT_WORK,
+  CEDAR_GROVE,
+  PRICING_FAQ,
+} from '../data/pricing';
+
+// Seed leads the card row and the table columns; PLANS stays the
+// purchasable set that choose-plan and checkout iterate.
+const ALL_PLANS = [SEED, ...PLANS];
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -33,7 +45,7 @@ import '../styles/home.css';
 import '../styles/pricing.css';
 
 const description =
-  'Pricing for the intelligent economic analysis platform. Every paid Lumecon plan includes Cedar Impact in full, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add Cedar Commons, the shared project workspace, and Cedar Grove, the advanced data library, which is also available on its own. Plans start at $1,000 a year, prices are public and you can try Lumecon free without a credit card.';
+  'Pricing for the intelligent economic analysis platform. Every paid Lumecon plan includes Cedar Impact in full, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add Cedar Commons, the shared project workspace, and Cedar Grove, the advanced data library, which is also available on its own. Paid plans start at $1,000 a year, prices are public, and Seed, the free account, lets you build a full analysis and see your direct effects without a credit card.';
 
 const jsonLd = [
   {
@@ -43,11 +55,12 @@ const jsonLd = [
     description,
     brand: { '@type': 'Brand', name: 'Lumecon' },
     offers: [
-      ...PLANS.map((p) => ({
+      ...ALL_PLANS.map((p) => ({
         '@type': 'Offer',
         name: `${p.name} plan`,
         price: p.priceAnnual,
         priceCurrency: 'USD',
+        ...(p.id === 'free' ? { description: p.tagline } : {}),
         url: `https://lumecon.ai/pricing#plans`,
       })),
       {
@@ -57,15 +70,6 @@ const jsonLd = [
         priceCurrency: 'USD',
         description: CEDAR_GROVE.body,
         url: 'https://lumecon.ai/pricing#cedar-grove',
-      },
-      {
-        '@type': 'Offer',
-        name: 'Free account',
-        price: 0,
-        priceCurrency: 'USD',
-        description:
-          'Create an account without a credit card, bring your documents, use Cedar and build an analysis end to end. Complete results unlock on any paid plan.',
-        url: 'https://lumecon.ai/signup',
       },
     ],
   },
@@ -120,12 +124,13 @@ const jsonLd = [
     <section class="pr-plans" id="plans" aria-label="Plans">
       <aside class="pr-free" aria-labelledby="free-title">
         <div class="pr-free__main">
-          <p class="h-kicker">The free account is the real product</p>
+          <p class="h-kicker">Seed, the free account, is the real product</p>
           <h2 class="pr-free__title" id="free-title">Don&rsquo;t take our word for it.</h2>
           <p class="pr-free__body">
-            Create a free account and use the actual Lumecon platform. Bring your documents, work
-            with Cedar and build an analysis end to end. There is no credit card, countdown or sales
-            call. Full results unlock when you choose a paid plan.
+            Create a free Seed account and use the actual Lumecon platform. Bring your documents,
+            work with Cedar, build an analysis end to end and see your direct effects on the results
+            page. There is no credit card, countdown or sales call. Indirect, induced and total
+            impact unlock when you choose a paid plan.
           </p>
         </div>
         <div class="pr-free__side">
@@ -136,10 +141,10 @@ const jsonLd = [
         </div>
       </aside>
 
-      <!-- 3. Three understandable plans. -->
+      <!-- 3. Four understandable plans, Seed first. -->
       <div class="pr-plans__grid">
         {
-          PLANS.map((p) => (
+          ALL_PLANS.map((p) => (
             <article
               class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`}
               id={`plan-${p.id}`}
@@ -238,7 +243,7 @@ const jsonLd = [
               <thead>
                 <tr>
                   <th scope="col"><span class="visually-hidden">Capability</span></th>
-                  {PLANS.map((p) => <th scope="col">{p.name}</th>)}
+                  {ALL_PLANS.map((p) => <th scope="col">{p.name}</th>)}
                 </tr>
               </thead>
               <tbody>

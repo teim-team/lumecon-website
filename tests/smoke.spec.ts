@@ -88,21 +88,37 @@ test('skip-link is hidden until focused', async ({ page }) => {
   expect(box?.x ?? -1).toBeLessThan(0);
 });
 
-test('pricing shows three public plans with Sapling recommended', async ({ page }) => {
+test('pricing shows four public plans, Seed first, with Sapling recommended', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
-  // One platform, three plans — no platform picker, no gating.
-  await expect(page.locator('.pr-plan')).toHaveCount(3);
+  // One platform, four plans — Seed (free) leads, no platform picker.
+  await expect(page.locator('.pr-plan')).toHaveCount(4);
+  await expect(page.locator('.pr-plan').first().locator('.pr-plan__name')).toHaveText('Seed');
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
+  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('Free');
   await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$1,000');
   await expect(page.locator('#plan-sapling .pr-plan__amount')).toHaveText('$2,500');
   await expect(page.locator('#plan-tree .pr-plan__amount')).toHaveText('$7,500');
-  // Plan CTAs route into signup with the stable tier id.
+  // Plan CTAs route into signup with the stable tier id — Seed's id
+  // stays `free`, the display name is marketing only.
+  await expect(page.locator('#plan-free .pr-plan__cta')).toHaveAttribute(
+    'href',
+    /\/signup\?tier=free/,
+  );
   await expect(page.locator('#plan-sprout .pr-plan__cta')).toHaveAttribute(
     'href',
     /\/signup\?tier=sprout/,
   );
-  // The nine-row detail table renders (Cedar, Cedar Commons, Cedar Grove rows included).
-  await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(9);
+  // The detail table renders with the Seed column and the Results and
+  // Exports rows that state the direct-effects preview.
+  await expect(page.locator('[data-plan-table] thead th')).toContainText([
+    '',
+    'Seed',
+    'Sprout',
+    'Sapling',
+    'Tree',
+  ]);
+  await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(11);
+  await expect(page.locator('[data-plan-table]')).toContainText('Direct effects');
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
 });
 

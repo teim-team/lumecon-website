@@ -16,11 +16,11 @@ center frame only, why cards, product tour, the Lumecon edge, a compact
 Cedar teaser and the mission close); **/cedar** owns the AI story
 (designed-in-from-the-beginning positioning, real captures of the docked
 Cedar panel on sample entities, three thin-line diagrams);
-**/pricing** is ruthlessly about pricing (three plans, the creed
-"Complexity belongs in the model. Not the pricing.", multi-year and
-lowest-applicable-price policies, Whole Nation, Cedar Commons, Cedar
-Grove on its own, and consultant licensing; prices include taxes and
-fees); **/methodology** argues the economics are credible (equations,
+**/pricing** is ruthlessly about pricing (four plans led by Seed, the
+free account, the creed "Complexity belongs in the model. Not the
+pricing.", multi-year and lowest-applicable-price policies, Whole
+Nation, Cedar Commons, Cedar Grove on its own, and consultant
+licensing; prices include taxes and fees); **/methodology** argues the economics are credible (equations,
 the six-stage flow, the data manifest, validation, lineage, comparisons
 and the AI-research verification block); the glossary defines terms and
 nothing more. Around those: sign-up (private-beta request), log-in,

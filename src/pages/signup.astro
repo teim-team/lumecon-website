@@ -245,7 +245,7 @@ const ORGANIZATION_TYPE_OPTIONS = [
       var qs = new URLSearchParams(window.location.search);
       var tier = qs.get('tier');
       if (!tier) return;
-      var tierName = { sprout: 'Sprout', sapling: 'Sapling', tree: 'Tree', free: 'Free trial' };
+      var tierName = { sprout: 'Sprout', sapling: 'Sapling', tree: 'Tree', free: 'Seed (free)' };
       // hasOwnProperty, not truthiness: a bare `tierName[tier]` resolves
       // inherited members like `constructor`/`__proto__` and would render
       // them into the badge. Only the four real tiers pass.

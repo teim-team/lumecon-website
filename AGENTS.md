@@ -183,6 +183,12 @@ User-facing word choices, everywhere a customer reads:
   - "Cedar Commons, the shared project workspace"
   - "Cedar Grove, the advanced data library"
   - "Cedar, the AI economic analyst, in every plan"
+  - "Seed, the free account" (2026-08) — the fourth plan, first on
+    /pricing: the real platform, where you build a full analysis and
+    see your direct effects; indirect, induced and total impact, and
+    exports, unlock on any paid plan. Display name only: the tier id
+    stays `free` everywhere machines read it (signup handoff, product
+    tierCapabilities). Seed never passes through checkout.
   Lumecon offers the products; Cedar is the brand. Do not describe
   Commons or Grove as plan features only — they are products that
   plans include.
