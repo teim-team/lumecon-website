@@ -1,10 +1,14 @@
 /**
- * Full-site visual sweep: every public page at desktop (1440) and
- * phone (390) widths, in both light and dark color schemes, plus the
- * signup page arriving from each real pricing tier. The output grid is
- * the review surface for theme and responsive regressions — dark mode
- * renders from the same stylesheets via prefers-color-scheme, so a
- * hardcoded light-only color shows up here before a visitor sees it.
+ * Full-site visual sweep: every public page at the audit widths from
+ * AGENTS.md (1440, 1024, 768, 430, 375, plus 390 as the device-frame
+ * phone), in both light and dark color schemes at the endpoints, plus
+ * the signup page arriving from each real pricing tier. The output
+ * grid is the review surface for theme and responsive regressions —
+ * dark mode renders from the same stylesheets via
+ * prefers-color-scheme, so a hardcoded light-only color shows up here
+ * before a visitor sees it, and the intermediate widths catch layouts
+ * (like the two-column pricing band between 641 and 1080px) that
+ * neither endpoint renders.
  *
  * Run against a served build:
  *   npm run build && npx serve dist -l 4330   (or astro preview)
@@ -45,8 +49,13 @@ async function ctx(width, height, colorScheme, isMobile = false) {
 const surfaces = [
   { name: 'desktop-light', c: await ctx(1440, 900, 'light') },
   { name: 'desktop-dark', c: await ctx(1440, 900, 'dark') },
+  { name: 'tablet-light', c: await ctx(1024, 768, 'light') },
+  { name: 'tablet-dark', c: await ctx(1024, 768, 'dark') },
+  { name: 'tablet-narrow-light', c: await ctx(768, 1024, 'light') },
+  { name: 'phone-430-light', c: await ctx(430, 932, 'light', true) },
   { name: 'phone-light', c: await ctx(390, 844, 'light', true) },
   { name: 'phone-dark', c: await ctx(390, 844, 'dark', true) },
+  { name: 'phone-375-light', c: await ctx(375, 667, 'light', true) },
 ];
 
 async function shot(c, url, name, opts = {}) {
@@ -99,10 +108,16 @@ for (const tier of ['sprout', 'sapling', 'tree', 'free']) {
 // Pricing FAQ: first disclosure open.
 await shot(desktopLight, '/pricing', 'pricing-faq-open--desktop-light', {
   before: async (page) => {
-    await page.evaluate(() => {
-      const d = document.querySelector('.pricing-faq details, [data-pricing-faq] details');
+    const opened = await page.evaluate(() => {
+      const d = document.querySelector('.pr-faq details.pr-more--faq');
       if (d) d.open = true;
+      return Boolean(d);
     });
+    if (!opened) {
+      throw new Error(
+        'pricing FAQ disclosure (.pr-faq details.pr-more--faq) not found; the open-state shot would capture the closed default'
+      );
+    }
     await page.waitForTimeout(300);
   },
   wait: 0,
