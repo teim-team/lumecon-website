@@ -54,14 +54,6 @@
   left: -5rem;
   background: radial-gradient(circle, rgba(5, 60, 54, 0.55), rgba(5, 60, 54, 0) 70%);
 }
-.asplit-brand__contours {
-  position: absolute;
-  inset: -8%;
-  width: 116%;
-  height: 116%;
-  opacity: 0.08;
-  pointer-events: none;
-}
 /* The real mark, white-filtered, bleeding off the top corner that
    faces away from the form. Login and signup mirror it. */
 .asplit-brand__mark {

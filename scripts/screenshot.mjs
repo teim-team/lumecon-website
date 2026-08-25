@@ -24,6 +24,12 @@ async function ctx(width, height, colorScheme, isMobile = false) {
   const c = await browser.newContext({
     viewport: { width, height },
     colorScheme,
+    // Full-page capture never scrolls, so IntersectionObserver-driven
+    // reveals below the fold would stay at opacity 0 and the shots
+    // would show fake gaps where real content lives. The site honors
+    // prefers-reduced-motion by forcing every reveal visible, so
+    // requesting it here makes the capture show the page as built.
+    reducedMotion: 'reduce',
     deviceScaleFactor: isMobile ? 2 : 1,
     isMobile,
     hasTouch: isMobile,

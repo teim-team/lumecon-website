@@ -33,14 +33,6 @@
   left: -5rem;
   background: radial-gradient(circle, rgba(5, 60, 54, 0.55), rgba(5, 60, 54, 0) 70%);
 }
-.tealfield__contours {
-  position: absolute;
-  inset: -8%;
-  width: 116%;
-  height: 116%;
-  opacity: 0.08;
-  pointer-events: none;
-}
 /* The asymmetric mark, white-filtered, bleeding off the top corner
    like the auth brand panels. Default right; --mark-left mirrors. */
 .tealfield__mark {

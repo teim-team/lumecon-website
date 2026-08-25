@@ -68,6 +68,25 @@ and revert any technically elegant change that makes the actual
 composition worse. Cleaner code is not evidence of better design;
 only the rendered result is.
 
+## Standing instruction: full width, foldable length (2026-08)
+
+Pages use the site container width (--container-max); do not ship a
+narrower reading column as a page's main layout — the 840px legal
+column read as an afterthought and is gone. Long document-style
+content (legal drafts, long reference sections) folds into
+disclosure rows (the pricing-FAQ device, .legal-sec in legal.css) so
+a page reads as a scannable set of sections, not one long scroll.
+LegalLayout opens all disclosures for print.
+
+## Standing instruction: no decorative circles (2026-08)
+
+The only circles on the site are the Lumecon mark itself (including
+MarkArt background usage) and functional icons. The old topographic
+contour ring linework on the auth brand panels and teal flow surfaces
+read as random circles and is deliberately removed; do not reintroduce
+contour rings, orbit lines, or generic circle patterns as decoration.
+Soft radial glows are fine — they read as light, not shapes.
+
 ## Standing instruction: teal is semantic
 
 Teal has semantic meaning in the Lumecon visual language. Do not use
