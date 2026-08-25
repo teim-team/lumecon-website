@@ -211,9 +211,21 @@
   display: flex;
   gap: 0.55rem;
   align-items: stretch;
-  padding: 0.9rem 1.2rem 1rem;
+  padding: 0.9rem 1.2rem 0.5rem;
   background: var(--white);
   border-top: 1px solid var(--rule);
+}
+/* Standing AI disclaimer under the composer: the one line of
+   expectation-setting the panel owes its reader. Quiet but always
+   visible; the estimates language mirrors the Terms. */
+.cedar-chat__disclaimer {
+  margin: 0;
+  padding: 0 1.2rem 0.7rem;
+  background: var(--white);
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+  text-align: center;
 }
 .cedar-chat__inputwrap {
   flex: 1;

@@ -61,6 +61,15 @@
   color: var(--ink-2);
   margin: 0;
 }
+/* One quiet line for the whole section, not a caption per shot: the
+   figures below carry specific numbers for named places, and this is
+   the disclosure that they are demonstrations, not client results. */
+.tour-samplenote {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+  margin: 0.5rem 0 0;
+}
 
 /* ---------- feature rows ---------- */
 .tour-rows {
