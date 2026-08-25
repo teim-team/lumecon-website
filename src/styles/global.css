@@ -246,33 +246,20 @@ body {
     --gold: #ffc83d;
   }
 
-  /* Primary CTA: keep accent teal as the saturated action color in
-     dark mode (navy is no longer a dark hue). */
-  .btn {
-    background: var(--accent);
-    color: #0a0f26;
-    border-color: var(--accent);
-  }
-  .btn:hover {
-    background: var(--accent-light);
-    border-color: var(--accent-light);
-  }
-  .btn--ghost {
-    background: transparent;
-    color: var(--navy);
-    border-color: var(--rule-strong);
-  }
-  .btn--ghost:hover {
-    background: var(--accent);
-    color: #0a0f26;
-    border-color: var(--accent);
-  }
+  /* The .btn dark overrides live in a second dark block AFTER the
+     base .btn rules further down this file — an equal-specificity
+     override here would lose the cascade to the base rules, which
+     are declared later. (That was a live bug: dark-mode primary
+     buttons silently rendered as inverted navy instead of teal.) */
 
-  /* Footer-bar: the dark stripe at the very bottom of every page
-     stays a deeper navy so it still reads as a defined band rather
-     than blending into the page. */
-  /* Footer bar is a light hairline strip now; the token flip
-     handles it, no navy override needed. */
+  /* Footer-bar: the navy stripe at the very bottom of every page.
+     It is styled with var(--navy), which the dark flip turns
+     near-white, so pin it to a literal deeper navy here — it stays a
+     defined terminating band on the dark page and the fixed
+     rgba-white text in footer.css stays readable in both modes. */
+  .footer-bar {
+    background: #0a0f26;
+  }
   .footer-email:hover {
     color: var(--accent-text);
   }
@@ -850,6 +837,33 @@ strong {
   background: var(--navy);
   color: var(--white);
   border-color: var(--navy);
+}
+/* Dark-mode button overrides. These sit AFTER the base .btn rules on
+   purpose: the token flip turns --navy near-white, so a dark-mode
+   primary would render as an inverted light pill. Keep accent teal as
+   the saturated action color in dark mode. (Declared here rather than
+   in the main dark block above because equal-specificity rules are
+   won by whichever comes later in the file.) */
+@media (prefers-color-scheme: dark) {
+  .btn {
+    background: var(--accent);
+    color: #0a0f26;
+    border-color: var(--accent);
+  }
+  .btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent-light);
+  }
+  .btn--ghost {
+    background: transparent;
+    color: var(--navy);
+    border-color: var(--rule-strong);
+  }
+  .btn--ghost:hover {
+    background: var(--accent);
+    color: #0a0f26;
+    border-color: var(--accent);
+  }
 }
 
 /* Scroll progress indicator. Lives at the very top of the viewport;

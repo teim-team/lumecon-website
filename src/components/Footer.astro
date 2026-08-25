@@ -13,10 +13,11 @@
  * fourteen to find one.
  *
  * Grouping costs height, because the deepest group sets the band, so
- * the groups are balanced to three: Methodology sits under Reference
- * rather than Product, and "Privacy choices" moved to the bottom bar
- * beside the email, which is where a preference control belongs
- * anyway. Four rows down to three.
+ * the groups are balanced to four: Contact lives under Account (the
+ * most actionable link, accented), LinkedIn sits in the bottom bar
+ * beside the email, and "Privacy choices" stays there too, which is
+ * where a preference control belongs anyway. The bottom bar is navy —
+ * the one dark strip that actually terminates the document.
  */
 import { site } from '../config';
 
@@ -25,7 +26,10 @@ interface Props {
 }
 const { isHome = false } = Astro.props;
 
-const GROUPS: { label: string; links: { href: string; text: string; ext?: boolean }[] }[] = [
+const GROUPS: {
+  label: string;
+  links: { href: string; text: string; ext?: boolean; contact?: boolean }[];
+}[] = [
   {
     label: 'Product',
     links: [
@@ -46,17 +50,15 @@ const GROUPS: { label: string; links: { href: string; text: string; ext?: boolea
     links: [
       { href: '/signup', text: 'Sign up' },
       { href: '/login', text: 'Log in' },
+      { href: `mailto:${site.email}`, text: 'Contact', contact: true },
     ],
-  },
-  {
-    label: 'Company',
-    links: [{ href: 'https://www.linkedin.com/company/lumecon-ai', text: 'LinkedIn', ext: true }],
   },
   {
     label: 'Legal',
     links: [
       { href: '/terms', text: 'Terms' },
       { href: '/privacy', text: 'Privacy' },
+      { href: '/ai-and-data-use', text: 'AI and data use' },
       { href: '/accessibility', text: 'Accessibility' },
     ],
   },
@@ -78,17 +80,12 @@ const GROUPS: { label: string; links: { href: string; text: string; ext?: boolea
                       {l.text}
                     </a>
                   ) : (
-                    <a href={l.href}>{l.text}</a>
+                    <a class={l.contact ? 'footer-links__contact' : undefined} href={l.href}>
+                      {l.text}
+                    </a>
                   )}
                 </li>
               ))}
-              {g.label === 'Company' && (
-                <li>
-                  <a class="footer-links__contact" href={`mailto:${site.email}`}>
-                    Contact
-                  </a>
-                </li>
-              )}
             </ul>
           </div>
         ))
@@ -108,6 +105,12 @@ const GROUPS: { label: string; links: { href: string; text: string; ext?: boolea
         </div>
         <div class="footer-bottom__right">
           <button type="button" class="footer-linkbtn" id="privacyChoices">Privacy choices</button>
+          <a
+            href="https://www.linkedin.com/company/lumecon-ai"
+            class="footer-linkbtn footer-linkbtn--a"
+            target="_blank"
+            rel="noopener noreferrer me">LinkedIn</a
+          >
           <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
         </div>
       </div>

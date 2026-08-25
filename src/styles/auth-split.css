@@ -197,6 +197,20 @@
   background: #086a61;
   border-color: #086a61;
 }
+/* --accent-text flips to the light teal (#5fd9cc) in dark mode, which
+   fails AA under the white label. Pin the fill to the constant dark
+   teal chip token, which clears AA in both modes. */
+@media (prefers-color-scheme: dark) {
+  .asplit .auth-form .btn {
+    background: var(--accent-chip);
+    border-color: var(--accent-chip);
+    color: #fff;
+  }
+  .asplit .auth-form .btn:hover {
+    background: #086a61;
+    border-color: #086a61;
+  }
+}
 
 /* "or" divider + Google, secondary to the primary action. Hidden
    until the page script confirms the API origin is configured. */
