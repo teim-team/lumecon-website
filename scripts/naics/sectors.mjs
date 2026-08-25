@@ -48,7 +48,7 @@ const RAW = [
   ['48-49', 'transportation', 'Transportation and Warehousing', 'Trucking, air and rail carriers, transit systems, pipelines, couriers and the warehouses that hold freight between trips.', 'teal'],
   ['51', 'information', 'Information', 'Software publishers, telecommunications, data centers and hosting, broadcasting and media production.', 'green'],
   ['52', 'finance', 'Finance and Insurance', 'Banks and credit unions, lenders, insurance carriers and agencies, and investment firms.', 'green'],
-  ['53', 'realestate', 'Real Estate and Rental and Leasing', 'Property owners and managers, real estate agents, and rental businesses from apartments to equipment yards.', 'bronze'],
+  ['53', 'realestate', 'Real Estate and Rental and Leasing', 'Property owners and managers, real estate agents and rental businesses from apartments to equipment yards.', 'bronze'],
   ['54', 'professional', 'Professional, Scientific, and Technical Services', 'Engineering and architecture firms, lawyers, accountants, consultants, research labs and IT services.', 'gold'],
   ['55', 'management', 'Management of Companies and Enterprises', 'Holding companies and corporate offices that oversee other establishments of the same enterprise.', 'bronze'],
   ['56', 'administrative', 'Administrative and Support and Waste Management', 'Staffing agencies, janitorial and landscaping crews, security services, call centers and waste collection.', 'green'],
@@ -56,8 +56,8 @@ const RAW = [
   ['62', 'healthcare', 'Health Care and Social Assistance', 'Hospitals, clinics, dental and behavioral health practices, nursing care, child care and social services.', 'teal'],
   ['71', 'arts', 'Arts, Entertainment, and Recreation', 'Museums and cultural centers, performing arts, sports and recreation businesses, casinos without hotels among them.', 'gold'],
   ['72', 'hospitality', 'Accommodation and Food Services', 'Hotels, casino hotels, RV parks, restaurants, caterers and bars.', 'bronze'],
-  ['81', 'otherservices', 'Other Services (except Public Administration)', 'Repair shops, personal care, religious and civic organizations, and similar services that fit nowhere else.', 'gold'],
-  ['92', 'publicadmin', 'Public Administration', 'Government at every level: executive and legislative offices, courts, public safety, and program administration.', 'green'],
+  ['81', 'otherservices', 'Other Services (except Public Administration)', 'Repair shops, personal care, religious and civic organizations and similar services that fit nowhere else.', 'gold'],
+  ['92', 'publicadmin', 'Public Administration', 'Government at every level: executive and legislative offices, courts, public safety and program administration.', 'green'],
 ];
 
 export const SECTORS = RAW.map(([code, slug, title, description, wash]) => ({
