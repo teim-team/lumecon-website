@@ -14,8 +14,8 @@
  *                  you what the data will support and where the gaps
  *                  are, learns how you work and offers interpretation,
  *                  so the analysis is not done alone.
- *   Cedar Commons  the collaborative environment. Sapling and up.
- *   Cedar Grove    the curated data library: harmonized public data and
+ *   Cedar Commons  the shared project workspace. Sapling and up.
+ *   Cedar Grove    the advanced data library: harmonized public data and
  *                  Lumecon's proprietary datasets. Sold on its own for
  *                  $2,500 with unlimited users, and included in Tree.
  *
@@ -71,7 +71,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'We do economic analysis.',
     tagline:
-      'Everything in Sprout, plus Cedar Commons for shared projects, project notes, data collection and outside collaborators.',
+      'Everything in Sprout, plus Cedar Commons, the shared project workspace: project notes, data collection and outside collaborators.',
     users: 'Up to 10 users',
     featured: true,
     clientWork: true,
@@ -86,7 +86,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'Our organization runs economic analysis through Lumecon.',
     tagline:
-      'Everything in Sapling, plus Cedar Grove, organizational context and Cedar calibration across the organization.',
+      'Everything in Sapling, plus Cedar Grove, the advanced data library, organizational context and Cedar calibration across the organization.',
     users: 'Unlimited users in one organization',
     clientWork: true,
     ctaLabel: 'Start with Tree',
@@ -112,7 +112,7 @@ export const CEDAR_GROVE = {
   period: '/ year',
   users: 'Unlimited users',
   headline: 'The data library, without the model.',
-  body: 'Cedar Grove is where Lumecon’s curated data lives: public datasets cleaned, harmonized and kept analysis-ready, alongside the proprietary datasets we build ourselves. Buy it on its own for the data, or get it with Tree along with the economic model and Cedar Commons.',
+  body: 'Cedar Grove is the advanced data library: public datasets cleaned, harmonized and kept analysis-ready, alongside the proprietary datasets we build ourselves. Buy it on its own for the data, or get it with Tree along with Cedar Impact and Cedar Commons.',
   bullets: [
     'Harmonized public data, maintained and versioned',
     'Lumecon’s proprietary datasets, added as they are built',
@@ -237,7 +237,7 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'What is Cedar Grove, and why is it sold separately?',
     a: [
-      'Cedar Grove is the curated data library: harmonized public data plus the proprietary datasets we build. It is useful without the model, so you can buy it on its own for $2,500 a year with unlimited users, and it comes with Tree.',
+      'Cedar Grove is the advanced data library: harmonized public data plus the proprietary datasets we build. It is useful without Cedar Impact, so you can buy it on its own for $2,500 a year with unlimited users, and it comes with Tree.',
       'Pricing it separately is also how we show what the economic model and Cedar Commons are worth on their own.',
     ],
   },
