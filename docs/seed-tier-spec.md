@@ -2,7 +2,7 @@
 
 **For:** the Claude Code session working in `teim-team/teim-app`
 **From:** the lumecon-website session, on the founder's direction (Elijah Moreno, 2026-08-25)
-**Status:** Implemented in teim-app (per the founder, 2026-08-25); the marketing site states this behavior as shipped. This document remains the contract — verify the acceptance checklist below against the deployed app, and treat any mismatch as an app bug, not a copy bug.
+**Status:** The marketing site is live-copy committed to this behavior — lumecon.ai already describes the Seed results preview as how the product works today, with no hedging. Implement this contract in teim-app now and verify it with the acceptance checklist below; until the checklist passes on the deployed app, the site's promise is ahead of the product, and any lasting mismatch is an app bug to fix, not a copy bug to soften.
 
 ## The decision
 
