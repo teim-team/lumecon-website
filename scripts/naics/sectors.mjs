@@ -79,6 +79,6 @@ export const TRIBAL_GOVERNMENT = {
   slug: 'tribalgov',
   title: 'Tribal Government',
   description:
-    'A Lumecon category for tribal nations as operating governments: administration, enterprises, housing, health, education and cultural programs, tracked as their own category rather than filed under local government within Public Administration.',
+    'A Lumecon category for tribal nations as operating governments: administration, public services, housing programs, health, education and cultural programs. Tribal enterprises are classified in their own industry sectors; this category covers the government itself.',
   wash: 'teal',
 };
