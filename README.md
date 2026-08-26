@@ -23,8 +23,10 @@ Nation, Cedar Commons, Cedar Grove on its own, and consultant
 licensing; prices include taxes and fees); **/methodology** argues the economics are credible (equations,
 the six-stage flow, the data manifest, validation, lineage, comparisons
 and the AI-research verification block); the glossary defines terms and
-nothing more. Around those: sign-up (private-beta request), log-in,
-choose-plan and checkout wired to the product API, /naics (deliberately
+nothing more. Around those: a sign-up page that takes private-beta
+requests through the contact endpoint, log-in, choose-plan and checkout
+pages that post to the product API when a backend is configured, /naics
+(deliberately
 unlisted in nav, indexed for search), /accessibility (WCAG 2.2 AA
 statement), /terms and /privacy (substantive working drafts under
 counsel review), /ai-and-data-use (plain-language AI and data-handling
@@ -101,7 +103,7 @@ src/
 public/         Static assets: brand marks, app screenshots (light + dark),
                 why-card art, favicons, OG image, robots.txt, llms.txt,
                 films
-tests/          Playwright specs (smoke, Cedar chat, consent, a11y)
+tests/          Playwright specs (smoke, Cedar classifier, focus trap, nudge)
 ```
 
 ### Where content lives

@@ -41,13 +41,13 @@ const RAW = [
   ['11', 'agriculture', 'Agriculture, Forestry, Fishing and Hunting', 'Farms, ranches, timber operations, fisheries and support services like crop dusting and farm labor contracting.', 'green'],
   ['21', 'mining', 'Mining, Quarrying, and Oil and Gas Extraction', 'Oil and gas wells, coal and mineral mines, quarries and the drilling and field services that keep them producing.', 'bronze'],
   ['22', 'utilities', 'Utilities', 'Electric power generation and delivery, natural gas distribution, water systems and sewage treatment.', 'gold'],
-  ['23', 'construction', 'Construction', 'General contractors, homebuilders, heavy and civil work like roads and bridges, and specialty trades from electrical to roofing.', 'teal'],
+  ['23', 'construction', 'Construction', 'General contractors, homebuilders and specialty trades from electrical to roofing, plus heavy and civil work like roads and bridges.', 'teal'],
   ['31-33', 'manufacturing', 'Manufacturing', 'Plants that turn materials into products: food processing, wood and metal fabrication, machinery, electronics and everything between.', 'teal'],
   ['42', 'wholesale', 'Wholesale Trade', 'Distributors that sell goods to businesses rather than consumers, from building supplies to grocery wholesalers.', 'bronze'],
   ['44-45', 'retail', 'Retail Trade', 'Stores and dealers that sell to the public: groceries, gas stations, auto dealers, clothing and online sellers.', 'gold'],
   ['48-49', 'transportation', 'Transportation and Warehousing', 'Trucking, air and rail carriers, transit systems, pipelines, couriers and the warehouses that hold freight between trips.', 'teal'],
   ['51', 'information', 'Information', 'Software publishers, telecommunications, data centers and hosting, broadcasting and media production.', 'green'],
-  ['52', 'finance', 'Finance and Insurance', 'Banks and credit unions, lenders, insurance carriers and agencies, and investment firms.', 'green'],
+  ['52', 'finance', 'Finance and Insurance', 'Banks and credit unions, lenders, investment firms, insurance carriers and agencies.', 'green'],
   ['53', 'realestate', 'Real Estate and Rental and Leasing', 'Property owners and managers, real estate agents and rental businesses from apartments to equipment yards.', 'bronze'],
   ['54', 'professional', 'Professional, Scientific, and Technical Services', 'Engineering and architecture firms, lawyers, accountants, consultants, research labs and IT services.', 'gold'],
   ['55', 'management', 'Management of Companies and Enterprises', 'Holding companies and corporate offices that oversee other establishments of the same enterprise.', 'bronze'],
@@ -79,6 +79,6 @@ export const TRIBAL_GOVERNMENT = {
   slug: 'tribalgov',
   title: 'Tribal Government',
   description:
-    'A Lumecon category for tribal nations as operating governments: administration, enterprises, housing, health, education and cultural programs, tracked as their own category rather than filed under local government within Public Administration.',
+    'A Lumecon category for tribal nations as operating governments: administration, public services, housing programs, health, education and cultural programs. Tribal enterprises are classified in their own industry sectors; this category covers the government itself.',
   wash: 'teal',
 };

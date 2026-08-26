@@ -237,27 +237,43 @@ const ORGANIZATION_TYPE_OPTIONS = [
   </main>
 
   <script is:inline>
-    /* Pricing -> Signup handoff. The pricing tier CTA links to
-       /signup?tier=X. Read the query, fill the hidden field, and
-       surface the plan badge so the choice visibly carries over
-       into the access request. */
+    /* Pricing -> Signup handoff. A pricing tier CTA links to /signup?tier=X
+       and a standalone product CTA (Cedar Grove, Cedar Press) links to
+       /signup?product=Y. Read whichever the query carries, fill the hidden
+       field, and surface the badge so the choice visibly carries over into
+       the access request instead of being silently dropped. */
     (function () {
       var qs = new URLSearchParams(window.location.search);
       var tier = qs.get('tier');
-      if (!tier) return;
+      var product = qs.get('product');
       var tierName = { sprout: 'Sprout', sapling: 'Sapling', tree: 'Tree', free: 'Seed (free)' };
+      var productName = { 'cedar-grove': 'Cedar Grove', 'cedar-press': 'Cedar Press' };
       // hasOwnProperty, not truthiness: a bare `tierName[tier]` resolves
       // inherited members like `constructor`/`__proto__` and would render
-      // them into the badge. Only the four real tiers pass.
-      if (!Object.prototype.hasOwnProperty.call(tierName, tier)) return;
+      // them into the badge. Only the known tiers and products pass.
+      var badgeText = null;
+      var fieldValue = null;
+      var changeHref = null;
+      if (tier && Object.prototype.hasOwnProperty.call(tierName, tier)) {
+        badgeText = tierName[tier] + ' tier';
+        fieldValue = tier;
+        changeHref = '/pricing';
+      } else if (product && Object.prototype.hasOwnProperty.call(productName, product)) {
+        badgeText = productName[product];
+        fieldValue = product;
+        changeHref = product === 'cedar-grove' ? '/pricing#cedar-grove' : '/pricing';
+      }
+      if (!badgeText) return;
       var badge = document.querySelector('[data-auth-plan]');
       var value = document.querySelector('[data-auth-plan-value]');
       var tierInput = document.querySelector('[data-auth-tier]');
+      var change = document.querySelector('.auth-plan__change');
       if (badge && value) {
-        value.textContent = tierName[tier] + ' tier';
+        value.textContent = badgeText;
         badge.hidden = false;
       }
-      if (tierInput) tierInput.value = tier;
+      if (change && changeHref) change.setAttribute('href', changeHref);
+      if (tierInput) tierInput.value = fieldValue;
     })();
   </script>
 
