@@ -70,7 +70,7 @@ export const SEED: Plan = {
   period: '',
   audience: 'I want to see our impact first.',
   tagline:
-    'The real platform, free: bring your documents, work with Cedar, build a full analysis and see your direct effects. Full results unlock on any paid plan.',
+    'Cedar Impact for real, free: bring your documents, work with Cedar, build a full analysis and see your direct effects. Full results unlock on any paid plan.',
   users: '1 user',
   ctaLabel: 'Start with Seed',
   ctaHref: '/signup?tier=free',
@@ -85,7 +85,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'I do economic analysis.',
     tagline:
-      'The full Lumecon model, Cedar, unlimited analysis and every supported U.S. geography.',
+      'Cedar Impact in full, with Cedar, unlimited analysis and every supported U.S. geography.',
     users: '1 user',
     ctaLabel: 'Start with Sprout',
     ctaHref: '/signup?tier=sprout',
@@ -169,8 +169,13 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   { label: 'Annual price', values: ['Free', '$1,000', '$2,500', '$7,500'] },
   { label: 'Users', values: ['1', '1', 'Up to 10', 'Unlimited users in one organization'] },
   {
-    label: 'Economic modeling',
-    values: ['Unlimited projects and analyses on the full Lumecon model', 'Same', 'Same', 'Same'],
+    label: 'Cedar Impact',
+    values: [
+      'Unlimited projects and analyses on the full economic model',
+      'Same',
+      'Same',
+      'Same',
+    ],
   },
   {
     label: 'Results',
