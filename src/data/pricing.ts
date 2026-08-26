@@ -70,7 +70,7 @@ export const SEED: Plan = {
   period: '',
   audience: 'I want to see our impact first.',
   tagline:
-    'The real platform, free: bring your documents, work with Cedar, build a full analysis and see your direct effects. Full results unlock on any plan.',
+    'The real platform, free: bring your documents, work with Cedar, build a full analysis and see your direct effects. Full results unlock on any paid plan.',
   users: '1 user',
   ctaLabel: 'Start with Seed',
   ctaHref: '/signup?tier=free',

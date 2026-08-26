@@ -33,10 +33,12 @@ repository:
 node scripts/naics/export-app.mjs > ../teim-app/src/data/naicsSectors.js
 ```
 
-The images travel separately: copy the `-sm.webp` and `-wide.webp` files
+The images travel separately: copy the bare-slug `.webp` files (the
+1200x800 full-size renders the app displays) and the `-wide.webp` banners
 (including the `-v2`, `-v3`, ... variants) from `public/naics/` into
-`teim-app/public/naics/`. Run all of this after `naics:duotone` and commit
-both repositories together.
+`teim-app/public/naics/`. The `-sm.webp` thumbnails are site-only and stay
+here. Run all of this after `naics:duotone` and commit both repositories
+together.
 
 ## `npm run shots:examples`
 

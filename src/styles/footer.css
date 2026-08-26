@@ -111,7 +111,11 @@
    footer and it is what actually terminates the document — the light
    band above it closes the content, the navy bar closes the page. */
 .footer-bar {
-  background: var(--navy);
+  /* Literal, not var(--navy): the dark flip turns --navy near-white, and
+     Astro emits this component sheet after global.css, so the dark-mode
+     pin there loses the cascade to this rule. The bar is deliberately the
+     same deep navy in both modes; its text is fixed rgba-white. */
+  background: #0a0f26;
   padding: 0.55rem 0;
 }
 .footer-bottom {

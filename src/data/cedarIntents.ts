@@ -1766,7 +1766,7 @@ export const INTENTS: CedarIntent[] = [
       'live example',
     ],
     answer:
-      'The fastest way to see Lumecon is to try it: create a free account, bring your documents and build an analysis end to end. Full results unlock on any plan. For a walkthrough with numbers close to your use case, the team is one email away.',
+      'The fastest way to see Lumecon is to try it: create a free account, bring your documents and build an analysis end to end. Full results unlock on any paid plan. For a walkthrough with numbers close to your use case, the team is one email away.',
     expanded:
       "More on the example numbers: the map's figures come from live model runs over public data, so they demonstrate the real mechanics (direct, indirect, induced and total impact, jobs and labor income) rather than mocked-up screenshots. They are labelled illustrative because a real analysis starts from your records: your payroll, spending and programs change the inputs, and the result is specific to your organization. If you want the workflow against a scenario close to yours, ask for a demo and the team will run one in your geography.",
   },

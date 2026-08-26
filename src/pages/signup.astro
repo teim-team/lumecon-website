@@ -238,22 +238,24 @@ const ORGANIZATION_TYPE_OPTIONS = [
 
   <script is:inline>
     /* Pricing -> Signup handoff. A pricing tier CTA links to /signup?tier=X
-       and a standalone product CTA (Cedar Grove, Cedar Press) links to
-       /signup?product=Y. Read whichever the query carries, fill the hidden
-       field, and surface the badge so the choice visibly carries over into
-       the access request instead of being silently dropped. */
+       and a standalone product CTA links to /signup?product=Y. Read
+       whichever the query carries, fill the hidden field, and surface the
+       badge so the choice visibly carries over into the access request
+       instead of being silently dropped. Only announced products belong in
+       this map; it ships in the page source. */
     (function () {
       var qs = new URLSearchParams(window.location.search);
       var tier = qs.get('tier');
       var product = qs.get('product');
       var tierName = { sprout: 'Sprout', sapling: 'Sapling', tree: 'Tree', free: 'Seed (free)' };
-      var productName = { 'cedar-grove': 'Cedar Grove', 'cedar-press': 'Cedar Press' };
+      var productName = { 'cedar-grove': 'Cedar Grove' };
       // hasOwnProperty, not truthiness: a bare `tierName[tier]` resolves
       // inherited members like `constructor`/`__proto__` and would render
       // them into the badge. Only the known tiers and products pass.
       var badgeText = null;
       var fieldValue = null;
       var changeHref = null;
+      var isProduct = false;
       if (tier && Object.prototype.hasOwnProperty.call(tierName, tier)) {
         badgeText = tierName[tier] + ' tier';
         fieldValue = tier;
@@ -261,6 +263,7 @@ const ORGANIZATION_TYPE_OPTIONS = [
       } else if (product && Object.prototype.hasOwnProperty.call(productName, product)) {
         badgeText = productName[product];
         fieldValue = product;
+        isProduct = true;
         changeHref = product === 'cedar-grove' ? '/pricing#cedar-grove' : '/pricing';
       }
       if (!badgeText) return;
@@ -268,9 +271,17 @@ const ORGANIZATION_TYPE_OPTIONS = [
       var value = document.querySelector('[data-auth-plan-value]');
       var tierInput = document.querySelector('[data-auth-tier]');
       var change = document.querySelector('.auth-plan__change');
+      var label = document.querySelector('.auth-plan__label');
       if (badge && value) {
         value.textContent = badgeText;
         badge.hidden = false;
+      }
+      /* Cedar Grove is a standalone product, not a plan: the badge must not
+         read "Plan Cedar Grove", and the change link should not promise a
+         plan change. */
+      if (isProduct) {
+        if (label) label.textContent = 'Product';
+        if (change) change.textContent = 'Change selection';
       }
       if (change && changeHref) change.setAttribute('href', changeHref);
       if (tierInput) tierInput.value = fieldValue;
@@ -384,7 +395,7 @@ const ORGANIZATION_TYPE_OPTIONS = [
         `Role: ${role}`,
         `Organization type: ${organizationType}`,
         tribalRaw ? `Serves tribal clients: ${tribalRaw}` : '',
-        tier ? `Plan interest: ${tier}` : '',
+        tier ? `${tier === 'cedar-grove' ? 'Product interest' : 'Plan interest'}: ${tier}` : '',
         interest ? `Wants to measure: ${interest}` : '',
       ].filter(Boolean);
 

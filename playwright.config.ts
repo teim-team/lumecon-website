@@ -57,10 +57,18 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4321',
     trace: 'on-first-retry',
-    ...(chromiumExecutable ? { launchOptions: { executablePath: chromiumExecutable } } : {}),
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        // The executable override belongs to the Chromium project only: at
+        // the top level the WebKit project inherited it and tried to launch
+        // the Chromium binary as Safari.
+        ...(chromiumExecutable ? { launchOptions: { executablePath: chromiumExecutable } } : {}),
+      },
+    },
     // WebKit (Safari engine) coverage. The site is QA'd heavily on
     // iOS Safari by hand; running the smoke suite on WebKit catches
     // engine-specific regressions in the d3-geo map, the Cedar chat,
