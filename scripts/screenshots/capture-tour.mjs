@@ -150,6 +150,12 @@ for (const theme of ['light', 'dark']) {
   // ---- dashboard: the Workspace board -------------------------------------
   const board = await ctx.newPage();
   await board.goto(`${APP}/app`, { waitUntil: 'networkidle' });
+  // The trace capture above ran in this same context, so the app remembers a
+  // results page and offers "pick up where you left off" over the board.
+  // Clear the remembered place and reload, or the marketing shot ships a
+  // resume toast covering a card.
+  await board.evaluate(() => localStorage.removeItem('teim:last-location'));
+  await board.reload({ waitUntil: 'networkidle' });
   await board.waitForTimeout(2600);
   await settleFonts(board);
   await stripChrome(board);
