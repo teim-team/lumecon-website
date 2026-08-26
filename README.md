@@ -22,10 +22,12 @@ Whole Nation, Workspace/Grove and consultant licensing; prices include
 taxes and fees); **/methodology** argues the economics are credible
 (equations, the six-stage flow, the data manifest, validation, lineage,
 comparisons and the AI-research verification block); the glossary
-defines terms and nothing more. Around those: sign-up, log-in and
-checkout wired to the product API, /accessibility (WCAG 2.2 AA
-statement), terms/privacy placeholders awaiting counsel, a 404 and an
-unlisted /film page kept out of the sitemap. There is one Lumecon
+defines terms and nothing more. Around those: a sign-up page that takes
+beta-access requests through the contact endpoint while the beta is
+closed, log-in and checkout pages that post to the product API when a
+backend is configured, /accessibility (WCAG 2.2 AA statement for the
+site), terms/privacy drafts awaiting counsel, a 404 and an unlisted
+/film page kept out of the sitemap. There is one Lumecon
 platform; the localeconomicimpact.com, tribaleconomicimpact.com and
 globaleconomicimpact.com domains are audience entry points into the same
 application. On the static deploy (no backend configured), Cedar's chat
@@ -75,11 +77,13 @@ npm run dev        # local dev server at http://localhost:4321
 ```
 src/
   components/   Astro components (Hero, WhyBand, ProductTour, Edge,
-                  WholeNation, CedarFlow, AskAI, FinalCta, Nav, Footer,
-                  CedarFAB, CedarChat, ConsentBanner, MarkArt,
-                  BrandWordmark)
-  pages/        One file per route: index, pricing, methodology, glossary,
-                  signup, login, terms, privacy, 404 and the unlisted film
+                  AskAI, FinalCta, Nav, Footer, CedarFAB, CedarChat,
+                  ConsentBanner, MarkArt, BrandWordmark, AuthBrandPanel,
+                  Contours, Lightbox)
+  pages/        One file per route: index, pricing, cedar, methodology,
+                  glossary, naics, accessibility, signup, login, welcome,
+                  choose-plan, checkout, terms, privacy, 404 and the
+                  unlisted film
   layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
                 LegalLayout.astro — legal/reference wrapper (methodology,
                 glossary, terms, privacy)
@@ -96,7 +100,7 @@ src/
 public/         Static assets: brand marks, app screenshots (light + dark),
                 why-card art, favicons, OG image, robots.txt, llms.txt,
                 films
-tests/          Playwright specs (smoke, Cedar chat, consent, a11y)
+tests/          Playwright specs (smoke, Cedar classifier, focus trap, nudge)
 ```
 
 ### Where content lives
