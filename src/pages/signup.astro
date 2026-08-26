@@ -349,12 +349,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
     const orgTypeSelect = form.querySelector<HTMLSelectElement>('[data-auth-orgtype]');
     const tribalRow = form.querySelector<HTMLElement>('[data-auth-tribal-row]');
     const tribalSelect = form.querySelector<HTMLSelectElement>('[data-auth-tribal]');
-    orgTypeSelect?.addEventListener('change', () => {
-      const isConsulting = orgTypeSelect.value === 'consulting_firm';
+    const syncOrgTypeConditionals = () => {
+      const isConsulting = orgTypeSelect?.value === 'consulting_firm';
       if (tribalRow) tribalRow.hidden = !isConsulting;
       if (!isConsulting && tribalSelect) tribalSelect.value = '';
 
-      const isTribalNation = orgTypeSelect.value === 'tribal_nation';
+      const isTribalNation = orgTypeSelect?.value === 'tribal_nation';
       form.querySelectorAll<HTMLButtonElement>('[data-tribal-role]').forEach((chip) => {
         chip.hidden = !isTribalNation;
         if (!isTribalNation && chip.classList.contains('auth-chip--on')) {
@@ -363,7 +363,19 @@ const ORGANIZATION_TYPE_OPTIONS = [
           if (roleInput) roleInput.value = '';
         }
       });
-    });
+    };
+    orgTypeSelect?.addEventListener('change', syncOrgTypeConditionals);
+    // form.reset() restores the select and hidden inputs without firing
+    // change (and a programmatic reset() dispatches no reset event), so the
+    // Tribal-only chips and their pressed state would survive a successful
+    // submission; the submit handler calls this right after resetting.
+    const resetConditionalUi = () => {
+      form.querySelectorAll('[data-role-chip]').forEach((c) => {
+        c.classList.remove('auth-chip--on');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      syncOrgTypeConditionals();
+    };
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -416,6 +428,7 @@ const ORGANIZATION_TYPE_OPTIONS = [
               'Thanks, you are on the list. Someone from the team will reach out with your access.',
             );
             form.reset();
+            resetConditionalUi();
             return;
           }
         }

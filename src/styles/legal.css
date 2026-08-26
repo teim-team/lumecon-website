@@ -147,6 +147,11 @@ body.legal-page footer {
 .legal-sec[open] > summary::after {
   transform: rotate(45deg);
 }
+@media (prefers-reduced-motion: reduce) {
+  .legal-sec > summary::after {
+    transition: none;
+  }
+}
 .legal-sec__body {
   padding: 0.1rem 0.2rem 1.2rem;
 }
