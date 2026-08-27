@@ -1,181 +1,144 @@
 /**
- * Thorough visual + clickability check across desktop, tablet, and
- * mobile viewports. Captures the pricing page in every meaningful
- * state, plus signup arriving from each tier/plan handoff, and runs
- * basic click validation on every interactive surface so we catch
- * "this thing doesn't fire" before the visitor does.
+ * Full-site visual sweep: every public page at the audit widths from
+ * AGENTS.md (1440, 1024, 768, 430, 375, plus 390 as the device-frame
+ * phone), in both light and dark color schemes at the endpoints, plus
+ * the signup page arriving from each real pricing tier. The output
+ * grid is the review surface for theme and responsive regressions —
+ * dark mode renders from the same stylesheets via
+ * prefers-color-scheme, so a hardcoded light-only color shows up here
+ * before a visitor sees it, and the intermediate widths catch layouts
+ * (like the two-column pricing band between 641 and 1080px) that
+ * neither endpoint renders.
+ *
+ * Run against a served build:
+ *   npm run build && npx serve dist -l 4330   (or astro preview)
+ *   node scripts/screenshot.mjs
  */
 import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 
 const CHROME = process.env.CHROME_BIN || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const BASE   = process.env.SHOT_BASE  || 'http://127.0.0.1:4330';
-const OUT    = process.env.SHOT_OUT   || '/tmp/shots8';
+const BASE = process.env.SHOT_BASE || 'http://127.0.0.1:4330';
+const OUT = process.env.SHOT_OUT || '/tmp/shots';
 
 await mkdir(OUT, { recursive: true });
 const browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox'] });
 
-async function ctx(width, height, isMobile = false) {
+async function ctx(width, height, colorScheme, isMobile = false) {
   const c = await browser.newContext({
     viewport: { width, height },
+    colorScheme,
+    // Full-page capture never scrolls, so IntersectionObserver-driven
+    // reveals below the fold would stay at opacity 0 and the shots
+    // would show fake gaps where real content lives. The site honors
+    // prefers-reduced-motion by forcing every reveal visible, so
+    // requesting it here makes the capture show the page as built.
+    reducedMotion: 'reduce',
     deviceScaleFactor: isMobile ? 2 : 1,
-    isMobile, hasTouch: isMobile,
+    isMobile,
+    hasTouch: isMobile,
   });
   await c.addInitScript(() => {
-    try { localStorage.setItem('lumecon:consent:analytics', 'denied'); } catch {}
+    try {
+      localStorage.setItem('lumecon:consent:analytics', 'denied');
+    } catch {}
   });
   return c;
 }
 
-const desktop = await ctx(1440, 900);
-const tablet  = await ctx(900, 1100);
-const phone   = await ctx(390, 844);
+const surfaces = [
+  { name: 'desktop-light', c: await ctx(1440, 900, 'light') },
+  { name: 'desktop-dark', c: await ctx(1440, 900, 'dark') },
+  { name: 'tablet-light', c: await ctx(1024, 768, 'light') },
+  { name: 'tablet-dark', c: await ctx(1024, 768, 'dark') },
+  { name: 'tablet-narrow-light', c: await ctx(768, 1024, 'light') },
+  { name: 'phone-430-light', c: await ctx(430, 932, 'light', true) },
+  { name: 'phone-light', c: await ctx(390, 844, 'light', true) },
+  { name: 'phone-dark', c: await ctx(390, 844, 'dark', true) },
+  { name: 'phone-375-light', c: await ctx(375, 667, 'light', true) },
+];
 
 async function shot(c, url, name, opts = {}) {
   const page = await c.newPage();
   await page.goto(BASE + url, { waitUntil: 'networkidle' });
   if (opts.before) await opts.before(page);
   await page.waitForTimeout(opts.wait ?? 800);
-  await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: opts.full ?? false });
+  await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: opts.full ?? true });
   await page.close();
   console.log('shot', name);
 }
 
-// ---- Pricing visual states across viewports ----
-await shot(desktop, '/pricing', '01-picker-desktop',  { wait: 600 });
-await shot(tablet,  '/pricing', '02-picker-tablet',   { wait: 600 });
-await shot(phone,   '/pricing', '03-picker-phone',    { wait: 600, full: true });
+// Every public page. /film is unlisted but still shippable; /naics is
+// deliberately unlisted in nav but indexed, so both stay in the sweep.
+const PAGES = [
+  ['/', 'home'],
+  ['/cedar', 'cedar'],
+  ['/pricing', 'pricing'],
+  ['/methodology', 'methodology'],
+  ['/glossary', 'glossary'],
+  ['/naics', 'naics'],
+  ['/signup', 'signup'],
+  ['/login', 'login'],
+  ['/choose-plan', 'choose-plan'],
+  ['/welcome', 'welcome'],
+  ['/accessibility', 'accessibility'],
+  ['/ai-and-data-use', 'ai-and-data-use'],
+  ['/terms', 'terms'],
+  ['/privacy', 'privacy'],
+  ['/404', '404'],
+  ['/film', 'film'],
+];
 
-// Local picked, full page (verify section deck mentions unlimited
-// use + quarterly refresh, comparison table is tightened)
-await shot(desktop, '/pricing', '04-local-desktop-full', {
-  full: true,
-  before: async (page) => {
-    await page.click('.pricing-platform-tile[data-platform-id="local-economic-impact"]');
-    await page.waitForTimeout(1800);
-  },
-  wait: 0,
-});
-
-// Tribal picked, just the comparison table
-await shot(desktop, '/pricing', '05-tribal-compare', {
-  before: async (page) => {
-    await page.click('.pricing-platform-tile[data-platform-id="tribal-economic-impact"]');
-    await page.waitForTimeout(1200);
-    await page.evaluate(() => {
-      const el = document.querySelector('.pricing-compare');
-      if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
-    });
-    await page.waitForTimeout(300);
-  },
-  wait: 0,
-});
-
-// Consultant picked, full page (verify project-based prose)
-await shot(desktop, '/pricing', '06-consultant-desktop-full', {
-  full: true,
-  before: async (page) => {
-    await page.click('.pricing-platform-tile[data-platform-id="consultant-economic-impact"]');
-    await page.waitForTimeout(1500);
-  },
-  wait: 0,
-});
-
-// Mobile, Local picked, full scroll
-await shot(phone, '/pricing', '07-local-phone-full', {
-  full: true,
-  before: async (page) => {
-    await page.click('.pricing-platform-tile[data-platform-id="local-economic-impact"]');
-    await page.waitForTimeout(1500);
-  },
-  wait: 0,
-});
-
-// Tree tier card up close on desktop (verify the new admin data benefit copy)
-await shot(desktop, '/pricing', '08-tree-card-zoom', {
-  before: async (page) => {
-    await page.click('.pricing-platform-tile[data-platform-id="local-economic-impact"]');
-    await page.waitForTimeout(1200);
-    await page.evaluate(() => {
-      const el = document.querySelector('.pricing-tier-card--featured');
-      if (el) el.scrollIntoView({ behavior: 'instant', block: 'center' });
-    });
-    await page.waitForTimeout(300);
-    // Expand the Tree details so the new admin data feature copy is visible
-    await page.evaluate(() => {
-      const featured = document.querySelector('.pricing-tier-card--featured');
-      const details = featured?.querySelector('details');
-      if (details) details.open = true;
-    });
-    await page.waitForTimeout(200);
-  },
-  wait: 0,
-});
-
-// ---- Signup arrival flows ----
-await shot(desktop, '/signup?tier=starter&platform=local', '09-signup-local-sprout', { wait: 500 });
-await shot(desktop, '/signup?tier=arborist&platform=consultant', '10-signup-arborist', { wait: 500 });
-await shot(phone,   '/signup?tier=standard&platform=tribal', '11-signup-mobile-sapling', { wait: 500 });
-
-// ---- Clickability tests ----
-async function clickabilityProbe(c, viewport) {
-  const page = await c.newPage();
-  await page.goto(BASE + '/pricing', { waitUntil: 'networkidle' });
-  await page.waitForTimeout(600);
-
-  // 1. Each of the 4 tiles should fire and bring up the right tier grid
-  const tiles = ['local-economic-impact', 'tribal-economic-impact', 'consultant-economic-impact'];
-  for (const id of tiles) {
-    await page.click(`.pricing-platform-tile[data-platform-id="${id}"]`);
-    await page.waitForTimeout(900);
-    const visible = await page.evaluate(() => {
-      const section = document.querySelector('[data-platform-section]');
-      return section && !section.hidden;
-    });
-    if (!visible) throw new Error(`Tile ${id} did not reveal the tier section on ${viewport}`);
-    // Click again to deselect
-    await page.click(`.pricing-platform-tile[data-platform-id="${id}"]`);
-    await page.waitForTimeout(500);
-    const hidden = await page.evaluate(() => {
-      const section = document.querySelector('[data-platform-section]');
-      return section && section.hidden;
-    });
-    if (!hidden) throw new Error(`Tile ${id} did not hide on re-click (${viewport})`);
+for (const { name: surface, c } of surfaces) {
+  for (const [url, slug] of PAGES) {
+    await shot(c, url, `${slug}--${surface}`);
   }
-
-  // 2. Pick Local, confirm the Toolbox aside is visible
-  await page.click('.pricing-platform-tile[data-platform-id="local-economic-impact"]');
-  await page.waitForTimeout(800);
-  const toolboxVisible = await page.evaluate(() => {
-    const t = document.querySelector('[data-addon="toolbox"]');
-    return t && !t.hidden;
-  });
-  if (!toolboxVisible) throw new Error(`Toolbox aside did not appear after Local pick (${viewport})`);
-
-  // 3. Pick Consultant, confirm Toolbox is hidden, regional grid hidden
-  await page.click('.pricing-platform-tile[data-platform-id="consultant-economic-impact"]');
-  await page.waitForTimeout(800);
-  const consultantState = await page.evaluate(() => {
-    const tb = document.querySelector('[data-addon="toolbox"]');
-    const regional = document.querySelector('[data-tier-grid="regional"]');
-    const consultant = document.querySelector('[data-tier-grid="consultant"]');
-    return {
-      toolboxHidden: tb && tb.hidden,
-      regionalHidden: regional && regional.hidden,
-      consultantVisible: consultant && !consultant.hidden,
-    };
-  });
-  if (!consultantState.toolboxHidden) throw new Error(`Toolbox visible on Consultant pick (${viewport})`);
-  if (!consultantState.regionalHidden) throw new Error(`Regional grid visible on Consultant pick (${viewport})`);
-  if (!consultantState.consultantVisible) throw new Error(`Consultant grid hidden on Consultant pick (${viewport})`);
-
-  await page.close();
-  console.log('clickability OK:', viewport);
 }
 
-await clickabilityProbe(desktop, 'desktop 1440');
-await clickabilityProbe(tablet,  'tablet 900');
-await clickabilityProbe(phone,   'phone 390');
+// ---- Signup arrival from each real pricing tier ----
+const desktopLight = surfaces[0].c;
+for (const tier of ['sprout', 'sapling', 'tree', 'free']) {
+  await shot(desktopLight, `/signup?tier=${tier}`, `signup-tier-${tier}--desktop-light`, {
+    wait: 500,
+    full: false,
+  });
+}
 
+// ---- Interactive states worth pinning ----
+// Pricing FAQ: first disclosure open.
+await shot(desktopLight, '/pricing', 'pricing-faq-open--desktop-light', {
+  before: async (page) => {
+    const opened = await page.evaluate(() => {
+      const d = document.querySelector('.pr-faq details.pr-more--faq');
+      if (d) d.open = true;
+      return Boolean(d);
+    });
+    if (!opened) {
+      throw new Error(
+        'pricing FAQ disclosure (.pr-faq details.pr-more--faq) not found; the open-state shot would capture the closed default'
+      );
+    }
+    await page.waitForTimeout(300);
+  },
+  wait: 0,
+});
+
+// Cedar chat open, both themes: the docked panel has its own surface
+// styles and a disclaimer line that must hold on dark grounds too.
+for (const { name: surface, c } of [surfaces[0], surfaces[1]]) {
+  await shot(c, '/', `cedar-chat-open--${surface}`, {
+    full: false,
+    before: async (page) => {
+      const fab = page.locator('[data-cedar-fab], .cedar-fab');
+      if (await fab.count()) {
+        await fab.first().click();
+        await page.waitForTimeout(600);
+      }
+    },
+    wait: 0,
+  });
+}
+
+for (const { c } of surfaces) await c.close();
 await browser.close();
 console.log('done');

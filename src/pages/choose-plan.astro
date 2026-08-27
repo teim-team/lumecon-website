@@ -23,9 +23,9 @@ import { PLANS } from '../data/pricing';
    as capability, not just seat count (Tree is Cedar Grove, not
    merely unlimited users). */
 const PLAN_DIFF: Record<string, string> = {
-  sprout: 'The full Lumecon model, Cedar and every supported geography',
-  sapling: 'Adds Cedar Commons: shared projects, project notes and external collaborators',
-  tree: 'Adds Cedar Grove, the organizational data library, and Cedar calibration',
+  sprout: 'Cedar Impact in full, Cedar and every supported geography',
+  sapling: 'Adds Cedar Commons, the shared project workspace, with external collaborators',
+  tree: 'Adds Cedar Grove, the advanced data library, and Cedar calibration',
 };
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -71,13 +71,15 @@ import '../styles/flow.css';
         }
       </div>
       <a class="cpl-free" href="/signup?tier=free" data-free-link>
-        <span class="cpl-free__label">Start free &rarr;</span>
+        <span class="cpl-free__label">Start free with Seed &rarr;</span>
         <span class="cpl-free__note">
-          Full results unlock on any plan.
+          See your direct effects free; full results unlock on any paid plan.
         </span>
       </a>
       <p class="cpl-foot">
-        Want the detail first? <a href="/pricing">Compare plans</a>. Using Lumecon for client work?{' '}
+        Want the detail first? <a href="/pricing">Compare plans</a>. Using Lumecon for client work?{
+          ' '
+        }
         <a href="/pricing#consultants">Commercial use starts with Sapling</a>.
       </p>
     </div>

@@ -57,4 +57,25 @@ const jsonLd = [
     <slot />
   </main>
   <Footer isHome={false} />
+
+  <script>
+    // The collapsible sections must not hide content from a printed
+    // copy: open everything before print, restore the reader's state
+    // after. (A closed <details> renders nothing on paper and CSS
+    // alone cannot open it.)
+    const opened: HTMLDetailsElement[] = [];
+    window.addEventListener('beforeprint', () => {
+      document
+        .querySelectorAll<HTMLDetailsElement>('details.legal-sec:not([open])')
+        .forEach((d) => {
+          d.open = true;
+          opened.push(d);
+        });
+    });
+    window.addEventListener('afterprint', () => {
+      opened.splice(0).forEach((d) => {
+        d.open = false;
+      });
+    });
+  </script>
 </BaseLayout>

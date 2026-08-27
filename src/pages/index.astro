@@ -1,6 +1,5 @@
 ---
 import { site } from '../config';
-import { REGIONAL_PLATFORMS } from '../data/platforms';
 import { FOUNDERS } from '../data/team';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -14,6 +13,17 @@ import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 
+// The audiences the retired per-domain entry points used to describe,
+// kept as a plain list for the Service JSON-LD. One platform, one
+// audience string; the Cedar products adapt to the organization type.
+const AUDIENCES = [
+  'Municipalities, state agencies and public institutions',
+  'Tribal governments and departments, federally and state-recognized tribes, intertribal organizations, tribal colleges, Native nonprofits, ANCs, NHOs, tribal enterprises, Native CDFIs, Native-entity federal contractors',
+  'Universities, foundations and nonprofits',
+  'Businesses and developers',
+  'Consulting firms and independent professionals running economic impact analyses on behalf of outside clients',
+];
+
 // Curated FAQ subset that powers the FAQPage JSON-LD on the
 // homepage (visible to search crawlers, not rendered as on-page
 // markup). The visible Cedar Q&A is the FAB on every page; this
@@ -21,11 +31,11 @@ import '../styles/footer.css';
 const FAQ_ITEMS = [
   {
     q: 'What is Lumecon?',
-    a: 'Lumecon is economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible analyses in minutes. Every analysis shows jobs, labor income, GDP contribution, economic output and tax impacts, separates direct, indirect and induced effects, and carries a lineage behind every number. Cedar, the AI economic analyst, is included in every plan.',
+    a: 'Lumecon is the intelligent economic analysis platform. Cedar Impact, where you run economic impact analysis, turns budgets, financial statements, payroll and program records into credible analyses in minutes. Every analysis shows jobs, labor income, GDP contribution, economic output and tax impacts, separates direct, indirect and induced effects, and carries a lineage behind every number. Cedar, the AI economic analyst, is included in every plan.',
   },
   {
     q: 'Is Lumecon an alternative to IMPLAN or REMI?',
-    a: 'Lumecon is economic impact analysis software in the same field as IMPLAN, RIMS II and REMI, and organizations evaluate it as an alternative to traditional economic modeling tools. Lumecon uses input-output modeling to estimate direct, indirect and induced effects, prices by flat annual subscription with no geography add-ons and no per-analysis fees, and includes Cedar, an AI economic analyst, in every plan. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
+    a: 'Cedar Impact, where you run economic impact analysis on Lumecon, is in the same field as IMPLAN, RIMS II and REMI, and organizations evaluate it as an alternative to traditional economic modeling tools. It uses input-output modeling to estimate direct, indirect and induced effects, prices by flat annual subscription with no geography add-ons and no per-analysis fees, and every plan includes Cedar, the AI economic analyst. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
   },
   {
     q: 'Who uses Lumecon?',
@@ -49,15 +59,15 @@ const FAQ_ITEMS = [
   },
   {
     q: 'How much does Lumecon cost?',
-    a: 'Lumecon has three public plans: Sprout at $1,000 a year for one user, Sapling at $2,500 a year for up to 10 users with Cedar Commons, and Tree at $7,500 a year with unlimited organizational users, Cedar Grove and hands-on Cedar calibration. Every plan includes the full model, Cedar, unlimited analysis and every supported U.S. geography.',
+    a: 'Lumecon has four public plans. Seed is free: build a full analysis and see your direct effects, with full results unlocking on any paid plan. Sprout is $1,000 a year for one user, Sapling is $2,500 a year for up to 10 users with Cedar Commons, the shared project workspace, and Tree is $7,500 a year with unlimited organizational users, Cedar Grove, the advanced data library, and hands-on Cedar calibration. Every paid plan includes Cedar Impact in full, Cedar, unlimited analysis and every supported U.S. geography.',
   },
   {
     q: 'Can I try Lumecon for free?',
-    a: 'Yes. You can create an account, bring your documents and build an analysis end to end for free. Full results unlock when you choose a plan.',
+    a: 'Yes. Seed, the free account, is the real platform: create an account, bring your documents and build an analysis end to end, then see your direct effects on the results page. Indirect, induced and total impact unlock when you choose a paid plan.',
   },
   {
     q: 'What is Cedar?',
-    a: "Cedar is Lumecon's AI economic analyst, included in every plan. See lumecon.ai/cedar for how it works. The chat on this site is a lightweight Cedar that answers questions about Lumecon.",
+    a: "Cedar is Lumecon's AI economic analyst, included in every plan, and the name of the product family around it: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; and Cedar Grove, the advanced data library. See lumecon.ai/cedar for how the analyst works. The chat on this site is a lightweight Cedar that answers questions about Lumecon.",
   },
   {
     q: 'Where was Lumecon built?',
@@ -74,7 +84,7 @@ const jsonLd = [
     legalName: site.legalName,
     alternateName: ['Lumecon', 'Lumecon.ai', site.name],
     disambiguatingDescription:
-      'Lumecon Inc. is an AI-assisted economic impact analysis software company, headquartered online at lumecon.ai. Not affiliated with any unrelated trademark-similar businesses in other industries.',
+      'Lumecon Inc. builds the intelligent economic analysis platform, headquartered online at lumecon.ai. Not affiliated with any unrelated trademark-similar businesses in other industries.',
     applicationCategory: 'BusinessApplication',
     applicationSubCategory: 'Economic Impact Analysis Software',
     operatingSystem: 'Web',
@@ -82,7 +92,7 @@ const jsonLd = [
     logo: `${site.url}/brand/lumecon-logo-mark-transparent.png`,
     image: `${site.url}/lumecon-og-image-1200x630.png`,
     description:
-      'Lumecon Inc. builds economic impact analysis software: one platform that turns budgets, financial statements, payroll and program records into credible analyses in minutes, with Cedar AI in every plan. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Plans from $1,000 a year, free to try.',
+      'Lumecon Inc. builds the intelligent economic analysis platform. Cedar Impact turns budgets, financial statements, payroll and program records into credible economic impact analyses in minutes, with Cedar, the AI economic analyst, in every plan. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Plans from $1,000 a year, free to try.',
     email: site.email,
     slogan: site.tagline,
     naics: '541512',
@@ -94,12 +104,7 @@ const jsonLd = [
       contactType: 'sales and support',
       availableLanguage: 'English',
     },
-    sameAs: [
-      'https://www.linkedin.com/company/lumecon-ai',
-      'https://localeconomicimpact.com',
-      'https://tribaleconomicimpact.com',
-      'https://globaleconomicimpact.com',
-    ],
+    sameAs: ['https://www.linkedin.com/company/lumecon-ai'],
     foundingLocation: { '@type': 'Place', name: site.builtAt },
     founder: FOUNDERS.map((p) => ({
       '@type': 'Person',
@@ -146,20 +151,32 @@ const jsonLd = [
       target: `mailto:${site.email}`,
     },
   },
-  // One product, one Service. The audiences the old per-platform entries
-  // described are variants of the same Lumecon application, not separate
-  // products with their own names and domains.
+  // One platform, one Service, one product family. The audiences the old
+  // per-domain entry points described are served by the same Cedar
+  // products, which adapt to the organization type.
   {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    serviceType: 'Economic Impact Analysis Software',
+    serviceType: 'Economic Analysis Software',
     name: 'Lumecon',
+    description:
+      'The intelligent economic analysis platform. Lumecon offers the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI economic analyst, in every plan.',
     url: site.url,
     provider: { '@type': 'Organization', name: site.legalName },
     areaServed: { '@type': 'Country', name: 'United States' },
     audience: {
       '@type': 'Audience',
-      audienceType: REGIONAL_PLATFORMS.map((p) => p.audience).join('; '),
+      audienceType: AUDIENCES.join('; '),
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'The Cedar family',
+      itemListElement: [
+        { '@type': 'Offer', name: 'Cedar Impact', description: 'Economic impact analysis' },
+        { '@type': 'Offer', name: 'Cedar Commons', description: 'Shared project workspace' },
+        { '@type': 'Offer', name: 'Cedar Grove', description: 'Advanced data library' },
+        { '@type': 'Offer', name: 'Cedar', description: 'AI economic analyst, in every plan' },
+      ],
     },
   },
   {
@@ -202,8 +219,8 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title="Lumecon | Economic Analysis"
-  description="Economic impact analysis software. Lumecon turns budgets, financial statements, payroll and program records into credible analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across counties, states, the nation, reservations and trust lands, with Cedar AI in every plan. Plans from $1,000 a year, free to try."
+  title="Lumecon | The Intelligent Economic Analysis Platform"
+  description="The intelligent economic analysis platform. Cedar Impact turns budgets, financial statements, payroll and program records into credible economic impact analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across counties, states, the nation, reservations and trust lands, with Cedar, the AI economic analyst, in every plan. Plans from $1,000 a year, free to try."
   canonical="https://lumecon.ai/"
   keywords="economic impact analysis, economic impact analysis software, economic impact analysis software, how to measure economic impact, IMPLAN, IMPLAN alternative, Implan, Implan alternative, RIMS II, RIMS 2, RIMS II alternative, BEA RIMS, REMI, Remi, REMI alternative, Lightcast, EMSI, Emsi, input-output modeling, fiscal multiplier, economic multipliers, alternative data, AI for government, AI for local government, AI for tribes, AI for tribal governments, AI for economic development, government AI software, tribal economic impact, tribal economic development software, reservation economics, ANCSA regions, Alaska Native Corporations, Native Hawaiian Organizations, AIANNH, Cedar AI, economic impact for grants, grant economic impact report, policy analysis software, government software, public-sector analytics, mission-driven organizations, CDFI, economic development organizations, Bureau of Economic Analysis, direct indirect induced effects, jobs output earnings, Cornell University, Cornell Brooks School, Cornell Law, Dartmouth, Federal Reserve, Center for Indian Country Development"
   ogTitle="Measure the Economic Impact of Any Decision"
@@ -285,5 +302,4 @@ const jsonLd = [
   document
     .querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal')
     .forEach((el) => obs.observe(el));
-
 </script>

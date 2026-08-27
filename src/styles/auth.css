@@ -26,7 +26,7 @@
 }
 .auth-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
@@ -44,7 +44,7 @@
 }
 .auth-sub {
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   line-height: 1.5;
   color: var(--ink-2);
   margin: 0 0 1.6rem;
@@ -62,7 +62,7 @@
 }
 .auth-field > span {
   font-family: var(--font-sans);
-  font-size: 0.82rem;
+  font-size: var(--fs-sm-2);
   font-weight: 600;
   color: var(--navy);
   letter-spacing: -0.005em;
@@ -75,7 +75,7 @@
 }
 .auth-reqnote {
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--muted, #6b6f8a);
   margin: 0 0 1rem;
 }
@@ -113,7 +113,7 @@
   padding: 1rem clamp(1rem, 4vw, 2.5rem);
   border-top: 1px solid var(--hairline, #e6e8ef);
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--muted, #6b6f8a);
 }
 .auth-foot a {
@@ -127,7 +127,7 @@
 .auth-field > input,
 .auth-field > textarea {
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--rule-strong, rgba(14, 21, 48, 0.18));
   border-radius: 8px;
@@ -154,7 +154,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-sans);
-  font-size: 0.82rem;
+  font-size: var(--fs-sm-2);
   color: var(--ink-3);
   margin-top: -0.3rem;
 }
@@ -168,7 +168,7 @@
 }
 .auth-meta {
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
   line-height: 1.5;
   color: var(--ink-2);
   background: var(--cream);
@@ -202,13 +202,13 @@
   border: 1px solid var(--accent);
   border-radius: 6px;
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: var(--fs-base-2);
   color: var(--navy);
   flex-wrap: wrap;
 }
 .auth-plan__label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-text);
@@ -222,14 +222,14 @@
   font-weight: 600;
   text-decoration: none;
   margin-left: auto;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
 }
 .auth-plan__change:hover {
   text-decoration: underline;
 }
 .auth-foot {
   font-family: var(--font-sans);
-  font-size: 0.92rem;
+  font-size: var(--fs-md-2);
   color: var(--ink-3);
   text-align: center;
   margin: 1.6rem 0 0;
@@ -270,7 +270,7 @@
   align-items: center;
   gap: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-3);
@@ -284,7 +284,7 @@
   height: 1.35rem;
   border-radius: 50%;
   border: 1px solid var(--rule-strong);
-  font-size: 0.7rem;
+  font-size: var(--fs-3xs);
 }
 .auth-steps__item--on {
   color: var(--accent-text);
@@ -325,7 +325,7 @@
 }
 .auth-chip {
   font-family: var(--font-sans);
-  font-size: 0.82rem;
+  font-size: var(--fs-sm-2);
   font-weight: 500;
   color: var(--ink-2);
   background: var(--white);
@@ -373,7 +373,7 @@
 }
 .pwmeter__label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--fs-3xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-3);
@@ -388,7 +388,7 @@
 }
 .pwrules li {
   font-family: var(--font-sans);
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
   color: var(--ink-3);
   display: inline-flex;
   align-items: center;
@@ -422,7 +422,7 @@
   align-self: center;
   cursor: pointer;
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--ink-3);
 }
@@ -431,7 +431,7 @@
 }
 .auth-legal {
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   line-height: 1.55;
   color: var(--ink-3);
   margin: 1.2rem 0 0;
@@ -453,7 +453,7 @@
 .co-code input {
   flex: 1;
   font-family: var(--font-mono);
-  font-size: 0.92rem;
+  font-size: var(--fs-md-2);
   letter-spacing: 0.06em;
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--rule-strong);
@@ -468,7 +468,7 @@
 }
 .co-code__apply {
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--navy);
   background: var(--white);
@@ -483,7 +483,7 @@
 }
 .co-code__note {
   margin: 0.35rem 0 0;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--accent-text);
   font-weight: 600;
 }
@@ -501,7 +501,7 @@
     border-radius: 6px;
   }
   .auth-title {
-    font-size: 1.65rem;
+    font-size: var(--fs-title);
   }
 }
 
@@ -525,7 +525,7 @@
   align-items: flex-start;
   gap: 0.6rem;
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   line-height: 1.5;
   color: var(--ink-2);
 }

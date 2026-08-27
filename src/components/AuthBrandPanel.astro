@@ -3,10 +3,12 @@
  * The teal brand panel of the mirrored auth pages (/login, /signup).
  * Visual reference: the product's sign-in screen (teim-app AuthGate)
  * so the site's auth and the app's auth read as one system. The
- * panel carries the same drifting contour linework and the faint
- * white-filtered mark bleeding off a top corner; the page-level
- * .asplit--login / .asplit--signup classes decide which corner, so
- * the two pages mirror deliberately.
+ * panel carries the soft glows and the faint white-filtered mark
+ * bleeding off a top corner; the page-level .asplit--login /
+ * .asplit--signup classes decide which corner, so the two pages
+ * mirror deliberately. (Founder rule 2026-08: no decorative circles
+ * that aren't the Lumecon mark itself — the old contour linework is
+ * deliberately gone.)
  *
  * Proof points are quiet icon + text rows with hairline separators,
  * not cards.
@@ -42,31 +44,6 @@ const ICONS = {
 <aside class="asplit-brand">
   <span class="asplit-brand__glow asplit-brand__glow--a" aria-hidden="true"></span>
   <span class="asplit-brand__glow asplit-brand__glow--b" aria-hidden="true"></span>
-  <svg
-    class="asplit-brand__contours"
-    viewBox="0 0 640 640"
-    preserveAspectRatio="xMidYMid slice"
-    aria-hidden="true"
-  >
-    <g fill="none" stroke="#ffffff" stroke-width="1.1">
-      {
-        [0.3, 0.46, 0.62, 0.78, 0.94, 1.1, 1.26, 1.42].map((s) => (
-          <path
-            transform={`translate(150 180) scale(${s})`}
-            d="M0,-150 C74,-150 152,-64 150,4 C148,84 58,152 -6,150 C-86,147 -152,66 -150,-14 C-148,-86 -74,-150 0,-150 Z"
-          />
-        ))
-      }
-      {
-        [0.3, 0.48, 0.66, 0.84, 1.02, 1.2, 1.38].map((s) => (
-          <path
-            transform={`translate(470 460) scale(${s})`}
-            d="M0,-130 C66,-134 138,-58 132,10 C127,78 52,136 -12,130 C-84,123 -134,54 -130,-18 C-126,-84 -62,-126 0,-130 Z"
-          />
-        ))
-      }
-    </g>
-  </svg>
   <MarkArt class="asplit-brand__mark" size={520} />
   <div class="asplit-brand__inner">
     <p class="asplit-brand__headline">{headline}</p>

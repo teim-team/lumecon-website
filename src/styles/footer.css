@@ -18,12 +18,11 @@
   margin: 0 auto;
   padding: 0 var(--container-pad);
 }
-/* Five link groups across one line. auto-fit rather than a fixed count so
+/* Four link groups across one line. auto-fit rather than a fixed count so
    the groups reflow themselves as the viewport narrows and no breakpoint
    has to name how many fit; each track is wide enough for the longest
-   label in it ("Industry sectors"). The height is set by the deepest
-   group, which is four, not by the fourteen-item list one column would
-   make. */
+   label in it. The height is set by the deepest group, which is four
+   (Legal), not by the twelve-item list one column would make. */
 .footer-groups {
   display: grid;
   /* 8rem, not the 9.5rem the longest label needs, because the track is a
@@ -107,10 +106,17 @@
   color: var(--accent-btn-hover);
 }
 
-/* Thin strip at the very bottom: just the copyright row + email. */
+/* Thin navy strip at the very bottom: just the copyright row, the
+   LinkedIn link and the email. This is the one dark surface in the
+   footer and it is what actually terminates the document — the light
+   band above it closes the content, the navy bar closes the page. */
 .footer-bar {
-  background: var(--cream);
-  border-top: 1px solid var(--rule);
+  /* Literal, not var(--navy): the dark flip turns --navy near-white, and
+     Astro emits this component sheet after global.css, so the dark-mode
+     pin there loses the cascade to this rule. The bar is deliberately the
+     same deep navy in both modes; its text is fixed rgba-white. */
+  background: #0a0f26;
+  padding: 0.55rem 0;
 }
 .footer-bottom {
   display: flex;
@@ -121,46 +127,43 @@
 }
 .footer-legal {
   font-size: 0.78rem;
-  color: var(--ink-3);
+  color: rgba(255, 255, 255, 0.72);
   line-height: 1.45;
   letter-spacing: 0.005em;
+}
+.footer-bar .footer-linkbtn {
+  color: rgba(255, 255, 255, 0.72);
+}
+.footer-bar .footer-linkbtn:hover {
+  color: var(--accent-light);
 }
 .footer-email {
   font-size: 0.78rem;
   letter-spacing: 0.04em;
-  color: var(--ink-3);
+  color: rgba(255, 255, 255, 0.72);
   transition: color 0.2s var(--ease);
   text-decoration: none;
 }
 .footer-email:hover {
-  color: var(--accent-text);
+  color: var(--accent-light);
+}
+/* LinkedIn shares the linkbtn look so the bar reads as one quiet row
+   of utilities; the class only strips the button-reset rules an <a>
+   does not need. */
+.footer-linkbtn--a {
+  text-decoration: none;
 }
 
-/* auto-fit reflows the groups down to 900px, where five still fit on one
-   line. Below that they cannot, and grouping stops paying: four tracks
-   over two rows measured 262px and two tracks over three rows measured
-   367px, against 136px for the single line. On a narrow screen the
-   footer is something you scroll past, not scan, so the labels go and
-   the links become one wrapping row, which is what they were before the
-   groups existed. `display: contents` on the group lets each list
-   become a direct child of the flex row, so the groups flow into one
-   another instead of forming five separate rows. */
+/* Below 780px the four groups cannot share one line, so they become a
+   two-by-two grid and keep their labels. The labels are the point of
+   the grouping — collapsing to one unlabeled wrapping row put the
+   run-on-sentence problem the groups were built to fix right back on
+   the screens where scanning is hardest. Two labeled columns cost a
+   little height and pay it back in findability. */
 @media (max-width: 780px) {
   .footer-groups {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.1rem;
-  }
-  .footer-group {
-    display: contents;
-  }
-  .footer-group__label {
-    display: none;
-  }
-  .footer-group__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem 1.5rem;
   }
 }
 @media (max-width: 600px) {

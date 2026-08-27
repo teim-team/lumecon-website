@@ -68,6 +68,25 @@ and revert any technically elegant change that makes the actual
 composition worse. Cleaner code is not evidence of better design;
 only the rendered result is.
 
+## Standing instruction: full width, foldable length (2026-08)
+
+Pages use the site container width (--container-max); do not ship a
+narrower reading column as a page's main layout — the 840px legal
+column read as an afterthought and is gone. Long document-style
+content (legal drafts, long reference sections) folds into
+disclosure rows (the pricing-FAQ device, .legal-sec in legal.css) so
+a page reads as a scannable set of sections, not one long scroll.
+LegalLayout opens all disclosures for print.
+
+## Standing instruction: no decorative circles (2026-08)
+
+The only circles on the site are the Lumecon mark itself (including
+MarkArt background usage) and functional icons. The old topographic
+contour ring linework on the auth brand panels and teal flow surfaces
+read as random circles and is deliberately removed; do not reintroduce
+contour rings, orbit lines, or generic circle patterns as decoration.
+Soft radial glows are fine — they read as light, not shapes.
+
 ## Standing instruction: teal is semantic
 
 Teal has semantic meaning in the Lumecon visual language. Do not use
@@ -143,6 +162,44 @@ User-facing word choices, everywhere a customer reads:
 - "Cedar", never "AI assistant"; Cedar is Lumecon's AI economic
   analyst on every surface, and the site chat is a lightweight
   Cedar, never a downgraded "site assistant" in schema or copy.
+- The platform phrase (founder-approved 2026-08, verbatim): Lumecon
+  is "the intelligent economic analysis platform". This is the
+  category-level positioning, used in the homepage title, the hero
+  kicker, the canonical pitch and page metas. "Economic impact
+  analysis" remains the search term customers type and stays the
+  category wording on Cedar Impact surfaces.
+- "Intelligent", not "AI", is how the products are described. The
+  word "AI" appears only where Cedar itself is being explained
+  (the /cedar page, "Cedar, the AI economic analyst" and the
+  approved Cedar phrases above). Everywhere else, embed intelligence
+  as a quality of the product, not a technology label.
+- The Cedar family (2026-08): Cedar is the brand that ties the
+  products together, and also Lumecon's AI economic analyst. The
+  sibling products, with their canonical one-line definitions,
+  verbatim wherever the family is introduced:
+  - "Cedar Impact, where you run economic impact analysis" — a
+    product beside Commons and Grove, not an engine label behind
+    them. In the app the side rail says Cedar Impact.
+  - "Cedar Commons, the shared project workspace"
+  - "Cedar Grove, the advanced data library"
+  - "Cedar, the AI economic analyst, in every plan"
+  - "Seed, the free account" (2026-08) — the fourth plan, first on
+    /pricing: the real platform, where you build a full analysis and
+    see your direct effects; indirect, induced and total impact, and
+    exports, unlock on any paid plan. Display name only: the tier id
+    stays `free` everywhere machines read it (signup handoff, product
+    tierCapabilities). Seed never passes through checkout.
+  Lumecon offers the products; Cedar is the brand. Do not describe
+  Commons or Grove as plan features only — they are products that
+  plans include.
+- NOT PUBLIC: Cedar Press is unannounced and must not appear
+  anywhere a visitor or a crawler can reach, which includes HTML
+  comments and CSS comments, both of which ship in the built
+  output. It was found in `dist/methodology/index.html` that way in
+  2026-08. Grep `dist/`, not just `src/`.
+- There is deliberately no platform page. The five product names are
+  introduced where they do work on the pages that already exist, not
+  gathered onto a page of their own.
 - "GDP contribution" for the primary value-added metric; "economic
   output" not "sales"; results vocabulary (Jobs supported, Labor
   income, GDP contribution, Economic output, Tax impacts, Direct,

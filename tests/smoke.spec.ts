@@ -30,10 +30,15 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
-  // Filter out a known-harmless console error (TLS cert on the preview host).
-  // (The old frame-ancestors meta-CSP warning and the ipapi.co geolocation
-  // call were both removed, so they can no longer appear here.)
-  const real = errs.filter((e) => !e.includes('CERT_AUTHORITY_INVALID'));
+  // Filter out known-harmless console errors from sandboxed environments,
+  // where the external font fetch fails against an interception proxy
+  // (bad cert) or a closed egress (connection reset). Same-origin assets
+  // are served from localhost and never produce either. (The old
+  // frame-ancestors meta-CSP warning and the ipapi.co geolocation call
+  // were both removed, so they can no longer appear here.)
+  const real = errs.filter(
+    (e) => !e.includes('CERT_AUTHORITY_INVALID') && !e.includes('ERR_CONNECTION_RESET'),
+  );
   expect(real).toEqual([]);
 });
 
@@ -83,45 +88,59 @@ test('skip-link is hidden until focused', async ({ page }) => {
   expect(box?.x ?? -1).toBeLessThan(0);
 });
 
-test('pricing shows three public plans with Sapling recommended', async ({ page }) => {
+test('pricing shows four public plans, Seed first, with Sapling recommended', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
-  // One platform, three plans — no platform picker, no gating.
-  await expect(page.locator('.pr-plan')).toHaveCount(3);
+  // One platform, four plans — Seed (free) leads, no platform picker.
+  await expect(page.locator('.pr-plan')).toHaveCount(4);
+  await expect(page.locator('.pr-plan').first().locator('.pr-plan__name')).toHaveText('Seed');
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
+  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('Free');
   await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$1,000');
   await expect(page.locator('#plan-sapling .pr-plan__amount')).toHaveText('$2,500');
   await expect(page.locator('#plan-tree .pr-plan__amount')).toHaveText('$7,500');
-  // Plan CTAs route into signup with the stable tier id.
+  // Plan CTAs route into signup with the stable tier id — Seed's id
+  // stays `free`, the display name is marketing only.
+  await expect(page.locator('#plan-free .pr-plan__cta')).toHaveAttribute(
+    'href',
+    /\/signup\?tier=free/,
+  );
   await expect(page.locator('#plan-sprout .pr-plan__cta')).toHaveAttribute(
     'href',
     /\/signup\?tier=sprout/,
   );
-  // The nine-row detail table renders (Cedar, Cedar Commons, Cedar Grove rows included).
-  await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(9);
+  // The detail table renders with the Seed column and the Results and
+  // Exports rows that state the direct-effects preview.
+  await expect(page.locator('[data-plan-table] thead th')).toContainText([
+    '',
+    'Seed',
+    'Sprout',
+    'Sapling',
+    'Tree',
+  ]);
+  await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(11);
+  await expect(page.locator('[data-plan-table]')).toContainText('Direct effects');
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
 });
 
-test('pricing carries the competitive transition offer and consultant band', async ({ page }) => {
+test('pricing leads with the free account and routes consultants to Sapling', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
   // The free CTA leads, above the plans, with the no-card line beside it.
   const hero = page.locator('.pr-hero');
   await expect(hero).toContainText('Plans start at $1,000 a year');
   await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
-  const offer = page.locator('#switch');
-  await expect(offer).toContainText('Already paying for economic impact software?');
-  await expect(offer).toContainText('whichever is lower');
-  await expect(offer.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
   // The free-account band sits before the paid tiers.
   const free = page.locator('.pr-free');
   await expect(free).toContainText('take our word for it');
   await expect(free).toContainText('No credit card');
   await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
-  // Consultants use the public plans: a band under the cards, no separate edition.
-  const band = page.locator('.pr-band');
-  await expect(band).toContainText('Commercial use starts with Sapling.');
-  await expect(band.locator('a.btn2')).toHaveAttribute('href', /^mailto:/);
-  // The FAQ carries the skepticism the table cannot.
-  await expect(page.locator('.pr-faq__row')).toHaveCount(9);
+  // Consultants use the public plans. The signal is one line under the
+  // cards, not a band and not a separate edition.
+  await expect(page.locator('.pr-plans__clientnote')).toContainText('start at Sapling');
+  // Cedar Grove is sold on its own, after the plans rather than as a fourth card.
+  await expect(page.locator('#cedar-grove')).toBeVisible();
+  // The FAQ carries the skepticism the table cannot. Each row is a details
+  // element the reader opens.
+  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(12);
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {
@@ -185,23 +204,46 @@ test('login offers the forgot-password flow from the product', async ({ page }) 
   await expect(page.locator('[data-login-title]')).toHaveText('Log in to Lumecon');
 });
 
-test('signup walks the two-step registration flow from the product', async ({ page }) => {
+/* This used to assert a two-step registration with a password checklist and a
+   back button. /signup stopped being that when it became the private-beta
+   request page: there is one panel, no password field and no step 2, so the
+   test had been asserting a flow that does not exist. Rewritten against the
+   page as it is. (Found while acting on Brian's note about viewport and
+   timing on this test, #300.) */
+test('signup collects a beta access request, with no account created', async ({ page }) => {
+  // Pin the width: the split layout and the role chips wrap differently on a
+  // narrow default viewport, and this asserts on their desktop arrangement.
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/signup', { waitUntil: 'domcontentloaded' });
+  // The form says when its wiring is live. Waiting on that beats a sleep:
+  // the chips below do nothing until the script has bound them.
+  await expect(page.locator('[data-auth-form][data-auth-ready]')).toBeAttached();
 
-  // Step 1: who you are. Email/password are not shown yet.
+  await expect(page.locator('[data-auth-form]')).toHaveAttribute('data-auth-kind', 'beta-request');
+  await expect(page.locator('h1')).toHaveText('Lumecon is in private beta');
+
+  // Everything the request needs, on one panel.
   await expect(page.locator('input[name="name"]')).toBeVisible();
-  await expect(page.locator('input[name="email"]')).toBeHidden();
-  await page.fill('input[name="name"]', 'Test Person');
-  await page.fill('input[name="organization"]', 'Test Nation');
-  await page.selectOption('select[name="organizationType"]', 'tribal_nation');
-  await page.locator('[data-role-chip]', { hasText: 'Consultant' }).click();
-  await page.locator('[data-auth-submit]').click();
-
-  // Step 2: account credentials, with the live password rule checklist.
   await expect(page.locator('input[name="email"]')).toBeVisible();
-  await page.fill('input[name="password"]', 'Correct-Horse-42');
-  await expect(page.locator('[data-pwrule="length"]')).toHaveClass(/pwrules--met/);
-  await expect(page.locator('[data-auth-back]')).toBeVisible();
+  await expect(page.locator('input[name="organization"]')).toBeVisible();
+  await expect(page.locator('select[name="organizationType"]')).toBeVisible();
+
+  // No credential is collected while the beta is closed.
+  await expect(page.locator('input[name="password"]')).toHaveCount(0);
+
+  // Tribal governance roles join the shared role list only when the
+  // organization identifies as a Tribal Nation.
+  await expect(page.locator('[data-tribal-role]:visible')).toHaveCount(0);
+  await page.selectOption('select[name="organizationType"]', 'tribal_nation');
+  await expect(page.locator('[data-tribal-role]:visible')).toHaveCount(3);
+  await page.selectOption('select[name="organizationType"]', 'government');
+  await expect(page.locator('[data-tribal-role]:visible')).toHaveCount(0);
+
+  // The role chips are a single-select mirrored into a hidden field.
+  await page.locator('[data-role-chip]', { hasText: 'Consultant' }).click();
+  await expect(page.locator('[data-role-chip][aria-pressed="true"]')).toHaveCount(1);
+
+  await expect(page.locator('[data-auth-submit]')).toHaveText('Request access');
 });
 
 test('methodology page renders equations with spoken readings', async ({ page }) => {
@@ -229,10 +271,16 @@ test('naics page lists all 20 sectors plus tribal government', async ({ page }) 
 
 test('methodology explains the two-digit NAICS choice', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
-  const sec = page.locator('section[aria-labelledby="m-naics"]');
-  await expect(sec.locator('h2')).toHaveText('Industries at the two-digit NAICS level');
-  await expect(sec).toContainText('administrative data coverage is strongest');
-  await expect(sec.locator('a[href="/naics"]')).toBeVisible();
+  // The methodology sections are disclosure cards now: the hook is on the
+  // face, the argument is behind it. The /naics browser is no longer linked
+  // from here by design.
+  const card = page.locator('details#m-naics');
+  await expect(card.locator('.mcard__title')).toHaveText('Industries at the two-digit NAICS level');
+  await expect(card).toContainText('administrative data coverage is strongest');
+  await card.locator('.mcard__face').click();
+  await expect(card.locator('.mcard__body')).toContainText(
+    'North American Industry Classification System',
+  );
 });
 
 test('accessibility statement is published and linked from the footer', async ({ page }) => {
@@ -252,22 +300,25 @@ test('skip link targets real content on subpages', async ({ page }) => {
 test('cedar page tells the AI story with three real captures, no diagrams', async ({ page }) => {
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('AI built for economic analysis');
-  // Exactly the three-shot story: upload, operations with Cedar's ask,
-  // board notes. Diagrams were removed by design; no screenshot repeats.
+  // Exactly the three-shot story, told through the shared product tour:
+  // upload, entities in the loop, partner context. Diagrams were removed by
+  // design; no screenshot repeats.
   await expect(page.locator('.cedarpg-diagram')).toHaveCount(0);
-  const shots = page.locator('.cedarpg-shot img');
-  await expect(shots).toHaveCount(4);
-  await expect(page.locator('img[src="/app/cedar-context.webp"]')).toHaveCount(1);
+  await expect(page.locator('.tour-row__shot img')).toHaveCount(3);
   await expect(page.locator('img[src="/app/cedar-wind-upload.webp"]')).toHaveCount(1);
   await expect(page.locator('img[src="/app/cedar-wind-entities.webp"]')).toHaveCount(1);
-  await expect(page.locator('img[src="/app/cedar-wind-partner.webp"]')).toHaveCount(1);
+  await expect(page.locator('img[src="/app/cedar-context.webp"]')).toHaveCount(1);
   await expect(page.locator('#navMenu a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('footer a[href="/cedar"]')).toHaveCount(1);
 });
 
 test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#cedar a[href="/cedar"]')).toHaveCount(1);
+  // Cedar gets one card in the why band and a link out. The old dedicated
+  // #cedar section and the AI tile block are both gone.
+  const card = page.locator('#why .whyw-card', { hasText: 'Cedar included' });
+  await expect(card).toHaveCount(1);
+  await expect(card.locator('a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('.askai')).toHaveCount(0);
 });
 
@@ -291,7 +342,7 @@ test('choose-plan offers the three plans and a free start', async ({ page }) => 
 test('welcome closes the flow in full teal with one action', async ({ page }) => {
   await page.goto('/welcome?plan=free', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText(/You.re in\./);
-  await expect(page.locator('[data-welcome-kicker]')).toHaveText('Free trial ready');
+  await expect(page.locator('[data-welcome-kicker]')).toHaveText('Seed account ready');
   await expect(page.locator('a.welc-btn')).toHaveAttribute('href', '/login');
   await expect(page.locator('.cedar-fab')).toHaveCount(0);
 });

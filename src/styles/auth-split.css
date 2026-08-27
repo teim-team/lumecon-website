@@ -54,14 +54,6 @@
   left: -5rem;
   background: radial-gradient(circle, rgba(5, 60, 54, 0.55), rgba(5, 60, 54, 0) 70%);
 }
-.asplit-brand__contours {
-  position: absolute;
-  inset: -8%;
-  width: 116%;
-  height: 116%;
-  opacity: 0.08;
-  pointer-events: none;
-}
 /* The real mark, white-filtered, bleeding off the top corner that
    faces away from the form. Login and signup mirror it. */
 .asplit-brand__mark {
@@ -196,6 +188,20 @@
 .asplit .auth-form .btn:hover {
   background: #086a61;
   border-color: #086a61;
+}
+/* --accent-text flips to the light teal (#5fd9cc) in dark mode, which
+   fails AA under the white label. Pin the fill to the constant dark
+   teal chip token, which clears AA in both modes. */
+@media (prefers-color-scheme: dark) {
+  .asplit .auth-form .btn {
+    background: var(--accent-chip);
+    border-color: var(--accent-chip);
+    color: #fff;
+  }
+  .asplit .auth-form .btn:hover {
+    background: #086a61;
+    border-color: #086a61;
+  }
 }
 
 /* "or" divider + Google, secondary to the primary action. Hidden

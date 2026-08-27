@@ -1,39 +1,45 @@
 # Lumecon
 
-Public marketing site for **Lumecon Inc.**, the economic impact analysis
-software: one platform that turns budgets, financial statements, payroll
-and program records into credible analyses in minutes, with Cedar (the AI
-economic analyst) in every plan. Built as a static
+Public marketing site for **Lumecon Inc.**, the intelligent economic
+analysis platform. Lumecon offers the Cedar product family: **Cedar
+Impact**, where you run economic impact analysis; **Cedar Commons**, the
+shared project workspace; **Cedar Grove**, the advanced data library; and
+**Cedar**, the AI economic analyst, in every plan. Built as a static
 [Astro](https://astro.build) site and deployed to GitHub Pages at
 [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
 authenticated product and its data layer live in sibling repositories (see
 [The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
 The site follows a one-argument-per-page architecture: the homepage says
-why Lumecon matters (trio money shot cycling ten sample analyses in the
+why Lumecon matters (trio money shot cycling sample analyses in the
 center frame only, why cards, product tour, the Lumecon edge, a compact
 Cedar teaser and the mission close); **/cedar** owns the AI story
 (designed-in-from-the-beginning positioning, real captures of the docked
-Cedar panel on two different sample entities, three thin-line diagrams);
-**/pricing** is ruthlessly about pricing (three plans, the creed
-"Complexity belongs in the model. Not the pricing.", multi-year and
-lowest-applicable-price policies, the competitive transition offer,
-Whole Nation, Workspace/Grove and consultant licensing; prices include
-taxes and fees); **/methodology** argues the economics are credible
-(equations, the six-stage flow, the data manifest, validation, lineage,
-comparisons and the AI-research verification block); the glossary
-defines terms and nothing more. Around those: sign-up, log-in and
-checkout wired to the product API, /accessibility (WCAG 2.2 AA
-statement), terms/privacy placeholders awaiting counsel, a 404 and an
-unlisted /film page kept out of the sitemap. There is one Lumecon
-platform; the localeconomicimpact.com, tribaleconomicimpact.com and
-globaleconomicimpact.com domains are audience entry points into the same
-application. On the static deploy (no backend configured), Cedar's chat
-is answered entirely by a local keyword classifier and calls no upstream
-provider; when `PUBLIC_API_URL` is set it calls the Cedar backend and
-falls back to the local classifier on any error. The Cedar launcher
-opens a chat docked to the bottom edge of the viewport (a full-width
-bottom sheet on phones), matching the product's pinned widget.
+Cedar panel on sample entities, three thin-line diagrams);
+**/pricing** is ruthlessly about pricing (four plans led by Seed, the
+free account, the creed "Complexity belongs in the model. Not the
+pricing.", multi-year and lowest-applicable-price policies, Whole
+Nation, Cedar Commons, Cedar Grove on its own, and consultant
+licensing; prices include taxes and fees); **/methodology** argues the economics are credible (equations,
+the six-stage flow, the data manifest, validation, lineage, comparisons
+and the AI-research verification block); the glossary defines terms and
+nothing more. Around those: a sign-up page that takes private-beta
+requests through the contact endpoint, log-in, choose-plan and checkout
+pages that post to the product API when a backend is configured, /naics
+(deliberately
+unlisted in nav, indexed for search), /accessibility (WCAG 2.2 AA
+statement), /terms and /privacy (substantive working drafts under
+counsel review), /ai-and-data-use (plain-language AI and data-handling
+statement, also a counsel draft), a 404 and an unlisted /film page kept
+out of the sitemap. There is one Lumecon platform; the retired
+per-audience entry-point domains are gone, and the products adapt to the
+organization type instead. On the static deploy (no backend configured),
+Cedar's chat is answered entirely by a local keyword classifier and
+calls no upstream provider; when `PUBLIC_API_URL` is set it calls the
+Cedar backend and falls back to the local classifier on any error. The
+Cedar launcher opens a chat docked to the bottom edge of the viewport (a
+full-width bottom sheet on phones), matching the product's pinned
+widget.
 
 ## Tech stack
 
@@ -75,18 +81,19 @@ npm run dev        # local dev server at http://localhost:4321
 ```
 src/
   components/   Astro components (Hero, WhyBand, ProductTour, Edge,
-                  WholeNation, CedarFlow, AskAI, FinalCta, Nav, Footer,
-                  CedarFAB, CedarChat, ConsentBanner, MarkArt,
-                  BrandWordmark)
-  pages/        One file per route: index, pricing, methodology, glossary,
-                  signup, login, terms, privacy, 404 and the unlisted film
+                  AskAI, FinalCta, Nav, Footer, CedarFAB, CedarChat,
+                  Lightbox, ConsentBanner, Contours, AuthBrandPanel,
+                  MarkArt, BrandWordmark)
+  pages/        One file per route: index, cedar, pricing, methodology,
+                  glossary, naics, signup, login, choose-plan, checkout,
+                  welcome, accessibility, ai-and-data-use, terms,
+                  privacy, 404 and the unlisted film
   layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
                 LegalLayout.astro — legal/reference wrapper (methodology,
-                glossary, terms, privacy)
+                glossary, terms, privacy, ai-and-data-use)
   data/         Single sources of truth:
-                  pricing.ts      plans, comparison rows, the competitive
-                                  offer, consultant licensing
-                  platforms.ts    the entry-point domain data (one platform)
+                  pricing.ts      plans, comparison rows, Cedar Grove
+                                  standalone, consultant licensing
                   team.ts         team + advisors (feeds founder JSON-LD)
                   cedarIntents.ts Cedar chat intent bank
   assets/       Build-time inlined assets (the AI assistant brand marks)
@@ -96,7 +103,7 @@ src/
 public/         Static assets: brand marks, app screenshots (light + dark),
                 why-card art, favicons, OG image, robots.txt, llms.txt,
                 films
-tests/          Playwright specs (smoke, Cedar chat, consent, a11y)
+tests/          Playwright specs (smoke, Cedar classifier, focus trap, nudge)
 ```
 
 ### Where content lives
@@ -104,7 +111,7 @@ tests/          Playwright specs (smoke, Cedar chat, consent, a11y)
 Page copy is authored directly in the `.astro` files, but structured,
 reused data is centralized in `src/data/` so a change lands in one place and
 flows to the page, the footer, the JSON-LD, and the sitemap. Changing a
-plan, the competitive offer, or a Cedar chat answer is a single edit in the
+plan, a product one-liner, or a Cedar chat answer is a single edit in the
 relevant data file.
 
 ## SEO & crawlers
@@ -112,9 +119,9 @@ relevant data file.
 - Per-page `<title>`, meta description, canonical, Open Graph, and Twitter
   card tags are set in `BaseLayout.astro`.
 - JSON-LD (Organization + SoftwareApplication, BreadcrumbList, FAQPage on
-  the homepage and methodology, Service for the entry-point domains,
-  DefinedTermSet on the glossary) is emitted from the same data that
-  renders the page.
+  the homepage and methodology, a Service node describing the Cedar
+  product family, DefinedTermSet on the glossary) is emitted from the
+  same data that renders the page.
 - `public/robots.txt` explicitly allows search crawlers and the AI
   assistants' crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot,
   Google-Extended and peers) so the product is discoverable through AI
@@ -158,8 +165,8 @@ succeed. See "Product handoff contract" in `AGENTS.md`.
 The canonical source of truth is the `:root` block in
 [`src/styles/global.css`](./src/styles/global.css) — every value below is a
 CSS custom property defined there. This is the **Lumecon marketing site's**
-system; the entry-point domain landing pages may diverge on color and font,
-but the type scale and spacing are a good shared baseline.
+system; the product carries its own, and the type scale and spacing are a
+good shared baseline between them.
 
 ### Fonts
 
@@ -246,7 +253,7 @@ product and the data it runs on live in sibling `teim-team` repositories:
 
 | Repo | What it is | Relationship to this site |
 | --- | --- | --- |
-| **`teim-app`** | The authenticated product: the **Tribal Economic Impact** platform, a React 19 + Vite SPA with a Fastify backend. ("TEIM" survives only in repo/DB/resource names, never as user-facing branding.) It also carries its own in-app marketing surface under a separate visual brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate visual brands** — do not cross-import styles or tokens. |
+| **`teim-app`** | The authenticated product where the Cedar family lives — Cedar Impact, Cedar Commons and Cedar Grove in one React 19 + Vite SPA with a Fastify backend. ("TEIM" survives only in repo/DB/resource names, never as user-facing branding.) It also carries its own in-app marketing surface under a separate visual brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate visual brands** — do not cross-import styles or tokens. |
 | **`cedar`** | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents and keeps only compressed chat memory; it never stores project data, files, or results. | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a *separate*, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
 | **`teim-engine`** | The economic-accounts data layer: EPA `stateior` StateIO supply/use tables shipped as CSV. | Upstream of the impact math the site describes. Keep the homepage "foundational data" strip consistent with the public sources the engine actually draws on. |
 
@@ -303,10 +310,11 @@ page-ownership rule); this list records the product/brand calls.
 - **Pricing policies (public commitments).** Prices include taxes and
   fees. Multi-year agreements qualify for preferred pricing with prepaid
   savings; multiple qualifying rates resolve to the lowest applicable
-  price. The competitive transition offer is 50% of documented qualifying
-  spend, capped at the standard plan price, or the existing preferred
-  rate, whichever is lower. Counsel must review the offer, the security
-  claims, the /cedar privacy language and "Patent pending" before launch.
+  price. The competitive transition offer no longer appears on /pricing
+  (cut in the 2026-08 pricing pass); do not reintroduce it on the page
+  without the founder. Counsel must review the security claims and the
+  /cedar privacy language before launch; "Patent pending" is confirmed
+  on file (founder, 2026-08).
 - **Numbers are used sparingly.** No mono section numbering; equations
   (Eq. 01…) and ordered flow steps keep their numbers because order is
   the content.

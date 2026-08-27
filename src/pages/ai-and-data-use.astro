@@ -1,0 +1,134 @@
+---
+/**
+ * /ai-and-data-use — plain-language statement of how Cedar uses data.
+ *
+ * A working draft in the site's register for counsel to review,
+ * recommended in docs/legal/legal-framework-review.md Part 4 as a
+ * sales asset for government and Tribal customers. Every claim here
+ * is derived from positions the Terms and Privacy Policy already
+ * take; nothing states a provider-contract or architecture detail
+ * that has not been verified. The provider and subprocessor
+ * disclosures are deliberately written as "to be published" until
+ * the internal data-flow specification exists (roadmap item 9) —
+ * this page must never run ahead of it.
+ */
+import { site } from '../config';
+import LegalLayout from '../layouts/LegalLayout.astro';
+---
+
+<LegalLayout
+  title="AI and Data Use | Lumecon"
+  description="How Cedar, Lumecon's AI economic analyst, uses data: what it reads, what it never does, and how your organization's content is handled across the Cedar product family."
+  canonical="https://lumecon.ai/ai-and-data-use"
+  keywords="Lumecon AI policy, Cedar AI data use, AI data handling, government AI procurement, tribal data sovereignty, economic analysis AI"
+>
+  <h1>AI and Data Use</h1>
+  <div class="date">Working draft, under review by counsel.</div>
+
+  <p>
+    Lumecon is the intelligent economic analysis platform, and Cedar is the AI economic analyst
+    inside it. This page says in plain language what Cedar does with data, what it never does, and
+    what is still being formalized. It exists because our customers, governments, Tribal
+    Nations, universities and the organizations that answer to them, are accountable for the
+    tools they bring in, and deserve answers before a procurement review has to ask.
+  </p>
+
+  <details class="legal-sec">
+    <summary><h2 class="legal-subhead">1. Where AI sits in the platform</h2></summary>
+    <div class="legal-sec__body">
+      <p>
+        Cedar works across the Cedar product family: it reads the documents you bring into Cedar
+        Impact, helps structure them into model-ready inputs, surfaces gaps and assumptions for your
+        sign-off, and helps turn results into reporting. AI in the workflow, economists in the loop:
+        the economic model itself is deterministic input-output economics, not a language model, and
+        every figure an analysis produces comes from the model with a lineage you can inspect. Cedar
+        assists the work; it does not invent the numbers.
+      </p>
+    </div>
+  </details>
+
+  <details class="legal-sec">
+    <summary><h2 class="legal-subhead">2. What Cedar reads, and why</h2></summary>
+    <div class="legal-sec__body">
+      <p>
+        In the product, Cedar processes the content your organization brings to its analyses:
+        budgets, financial statements, payroll and program records, in the documents and figures you
+        upload. It reads them to do the job you asked for: interpreting documents, mapping them
+        into the model, flagging assumptions and drafting language you review. Your content is used
+        to run your analyses and support you, as the <a href="/privacy">Privacy Policy</a> states.
+      </p>
+    </div>
+  </details>
+
+  <details class="legal-sec">
+    <summary><h2 class="legal-subhead">3. What we do not do</h2></summary>
+    <div class="legal-sec__body">
+      <p>
+        We do not sell personal information, and we do not use your information for third-party
+        advertising. Improvement work uses aggregated and de-identified information and does not
+        identify you or your organization. Cedar drafts and suggests; it does not approve its own
+        work: assumptions are surfaced for a person&rsquo;s sign-off, and economic judgment
+        stays human.
+      </p>
+    </div>
+  </details>
+
+  <details class="legal-sec">
+    <summary><h2 class="legal-subhead">4. Cedar on this website</h2></summary>
+    <div class="legal-sec__body">
+      <p>
+        The chat on lumecon.ai is a lightweight Cedar that answers questions about Lumecon. On the
+        static site it is answered by a local classifier running in your browser and sends nothing
+        to an AI provider; where a backend is configured, the conversation is processed to answer
+        you and reviewed in aggregate to improve the answers. Either way, it is not connected to any
+        customer&rsquo;s product data, and you should not put sensitive information in a chat.
+      </p>
+    </div>
+  </details>
+
+  <details class="legal-sec">
+    <summary><h2 class="legal-subhead">5. AI providers and subprocessors</h2></summary>
+    <div class="legal-sec__body">
+      <p>
+        Where Cedar relies on third-party AI providers, we are putting written contracts governing
+        the use of customer data in place with each of them, and we will not represent those
+        protections as final until they are verified. A plain-language summary of the provider
+        relationships and a subprocessor list will be published on this page as they are finalized;
+        we would rather this section say &ldquo;coming&rdquo; than say more than the signed
+        contracts do.
+      </p>
+    </div>
+  </details>
+
+  <details class="legal-sec">
+    <summary><h2 class="legal-subhead">6. Data sovereignty</h2></summary>
+    <div class="legal-sec__body">
+      <p>
+        Your content belongs to your organization. For Tribal Nations and government customers this
+        is more than a licensing term: data governance is a design priority, publicity opt-outs are
+        honored, and analyses are your record to keep, share or withhold. If your government or
+        procurement process needs specific commitments in writing, ask us; that is a
+        conversation we expect and welcome.
+      </p>
+    </div>
+  </details>
+
+  <details class="legal-sec">
+    <summary><h2 class="legal-subhead">7. Questions</h2></summary>
+    <div class="legal-sec__body">
+      <p>
+        Write to <a class="note-link" href={`mailto:${site.email}`}>{site.email}</a> and a person will
+        answer. This page will be kept consistent with the <a href="/terms">Terms of Service</a> and
+        <a href="/privacy">Privacy Policy</a> as counsel finalizes them, and updated here with a new date
+        when it changes.
+      </p>
+    </div>
+  </details>
+
+  <div class="note">
+    <strong>Counsel:</strong>{' '}{site.counsel}<br />Contact: <a
+      href={`mailto:${site.email}`}
+      class="note-link">{site.email}</a
+    >
+  </div>
+</LegalLayout>

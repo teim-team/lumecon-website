@@ -64,19 +64,35 @@
 /* The overlay. One element for the whole document, reused by every trigger:
    there is only ever one image enlarged, and a per-image overlay would mean
    a dozen dialogs on the home page waiting to be found by a screen reader. */
+/* A native <dialog>: the top layer, the focus trap and Escape are the
+   platform's, so what is left here is the reset every dialog needs (a UA
+   gives it a border, padding and a shrink-to-fit box) plus the scrim. */
 .lb {
   position: fixed;
   inset: 0;
   z-index: 200;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
   display: grid;
   grid-template-rows: 1fr;
   place-items: center;
   padding: clamp(1rem, 4vw, 3rem);
   background: rgba(10, 15, 38, 0.86);
+  color: inherit;
   cursor: zoom-out;
+  overscroll-behavior: contain;
 }
-.lb[hidden] {
+.lb:not([open]) {
   display: none;
+}
+/* The scrim is painted by `.lb` itself, which covers the viewport. The
+   backdrop stays transparent so the two do not stack into a darker wash. */
+.lb::backdrop {
+  background: transparent;
 }
 .lb__box {
   display: grid;

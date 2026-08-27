@@ -31,6 +31,21 @@
   font-weight: 500;
   margin: 0;
 }
+/* Which part of the platform this screenshot is from. Set in ink rather
+   than teal so it reads as a name above the kicker's claim, and the row
+   still has exactly one teal line. */
+/* The grid gap between text children is 0.7rem, which reads as a break
+   between the product name and the kicker it belongs with. Pull them into
+   one label block. */
+.tour-row__product {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 700;
+  margin: 0 0 -0.42rem 0;
+}
 .tour-title {
   font-family: var(--font-display);
   font-weight: 600;
@@ -45,6 +60,15 @@
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
+}
+/* One quiet line for the whole section, not a caption per shot: the
+   figures below carry specific numbers for named places, and this is
+   the disclosure that they are demonstrations, not client results. */
+.tour-samplenote {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+  margin: 0.5rem 0 0;
 }
 
 /* ---------- feature rows ---------- */

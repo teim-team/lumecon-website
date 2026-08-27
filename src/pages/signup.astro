@@ -38,11 +38,19 @@ import '../styles/auth.css';
 import '../styles/auth-split.css';
 
 // Kept in sync with ROLE_OPTIONS in the product (src/pages/accountModel.js).
-const ROLE_OPTIONS = [
+// One shared role taxonomy for every organization type; the Tribal
+// governance roles join it only when the organization identifies as a
+// Tribal Nation (see the orgtype handler below), so other audiences are
+// not led through another audience's org chart.
+const TRIBAL_ROLE_OPTIONS = [
   'Tribal Council Member or Elected Leader',
   'Tribal Administrator',
   'Tribal Treasurer or Finance Officer',
+];
+const SHARED_ROLE_OPTIONS = [
+  'Executive or Elected Leader',
   'Economic Development Director',
+  'Finance or Budget Officer',
   'Consultant',
   'Government Analyst',
   'Researcher/Academic',
@@ -146,7 +154,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
               </select>
             </label>
             <label class="auth-field" data-auth-tribal-row hidden>
-              <span>Do you provide services for tribal clients? <span class="auth-req" aria-hidden="true">*</span></span>
+              <span
+                >Do you provide services for tribal clients? <span
+                  class="auth-req"
+                  aria-hidden="true">*</span
+                ></span
+              >
               <select name="servesTribalClients" data-auth-tribal>
                 <option value="">Select one</option>
                 <option value="yes">Yes, we serve tribal clients</option>
@@ -157,7 +170,21 @@ const ORGANIZATION_TYPE_OPTIONS = [
               <span>Your role <span class="auth-req" aria-hidden="true">*</span></span>
               <div class="auth-chips" role="group" aria-label="Your role">
                 {
-                  ROLE_OPTIONS.map((role) => (
+                  TRIBAL_ROLE_OPTIONS.map((role) => (
+                    <button
+                      type="button"
+                      class="auth-chip"
+                      data-role-chip
+                      data-tribal-role
+                      aria-pressed="false"
+                      hidden
+                    >
+                      {role}
+                    </button>
+                  ))
+                }
+                {
+                  SHARED_ROLE_OPTIONS.map((role) => (
                     <button type="button" class="auth-chip" data-role-chip aria-pressed="false">
                       {role}
                     </button>
@@ -210,27 +237,54 @@ const ORGANIZATION_TYPE_OPTIONS = [
   </main>
 
   <script is:inline>
-    /* Pricing -> Signup handoff. The pricing tier CTA links to
-       /signup?tier=X. Read the query, fill the hidden field, and
-       surface the plan badge so the choice visibly carries over
-       into the access request. */
+    /* Pricing -> Signup handoff. A pricing tier CTA links to /signup?tier=X
+       and a standalone product CTA links to /signup?product=Y. Read
+       whichever the query carries, fill the hidden field, and surface the
+       badge so the choice visibly carries over into the access request
+       instead of being silently dropped. Only announced products belong in
+       this map; it ships in the page source. */
     (function () {
       var qs = new URLSearchParams(window.location.search);
       var tier = qs.get('tier');
-      if (!tier) return;
-      var tierName = { sprout: 'Sprout', sapling: 'Sapling', tree: 'Tree', free: 'Free trial' };
+      var product = qs.get('product');
+      var tierName = { sprout: 'Sprout', sapling: 'Sapling', tree: 'Tree', free: 'Seed (free)' };
+      var productName = { 'cedar-grove': 'Cedar Grove' };
       // hasOwnProperty, not truthiness: a bare `tierName[tier]` resolves
       // inherited members like `constructor`/`__proto__` and would render
-      // them into the badge. Only the four real tiers pass.
-      if (!Object.prototype.hasOwnProperty.call(tierName, tier)) return;
+      // them into the badge. Only the known tiers and products pass.
+      var badgeText = null;
+      var fieldValue = null;
+      var changeHref = null;
+      var isProduct = false;
+      if (tier && Object.prototype.hasOwnProperty.call(tierName, tier)) {
+        badgeText = tierName[tier] + ' tier';
+        fieldValue = tier;
+        changeHref = '/pricing';
+      } else if (product && Object.prototype.hasOwnProperty.call(productName, product)) {
+        badgeText = productName[product];
+        fieldValue = product;
+        isProduct = true;
+        changeHref = product === 'cedar-grove' ? '/pricing#cedar-grove' : '/pricing';
+      }
+      if (!badgeText) return;
       var badge = document.querySelector('[data-auth-plan]');
       var value = document.querySelector('[data-auth-plan-value]');
       var tierInput = document.querySelector('[data-auth-tier]');
+      var change = document.querySelector('.auth-plan__change');
+      var label = document.querySelector('.auth-plan__label');
       if (badge && value) {
-        value.textContent = tierName[tier] + ' tier';
+        value.textContent = badgeText;
         badge.hidden = false;
       }
-      if (tierInput) tierInput.value = tier;
+      /* Cedar Grove is a standalone product, not a plan: the badge must not
+         read "Plan Cedar Grove", and the change link should not promise a
+         plan change. */
+      if (isProduct) {
+        if (label) label.textContent = 'Product';
+        if (change) change.textContent = 'Change selection';
+      }
+      if (change && changeHref) change.setAttribute('href', changeHref);
+      if (tierInput) tierInput.value = fieldValue;
     })();
   </script>
 
@@ -259,6 +313,10 @@ const ORGANIZATION_TYPE_OPTIONS = [
   function setup(): void {
     const form = document.querySelector<HTMLFormElement>('[data-auth-form]');
     if (!form) return;
+    // `data-auth-ready` is stamped on this form once setup returns (see the
+    // bottom of this script). The smoke test waits on it rather than sleeping:
+    // before it appears, step 2's fields are in the document and merely
+    // unstyled, so asserting on them races the script.
     const status = form.querySelector<HTMLElement>('[data-auth-status]');
     const submitBtn = form.querySelector<HTMLButtonElement>('[data-auth-submit]');
     const roleInput = form.querySelector<HTMLInputElement>('[data-auth-role]');
@@ -282,17 +340,42 @@ const ORGANIZATION_TYPE_OPTIONS = [
       });
     });
 
-    // Organization type drives one conditional: consulting firms are asked
+    // Organization type drives two conditionals. Consulting firms are asked
     // whether they serve tribal clients (it gates Whole Nation analysis and
-    // is the affiliation signal). The row is hidden for every other type.
+    // is the affiliation signal); the row is hidden for every other type.
+    // Tribal Nations get the Tribal governance roles added to the shared
+    // role list; if one was selected and the org type changes away, the
+    // selection clears so a hidden chip can't stay silently chosen.
     const orgTypeSelect = form.querySelector<HTMLSelectElement>('[data-auth-orgtype]');
     const tribalRow = form.querySelector<HTMLElement>('[data-auth-tribal-row]');
     const tribalSelect = form.querySelector<HTMLSelectElement>('[data-auth-tribal]');
-    orgTypeSelect?.addEventListener('change', () => {
-      const isConsulting = orgTypeSelect.value === 'consulting_firm';
+    const syncOrgTypeConditionals = () => {
+      const isConsulting = orgTypeSelect?.value === 'consulting_firm';
       if (tribalRow) tribalRow.hidden = !isConsulting;
       if (!isConsulting && tribalSelect) tribalSelect.value = '';
-    });
+
+      const isTribalNation = orgTypeSelect?.value === 'tribal_nation';
+      form.querySelectorAll<HTMLButtonElement>('[data-tribal-role]').forEach((chip) => {
+        chip.hidden = !isTribalNation;
+        if (!isTribalNation && chip.classList.contains('auth-chip--on')) {
+          chip.classList.remove('auth-chip--on');
+          chip.setAttribute('aria-pressed', 'false');
+          if (roleInput) roleInput.value = '';
+        }
+      });
+    };
+    orgTypeSelect?.addEventListener('change', syncOrgTypeConditionals);
+    // form.reset() restores the select and hidden inputs without firing
+    // change (and a programmatic reset() dispatches no reset event), so the
+    // Tribal-only chips and their pressed state would survive a successful
+    // submission; the submit handler calls this right after resetting.
+    const resetConditionalUi = () => {
+      form.querySelectorAll('[data-role-chip]').forEach((c) => {
+        c.classList.remove('auth-chip--on');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      syncOrgTypeConditionals();
+    };
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -324,7 +407,7 @@ const ORGANIZATION_TYPE_OPTIONS = [
         `Role: ${role}`,
         `Organization type: ${organizationType}`,
         tribalRaw ? `Serves tribal clients: ${tribalRaw}` : '',
-        tier ? `Plan interest: ${tier}` : '',
+        tier ? `${tier === 'cedar-grove' ? 'Product interest' : 'Plan interest'}: ${tier}` : '',
         interest ? `Wants to measure: ${interest}` : '',
       ].filter(Boolean);
 
@@ -345,6 +428,7 @@ const ORGANIZATION_TYPE_OPTIONS = [
               'Thanks, you are on the list. Someone from the team will reach out with your access.',
             );
             form.reset();
+            resetConditionalUi();
             return;
           }
         }
@@ -370,8 +454,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setup);
+    document.addEventListener('DOMContentLoaded', () => {
+      setup();
+      document.querySelector('[data-auth-form]')?.setAttribute('data-auth-ready', 'true');
+    });
   } else {
     setup();
+    document.querySelector('[data-auth-form]')?.setAttribute('data-auth-ready', 'true');
   }
 </script>
