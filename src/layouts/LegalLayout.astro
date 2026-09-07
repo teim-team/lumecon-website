@@ -12,12 +12,11 @@ interface Props {
   title: string;
   description: string;
   canonical: string;
-  keywords: string;
   /** Additional schema objects (e.g. an FAQPage) appended to the defaults. */
   extraJsonLd?: object[];
 }
 
-const { title, description, canonical, keywords, extraJsonLd = [] } = Astro.props;
+const { title, description, canonical, extraJsonLd = [] } = Astro.props;
 
 // Minimal but valid WebPage schema so legal pages aren't barren in
 // structured-data audits. Tied to the homepage Organization @id.
@@ -48,7 +47,6 @@ const jsonLd = [
   title={title}
   description={description}
   canonical={canonical}
-  keywords={keywords}
   jsonLd={jsonLd}
   bodyClass="legal-page"
 >
