@@ -31,20 +31,22 @@
   font-weight: 500;
   margin: 0;
 }
-/* Which part of the platform this screenshot is from. Set in ink rather
-   than teal so it reads as a name above the kicker's claim, and the row
-   still has exactly one teal line. */
-/* The grid gap between text children is 0.7rem, which reads as a break
-   between the product name and the kicker it belongs with. Pull them into
-   one label block. */
+/* Which part of the platform this screenshot is from, on the same line as
+   the kicker rather than above it.
+   --------------------------------------------------------------------
+   These were two stacked mono uppercase eyebrows, and the upper one read
+   CEDAR IMPACT identically on all three rows, directly under a section
+   lede that had just named Cedar Impact. Two eyebrows over one heading is
+   an indecision the reader has to resolve. One line, product name in ink,
+   claim in teal, divided by a middot. */
 .tour-row__product {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 700;
-  margin: 0 0 -0.42rem 0;
+}
+.tour-row__product::after {
+  content: ' · ';
+  color: var(--ink-4);
+  font-weight: 400;
 }
 .tour-title {
   font-family: var(--font-display);
@@ -167,10 +169,38 @@
   background: var(--white);
   box-shadow: var(--shadow-frame);
 }
+/* The frame crops rather than showing the whole 16:9 capture.
+   --------------------------------------------------------------------
+   Two problems, one fix. At the full aspect a shot renders about 512px
+   tall against a text column of roughly 200px, so every row carried
+   300-odd pixels of empty column beside it: the "huge empty vertical gap"
+   the audit warns about, three times in a row. And the full app screen
+   spends its lower half on content the row is not talking about.
+
+   Cropping to 2:1 from the top keeps the part that carries the argument
+   (the headline figure and the cards under it), brings the row height
+   close to the text height, and enlarges nothing: the pixels are the same
+   size, there are simply fewer of them. Click still opens the whole
+   capture in the lightbox. */
+/* The ratio is set on the IMAGE, not on the figure. Two shapes use this
+   class: the homepage rows are a <picture> alone, and the Cedar rows are
+   a bare <img> followed by a <figcaption>. Constraining the figure would
+   have squeezed those captions into the cropped box. */
 .tour-row__shot img {
   display: block;
   width: 100%;
+  aspect-ratio: 2 / 1;
   height: auto;
+  object-fit: cover;
+  object-position: top center;
+}
+@media (max-width: 880px) {
+  /* Stacked, the shot is not competing with a text column beside it, so
+     it goes back to its true proportion. */
+  .tour-row__shot img {
+    aspect-ratio: auto;
+    object-fit: fill;
+  }
 }
 
 /* Hover on the three product rows: a lift on the screenshot itself, matching

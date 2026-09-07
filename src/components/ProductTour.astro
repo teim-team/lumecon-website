@@ -69,8 +69,10 @@ const ROWS = [
         ROWS.map((row, i) => (
           <article class={`tour-row${i % 2 === 1 ? ' tour-row--flip' : ''}`} id={`tour-${row.id}`}>
             <div class={`tour-row__text ${i % 2 === 1 ? 'reveal-right' : 'reveal-left'}`}>
-              <p class="tour-row__product">{row.product}</p>
-              <p class="tour-row__kicker">{row.kicker}</p>
+              <p class="tour-row__kicker">
+                <span class="tour-row__product">{row.product}</span>
+                {row.kicker}
+              </p>
               <h3 class="tour-row__title">{row.title}</h3>
               <p class="tour-row__body">{row.body}</p>
             </div>

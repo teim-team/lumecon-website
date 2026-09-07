@@ -536,6 +536,15 @@ html {
   scroll-snap-stop: normal;
 }
 
+/* Selection. The browser default is a saturated blue that belongs to no
+   part of this palette, and it is one of the few pieces of chrome a
+   reader triggers deliberately. Teal at low alpha keeps the text legible
+   underneath rather than reversing it out. */
+::selection {
+  background: var(--accent-rgba-18);
+  color: var(--ink);
+}
+
 /* Teal focus ring — UI accent, replaces default browser blue. */
 *:focus-visible {
   outline: 2px solid var(--accent);
@@ -853,6 +862,78 @@ strong {
   line-height: 1.7;
   color: var(--ink-2);
   margin: 0;
+}
+
+/* ---------- Inverted section ----------
+   One dark band, and the reason is compositional rather than decorative.
+   The page is otherwise a single white sheet running top to bottom, five
+   sections deep, each with the same rhythm: kicker, heading, lede, grid.
+   Hairlines separate them but nothing anchors the page, and a document
+   with no change of ground reads as long rather than as composed. A site
+   that separates only with hairlines is committing to that flatness.
+
+   It works by rebinding the same tokens the global dark-mode block
+   rebinds, scoped to one element. Everything inside keeps referring to
+   --ink, --rule, --accent-text and so on, so no descendant needs to know
+   it is on a dark surface; this is the mechanism the whole site already
+   uses, applied locally.
+
+   Use it once per page at most. Two inverted bands is a stripe pattern,
+   which is the failure mode this is trying to avoid. */
+.section--dark {
+  --white: #0c1229;
+  --surface: #141b38;
+  --cream: #0c1229;
+  --paper: #080d20;
+  --ink: #f1f3fa;
+  --ink-2: #c2c8dc;
+  --ink-3: #8f95ae;
+  --ink-4: #676d85;
+  --navy: #f1f3fa;
+  --rule: rgba(255, 255, 255, 0.14);
+  --rule-strong: rgba(255, 255, 255, 0.26);
+  /* The deep chip teal fails AA on a dark surface (3.68:1); the light
+     teal lands at 10.66:1. Same swap the global dark block makes. */
+  --accent-text: var(--accent-light);
+  --cedar-text: var(--cedar-light);
+  background: #0c1229;
+  color: var(--ink);
+  /* The band runs edge to edge, so it needs no hairline to be found. */
+  border-top: none;
+}
+/* The grain is a black-alpha tile: over a dark band it does nothing
+   visible and only muddies the edge, so the band supplies its own. */
+.section--dark {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+}
+.section--dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.33 0.33 0.33 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.045;
+}
+.section--dark > * {
+  position: relative;
+  z-index: 1;
+}
+/* In dark mode the page is already dark, so the band distinguishes itself
+   by sitting slightly above the surrounding ground rather than below it. */
+@media (prefers-color-scheme: dark) {
+  .section--dark {
+    --white: #161c3c;
+    --surface: #1d2450;
+    --cream: #161c3c;
+    background: #161c3c;
+  }
+}
+@media (forced-colors: active) {
+  .section--dark::before {
+    display: none;
+  }
 }
 
 /* Container utility */
