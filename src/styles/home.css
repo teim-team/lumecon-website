@@ -147,9 +147,14 @@
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  /* Was 82ch. A centred paragraph is harder to return-sweep than a
-     left-aligned one, because the left edge moves on every line, so it
-     wants a shorter measure than flush text would take, not a longer one. */
+  /* Was 82ch. Measured at 1440px: 82ch wraps this sentence to three
+     lines whose longest runs about 103 characters; 62ch wraps it to
+     four whose longest runs about 84. A centred paragraph is harder to
+     return-sweep than a left-aligned one, because the left edge moves on
+     every line, so it wants the shorter measure, not the longer one.
+     This sits below the 65-75%-of-container band in AGENTS.md, which
+     guards against narrow caps that leave the row visually empty; the
+     title above spans the full container, so the row is not empty. */
   max-width: 62ch;
 }
 .hero2-sub strong {

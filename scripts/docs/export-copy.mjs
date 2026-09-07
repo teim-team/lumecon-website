@@ -43,7 +43,13 @@ function chromiumExecutable() {
   return existsSync(fallback) ? fallback : undefined;
 }
 
-/** Every public page, in the order a reader would meet them. */
+/**
+ * Every public page, in the order a reader would meet them. A third
+ * element is the URL to actually visit when it differs from the path we
+ * file the page under: /checkout redirects to /choose-plan unless it is
+ * handed a valid paid tier, so without the query it exported choose-plan
+ * twice and checkout not at all.
+ */
 const PAGES = [
   ['/', 'Homepage'],
   ['/pricing', 'Pricing'],
@@ -54,7 +60,7 @@ const PAGES = [
   ['/signup', 'Sign up'],
   ['/login', 'Log in'],
   ['/choose-plan', 'Choose plan'],
-  ['/checkout', 'Checkout'],
+  ['/checkout', 'Checkout', '/checkout?tier=sprout'],
   ['/welcome', 'Welcome'],
   ['/film', 'Film'],
   ['/accessibility', 'Accessibility'],
@@ -96,10 +102,28 @@ async function readPages() {
     .then((c) => c.newPage());
   const out = [];
 
-  for (const [path, label] of PAGES) {
-    const res = await page.goto(BASE + path, { waitUntil: 'networkidle' }).catch(() => null);
-    if (!res || res.status() >= 400) {
-      out.push({ path, label, error: `status ${res ? res.status() : 'unreachable'}` });
+  for (const [path, label, visit = path] of PAGES) {
+    const res = await page.goto(BASE + visit, { waitUntil: 'networkidle' }).catch(() => null);
+    // Every page must answer 200, except the not-found page: asked for by
+    // its own URL it is a real route, but a host that wires it up as the
+    // fallback (GitHub Pages does) answers 404. Both are correct.
+    const ok = path === '/404' ? [200, 404] : [200];
+    if (!res || !ok.includes(res.status())) {
+      out.push({
+        path,
+        label,
+        error: `expected ${ok.join(' or ')}, got ${res ? res.status() : 'unreachable'}`,
+      });
+      continue;
+    }
+    // A client-side redirect would otherwise be exported under the wrong
+    // heading: /checkout without a valid tier sends the reader to
+    // /choose-plan, and the export recorded that page's copy twice.
+    await page.waitForTimeout(200);
+    const landed = new URL(page.url()).pathname.replace(/\/$/, '') || '/';
+    const wanted = new URL(BASE + visit).pathname.replace(/\/$/, '') || '/';
+    if (landed !== wanted) {
+      out.push({ path, label, error: `redirected to ${landed}` });
       continue;
     }
     // Folded copy is still copy: open every disclosure before reading.
@@ -121,6 +145,9 @@ function scrape() {
   const main = document.querySelector('main') || document.body;
   const blocks = [];
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'SVG', 'TEMPLATE']);
+  /** Tags the walker below emits itself; seeing one means keep descending. */
+  const HANDLED =
+    'h1,h2,h3,h4,h5,h6,p,li,dt,dd,summary,figcaption,blockquote,a,button,img,section,article,aside,header,footer,select,th,td';
 
   // Content that is hidden by default must be LABELLED, not silently
   // flattened into the copy. The first version of this export read the
@@ -157,8 +184,19 @@ function scrape() {
           tag.toLowerCase();
         blocks.push({ kind: 'section', text: name, cond });
         walk(el, cond);
-      } else {
+      } else if (tag === 'SELECT' || el.querySelector(HANDLED)) {
         walk(el, cond);
+      } else {
+        // Nothing below this element is copy the walker has a case for,
+        // so it is a text container: take its text whole rather than
+        // recursing past it. The signup fields are
+        // `label > span` holding a text node beside a `*` marker, and
+        // descending emitted the marker and dropped every field name, so
+        // the export listed the form's inputs with no idea what any of
+        // them asked for. SELECT is excluded so its options stay separate
+        // lines instead of collapsing into one run-on string.
+        const t = clean(el.innerText);
+        if (t) blocks.push({ kind: 'text', text: t, cond });
       }
     }
   };
@@ -335,6 +373,7 @@ function render(pages) {
       else if (b.kind === 'summary') put(`- _disclosure:_ ${b.text}`);
       else if (['li', 'dt', 'dd'].includes(b.kind)) put(`- ${mark(b)}${b.text}`);
       else if (b.kind === 'figcaption') put(`_caption:_ ${b.text}`);
+      else if (b.kind === 'text') put(`- _label:_ ${mark(b)}${b.text}`);
       else put(mark(b) + b.text, '');
     }
     put('');
@@ -364,12 +403,14 @@ function render(pages) {
 console.log(`Reading ${BASE} …`);
 const pages = await readPages();
 const unreachable = pages.filter((p) => p.error);
-if (unreachable.length === pages.length) {
-  console.error(`\nNothing reachable at ${BASE}. Run \`npm run build && npm run preview\` first.`);
+// A partial export is worse than none: it is committed and then reviewed
+// as if it were the whole site, and the missing pages are invisible in a
+// document whose whole claim is completeness. Any gap fails the run.
+if (unreachable.length) {
+  console.error(`\nCould not export ${unreachable.length} of ${pages.length} page(s):`);
+  for (const p of unreachable) console.error(`  ${p.path} — ${p.error}`);
+  console.error(`\nIs \`npm run build && npm run preview\` serving ${BASE}?`);
   process.exit(1);
 }
 writeFileSync(OUT, render(pages));
-console.log(
-  `\nWrote docs/site-copy-and-architecture.md (${pages.length - unreachable.length} pages).`,
-);
-if (unreachable.length) console.warn(`Skipped: ${unreachable.map((p) => p.path).join(', ')}`);
+console.log(`\nWrote docs/site-copy-and-architecture.md (${pages.length} pages).`);

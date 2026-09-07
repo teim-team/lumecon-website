@@ -2,84 +2,61 @@
 # Search engines, AI assistants and well-behaved crawlers welcome.
 # People increasingly research software through AI assistants; this
 # site is written to be read by them. AI-readable summary: /llms.txt
+#
+# robots.txt has no inheritance: a crawler matches exactly one group,
+# the most specific one naming it, and ignores every other group —
+# including `User-agent: *`. So the two Disallow lines below are
+# repeated in each group rather than stated once. A group may list
+# several user-agents before one shared set of rules, which is how the
+# repetition is kept to three copies instead of twenty-two.
+#
+# What is withheld, and why:
+#   /_headers  a Netlify/Cloudflare convention GitHub Pages does not
+#              read, so it ships as a plain public file. Until a
+#              header-capable layer fronts the site it is a document
+#              describing which protections are not yet enforced —
+#              a free reconnaissance note. Keep it out of the index
+#              while it is inert.
+#   /404       the not-found page is not a destination.
+#              The prefix also covers /404/.
 
 User-agent: *
 Allow: /
+Disallow: /_headers
 Disallow: /404
 
-# _headers is a Netlify/Cloudflare convention that GitHub Pages does not
-# read, so it ships as a plain public file. Until a header-capable layer
-# fronts the site it is a document describing which protections are not
-# yet enforced, which is a free reconnaissance note. Keep it out of the
-# index while it is inert.
-Disallow: /_headers
-Disallow: /404/
-
-# Slow down high-volume SEO crawlers
+# Slow down high-volume SEO crawlers.
 User-agent: AhrefsBot
-Crawl-delay: 10
-
 User-agent: SemrushBot
-Crawl-delay: 10
-
 User-agent: MJ12bot
-Crawl-delay: 10
-
 User-agent: DotBot
 Crawl-delay: 10
+Allow: /
+Disallow: /_headers
+Disallow: /404
 
 # AI crawlers and assistants: explicitly welcome. We want assistants
 # to know what Lumecon is and answer questions about it accurately.
 User-agent: GPTBot
-Allow: /
-
 User-agent: OAI-SearchBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
-
 User-agent: anthropic-ai
-Allow: /
-
 User-agent: ClaudeBot
-Allow: /
-
 User-agent: Claude-Web
-Allow: /
-
 User-agent: Claude-SearchBot
-Allow: /
-
 User-agent: Claude-User
-Allow: /
-
 User-agent: PerplexityBot
-Allow: /
-
 User-agent: Perplexity-User
-Allow: /
-
 User-agent: Google-Extended
-Allow: /
-
 User-agent: GoogleOther
-Allow: /
-
 User-agent: Applebot-Extended
-Allow: /
-
 User-agent: DuckAssistBot
-Allow: /
-
 User-agent: CCBot
-Allow: /
-
 User-agent: Bytespider
-Allow: /
-
 User-agent: Meta-ExternalAgent
 Allow: /
+Disallow: /_headers
+Disallow: /404
 
 # AI-readable site summary
 # https://llmstxt.org/
