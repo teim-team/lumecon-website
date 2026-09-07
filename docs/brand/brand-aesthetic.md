@@ -7,13 +7,13 @@ A reference for the look, feel, and voice of the Lumecon website. Values are pul
 ## 1. What Lumecon is
 
 - **Name:** Lumecon (legal: Lumecon Inc.)
-- **Tagline:** *We luminate economies.*
+- **Tagline:** _We luminate economies._
 - **One-line pitch:** Economic impact analysis software for governments, enterprises, and mission-driven organizations.
 - **Audiences:** governments, tribal nations, foundations, councils and boards, universities, and community-serving / mission-driven organizations.
 - **Built at:** Cornell University. **Contact:** contact@lumecon.ai
 - **Cedar** is the in-product AI analyst (its mark is a green cedar tree; it lives in a floating green "Ask Cedar" button).
 
-**Personality:** credible, modern, plain-spoken, evidence-first. Government-grade trust without the stuffiness. The recurring rhetorical anchor is *"prove it"* — Lumecon hands organizations the defensible numbers each room respects.
+**Personality:** credible, modern, plain-spoken, evidence-first. Government-grade trust without the stuffiness. The recurring rhetorical anchor is _"prove it"_ — Lumecon hands organizations the defensible numbers each room respects.
 
 ---
 
@@ -22,47 +22,53 @@ A reference for the look, feel, and voice of the Lumecon website. Values are pul
 Pure, saturated palette on **white** surfaces. No muddy mid-tones. Sections are separated by **hairline rules, not background tints**.
 
 ### Surfaces & ink
-| Token | Hex | Use |
-|---|---|---|
-| White | `#FFFFFF` | Primary surface (and "cream" — identical; separation comes from hairlines) |
-| Paper | `#F7F7F8` | Rare softer surface: forms, panels |
-| Navy / Ink | `#0A0F26` | Primary text; deep near-black navy |
-| Navy 2 | `#1A2046` | Darker navy accents, CTA hover |
-| Ink-2 | `#353B5C` | Body / secondary text |
-| Ink-3 | `#6B6F8A` | Muted text, captions, author lines |
-| Ink-4 | `#9DA1B5` | Faintest text, dots |
-| Rule | `rgba(10,15,38,.12)` | Hairline dividers / card borders |
-| Rule-strong | `rgba(10,15,38,.24)` | Stronger borders, ghost-button outlines |
+
+| Token       | Hex                  | Use                                                                        |
+| ----------- | -------------------- | -------------------------------------------------------------------------- |
+| White       | `#FFFFFF`            | Primary surface (and "cream" — identical; separation comes from hairlines) |
+| Paper       | `#F7F7F8`            | Rare softer surface: forms, panels                                         |
+| Navy / Ink  | `#0A0F26`            | Primary text; deep near-black navy                                         |
+| Navy 2      | `#1A2046`            | Darker navy accents, CTA hover                                             |
+| Ink-2       | `#353B5C`            | Body / secondary text                                                      |
+| Ink-3       | `#6B6F8A`            | Muted text, captions, author lines                                         |
+| Ink-4       | `#9DA1B5`            | Faintest text, dots                                                        |
+| Rule        | `rgba(10,15,38,.12)` | Hairline dividers / card borders                                           |
+| Rule-strong | `rgba(10,15,38,.24)` | Stronger borders, ghost-button outlines                                    |
 
 ### Accent — **Teal** (the working UI accent)
-| Token | Hex | Use |
-|---|---|---|
-| Accent | `#0FB5A5` | Eyebrows/kickers, numbers, focus rings, hovers, dividers, icon highlights, links |
-| Accent light | `#5FD9CC` | Hover/light fills |
-| Accent bar | `#B8EDE6` | Soft highlight fill |
-| Accent deep | `#0A8A7E` | Button hover / deeper teal |
-| Accent 8% | `rgba(15,181,165,.08)` | Faint tint (hover backgrounds, avatar rings) |
+
+| Token        | Hex                    | Use                                                                              |
+| ------------ | ---------------------- | -------------------------------------------------------------------------------- |
+| Accent       | `#0FB5A5`              | Eyebrows/kickers, numbers, focus rings, hovers, dividers, icon highlights, links |
+| Accent light | `#5FD9CC`              | Hover/light fills                                                                |
+| Accent bar   | `#B8EDE6`              | Soft highlight fill                                                              |
+| Accent deep  | `#0A8A7E`              | Button hover / deeper teal                                                       |
+| Accent 8%    | `rgba(15,181,165,.08)` | Faint tint (hover backgrounds, avatar rings)                                     |
 
 ### Brand gold — **reserved**, not a UI accent
-| Token | Hex | Use |
-|---|---|---|
-| Gold | `#F0A91A` | The wordmark and the word **"luminate"** only — deliberate brand DNA |
-| Gold light | `#FFD24B` | Glow / emphasis |
+
+| Token      | Hex       | Use                                                                  |
+| ---------- | --------- | -------------------------------------------------------------------- |
+| Gold       | `#F0A91A` | The wordmark and the word **"luminate"** only — deliberate brand DNA |
+| Gold light | `#FFD24B` | Glow / emphasis                                                      |
 
 > Rule: **gold is brand-only.** Don't use it for buttons, links, or generic UI — that job belongs to teal.
 
 ### Green / Cedar (product + nature cue)
-| Token | Hex | Use |
-|---|---|---|
+
+| Token         | Hex       | Use                                                |
+| ------------- | --------- | -------------------------------------------------- |
 | Cedar / Green | `#0E8B4F` | Cedar AI, the "Ask Cedar" button, green highlights |
-| Cedar light | `#1BB66A` | Brighter green highlight |
-| Green deep | `#0B5E36` | — |
+| Cedar light   | `#1BB66A` | Brighter green highlight                           |
+| Green deep    | `#0B5E36` | —                                                  |
 
 ### Supporting / map
+
 - **Terra (coral)** `#E04A2A` — used sparingly.
 - **Map palette:** source region = gold (focal point); tribal/reservation layer = amber-gold `#C77A18` (deep `#7A4708`); spillover = teal. Warm focal point, cool spillover.
 
 ### Dark mode
+
 Automatic via `prefers-color-scheme` (no toggle). Tokens flip to navy surfaces (`#0F1530`) with light text (`#F1F3FA`); gold and teal are punched up slightly so highlights still read.
 
 ---
@@ -93,6 +99,7 @@ The most recognizable visual element. Standalone section headlines sit on a **ha
 - **Wipes in on scroll** (`scaleX` 0 → 1) from the left or right, triggered by an IntersectionObserver.
 
 **Rules of use:**
+
 - Only on **standalone section headers** (hero h1s, section h2s, legal page titles). **Never** on headers that live inside a card or panel.
 - **No repeating color on the same page**, and vary the wipe direction / which side bleeds so adjacent highlights feel distinct (teal / gold / green rotate).
 
@@ -149,6 +156,7 @@ The most recognizable visual element. Standalone section headlines sit on a **ha
 ## 10. Quick "do / don't"
 
 **Do**
+
 - White surfaces; separate with hairlines.
 - Teal for all interactive/accent UI; gold only for the brand wordmark + "luminate".
 - One mono kicker + one big Inter headline per section.
@@ -156,6 +164,7 @@ The most recognizable visual element. Standalone section headlines sit on a **ha
 - Subtle rise/fade and wipe-in motion.
 
 **Don't**
+
 - Don't use gold as a generic accent.
 - Don't put a highlight rectangle on a header inside a card.
 - Don't repeat a highlight color within a page.

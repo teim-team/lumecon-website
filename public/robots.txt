@@ -6,6 +6,13 @@
 User-agent: *
 Allow: /
 Disallow: /404
+
+# _headers is a Netlify/Cloudflare convention that GitHub Pages does not
+# read, so it ships as a plain public file. Until a header-capable layer
+# fronts the site it is a document describing which protections are not
+# yet enforced, which is a free reconnaissance note. Keep it out of the
+# index while it is inert.
+Disallow: /_headers
 Disallow: /404/
 
 # Slow down high-volume SEO crawlers

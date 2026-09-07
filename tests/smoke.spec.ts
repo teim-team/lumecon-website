@@ -362,3 +362,25 @@ test('welcome closes the flow in full teal with one action', async ({ page }) =>
   await expect(page.locator('a.welc-btn')).toHaveAttribute('href', '/login');
   await expect(page.locator('.cedar-fab')).toHaveCount(0);
 });
+
+test('security.txt stays valid and does not silently lapse', async ({ page }) => {
+  // RFC 9116 requires Contact and Expires. An expired security.txt is
+  // treated as invalid by scanners and by researchers, and nothing else
+  // in the repo watches the date, so this is the thing that notices.
+  const res = await page.goto('/.well-known/security.txt');
+  expect(res?.status()).toBe(200);
+  const body = (await res!.text()) ?? '';
+
+  expect(body).toMatch(/^Contact:\s*\S+/m);
+  const expires = body.match(/^Expires:\s*(\S+)/m);
+  expect(expires, 'security.txt must carry an Expires field (RFC 9116 §2.5.5)').toBeTruthy();
+
+  const when = new Date(expires![1]);
+  expect(Number.isNaN(when.getTime()), `Expires is not a valid date: ${expires![1]}`).toBe(false);
+
+  const daysLeft = Math.round((when.getTime() - Date.now()) / 86_400_000);
+  // Fails while there is still time to renew, rather than after it lapses.
+  expect(daysLeft, `security.txt expires in ${daysLeft} days — renew it`).toBeGreaterThan(30);
+  // RFC 9116 §2.5.5: SHOULD be less than a year out.
+  expect(daysLeft, `Expires is ${daysLeft} days out; RFC 9116 asks for under a year`).toBeLessThan(366);
+});

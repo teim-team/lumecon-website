@@ -11,21 +11,21 @@ The free account is now a named plan: **Seed**, first of four (Seed, Sprout, Sap
 ## Naming and identity
 
 - Display name: **Seed**. Machine identity: tier id **`free`** — unchanged everywhere (DB, `tierCapabilities`, signup handoff `/signup?tier=free`, analytics). Do not rename the id.
-- Canonical one-liner (verbatim, matches the site's protected vocabulary): *"Seed, the free account: build a full analysis and see your direct effects; full results unlock on any plan."*
+- Canonical one-liner (verbatim, matches the site's protected vocabulary): _"Seed, the free account: build a full analysis and see your direct effects; full results unlock on any plan."_
 - Seed never passes through checkout. Upgrade paths lead to plan selection.
 
 ## Capability contract (server-side, non-negotiable)
 
 `server/lib/tierCapabilities.js` (or wherever capability truth lives — the server owns it, per the reconciliation principle) gains/adjusts the `free` tier:
 
-| Capability | `free` (Seed) | Paid tiers |
-| --- | --- | --- |
-| Build analyses end to end (intake, Cedar, model run) | Yes (unchanged) | Yes |
-| Results page access | Yes | Yes |
-| Direct-effect figures (jobs, labor income, GDP contribution, economic output at the direct layer) | Yes | Yes |
-| Indirect, induced, total impact | **No — withheld by the server** | Yes |
-| Tax impacts | **No — withheld** (computed across layers; a direct-only tax figure would mislead) | Yes |
-| Exports (XLSX workbook, CSV tables, printable summary) | **No** | Yes |
+| Capability                                                                                        | `free` (Seed)                                                                      | Paid tiers |
+| ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------- |
+| Build analyses end to end (intake, Cedar, model run)                                              | Yes (unchanged)                                                                    | Yes        |
+| Results page access                                                                               | Yes                                                                                | Yes        |
+| Direct-effect figures (jobs, labor income, GDP contribution, economic output at the direct layer) | Yes                                                                                | Yes        |
+| Indirect, induced, total impact                                                                   | **No — withheld by the server**                                                    | Yes        |
+| Tax impacts                                                                                       | **No — withheld** (computed across layers; a direct-only tax figure would mislead) | Yes        |
+| Exports (XLSX workbook, CSV tables, printable summary)                                            | **No**                                                                             | Yes        |
 
 **The withholding must be server-side.** The API response for a free-tier account must not contain the locked figures at all. A CSS/JS blur over real numbers in the payload is a suggestion, not a paywall — anyone opens dev tools and reads them. The frontend renders placeholder shapes because it has nothing else to render. Export endpoints must also enforce tier server-side (403/upgrade response), not just hide buttons.
 
