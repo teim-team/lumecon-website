@@ -64,9 +64,32 @@
 :root {
   /* Lumecon Inc. — bold, modern govt-software palette.
      Pure white surfaces, saturated brand accents, no muddy mid-tones. */
-  --white: #ffffff;
-  --cream: #ffffff; /* same as white; sections separate via hairlines, not tint */
-  --paper: #f7f7f8; /* one rare softer surface (forms, panels), barely off-white */
+  /* ---- Ground and surface ----
+     The site used to paint everything, page and panel alike, in pure
+     #FFFFFF. Two consequences, and the second is the expensive one.
+
+     Pure white is the brightest value a display can emit, so it has no
+     material quality: it reads as a lit panel rather than as paper, and
+     body text on it sits at about 19:1, past the point where more
+     contrast reads as clarity and into where it reads as glare. Nearly
+     every carefully made site sits a degree or two off it.
+
+     More importantly, one value cannot express two things. When the page
+     and the card on it are the same colour, the only way to say "this is
+     on top" is to draw a border or cast a shadow, which is why this site
+     accumulated so many of both. Give the page a ground and let genuinely
+     raised things be pure white, and the elevation is carried by the
+     surfaces themselves. That is what lets a screenshot read as an object
+     lying on the page with a hairline, instead of needing a drop shadow
+     to prove it is there.
+
+     --white is the GROUND (it keeps its name because it is what the 40-odd
+     section backgrounds already reference). --surface is the raised white:
+     screenshot frames, plan cards, form panels, the chat, the lightbox. */
+  --white: #faf8f4;
+  --surface: #ffffff;
+  --cream: #fcfbf9; /* legacy alias for the ground */
+  --paper: #f6f5f2; /* one step below the ground: inset fields, wells */
   --navy: #0a0f26; /* deeper, more saturated near-black-navy */
   --navy2: #1a2046;
   --navy-soft: rgba(10, 15, 38, 0.68);
@@ -318,8 +341,11 @@ body {
 @media (prefers-color-scheme: dark) {
   :root {
     --white: #0f1530;
+    /* Raised surfaces step up from the ground here, the way they step
+       down from it in light mode. */
+    --surface: #161c3c;
     --cream: #131838;
-    --paper: #181e40;
+    --paper: #0b1026;
     --navy: #f1f3fa;
     --navy2: #bcc1d8;
     --navy-soft: rgba(241, 243, 250, 0.68);

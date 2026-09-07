@@ -18,7 +18,11 @@
   width: 100%;
   z-index: 100;
   padding: 1.25rem 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--white) 94%, transparent),
+    transparent
+  );
   transition:
     background 0.25s var(--ease),
     padding 0.25s var(--ease),
@@ -26,7 +30,7 @@
   border-bottom: 1px solid transparent;
 }
 #nav.nav--fixed.scrolled {
-  background: rgba(255, 255, 255, 0.94);
+  background: color-mix(in srgb, var(--white) 94%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 0.75rem 0;
@@ -36,7 +40,11 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.94);
+  /* The ground, not pure white. Now that the page has a ground and pure
+     white means "raised", a hardcoded white nav read as a separate sheet
+     laid over the top of every page. The bar belongs to the page; its
+     hairline and its blur do the separating. */
+  background: color-mix(in srgb, var(--white) 94%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--rule);
@@ -208,4 +216,82 @@ html.navm-open {
 }
 .navm-contact:hover {
   color: var(--accent-text);
+}
+
+/* VARIANT: the destinations are visible at desktop width.
+   --------------------------------------------------------------------
+   The bar was brand + Menu at every viewport. Below 1000px it still is;
+   above it the four destinations and the auth pair sit in the bar, which
+   is what every enterprise buyer expects to find and what stops Pricing
+   and Methodology from being two clicks behind a button. */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.7rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a,
+.nav-login {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--navy);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.nav-links a:hover,
+.nav-login:hover {
+  color: var(--accent-text);
+}
+.nav-links__sep {
+  width: 1px;
+  height: 18px;
+  background: var(--rule);
+}
+.nav-signup {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: #fff;
+  text-decoration: none;
+  background: var(--accent-chip);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.15s var(--ease);
+}
+.nav-signup:hover {
+  background: var(--accent-chip-hover);
+}
+/* Below this the inline row stops fitting beside the wordmark and the
+   Menu overlay takes over again. */
+@media (max-width: 999px) {
+  .nav-links,
+  .nav-links__sep,
+  .nav-login,
+  .nav-signup {
+    display: none;
+  }
+}
+@media (min-width: 1000px) {
+  .navm-btn {
+    display: none;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .nav-signup {
+    color: #0a0f26;
+    background: var(--accent);
+  }
+  .nav-signup:hover {
+    background: var(--accent-light);
+  }
 }

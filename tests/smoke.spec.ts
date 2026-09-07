@@ -154,6 +154,11 @@ test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page 
   // backdrop-filter made it the containing block for position:fixed,
   // silently confining the "full screen" menu to the nav bar's box.
   // Inner pages (nav--static) always carry the filter, so open there.
+  //
+  // Below 1000px the bar is brand + Menu; at and above it the destinations
+  // sit inline and the Menu button is hidden, so this exercises the
+  // overlay at a width where it is the navigation.
+  await page.setViewportSize({ width: 900, height: 800 });
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
   await page.locator('#navMenuBtn').click();
   const menu = page.locator('#navMenu');
@@ -163,6 +168,18 @@ test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page 
   if (!box || !viewport) throw new Error('no menu box');
   expect(box.height).toBeGreaterThan(viewport.height * 0.9);
   await expect(menu.locator('a', { hasText: 'Methodology' })).toBeVisible();
+});
+
+test('desktop nav shows the destinations inline, with no Menu button', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  const links = page.locator('.nav-links a');
+  await expect(links).toHaveCount(4);
+  for (const label of ['How it works', 'Cedar', 'Pricing', 'Methodology']) {
+    await expect(page.locator('.nav-links a', { hasText: label })).toBeVisible();
+  }
+  await expect(page.locator('.nav-signup')).toBeVisible();
+  await expect(page.locator('#navMenuBtn')).toBeHidden();
 });
 
 test('checkout is payment-only: knows the plan, no plan picker', async ({ page }) => {

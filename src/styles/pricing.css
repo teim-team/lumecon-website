@@ -181,7 +181,7 @@
   position: relative;
   border: 1px solid var(--rule);
   border-radius: 8px;
-  background: var(--white);
+  background: var(--surface);
   padding: 1.6rem 1.5rem 1.5rem;
   display: grid;
   gap: 0.55rem;

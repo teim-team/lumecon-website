@@ -117,6 +117,7 @@
   margin-right: calc(-1 * var(--bleed));
   border-right: none;
   border-radius: 6px 0 0 6px;
+  background: var(--surface);
 }
 .tour-row--flip .tour-row__shot {
   margin-right: 0;

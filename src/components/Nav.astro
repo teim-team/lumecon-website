@@ -21,16 +21,30 @@ const { isHome = false } = Astro.props;
       <span class="nav-brand__desc">Economic Analysis</span>
     </div>
 
-    <button
-      class="navm-btn"
-      id="navMenuBtn"
-      aria-label="Menu"
-      aria-expanded="false"
-      aria-controls="navMenu"
-    >
-      <span class="navm-btn__label">Menu</span>
-      <span class="navm-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/#product">How it works</a></li>
+        <li><a href="/cedar">Cedar</a></li>
+        <li><a href="/pricing">Pricing</a></li>
+        <li><a href="/methodology">Methodology</a></li>
+      </ul>
+      <span class="nav-links__sep" aria-hidden="true"></span>
+      <a class="nav-login" href="/login">Log in</a>
+      <a class="nav-signup" href="/signup">Sign up</a>
+
+      <button
+        class="navm-btn"
+        id="navMenuBtn"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="navMenu"
+      >
+        <span class="navm-btn__label">Menu</span>
+        <span class="navm-btn__bars" aria-hidden="true"
+          ><span></span><span></span><span></span></span
+        >
+      </button>
+    </div>
   </div>
 </nav>
 

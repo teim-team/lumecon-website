@@ -60,7 +60,7 @@
   background: linear-gradient(180deg, #096f66 0%, #05564f 100%);
 }
 .btn2--card {
-  background: var(--white);
+  background: var(--surface);
   color: var(--navy);
   border: 1px solid var(--rule-strong);
 }
@@ -208,7 +208,7 @@
   border: 1px solid var(--rule);
   border-radius: 8px;
   overflow: hidden;
-  background: var(--white);
+  background: var(--surface);
   transform-origin: center top;
   will-change: transform;
   /* transform / box-shadow / opacity carry the 6.5s rotation, so they stay
@@ -491,6 +491,7 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: var(--shadow-frame);
+  background: var(--surface);
 }
 .cedar-shot img {
   display: block;
@@ -557,6 +558,7 @@
     transform 0.2s var(--ease),
     border-color 0.2s var(--ease),
     box-shadow 0.2s var(--ease);
+  background: var(--surface);
 }
 .askai-tile:hover {
   border-color: var(--rule-strong);
