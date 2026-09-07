@@ -115,7 +115,7 @@ await shot(desktopLight, '/pricing', 'pricing-faq-open--desktop-light', {
     });
     if (!opened) {
       throw new Error(
-        'pricing FAQ disclosure (.pr-faq details.pr-more--faq) not found; the open-state shot would capture the closed default'
+        'pricing FAQ disclosure (.pr-faq details.pr-more--faq) not found; the open-state shot would capture the closed default',
       );
     }
     await page.waitForTimeout(300);

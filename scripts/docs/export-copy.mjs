@@ -81,7 +81,8 @@ const CLAIMS = {
   'Geography coverage (counties / states / nation / reservations)':
     /counties?,? states?,? (and )?the nation|every supported u\.s\. geography/i,
   'Unlimited analysis / no per-analysis fees': /unlimited (analysis|projects)|per-analysis fee/i,
-  'Cedar included in every plan': /cedar[^.]{0,40}(in every plan|included)|included[^.]{0,30}cedar/i,
+  'Cedar included in every plan':
+    /cedar[^.]{0,40}(in every plan|included)|included[^.]{0,30}cedar/i,
   'Traceability / lineage': /traceab|lineage|trace (this|a|any) number/i,
   'Same model / same data foundation': /same (underlying )?(economic )?model|same data foundation/i,
 };
@@ -90,7 +91,9 @@ const CLAIMS = {
 
 async function readPages() {
   const browser = await chromium.launch({ executablePath: chromiumExecutable() });
-  const page = await browser.newContext({ viewport: { width: 1440, height: 900 } }).then((c) => c.newPage());
+  const page = await browser
+    .newContext({ viewport: { width: 1440, height: 900 } })
+    .then((c) => c.newPage());
   const out = [];
 
   for (const [path, label] of PAGES) {
@@ -119,30 +122,43 @@ function scrape() {
   const blocks = [];
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'SVG', 'TEMPLATE']);
 
-  const walk = (node) => {
+  // Content that is hidden by default must be LABELLED, not silently
+  // flattened into the copy. The first version of this export read the
+  // signup page's conditional plan badge — hidden until a ?tier= is
+  // present — and rendered its two spans as the string "PlanChange plan",
+  // which a reviewer then reported as a visible layout defect. It is not
+  // one. Conditional copy is still copy worth reviewing, so it stays in,
+  // marked for what it is.
+  const isConditional = (el) => el.hasAttribute('hidden') || el.closest('[hidden]') !== null;
+
+  const walk = (node, conditional = false) => {
     for (const el of node.children) {
       const tag = el.tagName;
       if (SKIP.has(tag)) continue;
+      const cond = conditional || isConditional(el);
       if (/^H[1-6]$/.test(tag)) {
-        blocks.push({ kind: 'h' + tag[1], text: clean(el.innerText) });
+        blocks.push({ kind: 'h' + tag[1], text: clean(el.innerText), cond });
       } else if (['P', 'LI', 'DT', 'DD', 'SUMMARY', 'FIGCAPTION', 'BLOCKQUOTE'].includes(tag)) {
         const t = clean(el.innerText);
-        if (t) blocks.push({ kind: tag.toLowerCase(), text: t });
+        if (t) blocks.push({ kind: tag.toLowerCase(), text: t, cond });
       } else if (tag === 'A' && !el.querySelector('p,h1,h2,h3,h4,li')) {
         const t = clean(el.innerText);
-        if (t) blocks.push({ kind: 'link', text: t, href: el.getAttribute('href') });
+        if (t) blocks.push({ kind: 'link', text: t, href: el.getAttribute('href'), cond });
       } else if (tag === 'BUTTON') {
         const t = clean(el.innerText);
-        if (t) blocks.push({ kind: 'button', text: t });
+        if (t) blocks.push({ kind: 'button', text: t, cond });
       } else if (tag === 'IMG') {
-        blocks.push({ kind: 'img', text: el.getAttribute('alt') || '(no alt)' });
+        blocks.push({ kind: 'img', text: el.getAttribute('alt') || '(no alt)', cond });
       } else if (['SECTION', 'ARTICLE', 'ASIDE', 'HEADER', 'FOOTER'].includes(tag)) {
         const name =
-          el.getAttribute('aria-label') || el.getAttribute('id') || el.className.split(' ')[0] || tag.toLowerCase();
-        blocks.push({ kind: 'section', text: name });
-        walk(el);
+          el.getAttribute('aria-label') ||
+          el.getAttribute('id') ||
+          el.className.split(' ')[0] ||
+          tag.toLowerCase();
+        blocks.push({ kind: 'section', text: name, cond });
+        walk(el, cond);
       } else {
-        walk(el);
+        walk(el, cond);
       }
     }
   };
@@ -174,6 +190,9 @@ function scrape() {
 
 /* --------------------------------------------------------------- write */
 
+/** Conditional copy is flagged so a reviewer does not read it as visible. */
+const mark = (b) => (b.cond ? '**[conditional]** ' : '');
+
 const normalise = (s) =>
   s
     .toLowerCase()
@@ -186,7 +205,11 @@ function repetition(pages) {
   const sentences = new Map();
   for (const p of pages) {
     for (const b of p.blocks || []) {
-      if (!['p', 'li', 'dd', 'dt', 'summary', 'figcaption', 'h1', 'h2', 'h3', 'h4'].includes(b.kind)) continue;
+      if (b.cond) continue; // conditional copy is not what the page says by default
+      if (
+        !['p', 'li', 'dd', 'dt', 'summary', 'figcaption', 'h1', 'h2', 'h3', 'h4'].includes(b.kind)
+      )
+        continue;
       for (const raw of b.text.split(/(?<=[.?!])\s+/)) {
         const n = normalise(raw);
         if (n.split(' ').length < 6) continue; // fragments are not repetition
@@ -204,7 +227,8 @@ function repetition(pages) {
     claims[label] = [];
     for (const p of pages) {
       const n = (p.blocks || []).filter(
-        (b) => ['p', 'li', 'dd', 'dt', 'summary', 'h1', 'h2', 'h3'].includes(b.kind) && re.test(b.text),
+        (b) =>
+          ['p', 'li', 'dd', 'dt', 'summary', 'h1', 'h2', 'h3'].includes(b.kind) && re.test(b.text),
       ).length;
       if (n) claims[label].push(`\`${p.path}\` ×${n}`);
     }
@@ -230,16 +254,22 @@ function render(pages) {
   put('');
   put('I want a hard critique of the writing and the information architecture. Specifically:');
   put('');
-  put('1. **Does each page make one argument, and is it the right one?** The intended job is listed per page below.');
+  put(
+    '1. **Does each page make one argument, and is it the right one?** The intended job is listed per page below.',
+  );
   put(
     '2. **Where is the copy vague, hedged, or making a claim it does not support?** This is sold to people who will be asked to defend the numbers in a public meeting.',
   );
   put('3. **Where does it repeat itself**, within a page or across pages?');
-  put('4. **Is anything overwritten?** Name the sentences that could go entirely without losing meaning.');
+  put(
+    '4. **Is anything overwritten?** Name the sentences that could go entirely without losing meaning.',
+  );
   put(
     '5. **Does the architecture match how a buyer actually decides?** Is anything in the wrong place, missing, or on a page nobody will reach.',
   );
-  put('6. **Tone.** It should read as credible and plain-spoken. Flag anything that reads as vendor language.');
+  put(
+    '6. **Tone.** It should read as credible and plain-spoken. Flag anything that reads as vendor language.',
+  );
   put('');
   put(
     'House rules the copy must keep: no ampersands in visible copy; "analysis" not "study"; "organization" not "client"; "economic output" not "sales"; "Cedar" is the AI economic analyst and is never an "AI assistant"; the product family is Cedar Impact, Cedar Commons and Cedar Grove, with Seed as the free plan.',
@@ -253,7 +283,9 @@ function render(pages) {
       put(`| \`${p.path}\` | — | (${p.error}) | — |`);
       continue;
     }
-    put(`| \`${p.path}\` | ${p.wordCount} | ${p.title.replace(/\|/g, '\\|')} | ${p.description.length} |`);
+    put(
+      `| \`${p.path}\` | ${p.wordCount} | ${p.title.replace(/\|/g, '\\|')} | ${p.description.length} |`,
+    );
   }
   put(`| **Total** | **${pages.reduce((a, p) => a + (p.wordCount || 0), 0)}** | | |`, '');
 
@@ -276,11 +308,19 @@ function render(pages) {
     const heads = p.blocks.filter((b) => /^h[1-6]$/.test(b.kind));
     if (heads.length) {
       put('### Architecture (heading outline)', '');
-      for (const h of heads) put('  '.repeat(Math.max(0, Number(h.kind[1]) - 1)) + `- **${h.kind.toUpperCase()}** ${h.text}`);
+      for (const h of heads)
+        put(
+          '  '.repeat(Math.max(0, Number(h.kind[1]) - 1)) +
+            `- **${h.kind.toUpperCase()}** ${h.text}`,
+        );
       put('');
     }
 
     put('### Copy, in document order', '');
+    put(
+      '_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._',
+      '',
+    );
     let lastSection = null;
     for (const b of p.blocks) {
       if (b.kind === 'section') {
@@ -293,9 +333,9 @@ function render(pages) {
       else if (b.kind === 'link') put(`- _link:_ [${b.text}](${b.href})`);
       else if (b.kind === 'button') put(`- _button:_ ${b.text}`);
       else if (b.kind === 'summary') put(`- _disclosure:_ ${b.text}`);
-      else if (['li', 'dt', 'dd'].includes(b.kind)) put(`- ${b.text}`);
+      else if (['li', 'dt', 'dd'].includes(b.kind)) put(`- ${mark(b)}${b.text}`);
       else if (b.kind === 'figcaption') put(`_caption:_ ${b.text}`);
-      else put(b.text, '');
+      else put(mark(b) + b.text, '');
     }
     put('');
   }
@@ -311,7 +351,8 @@ function render(pages) {
   }
   put('', '### How often each recurring claim is made, by page', '');
   put('| Claim | Where it appears |', '|---|---|');
-  for (const [label, hits] of Object.entries(claims)) put(`| ${label} | ${hits.length ? hits.join(', ') : '—'} |`);
+  for (const [label, hits] of Object.entries(claims))
+    put(`| ${label} | ${hits.length ? hits.join(', ') : '—'} |`);
   put('');
 
   if (existsSync(NOTES)) put(readFileSync(NOTES, 'utf8').trimEnd(), '');
@@ -328,5 +369,7 @@ if (unreachable.length === pages.length) {
   process.exit(1);
 }
 writeFileSync(OUT, render(pages));
-console.log(`\nWrote docs/site-copy-and-architecture.md (${pages.length - unreachable.length} pages).`);
+console.log(
+  `\nWrote docs/site-copy-and-architecture.md (${pages.length - unreachable.length} pages).`,
+);
 if (unreachable.length) console.warn(`Skipped: ${unreachable.map((p) => p.path).join(', ')}`);

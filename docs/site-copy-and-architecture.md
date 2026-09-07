@@ -23,12 +23,12 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page               |    Words | Title                                                 | Meta description length |
 | ------------------ | -------: | ----------------------------------------------------- | ----------------------: |
-| `/`                |      595 | Lumecon \| The Intelligent Economic Analysis Platform |                     150 |
+| `/`                |      593 | Lumecon \| The Intelligent Economic Analysis Platform |                     150 |
 | `/pricing`         |     1279 | Pricing \| Lumecon                                    |                     146 |
 | `/methodology`     |     2596 | Methodology \| Lumecon                                |                     154 |
 | `/cedar`           |      509 | Cedar, the AI economic analyst \| Lumecon             |                     135 |
 | `/glossary`        |      431 | Glossary \| Lumecon                                   |                     142 |
-| `/naics`           |      525 | Industry sectors \| Lumecon                           |                     146 |
+| `/naics`           |      527 | Industry sectors \| Lumecon                           |                     146 |
 | `/signup`          |      201 | Request beta access \| Lumecon                        |                     118 |
 | `/login`           |       67 | Log in \| Lumecon                                     |                      31 |
 | `/choose-plan`     |      149 | Choose your plan \| Lumecon                           |                     103 |
@@ -54,7 +54,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 595
+- **Visible words:** 593
 
 ### Architecture (heading outline)
 
@@ -79,6 +79,8 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 > _section: `top`_
 
 - _image alt:_ (no alt)
@@ -90,10 +92,10 @@ Credible economic impact analysis for governments, universities, nonprofits, bus
 
 - _link:_ [Plans from $1,000 a year →](/pricing)
 - _link:_ [Try Lumecon for free →](/signup?tier=free)
-- _image alt:_ Lumecon results page for a whole-nation economic footprint at Tulalip, Washington: an estimated 4,820 jobs and $1,240,500,000 in economic output, with statewide and homelands scopes. Shown with sample data.
-- _image alt:_ Lumecon results page on the Homelands scope, zoomed to the Tulalip reservation in Snohomish County, Washington, with the homelands operations breakdown below. Shown with sample data.
-- _image alt:_ Lumecon comparison of FY2023 Nation Economic Footprint against FY2025 Nation Economic Footprint at Tulalip, Washington, with the change in jobs, GDP contribution, labor income, economic output and tax impacts. Shown with sample data.
-  _caption:_ Shown with sample data: a Tribal Nation's whole economy at Tulalip, Washington.
+- _image alt:_ Lumecon results page for university research campus operations in Ohio: an estimated 3,050 jobs and $720,000,000 in economic output, with four key figures and the county map. Shown with sample data.
+- _image alt:_ Lumecon results page framed on the Ohio county map for university research campus operations, with the operations breakdown below. Shown with sample data.
+- _image alt:_ Lumecon comparison of Research Laboratory Construction (2022) against Research Campus Operations (2025) in Ohio, with the change in jobs, GDP contribution, labor income, economic output and tax impacts. Shown with sample data.
+  _caption:_ Shown with sample data: a university research campus in Ohio.
 
 > _section: `Data provenance`_
 
@@ -273,6 +275,8 @@ Create a free Seed account, bring your documents and see what the model finds. N
   - **H2** Pricing questions, answered plainly.
 
 ### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
 
 > _section: `pr-hero`_
 
@@ -478,6 +482,8 @@ Subscriptions renew automatically, we email you 90 days and 30 days beforehand, 
     - **H3** Are Lumecon results estimates?
 
 ### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
 
 > _section: `meth-hero`_
 
@@ -694,6 +700,8 @@ Yes. Results are decision-support estimates and are labeled as such wherever the
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 > _section: `meth-hero`_
 
 CEDAR
@@ -779,6 +787,8 @@ We are continually expanding the formats Cedar can understand, the workflows it 
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 > _section: `meth-hero`_
 
 REFERENCE
@@ -817,7 +827,7 @@ The terms that come up most in economic impact analysis, defined in plain langua
 - The count of jobs supported by the activity across the direct, indirect and induced layers over the analysis period. It is a job count; where a conversion basis matters, the analysis states it.
 - GDP contribution
 - The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP. Lumecon uses GDP contribution as the plain-language label for value added.
-  No term matches that. Ask Cedar in the corner of this page, or write to contact@lumecon.ai and we will add it.
+  **[conditional]** No term matches that. Ask Cedar in the corner of this page, or write to contact@lumecon.ai and we will add it.
 
 Read how an analysis is built, or ask Cedar (in the corner of this page) to explain any of these in plain language.
 
@@ -832,7 +842,7 @@ Read how an analysis is built, or ask Cedar (in the corner of this page) to expl
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, BreadcrumbList, DefinedTermSet
-- **Visible words:** 525
+- **Visible words:** 527
 
 ### Architecture (heading outline)
 
@@ -840,13 +850,15 @@ Read how an analysis is built, or ask Cedar (in the corner of this page) to expl
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 > _section: `meth-hero`_
 
 REFERENCE
 
 **H1: The sectors behind every number.**
 
-Lumecon classifies economic activity at the two-digit NAICS sector level, where federal administrative data is most complete. Complete data means fewer assumptions standing in for missing values, so every multiplier rests on published figures. Hover over a sector to see what belongs to it, and read why two digits in the methodology.
+Lumecon classifies economic activity at the two-digit NAICS sector level, because county and state employment and wage data are more complete there. That reduces, but does not eliminate, the estimation standing in for suppressed and missing values. Open a sector to see what belongs to it, and read why two digits in the methodology.
 
 > _section: `Sectors`_
 
@@ -890,11 +902,13 @@ Lumecon classifies economic activity at the two-digit NAICS sector level, where 
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 **H1: Lumecon is in private beta**
 
 We are opening access in waves while we finish the work. Tell us who you are and what you want to measure, and the team will reach out with your access.
 
-PlanChange plan
+**[conditional]** PlanChange plan
 
 Fields marked * are required.
 
@@ -941,6 +955,8 @@ Every request goes to a person, not a queue. When your access is ready you get t
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 > _section: `asplit-brand`_
 
 - _image alt:_ (no alt)
@@ -956,14 +972,14 @@ Your analyses, organizational context, Cedar and reporting tools stay together i
 
 Welcome back. Enter your work email to continue.
 
-- 12 characters or more
-- Upper and lower case
-- A number
-- A symbol
-- _link:_ [Forgot password?](#)
+- **[conditional]** 12 characters or more
+- **[conditional]** Upper and lower case
+- **[conditional]** A number
+- **[conditional]** A symbol
+- _link:_ [Forgot password?](/login?reset=1)
 - _button:_ Log in
 - _button:_ Back to sign in
-- _link:_ [Continue with Google](#)
+- _link:_ [Continue with Google](/login?google=1)
   New to Lumecon? Create an account
 
 ---
@@ -982,6 +998,8 @@ Welcome back. Enter your work email to continue.
 - **H1** How will you use Lumecon?
 
 ### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
 
 - _image alt:_ (no alt)
   YOUR ACCOUNT IS READY
@@ -1013,6 +1031,8 @@ Every plan runs the same economic model on the same data foundation. Pick the si
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 - _image alt:_ (no alt)
   YOUR ACCOUNT IS READY
 
@@ -1043,6 +1063,8 @@ Every plan runs the same economic model on the same data foundation. Pick the si
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 - _image alt:_ (no alt)
   SUBSCRIPTION CONFIRMED
 
@@ -1070,6 +1092,8 @@ Your Lumecon workspace is ready.
   - **H2** Lumecon · the product film
 
 ### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
 
 Product films
 
@@ -1108,6 +1132,8 @@ Download the film (MP4, 7.6 MB)
   - **H2** Report a problem
 
 ### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
 
 **H1: Accessibility**
 
@@ -1158,6 +1184,8 @@ If any part of this site is difficult to use with assistive technology, or you s
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 **H1: AI and Data Use**
 
 Lumecon is the intelligent economic analysis platform, and Cedar is the AI economic analyst inside it. This page says in plain language what Cedar does with data, what it never does, and what is still being formalized. It exists because our customers, governments, Tribal Nations, universities and the organizations that answer to them, are accountable for the tools they bring in, and deserve answers before a procurement review has to ask.
@@ -1202,6 +1230,8 @@ Lumecon is the intelligent economic analysis platform, and Cedar is the AI econo
 
 ### Copy, in document order
 
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
 **H1: Privacy Policy**
 
 - _disclosure:_ What we collect
@@ -1243,6 +1273,8 @@ Lumecon is the intelligent economic analysis platform, and Cedar is the AI econo
 - **H1** Terms of Service
 
 ### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
 
 **H1: Terms of Service**
 
@@ -1306,6 +1338,8 @@ Lumecon is the intelligent economic analysis platform, and Cedar is the AI econo
 - **H1** 404
 
 ### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
 
 **H1: 404**
 
