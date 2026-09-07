@@ -140,19 +140,18 @@
   margin: auto;
   padding: clamp(2.2rem, 5vh, 3.2rem) clamp(1.25rem, 4vw, 2rem);
 }
+/* No chip, for the same reason the homepage edge icons lost theirs: a
+   tinted rounded square around a single icon adds a rectangle that says
+   nothing and reads as template chrome. */
 .asplit-ic {
-  width: 50px;
-  height: 50px;
-  border-radius: 13px;
-  display: grid;
-  place-items: center;
-  background: var(--accent-rgba-08);
+  display: flex;
+  align-items: center;
   color: var(--accent-text);
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.75rem;
 }
 .asplit-ic svg {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
 .asplit-title {
   font-family: var(--font-display);
