@@ -82,7 +82,7 @@ const INCLUDED = [
         <h1 class="co2-title">Complete your subscription.</h1>
         <p class="co2-tagline">Everything you need to start measuring your impact is ready.</p>
 
-        <form class="auth-form" data-co-form novalidate>
+        <form class="auth-form" method="post" action="/checkout" data-co-form novalidate>
           <label class="auth-field">
             <span>Email for your receipt and account</span>
             <input
@@ -114,9 +114,11 @@ const INCLUDED = [
             Stripe.
           </p>
 
-          <!-- Point-of-sale disclosure (legal framework review, Part 5
+          {
+            /* Point-of-sale disclosure (legal framework review, Part 5
                item 3): plan, amount, frequency, auto-renewal and how
-               to cancel, immediately above the purchase action. -->
+               to cancel, immediately above the purchase action. */
+          }
           <p class="co2-disclose" data-co-disclose></p>
 
           <p class="auth-meta" data-auth-status role="status" aria-live="polite" hidden></p>

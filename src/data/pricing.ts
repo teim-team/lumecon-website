@@ -170,12 +170,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   { label: 'Users', values: ['1', '1', 'Up to 10', 'Unlimited users in one organization'] },
   {
     label: 'Cedar Impact',
-    values: [
-      'Unlimited projects and analyses on the full economic model',
-      'Same',
-      'Same',
-      'Same',
-    ],
+    values: ['Unlimited projects and analyses on the full economic model', 'Same', 'Same', 'Same'],
   },
   {
     label: 'Results',

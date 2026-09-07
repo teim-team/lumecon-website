@@ -1,0 +1,332 @@
+/**
+ * Export every page's visible copy and information architecture.
+ *
+ * Writes docs/site-copy-and-architecture.md: the rendered copy of each
+ * page in document order with every <details> expanded, the heading
+ * outline, the meta and structured-data summary, and an appendix that
+ * MEASURES repetition rather than asserting it.
+ *
+ * It reads the built site through a real browser rather than parsing
+ * src/, for two reasons. Copy lives in several places (.astro markup,
+ * src/data/pricing.ts, scripts/naics/sectors.mjs) and a source-reading
+ * export would miss some of it; and folded content only exists once a
+ * <details> is open. Reading the render cannot drift from what ships.
+ *
+ * Same convention as the rest of scripts/: nothing here runs at build
+ * time. Run it when copy changes and commit the output.
+ *
+ *   npm run docs:copy
+ *
+ * The editorial notes in docs/_copy-notes.md are hand-maintained and are
+ * appended verbatim, so regenerating never overwrites them.
+ */
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+import { chromium } from '@playwright/test';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const BASE = process.env.DOCS_BASE_URL || 'http://localhost:4321';
+const OUT = resolve(ROOT, 'docs/site-copy-and-architecture.md');
+const NOTES = resolve(ROOT, 'docs/_copy-notes.md');
+
+/** Same resolution order as playwright.config.ts. */
+function chromiumExecutable() {
+  if (process.env.PW_CHROMIUM_EXECUTABLE) return process.env.PW_CHROMIUM_EXECUTABLE;
+  try {
+    const pinned = chromium.executablePath();
+    if (pinned && existsSync(pinned)) return undefined;
+  } catch {
+    /* fall through */
+  }
+  const fallback = '/opt/pw-browsers/chromium';
+  return existsSync(fallback) ? fallback : undefined;
+}
+
+/** Every public page, in the order a reader would meet them. */
+const PAGES = [
+  ['/', 'Homepage'],
+  ['/pricing', 'Pricing'],
+  ['/methodology', 'Methodology'],
+  ['/cedar', 'Cedar'],
+  ['/glossary', 'Glossary'],
+  ['/naics', 'NAICS sectors'],
+  ['/signup', 'Sign up'],
+  ['/login', 'Log in'],
+  ['/choose-plan', 'Choose plan'],
+  ['/checkout', 'Checkout'],
+  ['/welcome', 'Welcome'],
+  ['/film', 'Film'],
+  ['/accessibility', 'Accessibility'],
+  ['/ai-and-data-use', 'AI and data use'],
+  ['/privacy', 'Privacy'],
+  ['/terms', 'Terms'],
+  ['/404', 'Not found'],
+];
+
+/** The one-line job each page is supposed to do (AGENTS.md, "Page ownership"). */
+const OWNERSHIP = {
+  '/': 'Why Lumecon matters.',
+  '/pricing': 'What it costs and why the pricing is different.',
+  '/methodology': 'Why the economics are credible.',
+  '/cedar': "Why Lumecon's use of AI is different.",
+  '/glossary': 'Defines terms and nothing more.',
+  '/naics': 'What the sector classification covers.',
+};
+
+/** Claims worth counting because they are the ones that recur. */
+const CLAIMS = {
+  'Audience list (governments / universities / nonprofits / businesses / Tribal Nations)':
+    /governments?[^.]{0,80}(tribal nations|universities)|universities[^.]{0,80}tribal nations/i,
+  'Geography coverage (counties / states / nation / reservations)':
+    /counties?,? states?,? (and )?the nation|every supported u\.s\. geography/i,
+  'Unlimited analysis / no per-analysis fees': /unlimited (analysis|projects)|per-analysis fee/i,
+  'Cedar included in every plan': /cedar[^.]{0,40}(in every plan|included)|included[^.]{0,30}cedar/i,
+  'Traceability / lineage': /traceab|lineage|trace (this|a|any) number/i,
+  'Same model / same data foundation': /same (underlying )?(economic )?model|same data foundation/i,
+};
+
+/* ---------------------------------------------------------------- read */
+
+async function readPages() {
+  const browser = await chromium.launch({ executablePath: chromiumExecutable() });
+  const page = await browser.newContext({ viewport: { width: 1440, height: 900 } }).then((c) => c.newPage());
+  const out = [];
+
+  for (const [path, label] of PAGES) {
+    const res = await page.goto(BASE + path, { waitUntil: 'networkidle' }).catch(() => null);
+    if (!res || res.status() >= 400) {
+      out.push({ path, label, error: `status ${res ? res.status() : 'unreachable'}` });
+      continue;
+    }
+    // Folded copy is still copy: open every disclosure before reading.
+    await page.evaluate(() => document.querySelectorAll('details').forEach((d) => (d.open = true)));
+    await page.waitForTimeout(200);
+    out.push({ path, label, ...(await page.evaluate(scrape)) });
+    process.stdout.write(`  ${path}\n`);
+  }
+
+  await browser.close();
+  return out;
+}
+
+/** Runs in the page. Walks <main> and emits a flat, ordered block list. */
+function scrape() {
+  const clean = (s) => (s || '').replace(/\s+/g, ' ').trim();
+  const meta = (n) => document.querySelector(`meta[name="${n}"]`)?.content || '';
+  const prop = (n) => document.querySelector(`meta[property="${n}"]`)?.content || '';
+  const main = document.querySelector('main') || document.body;
+  const blocks = [];
+  const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'SVG', 'TEMPLATE']);
+
+  const walk = (node) => {
+    for (const el of node.children) {
+      const tag = el.tagName;
+      if (SKIP.has(tag)) continue;
+      if (/^H[1-6]$/.test(tag)) {
+        blocks.push({ kind: 'h' + tag[1], text: clean(el.innerText) });
+      } else if (['P', 'LI', 'DT', 'DD', 'SUMMARY', 'FIGCAPTION', 'BLOCKQUOTE'].includes(tag)) {
+        const t = clean(el.innerText);
+        if (t) blocks.push({ kind: tag.toLowerCase(), text: t });
+      } else if (tag === 'A' && !el.querySelector('p,h1,h2,h3,h4,li')) {
+        const t = clean(el.innerText);
+        if (t) blocks.push({ kind: 'link', text: t, href: el.getAttribute('href') });
+      } else if (tag === 'BUTTON') {
+        const t = clean(el.innerText);
+        if (t) blocks.push({ kind: 'button', text: t });
+      } else if (tag === 'IMG') {
+        blocks.push({ kind: 'img', text: el.getAttribute('alt') || '(no alt)' });
+      } else if (['SECTION', 'ARTICLE', 'ASIDE', 'HEADER', 'FOOTER'].includes(tag)) {
+        const name =
+          el.getAttribute('aria-label') || el.getAttribute('id') || el.className.split(' ')[0] || tag.toLowerCase();
+        blocks.push({ kind: 'section', text: name });
+        walk(el);
+      } else {
+        walk(el);
+      }
+    }
+  };
+  walk(main);
+
+  const jsonld = [...document.querySelectorAll('script[type="application/ld+json"]')]
+    .flatMap((s) => {
+      try {
+        const j = JSON.parse(s.textContent);
+        return Array.isArray(j) ? j : [j];
+      } catch {
+        return [];
+      }
+    })
+    .map((o) => o['@type']);
+
+  return {
+    title: document.title,
+    description: meta('description'),
+    keywordsLen: (meta('keywords') || '').length,
+    robots: meta('robots'),
+    canonical: document.querySelector('link[rel=canonical]')?.href || '',
+    ogTitle: prop('og:title'),
+    jsonld: [...new Set(jsonld.flat())],
+    wordCount: clean(main.innerText).split(/\s+/).filter(Boolean).length,
+    blocks,
+  };
+}
+
+/* --------------------------------------------------------------- write */
+
+const normalise = (s) =>
+  s
+    .toLowerCase()
+    .replace(/[‘’']/g, "'")
+    .replace(/[^a-z0-9' ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+function repetition(pages) {
+  const sentences = new Map();
+  for (const p of pages) {
+    for (const b of p.blocks || []) {
+      if (!['p', 'li', 'dd', 'dt', 'summary', 'figcaption', 'h1', 'h2', 'h3', 'h4'].includes(b.kind)) continue;
+      for (const raw of b.text.split(/(?<=[.?!])\s+/)) {
+        const n = normalise(raw);
+        if (n.split(' ').length < 6) continue; // fragments are not repetition
+        if (!sentences.has(n)) sentences.set(n, []);
+        sentences.get(n).push({ page: p.path, text: raw.trim() });
+      }
+    }
+  }
+  const duplicated = [...sentences.values()]
+    .filter((v) => new Set(v.map((x) => x.page)).size > 1)
+    .sort((a, b) => b.length - a.length);
+
+  const claims = {};
+  for (const [label, re] of Object.entries(CLAIMS)) {
+    claims[label] = [];
+    for (const p of pages) {
+      const n = (p.blocks || []).filter(
+        (b) => ['p', 'li', 'dd', 'dt', 'summary', 'h1', 'h2', 'h3'].includes(b.kind) && re.test(b.text),
+      ).length;
+      if (n) claims[label].push(`\`${p.path}\` ×${n}`);
+    }
+  }
+  return { duplicated, claims };
+}
+
+function render(pages) {
+  const L = [];
+  const put = (...lines) => L.push(...lines);
+
+  put('# Lumecon website: full copy and information architecture');
+  put('');
+  put(
+    '_Generated by `npm run docs:copy` from the built site, every disclosure expanded, in document order. Nothing is paraphrased: the copy below is exactly what renders._',
+  );
+  put('');
+  put('## What this document is for');
+  put('');
+  put(
+    'Lumecon is an economic impact analysis platform for governments, tribal nations, universities, nonprofits and businesses. It is pre-launch, in private beta. Buyers are institutional and sceptical: city managers, tribal economic development directors, university and foundation staff, and consultants who currently use IMPLAN, RIMS II or REMI.',
+  );
+  put('');
+  put('I want a hard critique of the writing and the information architecture. Specifically:');
+  put('');
+  put('1. **Does each page make one argument, and is it the right one?** The intended job is listed per page below.');
+  put(
+    '2. **Where is the copy vague, hedged, or making a claim it does not support?** This is sold to people who will be asked to defend the numbers in a public meeting.',
+  );
+  put('3. **Where does it repeat itself**, within a page or across pages?');
+  put('4. **Is anything overwritten?** Name the sentences that could go entirely without losing meaning.');
+  put(
+    '5. **Does the architecture match how a buyer actually decides?** Is anything in the wrong place, missing, or on a page nobody will reach.',
+  );
+  put('6. **Tone.** It should read as credible and plain-spoken. Flag anything that reads as vendor language.');
+  put('');
+  put(
+    'House rules the copy must keep: no ampersands in visible copy; "analysis" not "study"; "organization" not "client"; "economic output" not "sales"; "Cedar" is the AI economic analyst and is never an "AI assistant"; the product family is Cedar Impact, Cedar Commons and Cedar Grove, with Seed as the free plan.',
+  );
+  put('', '---', '');
+  put('## Site map and page weights', '');
+  put('| Page | Words | Title | Meta description length |');
+  put('|---|---:|---|---:|');
+  for (const p of pages) {
+    if (p.error) {
+      put(`| \`${p.path}\` | — | (${p.error}) | — |`);
+      continue;
+    }
+    put(`| \`${p.path}\` | ${p.wordCount} | ${p.title.replace(/\|/g, '\\|')} | ${p.description.length} |`);
+  }
+  put(`| **Total** | **${pages.reduce((a, p) => a + (p.wordCount || 0), 0)}** | | |`, '');
+
+  for (const p of pages) {
+    put('---', '', `## \`${p.path}\` — ${p.label}`, '');
+    if (p.error) {
+      put(`_Could not render: ${p.error}_`, '');
+      continue;
+    }
+    if (OWNERSHIP[p.path]) put(`**Intended job of this page:** ${OWNERSHIP[p.path]}`, '');
+    put(`- **Title:** ${p.title}`);
+    put(`- **Meta description** (${p.description.length} chars): ${p.description}`);
+    if (p.ogTitle && p.ogTitle !== p.title) put(`- **og:title:** ${p.ogTitle}`);
+    put(`- **Canonical:** ${p.canonical}`);
+    if (p.robots) put(`- **Robots:** ${p.robots}`);
+    if (p.jsonld.length) put(`- **Structured data:** ${p.jsonld.join(', ')}`);
+    if (p.keywordsLen) put(`- **Meta keywords:** ${p.keywordsLen} characters`);
+    put(`- **Visible words:** ${p.wordCount}`, '');
+
+    const heads = p.blocks.filter((b) => /^h[1-6]$/.test(b.kind));
+    if (heads.length) {
+      put('### Architecture (heading outline)', '');
+      for (const h of heads) put('  '.repeat(Math.max(0, Number(h.kind[1]) - 1)) + `- **${h.kind.toUpperCase()}** ${h.text}`);
+      put('');
+    }
+
+    put('### Copy, in document order', '');
+    let lastSection = null;
+    for (const b of p.blocks) {
+      if (b.kind === 'section') {
+        if (b.text !== lastSection) {
+          put('', `> _section: \`${b.text}\`_`, '');
+          lastSection = b.text;
+        }
+      } else if (/^h[1-6]$/.test(b.kind)) put('', `**${b.kind.toUpperCase()}: ${b.text}**`, '');
+      else if (b.kind === 'img') put(`- _image alt:_ ${b.text}`);
+      else if (b.kind === 'link') put(`- _link:_ [${b.text}](${b.href})`);
+      else if (b.kind === 'button') put(`- _button:_ ${b.text}`);
+      else if (b.kind === 'summary') put(`- _disclosure:_ ${b.text}`);
+      else if (['li', 'dt', 'dd'].includes(b.kind)) put(`- ${b.text}`);
+      else if (b.kind === 'figcaption') put(`_caption:_ ${b.text}`);
+      else put(b.text, '');
+    }
+    put('');
+  }
+
+  const { duplicated, claims } = repetition(pages.filter((p) => !p.error));
+  put('---', '', '## Appendix A: repetition, measured', '');
+  put('_Computed from the copy above, not from memory. A sentence here is six words or more._', '');
+  put('### Sentences that appear verbatim on more than one page', '');
+  if (!duplicated.length) put('_None._');
+  for (const hits of duplicated) {
+    const where = [...new Set(hits.map((h) => '`' + h.page + '`'))].join(' and ');
+    put(`- **On ${where}:** "${hits[0].text}"`);
+  }
+  put('', '### How often each recurring claim is made, by page', '');
+  put('| Claim | Where it appears |', '|---|---|');
+  for (const [label, hits] of Object.entries(claims)) put(`| ${label} | ${hits.length ? hits.join(', ') : '—'} |`);
+  put('');
+
+  if (existsSync(NOTES)) put(readFileSync(NOTES, 'utf8').trimEnd(), '');
+  return L.join('\n') + '\n';
+}
+
+/* ----------------------------------------------------------------- run */
+
+console.log(`Reading ${BASE} …`);
+const pages = await readPages();
+const unreachable = pages.filter((p) => p.error);
+if (unreachable.length === pages.length) {
+  console.error(`\nNothing reachable at ${BASE}. Run \`npm run build && npm run preview\` first.`);
+  process.exit(1);
+}
+writeFileSync(OUT, render(pages));
+console.log(`\nWrote docs/site-copy-and-architecture.md (${pages.length - unreachable.length} pages).`);
+if (unreachable.length) console.warn(`Skipped: ${unreachable.map((p) => p.path).join(', ')}`);

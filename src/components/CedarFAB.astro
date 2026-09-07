@@ -66,9 +66,11 @@ import CedarChat from './CedarChat.astro';
   <span class="cedar-fab__label cedar-fab__label--close">Close</span>
 </button>
 
-<!-- One-time-per-session helper nudge. Hidden until the timer in the
+{
+  /* One-time-per-session helper nudge. Hidden until the timer in the
      script below shows it; role="status" announces the offer politely
-     to screen readers when it appears. -->
+     to screen readers when it appears. */
+}
 <div class="cedar-nudge" id="cedarNudge" role="status" hidden>
   <button
     type="button"
@@ -96,10 +98,12 @@ import CedarChat from './CedarChat.astro';
   </p>
 </div>
 
-<!-- Self-contained Cedar chat panel. Hidden until the FAB opens it.
+{
+  /* Self-contained Cedar chat panel. Hidden until the FAB opens it.
      Class-scoped (cedar-fab-panel + child .cedar-chat etc.) so it
      coexists with the inline Cedar chat on the homepage without
-     element-id collisions. -->
+     element-id collisions. */
+}
 <div
   class="cedar-fab-panel"
   id="cedarFabPanel"

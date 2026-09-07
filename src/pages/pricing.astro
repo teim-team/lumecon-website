@@ -96,7 +96,7 @@ const jsonLd = [
 >
   <Nav />
   <main class="pr" id="top" tabindex="-1">
-    <!-- 1. Hero: simplicity is the opening argument. -->
+    {/* 1. Hero: simplicity is the opening argument. */}
     <section class="pr-hero">
       <div class="pr-hero__inner" data-reveal-group>
         <p class="h-kicker">Pricing</p>
@@ -120,7 +120,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 2. The free account, promoted: don't take our word for it. -->
+    {/* 2. The free account, promoted: don't take our word for it. */}
     <section class="pr-plans" id="plans" aria-label="Plans">
       <aside class="pr-free" aria-labelledby="free-title">
         <div class="pr-free__main">
@@ -141,7 +141,7 @@ const jsonLd = [
         </div>
       </aside>
 
-      <!-- 3. Four understandable plans, Seed first. -->
+      {/* 3. Four understandable plans, Seed first. */}
       <div class="pr-plans__grid">
         {
           ALL_PLANS.map((p) => (
@@ -182,15 +182,19 @@ const jsonLd = [
         }
       </div>
 
-      <!-- One line for what used to be a consultant band. The cards
-           carry the marker; this says what the marker means. -->
+      {
+        /* One line for what used to be a consultant band. The cards
+           carry the marker; this says what the marker means. */
+      }
       <p class="pr-plans__clientnote">{CLIENT_WORK.note}</p>
 
-      <!-- Cedar Grove: the data library, sold on its own. It sits after
+      {
+        /* Cedar Grove: the data library, sold on its own. It sits after
            the plans rather than as a fourth card because it is not a
            fourth tier of the same thing: no economic model, no Cedar
            Commons, unlimited people. Pricing it here is also what shows
-           the model and Commons are the larger part of Tree. -->
+           the model and Commons are the larger part of Tree. */
+      }
       <aside class="pr-grove" id="cedar-grove" aria-labelledby="grove-title">
         <div class="pr-grove__main">
           <p class="h-kicker">{CEDAR_GROVE.kicker}</p>
@@ -227,10 +231,12 @@ const jsonLd = [
         </div>
       </aside>
 
-      <!-- Detail table, folded away by default. The cards answer the question
+      {
+        /* Detail table, folded away by default. The cards answer the question
            for most readers; the grid is for someone checking one capability.
            <details> rather than scripted state: no JavaScript, and keyboard
-           operable for free. -->
+           operable for free. */
+      }
       <details class="pr-more">
         <summary class="pr-more__summary">
           <span class="pr-more__label">Compare all plans</span>
@@ -265,8 +271,8 @@ const jsonLd = [
         </div>
       </details>
       <p class="pr-plans__note">
-        Every paid plan includes Cedar Impact in full, on the same data foundation; Seed shows
-        your direct effects. Prices include taxes and fees.{' '}
+        Every paid plan includes Cedar Impact in full, on the same data foundation; Seed shows your
+        direct effects. Prices include taxes and fees.{' '}
         <a class="inline-link" href="/cedar">Learn what Cedar does</a>.
       </p>
     </section>
@@ -283,9 +289,11 @@ const jsonLd = [
       });
     </script>
 
-    <!-- The FAQ is the body of the page now: everything the two prose
+    {
+      /* The FAQ is the body of the page now: everything the two prose
          sections and the commitment section used to argue is an answer
-         behind a one-sentence question. -->
+         behind a one-sentence question. */
+    }
     <section class="flowsec pr-faq" id="faq" aria-labelledby="faq-title">
       <div class="flowsec-inner">
         <header class="flowsec-head" data-reveal-group>

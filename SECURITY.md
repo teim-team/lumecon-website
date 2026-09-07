@@ -20,7 +20,7 @@ In scope:
 - The sign-up, log-in and checkout pages. While the beta is closed, the signup form posts a beta-access request to the contact endpoint (`/v1/contact`); the log-in page posts to the Lumecon product API (`/auth/login`, `/auth/password-reset-request`, `/auth/password-reset`) when a backend is configured, and checkout is a planned `/billing/checkout-session` Stripe handoff.
 
 Out of scope:
-- Findings on third-party services we link to (LinkedIn, font CDNs).
+- Findings on third-party services we link to (LinkedIn).
 - Brute-force attacks, denial-of-service tests, social engineering.
 - Reports about missing security headers without an exploitable consequence.
 
@@ -63,13 +63,4 @@ Needs an infrastructure decision (tracked, not yet done):
   CloudFront with a response-headers policy suits us if the rest of the stack
   ends up on AWS. Whichever is chosen, the requirement is real HTTP headers,
   not the vendor.
-- **Self-host Inter and JetBrains Mono.** Google Fonts loads before any
-  consent choice, which discloses visitor IPs to a third party; self-hosting
-  removes the third party and lets the CSP tighten to `font-src 'self'`.
-  *Fallbacks, if self-hosting is not done first:* proxy the font files through
-  our own origin so no visitor IP reaches Google; or defer the Google Fonts
-  link until after consent and ship the system stack
-  (`ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif`)
-  until then. Both close the disclosure; only self-hosting also lets the CSP
-  tighten, so they are stopgaps rather than substitutes.
 - SHA-pin GitHub Actions (currently tag refs) and pin `@lhci/cli` exactly.

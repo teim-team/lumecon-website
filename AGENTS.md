@@ -238,9 +238,11 @@ output is committed. Run them when their inputs change.
 - Hero example screenshots: `scripts/screenshots/capture-examples.mjs`
   captures the 60 `public/app/ex-*.webp` hero images from a running
   teim-app dev server; `optimize-examples.mjs` compresses them.
-- Smoke tests: `npm run test:smoke` (Playwright; CI runs chromium +
-  webkit). In a sandbox without Google Fonts the home smoke test
-  fails on a blocked font request; every other failure is real.
+- Smoke tests: `npm run build` first (Playwright serves `dist/`), then
+  `npm run test:smoke` (CI runs chromium + webkit). The site makes no
+  third-party requests since the typefaces were self-hosted, so there is
+  no longer an environmental failure mode to discount: every failure is
+  real.
 
 Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
 originals) is tracked in git. Moving it to external storage is a

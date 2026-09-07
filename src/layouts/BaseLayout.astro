@@ -78,7 +78,8 @@ const ogIA =
     <meta name="format-detection" content="telephone=no" />
     <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonical} />
-    <!-- Content Security Policy. Static-host friendly (meta-tag enforced).
+    {
+      /* Content Security Policy. Static-host friendly (meta-tag enforced).
      'unsafe-inline' on script/style is required because Astro inlines
      per-page hydration shims and the JSON-LD blob below; revisit when
      we move off GitHub Pages and can set this as an HTTP header with
@@ -94,7 +95,8 @@ const ogIA =
      Strict-Transport-Security can only be set as HTTP *headers*, which
      static hosting (GitHub Pages) cannot emit. They are not enforced
      until a header-capable layer (Cloudflare, the API origin, etc.)
-     fronts the site; add `X-Frame-Options: DENY` there. -->
+     fronts the site; add `X-Frame-Options: DENY` there. */
+    }
     <meta
       http-equiv="Content-Security-Policy"
       content={`default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src ${connectSrc}; upgrade-insecure-requests`}
@@ -105,7 +107,7 @@ const ogIA =
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
-    <!-- Favicons + app icons -->
+    {/* Favicons + app icons */}
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -122,7 +124,7 @@ const ogIA =
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="application-name" content="Lumecon" />
 
-    <!-- Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews -->
+    {/* Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews */}
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={ogT} />
@@ -136,7 +138,7 @@ const ogIA =
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogIA} />
 
-    <!-- Twitter / X card -->
+    {/* Twitter / X card */}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogT} />
     <meta name="twitter:description" content={ogD} />
@@ -144,18 +146,22 @@ const ogIA =
     <meta name="twitter:image:alt" content={ogIA} />
     <meta name="twitter:domain" content="lumecon.ai" />
 
-    <!-- Type is self-hosted (see the @font-face block at the top of
+    {
+      /* Type is self-hosted (see the @font-face block at the top of
          global.css). Preloading the two faces every page actually paints
          with means the first paint is already Inter: the old Google Fonts
          link loaded asynchronously, so headlines rendered in a system
          fallback and then reflowed. The latin-ext face is deliberately not
          preloaded; its unicode-range keeps it from downloading at all on an
-         English page. -->
-    <!-- The scroll-reveal gate. Every rule that starts an element at
+         English page. */
+    }
+    {
+      /* The scroll-reveal gate. Every rule that starts an element at
          opacity 0 is scoped to `html.js` (see global.css), so with
          scripting unavailable nothing is ever hidden. This runs before
          the stylesheet is applied to any content, so there is no flash of
-         visible-then-hidden. -->
+         visible-then-hidden. */
+    }
     <script is:inline>
       document.documentElement.classList.add('js');
     </script>
@@ -182,11 +188,13 @@ const ogIA =
     more predictable on mobile, and the visual cost (no fade
     between pages) is negligible on a four-page marketing site. */
     }
-    <!-- The entity graph, on every page. The full Organization node lives
+    {
+      /* The entity graph, on every page. The full Organization node lives
          on the homepage; this compact pair rides everywhere so a crawler
          landing on any page still learns who publishes it, that lumecon.ai
          is the official source, and where the nodes join (@id). Duplicate
-         @ids merge in linked data, so the homepage's richer node wins. -->
+         @ids merge in linked data, so the homepage's richer node wins. */
+    }
     <script
       is:inline
       type="application/ld+json"

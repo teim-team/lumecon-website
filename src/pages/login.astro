@@ -74,7 +74,7 @@ import '../styles/auth-split.css';
           Welcome back. Enter your work email to continue.
         </p>
 
-        <form class="auth-form" data-login-form novalidate>
+        <form class="auth-form" method="post" action="/login" data-login-form novalidate>
           <label class="auth-field" data-login-field="email">
             <span>Work email</span>
             <input
@@ -110,9 +110,11 @@ import '../styles/auth-split.css';
           </div>
         </form>
 
-        <!-- Google sign-in stays secondary, and stays hidden until
+        {
+          /* Google sign-in stays secondary, and stays hidden until
              PUBLIC_API_URL is configured (the OAuth origin decision
-             is founder-owned; see README). -->
+             is founder-owned; see README). */
+        }
         <div class="asplit-sso" data-google-wrap hidden>
           <div class="asplit-or" aria-hidden="true"><span>or</span></div>
           <a class="asplit-google" data-google-btn href="#">

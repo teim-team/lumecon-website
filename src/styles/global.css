@@ -14,11 +14,12 @@
    3. font-src and style-src drop two third-party origins from the CSP,
       and no visitor request leaves for fonts.gstatic.com.
 
-   Files come from @fontsource-variable/inter and
-   @fontsource-variable/jetbrains-mono (both 5.3.0), copied by
-   `npm run fonts:sync`. Same convention as scripts/: a generator whose
-   output is committed. unicode-range is copied from the upstream CSS so
-   latin-ext only downloads when a page actually needs it. */
+   Files are copied from the @fontsource-variable/inter and
+   @fontsource-variable/jetbrains-mono packages (both 5.3.0, devDependencies)
+   into public/fonts/ and committed, the same convention scripts/ uses for
+   generated output. To update: bump the packages and re-copy the four
+   `*-latin-*.woff2` files named below. unicode-range is copied from the
+   upstream CSS so latin-ext only downloads when a page needs it. */
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -490,50 +491,21 @@ body::after {
      cascade to nav.css's hardcoded-white background. */
 }
 
-/* ---------- Section-snap scrolling ----------
-   Marketing pages read as a sequence of self-contained "pages":
-   hero, workspace, why, products, cedar, contact, etc. Setting
-   snap-type on <html> + snap-align on each major section makes the
-   browser gently land on the next section when the visitor scrolls
-   close to a boundary. Proximity (not mandatory) keeps the feel
-   natural — small flicks still scroll freely, but a longer flick
-   snaps to the next page-sized section.
+/* Scroll-snap was removed, not disabled.
+   --------------------------------------------------------------------
+   The homepage used `scroll-snap-type: y proximity` on <html> to land on
+   section boundaries, and it was turned off because it fought momentum
+   scrolling on macOS trackpads and iOS Safari. What was left behind was
+   the whole apparatus set to `none`: the property declared three times
+   across two media queries, plus a `.snap-section` rule that no element
+   in the site carries. All of it did nothing. Gone.
 
-   The min-block-size pairing in each component CSS ensures sections
-   are at least one viewport tall (dvh accounts for mobile URL bars). */
+   `overflow-x: clip` and `scroll-padding-top` are load-bearing and stay:
+   `clip` rather than `hidden` avoids making <html> a scroll container,
+   and the padding keeps anchor jumps clear of the fixed nav. */
 html {
-  /* Scroll-snap intentionally OFF. We previously had
-       scroll-snap-type: y proximity
-     to give the homepage a "section-by-section" feel, but html-level
-     scroll-snap consistently caused "broken/jumpy scroll" reports on
-     macOS trackpads and iOS Safari (it fought momentum scrolling at
-     section boundaries). The .snap-section / scroll-snap-align hints on
-     children become inert without a snap container, so we leave them in
-     place as harmless markers. */
-  scroll-snap-type: none;
-  /* The headline highlight blocks bleed sideways (negative vw insets)
-     for an editorial look; clip the x-axis at the root so that bleed
-     can never become a horizontal scroll. `clip` (not `hidden`) avoids
-     making <html> a scroll container. */
   overflow-x: clip;
-  /* Reserve room for the fixed nav so anchor jumps land below it. */
   scroll-padding-top: clamp(4.5rem, 8vh, 5.5rem);
-}
-/* Disable snap on small landscape screens — phones in landscape have
-   too little vertical room for 100dvh sections to feel right. */
-@media (max-height: 480px) {
-  html {
-    scroll-snap-type: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-snap-type: none;
-  }
-}
-.snap-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
 }
 
 /* Selection. The browser default is a saturated blue that belongs to no
@@ -660,45 +632,6 @@ html {
   text-decoration: none;
 }
 
-/* Editorial primitives — used by Hero, Products, Why, Cedar so the
-   whole homepage reads as one publication, not four pasted-together
-   sections. */
-.kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-mono);
-  font-size: var(--type-xs);
-  font-weight: 500;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--navy);
-  opacity: 0.78;
-  margin-bottom: 1.25rem;
-}
-.kicker::before {
-  content: '§';
-  color: var(--accent-text);
-  font-weight: 700;
-}
-.display {
-  font-family: var(--font-display);
-  /* `font-variation-settings: 'opsz' 144` used to sit here. It did nothing
-     twice over: the Google Fonts request never asked for the opsz axis, and
-     144 is outside Inter's range anyway (14-32; 144 is the range of a
-     display serif, so the number was inherited from a different typeface).
-     `font-optical-sizing: auto` on body now handles this correctly for
-     every element, at whatever size it actually renders. */
-  font-weight: var(--weight-display);
-  letter-spacing: var(--track-title);
-  line-height: 0.98;
-}
-.display em {
-  font-style: italic;
-  font-weight: 400;
-  color: var(--gold);
-}
-
 /* Brand emphasis — the italic gold "luminate" wordplay that runs
    through the site, set in Inter italic so the brand ships exactly
    two font families. The glow keyframe pulses softly so the word
@@ -728,17 +661,6 @@ html {
   .lumin {
     animation: none;
   }
-}
-.lede {
-  /* `pretty` only protects the last line from a single-word orphan, which
-     is what body copy wants; `balance` on a paragraph would even out every
-     line and read as justified-ish. */
-  text-wrap: pretty;
-  font-size: clamp(1.05rem, 1.6vw, 1.32rem);
-  line-height: 1.55;
-  color: var(--navy);
-  opacity: 0.88;
-  max-width: 38rem;
 }
 
 a {
@@ -834,34 +756,6 @@ strong {
   .hover-veil {
     transition: none;
   }
-}
-
-/* Prose that is one argument in consecutive paragraphs.
-   --------------------------------------------------------------------
-   Two prose columns only work when both sides are genuinely parallel and
-   run about the same length. Every text-only pair on this site failed
-   that: 321 characters against 568 and 355 against 181 on methodology,
-   248 against 129 and 65 against 127 on pricing. The short side left a
-   hole beside the long one and the eye had to travel back up the page to
-   start the second half.
-
-   Stacked at the deck measure they read as what they are. This lives in
-   global.css so a page adds `prose-stack` rather than inventing its own
-   `*__cols` grid; .meth-onecol is the same rule under the name the
-   methodology markup already uses. Genuine pairs, prose beside an
-   equation or a question beside its answer, keep their own two-column
-   rules. */
-.prose-stack,
-.meth-onecol {
-  display: grid;
-  gap: 1rem;
-  max-width: var(--measure-deck);
-}
-.prose-stack > p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--ink-2);
-  margin: 0;
 }
 
 /* ---------- Inverted section ----------

@@ -48,11 +48,13 @@ const { isHome = false } = Astro.props;
   </div>
 </nav>
 
-<!-- The overlay must be a SIBLING of <nav>, not a child: the nav bar
+{
+  /* The overlay must be a SIBLING of <nav>, not a child: the nav bar
      carries backdrop-filter (always on inner pages, on scroll on the
      homepage), and a filtered ancestor becomes the containing block
      for position: fixed descendants. Inside the nav, the "full
-     screen" overlay was silently confined to the bar's own box. -->
+     screen" overlay was silently confined to the bar's own box. */
+}
 <div class="navm" id="navMenu" hidden>
   <div class="navm-inner">
     <ul class="navm-list">

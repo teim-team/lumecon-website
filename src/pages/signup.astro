@@ -105,10 +105,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
           We are opening access in waves while we finish the work. Tell us who you are and what you
           want to measure, and the team will reach out with your access.
         </p>
-        <!-- If /signup arrived from a pricing tier CTA, the URL query
+        {
+          /* If /signup arrived from a pricing tier CTA, the URL query
              carries tier= and this badge reflects the chosen plan back
              at the visitor. Hidden by default; the inline script below
-             reveals it if the query is present. -->
+             reveals it if the query is present. */
+        }
         <p class="auth-plan" data-auth-plan hidden>
           <span class="auth-plan__label">Plan</span>
           <span class="auth-plan__value" data-auth-plan-value></span>
@@ -118,7 +120,14 @@ const ORGANIZATION_TYPE_OPTIONS = [
         <p class="auth-reqnote">
           Fields marked <span class="auth-req" aria-hidden="true">*</span> are required.
         </p>
-        <form class="auth-form" data-auth-form data-auth-kind="beta-request" novalidate>
+        <form
+          class="auth-form"
+          method="post"
+          action="/signup"
+          data-auth-form
+          data-auth-kind="beta-request"
+          novalidate
+        >
           <input type="hidden" name="tier" data-auth-tier />
           <input type="hidden" name="role" data-auth-role />
 
@@ -210,10 +219,12 @@ const ORGANIZATION_TYPE_OPTIONS = [
           </div>
         </form>
 
-        <!-- Acceptance language is deliberately absent until counsel
+        {
+          /* Acceptance language is deliberately absent until counsel
              delivers the final documents: no agreement is claimed to
              Terms whose page says they are being prepared. See
-             docs/legal/legal-framework-review.md, Part 5 items 1-2. -->
+             docs/legal/legal-framework-review.md, Part 5 items 1-2. */
+        }
         <p class="auth-legal">
           Our <a href="/terms">Terms of Service</a>{' '}and{' '}
           <a href="/privacy">Privacy Policy</a> are being finalized with counsel; you will be asked to

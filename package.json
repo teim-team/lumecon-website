@@ -16,7 +16,8 @@
     "test:smoke": "playwright test",
     "naics:duotone": "node scripts/naics/duotone.mjs scripts/naics/sources",
     "naics:export-app": "node scripts/naics/export-app.mjs",
-    "shots:examples": "node scripts/screenshots/capture-examples.mjs"
+    "shots:examples": "node scripts/screenshots/capture-examples.mjs",
+    "docs:copy": "node scripts/docs/export-copy.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
