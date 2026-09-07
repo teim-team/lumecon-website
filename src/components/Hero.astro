@@ -89,6 +89,32 @@ import '../styles/home.css';
         Shown with sample data: a community college in Connecticut.
       </figcaption>
     </figure>
+
+    <!-- Provenance, in the first viewport.
+         The reference site puts a customer logo wall here. Lumecon is in
+         private beta and has no customers to name, so naming any would be
+         a lie. What it does have is the thing a government or institutional
+         buyer is actually checking for, which is where the numbers come
+         from. Every agency below appears in the source manifest on
+         /methodology; this is a summary of that page, not a new claim, and
+         it is deliberately worded as data provenance rather than as any
+         kind of partnership or endorsement. -->
+    <aside class="proof reveal-soft" data-stagger="5" aria-label="Data provenance">
+      <!-- The label is the link. As a separate "See every source" it sat at
+           the end of the agency row and read as a seventh agency. -->
+      <a class="proof__label" href="/methodology#m-data">
+        Every analysis is built on federal data
+      </a>
+      <ul class="proof__list">
+        <li>U.S. Census Bureau</li>
+        <li>Bureau of Economic Analysis</li>
+        <li>Bureau of Labor Statistics</li>
+        <li>Bureau of Indian Affairs</li>
+        <li>USDA</li>
+        <li>NOAA</li>
+      </ul>
+    </aside>
+
     <script is:inline>
       /* One example per visit, locked; only the archetypes rotate.
          Each frame permanently holds one archetype of the chosen

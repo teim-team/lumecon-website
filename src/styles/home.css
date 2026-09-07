@@ -353,6 +353,97 @@
   }
 }
 
+/* ---------- provenance row ----------
+   A quiet band closing the hero: label, the agencies behind the model,
+   and a route to the full manifest. Deliberately typographic. Agency
+   wordmarks would be a licensing question and, worse, would read as
+   endorsement; plain type states the fact and claims nothing else. */
+.proof {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: clamp(1.4rem, 4vh, 2.6rem) auto 0;
+  padding-top: clamp(1.2rem, 3vh, 1.8rem);
+  border-top: 1px solid var(--rule);
+  /* A deliberate two-line block, label over agencies, rather than one row
+     that happens to wrap: at this width the label plus six agency names
+     cannot fit on a line, so letting it wrap put the label in a different
+     place at every breakpoint. */
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+}
+.proof__label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.proof__label:hover {
+  color: var(--accent-text);
+}
+.proof__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.4rem clamp(0.8rem, 1.8vw, 1.5rem);
+}
+.proof__list li {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+/* Separators are drawn, not typed, so a screen reader reads a list of
+   six agencies rather than six agencies interrupted by middots. */
+.proof__list li + li {
+  position: relative;
+  padding-left: clamp(0.8rem, 1.8vw, 1.5rem);
+}
+.proof__list li + li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 1px;
+  background: var(--rule);
+}
+@media (max-width: 900px) {
+  .proof {
+    justify-items: start;
+  }
+  .proof__list {
+    justify-content: flex-start;
+  }
+  .proof__list li {
+    white-space: normal;
+  }
+}
+@media (max-width: 560px) {
+  /* On a phone the separators fight the wrap; the list becomes a plain
+     stack of names and the rule above the band does the dividing. */
+  .proof__list {
+    gap: 0.25rem 1rem;
+  }
+  .proof__list li + li {
+    padding-left: 0;
+  }
+  .proof__list li + li::before {
+    display: none;
+  }
+  .proof__list li {
+    font-size: 0.86rem;
+  }
+}
+
 /* ---------- why (white, hairline, teim-app cards) ---------- */
 .whyw {
   background: var(--white);
