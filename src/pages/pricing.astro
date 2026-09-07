@@ -45,7 +45,7 @@ import '../styles/home.css';
 import '../styles/pricing.css';
 
 const description =
-  'Pricing for the intelligent economic analysis platform. Every paid Lumecon plan includes Cedar Impact in full, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add Cedar Commons, the shared project workspace, and Cedar Grove, the advanced data library, which is also available on its own. Paid plans start at $1,000 a year, prices are public, and Seed, the free account, lets you build a full analysis and see your direct effects without a credit card.';
+  'Every price on one page. Plans from $1,000 a year, unlimited analysis, every U.S. geography and Cedar included. Seed is free, with no credit card.';
 
 const jsonLd = [
   {
@@ -89,7 +89,6 @@ const jsonLd = [
   title="Pricing | Lumecon"
   description={description}
   canonical="https://lumecon.ai/pricing"
-  keywords="Lumecon pricing, economic impact analysis pricing, economic impact software cost, IMPLAN alternative pricing, REMI alternative pricing, economic modeling software price, Cedar AI pricing, annual subscription, free economic impact software trial"
   ogTitle="Lumecon pricing: standard pricing, tailored modeling"
   ogDescription={description}
   jsonLd={jsonLd}
@@ -186,7 +185,7 @@ const jsonLd = [
         /* One line for what used to be a consultant band. The cards
            carry the marker; this says what the marker means. */
       }
-      <p class="pr-plans__clientnote">{CLIENT_WORK.note}</p>
+      <p class="pr-plans__clientnote" id="consultants">{CLIENT_WORK.note}</p>
 
       {
         /* Cedar Grove: the data library, sold on its own. It sits after

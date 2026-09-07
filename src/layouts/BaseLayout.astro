@@ -7,7 +7,6 @@ interface Props {
   title: string;
   description: string;
   canonical: string;
-  keywords: string;
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
@@ -27,7 +26,6 @@ const {
   title,
   description,
   canonical,
-  keywords,
   ogTitle,
   ogDescription,
   ogImage,
@@ -67,7 +65,18 @@ const ogIA =
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content={keywords} />
+    {
+      /* No <meta name="keywords">. Google has ignored it for ranking since
+        2009 and Bing treats it as a spam signal at most, so it bought
+        nothing. What it cost was real: the homepage tag carried 1,090
+        characters listing IMPLAN four times, RIMS four times and REMI
+        three, with duplicate case variants, no editorial framing and none
+        of the non-affiliation disclaimer the visible copy and llms.txt
+        both carry. A hidden, disclaimer-free list of a competitor's marks
+        is the weakest possible version of a comparison claim. The
+        positioning stays where it works: visible copy, the JSON-LD
+        knowsAbout list, and llms.txt. */
+    }
     <meta name="robots" content={robotsValue} />
     <meta name="googlebot" content={robotsValue} />
     <meta name="bingbot" content={robotsValue} />
