@@ -63,6 +63,10 @@
   background: var(--surface);
   color: var(--navy);
   border: 1px solid var(--rule-strong);
+  /* Above the grain layer: the page is matte, the things lying on it are
+     not. See the grain block in global.css. */
+  position: relative;
+  z-index: 2;
 }
 .btn2--card:hover {
   border-color: var(--navy);
@@ -195,6 +199,10 @@
    script in Hero.astro; transforms carry the motion. */
 .trio {
   position: relative;
+  /* The container rises above the grain, not the frames: they carry their
+     own z-index for the rotation and raising them individually would
+     rewrite the stacking the position classes depend on. */
+  z-index: 2;
   width: 100%;
   max-width: var(--container-max);
   margin: clamp(1.6rem, 4vh, 3rem) auto 0;
@@ -492,6 +500,10 @@
   overflow: hidden;
   box-shadow: var(--shadow-frame);
   background: var(--surface);
+  /* Above the grain layer: the page is matte, the things lying on it are
+     not. See the grain block in global.css. */
+  position: relative;
+  z-index: 2;
 }
 .cedar-shot img {
   display: block;
@@ -559,6 +571,10 @@
     border-color 0.2s var(--ease),
     box-shadow 0.2s var(--ease);
   background: var(--surface);
+  /* Above the grain layer: the page is matte, the things lying on it are
+     not. See the grain block in global.css. */
+  position: relative;
+  z-index: 2;
 }
 .askai-tile:hover {
   border-color: var(--rule-strong);

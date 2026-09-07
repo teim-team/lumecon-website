@@ -190,6 +190,7 @@
     transform 0.2s var(--ease),
     border-color 0.2s var(--ease),
     box-shadow 0.2s var(--ease);
+  z-index: 2;
 }
 /* Neutral shadows, same reason as everywhere else on the site: a teal-cast
    shadow under a teal-bordered card reads as backlighting, not as depth.

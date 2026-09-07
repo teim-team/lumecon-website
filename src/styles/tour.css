@@ -118,6 +118,10 @@
   border-right: none;
   border-radius: 6px 0 0 6px;
   background: var(--surface);
+  /* Above the grain layer: the page is matte, the things lying on it are
+     not. See the grain block in global.css. */
+  position: relative;
+  z-index: 2;
 }
 .tour-row--flip .tour-row__shot {
   margin-right: 0;
