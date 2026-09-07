@@ -27,7 +27,7 @@
 .auth-eyebrow {
   font-family: var(--font-mono);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
@@ -209,7 +209,7 @@
 .auth-plan__label {
   font-family: var(--font-mono);
   font-size: var(--fs-3xs);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;

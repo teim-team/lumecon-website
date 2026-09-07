@@ -54,7 +54,7 @@
 .tealfield__kicker {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.92);
   font-weight: 600;
@@ -76,7 +76,7 @@
 }
 .cpl-title {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   font-size: clamp(2.1rem, 3.6vw, 3.2rem);
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -123,7 +123,7 @@
   left: 1.2rem;
   font-family: var(--font-mono);
   font-size: 0.6rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   font-weight: 600;
   color: #fff;
@@ -133,7 +133,7 @@
 }
 .cpl-card__name {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.25rem;
   letter-spacing: -0.015em;
 }
@@ -145,7 +145,7 @@
 }
 .cpl-card__price {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.45rem;
   letter-spacing: -0.02em;
   margin-top: 0.5rem;
@@ -200,7 +200,7 @@
 }
 .cpl-free__label {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1rem;
   color: var(--navy);
 }
@@ -256,7 +256,7 @@
 .co2-summary__users {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.92);
   font-weight: 600;
@@ -301,7 +301,7 @@
 .co2-summary__due-label {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.92);
   font-weight: 600;
@@ -332,7 +332,7 @@
 .co2-kicker {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 600;
@@ -340,7 +340,7 @@
 }
 .co2-title {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.55rem;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -357,7 +357,7 @@
 .co2-paylabel {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 600;
@@ -419,7 +419,7 @@
 }
 .welc-title {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   font-size: clamp(3rem, 7vw, 5.2rem);
   line-height: 1;
   letter-spacing: -0.035em;

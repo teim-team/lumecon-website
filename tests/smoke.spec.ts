@@ -30,12 +30,11 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
-  // Filter out known-harmless console errors from sandboxed environments,
-  // where the external font fetch fails against an interception proxy
-  // (bad cert) or a closed egress (connection reset). Same-origin assets
-  // are served from localhost and never produce either. (The old
-  // frame-ancestors meta-CSP warning and the ipapi.co geolocation call
-  // were both removed, so they can no longer appear here.)
+  // The site makes no third-party requests at all now that Inter and
+  // JetBrains Mono are self-hosted, so this filter should never have
+  // anything to catch. It stays as a guard for sandboxes that break
+  // same-origin fetches through an interception proxy (bad cert) or a
+  // closed egress (connection reset).
   const real = errs.filter(
     (e) => !e.includes('CERT_AUTHORITY_INVALID') && !e.includes('ERR_CONNECTION_RESET'),
   );

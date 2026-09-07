@@ -3,18 +3,20 @@
  * The Lumecon edge — the table-stakes capabilities buyers scan for
  * (cloud, security, AI native, authoritative data, data freshness,
  * methodology), each with a line icon drawn in the app's icon style
- * (thin strokes, sharp joins, teal chip). The header tells the
+ * (thin strokes, sharp joins, no chip). The header tells the
  * provenance story in evidence terms: who built it, on what
  * foundation, and what that makes possible.
  *
- * Six tiles that lead with the icon. At rest each shows its icon, label
- * and headline; the sentence underneath appears on hover. That is what
- * takes the density down: six paragraphs is most of the reading on this
- * part of the page, and a visitor scanning for "do they do security" only
- * needs the headline until they care.
+ * Six tiles that lead with the icon, each with its sentence visible.
  *
- * The reveal is the shared .hover-veil pattern in global.css, which the
- * Cedar page's "how it is built" facts use too.
+ * The sentence used to be held back until hover (the shared .hover-veil
+ * pattern). Two problems with that. Visually, six tiles showing only a
+ * label and a four-word headline made the largest section on the page read
+ * as mostly empty, which is the opposite of the density it was trying to
+ * reduce: the page was still that tall, the substance was just invisible.
+ * Practically, a buyer scanning for "do they do security" got the answer
+ * only by hovering, and never on a phone. The sentences are one line each;
+ * they cost less than the hole they left.
  */
 import '../styles/home.css';
 
@@ -63,7 +65,7 @@ const CARDS = [
     <header class="flowsec-head">
       <p class="h-kicker">The Lumecon edge</p>
       <h2 class="flowsec-title" id="edge-title">
-        Decades of economic science, <span class="brand-em">kept current with the economy.</span>
+        Decades of economic science, <span class="brand-em">kept current</span> with the economy.
       </h2>
       <p class="flowsec-lede">
         Built by economists, engineers and researchers with experience at the Federal Reserve and
@@ -79,7 +81,7 @@ const CARDS = [
     <div class="edge-grid">
       {
         CARDS.map((c) => (
-          <article class="edge-card" data-hover-reveal tabindex="0">
+          <article class="edge-card">
             <span class="edge-ic" aria-hidden="true">
               {c.icon === 'cloud' && (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -132,7 +134,7 @@ const CARDS = [
             </span>
             <p class="whyw-card__k">{c.k}</p>
             <h3 class="whyw-card__t">{c.t}</h3>
-            <p class="whyw-card__b hover-veil">{c.b}</p>
+            <p class="whyw-card__b">{c.b}</p>
           </article>
         ))
       }

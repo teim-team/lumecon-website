@@ -21,9 +21,9 @@
   padding: clamp(6.5rem, 12vh, 9rem) 0 0;
 }
 .meth-hero__title {
-  font-size: clamp(2rem, 4.6vw, 3.3rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 4.2vw, 3.05rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
   line-height: 1.06;
   /* No character cap: the title uses the full container width and
      balances its own lines. */
@@ -34,10 +34,14 @@
    shares the hero's row, so the deck runs the container like the title
    above it rather than stopping partway. */
 .meth-hero__lede {
-  font-size: clamp(1.02rem, 1.4vw, 1.18rem);
-  line-height: 1.65;
+  font-size: clamp(1.02rem, 1.4vw, 1.14rem);
+  line-height: 1.68;
   color: var(--ink-2);
-  max-width: none;
+  /* Was `none`, so this ran the whole 1360px shell: about 140 characters
+     a line, which is roughly twice a comfortable measure. Long lines are
+     not a neutral choice on a page whose job is to be read carefully. */
+  max-width: var(--measure-lede);
+  text-wrap: pretty;
   margin: 0 0 3rem;
 }
 /* Three principles: hairline-separated columns, no boxes. */
@@ -85,7 +89,7 @@
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   margin: 0 0 0.5rem;
@@ -195,7 +199,7 @@
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   margin: 0 0 0.55rem;
@@ -390,9 +394,9 @@
   max-width: 76rem;
 }
 .meth-mission__title {
-  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
-  font-weight: 700;
-  letter-spacing: -0.022em;
+  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
   line-height: 1.12;
   margin: 0 0 1.1rem;
 }
@@ -621,7 +625,7 @@
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
 }

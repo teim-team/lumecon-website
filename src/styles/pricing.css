@@ -34,28 +34,33 @@
 }
 .pr-hero__title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
+  font-weight: var(--weight-display);
+  font-size: clamp(2.1rem, 4.4vw, 3.2rem);
   line-height: 1.08;
-  letter-spacing: -0.025em;
+  letter-spacing: var(--track-display);
   color: var(--ink);
   margin: 0;
   max-width: 32ch;
 }
 .pr-hero__lede {
-  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
-  line-height: 1.6;
+  font-size: clamp(1.02rem, 1.5vw, 1.14rem);
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
-  max-width: 82ch;
+  text-wrap: pretty;
+  max-width: 66ch;
 }
+/* Sentence case, sans. Set in letterspaced mono uppercase this read as a
+   system banner rather than as the reassurance it is; uppercase also costs
+   about 15% reading speed at sentence length, which is a bad trade on the
+   one line telling a buyer there are no hidden prices. Mono stays the
+   voice of labels and eyebrows. */
 .pr-hero__callout {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
   color: var(--accent-text);
-  margin: 0;
+  font-weight: 500;
+  margin: 0.1rem 0 0;
 }
 .pr-hero__ctas {
   display: flex;
@@ -65,10 +70,8 @@
   margin-top: 0.3rem;
 }
 .pr-hero__nocard {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
   color: var(--ink-3);
   margin: 0;
 }
@@ -91,16 +94,23 @@
 }
 
 /* ---------- free-account band (before the paid tiers) ---------- */
+/* An editorial band, not a fifth card.
+   --------------------------------------------------------------------
+   This was a mint-tinted rounded rectangle with an accent border, sitting
+   directly above a row of four bordered rounded rectangles. Two problems:
+   it was the only tinted slab on a site that separates with hairlines, and
+   as another box it competed with the plan cards instead of introducing
+   them. Ruled top and bottom on the white surface, it reads as an insert
+   the eye passes through on the way to the prices. */
 .pr-free {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: clamp(1.2rem, 3vw, 2.5rem);
   flex-wrap: wrap;
-  border: 1px solid var(--accent-bar);
-  background: var(--accent-rgba-08);
-  border-radius: 8px;
-  padding: clamp(1.4rem, 3vw, 2rem) clamp(1.4rem, 3vw, 2.2rem);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: clamp(1.6rem, 3.4vw, 2.4rem) 0;
 }
 .pr-free__main {
   display: grid;
@@ -110,7 +120,7 @@
 }
 .pr-free__title {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: clamp(1.4rem, 2.6vw, 1.9rem);
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -118,10 +128,11 @@
 }
 .pr-free__body {
   font-size: 0.97rem;
-  line-height: 1.62;
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
-  max-width: 86ch;
+  text-wrap: pretty;
+  max-width: var(--measure-lede);
 }
 .pr-free__side {
   display: grid;
@@ -130,10 +141,8 @@
   flex-shrink: 0;
 }
 .pr-free__terms {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
   color: var(--ink-3);
   margin: 0;
   white-space: nowrap;
@@ -182,17 +191,22 @@
     border-color 0.2s var(--ease),
     box-shadow 0.2s var(--ease);
 }
+/* Neutral shadows, same reason as everywhere else on the site: a teal-cast
+   shadow under a teal-bordered card reads as backlighting, not as depth.
+   The featured plan is distinguished by its accent border and its flag,
+   which is enough; it was also carrying the heaviest glow on the page. */
 .pr-plan:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-  box-shadow: 0 18px 44px -24px rgba(10, 127, 116, 0.4);
+  transform: translateY(var(--lift));
+  border-color: var(--rule-strong);
+  box-shadow: var(--lift-shadow);
 }
 .pr-plan--featured {
   border-color: var(--accent);
-  box-shadow: 0 24px 56px -30px rgba(10, 127, 116, 0.45);
+  box-shadow: var(--shadow-frame);
 }
 .pr-plan--featured:hover {
-  box-shadow: 0 28px 64px -30px rgba(10, 127, 116, 0.55);
+  border-color: var(--accent);
+  box-shadow: var(--lift-shadow);
 }
 .pr-plan__flag {
   position: absolute;
@@ -201,7 +215,7 @@
   margin: 0;
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: #fff;
   /* Solid chip teal: the old #0fb5a5 gradient end gave white text
@@ -215,17 +229,18 @@
    recommendation, and Sapling wears both at once. This is what replaced
    the consultant band. A consultancy scanning the three cards can see
    where its floor is without reading a paragraph to find out. */
+/* Plain mono type, not a pill. An outlined capsule around two words draws
+   a second border inside a card that already has one, and turns a label
+   into an object. */
 .pr-plan__chip {
   justify-self: start;
   margin: 0 0 0.15rem;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
+  font-size: 0.64rem;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: var(--accent-text);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 0.16rem 0.55rem;
+  color: var(--ink-3);
+  padding: 0;
 }
 /* `visibility`, not `display: none`, so the slot still occupies its row
    on the plan that has no marker. */
@@ -234,7 +249,7 @@
 }
 .pr-plan__name {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.5rem;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -258,7 +273,7 @@
 }
 .pr-plan__amount {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   font-size: clamp(2rem, 3.4vw, 2.7rem);
   letter-spacing: -0.03em;
   color: var(--ink);
@@ -327,7 +342,7 @@
 .pr-table thead th {
   border-top: none;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1rem;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -378,7 +393,7 @@
 .pr-grove__title {
   font-family: var(--font-display);
   font-size: clamp(1.3rem, 2.4vw, 1.75rem);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin: 0.35rem 0 0.7rem;
@@ -497,7 +512,7 @@
 }
 .pr-faq__row dt {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: clamp(1.05rem, 1.8vw, 1.25rem);
   letter-spacing: -0.015em;
   line-height: 1.35;
@@ -605,7 +620,7 @@
 .pr-more__label {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--accent-text);

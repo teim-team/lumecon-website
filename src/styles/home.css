@@ -7,8 +7,8 @@
 /* ---------- shared primitives ---------- */
 .h-kicker {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   font-weight: 500;
@@ -26,28 +26,46 @@
   letter-spacing: -0.005em;
   text-decoration: none;
   transition:
-    transform 0.15s var(--ease),
-    box-shadow 0.15s var(--ease),
-    background 0.15s var(--ease);
+    background 0.15s var(--ease),
+    border-color 0.15s var(--ease);
 }
+/* The primary action keeps a gradient, but a different kind of one.
+   --------------------------------------------------------------------
+   It was `linear-gradient(135deg, #0FB5A5, #0A7F74)` with a teal glow
+   beneath it and a lift on hover. Three things were wrong, and only one
+   of them was the gradient:
+
+   1. A 135deg ramp between two values of ONE hue does not read as colour,
+      it reads as light falling across a curved surface. That is a
+      simulated sheen, and it is the specific effect that dates a page.
+   2. The shadow was tinted with the button's own teal at 0.55 alpha. A
+      shadow takes the colour of the surface it falls on, so a teal shadow
+      under a teal button reads as neon. This was the single glossiest
+      object on the site, and it appeared on every page.
+   3. Lift plus glow on hover made an ordinary link behave like a physical
+      pill floating over the document.
+
+   What is here instead: the same hue, top to bottom rather than diagonal,
+   with a luminance shift small enough to be felt rather than seen. It
+   gives the surface material depth without pretending to be lit. The
+   shadow is neutral and almost flat. The lightest point (#0A8177) holds
+   4.75:1 against white, so the label stays AA at this size; do not
+   lighten the top stop without re-checking that. */
 .btn2--primary {
-  background: linear-gradient(135deg, #0fb5a5 0%, #0a7f74 100%);
+  background: linear-gradient(180deg, #0a8177 0%, #086b62 100%);
   color: #fff;
-  box-shadow: 0 10px 24px -12px rgba(10, 127, 116, 0.55);
+  box-shadow: var(--shadow-control);
 }
 .btn2--primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(10, 127, 116, 0.65);
+  background: linear-gradient(180deg, #096f66 0%, #05564f 100%);
 }
 .btn2--card {
   background: var(--white);
   color: var(--navy);
-  border: 1px solid var(--rule);
-  box-shadow: 0 8px 20px -14px rgba(10, 15, 38, 0.35);
+  border: 1px solid var(--rule-strong);
 }
 .btn2--card:hover {
-  transform: translateY(-1px);
-  border-color: var(--rule-strong);
+  border-color: var(--navy);
 }
 .btn2 .btn2-arrow {
   font-weight: 400;
@@ -64,12 +82,18 @@
   pointer-events: none;
   user-select: none;
   z-index: 0;
-  opacity: 0.09;
+  /* Down from 0.09. At that strength the mark's arcs resolved into three
+     distinct grey curves in the corner of the hero, which read as stray
+     lines rather than as the brand: a shape you notice and cannot name is
+     worse than no shape. At this weight it is a texture in the paper. */
+  opacity: 0.055;
 }
 @media (prefers-color-scheme: dark) {
   .markart {
     filter: invert(1) hue-rotate(180deg);
-    opacity: 0.13;
+    /* Down from 0.13, matching the light-mode reduction. Inverted on the
+       dark surface the arcs came up brighter than they ever did on white. */
+    opacity: 0.075;
   }
 }
 @media (max-width: 760px) {
@@ -102,10 +126,10 @@
 }
 .hero2-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.3rem, 5.6vw, 4.3rem);
-  line-height: 1.06;
-  letter-spacing: -0.025em;
+  font-weight: var(--weight-display);
+  font-size: clamp(2.3rem, 5.6vw, 4.4rem);
+  line-height: 1.04;
+  letter-spacing: var(--track-display);
   color: var(--ink);
   margin: 0;
   max-width: 42ch;
@@ -114,11 +138,15 @@
   color: var(--accent-text);
 }
 .hero2-sub {
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  text-wrap: pretty;
+  font-size: clamp(1.05rem, 1.5vw, 1.22rem);
   line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  max-width: 82ch;
+  /* Was 82ch. A centred paragraph is harder to return-sweep than a
+     left-aligned one, because the left edge moves on every line, so it
+     wants a shorter measure than flush text would take, not a longer one. */
+  max-width: 62ch;
 }
 .hero2-sub strong {
   color: var(--accent-text);
@@ -198,22 +226,41 @@
   width: 100%;
   height: auto;
 }
+/* The stack, quieted.
+   --------------------------------------------------------------------
+   The centre frame carried a 0.5-alpha 96px drop shadow and the side
+   frames a 0.35 one, which is what made the hero read as three glossy
+   panels hovering over the page rather than as product. All three are
+   neutral and much weaker now; the hairline border does the separating.
+
+   The side frames also used to sit at translateX(-98%) and (-2%) of a
+   66%-wide frame, which pushed them past both edges of the shell: at
+   1440px they were sliced through mid-word by the viewport, so the first
+   thing a visitor saw was two broken screenshots. They are pulled inside
+   the shell and set further back, so the row reads as a deliberate stack
+   with the money shot in front. */
 .trio-pos-c {
   transform: translateX(-50%);
   z-index: 2;
   box-shadow:
-    0 44px 96px -42px rgba(10, 15, 38, 0.5),
-    0 14px 30px -18px rgba(10, 15, 38, 0.22);
+    0 2px 8px -3px rgba(10, 15, 38, 0.08),
+    0 30px 64px -34px rgba(10, 15, 38, 0.26);
 }
 .trio-pos-l {
-  transform: translateX(-98%) translateY(4%) scale(0.8);
+  transform: translateX(-88%) translateY(4.5%) scale(0.78);
   z-index: 1;
-  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+  opacity: 0.72;
+  box-shadow: 0 18px 44px -30px rgba(10, 15, 38, 0.22);
 }
 .trio-pos-r {
-  transform: translateX(-2%) translateY(4%) scale(0.8);
+  transform: translateX(-12%) translateY(4.5%) scale(0.78);
   z-index: 1;
-  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+  opacity: 0.72;
+  box-shadow: 0 18px 44px -30px rgba(10, 15, 38, 0.22);
+}
+/* Whichever frame is in front is at full strength. */
+.trio-frame:hover {
+  opacity: 1;
 }
 
 /* Hover on the hero trio. Same vocabulary as the product tour rows
@@ -333,16 +380,16 @@
 .whyw-card__k {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   margin: 0;
 }
 .whyw-card__t {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.12rem;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--track-sub);
   color: var(--ink);
   margin: 0;
 }
@@ -417,19 +464,24 @@
 .flowsec-title,
 .whyw-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  font-weight: var(--weight-display);
+  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
   line-height: 1.14;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-title);
   color: var(--ink);
   margin: 0;
 }
 .flowsec-lede,
 .whyw-lede {
-  font-size: clamp(1rem, 1.4vw, 1.13rem);
-  line-height: 1.62;
+  text-wrap: pretty;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
+  /* These ran the full 1360px shell, which at this size is about 125
+     characters a line. The eye loses its place on the return sweep well
+     before that. */
+  max-width: var(--measure-lede);
 }
 /* Cedar teaser: one position statement + one real capture. The old
    five-step pipeline moved to /cedar as a diagram. */
@@ -438,7 +490,7 @@
   border: 1px solid var(--rule);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+  box-shadow: var(--shadow-frame);
 }
 .cedar-shot img {
   display: block;
@@ -507,9 +559,7 @@
     box-shadow 0.2s var(--ease);
 }
 .askai-tile:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-  box-shadow: 0 14px 34px -18px rgba(10, 127, 116, 0.35);
+  border-color: var(--rule-strong);
 }
 .askai-tile__ic {
   display: inline-flex;
@@ -613,41 +663,36 @@
   gap: 0.5rem;
   align-content: start;
 }
-/* With no card to light up, the icon chip carries the hover: it takes the
-   accent border and lifts, the way the tour screenshots and the hero frames
-   do. */
-.edge-card:hover .edge-ic,
-.edge-card:focus-visible .edge-ic {
-  border-color: var(--accent);
-  background: var(--accent-rgba-18);
-  transform: translateY(var(--lift));
-}
+/* The tile is not a control: it has no link and nothing to reveal, so it
+   carries no hover state and is not in the tab order. It used to be
+   focusable purely to expose a hover-only sentence, which is now visible. */
 /* The sentence itself uses the shared .hover-veil in global.css. */
-@media (prefers-reduced-motion: reduce) {
-  .edge-card:hover .edge-ic {
-    transform: none;
-  }
-}
+
+/* No chip. The icon sits directly on the page.
+   --------------------------------------------------------------------
+   These were 76px mint squares with a teal border and a rounded corner,
+   one per tile. A tinted container around an icon is the most reliable
+   template signal there is: it adds a rectangle that communicates
+   nothing, it makes six identical boxes out of six different ideas, and
+   it competes with the hairlines that are supposed to be doing the
+   dividing. The line icons are drawn in the app's own style and hold the
+   page perfectly well on their own, at a larger stroke-to-size ratio. */
 .edge-ic {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  /* The icon leads the tile now that the sentence is held back, so it is
-     sized to be the thing you see first rather than a bullet beside a label. */
-  width: 76px;
-  height: 76px;
-  border-radius: 12px;
-  background: var(--accent-rgba-08);
-  border: 1px solid var(--accent-bar);
-  color: var(--accent-text);
-  margin-bottom: 0.55rem;
+  /* Flush left with the label and the sentence below it. As an inline-flex
+     grid child it stretched to the column and centred its own contents, so
+     the icon floated over the middle of a left-aligned block. */
+  justify-content: flex-start;
+  color: var(--ink-2);
+  margin-bottom: 0.7rem;
   transition:
     transform 0.2s var(--ease),
     background 0.2s var(--ease);
 }
 .edge-ic svg {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
 }
 @media (max-width: 980px) {
   .edge-grid {
@@ -660,11 +705,7 @@
   }
 }
 
-/* ---------- interactive hover states (the app's card feel) ---------- */
-.edge-card:hover .edge-ic {
-  transform: scale(1.08);
-  background: var(--accent-rgba-18);
-}
+/* ---------- interactive hover states ---------- */
 .tour-row__shot,
 .cedar-shot {
   transition:
@@ -749,33 +790,38 @@
   text-align: center;
   gap: 1.1rem;
 }
+/* The closing statement is allowed to be larger than a section heading
+   and smaller than the hero. It used to sit at 3.4rem/700, which put it
+   within a few pixels of the h1 and gave the page two things competing
+   to be the loudest. */
 .fcta-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
-  letter-spacing: -0.025em;
-  line-height: 1.06;
+  font-weight: var(--weight-display);
+  font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+  letter-spacing: var(--track-display);
+  line-height: 1.08;
   color: var(--ink);
   margin: 0;
 }
 .fcta-lede {
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.6;
+  text-wrap: pretty;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
-  max-width: 72ch;
+  max-width: 60ch;
 }
 .fcta-contact {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
   color: var(--ink-3);
-  margin: 0.4rem 0 0;
+  margin: 0.8rem 0 0;
 }
 .fcta-contact a {
   color: var(--accent-text);
+  font-weight: 500;
   text-decoration: none;
+  border-bottom: 1px solid var(--accent-bar);
 }
 .fcta-contact a:hover {
   text-decoration: underline;

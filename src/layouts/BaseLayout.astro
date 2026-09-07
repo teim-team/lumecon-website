@@ -97,7 +97,7 @@ const ogIA =
      fronts the site; add `X-Frame-Options: DENY` there. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content={`default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src ${connectSrc}; upgrade-insecure-requests`}
+      content={`default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src ${connectSrc}; upgrade-insecure-requests`}
     />
     <meta
       http-equiv="Permissions-Policy"
@@ -144,20 +144,27 @@ const ogIA =
     <meta name="twitter:image:alt" content={ogIA} />
     <meta name="twitter:domain" content="lumecon.ai" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Type is self-hosted (see the @font-face block at the top of
+         global.css). Preloading the two faces every page actually paints
+         with means the first paint is already Inter: the old Google Fonts
+         link loaded asynchronously, so headlines rendered in a system
+         fallback and then reflowed. The latin-ext face is deliberately not
+         preloaded; its unicode-range keeps it from downloading at all on an
+         English page. -->
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      as="font"
+      type="font/woff2"
+      href="/fonts/inter-latin-opsz-normal.woff2"
+      crossorigin
     />
-    <noscript
-      ><link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap"
-        rel="stylesheet"
-      /></noscript
-    >
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/jetbrains-mono-latin-wght-normal.woff2"
+      crossorigin
+    />
     {
       /* ClientRouter (Astro view transitions) intentionally NOT enabled.
     On iOS Safari the cross-page DOM swap interacted poorly with

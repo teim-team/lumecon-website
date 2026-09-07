@@ -1,3 +1,66 @@
+/* ---------- Self-hosted type ----------
+   Inter and JetBrains Mono ship with the site instead of arriving from
+   Google Fonts. Three reasons, in order of how much they matter:
+
+   1. The stylesheet used to load asynchronously (`preload as=style` with
+      an onload handler flipping it to a stylesheet), so every page painted
+      its headlines in a system fallback and then reflowed into Inter. On a
+      site whose whole argument is care, that flash was the first thing a
+      visitor saw.
+   2. The Google request only asked for the weight axis, so
+      `font-variation-settings: 'opsz'` in .display was inert: large type
+      was being drawn with body-text letterforms. These are the two-axis
+      builds, so `font-optical-sizing` finally does something.
+   3. font-src and style-src drop two third-party origins from the CSP,
+      and no visitor request leaves for fonts.gstatic.com.
+
+   Files come from @fontsource-variable/inter and
+   @fontsource-variable/jetbrains-mono (both 5.3.0), copied by
+   `npm run fonts:sync`. Same convention as scripts/: a generator whose
+   output is committed. unicode-range is copied from the upstream CSS so
+   latin-ext only downloads when a page actually needs it. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-opsz-normal.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext-opsz-normal.woff2') format('woff2-variations');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-opsz-italic.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   /* Lumecon Inc. — bold, modern govt-software palette.
      Pure white surfaces, saturated brand accents, no muddy mid-tones. */
@@ -110,6 +173,31 @@
      the same number gives different widths on a deck and a headline. */
   --measure-deck: 82ch;
   --measure-prose: 68ch;
+  /* The measure a section lede actually reads at. The ledes used to run
+     the full container: at 1360px and 18px that is ~125 characters a line,
+     roughly double the range prose is comfortable in, and the eye loses
+     the return sweep. Section intros now sit here instead. */
+  --measure-lede: 74ch;
+
+  /* ---- Display type scale ----
+     One place to set how the site sounds. Two things changed here.
+
+     Weight: display type was 700 everywhere, from the hero down to a
+     1.1rem card title. When every heading is set at the heaviest weight
+     the page has no hierarchy of voice, only of size, and a wall of 700
+     reads as loud rather than as confident. Inter at 600 with the optical
+     size axis engaged holds just as much authority at large sizes and
+     lets the hero be the only thing shouting.
+
+     Tracking: tightens as size grows, which is what the eye expects of
+     display type. These pair with `font-optical-sizing: auto` on body —
+     the self-hosted faces carry the opsz axis, so at 68px the browser now
+     draws genuinely display-cut letterforms (about 6% narrower, with
+     finer joins) instead of scaling up body shapes. */
+  --weight-display: 600;
+  --track-display: -0.032em; /* hero h1 */
+  --track-title: -0.024em; /* section h2 */
+  --track-sub: -0.015em; /* card and row h3 */
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
   --error-color: #dc2626;
@@ -119,11 +207,24 @@
   --accent-rgba-18: rgba(15, 181, 165, 0.18);
   /* The hover vocabulary, shared by everything that lifts on hover: the tour
      screenshots, the hero trio frames, the pricing cards and the edge icons.
-     One rise distance and one teal-cast shadow, so a new hover state is a
-     token reference rather than another hand-picked pair of numbers. */
+     One rise distance and one shadow, so a new hover state is a token
+     reference rather than another hand-picked pair of numbers.
+
+     The shadow is NEUTRAL. It used to be cast in teal
+     (rgba(10,127,116,.36)), which is the wrong physics: a shadow is the
+     absence of light, so it takes the colour of the surface it falls on,
+     not of the object above it. A teal-tinted shadow under a teal object
+     reads as self-illumination, which is what made the frames and buttons
+     look like backlit plastic rather than paper on a page. */
   --lift: -3px;
-  --lift-shadow:
-    0 22px 48px -26px rgba(10, 127, 116, 0.36), 0 6px 16px -10px rgba(10, 15, 38, 0.14);
+  --lift-shadow: 0 2px 6px -2px rgba(10, 15, 38, 0.07), 0 24px 56px -28px rgba(10, 15, 38, 0.26);
+  /* Resting elevation for the things that carry a screenshot: a hairline
+     does most of the work and the shadow only separates the frame from the
+     page. Two layers, both neutral, both far weaker than the 0.5-alpha
+     drop shadows they replace. */
+  --shadow-frame: 0 1px 3px -1px rgba(10, 15, 38, 0.06), 0 14px 36px -22px rgba(10, 15, 38, 0.2);
+  /* Buttons and small controls sit almost flat on the page. */
+  --shadow-control: 0 1px 2px rgba(10, 15, 38, 0.08);
 
   /* Map palette. Source = gold (focal point), tribal = amber-gold
      (warm sibling, deeper than gold so reservations read as a
@@ -198,6 +299,10 @@ body {
   overscroll-behavior-x: none;
   line-height: 1.6;
   font-variant-numeric: tabular-nums;
+  /* The self-hosted Inter carries the opsz axis, so let the browser match
+     optical size to font size automatically. This is the single largest
+     difference between the old rendering and this one at display sizes. */
+  font-optical-sizing: auto;
 }
 
 /* ---------- Dark mode ----------
@@ -453,7 +558,7 @@ html {
   font-family: var(--font-mono);
   font-size: var(--type-xs);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--navy);
   opacity: 0.78;
@@ -466,9 +571,14 @@ html {
 }
 .display {
   font-family: var(--font-display);
-  font-variation-settings: 'opsz' 144;
-  font-weight: 500;
-  letter-spacing: -0.022em;
+  /* `font-variation-settings: 'opsz' 144` used to sit here. It did nothing
+     twice over: the Google Fonts request never asked for the opsz axis, and
+     144 is outside Inter's range anyway (14-32; 144 is the range of a
+     display serif, so the number was inherited from a different typeface).
+     `font-optical-sizing: auto` on body now handles this correctly for
+     every element, at whatever size it actually renders. */
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
   line-height: 0.98;
 }
 .display em {
@@ -508,6 +618,10 @@ html {
   }
 }
 .lede {
+  /* `pretty` only protects the last line from a single-word orphan, which
+     is what body copy wants; `balance` on a paragraph would even out every
+     line and read as justified-ish. */
+  text-wrap: pretty;
   font-size: clamp(1.05rem, 1.6vw, 1.32rem);
   line-height: 1.55;
   color: var(--navy);
@@ -527,13 +641,20 @@ h3 {
 }
 h1,
 h2 {
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
   color: var(--navy);
+  /* Balance the rag. Without this the browser fills each line greedily and
+     leaves whatever is left on the last one, which is how a headline ends
+     up with a single orphaned word, or splits an emphasised phrase across
+     a break so half of it is teal on one line and half on the next. It is
+     a progressive enhancement: browsers that do not support it lay the
+     line out exactly as before. */
+  text-wrap: balance;
 }
 h3 {
-  font-weight: 600;
-  letter-spacing: -0.012em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-sub);
   line-height: 1.2;
   color: var(--navy);
 }

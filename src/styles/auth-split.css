@@ -80,7 +80,7 @@
 }
 .asplit-brand__headline {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   font-size: clamp(2.2rem, 3.4vw, 3.4rem);
   line-height: 1.04;
   letter-spacing: -0.03em;
@@ -156,7 +156,7 @@
 }
 .asplit-title {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.55rem;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -225,7 +225,7 @@
   padding: 0 0.85rem;
   font-family: var(--font-mono);
   font-size: 0.62rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-3);
   line-height: 1;
