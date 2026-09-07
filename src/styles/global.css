@@ -978,7 +978,21 @@ strong {
   border: 0;
 }
 
-.reveal {
+/* Scroll-reveal is an ENHANCEMENT, never the default state.
+   --------------------------------------------------------------------
+   Every rule that starts an element at opacity 0 is gated behind `.js`,
+   a class an inline script in <head> puts on <html>. Without it nothing
+   is ever hidden.
+
+   This was a real failure, not a hypothetical one: with scripting off,
+   the homepage rendered fifteen invisible elements and the methodology
+   page twenty-six, which is to say both pages were blank below the nav.
+   Anything that does not run the observer (scripting disabled, a script
+   error earlier in the document, a stricter CSP, a rendering crawler)
+   saw an empty site. Content must never depend on JavaScript to become
+   visible; motion may depend on it. The script also carries a failsafe
+   timeout that reveals anything still unseen. */
+.js .reveal {
   opacity: 0;
   transform: translateY(18px);
   transition:
@@ -986,19 +1000,19 @@ strong {
     transform 0.7s var(--ease);
   will-change: opacity, transform;
 }
-.reveal.seen {
+.js .reveal.seen {
   opacity: 1;
   transform: none;
 }
 /* A softer reveal for inline body text — smaller travel, faster. */
-.reveal-soft {
+.js .reveal-soft {
   opacity: 0;
   transform: translateY(10px);
   transition:
     opacity 0.55s var(--ease),
     transform 0.55s var(--ease);
 }
-.reveal-soft.seen {
+.js .reveal-soft.seen {
   opacity: 1;
   transform: none;
 }
@@ -1016,38 +1030,38 @@ strong {
    flicker on a fast connection. The observer only has to see the
    container, and BaseLayout already adds `.seen` to whatever it
    observes, so the same machinery drives both. */
-[data-reveal-group] > * {
+.js [data-reveal-group] > * {
   opacity: 0;
   transform: translateY(10px);
   transition:
     opacity 0.55s var(--ease),
     transform 0.55s var(--ease);
 }
-[data-reveal-group].seen > * {
+.js [data-reveal-group].seen > * {
   opacity: 1;
   transform: none;
 }
-[data-reveal-group].seen > *:nth-child(1) {
+.js [data-reveal-group].seen > *:nth-child(1) {
   transition-delay: 0ms;
 }
-[data-reveal-group].seen > *:nth-child(2) {
+.js [data-reveal-group].seen > *:nth-child(2) {
   transition-delay: 90ms;
 }
-[data-reveal-group].seen > *:nth-child(3) {
+.js [data-reveal-group].seen > *:nth-child(3) {
   transition-delay: 180ms;
 }
-[data-reveal-group].seen > *:nth-child(4) {
+.js [data-reveal-group].seen > *:nth-child(4) {
   transition-delay: 270ms;
 }
-[data-reveal-group].seen > *:nth-child(5) {
+.js [data-reveal-group].seen > *:nth-child(5) {
   transition-delay: 360ms;
 }
-[data-reveal-group].seen > *:nth-child(6) {
+.js [data-reveal-group].seen > *:nth-child(6) {
   transition-delay: 450ms;
 }
 /* Past six the delay stops growing: an eighth item would otherwise wait
    two thirds of a second after the section is already on screen. */
-[data-reveal-group].seen > *:nth-child(n + 7) {
+.js [data-reveal-group].seen > *:nth-child(n + 7) {
   transition-delay: 450ms;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1056,42 +1070,48 @@ strong {
   .reveal-left,
   .reveal-right,
   .reveal-diagonal,
-  [data-reveal-group] > * {
+  [data-reveal-group] > *,
+  .js .reveal,
+  .js .reveal-soft,
+  .js .reveal-left,
+  .js .reveal-right,
+  .js .reveal-diagonal,
+  .js [data-reveal-group] > * {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
   }
 }
-.reveal-left {
+.js .reveal-left {
   opacity: 0;
   transform: translateX(-60px);
   transition:
     opacity 0.8s var(--ease),
     transform 0.8s var(--ease);
 }
-.reveal-left.seen {
+.js .reveal-left.seen {
   opacity: 1;
   transform: none;
 }
-.reveal-right {
+.js .reveal-right {
   opacity: 0;
   transform: translateX(60px);
   transition:
     opacity 0.8s var(--ease),
     transform 0.8s var(--ease);
 }
-.reveal-right.seen {
+.js .reveal-right.seen {
   opacity: 1;
   transform: none;
 }
-.reveal-diagonal {
+.js .reveal-diagonal {
   opacity: 0;
   transform: translate(30px, -20px);
   transition:
     opacity 0.9s var(--ease),
     transform 0.9s var(--ease);
 }
-.reveal-diagonal.seen {
+.js .reveal-diagonal.seen {
   opacity: 1;
   transform: none;
 }

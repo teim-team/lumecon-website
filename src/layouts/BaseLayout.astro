@@ -151,6 +151,15 @@ const ogIA =
          fallback and then reflowed. The latin-ext face is deliberately not
          preloaded; its unicode-range keeps it from downloading at all on an
          English page. -->
+    <!-- The scroll-reveal gate. Every rule that starts an element at
+         opacity 0 is scoped to `html.js` (see global.css), so with
+         scripting unavailable nothing is ever hidden. This runs before
+         the stylesheet is applied to any content, so there is no flash of
+         visible-then-hidden. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
     <link
       rel="preload"
       as="font"
@@ -298,6 +307,17 @@ const ogIA =
             for (var i = 0; i < els.length; i++) els[i].classList.add('seen');
             return;
           }
+          // Failsafe. The gate above means nothing is hidden without
+          // scripting at all, but scripting can also be present and still
+          // fail to deliver: an observer that never fires, a container
+          // that never intersects, a viewport change mid-load. Content is
+          // not allowed to stay invisible because an animation did not
+          // run, so anything still unseen after this window is shown.
+          setTimeout(function () {
+            var stuck = document.querySelectorAll(selector);
+            for (var j = 0; j < stuck.length; j++) stuck[j].classList.add('seen');
+          }, 3000);
+
           var io = new IntersectionObserver(
             function (entries) {
               for (var i = 0; i < entries.length; i++) {
