@@ -29,7 +29,7 @@ import CedarChat from './CedarChat.astro';
   type="button"
   class="cedar-fab"
   id="cedarFab"
-  aria-label="Ask Cedar. Questions about Lumecon"
+  aria-label="Ask Cedar Questions about Lumecon"
   aria-expanded="false"
   aria-controls="cedarFabPanel"
   title="Ask Cedar"
@@ -187,7 +187,7 @@ import CedarChat from './CedarChat.astro';
       panel.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cedar-popped');
       fab.setAttribute('aria-expanded', 'false');
-      fab.setAttribute('aria-label', 'Ask Cedar. Questions about Lumecon');
+      fab.setAttribute('aria-label', 'Ask Cedar Questions about Lumecon');
       fab.setAttribute('title', 'Ask Cedar');
       if (returnFocus) (fab as HTMLElement).focus({ preventScroll: true });
       trackEvent('cedar.fab.close');
