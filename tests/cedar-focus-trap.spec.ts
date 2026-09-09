@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { scrollUntilCedarVisible } from './cedar-visibility';
 
 /**
  * Cedar FAB focus-trap (#9).
@@ -27,6 +28,7 @@ test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', asy
   const panel = page.locator('#cedarFabPanel');
   await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
 
+  await scrollUntilCedarVisible(page);
   await fab.click();
   await expect(panel.locator('[data-cedar-input]')).toBeFocused();
 

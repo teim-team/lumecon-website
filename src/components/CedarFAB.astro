@@ -1,15 +1,15 @@
 ---
 /**
- * Persistent Cedar launcher pill anchored to the bottom-right of every
- * page, styled to match the Ask Cedar launcher in the TEIM app (status
- * dot + "Ask Cedar" label + context line on a bordered surface card).
+ * Contextual Cedar launcher anchored to the bottom-right of marketing
+ * pages. It stays out of the opening composition, then appears once the
+ * page intro has passed. While the visitor scrolls, it steps away from
+ * controls and high-value reading surfaces rather than covering them.
  * Click toggles a self-contained Cedar chat panel that lives entirely
- * inside this component, so it works the same on every page.
+ * inside this component, so it works the same everywhere it is offered.
  *
- * A one-time-per-session nudge bubble (#cedarNudge) pops up above the
- * pill a few seconds after load, offering help with any questions. It
- * is skipped on /cedar (the inline chat page), hides as soon as the
- * chat opens, and stays dismissed for the rest of the session.
+ * The dormant nudge markup remains available for a future deliberate
+ * prompt, but it never opens itself. Unprompted bubbles competed with
+ * the page and made the product feel less considered.
  *
  * The chat conversation logic itself (classification, API call,
  * transcript rendering) lives in src/lib/cedarChat.ts. This
@@ -31,6 +31,9 @@ import CedarChat from './CedarChat.astro';
   id="cedarFab"
   aria-expanded="false"
   aria-controls="cedarFabPanel"
+  aria-hidden="true"
+  tabindex="-1"
+  data-cedar-visibility="waiting"
   title="Ask Cedar"
 >
   <span class="cedar-fab__dot" aria-hidden="true"></span>
@@ -153,7 +156,6 @@ import CedarChat from './CedarChat.astro';
     // ---- Helper nudge (one per browser session) ----
     const nudge = document.getElementById('cedarNudge');
     const NUDGE_KEY = 'lumecon-cedar-nudge-seen';
-    const NUDGE_DELAY_MS = 4000;
     const markNudgeSeen = (): void => {
       try {
         sessionStorage.setItem(NUDGE_KEY, '1');
@@ -165,9 +167,104 @@ import CedarChat from './CedarChat.astro';
       if (nudge && !nudge.hidden) nudge.hidden = true;
     };
 
+    /* The launcher is supporting navigation, not part of the hero. Keep it
+       out of the opening composition, and do not let a fixed control cover
+       a price, definition, product screen or another control farther down
+       the page. The collision list combines semantic controls with the few
+       page surfaces whose whole rectangle carries meaning. */
+    const main = document.querySelector<HTMLElement>('main');
+    const intro = main?.firstElementChild instanceof HTMLElement ? main.firstElementChild : null;
+    const avoidSelector = [
+      'a[href]',
+      'button',
+      'input',
+      'select',
+      'textarea',
+      'summary',
+      '[role="button"]',
+      '[tabindex]:not([tabindex="-1"])',
+      'table',
+      '[data-zoom]',
+      '.pr-free',
+      '.pr-plan',
+      '.pr-grove',
+      '.meth-defs__row',
+      '.naics-tile',
+      '.footer',
+    ].join(',');
+    let visibilityFrame = 0;
+
+    const setLauncherVisibility = (visible: boolean, reason: 'waiting' | 'avoiding'): void => {
+      if (!visible && document.activeElement === fab) return;
+      fab.dataset.cedarVisibility = visible ? 'visible' : reason;
+      if (visible) {
+        fab.removeAttribute('aria-hidden');
+        fab.removeAttribute('tabindex');
+      } else {
+        fab.setAttribute('aria-hidden', 'true');
+        fab.setAttribute('tabindex', '-1');
+        hideNudge();
+      }
+    };
+
+    const introHasPassed = (): boolean => {
+      if (!intro) return window.scrollY > Math.min(240, window.innerHeight * 0.3);
+      const navBottom = document
+        .querySelector<HTMLElement>('body > nav')
+        ?.getBoundingClientRect().bottom;
+      const clearLine = Math.max(88, (navBottom || 72) + 16);
+      return intro.getBoundingClientRect().bottom <= clearLine;
+    };
+
+    const overlapsProtectedContent = (): boolean => {
+      const fabRect = fab.getBoundingClientRect();
+      const clearance = 10;
+      const zones = document.querySelectorAll<HTMLElement>(avoidSelector);
+      for (const zone of zones) {
+        if (
+          zone === fab ||
+          fab.contains(zone) ||
+          panel.contains(zone) ||
+          nudge?.contains(zone) ||
+          zone.hidden
+        ) {
+          continue;
+        }
+        const rect = zone.getBoundingClientRect();
+        if (!rect.width || !rect.height || rect.bottom <= 0 || rect.top >= window.innerHeight) {
+          continue;
+        }
+        if (
+          rect.right > fabRect.left - clearance &&
+          rect.left < fabRect.right + clearance &&
+          rect.bottom > fabRect.top - clearance &&
+          rect.top < fabRect.bottom + clearance
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const updateLauncherVisibility = (): void => {
+      visibilityFrame = 0;
+      if (document.body.classList.contains('cedar-popped')) return;
+      if (!introHasPassed()) {
+        setLauncherVisibility(false, 'waiting');
+        return;
+      }
+      setLauncherVisibility(!overlapsProtectedContent(), 'avoiding');
+    };
+
+    const scheduleLauncherVisibility = (): void => {
+      if (visibilityFrame) return;
+      visibilityFrame = window.requestAnimationFrame(updateLauncherVisibility);
+    };
+
     const open = () => {
       markNudgeSeen();
       hideNudge();
+      setLauncherVisibility(true, 'waiting');
       panel.hidden = false;
       panel.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cedar-popped');
@@ -190,6 +287,7 @@ import CedarChat from './CedarChat.astro';
       fab.setAttribute('title', 'Ask Cedar');
       if (returnFocus) (fab as HTMLElement).focus({ preventScroll: true });
       trackEvent('cedar.fab.close');
+      scheduleLauncherVisibility();
     };
 
     // The panel is a modal-ish dialog: while it's open, keep Tab focus
@@ -215,11 +313,12 @@ import CedarChat from './CedarChat.astro';
       if (document.body.classList.contains('cedar-popped')) close();
       else open();
     });
+    fab.addEventListener('blur', scheduleLauncherVisibility);
 
     panel.querySelector('[data-cedar-fab-close]')?.addEventListener('click', () => close());
 
-    // Show the nudge a few seconds after load, once per session. Skipped
-    // on /cedar, where the inline chat already fills the page.
+    // Keep the dormant nudge's explicit dismiss path wired. There is no
+    // auto-show timer, and /cedar uses its inline chat instead of this FAB.
     if (nudge && !window.location.pathname.startsWith('/cedar')) {
       const dismiss = document.getElementById('cedarNudgeDismiss');
       dismiss?.addEventListener('click', () => {
@@ -233,7 +332,6 @@ import CedarChat from './CedarChat.astro';
          spam next to the quieter v3 design. The bubble markup stays
          (dismiss handler above) in case a future surface opens it
          deliberately, but nothing pops on its own. */
-      void NUDGE_DELAY_MS;
     }
     document.addEventListener('keydown', (e) => {
       if (!document.body.classList.contains('cedar-popped')) return;
@@ -271,6 +369,17 @@ import CedarChat from './CedarChat.astro';
       if (path.includes(panel) || path.includes(fab)) return;
       close();
     });
+
+    window.addEventListener('scroll', scheduleLauncherVisibility, { passive: true });
+    window.addEventListener('resize', scheduleLauncherVisibility, { passive: true });
+    window.addEventListener('load', scheduleLauncherVisibility, { once: true });
+    if ('ResizeObserver' in window && main) {
+      const layoutObserver = new ResizeObserver(scheduleLauncherVisibility);
+      layoutObserver.observe(main);
+      if (intro && intro !== main) layoutObserver.observe(intro);
+    }
+    void document.fonts?.ready.then(scheduleLauncherVisibility);
+    scheduleLauncherVisibility();
   }
 
   if (document.readyState === 'loading') {
@@ -308,10 +417,21 @@ import CedarChat from './CedarChat.astro';
     font-size: 0.88rem;
     font-weight: 600;
     letter-spacing: -0.005em;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px);
     transition:
       background 0.2s var(--ease),
       box-shadow 0.2s var(--ease),
+      opacity 0.16s var(--ease),
       transform 0.2s var(--ease);
+  }
+  .cedar-fab[data-cedar-visibility='visible'] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
   }
   /* Closed state: a compact product-mark label. Keeping this to one line
      prevents a persistent helper from covering definitions, prices or CTAs. */

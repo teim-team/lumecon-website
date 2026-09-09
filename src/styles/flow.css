@@ -594,7 +594,16 @@
     width: 100%;
   }
   .cpl-card__go {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 0.55rem;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-control);
+    background: var(--accent-text);
+    color: #fff;
   }
   .co2 {
     grid-template-columns: 1fr;

@@ -163,4 +163,15 @@ import '../styles/home.css';
       font-size: clamp(2.8rem, 13vw, 4rem);
     }
   }
+  @media (max-width: 400px) {
+    .filmhold .hero2-cta {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .filmhold .hero2-cta .btn2 {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 </style>

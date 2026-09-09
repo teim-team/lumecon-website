@@ -188,6 +188,7 @@
 .meth-eqs {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   gap: 1rem;
   border-left: 0;
   padding-left: 0;
@@ -606,13 +607,33 @@
 }
 .mcards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1.1rem;
   align-items: start;
+}
+.mcard:nth-child(-n + 3) {
+  grid-column: span 2;
+}
+.mcard:nth-child(n + 4) {
+  grid-column: span 3;
+}
+@media (max-width: 1100px) and (min-width: 861px) {
+  .mcards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mcard:nth-child(n) {
+    grid-column: auto;
+  }
+  .mcard:last-child {
+    grid-column: 1 / -1;
+  }
 }
 @media (max-width: 860px) {
   .mcards {
     grid-template-columns: 1fr;
+  }
+  .mcard:nth-child(n) {
+    grid-column: auto;
   }
 }
 .mcard {
@@ -759,6 +780,15 @@
   width: 0.95rem;
   height: 0.95rem;
   flex: none;
+  color: var(--ink-2);
+  opacity: 0.72;
+  transition:
+    color 0.2s var(--ease),
+    opacity 0.2s var(--ease);
+}
+.gloss-search:focus-within svg {
+  color: var(--accent-text);
+  opacity: 1;
 }
 .gloss-search input {
   flex: 1;

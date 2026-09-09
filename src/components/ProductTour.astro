@@ -20,7 +20,8 @@ const ROWS = [
     img: '/app/trace.webp',
     imgDark: '/app/trace-dark.webp',
     width: 1920,
-    height: 1020,
+    height: 1055,
+    darkHeight: 1009,
     alt: 'Lumecon lineage panel titled Where $1,240,500,000 comes from for a sample Tribal Nation analysis, breaking economic output into direct, indirect and induced layers, by operation and industry.',
   },
   {
@@ -33,6 +34,7 @@ const ROWS = [
     imgDark: '/app/compare-dark.webp',
     width: 1920,
     height: 1200,
+    darkHeight: 1200,
     alt: 'Lumecon comparison of a sample Tribal Nation economic footprint in fiscal years 2023 and 2025, showing changes in jobs, GDP contribution, labor income, economic output and tax impacts.',
   },
   {
@@ -48,6 +50,7 @@ const ROWS = [
     imgDark: '/app/dashboard-dark.webp',
     width: 1920,
     height: 1200,
+    darkHeight: 1200,
     alt: 'Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.',
   },
 ];
@@ -89,7 +92,12 @@ const ROWS = [
               data-zoom
             >
               <picture>
-                <source srcset={row.imgDark} media="(prefers-color-scheme: dark)" />
+                <source
+                  srcset={row.imgDark}
+                  media="(prefers-color-scheme: dark)"
+                  width={row.width}
+                  height={row.darkHeight}
+                />
                 {/* width/height are the intrinsic ratio, kept so the browser
                      reserves the box before the file arrives. The rendered size
                      is CSS-driven (`.tour-row__shot img`), so the shot scales

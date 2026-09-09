@@ -385,21 +385,41 @@
 }
 /* ---------- ask any AI ---------- */
 .askai {
-  background: var(--white);
+  background: var(--surface-2);
   border-top: 1px solid var(--rule);
-  padding: clamp(2rem, 5vh, 3.2rem) var(--container-pad);
+  padding: clamp(2.4rem, 6vh, 4rem) var(--container-pad);
 }
 .askai-inner {
   max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
-  gap: 0.9rem;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+.askai-copy {
+  display: grid;
+  gap: 0.72rem;
+}
+.askai-copy h2 {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(1.65rem, 2.8vw, 2.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 .askai-note {
   font-size: 0.92rem;
+  line-height: 1.62;
   color: var(--ink-3);
   margin: 0;
-  max-width: 88ch;
+  max-width: 54ch;
+}
+.askai-proof {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.7rem;
+  border-top: 1px solid var(--rule-strong);
 }
 /* The plainly factual paragraph retrieval systems can quote. */
 .askai-fact {
@@ -415,63 +435,37 @@
   color: var(--ink-3);
   margin: 0;
 }
-.askai-grid {
+.askai-links {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
 }
-.askai-tile {
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: 1.1rem 0.8rem 0.95rem;
-  text-decoration: none;
-  color: var(--ink);
-  transition:
-    transform 0.2s var(--ease),
-    border-color 0.2s var(--ease),
-    box-shadow 0.2s var(--ease);
-  background: var(--surface);
-}
-.askai-tile:hover {
-  border-color: var(--rule-strong);
-}
-.askai-tile__ic {
+.askai-links a {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 34px;
-  /* Official marks, monochrome, in the site accent. Teal on white
-     stays on --accent-text for contrast. */
+  align-items: baseline;
+  gap: 0.28rem;
+  padding: 0.35rem 0;
+  text-decoration: none;
+  font-size: 0.83rem;
+  font-weight: 650;
   color: var(--accent-text);
-  transition: transform 0.2s var(--ease);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
 }
-.askai-tile__ic svg {
-  width: 28px;
-  height: 28px;
-}
-.askai-tile:hover .askai-tile__ic {
-  transform: scale(1.08);
-}
-.askai-tile__name {
-  font-family: var(--font-sans);
-  font-size: 0.86rem;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-}
-@media (max-width: 880px) {
-  .askai-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+@media (hover: hover) {
+  .askai-links a:hover {
+    border-bottom-color: var(--accent-text);
   }
 }
-@media (max-width: 560px) {
-  .askai-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (max-width: 760px) {
+  .askai-inner {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+  .askai-copy h2 {
+    max-width: 18ch;
   }
 }
 
@@ -702,14 +696,14 @@
    gets a visible press state; on desktop the same press reads as a
    satisfying click-down. Guarded for reduced motion below. */
 .btn2:active,
-.askai-tile:active,
+.askai-links a:active,
 .pr-plan:active {
   transform: scale(0.985);
   transition-duration: 0.06s;
 }
 @media (prefers-reduced-motion: reduce) {
   .btn2:active,
-  .askai-tile:active,
+  .askai-links a:active,
   .pr-plan:active {
     transform: none;
   }
@@ -869,7 +863,7 @@
   position: absolute;
   z-index: 2;
   top: 16%;
-  left: -2.75rem;
+  left: -1rem;
   width: calc(100% - 0.75rem);
   overflow: hidden;
   border: 1px solid rgba(10, 15, 38, 0.17);
@@ -1121,7 +1115,7 @@
     min-height: clamp(27rem, 42vw, 33rem);
   }
   .hero2-screen {
-    left: -1.5rem;
+    left: -0.75rem;
     width: calc(100% + 0.5rem);
   }
 }

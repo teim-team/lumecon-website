@@ -1,5 +1,6 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 import { INTENTS, CHIP_IDS, FALLBACK_ANSWER } from '../src/data/cedarIntents';
+import { scrollUntilCedarVisible } from './cedar-visibility';
 
 /**
  * Cedar classifier routing tests.
@@ -27,7 +28,7 @@ async function openCedar(page: Page): Promise<Locator> {
   const panel = page.locator('#cedarFabPanel');
   // bootChat() stamps this once the runtime is wired (on page load).
   await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
-  await page.locator('#cedarFab').click();
+  await (await scrollUntilCedarVisible(page)).click();
   await expect(panel.locator('[data-cedar-input]')).toBeVisible();
   return panel;
 }
@@ -54,7 +55,7 @@ test('cedar routes representative questions to the right intent', async ({ page,
     { q: 'what does lumecon do', expect: 'structured economic impact analysis' },
     { q: 'how much does it cost', expect: 'per-analysis or per-geography' },
     { q: 'does this work for tribal nations', expect: 'Whole Nation' },
-    { q: 'EPA grant', expect: 'one of the most common uses of Lumecon' },
+    { q: 'EPA grant', expect: 'Grant preparation is a strong use case' },
     { q: 'how long does it take', expect: 'Turnaround depends' },
     { q: 'can I see a demo', expect: 'Happy to set one up' },
     { q: 'what is cedar', expect: 'help process documents' },
@@ -163,7 +164,7 @@ test('cedar handles rapid back-to-back submits without breaking', async ({ page,
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const panel = page.locator('#cedarFabPanel');
   await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
-  await page.locator('#cedarFab').click();
+  await (await scrollUntilCedarVisible(page)).click();
   const input = panel.locator('[data-cedar-input]');
 
   // Fire two messages back-to-back, the second while the first is still

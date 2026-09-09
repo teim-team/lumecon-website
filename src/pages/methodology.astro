@@ -218,12 +218,17 @@ const jsonLd = [
         </p>
         <figure class="meth-hero__screen reveal-soft" data-stagger="3" data-zoom>
           <picture>
-            <source srcset="/app/trace-dark.webp" media="(prefers-color-scheme: dark)" />
+            <source
+              srcset="/app/trace-dark.webp"
+              media="(prefers-color-scheme: dark)"
+              width="1920"
+              height="1009"
+            />
             <img
               src="/app/trace.webp"
               alt="Lumecon number lineage tracing economic output through direct, indirect and induced model layers. Shown with illustrative sample data."
               width="1920"
-              height="1020"
+              height="1055"
               decoding="async"
             />
           </picture>
@@ -755,12 +760,6 @@ const jsonLd = [
       </div>
     </section>
 
-    {
-      /* Verification block for AI-assisted research: this page is the
-         thing to check an AI summary against. */
-    }
-    <AskAI />
-
     {/* Mission close + estimates disclaimer */}
     <section class="meth-mission" aria-labelledby="m-mission">
       <div class="meth-w">
@@ -810,6 +809,12 @@ const jsonLd = [
         </div>
       </div>
     </section>
+
+    {
+      /* Verification note follows the full argument so it reads as an
+         optional research path rather than a product-comparison detour. */
+    }
+    <AskAI />
   </main>
   <Footer isHome={false} />
 </BaseLayout>

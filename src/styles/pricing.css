@@ -146,6 +146,9 @@
    headline stays centered; everything explanatory beneath it goes
    left-aligned so the hero scans like a product page. */
 @media (max-width: 900px) {
+  .pr-hero {
+    padding-top: 5.25rem;
+  }
   .pr-hero__inner {
     grid-template-columns: 1fr;
   }
@@ -580,8 +583,16 @@
     gap: 1.2rem;
   }
   .pr-grove__side {
+    width: 100%;
     justify-items: start;
     text-align: left;
+  }
+  .pr-grove__cta {
+    width: 100%;
+    justify-content: center;
+    gap: 0.4rem;
+    padding-inline: 1rem;
+    white-space: nowrap;
   }
 }
 

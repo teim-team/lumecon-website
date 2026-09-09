@@ -232,6 +232,14 @@
 .cedarpg-band {
   background: transparent;
 }
+@media (min-width: 901px) {
+  .cedarpg-acts {
+    padding-bottom: 0;
+  }
+  .cedarpg-band {
+    padding-top: 2rem;
+  }
+}
 .cedarpg-band .meth-w {
   padding: clamp(2rem, 4vw, 3.5rem);
   border: 1px solid var(--rule);
