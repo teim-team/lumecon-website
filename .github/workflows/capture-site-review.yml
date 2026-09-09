@@ -180,14 +180,121 @@ jobs:
               await preparePage(page, route);
               const measurement = await page.evaluate(() => {
                 const viewportWidth = document.documentElement.clientWidth;
-                const scrollWidth = Math.max(
-                  document.documentElement.scrollWidth,
-                  document.body?.scrollWidth || 0,
-                );
+                const pageWidth = () =>
+                  Math.max(
+                    document.documentElement.scrollWidth,
+                    document.body?.scrollWidth || 0,
+                  );
+                const scrollWidth = pageWidth();
+                const overflowPx = Math.max(0, scrollWidth - viewportWidth);
+                const diagnostics = { bounds: [], removalImpact: [] };
+
+                if (overflowPx > 1) {
+                  const selectorFor = (element) => {
+                    const parts = [];
+                    for (
+                      let node = element;
+                      node && node.nodeType === Node.ELEMENT_NODE && parts.length < 6;
+                      node = node.parentElement
+                    ) {
+                      let part = node.localName;
+                      if (node.id) {
+                        part += '#' + CSS.escape(node.id);
+                        parts.unshift(part);
+                        break;
+                      }
+                      const classes = [...node.classList].slice(0, 3);
+                      if (classes.length) {
+                        part += '.' + classes.map((name) => CSS.escape(name)).join('.');
+                      }
+                      const sameTag = node.parentElement
+                        ? [...node.parentElement.children].filter(
+                            (sibling) => sibling.localName === node.localName,
+                          )
+                        : [];
+                      if (sameTag.length > 1) {
+                        part += ':nth-of-type(' + (sameTag.indexOf(node) + 1) + ')';
+                      }
+                      parts.unshift(part);
+                    }
+                    return parts.join(' > ');
+                  };
+
+                  const describe = (element) => {
+                    const rect = element.getBoundingClientRect();
+                    const style = getComputedStyle(element);
+                    const pseudo = (which) => {
+                      const value = getComputedStyle(element, which);
+                      if (!value || value.content === 'none') return null;
+                      return {
+                        content: value.content,
+                        position: value.position,
+                        left: value.left,
+                        right: value.right,
+                        width: value.width,
+                        transform: value.transform,
+                        overflowX: value.overflowX,
+                      };
+                    };
+                    return {
+                      selector: selectorFor(element),
+                      tag: element.localName,
+                      rect: {
+                        left: Math.round(rect.left * 100) / 100,
+                        right: Math.round(rect.right * 100) / 100,
+                        width: Math.round(rect.width * 100) / 100,
+                      },
+                      clientWidth: element.clientWidth,
+                      scrollWidth: element.scrollWidth,
+                      position: style.position,
+                      overflowX: style.overflowX,
+                      before: pseudo('::before'),
+                      after: pseudo('::after'),
+                    };
+                  };
+
+                  const elements = [...document.querySelectorAll('body *')];
+                  diagnostics.bounds = elements
+                    .filter((element) => {
+                      const rect = element.getBoundingClientRect();
+                      const style = getComputedStyle(element);
+                      return (
+                        rect.left < -1 ||
+                        rect.right > viewportWidth + 1 ||
+                        (style.overflowX === 'visible' &&
+                          element.scrollWidth > element.clientWidth + 1)
+                      );
+                    })
+                    .map(describe);
+
+                  for (const element of elements) {
+                    const displayValue = element.style.getPropertyValue('display');
+                    const displayPriority = element.style.getPropertyPriority('display');
+                    element.style.setProperty('display', 'none', 'important');
+                    const widthAfterRemoval = pageWidth();
+                    element.style.removeProperty('display');
+                    if (displayValue) {
+                      element.style.setProperty(
+                        'display',
+                        displayValue,
+                        displayPriority,
+                      );
+                    }
+                    if (widthAfterRemoval < scrollWidth) {
+                      diagnostics.removalImpact.push({
+                        ...describe(element),
+                        widthAfterRemoval,
+                        reduction: scrollWidth - widthAfterRemoval,
+                      });
+                    }
+                  }
+                }
+
                 return {
                   viewportWidth,
                   scrollWidth,
-                  overflowPx: Math.max(0, scrollWidth - viewportWidth),
+                  overflowPx,
+                  diagnostics,
                 };
               });
               const result = {
