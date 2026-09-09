@@ -181,6 +181,7 @@ for (const theme of ['light', 'dark']) {
     // not reveal the clipped top of the following cards.
     minHeight: 920,
     maxHeight: 1120,
+    bottomPadding: 16,
     label: 'results header and lineage panel',
   });
   await trace.waitForTimeout(500);
