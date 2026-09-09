@@ -214,6 +214,7 @@ for (const theme of ['light', 'dark']) {
     const mapHeight = await fitScrolledBoundary(mapPage, '.restop', '.rsec-nav', {
       minHeight: 720,
       maxHeight: 1000,
+      bottomPadding: 8,
       label: `${t.id} map and result navigation`,
     });
     await mapPage.waitForTimeout(700);

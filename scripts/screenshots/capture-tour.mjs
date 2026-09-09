@@ -70,12 +70,39 @@ async function stripChrome(page) {
   await page.waitForTimeout(250);
 }
 
-async function assertBoundaryVisible(page, selector, label) {
-  const box = await page.locator(selector).first().boundingBox();
-  const viewport = page.viewportSize();
-  if (!box || !viewport || box.y + box.height > viewport.height + 1) {
+async function fitScrolledBoundary(
+  page,
+  anchorSelector,
+  boundarySelector,
+  { width = 1920, minHeight, maxHeight, topPadding = 24, bottomPadding = 20, label },
+) {
+  await page.setViewportSize({ width, height: maxHeight });
+  const positionAtAnchor = async () => {
+    await page.evaluate(
+      ({ selector, padding }) => {
+        const anchor = document.querySelector(selector);
+        if (!anchor) return;
+        const top = anchor.getBoundingClientRect().top + window.scrollY - padding;
+        window.scrollTo({ top, behavior: 'instant' });
+      },
+      { selector: anchorSelector, padding: topPadding },
+    );
+    await page.waitForTimeout(100);
+  };
+  await positionAtAnchor();
+  const box = await page.locator(boundarySelector).first().boundingBox();
+  if (!box) throw new Error(`capture-tour: could not find ${label}`);
+  const height = Math.max(minHeight, Math.ceil(box.y + box.height + bottomPadding));
+  if (height > maxHeight) {
+    throw new Error(`capture-tour: ${label} needs ${height}px, above ${maxHeight}px limit`);
+  }
+  await page.setViewportSize({ width, height });
+  await positionAtAnchor();
+  const fitted = await page.locator(boundarySelector).first().boundingBox();
+  if (!fitted || fitted.y + fitted.height > height + 1) {
     throw new Error(`capture-tour: ${label} does not end inside the capture frame`);
   }
+  return height;
 }
 
 for (const theme of ['light', 'dark']) {
@@ -122,7 +149,7 @@ for (const theme of ['light', 'dark']) {
   // Each marketing frame stops on a complete product boundary. Trace ends just
   // after its lineage panel; the board and comparison use a taller frame so a
   // project card or the comparison controls are not sliced by the viewport.
-  const traceCtx = await makeContext(1920, 1020, 2);
+  const traceCtx = await makeContext(1920, 1120, 2);
   const boardCtx = await makeContext(1920, 1200, 2);
   const cmpCtx = await makeContext(1600, 1000, 2.4);
 
@@ -145,15 +172,15 @@ for (const theme of ['light', 'dark']) {
   });
   if (!opened) throw new Error('capture-tour: no .metric__trace control on the results page');
   await trace.waitForTimeout(1200);
-  // Frame on the headline so the lineage panel sits in the lower half with the
-  // figure it explains above it; the panel alone reads as a table with no
-  // subject.
-  await trace.evaluate(() => {
-    const h1 = document.querySelector('.reshead h1');
-    if (h1) window.scrollTo({ top: h1.getBoundingClientRect().top + window.scrollY - 24 });
+  // Include the complete results header, not just its headline, and stop after
+  // the full lineage panel. Measuring both boundaries prevents a clipped
+  // eyebrow at the top or the next card appearing at the bottom.
+  const traceHeight = await fitScrolledBoundary(trace, '.reshead', '.lineage', {
+    minHeight: 1020,
+    maxHeight: 1120,
+    label: 'results header and lineage panel',
   });
   await trace.waitForTimeout(500);
-  await assertBoundaryVisible(trace, '.lineage', 'lineage panel');
   await trace.screenshot({ path: `${OUT}/trace${suffix}.png` });
   await trace.close();
 
@@ -181,7 +208,7 @@ for (const theme of ['light', 'dark']) {
   await traceCtx.close();
   await boardCtx.close();
   await cmpCtx.close();
-  console.log(`tour${suffix}: trace, dashboard, compare`);
+  console.log(`tour${suffix}: trace ${traceHeight}px, dashboard, compare`);
 }
 await browser.close();
 console.log('tour capture done');
