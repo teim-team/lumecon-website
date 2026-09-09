@@ -752,6 +752,10 @@
   justify-content: flex-start;
   margin-top: 0.35rem;
 }
+.hero2 .hero2-cta .btn2 {
+  padding-inline: 1.25rem;
+  font-size: 0.95rem;
+}
 
 /* The photograph establishes the economic place. The screen overlaps it as
    the instrument used to understand that place, not as another card in a

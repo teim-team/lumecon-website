@@ -749,42 +749,23 @@ strong {
   border: 0;
 }
 
-/* Scroll-reveal is an ENHANCEMENT, never the default state.
-   --------------------------------------------------------------------
-   Every rule that starts an element at opacity 0 is gated behind `.js`,
-   a class an inline script in <head> puts on <html>. Without it nothing
-   is ever hidden.
-
-   This was a real failure, not a hypothetical one: with scripting off,
-   the homepage rendered fifteen invisible elements and the methodology
-   page twenty-six, which is to say both pages were blank below the nav.
-   Anything that does not run the observer (scripting disabled, a script
-   error earlier in the document, a stricter CSP, a rendering crawler)
-   saw an empty site. Content must never depend on JavaScript to become
-   visible; motion may depend on it. The script also carries a failsafe
-   timeout that reveals anything still unseen. */
+/* Scroll-reveal is an enhancement, never a visibility gate. Text stays fully
+   opaque throughout the transition so contrast does not dip while an audit,
+   a crawler or a fast-scrolling reader reaches a section. Only position moves. */
 .js .reveal {
-  opacity: 0;
   transform: translateY(18px);
-  transition:
-    opacity 0.7s var(--ease),
-    transform 0.7s var(--ease);
-  will-change: opacity, transform;
+  transition: transform 0.7s var(--ease);
+  will-change: transform;
 }
 .js .reveal.seen {
-  opacity: 1;
   transform: none;
 }
 /* A softer reveal for inline body text — smaller travel, faster. */
 .js .reveal-soft {
-  opacity: 0;
   transform: translateY(10px);
-  transition:
-    opacity 0.55s var(--ease),
-    transform 0.55s var(--ease);
+  transition: transform 0.55s var(--ease);
 }
 .js .reveal-soft.seen {
-  opacity: 1;
   transform: none;
 }
 /* Stagger a whole section from one attribute.
@@ -802,14 +783,10 @@ strong {
    container, and BaseLayout already adds `.seen` to whatever it
    observes, so the same machinery drives both. */
 .js [data-reveal-group] > * {
-  opacity: 0;
   transform: translateY(10px);
-  transition:
-    opacity 0.55s var(--ease),
-    transform 0.55s var(--ease);
+  transition: transform 0.55s var(--ease);
 }
 .js [data-reveal-group].seen > * {
-  opacity: 1;
   transform: none;
 }
 .js [data-reveal-group].seen > *:nth-child(1) {
@@ -854,36 +831,24 @@ strong {
   }
 }
 .js .reveal-left {
-  opacity: 0;
   transform: translateX(-28px);
-  transition:
-    opacity 0.8s var(--ease),
-    transform 0.8s var(--ease);
+  transition: transform 0.8s var(--ease);
 }
 .js .reveal-left.seen {
-  opacity: 1;
   transform: none;
 }
 .js .reveal-right {
-  opacity: 0;
   transform: translateX(28px);
-  transition:
-    opacity 0.8s var(--ease),
-    transform 0.8s var(--ease);
+  transition: transform 0.8s var(--ease);
 }
 .js .reveal-right.seen {
-  opacity: 1;
   transform: none;
 }
 .js .reveal-diagonal {
-  opacity: 0;
   transform: translate(18px, -10px);
-  transition:
-    opacity 0.9s var(--ease),
-    transform 0.9s var(--ease);
+  transition: transform 0.9s var(--ease);
 }
 .js .reveal-diagonal.seen {
-  opacity: 1;
   transform: none;
 }
 
