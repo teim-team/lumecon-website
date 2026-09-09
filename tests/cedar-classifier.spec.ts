@@ -51,14 +51,14 @@ test('cedar routes representative questions to the right intent', async ({ page,
   const panel = await openCedar(page);
 
   const cases: Array<{ q: string; expect: string }> = [
-    { q: 'what does lumecon do', expect: 'a council memo, a grant narrative' },
+    { q: 'what does lumecon do', expect: 'structured economic impact analysis' },
     { q: 'how much does it cost', expect: 'per-analysis or per-geography' },
     { q: 'does this work for tribal nations', expect: 'Whole Nation' },
     { q: 'EPA grant', expect: 'one of the most common uses of Lumecon' },
-    { q: 'how long does it take', expect: 'A standard analysis takes minutes' },
+    { q: 'how long does it take', expect: 'Turnaround depends' },
     { q: 'can I see a demo', expect: 'Happy to set one up' },
-    { q: 'what is cedar', expect: 'I handle the data wrangling and the polish' },
-    { q: 'how is this different from implan', expect: 'Same underlying economics' },
+    { q: 'what is cedar', expect: 'help process documents' },
+    { q: 'how is this different from implan', expect: 'established input-output methods' },
     { q: 'what is indian country', expect: '18 U.S.C.' },
     { q: 'what does federally recognized mean', expect: '575 tribal entities' },
     { q: 'tell me about the dawes act', expect: 'patchwork of ownership' },

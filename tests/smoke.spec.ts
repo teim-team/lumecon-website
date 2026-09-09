@@ -120,7 +120,7 @@ test('pricing leads with the free account and routes consultants to Sapling', as
   await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // The free-account band sits before the paid tiers.
   const free = page.locator('.pr-free');
-  await expect(free).toContainText('take our word for it');
+  await expect(free).toContainText('Request free access');
   await expect(free).toContainText('No credit card');
   await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // Consultants use the public plans. The signal is one line under the
@@ -290,7 +290,9 @@ test('naics page lists all 20 sectors plus tribal government', async ({ page }) 
   await expect(page.locator('.meth-hero__lede a[href="/methodology#m-naics"]')).toBeVisible();
   // Hover text exists in the DOM for every tile, manufacturing included.
   await expect(page.locator('#naics-manufacturing .naics-tile__desc')).toContainText('materials');
-  await expect(page.locator('#naics-tribalgov .naics-tile__desc')).toContainText('Lumecon category');
+  await expect(page.locator('#naics-tribalgov .naics-tile__desc')).toContainText(
+    'Lumecon category',
+  );
 });
 
 test('methodology explains the two-digit NAICS choice', async ({ page }) => {
@@ -340,7 +342,7 @@ test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ pa
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   // Cedar gets one card in the why band and a link out. The old dedicated
   // #cedar section and the AI tile block are both gone.
-  const card = page.locator('#why .whyw-card', { hasText: 'Cedar included' });
+  const card = page.locator('#why .whyw-card', { hasText: 'Built into the workflow' });
   await expect(card).toHaveCount(1);
   await expect(card.locator('a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('.askai')).toHaveCount(0);
@@ -390,5 +392,7 @@ test('security.txt stays valid and does not silently lapse', async ({ page }) =>
   // Fails while there is still time to renew, rather than after it lapses.
   expect(daysLeft, `security.txt expires in ${daysLeft} days — renew it`).toBeGreaterThan(30);
   // RFC 9116 §2.5.5: SHOULD be less than a year out.
-  expect(daysLeft, `Expires is ${daysLeft} days out; RFC 9116 asks for under a year`).toBeLessThan(366);
+  expect(daysLeft, `Expires is ${daysLeft} days out; RFC 9116 asks for under a year`).toBeLessThan(
+    366,
+  );
 });
