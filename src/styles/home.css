@@ -7,11 +7,11 @@
 /* ---------- shared primitives ---------- */
 .h-kicker {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.11em;
+  font-size: 0.74rem;
+  letter-spacing: 0.095em;
   text-transform: uppercase;
   color: var(--accent-text);
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
 }
 .btn2 {
@@ -20,16 +20,16 @@
   gap: 0.55rem;
   padding: 0.85rem 1.5rem;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.005em;
   text-decoration: none;
   transition:
-    background 0.15s var(--ease),
-    border-color 0.15s var(--ease),
-    box-shadow 0.15s var(--ease),
+    background 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
     transform 0.08s var(--ease);
 }
 /* The primary action keeps a gradient, but a different kind of one.
@@ -208,8 +208,8 @@
 
 /* ---------- why (white, hairline, teim-app cards) ---------- */
 .whyw {
-  background: var(--white);
-  border-top: 1px solid var(--rule);
+  background: var(--surface-2);
+  border-top: 0;
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .whyw-inner {
@@ -226,17 +226,27 @@
 .whyw-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  /* Column gap does the separating now that the vertical rules are gone. */
-  gap: var(--gutter);
+  gap: 0;
+  overflow: hidden;
+  padding: clamp(0.85rem, 1.8vw, 1.4rem);
+  background: var(--surface-glass);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-surface);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
 }
 /* No vertical rules between the cards. The illustrations already read as four
    distinct things, and a rule beside each one boxed them in. Column gap does
    the separating instead, which is why the grid below carries one. */
 .whyw-card {
-  padding: 0.4rem 0;
+  padding: clamp(0.8rem, 1.5vw, 1.35rem);
   display: grid;
   gap: 0.5rem;
   align-content: start;
+}
+.whyw-card + .whyw-card {
+  border-left: 1px solid var(--rule);
 }
 .whyw-card__k {
   font-family: var(--font-mono);
@@ -263,7 +273,13 @@
 @media (max-width: 1199px) {
   .whyw-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 2.6rem;
+    row-gap: 0;
+  }
+  .whyw-card:nth-child(3) {
+    border-left: 0;
+  }
+  .whyw-card:nth-child(n + 3) {
+    border-top: 1px solid var(--rule);
   }
 }
 @media (max-width: 759px) {
@@ -272,15 +288,16 @@
     row-gap: 0;
   }
   .whyw-card {
-    padding: 0;
+    padding: 1.2rem 0.45rem;
   }
   /* Editorial sequence: eyebrow first, then the illustration large
      and centered, then left-aligned copy; hairline rules between
      features instead of vertical separators. */
   .whyw-card + .whyw-card {
+    border-left: 0;
     border-top: 1px solid var(--rule);
-    margin-top: 1.8rem;
-    padding-top: 1.8rem;
+    margin-top: 0;
+    padding-top: 1.2rem;
   }
   .whyw-card__k {
     order: -1;
@@ -527,7 +544,7 @@
      grid child it stretched to the column and centred its own contents, so
      the icon floated over the middle of a left-aligned block. */
   justify-content: flex-start;
-  color: var(--ink);
+  color: var(--accent-light);
   margin-bottom: 0.7rem;
 }
 .edge-ic svg {
@@ -624,8 +641,8 @@
 .fcta {
   position: relative;
   overflow: hidden;
-  background: var(--white);
-  border-top: 1px solid var(--rule);
+  background: var(--ground-bright);
+  border-top: 0;
   padding: clamp(4.5rem, 11vh, 8rem) var(--container-pad);
 }
 .fcta-inner {
@@ -705,16 +722,38 @@
   }
 }
 
-/* ---------- homepage v4: economic places ----------
+/* ---------- homepage v5: luminous economic places ----------
    The homepage now works like an editorial product story: a large, left-
    aligned promise beside one readable product screen, then a full-width
    photographic passage through the kinds of places the platform measures.
-   Light comes from contrast between pure-white surfaces, the duotone images
-   and the raised application frame. There is no decorative glow or texture. */
+   Light comes from the relationship between the mineral ground, clean white
+   instruments, the duotone photography and the raised application frame. */
 .hero2 {
+  position: relative;
+  isolation: isolate;
   overflow: clip;
-  background: var(--surface);
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafb 45%, #edf4f4 100%);
   padding: clamp(7.5rem, 12vh, 9rem) var(--container-pad) clamp(2rem, 4vh, 3rem);
+  box-shadow: inset 0 -1px 0 var(--rule);
+}
+.hero2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    transparent 0 48%,
+    rgba(255, 255, 255, 0.7) 56%,
+    transparent 66%
+  );
+  opacity: 0.46;
+}
+.hero2 > .hero2-inner,
+.hero2 > .proof {
+  position: relative;
+  z-index: 1;
 }
 .hero2 > .hero2-inner {
   max-width: var(--container-max);
@@ -768,12 +807,30 @@
   margin: 0;
   isolation: isolate;
 }
+.hero2-stage::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 12% -5% 4% 6%;
+  background: linear-gradient(
+    145deg,
+    rgba(15, 181, 165, 0.2),
+    rgba(15, 181, 165, 0.04) 44%,
+    rgba(196, 151, 68, 0.12) 76%,
+    transparent
+  );
+  filter: blur(38px);
+  transform: skewY(-3deg);
+  pointer-events: none;
+}
 .hero2-photo {
   position: absolute;
   inset: 0 0 2.5rem 17%;
   overflow: hidden;
   background: #8a691f;
-  border: 1px solid rgba(10, 15, 38, 0.08);
+  border: 1px solid rgba(10, 15, 38, 0.1);
+  border-radius: var(--radius-frame);
+  box-shadow: 0 22px 58px -38px rgba(10, 28, 52, 0.48);
 }
 .hero2-photo img {
   display: block;
@@ -811,13 +868,9 @@
   width: calc(100% - 0.75rem);
   overflow: hidden;
   border: 1px solid rgba(10, 15, 38, 0.17);
-  border-radius: 10px;
+  border-radius: var(--radius-frame);
   background: var(--surface);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    0 2px 4px rgba(10, 15, 38, 0.08),
-    0 24px 52px -20px rgba(10, 15, 38, 0.3),
-    0 54px 90px -52px rgba(10, 15, 38, 0.38);
+  box-shadow: var(--shadow-surface-high);
   transition:
     transform 0.25s var(--ease),
     border-color 0.25s var(--ease),
@@ -827,10 +880,9 @@
   transform: translateY(-4px);
   border-color: rgba(10, 127, 116, 0.45);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.96),
-    0 3px 6px rgba(10, 15, 38, 0.08),
-    0 30px 62px -22px rgba(10, 15, 38, 0.34),
-    0 64px 100px -54px rgba(10, 15, 38, 0.42);
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 6px rgba(10, 28, 52, 0.08),
+    0 34px 82px -34px rgba(10, 28, 52, 0.44);
 }
 .hero2-screen img {
   display: block;
@@ -850,8 +902,14 @@
 .hero2 > .proof {
   max-width: var(--container-max);
   margin: clamp(1.6rem, 3.5vh, 2.4rem) auto 0;
-  padding-top: clamp(1.2rem, 2.5vh, 1.65rem);
+  padding: clamp(1.05rem, 2vw, 1.35rem) clamp(1.2rem, 2.4vw, 1.8rem);
   justify-items: start;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface-glass);
+  box-shadow: var(--shadow-surface);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
 }
 .hero2 > .proof .proof__list {
   justify-content: flex-start;
@@ -905,10 +963,11 @@
   bottom: 0;
   left: 0;
   padding: clamp(1.35rem, 2.4vw, 2.25rem);
-  background: rgba(6, 18, 40, 0.82);
+  background: rgba(6, 18, 40, 0.68);
   border-top: 1px solid rgba(255, 255, 255, 0.32);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
 }
 .place-panel__copy p {
   margin: 0 0 0.7rem;
@@ -992,11 +1051,42 @@
    pure-white hero and product tour. The previous two-step tint could not be
    perceived at normal viewing distance. */
 .places + .whyw {
-  background: #f4f7f8;
+  background: linear-gradient(180deg, #e9f0f2 0%, var(--surface-2) 100%);
   border-top: 0;
 }
+.edge.section--dark {
+  background:
+    linear-gradient(128deg, rgba(15, 181, 165, 0.13), transparent 38%),
+    linear-gradient(312deg, rgba(240, 169, 26, 0.055), transparent 28%), #0b1229;
+}
+.edge::before {
+  content: '';
+  position: absolute;
+  top: -6rem;
+  right: -4rem;
+  z-index: 0;
+  width: 28rem;
+  height: 28rem;
+  background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
+  filter: brightness(0) invert(1);
+  opacity: 0.035;
+  pointer-events: none;
+}
+.edge-card,
+.edge-ic {
+  transition:
+    border-color 0.22s var(--ease),
+    color 0.22s var(--ease),
+    transform 0.22s var(--ease);
+}
+.edge-card:hover {
+  border-top-color: rgba(95, 217, 204, 0.58);
+}
+.edge-card:hover .edge-ic {
+  transform: translateY(-2px);
+}
 .tour {
-  background: var(--surface);
+  background: var(--ground-bright);
 }
 
 @media (max-width: 1120px) {
@@ -1139,6 +1229,17 @@
 }
 
 @media (prefers-color-scheme: dark) {
+  .hero2 {
+    background: linear-gradient(145deg, #171d3e 0%, #111833 48%, #0c2a31 100%);
+  }
+  .hero2::before {
+    background: linear-gradient(
+      112deg,
+      transparent 0 48%,
+      rgba(255, 255, 255, 0.06) 56%,
+      transparent 66%
+    );
+  }
   .hero2-photo {
     border-color: rgba(255, 255, 255, 0.12);
   }

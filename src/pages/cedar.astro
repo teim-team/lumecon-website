@@ -56,7 +56,7 @@ const jsonLd = [
   <Nav isHome={false} />
   <main class="meth cedarpg" id="top" tabindex="-1">
     {/* Hero */}
-    <header class="meth-hero">
+    <header class="meth-hero cedarpg-hero section--dark">
       <div class="meth-w">
         <p class="h-kicker reveal-soft">Cedar</p>
         <h1 class="meth-hero__title reveal-soft" data-stagger="1">
@@ -75,6 +75,22 @@ const jsonLd = [
             Try Lumecon <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
+        <figure class="cedarpg-hero__screen reveal-soft" data-stagger="3" data-zoom>
+          <picture>
+            <source
+              srcset="/app/cedar-wind-entities-dark.webp"
+              media="(prefers-color-scheme: dark)"
+            />
+            <img
+              src="/app/cedar-wind-entities.webp"
+              alt="Cedar reviewing the organizations and project entities it identified from source documents for a sample wind project."
+              width="1920"
+              height="1080"
+              decoding="async"
+            />
+          </picture>
+          <figcaption>Cedar turns source material into reviewable economic inputs.</figcaption>
+        </figure>
       </div>
     </header>
 

@@ -98,24 +98,40 @@ const jsonLd = [
     {/* 1. Hero: simplicity is the opening argument. */}
     <section class="pr-hero">
       <div class="pr-hero__inner" data-reveal-group>
-        <p class="h-kicker">Pricing</p>
-        <h1 class="pr-hero__title">
-          We tailor the modeling. Your pricing <span class="hero2-em">stays standard</span>.
-        </h1>
-        <p class="pr-hero__lede">
-          Every paid plan runs the full economic model with unlimited analysis, every supported U.S.
-          geography and Cedar. Higher plans add collaboration and scale. However complex your
-          organization is, the pricing stays simple.
-        </p>
-        <p class="pr-hero__callout">
-          Plans start at $1,000 a year, and every price is on this page.
-        </p>
-        <div class="pr-hero__ctas">
-          <a class="btn2 btn2--primary" href="/signup?tier=free">
-            Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
-          </a>
-          <a class="btn2 btn2--card" href="#plans">Compare plans</a>
+        <div class="pr-hero__copy">
+          <p class="h-kicker">Pricing</p>
+          <h1 class="pr-hero__title">
+            We tailor the modeling. Your pricing <span class="hero2-em">stays standard</span>.
+          </h1>
+          <p class="pr-hero__lede">
+            Every paid plan runs the full economic model with unlimited analysis, every supported
+            U.S. geography and Cedar. Higher plans add collaboration and scale. However complex your
+            organization is, the pricing stays simple.
+          </p>
+          <p class="pr-hero__callout">
+            Plans start at $1,000 a year, and every price is on this page.
+          </p>
+          <div class="pr-hero__ctas">
+            <a class="btn2 btn2--primary" href="/signup?tier=free">
+              Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+            <a class="btn2 btn2--card" href="#plans">Compare plans</a>
+          </div>
         </div>
+        <aside class="pr-hero__ledger" aria-label="Annual plan prices">
+          <p class="pr-hero__ledger-k">Annual access</p>
+          <ul>
+            {
+              ALL_PLANS.map((p) => (
+                <li class={p.featured ? 'is-featured' : ''}>
+                  <span>{p.name}</span>
+                  <strong>{p.price}</strong>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="pr-hero__ledger-note">One model. Every geography. Unlimited analysis.</p>
+        </aside>
       </div>
     </section>
 

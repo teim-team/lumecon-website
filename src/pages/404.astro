@@ -5,15 +5,16 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
-import '../styles/legal.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
 ---
 
 <BaseLayout
   title="Page Not Found | Lumecon"
   description="That page doesn't exist. Return to Lumecon's economic impact analysis software for governments, enterprises and mission-driven organizations."
   canonical="https://lumecon.ai/404"
-  bodyClass="legal-page"
   noindex={true}
+  cedar={false}
 >
   <Nav isHome={false} />
   <script>
@@ -23,14 +24,69 @@ import '../styles/legal.css';
     const referral = window.location.pathname.match(/^\/r\/([A-Za-z0-9_-]{1,64})\/?$/);
     if (referral) window.location.replace(`/signup?ref=${referral[1]}`);
   </script>
-  <main
-    id="top"
-    tabindex="-1"
-    style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;"
-  >
-    <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: .5rem;">404</h1>
-    <p style="margin-bottom: 2rem;">The page you're looking for doesn't exist.</p>
-    <a href="/" class="btn">Back to Home</a>
+  <main class="meth notfound" id="top" tabindex="-1">
+    <header class="meth-hero">
+      <div class="meth-w">
+        <p class="h-kicker">Error 404</p>
+        <h1 class="meth-hero__title">Nothing at this address.</h1>
+        <p class="meth-hero__lede">The page you&rsquo;re looking for doesn&rsquo;t exist.</p>
+        <a href="/" class="btn2 btn2--primary">
+          Back to home <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </header>
   </main>
   <Footer isHome={false} />
 </BaseLayout>
+
+<style>
+  .notfound {
+    background: transparent;
+  }
+  .notfound .meth-hero {
+    min-height: clamp(34rem, 68vh, 48rem);
+    display: flex;
+    align-items: center;
+    padding: 4rem 0;
+  }
+  .notfound .meth-w {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(20rem, 7fr);
+    align-items: center;
+    column-gap: clamp(3rem, 7vw, 7rem);
+  }
+  .notfound .meth-w::after {
+    content: '404';
+    grid-column: 2;
+    grid-row: 1 / 5;
+    font-family: var(--font-display);
+    font-size: clamp(10rem, 22vw, 21rem);
+    font-weight: 700;
+    line-height: 0.75;
+    letter-spacing: -0.09em;
+    color: var(--surface);
+    text-shadow:
+      0 0 0.5px var(--rule-strong),
+      0 28px 70px rgba(10, 28, 52, 0.12);
+  }
+  .notfound .meth-hero__title {
+    max-width: 12ch;
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height: 0.99;
+  }
+  .notfound .meth-hero__lede {
+    margin-bottom: 1.6rem;
+  }
+  @media (max-width: 760px) {
+    .notfound .meth-w {
+      grid-template-columns: 1fr;
+    }
+    .notfound .meth-w::after {
+      grid-column: 1;
+      grid-row: 1;
+      margin-bottom: 2rem;
+      font-size: clamp(8rem, 38vw, 12rem);
+    }
+  }
+</style>

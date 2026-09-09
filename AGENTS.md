@@ -31,23 +31,32 @@ Design tells to hunt:
   identical boxes. Prefer strong axes, top-aligned content with
   natural copy lengths, and normalized visual weight over identical
   pixel dimensions.
-- Pronounced rounded corners and pills. This site's scale is 8px
-  cards/frames, 6px buttons/chips; eyebrows are plain mono
-  typography, not pill objects.
+- Pronounced rounded corners and pills. Controls use 8px, product
+  frames use 14px and genuine grouped panels use 18-20px. A radius
+  communicates one assembled object; it is not permission to wrap
+  every idea in a card. Eyebrows are plain mono typography, not pills.
 - Icons imprisoned in tinted circles or squares inside cards; the
   custom illustrations stand on their own.
-- Decorative gradients, glows, blobs, sparkles, dotted connectors
-  and other fake complexity. Only the real Lumecon mark is used as
-  background art. Founder-approved treatments (2026-09) are narrow
-  and about surface quality or real economic context rather than ornament:
-  - A barely cool page ground (#FBFCFE) beneath pure-white raised
-    surfaces. The two-step value difference creates hierarchy
-    without coating the page in visible texture or making every
-    surface prove its depth with another border or heavy shadow. Do
-    not add grain/noise overlays or tint individual light sections.
+- Decorative blobs, sparkles, dotted connectors and other fake
+  complexity. Only the real Lumecon mark is used as background art.
+  Founder-approved treatments (2026-09) are about optical surface
+  quality and real economic context rather than ornament:
+  - A cool mineral page ground (#F3F6F8) beneath pure-white working
+    surfaces. Directional, low-frequency light planes may shape a
+    hero or product stage; they must not read as colored circles or
+    generic SaaS blobs. Never add grain/noise overlays.
+  - Translucency is reserved for navigation, captions over licensed
+    photography and copy panes that genuinely overlap a product
+    screen. Use crisp inset highlights and neutral multi-distance
+    shadows to separate working surfaces from the ground.
+  - Broad white, mineral and deep-navy planes may organize a long
+    page when the change of material carries meaning. Avoid a stripe
+    pattern and do not tint every individual content section.
   - A two-stop vertical gradient on the primary button, dark enough
     at its lightest stop to keep white text at 4.75:1. It reads as a
-    physical control, not as decoration. No other element takes one.
+    physical control, not as decoration. Deep research covers and
+    acquisition fields may use restrained directional gradients;
+    ordinary cards do not.
   - Licensed sector photography may create a full-bleed editorial
     passage or sit behind a real product screen. Use the committed
     duotone derivatives, keep the photography subordinate to the
@@ -100,7 +109,9 @@ MarkArt background usage) and functional icons. The old topographic
 contour ring linework on the auth brand panels and teal flow surfaces
 read as random circles and is deliberately removed; do not reintroduce
 contour rings, orbit lines, or generic circle patterns as decoration.
-Soft radial glows are fine — they read as light, not shapes.
+Directional light fields are fine when they read as illumination on
+a plane. Avoid discrete radial circles; the moment a glow reads as a
+shape, remove it.
 
 ## Standing instruction: teal is semantic
 

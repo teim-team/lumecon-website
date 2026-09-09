@@ -248,8 +248,66 @@ const jsonLd = [
 
 <style>
   /* Glossary-specific refinements on the methodology vocabulary. */
+  .meth {
+    background: transparent;
+  }
+  .meth-hero {
+    padding-bottom: clamp(2.8rem, 5vw, 4.5rem);
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafb 58%, #edf3f4 100%);
+    border-bottom: 1px solid var(--rule);
+  }
+  .meth-hero__title {
+    max-width: 17ch;
+    font-size: clamp(3rem, 5.4vw, 5rem);
+    line-height: 0.99;
+  }
+  .meth-hero__lede {
+    max-width: 66ch;
+    margin-bottom: 0;
+  }
+  .meth-sec {
+    padding-top: clamp(3rem, 6vw, 5rem);
+  }
+  .meth-sec > .meth-w {
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.72fr) minmax(0, 2.28fr);
+    gap: clamp(2rem, 4vw, 4.5rem);
+    align-items: start;
+  }
+  .gloss-tools {
+    position: sticky;
+    top: 6.5rem;
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+    padding: 1.25rem;
+    background: var(--surface-glass-strong);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-frame);
+    box-shadow: var(--shadow-surface);
+    backdrop-filter: blur(18px) saturate(115%);
+    -webkit-backdrop-filter: blur(18px) saturate(115%);
+  }
+  .gloss-search {
+    flex: none;
+    width: 100%;
+    background: var(--paper);
+  }
+  .gloss-count {
+    min-height: 1.2em;
+  }
+  .gloss-defs {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-surface-high);
+  }
   .gloss-defs .meth-defs__row {
     scroll-margin-top: 6rem;
+    grid-template-columns: minmax(13rem, 0.7fr) minmax(0, 1.3fr);
+    padding: 1.45rem 1.6rem;
   }
   .gloss-abbr {
     font-family: var(--font-mono);
@@ -262,15 +320,39 @@ const jsonLd = [
   }
   /* .gloss-link is global (methodology.css), shared with /cedar. */
   .gloss-foot {
+    grid-column: 1;
     margin: 2rem 0 0;
     font-size: 0.98rem;
     line-height: 1.7;
     color: var(--ink-2);
-    max-width: 44rem;
+    max-width: 68ch;
   }
   .gloss-link {
     color: var(--accent-text);
     text-decoration: underline;
     text-underline-offset: 0.16em;
+  }
+  @media (max-width: 860px) {
+    .meth-sec > .meth-w {
+      grid-template-columns: 1fr;
+    }
+    .gloss-tools {
+      position: static;
+      grid-column: 1;
+    }
+    .gloss-defs,
+    .gloss-foot,
+    .gloss-none {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .gloss-defs .meth-defs__row {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .meth-hero {
+      background: linear-gradient(145deg, #171d3e 0%, #111833 58%, #0c2a31 100%);
+    }
   }
 </style>

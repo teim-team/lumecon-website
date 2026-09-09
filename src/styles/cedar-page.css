@@ -95,3 +95,154 @@
   color: var(--ink);
   margin: 0.3rem 0 0;
 }
+
+/* ---------- v3: Cedar as a product, not a generic AI page ---------- */
+.cedarpg-hero {
+  position: relative;
+  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
+  background:
+    linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
+    linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
+}
+.cedarpg-hero .meth-w {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 4.5fr) minmax(28rem, 7.5fr);
+  column-gap: clamp(3rem, 6vw, 6rem);
+  align-items: center;
+}
+.cedarpg-hero .h-kicker,
+.cedarpg-hero .meth-hero__title,
+.cedarpg-hero .meth-hero__lede,
+.cedarpg-hero .cedarpg-cta {
+  grid-column: 1;
+}
+.cedarpg-hero .meth-hero__title {
+  max-width: 13ch;
+  font-size: clamp(2.8rem, 4.6vw, 4.6rem);
+  line-height: 0.99;
+}
+.cedarpg-hero .meth-hero__lede {
+  max-width: 56ch;
+  margin-bottom: 1.6rem;
+}
+.cedarpg-hero .cedarpg-cta {
+  margin-bottom: 0;
+}
+.cedarpg-hero__screen {
+  grid-column: 2;
+  grid-row: 1 / 5;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 36px 90px -38px rgba(0, 0, 0, 0.86);
+}
+.cedarpg-hero__screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cedarpg-hero__screen figcaption {
+  padding: 0.78rem 1rem;
+  border-top: 1px solid var(--rule);
+  background: rgba(8, 17, 38, 0.94);
+  color: var(--ink-3);
+  font-size: 0.78rem;
+}
+
+.cedarpg-acts {
+  border-top: 0;
+  background: linear-gradient(145deg, var(--ground-bright), var(--ground));
+}
+.cedarpg-acts .tour-rows {
+  gap: 0;
+  counter-reset: cedar-stage;
+}
+.cedarpg-acts .tour-row,
+.cedarpg-acts .tour-row--flip {
+  align-items: center;
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+.cedarpg-acts .tour-row {
+  grid-template-columns: minmax(15rem, 3fr) minmax(0, 9fr);
+}
+.cedarpg-acts .tour-row--flip {
+  grid-template-columns: minmax(0, 9fr) minmax(15rem, 3fr);
+}
+.cedarpg-acts .tour-row + .tour-row {
+  border-top: 1px solid var(--rule);
+}
+.cedarpg-acts .tour-row__text {
+  counter-increment: cedar-stage;
+}
+.cedarpg-acts .tour-row__text::before {
+  content: '0' counter(cedar-stage);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  color: var(--accent-text);
+}
+.cedarpg-acts .tour-row .tour-row__shot,
+.cedarpg-acts .tour-row--flip .tour-row__shot {
+  margin-inline: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-surface-high);
+}
+.cedarpg-acts .tour-row__shot img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top center;
+}
+.cedarpg-cap {
+  padding: 0.85rem 1.1rem 0.95rem;
+  background: var(--surface-glass-strong);
+}
+.cedarpg-band {
+  background: transparent;
+}
+.cedarpg-band .meth-w {
+  padding: clamp(2rem, 4vw, 3.5rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  background: var(--surface-glass-strong);
+  box-shadow: var(--shadow-surface);
+}
+.cedarpg-fact + .cedarpg-fact {
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(1.2rem, 2.5vw, 2.2rem);
+}
+
+@media (max-width: 980px) {
+  .cedarpg-hero .meth-w {
+    grid-template-columns: 1fr;
+  }
+  .cedarpg-hero .h-kicker,
+  .cedarpg-hero .meth-hero__title,
+  .cedarpg-hero .meth-hero__lede,
+  .cedarpg-hero .cedarpg-cta,
+  .cedarpg-hero__screen {
+    grid-column: 1;
+  }
+  .cedarpg-hero__screen {
+    grid-row: auto;
+    margin-top: 1.4rem;
+  }
+}
+@media (max-width: 900px) {
+  .cedarpg-acts .tour-row,
+  .cedarpg-acts .tour-row--flip {
+    grid-template-columns: 1fr;
+  }
+  .cedarpg-fact + .cedarpg-fact {
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding: 1.4rem 0 0;
+  }
+}

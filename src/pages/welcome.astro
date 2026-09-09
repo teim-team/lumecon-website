@@ -30,18 +30,32 @@ const appUrl = (import.meta.env.PUBLIC_APP_URL || '').replace(/\/+$/, '') || '/l
   <main class="welc tealfield" id="top" tabindex="-1">
     <Contours />
     <div class="welc-inner">
-      <p class="tealfield__kicker" data-welcome-kicker>Subscription confirmed</p>
-      <h1 class="welc-title">You&rsquo;re in.</h1>
-      <p class="welc-sub">
-        Your Lumecon workspace is ready.{' '}
-        <span data-welcome-free hidden>
-          Seed shows your direct effects; full results unlock on any paid plan.
-        </span>
-      </p>
-      <a class="welc-btn" href={appUrl}>
-        Open Lumecon <span aria-hidden="true">&rarr;</span>
-      </a>
-      <p class="welc-note">Log in with the email and password you just created.</p>
+      <div class="welc-copy">
+        <p class="tealfield__kicker" data-welcome-kicker>Subscription confirmed</p>
+        <h1 class="welc-title">You&rsquo;re in.</h1>
+        <p class="welc-sub">
+          Your Lumecon workspace is ready.{' '}
+          <span data-welcome-free hidden>
+            Seed shows your direct effects; full results unlock on any paid plan.
+          </span>
+        </p>
+        <a class="welc-btn" href={appUrl}>
+          Open Lumecon <span aria-hidden="true">&rarr;</span>
+        </a>
+        <p class="welc-note">Log in with the email and password you just created.</p>
+      </div>
+      <figure class="welc-preview" data-zoom>
+        <picture>
+          <source srcset="/app/dashboard-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img
+            src="/app/dashboard.webp"
+            alt="The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data."
+            width="1920"
+            height="1080"
+            decoding="async"
+          />
+        </picture>
+      </figure>
     </div>
   </main>
 

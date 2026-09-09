@@ -200,9 +200,9 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
   <Nav isHome={false} />
-  <main class="meth" id="top" tabindex="-1">
+  <main class="meth meth--research" id="top" tabindex="-1">
     {/* Hero: the methodological position, then three principles. */}
-    <header class="meth-hero">
+    <header class="meth-hero meth-hero--cover section--dark">
       <div class="meth-w">
         <p class="h-kicker reveal-soft">Methodology</p>
         <h1 class="meth-hero__title reveal-soft" data-stagger="1">
@@ -216,6 +216,19 @@ const jsonLd = [
             >Built on decades of economic science. Not frozen in it.</span
           >
         </p>
+        <figure class="meth-hero__screen reveal-soft" data-stagger="3" data-zoom>
+          <picture>
+            <source srcset="/app/trace-dark.webp" media="(prefers-color-scheme: dark)" />
+            <img
+              src="/app/trace.webp"
+              alt="Lumecon number lineage tracing economic output through direct, indirect and induced model layers. Shown with illustrative sample data."
+              width="1920"
+              height="1080"
+              decoding="async"
+            />
+          </picture>
+          <figcaption>The evidence behind a result, visible in the product.</figcaption>
+        </figure>
         <ol class="meth-principles" aria-label="Three principles">
           <li class="reveal-soft" data-stagger="1" data-hover-reveal tabindex="0">
             <p class="meth-principles__k">Proven foundations</p>
@@ -506,7 +519,7 @@ const jsonLd = [
 
     {/* 04 · Geographies */}
     {/* 05 · The data manifest */}
-    <section class="meth-sec" aria-labelledby="m-data">
+    <section class="meth-sec meth-ledger section--dark" aria-labelledby="m-data">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
           <h2 id="m-data">The data behind every analysis</h2>

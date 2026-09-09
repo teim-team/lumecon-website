@@ -10,6 +10,7 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
+import '../styles/home.css';
 
 const FILMS = [
   {
@@ -30,6 +31,7 @@ const FILMS = [
   description="Short demonstrations of the real Lumecon product."
   canonical={`${site.url}/film`}
   noindex={true}
+  cedar={false}
 >
   <Nav />
   <main class="films" id="top" tabindex="-1">
@@ -66,17 +68,19 @@ const FILMS = [
 
 <style>
   .films {
-    background: var(--white);
+    background: transparent;
   }
   .films__inner {
-    max-width: 860px;
+    max-width: var(--container-max);
     margin: 0 auto;
-    padding: 7.5rem 1.5rem 5rem;
+    padding: clamp(6rem, 10vh, 8rem) var(--container-pad) clamp(4rem, 8vw, 6rem);
   }
   .films h1 {
-    font-size: clamp(2rem, 4.5vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    max-width: 14ch;
+    font-size: clamp(3.2rem, 6vw, 5.4rem);
+    font-weight: var(--weight-hero);
+    letter-spacing: -0.05em;
+    line-height: 0.98;
     color: var(--ink);
     margin: 0.75rem 0 0.9rem;
   }
@@ -84,15 +88,22 @@ const FILMS = [
     font-size: 1.05rem;
     line-height: 1.6;
     color: var(--ink-2);
-    max-width: 46rem;
-    margin: 0 0 3rem;
+    max-width: 62ch;
+    margin: 0 0 clamp(3rem, 6vw, 5rem);
   }
   .film {
+    display: grid;
+    grid-template-columns: minmax(15rem, 3fr) minmax(0, 9fr);
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.45rem clamp(2rem, 4vw, 4.5rem);
+    align-items: start;
     border-top: 1px solid rgba(10, 15, 38, 0.12);
-    padding-top: 2rem;
-    margin-top: 2rem;
+    padding-top: clamp(2rem, 4vw, 3rem);
+    margin-top: 0;
   }
   .film__title {
+    grid-column: 1;
+    grid-row: 1;
     font-size: 1.25rem;
     font-weight: 700;
     letter-spacing: -0.01em;
@@ -100,6 +111,8 @@ const FILMS = [
     margin: 0;
   }
   .film__meta {
+    grid-column: 1;
+    grid-row: 2;
     font-size: 0.72rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -107,19 +120,41 @@ const FILMS = [
     margin: 0.4rem 0 1.1rem;
   }
   .film__player {
+    grid-column: 2;
+    grid-row: 1 / 5;
     width: 100%;
+    aspect-ratio: 16 / 9;
     display: block;
     background: var(--navy);
     border: 1px solid rgba(10, 15, 38, 0.12);
+    border-radius: var(--radius-frame);
+    box-shadow: var(--shadow-surface-high);
   }
   .film__caption {
+    grid-column: 1;
+    grid-row: 3;
     font-size: 0.92rem;
     line-height: 1.55;
     color: var(--ink-3);
     margin: 0.9rem 0 0.4rem;
   }
   .film__download {
+    grid-column: 1;
+    grid-row: 4;
     margin: 0.2rem 0 0;
     font-size: 0.92rem;
+  }
+  @media (max-width: 900px) {
+    .film {
+      grid-template-columns: 1fr;
+    }
+    .film__title,
+    .film__meta,
+    .film__player,
+    .film__caption,
+    .film__download {
+      grid-column: 1;
+      grid-row: auto;
+    }
   }
 </style>

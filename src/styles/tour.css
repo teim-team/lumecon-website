@@ -4,8 +4,8 @@
    the hero shot (hairline border, small radius, soft shadow). */
 
 .tour {
-  background: var(--white);
-  border-top: 1px solid var(--rule);
+  background: var(--ground-bright);
+  border-top: 0;
   padding: clamp(4rem, 9vh, 7.5rem) var(--container-pad);
 }
 .tour-inner {
@@ -24,11 +24,11 @@
 .tour-kicker,
 .tour-row__kicker {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.11em;
+  font-size: 0.74rem;
+  letter-spacing: 0.095em;
   text-transform: uppercase;
   color: var(--accent-text);
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
 }
 /* Which part of the platform this screenshot is from, on the same line as
@@ -103,32 +103,31 @@
    already carry `overflow-x: clip`, so the scrollbar's width cannot turn
    this into a horizontal scroll. */
 .tour-row {
-  --bleed: calc((100vw - min(var(--container-max), 100vw - 2 * var(--container-pad))) / 2);
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-  gap: clamp(1.6rem, 4vw, 3.4rem);
+  grid-template-columns: minmax(0, 4.4fr) minmax(0, 7.6fr);
+  gap: 0;
   /* Top-aligned, not centred. A three-line paragraph vertically centred
      against a 560px image sits in a pool of its own whitespace with the
      heading floating away from the top of the picture it introduces. */
   align-items: start;
 }
 .tour-row--flip {
-  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  grid-template-columns: minmax(0, 7.6fr) minmax(0, 4.4fr);
 }
 .tour-row .tour-row__shot {
-  margin-right: calc(-1 * var(--bleed));
-  border-right: none;
-  border-radius: 6px 0 0 6px;
+  margin-right: 0;
+  border-right: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
   background: var(--surface);
   position: relative;
   z-index: 2;
 }
 .tour-row--flip .tour-row__shot {
   margin-right: 0;
-  margin-left: calc(-1 * var(--bleed));
+  margin-left: 0;
   border-right: 1px solid var(--rule);
-  border-left: none;
-  border-radius: 0 6px 6px 0;
+  border-left: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
 }
 /* Keep text first in source order for screen readers; swap visually. */
 .tour-row--flip .tour-row__text {
@@ -138,9 +137,24 @@
   order: 1;
 }
 .tour-row__text {
+  position: relative;
+  z-index: 3;
+  align-self: center;
   display: grid;
   gap: 0.7rem;
   align-content: center;
+  margin-right: -2.75rem;
+  padding: clamp(1.4rem, 2.4vw, 2rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface-glass-strong);
+  box-shadow: var(--shadow-surface);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+}
+.tour-row--flip .tour-row__text {
+  margin-right: 0;
+  margin-left: -2.75rem;
 }
 .tour-row__title {
   font-family: var(--font-display);
@@ -162,7 +176,7 @@
 .tour-row__shot {
   margin: 0;
   border: 1px solid var(--rule);
-  border-radius: 6px;
+  border-radius: var(--radius-frame);
   overflow: hidden;
   background: var(--white);
   box-shadow: var(--shadow-frame);
@@ -213,7 +227,11 @@
     margin-left: 0;
     margin-right: 0;
     border: 1px solid var(--rule);
-    border-radius: 6px;
+    border-radius: var(--radius-frame);
+  }
+  .tour-row__text,
+  .tour-row--flip .tour-row__text {
+    margin: 0 0 -1rem;
   }
   /* Stack text above its screenshot on mobile, in both row variants. */
   .tour-row--flip .tour-row__text {

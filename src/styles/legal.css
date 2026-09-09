@@ -7,14 +7,31 @@ body.legal-page main {
   /* Full site width, same container as every other page. The old
      840px column made these pages read as an afterthought (founder
      note 2026-08: use the width of the page). */
-  width: 100%;
+  position: relative;
+  overflow: hidden;
+  width: calc(100% - var(--container-pad) - var(--container-pad));
   max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 5rem var(--container-pad) 4rem;
+  margin: clamp(1.5rem, 3vw, 3rem) auto clamp(3rem, 6vw, 5rem);
+  padding: clamp(2rem, 5vw, 4.5rem);
   flex: 1;
+  background: var(--surface-glass-strong);
+  border: 1px solid var(--surface-edge);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-surface-high);
+  backdrop-filter: blur(24px) saturate(115%);
+  -webkit-backdrop-filter: blur(24px) saturate(115%);
+}
+body.legal-page main::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
 }
 body.legal-page h1 {
-  font-size: clamp(2rem, 4.5vw, 2.6rem);
+  font-size: clamp(2.6rem, 5vw, 4.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
   letter-spacing: -0.025em;
   margin-bottom: 0.35rem;
 }
@@ -47,6 +64,12 @@ body.legal-page li {
   margin-bottom: 0.9rem;
   font-weight: 400;
 }
+body.legal-page main > p,
+body.legal-page main > ul,
+body.legal-page main > ol,
+.legal-sec__body {
+  max-width: 82ch;
+}
 body.legal-page ul,
 body.legal-page ol {
   padding-left: 1.3rem;
@@ -77,8 +100,10 @@ body.legal-page main a:hover {
 .note {
   margin-top: 2rem;
   padding: 1.3rem;
-  background: var(--cream);
-  border-left: 2.5px solid var(--green);
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-control);
   font-size: 0.95rem;
   color: var(--ink-2);
   line-height: 1.65;
@@ -118,13 +143,22 @@ body.legal-page footer {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.05rem 0.2rem;
+  margin: 0 -0.8rem;
+  padding: 1.15rem 0.8rem;
+  border-radius: 10px;
+  transition: background 0.15s var(--ease);
 }
 .legal-sec > summary::-webkit-details-marker {
   display: none;
 }
 .legal-sec > summary:hover .legal-subhead {
   color: var(--accent-text);
+}
+.legal-sec > summary:hover {
+  background: var(--accent-rgba-08);
+}
+.legal-sec[open] {
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 .legal-sec > summary:focus-visible {
   outline: 2px solid var(--accent);
@@ -157,4 +191,30 @@ body.legal-page footer {
 }
 .legal-sec__body > p:last-child {
   margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  body.legal-page main {
+    width: calc(100% - 1rem);
+    margin: 0.5rem auto 2rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+}
+
+@media print {
+  body.legal-page main {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .legal-sec {
+    break-inside: avoid;
+  }
 }

@@ -72,17 +72,29 @@
      two cool steps from pure white. That is enough to let a real surface
      read without coating the entire document in a texture or asking every
      card to prove its depth with a heavy shadow. */
-  --white: #fbfcfe;
+  --ground: #f3f6f8;
+  --ground-bright: #fafcfd;
   --surface: #ffffff;
-  --cream: #fbfcfe; /* legacy alias for the ground */
-  --paper: #f7f7f8; /* one step below the ground: inset fields, wells */
-  --navy: #0a0f26; /* deeper, more saturated near-black-navy */
-  --navy2: #1a2046;
-  --navy-soft: rgba(10, 15, 38, 0.68);
-  --ink: #0a0f26;
-  --ink-2: #353b5c;
-  --ink-3: #6b6f8a;
-  --ink-4: #9da1b5;
+  --surface-2: #edf2f4;
+  --surface-inset: #e5ebee;
+  /* Legacy aliases. New work should name the material it needs rather
+     than treating every pale value as interchangeable white. */
+  --white: var(--ground);
+  --cream: var(--surface-2);
+  --paper: var(--surface-inset);
+  --surface-glass: rgba(255, 255, 255, 0.78);
+  --surface-glass-strong: rgba(255, 255, 255, 0.9);
+  --surface-edge: rgba(255, 255, 255, 0.92);
+  --radius-control: 8px;
+  --radius-frame: 14px;
+  --radius-panel: 20px;
+  --navy: #071824;
+  --navy2: #18364a;
+  --navy-soft: rgba(7, 24, 36, 0.68);
+  --ink: #071824;
+  --ink-2: #33434a;
+  --ink-3: #647279;
+  --ink-4: #93a0a5;
   --terra: #e04a2a; /* bold coral-orange */
   --terra-dark: #b33013;
   --terra-light: #f58057;
@@ -151,11 +163,11 @@
   --blue-deep: #1e40a6;
   --purple: #6e3dd8;
   --purple-rule: #6e3dd8;
-  --gray: #353b5c;
-  --graylt: #6b6f8a;
+  --gray: #33434a;
+  --graylt: #647279;
   --blush: #fff1ed;
-  --rule: rgba(10, 15, 38, 0.12);
-  --rule-strong: rgba(10, 15, 38, 0.24);
+  --rule: rgba(10, 28, 52, 0.1);
+  --rule-strong: rgba(10, 28, 52, 0.2);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   /* One shell width for the whole site: nav, home bands, tour, pricing
      and methodology all measure from this, so the wordmark, the section
@@ -240,6 +252,12 @@
     0 18px 44px -26px rgba(10, 15, 38, 0.26);
   /* Buttons and small controls sit almost flat on the page. */
   --shadow-control: 0 1px 2px rgba(10, 15, 38, 0.08);
+  --shadow-surface:
+    inset 0 1px 0 var(--surface-edge), 0 1px 2px rgba(10, 28, 52, 0.06),
+    0 9px 24px -18px rgba(10, 28, 52, 0.2), 0 28px 64px -40px rgba(10, 28, 52, 0.28);
+  --shadow-surface-high:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98), 0 2px 5px rgba(10, 28, 52, 0.07),
+    0 18px 42px -22px rgba(10, 28, 52, 0.24), 0 48px 96px -52px rgba(10, 28, 52, 0.34);
 
   /* Map palette. Source = gold (focal point), tribal = amber-gold
      (warm sibling, deeper than gold so reservations read as a
@@ -297,7 +315,16 @@ body {
   font-family: var(--font-sans);
   font-size: 18px;
   color: var(--navy);
-  background: var(--white);
+  background-color: var(--ground);
+  background-image:
+    linear-gradient(
+      112deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.68) 25%,
+      rgba(220, 237, 241, 0.22) 51%,
+      rgba(243, 246, 248, 0) 74%
+    ),
+    linear-gradient(180deg, #fcfeff 0, var(--ground) 34rem, #edf2f5 100%);
   -webkit-font-smoothing: antialiased;
   /* `clip`, not `hidden`: `hidden` turns <body> into its own scroll
      container on iOS Safari, which breaks momentum scrolling, the URL-
@@ -332,12 +359,19 @@ body {
    both light and dark surfaces. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --white: #0f1530;
+    --ground: #0f1530;
+    --ground-bright: #151c3a;
+    --surface-2: #131838;
+    --surface-inset: #0b1026;
+    --white: var(--ground);
     /* Raised surfaces step up from the ground here, the way they step
        down from it in light mode. */
     --surface: #161c3c;
-    --cream: #131838;
-    --paper: #0b1026;
+    --cream: var(--surface-2);
+    --paper: var(--surface-inset);
+    --surface-glass: rgba(22, 28, 60, 0.8);
+    --surface-glass-strong: rgba(22, 28, 60, 0.92);
+    --surface-edge: rgba(255, 255, 255, 0.09);
     --navy: #f1f3fa;
     --navy2: #bcc1d8;
     --navy-soft: rgba(241, 243, 250, 0.68);
@@ -348,6 +382,12 @@ body {
     --rule: rgba(255, 255, 255, 0.12);
     --rule-strong: rgba(255, 255, 255, 0.22);
     --surface-highlight: rgba(255, 255, 255, 0.08);
+    --shadow-surface:
+      inset 0 1px 0 var(--surface-edge), 0 2px 4px rgba(0, 0, 0, 0.24),
+      0 18px 42px -22px rgba(0, 0, 0, 0.48);
+    --shadow-surface-high:
+      inset 0 1px 0 var(--surface-edge), 0 2px 5px rgba(0, 0, 0, 0.32),
+      0 28px 68px -28px rgba(0, 0, 0, 0.68);
     --accent-rgba-08: rgba(15, 181, 165, 0.14);
     --accent-rgba-18: rgba(15, 181, 165, 0.26);
     /* Light mode's --accent-bar is an opaque pale mint (#b8ede6) that reads
@@ -368,6 +408,17 @@ body {
     --graylt: #8c92ab;
     /* Highlight tints need more punch to read on a dark surface. */
     --gold: #ffc83d;
+  }
+
+  body {
+    background-image:
+      linear-gradient(
+        112deg,
+        rgba(54, 68, 118, 0.28) 0%,
+        rgba(31, 43, 80, 0.12) 34%,
+        rgba(15, 21, 48, 0) 66%
+      ),
+      linear-gradient(180deg, #101733 0, var(--ground) 34rem, #0b1026 100%);
   }
 
   /* The .btn dark overrides live in a second dark block AFTER the
@@ -683,7 +734,7 @@ strong {
      teal lands at 10.66:1. Same swap the global dark block makes. */
   --accent-text: var(--accent-light);
   --cedar-text: var(--cedar-light);
-  background: #0c1229;
+  background: linear-gradient(145deg, #091126 0%, #0d1933 56%, #082531 100%);
   color: var(--ink);
   /* The band runs edge to edge, so it needs no hairline to be found. */
   border-top: none;
