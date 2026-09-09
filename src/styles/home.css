@@ -1055,6 +1055,7 @@
   border-top: 0;
 }
 .edge.section--dark {
+  overflow: hidden;
   background:
     linear-gradient(128deg, rgba(15, 181, 165, 0.13), transparent 38%),
     linear-gradient(312deg, rgba(240, 169, 26, 0.055), transparent 28%), #0b1229;

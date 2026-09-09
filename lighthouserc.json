@@ -9,17 +9,10 @@
         "http://localhost/cedar/index.html",
         "http://localhost/naics/index.html",
         "http://localhost/glossary/index.html",
-        "http://localhost/login/index.html",
-        "http://localhost/signup/index.html",
-        "http://localhost/choose-plan/index.html",
-        "http://localhost/checkout/index.html?tier=sprout",
-        "http://localhost/welcome/index.html",
-        "http://localhost/film/index.html",
         "http://localhost/ai-and-data-use/index.html",
         "http://localhost/accessibility/index.html",
         "http://localhost/privacy/index.html",
-        "http://localhost/terms/index.html",
-        "http://localhost/404.html"
+        "http://localhost/terms/index.html"
       ],
       "numberOfRuns": 1,
       "settings": {
