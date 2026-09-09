@@ -35,6 +35,7 @@
   -webkit-backdrop-filter: blur(14px);
   padding: 0.75rem 0;
   border-bottom-color: var(--rule-strong);
+  box-shadow: 0 12px 30px -28px rgba(10, 15, 38, 0.55);
 }
 #nav.nav--static {
   position: sticky;
@@ -51,9 +52,9 @@
 }
 
 .nav-w {
-  max-width: none;
-  margin: 0;
-  padding: 0 clamp(1rem, 2.2vw, 2rem);
+  max-width: calc(var(--container-max) + var(--container-pad) + var(--container-pad));
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -204,6 +205,9 @@ html.navm-open {
 .navm-list a:hover {
   color: var(--accent-text);
 }
+.navm-list a[aria-current='page'] {
+  color: var(--accent-text);
+}
 .navm-list__cta {
   color: var(--accent-text) !important;
 }
@@ -245,11 +249,22 @@ html.navm-open {
   letter-spacing: -0.005em;
   color: var(--navy);
   text-decoration: none;
-  transition: color 0.15s var(--ease);
+  padding: 0.35rem 0 0.3rem;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
 }
 .nav-links a:hover,
 .nav-login:hover {
   color: var(--accent-text);
+  border-bottom-color: var(--accent-bar);
+}
+.nav-links a[aria-current='page'],
+.nav-login[aria-current='page'] {
+  color: var(--accent-text);
+  font-weight: 600;
+  border-bottom-color: var(--accent-text);
 }
 .nav-links__sep {
   width: 1px;
@@ -263,13 +278,31 @@ html.navm-open {
   letter-spacing: -0.005em;
   color: #fff;
   text-decoration: none;
-  background: var(--accent-chip);
+  background: linear-gradient(180deg, #0a8177 0%, #086b62 100%);
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  transition: background 0.15s var(--ease);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    var(--shadow-control);
+  transition:
+    background 0.15s var(--ease),
+    transform 0.08s var(--ease),
+    box-shadow 0.15s var(--ease);
 }
 .nav-signup:hover {
-  background: var(--accent-chip-hover);
+  background: linear-gradient(180deg, #096f66 0%, #05564f 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 16px -12px rgba(10, 15, 38, 0.5);
+}
+.nav-signup:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-signup:active {
+    transform: none;
+  }
 }
 /* Below this the inline row stops fitting beside the wordmark and the
    Menu overlay takes over again. */
@@ -288,10 +321,10 @@ html.navm-open {
 }
 @media (prefers-color-scheme: dark) {
   .nav-signup {
-    color: #0a0f26;
-    background: var(--accent);
+    color: #fff;
+    background: linear-gradient(180deg, #0a8177 0%, #086b62 100%);
   }
   .nav-signup:hover {
-    background: var(--accent-light);
+    background: linear-gradient(180deg, #096f66 0%, #05564f 100%);
   }
 }

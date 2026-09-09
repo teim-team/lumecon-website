@@ -1,23 +1,24 @@
 ---
 /**
- * The actual Lumecon mark (asymmetric concentric rings + gold arc)
- * as cropped background art, the way the app uses it on card
- * headers. Position and size come from the caller's class; the
- * image itself is the real brand asset, not a generic circle set.
+ * The actual Lumecon mark as cropped background art, the way the app
+ * uses it on card headers. Callers can use the full-color brand asset
+ * or its much lighter monochrome teal export.
  */
 interface Props {
   class?: string;
   size?: number;
+  teal?: boolean;
 }
-const { class: className = 'markart', size = 680 } = Astro.props;
+const { class: className = 'markart', size = 680, teal = false } = Astro.props;
+const src = teal ? '/brand/lumecon-logo-mark-teal.png' : '/brand/lumecon-logo-mark-transparent.png';
 ---
 
 <img
   class={className}
-  src="/brand/lumecon-logo-mark-transparent.png"
+  src={src}
   alt=""
   width={size}
-  height={size}
+  height={Math.round((size * 866) / 895)}
   loading="lazy"
   decoding="async"
   aria-hidden="true"

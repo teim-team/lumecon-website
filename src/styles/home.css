@@ -19,6 +19,7 @@
   align-items: center;
   gap: 0.55rem;
   padding: 0.85rem 1.5rem;
+  border: 1px solid transparent;
   border-radius: 6px;
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -27,7 +28,9 @@
   text-decoration: none;
   transition:
     background 0.15s var(--ease),
-    border-color 0.15s var(--ease);
+    border-color 0.15s var(--ease),
+    box-shadow 0.15s var(--ease),
+    transform 0.08s var(--ease);
 }
 /* The primary action keeps a gradient, but a different kind of one.
    --------------------------------------------------------------------
@@ -54,22 +57,29 @@
 .btn2--primary {
   background: linear-gradient(180deg, #0a8177 0%, #086b62 100%);
   color: #fff;
-  box-shadow: var(--shadow-control);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    var(--shadow-control);
 }
 .btn2--primary:hover {
   background: linear-gradient(180deg, #096f66 0%, #05564f 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 16px -12px rgba(10, 15, 38, 0.5);
 }
 .btn2--card {
   background: var(--surface);
   color: var(--navy);
   border: 1px solid var(--rule-strong);
-  /* Above the grain layer: the page is matte, the things lying on it are
-     not. See the grain block in global.css. */
-  position: relative;
-  z-index: 2;
+  box-shadow:
+    inset 0 1px 0 var(--surface-highlight),
+    var(--shadow-control);
 }
 .btn2--card:hover {
   border-color: var(--navy);
+  box-shadow:
+    inset 0 1px 0 var(--surface-highlight),
+    0 6px 16px -12px rgba(10, 15, 38, 0.42);
 }
 .btn2 .btn2-arrow {
   font-weight: 400;
@@ -130,7 +140,7 @@
 }
 .hero2-title {
   font-family: var(--font-display);
-  font-weight: var(--weight-display);
+  font-weight: var(--weight-hero);
   font-size: clamp(2.3rem, 5.6vw, 4.4rem);
   line-height: 1.04;
   letter-spacing: var(--track-display);
@@ -173,7 +183,7 @@
      inside the first screen with room to spare, and the CTA stack
      must clear the docked Cedar launcher in the corner. */
   .hero2 {
-    padding-top: 4.5rem;
+    padding-top: 5.5rem;
   }
   .hero2-title {
     font-size: 2rem;
@@ -204,9 +214,6 @@
    script in Hero.astro; transforms carry the motion. */
 .trio {
   position: relative;
-  /* The container rises above the grain, not the frames: they carry their
-     own z-index for the rotation and raising them individually would
-     rewrite the stacking the position classes depend on. */
   z-index: 2;
   width: 100%;
   max-width: var(--container-max);
@@ -256,20 +263,25 @@
   transform: translateX(-50%);
   z-index: 2;
   box-shadow:
-    0 2px 8px -3px rgba(10, 15, 38, 0.08),
-    0 30px 64px -34px rgba(10, 15, 38, 0.26);
+    inset 0 1px 0 var(--surface-highlight),
+    0 3px 10px -4px rgba(10, 15, 38, 0.12),
+    0 36px 72px -38px rgba(10, 15, 38, 0.34);
 }
 .trio-pos-l {
   transform: translateX(-88%) translateY(4.5%) scale(0.78);
   z-index: 1;
-  opacity: 0.72;
-  box-shadow: 0 18px 44px -30px rgba(10, 15, 38, 0.22);
+  opacity: 0.78;
+  box-shadow:
+    inset 0 1px 0 var(--surface-highlight),
+    0 22px 50px -32px rgba(10, 15, 38, 0.26);
 }
 .trio-pos-r {
   transform: translateX(-12%) translateY(4.5%) scale(0.78);
   z-index: 1;
-  opacity: 0.72;
-  box-shadow: 0 18px 44px -30px rgba(10, 15, 38, 0.22);
+  opacity: 0.78;
+  box-shadow:
+    inset 0 1px 0 var(--surface-highlight),
+    0 22px 50px -32px rgba(10, 15, 38, 0.26);
 }
 /* Whichever frame is in front is at full strength. */
 .trio-frame:hover {
@@ -596,10 +608,6 @@
   overflow: hidden;
   box-shadow: var(--shadow-frame);
   background: var(--surface);
-  /* Above the grain layer: the page is matte, the things lying on it are
-     not. See the grain block in global.css. */
-  position: relative;
-  z-index: 2;
 }
 .cedar-shot img {
   display: block;
@@ -667,10 +675,6 @@
     border-color 0.2s var(--ease),
     box-shadow 0.2s var(--ease);
   background: var(--surface);
-  /* Above the grain layer: the page is matte, the things lying on it are
-     not. See the grain block in global.css. */
-  position: relative;
-  z-index: 2;
 }
 .askai-tile:hover {
   border-color: var(--rule-strong);
@@ -716,26 +720,6 @@
   border-bottom-color: var(--accent-text);
 }
 
-/* The mark keeps the app's slow anchor drift behind the hero. */
-.markart--tr {
-  transform-origin: 62% 40%;
-  animation: mark-drift 26s ease-in-out infinite;
-}
-@keyframes mark-drift {
-  0%,
-  100% {
-    transform: rotate(0deg) translate(0, 0);
-  }
-  50% {
-    transform: rotate(6deg) translate(-1rem, 0.8rem);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .markart--tr {
-    animation: none;
-  }
-}
-
 /* ---------- the edge grid ---------- */
 .edge {
   background: var(--white);
@@ -754,12 +738,11 @@
 .edge-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* Gutters do all the separating: no box around a tile, no rule between
-     columns. */
+  /* Gutters and short horizontal rules organize the information without
+     enclosing each capability in another card. */
   gap: clamp(2.4rem, 5vh, 3.6rem) var(--gutter);
 }
-/* Six tiles that lead with the icon, with the sentence held back until the
-   pointer arrives.
+/* Six tiles that lead with the icon and keep the supporting sentence visible.
 
    No card around them: the site separates with hairlines, not boxes, and a
    border here drew a rectangle around what is mostly whitespace at rest. The
@@ -772,7 +755,8 @@
    row height, grid stretch equalizes the rest, and nothing needs a magic
    offset that a copy edit would silently break. */
 .edge-card {
-  padding: 0.2rem 0;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid var(--rule);
   display: grid;
   gap: 0.5rem;
   align-content: start;
@@ -798,11 +782,8 @@
      grid child it stretched to the column and centred its own contents, so
      the icon floated over the middle of a left-aligned block. */
   justify-content: flex-start;
-  color: var(--ink-2);
+  color: var(--ink);
   margin-bottom: 0.7rem;
-  transition:
-    transform 0.2s var(--ease),
-    background 0.2s var(--ease);
 }
 .edge-ic svg {
   width: 34px;
@@ -836,11 +817,16 @@
   box-shadow: var(--lift-shadow);
 }
 @media (prefers-reduced-motion: reduce) {
-  .edge-card,
-  .whyw-card,
+  .btn2,
+  .btn2 .btn2-arrow,
   .tour-row__shot,
   .cedar-shot {
     transition: none;
+  }
+  .btn2:hover .btn2-arrow,
+  .tour-row__shot:hover,
+  .cedar-shot:hover {
+    transform: none;
   }
 }
 
@@ -875,15 +861,18 @@
   max-width: 100%;
   width: auto;
   height: auto;
-  transition: transform 0.25s var(--ease);
-}
-.whyw-card:hover .whyw-art img {
-  transform: translateY(-2px) scale(1.03);
 }
 .whyw-art svg {
   display: block;
   width: 100%;
   height: auto;
+}
+@media (max-width: 759px) {
+  .whyw-card[data-art='cedar'] .whyw-art img {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
 }
 
 /* ---------- final CTA (sign-up close) ---------- */

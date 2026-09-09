@@ -8,6 +8,7 @@ import { test, expect } from '@playwright/test';
  */
 
 test('home page loads and renders the hero product shot', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const errs: string[] = [];
   page.on('pageerror', (e) => errs.push(e.message));
   page.on('console', (m) => {
@@ -19,6 +20,12 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   // The hero trio: one example locked for the visit, its three
   // archetypes (results, map, comparison) each on screen exactly once.
   await expect(page.locator('#trio .trio-pos-c img')).toBeVisible();
+  await expect(page.locator('#trio .trio-pos-c img')).toHaveAttribute(
+    'src',
+    '/app/ex-college-results.webp',
+  );
+  await expect(page.locator('#trio .trio-pos-c img')).toHaveAttribute('fetchpriority', 'high');
+  await expect(page.locator('#trio img[fetchpriority="high"]')).toHaveCount(1);
   const srcs = await page
     .locator('#trio [data-trio] img')
     .evaluateAll((imgs) => imgs.map((img) => (img as HTMLImageElement).getAttribute('src') || ''));
@@ -82,9 +89,14 @@ test('skip-link is hidden until focused', async ({ page }) => {
   await page.goto('/');
   const skip = page.locator('.skip-link');
   await expect(skip).toBeAttached();
+  await expect(page.locator('main#top')).toHaveAttribute('tabindex', '-1');
   const box = await skip.boundingBox();
   // Either off-canvas (negative x) or 1px clipped.
   expect(box?.x ?? -1).toBeLessThan(0);
+  await skip.focus();
+  await expect(skip).toBeVisible();
+  await skip.press('Enter');
+  await expect(page.locator('main#top')).toBeFocused();
 });
 
 test('pricing shows four public plans, Seed first, with Sapling recommended', async ({ page }) => {
@@ -179,7 +191,24 @@ test('desktop nav shows the destinations inline, with no Menu button', async ({ 
     await expect(page.locator('.nav-links a', { hasText: label })).toBeVisible();
   }
   await expect(page.locator('.nav-signup')).toBeVisible();
+  await expect(page.locator('.nav-links a[aria-current="page"]')).toHaveText('Pricing');
   await expect(page.locator('#navMenuBtn')).toBeHidden();
+});
+
+test('menu closes cleanly when the viewport crosses into desktop navigation', async ({ page }) => {
+  await page.setViewportSize({ width: 900, height: 800 });
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  await page.locator('#navMenuBtn').click();
+  await expect(page.locator('#navMenu')).toBeVisible();
+  await expect(page.locator('#navMenu a[href="/pricing"]')).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('html')).toHaveClass(/navm-open/);
+  await page.keyboard.press('Shift+Tab');
+  await expect(page.locator('#navMenuBtn')).toBeFocused();
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(page.locator('#navMenu')).toBeHidden();
+  await expect(page.locator('html')).not.toHaveClass(/navm-open/);
+  await expect(page.locator('.nav-links a[aria-current="page"]')).toBeFocused();
 });
 
 test('checkout is payment-only: knows the plan, no plan picker', async ({ page }) => {

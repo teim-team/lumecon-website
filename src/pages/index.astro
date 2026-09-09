@@ -176,17 +176,17 @@ const jsonLd = [
 
 <BaseLayout
   title="Lumecon | The Intelligent Economic Analysis Platform"
-  description="Economic impact analysis for governments, universities, nonprofits and Tribal Nations. Jobs, GDP contribution and tax impacts, every result traceable."
+  description="The intelligent economic analysis platform for governments, universities, nonprofits and Tribal Nations. Every result is traceable."
   canonical="https://lumecon.ai/"
   ogTitle="Measure the Economic Impact of Any Decision"
-  ogDescription="Credible economic impact analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across supported U.S. geographies, with Cedar AI in every plan. Plans from $1,000 a year, free to try."
-  ogImageAlt="Lumecon. Economic impact analysis software with Cedar AI in every plan. Plans from $1,000 a year, free to try."
+  ogDescription="Credible economic impact analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across supported U.S. geographies, with Cedar in every plan. Plans from $1,000 a year, free to try."
+  ogImageAlt="Lumecon. Economic impact analysis software with Cedar in every plan. Plans from $1,000 a year, free to try."
   bodyClass="home-page"
   jsonLd={jsonLd}
 >
   <div class="scroll-progress" id="scrollProgress"></div>
   <Nav isHome={true} />
-  <main>
+  <main id="top" tabindex="-1">
     <Hero />
     <WhyBand />
     <ProductTour />
@@ -196,20 +196,12 @@ const jsonLd = [
   <Footer isHome={true} />
 </BaseLayout>
 
-<style is:global>
-  html {
-    scroll-behavior: smooth;
-  }
-</style>
-
 <script>
-  // Scroll & reveal constants
+  // Scroll progress and nav state. Reveal behavior is shared by every
+  // page in BaseLayout so its fallback and reduced-motion handling stay
+  // consistent here too.
   const NAV_SCROLL_THRESHOLD = 40; // px before nav gets 'scrolled' class
-  const STAGGER_DELAY_PER_ITEM = 150; // ms between staggered reveals
-  const REVEAL_THRESHOLD = 0.08;
-  const REVEAL_ROOT_MARGIN = '0px 0px -30px 0px';
 
-  // Scroll progress indicator + nav scroll state
   (function () {
     const nav = document.getElementById('nav');
     const progressBar = document.getElementById('scrollProgress');
@@ -234,27 +226,6 @@ const jsonLd = [
       },
       { passive: true },
     );
+    onScroll();
   })();
-
-  // Intersection observer for reveal animations (staggered product blocks)
-  const obs = new IntersectionObserver(
-    (es) => {
-      es.forEach((e) => {
-        if (e.isIntersecting) {
-          const el = e.target as HTMLElement;
-          const stagger = el.dataset.stagger;
-          if (stagger) {
-            setTimeout(() => el.classList.add('seen'), parseInt(stagger) * STAGGER_DELAY_PER_ITEM);
-          } else {
-            el.classList.add('seen');
-          }
-          obs.unobserve(e.target);
-        }
-      });
-    },
-    { threshold: REVEAL_THRESHOLD, rootMargin: REVEAL_ROOT_MARGIN },
-  );
-  document
-    .querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal')
-    .forEach((el) => obs.observe(el));
 </script>

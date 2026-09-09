@@ -40,14 +40,11 @@ Design tells to hunt:
   and other fake complexity. Only the real Lumecon mark is used as
   background art. Two founder-approved exceptions (2026-09), both
   narrow, both about surface quality rather than ornament:
-  - A fine monochrome grain on the page ground only, at roughly 3%
-    alpha. A pure #FFFFFF ground has zero pixel variance, which is
-    why the site read as a lit panel rather than paper, and why
-    every attempt at elevation had to be spent on another border or
-    shadow. The grain gives the ground texture so raised surfaces
-    can stay clean white and still read as raised. It belongs to the
-    ground: never on cards, frames, buttons or type, never tinted,
-    never animated, and never so strong it is legible as an effect.
+  - A barely cool page ground (#FBFCFE) beneath pure-white raised
+    surfaces. The two-step value difference creates hierarchy
+    without coating the page in visible texture or making every
+    surface prove its depth with another border or heavy shadow. Do
+    not add grain/noise overlays or tint individual light sections.
   - A two-stop vertical gradient on the primary button, dark enough
     at its lightest stop to keep white text at 4.75:1. It reads as a
     physical control, not as decoration. No other element takes one.

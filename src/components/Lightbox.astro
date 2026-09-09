@@ -205,7 +205,10 @@ import '../styles/lightbox.css';
          role plus tabindex gives the same keyboard contract, and the alt
          text is already the accessible name. */
       img.setAttribute('role', 'button');
-      img.setAttribute('tabindex', '0');
+      /* A rotating group may deliberately expose only its active image to
+         the tab order. Respect an explicit tabindex; opt in everything
+         else by default. */
+      if (!img.hasAttribute('tabindex')) img.setAttribute('tabindex', '0');
       img.setAttribute('aria-haspopup', 'dialog');
 
       var badge = document.createElement('span');

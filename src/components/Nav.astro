@@ -1,9 +1,7 @@
 ---
 /**
- * Nav — brand on the left, a single Menu button on the right, on
- * every viewport (the pattern the refreshed IMPLAN site uses).
- * The menu opens a full-screen overlay with the destinations that
- * matter: How it works, Pricing, Methodology, Log in, Sign up.
+ * Nav — brand on the left, core destinations inline on desktop and a
+ * full-screen menu below the point where that row stops fitting.
  */
 import { site } from '../config';
 import BrandWordmark from './BrandWordmark.astro';
@@ -11,6 +9,7 @@ interface Props {
   isHome?: boolean;
 }
 const { isHome = false } = Astro.props;
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
@@ -24,13 +23,31 @@ const { isHome = false } = Astro.props;
     <div class="nav-right">
       <ul class="nav-links">
         <li><a href="/#product">How it works</a></li>
-        <li><a href="/cedar">Cedar</a></li>
-        <li><a href="/pricing">Pricing</a></li>
-        <li><a href="/methodology">Methodology</a></li>
+        <li>
+          <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>Cedar</a>
+        </li>
+        <li>
+          <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}
+            >Pricing</a
+          >
+        </li>
+        <li>
+          <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}
+            >Methodology</a
+          >
+        </li>
       </ul>
       <span class="nav-links__sep" aria-hidden="true"></span>
-      <a class="nav-login" href="/login">Log in</a>
-      <a class="nav-signup" href="/signup">Sign up</a>
+      <a
+        class="nav-login"
+        href="/login"
+        aria-current={currentPath === '/login' ? 'page' : undefined}>Log in</a
+      >
+      <a
+        class="nav-signup"
+        href="/signup"
+        aria-current={currentPath === '/signup' ? 'page' : undefined}>Sign up</a
+      >
 
       <button
         class="navm-btn"
@@ -59,11 +76,28 @@ const { isHome = false } = Astro.props;
   <div class="navm-inner">
     <ul class="navm-list">
       <li><a href="/#product">How it works</a></li>
-      <li><a href="/cedar">Cedar</a></li>
-      <li><a href="/pricing">Pricing</a></li>
-      <li><a href="/methodology">Methodology</a></li>
-      <li><a href="/login">Log in</a></li>
-      <li><a class="navm-list__cta" href="/signup">Sign up</a></li>
+      <li>
+        <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>Cedar</a>
+      </li>
+      <li>
+        <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}>Pricing</a
+        >
+      </li>
+      <li>
+        <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}
+          >Methodology</a
+        >
+      </li>
+      <li>
+        <a href="/login" aria-current={currentPath === '/login' ? 'page' : undefined}>Log in</a>
+      </li>
+      <li>
+        <a
+          class="navm-list__cta"
+          href="/signup"
+          aria-current={currentPath === '/signup' ? 'page' : undefined}>Sign up</a
+        >
+      </li>
     </ul>
     <a class="navm-contact" href={`mailto:${site.email}`}>{site.email}</a>
   </div>
@@ -74,11 +108,14 @@ const { isHome = false } = Astro.props;
     const btn = document.getElementById('navMenuBtn');
     const menu = document.getElementById('navMenu');
     if (!btn || !menu) return;
+    const label = btn.querySelector('.navm-btn__label');
 
     const open = () => {
       menu.hidden = false;
       btn.classList.add('on');
       btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', 'Close menu');
+      if (label) label.textContent = 'Close';
       document.documentElement.classList.add('navm-open');
       const first = menu.querySelector('a');
       if (first) (first as HTMLElement).focus();
@@ -87,18 +124,18 @@ const { isHome = false } = Astro.props;
       menu.hidden = true;
       btn.classList.remove('on');
       btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Menu');
+      if (label) label.textContent = 'Menu';
       document.documentElement.classList.remove('navm-open');
       if (refocus) btn.focus();
     };
 
     btn.addEventListener('click', () => (menu.hidden ? open() : close()));
-    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => close(false)));
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => close()));
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !menu.hidden) close();
-    });
-    menu.addEventListener('keydown', (e) => {
       if (e.key !== 'Tab' || menu.hidden) return;
-      const focusable = menu.querySelectorAll('a');
+      const focusable = [btn, ...menu.querySelectorAll('a')];
       const first = focusable[0] as HTMLElement;
       const last = focusable[focusable.length - 1] as HTMLElement;
       if (e.shiftKey && document.activeElement === first) {
@@ -107,6 +144,24 @@ const { isHome = false } = Astro.props;
       } else if (!e.shiftKey && document.activeElement === last) {
         e.preventDefault();
         first.focus();
+      }
+    });
+
+    // A phone can cross the desktop breakpoint when it rotates, and a
+    // browser window can be widened while the overlay is open. Once the
+    // inline navigation takes over, close the now-unreachable overlay and
+    // release the page scroll without trying to focus the hidden toggle.
+    const desktop = window.matchMedia('(min-width: 1000px)');
+    desktop.addEventListener('change', (event) => {
+      if (!event.matches || menu.hidden) return;
+      const hadOverlayFocus =
+        document.activeElement === btn || menu.contains(document.activeElement);
+      close(false);
+      if (hadOverlayFocus) {
+        const destination =
+          document.querySelector<HTMLElement>('.nav-links a[aria-current="page"]') ||
+          document.querySelector<HTMLElement>('.nav-brand a');
+        destination?.focus();
       }
     });
   })();

@@ -155,13 +155,6 @@ import CedarChat from './CedarChat.astro';
     const nudge = document.getElementById('cedarNudge');
     const NUDGE_KEY = 'lumecon-cedar-nudge-seen';
     const NUDGE_DELAY_MS = 4000;
-    const nudgeSeen = (): boolean => {
-      try {
-        return sessionStorage.getItem(NUDGE_KEY) === '1';
-      } catch {
-        return true; // storage unavailable: never show rather than nag every load
-      }
-    };
     const markNudgeSeen = (): void => {
       try {
         sessionStorage.setItem(NUDGE_KEY, '1');
@@ -299,7 +292,7 @@ import CedarChat from './CedarChat.astro';
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1.25rem;
-    background: var(--white);
+    background: var(--surface);
     color: var(--ink);
     border: 1px solid var(--rule-strong);
     border-radius: 0.5rem;
@@ -334,7 +327,7 @@ import CedarChat from './CedarChat.astro';
     }
   }
   .cedar-fab:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 4px;
   }
   .cedar-fab__dot {
@@ -424,7 +417,7 @@ import CedarChat from './CedarChat.astro';
   /* Open state = a clear navy "Close" pill (the launcher steps aside). */
   body.cedar-popped .cedar-fab {
     background: var(--navy);
-    color: var(--white);
+    color: #fff;
     border-color: transparent;
     gap: 0.5rem;
     padding: 0.7rem 1.05rem;
@@ -536,7 +529,7 @@ import CedarChat from './CedarChat.astro';
     z-index: 79;
     width: min(280px, calc(100vw - 1.8rem));
     padding: 0.9rem 1rem 0.85rem;
-    background: var(--white);
+    background: var(--surface);
     color: var(--ink);
     border: 1px solid var(--rule-strong);
     border-radius: 0.5rem;
@@ -556,7 +549,7 @@ import CedarChat from './CedarChat.astro';
     right: 30px;
     width: 12px;
     height: 12px;
-    background: var(--white);
+    background: var(--surface);
     border-right: 1px solid var(--rule-strong);
     border-bottom: 1px solid var(--rule-strong);
     transform: rotate(45deg);
@@ -597,8 +590,16 @@ import CedarChat from './CedarChat.astro';
     background: var(--cream);
   }
   .cedar-nudge__dismiss:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    :global(body.consent-pending) .cedar-fab,
+    :global(body.consent-pending) .cedar-nudge {
+      visibility: hidden;
+      pointer-events: none;
+    }
   }
 
   /* Mobile: the docked panel becomes a full-width bottom sheet. */
@@ -610,7 +611,7 @@ import CedarChat from './CedarChat.astro';
       bottom: 0;
       max-height: min(78dvh, 560px);
       padding-bottom: env(safe-area-inset-bottom, 0px);
-      background: var(--white);
+      background: var(--surface);
       border-radius: 8px 8px 0 0;
     }
     .cedar-fab-panel :global(.cedar-chat) {

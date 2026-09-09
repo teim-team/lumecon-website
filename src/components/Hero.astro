@@ -4,19 +4,18 @@
  *
  * The screenshot system is hierarchical: an EXAMPLE (one organization and
  * use case) owns three ARCHETYPES (results, map, comparison over time).
- * One example is selected per page visit and locked; the three frames all
- * belong to that example and only the archetypes rotate through the center,
- * starting from the example's strongest money shot. The example never
- * changes because a timer fired, the viewport changed or the page rendered
- * again; a fresh visit may pick a different one. Every archetype ships as a
- * light and dark capture at the same 1600x1000 frame.
+ * The three frames belong to one stable example and only the archetypes
+ * rotate through the center, starting from that example's strongest money
+ * shot. Keeping the example stable lets the HTML preload the real LCP image
+ * instead of downloading one screenshot and swapping in another. Every
+ * archetype ships as a light and dark capture at the same 1600x1000 frame.
  */
 import MarkArt from './MarkArt.astro';
 import '../styles/home.css';
 ---
 
-<section class="hero2" id="top">
-  <MarkArt class="markart markart--tr" size={640} />
+<section class="hero2">
+  <MarkArt class="markart markart--tr" size={640} teal />
   <div class="hero2-inner">
     <p class="h-kicker reveal-soft">The Intelligent Economic Analysis Platform</p>
 
@@ -50,18 +49,6 @@ import '../styles/home.css';
     </div>
 
     <figure class="trio reveal-soft" data-stagger="4" id="trio">
-      <div class="trio-frame trio-pos-l" data-trio data-zoom>
-        <picture>
-          <source srcset="/app/ex-college-map-dark.webp" media="(prefers-color-scheme: dark)" />
-          <img
-            src="/app/ex-college-map.webp"
-            alt="Lumecon results page framed on the Connecticut county map for a community college campus expansion, with the operations breakdown below."
-            width="1920"
-            height="1080"
-            decoding="async"
-          />
-        </picture>
-      </div>
       <div class="trio-frame trio-pos-c" data-trio data-zoom>
         <picture>
           <source srcset="/app/ex-college-results-dark.webp" media="(prefers-color-scheme: dark)" />
@@ -76,6 +63,18 @@ import '../styles/home.css';
         </picture>
       </div>
       <div class="trio-frame trio-pos-r" data-trio data-zoom>
+        <picture>
+          <source srcset="/app/ex-college-map-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img
+            src="/app/ex-college-map.webp"
+            alt="Lumecon results page framed on the Connecticut county map for a community college campus expansion, with the operations breakdown below."
+            width="1920"
+            height="1080"
+            decoding="async"
+          />
+        </picture>
+      </div>
+      <div class="trio-frame trio-pos-l" data-trio data-zoom>
         <picture>
           <source srcset="/app/ex-college-compare-dark.webp" media="(prefers-color-scheme: dark)" />
           <img
@@ -122,7 +121,7 @@ import '../styles/home.css';
     </aside>
 
     <script is:inline>
-      /* One example per visit, locked; only the archetypes rotate.
+      /* One example, locked; only the archetypes rotate.
          Each frame permanently holds one archetype of the chosen
          example (its content is set once, below); the rotation swaps
          POSITION classes, so every archetype is on screen exactly
@@ -254,14 +253,33 @@ import '../styles/home.css';
         ];
         var FILE = { results: 'results', map: 'map', comparison: 'compare' };
         var POSITIONS = ['trio-pos-c', 'trio-pos-r', 'trio-pos-l'];
+        var compact = window.matchMedia('(max-width: 760px)');
+
+        function place(frame, position) {
+          frame.className = 'trio-frame ' + position;
+          var img = frame.querySelector('img');
+          if (img) {
+            var hiddenOnCompact = compact.matches && position !== 'trio-pos-c';
+            img.setAttribute('tabindex', hiddenOnCompact ? '-1' : '0');
+          }
+        }
+        function syncTabOrder() {
+          frames.forEach(function (frame) {
+            var position = POSITIONS.find(function (name) {
+              return frame.classList.contains(name);
+            });
+            if (position) place(frame, position);
+          });
+        }
 
         var trio = document.getElementById('trio');
         var caption = document.getElementById('trioCaption');
         var frames = trio ? [].slice.call(trio.querySelectorAll('[data-trio]')) : [];
         if (frames.length !== 3) return;
 
-        /* Select the example once and lock it for the whole visit. */
-        var example = EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)];
+        /* The first example is also the server-rendered markup above, so
+           the browser's eager image discovery and the script agree. */
+        var example = EXAMPLES[0];
         var second = example.first === 'map' ? 'results' : 'map';
         var order = [example.first, second, 'comparison'];
 
@@ -277,9 +295,10 @@ import '../styles/home.css';
             img.src = '/app/ex-' + example.id + '-' + FILE[arch] + '.webp';
             img.alt = example.alts[arch] + ' Shown with sample data.';
           }
-          frame.className = 'trio-frame ' + POSITIONS[i];
+          place(frame, POSITIONS[i]);
         });
         if (caption) caption.textContent = 'Shown with sample data: ' + example.label + '.';
+        compact.addEventListener('change', syncTabOrder);
 
         /* Rotate the archetypes: the next view slides to the center,
            the center recedes. Frame i sits at position (i + offset) mod 3
@@ -290,22 +309,35 @@ import '../styles/home.css';
         function advance() {
           offset = (offset + 2) % 3;
           frames.forEach(function (frame, i) {
-            frame.className = 'trio-frame ' + POSITIONS[(i + offset) % 3];
+            place(frame, POSITIONS[(i + offset) % 3]);
           });
         }
 
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        var timer = setInterval(advance, 6500);
-        trio.addEventListener('mouseenter', function () {
+        var timer;
+        function stop() {
           clearInterval(timer);
-        });
-        trio.addEventListener('mouseleave', function () {
+          timer = null;
+        }
+        function start() {
+          var lightbox = document.getElementById('lightbox');
+          var occupied = trio.matches(':hover') || trio.contains(document.activeElement);
+          if (document.hidden || occupied || (lightbox && lightbox.open)) return;
           clearInterval(timer);
           timer = setInterval(advance, 6500);
+        }
+        start();
+        trio.addEventListener('mouseenter', stop);
+        trio.addEventListener('mouseleave', start);
+        trio.addEventListener('focusin', stop);
+        trio.addEventListener('focusout', function () {
+          /* Let focus settle first: opening the lightbox moves focus out
+             of the trio, but its open dialog should keep rotation paused. */
+          setTimeout(start, 0);
         });
         document.addEventListener('visibilitychange', function () {
-          clearInterval(timer);
-          if (!document.hidden) timer = setInterval(advance, 6500);
+          stop();
+          start();
         });
       })();
     </script>
