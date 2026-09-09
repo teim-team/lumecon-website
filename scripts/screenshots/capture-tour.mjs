@@ -176,7 +176,10 @@ for (const theme of ['light', 'dark']) {
   // the full lineage panel. Measuring both boundaries prevents a clipped
   // eyebrow at the top or the next card appearing at the bottom.
   const traceHeight = await fitScrolledBoundary(trace, '.reshead', '.lineage', {
-    minHeight: 1020,
+    // Light and dark typography do not land at exactly the same height. Keep
+    // the floor below either natural boundary so a shorter dark panel does
+    // not reveal the clipped top of the following cards.
+    minHeight: 920,
     maxHeight: 1120,
     label: 'results header and lineage panel',
   });
