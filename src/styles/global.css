@@ -216,7 +216,7 @@
   --accent-rgba-08: rgba(15, 181, 165, 0.08);
   --accent-rgba-18: rgba(15, 181, 165, 0.18);
   /* The hover vocabulary, shared by everything that lifts on hover: the tour
-     screenshots, the hero trio frames, the pricing cards and the edge icons.
+     screenshots, the hero product frame, the pricing cards and the edge icons.
      One rise distance and one shadow, so a new hover state is a token
      reference rather than another hand-picked pair of numbers.
 

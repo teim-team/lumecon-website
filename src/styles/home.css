@@ -89,83 +89,20 @@
   transform: translateX(3px);
 }
 
-/* The real Lumecon mark as background art: cropped at the section
-   edge, quiet, never behind text. Dark mode re-lights the strokes. */
-.markart {
-  position: absolute;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-  /* Down from 0.09. At that strength the mark's arcs resolved into three
-     distinct grey curves in the corner of the hero, which read as stray
-     lines rather than as the brand: a shape you notice and cannot name is
-     worse than no shape. At this weight it is a texture in the paper. */
-  opacity: 0.055;
-}
-@media (prefers-color-scheme: dark) {
-  .markart {
-    filter: invert(1) hue-rotate(180deg);
-    /* Down from 0.13, matching the light-mode reduction. Inverted on the
-       dark surface the arcs came up brighter than they ever did on white. */
-    opacity: 0.075;
-  }
-}
-@media (max-width: 760px) {
-  .hero2 .markart,
-  .pr-hero .markart {
-    display: none;
-  }
-}
-
-/* ---------- hero ---------- */
-.hero2 {
-  position: relative;
-  overflow: hidden;
-  background: var(--white);
-  padding: clamp(6.5rem, 12vh, 9.5rem) var(--container-pad) clamp(3rem, 6vh, 4.5rem);
-}
-.markart--tr {
-  top: -190px;
-  right: -230px;
-}
-.hero2-inner {
-  position: relative;
-  z-index: 1;
-  max-width: var(--container-max);
-  margin: 0 auto;
-  display: grid;
-  justify-items: center;
-  text-align: center;
-  gap: 1.3rem;
-}
+/* ---------- hero type and actions ---------- */
 .hero2-title {
   font-family: var(--font-display);
   font-weight: var(--weight-hero);
-  font-size: clamp(2.3rem, 5.6vw, 4.4rem);
-  line-height: 1.04;
-  letter-spacing: var(--track-display);
   color: var(--ink);
   margin: 0;
-  max-width: 42ch;
 }
 .hero2-em {
   color: var(--accent-text);
 }
 .hero2-sub {
   text-wrap: pretty;
-  font-size: clamp(1.05rem, 1.5vw, 1.22rem);
-  line-height: 1.6;
   color: var(--ink-2);
   margin: 0;
-  /* Was 82ch. Measured at 1440px: 82ch wraps this sentence to three
-     lines whose longest runs about 103 characters; 62ch wraps it to
-     four whose longest runs about 84. A centred paragraph is harder to
-     return-sweep than a left-aligned one, because the left edge moves on
-     every line, so it wants the shorter measure, not the longer one.
-     This sits below the 65-75%-of-container band in AGENTS.md, which
-     guards against narrow caps that leave the row visually empty; the
-     title above spans the full container, so the row is not empty. */
-  max-width: 62ch;
 }
 .hero2-sub strong {
   color: var(--accent-text);
@@ -175,199 +112,7 @@
   display: flex;
   gap: 0.8rem;
   flex-wrap: wrap;
-  justify-content: center;
   margin-top: 0.4rem;
-}
-@media (max-width: 560px) {
-  /* Compact hero: on a phone the headline + body + CTAs must land
-     inside the first screen with room to spare, and the CTA stack
-     must clear the docked Cedar launcher in the corner. */
-  .hero2 {
-    padding-top: 5.5rem;
-  }
-  .hero2-title {
-    font-size: 2rem;
-    line-height: 1.1;
-  }
-  .hero2-sub {
-    font-size: 0.94rem;
-    line-height: 1.5;
-    max-width: 36ch;
-  }
-  .hero2-inner {
-    gap: 0.85rem;
-  }
-  .hero2-cta {
-    gap: 0.6rem;
-  }
-  .hero2-cta .btn2 {
-    padding: 0.75rem 1.2rem;
-    font-size: 0.95rem;
-  }
-}
-
-/* ---------- trio money shot ----------
-   Three app pages stacked the way the refreshed IMPLAN hero stacks
-   its product panels, and they rotate: every few seconds the front
-   page cedes the center to the next one (paused on hover, off under
-   reduced motion). Position classes are swapped by the inline
-   script in Hero.astro; transforms carry the motion. */
-.trio {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: var(--container-max);
-  margin: clamp(1.6rem, 4vh, 3rem) auto 0;
-  aspect-ratio: 1240 / 545;
-}
-.trio-frame {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 66%;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--surface);
-  transform-origin: center top;
-  will-change: transform;
-  /* transform / box-shadow / opacity carry the 6.5s rotation, so they stay
-     slow. `translate` is reserved for the hover lift below and is the only
-     thing here that moves at pointer speed. */
-  transition:
-    transform 0.9s var(--ease),
-    box-shadow 0.9s var(--ease),
-    opacity 0.9s var(--ease),
-    translate 0.25s var(--ease),
-    border-color 0.25s var(--ease);
-}
-.trio-frame img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-/* The stack, quieted.
-   --------------------------------------------------------------------
-   The centre frame carried a 0.5-alpha 96px drop shadow and the side
-   frames a 0.35 one, which is what made the hero read as three glossy
-   panels hovering over the page rather than as product. All three are
-   neutral and much weaker now; the hairline border does the separating.
-
-   The side frames also used to sit at translateX(-98%) and (-2%) of a
-   66%-wide frame, which pushed them past both edges of the shell: at
-   1440px they were sliced through mid-word by the viewport, so the first
-   thing a visitor saw was two broken screenshots. They are pulled inside
-   the shell and set further back, so the row reads as a deliberate stack
-   with the money shot in front. */
-.trio-pos-c {
-  transform: translateX(-50%);
-  z-index: 2;
-  box-shadow:
-    inset 0 1px 0 var(--surface-highlight),
-    0 3px 10px -4px rgba(10, 15, 38, 0.12),
-    0 36px 72px -38px rgba(10, 15, 38, 0.34);
-}
-.trio-pos-l {
-  transform: translateX(-88%) translateY(4.5%) scale(0.78);
-  z-index: 1;
-  opacity: 0.78;
-  box-shadow:
-    inset 0 1px 0 var(--surface-highlight),
-    0 22px 50px -32px rgba(10, 15, 38, 0.26);
-}
-.trio-pos-r {
-  transform: translateX(-12%) translateY(4.5%) scale(0.78);
-  z-index: 1;
-  opacity: 0.78;
-  box-shadow:
-    inset 0 1px 0 var(--surface-highlight),
-    0 22px 50px -32px rgba(10, 15, 38, 0.26);
-}
-/* Whichever frame is in front is at full strength. */
-.trio-frame:hover {
-  opacity: 1;
-}
-
-/* Hover on the hero trio. Same vocabulary as the product tour rows
-   (rise + teal border + teal-cast shadow), and the rotation is already
-   paused while the pointer is over the trio, so the lift is not fighting
-   a position change.
-
-   The lift uses the individual `translate` property rather than adding to
-   `transform`. Each position class owns its own transform (the side frames
-   carry a translateX, a translateY and a scale(0.8)), so a shared hover
-   rule cannot append to it without rewriting all three. `translate` is
-   applied outside `transform`, which also means the lift is a true 10px in
-   page space instead of 8px on the scaled side frames.
-
-   z-index raises the hovered frame over its neighbours: the frames overlap,
-   and a side frame lifting *underneath* the center one reads as a glitch. */
-.trio-frame:hover {
-  /* Three times the shared lift: these frames are far larger than a card,
-     so the same 3px would not read at all. */
-  translate: 0 calc(var(--lift) * 3);
-  border-color: var(--accent);
-  z-index: 3;
-  box-shadow: var(--lift-shadow);
-  /* Only on the way in: hover-out falls back to the 0.9s rotation timing
-     above, so a frame that rotates away while the pointer leaves does not
-     snap its shadow. */
-  transition:
-    translate 0.25s var(--ease),
-    border-color 0.25s var(--ease),
-    box-shadow 0.25s var(--ease);
-}
-@media (prefers-reduced-motion: reduce) {
-  .trio-frame:hover {
-    translate: none;
-  }
-}
-.trio-caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  margin: 0.9rem auto 0;
-  text-align: center;
-  font-size: 0.82rem;
-  color: var(--ink-3);
-  max-width: 88ch;
-}
-/* Room for the absolutely-positioned caption below the frames. */
-.trio {
-  margin-bottom: 3rem;
-}
-@media (max-width: 760px) {
-  .trio {
-    aspect-ratio: 1600 / 1010;
-  }
-  .trio-frame {
-    width: 100%;
-  }
-  .trio-pos-c {
-    transform: translateX(-50%);
-    opacity: 1;
-    visibility: visible;
-  }
-  /* Only the center frame exists on a phone; the other two sit exactly
-     behind it at zero opacity and rotate through.
-
-     `visibility` is here because the screenshots are keyboard controls now:
-     they open the lightbox, so they are in the tab order, and a control
-     nobody can see should not be. The longhand is what lets the 0.9s fade
-     still play, by holding the visibility change until the fade has
-     finished. Setting `transition` in shorthand here would reset it to zero
-     delay and the frame would vanish instead of fading. */
-  .trio-pos-l,
-  .trio-pos-r {
-    transform: translateX(-50%) scale(0.96);
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-    transition-property: transform, box-shadow, opacity, translate, border-color, visibility;
-    transition-duration: 0.9s, 0.9s, 0.9s, 0.25s, 0.25s, 0s;
-    transition-delay: 0s, 0s, 0s, 0s, 0s, 0.9s;
-  }
 }
 
 /* ---------- provenance row ----------
@@ -957,5 +702,461 @@
   .edge {
     padding-top: 3rem;
     padding-bottom: 3rem;
+  }
+}
+
+/* ---------- homepage v4: economic places ----------
+   The homepage now works like an editorial product story: a large, left-
+   aligned promise beside one readable product screen, then a full-width
+   photographic passage through the kinds of places the platform measures.
+   Light comes from contrast between pure-white surfaces, the duotone images
+   and the raised application frame. There is no decorative glow or texture. */
+.hero2 {
+  overflow: clip;
+  background: var(--surface);
+  padding: clamp(7.5rem, 12vh, 9rem) var(--container-pad) clamp(2rem, 4vh, 3rem);
+}
+.hero2 > .hero2-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+  align-items: center;
+  justify-items: stretch;
+  gap: clamp(3rem, 5.5vw, 5.8rem);
+  text-align: left;
+}
+.hero2-copy {
+  display: grid;
+  justify-items: start;
+  gap: clamp(1rem, 2.1vh, 1.45rem);
+  position: relative;
+  z-index: 3;
+}
+.hero2 .hero2-title {
+  max-width: none;
+  font-size: clamp(3.25rem, 5.15vw, 5.15rem);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+.hero2-line {
+  display: block;
+  white-space: nowrap;
+}
+.hero2 .hero2-sub {
+  max-width: 58ch;
+  font-size: clamp(1rem, 1.2vw, 1.13rem);
+  line-height: 1.62;
+}
+.hero2 .hero2-cta {
+  justify-content: flex-start;
+  margin-top: 0.35rem;
+}
+
+/* The photograph establishes the economic place. The screen overlaps it as
+   the instrument used to understand that place, not as another card in a
+   row. The harder top highlight and long neutral shadow give the frame the
+   crisp, finished surface the previous restrained stack was missing. */
+.hero2-stage {
+  position: relative;
+  min-width: 0;
+  min-height: clamp(31rem, 42vw, 38rem);
+  margin: 0;
+  isolation: isolate;
+}
+.hero2-photo {
+  position: absolute;
+  inset: 0 0 2.5rem 17%;
+  overflow: hidden;
+  background: #8a691f;
+  border: 1px solid rgba(10, 15, 38, 0.08);
+}
+.hero2-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% center;
+  transform: scale(1.012);
+}
+.hero2-photo__label {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.15rem;
+  margin: 0;
+  padding-left: 0.9rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.55;
+  letter-spacing: 0.1em;
+  text-align: right;
+  text-transform: uppercase;
+}
+.hero2-photo__label span {
+  display: block;
+  color: #fff;
+  font-weight: 700;
+}
+.hero2-screen {
+  position: absolute;
+  z-index: 2;
+  top: 16%;
+  left: -2.75rem;
+  width: calc(100% - 0.75rem);
+  overflow: hidden;
+  border: 1px solid rgba(10, 15, 38, 0.17);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 2px 4px rgba(10, 15, 38, 0.08),
+    0 24px 52px -20px rgba(10, 15, 38, 0.3),
+    0 54px 90px -52px rgba(10, 15, 38, 0.38);
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.hero2-screen:hover {
+  transform: translateY(-4px);
+  border-color: rgba(10, 127, 116, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 3px 6px rgba(10, 15, 38, 0.08),
+    0 30px 62px -22px rgba(10, 15, 38, 0.34),
+    0 64px 100px -54px rgba(10, 15, 38, 0.42);
+}
+.hero2-screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hero2-stage figcaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  color: var(--ink-3);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.hero2 > .proof {
+  max-width: var(--container-max);
+  margin: clamp(1.6rem, 3.5vh, 2.4rem) auto 0;
+  padding-top: clamp(1.2rem, 2.5vh, 1.65rem);
+  justify-items: start;
+}
+.hero2 > .proof .proof__list {
+  justify-content: flex-start;
+}
+
+/* Economic places are deliberately full-bleed. They break the white-page
+   rhythm once, connect the product to the physical economy, and let the
+   existing licensed duotone system carry more of the brand. */
+.places {
+  background: #09132b;
+  color: #fff;
+}
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.place-panel {
+  position: relative;
+  min-width: 0;
+  min-height: clamp(20rem, 29vw, 28rem);
+  overflow: hidden;
+  background: #0a4750;
+}
+.place-panel + .place-panel {
+  border-left: 1px solid rgba(255, 255, 255, 0.34);
+}
+.place-panel img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.01);
+  transition: transform 0.8s var(--ease);
+}
+.place-panel:hover img {
+  transform: scale(1.04);
+}
+.place-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 14, 33, 0.13);
+  pointer-events: none;
+}
+.place-panel__copy {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: clamp(1.35rem, 2.4vw, 2.25rem);
+  background: rgba(6, 18, 40, 0.82);
+  border-top: 1px solid rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.place-panel__copy p {
+  margin: 0 0 0.7rem;
+  color: rgba(255, 255, 255, 0.76);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.place-panel__copy h3 {
+  max-width: 18ch;
+  margin: 0;
+  color: #fff;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.65rem, 2.5vw, 2.45rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+.places-measures {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 2.25rem) var(--container-pad) 1rem;
+}
+.places-measures > p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: clamp(0.95rem, 1.2vw, 1.06rem);
+  line-height: 1.5;
+}
+.places-measures > p span {
+  color: var(--accent-light);
+  font-weight: 650;
+}
+.places-measures ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem clamp(0.9rem, 2vw, 1.55rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.places-measures li {
+  position: relative;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.places-measures li + li {
+  padding-left: clamp(0.9rem, 2vw, 1.55rem);
+}
+.places-measures li + li::before {
+  content: '';
+  position: absolute;
+  top: 0.12em;
+  bottom: 0.12em;
+  left: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.28);
+}
+.places-note {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad) 1.5rem;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+/* A real alternation now separates the illustrated value section from the
+   pure-white hero and product tour. The previous two-step tint could not be
+   perceived at normal viewing distance. */
+.places + .whyw {
+  background: #f4f7f8;
+  border-top: 0;
+}
+.tour {
+  background: var(--surface);
+}
+
+@media (max-width: 1120px) {
+  .hero2 > .hero2-inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+  .hero2 .hero2-title {
+    font-size: clamp(3rem, 5vw, 4.3rem);
+  }
+  .hero2-stage {
+    min-height: clamp(27rem, 42vw, 33rem);
+  }
+  .hero2-screen {
+    left: -1.5rem;
+    width: calc(100% + 0.5rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero2 {
+    padding-top: 7.25rem;
+  }
+  .hero2 > .hero2-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.8rem;
+  }
+  .hero2-copy {
+    max-width: 44rem;
+  }
+  .hero2 .hero2-title {
+    font-size: clamp(3.15rem, 8vw, 4.8rem);
+  }
+  .hero2-stage {
+    min-height: clamp(28rem, 68vw, 36rem);
+  }
+  .hero2-photo {
+    left: 20%;
+  }
+  .hero2-screen {
+    left: 0;
+    width: 90%;
+  }
+  .places-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .place-panel {
+    min-height: clamp(17rem, 54vw, 25rem);
+  }
+  .place-panel + .place-panel {
+    border-top: 1px solid rgba(255, 255, 255, 0.34);
+    border-left: 0;
+  }
+  .place-panel__copy h3 {
+    max-width: 24ch;
+  }
+  .places-measures {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .places-measures ul {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero2 {
+    padding-top: 5.9rem;
+    padding-bottom: 1.75rem;
+  }
+  .hero2 > .hero2-inner {
+    gap: 2rem;
+  }
+  .hero2-copy {
+    gap: 0.9rem;
+  }
+  .hero2 .hero2-title {
+    font-size: clamp(2.45rem, 12.3vw, 3.05rem);
+    line-height: 0.99;
+    letter-spacing: -0.05em;
+  }
+  .hero2 .hero2-sub {
+    max-width: 40ch;
+    font-size: 0.96rem;
+    line-height: 1.52;
+  }
+  .hero2 .hero2-cta {
+    width: 100%;
+  }
+  .hero2 .hero2-cta .btn2 {
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.82rem 1rem;
+  }
+  .hero2-stage {
+    min-height: clamp(20rem, 88vw, 23rem);
+  }
+  .hero2-photo {
+    inset: 2.75rem 0 2.2rem 18%;
+  }
+  .hero2-photo__label {
+    display: none;
+  }
+  .hero2-screen {
+    top: 0;
+    left: 0;
+    width: 96%;
+    border-radius: 8px;
+  }
+  .hero2-stage figcaption {
+    max-width: 30ch;
+    font-size: 0.72rem;
+  }
+  .hero2 > .proof {
+    margin-top: 1.25rem;
+  }
+  .place-panel {
+    min-height: 17rem;
+  }
+  .place-panel__copy {
+    padding: 1.25rem var(--container-pad);
+  }
+  .place-panel__copy h3 {
+    font-size: 1.65rem;
+  }
+  .places-measures {
+    padding-top: 1.35rem;
+  }
+  .places-measures ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 1rem;
+  }
+  .places-measures li + li {
+    padding-left: 0;
+  }
+  .places-measures li + li::before {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .hero2-photo {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .hero2-screen {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 2px 4px rgba(0, 0, 0, 0.25),
+      0 28px 64px -24px rgba(0, 0, 0, 0.72);
+  }
+  .places + .whyw {
+    background: var(--cream);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero2-screen,
+  .place-panel img {
+    transition: none;
+  }
+  .hero2-screen:hover,
+  .place-panel:hover img {
+    transform: none;
   }
 }

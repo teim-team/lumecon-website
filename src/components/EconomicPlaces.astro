@@ -1,0 +1,74 @@
+---
+/**
+ * A photographic bridge between the promise in the hero and the platform
+ * capabilities below. These are sectors Lumecon supports, not customers or
+ * endorsements. All images are processed derivatives from the licensed
+ * Shutterstock sector library tracked in scripts/naics/.
+ */
+import '../styles/home.css';
+
+const PLACES = [
+  {
+    label: 'Public infrastructure',
+    title: 'Show what investment sets in motion.',
+    image: '/naics/construction-v2-wide.webp',
+    alt: 'Construction professionals reviewing work inside a large structural project.',
+  },
+  {
+    label: 'Tribal economies',
+    title: 'See the whole economy, on your terms.',
+    image: '/naics/tribalgov-v2-wide.webp',
+    alt: 'Rows of Tribal Nation flags displayed in a contemporary civic interior.',
+  },
+  {
+    label: 'Advanced manufacturing',
+    title: 'Make complex investments legible.',
+    image: '/naics/manufacturing-v2-wide.webp',
+    alt: 'A robotic assembly system working on an electric vehicle platform.',
+  },
+];
+
+const MEASURES = [
+  'Jobs supported',
+  'Labor income',
+  'GDP contribution',
+  'Economic output',
+  'Tax impacts',
+];
+---
+
+<section class="places" aria-labelledby="places-title">
+  <h2 class="visually-hidden" id="places-title">Economic impact across the places you serve</h2>
+
+  <div class="places-grid">
+    {
+      PLACES.map((place, index) => (
+        <article class="place-panel reveal-soft" data-stagger={String(index + 1)}>
+          <img
+            src={place.image}
+            alt={place.alt}
+            width="1500"
+            height="600"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="place-panel__copy">
+            <p>{place.label}</p>
+            <h3>{place.title}</h3>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="places-measures">
+    <p>
+      <span>Every organization has an economic impact.</span> Lumecon makes it visible.
+    </p>
+    <ul aria-label="Economic impact measures">
+      {MEASURES.map((measure) => <li>{measure}</li>)}
+    </ul>
+  </div>
+
+  <p class="places-note">Photography is illustrative and does not identify Lumecon customers.</p>
+</section>

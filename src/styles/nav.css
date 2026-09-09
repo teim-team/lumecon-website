@@ -87,7 +87,7 @@
    inline row (wordmark + descriptor + "See your impact" + About + Join
    + auth pair) needs ~1080px, so below ~1120px the descriptor steps
    aside and the links keep the width. */
-@media (max-width: 1120px) {
+@media (max-width: 1280px) {
   .nav-brand__sep,
   .nav-brand__desc {
     display: none;

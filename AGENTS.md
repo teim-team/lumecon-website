@@ -38,8 +38,8 @@ Design tells to hunt:
   custom illustrations stand on their own.
 - Decorative gradients, glows, blobs, sparkles, dotted connectors
   and other fake complexity. Only the real Lumecon mark is used as
-  background art. Two founder-approved exceptions (2026-09), both
-  narrow, both about surface quality rather than ornament:
+  background art. Founder-approved treatments (2026-09) are narrow
+  and about surface quality or real economic context rather than ornament:
   - A barely cool page ground (#FBFCFE) beneath pure-white raised
     surfaces. The two-step value difference creates hierarchy
     without coating the page in visible texture or making every
@@ -48,6 +48,12 @@ Design tells to hunt:
   - A two-stop vertical gradient on the primary button, dark enough
     at its lightest stop to keep white text at 4.75:1. It reads as a
     physical control, not as decoration. No other element takes one.
+  - Licensed sector photography may create a full-bleed editorial
+    passage or sit behind a real product screen. Use the committed
+    duotone derivatives, keep the photography subordinate to the
+    product argument and state clearly when people or facilities are
+    illustrative rather than customers. A solid image wash is allowed
+    when text needs contrast; decorative color gradients are not.
 - Repetitive section rhythm (eyebrow, giant heading, paragraph,
   cards) with no compositional variation.
 - Huge empty vertical gaps; phone sections carry less padding than
@@ -229,20 +235,22 @@ docs/reconciliation-roadmap.md.
 Nothing in `scripts/` runs at build time; each is a generator whose
 output is committed. Run them when their inputs change.
 
-- Sector thumbnails (duotone): `scripts/naics/sectors.mjs` is the
+- Sector photography (duotone): `scripts/naics/sectors.mjs` is the
   single source for the 20 NAICS sectors + the Tribal Government
   category, their descriptions and wash colors; `/naics` and the
-  thumbnail pipeline both read it, so tiles and images cannot drift.
+  photography pipeline both read it, so tiles and images cannot drift.
   `node scripts/naics/duotone.mjs scripts/naics/sources` regenerates
   `public/naics/*.webp` (three crops per sector: 1200x800, 600x400
-  `-sm`, 1500x600 `-wide`). Sources are licensed Shutterstock
+  `-sm`, 1500x600 `-wide`). The `/naics` directory uses the small
+  crops and the homepage may use selected wide crops. Sources are
+  licensed Shutterstock
   originals named `<slug>_shutterstock_<imageID>_<downloadID>.jpeg`;
   the licensing record is `scripts/naics/LICENSES.md`. Never use the
   NACA proposal photos.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist
-  for the app to copy (the site itself only renders `-sm`). Edit
+  for the app to copy. Edit
   sectors.mjs, never naicsSectors.js directly.
 - Hero example screenshots: `scripts/screenshots/capture-examples.mjs`
   captures the 60 `public/app/ex-*.webp` hero images from a running
