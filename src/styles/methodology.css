@@ -883,7 +883,7 @@
   padding-left: clamp(1.4rem, 3vw, 2.4rem);
 }
 
-.meth-ledger {
+.meth > .meth-sec.meth-ledger.section--dark {
   padding-block: clamp(4.5rem, 8vw, 7rem);
   background:
     linear-gradient(132deg, rgba(15, 181, 165, 0.12), transparent 38%),
