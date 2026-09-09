@@ -295,7 +295,8 @@
 }
 .pr-plan__flag {
   position: absolute;
-  top: -0.8rem;
+  /* Keep the recommendation inside the clipped, rounded plan frame. */
+  top: 0.65rem;
   left: 1.2rem;
   margin: 0;
   font-family: var(--font-mono);

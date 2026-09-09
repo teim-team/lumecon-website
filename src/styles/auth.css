@@ -511,6 +511,20 @@
   }
 }
 
+@media (max-width: 400px) {
+  .pwrules {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .auth-chip,
+  .auth-back,
+  .co-code__apply {
+    min-height: 44px;
+  }
+}
+
 /* Touch feedback for the auth and checkout controls. */
 .auth-form .btn:active,
 .auth-chip:active,

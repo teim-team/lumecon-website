@@ -1,5 +1,6 @@
-// Convert the raw ProductTour captures (3840x2160, deviceScaleFactor 2) into the
-// 1920x1080 webp assets the homepage tour serves, straight into public/app/.
+// Convert the raw ProductTour captures into 1920px-wide webp assets. Each raw
+// keeps its purpose-built aspect ratio so no interface control is cut merely to
+// force every product view into the same box.
 // Recapture whenever the app layout changes: these are screenshots of the real
 // product and go stale silently.
 import sharp from 'sharp';

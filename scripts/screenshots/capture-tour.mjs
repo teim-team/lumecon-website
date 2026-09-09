@@ -70,6 +70,14 @@ async function stripChrome(page) {
   await page.waitForTimeout(250);
 }
 
+async function assertBoundaryVisible(page, selector, label) {
+  const box = await page.locator(selector).first().boundingBox();
+  const viewport = page.viewportSize();
+  if (!box || !viewport || box.y + box.height > viewport.height + 1) {
+    throw new Error(`capture-tour: ${label} does not end inside the capture frame`);
+  }
+}
+
 for (const theme of ['light', 'dark']) {
   const suffix = theme === 'dark' ? '-dark' : '';
 
@@ -111,14 +119,15 @@ for (const theme of ['light', 'dark']) {
     return c;
   };
 
-  // Every frame lands as 3840x2160 raw and 1920x1080 optimized. The comparison
-  // page is short, so it reaches that from a smaller viewport at a higher scale
-  // factor rather than leaving the bottom of the frame blank.
-  const ctx = await makeContext(1920, 1080, 2);
-  const cmpCtx = await makeContext(1600, 900, 2.4);
+  // Each marketing frame stops on a complete product boundary. Trace ends just
+  // after its lineage panel; the board and comparison use a taller frame so a
+  // project card or the comparison controls are not sliced by the viewport.
+  const traceCtx = await makeContext(1920, 1020, 2);
+  const boardCtx = await makeContext(1920, 1200, 2);
+  const cmpCtx = await makeContext(1600, 1000, 2.4);
 
   // ---- trace: the lineage panel open on economic output -------------------
-  const trace = await ctx.newPage();
+  const trace = await traceCtx.newPage();
   await trace.goto(`${APP}/app/projects/${TARGET.b.projectId}/runs/${TARGET.b.runId}/results`, {
     waitUntil: 'networkidle',
   });
@@ -144,18 +153,13 @@ for (const theme of ['light', 'dark']) {
     if (h1) window.scrollTo({ top: h1.getBoundingClientRect().top + window.scrollY - 24 });
   });
   await trace.waitForTimeout(500);
+  await assertBoundaryVisible(trace, '.lineage', 'lineage panel');
   await trace.screenshot({ path: `${OUT}/trace${suffix}.png` });
   await trace.close();
 
   // ---- dashboard: the Workspace board -------------------------------------
-  const board = await ctx.newPage();
+  const board = await boardCtx.newPage();
   await board.goto(`${APP}/app`, { waitUntil: 'networkidle' });
-  // The trace capture above ran in this same context, so the app remembers a
-  // results page and offers "pick up where you left off" over the board.
-  // Clear the remembered place and reload, or the marketing shot ships a
-  // resume toast covering a card.
-  await board.evaluate(() => localStorage.removeItem('teim:last-location'));
-  await board.reload({ waitUntil: 'networkidle' });
   await board.waitForTimeout(2600);
   await settleFonts(board);
   await stripChrome(board);
@@ -174,7 +178,8 @@ for (const theme of ['light', 'dark']) {
   await cmp.screenshot({ path: `${OUT}/compare${suffix}.png` });
   await cmp.close();
 
-  await ctx.close();
+  await traceCtx.close();
+  await boardCtx.close();
   await cmpCtx.close();
   console.log(`tour${suffix}: trace, dashboard, compare`);
 }

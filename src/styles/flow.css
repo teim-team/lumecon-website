@@ -578,6 +578,14 @@
     align-items: baseline;
     column-gap: 0.8rem;
   }
+  .cpl-card--featured,
+  .cpl-card--featured:hover {
+    transform: none;
+    padding-top: 2.25rem;
+  }
+  .cpl-card__flag {
+    top: 0.65rem;
+  }
   .cpl-card__price {
     margin-top: 0;
     margin-left: auto;
@@ -608,6 +616,19 @@
   .welc-inner {
     grid-template-columns: 1fr;
     text-align: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .welc {
+    padding: 2rem 0.75rem;
+  }
+  .welc-inner {
+    gap: 1.4rem;
+    padding: 1.25rem 1rem;
+  }
+  .welc-preview {
+    margin-inline: -0.25rem;
   }
 }
 

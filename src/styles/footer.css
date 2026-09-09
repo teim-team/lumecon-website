@@ -92,6 +92,7 @@
 }
 .footer-bottom__right {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: clamp(0.9rem, 2vw, 1.6rem);
 }
@@ -171,5 +172,26 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
+  }
+}
+@media (max-width: 430px) {
+  .footer-bottom__right {
+    width: 100%;
+  }
+  .footer-email {
+    flex-basis: 100%;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .footer-group__list {
+    gap: 0;
+  }
+  .footer-group__list a,
+  .footer-linkbtn,
+  .footer-email {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 }

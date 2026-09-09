@@ -25,7 +25,7 @@ const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; li
   [
     {
       term: 'Economic impact analysis',
-      def: 'A method for estimating the economic footprint of an organization, project or program: its own spending plus the additional activity that spending sets off across a region.',
+      def: 'A method for estimating the economic activity associated with an organization, project, program or change within a defined region and period. An impact analysis is not, by itself, proof that the activity caused an observed outcome.',
     },
     {
       term: 'Direct effect',
@@ -41,11 +41,11 @@ const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; li
     },
     {
       term: 'Total impact',
-      def: 'Direct, indirect and induced effects added together, the headline number, with each layer shown separately so a reviewer can see where it comes from.',
+      def: 'For a given measure, the direct, indirect and induced effects added together. Jobs, labor income, GDP contribution and economic output each have their own total.',
     },
     {
       term: 'Multiplier',
-      def: 'A factor estimating how each dollar of direct activity ripples into additional activity. Multipliers differ by industry and geography, which is why a casino in Connecticut has a different ripple than a wind farm in Nebraska.',
+      def: 'A ratio relating a direct effect to a total or additional effect for a particular measure, such as economic output, labor income or employment. Multipliers vary by industry and geography.',
     },
     {
       term: 'Regional purchase coefficient',
@@ -60,7 +60,7 @@ const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; li
     {
       term: 'NAICS sector',
       abbr: 'NAICS',
-      def: 'The North American Industry Classification System, the federal standard for grouping economic activity by industry. Lumecon classifies at the two-digit sector level, where administrative data coverage is most complete.',
+      def: 'The North American Industry Classification System, the federal standard for grouping economic activity by industry. Lumecon classifies at the two-digit sector level, where public data are generally more available.',
     },
     {
       term: 'Base year',
@@ -68,7 +68,7 @@ const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; li
     },
     {
       term: 'Labor income',
-      def: 'Wages, salaries and benefits paid to workers, reported alongside jobs and output as one of the headline figures.',
+      def: 'Employee compensation and, where modeled, proprietor income associated with the activity. It is reported alongside jobs, GDP contribution and economic output.',
     },
     {
       term: 'Economic output',
@@ -76,11 +76,15 @@ const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; li
     },
     {
       term: 'Jobs supported',
-      def: 'The count of jobs supported by the activity across the direct, indirect and induced layers over the analysis period. It is a job count; where a conversion basis matters, the analysis states it.',
+      def: 'The employment associated with the modeled activity across the direct, indirect and induced layers. Depending on the model and analysis period, it may represent annual jobs, average annual employment or job-years; the analysis should state the basis.',
     },
     {
       term: 'GDP contribution',
       def: 'The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP. Lumecon uses GDP contribution as the plain-language label for value added.',
+    },
+    {
+      term: 'Tax impacts',
+      def: 'Estimated federal, state and local tax revenue associated with the modeled activity. Tax impacts are not the same as fiscal impact, which also considers government costs.',
     },
   ];
 

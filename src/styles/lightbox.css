@@ -1,7 +1,7 @@
 /* ---------- lightbox ----------
    Click a product screenshot, see it full size, click out.
 
-   The screenshots on this site are 1920x1080 renders of real app surfaces
+   The screenshots on this site are 1920px-wide renders of real app surfaces
    shown at a third of that width, which means the numbers, the map and the
    panel copy are all present and none of them are readable. This is the way
    to read them.
@@ -78,7 +78,7 @@
   inset: 0;
   z-index: 200;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   max-width: none;
   max-height: none;
   margin: 0;
@@ -86,7 +86,10 @@
   display: grid;
   grid-template-rows: 1fr;
   place-items: center;
-  padding: clamp(1rem, 4vw, 3rem);
+  padding: calc(clamp(1rem, 4vw, 3rem) + env(safe-area-inset-top, 0px))
+    calc(clamp(1rem, 4vw, 3rem) + env(safe-area-inset-right, 0px))
+    calc(clamp(1rem, 4vw, 3rem) + env(safe-area-inset-bottom, 0px))
+    calc(clamp(1rem, 4vw, 3rem) + env(safe-area-inset-left, 0px));
   background: rgba(10, 15, 38, 0.86);
   color: inherit;
   cursor: zoom-out;
@@ -114,7 +117,7 @@
   max-width: 100%;
   /* The caption and the padding come out of the viewport before the picture
      does, or a long caption pushes the bottom of the image off screen. */
-  max-height: calc(100vh - 10rem);
+  max-height: calc(100dvh - 10rem);
   object-fit: contain;
   border-radius: 6px;
   background: var(--surface);
@@ -140,7 +143,7 @@
   overscroll-behavior: contain;
   /* Clear the close button, which is fixed and would otherwise sit on the
      top edge of a picture that now runs the full width. */
-  padding-top: 4.4rem;
+  padding-top: calc(4.4rem + env(safe-area-inset-top, 0px));
 }
 .lb.is-full .lb__box {
   max-width: none;
@@ -166,8 +169,8 @@
 }
 .lb__close {
   position: fixed;
-  top: clamp(0.6rem, 2vw, 1.2rem);
-  right: clamp(0.6rem, 2vw, 1.2rem);
+  top: calc(clamp(0.6rem, 2vw, 1.2rem) + env(safe-area-inset-top, 0px));
+  right: calc(clamp(0.6rem, 2vw, 1.2rem) + env(safe-area-inset-right, 0px));
   display: grid;
   place-items: center;
   width: 2.6rem;
@@ -198,7 +201,7 @@
 .lb__hint {
   position: fixed;
   left: 50%;
-  bottom: clamp(0.5rem, 2vw, 1rem);
+  bottom: calc(clamp(0.5rem, 2vw, 1rem) + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
   margin: 0;
   font-family: var(--font-mono);
@@ -246,15 +249,18 @@ html.lb-open .scroll-progress {
 
 @media (max-width: 640px) {
   .lb__img {
-    max-height: calc(100vh - 12rem);
+    max-height: calc(100dvh - 12rem);
   }
   .lb {
-    padding: 3.6rem 0.75rem 3.2rem;
+    padding: calc(3.6rem + env(safe-area-inset-top, 0px))
+      calc(0.75rem + env(safe-area-inset-right, 0px))
+      calc(3.2rem + env(safe-area-inset-bottom, 0px)) calc(0.75rem + env(safe-area-inset-left, 0px));
   }
   /* No side padding once the picture is at its own size: 0.75rem either
      side of a 1920px image is 24px of scrollable nothing at each end. */
   .lb.is-full {
-    padding: 3.6rem 0 3.2rem;
+    padding: calc(3.6rem + env(safe-area-inset-top, 0px)) env(safe-area-inset-right, 0px)
+      calc(3.2rem + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0px);
   }
   .lb__hint {
     font-size: 0.58rem;

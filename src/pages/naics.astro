@@ -77,13 +77,13 @@ const jsonLd = [
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Reference</p>
         <h1 class="meth-hero__title">
-          The sectors behind <span class="brand-em">every number</span>.
+          The sectors Lumecon <span class="brand-em">uses</span>.
         </h1>
         <p class="meth-hero__lede">
-          Lumecon classifies economic activity at the two-digit NAICS sector level, because county
-          and state employment and wage data are more complete there. That reduces, but does not
-          eliminate, the estimation standing in for suppressed and missing values. Open a sector to
-          see what belongs to it, and read{' '}
+          Lumecon presents economic activity at the two-digit NAICS sector level because public
+          county and state employment and wage data are generally more available there. This
+          reduces, but does not eliminate, estimation for suppressed and missing values. Open a
+          sector to see what belongs to it, and read{' '}
           <a class="gloss-link" href="/methodology#m-naics">why two digits</a> in the methodology.
         </p>
       </div>
@@ -117,10 +117,11 @@ const jsonLd = [
           }
         </ul>
         <p class="gloss-foot">
-          Tribal Government is a Lumecon category rather than a NAICS sector. NAICS files tribal
-          governments under local government within Public Administration (92); we track them as
-          their own category because a nation operates as a government, an employer and an
-          enterprise owner at once. For definitions of the terms used in results, see the{' '}
+          Tribal Government is a Lumecon category rather than a two-digit NAICS sector. NAICS places
+          American Indian and Alaska Native Tribal Governments in Public Administration (92);
+          Lumecon presents Tribal Government separately because a nation may operate as a
+          government, an employer and an enterprise owner at once. For definitions of the terms used
+          in results, see the{' '}
           <a class="gloss-link" href="/glossary">glossary</a>.
         </p>
       </div>
@@ -334,7 +335,7 @@ const jsonLd = [
       grid-column: span 6;
     }
   }
-  @media (max-width: 760px) {
+  @media (max-width: 860px) {
     .meth-hero .meth-w {
       grid-template-columns: 1fr;
     }

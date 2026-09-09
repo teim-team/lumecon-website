@@ -1,9 +1,9 @@
-// Convert raw capture PNGs (3840x2160, deviceScaleFactor 2) into the webp
-// assets the homepage serves, written straight into public/app/.
+// Convert raw capture PNGs into 1920px-wide webp assets, preserving each
+// purpose-built frame. Results and maps use DOM-measured boundaries;
+// comparisons use a 16:10 frame.
 //
-// 1920 wide is not arbitrary: it is what the <img width="1920" height="1080">
-// attributes on the site declare, so the browser reserves the right box before
-// the image lands. Changing it here means changing them there.
+// 1920 wide is not arbitrary: it is what the site declares, so the browser
+// reserves the right box before the file arrives.
 import sharp from 'sharp';
 import { readdirSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

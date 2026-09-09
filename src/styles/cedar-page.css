@@ -48,8 +48,8 @@
   border-top: 1px solid var(--rule);
 }
 
-/* How it is built: three short answers side by side, hairline-free, sized to
-   read as a footnote to the three acts rather than a fourth act. */
+/* How it is built: three short answers side by side, sized to read as a
+   footnote to the three acts rather than a fourth act. */
 .cedarpg-facts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -62,11 +62,26 @@
   color: var(--ink-2);
   margin: 0.5rem 0 0;
 }
-/* With no icon to lift the way the homepage edge tiles have, the label
-   carries the hover: it deepens as its sentence arrives. */
+.cedarpg-fact__icon {
+  display: block;
+  width: 2.9rem;
+  height: 2.9rem;
+  margin: 0 0 1.15rem;
+  color: var(--accent-deep);
+  filter: drop-shadow(0 8px 14px rgba(15, 181, 165, 0.14));
+}
+.cedarpg-fact__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .cedarpg-fact .h-kicker {
+  margin-bottom: 0;
   transition: color 0.25s var(--ease);
 }
+/* The label deepens on hover, but every sentence remains visible at rest. */
 .cedarpg-fact:hover .h-kicker,
 .cedarpg-fact:focus-visible .h-kicker {
   color: var(--accent-deep);
@@ -83,10 +98,7 @@
   }
 }
 
-/* Each fact keeps a headline visible at rest. Without one the band was three
-   mono labels over a lot of white, since the sentence below is held back
-   until hover; the homepage edge tiles get away with a bare label because a
-   76px icon is doing that job. */
+/* Each fact keeps a compact headline between its line icon and evidence. */
 .cedarpg-fact__t {
   font-family: var(--font-display);
   font-size: 1.02rem;
@@ -135,12 +147,13 @@
   grid-row: 1 / 5;
   overflow: hidden;
   margin: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(95, 217, 204, 0.38);
   border-radius: var(--radius-frame);
-  background: var(--surface);
+  background: #f8fbfb;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 36px 90px -38px rgba(0, 0, 0, 0.86);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(15, 181, 165, 0.08),
+    0 40px 96px -38px rgba(0, 0, 0, 0.9);
 }
 .cedarpg-hero__screen img {
   display: block;
@@ -204,6 +217,18 @@
   padding: 0.85rem 1.1rem 0.95rem;
   background: var(--surface-glass-strong);
 }
+.cedarpg-acts .tour-row .tour-row__shot.cedarpg-shot--dark {
+  border-color: rgba(15, 181, 165, 0.42);
+  background: #081326;
+  box-shadow:
+    0 0 0 1px rgba(15, 181, 165, 0.08),
+    0 28px 68px -38px rgba(7, 17, 38, 0.72);
+}
+.cedarpg-shot--dark .cedarpg-cap {
+  border-top-color: rgba(255, 255, 255, 0.13);
+  background: linear-gradient(115deg, #0b1d33, #07353b);
+  color: rgba(239, 246, 248, 0.72);
+}
 .cedarpg-band {
   background: transparent;
 }
@@ -211,7 +236,9 @@
   padding: clamp(2rem, 4vw, 3.5rem);
   border: 1px solid var(--rule);
   border-radius: var(--radius-panel);
-  background: var(--surface-glass-strong);
+  background:
+    linear-gradient(118deg, rgba(15, 181, 165, 0.08) 0%, transparent 30%),
+    var(--surface-glass-strong);
   box-shadow: var(--shadow-surface);
 }
 .cedarpg-fact + .cedarpg-fact {
@@ -240,9 +267,44 @@
   .cedarpg-acts .tour-row--flip {
     grid-template-columns: 1fr;
   }
+  /* Cedar stacks slightly before the shared tour does, so reset the shared
+     alternating overlap and visual order at Cedar's own breakpoint. */
+  .cedarpg-acts .tour-row__text,
+  .cedarpg-acts .tour-row--flip .tour-row__text {
+    order: 1;
+    margin: 0 0 -1rem;
+  }
+  .cedarpg-acts .tour-row .tour-row__shot,
+  .cedarpg-acts .tour-row--flip .tour-row__shot {
+    order: 2;
+    margin-inline: 0;
+  }
   .cedarpg-fact + .cedarpg-fact {
     border-left: 0;
     border-top: 1px solid var(--rule);
     padding: 1.4rem 0 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .cedarpg-hero {
+    padding-block: 5.75rem 3.25rem;
+  }
+  .cedarpg-acts {
+    padding-block: 0;
+  }
+  .cedarpg-acts .tour-row,
+  .cedarpg-acts .tour-row--flip {
+    padding-block: 3rem;
+  }
+  .cedarpg-band {
+    padding-block: 3rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .cedarpg-acts .tour-row,
+  .cedarpg-acts .tour-row--flip {
+    padding-block: 2.5rem;
   }
 }

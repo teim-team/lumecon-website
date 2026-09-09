@@ -12,7 +12,7 @@
  * looking for them anyway, and the commitment-pricing section is one
  * more question rather than a section of its own.
  *
- *   1. Hero: standard pricing, tailored modeling.
+ *   1. Hero: one model, clear annual pricing.
  *   2. Free-account band: don't take our word for it, before the tiers.
  *   3. Four plans led by Seed, the client-work marker, and Cedar Grove
  *      on its own.
@@ -45,7 +45,7 @@ import '../styles/home.css';
 import '../styles/pricing.css';
 
 const description =
-  'Every price on one page. Plans from $1,000 a year, unlimited analysis, every supported U.S. geography and Cedar included. Seed is free, with no credit card.';
+  'Every price on one page. Paid plans start at $1,000 a year with unlimited analyses, every supported U.S. geography and Cedar. Request Seed access for free.';
 
 const jsonLd = [
   {
@@ -89,7 +89,7 @@ const jsonLd = [
   title="Pricing | Lumecon"
   description={description}
   canonical="https://lumecon.ai/pricing"
-  ogTitle="Lumecon pricing: standard pricing, tailored modeling"
+  ogTitle="Lumecon pricing: one model, clear annual pricing"
   ogDescription={description}
   jsonLd={jsonLd}
 >
@@ -101,19 +101,19 @@ const jsonLd = [
         <div class="pr-hero__copy">
           <p class="h-kicker">Pricing</p>
           <h1 class="pr-hero__title">
-            We tailor the modeling. Your pricing <span class="hero2-em">stays standard</span>.
+            Full economic analysis. <span class="hero2-em">Clear annual pricing.</span>
           </h1>
           <p class="pr-hero__lede">
-            Every paid plan runs the full economic model with unlimited analysis, every supported
-            U.S. geography and Cedar. Higher plans add collaboration and scale. However complex your
-            organization is, the pricing stays simple.
+            Every paid plan runs the same regionalized input-output model with unlimited analyses
+            and every supported U.S. geography. Higher plans add collaboration, organizational
+            memory and scale. No per-analysis fees or geography add-ons.
           </p>
           <p class="pr-hero__callout">
             Plans start at $1,000 a year, and every price is on this page.
           </p>
           <div class="pr-hero__ctas">
             <a class="btn2 btn2--primary" href="/signup?tier=free">
-              Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+              Request free access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
             </a>
             <a class="btn2 btn2--card" href="#plans">Compare plans</a>
           </div>
@@ -130,7 +130,7 @@ const jsonLd = [
               ))
             }
           </ul>
-          <p class="pr-hero__ledger-note">One model. Every geography. Unlimited analysis.</p>
+          <p class="pr-hero__ledger-note">One model. Every geography. Unlimited analyses.</p>
         </aside>
       </div>
     </section>
@@ -139,18 +139,17 @@ const jsonLd = [
     <section class="pr-plans" id="plans" aria-label="Plans">
       <aside class="pr-free" aria-labelledby="free-title">
         <div class="pr-free__main">
-          <p class="h-kicker">Seed, the free account, is the real product</p>
-          <h2 class="pr-free__title" id="free-title">Don&rsquo;t take our word for it.</h2>
+          <p class="h-kicker">Seed is the real platform</p>
+          <h2 class="pr-free__title" id="free-title">Request free access.</h2>
           <p class="pr-free__body">
-            Create a free Seed account and use the actual Lumecon platform. Bring your documents,
-            work with Cedar, build an analysis end to end and see your direct effects on the results
-            page. There is no credit card, countdown or sales call. Indirect, induced and total
-            impact unlock when you choose a paid plan.
+            Access is opening in waves. When your place is ready, use the actual Lumecon platform:
+            bring your documents, work with Cedar, build an analysis end to end and see direct
+            effects on the results page. Indirect, induced and total impact unlock on a paid plan.
           </p>
         </div>
         <div class="pr-free__side">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
-            Try Lumecon free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            Request free access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
           <p class="pr-free__terms">No credit card &middot; No expiration &middot; No obligation</p>
         </div>

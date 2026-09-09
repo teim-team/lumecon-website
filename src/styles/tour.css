@@ -93,9 +93,9 @@
    of three identical half-and-half splits. Together that is roughly 910px
    at 1440, about a fifth more scale.
 
-   It still is not a substitute for cropped captures: a full app screen has
-   more in it than any half-page column can carry legibly. The lightbox is
-   the way through to detail, and the shots are click-to-zoom.
+   Each capture now ends on a complete interface module instead of forcing
+   every view into the same ratio. The lightbox is the way through to detail,
+   and the shots are click-to-zoom.
 
    The bleed distance is the gap between the shell's edge and the viewport
    edge: half the difference between the viewport and the shell, where the
@@ -181,38 +181,14 @@
   background: var(--white);
   box-shadow: var(--shadow-frame);
 }
-/* The frame crops rather than showing the whole 16:9 capture.
-   --------------------------------------------------------------------
-   Two problems, one fix. At the full aspect a shot renders about 512px
-   tall against a text column of roughly 200px, so every row carried
-   300-odd pixels of empty column beside it: the "huge empty vertical gap"
-   the audit warns about, three times in a row. And the full app screen
-   spends its lower half on content the row is not talking about.
-
-   Cropping to 2:1 from the top keeps the part that carries the argument
-   (the headline figure and the cards under it), brings the row height
-   close to the text height, and enlarges nothing: the pixels are the same
-   size, there are simply fewer of them. Click still opens the whole
-   capture in the lightbox. */
-/* The ratio is set on the IMAGE, not on the figure. Two shapes use this
-   class: the homepage rows are a <picture> alone, and the Cedar rows are
-   a bare <img> followed by a <figcaption>. Constraining the figure would
-   have squeezed those captions into the cropped box. */
+/* Marketing captures now stop on complete interface boundaries. Preserve the
+   image's authored ratio instead of cropping through a map, project card or
+   control. Cedar's workflow captures keep their 16:9 rule in cedar-page.css. */
 .tour-row__shot img {
   display: block;
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: auto;
   height: auto;
-  object-fit: cover;
-  object-position: top center;
-}
-@media (max-width: 880px) {
-  /* Stacked, the shot is not competing with a text column beside it, so
-     it goes back to its true proportion. */
-  .tour-row__shot img {
-    aspect-ratio: auto;
-    object-fit: fill;
-  }
 }
 
 @media (max-width: 880px) {

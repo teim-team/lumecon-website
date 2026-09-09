@@ -15,11 +15,13 @@ const ROWS = [
     id: 'trace',
     product: 'Cedar Impact',
     kicker: 'Defensible by design',
-    title: 'Trace any number back to its layers',
+    title: 'Trace a reported result to its components',
     body: 'Each headline figure includes a “Trace this number” control. Follow a result through direct, indirect and induced effects, the operations that generate them and the industries where they land.',
     img: '/app/trace.webp',
     imgDark: '/app/trace-dark.webp',
-    alt: 'Lumecon lineage panel titled Where $214,300,000 comes from, breaking economic output into direct, indirect and induced layers, by operation and by industry with share bars.',
+    width: 1920,
+    height: 1020,
+    alt: 'Lumecon lineage panel titled Where $1,240,500,000 comes from for a sample Tribal Nation analysis, breaking economic output into direct, indirect and induced layers, by operation and industry.',
   },
   {
     id: 'compare',
@@ -29,7 +31,9 @@ const ROWS = [
     body: 'Put years or scenarios side by side and see the change in jobs, labor income, GDP contribution, economic output and tax impacts. When the next budget cycle begins, the comparison is already there.',
     img: '/app/compare.webp',
     imgDark: '/app/compare-dark.webp',
-    alt: 'Lumecon compare view of two community college expansion analyses, showing jobs, GDP contribution, labor income, economic output and tax impacts with green percentage-change values.',
+    width: 1920,
+    height: 1200,
+    alt: 'Lumecon comparison of a sample Tribal Nation economic footprint in fiscal years 2023 and 2025, showing changes in jobs, GDP contribution, labor income, economic output and tax impacts.',
   },
   {
     id: 'workspace',
@@ -42,6 +46,8 @@ const ROWS = [
     body: 'Drafts, completed analyses, comparisons and exports stay together in your Workspace, built for recurring analysis and ready to open, compare or export as a workbook, CSV tables or a printable summary.',
     img: '/app/dashboard.webp',
     imgDark: '/app/dashboard-dark.webp',
+    width: 1920,
+    height: 1200,
     alt: 'Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.',
   },
 ];
@@ -91,8 +97,8 @@ const ROWS = [
                 <img
                   src={row.img}
                   alt={row.alt}
-                  width="1920"
-                  height="1080"
+                  width={row.width}
+                  height={row.height}
                   sizes="(max-width: 900px) 100vw, 50vw"
                   loading="lazy"
                   decoding="async"

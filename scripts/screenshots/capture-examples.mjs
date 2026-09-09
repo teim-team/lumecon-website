@@ -1,6 +1,6 @@
 // Capture the homepage example library from the running product:
 // 10 examples x 3 archetypes (results, map, comparison) x 2 themes,
-// all at the same 1600x1000 frame.
+// at marketing-safe frames that end on complete interface modules.
 //
 // Usage:
 //   1. Run the app dev server (teim-app): npm run dev  (port 5173)
@@ -12,14 +12,10 @@
 // stop cross-footing. Set PW_CHROMIUM to your Chromium binary if Playwright's
 // default download is unavailable.
 //
-// Every frame lands as 3840x2160 raw, which optimize-examples.mjs emits at
-// 1920x1080 and the <img width/height> attributes on the site declare. It used
-// to be 1600x1000, a 16:10 frame that matched neither.
-//
-// The comparison page uses a smaller viewport at a higher device scale factor
-// to get there. It is a short page: at 1920x1080 its content ends at 847px and
-// the bottom fifth of the frame is blank. 1600x900 puts the same content at 93%
-// of the frame height for the same output pixels.
+// Results and map captures measure their final interface boundary in the DOM,
+// so a longer headline or a different geography can never leave half a card in
+// frame. Comparisons use a smaller 16:10 viewport at a higher scale factor so
+// their controls remain in frame without shrinking the type.
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -68,6 +64,64 @@ async function stripChrome(page) {
   await page.waitForTimeout(250);
 }
 
+async function fitTopBoundary(
+  page,
+  selector,
+  { width = 1920, minHeight, maxHeight, padding = 24, label },
+) {
+  await page.setViewportSize({ width, height: maxHeight });
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await page.waitForTimeout(100);
+  const box = await page.locator(selector).first().boundingBox();
+  if (!box) throw new Error(`capture-examples: could not find ${label}`);
+  const height = Math.max(minHeight, Math.ceil(box.y + box.height + padding));
+  if (height > maxHeight) {
+    throw new Error(`capture-examples: ${label} needs ${height}px, above ${maxHeight}px limit`);
+  }
+  await page.setViewportSize({ width, height });
+  await page.waitForTimeout(100);
+  const fitted = await page.locator(selector).first().boundingBox();
+  if (!fitted || fitted.y + fitted.height > height + 1) {
+    throw new Error(`capture-examples: ${label} does not end inside the capture frame`);
+  }
+  return height;
+}
+
+async function fitScrolledBoundary(
+  page,
+  anchorSelector,
+  boundarySelector,
+  { width = 1920, minHeight, maxHeight, topPadding = 18, bottomPadding = 24, label },
+) {
+  await page.setViewportSize({ width, height: maxHeight });
+  const positionAtAnchor = async () => {
+    await page.evaluate(
+      ({ selector, padding }) => {
+        const anchor = document.querySelector(selector);
+        if (!anchor) return;
+        const top = anchor.getBoundingClientRect().top + window.scrollY - padding;
+        window.scrollTo({ top, behavior: 'instant' });
+      },
+      { selector: anchorSelector, padding: topPadding },
+    );
+    await page.waitForTimeout(100);
+  };
+  await positionAtAnchor();
+  const box = await page.locator(boundarySelector).first().boundingBox();
+  if (!box) throw new Error(`capture-examples: could not find ${label}`);
+  const height = Math.max(minHeight, Math.ceil(box.y + box.height + bottomPadding));
+  if (height > maxHeight) {
+    throw new Error(`capture-examples: ${label} needs ${height}px, above ${maxHeight}px limit`);
+  }
+  await page.setViewportSize({ width, height });
+  await positionAtAnchor();
+  const fitted = await page.locator(boundarySelector).first().boundingBox();
+  if (!fitted || fitted.y + fitted.height > height + 1) {
+    throw new Error(`capture-examples: ${label} does not end inside the capture frame`);
+  }
+  return height;
+}
+
 for (const theme of ['light', 'dark']) {
   const suffix = theme === 'dark' ? '-dark' : '';
   const mockApi = async (route) => {
@@ -93,8 +147,8 @@ for (const theme of ['light', 'dark']) {
     return route.continue();
   };
 
-  // Both contexts render the same mocked app; they differ only in how much page
-  // fits the frame. See the header comment.
+  // The contexts render the same mocked app; they differ only in how much page
+  // fits each purpose-built frame. See the header comment.
   const makeContext = async (width, height, scale) => {
     const c = await browser.newContext({
       viewport: { width, height },
@@ -112,19 +166,37 @@ for (const theme of ['light', 'dark']) {
     await c.route('**/*', mockApi);
     return c;
   };
-  const ctx = await makeContext(1920, 1080, 2);
-  const cmpCtx = await makeContext(1600, 900, 2.4);
+  const resultsCtx = await makeContext(1920, 1400, 2);
+  const mapCtx = await makeContext(1920, 1080, 2);
+  const cmpCtx = await makeContext(1600, 1000, 2.4);
 
   for (const t of CAPTURE_TARGETS) {
-    // Results and map share one visit to the current analysis (run B).
-    const page = await ctx.newPage();
+    // Results and map use separate visits to the current analysis (run B),
+    // because each frame has its own measured content boundary.
+    const page = await resultsCtx.newPage();
     await page.goto(`${APP}/app/projects/${t.b.projectId}/runs/${t.b.runId}/results`, {
       waitUntil: 'networkidle',
     });
     await page.waitForTimeout(2600);
     await settleFonts(page);
     await stripChrome(page);
+    const resultsHeight = await fitTopBoundary(page, '.restop', {
+      minHeight: 1120,
+      maxHeight: 1400,
+      label: `${t.id} results geography row`,
+    });
     await page.screenshot({ path: `${OUT}/ex-${t.id}-results${suffix}.png` });
+
+    // Use a fresh 16:9 page for the geography crop. Reusing the taller results
+    // page made every map asset inherit the results frame even though the map
+    // is explicitly positioned at the top of its own capture.
+    const mapPage = await mapCtx.newPage();
+    await mapPage.goto(`${APP}/app/projects/${t.b.projectId}/runs/${t.b.runId}/results`, {
+      waitUntil: 'networkidle',
+    });
+    await mapPage.waitForTimeout(2600);
+    await settleFonts(mapPage);
+    await stripChrome(mapPage);
 
     // Map crop: the geography leads the frame. No repeated KPI row (the
     // results frame already owns it); the map panel sits at the top with
@@ -134,32 +206,19 @@ for (const theme of ['light', 'dark']) {
     // county maps, a multi-county reservation (Warm Springs) and a
     // single-county homeland (Tulalip), not ten copies of one map.
     if (t.example.reservationShare) {
-      await page.locator('button:has-text("Homelands")').first().click();
-      await page.waitForTimeout(1800);
+      await mapPage.locator('button:has-text("Homelands")').first().click();
+      await mapPage.waitForTimeout(1800);
     }
-    await page.evaluate(() => {
-      // Anchor on the .restop row (the geography card and the export panel),
-      // not on the map SVG with a 40px lead-in. That lead-in used to sit on
-      // empty page; now that the map card is compact it catches the bottom
-      // edge of the KPI cards, so the frame opens on a row of sliced cards.
-      // 18px is the row's own top margin: white above it, nothing cut.
-      const row = document.querySelector('.restop');
-      const anchor =
-        row ||
-        [...document.querySelectorAll('svg')].reduce(
-          (best, svg) =>
-            !best || svg.querySelectorAll('path').length > best.querySelectorAll('path').length
-              ? svg
-              : best,
-          null,
-        );
-      if (anchor) {
-        const r = anchor.getBoundingClientRect();
-        window.scrollTo({ top: r.top + window.scrollY - 18, behavior: 'instant' });
-      }
+    // End after the result-navigation row. That shows the complete geography
+    // and export surface without slicing into the operations table below it.
+    const mapHeight = await fitScrolledBoundary(mapPage, '.restop', '.rsec-nav', {
+      minHeight: 720,
+      maxHeight: 1000,
+      label: `${t.id} map and result navigation`,
     });
-    await page.waitForTimeout(700);
-    await page.screenshot({ path: `${OUT}/ex-${t.id}-map${suffix}.png` });
+    await mapPage.waitForTimeout(700);
+    await mapPage.screenshot({ path: `${OUT}/ex-${t.id}-map${suffix}.png` });
+    await mapPage.close();
     await page.close();
 
     // Comparison: the earlier analysis against the current one. The
@@ -178,9 +237,10 @@ for (const theme of ['light', 'dark']) {
     await cmp.waitForTimeout(250);
     await cmp.screenshot({ path: `${OUT}/ex-${t.id}-compare${suffix}.png` });
     await cmp.close();
-    console.log(`ex-${t.id}${suffix}: results, map, compare`);
+    console.log(`ex-${t.id}${suffix}: results ${resultsHeight}px, map ${mapHeight}px, compare`);
   }
-  await ctx.close();
+  await resultsCtx.close();
+  await mapCtx.close();
   await cmpCtx.close();
 }
 await browser.close();

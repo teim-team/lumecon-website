@@ -1,8 +1,7 @@
 ---
-/* Unlisted film page. Hosts the product films referenced from reports,
-   decks and updates, so a reader can click straight through and watch.
-   Deliberately kept out of the sitemap (see astro.config.mjs), out of the
-   nav, and marked noindex; share the link directly. */
+/* Unlisted, noindex holding page. The previous film showed an earlier
+   interface, so it is intentionally not embedded or downloadable here while
+   the new product film is being recaptured. */
 import { site } from '../config';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -11,150 +10,157 @@ import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/home.css';
-
-const FILMS = [
-  {
-    id: 'tallgrass',
-    title: 'Lumecon · the product film',
-    meta: '1:01 · July 2026',
-    src: '/films/tallgrass-demo-v11.mp4',
-    poster: '/films/tallgrass-demo-poster.jpg',
-    caption:
-      'Three documents go in, Cedar drafts and cites the intake, and a completed analysis lands with every number traceable. The demonstration uses the fictional Tallgrass River Nation; all figures are invented.',
-    downloadLabel: 'Download the film (MP4, 7.6 MB)',
-  },
-];
 ---
 
 <BaseLayout
-  title="Product films | Lumecon Inc."
-  description="Short demonstrations of the real Lumecon product."
+  title="Product film | Lumecon Inc."
+  description="A new Lumecon product film is in production."
   canonical={`${site.url}/film`}
   noindex={true}
   cedar={false}
 >
   <Nav />
-  <main class="films" id="top" tabindex="-1">
-    <div class="films__inner" data-reveal-group>
-      <p class="h-kicker">Product films</p>
-      <h1>The product, in motion</h1>
-      <p class="films__intro">
-        Short demonstrations of the real Lumecon product. This page is unlisted; share the link
-        directly.
-      </p>
-      {
-        FILMS.map((f) => (
-          <section class="film" id={f.id}>
-            <h2 class="film__title">{f.title}</h2>
-            <p class="film__meta mono">{f.meta}</p>
-            <video class="film__player" controls playsinline preload="metadata" poster={f.poster}>
-              <source src={f.src} type="video/mp4" />
-              Your browser does not support embedded video.
-              <a href={f.src}>Download the film instead.</a>
-            </video>
-            <p class="film__caption">{f.caption}</p>
-            <p class="film__download">
-              <a href={f.src} download>
-                {f.downloadLabel}
-              </a>
-            </p>
-          </section>
-        ))
-      }
+  <main class="filmhold section--dark" id="top" tabindex="-1">
+    <div class="filmhold__inner" data-reveal-group>
+      <div class="filmhold__copy">
+        <p class="h-kicker">Product film</p>
+        <h1>A clearer look at Lumecon is <span class="brand-em">in production.</span></h1>
+        <p class="filmhold__lede">
+          The interface and workflow have changed since the previous demonstration. A new film will
+          be published here after it is recaptured in the current product.
+        </p>
+        <div class="hero2-cta">
+          <a class="btn2 btn2--primary" href="/#product">
+            Explore the product <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn2 btn2--card" href="/cedar">Meet Cedar</a>
+        </div>
+      </div>
+      <aside class="filmhold__slate" aria-label="Production status">
+        <img
+          src="/brand/lumecon-logo-mark-transparent.png"
+          alt=""
+          width="1024"
+          height="1024"
+          decoding="async"
+        />
+        <div class="filmhold__status">
+          <span>Current status</span>
+          <strong>Interface recapture</strong>
+        </div>
+        <p>New product views. Updated narration. The same economic rigor.</p>
+      </aside>
     </div>
   </main>
   <Footer />
 </BaseLayout>
 
 <style>
-  .films {
-    background: transparent;
+  .filmhold {
+    position: relative;
+    overflow: hidden;
+    min-height: min(82vh, 54rem);
+    display: grid;
+    align-items: center;
+    padding: clamp(7rem, 13vh, 10rem) var(--container-pad) clamp(4rem, 8vw, 7rem);
+    background:
+      linear-gradient(125deg, rgba(15, 181, 165, 0.18), transparent 44%),
+      linear-gradient(145deg, #0b1730 0%, #081329 58%, #073c40 100%);
   }
-  .films__inner {
+  .filmhold__inner {
+    width: 100%;
     max-width: var(--container-max);
     margin: 0 auto;
-    padding: clamp(6rem, 10vh, 8rem) var(--container-pad) clamp(4rem, 8vw, 6rem);
-  }
-  .films h1 {
-    max-width: 14ch;
-    font-size: clamp(3.2rem, 6vw, 5.4rem);
-    font-weight: var(--weight-hero);
-    letter-spacing: -0.05em;
-    line-height: 0.98;
-    color: var(--ink);
-    margin: 0.75rem 0 0.9rem;
-  }
-  .films__intro {
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: var(--ink-2);
-    max-width: 62ch;
-    margin: 0 0 clamp(3rem, 6vw, 5rem);
-  }
-  .film {
     display: grid;
-    grid-template-columns: minmax(15rem, 3fr) minmax(0, 9fr);
-    grid-template-rows: auto auto 1fr auto;
-    gap: 0.45rem clamp(2rem, 4vw, 4.5rem);
-    align-items: start;
-    border-top: 1px solid rgba(10, 15, 38, 0.12);
-    padding-top: clamp(2rem, 4vw, 3rem);
-    margin-top: 0;
+    grid-template-columns: minmax(0, 5fr) minmax(22rem, 4fr);
+    gap: clamp(3rem, 8vw, 8rem);
+    align-items: center;
   }
-  .film__title {
-    grid-column: 1;
-    grid-row: 1;
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--ink);
+  .filmhold__copy {
+    display: grid;
+    justify-items: start;
+    gap: 1.25rem;
+  }
+  .filmhold h1 {
+    max-width: 12ch;
     margin: 0;
+    font-size: clamp(3.1rem, 6vw, 5.8rem);
+    font-weight: var(--weight-hero);
+    letter-spacing: -0.055em;
+    line-height: 0.96;
   }
-  .film__meta {
-    grid-column: 1;
-    grid-row: 2;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
+  .filmhold__lede {
+    max-width: 58ch;
+    margin: 0 0 0.5rem;
+    font-size: clamp(1rem, 1.3vw, 1.14rem);
+    line-height: 1.7;
+    color: var(--ink-2);
+  }
+  .filmhold__slate {
+    position: relative;
+    overflow: hidden;
+    min-height: clamp(24rem, 38vw, 34rem);
+    margin: 0;
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--radius-panel);
+    background: rgba(255, 255, 255, 0.055);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 36px 90px -42px rgba(0, 0, 0, 0.8);
+  }
+  .filmhold__slate img {
+    position: absolute;
+    width: 118%;
+    max-width: none;
+    right: -32%;
+    top: -28%;
+    opacity: 0.11;
+    filter: saturate(0) brightness(4);
+    pointer-events: none;
+  }
+  .filmhold__status {
+    position: relative;
+    display: grid;
+    gap: 0.25rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .filmhold__status span {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.11em;
     text-transform: uppercase;
-    color: var(--accent-text);
-    margin: 0.4rem 0 1.1rem;
+    color: var(--accent-light);
   }
-  .film__player {
-    grid-column: 2;
-    grid-row: 1 / 5;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    display: block;
-    background: var(--navy);
-    border: 1px solid rgba(10, 15, 38, 0.12);
-    border-radius: var(--radius-frame);
-    box-shadow: var(--shadow-surface-high);
+  .filmhold__status strong {
+    font-size: clamp(1.35rem, 2.5vw, 2rem);
+    font-weight: 600;
   }
-  .film__caption {
-    grid-column: 1;
-    grid-row: 3;
-    font-size: 0.92rem;
+  .filmhold__slate p {
+    position: relative;
+    max-width: 32ch;
+    margin: 1.2rem 0 0;
+    color: var(--ink-2);
     line-height: 1.55;
-    color: var(--ink-3);
-    margin: 0.9rem 0 0.4rem;
   }
-  .film__download {
-    grid-column: 1;
-    grid-row: 4;
-    margin: 0.2rem 0 0;
-    font-size: 0.92rem;
-  }
-  @media (max-width: 900px) {
-    .film {
+  @media (max-width: 860px) {
+    .filmhold__inner {
       grid-template-columns: 1fr;
     }
-    .film__title,
-    .film__meta,
-    .film__player,
-    .film__caption,
-    .film__download {
-      grid-column: 1;
-      grid-row: auto;
+    .filmhold__slate {
+      min-height: 20rem;
+    }
+  }
+  @media (max-width: 560px) {
+    .filmhold {
+      padding-top: 6rem;
+    }
+    .filmhold h1 {
+      font-size: clamp(2.8rem, 13vw, 4rem);
     }
   }
 </style>

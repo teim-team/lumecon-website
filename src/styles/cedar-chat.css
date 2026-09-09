@@ -484,11 +484,20 @@
     font-size: 16px;
   }
   .cedar-chat__send {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
   }
   .cedar-chip {
     font-size: 0.82rem;
     padding: 0.4rem 0.75rem;
+    min-height: 44px;
+  }
+  .cedar-chip-more,
+  .cedar-followup {
+    min-height: 44px;
+  }
+  .cedar-feedback__btn {
+    width: 44px;
+    height: 44px;
   }
 }

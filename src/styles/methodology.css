@@ -57,9 +57,8 @@
   margin: 0.28rem 0 0;
 }
 
-/* Each principle holds its sentence back until the pointer arrives, the same
-   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
-   label deepens as its sentence lands. */
+/* Every principle is readable at rest; the label shift is a light accent, not
+   a disclosure mechanism. */
 .meth-principles li {
   outline: none;
 }
@@ -536,9 +535,7 @@
     margin: 0.28rem 0 0;
   }
 
-  /* Each principle holds its sentence back until the pointer arrives, the same
-   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
-   label deepens as its sentence lands. */
+  /* Supporting copy remains visible on phones; the label shift is decorative. */
   .meth-principles li {
     outline: none;
   }
@@ -770,7 +767,8 @@
   outline: none;
   background: transparent;
   font: inherit;
-  font-size: 0.98rem;
+  /* A 16px floor prevents iOS Safari from zooming the page on focus. */
+  font-size: 1rem;
   color: var(--ink);
 }
 .gloss-count {
@@ -883,17 +881,28 @@
   padding-left: clamp(1.4rem, 3vw, 2.4rem);
 }
 
-.meth > .meth-sec.meth-ledger.section--dark {
+.meth > .meth-sec.meth-ledger {
   padding-block: clamp(4.5rem, 8vw, 7rem);
   background:
-    linear-gradient(132deg, rgba(15, 181, 165, 0.12), transparent 38%),
-    linear-gradient(150deg, #101c37, #07111f);
+    linear-gradient(122deg, transparent 38%, rgba(15, 181, 165, 0.1) 100%),
+    linear-gradient(145deg, #e9f1f0 0%, #f7f9f8 54%, #e5edef 100%);
+  border-block: 1px solid rgba(7, 17, 38, 0.07);
 }
 .meth-ledger .meth-manifest {
-  background: rgba(255, 255, 255, 0.035);
+  --ink: #f5fafb;
+  --ink-2: rgba(238, 246, 248, 0.78);
+  --ink-3: rgba(238, 246, 248, 0.58);
+  --navy: #f5fafb;
+  --rule: rgba(255, 255, 255, 0.13);
+  --accent-text: #73e2d6;
+  --accent-rgba-08: rgba(95, 217, 204, 0.1);
+  border-color: rgba(95, 217, 204, 0.24);
+  background:
+    linear-gradient(112deg, rgba(15, 181, 165, 0.16) 0%, transparent 46%),
+    linear-gradient(145deg, #0b1b31 0%, #081426 58%, #07323a 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    0 32px 80px -50px rgba(0, 0, 0, 0.85);
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 34px 78px -42px rgba(7, 17, 38, 0.55);
 }
 .meth-ledger .meth-threeup {
   margin-top: 2.4rem;

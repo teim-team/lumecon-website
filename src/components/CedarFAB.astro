@@ -293,8 +293,9 @@ import CedarChat from './CedarChat.astro';
     z-index: 80;
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1.25rem;
+    min-height: 44px;
+    gap: 0.55rem;
+    padding: 0.55rem 0.85rem;
     background: var(--surface);
     color: var(--ink);
     border: 1px solid var(--rule-strong);
@@ -312,8 +313,8 @@ import CedarChat from './CedarChat.astro';
       box-shadow 0.2s var(--ease),
       transform 0.2s var(--ease);
   }
-  /* Closed state = the launcher pill from the TEIM app: a bordered
-     surface card with the green status dot and two lines of copy. */
+  /* Closed state: a compact product-mark label. Keeping this to one line
+     prevents a persistent helper from covering definitions, prices or CTAs. */
   .cedar-fab:hover {
     background: var(--cream);
     transform: translateY(-2px);
@@ -334,6 +335,7 @@ import CedarChat from './CedarChat.astro';
     outline-offset: 4px;
   }
   .cedar-fab__dot {
+    display: none;
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
@@ -352,11 +354,7 @@ import CedarChat from './CedarChat.astro';
     line-height: 1.2;
   }
   .cedar-fab__context {
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--ink-3);
-    line-height: 1.2;
-    margin-top: 0.1rem;
+    display: none;
   }
   .cedar-fab__icon {
     display: inline-flex;
@@ -368,9 +366,11 @@ import CedarChat from './CedarChat.astro';
     display: block;
   }
   .cedar-fab__icon--close,
-  .cedar-fab__label--close,
-  .cedar-fab__icon--mark {
+  .cedar-fab__label--close {
     display: none;
+  }
+  .cedar-fab__icon--mark {
+    display: inline-flex;
   }
   .cedar-fab__icon--mark img {
     display: block;
@@ -466,11 +466,11 @@ import CedarChat from './CedarChat.astro';
   }
   .cedar-fab-panel__close {
     position: absolute;
-    top: 0.55rem;
-    right: 0.55rem;
+    top: 0.25rem;
+    right: 0.25rem;
     z-index: 3;
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -491,7 +491,7 @@ import CedarChat from './CedarChat.astro';
   /* Leave room for the close button so it never overlaps the Online
      status in the chat header. */
   .cedar-fab-panel :global(.cedar-chat__status) {
-    margin-right: 2rem;
+    margin-right: 3rem;
   }
   .cedar-fab-panel :global(.cedar-chat) {
     width: 100%;
@@ -566,7 +566,7 @@ import CedarChat from './CedarChat.astro';
     }
   }
   .cedar-nudge__text {
-    margin: 0 1.25rem 0 0;
+    margin: 0 2.35rem 0 0;
     font-family: var(--font-sans);
     font-size: 0.88rem;
     line-height: 1.45;
@@ -574,13 +574,13 @@ import CedarChat from './CedarChat.astro';
   }
   .cedar-nudge__dismiss {
     position: absolute;
-    top: 0.45rem;
-    right: 0.45rem;
+    top: 0.15rem;
+    right: 0.15rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     background: transparent;
     color: var(--ink-3);
@@ -619,12 +619,15 @@ import CedarChat from './CedarChat.astro';
     }
     .cedar-fab-panel :global(.cedar-chat) {
       max-height: min(78dvh, 560px);
+      min-height: 0;
       border-left: 0;
       border-right: 0;
       border-radius: 8px 8px 0 0;
     }
     .cedar-fab-panel :global(.cedar-chat__transcript) {
-      max-height: 260px;
+      min-height: 0;
+      max-height: none;
+      flex: 1 1 auto;
     }
   }
 </style>
