@@ -351,7 +351,7 @@ test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ pa
 test('methodology hosts the AI-research verification block', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.askai')).toHaveCount(1);
-  await expect(page.locator('.askai-tile')).toHaveCount(6);
+  await expect(page.locator('.askai-links a')).toHaveCount(6);
 });
 
 test('choose-plan offers the three plans and a free start', async ({ page }) => {

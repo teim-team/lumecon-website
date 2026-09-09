@@ -35,8 +35,11 @@ test('launcher pill shows the Ask Cedar label and context line', async ({ page }
   await expect(fab).toContainText('Close');
 });
 
-test('Cedar page relies on its inline Cedar surface', async ({ page }) => {
+test('Cedar page uses its dedicated editorial surface without a duplicate launcher', async ({
+  page,
+}) => {
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('#cedarFab')).toHaveCount(0);
-  await expect(page.locator('.cedarpg .cedar-chat')).toHaveCount(1);
+  await expect(page.locator('.cedarpg .cedarpg-hero')).toHaveCount(1);
+  await expect(page.locator('.cedarpg [data-zoom]')).toHaveCount(4);
 });

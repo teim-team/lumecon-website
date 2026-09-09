@@ -347,6 +347,9 @@
     background 0.15s var(--ease),
     color 0.15s var(--ease);
 }
+.auth-chip[hidden] {
+  display: none;
+}
 .auth-chip::before {
   content: '';
   width: 0.72rem;
