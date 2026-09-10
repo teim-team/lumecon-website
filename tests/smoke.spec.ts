@@ -82,7 +82,8 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
   await expect(page.locator('.pr-plan')).toHaveCount(4);
   await expect(page.locator('.pr-plan').first().locator('.pr-plan__name')).toHaveText('Seed');
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
-  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('Free');
+  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('$0');
+  await expect(page.locator('#plan-free .pr-plan__period')).toHaveText('/ year');
   await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$1,000');
   await expect(page.locator('#plan-sapling .pr-plan__amount')).toHaveText('$2,500');
   await expect(page.locator('#plan-tree .pr-plan__amount')).toHaveText('$7,500');
@@ -108,6 +109,32 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
   await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(11);
   await expect(page.locator('[data-plan-table]')).toContainText('Direct effects');
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
+});
+
+test('homepage uses clear free-access language and Cedar starts on demand', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await expect(page.locator('.hero2-cta a[href="/signup?tier=free"]')).toHaveText(
+    /Request free access/,
+  );
+
+  await page.locator('#why').scrollIntoViewIfNeeded();
+  const fab = page.locator('.cedar-fab');
+  await expect(fab).toBeVisible();
+  await fab.click();
+
+  const panel = page.locator('#cedarFabPanel');
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1');
+  const prompts = await panel
+    .locator('.cedar-chip')
+    .evaluateAll((chips) => chips.slice(0, 5).map((chip) => chip.textContent?.trim()));
+  expect(prompts).toEqual([
+    'What is Lumecon?',
+    'What is Cedar?',
+    'Is my data safe?',
+    'How is this different from IMPLAN / RIMS / Lightcast?',
+    'How much does it cost?',
+  ]);
 });
 
 test('pricing leads with the free account and routes consultants to Sapling', async ({ page }) => {
@@ -324,7 +351,7 @@ test('skip link targets real content on subpages', async ({ page }) => {
 test('cedar page tells the AI story with three real captures, no diagrams', async ({ page }) => {
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('reviewable economic inputs');
-  await expect(page.locator('.meth-hero__lede')).toContainText("Lumecon’s AI economic analyst");
+  await expect(page.locator('.meth-hero__lede')).toContainText('Lumecon’s AI economic analyst');
   // Exactly the three-shot story, told through the shared product tour:
   // upload, entities in the loop, partner context. Diagrams were removed by
   // design; no screenshot repeats.

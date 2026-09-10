@@ -8,8 +8,7 @@ import '../styles/home.css';
 
 const ROWS = [
   {
-    index: '01',
-    label: 'Economic model',
+    label: 'Method',
     title: 'Regionalized methods with documented assumptions',
     body: 'Input-output relationships are regionalized to the geography being analyzed, with direct, indirect and induced effects kept distinct.',
     href: '/methodology#m-core',
@@ -17,8 +16,7 @@ const ROWS = [
     icon: 'model',
   },
   {
-    index: '02',
-    label: 'Public evidence',
+    label: 'Evidence',
     title: 'Sources and vintages stay visible',
     body: 'Federal economic data provides the foundation, with higher-frequency indicators used only where they add relevant information.',
     href: '/methodology#m-data',
@@ -26,8 +24,7 @@ const ROWS = [
     icon: 'source',
   },
   {
-    index: '03',
-    label: 'Cedar and review',
+    label: 'Review',
     title: 'AI-proposed inputs remain subject to human approval',
     body: 'Cedar organizes source material and flags ambiguity. Cedar Impact performs the calculations after inputs and assumptions are reviewed.',
     href: '/cedar',
@@ -35,8 +32,7 @@ const ROWS = [
     icon: 'review',
   },
   {
-    index: '04',
-    label: 'Security program',
+    label: 'Security',
     title: 'Controls open to procurement review',
     body: 'Lumecon is working toward a future SOC 2 Type II examination. No SOC 2 examination has been completed and no report is currently available.',
     href: '/security',
@@ -65,9 +61,6 @@ const ROWS = [
       {
         ROWS.map((row) => (
           <a class="edge-row" href={row.href}>
-            <span class="edge-row__index" aria-hidden="true">
-              {row.index}
-            </span>
             <span class="edge-row__icon" aria-hidden="true">
               {row.icon === 'model' && (
                 <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">

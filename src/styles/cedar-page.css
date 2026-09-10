@@ -169,7 +169,6 @@
 }
 .cedarpg-acts .tour-rows {
   gap: 0;
-  counter-reset: cedar-stage;
 }
 .cedarpg-acts .tour-row,
 .cedarpg-acts .tour-row--flip {
@@ -184,17 +183,6 @@
 }
 .cedarpg-acts .tour-row + .tour-row {
   border-top: 1px solid var(--rule);
-}
-.cedarpg-acts .tour-row__text {
-  counter-increment: cedar-stage;
-}
-.cedarpg-acts .tour-row__text::before {
-  content: '0' counter(cedar-stage);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.11em;
-  color: var(--accent-text);
 }
 .cedarpg-acts .tour-row .tour-row__shot,
 .cedarpg-acts .tour-row--flip .tour-row__shot {

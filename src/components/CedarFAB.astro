@@ -39,14 +39,7 @@ import CedarChat from './CedarChat.astro';
 >
   <span class="cedar-fab__dot" aria-hidden="true"></span>
   <span class="cedar-fab__icon cedar-fab__icon--mark" aria-hidden="true">
-    <img
-      src="/brand/lumecon-logo-mark-teal.png"
-      alt=""
-      width="30"
-      height="30"
-      loading="lazy"
-      decoding="async"
-    />
+    <img src="/brand/lumecon-logo-mark-teal.png" alt="" width="30" height="30" decoding="async" />
   </span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg
@@ -136,19 +129,23 @@ import CedarChat from './CedarChat.astro';
 </div>
 
 <script>
-  /* Bundled module: imports the shared Cedar chat runtime + the
-     observability surface from src/lib. Re-runs on view transitions
-     via astro:page-load. */
-  import { bootChat } from '../lib/cedarChat';
+  /* The launcher shell stays small. The full intent bank is loaded only
+     after someone opens Cedar, so a visitor who never uses chat does not
+     pay to download or initialize it. */
   import { trackEvent } from '../lib/observability';
+
+  let chatModule: Promise<typeof import('../lib/cedarChat')> | undefined;
+
+  const ensureChat = async (panel: HTMLElement): Promise<void> => {
+    chatModule ??= import('../lib/cedarChat');
+    const { bootChat } = await chatModule;
+    bootChat(panel, { surface: 'fab' });
+  };
 
   function setup(): void {
     const fab = document.getElementById('cedarFab');
     const panel = document.getElementById('cedarFabPanel');
     if (!fab || !panel) return;
-
-    // Boot the chat runtime (idempotent — guards on data-cedar-booted).
-    bootChat(panel, { surface: 'fab' });
 
     // FAB-specific open/close handlers. Guard against double-binding
     // when astro:page-load re-fires this script.
@@ -256,7 +253,7 @@ import CedarChat from './CedarChat.astro';
       visibilityFrame = window.requestAnimationFrame(updateLauncherVisibility);
     };
 
-    const open = () => {
+    const open = async () => {
       markNudgeSeen();
       hideNudge();
       setLauncherVisibility(true, 'waiting');
@@ -271,6 +268,11 @@ import CedarChat from './CedarChat.astro';
       fab.setAttribute('aria-expanded', 'true');
       fab.setAttribute('aria-label', 'Close Cedar');
       fab.setAttribute('title', 'Close Cedar');
+      try {
+        await ensureChat(panel);
+      } catch (error) {
+        console.error('Unable to start Cedar chat', error);
+      }
       const input = panel.querySelector<HTMLInputElement>('[data-cedar-input]');
       window.setTimeout(() => input?.focus({ preventScroll: true }), 180);
       trackEvent('cedar.fab.open');
@@ -316,7 +318,7 @@ import CedarChat from './CedarChat.astro';
     fab.addEventListener('click', (e) => {
       e.stopPropagation();
       if (document.body.classList.contains('cedar-popped')) close();
-      else open();
+      else void open();
     });
     fab.addEventListener('blur', scheduleLauncherVisibility);
 

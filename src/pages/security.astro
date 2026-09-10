@@ -25,22 +25,18 @@ const jsonLd = {
 
 const FLOW = [
   {
-    n: '01',
     title: 'Source material',
     body: 'You choose the documents and figures used for an analysis.',
   },
   {
-    n: '02',
     title: 'Cedar prepares',
     body: 'Cedar proposes inputs, preserves source references and flags unresolved questions.',
   },
   {
-    n: '03',
     title: 'A person reviews',
     body: 'The person running the analysis approves inputs, mappings and assumptions.',
   },
   {
-    n: '04',
     title: 'Cedar Impact calculates',
     body: 'The economic model produces results and keeps their source and model lineage available.',
   },
@@ -116,7 +112,6 @@ const FLOW = [
           {
             FLOW.map((step) => (
               <li>
-                <span>{step.n}</span>
                 <strong>{step.title}</strong>
                 <p>{step.body}</p>
               </li>

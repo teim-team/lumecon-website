@@ -131,11 +131,6 @@
   padding-left: clamp(1rem, 2.2vw, 1.8rem);
   border-left: 1px solid var(--rule);
 }
-.secpg-flow__steps span {
-  color: var(--accent-text);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-}
 .secpg-flow__steps strong {
   color: var(--ink);
   font-size: 1.02rem;

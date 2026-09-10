@@ -118,9 +118,17 @@
     inset 0 1px 0 #fff,
     0 20px 52px -32px rgba(3, 10, 28, 0.8);
 }
-.cpl-card:hover {
+.cpl-card:focus-visible {
   transform: translateY(-3px);
   box-shadow: 0 18px 40px -18px rgba(4, 45, 40, 0.55);
+  outline: 3px solid rgba(95, 217, 204, 0.95);
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cpl-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px -18px rgba(4, 45, 40, 0.55);
+  }
 }
 .cpl-card--featured {
   transform: translateY(-6px);
@@ -129,13 +137,18 @@
     inset 0 1px 0 #fff,
     0 30px 70px -34px rgba(2, 10, 28, 0.95);
 }
-.cpl-card--featured:hover {
+.cpl-card--featured:focus-visible {
   transform: translateY(-8px);
 }
+.cpl-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+  min-height: 1.55rem;
+}
 .cpl-card__flag {
-  position: absolute;
-  top: -0.7rem;
-  left: 1.2rem;
+  flex: 0 0 auto;
   font-family: var(--font-mono);
   font-size: 0.6rem;
   letter-spacing: 0.11em;
@@ -213,9 +226,20 @@
     inset 0 1px 0 #fff,
     0 20px 52px -32px rgba(3, 10, 28, 0.8);
 }
-.cpl-free:hover {
+.cpl-free:focus-visible {
   transform: translateY(-2px);
   box-shadow: 0 14px 32px -16px rgba(4, 45, 40, 0.55);
+  outline: 3px solid rgba(95, 217, 204, 0.95);
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cpl-card--featured:hover {
+    transform: translateY(-8px);
+  }
+  .cpl-free:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px -16px rgba(4, 45, 40, 0.55);
+  }
 }
 .cpl-free__label {
   font-family: var(--font-display);

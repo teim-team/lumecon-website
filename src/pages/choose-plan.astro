@@ -58,8 +58,10 @@ import '../styles/flow.css';
               href={`/checkout?tier=${p.id}`}
               data-plan-link={p.id}
             >
-              {p.featured && <span class="cpl-card__flag">Recommended</span>}
-              <span class="cpl-card__name">{p.name}</span>
+              <span class="cpl-card__head">
+                <span class="cpl-card__name">{p.name}</span>
+                {p.featured && <span class="cpl-card__flag">Recommended</span>}
+              </span>
               <span class="cpl-card__audience">{p.audience}</span>
               <span class="cpl-card__price">
                 {p.price}

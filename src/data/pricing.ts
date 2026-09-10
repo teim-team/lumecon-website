@@ -66,8 +66,8 @@ export const SEED: Plan = {
   id: 'free',
   name: 'Seed',
   priceAnnual: 0,
-  price: 'Free',
-  period: '',
+  price: '$0',
+  period: '/ year',
   audience: 'Evaluate Lumecon before paying.',
   tagline:
     'Request free Seed access during the private beta. Once admitted, bring your documents, work with Cedar, build an analysis and see direct effects. Full results unlock on a paid plan.',
@@ -166,7 +166,7 @@ export interface PlanRow {
 }
 
 export const PLAN_TABLE_ROWS: PlanRow[] = [
-  { label: 'Annual price', values: ['Free', '$1,000', '$2,500', '$7,500'] },
+  { label: 'Annual price', values: ['$0 / year', '$1,000', '$2,500', '$7,500'] },
   { label: 'Users', values: ['1', '1', 'Up to 10', 'Unlimited users in one organization'] },
   {
     label: 'Cedar Impact',
