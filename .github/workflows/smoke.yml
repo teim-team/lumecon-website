@@ -39,7 +39,7 @@ jobs:
       - name: Smoke — WebKit (informational)
         run: npx playwright test --project=webkit
         continue-on-error: true
-      - name: Keep the published copy audit current
+      - name: Capture review surfaces and keep the published copy audit current
         run: |
           npm run preview -- --host 127.0.0.1 > /tmp/lumecon-preview.log 2>&1 &
           preview_pid=$!
@@ -48,6 +48,7 @@ jobs:
             if curl --silent --fail http://127.0.0.1:4321/ >/dev/null; then break; fi
             sleep 1
           done
+          SHOT_BASE=http://127.0.0.1:4321 SHOT_OUT=artifacts/finish-pass-screenshots node scripts/screenshots/capture-finish-pass.mjs
           DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
           git diff --exit-code -- docs/site-copy-and-architecture.md
       - if: failure()
@@ -57,6 +58,7 @@ jobs:
           path: |
             test-results/
             playwright-report/
+            artifacts/finish-pass-screenshots/
             docs/site-copy-and-architecture.md
             /tmp/lumecon-preview.log
           retention-days: 7
