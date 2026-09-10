@@ -522,7 +522,10 @@ function render(pages, crawl) {
   put('');
 
   if (existsSync(NOTES)) put(readFileSync(NOTES, 'utf8').trimEnd(), '');
-  return L.join('\n') + '\n';
+  // Keep the committed record byte-stable. `put(..., '')` deliberately
+  // creates readable paragraph spacing, but the final call should not add
+  // an extra blank line whose only effect is a perpetual CI diff.
+  return L.join('\n').trimEnd() + '\n';
 }
 
 /* ----------------------------------------------------------------- run */
