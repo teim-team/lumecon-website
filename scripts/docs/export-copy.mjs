@@ -270,7 +270,11 @@ async function crawlAudit(pages) {
 
   for (const page of pages) {
     if (page.error) continue;
-    const expectedCanonical = `${CANONICAL_ORIGIN}${page.path === '/' ? '' : page.path}`;
+    // The canonical root is URL-normalized with its trailing slash; every
+    // other public route intentionally follows Astro's trailingSlash:never
+    // setting. Constructing it through URL keeps the audit aligned with the
+    // sitemap instead of flagging a valid root URL as a false regression.
+    const expectedCanonical = new URL(page.path, `${CANONICAL_ORIGIN}/`).href;
     const expectsNoindex = NOINDEX_PATHS.has(page.path);
     const hasNoindex = /\bnoindex\b/i.test(page.robots || '');
 
