@@ -130,7 +130,10 @@ for (const { name: surface, c } of [surfaces[0], surfaces[1]]) {
     full: false,
     before: async (page) => {
       const fab = page.locator('[data-cedar-fab], .cedar-fab');
-      if (await fab.count()) {
+      // The chat launcher is intentionally withheld until its client-side
+      // visibility gate is satisfied. Do not fail the whole visual sweep when
+      // that public default is hidden.
+      if ((await fab.count()) && (await fab.first().isVisible())) {
         await fab.first().click();
         await page.waitForTimeout(600);
       }
