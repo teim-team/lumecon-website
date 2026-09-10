@@ -6,13 +6,7 @@ _These are my recommendations, not changes already made. I would like them argue
 
 ### Whole-site
 
-1. **Meta descriptions are two to three times too long.** The homepage runs 400 characters, pricing 478, methodology 342. Search results truncate near 155-160, so the back half of every one of them is written for nobody. Each should be rewritten to one sentence that would make a sceptical buyer click.
-
-2. **`/checkout` and `/choose-plan` ship identical titles and descriptions.** Both say "Choose your plan | Lumecon". They are different steps and one of them is misdescribed.
-
-3. **Metric definitions are duplicated verbatim between `/methodology` and `/glossary`.** Five sentences are word-for-word identical. This is partly my doing: I corrected the glossary's "Output / sales or revenue" to match the methodology wording, which fixed a vocabulary-rule violation and created an exact duplicate. The underlying question is unresolved and someone should settle it: **which page owns the definition of a headline metric?** My view is the glossary owns definitions and the methodology page should link to it rather than restate it, because the methodology page's job is the mathematics.
-
-4. **The homepage's largest block of writing is invisible.** Roughly 740 words of FAQ exist only as JSON-LD for crawlers, with no on-page equivalent. That is more words than the entire visible homepage. Either the questions are worth answering, in which case answer them where people can read them, or they are not.
+1. **Two headline-metric definitions are duplicated verbatim between `/methodology` and `/glossary`: GDP contribution and economic output.** The underlying question is unresolved: **which page owns the definition of a headline metric?** My view is the glossary owns definitions and the methodology page should link to it rather than restate it, because the methodology page's job is the mathematics.
 
 ### `/` Homepage
 

@@ -1713,7 +1713,7 @@ export const INTENTS: CedarIntent[] = [
       'is cedar generative',
     ],
     answer:
-      'Cedar is the AI assistant inside Lumecon, not the economic model itself. It helps organize records, suggest mappings, present assumptions and draft explanations. Calculated impact figures come from the input-output model rather than a chatbot response, and users review the inputs and assumptions before finalizing an analysis.',
+      'Cedar is Lumecon’s AI economic analyst, not the economic model itself. It helps organize records, suggest mappings, present assumptions and draft explanations. Calculated impact figures come from the input-output model rather than a chatbot response, and users review the inputs and assumptions before finalizing an analysis.',
     expanded:
       "Like any generative AI system, Cedar can be wrong. It is designed to work from the analysis context and available reference material, flag ambiguous items for review and keep generated prose separate from the model's calculated results. Users remain responsible for confirming mappings, assumptions and final language.",
   },

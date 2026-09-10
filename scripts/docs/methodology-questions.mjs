@@ -265,9 +265,10 @@ const NOT_MODEL = [
   {
     q: 'What can the model actually analyse today?',
     kind: 'summary',
-    said: `The site says &ldquo;measure the economic impact of any decision&rdquo; and
-           &ldquo;every supported U.S. geography&rdquo;. Neither has a stated boundary.`,
-    where: 'Homepage hero and throughout. Quoted fragments inside a summary.',
+    said: `The homepage says &ldquo;Economic analysis that holds up.&rdquo; The pricing page promises
+           &ldquo;every supported U.S. geography&rdquo;. Neither identifies which analyses or
+           geographies are currently supported.`,
+    where: 'Homepage hero and pricing page. Quoted fragments inside a summary.',
     needs: [
       'Which analysis types are live rather than planned.',
       'Which geographies are genuinely supported, including whether every reservation and trust land is covered or only those with sufficient data.',

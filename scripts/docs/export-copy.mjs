@@ -87,7 +87,8 @@ const CLAIMS = {
     /governments?[^.]{0,80}(tribal nations|universities)|universities[^.]{0,80}tribal nations/i,
   'Geography coverage (counties / states / nation / reservations)':
     /counties?,? states?,? (and )?the nation|every supported u\.s\. geography/i,
-  'Unlimited analysis / no per-analysis fees': /unlimited (analysis|projects)|per-analysis fee/i,
+  'Unlimited analyses / no per-analysis fees':
+    /unlimited (analysis|analyses|projects)|per-analysis fee/i,
   'Cedar included in every plan':
     /cedar[^.]{0,40}(in every plan|included)|included[^.]{0,30}cedar/i,
   'Traceability / lineage': /traceab|lineage|trace (this|a|any) number/i,
@@ -138,17 +139,17 @@ async function readPages() {
   return out;
 }
 
-/** Runs in the page. Walks <main> and emits a flat, ordered block list. */
+/** Runs in the page. Walks the rendered document and emits a flat, ordered block list. */
 function scrape() {
   const clean = (s) => (s || '').replace(/\s+/g, ' ').trim();
   const meta = (n) => document.querySelector(`meta[name="${n}"]`)?.content || '';
   const prop = (n) => document.querySelector(`meta[property="${n}"]`)?.content || '';
-  const main = document.querySelector('main') || document.body;
+  const root = document.body;
   const blocks = [];
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'SVG', 'TEMPLATE']);
   /** Tags the walker below emits itself; seeing one means keep descending. */
   const HANDLED =
-    'h1,h2,h3,h4,h5,h6,p,li,dt,dd,summary,figcaption,blockquote,a,button,img,section,article,aside,header,footer,select,th,td';
+    'h1,h2,h3,h4,h5,h6,p,li,dt,dd,summary,figcaption,blockquote,a,button,img,section,article,aside,header,footer,nav,select,th,td';
 
   // Content that is hidden by default must be LABELLED, not silently
   // flattened into the copy. The first version of this export read the
@@ -177,7 +178,7 @@ function scrape() {
         if (t) blocks.push({ kind: 'button', text: t, cond });
       } else if (tag === 'IMG') {
         blocks.push({ kind: 'img', text: el.getAttribute('alt') || '(no alt)', cond });
-      } else if (['SECTION', 'ARTICLE', 'ASIDE', 'HEADER', 'FOOTER'].includes(tag)) {
+      } else if (['NAV', 'SECTION', 'ARTICLE', 'ASIDE', 'HEADER', 'FOOTER'].includes(tag)) {
         const name =
           el.getAttribute('aria-label') ||
           el.getAttribute('id') ||
@@ -201,7 +202,7 @@ function scrape() {
       }
     }
   };
-  walk(main);
+  walk(root);
 
   const jsonld = [...document.querySelectorAll('script[type="application/ld+json"]')]
     .flatMap((s) => {
@@ -222,7 +223,7 @@ function scrape() {
     canonical: document.querySelector('link[rel=canonical]')?.href || '',
     ogTitle: prop('og:title'),
     jsonld: [...new Set(jsonld.flat())],
-    wordCount: clean(main.innerText).split(/\s+/).filter(Boolean).length,
+    wordCount: clean(root.innerText).split(/\s+/).filter(Boolean).length,
     blocks,
   };
 }

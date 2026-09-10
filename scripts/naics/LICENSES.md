@@ -7,13 +7,15 @@ record that each one is properly licensed.
 
 ## License status
 
-All 21 source photographs are licensed to Lumecon Inc. under the
-Shutterstock **Standard license**, confirmed against the Shutterstock
-account License history (Images tab) on 2026-07-26. Each download in
-that history is dated 2026-07-25 and the license/download IDs below
-match it one to one. The Standard license is perpetual: it remains
-valid after the subscription ends, so keep the license certificates
-with the account records.
+All 25 source photographs used by the current public build are
+licensed to Lumecon Inc. under the Shutterstock **Standard license**.
+The original 21 were confirmed against the Shutterstock account License
+history (Images tab) on 2026-07-26; each download in that cohort is
+dated 2026-07-25 and its asset and license IDs below match one to one.
+The four public-page v2 images are separately identified in the
+manifest with their Shutterstock asset and license IDs. The Standard
+license is perpetual: it remains valid after the subscription ends, so
+keep the license certificates with the account records.
 
 What the Standard license permits, in plain terms: use in and around
 the product, including web and app interfaces, marketing and
@@ -49,19 +51,23 @@ license ID.
 ## Manifest
 
 Grouped by the brand wash each sector is assigned (teal, green,
-bronze, gold), then alphabetical within the group. Every row:
-Standard license, licensed to Lumecon Inc., download dated
-2026-07-25, verified 2026-07-26.
+bronze, gold), then alphabetical within the group. Every row carries a
+Standard license for Lumecon Inc. The original cohort was downloaded on
+2026-07-25 and verified on 2026-07-26. Rows marked `v2` identify the
+additional source used by a current public-page crop.
 
 ### Teal wash
 
 | Sector slug    | Shutterstock asset ID | License ID   | Subject                         |
 | -------------- | --------------------- | ------------ | ------------------------------- |
 | construction   | 2650575753            | 806729367383 | Rebar crew on a structural deck |
+| construction-v2 | 2770701175           | 806816543922 | Public-page v2 image            |
 | healthcare     | 2740247283            | 806730895076 | Clinician with a patient        |
 | manufacturing  | 2761678059            | 806729672016 | Plant floor with crew           |
+| manufacturing-v2 | 2773176257          | 806816679034 | Public-page v2 image            |
 | transportation | 2755727965            | 806729746252 | Cargo ships at sea              |
 | tribalgov      | 2687071147            | 806731176783 | Feather regalia with beadwork   |
+| tribalgov-v2   | 2708163669            | 806819361327 | Public-page v2 image            |
 
 ### Green wash
 
@@ -93,6 +99,8 @@ Standard license, licensed to Lumecon Inc., download dated
 | professional  | 2752039147            | 806730706435 | Consulting team meeting              |
 | retail        | 2769581455            | 806730275771 | Grocery shopper with a basket        |
 | utilities     | 2750775877            | 806729298773 | Transmission towers at dusk          |
+| utilities-v2  | 2760326511            | 806816496991 | Public-page v2 image                 |
 
-All 21 tiles (20 NAICS sectors plus the Tribal Government category)
-carry licensed photography.
+All 21 public sector tiles (20 NAICS sectors plus the Tribal Government
+category), along with the public-page v2 variants, carry licensed
+photography.
