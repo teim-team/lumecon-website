@@ -164,8 +164,10 @@ const jsonLd = [
         {
           ALL_PLANS.map((p) => (
             <article class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`} id={`plan-${p.id}`}>
-              {p.featured && <p class="pr-plan__flag">Recommended</p>}
-              <h2 class="pr-plan__name">{p.name}</h2>
+              <div class="pr-plan__head">
+                <h2 class="pr-plan__name">{p.name}</h2>
+                {p.featured && <p class="pr-plan__flag">Recommended</p>}
+              </div>
               {/* Always rendered so the three cards keep the same rhythm.
                   Without the placeholder Sprout's price sat a chip-height
                   above the other two and the row read as ragged. */}

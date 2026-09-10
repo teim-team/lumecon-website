@@ -174,8 +174,9 @@ import '../styles/auth-split.css';
   function setup(): void {
     const form = document.querySelector<HTMLFormElement>('[data-login-form]');
     if (!form) return;
-    const resetToken = new URLSearchParams(window.location.search).get('reset_token') || '';
-    let mode: Mode = resetToken ? 'reset' : 'login';
+    const params = new URLSearchParams(window.location.search);
+    const resetToken = params.get('reset_token') || '';
+    let mode: Mode = resetToken ? 'reset' : params.get('reset') === '1' ? 'forgot' : 'login';
 
     const status = form.querySelector<HTMLElement>('[data-auth-status]');
     const submitBtn = form.querySelector<HTMLButtonElement>('[data-login-submit]');

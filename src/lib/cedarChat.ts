@@ -500,7 +500,7 @@ const PLACEHOLDER_EXAMPLES = [
   'Try "how much does it cost?"',
   'Try "does this work for tribal nations?"',
   'Try "EPA grant"',
-  'Try "how long does a study take?"',
+  'Try "how long does an analysis take?"',
   'Try "see a demo"',
 ];
 

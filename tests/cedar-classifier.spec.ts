@@ -26,9 +26,10 @@ async function openCedar(page: Page): Promise<Locator> {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const panel = page.locator('#cedarFabPanel');
-  // bootChat() stamps this once the runtime is wired (on page load).
-  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await (await scrollUntilCedarVisible(page)).click();
+  // The full Cedar runtime is intentionally loaded only after someone
+  // opens the launcher, keeping the marketing page's initial JS light.
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await expect(panel.locator('[data-cedar-input]')).toBeVisible();
   return panel;
 }
@@ -53,7 +54,7 @@ test('cedar routes representative questions to the right intent', async ({ page,
 
   const cases: Array<{ q: string; expect: string }> = [
     { q: 'what does lumecon do', expect: 'structured economic impact analysis' },
-    { q: 'how much does it cost', expect: 'per-analysis or per-geography' },
+    { q: 'how much does it cost', expect: 'Seed is the free private-beta plan' },
     { q: 'does this work for tribal nations', expect: 'Whole Nation' },
     { q: 'EPA grant', expect: 'Grant preparation is a strong use case' },
     { q: 'how long does it take', expect: 'Turnaround depends' },
@@ -115,7 +116,7 @@ test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
   const panel = await openCedar(page);
   // "pricng" is one edit from the "pricing" trigger.
   const bubble = await ask(panel, 'pricng');
-  await expect(bubble).toContainText('per-analysis or per-geography');
+  await expect(bubble).toContainText('Seed is the free private-beta plan');
 });
 
 test('every starter chip routes to its own intent, never the fallback', async ({
@@ -139,6 +140,7 @@ test('every starter chip routes to its own intent, never the fallback', async ({
     const intent = INTENTS.find((i) => i.id === id)!;
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     const panel = page.locator('#cedarFabPanel');
+    await (await scrollUntilCedarVisible(page)).click();
     await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
     await page.evaluate((cid) => {
       const el = document.querySelector(`#cedarFabPanel .cedar-chip[data-intent="${cid}"]`);
@@ -163,8 +165,8 @@ test('cedar handles rapid back-to-back submits without breaking', async ({ page,
   page.on('pageerror', (e) => errs.push(e.message));
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const panel = page.locator('#cedarFabPanel');
-  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await (await scrollUntilCedarVisible(page)).click();
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   const input = panel.locator('[data-cedar-input]');
 
   // Fire two messages back-to-back, the second while the first is still
@@ -191,7 +193,7 @@ test('asking the same question twice goes deeper instead of repeating verbatim',
   test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
   const panel = await openCedar(page);
   const first = await ask(panel, 'how much does it cost');
-  await expect(first).toContainText('per-analysis or per-geography');
+  await expect(first).toContainText('Seed is the free private-beta plan');
   // The repeat should acknowledge the earlier answer and bridge into the
   // deeper (expanded) version rather than replaying the same paragraph.
   const second = await ask(panel, 'how much does it cost');
@@ -223,7 +225,7 @@ test('a compound question answers the primary topic and chips the second', async
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'how much does it cost and also is my data safe');
   // Primary: pricing.
-  await expect(bubble).toContainText('per-analysis or per-geography');
+  await expect(bubble).toContainText('Seed is the free private-beta plan');
   // The second half of the question surfaces as the first follow-up chip.
   const firstChip = panel.locator('.cedar-followups').last().locator('button').first();
   await expect(firstChip).toHaveText('Is my data safe?');
@@ -246,6 +248,7 @@ test('a returning visitor gets a welcome-back line tied to their last topic', as
   });
   await page.reload({ waitUntil: 'domcontentloaded' });
   const panel = page.locator('#cedarFabPanel');
+  await (await scrollUntilCedarVisible(page)).click();
   await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await expect(panel.locator('.cedar-msg--bot').last()).toContainText('Welcome back', {
     timeout: 5000,
@@ -266,7 +269,7 @@ test('the idle nudge fires on the open FAB panel (position: fixed)', async ({
   // Flush the thinking pause + streaming (short under reduced motion).
   await page.clock.runFor(3000);
   await expect(panel.locator('.cedar-msg--bot .cedar-msg__bubble').last()).toContainText(
-    'per-analysis',
+    'Seed is the free private-beta plan',
   );
   // Leave the open panel idle past the nudge delay. The panel is
   // position: fixed, so this guards against visibility checks (like

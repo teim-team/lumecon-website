@@ -155,7 +155,7 @@ export const INTENTS: CedarIntent[] = [
       'why is the ai called cedar',
     ],
     answer:
-      'The name is intentional. Most AI feels sterile, placeless and detached. A cedar is rooted, durable and protective, which is closer to what this should feel like: memory, place and care rather than automation for its own sake. Inside Lumecon, Cedar helps you work with messy source records, compliance forms, public datasets and analysis assumptions, and it organizes that evidence without stripping away where it came from or what it represents. Cedar is not just here to make analyses faster. It is here to help your economic evidence keep its roots.',
+      'Cedar is named for a durable, place-based symbol that fits Lumecon’s work with local economies and long-lived records. In the product, Cedar helps organize source material, propose inputs and flag questions for review; it does not replace the person who approves the analysis.',
   },
   {
     id: 'cedar_identity',
@@ -599,7 +599,7 @@ export const INTENTS: CedarIntent[] = [
       'nonprofit discount',
     ],
     answer:
-      'Lumecon has four plans. Seed is free; during private beta, access opens in waves. Seed lets admitted users build an analysis and view direct effects, while paid plans unlock indirect, induced and total effects and exports. Paid plans are flat annual subscriptions with no per-analysis or per-geography charges. Sprout is $1,000 a year for one user. Sapling is $2,500 a year for up to 10 users and adds Cedar Commons, the shared project workspace. Tree is $7,500 a year with unlimited users in one organization, Cedar Grove and hands-on Cedar calibration to organizational terminology and workflows. The full grid is on the pricing page. Want me to break down what each plan includes?',
+      'Seed is the free private-beta plan, with access opening in waves. Paid plans are flat annual subscriptions: Sprout is $1,000 for one user, Sapling is $2,500 for up to 10 users and Tree is $7,500 for unlimited users in one organization. See the full comparison at [Pricing](/pricing), including what each plan unlocks.',
     expanded:
       'More on what the plans include: Cedar and supported U.S. geographies are available across the plan family. Paid plans include unlimited projects and analyses. Sprout is for one user, Sapling adds Cedar Commons for up to 10 users, and Tree adds unlimited users within one organization, Cedar Grove and hands-on Cedar calibration. During private beta, request Seed access to build an analysis and view direct effects at no cost; indirect, induced and total impact and exports unlock on a paid plan.',
   },
@@ -917,7 +917,7 @@ export const INTENTS: CedarIntent[] = [
       'export api',
     ],
     answer:
-      'Lumecon is a modern web platform with support for structured data, guided workflows and organization-level use. For integrations, team access, uploads or API questions, the best next step is to contact the Lumecon team directly.',
+      'During private beta, integration and API support are deployment-specific. Lumecon supports guided uploads and organization-level workflows; contact the team to confirm the current integration, API and access options for your deployment.',
     expanded:
       'A bit more detail: data comes in through guided uploads such as PDFs, spreadsheets and CSVs, and Cedar helps structure it against the sources used by the analysis. Access scales by plan: one user on Sprout, up to 10 on Sapling with Cedar Commons and unlimited users within one organization on Tree. Hosting, security, API and integration capabilities should be confirmed with the team for the deployment you are considering.',
   },
@@ -1000,7 +1000,7 @@ export const INTENTS: CedarIntent[] = [
       'stand up to our board',
     ],
     answer:
-      'Three things are designed to support review. The calculation uses an established input-output framework, Cedar works from the analysis records and available source material, and key inputs and modeling assumptions are presented with the result. Reviewers should still examine the data, scope and assumptions before relying on an estimate.',
+      'Lumecon is designed to make review possible: it uses an established input-output framework, Cedar works from the analysis records and available source material, and the product presents key inputs and modeling assumptions with the result. Reviewers should still examine the data, scope and assumptions before relying on an estimate.',
     expanded:
       'A careful review starts with the analysis scope, source years, industry mappings and model assumptions. Lumecon is designed to present key inputs and assumptions with the result, and the public methodology explains the economic framework. Cedar can help explain that material, but its prose is not a substitute for reviewing the underlying data and model choices.',
   },
@@ -1535,7 +1535,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'In Lumecon, you bring administrative records into the workspace, Cedar helps structure them, and your team reviews the proposed mappings and assumptions before running the model. Results and revisions stay with the project, and paid plans provide exports for further reporting. The workflow supports economic judgment without claiming to replace it.',
     expanded:
-      'Step by step: (1) upload records such as budgets, payroll, vendor lists and program data; (2) review the suggested NAICS, geography and time-period mappings; (3) review and adjust the assumptions presented for the analysis; (4) run the model; and (5) use Cedar to help explain the results. Paid exports include an Excel workbook, CSV tables and a printable summary. Your team remains responsible for the context and judgment behind the analysis.',
+      'Bring records such as budgets, payroll, vendor lists and program data into the workspace, then review the suggested NAICS, geography and time-period mappings alongside the assumptions presented for the analysis. After the model runs, Cedar can help explain the results. Paid exports include an Excel workbook, CSV tables and a printable summary. Your team remains responsible for the context and judgment behind the analysis.',
   },
   {
     id: 'roi_lumecon',
@@ -3552,17 +3552,15 @@ export const OUT_OF_SCOPE_TRIGGERS = [
 // free-text input.
 export const CHIP_IDS = [
   'company_overview',
-  'tribal_platform',
+  'cedar_identity',
+  'security',
+  'competitors',
+  'pricing',
   'audience',
   'grant_applications',
-  'pricing',
   'county_city_use',
   'state_agency_use',
   'time_to_study',
   'demo',
-  'competitors',
-  'cedar_identity',
   'cedar_tiers',
-  'indian_country',
-  'eda_districts',
 ] as const;

@@ -70,6 +70,25 @@ const PAGES = [
   ['/404', 'Not found'],
 ];
 
+const CANONICAL_ORIGIN = 'https://lumecon.ai';
+const NOINDEX_PATHS = new Set([
+  '/signup',
+  '/login',
+  '/choose-plan',
+  '/checkout',
+  '/welcome',
+  '/404',
+]);
+
+// Browsers normalize an origin-only URL to include a trailing slash when
+// reading link.href, while Astro's sitemap intentionally serializes the root
+// as the bare origin. Compare a stable canonical key so that normal URL
+// serialization is not mistaken for contradictory SEO metadata.
+function canonicalKey(url) {
+  const parsed = new URL(url);
+  return `${parsed.origin}${parsed.pathname === '/' ? '' : parsed.pathname}`;
+}
+
 /** The one-line job each page is supposed to do (AGENTS.md, "Page ownership"). */
 const OWNERSHIP = {
   '/': 'Why Lumecon matters.',
@@ -204,16 +223,16 @@ function scrape() {
   };
   walk(root);
 
-  const jsonld = [...document.querySelectorAll('script[type="application/ld+json"]')]
-    .flatMap((s) => {
-      try {
-        const j = JSON.parse(s.textContent);
-        return Array.isArray(j) ? j : [j];
-      } catch {
-        return [];
-      }
-    })
-    .map((o) => o['@type']);
+  const jsonld = [];
+  const jsonldErrors = [];
+  document.querySelectorAll('script[type="application/ld+json"]').forEach((s, index) => {
+    try {
+      const parsed = JSON.parse(s.textContent);
+      (Array.isArray(parsed) ? parsed : [parsed]).forEach((item) => jsonld.push(item['@type']));
+    } catch {
+      jsonldErrors.push(`JSON-LD block ${index + 1} is not valid JSON`);
+    }
+  });
 
   return {
     title: document.title,
@@ -222,10 +241,80 @@ function scrape() {
     robots: meta('robots'),
     canonical: document.querySelector('link[rel=canonical]')?.href || '',
     ogTitle: prop('og:title'),
+    ogDescription: prop('og:description'),
+    ogImage: prop('og:image'),
+    ogImageAlt: prop('og:image:alt'),
+    twitterCard: meta('twitter:card'),
+    twitterTitle: meta('twitter:title'),
+    twitterDescription: meta('twitter:description'),
+    twitterImage: meta('twitter:image'),
+    twitterImageAlt: meta('twitter:image:alt'),
     jsonld: [...new Set(jsonld.flat())],
+    jsonldErrors,
     wordCount: clean(root.innerText).split(/\s+/).filter(Boolean).length,
     blocks,
   };
+}
+
+async function crawlAudit(pages) {
+  const issues = [];
+  const index = await fetch(`${BASE}/sitemap-index.xml`).catch(() => null);
+  if (!index?.ok) {
+    return { issues: [`Could not read ${BASE}/sitemap-index.xml`] };
+  }
+
+  const indexXml = await index.text();
+  const sitemapUrls = [...indexXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  const indexedCanonicals = new Set();
+  for (const sitemapUrl of sitemapUrls) {
+    const path = new URL(sitemapUrl).pathname;
+    const response = await fetch(`${BASE}${path}`).catch(() => null);
+    if (!response?.ok) {
+      issues.push(`Could not read sitemap member ${sitemapUrl}`);
+      continue;
+    }
+    const xml = await response.text();
+    for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+      indexedCanonicals.add(canonicalKey(match[1]));
+    }
+  }
+
+  for (const page of pages) {
+    if (page.error) continue;
+    const expectedCanonical = `${CANONICAL_ORIGIN}${page.path === '/' ? '' : page.path}`;
+    const expectsNoindex = NOINDEX_PATHS.has(page.path);
+    const hasNoindex = /\bnoindex\b/i.test(page.robots || '');
+
+    if (!page.canonical || canonicalKey(page.canonical) !== expectedCanonical) {
+      issues.push(
+        `${page.path}: canonical is ${page.canonical || '(missing)'}, expected ${expectedCanonical}`,
+      );
+    }
+    if (hasNoindex !== expectsNoindex) {
+      issues.push(`${page.path}: robots should ${expectsNoindex ? '' : 'not '}include noindex`);
+    }
+    if (expectsNoindex && indexedCanonicals.has(expectedCanonical)) {
+      issues.push(`${page.path}: noindex route appears in sitemap`);
+    }
+    if (!expectsNoindex && !indexedCanonicals.has(expectedCanonical)) {
+      issues.push(`${page.path}: indexable route is missing from sitemap`);
+    }
+    if (!page.description) issues.push(`${page.path}: missing meta description`);
+    if (!page.ogTitle || !page.ogDescription || !page.ogImage || !page.ogImageAlt) {
+      issues.push(`${page.path}: incomplete Open Graph metadata`);
+    }
+    if (
+      page.twitterCard !== 'summary_large_image' ||
+      !page.twitterTitle ||
+      !page.twitterDescription ||
+      !page.twitterImage ||
+      !page.twitterImageAlt
+    ) {
+      issues.push(`${page.path}: incomplete Twitter card metadata`);
+    }
+    issues.push(...page.jsonldErrors.map((error) => `${page.path}: ${error}`));
+  }
+  return { issues, sitemapCount: indexedCanonicals.size };
 }
 
 /* --------------------------------------------------------------- write */
@@ -276,7 +365,7 @@ function repetition(pages) {
   return { duplicated, claims };
 }
 
-function render(pages) {
+function render(pages, crawl) {
   const L = [];
   const put = (...lines) => L.push(...lines);
 
@@ -329,6 +418,19 @@ function render(pages) {
   }
   put(`| **Total** | **${pages.reduce((a, p) => a + (p.wordCount || 0), 0)}** | | |`, '');
 
+  put('## Crawler metadata audit', '');
+  put(
+    'This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards and JSON-LD parsing against the built site.',
+    '',
+  );
+  put(`- **Sitemap URLs:** ${crawl.sitemapCount || 0}`);
+  if (crawl.issues.length) {
+    for (const issue of crawl.issues) put(`- **Issue:** ${issue}`);
+  } else {
+    put('- **Status:** All checked crawler metadata is complete and consistent.');
+  }
+  put('');
+
   for (const p of pages) {
     put('---', '', `## \`${p.path}\` — ${p.label}`, '');
     if (p.error) {
@@ -339,6 +441,10 @@ function render(pages) {
     put(`- **Title:** ${p.title}`);
     put(`- **Meta description** (${p.description.length} chars): ${p.description}`);
     if (p.ogTitle && p.ogTitle !== p.title) put(`- **og:title:** ${p.ogTitle}`);
+    put(`- **og:description:** ${p.ogDescription}`);
+    put(`- **og:image:** ${p.ogImage}`);
+    put(`- **og:image alt:** ${p.ogImageAlt}`);
+    put(`- **Twitter card:** ${p.twitterCard}`);
     put(`- **Canonical:** ${p.canonical}`);
     if (p.robots) put(`- **Robots:** ${p.robots}`);
     if (p.jsonld.length) put(`- **Structured data:** ${p.jsonld.join(', ')}`);
@@ -414,5 +520,11 @@ if (unreachable.length) {
   console.error(`\nIs \`npm run build && npm run preview\` serving ${BASE}?`);
   process.exit(1);
 }
-writeFileSync(OUT, render(pages));
+const crawl = await crawlAudit(pages);
+if (crawl.issues.length) {
+  console.error(`\nCrawler metadata audit found ${crawl.issues.length} issue(s):`);
+  for (const issue of crawl.issues) console.error(`  ${issue}`);
+  process.exit(1);
+}
+writeFileSync(OUT, render(pages, crawl));
 console.log(`\nWrote docs/site-copy-and-architecture.md (${pages.length} pages).`);

@@ -12,7 +12,7 @@ Economic impact analysis software and an alternative to established modeling too
 
 ## One platform
 
-There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI economic analyst, in every plan. It learns what kind of organization the customer is (city, county, state agency, university, nonprofit, business, economic development organization, Tribal Nation, tribal enterprise, consulting firm) and adapts geographies, workflows, terminology and analysis types.
+There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI economic analyst, in every plan. The product supports documented workflows for cities, counties, state agencies, universities, nonprofits, businesses, economic development organizations, Tribal Nations, tribal enterprises and consulting firms. Tree includes hands-on Cedar calibration to an organization's terminology and workflows.
 
 ## Pricing (public)
 
@@ -73,13 +73,3 @@ Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researche
 - Web: https://lumecon.ai
 
 ## Optional
-
-- [Pricing](https://lumecon.ai/pricing/)
-- [Cedar](https://lumecon.ai/cedar/)
-- [Methodology](https://lumecon.ai/methodology/)
-- [Glossary](https://lumecon.ai/glossary/)
-- [Industry sectors](https://lumecon.ai/naics/)
-- [AI and data use](https://lumecon.ai/ai-and-data-use/)
-- [Security](https://lumecon.ai/security/)
-- [Privacy policy](https://lumecon.ai/privacy/)
-- [Terms of service](https://lumecon.ai/terms/)

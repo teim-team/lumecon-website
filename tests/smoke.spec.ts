@@ -82,7 +82,8 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
   await expect(page.locator('.pr-plan')).toHaveCount(4);
   await expect(page.locator('.pr-plan').first().locator('.pr-plan__name')).toHaveText('Seed');
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
-  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('Free');
+  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('$0');
+  await expect(page.locator('#plan-free .pr-plan__period')).toHaveText('/ year');
   await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$1,000');
   await expect(page.locator('#plan-sapling .pr-plan__amount')).toHaveText('$2,500');
   await expect(page.locator('#plan-tree .pr-plan__amount')).toHaveText('$7,500');
@@ -108,6 +109,32 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
   await expect(page.locator('[data-plan-table] tbody tr')).toHaveCount(11);
   await expect(page.locator('[data-plan-table]')).toContainText('Direct effects');
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
+});
+
+test('homepage uses clear free-access language and Cedar starts on demand', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await expect(page.locator('.hero2 .hero2-cta a[href="/signup?tier=free"]')).toHaveText(
+    /Request free access/,
+  );
+
+  await page.locator('#why').scrollIntoViewIfNeeded();
+  const fab = page.locator('.cedar-fab');
+  await expect(fab).toBeVisible();
+  await fab.click();
+
+  const panel = page.locator('#cedarFabPanel');
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1');
+  const prompts = await panel
+    .locator('.cedar-chip')
+    .evaluateAll((chips) => chips.slice(0, 5).map((chip) => chip.textContent?.trim()));
+  expect(prompts).toEqual([
+    'What is Lumecon?',
+    'What is Cedar?',
+    'Is my data safe?',
+    'How is this different from IMPLAN / RIMS / Lightcast?',
+    'How much does it cost?',
+  ]);
 });
 
 test('pricing leads with the free account and routes consultants to Sapling', async ({ page }) => {
@@ -226,6 +253,14 @@ test('login offers the forgot-password flow from the product', async ({ page }) 
   await expect(page.locator('[data-login-title]')).toHaveText('Log in to Lumecon');
 });
 
+test('login reset links open the reset-request state on direct navigation', async ({ page }) => {
+  await page.goto('/login?reset=1', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('[data-login-title]')).toHaveText('Reset your password');
+  await expect(page.locator('input[name="email"]')).toBeVisible();
+  await expect(page.locator('input[name="password"]')).toBeHidden();
+  await expect(page.locator('[data-login-submit]')).toHaveText('Send reset link');
+});
+
 /* This used to assert a two-step registration with a password checklist and a
    back button. /signup stopped being that when it became the private-beta
    request page: there is one panel, no password field and no step 2, so the
@@ -270,6 +305,7 @@ test('signup collects a beta access request, with no account created', async ({ 
 
 test('methodology page renders equations with spoken readings', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.meth-hero__title')).toContainText('better inputs');
   const equations = page.locator('.eq[role="math"]');
   await expect(equations).toHaveCount(6);
   // Every equation block must carry a plain-language reading for
@@ -324,7 +360,7 @@ test('skip link targets real content on subpages', async ({ page }) => {
 test('cedar page tells the AI story with three real captures, no diagrams', async ({ page }) => {
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('reviewable economic inputs');
-  await expect(page.locator('.meth-hero__lede')).toContainText("Lumecon’s AI economic analyst");
+  await expect(page.locator('.meth-hero__lede')).toContainText('Lumecon’s AI economic analyst');
   // Exactly the three-shot story, told through the shared product tour:
   // upload, entities in the loop, partner context. Diagrams were removed by
   // design; no screenshot repeats.
@@ -401,4 +437,26 @@ test('security.txt stays valid and does not silently lapse', async ({ page }) =>
   expect(daysLeft, `Expires is ${daysLeft} days out; RFC 9116 asks for under a year`).toBeLessThan(
     366,
   );
+});
+
+test('security keeps one dark surface and preserves readable print text', async ({ page }) => {
+  await page.goto('/security', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.secpg .section--dark')).toHaveCount(1);
+  await expect(page.locator('.secpg-flow')).toHaveCount(0);
+  await expect(page.locator('main')).not.toContainText('Cedar Impact calculates');
+
+  await page.emulateMedia({ media: 'print' });
+  await expect(page.locator('.secpg-hero h1')).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-status dd').first()).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-hero .btn2')).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-hero .btn2')).toHaveCSS(
+    'background-color',
+    'rgb(255, 255, 255)',
+  );
+});
+
+test('privacy policy discloses Cedar topic memory', async ({ page }) => {
+  await page.goto('/privacy', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('main')).toContainText('topic identifier and timestamp');
+  await expect(page.locator('main')).toContainText('local storage for up to 30 days');
 });

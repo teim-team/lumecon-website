@@ -1,7 +1,7 @@
 {
   "name": "Lumecon Inc.",
   "short_name": "Lumecon",
-  "description": "Economic and policy analysis software for governments and mission-driven organizations. An alternative to IMPLAN, RIMS II, and REMI.",
+  "description": "Economic impact analysis software that turns organizational records and public economic data into reviewable results.",
   "start_url": "/",
   "scope": "/",
   "icons": [

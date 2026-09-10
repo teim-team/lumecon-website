@@ -26,10 +26,10 @@ test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', asy
 
   const fab = page.locator('#cedarFab');
   const panel = page.locator('#cedarFabPanel');
-  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
 
   await scrollUntilCedarVisible(page);
   await fab.click();
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await expect(panel.locator('[data-cedar-input]')).toBeFocused();
 
   // Tab through the dialog repeatedly; focus must never escape to the
