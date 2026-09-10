@@ -9,18 +9,10 @@ import { scrollUntilCedarVisible } from './cedar-visibility';
  * the panel's own controls, and Escape must close it and return focus to
  * the FAB. Guards keyboard accessibility for the floating chat.
  *
- * Chromium only — focus semantics are engine-independent and headless
- * WebKit is unreliable in CI (see playwright.config.ts).
+ * Both Chromium and WebKit must keep keyboard focus inside the dialog.
  */
 
-test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(
-    browserName !== 'chromium',
-    'Focus semantics are engine-independent; headless WebKit is unreliable in CI.',
-  );
+test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 

@@ -17,9 +17,7 @@ import { scrollUntilCedarVisible } from './cedar-visibility';
  * Reduced motion is emulated so replies stream instantly and the
  * thinking pause collapses, keeping the suite fast and deterministic.
  *
- * Chromium only: the chat is plain DOM/JS and works on WebKit, but
- * headless WebKit is unreliable in CI (see playwright.config.ts), and
- * routing is engine-independent — running it once on Chromium is enough.
+ * Both browsers exercise the real DOM runtime over the HTTPS smoke preview.
  */
 
 async function openCedar(page: Page): Promise<Locator> {
@@ -45,11 +43,7 @@ async function ask(panel: Locator, text: string): Promise<Locator> {
   return panel.locator('.cedar-msg--bot .cedar-msg__bubble').last();
 }
 
-test('cedar routes representative questions to the right intent', async ({ page, browserName }) => {
-  test.skip(
-    browserName !== 'chromium',
-    'Routing is engine-independent; headless WebKit is unreliable in CI.',
-  );
+test('cedar routes representative questions to the right intent', async ({ page }) => {
   const panel = await openCedar(page);
 
   const cases: Array<{ q: string; expect: string }> = [
@@ -76,14 +70,7 @@ test('cedar routes representative questions to the right intent', async ({ page,
   }
 });
 
-test('cedar sends an off-topic question to the out-of-scope reply', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(
-    browserName !== 'chromium',
-    'Routing is engine-independent; headless WebKit is unreliable in CI.',
-  );
+test('cedar sends an off-topic question to the out-of-scope reply', async ({ page }) => {
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'who is the president of mexico');
   await expect(bubble).toContainText(
@@ -91,14 +78,7 @@ test('cedar sends an off-topic question to the out-of-scope reply', async ({
   );
 });
 
-test('cedar asks to clarify when a message is genuinely ambiguous', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(
-    browserName !== 'chromium',
-    'Routing is engine-independent; headless WebKit is unreliable in CI.',
-  );
+test('cedar asks to clarify when a message is genuinely ambiguous', async ({ page }) => {
   const panel = await openCedar(page);
   // Cedar only clarifies on genuine ambiguity now: a weak two-way tie on a
   // single bare word just answers the declaration-order winner. "tribal
@@ -108,25 +88,14 @@ test('cedar asks to clarify when a message is genuinely ambiguous', async ({
   await expect(bubble).toContainText('Did you mean');
 });
 
-test('cedar tolerates a single-letter typo', async ({ page, browserName }) => {
-  test.skip(
-    browserName !== 'chromium',
-    'Routing is engine-independent; headless WebKit is unreliable in CI.',
-  );
+test('cedar tolerates a single-letter typo', async ({ page }) => {
   const panel = await openCedar(page);
   // "pricng" is one edit from the "pricing" trigger.
   const bubble = await ask(panel, 'pricng');
   await expect(bubble).toContainText('Seed is the free private-beta plan');
 });
 
-test('every starter chip routes to its own intent, never the fallback', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(
-    browserName !== 'chromium',
-    'Routing is engine-independent; headless WebKit is unreliable in CI.',
-  );
+test('every starter chip routes to its own intent, never the fallback', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   // A chip is an explicit intent choice. Some labels (e.g. "How long
   // does an analysis take?") don't contain their own trigger phrases, so
@@ -157,8 +126,7 @@ test('every starter chip routes to its own intent, never the fallback', async ({
   }
 });
 
-test('cedar handles rapid back-to-back submits without breaking', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+test('cedar handles rapid back-to-back submits without breaking', async ({ page }) => {
   // Intentionally NOT reduced motion: this exercises the word-by-word
   // streaming + the transcript aria-busy toggle under concurrency.
   const errs: string[] = [];
@@ -188,9 +156,7 @@ test('cedar handles rapid back-to-back submits without breaking', async ({ page,
 
 test('asking the same question twice goes deeper instead of repeating verbatim', async ({
   page,
-  browserName,
 }) => {
-  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
   const panel = await openCedar(page);
   const first = await ask(panel, 'how much does it cost');
   await expect(first).toContainText('Seed is the free private-beta plan');
@@ -200,11 +166,7 @@ test('asking the same question twice goes deeper instead of repeating verbatim',
   await expect(second).toContainText('We touched on this earlier');
 });
 
-test('conversational filler rotates phrasing instead of replying identically', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+test('conversational filler rotates phrasing instead of replying identically', async ({ page }) => {
   const panel = await openCedar(page);
   const g1 = await ask(panel, 'hello');
   // Wait out the typing indicator: the bubble exists before its text lands.
@@ -217,11 +179,7 @@ test('conversational filler rotates phrasing instead of replying identically', a
   expect(g2Text).not.toBe(g1Text);
 });
 
-test('a compound question answers the primary topic and chips the second', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+test('a compound question answers the primary topic and chips the second', async ({ page }) => {
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'how much does it cost and also is my data safe');
   // Primary: pricing.
@@ -231,11 +189,7 @@ test('a compound question answers the primary topic and chips the second', async
   await expect(firstChip).toHaveText('Is my data safe?');
 });
 
-test('a returning visitor gets a welcome-back line tied to their last topic', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+test('a returning visitor gets a welcome-back line tied to their last topic', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   // Simulate a previous visit (topic marker) + a fresh session (new tab).
@@ -255,11 +209,7 @@ test('a returning visitor gets a welcome-back line tied to their last topic', as
   });
 });
 
-test('the idle nudge fires on the open FAB panel (position: fixed)', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(browserName !== 'chromium', 'Engine-independent; headless WebKit is unreliable in CI.');
+test('the idle nudge fires on the open FAB panel (position: fixed)', async ({ page }) => {
   // Fake timers so the 50s idle window can be fast-forwarded.
   await page.clock.install();
   const panel = await openCedar(page);
