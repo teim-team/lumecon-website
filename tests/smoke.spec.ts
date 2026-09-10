@@ -160,7 +160,7 @@ test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page 
 });
 
 test('desktop nav shows the destinations inline, with no Menu button', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.setViewportSize({ width: 1000, height: 800 });
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
   const links = page.locator('.nav-links a');
   await expect(links).toHaveCount(4);
@@ -346,10 +346,17 @@ test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ pa
   await expect(page.locator('.askai')).toHaveCount(0);
 });
 
-test('methodology hosts the AI-research verification block', async ({ page }) => {
+test('methodology shows the public-data foundation', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('.askai')).toHaveCount(1);
-  await expect(page.locator('.askai-links a')).toHaveCount(6);
+  await expect(page.locator('.askai')).toHaveCount(0);
+  await expect(page.locator('#m-data')).toContainText('Public data foundation');
+  await expect(page.locator('.meth-manifest')).toContainText('BEA Input-Output Accounts');
+});
+
+test('print view excludes the dark evidence band', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.emulateMedia({ media: 'print' });
+  await expect(page.locator('#edge')).toBeHidden();
 });
 
 test('choose-plan offers the three plans and a free start', async ({ page }) => {

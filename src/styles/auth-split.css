@@ -143,6 +143,15 @@
   height: 100%;
   display: block;
 }
+.asplit-brand__photo-note {
+  max-width: 26rem;
+  margin: 1.25rem 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  letter-spacing: 0.035em;
+}
 
 /* ---------- form column ---------- */
 .asplit-formcol {
@@ -357,6 +366,9 @@
   .asplit-brand__point {
     padding: 0.6rem 0;
     font-size: 0.92rem;
+  }
+  .asplit-brand__photo-note {
+    margin-top: 1rem;
   }
   .asplit-brand__mark {
     width: 17rem;

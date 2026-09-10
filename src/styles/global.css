@@ -199,11 +199,11 @@
      the same number gives different widths on a deck and a headline. */
   --measure-deck: 82ch;
   --measure-prose: 68ch;
-  /* The measure a section lede actually reads at. The ledes used to run
-     the full container: at 1360px and 18px that is ~125 characters a line,
-     roughly double the range prose is comfortable in, and the eye loses
-     the return sweep. Section intros now sit here instead. */
-  --measure-lede: 74ch;
+  /* Section ledes stay proportionate to their container rather than using a
+     fixed character measure. A section head is capped at 1180px inside the
+     1360px page container, so 75% of it reads as roughly 65% of the full
+     page at desktop while remaining responsive at every narrower width. */
+  --measure-lede: min(75%, 62rem);
 
   /* ---- Display type scale ----
      One place to set how the site sounds. Two things changed here.
@@ -561,6 +561,7 @@ html {
   .why,
   .cta,
   .footer,
+  .edge,
   .scroll-progress,
   .skip-link {
     display: none !important;

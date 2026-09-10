@@ -66,8 +66,7 @@ body.legal-page li {
 }
 body.legal-page main > p,
 body.legal-page main > ul,
-body.legal-page main > ol,
-.legal-sec__body {
+body.legal-page main > ol {
   max-width: 82ch;
 }
 body.legal-page ul,
