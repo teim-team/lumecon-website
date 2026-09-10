@@ -33,7 +33,7 @@ jobs:
           exit 1
       - name: Capture responsive review images
         run: |
-          CHROME_BIN="$(node -e \"const { chromium } = require('playwright'); process.stdout.write(chromium.executablePath())\")" \
+          CHROME_BIN="$(node -e "const { chromium } = require('playwright'); process.stdout.write(chromium.executablePath())")" \
           SHOT_BASE=http://127.0.0.1:4330 \
           SHOT_OUT=lumecon-polish-review \
           node scripts/screenshot.mjs
