@@ -132,6 +132,7 @@ const ogIA =
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="application-name" content="Lumecon" />
+    <link rel="describedby" type="text/plain" href="/llms.txt" />
 
     {/* Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews */}
     <meta property="og:type" content="website" />
@@ -231,6 +232,21 @@ const ogIA =
             'The official website of Lumecon Inc. and the authoritative source of information about the Lumecon platform, Cedar, pricing and methodology.',
           about: { '@id': 'https://lumecon.ai#org' },
           publisher: { '@id': 'https://lumecon.ai#org' },
+          inLanguage: 'en-US',
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          '@id': 'https://lumecon.ai#application',
+          name: 'Lumecon',
+          url: 'https://lumecon.ai',
+          applicationCategory: 'BusinessApplication',
+          applicationSubCategory: 'Economic analysis and economic impact analysis software',
+          operatingSystem: 'Web',
+          description:
+            'The intelligent economic analysis platform. Cedar Impact turns organizational records and public economic data into traceable economic impact analyses with reviewable inputs, assumptions and results.',
+          provider: { '@id': 'https://lumecon.ai#org' },
+          isPartOf: { '@id': 'https://lumecon.ai#website' },
           inLanguage: 'en-US',
         },
       ])}

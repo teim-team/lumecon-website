@@ -106,9 +106,6 @@
   border-top: 0;
   padding: clamp(4rem, 7vw, 6rem) 0;
 }
-.meth > .meth-sec:nth-of-type(even) {
-  background: var(--ground-bright);
-}
 .meth-sec__head {
   display: flex;
   align-items: baseline;
@@ -282,42 +279,16 @@
 .meth-flow {
   list-style: none;
   margin: 0 0 clamp(2.2rem, 4vw, 3.2rem);
-  padding: clamp(1.2rem, 2.5vw, 1.8rem);
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  counter-reset: flow;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-panel);
-  background: var(--surface);
-  box-shadow: var(--shadow-surface);
+  border-block: 1px solid var(--rule);
 }
 .meth-flow li {
-  counter-increment: flow;
-  position: relative;
-  padding: 0.9rem 1.4rem 0 0;
+  padding: 1.25rem 1.4rem;
 }
 .meth-flow li + li {
   border-left: 1px solid var(--rule);
-  padding-left: 1.4rem;
-}
-/* Step index + a directional tick along the top rule. */
-.meth-flow li::before {
-  content: counter(flow, decimal-leading-zero);
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--accent-text);
-  margin-bottom: 0.55rem;
-}
-.meth-flow li:not(:last-child)::after {
-  content: '\2192';
-  position: absolute;
-  top: 0.82rem;
-  right: 0.45rem;
-  font-size: 0.85rem;
-  color: var(--ink-4);
 }
 .meth-flow__k {
   font-weight: 600;
@@ -516,16 +487,12 @@
 @media (max-width: 1024px) {
   .meth-flow {
     grid-template-columns: repeat(3, 1fr);
-    row-gap: 1.6rem;
   }
-  /* In a 3x2 wrap the left edge of each row loses its divider
-     naturally; suppress the arrow at each row's end. */
   .meth-flow li:nth-child(4) {
     border-left: 0;
-    padding-left: 0;
   }
-  .meth-flow li:nth-child(3)::after {
-    content: '';
+  .meth-flow li:nth-child(n + 4) {
+    border-top: 1px solid var(--rule);
   }
 }
 @media (max-width: 900px) {
@@ -548,35 +515,6 @@
   }
 }
 @media (max-width: 700px) {
-  /* Each principle keeps a headline visible at rest. Without one the band was
-   three mono labels over a lot of white, since the sentence below is held
-   back until hover. */
-  .meth-principles__t {
-    font-family: var(--font-display);
-    font-size: 1.02rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    margin: 0.28rem 0 0;
-  }
-
-  /* Supporting copy remains visible on phones; the label shift is decorative. */
-  .meth-principles li {
-    outline: none;
-  }
-  .meth-principles__k {
-    transition: color 0.25s var(--ease);
-  }
-  .meth-principles li:hover .meth-principles__k,
-  .meth-principles li:focus-visible .meth-principles__k {
-    color: var(--accent-deep);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .meth-principles__k {
-      transition: none;
-    }
-  }
-
   .meth-principles {
     grid-template-columns: 1fr;
     gap: 1.3rem;
@@ -595,9 +533,6 @@
   .meth-flow li:first-child {
     border-top: 0;
     padding-top: 0;
-  }
-  .meth-flow li:not(:last-child)::after {
-    content: none;
   }
   .meth-manifest__row {
     grid-template-columns: 1fr;
@@ -895,13 +830,11 @@
 .meth-hero--cover .meth-principles {
   grid-column: 1 / -1;
   margin-top: clamp(2.5rem, 5vw, 4rem);
-  padding: clamp(1.5rem, 3vw, 2.2rem);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-panel);
-  background: rgba(255, 255, 255, 0.045);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 30px 70px -42px rgba(0, 0, 0, 0.8);
+  padding: clamp(1.5rem, 3vw, 2.2rem) 0;
+  border-inline: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 .meth-hero--cover .meth-principles li + li {
   border-left: 1px solid var(--rule);

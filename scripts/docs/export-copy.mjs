@@ -240,6 +240,7 @@ function scrape() {
     keywordsLen: (meta('keywords') || '').length,
     robots: meta('robots'),
     canonical: document.querySelector('link[rel=canonical]')?.href || '',
+    llmsSummary: document.querySelector('link[rel=describedby][href="/llms.txt"]')?.href || '',
     ogTitle: prop('og:title'),
     ogDescription: prop('og:description'),
     ogImage: prop('og:image'),
@@ -300,6 +301,7 @@ async function crawlAudit(pages) {
       issues.push(`${page.path}: indexable route is missing from sitemap`);
     }
     if (!page.description) issues.push(`${page.path}: missing meta description`);
+    if (!page.llmsSummary) issues.push(`${page.path}: missing llms.txt discovery link`);
     if (!page.ogTitle || !page.ogDescription || !page.ogImage || !page.ogImageAlt) {
       issues.push(`${page.path}: incomplete Open Graph metadata`);
     }
@@ -313,6 +315,9 @@ async function crawlAudit(pages) {
       issues.push(`${page.path}: incomplete Twitter card metadata`);
     }
     issues.push(...page.jsonldErrors.map((error) => `${page.path}: ${error}`));
+    if (!page.jsonld.includes('SoftwareApplication')) {
+      issues.push(`${page.path}: missing SoftwareApplication structured data`);
+    }
   }
   return { issues, sitemapCount: indexedCanonicals.size };
 }
@@ -420,7 +425,7 @@ function render(pages, crawl) {
 
   put('## Crawler metadata audit', '');
   put(
-    'This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards and JSON-LD parsing against the built site.',
+    'This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards, the llms.txt discovery link and JSON-LD against the built site.',
     '',
   );
   put(`- **Sitemap URLs:** ${crawl.sitemapCount || 0}`);

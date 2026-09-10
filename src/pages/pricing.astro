@@ -50,6 +50,25 @@ const description =
 const jsonLd = [
   {
     '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://lumecon.ai/pricing#webpage',
+    name: 'Pricing | Lumecon',
+    url: 'https://lumecon.ai/pricing',
+    description,
+    isPartOf: { '@id': 'https://lumecon.ai#website' },
+    about: { '@id': 'https://lumecon.ai#application' },
+    publisher: { '@id': 'https://lumecon.ai#org' },
+    inLanguage: 'en-US',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://lumecon.ai' },
+        { '@type': 'ListItem', position: 2, name: 'Pricing', item: 'https://lumecon.ai/pricing' },
+      ],
+    },
+  },
+  {
+    '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'Lumecon',
     description,

@@ -245,12 +245,10 @@
   gap: 0;
   overflow: hidden;
   padding: clamp(0.85rem, 1.8vw, 1.4rem);
-  background: var(--surface-glass);
+  background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-surface);
-  backdrop-filter: blur(18px) saturate(120%);
-  -webkit-backdrop-filter: blur(18px) saturate(120%);
 }
 /* No vertical rules between the cards. The illustrations already read as four
    distinct things, and a rule beside each one boxed them in. Column gap does
@@ -1060,22 +1058,18 @@
   max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.42fr) minmax(20rem, 0.58fr);
-  grid-template-rows: repeat(2, minmax(16rem, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 .place-panel {
   position: relative;
   min-width: 0;
-  min-height: 17rem;
+  min-height: clamp(22rem, 31vw, 27rem);
   overflow: hidden;
   background: #0a4750;
   color: #fff;
   text-decoration: none;
   outline: none;
-}
-.place-panel:first-child {
-  grid-row: 1 / 3;
 }
 .place-panel img {
   position: absolute;
@@ -1141,9 +1135,9 @@
   max-width: 22ch;
   margin: 0;
   color: #fff;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.45rem, 2.15vw, 2.25rem);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.55vw, 1.85rem);
+  font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.06;
   text-wrap: balance;
@@ -1283,9 +1277,6 @@
   }
   .place-panel {
     min-height: clamp(17rem, 54vw, 25rem);
-  }
-  .place-panel:first-child {
-    grid-row: auto;
   }
   .place-panel__copy h3 {
     max-width: 24ch;

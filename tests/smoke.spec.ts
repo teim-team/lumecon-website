@@ -42,6 +42,23 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
     '/naics/manufacturing-v2-wide.webp',
   ]);
   await expect(page.locator('.places-note')).toContainText('does not identify Lumecon customers');
+  // Three equal sector panels make this a product-facing comparison, not an
+  // editorial feature article with one promoted story.
+  const placeBoxes = await page.locator('.place-panel').evaluateAll((panels) =>
+    panels.map((panel) => {
+      const box = panel.getBoundingClientRect();
+      return { width: box.width, height: box.height };
+    }),
+  );
+  expect(placeBoxes).toHaveLength(3);
+  for (const box of placeBoxes.slice(1)) {
+    expect(Math.abs(box.width - placeBoxes[0].width)).toBeLessThan(1);
+    expect(Math.abs(box.height - placeBoxes[0].height)).toBeLessThan(1);
+  }
+  await expect(page.locator('.place-panel__copy h3').first()).not.toHaveCSS(
+    'font-family',
+    /Georgia/,
+  );
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
@@ -165,11 +182,12 @@ test('signup reflects a plan carried over from pricing', async ({ page }) => {
   await expect(badge).toContainText(/Sapling tier/);
 });
 
-test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page }) => {
+test('menu overlay opens full screen from the opaque nav', async ({ page }) => {
   // Regression: the overlay used to live inside <nav>, whose
   // backdrop-filter made it the containing block for position:fixed,
   // silently confining the "full screen" menu to the nav bar's box.
-  // Inner pages (nav--static) always carry the filter, so open there.
+  // The header is now solid, but the full-viewport overlay must remain
+  // independent from the bar that opens it.
   //
   // Below 1000px the bar is brand + Menu; at and above it the destinations
   // sit inline and the Menu button is hidden, so this exercises the
@@ -184,6 +202,8 @@ test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page 
   if (!box || !viewport) throw new Error('no menu box');
   expect(box.height).toBeGreaterThan(viewport.height * 0.9);
   await expect(menu.locator('a', { hasText: 'Methodology' })).toBeVisible();
+  await expect(page.locator('#nav')).toHaveCSS('backdrop-filter', 'none');
+  await expect(page.locator('#nav')).toHaveCSS('background-color', 'rgb(250, 252, 253)');
 });
 
 test('desktop nav shows the destinations inline, with no Menu button', async ({ page }) => {
@@ -314,6 +334,32 @@ test('methodology page renders equations with spoken readings', async ({ page })
     expect(await eq.getAttribute('aria-label')).toBeTruthy();
   }
   await expect(equations.nth(1)).toContainText('x = (I − A)−1 f');
+  // Sequence is conveyed by the named layers, not generic 01–06 badges or
+  // arrows. Equation references stay intact elsewhere on the page.
+  await expect(page.locator('.meth-flow')).not.toContainText(/^0[1-6]$/);
+  await expect(page.locator('.meth-flow li').first()).toHaveCSS('counter-increment', 'none');
+});
+
+test('every page exposes the canonical product record for people and crawlers', async ({
+  page,
+}) => {
+  await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('link[rel="describedby"][href="/llms.txt"]')).toHaveCount(1);
+  const structuredData = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(structuredData.join('\n')).toContain('SoftwareApplication');
+  await expect(page.locator('.meth-hero__lede')).toContainText(
+    'intelligent economic analysis platform',
+  );
+  await expect(page.locator('.meth-hero__lede')).toContainText('economic impact analysis software');
+});
+
+test('the production build preserves the app handoff and API CSP', async ({ page }) => {
+  await page.goto('/welcome', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.welc-btn')).toHaveAttribute('href', 'https://app.lumecon.ai');
+  const csp = await page
+    .locator('meta[http-equiv="Content-Security-Policy"]')
+    .getAttribute('content');
+  expect(csp).toContain("connect-src 'self' https://api.lumecon.ai");
 });
 
 test('naics page lists all 20 sectors plus tribal government', async ({ page }) => {
