@@ -33,8 +33,8 @@
   border: 1px solid var(--rule);
   background: var(--surface);
   color: var(--accent-text);
-  opacity: 0;
-  transform: translateY(3px);
+  opacity: 0.82;
+  transform: none;
   transition:
     opacity 0.2s var(--ease),
     transform 0.2s var(--ease);
@@ -48,7 +48,6 @@
 [data-zoom]:hover .zoom-badge,
 [data-zoom]:focus-within .zoom-badge {
   opacity: 1;
-  transform: translateY(0);
 }
 @media (hover: none) {
   .zoom-badge {
@@ -62,9 +61,12 @@
   bottom: auto;
   top: 0.55rem;
 }
-[data-zoom] img:focus-visible {
+[data-zoom]:focus-within {
   outline: 2px solid var(--accent-text);
-  outline-offset: 2px;
+  outline-offset: -3px;
+}
+[data-zoom] img:focus-visible {
+  outline: 0;
 }
 
 /* The overlay. One element for the whole document, reused by every trigger:

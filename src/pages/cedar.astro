@@ -61,15 +61,13 @@ const jsonLd = [
       <div class="meth-w">
         <p class="h-kicker reveal-soft">Cedar</p>
         <h1 class="meth-hero__title reveal-soft" data-stagger="1">
-          AI built for economic analysis <span class="brand-em">from the beginning.</span>
+          Cedar turns source material into <span class="brand-em">reviewable economic inputs.</span>
         </h1>
         <p class="meth-hero__lede reveal-soft" data-stagger="2">
-          Cedar is Lumecon&rsquo;s AI economic analyst. It organizes source material, helps
-          structure inputs and explains outputs alongside Cedar Impact rather than sitting on top of
-          finished results. Cedar Impact performs the economic calculations, and an analyst reviews
-          assumptions before results are final. <span class="brand-em"
-            >AI in the workflow. Economists in the loop.</span
-          >
+          Cedar is Lumecon&rsquo;s AI economic analyst. It reads documents you select, proposes
+          structured inputs, flags unresolved questions and helps explain results. Cedar Impact
+          performs the economic calculations with approved inputs, while the person running the
+          analysis reviews assumptions and approves the final result.
         </p>
         <div class="cedarpg-cta reveal-soft" data-stagger="3">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
@@ -79,7 +77,7 @@ const jsonLd = [
         <figure class="cedarpg-hero__screen reveal-soft" data-stagger="3" data-zoom>
           <img
             src="/app/cedar-wind-entities.webp"
-            alt="Cedar reviewing the organizations and project entities it identified from source documents for a sample wind project."
+            alt="Cedar reviewing proposed economic inputs from sample wind-project source documents."
             width="1920"
             height="1080"
             decoding="async"
@@ -112,18 +110,19 @@ const jsonLd = [
       <div class="tour-inner tour-rows">
         <article class="tour-row" aria-labelledby="c-analyst">
           <div class="tour-row__text reveal-left">
-            <h2 class="tour-row__title" id="c-analyst">Cedar is an economic analyst.</h2>
+            <h2 class="tour-row__title" id="c-analyst">
+              Cedar prepares source material for review.
+            </h2>
             <p class="tour-row__body">
-              Cedar starts where your work already is. Upload PDFs, spreadsheets and prior analyses,
-              and it surfaces candidate inputs for review before approved values enter the model. It
-              stays with the analysis as the work moves from source material to results, and flags
-              what it cannot resolve rather than papering over it.
+              Upload PDFs, spreadsheets and prior analyses. Cedar extracts candidate inputs, flags
+              unresolved questions and keeps source references attached so a person can approve each
+              value before it enters the model.
             </p>
           </div>
           <figure class="tour-row__shot reveal-right" data-zoom>
             <img
               src="/app/cedar-wind-upload.webp"
-              alt="The documents step of a new analysis: two PDFs, a capital plan and county road-use agreements, uploading to Cedar with live per-file status, alongside a note telling Cedar to watch for the substation electrical line item."
+              alt="Cedar reviewing uploaded wind-project documents and flagging one unresolved contract value."
               width="1920"
               height="1080"
               loading="lazy"
@@ -137,19 +136,19 @@ const jsonLd = [
         </article>
         <article class="tour-row tour-row--flip" aria-labelledby="c-work">
           <div class="tour-row__text reveal-right">
-            <h2 class="tour-row__title" id="c-work">It works through the analysis with you.</h2>
+            <h2 class="tour-row__title" id="c-work">
+              Review mappings and assumptions before the model runs.
+            </h2>
             <p class="tour-row__body">
-              Those documents become proposed operations and values for the analyst to review, with
-              Cedar helping classify each one to an industry. Cedar suggests, questions, organizes
-              and structures, then helps explain the model&rsquo;s findings for a council, a
-              grantmaker or a board. Cedar Impact performs the calculations; suggested inputs and
-              assumptions remain visible for review before results are final.
+              Cedar proposes industry mappings and organizes inputs; Cedar Impact calculates results
+              only after review. The same workspace then helps explain findings for a council,
+              grantmaker or board without hiding the assumptions behind them.
             </p>
           </div>
           <figure class="tour-row__shot cedarpg-shot--dark reveal-left" data-zoom>
             <img
               src="/app/cedar-wind-entities-dark.webp"
-              alt="The details step of the wind analysis: three operation cards with their sector icons, turbine and storage installation, grid interconnection and operations and maintenance, beside the open Cedar panel reporting that two operations are model ready and flagging the grid interconnection contract value found in the procurement workbook."
+              alt="Cedar showing three proposed wind-project operations and flagging an unresolved grid-interconnection value."
               width="1920"
               height="1080"
               loading="lazy"
@@ -164,21 +163,19 @@ const jsonLd = [
         <article class="tour-row" aria-labelledby="c-org">
           <div class="tour-row__text reveal-left">
             <h2 class="tour-row__title" id="c-org">
-              It works from your organization&rsquo;s context.
+              Keep organizational context with the project.
             </h2>
             <p class="tour-row__body">
-              Within each project, Cedar works from the context your team has approved, and larger
-              organizations can calibrate it around their terminology and reporting. Cedar Commons
-              is where that work lives: one board a team returns to, each project with its own
-              collaborators, notes and a Cedar that understands it. <span class="brand-em"
-                >External collaborators see only the projects they are permitted to access.</span
-              >
+              Cedar works from the source material and notes available within a project. Cedar
+              Commons keeps projects, notes and collaborators together, while project permissions
+              define who can open and change each analysis. Larger organizations can calibrate Cedar
+              around their terminology and reporting needs.
             </p>
           </div>
           <figure class="tour-row__shot reveal-right" data-zoom>
             <img
               src="/app/cedar-context.webp"
-              alt="The Cedar Commons board with the Cedar panel open on a shared project, answering 'What changed since my last visit?' with who re-ran the analysis, how the jobs and output figures moved, and the note an external reviewer left, scoped to that project."
+              alt="Cedar Commons showing project updates, revised results and an external reviewer note."
               width="1920"
               height="1080"
               loading="lazy"
@@ -201,7 +198,7 @@ const jsonLd = [
     <section class="meth-sec cedarpg-band" aria-labelledby="c-built">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <h2 class="reveal-soft" id="c-built">How it is built.</h2>
+          <h2 class="reveal-soft" id="c-built">Built for review, privacy and accountability.</h2>
         </div>
         <div class="cedarpg-facts">
           <div class="cedarpg-fact reveal-soft" data-stagger="1">
@@ -212,13 +209,11 @@ const jsonLd = [
                 <path d="M8 5v6M24 5v6M8 21v6M24 21v6" stroke-width="1.2"></path>
               </svg>
             </span>
-            <p class="h-kicker">Developed together</p>
-            <h3 class="cedarpg-fact__t">Economics and engineering, one team</h3>
+            <p class="h-kicker">Economic model</p>
+            <h3 class="cedarpg-fact__t">AI does not calculate impact figures</h3>
             <p>
-              Lumecon is developed across economics, social science, data science and software
-              engineering, where modeling decisions shape the software and new data changes what can
-              be estimated. The model, data pipeline, software and AI evolve together, which is why
-              Cedar behaves like part of the analysis.
+              Cedar organizes inputs and explains outputs. Cedar Impact performs the calculations
+              with a deterministic input-output model and approved assumptions.
             </p>
           </div>
           <div class="cedarpg-fact reveal-soft" data-stagger="2">
@@ -229,13 +224,13 @@ const jsonLd = [
                 <path d="M13.4 14.1v-2.3a2.6 2.6 0 0 1 5.2 0v2.3" stroke-width="1.2"></path>
               </svg>
             </span>
-            <p class="h-kicker">Your work stays yours</p>
-            <h3 class="cedarpg-fact__t">Your proprietary source material stays separated</h3>
+            <p class="h-kicker">Customer data</p>
+            <h3 class="cedarpg-fact__t">Terms are documented before sensitive records move</h3>
             <p>
-              Customer proprietary source material is separated by organization and is not made
-              available to other customers. The{' '}
-              <a class="inline-link" href="/privacy">privacy policy</a> governs how Lumecon handles customer
-              data and service improvements.
+              During private beta, access, retention, deletion, AI-provider use and subprocessors
+              are documented during procurement. Read the <a class="inline-link" href="/security"
+                >current security status</a
+              >.
             </p>
           </div>
           <div class="cedarpg-fact reveal-soft" data-stagger="3">
@@ -246,8 +241,8 @@ const jsonLd = [
                 <path d="M10.5 10.8v8.4M16 13.8v8.4M21.5 10.8v8.4" stroke-width="1.1"></path>
               </svg>
             </span>
-            <p class="h-kicker">Documented inputs</p>
-            <h3 class="cedarpg-fact__t">Evidence the analyst can review</h3>
+            <p class="h-kicker">Human review</p>
+            <h3 class="cedarpg-fact__t">People approve inputs and assumptions</h3>
             <p>
               Cedar helps extract, organize and classify candidate inputs from source material.
               Those inputs remain reviewable before they enter an analysis; once approved, Cedar
@@ -263,20 +258,20 @@ const jsonLd = [
     <section class="meth-mission" aria-labelledby="c-close">
       <div class="meth-w">
         <h2 class="meth-mission__title" id="c-close">
-          Cedar keeps improving because <span class="brand-em"
-            >the model, data infrastructure, software and AI evolve together</span
+          Cedar supports each analysis while <span class="brand-em"
+            >approval stays with the person running it</span
           >.
         </h2>
         <p class="meth-mission__lede">
-          We are continually expanding the formats Cedar can understand, the workflows it can
-          support, the context it can use and the ways modern data can strengthen economic analysis.
+          Source material, proposed inputs, assumptions and final calculations remain available for
+          human review throughout the workflow.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
             Request beta access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="btn2 btn2--card" href="/methodology">
-            Read the methodology <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          <a class="btn2 btn2--card" href="/ai-and-data-use">
+            Read AI and data use <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </div>

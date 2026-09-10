@@ -46,7 +46,7 @@ import '../styles/auth-split.css';
   <Nav />
   <main class="asplit asplit--login" id="top" tabindex="-1">
     <AuthBrandPanel
-      headline="Pick up where you left off."
+      headline="Return to your Lumecon workspace."
       lede="Your analyses, organizational context, Cedar and reporting tools stay together in Lumecon."
       points={[
         { icon: 'archive', text: 'Your analyses and prior work stay with your organization' },
@@ -71,9 +71,7 @@ import '../styles/auth-split.css';
           </svg>
         </span>
         <h1 class="asplit-title" data-login-title>Log in to Lumecon</h1>
-        <p class="asplit-tagline" data-login-sub>
-          Welcome back. Enter your work email to continue.
-        </p>
+        <p class="asplit-tagline" data-login-sub>Enter your work email and password to continue.</p>
 
         <form class="auth-form" method="post" action="/login" data-login-form novalidate>
           <label class="auth-field" data-login-field="email">
@@ -138,7 +136,7 @@ import '../styles/auth-split.css';
         </div>
 
         <p class="asplit-foot">
-          New to Lumecon? <a href="/signup">Create an account</a>
+          New to Lumecon? <a href="/signup">Request beta access</a>
         </p>
       </div>
     </div>
@@ -231,7 +229,7 @@ import '../styles/auth-split.css';
             : 'Choose a new password';
       if (sub)
         sub.textContent = isLogin
-          ? 'Welcome back. Enter your work email to continue.'
+          ? 'Enter your work email and password to continue.'
           : isForgot
             ? 'We will email you a link to reset your password.'
             : 'Choose a new password for your account.';

@@ -951,7 +951,7 @@ export const INTENTS: CedarIntent[] = [
       'government data',
     ],
     answer:
-      'Your organization controls what it uploads and who it authorizes to use the service. Lumecon uses safeguards appropriate to the sensitivity of the information and will document current hosting, encryption, access-control, retention and AI-provider arrangements during a security review. The team also brings experience handling sensitive government data. Confirm the requirements for your deployment before anything sensitive moves.',
+      'Lumecon is formalizing controls for access management, data protection, vendor oversight, incident response and recovery. Its security program is being developed against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. Lumecon has not completed a SOC 2 examination and does not currently have a SOC 2 report. Review the current controls, hosting, retention, subprocessors and AI-provider terms before sensitive records move.',
     expanded:
       'Security requirements vary by organization and deployment. Ask the team to confirm the current architecture, hosting region, encryption, access controls, subprocessors, retention and AI data-use terms in writing before you upload sensitive records. For a security questionnaire, procurement review or council review, email contact@lumecon.ai.',
   },
@@ -2764,7 +2764,7 @@ export const INTENTS: CedarIntent[] = [
       'who are your subprocessors',
     ],
     answer:
-      'Lumecon does not claim a security certification unless it is current and documented. For a procurement review, ask the team to confirm the present hosting, encryption, access-control and subprocessor arrangements and to identify which certifications or assessments are complete, underway or not yet available. Email contact@lumecon.ai before sensitive data moves.',
+      'Lumecon is formalizing its security program against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. It has not completed a SOC 2 examination and does not currently have a SOC 2 report. During procurement review, the team can document which controls, assessments and provider agreements are complete, in progress or not yet available.',
   },
   {
     id: 'sso_auth',
@@ -2828,7 +2828,7 @@ export const INTENTS: CedarIntent[] = [
       'legal terms',
     ],
     answer:
-      'The team can provide a master service agreement and a data processing agreement, and will work through redlines with your legal and procurement offices. For specialized terms (a BAA or sector-specific clauses), say so up front and they will tell you what is in place and what needs scoping. Start at contact@lumecon.ai and we will get the paperwork moving.',
+      'Lumecon’s standard service and data-processing agreements are being finalized with counsel. Ask the team what is currently available and identify any government, Tribal, university or sector-specific requirements early in procurement.',
   },
   {
     id: 'billing_cancellation',
@@ -2892,7 +2892,7 @@ export const INTENTS: CedarIntent[] = [
       'keyboard navigation',
     ],
     answer:
-      'Accessibility is a real requirement for public-sector buyers, and we treat it that way: the platform is built to WCAG 2.1 AA and Section 508, including keyboard navigation and screen-reader support. For a formal VPAT or a specific conformance requirement, tell the team where you are in procurement and they will share the documentation your review needs. Email contact@lumecon.ai for the details.',
+      'Lumecon is working toward substantial conformance with WCAG 2.2 AA. The website includes keyboard navigation, screen-reader support, visible focus states and reduced-motion handling. Confirm the product’s current status and any formal accessibility documentation during procurement.',
   },
 
   {

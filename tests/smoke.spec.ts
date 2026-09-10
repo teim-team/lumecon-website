@@ -45,9 +45,7 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
-  // The site makes no third-party requests at all now that Inter and
-  // JetBrains Mono are self-hosted, so this filter should never have
-  // anything to catch. It stays as a guard for sandboxes that break
+  // Core site assets are self-hosted. This stays as a guard for sandboxes that break
   // same-origin fetches through an interception proxy (bad cert) or a
   // closed egress (connection reset).
   const real = errs.filter(
@@ -120,7 +118,7 @@ test('pricing leads with the free account and routes consultants to Sapling', as
   await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // The free-account band sits before the paid tiers.
   const free = page.locator('.pr-free');
-  await expect(free).toContainText('Request free access');
+  await expect(free).toContainText('Request Seed access');
   await expect(free).toContainText('No credit card');
   await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // Consultants use the public plans. The signal is one line under the
@@ -130,7 +128,7 @@ test('pricing leads with the free account and routes consultants to Sapling', as
   await expect(page.locator('#cedar-grove')).toBeVisible();
   // The FAQ carries the skepticism the table cannot. Each row is a details
   // element the reader opens.
-  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(12);
+  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(11);
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {
@@ -200,7 +198,7 @@ test('checkout is payment-only: knows the plan, no plan picker', async ({ page }
   await expect(summary).toContainText('Taxes and fees included');
   // One job: no selectable plan cards, just a quiet change-plan link.
   await expect(page.locator('.co-plan')).toHaveCount(0);
-  await expect(page.locator('h1')).toContainText('Complete your subscription');
+  await expect(page.locator('h1')).toContainText('Confirm your plan details');
   await expect(page.locator('[data-co-change]')).toHaveAttribute('href', /\/choose-plan/);
 
   await page.fill('input[name="discountCode"]', 'welcome25');
@@ -367,7 +365,7 @@ test('choose-plan offers the three plans and a free start', async ({ page }) => 
 
 test('welcome closes the flow in full teal with one action', async ({ page }) => {
   await page.goto('/welcome?plan=free', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('h1')).toContainText(/You.re in\./);
+  await expect(page.locator('h1')).toContainText('Your Lumecon workspace is ready');
   await expect(page.locator('[data-welcome-kicker]')).toHaveText('Seed account ready');
   await expect(page.locator('a.welc-btn')).toHaveAttribute('href', '/login');
   await expect(page.locator('.cedar-fab')).toHaveCount(0);

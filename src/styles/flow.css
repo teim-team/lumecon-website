@@ -406,18 +406,18 @@
   padding: 0.75rem 0.95rem;
   margin: 0;
 }
-/* Same teal primary as the auth pages: one family, one action. */
+/* Same semantic primary as the auth pages: one family, one action. */
 .co2 .auth-form .btn {
   padding: 0.85rem 1.5rem;
   border-radius: 10px;
   font-size: 1rem;
-  background: var(--accent-text);
-  border-color: var(--accent-text);
-  color: #fff;
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  border-color: var(--action-top);
+  color: var(--action-ink);
 }
 .co2 .auth-form .btn:hover {
-  background: #086a61;
-  border-color: #086a61;
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  border-color: var(--action-hover-top);
 }
 .co2-change {
   margin: 1.5rem 0 0;

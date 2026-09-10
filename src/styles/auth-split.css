@@ -205,31 +205,30 @@
   padding: 0.85rem 1.5rem;
   border-radius: 10px;
   font-size: 1rem;
-  /* The product's sign-in primary is teal; use the site's dark teal
-     token so white label text keeps AA contrast. */
-  background: var(--accent-text);
-  border-color: var(--accent-text);
-  color: #fff;
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  border-color: var(--action-top);
+  color: var(--action-ink);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
     0 10px 24px -14px rgba(6, 58, 54, 0.55);
 }
 .asplit .auth-form .btn:hover {
-  background: #086a61;
-  border-color: #086a61;
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  border-color: var(--action-hover-top);
 }
-/* --accent-text flips to the light teal (#5fd9cc) in dark mode, which
-   fails AA under the white label. Pin the fill to the constant dark
-   teal chip token, which clears AA in both modes. */
 @media (prefers-color-scheme: dark) {
   .asplit .auth-form .btn {
-    background: var(--accent-chip);
-    border-color: var(--accent-chip);
-    color: #fff;
+    background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+    border-color: var(--action-top);
+    color: var(--action-ink);
   }
   .asplit .auth-form .btn:hover {
-    background: #086a61;
-    border-color: #086a61;
+    background: linear-gradient(
+      180deg,
+      var(--action-hover-top) 0%,
+      var(--action-hover-bottom) 100%
+    );
+    border-color: var(--action-hover-top);
   }
 }
 

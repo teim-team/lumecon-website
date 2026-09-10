@@ -64,7 +64,7 @@ const TERMS: Array<{ term: string; abbr?: string; def: string; href?: string; li
     },
     {
       term: 'Base year',
-      def: 'The reference year whose price levels and industry structure the analysis data is anchored to.',
+      def: 'The reference year to which the analysis data’s price levels and industry structure are anchored.',
     },
     {
       term: 'Labor income',
@@ -139,7 +139,7 @@ const jsonLd = [
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Reference</p>
         <h1 class="meth-hero__title">
-          The language of <span class="brand-em">economic impact</span>.
+          Definitions for the terms used in a <span class="brand-em">Lumecon analysis</span>.
         </h1>
         <p class="meth-hero__lede">
           The terms that come up most in economic impact analysis, defined in plain language. For
@@ -216,8 +216,9 @@ const jsonLd = [
           it.
         </p>
         <p class="gloss-foot">
-          Read <a class="gloss-link" href="/methodology">how an analysis is built</a>, or ask Cedar
-          (in the corner of this page) to explain any of these in plain language.
+          For the calculations behind these terms, read the{' '}
+          <a class="gloss-link" href="/methodology">methodology</a>. Cedar can also explain a term
+          in the context of an analysis.
         </p>
         <script is:inline>
           (function () {
@@ -239,9 +240,11 @@ const jsonLd = [
                 if (hit) shown++;
               });
               if (none) none.hidden = shown !== 0;
-              if (count) count.textContent = q ? shown + ' of ' + total + ' terms' : '';
+              if (count)
+                count.textContent = q ? shown + ' of ' + total + ' terms' : total + ' terms';
             }
             input.addEventListener('input', apply);
+            apply();
           })();
         </script>
       </div>
@@ -274,7 +277,7 @@ const jsonLd = [
   }
   .meth-sec > .meth-w {
     display: grid;
-    grid-template-columns: minmax(15rem, 0.72fr) minmax(0, 2.28fr);
+    grid-template-columns: minmax(13rem, 0.58fr) minmax(0, 2.42fr);
     gap: clamp(2rem, 4vw, 4.5rem);
     align-items: start;
   }
@@ -286,13 +289,11 @@ const jsonLd = [
     flex-direction: column;
     align-items: stretch;
     margin: 0;
-    padding: 1.25rem;
-    background: var(--surface-glass-strong);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-frame);
-    box-shadow: var(--shadow-surface);
-    backdrop-filter: blur(18px) saturate(115%);
-    -webkit-backdrop-filter: blur(18px) saturate(115%);
+    gap: 0.8rem;
+    padding: 1.15rem 0;
+    background: transparent;
+    border-top: 2px solid var(--navy);
+    border-bottom: 1px solid var(--rule);
   }
   .gloss-search {
     flex: none;
@@ -305,13 +306,15 @@ const jsonLd = [
   .gloss-defs {
     grid-column: 2;
     grid-row: 1 / 4;
-    border-radius: var(--radius-panel);
-    box-shadow: var(--shadow-surface-high);
+    border-width: 1px 0 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
   }
   .gloss-defs .meth-defs__row {
     scroll-margin-top: 6rem;
     grid-template-columns: minmax(13rem, 0.7fr) minmax(0, 1.3fr);
-    padding: 1.45rem 1.6rem;
+    padding: 1.45rem 0;
   }
   .gloss-abbr {
     font-family: var(--font-mono);

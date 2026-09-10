@@ -101,7 +101,8 @@ const jsonLd = [
         <div class="pr-hero__copy">
           <p class="h-kicker">Pricing</p>
           <h1 class="pr-hero__title">
-            Full economic analysis. <span class="hero2-em">Clear annual pricing.</span>
+            Complete economic analysis with <span class="hero2-em">transparent annual pricing.</span
+            >
           </h1>
           <p class="pr-hero__lede">
             Every paid plan runs the same regionalized input-output model with unlimited analyses
@@ -113,7 +114,7 @@ const jsonLd = [
           </p>
           <div class="pr-hero__ctas">
             <a class="btn2 btn2--primary" href="/signup?tier=free">
-              Request free access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+              Request Seed access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
             </a>
             <a class="btn2 btn2--card" href="#plans">Compare plans</a>
           </div>
@@ -130,7 +131,10 @@ const jsonLd = [
               ))
             }
           </ul>
-          <p class="pr-hero__ledger-note">One model. Every geography. Unlimited analyses.</p>
+          <p class="pr-hero__ledger-note">
+            Every paid plan includes the same model, every supported geography and unlimited
+            analyses.
+          </p>
         </aside>
       </div>
     </section>
@@ -139,19 +143,19 @@ const jsonLd = [
     <section class="pr-plans" id="plans" aria-label="Plans">
       <aside class="pr-free" aria-labelledby="free-title">
         <div class="pr-free__main">
-          <p class="h-kicker">Seed is the real platform</p>
-          <h2 class="pr-free__title" id="free-title">Request free access.</h2>
+          <p class="h-kicker">Evaluate Lumecon with Seed</p>
+          <h2 class="pr-free__title" id="free-title">Request Seed access.</h2>
           <p class="pr-free__body">
-            Access is opening in waves. When your place is ready, use the actual Lumecon platform:
-            bring your documents, work with Cedar, build an analysis end to end and see direct
-            effects on the results page. Indirect, induced and total impact unlock on a paid plan.
+            Access is opening in waves. Once admitted, bring your documents, work with Cedar, build
+            an analysis and review direct effects on the results page. Indirect, induced and total
+            effects unlock on a paid plan.
           </p>
         </div>
         <div class="pr-free__side">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
-            Request free access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            Request Seed access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
-          <p class="pr-free__terms">No credit card &middot; No expiration &middot; No obligation</p>
+          <p class="pr-free__terms">No credit card, expiration or obligation.</p>
         </div>
       </aside>
 
@@ -159,11 +163,7 @@ const jsonLd = [
       <div class="pr-plans__grid">
         {
           ALL_PLANS.map((p) => (
-            <article
-              class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`}
-              id={`plan-${p.id}`}
-              data-plan-card={p.ctaHref}
-            >
+            <article class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`} id={`plan-${p.id}`}>
               {p.featured && <p class="pr-plan__flag">Recommended</p>}
               <h2 class="pr-plan__name">{p.name}</h2>
               {/* Always rendered so the three cards keep the same rhythm.
@@ -175,7 +175,7 @@ const jsonLd = [
               >
                 {CLIENT_WORK.chip}
               </p>
-              <p class="pr-plan__audience">&ldquo;{p.audience}&rdquo;</p>
+              <p class="pr-plan__audience">{p.audience}</p>
               <p class="pr-plan__price">
                 <span class="pr-plan__amount">{p.price}</span>
                 <span class="pr-plan__period">{p.period}</span>
@@ -291,18 +291,6 @@ const jsonLd = [
       </p>
     </section>
 
-    <script is:inline>
-      /* The whole plan card is a click target for its primary CTA; the
-     links inside keep working as themselves. */
-      document.querySelectorAll('[data-plan-card]').forEach(function (card) {
-        card.addEventListener('click', function (e) {
-          if (e.target.closest('a')) return;
-          var href = card.getAttribute('data-plan-card');
-          if (href) window.location.href = href;
-        });
-      });
-    </script>
-
     {
       /* The FAQ is the body of the page now: everything the two prose
          sections and the commitment section used to argue is an answer
@@ -311,7 +299,7 @@ const jsonLd = [
     <section class="flowsec pr-faq" id="faq" aria-labelledby="faq-title">
       <div class="flowsec-inner">
         <header class="flowsec-head" data-reveal-group>
-          <h2 class="flowsec-title" id="faq-title">Pricing questions, answered plainly.</h2>
+          <h2 class="flowsec-title" id="faq-title">Questions about plans and billing.</h2>
         </header>
         <div class="pr-faq__list">
           {

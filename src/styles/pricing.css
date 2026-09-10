@@ -254,7 +254,6 @@
   box-shadow: var(--shadow-surface-high);
 }
 .pr-plan {
-  cursor: pointer;
   position: relative;
   border: 0;
   border-radius: 0;

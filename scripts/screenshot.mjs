@@ -68,8 +68,8 @@ async function shot(c, url, name, opts = {}) {
   console.log('shot', name);
 }
 
-// Every public page. /film is unlisted but still shippable; /naics is
-// deliberately unlisted in nav but indexed, so both stay in the sweep.
+// Every public page. /naics is deliberately unlisted in nav but indexed,
+// so it stays in the sweep.
 const PAGES = [
   ['/', 'home'],
   ['/cedar', 'cedar'],
@@ -83,10 +83,10 @@ const PAGES = [
   ['/welcome', 'welcome'],
   ['/accessibility', 'accessibility'],
   ['/ai-and-data-use', 'ai-and-data-use'],
+  ['/security', 'security'],
   ['/terms', 'terms'],
   ['/privacy', 'privacy'],
   ['/404', '404'],
-  ['/film', 'film'],
 ];
 
 for (const { name: surface, c } of surfaces) {

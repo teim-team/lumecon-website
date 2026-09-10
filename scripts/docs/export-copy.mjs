@@ -62,9 +62,9 @@ const PAGES = [
   ['/choose-plan', 'Choose plan'],
   ['/checkout', 'Checkout', '/checkout?tier=sprout'],
   ['/welcome', 'Welcome'],
-  ['/film', 'Film'],
   ['/accessibility', 'Accessibility'],
   ['/ai-and-data-use', 'AI and data use'],
+  ['/security', 'Security'],
   ['/privacy', 'Privacy'],
   ['/terms', 'Terms'],
   ['/404', 'Not found'],
@@ -76,6 +76,7 @@ const OWNERSHIP = {
   '/pricing': 'What it costs and why the pricing is different.',
   '/methodology': 'Why the economics are credible.',
   '/cedar': "Why Lumecon's use of AI is different.",
+  '/security': 'Current product controls and security-program status.',
   '/glossary': 'Defines terms and nothing more.',
   '/naics': 'What the sector classification covers.',
 };

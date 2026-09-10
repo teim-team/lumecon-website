@@ -15,7 +15,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import AskAI from '../components/AskAI.astro';
 import { site } from '../config';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -206,15 +205,13 @@ const jsonLd = [
       <div class="meth-w">
         <p class="h-kicker reveal-soft">Methodology</p>
         <h1 class="meth-hero__title reveal-soft" data-stagger="1">
-          Proven foundations, <span class="brand-em">better inputs</span> and a model that keeps improving.
+          Established economic methods, <span class="brand-em">updated for the economy</span> you are
+          analyzing.
         </h1>
         <p class="meth-hero__lede reveal-soft" data-stagger="2">
-          Input-output analysis carries nearly a century of economic research. Cedar Impact, where
-          you run economic impact analysis on Lumecon, builds on that foundation with public data
-          selected for the analysis and geography, modern regionalization, higher-frequency evidence
-          where appropriate and transparent validation. <span class="brand-em"
-            >Built on decades of economic science. Not frozen in it.</span
-          >
+          Cedar Impact uses regionalized input-output analysis built from federal economic data. It
+          applies current public indicators where appropriate, documents regionalization and
+          validation and keeps the evidence behind each result available for review.
         </p>
         <figure class="meth-hero__screen reveal-soft" data-stagger="3" data-zoom>
           <picture>
@@ -286,12 +283,6 @@ const jsonLd = [
               suppliers&rsquo; requirements, the suppliers&rsquo; suppliers and so on. That inverse
               is the Leontief system, and it is the arithmetic at the center of every impact
               estimate.
-            </p>
-            <p class="reveal-soft" data-stagger="3">
-              We keep that proven core and supplement it with higher-frequency public indicators and
-              newer estimation methods, so an analysis can better reflect current economic
-              conditions rather than relying exclusively on the vintage of the underlying benchmark
-              tables.
             </p>
           </div>
           <div class="meth-eqs">
@@ -595,7 +586,7 @@ const jsonLd = [
           <h2 id="m-deeper">The commitments behind every analysis</h2>
         </div>
         <p class="meth-sec__lede">
-          Five things that hold no matter what you run. Open a card for the full detail.
+          These five commitments apply to every analysis; open each section for methodology detail.
         </p>
         <div class="mcards">
           <details class="mcard" id="m-geo">
@@ -719,7 +710,7 @@ const jsonLd = [
           <details class="mcard" id="m-compare">
             <summary class="mcard__face">
               <span class="mcard__kicker">Comparison</span>
-              <span class="mcard__title">The same foundation, built differently around it</span>
+              <span class="mcard__title">How Lumecon differs from established platforms</span>
               <span class="mcard__hook">
                 Established platforms and Lumecon draw on the same national statistical system; the
                 differences are architecture, workflow and price.
@@ -764,14 +755,11 @@ const jsonLd = [
     <section class="meth-mission" aria-labelledby="m-mission">
       <div class="meth-w">
         <h2 class="meth-mission__title" id="m-mission">
-          Every organization has an economic impact. <span class="brand-em"
-            >Every organization should be able to see it.</span
-          >
+          Bring your records into <span class="brand-em">a method you can examine.</span>
         </h2>
         <p class="meth-mission__lede">
-          Better modeling should widen access to rigorous analysis. Businesses, governments,
-          universities, nonprofits and Tribal Nations shape the economies around them. Our job is to
-          make that impact visible.
+          Review the equations, sources, limitations and result lineage, then evaluate the workflow
+          with your own analysis during the private beta.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/pricing">
@@ -800,21 +788,17 @@ const jsonLd = [
         <div class="meth-faq__list">
           {
             FAQ.map((item) => (
-              <div class="meth-faq__row">
-                <h3>{item.q}</h3>
+              <details class="meth-faq__row">
+                <summary>
+                  <h3>{item.q}</h3>
+                </summary>
                 <p>{item.a}</p>
-              </div>
+              </details>
             ))
           }
         </div>
       </div>
     </section>
-
-    {
-      /* Verification note follows the full argument so it reads as an
-         optional research path rather than a product-comparison detour. */
-    }
-    <AskAI />
   </main>
   <Footer isHome={false} />
 </BaseLayout>

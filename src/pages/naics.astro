@@ -77,7 +77,7 @@ const jsonLd = [
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Reference</p>
         <h1 class="meth-hero__title">
-          The sectors Lumecon <span class="brand-em">uses</span>.
+          Industry sectors used in <span class="brand-em">Lumecon analyses</span>.
         </h1>
         <p class="meth-hero__lede">
           Lumecon presents economic activity at the two-digit NAICS sector level because public
@@ -94,32 +94,32 @@ const jsonLd = [
         <ul class="naics-grid" role="list">
           {
             tiles.map((t) => (
-              <li
-                class="naics-tile"
-                id={`naics-${t.slug}`}
-                tabindex="0"
-                aria-describedby={`naics-${t.slug}-description`}
-                style={`--wash-shadow: ${rgb(t.colors.shadow)}; --wash-mid: ${rgb(t.colors.mid)}; --wash-hi: ${rgb(t.colors.highlight)};`}
-              >
-                <div class="naics-tile__media" aria-hidden="true">
-                  {t.photo ? (
-                    <img src={t.photo} alt="" width="600" height="400" loading="lazy" />
-                  ) : (
-                    <div class="naics-tile__field" />
-                  )}
-                </div>
-                <div class="naics-tile__bar">
-                  <div class="naics-tile__heading">
-                    <span class="naics-tile__code">{t.code}</span>
-                    <h2 class="naics-tile__title">{t.title}</h2>
-                  </div>
-                  <span class="naics-tile__cue" aria-hidden="true">
-                    View details <span class="naics-tile__plus" />
-                  </span>
-                </div>
-                <p class="naics-tile__desc" id={`naics-${t.slug}-description`}>
-                  {t.description}
-                </p>
+              <li class="naics-cell">
+                <details
+                  class="naics-tile"
+                  id={`naics-${t.slug}`}
+                  style={`--wash-shadow: ${rgb(t.colors.shadow)}; --wash-mid: ${rgb(t.colors.mid)}; --wash-hi: ${rgb(t.colors.highlight)};`}
+                >
+                  <summary class="naics-tile__summary">
+                    <div class="naics-tile__media" aria-hidden="true">
+                      {t.photo ? (
+                        <img src={t.photo} alt="" width="600" height="400" loading="lazy" />
+                      ) : (
+                        <div class="naics-tile__field" />
+                      )}
+                    </div>
+                    <div class="naics-tile__bar">
+                      <div class="naics-tile__heading">
+                        <span class="naics-tile__code">{t.code}</span>
+                        <h2 class="naics-tile__title">{t.title}</h2>
+                      </div>
+                      <span class="naics-tile__cue" aria-hidden="true">
+                        View details <span class="naics-tile__plus" />
+                      </span>
+                    </div>
+                  </summary>
+                  <p class="naics-tile__desc">{t.description}</p>
+                </details>
               </li>
             ))
           }
@@ -185,27 +185,45 @@ const jsonLd = [
     grid-auto-flow: dense;
     gap: clamp(0.8rem, 1.3vw, 1.15rem);
   }
+  .naics-cell {
+    min-width: 0;
+    grid-column: span 3;
+  }
   .naics-tile {
     position: relative;
     border: 1px solid var(--rule, rgba(10, 15, 38, 0.12));
-    grid-column: span 3;
+    height: 100%;
     border-radius: var(--radius-frame);
     overflow: hidden;
     background: #09132b;
     outline: none;
     box-shadow: var(--shadow-surface);
   }
-  .naics-tile:nth-child(1),
-  .naics-tile:nth-child(8),
-  .naics-tile:nth-child(15) {
+  .naics-cell:nth-child(1),
+  .naics-cell:nth-child(8),
+  .naics-cell:nth-child(15) {
     grid-column: span 6;
   }
-  .naics-tile:nth-child(1) .naics-tile__media,
-  .naics-tile:nth-child(8) .naics-tile__media,
-  .naics-tile:nth-child(15) .naics-tile__media {
+  .naics-cell:nth-child(1) .naics-tile__media,
+  .naics-cell:nth-child(8) .naics-tile__media,
+  .naics-cell:nth-child(15) .naics-tile__media {
     aspect-ratio: 3 / 1;
   }
-  .naics-tile:focus-visible {
+  .naics-tile__summary {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    list-style: none;
+  }
+  .naics-tile__summary::-webkit-details-marker {
+    display: none;
+  }
+  .naics-tile__summary::marker {
+    content: '';
+  }
+  .naics-tile__summary:focus-visible {
+    outline: 3px solid rgba(95, 217, 204, 0.9);
+    outline-offset: -4px;
     box-shadow: 0 0 0 3px rgba(15, 181, 165, 0.35);
   }
   .naics-tile__media {
@@ -225,9 +243,10 @@ const jsonLd = [
     transform: scale(1.01);
     transition: transform 0.65s var(--ease);
   }
-  .naics-tile:hover .naics-tile__media img,
-  .naics-tile:focus-within .naics-tile__media img {
-    transform: scale(1.045);
+  @media (hover: hover) {
+    .naics-tile__summary:hover .naics-tile__media img {
+      transform: scale(1.045);
+    }
   }
   /* Placeholder until the sector's processed photograph exists: the same
      duotone ramp the pipeline applies, as a quiet field. */
@@ -310,12 +329,10 @@ const jsonLd = [
     width: 1px;
     height: 100%;
   }
-  .naics-tile:hover .naics-tile__plus,
-  .naics-tile:focus-visible .naics-tile__plus,
-  .naics-tile:focus-within .naics-tile__plus {
+  .naics-tile[open] .naics-tile__plus {
     transform: rotate(45deg);
   }
-  /* The description slides over the media on hover or keyboard focus. */
+  /* The description opens through native disclosure semantics. */
   .naics-tile__desc {
     position: absolute;
     inset: 0;
@@ -323,8 +340,8 @@ const jsonLd = [
     padding: 1rem 1.05rem 4.8rem;
     font-size: 0.86rem;
     line-height: 1.55;
-    color: var(--wash-hi);
-    background: color-mix(in srgb, var(--wash-shadow) 88%, transparent);
+    color: #fff;
+    background: rgba(5, 16, 34, 0.94);
     backdrop-filter: blur(12px) saturate(118%);
     -webkit-backdrop-filter: blur(12px) saturate(118%);
     opacity: 0;
@@ -334,9 +351,7 @@ const jsonLd = [
     overflow-y: auto;
     pointer-events: none;
   }
-  .naics-tile:hover .naics-tile__desc,
-  .naics-tile:focus-visible .naics-tile__desc,
-  .naics-tile:focus-within .naics-tile__desc {
+  .naics-tile[open] .naics-tile__desc {
     opacity: 1;
     pointer-events: auto;
   }
@@ -345,32 +360,11 @@ const jsonLd = [
     .naics-tile__media img {
       transition: none;
     }
-    .naics-tile:hover .naics-tile__media img,
-    .naics-tile:focus-within .naics-tile__media img {
+    .naics-tile__summary:hover .naics-tile__media img {
       transform: none;
     }
     .naics-tile__plus {
       transition: none;
-    }
-  }
-  /* Touch screens have no hover: show the description under the tile. */
-  @media (hover: none) {
-    .naics-tile {
-      background: var(--surface);
-    }
-    .naics-tile__bar {
-      position: relative;
-    }
-    .naics-tile__cue {
-      display: none;
-    }
-    .naics-tile__desc {
-      position: static;
-      opacity: 1;
-      pointer-events: auto;
-      background: none;
-      color: var(--ink-2, #353b5c);
-      padding: 0 0.85rem 0.9rem;
     }
   }
   @media (max-width: 1050px) {
@@ -380,12 +374,12 @@ const jsonLd = [
     .naics-grid {
       grid-template-columns: repeat(6, minmax(0, 1fr));
     }
-    .naics-tile {
+    .naics-cell {
       grid-column: span 3;
     }
-    .naics-tile:nth-child(1),
-    .naics-tile:nth-child(8),
-    .naics-tile:nth-child(15) {
+    .naics-cell:nth-child(1),
+    .naics-cell:nth-child(8),
+    .naics-cell:nth-child(15) {
       grid-column: span 6;
     }
   }
@@ -407,15 +401,15 @@ const jsonLd = [
     .naics-grid {
       grid-template-columns: 1fr;
     }
-    .naics-tile,
-    .naics-tile:nth-child(1),
-    .naics-tile:nth-child(8),
-    .naics-tile:nth-child(15) {
+    .naics-cell,
+    .naics-cell:nth-child(1),
+    .naics-cell:nth-child(8),
+    .naics-cell:nth-child(15) {
       grid-column: auto;
     }
-    .naics-tile:nth-child(1) .naics-tile__media,
-    .naics-tile:nth-child(8) .naics-tile__media,
-    .naics-tile:nth-child(15) .naics-tile__media {
+    .naics-cell:nth-child(1) .naics-tile__media,
+    .naics-cell:nth-child(8) .naics-tile__media,
+    .naics-cell:nth-child(15) .naics-tile__media {
       aspect-ratio: 3 / 2;
     }
   }

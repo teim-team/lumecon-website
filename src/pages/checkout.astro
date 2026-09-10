@@ -33,7 +33,7 @@ import '../styles/flow.css';
 const INCLUDED = [
   'Full Lumecon model',
   'Every supported U.S. geography',
-  'Unlimited analysis',
+  'Unlimited analyses',
   'Cedar included',
 ];
 ---
@@ -67,8 +67,8 @@ const INCLUDED = [
               </span>
             </div>
             <p class="co2-summary__fine">
-              Annual subscription. Taxes and fees included. Payment is processed by Stripe; Lumecon
-              does not store card details.
+              Annual subscription. Taxes and fees included. When online payment is enabled, Stripe
+              processes card details directly.
             </p>
           </div>
         ))
@@ -77,9 +77,9 @@ const INCLUDED = [
 
     <div class="co2-pay">
       <div class="co2-pay__inner">
-        <p class="co2-kicker">Secure checkout</p>
-        <h1 class="co2-title">Complete your subscription.</h1>
-        <p class="co2-tagline">Everything you need to start measuring your impact is ready.</p>
+        <p class="co2-kicker">Subscription request</p>
+        <h1 class="co2-title">Confirm your plan details.</h1>
+        <p class="co2-tagline">Submit the request and our team will confirm the payment path.</p>
 
         <form class="auth-form" method="post" action="/checkout" data-co-form novalidate>
           <label class="auth-field">
@@ -282,7 +282,7 @@ const INCLUDED = [
           setStatus(
             status,
             'ok',
-            "Online payment is almost ready. We've got your order details and the team will complete your subscription by email, usually the same day.",
+            'We received your subscription request. A team member will follow up by email to complete it.',
           );
           return;
         }

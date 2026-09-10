@@ -91,6 +91,11 @@
   --navy: #071824;
   --navy2: #18364a;
   --navy-soft: rgba(7, 24, 36, 0.68);
+  --action-top: #173a4f;
+  --action-bottom: #0a2232;
+  --action-hover-top: #1d4b63;
+  --action-hover-bottom: #0b3044;
+  --action-ink: #ffffff;
   --ink: #071824;
   --ink-2: #33434a;
   --ink-3: #647279;
@@ -375,6 +380,11 @@ body {
     --navy: #f1f3fa;
     --navy2: #bcc1d8;
     --navy-soft: rgba(241, 243, 250, 0.68);
+    --action-top: #ffffff;
+    --action-bottom: #e7f0f2;
+    --action-hover-top: #ffffff;
+    --action-hover-bottom: #d9e7ea;
+    --action-ink: #071824;
     --ink: #f1f3fa;
     --ink-2: #c9cedf;
     --ink-3: #8c92ab;
@@ -921,19 +931,19 @@ strong {
   font-weight: 500;
   letter-spacing: -0.005em;
   border-radius: 4px;
-  border: 1px solid var(--navy);
+  border: 1px solid var(--action-top);
   cursor: pointer;
   transition:
     background 0.15s var(--ease),
     color 0.15s var(--ease),
     border-color 0.15s var(--ease);
-  background: var(--navy);
-  color: var(--white);
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  color: var(--action-ink);
   text-decoration: none;
 }
 .btn:hover {
-  background: var(--navy2);
-  border-color: var(--navy2);
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  border-color: var(--action-hover-top);
 }
 .btn--ghost {
   background: transparent;
@@ -945,21 +955,21 @@ strong {
   color: var(--white);
   border-color: var(--navy);
 }
-/* Dark-mode button overrides. These sit AFTER the base .btn rules on
-   purpose: the token flip turns --navy near-white, so a dark-mode
-   primary would render as an inverted light pill. Keep accent teal as
-   the saturated action color in dark mode. (Declared here rather than
-   in the main dark block above because equal-specificity rules are
-   won by whichever comes later in the file.) */
+/* Dark surfaces use the same semantic action tokens. Their values invert to
+   a light control with navy ink, while teal remains the active accent. */
 @media (prefers-color-scheme: dark) {
   .btn {
-    background: var(--accent);
-    color: #0a0f26;
-    border-color: var(--accent);
+    background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+    color: var(--action-ink);
+    border-color: var(--action-top);
   }
   .btn:hover {
-    background: var(--accent-light);
-    border-color: var(--accent-light);
+    background: linear-gradient(
+      180deg,
+      var(--action-hover-top) 0%,
+      var(--action-hover-bottom) 100%
+    );
+    border-color: var(--action-hover-top);
   }
   .btn--ghost {
     background: transparent;

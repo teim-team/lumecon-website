@@ -32,6 +32,7 @@ import CedarChat from './CedarChat.astro';
   aria-expanded="false"
   aria-controls="cedarFabPanel"
   aria-hidden="true"
+  aria-label="Ask Cedar"
   tabindex="-1"
   data-cedar-visibility="waiting"
   title="Ask Cedar"
@@ -111,6 +112,7 @@ import CedarChat from './CedarChat.astro';
   id="cedarFabPanel"
   role="dialog"
   aria-label="Ask Cedar"
+  aria-modal="true"
   aria-hidden="true"
   hidden
 >
@@ -175,14 +177,6 @@ import CedarChat from './CedarChat.astro';
     const main = document.querySelector<HTMLElement>('main');
     const intro = main?.firstElementChild instanceof HTMLElement ? main.firstElementChild : null;
     const avoidSelector = [
-      'a[href]',
-      'button',
-      'input',
-      'select',
-      'textarea',
-      'summary',
-      '[role="button"]',
-      '[tabindex]:not([tabindex="-1"])',
       'table',
       '[data-zoom]',
       '.pr-free',
@@ -190,6 +184,7 @@ import CedarChat from './CedarChat.astro';
       '.pr-grove',
       '.meth-defs__row',
       '.naics-tile',
+      '.place-panel',
       '.footer',
     ].join(',');
     let visibilityFrame = 0;
@@ -268,6 +263,11 @@ import CedarChat from './CedarChat.astro';
       panel.hidden = false;
       panel.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cedar-popped');
+      document
+        .querySelectorAll<HTMLElement>('body > nav, body > main, body > footer')
+        .forEach((el) => {
+          el.inert = true;
+        });
       fab.setAttribute('aria-expanded', 'true');
       fab.setAttribute('aria-label', 'Close Cedar');
       fab.setAttribute('title', 'Close Cedar');
@@ -282,8 +282,13 @@ import CedarChat from './CedarChat.astro';
       panel.hidden = true;
       panel.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cedar-popped');
+      document
+        .querySelectorAll<HTMLElement>('body > nav, body > main, body > footer')
+        .forEach((el) => {
+          el.inert = false;
+        });
       fab.setAttribute('aria-expanded', 'false');
-      fab.removeAttribute('aria-label');
+      fab.setAttribute('aria-label', 'Ask Cedar');
       fab.setAttribute('title', 'Ask Cedar');
       if (returnFocus) (fab as HTMLElement).focus({ preventScroll: true });
       trackEvent('cedar.fab.close');
@@ -597,12 +602,16 @@ import CedarChat from './CedarChat.astro';
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: var(--ink-3);
+    color: #fff;
     cursor: pointer;
   }
   .cedar-fab-panel__close:hover {
-    background: var(--accent-rgba-08);
-    color: var(--navy);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+  .cedar-fab-panel__close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -4px;
   }
   .cedar-fab-panel__close svg {
     width: 14px;

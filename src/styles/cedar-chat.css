@@ -27,7 +27,7 @@
   /* Was a one-off #0f9488, a teal that exists nowhere else in the system and
      did not match the app's Cedar header. --accent-deep is #0a8a7e, the same
      value teim-app uses as --teal-dark, so the two panels now agree. */
-  background: var(--accent-deep);
+  background: var(--accent-chip-hover);
 }
 .cedar-chat__heading {
   display: grid;
@@ -48,7 +48,7 @@
   color: #fff;
 }
 .cedar-chat__context {
-  color: rgba(255, 255, 255, 0.92);
+  color: #fff;
   font-family: var(--font-sans);
   font-size: 0.75rem;
   line-height: 1.3;

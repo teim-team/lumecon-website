@@ -21,8 +21,8 @@ free account, the creed "Complexity belongs in the model. Not the
 pricing.", multi-year and lowest-applicable-price policies, Whole
 Nation, Cedar Commons, Cedar Grove on its own, and consultant
 licensing; prices include taxes and fees); **/methodology** argues the economics are credible (equations,
-the six-stage flow, the data manifest, validation, lineage, comparisons
-and the AI-research verification block); the glossary defines terms and
+the six-stage flow, the data manifest, validation, lineage and comparisons);
+the glossary defines terms and
 nothing more. Around those: a sign-up page that takes private-beta
 requests through the contact endpoint, log-in, choose-plan and checkout
 pages that post to the product API when a backend is configured, /naics
@@ -30,8 +30,8 @@ pages that post to the product API when a backend is configured, /naics
 unlisted in nav, indexed for search), /accessibility (WCAG 2.2 AA
 statement), /terms and /privacy (substantive working drafts under
 counsel review), /ai-and-data-use (plain-language AI and data-handling
-statement, also a counsel draft), a 404 and an unlisted /film page kept
-out of the sitemap. There is one Lumecon platform; the retired
+statement, also a counsel draft), /security (the current control program
+and SOC 2 preparation status) and a 404. There is one Lumecon platform; the retired
 per-audience entry-point domains are gone, and the products adapt to the
 organization type instead. On the static deploy (no backend configured),
 Cedar's chat is answered entirely by a local keyword classifier and
@@ -116,13 +116,13 @@ There is no lint step beyond `astro check` and Prettier. `format:check` is
 ```
 src/
   components/   Astro components (Hero, WhyBand, ProductTour, Edge,
-                  AskAI, FinalCta, Nav, Footer, CedarFAB, CedarChat,
+                  FinalCta, Nav, Footer, CedarFAB, CedarChat,
                   Lightbox, ConsentBanner, Contours, AuthBrandPanel,
                   MarkArt, BrandWordmark)
   pages/        One file per route: index, cedar, pricing, methodology,
                   glossary, naics, signup, login, choose-plan, checkout,
-                  welcome, accessibility, ai-and-data-use, terms,
-                  privacy, 404 and the unlisted film
+                  welcome, accessibility, ai-and-data-use, security,
+                  terms, privacy and 404
   layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
                 LegalLayout.astro — legal/reference wrapper (methodology,
                 glossary, terms, privacy, ai-and-data-use)
@@ -139,7 +139,7 @@ src/
 public/         Static assets: brand marks, app screenshots (light + dark),
                 why-card art, sector photography, self-hosted fonts,
                 favicons, OG image, robots.txt, llms.txt, _headers,
-                .well-known/security.txt, films
+                .well-known/security.txt
 scripts/        Generators whose output is committed, never run at build
                 time: naics/ (sector data + duotone thumbnails + app
                 export), screenshots/ (hero examples), docs/ (the copy and
@@ -395,11 +395,11 @@ engineering rules live in [`AGENTS.md`](./AGENTS.md) (AI-frontend-tell
 audit, semantic teal, the approved brand-phrase vocabulary and the
 page-ownership rule); this list records the product/brand calls.
 
-- **Positioning.** "Built on decades of economic science. Not frozen in
-  it." answers the incumbency pitch; "We tailor the modeling, not the
-  price." answers consultative pricing. Cedar's line is "AI in the
-  workflow. Economists in the loop." Mission: "Every organization has an
-  economic impact." Reuse these; do not invent new slogans per section.
+- **Positioning.** Lead with traceable economic analysis, reviewable inputs
+  and transparent annual pricing. Cedar organizes source material and proposes
+  inputs; Cedar Impact performs the calculations, and the person running an
+  analysis approves assumptions and final results. Avoid campaign slogans that
+  obscure those product boundaries.
 - **Pricing policies (public commitments).** Prices include taxes and
   fees. Multi-year agreements qualify for preferred pricing with prepaid
   savings; multiple qualifying rates resolve to the lowest applicable

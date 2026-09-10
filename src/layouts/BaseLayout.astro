@@ -408,6 +408,19 @@ const ogIA =
         function jumpScrollTo(el) {
           el.scrollIntoView({ behavior: 'auto', block: 'start' });
         }
+        function prepareAndFocusTarget(el) {
+          const details = el.matches('details') ? el : el.closest('details');
+          if (details) details.open = true;
+          const focusTarget = el.matches('details') ? el.querySelector('summary') || el : el;
+          if (!focusTarget.matches('summary, a, button, input, select, textarea, [tabindex]')) {
+            focusTarget.setAttribute('tabindex', '-1');
+          }
+          try {
+            focusTarget.focus({ preventScroll: true });
+          } catch (_) {
+            focusTarget.focus();
+          }
+        }
         function stripHash() {
           try {
             history.replaceState(null, '', location.pathname + location.search);
@@ -425,6 +438,7 @@ const ogIA =
           if (target) {
             // Defer one frame so layout is settled before scroll-to.
             requestAnimationFrame(() => {
+              prepareAndFocusTarget(target);
               jumpScrollTo(target);
               stripHash();
             });
@@ -459,6 +473,7 @@ const ogIA =
           const target = document.querySelector(url.hash);
           if (!target) return;
           e.preventDefault();
+          prepareAndFocusTarget(target);
           smoothScrollTo(target);
           // Don't pushState — the URL stays as-is, no fragment added.
         });

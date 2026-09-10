@@ -56,6 +56,13 @@
   gap: var(--gutter);
   margin-top: 0.4rem;
 }
+.cedarpg-fact {
+  padding-top: 1.35rem;
+  border-top: 2px solid var(--navy);
+}
+.cedarpg-fact:nth-child(2) {
+  border-top-color: var(--accent-text);
+}
 .cedarpg-fact p:not(.h-kicker) {
   font-size: 0.95rem;
   line-height: 1.7;
@@ -68,7 +75,6 @@
   height: 2.9rem;
   margin: 0 0 1.15rem;
   color: var(--accent-deep);
-  filter: drop-shadow(0 8px 14px rgba(15, 181, 165, 0.14));
 }
 .cedarpg-fact__icon svg {
   display: block;
@@ -79,17 +85,6 @@
 }
 .cedarpg-fact .h-kicker {
   margin-bottom: 0;
-  transition: color 0.25s var(--ease);
-}
-/* The label deepens on hover, but every sentence remains visible at rest. */
-.cedarpg-fact:hover .h-kicker,
-.cedarpg-fact:focus-visible .h-kicker {
-  color: var(--accent-deep);
-}
-@media (prefers-reduced-motion: reduce) {
-  .cedarpg-fact .h-kicker {
-    transition: none;
-  }
 }
 @media (max-width: 900px) {
   .cedarpg-facts {
@@ -241,17 +236,11 @@
   }
 }
 .cedarpg-band .meth-w {
-  padding: clamp(2rem, 4vw, 3.5rem);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-panel);
-  background:
-    linear-gradient(118deg, rgba(15, 181, 165, 0.08) 0%, transparent 30%),
-    var(--surface-glass-strong);
-  box-shadow: var(--shadow-surface);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--rule);
 }
 .cedarpg-fact + .cedarpg-fact {
-  border-left: 1px solid var(--rule);
-  padding-left: clamp(1.2rem, 2.5vw, 2.2rem);
+  padding-left: 0;
 }
 
 @media (max-width: 980px) {
@@ -289,7 +278,7 @@
   }
   .cedarpg-fact + .cedarpg-fact {
     border-left: 0;
-    border-top: 1px solid var(--rule);
+    border-top: 2px solid var(--rule);
     padding: 1.4rem 0 0;
   }
 }

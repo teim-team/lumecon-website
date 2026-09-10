@@ -10,21 +10,27 @@ import '../styles/home.css';
 const PLACES = [
   {
     label: 'Public infrastructure',
-    title: 'Measure the jobs, income and output supported by capital investment.',
+    title: 'See how capital investment moves through local industries.',
     image: '/naics/construction-v2-wide.webp',
     alt: 'Construction professionals reviewing work inside a large structural project.',
+    href: '/naics#naics-construction',
+    tone: 'bronze',
   },
   {
     label: 'Tribal economies',
-    title: 'Model Tribal government and enterprise activity across reservations and trust lands.',
+    title: 'Bring government and enterprise activity into a whole-economy view.',
     image: '/naics/tribalgov-v2-wide.webp',
     alt: 'Rows of Tribal Nation flags displayed in a contemporary civic interior.',
+    href: '/naics#naics-tribalgov',
+    tone: 'gold',
   },
   {
     label: 'Advanced manufacturing',
     title: 'Trace construction and operations through regional supply chains.',
     image: '/naics/manufacturing-v2-wide.webp',
     alt: 'A robotic assembly system working on an electric vehicle platform.',
+    href: '/naics#naics-manufacturing',
+    tone: 'teal',
   },
 ];
 
@@ -38,12 +44,26 @@ const MEASURES = [
 ---
 
 <section class="places" aria-labelledby="places-title">
-  <h2 class="visually-hidden" id="places-title">Economic impact across the places you serve</h2>
+  <header class="places-intro">
+    <div>
+      <p class="h-kicker">Built for the real economy</p>
+      <h2 id="places-title">Follow spending through the places and industries it reaches.</h2>
+    </div>
+    <ul aria-label="Measures reported by Lumecon">
+      {MEASURES.map((measure) => <li>{measure}</li>)}
+    </ul>
+  </header>
 
   <div class="places-grid">
     {
       PLACES.map((place, index) => (
-        <article class="place-panel reveal-soft" data-stagger={String(index + 1)}>
+        <a
+          class="place-panel reveal-soft"
+          data-stagger={String(index + 1)}
+          data-tone={place.tone}
+          href={place.href}
+          aria-label={`${place.label}: ${place.title}`}
+        >
           <img
             src={place.image}
             alt={place.alt}
@@ -55,19 +75,13 @@ const MEASURES = [
           <div class="place-panel__copy">
             <p>{place.label}</p>
             <h3>{place.title}</h3>
+            <span class="place-panel__cue" aria-hidden="true">
+              Explore the sector <b>&rarr;</b>
+            </span>
           </div>
-        </article>
+        </a>
       ))
     }
-  </div>
-
-  <div class="places-measures">
-    <p>
-      <span>Every organization has an economic impact.</span> Lumecon makes it visible.
-    </p>
-    <ul aria-label="Economic impact measures">
-      {MEASURES.map((measure) => <li>{measure}</li>)}
-    </ul>
   </div>
 
   <p class="places-note">Photography is illustrative and does not identify Lumecon customers.</p>

@@ -15,10 +15,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // /film is unlisted: reachable by direct link only, kept out of the
-      // sitemap (and noindex'd in its layout props).
       filter: (page) =>
-        !['/film', '/checkout', '/welcome', '/choose-plan', '/login', '/signup'].some((path) =>
+        !['/checkout', '/welcome', '/choose-plan', '/login', '/signup'].some((path) =>
           page.includes(path),
         )
     })

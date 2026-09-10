@@ -55,17 +55,33 @@
    4.75:1 against white, so the label stays AA at this size; do not
    lighten the top stop without re-checking that. */
 .btn2--primary {
-  background: linear-gradient(180deg, #0a8177 0%, #086b62 100%);
-  color: #fff;
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  color: var(--action-ink);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
     var(--shadow-control);
 }
 .btn2--primary:hover {
-  background: linear-gradient(180deg, #096f66 0%, #05564f 100%);
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     0 6px 16px -12px rgba(10, 15, 38, 0.5);
+}
+.btn2--primary .btn2-arrow {
+  color: var(--accent-light);
+}
+.section--dark .btn2--primary {
+  background: linear-gradient(180deg, #ffffff 0%, #e7f0f2 100%);
+  color: #071824;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 10px 24px -16px rgba(0, 0, 0, 0.72);
+}
+.section--dark .btn2--primary:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #d9e7ea 100%);
+}
+.section--dark .btn2--primary .btn2-arrow {
+  color: #0a7f74;
 }
 .btn2--card {
   background: var(--surface);
@@ -481,83 +497,153 @@
   border-bottom-color: var(--accent-text);
 }
 
-/* ---------- the edge grid ---------- */
+/* ---------- institutional evidence ledger ---------- */
 .edge {
   background: var(--white);
   border-top: 1px solid var(--rule);
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
-/* Extra air between the section header and the tile grid: the tiles are
-   mostly whitespace at rest, so they need room around them to read as a
-   deliberate row of icons rather than a gap in the page. */
 .edge-inner {
   max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
-  gap: clamp(2.6rem, 6vh, 4rem);
+  grid-template-columns: minmax(19rem, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+  gap: clamp(3rem, 7vw, 7.5rem);
 }
-.edge-grid {
+.edge-thesis {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* Gutters and short horizontal rules organize the information without
-     enclosing each capability in another card. */
-  gap: clamp(2.4rem, 5vh, 3.6rem) var(--gutter);
+  gap: 1rem;
 }
-/* Six tiles that lead with the icon and keep the supporting sentence visible.
-
-   No card around them: the site separates with hairlines, not boxes, and a
-   border here drew a rectangle around what is mostly whitespace at rest. The
-   column rule is the same one the why cards use.
-
-   The sentence stays in normal flow. `opacity` does not affect layout, so a
-   hidden sentence still occupies its space and revealing one cannot reflow the
-   row or nudge the tiles beside it. That is also why there is no min-height
-   here and no absolute positioning: the tallest sentence in the set sets the
-   row height, grid stretch equalizes the rest, and nothing needs a magic
-   offset that a copy edit would silently break. */
-.edge-card {
-  padding: 1.25rem 0 0;
-  border-top: 1px solid var(--rule);
-  display: grid;
-  gap: 0.5rem;
-  align-content: start;
+.edge-thesis h2 {
+  max-width: 11ch;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4.5vw, 4.6rem);
+  font-weight: var(--weight-display);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
 }
-/* The tile is not a control: it has no link and nothing to reveal, so it
-   carries no hover state and is not in the tab order. It used to be
-   focusable purely to expose a hover-only sentence, which is now visible. */
-/* Supporting copy remains visible on every input mode. */
-
-/* No chip. The icon sits directly on the page.
-   --------------------------------------------------------------------
-   These were 76px mint squares with a teal border and a rounded corner,
-   one per tile. A tinted container around an icon is the most reliable
-   template signal there is: it adds a rectangle that communicates
-   nothing, it makes six identical boxes out of six different ideas, and
-   it competes with the hairlines that are supposed to be doing the
-   dividing. The line icons are drawn in the app's own style and hold the
-   page perfectly well on their own, at a larger stroke-to-size ratio. */
-.edge-ic {
-  display: flex;
+.edge-thesis > p:not(.h-kicker) {
+  max-width: 48ch;
+  margin: 0.35rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1rem;
+  line-height: 1.62;
+}
+.edge-thesis__link {
+  display: inline-flex;
   align-items: center;
-  /* Flush left with the label and the sentence below it. As an inline-flex
-     grid child it stretched to the column and centred its own contents, so
-     the icon floated over the middle of a left-aligned block. */
-  justify-content: flex-start;
+  justify-self: start;
+  gap: 0.55rem;
+  margin-top: 0.6rem;
   color: var(--accent-light);
-  margin-bottom: 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(95, 217, 204, 0.46);
 }
-.edge-ic svg {
-  width: 34px;
-  height: 34px;
+.edge-thesis__link span {
+  transition: transform 0.2s var(--ease);
+}
+.edge-ledger {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+.edge-row {
+  display: grid;
+  grid-template-columns: 2.5rem 3rem minmax(0, 1fr);
+  gap: clamp(0.9rem, 2vw, 1.5rem);
+  align-items: start;
+  padding: clamp(1.25rem, 2.2vw, 1.8rem) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.19);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+.edge-row__index,
+.edge-row__label {
+  color: rgba(255, 255, 255, 0.48);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.edge-row__index {
+  padding-top: 0.25rem;
+}
+.edge-row__icon {
+  color: var(--accent-light);
+}
+.edge-row__icon svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+.edge-row__copy {
+  display: grid;
+  gap: 0.42rem;
+}
+.edge-row__copy strong {
+  color: #fff;
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  font-weight: 620;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+.edge-row__body {
+  max-width: 65ch;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.9rem;
+  line-height: 1.52;
+}
+.edge-row__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  justify-self: start;
+  margin-top: 0.25rem;
+  color: var(--accent-light);
+  font-size: 0.78rem;
+  font-weight: 620;
+}
+.edge-row__action b {
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: transform 0.2s var(--ease);
+}
+@media (hover: hover) {
+  .edge-row:hover {
+    border-bottom-color: rgba(95, 217, 204, 0.68);
+    background: linear-gradient(90deg, rgba(15, 181, 165, 0.06), transparent 76%);
+  }
+  .edge-row:hover .edge-row__action b,
+  .edge-thesis__link:hover span {
+    transform: translateX(4px);
+  }
+}
+.edge-row:focus-visible,
+.edge-thesis__link:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 5px;
 }
 @media (max-width: 980px) {
-  .edge-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .edge-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .edge-thesis h2 {
+    max-width: 15ch;
   }
 }
 @media (max-width: 560px) {
-  .edge-grid {
-    grid-template-columns: minmax(0, 1fr);
+  .edge-row {
+    grid-template-columns: 2.1rem minmax(0, 1fr);
+  }
+  .edge-row__icon {
+    display: none;
   }
 }
 
@@ -758,7 +844,7 @@
   max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   align-items: center;
   justify-items: stretch;
   gap: clamp(3rem, 5.5vw, 5.8rem);
@@ -772,14 +858,11 @@
   z-index: 3;
 }
 .hero2 .hero2-title {
-  max-width: none;
-  font-size: clamp(3.25rem, 5.15vw, 5.15rem);
-  line-height: 0.96;
+  max-width: 12ch;
+  font-size: clamp(3.25rem, 4.8vw, 4.8rem);
+  line-height: 0.98;
   letter-spacing: -0.055em;
-}
-.hero2-line {
-  display: block;
-  white-space: nowrap;
+  text-wrap: balance;
 }
 .hero2 .hero2-sub {
   max-width: 58ch;
@@ -920,20 +1003,81 @@
 .places {
   background: #09132b;
   color: #fff;
+  padding: clamp(3.6rem, 7vw, 6rem) var(--container-pad) 1.4rem;
+}
+.places-intro {
+  max-width: var(--container-max);
+  margin: 0 auto clamp(2rem, 4vw, 3.2rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
+  align-items: end;
+  gap: clamp(2rem, 5vw, 6rem);
+}
+.places-intro > div {
+  display: grid;
+  gap: 0.8rem;
+}
+.places-intro .h-kicker {
+  color: var(--accent-light);
+}
+.places-intro h2 {
+  max-width: 20ch;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+.places-intro ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1rem;
+  margin: 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  list-style: none;
+}
+.places-intro li {
+  position: relative;
+  padding-left: 0.9rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.places-intro li::before {
+  content: '';
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 5px;
+  height: 1px;
+  background: var(--accent-light);
 }
 .places-grid {
+  max-width: var(--container-max);
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.42fr) minmax(20rem, 0.58fr);
+  grid-template-rows: repeat(2, minmax(16rem, 1fr));
+  gap: 10px;
 }
 .place-panel {
   position: relative;
   min-width: 0;
-  min-height: clamp(20rem, 29vw, 28rem);
+  min-height: 17rem;
   overflow: hidden;
   background: #0a4750;
+  color: #fff;
+  text-decoration: none;
+  outline: none;
 }
-.place-panel + .place-panel {
-  border-left: 1px solid rgba(255, 255, 255, 0.34);
+.place-panel:first-child {
+  grid-row: 1 / 3;
 }
 .place-panel img {
   position: absolute;
@@ -943,26 +1087,48 @@
   height: 100%;
   object-fit: cover;
   transform: scale(1.01);
-  transition: transform 0.8s var(--ease);
+  transition:
+    transform 0.65s var(--ease),
+    filter 0.35s var(--ease);
 }
-.place-panel:hover img {
-  transform: scale(1.04);
+.place-panel[data-tone='bronze']::before,
+.place-panel[data-tone='gold']::before,
+.place-panel[data-tone='teal']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: color;
+  opacity: 0.24;
+}
+.place-panel[data-tone='bronze']::before {
+  background: #9a5f2c;
+}
+.place-panel[data-tone='gold']::before {
+  background: #b78932;
+  opacity: 0.2;
+}
+.place-panel[data-tone='teal']::before {
+  background: #087e7a;
+  opacity: 0.12;
 }
 .place-panel::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(5, 14, 33, 0.13);
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(5, 14, 33, 0.03) 28%, rgba(5, 14, 33, 0.44) 100%);
   pointer-events: none;
 }
 .place-panel__copy {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   right: 0;
   bottom: 0;
   left: 0;
   padding: clamp(1.35rem, 2.4vw, 2.25rem);
-  background: rgba(6, 18, 40, 0.68);
+  background: rgba(6, 18, 40, 0.78);
   border-top: 1px solid rgba(255, 255, 255, 0.32);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(18px) saturate(125%);
@@ -978,69 +1144,53 @@
   text-transform: uppercase;
 }
 .place-panel__copy h3 {
-  max-width: 18ch;
+  max-width: 22ch;
   margin: 0;
   color: #fff;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.65rem, 2.5vw, 2.45rem);
+  font-size: clamp(1.45rem, 2.15vw, 2.25rem);
   font-weight: 400;
   letter-spacing: -0.025em;
   line-height: 1.06;
   text-wrap: balance;
 }
-.places-measures {
-  display: grid;
-  grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.2fr);
+.place-panel__cue {
+  display: inline-flex;
   align-items: center;
-  gap: clamp(1.5rem, 4vw, 4rem);
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: clamp(1.5rem, 3vw, 2.25rem) var(--container-pad) 1rem;
-}
-.places-measures > p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: clamp(0.95rem, 1.2vw, 1.06rem);
-  line-height: 1.5;
-}
-.places-measures > p span {
-  color: var(--accent-light);
-  font-weight: 650;
-}
-.places-measures ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.55rem clamp(0.9rem, 2vw, 1.55rem);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.places-measures li {
-  position: relative;
-  color: rgba(255, 255, 255, 0.9);
+  gap: 0.5rem;
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.82);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  white-space: nowrap;
 }
-.places-measures li + li {
-  padding-left: clamp(0.9rem, 2vw, 1.55rem);
+.place-panel__cue b {
+  color: var(--accent-light);
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: transform 0.2s var(--ease);
 }
-.places-measures li + li::before {
-  content: '';
-  position: absolute;
-  top: 0.12em;
-  bottom: 0.12em;
-  left: 0;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.28);
+@media (hover: hover) {
+  .place-panel:hover img {
+    transform: scale(1.045);
+    filter: saturate(1.08) contrast(1.04);
+  }
+  .place-panel:hover .place-panel__cue b {
+    transform: translateX(4px);
+  }
+}
+.place-panel:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--accent-light);
+}
+.place-panel:active img {
+  transform: scale(1.025);
 }
 .places-note {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 var(--container-pad) 1.5rem;
+  padding: 0.9rem 0 0;
   color: rgba(255, 255, 255, 0.52);
   font-size: 0.7rem;
   line-height: 1.5;
@@ -1085,19 +1235,6 @@
   filter: brightness(0) invert(1);
   opacity: 0.035;
   pointer-events: none;
-}
-.edge-card,
-.edge-ic {
-  transition:
-    border-color 0.22s var(--ease),
-    color 0.22s var(--ease),
-    transform 0.22s var(--ease);
-}
-.edge-card:hover {
-  border-top-color: rgba(95, 217, 204, 0.58);
-}
-.edge-card:hover .edge-ic {
-  transform: translateY(-2px);
 }
 .tour {
   background: var(--ground-bright);
@@ -1146,23 +1283,20 @@
   }
   .places-grid {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
   }
   .place-panel {
     min-height: clamp(17rem, 54vw, 25rem);
   }
-  .place-panel + .place-panel {
-    border-top: 1px solid rgba(255, 255, 255, 0.34);
-    border-left: 0;
+  .place-panel:first-child {
+    grid-row: auto;
   }
   .place-panel__copy h3 {
     max-width: 24ch;
   }
-  .places-measures {
+  .places-intro {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
-  }
-  .places-measures ul {
-    justify-content: flex-start;
+    gap: 1.5rem;
   }
 }
 
@@ -1178,8 +1312,8 @@
     gap: 0.9rem;
   }
   .hero2 .hero2-title {
-    /* Keep each authored line intact without letting the longest one run
-       past the phone gutter at 375px. */
+    /* Keep the compact promise legible without letting it run past the
+       phone gutter at 375px. */
     font-size: clamp(2.35rem, 10.6vw, 2.72rem);
     line-height: 0.99;
     letter-spacing: -0.05em;
@@ -1230,19 +1364,17 @@
   .place-panel__copy h3 {
     font-size: 1.65rem;
   }
-  .places-measures {
-    padding-top: 1.35rem;
+  .places {
+    padding-inline: var(--container-pad);
   }
-  .places-measures ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem 1rem;
+  .places-intro h2 {
+    font-size: clamp(2rem, 9vw, 2.65rem);
   }
-  .places-measures li + li {
-    padding-left: 0;
+  .places-intro ul {
+    grid-template-columns: minmax(0, 1fr);
   }
-  .places-measures li + li::before {
-    display: none;
+  .places-grid {
+    gap: 8px;
   }
 }
 
@@ -1275,7 +1407,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero2-screen,
-  .place-panel img {
+  .place-panel img,
+  .place-panel__cue b {
     transition: none;
   }
   .hero2-screen:hover,
