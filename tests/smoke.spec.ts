@@ -457,7 +457,7 @@ test('welcome closes the flow in full teal with one action', async ({ page }) =>
   await page.goto('/welcome?plan=free', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('Your Lumecon workspace is ready');
   await expect(page.locator('[data-welcome-kicker]')).toHaveText('Seed account ready');
-  await expect(page.locator('a.welc-btn')).toHaveAttribute('href', '/login');
+  await expect(page.locator('a.welc-btn')).toHaveAttribute('href', 'https://app.lumecon.ai');
   await expect(page.locator('.cedar-fab')).toHaveCount(0);
 });
 
