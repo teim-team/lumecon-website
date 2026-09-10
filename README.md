@@ -104,8 +104,8 @@ already made.
 `tests/` holds four specs: `smoke.spec.ts` (routes, hero rotation, pricing,
 auth flows, heading and asset checks, `security.txt` expiry) plus three
 covering the Cedar chat classifier, its focus trap, and the nudge. CI runs
-chromium and webkit; webkit is informational only, so a webkit-only failure
-does not block. In sandboxes without the pinned browser, the config falls
+Chromium and WebKit as required gates; a failure in either browser blocks
+the smoke job. In sandboxes without the pinned browser, the config falls
 back to a system Chromium — `PW_CHROMIUM_EXECUTABLE` overrides it.
 
 There is no lint step beyond `astro check` and Prettier. `format:check` is

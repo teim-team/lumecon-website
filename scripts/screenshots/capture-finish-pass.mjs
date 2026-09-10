@@ -51,6 +51,16 @@ const captures = [
   { name: 'methodology-mobile', path: '/methodology', width: 390, height: 844, mobile: true },
 ];
 
+for (const width of [1440, 1024, 768, 430, 375]) {
+  for (const [name, path, selector] of [
+    ['home-copy', '/', '.hero2'],
+    ['glossary-copy', '/glossary', '.meth-hero'],
+    ['naics-disclosure', '/naics', '.meth-hero'],
+  ]) {
+    captures.push({ name: `${name}-${width}`, path, selector, width, height: 1000 });
+  }
+}
+
 for (const capture of captures) {
   const context = await browser.newContext({
     viewport: { width: capture.width, height: capture.height },
@@ -70,10 +80,29 @@ for (const capture of captures) {
   });
   const page = await context.newPage();
   await page.goto(`${BASE}${capture.path}`, { waitUntil: 'networkidle' });
-  await primeLazyImages(page);
-  await page.screenshot({ path: join(OUT, `${capture.name}.png`), fullPage: true });
+  await page.evaluate(() => document.fonts.ready);
+  if (capture.selector) {
+    await page.locator(capture.selector).screenshot({ path: join(OUT, `${capture.name}.png`) });
+  } else {
+    await primeLazyImages(page);
+    await page.screenshot({ path: join(OUT, `${capture.name}.png`), fullPage: true });
+  }
   await context.close();
   console.log(`captured ${capture.name}`);
+}
+
+for (const path of ['/methodology', '/cedar']) {
+  for (const colorScheme of ['light', 'dark']) {
+    const page = await browser.newPage({ colorScheme, reducedMotion: 'reduce' });
+    await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
+    await page.emulateMedia({ media: 'print', colorScheme });
+    await page.pdf({
+      path: join(OUT, `${path.slice(1)}-print-${colorScheme}.pdf`),
+      format: 'A4',
+      printBackground: false,
+    });
+    await page.close();
+  }
 }
 
 await browser.close();

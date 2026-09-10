@@ -17,6 +17,14 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
 
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
+  await expect(page).toHaveTitle(/the intelligent economic analysis platform/i);
+  await expect(page.locator('.hero2 .h-kicker')).toHaveText(
+    'the intelligent economic analysis platform',
+  );
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    /the intelligent economic analysis platform/,
+  );
   // One static, readable product view is staged against the matching
   // economic-place image. Only the product view is promoted for LCP.
   const heroShot = page.locator('.hero2-screen img');
@@ -506,3 +514,37 @@ test('privacy policy discloses Cedar topic memory', async ({ page }) => {
   await expect(page.locator('main')).toContainText('topic identifier and timestamp');
   await expect(page.locator('main')).toContainText('local storage for up to 30 days');
 });
+
+for (const route of ['/methodology', '/cedar']) {
+  test(`${route} dark sections retain readable text when printing without backgrounds`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ media: 'print', colorScheme: 'dark', reducedMotion: 'reduce' });
+    await page.goto(route, { waitUntil: 'networkidle' });
+    const section = page.locator('.section--dark').first();
+    await expect(section).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(section).toHaveCSS('background-image', 'none');
+    const heading = section.locator('h1').first();
+    await expect(heading).toBeVisible();
+    const colors = await section
+      .locator('h1, h1 span, p')
+      .evaluateAll((nodes) =>
+        nodes
+          .filter((node) => node.textContent?.trim())
+          .map((node) => getComputedStyle(node).color),
+      );
+    for (const color of colors) {
+      const channels = color
+        .match(/[\d.]+/g)
+        ?.slice(0, 3)
+        .map(Number);
+      expect(channels, color).toHaveLength(3);
+      const linear = channels!.map((value) => {
+        const channel = value / 255;
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+      });
+      const luminance = 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+      expect(1.05 / (luminance + 0.05), `${route}: ${color} on white`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+}

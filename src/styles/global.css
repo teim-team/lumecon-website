@@ -769,6 +769,27 @@ strong {
     background: #161c3c;
   }
 }
+/* Printed backgrounds may be disabled independently of the color scheme. */
+@media print {
+  .section--dark {
+    --white: #fff;
+    --surface: #fff;
+    --cream: #fff;
+    --paper: #fff;
+    --ink: #111;
+    --ink-2: #222;
+    --ink-3: #333;
+    --ink-4: #444;
+    --navy: #111;
+    --accent-text: #006c6c;
+    --cedar-text: #006c6c;
+    --rule: #999;
+    --rule-strong: #666;
+    background: #fff !important;
+    color: var(--ink);
+  }
+}
+
 /* Container utility */
 .container {
   max-width: var(--container-max);

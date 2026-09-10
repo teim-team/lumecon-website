@@ -183,6 +183,10 @@ function scrape() {
     for (const el of node.children) {
       const tag = el.tagName;
       if (SKIP.has(tag)) continue;
+      // Native dialogs are closed without a `hidden` attribute. Their
+      // descendants can still expose innerText, so omit the whole closed
+      // subtree instead of exporting modal hints as visible page copy.
+      if (el.closest('dialog:not([open])')) continue;
       const cond = conditional || isConditional(el);
       if (/^H[1-6]$/.test(tag)) {
         blocks.push({ kind: 'h' + tag[1], text: clean(el.innerText), cond });
