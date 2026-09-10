@@ -323,7 +323,8 @@ test('skip link targets real content on subpages', async ({ page }) => {
 
 test('cedar page tells the AI story with three real captures, no diagrams', async ({ page }) => {
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('h1')).toContainText('AI built for economic analysis');
+  await expect(page.locator('h1')).toContainText('reviewable economic inputs');
+  await expect(page.locator('.meth-hero__lede')).toContainText("Lumecon’s AI economic analyst");
   // Exactly the three-shot story, told through the shared product tour:
   // upload, entities in the loop, partner context. Diagrams were removed by
   // design; no screenshot repeats.
@@ -340,7 +341,7 @@ test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ pa
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   // Cedar gets one card in the why band and a link out. The old dedicated
   // #cedar section and the AI tile block are both gone.
-  const card = page.locator('#why .whyw-card', { hasText: 'Built into the workflow' });
+  const card = page.locator('#why .whyw-card', { hasText: 'Review inputs before they run' });
   await expect(card).toHaveCount(1);
   await expect(card.locator('a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('.askai')).toHaveCount(0);
