@@ -137,9 +137,17 @@ import CedarChat from './CedarChat.astro';
   let chatModule: Promise<typeof import('../lib/cedarChat')> | undefined;
 
   const ensureChat = async (panel: HTMLElement): Promise<void> => {
-    chatModule ??= import('../lib/cedarChat');
-    const { bootChat } = await chatModule;
-    bootChat(panel, { surface: 'fab' });
+    try {
+      chatModule ??= import('../lib/cedarChat');
+      const { bootChat } = await chatModule;
+      bootChat(panel, { surface: 'fab' });
+    } catch (error) {
+      // A rejected dynamic import is otherwise cached for the rest of the
+      // page session. Clear it so closing and reopening Cedar can retry if a
+      // transient network interruption was the cause.
+      chatModule = undefined;
+      throw error;
+    }
   };
 
   function setup(): void {
@@ -151,6 +159,21 @@ import CedarChat from './CedarChat.astro';
     // when astro:page-load re-fires this script.
     if ((fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound) return;
     (fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound = true;
+
+    const setChatLoading = (loading: boolean): void => {
+      panel.dataset.cedarLoading = loading ? 'true' : 'false';
+      panel.setAttribute('aria-busy', String(loading));
+      const chat = panel.querySelector<HTMLElement>('.cedar-chat');
+      if (chat) chat.inert = loading;
+      for (const control of panel.querySelectorAll<HTMLInputElement | HTMLButtonElement>(
+        '.cedar-chat input, .cedar-chat button',
+      )) {
+        control.disabled = loading;
+        if (control instanceof HTMLInputElement) {
+          control.placeholder = loading ? 'Opening Cedar…' : 'Ask Cedar a question...';
+        }
+      }
+    };
 
     // ---- Helper nudge (one per browser session) ----
     const nudge = document.getElementById('cedarNudge');
@@ -253,7 +276,10 @@ import CedarChat from './CedarChat.astro';
       visibilityFrame = window.requestAnimationFrame(updateLauncherVisibility);
     };
 
+    let opening = false;
     const open = async () => {
+      if (opening || document.body.classList.contains('cedar-popped')) return;
+      opening = true;
       markNudgeSeen();
       hideNudge();
       setLauncherVisibility(true, 'waiting');
@@ -268,19 +294,32 @@ import CedarChat from './CedarChat.astro';
       fab.setAttribute('aria-expanded', 'true');
       fab.setAttribute('aria-label', 'Close Cedar');
       fab.setAttribute('title', 'Close Cedar');
+      setChatLoading(true);
       try {
         await ensureChat(panel);
+        // The visitor may have used the close button while Cedar was
+        // loading. Do not focus a hidden panel when the import finishes.
+        if (panel.hidden || !document.body.classList.contains('cedar-popped')) return;
+        setChatLoading(false);
+        const input = panel.querySelector<HTMLInputElement>('[data-cedar-input]');
+        window.setTimeout(() => {
+          if (!panel.hidden) input?.focus({ preventScroll: true });
+        }, 180);
+        trackEvent('cedar.fab.open');
       } catch (error) {
         console.error('Unable to start Cedar chat', error);
+        // Never leave the rest of the page inert behind an unresponsive
+        // dialog. Closing gives the visitor a clear retry path.
+        close();
+      } finally {
+        opening = false;
       }
-      const input = panel.querySelector<HTMLInputElement>('[data-cedar-input]');
-      window.setTimeout(() => input?.focus({ preventScroll: true }), 180);
-      trackEvent('cedar.fab.open');
     };
     const close = () => {
       // If focus is inside the panel when it closes, hand it back to the
       // FAB so keyboard users aren't dropped at the top of the document.
       const returnFocus = panel.contains(document.activeElement);
+      setChatLoading(false);
       panel.hidden = true;
       panel.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cedar-popped');

@@ -113,7 +113,7 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
 
 test('homepage uses clear free-access language and Cedar starts on demand', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
-  await expect(page.locator('.hero2-cta a[href="/signup?tier=free"]')).toHaveText(
+  await expect(page.locator('.hero2 .hero2-cta a[href="/signup?tier=free"]')).toHaveText(
     /Request free access/,
   );
 

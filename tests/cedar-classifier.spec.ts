@@ -26,9 +26,10 @@ async function openCedar(page: Page): Promise<Locator> {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const panel = page.locator('#cedarFabPanel');
-  // bootChat() stamps this once the runtime is wired (on page load).
-  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await (await scrollUntilCedarVisible(page)).click();
+  // The full Cedar runtime is intentionally loaded only after someone
+  // opens the launcher, keeping the marketing page's initial JS light.
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await expect(panel.locator('[data-cedar-input]')).toBeVisible();
   return panel;
 }
@@ -139,6 +140,7 @@ test('every starter chip routes to its own intent, never the fallback', async ({
     const intent = INTENTS.find((i) => i.id === id)!;
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     const panel = page.locator('#cedarFabPanel');
+    await (await scrollUntilCedarVisible(page)).click();
     await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
     await page.evaluate((cid) => {
       const el = document.querySelector(`#cedarFabPanel .cedar-chip[data-intent="${cid}"]`);
@@ -163,8 +165,8 @@ test('cedar handles rapid back-to-back submits without breaking', async ({ page,
   page.on('pageerror', (e) => errs.push(e.message));
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const panel = page.locator('#cedarFabPanel');
-  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await (await scrollUntilCedarVisible(page)).click();
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   const input = panel.locator('[data-cedar-input]');
 
   // Fire two messages back-to-back, the second while the first is still
@@ -246,6 +248,7 @@ test('a returning visitor gets a welcome-back line tied to their last topic', as
   });
   await page.reload({ waitUntil: 'domcontentloaded' });
   const panel = page.locator('#cedarFabPanel');
+  await (await scrollUntilCedarVisible(page)).click();
   await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await expect(panel.locator('.cedar-msg--bot').last()).toContainText('Welcome back', {
     timeout: 5000,

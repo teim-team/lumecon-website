@@ -40,6 +40,7 @@ jobs:
       - name: Audit crawler metadata and export rendered copy
         run: DOCS_BASE_URL=http://127.0.0.1:4330 npm run docs:copy
       - uses: actions/upload-artifact@v7
+        if: always()
         with:
           name: lumecon-polish-qa
           path: |
