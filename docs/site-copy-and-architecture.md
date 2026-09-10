@@ -23,24 +23,31 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 736 | Lumecon \| Economic Analysis That Holds Up | 121 |
-| `/pricing` | 1190 | Pricing \| Lumecon | 155 |
-| `/methodology` | 2539 | Methodology \| Lumecon | 154 |
+| `/` | 727 | Lumecon \| Economic Analysis That Holds Up | 121 |
+| `/pricing` | 1194 | Pricing \| Lumecon | 155 |
+| `/methodology` | 2553 | Methodology \| Lumecon | 167 |
 | `/cedar` | 464 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/glossary` | 547 | Glossary \| Lumecon | 142 |
 | `/naics` | 644 | Industry sectors \| Lumecon | 146 |
 | `/signup` | 238 | Request beta access \| Lumecon | 118 |
-| `/login` | 114 | Log in \| Lumecon | 31 |
+| `/login` | 118 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 218 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 205 | Checkout \| Lumecon | 81 |
-| `/welcome` | 56 | Welcome to Lumecon | 32 |
+| `/welcome` | 62 | Welcome to Lumecon | 32 |
 | `/accessibility` | 382 | Accessibility \| Lumecon | 141 |
 | `/ai-and-data-use` | 601 | AI and Data Use \| Lumecon | 133 |
-| `/security` | 533 | Security \| Lumecon | 118 |
-| `/privacy` | 616 | Privacy Policy \| Lumecon | 99 |
+| `/security` | 433 | Security \| Lumecon | 118 |
+| `/privacy` | 664 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1028 | Terms of Service \| Lumecon | 146 |
 | `/404` | 93 | Page Not Found \| Lumecon | 141 |
-| **Total** | **10204** | | |
+| **Total** | **10171** | | |
+
+## Crawler metadata audit
+
+This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards, the llms.txt discovery link and JSON-LD against the built site.
+
+- **Sitemap URLs:** 11
+- **Status:** All checked crawler metadata is complete and consistent.
 
 ---
 
@@ -51,10 +58,14 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 - **Title:** Lumecon | Economic Analysis That Holds Up
 - **Meta description** (121 chars): Turn organizational records and public economic data into traceable economic impact analyses with Cedar and Cedar Impact.
 - **og:title:** Economic Analysis That Holds Up
+- **og:description:** Turn organizational records and public economic data into traceable economic impact analyses with Cedar and Cedar Impact.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon economic impact analysis software, with Cedar in every plan.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 736
+- **Visible words:** 727
 
 ### Architecture (heading outline)
 
@@ -111,7 +122,7 @@ INTELLIGENT ECONOMIC ANALYSIS
 Lumecon brings your organization’s records, authoritative public data and a regional economic model into one reviewable workflow. Cedar structures the inputs and flags uncertainty; you approve the assumptions, Cedar Impact calculates the results and every estimate keeps its source trail.
 
 - _link:_ [See plans and pricing →](/pricing)
-- _link:_ [Request Seed access →](/signup?tier=free)
+- _link:_ [Request free access →](/signup?tier=free)
 - _image alt:_ (no alt)
 RENEWABLE ENERGY IOWA
 
@@ -177,7 +188,7 @@ WHY LUMECON
 
 **H2: Keep records, assumptions and results in one reviewable workflow.**
 
-Build an analysis once, then update, compare and report it without reconstructing the process. Compare plans or request Seed access.
+Build an analysis once, then update, compare and report it without reconstructing the process. Compare plans or request free access.
 
 
 > _section: `whyw-card`_
@@ -276,10 +287,10 @@ BUILT FOR SCRUTINY
 Lumecon combines established economic methods, current public data and a reviewable product workflow. Its team includes economists, data scientists and engineers with experience at Federal Reserve institutions and leading universities.
 
 - _link:_ [Read the methodology →](/methodology)
-- _link:_ [01 ECONOMIC MODEL Regionalized methods with documented assumptions Input-output relationships are regionalized to the geography being analyzed, with direct, indirect and induced effects kept distinct. Examine the model →](/methodology#m-core)
-- _link:_ [02 PUBLIC EVIDENCE Sources and vintages stay visible Federal economic data provides the foundation, with higher-frequency indicators used only where they add relevant information. Review the sources →](/methodology#m-data)
-- _link:_ [03 CEDAR AND REVIEW AI-proposed inputs remain subject to human approval Cedar organizes source material and flags ambiguity. Cedar Impact performs the calculations after inputs and assumptions are reviewed. See how Cedar works →](/cedar)
-- _link:_ [04 SECURITY PROGRAM Controls open to procurement review Lumecon is working toward a future SOC 2 Type II examination. No SOC 2 examination has been completed and no report is currently available. Read the current status →](/security)
+- _link:_ [METHOD Regionalized methods with documented assumptions Input-output relationships are regionalized to the geography being analyzed, with direct, indirect and induced effects kept distinct. Examine the model →](/methodology#m-core)
+- _link:_ [EVIDENCE Sources and vintages stay visible Federal economic data provides the foundation, with higher-frequency indicators used only where they add relevant information. Review the sources →](/methodology#m-data)
+- _link:_ [REVIEW AI-proposed inputs remain subject to human approval Cedar organizes source material and flags ambiguity. Cedar Impact performs the calculations after inputs and assumptions are reviewed. See how Cedar works →](/cedar)
+- _link:_ [SECURITY Controls open to procurement review Lumecon is working toward a future SOC 2 Type II examination. No SOC 2 examination has been completed and no report is currently available. Read the current status →](/security)
 
 > _section: `get-started`_
 
@@ -288,9 +299,9 @@ GET STARTED
 
 **H2: Every organization has an economic impact. Make yours visible.**
 
-Request Seed access during the private beta. Once admitted, you can upload your documents, build an analysis and review direct effects before choosing a paid plan. No credit card is required.
+Request free access during the private beta. Once admitted, you can upload your documents, build an analysis and review direct effects before choosing a paid plan. No credit card is required.
 
-- _link:_ [Request Seed access →](/signup?tier=free)
+- _link:_ [Request free access →](/signup?tier=free)
 - _link:_ [Compare plans →](/pricing)
 Prefer to talk to a person first? contact@lumecon.ai
 
@@ -336,22 +347,20 @@ LEGAL
 **[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
 
 - _button:_ What is Lumecon?
-- _button:_ Does this work for tribal nations?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
 - _button:_ Who is Lumecon for?
 - _button:_ Can it support grant applications?
-- _button:_ How much does it cost?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
 - _button:_ How long does an analysis take?
 - _button:_ Can I see a demo?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
-- _button:_ What is Cedar?
 - _button:_ Free vs paid Cedar?
-- _button:_ What is Indian Country?
-- _button:_ What is an EDA district?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
-**[conditional]** Cedar can make mistakes. Check important details, and treat figures as estimates.
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
 
 - _button:_ ✕
 - _image alt:_ (no alt)
@@ -371,10 +380,14 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Title:** Pricing | Lumecon
 - **Meta description** (155 chars): Every price on one page. Paid plans start at $1,000 a year with unlimited analyses, every supported U.S. geography and Cedar. Request Seed access for free.
 - **og:title:** Lumecon pricing: one model, clear annual pricing
+- **og:description:** Every price on one page. Paid plans start at $1,000 a year with unlimited analyses, every supported U.S. geography and Cedar. Request Seed access for free.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, Product, FAQPage
-- **Visible words:** 1190
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
+- **Visible words:** 1194
 
 ### Architecture (heading outline)
 
@@ -431,7 +444,7 @@ Plans start at $1,000 a year, and every price is on this page.
 
 ANNUAL ACCESS
 
-- Seed Free
+- Seed $0
 - Sprout $1,000
 - Sapling $2,500
 - Tree $7,500
@@ -461,7 +474,7 @@ No credit card, expiration or obligation.
 
 Evaluate Lumecon before paying.
 
-Free
+$0 / YEAR
 
 1 USER
 
@@ -486,10 +499,10 @@ Cedar Impact in full, with Cedar, unlimited analyses and every supported U.S. ge
 
 > _section: `plan-sapling`_
 
-RECOMMENDED
-
 
 **H2: Sapling**
+
+RECOMMENDED
 
 CLIENT WORK
 
@@ -541,14 +554,14 @@ $2,500 / YEAR
 Unlimited users
 
 - _link:_ [Request Cedar Grove access →](/signup?product=cedar-grove)
-- _disclosure:_ COMPARE ALL PLANS Every capability, side by side
+- _disclosure:_ Compare all plansEvery capability, side by side
 - _label:_ Capability
 - _label:_ Seed
 - _label:_ Sprout
 - _label:_ Sapling
 - _label:_ Tree
 - _label:_ ANNUAL PRICE
-- _label:_ Free
+- _label:_ $0 / year
 - _label:_ $1,000
 - _label:_ $2,500
 - _label:_ $7,500
@@ -700,22 +713,20 @@ LEGAL
 **[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
 
 - _button:_ What is Lumecon?
-- _button:_ Does this work for tribal nations?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
 - _button:_ Who is Lumecon for?
 - _button:_ Can it support grant applications?
-- _button:_ How much does it cost?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
 - _button:_ How long does an analysis take?
 - _button:_ Can I see a demo?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
-- _button:_ What is Cedar?
 - _button:_ Free vs paid Cedar?
-- _button:_ What is Indian Country?
-- _button:_ What is an EDA district?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
-**[conditional]** Cedar can make mistakes. Check important details, and treat figures as estimates.
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
 
 We use optional analytics to improve Lumecon. Privacy Policy
 
@@ -729,15 +740,19 @@ We use optional analytics to improve Lumecon. Privacy Policy
 **Intended job of this page:** Why the economics are credible.
 
 - **Title:** Methodology | Lumecon
-- **Meta description** (154 chars): How Lumecon estimates economic impact: input-output modeling on federal data, regionalized to your county, state or reservation, with the equations shown.
+- **Meta description** (167 chars): Lumecon is the intelligent economic analysis platform. Cedar Impact is its economic impact analysis software, using regionalized input-output modeling on federal data.
+- **og:description:** Lumecon is the intelligent economic analysis platform. Cedar Impact is its economic impact analysis software, using regionalized input-output modeling on federal data.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2539
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
+- **Visible words:** 2553
 
 ### Architecture (heading outline)
 
-- **H1** Established economic methods, updated for the economy you are analyzing.
+- **H1** Established economic methods with better inputs for the economy you are analyzing.
   - **H2** The core model
   - **H2** From national relationships to your region
     - **H3** Suppressed and small-area data
@@ -750,6 +765,12 @@ We use optional analytics to improve Lumecon. Privacy Policy
   - **H2** What the headline measures mean
   - **H2** Bring your records into a method you can examine.
   - **H2** Common questions
+    - **H3** What model does Lumecon use?
+    - **H3** Is Lumecon an alternative to IMPLAN or REMI?
+    - **H3** How does Lumecon handle suppressed government data?
+    - **H3** How are reservations and trust lands modeled?
+    - **H3** What do direct, indirect and induced effects mean?
+    - **H3** Are Lumecon results estimates?
 
 ### Copy, in document order
 
@@ -782,9 +803,9 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 METHODOLOGY
 
 
-**H1: Established economic methods, updated for the economy you are analyzing.**
+**H1: Established economic methods with better inputs for the economy you are analyzing.**
 
-Cedar Impact uses regionalized input-output analysis built from federal economic data. It applies current public indicators where appropriate, documents regionalization and validation and keeps the evidence behind each result available for review.
+Lumecon is the intelligent economic analysis platform. Cedar Impact, its economic impact analysis software, uses regionalized input-output analysis built from federal economic data. It applies current public indicators where appropriate, documents regionalization and validation and keeps the evidence behind each result available for review.
 
 - _image alt:_ Lumecon number lineage tracing economic output through direct, indirect and induced model layers. Shown with illustrative sample data.
 _caption:_ The evidence behind a result, visible in the product.
@@ -888,29 +909,29 @@ The model is continually evaluated and improved as better data, regionalization 
 
 These five commitments apply to every analysis; open each section for methodology detail.
 
-- _disclosure:_ GEOGRAPHY Geographies that follow the real economy Counties, states and the nation, with reservations and trust lands treated as first-class regions rather than approximations.
+- _disclosure:_ GeographyGeographies that follow the real economyCounties, states and the nation, with reservations and trust lands treated as first-class regions rather than approximations.
 Where an analysis covers both a state and homelands, the two scopes are reported side by side with the subset relationship stated explicitly, so nothing is double-counted.
 
 Reservation and trust-land regions are constructed from the federal boundary files for American Indian and Alaska Native areas and from the employment, industry and demographic data located within those boundaries. They are modeled geographies with their own regional characteristics, and results for a reservation are estimated for that region itself. We use homelands as the plain-language umbrella term for reservation and trust-land geographies. Tribal government analysis is an active area of methodological work for us, and this page will grow as that work does.
 
-- _disclosure:_ INDUSTRIES Industries at the two-digit NAICS level Classification lives where administrative data coverage is strongest, so fewer values are imputed between a source and a multiplier.
+- _disclosure:_ IndustriesIndustries at the two-digit NAICS levelClassification lives where administrative data coverage is strongest, so fewer values are imputed between a source and a multiplier.
 Every dollar in an analysis is classified against the North American Industry Classification System at the two-digit sector level, from Agriculture (11) to Public Administration (92). Two digits is where administrative data coverage is strongest: the federal employment, wage and output series that anchor the model are published nearly complete at this level for counties and states, while finer detail is often suppressed for confidentiality in smaller geographies. Working where the data is complete means fewer imputed values and fewer assumptions between a source and a multiplier.
 
 As our client base and data coverage grow, we intend to extend classification beyond two digits where published sources support it, and each analysis will state the level it uses. Tribal governments are tracked as their own Lumecon category rather than as local government within Public Administration (92), because a nation that runs administration, enterprises, housing, health and education programs is understated by that single line.
 
 See the twenty sectors and the Tribal Government category.
 
-- _disclosure:_ VALIDATION Validation and human review A run that fails a critical check stops rather than shipping a doubtful number, and a person confirms the assumptions before results are finalized.
+- _disclosure:_ ValidationValidation and human reviewA run that fails a critical check stops rather than shipping a doubtful number, and a person confirms the assumptions before results are finalized.
 The software checks that tables cross-foot, that scopes nest correctly and that inputs fall in plausible ranges. Estimated inputs and model outputs are checked against plausibility bounds, including multiplier ranges credible for a small regional economy, and a run that fails a critical check stops rather than shipping a doubtful number.
 
 Automation assists with data processing, quality checks and documentation. Economic assumptions, regionalization choices and model design remain economically grounded and subject to human review, and the person running an analysis confirms the assumptions before results are finalized. Learn how Cedar works.
 
-- _disclosure:_ TRACEABILITY Every number has a lineage Each figure traces to its effect layer, operations, industries and source tags, and exports carry the full detail.
+- _disclosure:_ TraceabilityEvery number has a lineageEach figure traces to its effect layer, operations, industries and source tags, and exports carry the full detail.
 Each headline figure carries a trace: which effect layer it comes from, which operations generate it and which industries it lands in, each with its share. The same traceability runs through the inputs, where every figure carries its source tag (reported, apportioned or estimated).
 
 Exports carry the source references, the assumptions, the model inputs and the full set of tables behind each figure, so the person defending the number in a council meeting, a boardroom or a grant review holds the same detail the model used.
 
-- _disclosure:_ COMPARISON How Lumecon differs from established platforms Established platforms and Lumecon draw on the same national statistical system; the differences are architecture, workflow and price.
+- _disclosure:_ ComparisonHow Lumecon differs from established platformsEstablished platforms and Lumecon draw on the same national statistical system; the differences are architecture, workflow and price.
 Input-output analysis is an established, openly published field. Established platforms and Lumecon draw on the same national statistical system and decades of economic research. Lumecon differentiates through its data architecture, regionalization, traceability, reservation and trust-land modeling, modern workflow and pricing. Lumecon is not affiliated with or endorsed by IMPLAN, REMI or any other platform named here.
 
 
@@ -944,22 +965,34 @@ Lumecon results are decision-support estimates. They describe likely economic re
 
 **H2: Common questions**
 
-- _disclosure:_ What model does Lumecon use?
+
+**H3: What model does Lumecon use?**
+
 A regionalized input-output model built from the national economic accounts, extended with household and government accounts (a social accounting matrix formulation) so induced effects and the government tax-and-spend cycle can be estimated alongside direct and indirect effects.
 
-- _disclosure:_ Is Lumecon an alternative to IMPLAN or REMI?
+
+**H3: Is Lumecon an alternative to IMPLAN or REMI?**
+
 Organizations evaluate Lumecon as an alternative to IMPLAN, RIMS II and REMI. The input-output foundation is shared across the field; Lumecon differs in its fully public, citable data foundation, the per-figure lineage with source tags, reservation and trust-land modeling and flat subscription pricing. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.
 
-- _disclosure:_ How does Lumecon handle suppressed government data?
+
+**H3: How does Lumecon handle suppressed government data?**
+
 Federal disclosure rules withhold some county-sector figures. Where a suppressed sector clearly exists in a region, Lumecon estimates its employment from wider employment-per-establishment patterns and tags the figure as estimated, so a reviewer can always tell reported values from estimates.
 
-- _disclosure:_ How are reservations and trust lands modeled?
+
+**H3: How are reservations and trust lands modeled?**
+
 As modeled geographies constructed from the federal boundary files for American Indian and Alaska Native areas and the data located within them, with regional purchase behavior estimated for the region itself. Household income includes transfer income, which is a meaningful share of income in many reservation economies.
 
-- _disclosure:_ What do direct, indirect and induced effects mean?
+
+**H3: What do direct, indirect and induced effects mean?**
+
 Direct effects are the analyzed activity itself: its spending, wages and jobs. Indirect effects happen at the suppliers it buys from. Induced effects come from workers spending their earnings in the region. Lumecon reports the three layers separately and shows how each total is composed.
 
-- _disclosure:_ Are Lumecon results estimates?
+
+**H3: Are Lumecon results estimates?**
+
 Yes. Results are decision-support estimates and are labeled as such wherever they appear. Every analysis states its data year and assumptions, and exports carry the full tables behind each figure so the estimates can be reviewed.
 
 
@@ -1004,22 +1037,20 @@ LEGAL
 **[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
 
 - _button:_ What is Lumecon?
-- _button:_ Does this work for tribal nations?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
 - _button:_ Who is Lumecon for?
 - _button:_ Can it support grant applications?
-- _button:_ How much does it cost?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
 - _button:_ How long does an analysis take?
 - _button:_ Can I see a demo?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
-- _button:_ What is Cedar?
 - _button:_ Free vs paid Cedar?
-- _button:_ What is Indian Country?
-- _button:_ What is an EDA district?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
-**[conditional]** Cedar can make mistakes. Check important details, and treat figures as estimates.
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
 
 - _button:_ ✕
 - _image alt:_ (no alt)
@@ -1038,9 +1069,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Cedar, the AI economic analyst | Lumecon
 - **Meta description** (151 chars): Cedar is Lumecon’s AI economic analyst, helping teams organize source material, structure reviewable inputs and explain results alongside Cedar Impact.
+- **og:description:** Cedar is Lumecon’s AI economic analyst, helping teams organize source material, structure reviewable inputs and explain results alongside Cedar Impact.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/cedar
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage, BreadcrumbList
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
 - **Visible words:** 464
 
 ### Architecture (heading outline)
@@ -1090,7 +1125,7 @@ CEDAR
 
 Cedar is Lumecon’s AI economic analyst. It reads documents you select, proposes structured inputs, flags unresolved questions and helps explain results. Cedar Impact performs the economic calculations with approved inputs, while the person running the analysis reviews assumptions and approves the final result.
 
-- _link:_ [Request beta access →](/signup?tier=free)
+- _link:_ [Request free access →](/signup?tier=free)
 - _image alt:_ Cedar reviewing proposed economic inputs from sample wind-project source documents.
 _caption:_ Cedar turns source material into reviewable economic inputs.
 
@@ -1155,7 +1190,7 @@ Cedar helps extract, organize and classify candidate inputs from source material
 
 Source material, proposed inputs, assumptions and final calculations remain available for human review throughout the workflow.
 
-- _link:_ [Request beta access →](/signup?tier=free)
+- _link:_ [Request free access →](/signup?tier=free)
 - _link:_ [Read AI and data use →](/ai-and-data-use)
 
 > _section: `footer`_
@@ -1206,9 +1241,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Glossary | Lumecon
 - **Meta description** (142 chars): Direct, indirect and induced effects, multipliers, GDP contribution and the rest of the economic impact vocabulary, defined in plain language.
+- **og:description:** Direct, indirect and induced effects, multipliers, GDP contribution and the rest of the economic impact vocabulary, defined in plain language.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/glossary
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage, BreadcrumbList, DefinedTermSet
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, DefinedTermSet
 - **Visible words:** 547
 
 ### Architecture (heading outline)
@@ -1330,22 +1369,20 @@ LEGAL
 **[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
 
 - _button:_ What is Lumecon?
-- _button:_ Does this work for tribal nations?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
 - _button:_ Who is Lumecon for?
 - _button:_ Can it support grant applications?
-- _button:_ How much does it cost?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
 - _button:_ How long does an analysis take?
 - _button:_ Can I see a demo?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
-- _button:_ What is Cedar?
 - _button:_ Free vs paid Cedar?
-- _button:_ What is Indian Country?
-- _button:_ What is an EDA district?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
-**[conditional]** Cedar can make mistakes. Check important details, and treat figures as estimates.
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
 
 We use optional analytics to improve Lumecon. Privacy Policy
 
@@ -1360,9 +1397,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Industry sectors | Lumecon
 - **Meta description** (146 chars): The 20 NAICS sectors and the Tribal Government category Lumecon classifies economic activity into, and why the model works at the two-digit level.
+- **og:description:** The 20 NAICS sectors and the Tribal Government category Lumecon classifies economic activity into, and why the model works at the two-digit level.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, BreadcrumbList, DefinedTermSet
+- **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, DefinedTermSet
 - **Visible words:** 644
 
 ### Architecture (heading outline)
@@ -1472,22 +1513,20 @@ LEGAL
 **[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
 
 - _button:_ What is Lumecon?
-- _button:_ Does this work for tribal nations?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
 - _button:_ Who is Lumecon for?
 - _button:_ Can it support grant applications?
-- _button:_ How much does it cost?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
 - _button:_ How long does an analysis take?
 - _button:_ Can I see a demo?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
-- _button:_ What is Cedar?
 - _button:_ Free vs paid Cedar?
-- _button:_ What is Indian Country?
-- _button:_ What is an EDA district?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
-**[conditional]** Cedar can make mistakes. Check important details, and treat figures as estimates.
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
 
 We use optional analytics to improve Lumecon. Privacy Policy
 
@@ -1500,9 +1539,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Request beta access | Lumecon
 - **Meta description** (118 chars): Lumecon is in private beta. Tell us who you are and what you want to measure, and the team will reach out with access.
+- **og:description:** Lumecon is in private beta. Tell us who you are and what you want to measure, and the team will reach out with access.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/signup
 - **Robots:** noindex, nofollow
-- **Structured data:** Organization, WebSite
+- **Structured data:** Organization, WebSite, SoftwareApplication
 - **Visible words:** 238
 
 ### Architecture (heading outline)
@@ -1610,10 +1653,14 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Log in | Lumecon
 - **Meta description** (31 chars): Log in to your Lumecon account.
+- **og:description:** Log in to your Lumecon account.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
-- **Structured data:** Organization, WebSite
-- **Visible words:** 114
+- **Structured data:** Organization, WebSite, SoftwareApplication
+- **Visible words:** 118
 
 ### Architecture (heading outline)
 
@@ -1671,8 +1718,8 @@ Enter your work email and password to continue.
 - _link:_ [Forgot password?](/login?reset=1)
 - _button:_ Log in
 - _button:_ Back to sign in
-- _label:_ **[conditional]** or
-- _link:_ [Continue with Google](/login?google=1)
+- _label:_ OR
+- _link:_ [Continue with Google](https://api.lumecon.ai/auth/google)
 New to Lumecon? Request beta access
 
 
@@ -1693,9 +1740,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Choose your plan | Lumecon
 - **Meta description** (103 chars): Pick the Lumecon plan that fits how you work. Every plan runs the same economic model on the same data.
+- **og:description:** Pick the Lumecon plan that fits how you work. Every plan runs the same economic model on the same data.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/choose-plan
 - **Robots:** noindex, nofollow
-- **Structured data:** Organization, WebSite
+- **Structured data:** Organization, WebSite, SoftwareApplication
 - **Visible words:** 218
 
 ### Architecture (heading outline)
@@ -1736,7 +1787,7 @@ CHOOSE A PLAN
 Every paid plan runs the same economic model on the same data foundation. Choose the collaboration and data capabilities your team needs; you can change plans later.
 
 - _link:_ [Sprout For an individual analyst. $1,000 / year 1 USER Cedar Impact in full, Cedar and every supported geography Continue with Sprout →](/checkout?tier=sprout)
-- _link:_ [RECOMMENDED Sapling For teams and client work. $2,500 / year UP TO 10 USERS Adds Cedar Commons, the shared project workspace, with external collaborators Continue with Sapling →](/checkout?tier=sapling)
+- _link:_ [Sapling RECOMMENDED For teams and client work. $2,500 / year UP TO 10 USERS Adds Cedar Commons, the shared project workspace, with external collaborators Continue with Sapling →](/checkout?tier=sapling)
 - _link:_ [Tree For organization-wide use. $7,500 / year UNLIMITED USERS IN ONE ORGANIZATION Adds Cedar Grove, the advanced data library, and Cedar calibration Continue with Tree →](/checkout?tier=tree)
 - _link:_ [Start free with Seed → See your direct effects free; full results unlock on any paid plan.](/signup?tier=free)
 Want the detail first? Compare plans. Using Lumecon for client work? Commercial use starts with Sapling.
@@ -1784,9 +1835,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Checkout | Lumecon
 - **Meta description** (81 chars): Complete your Lumecon subscription. Prices are annual and include taxes and fees.
+- **og:description:** Complete your Lumecon subscription. Prices are annual and include taxes and fees.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/checkout
 - **Robots:** noindex, nofollow
-- **Structured data:** Organization, WebSite
+- **Structured data:** Organization, WebSite, SoftwareApplication
 - **Visible words:** 205
 
 ### Architecture (heading outline)
@@ -1923,10 +1978,14 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Welcome to Lumecon
 - **Meta description** (32 chars): Your Lumecon workspace is ready.
+- **og:description:** Your Lumecon workspace is ready.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/welcome
 - **Robots:** noindex, nofollow
-- **Structured data:** Organization, WebSite
-- **Visible words:** 56
+- **Structured data:** Organization, WebSite, SoftwareApplication
+- **Visible words:** 62
 
 ### Architecture (heading outline)
 
@@ -1963,9 +2022,9 @@ SUBSCRIPTION CONFIRMED
 
 **H1: Your Lumecon workspace is ready.**
 
-Your Lumecon workspace is ready.
+Open Lumecon to review your workspace and begin your first analysis.
 
-- _link:_ [Open Lumecon →](/login)
+- _link:_ [Open Lumecon →](https://app.lumecon.ai)
 Use the account credentials provided with your access invitation.
 
 - _image alt:_ The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data.
@@ -1984,9 +2043,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Accessibility | Lumecon
 - **Meta description** (141 chars): How Lumecon approaches accessibility, what we target, what we know is not there yet, and how to tell us when something does not work for you.
+- **og:description:** How Lumecon approaches accessibility, what we target, what we know is not there yet, and how to tell us when something does not work for you.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/accessibility
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage, BreadcrumbList
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
 - **Visible words:** 382
 
 ### Architecture (heading outline)
@@ -2101,14 +2164,26 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** AI and Data Use | Lumecon
 - **Meta description** (133 chars): How Cedar processes source material, how AI is separated from the economic model and which data-protection commitments are in effect.
+- **og:description:** How Cedar processes source material, how AI is separated from the economic model and which data-protection commitments are in effect.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/ai-and-data-use
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage, BreadcrumbList
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
 - **Visible words:** 601
 
 ### Architecture (heading outline)
 
 - **H1** AI and Data Use
+  - **H2** 1. Where AI sits in the platform
+  - **H2** 2. What Cedar reads, and why
+  - **H2** 3. What we do not do
+  - **H2** 4. Cedar on this website
+  - **H2** 5. AI providers and subprocessors
+  - **H2** 6. Data sovereignty
+  - **H2** 7. Security program and SOC 2
+  - **H2** 8. Questions
 
 ### Copy, in document order
 
@@ -2141,28 +2216,44 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _label:_ Working draft, under review by counsel.
 Cedar helps teams turn organizational records into reviewable inputs and explanations within Lumecon. This statement explains what Cedar processes, how AI is separated from the economic model and which data-protection commitments are currently in effect.
 
-- _disclosure:_ 1. Where AI sits in the platform
+
+**H2: 1. Where AI sits in the platform**
+
 Cedar reads documents supplied to Cedar Impact, proposes structured inputs, flags gaps and assumptions and helps draft reporting. Cedar Impact applies approved inputs to a deterministic input-output model; economic impact figures are calculated by that model, not generated by a language model. The person running the analysis reviews the assumptions and approves the final result.
 
-- _disclosure:_ 2. What Cedar reads, and why
+
+**H2: 2. What Cedar reads, and why**
+
 Cedar processes the documents and figures your organization selects for an analysis, which may include budgets, financial statements, payroll, program records and prior analyses. It uses that material to propose model inputs, identify questions and help explain results. ThePrivacy Policy describes how Lumecon uses customer content to operate and support the service.
 
-- _disclosure:_ 3. What we do not do
+
+**H2: 3. What we do not do**
+
 Lumecon does not sell personal information or use customer information for third-party advertising. Service improvement may use usage metadata and information that has been aggregated and de-identified, as described in the applicable terms. Customer-specific limits on AI-provider use, retention and model training are confirmed in the applicable agreement during private beta. Cedar proposes work for review and does not approve an analysis.
 
-- _disclosure:_ 4. Cedar on this website
+
+**H2: 4. Cedar on this website**
+
 The chat on lumecon.ai is a lightweight Cedar that answers questions about Lumecon. Most questions are answered by an in-browser classifier. If a backend is enabled, an unmatched message and an anonymous conversation identifier may be sent to the Lumecon API to produce an answer. The website chat is not connected to customer product data. Do not enter confidential or sensitive information in it.
 
-- _disclosure:_ 5. AI providers and subprocessors
+
+**H2: 5. AI providers and subprocessors**
+
 Some Cedar functions may use third-party AI providers. During private beta, Lumecon is finalizing written terms and technical controls covering each provider’s processing purpose, retention, access and model-training practices. Before sensitive customer content is routed to a provider, those arrangements will be confirmed for the deployment and documented during security review. A current subprocessor list will be published as those arrangements are finalized.
 
-- _disclosure:_ 6. Data sovereignty
+
+**H2: 6. Data sovereignty**
+
 Lumecon does not take ownership of customer content. For Tribal Nations and government customers, data-governance, publicity, access, retention and deletion requirements are addressed during procurement and recorded in the applicable agreement. An organization decides how its analyses are shared, subject to participant permissions and its agreement with Lumecon.
 
-- _disclosure:_ 7. Security program and SOC 2
+
+**H2: 7. Security program and SOC 2**
+
 Lumecon is formalizing its security program against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. Lumecon has not completed a SOC 2 examination and does not currently have a SOC 2 report. Current information about controls, subprocessors, data handling and readiness work is available through asecurity review.
 
-- _disclosure:_ 8. Questions
+
+**H2: 8. Questions**
+
 Write to contact@lumecon.ai and a person will answer. This page will be kept consistent with the Terms of Service and Privacy Policy as counsel finalizes them, and updated here with a new date when it changes.
 
 - _label:_ Counsel:
@@ -2212,15 +2303,18 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Security | Lumecon
 - **Meta description** (118 chars): Lumecon’s current security program, product controls and SOC 2 preparation status for customer and procurement review.
+- **og:description:** Lumecon’s current security program, product controls and SOC 2 preparation status for customer and procurement review.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/security
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage
-- **Visible words:** 533
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage
+- **Visible words:** 433
 
 ### Architecture (heading outline)
 
 - **H1** Security you can examine.
-  - **H2** Human review stays between source material and calculated results.
   - **H2** What is implemented and what remains in progress.
     - **H3** Application controls
     - **H3** Readiness and evidence
@@ -2279,23 +2373,6 @@ CURRENT STATUS
 The examination scope is still being defined. Customer-specific commitments belong in the applicable agreement.
 
 
-> _section: `secpg-flow`_
-
-
-> _section: `secpg-head`_
-
-AI AND MODEL BOUNDARY
-
-
-**H2: Human review stays between source material and calculated results.**
-
-Cedar organizes information and proposes structure. It does not calculate economic impacts or approve an analysis; responsibility for approving assumptions and final results stays with the person running the analysis.
-
-- 01 Source material You choose the documents and figures used for an analysis.
-- 02 Cedar prepares Cedar proposes inputs, preserves source references and flags unresolved questions.
-- 03 A person reviews The person running the analysis approves inputs, mappings and assumptions.
-- 04 Cedar Impact calculates The economic model produces results and keeps their source and model lineage available.
-
 > _section: `secpg-program`_
 
 
@@ -2334,7 +2411,7 @@ This page describes current product design and program status; it is not a certi
 
 > _section: `secpg-ai`_
 
-CUSTOMER DATA AND AI
+CEDAR AND CUSTOMER DATA
 
 
 **H2: Provider terms are verified before sensitive content moves.**
@@ -2397,14 +2474,25 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Privacy Policy | Lumecon
 - **Meta description** (99 chars): How Lumecon collects, uses, shares, retains and protects personal information and customer content.
+- **og:description:** How Lumecon collects, uses, shares, retains and protects personal information and customer content.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/privacy
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage, BreadcrumbList
-- **Visible words:** 616
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
+- **Visible words:** 664
 
 ### Architecture (heading outline)
 
 - **H1** Privacy Policy
+  - **H2** What we collect
+  - **H2** How we use it
+  - **H2** Analytics and your consent
+  - **H2** When we share
+  - **H2** Retention and security
+  - **H2** Your rights
+  - **H2** Changes
 
 ### Copy, in document order
 
@@ -2435,27 +2523,41 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 **H1: Privacy Policy**
 
 - _label:_ Working draft, under review by counsel.
-- _disclosure:_ What we collect
+
+**H2: What we collect**
+
 We collect the information you provide, customer content needed to operate the product and limited technical information needed to secure and support the service. An access request or contact form may include your name, work email, organization, role and the analysis you want to run. Product content may include documents and figures you select for an analysis. Our servers may record request time, browser or device information, IP address and error details when needed to operate and secure the service.
 
-The website Cedar stores the current conversation in session storage for the open tab. Most questions are answered in the browser. If a backend is enabled, an unmatched message and an anonymous conversation identifier may be sent to the Lumecon API to produce an answer. Do not enter confidential or sensitive information in the website chat.
+The website Cedar stores the current conversation in session storage for the open tab. After a substantive Cedar answer, it also stores a topic identifier and timestamp in local storage for up to 30 days so a later visit can receive one welcome-back prompt. That record does not include the conversation text and is removed when it is used or found expired. Most questions are answered in the browser. If a backend is enabled, an unmatched message and an anonymous conversation identifier may be sent to the Lumecon API to produce an answer. Do not enter confidential or sensitive information in the website chat.
 
-- _disclosure:_ How we use it
+
+**H2: How we use it**
+
 We use contact and beta-request details to respond, to grant access and to tell you about the service you asked about. We use product content to run your analyses and support you. We may use usage metadata and information that has been aggregated and de-identified to maintain, secure and improve the service, as described in the applicable terms. We do not sell personal information or use your information for third-party advertising.
 
-- _disclosure:_ Analytics and your consent
+
+**H2: Analytics and your consent**
+
 Optional analytics are disabled until you opt in. The site self-hosts its fonts and does not load advertising trackers. If analytics are configured after consent, usage events may be sent to the provider identified in the current subprocessor disclosure. Requests needed for sign-up, login, checkout or a configured Cedar backend are service requests rather than analytics. You can change your choice through the Privacy choices control in the footer.
 
-- _disclosure:_ When we share
+
+**H2: When we share**
+
 We share information with service providers who host and operate the platform for us, under obligations to protect it; when the law requires it; to protect the service, our customers or the public from harm; and as part of a financing, acquisition or similar transaction, in which case this policy continues to apply to the information transferred.
 
-- _disclosure:_ Retention and security
+
+**H2: Retention and security**
+
 We retain information only as long as needed for the purposes described here, our contractual obligations and applicable law, then delete or de-identify it. Product content remains while an account is active unless the applicable agreement states otherwise. Closing an account ends access but may not trigger immediate deletion where retention is required by law, security needs or the applicable agreement. Lumecon is formalizing its security program against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target; it does not currently have a SOC 2 report. Current controls and readiness work are described on the Security page.
 
-- _disclosure:_ Your rights
+
+**H2: Your rights**
+
 Write to contact@lumecon.ai to ask what we hold about you, to correct it or to have it deleted, and we will respond within the time the applicable law sets. The service is for organizations and is not directed to children.
 
-- _disclosure:_ Changes
+
+**H2: Changes**
+
 We will update this policy as the service evolves. Material changes will be posted here with a new date, and where the law requires it we will tell you directly.
 
 - _label:_ Counsel:
@@ -2503,14 +2605,32 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Terms of Service | Lumecon
 - **Meta description** (146 chars): The terms governing use of Lumecon: accounts, subscriptions, acceptable use, intellectual property and the limits on how results may be relied on.
+- **og:description:** The terms governing use of Lumecon: accounts, subscriptions, acceptable use, intellectual property and the limits on how results may be relied on.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/terms
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, WebPage, BreadcrumbList
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
 - **Visible words:** 1028
 
 ### Architecture (heading outline)
 
 - **H1** Terms of Service
+  - **H2** 1. Who we are and what these terms cover
+  - **H2** 2. The service, including beta access
+  - **H2** 3. Accounts
+  - **H2** 4. Subscriptions and fees
+  - **H2** 5. Your content
+  - **H2** 6. Results are estimates
+  - **H2** 7. Cedar and AI outputs
+  - **H2** 8. Acceptable use
+  - **H2** 9. Intellectual property
+  - **H2** 10. Warranties and disclaimers
+  - **H2** 11. Limitation of liability
+  - **H2** 12. Indemnification
+  - **H2** 13. Termination
+  - **H2** 14. Changes and governing law
 
 ### Copy, in document order
 
@@ -2541,46 +2661,74 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 **H1: Terms of Service**
 
 - _label:_ Working draft, under review by counsel. These terms take effect when you are asked to accept them, not before.
-- _disclosure:_ 1. Who we are and what these terms cover
+
+**H2: 1. Who we are and what these terms cover**
+
 Lumecon is an economic analysis platform operated by Lumecon Inc.. Once finalized and accepted, these terms will govern the Lumecon software, websites, subscriptions and advisory services, including the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI economic analyst, in every plan.
 
-- _disclosure:_ 2. The service, including beta access
+
+**H2: 2. The service, including beta access**
+
 Lumecon is offered in phases. During any beta or early-access period, features may change, pause or end without notice, and access may be granted, limited or withdrawn at our discretion. Beta access is provided so you can evaluate the platform; it creates no entitlement to any particular feature, output, uptime or continued access.
 
-- _disclosure:_ 3. Accounts
+
+**H2: 3. Accounts**
+
 You are responsible for your account credentials and for activity under your account. If an account is created or paid for on behalf of an organization, the account belongs to that organization and may be reassigned within it. You must be at least 18 and, when registering for an organization, authorized to act for it. We may suspend accounts that violate these terms or put the service or other customers at risk.
 
-- _disclosure:_ 4. Subscriptions and fees
+
+**H2: 4. Subscriptions and fees**
+
 Paid plans are annual, priced as published or as agreed in an order form, and payable in advance. The published plan price is all-inclusive: applicable taxes and fees are included in it, as stated on the pricing page. Subscriptions renew for successive annual terms unless either party gives notice before renewal. Except where the law requires otherwise, fees are not refundable. Plan prices may change at renewal with advance notice.
 
-- _disclosure:_ 5. Your content
+
+**H2: 5. Your content**
+
 You keep ownership of the documents, data and other material you bring to the service. You grant Lumecon Inc. the license needed to host, process and display that material in order to operate, secure and support the service for you. You are responsible for having the rights to the material you upload and for its accuracy. We may use aggregated and de-identified information derived from use of the service to improve the platform, in ways that do not identify you or your organization.
 
-- _disclosure:_ 6. Results are estimates
+
+**H2: 6. Results are estimates**
+
 Lumecon results are decision-support estimates. They describe likely economic relationships given the data and assumptions stated in each analysis, and they are labeled as estimates everywhere they appear. They are not financial, legal, tax or investment advice, they are not audits, and no result is a guarantee of any economic outcome. You are responsible for the decisions you make with them and for confirming the assumptions each analysis states.
 
-- _disclosure:_ 7. Cedar and AI outputs
+
+**H2: 7. Cedar and AI outputs**
+
 Cedar assists with document intake, proposed input mappings, interpretation and reporting. Cedar Impact applies approved inputs to the economic model. Like all AI systems, Cedar can be wrong, so the person running an analysis is responsible for reviewing and approving its suggestions and the assumptions behind the final result.
 
-- _disclosure:_ 8. Acceptable use
+
+**H2: 8. Acceptable use**
+
 You agree not to misuse the service. That includes attempting to breach its security, probing or overloading it, reselling or sublicensing access without an agreement that allows it, scraping the service, using it to build a competing product, removing proprietary notices, reverse engineering the software except where the law permits, or presenting Lumecon outputs in a way that misstates what they are or how they were produced.
 
-- _disclosure:_ 9. Intellectual property
+
+**H2: 9. Intellectual property**
+
 The Lumecon software, proprietary models, data architecture, documentation, website content and other materials we create are owned by Lumecon Inc. or our licensors and are protected by intellectual property law; Lumecon’s technology is patent pending. Public data, customer content and third-party materials remain subject to their own rights and licenses. Lumecon, We luminate economies and Cedar are trademarks of Lumecon Inc.. These terms grant you a right to use the service, not any ownership in it.
 
-- _disclosure:_ 10. Warranties and disclaimers
+
+**H2: 10. Warranties and disclaimers**
+
 The service is provided as is and as available. To the fullest extent the law allows, Lumecon Inc. disclaims all warranties, express or implied, including merchantability, fitness for a particular purpose and non-infringement, and does not warrant that the service will be uninterrupted, error-free or that any output will be accurate or complete.
 
-- _disclosure:_ 11. Limitation of liability
+
+**H2: 11. Limitation of liability**
+
 To the fullest extent the law allows, Lumecon Inc. will not be liable for indirect, incidental, special, consequential or punitive damages, or for lost profits, revenue, data or goodwill, however arising. Our total liability for all claims arising out of or relating to the service is limited to the fees you paid for the service in the twelve months before the event giving rise to the claim, or one hundred dollars if you have paid no fees.
 
-- _disclosure:_ 12. Indemnification
+
+**H2: 12. Indemnification**
+
 You will defend and indemnify Lumecon Inc. against claims arising from the material you bring to the service, your use of results in violation of these terms, or your violation of law or the rights of a third party.
 
-- _disclosure:_ 13. Termination
+
+**H2: 13. Termination**
+
 You may stop using the service at any time. We may suspend or terminate access for material breach of these terms that is not cured after notice, or immediately where the breach puts the service or others at risk. On termination your right to use the service ends; sections that by their nature should survive (including ownership, disclaimers, liability limits and indemnification) survive.
 
-- _disclosure:_ 14. Changes and governing law
+
+**H2: 14. Changes and governing law**
+
 We may update these terms as the service evolves; material changes will be notified and apply going forward from their effective date. The governing law and venue for these terms will be stated here when counsel finalizes them.
 
 - _label:_ Counsel:
@@ -2628,9 +2776,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 - **Title:** Page Not Found | Lumecon
 - **Meta description** (141 chars): That page doesn't exist. Return to Lumecon's economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **og:description:** That page doesn't exist. Return to Lumecon's economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/404
 - **Robots:** noindex, nofollow
-- **Structured data:** Organization, WebSite
+- **Structured data:** Organization, WebSite, SoftwareApplication
 - **Visible words:** 93
 
 ### Architecture (heading outline)
@@ -2720,7 +2872,6 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 
 - **On `/` and `/pricing` and `/methodology` and `/cedar` and `/glossary` and `/naics` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
 - **On `/` and `/methodology` and `/cedar` and `/welcome`:** "Click anywhere or press Esc to close"
-- **On `/` and `/pricing`:** "Request Seed access during the private beta."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."
@@ -2741,7 +2892,7 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 | Geography coverage (counties / states / nation / reservations) | `/` ×1, `/pricing` ×2, `/methodology` ×1, `/checkout` ×3 |
 | Unlimited analyses / no per-analysis fees | `/` ×1, `/pricing` ×3, `/signup` ×1, `/checkout` ×3 |
 | Cedar included in every plan | `/signup` ×1, `/checkout` ×3, `/terms` ×1 |
-| Traceability / lineage | `/` ×2, `/methodology` ×6, `/login` ×1, `/security` ×1 |
+| Traceability / lineage | `/` ×2, `/methodology` ×6, `/login` ×1 |
 | Same model / same data foundation | `/pricing` ×5, `/choose-plan` ×1 |
 
 ---

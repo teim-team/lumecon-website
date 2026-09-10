@@ -59,6 +59,15 @@ for (const capture of captures) {
     isMobile: Boolean(capture.mobile),
     reducedMotion: 'reduce',
   });
+  await context.addInitScript(() => {
+    try {
+      // The consent choice belongs in product testing, not over the design
+      // handoff. Keep analytics declined in these deterministic review shots.
+      localStorage.setItem('lumecon:consent:analytics', 'denied');
+    } catch {
+      // A disabled storage context still produces a valid visual capture.
+    }
+  });
   const page = await context.newPage();
   await page.goto(`${BASE}${capture.path}`, { waitUntil: 'networkidle' });
   await primeLazyImages(page);
