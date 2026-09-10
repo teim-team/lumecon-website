@@ -521,13 +521,14 @@ for (const route of ['/methodology', '/cedar']) {
   }) => {
     await page.emulateMedia({ media: 'print', colorScheme: 'dark', reducedMotion: 'reduce' });
     await page.goto(route, { waitUntil: 'networkidle' });
+    await expect(page.locator('#consentBanner')).toBeHidden();
     const section = page.locator('.section--dark').first();
     await expect(section).toHaveCSS('background-color', 'rgb(255, 255, 255)');
     await expect(section).toHaveCSS('background-image', 'none');
     const heading = section.locator('h1').first();
     await expect(heading).toBeVisible();
     const colors = await section
-      .locator('h1, h1 span, p')
+      .locator('h1, h1 span, p, a, figcaption')
       .evaluateAll((nodes) =>
         nodes
           .filter((node) => node.textContent?.trim())

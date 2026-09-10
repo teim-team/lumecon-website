@@ -563,7 +563,8 @@ html {
   .footer,
   .edge,
   .scroll-progress,
-  .skip-link {
+  .skip-link,
+  .consent {
     display: none !important;
   }
   body,
@@ -787,6 +788,17 @@ strong {
     --rule-strong: #666;
     background: #fff !important;
     color: var(--ink);
+  }
+  .section--dark a,
+  .section--dark figcaption {
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+  .section--dark a {
+    color: var(--accent-text) !important;
+  }
+  .section--dark figcaption {
+    color: var(--ink-3) !important;
   }
 }
 

@@ -23,12 +23,12 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 727 | Lumecon \| Economic Analysis That Holds Up | 121 |
+| `/` | 729 | Lumecon \| the intelligent economic analysis platform | 157 |
 | `/pricing` | 1194 | Pricing \| Lumecon | 155 |
 | `/methodology` | 2553 | Methodology \| Lumecon | 167 |
 | `/cedar` | 464 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/glossary` | 547 | Glossary \| Lumecon | 142 |
-| `/naics` | 644 | Industry sectors \| Lumecon | 146 |
+| `/naics` | 656 | Industry sectors \| Lumecon | 146 |
 | `/signup` | 238 | Request beta access \| Lumecon | 118 |
 | `/login` | 118 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 218 | Choose your plan \| Lumecon | 103 |
@@ -40,7 +40,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 664 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1028 | Terms of Service \| Lumecon | 146 |
 | `/404` | 93 | Page Not Found \| Lumecon | 141 |
-| **Total** | **10171** | | |
+| **Total** | **10185** | | |
 
 ## Crawler metadata audit
 
@@ -55,17 +55,16 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 
 **Intended job of this page:** Why Lumecon matters.
 
-- **Title:** Lumecon | Economic Analysis That Holds Up
-- **Meta description** (121 chars): Turn organizational records and public economic data into traceable economic impact analyses with Cedar and Cedar Impact.
-- **og:title:** Economic Analysis That Holds Up
-- **og:description:** Turn organizational records and public economic data into traceable economic impact analyses with Cedar and Cedar Impact.
+- **Title:** Lumecon | the intelligent economic analysis platform
+- **Meta description** (157 chars): Lumecon is the intelligent economic analysis platform. Turn organizational records and public data into traceable economic impact analyses with Cedar Impact.
+- **og:description:** Lumecon is the intelligent economic analysis platform. Turn organizational records and public data into traceable economic impact analyses with Cedar Impact.
 - **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
 - **og:image alt:** Lumecon economic impact analysis software, with Cedar in every plan.
 - **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 727
+- **Visible words:** 729
 
 ### Architecture (heading outline)
 
@@ -114,7 +113,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 
 > _section: `hero2`_
 
-INTELLIGENT ECONOMIC ANALYSIS
+THE INTELLIGENT ECONOMIC ANALYSIS PLATFORM
 
 
 **H1: Economic analysis that holds up.**
@@ -361,10 +360,6 @@ LEGAL
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
 **[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
-
-- _button:_ ✕
-- _image alt:_ (no alt)
-Click anywhere or press Esc to close
 
 We use optional analytics to improve Lumecon. Privacy Policy
 
@@ -1052,10 +1047,6 @@ LEGAL
 - _label:_ **[conditional]** Ask Cedar
 **[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
 
-- _button:_ ✕
-- _image alt:_ (no alt)
-Click anywhere or press Esc to close
-
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -1224,10 +1215,6 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-- _button:_ ✕
-- _image alt:_ (no alt)
-Click anywhere or press Esc to close
-
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -1404,7 +1391,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, DefinedTermSet
-- **Visible words:** 644
+- **Visible words:** 656
 
 ### Architecture (heading outline)
 
@@ -1444,6 +1431,8 @@ REFERENCE
 **H1: Industry sectors used in Lumecon analyses.**
 
 Lumecon presents economic activity at the two-digit NAICS sector level because public county and state employment and wage data are generally more available there. This reduces, but does not eliminate, estimation for suppressed and missing values. Open a sector to see what belongs to it, and read why two digits in the methodology.
+
+Photography on this page is illustrative and does not identify Lumecon customers.
 
 
 > _section: `Sectors`_
@@ -2028,10 +2017,6 @@ Open Lumecon to review your workspace and begin your first analysis.
 Use the account credentials provided with your access invitation.
 
 - _image alt:_ The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data.
-- _button:_ ✕
-- _image alt:_ (no alt)
-Click anywhere or press Esc to close
-
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -2871,7 +2856,6 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 ### Sentences that appear verbatim on more than one page
 
 - **On `/` and `/pricing` and `/methodology` and `/cedar` and `/glossary` and `/naics` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
-- **On `/` and `/methodology` and `/cedar` and `/welcome`:** "Click anywhere or press Esc to close"
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."
