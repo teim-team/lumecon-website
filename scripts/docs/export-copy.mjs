@@ -80,6 +80,15 @@ const NOINDEX_PATHS = new Set([
   '/404',
 ]);
 
+// Browsers normalize an origin-only URL to include a trailing slash when
+// reading link.href, while Astro's sitemap intentionally serializes the root
+// as the bare origin. Compare a stable canonical key so that normal URL
+// serialization is not mistaken for contradictory SEO metadata.
+function canonicalKey(url) {
+  const parsed = new URL(url);
+  return `${parsed.origin}${parsed.pathname === '/' ? '' : parsed.pathname}`;
+}
+
 /** The one-line job each page is supposed to do (AGENTS.md, "Page ownership"). */
 const OWNERSHIP = {
   '/': 'Why Lumecon matters.',
@@ -265,20 +274,18 @@ async function crawlAudit(pages) {
       continue;
     }
     const xml = await response.text();
-    for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) indexedCanonicals.add(match[1]);
+    for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+      indexedCanonicals.add(canonicalKey(match[1]));
+    }
   }
 
   for (const page of pages) {
     if (page.error) continue;
-    // The canonical root is URL-normalized with its trailing slash; every
-    // other public route intentionally follows Astro's trailingSlash:never
-    // setting. Constructing it through URL keeps the audit aligned with the
-    // sitemap instead of flagging a valid root URL as a false regression.
-    const expectedCanonical = new URL(page.path, `${CANONICAL_ORIGIN}/`).href;
+    const expectedCanonical = `${CANONICAL_ORIGIN}${page.path === '/' ? '' : page.path}`;
     const expectsNoindex = NOINDEX_PATHS.has(page.path);
     const hasNoindex = /\bnoindex\b/i.test(page.robots || '');
 
-    if (page.canonical !== expectedCanonical) {
+    if (!page.canonical || canonicalKey(page.canonical) !== expectedCanonical) {
       issues.push(
         `${page.path}: canonical is ${page.canonical || '(missing)'}, expected ${expectedCanonical}`,
       );
