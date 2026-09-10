@@ -3528,7 +3528,7 @@ export const OUT_OF_SCOPE_ANSWER =
   "I'm Cedar, Lumecon's AI economic analyst; on this site I'm best at answering questions about Lumecon, economic impact reporting and how to connect with the team. Try asking me what Lumecon does, who the platform is for or how economic impact analysis works.";
 
 export const FALLBACK_ANSWER =
-  'Let me point you the right way. I\'m a focused assistant, so I\'m sharpest on Lumecon itself. I can cover what Lumecon does and who it\'s for (tribal nations, cities and counties, state agencies, foundations, universities, nonprofits), how an analysis works and how the math holds up, grants and federal funding (EDA, HUD, DOT, EPA, USDA and more), pricing, geographies, jobs or how to reach the team. Try a word or two like "pricing," "tribal," "EPA grant," "jobs," or "demo," or email contact@lumecon.ai for anything specific.';
+  'Let me point you the right way. I\'m focused on Lumecon itself, so I\'m sharpest on what Lumecon does and who it\'s for (tribal nations, cities and counties, state agencies, foundations, universities, nonprofits), how an analysis works and how the math holds up, grants and federal funding (EDA, HUD, DOT, EPA, USDA and more), pricing, geographies, jobs or how to reach the team. Try a word or two like "pricing," "tribal," "EPA grant," "jobs," or "demo," or email contact@lumecon.ai for anything specific.';
 
 // Triggers that flip an unmatched message into OUT_OF_SCOPE rather than
 // the generic FALLBACK. Pure-spam strings still fall through.
