@@ -23,24 +23,6 @@ const jsonLd = {
   inLanguage: 'en-US',
 };
 
-const FLOW = [
-  {
-    title: 'Source material',
-    body: 'You choose the documents and figures used for an analysis.',
-  },
-  {
-    title: 'Cedar prepares',
-    body: 'Cedar proposes inputs, preserves source references and flags unresolved questions.',
-  },
-  {
-    title: 'A person reviews',
-    body: 'The person running the analysis approves inputs, mappings and assumptions.',
-  },
-  {
-    title: 'Cedar Impact calculates',
-    body: 'The economic model produces results and keeps their source and model lineage available.',
-  },
-];
 ---
 
 <BaseLayout
@@ -95,32 +77,6 @@ const FLOW = [
       </div>
     </header>
 
-    <section class="secpg-flow" aria-labelledby="sec-flow-title">
-      <div class="secpg-w">
-        <header class="secpg-head">
-          <p class="h-kicker">AI and model boundary</p>
-          <h2 id="sec-flow-title">
-            Human review stays between source material and calculated results.
-          </h2>
-          <p>
-            Cedar organizes information and proposes structure. It does not calculate economic
-            impacts or approve an analysis; responsibility for approving assumptions and final
-            results stays with the person running the analysis.
-          </p>
-        </header>
-        <ol class="secpg-flow__steps">
-          {
-            FLOW.map((step) => (
-              <li>
-                <strong>{step.title}</strong>
-                <p>{step.body}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </section>
-
     <section class="secpg-program" aria-labelledby="sec-program-title">
       <div class="secpg-w">
         <header class="secpg-head">
@@ -167,10 +123,10 @@ const FLOW = [
       </div>
     </section>
 
-    <section class="secpg-ai section--dark" aria-labelledby="sec-ai-title">
+    <section class="secpg-ai" aria-labelledby="sec-ai-title">
       <div class="secpg-w secpg-ai__grid">
         <div>
-          <p class="h-kicker">Customer data and AI</p>
+          <p class="h-kicker">Cedar and customer data</p>
           <h2 id="sec-ai-title">Provider terms are verified before sensitive content moves.</h2>
         </div>
         <div>

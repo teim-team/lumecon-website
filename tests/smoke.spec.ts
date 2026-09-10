@@ -253,6 +253,14 @@ test('login offers the forgot-password flow from the product', async ({ page }) 
   await expect(page.locator('[data-login-title]')).toHaveText('Log in to Lumecon');
 });
 
+test('login reset links open the reset-request state on direct navigation', async ({ page }) => {
+  await page.goto('/login?reset=1', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('[data-login-title]')).toHaveText('Reset your password');
+  await expect(page.locator('input[name="email"]')).toBeVisible();
+  await expect(page.locator('input[name="password"]')).toBeHidden();
+  await expect(page.locator('[data-login-submit]')).toHaveText('Send reset link');
+});
+
 /* This used to assert a two-step registration with a password checklist and a
    back button. /signup stopped being that when it became the private-beta
    request page: there is one panel, no password field and no step 2, so the
@@ -297,6 +305,7 @@ test('signup collects a beta access request, with no account created', async ({ 
 
 test('methodology page renders equations with spoken readings', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.meth-hero__title')).toContainText('better inputs');
   const equations = page.locator('.eq[role="math"]');
   await expect(equations).toHaveCount(6);
   // Every equation block must carry a plain-language reading for
@@ -428,4 +437,26 @@ test('security.txt stays valid and does not silently lapse', async ({ page }) =>
   expect(daysLeft, `Expires is ${daysLeft} days out; RFC 9116 asks for under a year`).toBeLessThan(
     366,
   );
+});
+
+test('security keeps one dark surface and preserves readable print text', async ({ page }) => {
+  await page.goto('/security', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.secpg .section--dark')).toHaveCount(1);
+  await expect(page.locator('.secpg-flow')).toHaveCount(0);
+  await expect(page.locator('main')).not.toContainText('Cedar Impact calculates');
+
+  await page.emulateMedia({ media: 'print' });
+  await expect(page.locator('.secpg-hero h1')).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-status dd').first()).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-hero .btn2')).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-hero .btn2')).toHaveCSS(
+    'background-color',
+    'rgb(255, 255, 255)',
+  );
+});
+
+test('privacy policy discloses Cedar topic memory', async ({ page }) => {
+  await page.goto('/privacy', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('main')).toContainText('topic identifier and timestamp');
+  await expect(page.locator('main')).toContainText('local storage for up to 30 days');
 });
