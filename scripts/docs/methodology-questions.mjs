@@ -130,7 +130,8 @@ const SECTIONS = [
         q: 'Which higher-frequency series update which model quantities?',
         kind: 'quote',
         said: `Between benchmarks, higher-frequency public series for employment, wages and prices
-               keep the model close to present conditions.`,
+               update the levels the model scales against, while structural relationships remain tied
+               to benchmark tables.`,
         where: '/methodology, Between benchmarks',
         needs: [
           'A mapping: series to quantity to transformation.',

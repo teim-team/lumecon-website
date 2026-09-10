@@ -516,7 +516,7 @@
 .edge-thesis h2 {
   max-width: 11ch;
   margin: 0;
-  color: #fff;
+  color: var(--ink);
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 4.5vw, 4.6rem);
   font-weight: var(--weight-display);
@@ -527,7 +527,7 @@
 .edge-thesis > p:not(.h-kicker) {
   max-width: 48ch;
   margin: 0.35rem 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--ink-2);
   font-size: 1rem;
   line-height: 1.62;
 }
@@ -537,17 +537,17 @@
   justify-self: start;
   gap: 0.55rem;
   margin-top: 0.6rem;
-  color: var(--accent-light);
+  color: var(--accent-text);
   font-size: 0.9rem;
   font-weight: 650;
   text-decoration: none;
-  border-bottom: 1px solid rgba(95, 217, 204, 0.46);
+  border-bottom: 1px solid var(--accent-bar);
 }
 .edge-thesis__link span {
   transition: transform 0.2s var(--ease);
 }
 .edge-ledger {
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-top: 1px solid var(--rule-strong);
 }
 .edge-row {
   display: grid;
@@ -555,7 +555,7 @@
   gap: clamp(0.9rem, 2vw, 1.5rem);
   align-items: start;
   padding: clamp(1.25rem, 2.2vw, 1.8rem) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.19);
+  border-bottom: 1px solid var(--rule);
   color: inherit;
   text-decoration: none;
   transition:
@@ -563,14 +563,14 @@
     background 0.2s var(--ease);
 }
 .edge-row__label {
-  color: rgba(255, 255, 255, 0.48);
+  color: var(--ink-3);
   font-family: var(--font-mono);
   font-size: 0.64rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 .edge-row__icon {
-  color: var(--accent-light);
+  color: var(--accent-text);
 }
 .edge-row__icon svg {
   display: block;
@@ -582,7 +582,7 @@
   gap: 0.42rem;
 }
 .edge-row__copy strong {
-  color: #fff;
+  color: var(--ink);
   font-size: clamp(1.05rem, 1.5vw, 1.25rem);
   font-weight: 620;
   letter-spacing: -0.015em;
@@ -590,7 +590,7 @@
 }
 .edge-row__body {
   max-width: 65ch;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--ink-2);
   font-size: 0.9rem;
   line-height: 1.52;
 }
@@ -600,7 +600,7 @@
   gap: 0.45rem;
   justify-self: start;
   margin-top: 0.25rem;
-  color: var(--accent-light);
+  color: var(--accent-text);
   font-size: 0.78rem;
   font-weight: 620;
 }
@@ -611,8 +611,8 @@
 }
 @media (hover: hover) {
   .edge-row:hover {
-    border-bottom-color: rgba(95, 217, 204, 0.68);
-    background: linear-gradient(90deg, rgba(15, 181, 165, 0.06), transparent 76%);
+    border-bottom-color: var(--accent);
+    background: linear-gradient(90deg, rgba(15, 181, 165, 0.055), transparent 76%);
   }
   .edge-row:hover .edge-row__action b,
   .edge-thesis__link:hover span {
@@ -621,7 +621,7 @@
 }
 .edge-row:focus-visible,
 .edge-thesis__link:focus-visible {
-  outline: 2px solid var(--accent-light);
+  outline: 2px solid var(--accent-text);
   outline-offset: 5px;
 }
 @media (max-width: 980px) {
@@ -1193,26 +1193,6 @@
   background: var(--surface-2);
   border-top: 0;
 }
-.edge.section--dark {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background:
-    linear-gradient(
-      104deg,
-      rgba(95, 217, 204, 0.18) 0%,
-      rgba(15, 181, 165, 0.07) 34%,
-      transparent 58%
-    ),
-    linear-gradient(142deg, #064049 0%, #082a3b 42%, #081329 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(95, 217, 204, 0.22),
-    inset 0 -1px 0 rgba(7, 17, 38, 0.5);
-}
-.edge.section--dark .edge-inner {
-  position: relative;
-  z-index: 1;
-}
 .edge::before {
   content: '';
   position: absolute;
@@ -1222,8 +1202,8 @@
   width: 28rem;
   height: 28rem;
   background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
-  filter: brightness(0) invert(1);
-  opacity: 0.035;
+  filter: none;
+  opacity: 0.025;
   pointer-events: none;
 }
 .tour {

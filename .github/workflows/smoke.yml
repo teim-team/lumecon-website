@@ -49,8 +49,9 @@ jobs:
             sleep 1
           done
           SHOT_BASE=http://127.0.0.1:4321 SHOT_OUT=artifacts/finish-pass-screenshots node scripts/screenshots/capture-finish-pass.mjs
+          npm run docs:questions
           DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
-          git diff --exit-code -- docs/site-copy-and-architecture.md
+          git diff --exit-code -- docs/methodology-open-questions.pdf docs/site-copy-and-architecture.md
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
@@ -59,6 +60,7 @@ jobs:
             test-results/
             playwright-report/
             artifacts/finish-pass-screenshots/
+            docs/methodology-open-questions.pdf
             docs/site-copy-and-architecture.md
             /tmp/lumecon-preview.log
           retention-days: 7

@@ -186,7 +186,21 @@ function scrape() {
       const cond = conditional || isConditional(el);
       if (/^H[1-6]$/.test(tag)) {
         blocks.push({ kind: 'h' + tag[1], text: clean(el.innerText), cond });
-      } else if (['P', 'LI', 'DT', 'DD', 'SUMMARY', 'FIGCAPTION', 'BLOCKQUOTE'].includes(tag)) {
+      } else if (tag === 'SUMMARY') {
+        // Disclosure headings are frequently nested in <summary>. Preserve
+        // that hierarchy rather than flattening an entire legal disclosure
+        // into one unlabeled run of text.
+        const heading = el.querySelector(
+          ':scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6',
+        );
+        if (heading) {
+          blocks.push({ kind: 'h' + heading.tagName[1], text: clean(heading.innerText), cond });
+        }
+        const copy = el.cloneNode(true);
+        copy.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach((child) => child.remove());
+        const t = clean(copy.innerText);
+        if (t) blocks.push({ kind: 'summary', text: t, cond });
+      } else if (['P', 'LI', 'DT', 'DD', 'FIGCAPTION', 'BLOCKQUOTE'].includes(tag)) {
         const t = clean(el.innerText);
         if (t) blocks.push({ kind: tag.toLowerCase(), text: t, cond });
       } else if (tag === 'A' && !el.querySelector('p,h1,h2,h3,h4,li')) {
