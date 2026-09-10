@@ -7,6 +7,10 @@ import { expect, type Locator, type Page } from '@playwright/test';
  */
 export async function scrollUntilCedarVisible(page: Page): Promise<Locator> {
   const fab = page.locator('#cedarFab');
+  // Compute positions after fonts and eager assets settle. The product's
+  // collision controller reads the same layout on an animation frame.
+  await page.waitForLoadState('load');
+  await page.evaluate(() => document.fonts.ready.then(() => undefined));
   const positions = await page.evaluate(() => {
     const intro = document.querySelector<HTMLElement>('main > :first-child');
     const introEnd = intro ? intro.getBoundingClientRect().bottom + window.scrollY + 24 : 240;
@@ -18,8 +22,12 @@ export async function scrollUntilCedarVisible(page: Page): Promise<Locator> {
   });
 
   for (const position of positions) {
-    await page.evaluate((top) => window.scrollTo(0, top), position);
-    await page.waitForTimeout(24);
+    await page.evaluate(async (top) => {
+      window.scrollTo({ top, behavior: 'instant' });
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      );
+    }, position);
     if ((await fab.getAttribute('data-cedar-visibility')) === 'visible') {
       await expect(fab).toBeVisible();
       return fab;
