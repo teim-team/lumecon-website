@@ -440,12 +440,118 @@
   }
 }
 
-/* ---------- detail table ---------- */
+/* ---------- detail table ----------
+   Five columns at a 780px minimum: wider than any phone and most tablets.
+   The wrap scrolls; the shell around it says so. Row labels stay pinned
+   while the plan columns slide under them, columns snap so a swipe lands
+   on a plan rather than between two, a thin scrollbar is always drawn,
+   and the shell's edges fade on whichever side has more (the page script
+   sets data-at-start / data-at-end / data-scrollable from the scroller).
+   Without the script the table still scrolls and the labels still pin;
+   only the fades and the cue depend on it. */
+/* The fold is a grid item of .pr-plans, and a grid item's automatic
+   minimum width is its content's minimum: the table's 780px. Without this
+   the open fold grew to 821px on a 390px phone, ran off the right edge,
+   and the wrap never became narrower than the table, so nothing scrolled
+   and only the first plan could be seen. */
+.pr-plans > .pr-more {
+  min-width: 0;
+}
+.pr-table-shell {
+  position: relative;
+  /* The pinned label column's width, read by the wrap (snap padding), the
+     label cells and the left fade, so the three always agree. */
+  --pr-label-w: 12rem;
+}
 .pr-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--rule);
   border-radius: 8px;
   background: var(--surface);
+  scroll-snap-type: x proximity;
+  /* A hair wider than the labels: a cell can outgrow its specified width by
+     a pixel or two, and a snap point that lands short of the labels leaves
+     the wrap resting a few pixels in, which reads as "already slid". */
+  scroll-padding-left: calc(var(--pr-label-w) + 0.25rem);
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+.pr-table thead th,
+.pr-table td {
+  scroll-snap-align: start;
+}
+/* The row-label column rides along the left edge. The hairline on its
+   right is a box-shadow rather than a border so it sits above the
+   sliding cells without changing the table's geometry. */
+.pr-table tbody th,
+.pr-table thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface);
+  box-shadow: 1px 0 0 var(--rule);
+  scroll-snap-align: none;
+  width: var(--pr-label-w);
+  min-width: var(--pr-label-w);
+  box-sizing: border-box;
+}
+.pr-table thead th:first-child {
+  background: var(--paper);
+}
+/* Edge fades: the surface colour dissolving over the last 2.5rem on the
+   side that has more. Inset a pixel so they sit inside the border. */
+.pr-table-shell::before,
+.pr-table-shell::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  z-index: 2; /* above the sticky label cells */
+  width: 2.5rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.pr-table-shell::before {
+  /* Begins where the pinned labels end: under them it would never be seen.
+     Narrower than the right fade: this edge only hints that something lies
+     behind it, and a wider one softened the first characters of a price. */
+  left: calc(var(--pr-label-w) + 1px);
+  width: 1.25rem;
+  border-radius: 8px 0 0 8px;
+  background: linear-gradient(90deg, var(--surface), transparent);
+}
+.pr-table-shell::after {
+  right: 1px;
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(270deg, var(--surface), transparent);
+}
+.pr-table-shell[data-scrollable='true'][data-at-start='false']::before,
+.pr-table-shell[data-scrollable='true'][data-at-end='false']::after {
+  opacity: 1;
+}
+/* The cue: one mono line, shown only while the table is scrollable and
+   the reader has not slid it yet. Once they have, the fades carry the
+   affordance on their own. */
+.pr-table-cue {
+  display: none;
+  margin: 0 0 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+/* The cue lives beside the shell, not in it, so the shell's box is exactly
+   the table's and the fades land on its edges. */
+.pr-more__body:has(> .pr-table-shell[data-scrollable='true'][data-at-start='true']) .pr-table-cue {
+  display: block;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pr-table-shell::before,
+  .pr-table-shell::after {
+    transition: none;
+  }
 }
 .pr-table {
   width: 100%;
@@ -485,6 +591,22 @@
 }
 .pr-table__quiet {
   color: var(--ink-4);
+}
+/* On a phone a nowrap label column takes half the screen and leaves a
+   plan column nowhere to go. Let the labels wrap to two lines instead.
+   After the base th rules on purpose: same specificity, so order decides. */
+@media (max-width: 640px) {
+  .pr-table-shell {
+    --pr-label-w: 8rem;
+  }
+  .pr-table tbody th {
+    white-space: normal;
+  }
+  /* One plan at a time beside its labels: a rest state between two columns
+     shows slivers of both, so on a phone the snap is mandatory. */
+  .pr-table-wrap {
+    scroll-snap-type: x mandatory;
+  }
 }
 /* ---------- client-work note and Cedar Grove ---------- */
 
