@@ -70,7 +70,9 @@ body.legal-page li {
   margin-bottom: 0.9rem;
   font-weight: 400;
 }
-body.legal-page main > p,
+/* The open-all row is a control, not prose: it spans the working surface so
+   its button sits at the right edge, above the full-width disclosure rows. */
+body.legal-page main > p:not(.fold-all-row),
 body.legal-page main > ul,
 body.legal-page main > ol {
   max-width: 82ch;
