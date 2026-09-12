@@ -160,7 +160,7 @@ const jsonLd = [
 
     {/* 2. The free account, promoted: don't take our word for it. */}
     <section class="pr-plans" id="plans" aria-label="Plans">
-      <aside class="pr-free" aria-labelledby="free-title">
+      <aside class="pr-free" aria-labelledby="free-title" data-reveal-group>
         <div class="pr-free__main">
           <p class="h-kicker">Evaluate Lumecon with Seed</p>
           <h2 class="pr-free__title" id="free-title">Request Seed access.</h2>
@@ -179,7 +179,7 @@ const jsonLd = [
       </aside>
 
       {/* 3. Four understandable plans, Seed first. */}
-      <div class="pr-plans__grid">
+      <div class="pr-plans__grid reveal-soft">
         {
           ALL_PLANS.map((p) => (
             <article class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`} id={`plan-${p.id}`}>
@@ -230,7 +230,7 @@ const jsonLd = [
            Commons, unlimited people. Pricing it here is also what shows
            the model and Commons are the larger part of Tree. */
       }
-      <aside class="pr-grove" id="cedar-grove" aria-labelledby="grove-title">
+      <aside class="pr-grove" id="cedar-grove" aria-labelledby="grove-title" data-reveal-group>
         <div class="pr-grove__main">
           <p class="h-kicker">{CEDAR_GROVE.kicker}</p>
           <h2 class="pr-grove__title" id="grove-title">

@@ -44,7 +44,7 @@ const ROWS = [
 
 <section class="edge" id="edge" aria-labelledby="edge-title">
   <div class="edge-inner">
-    <header class="edge-thesis">
+    <header class="edge-thesis" data-reveal-group>
       <p class="h-kicker">Built for scrutiny</p>
       <h2 id="edge-title">Economic analysis built to withstand review.</h2>
       <p>
@@ -57,7 +57,7 @@ const ROWS = [
       </a>
     </header>
 
-    <div class="edge-ledger">
+    <div class="edge-ledger reveal-soft">
       {
         ROWS.map((row) => (
           <a class="edge-row" href={row.href}>

@@ -23,7 +23,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 729 | Lumecon \| the intelligent economic analysis platform | 157 |
+| `/` | 729 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/pricing` | 1194 | Pricing \| Lumecon | 155 |
 | `/methodology` | 2556 | Methodology \| Lumecon | 167 |
 | `/cedar` | 464 | Cedar, the AI economic analyst \| Lumecon | 151 |
@@ -55,7 +55,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 
 **Intended job of this page:** Why Lumecon matters.
 
-- **Title:** Lumecon | the intelligent economic analysis platform
+- **Title:** Lumecon | The Intelligent Economic Analysis Platform
 - **Meta description** (157 chars): Lumecon is the intelligent economic analysis platform. Turn organizational records and public data into traceable economic impact analyses with Cedar Impact.
 - **og:description:** Lumecon is the intelligent economic analysis platform. Turn organizational records and public data into traceable economic impact analyses with Cedar Impact.
 - **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
