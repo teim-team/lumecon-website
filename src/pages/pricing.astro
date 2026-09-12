@@ -279,29 +279,36 @@ const jsonLd = [
           <span class="pr-more__chev" aria-hidden="true"></span>
         </summary>
         <div class="pr-more__body">
-          <div class="pr-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
-            <table class="pr-table" data-plan-table>
-              <thead>
-                <tr>
-                  <th scope="col"><span class="visually-hidden">Capability</span></th>
-                  {ALL_PLANS.map((p) => <th scope="col">{p.name}</th>)}
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  PLAN_TABLE_ROWS.map((row) => (
-                    <tr>
-                      <th scope="row">{row.label}</th>
-                      {row.values.map((v) => (
-                        <td class={v === 'Same' || v === 'Not included' ? 'pr-table__quiet' : ''}>
-                          {v}
-                        </td>
-                      ))}
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </table>
+          {
+            /* The table is wider than a phone. The shell carries the edge fades
+              and the cue; the script below tells it which edge has more. */
+          }
+          <p class="pr-table-cue" aria-hidden="true">Slide to compare plans →</p>
+          <div class="pr-table-shell" data-scroll-shell>
+            <div class="pr-table-wrap" role="region" aria-label="Plan comparison" tabindex="0">
+              <table class="pr-table" data-plan-table>
+                <thead>
+                  <tr>
+                    <th scope="col"><span class="visually-hidden">Capability</span></th>
+                    {ALL_PLANS.map((p) => <th scope="col">{p.name}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    PLAN_TABLE_ROWS.map((row) => (
+                      <tr>
+                        <th scope="row">{row.label}</th>
+                        {row.values.map((v) => (
+                          <td class={v === 'Same' || v === 'Not included' ? 'pr-table__quiet' : ''}>
+                            {v}
+                          </td>
+                        ))}
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </details>
@@ -344,3 +351,26 @@ const jsonLd = [
   </main>
   <Footer />
 </BaseLayout>
+
+<script>
+  // Direction-aware edges for the plan table. CSS scrolls the table and
+  // pins the row labels; what CSS cannot know is whether there is more to
+  // the left or the right, so the shell learns it from the scroller and
+  // the fades and the cue read those two attributes. Passive, resize-aware
+  // and idle when the table fits.
+  for (const shell of document.querySelectorAll<HTMLElement>('[data-scroll-shell]')) {
+    const scroller = shell.querySelector<HTMLElement>('.pr-table-wrap');
+    if (!scroller) continue;
+    const update = () => {
+      const max = scroller.scrollWidth - scroller.clientWidth;
+      shell.dataset.scrollable = String(max > 1);
+      // A few pixels of tolerance: snapping can rest the wrap a pixel or two
+      // from either edge, and that is still the edge.
+      shell.dataset.atStart = String(scroller.scrollLeft <= 4);
+      shell.dataset.atEnd = String(scroller.scrollLeft >= max - 4);
+    };
+    scroller.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(scroller);
+    update();
+  }
+</script>

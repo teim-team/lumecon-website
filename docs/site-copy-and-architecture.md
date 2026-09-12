@@ -25,7 +25,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 |---|---:|---|---:|
 | `/` | 729 | Lumecon \| the intelligent economic analysis platform | 157 |
 | `/pricing` | 1194 | Pricing \| Lumecon | 155 |
-| `/methodology` | 2553 | Methodology \| Lumecon | 167 |
+| `/methodology` | 2556 | Methodology \| Lumecon | 167 |
 | `/cedar` | 464 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/glossary` | 547 | Glossary \| Lumecon | 142 |
 | `/naics` | 656 | Industry sectors \| Lumecon | 146 |
@@ -35,12 +35,12 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 205 | Checkout \| Lumecon | 81 |
 | `/welcome` | 62 | Welcome to Lumecon | 32 |
 | `/accessibility` | 382 | Accessibility \| Lumecon | 141 |
-| `/ai-and-data-use` | 601 | AI and Data Use \| Lumecon | 133 |
+| `/ai-and-data-use` | 604 | AI and Data Use \| Lumecon | 133 |
 | `/security` | 433 | Security \| Lumecon | 118 |
-| `/privacy` | 664 | Privacy Policy \| Lumecon | 99 |
-| `/terms` | 1028 | Terms of Service \| Lumecon | 146 |
+| `/privacy` | 667 | Privacy Policy \| Lumecon | 99 |
+| `/terms` | 1031 | Terms of Service \| Lumecon | 146 |
 | `/404` | 93 | Page Not Found \| Lumecon | 141 |
-| **Total** | **10185** | | |
+| **Total** | **10197** | | |
 
 ## Crawler metadata audit
 
@@ -550,6 +550,8 @@ Unlimited users
 
 - _link:_ [Request Cedar Grove access →](/signup?product=cedar-grove)
 - _disclosure:_ Compare all plansEvery capability, side by side
+Slide to compare plans →
+
 - _label:_ Capability
 - _label:_ Seed
 - _label:_ Sprout
@@ -743,7 +745,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2553
+- **Visible words:** 2556
 
 ### Architecture (heading outline)
 
@@ -903,6 +905,8 @@ The model is continually evaluated and improved as better data, regionalization 
 **H2: The commitments behind every analysis**
 
 These five commitments apply to every analysis; open each section for methodology detail.
+
+CLOSE ALL COMMITMENTS
 
 - _disclosure:_ GeographyGeographies that follow the real economyCounties, states and the nation, with reservations and trust lands treated as first-class regions rather than approximations.
 Where an analysis covers both a state and homelands, the two scopes are reported side by side with the subset relationship stated explicitly, so nothing is double-counted.
@@ -2156,7 +2160,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/ai-and-data-use
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 601
+- **Visible words:** 604
 
 ### Architecture (heading outline)
 
@@ -2200,6 +2204,8 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 
 - _label:_ Working draft, under review by counsel.
 Cedar helps teams turn organizational records into reviewable inputs and explanations within Lumecon. This statement explains what Cedar processes, how AI is separated from the economic model and which data-protection commitments are currently in effect.
+
+CLOSE ALL SECTIONS
 
 
 **H2: 1. Where AI sits in the platform**
@@ -2466,7 +2472,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/privacy
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 664
+- **Visible words:** 667
 
 ### Architecture (heading outline)
 
@@ -2508,6 +2514,8 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 **H1: Privacy Policy**
 
 - _label:_ Working draft, under review by counsel.
+CLOSE ALL SECTIONS
+
 
 **H2: What we collect**
 
@@ -2597,7 +2605,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/terms
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1028
+- **Visible words:** 1031
 
 ### Architecture (heading outline)
 
@@ -2646,6 +2654,8 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 **H1: Terms of Service**
 
 - _label:_ Working draft, under review by counsel. These terms take effect when you are asked to accept them, not before.
+CLOSE ALL SECTIONS
+
 
 **H2: 1. Who we are and what these terms cover**
 

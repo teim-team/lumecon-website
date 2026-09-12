@@ -1,0 +1,66 @@
+---
+/**
+ * Open all / close all, for a page made of <details> folds.
+ *
+ * The legal pages fold into as many as fourteen sections and the
+ * methodology commitments into five; a reader who wants the whole
+ * document, or wants to search it in a browser that does not look
+ * inside a closed <details>, otherwise clicks every summary in turn.
+ * LegalLayout already opens everything for print, which is the same
+ * need on paper.
+ *
+ * Progressive: the row ships `hidden` and the script reveals it, so
+ * without JavaScript there is no control that does nothing. The label
+ * follows the folds rather than the button's own memory: open every
+ * section by hand and it reads "Close all sections" on its own.
+ *
+ * `selector` scopes which folds the button drives, so a page with two
+ * kinds of fold (pricing has plan details and an FAQ) can place a
+ * control per set.
+ */
+interface Props {
+  selector: string;
+  /** Accessible name for the group, e.g. "sections" or "commitments". */
+  noun?: string;
+}
+const { selector, noun = 'sections' } = Astro.props;
+---
+
+<p class="fold-all-row" hidden>
+  <button
+    type="button"
+    class="fold-all"
+    data-fold-all={selector}
+    data-noun={noun}
+    aria-pressed="false"
+  >
+    Open all {noun}
+  </button>
+</p>
+
+<script>
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('button[data-fold-all]')) {
+    const selector = btn.dataset.foldAll || 'details';
+    const noun = btn.dataset.noun || 'sections';
+    const folds = () => Array.from(document.querySelectorAll<HTMLDetailsElement>(selector));
+    if (folds().length < 2) continue; // one fold needs no "all"
+    const sync = () => {
+      const allOpen = folds().every((d) => d.open);
+      btn.setAttribute('aria-pressed', String(allOpen));
+      btn.textContent = `${allOpen ? 'Close' : 'Open'} all ${noun}`;
+    };
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-pressed') !== 'true';
+      for (const d of folds()) d.open = open;
+      sync();
+    });
+    // Keep the label truthful when folds are toggled by hand, by a
+    // hash link (BaseLayout opens the target fold) or by print.
+    for (const d of folds()) d.addEventListener('toggle', sync);
+    sync();
+    // `hidden` lives on the row, not the button: .fold-all sets its own
+    // display, which would outrank the UA stylesheet's [hidden] rule.
+    const row = btn.closest<HTMLElement>('.fold-all-row');
+    if (row) row.hidden = false;
+  }
+</script>
