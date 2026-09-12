@@ -21,6 +21,7 @@ import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/home.css';
 import '../styles/methodology.css';
+import FoldAll from '../components/FoldAll.astro';
 
 const description =
   'Lumecon is the intelligent economic analysis platform. Cedar Impact is its economic impact analysis software, using regionalized input-output modeling on federal data.';
@@ -589,6 +590,7 @@ const jsonLd = [
         <p class="meth-sec__lede">
           These five commitments apply to every analysis; open each section for methodology detail.
         </p>
+        <FoldAll selector=".mcards > .mcard" noun="commitments" />
         <div class="mcards">
           <details class="mcard" id="m-geo">
             <summary class="mcard__face">
