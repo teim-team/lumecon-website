@@ -841,12 +841,14 @@
   padding-left: clamp(1.4rem, 3vw, 2.4rem);
 }
 
+/* Surface tokens, not hex: the section keeps its ink tokens in dark mode,
+   so a hard-coded light gradient left pale text on a pale ground there. */
 .meth > .meth-sec.meth-ledger {
   padding-block: clamp(4.5rem, 8vw, 7rem);
   background:
     linear-gradient(122deg, transparent 38%, rgba(15, 181, 165, 0.1) 100%),
-    linear-gradient(145deg, #e9f1f0 0%, #f7f9f8 54%, #e5edef 100%);
-  border-block: 1px solid rgba(7, 17, 38, 0.07);
+    linear-gradient(145deg, var(--surface-2) 0%, var(--surface) 54%, var(--surface-inset) 100%);
+  border-block: 1px solid var(--rule);
 }
 .meth-ledger .meth-manifest {
   --ink: #f5fafb;
