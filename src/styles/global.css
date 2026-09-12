@@ -850,23 +850,34 @@ strong {
   border: 0;
 }
 
-/* Scroll-reveal is an enhancement, never a visibility gate. Text stays fully
-   opaque throughout the transition so contrast does not dip while an audit,
-   a crawler or a fast-scrolling reader reaches a section. Only position moves. */
+/* Scroll-reveal is an enhancement, never a visibility gate. An element
+   fades in as it rises, and four things keep the fade from ever hiding
+   content: every opacity:0 here is scoped to html.js, so nothing is hidden
+   without scripting; BaseLayout reveals anything already above the fold
+   on load; a three-second failsafe shows whatever the observer missed; and
+   reduced motion turns the whole thing off below. */
 .js .reveal {
-  transform: translateY(18px);
-  transition: transform 0.7s var(--ease);
-  will-change: transform;
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.7s var(--ease);
+  will-change: opacity, transform;
 }
 .js .reveal.seen {
+  opacity: 1;
   transform: none;
 }
 /* A softer reveal for inline body text — smaller travel, faster. */
 .js .reveal-soft {
-  transform: translateY(10px);
-  transition: transform 0.55s var(--ease);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.5s var(--ease),
+    transform 0.55s var(--ease);
 }
 .js .reveal-soft.seen {
+  opacity: 1;
   transform: none;
 }
 /* Stagger a whole section from one attribute.
@@ -884,10 +895,14 @@ strong {
    container, and BaseLayout already adds `.seen` to whatever it
    observes, so the same machinery drives both. */
 .js [data-reveal-group] > * {
-  transform: translateY(10px);
-  transition: transform 0.55s var(--ease);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.5s var(--ease),
+    transform 0.55s var(--ease);
 }
 .js [data-reveal-group].seen > * {
+  opacity: 1;
   transform: none;
 }
 .js [data-reveal-group].seen > *:nth-child(1) {
@@ -1023,7 +1038,10 @@ strong {
     padding: 0.7rem 0;
   }
 }
-@media (prefers-reduced-motion: reduce) {
+/* Print is the other reader that never scrolls: a PDF made before the
+   failsafe has run must carry every section, so print media joins the
+   reduced-motion reset. */
+@media (prefers-reduced-motion: reduce), print {
   .reveal,
   .reveal-soft,
   .reveal-left,
@@ -1042,24 +1060,36 @@ strong {
   }
 }
 .js .reveal-left {
+  opacity: 0;
   transform: translateX(-28px);
-  transition: transform 0.8s var(--ease);
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.8s var(--ease);
 }
 .js .reveal-left.seen {
+  opacity: 1;
   transform: none;
 }
 .js .reveal-right {
+  opacity: 0;
   transform: translateX(28px);
-  transition: transform 0.8s var(--ease);
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.8s var(--ease);
 }
 .js .reveal-right.seen {
+  opacity: 1;
   transform: none;
 }
 .js .reveal-diagonal {
+  opacity: 0;
   transform: translate(18px, -10px);
-  transition: transform 0.9s var(--ease);
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.9s var(--ease);
 }
 .js .reveal-diagonal.seen {
+  opacity: 1;
   transform: none;
 }
 
@@ -1086,7 +1116,8 @@ strong {
   transition:
     background 0.15s var(--ease),
     color 0.15s var(--ease),
-    border-color 0.15s var(--ease);
+    border-color 0.15s var(--ease),
+    transform 0.15s var(--ease);
   background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
   color: var(--action-ink);
   text-decoration: none;
@@ -1094,6 +1125,17 @@ strong {
 .btn:hover {
   background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
   border-color: var(--action-hover-top);
+}
+/* Hover never fires on a touch screen, so a press is the feedback there;
+   on a desktop the same press reads as the click landing. */
+.btn:active {
+  transform: scale(0.985);
+  transition-duration: 0.06s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:active {
+    transform: none;
+  }
 }
 .btn--ghost {
   background: transparent;

@@ -50,7 +50,7 @@ const CARDS = [
 
 <section class="whyw" id="why" aria-labelledby="whyw-title">
   <div class="whyw-inner">
-    <header class="whyw-head">
+    <header class="whyw-head" data-reveal-group>
       <p class="h-kicker">Why Lumecon</p>
       <h2 class="whyw-title" id="whyw-title">
         Keep records, assumptions and results in one reviewable workflow.
@@ -61,7 +61,7 @@ const CARDS = [
         <a class="inline-link" href="/signup?tier=free">request free access</a>.
       </p>
     </header>
-    <div class="whyw-grid">
+    <div class="whyw-grid" data-reveal-group>
       {
         CARDS.map((c) => (
           <article class="whyw-card" data-art={c.art}>

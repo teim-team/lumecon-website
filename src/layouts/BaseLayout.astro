@@ -506,5 +506,62 @@ const ogIA =
         window.addEventListener('hashchange', handleLandingHash);
       })();
     </script>
+
+    <script is:inline>
+      // Disclosure folds unfold in every browser. global.css animates
+      // ::details-content where interpolate-size exists (Chromium); Safari
+      // and Firefox have neither, so there the same four folds animate
+      // their height through the Web Animations API instead. The summary
+      // click is intercepted, the closed and open heights are measured,
+      // and the <details> tweens between them while its body fades. Open
+      // state set by script (hash targets, open-all, print) bypasses this
+      // and stays instant, as it does in the CSS version.
+      (function () {
+        var SEL = 'details.mcard, details.legal-sec, details.pr-more, details.meth-faq__row';
+        if (!('animate' in Element.prototype)) return;
+        if (window.CSS && CSS.supports && CSS.supports('interpolate-size', 'allow-keywords'))
+          return;
+        var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+        var EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+        document.addEventListener('click', function (e) {
+          if (e.defaultPrevented) return;
+          var summary = e.target && e.target.closest ? e.target.closest('summary') : null;
+          if (!summary) return;
+          var d = summary.parentElement;
+          if (!d || !d.matches(SEL)) return;
+          if (reduced && reduced.matches) return;
+          e.preventDefault();
+          if (d.__folding) return;
+          var opening = !d.open;
+          var start = d.offsetHeight;
+          d.open = opening;
+          var end = d.offsetHeight;
+          if (!opening) d.open = true;
+          d.__folding = true;
+          d.style.overflow = 'clip';
+          var body = [];
+          for (var n = summary.nextElementSibling; n; n = n.nextElementSibling) body.push(n);
+          var fades = body.map(function (el) {
+            return el.animate([{ opacity: opening ? 0 : 1 }, { opacity: opening ? 1 : 0 }], {
+              duration: 220,
+              easing: 'ease',
+              fill: 'forwards',
+            });
+          });
+          var fold = d.animate([{ height: start + 'px' }, { height: end + 'px' }], {
+            duration: 280,
+            easing: EASE,
+          });
+          var done = function () {
+            if (!opening) d.open = false;
+            for (var k = 0; k < fades.length; k++) fades[k].cancel();
+            d.style.overflow = '';
+            d.__folding = false;
+          };
+          fold.onfinish = done;
+          fold.oncancel = done;
+        });
+      })();
+    </script>
   </body>
 </html>
