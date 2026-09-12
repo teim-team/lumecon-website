@@ -569,7 +569,8 @@ html {
   .edge,
   .scroll-progress,
   .skip-link,
-  .consent {
+  .consent,
+  .fold-all-row {
     display: none !important;
   }
   body,
@@ -951,7 +952,10 @@ strong {
     height: auto;
     opacity: 1;
   }
-  @media (prefers-reduced-motion: reduce) {
+  /* Print, too: LegalLayout opens every section in beforeprint, and the
+     print layout is captured at once, so a fold still unfolding would print
+     clipped. No transition means the open state applies synchronously. */
+  @media (prefers-reduced-motion: reduce), print {
     .mcard::details-content,
     .legal-sec::details-content,
     .pr-more::details-content,
