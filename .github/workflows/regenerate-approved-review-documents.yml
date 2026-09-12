@@ -22,6 +22,12 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Build and serve
+        # The production URLs the build is documented to need (AGENTS.md), so
+        # the exported copy describes the deployed site rather than the
+        # login-only fallback.
+        env:
+          PUBLIC_APP_URL: https://app.lumecon.ai
+          PUBLIC_API_URL: https://api.lumecon.ai
         run: |
           npm run build
           npm exec astro preview -- --host 127.0.0.1 --port 4330 > /tmp/lumecon-preview.log 2>&1 &

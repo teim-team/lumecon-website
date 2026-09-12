@@ -19,7 +19,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      # The production URLs the build is documented to need (AGENTS.md): without
+      # them Astro emits the login-only variant and the smoke suite's /welcome
+      # and CSP assertions fail before the screenshots and copy audit run.
       - run: npm run build
+        env:
+          PUBLIC_APP_URL: https://app.lumecon.ai
+          PUBLIC_API_URL: https://api.lumecon.ai
       - name: Smoke test
         run: npx playwright test --project=chromium
       - name: Serve built site
