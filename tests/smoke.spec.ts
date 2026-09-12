@@ -2,12 +2,13 @@ import { test, expect } from '@playwright/test';
 
 /**
  * Smoke suite. Catches the regressions we've actually hit (broken icon
- * renders, empty viewport, leaking skip-link, hero cycle failing to
- * start, demo route 404). Intentionally narrow — perf and a11y are
+ * renders, empty viewport, leaking skip-link, missing hero imagery and
+ * demo route 404). Intentionally narrow — perf and a11y are
  * covered by Lighthouse CI, not here.
  */
 
 test('home page loads and renders the hero product shot', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const errs: string[] = [];
   page.on('pageerror', (e) => errs.push(e.message));
   page.on('console', (m) => {
@@ -16,76 +17,88 @@ test('home page loads and renders the hero product shot', async ({ page }) => {
 
   await page.goto('/', { waitUntil: 'networkidle' });
   await expect(page).toHaveTitle(/Lumecon/i);
-  // The hero trio: one example locked for the visit, its three
-  // archetypes (results, map, comparison) each on screen exactly once.
-  await expect(page.locator('#trio .trio-pos-c img')).toBeVisible();
-  const srcs = await page
-    .locator('#trio [data-trio] img')
-    .evaluateAll((imgs) => imgs.map((img) => (img as HTMLImageElement).getAttribute('src') || ''));
-  const parsed = srcs.map((s) => s.match(/^\/app\/ex-([a-z]+)-(results|map|compare)\.webp$/));
-  expect(parsed.every(Boolean)).toBe(true);
-  expect(new Set(parsed.map((m) => m![1])).size).toBe(1); // one example only
-  expect(new Set(parsed.map((m) => m![2])).size).toBe(3); // all three archetypes
-  await expect(page.locator('#trioCaption')).toContainText('Shown with sample data:');
+  await expect(page).toHaveTitle(/the intelligent economic analysis platform/i);
+  await expect(page.locator('.hero2 .h-kicker')).toHaveText(
+    'the intelligent economic analysis platform',
+  );
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    /the intelligent economic analysis platform/,
+  );
+  // One static, readable product view is staged against the matching
+  // economic-place image. Only the product view is promoted for LCP.
+  const heroShot = page.locator('.hero2-screen img');
+  await expect(heroShot).toBeVisible();
+  await expect(heroShot).toHaveAttribute('src', '/app/ex-wind-results.webp');
+  await expect(heroShot).toHaveAttribute('fetchpriority', 'high');
+  await expect(page.locator('.hero2 img[fetchpriority="high"]')).toHaveCount(1);
+  await expect(page.locator('.hero2-photo img')).toHaveAttribute(
+    'src',
+    '/naics/utilities-v2-wide.webp',
+  );
+  await expect(page.locator('.hero2-stage figcaption')).toContainText('Illustrative sample data');
+
+  // The editorial photo passage uses the same licensed duotone system
+  // without implying that any depicted facility is a customer.
+  await expect(page.locator('.place-panel')).toHaveCount(3);
+  const placeSrcs = await page
+    .locator('.place-panel img')
+    .evaluateAll((images) => images.map((image) => image.getAttribute('src')));
+  expect(placeSrcs).toEqual([
+    '/naics/construction-v2-wide.webp',
+    '/naics/tribalgov-v2-wide.webp',
+    '/naics/manufacturing-v2-wide.webp',
+  ]);
+  await expect(page.locator('.places-note')).toContainText('does not identify Lumecon customers');
+  // Three equal sector panels make this a product-facing comparison, not an
+  // editorial feature article with one promoted story.
+  const placeBoxes = await page.locator('.place-panel').evaluateAll((panels) =>
+    panels.map((panel) => {
+      const box = panel.getBoundingClientRect();
+      return { width: box.width, height: box.height };
+    }),
+  );
+  expect(placeBoxes).toHaveLength(3);
+  for (const box of placeBoxes.slice(1)) {
+    expect(Math.abs(box.width - placeBoxes[0].width)).toBeLessThan(1);
+    expect(Math.abs(box.height - placeBoxes[0].height)).toBeLessThan(1);
+  }
+  await expect(page.locator('.place-panel__copy h3').first()).not.toHaveCSS(
+    'font-family',
+    /Georgia/,
+  );
   // The product tour renders its screenshot rows below the hero.
   expect(await page.locator('.tour-row img').count()).toBeGreaterThan(2);
 
-  // Filter out known-harmless console errors from sandboxed environments,
-  // where the external font fetch fails against an interception proxy
-  // (bad cert) or a closed egress (connection reset). Same-origin assets
-  // are served from localhost and never produce either. (The old
-  // frame-ancestors meta-CSP warning and the ipapi.co geolocation call
-  // were both removed, so they can no longer appear here.)
+  // Core site assets are self-hosted. This stays as a guard for sandboxes that break
+  // same-origin fetches through an interception proxy (bad cert) or a
+  // closed egress (connection reset).
   const real = errs.filter(
     (e) => !e.includes('CERT_AUTHORITY_INVALID') && !e.includes('ERR_CONNECTION_RESET'),
   );
   expect(real).toEqual([]);
 });
 
-const readTrioState = (page: import('@playwright/test').Page) =>
-  page.locator('#trio [data-trio]').evaluateAll((frames) =>
-    frames.map((f) => ({
-      src: f.querySelector('img')?.getAttribute('src') || '',
-      center: f.classList.contains('trio-pos-c'),
-    })),
-  );
-
-test('hero opens on the money shot and holds still under reduced motion', async ({ page }) => {
+test('hero stays readable and motion-safe under reduced motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(400);
-  const before = await readTrioState(page);
-  // The example's declared money shot opens the cycle: results or map,
-  // never comparison. Under reduced motion nothing advances, ever.
-  expect(before.find((f) => f.center)?.src).toMatch(/-(results|map)\.webp$/);
-  await page.waitForTimeout(7600);
-  expect(await readTrioState(page)).toEqual(before);
-});
-
-test('hero rotates archetypes but never the example during a visit', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(400);
-  const before = await readTrioState(page);
-  const centerBefore = before.find((f) => f.center)?.src;
-  // Let the timer advance at least once (6.5s interval).
-  await page.waitForTimeout(7600);
-  const after = await readTrioState(page);
-  // Sources never change once assigned: the example is locked and each
-  // frame keeps its archetype. Only the position classes move.
-  expect(after.map((f) => f.src)).toEqual(before.map((f) => f.src));
-  const centerAfter = after.find((f) => f.center)?.src;
-  expect(centerAfter).not.toEqual(centerBefore);
-  const example = (s?: string) => s?.match(/ex-([a-z]+)-/)?.[1];
-  expect(example(centerAfter)).toEqual(example(centerBefore));
+  await expect(page.locator('.hero2-title')).toBeVisible();
+  await expect(page.locator('.hero2-screen')).toBeVisible();
+  await expect(page.locator('.hero2-screen')).toHaveCSS('transition-duration', '0s');
 });
 
 test('skip-link is hidden until focused', async ({ page }) => {
   await page.goto('/');
   const skip = page.locator('.skip-link');
   await expect(skip).toBeAttached();
+  await expect(page.locator('main#top')).toHaveAttribute('tabindex', '-1');
   const box = await skip.boundingBox();
   // Either off-canvas (negative x) or 1px clipped.
   expect(box?.x ?? -1).toBeLessThan(0);
+  await skip.focus();
+  await expect(skip).toBeVisible();
+  await skip.press('Enter');
+  await expect(page.locator('main#top')).toBeFocused();
 });
 
 test('pricing shows four public plans, Seed first, with Sapling recommended', async ({ page }) => {
@@ -94,7 +107,8 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
   await expect(page.locator('.pr-plan')).toHaveCount(4);
   await expect(page.locator('.pr-plan').first().locator('.pr-plan__name')).toHaveText('Seed');
   await expect(page.locator('.pr-plan--featured .pr-plan__name')).toHaveText('Sapling');
-  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('Free');
+  await expect(page.locator('#plan-free .pr-plan__amount')).toHaveText('$0');
+  await expect(page.locator('#plan-free .pr-plan__period')).toHaveText('/ year');
   await expect(page.locator('#plan-sprout .pr-plan__amount')).toHaveText('$1,000');
   await expect(page.locator('#plan-sapling .pr-plan__amount')).toHaveText('$2,500');
   await expect(page.locator('#plan-tree .pr-plan__amount')).toHaveText('$7,500');
@@ -122,6 +136,32 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
   await expect(page.locator('[data-plan-table]')).toContainText('Cedar Grove');
 });
 
+test('homepage uses clear free-access language and Cedar starts on demand', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await expect(page.locator('.hero2 .hero2-cta a[href="/signup?tier=free"]')).toHaveText(
+    /Request free access/,
+  );
+
+  await page.locator('#why').scrollIntoViewIfNeeded();
+  const fab = page.locator('.cedar-fab');
+  await expect(fab).toBeVisible();
+  await fab.click();
+
+  const panel = page.locator('#cedarFabPanel');
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1');
+  const prompts = await panel
+    .locator('.cedar-chip')
+    .evaluateAll((chips) => chips.slice(0, 5).map((chip) => chip.textContent?.trim()));
+  expect(prompts).toEqual([
+    'What is Lumecon?',
+    'What is Cedar?',
+    'Is my data safe?',
+    'How is this different from IMPLAN / RIMS / Lightcast?',
+    'How much does it cost?',
+  ]);
+});
+
 test('pricing leads with the free account and routes consultants to Sapling', async ({ page }) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
   // The free CTA leads, above the plans, with the no-card line beside it.
@@ -130,7 +170,7 @@ test('pricing leads with the free account and routes consultants to Sapling', as
   await expect(hero.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // The free-account band sits before the paid tiers.
   const free = page.locator('.pr-free');
-  await expect(free).toContainText('take our word for it');
+  await expect(free).toContainText('Request Seed access');
   await expect(free).toContainText('No credit card');
   await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
   // Consultants use the public plans. The signal is one line under the
@@ -140,7 +180,7 @@ test('pricing leads with the free account and routes consultants to Sapling', as
   await expect(page.locator('#cedar-grove')).toBeVisible();
   // The FAQ carries the skepticism the table cannot. Each row is a details
   // element the reader opens.
-  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(12);
+  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(11);
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {
@@ -150,11 +190,17 @@ test('signup reflects a plan carried over from pricing', async ({ page }) => {
   await expect(badge).toContainText(/Sapling tier/);
 });
 
-test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page }) => {
+test('menu overlay opens full screen from the opaque nav', async ({ page }) => {
   // Regression: the overlay used to live inside <nav>, whose
   // backdrop-filter made it the containing block for position:fixed,
   // silently confining the "full screen" menu to the nav bar's box.
-  // Inner pages (nav--static) always carry the filter, so open there.
+  // The header is now solid, but the full-viewport overlay must remain
+  // independent from the bar that opens it.
+  //
+  // Below 1000px the bar is brand + Menu; at and above it the destinations
+  // sit inline and the Menu button is hidden, so this exercises the
+  // overlay at a width where it is the navigation.
+  await page.setViewportSize({ width: 900, height: 800 });
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
   await page.locator('#navMenuBtn').click();
   const menu = page.locator('#navMenu');
@@ -164,6 +210,37 @@ test('menu overlay opens full screen on a backdrop-filtered nav', async ({ page 
   if (!box || !viewport) throw new Error('no menu box');
   expect(box.height).toBeGreaterThan(viewport.height * 0.9);
   await expect(menu.locator('a', { hasText: 'Methodology' })).toBeVisible();
+  await expect(page.locator('#nav')).toHaveCSS('backdrop-filter', 'none');
+  await expect(page.locator('#nav')).toHaveCSS('background-color', 'rgb(250, 252, 253)');
+});
+
+test('desktop nav shows the destinations inline, with no Menu button', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  const links = page.locator('.nav-links a');
+  await expect(links).toHaveCount(4);
+  for (const label of ['How it works', 'Cedar', 'Pricing', 'Methodology']) {
+    await expect(page.locator('.nav-links a', { hasText: label })).toBeVisible();
+  }
+  await expect(page.locator('.nav-signup')).toBeVisible();
+  await expect(page.locator('.nav-links a[aria-current="page"]')).toHaveText('Pricing');
+  await expect(page.locator('#navMenuBtn')).toBeHidden();
+});
+
+test('menu closes cleanly when the viewport crosses into desktop navigation', async ({ page }) => {
+  await page.setViewportSize({ width: 900, height: 800 });
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  await page.locator('#navMenuBtn').click();
+  await expect(page.locator('#navMenu')).toBeVisible();
+  await expect(page.locator('#navMenu a[href="/pricing"]')).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('html')).toHaveClass(/navm-open/);
+  await page.keyboard.press('Shift+Tab');
+  await expect(page.locator('#navMenuBtn')).toBeFocused();
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(page.locator('#navMenu')).toBeHidden();
+  await expect(page.locator('html')).not.toHaveClass(/navm-open/);
+  await expect(page.locator('.nav-links a[aria-current="page"]')).toBeFocused();
 });
 
 test('checkout is payment-only: knows the plan, no plan picker', async ({ page }) => {
@@ -176,7 +253,7 @@ test('checkout is payment-only: knows the plan, no plan picker', async ({ page }
   await expect(summary).toContainText('Taxes and fees included');
   // One job: no selectable plan cards, just a quiet change-plan link.
   await expect(page.locator('.co-plan')).toHaveCount(0);
-  await expect(page.locator('h1')).toContainText('Complete your subscription');
+  await expect(page.locator('h1')).toContainText('Confirm your plan details');
   await expect(page.locator('[data-co-change]')).toHaveAttribute('href', /\/choose-plan/);
 
   await page.fill('input[name="discountCode"]', 'welcome25');
@@ -202,6 +279,14 @@ test('login offers the forgot-password flow from the product', async ({ page }) 
   await expect(page.locator('[data-login-submit]')).toHaveText('Send reset link');
   await page.locator('[data-login-back]').click();
   await expect(page.locator('[data-login-title]')).toHaveText('Log in to Lumecon');
+});
+
+test('login reset links open the reset-request state on direct navigation', async ({ page }) => {
+  await page.goto('/login?reset=1', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('[data-login-title]')).toHaveText('Reset your password');
+  await expect(page.locator('input[name="email"]')).toBeVisible();
+  await expect(page.locator('input[name="password"]')).toBeHidden();
+  await expect(page.locator('[data-login-submit]')).toHaveText('Send reset link');
 });
 
 /* This used to assert a two-step registration with a password checklist and a
@@ -248,6 +333,7 @@ test('signup collects a beta access request, with no account created', async ({ 
 
 test('methodology page renders equations with spoken readings', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.meth-hero__title')).toContainText('better inputs');
   const equations = page.locator('.eq[role="math"]');
   await expect(equations).toHaveCount(6);
   // Every equation block must carry a plain-language reading for
@@ -256,6 +342,32 @@ test('methodology page renders equations with spoken readings', async ({ page })
     expect(await eq.getAttribute('aria-label')).toBeTruthy();
   }
   await expect(equations.nth(1)).toContainText('x = (I − A)−1 f');
+  // Sequence is conveyed by the named layers, not generic 01–06 badges or
+  // arrows. Equation references stay intact elsewhere on the page.
+  await expect(page.locator('.meth-flow')).not.toContainText(/^0[1-6]$/);
+  await expect(page.locator('.meth-flow li').first()).toHaveCSS('counter-increment', 'none');
+});
+
+test('every page exposes the canonical product record for people and crawlers', async ({
+  page,
+}) => {
+  await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('link[rel="describedby"][href="/llms.txt"]')).toHaveCount(1);
+  const structuredData = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(structuredData.join('\n')).toContain('SoftwareApplication');
+  await expect(page.locator('.meth-hero__lede')).toContainText(
+    'intelligent economic analysis platform',
+  );
+  await expect(page.locator('.meth-hero__lede')).toContainText('economic impact analysis software');
+});
+
+test('the production build preserves the app handoff and API CSP', async ({ page }) => {
+  await page.goto('/welcome', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.welc-btn')).toHaveAttribute('href', 'https://app.lumecon.ai');
+  const csp = await page
+    .locator('meta[http-equiv="Content-Security-Policy"]')
+    .getAttribute('content');
+  expect(csp).toContain("connect-src 'self' https://api.lumecon.ai");
 });
 
 test('naics page lists all 20 sectors plus tribal government', async ({ page }) => {
@@ -266,7 +378,9 @@ test('naics page lists all 20 sectors plus tribal government', async ({ page }) 
   await expect(page.locator('.meth-hero__lede a[href="/methodology#m-naics"]')).toBeVisible();
   // Hover text exists in the DOM for every tile, manufacturing included.
   await expect(page.locator('#naics-manufacturing .naics-tile__desc')).toContainText('materials');
-  await expect(page.locator('#naics-tribalgov .naics-tile__desc')).toContainText('Lumecon category');
+  await expect(page.locator('#naics-tribalgov .naics-tile__desc')).toContainText(
+    'Lumecon category',
+  );
 });
 
 test('methodology explains the two-digit NAICS choice', async ({ page }) => {
@@ -299,7 +413,8 @@ test('skip link targets real content on subpages', async ({ page }) => {
 
 test('cedar page tells the AI story with three real captures, no diagrams', async ({ page }) => {
   await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('h1')).toContainText('AI built for economic analysis');
+  await expect(page.locator('h1')).toContainText('reviewable economic inputs');
+  await expect(page.locator('.meth-hero__lede')).toContainText('Lumecon’s AI economic analyst');
   // Exactly the three-shot story, told through the shared product tour:
   // upload, entities in the loop, partner context. Diagrams were removed by
   // design; no screenshot repeats.
@@ -316,16 +431,23 @@ test('homepage keeps Cedar to a teaser and drops the AI-tile block', async ({ pa
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   // Cedar gets one card in the why band and a link out. The old dedicated
   // #cedar section and the AI tile block are both gone.
-  const card = page.locator('#why .whyw-card', { hasText: 'Cedar included' });
+  const card = page.locator('#why .whyw-card', { hasText: 'Review inputs before they run' });
   await expect(card).toHaveCount(1);
   await expect(card.locator('a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('.askai')).toHaveCount(0);
 });
 
-test('methodology hosts the AI-research verification block', async ({ page }) => {
+test('methodology shows the public-data foundation', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('.askai')).toHaveCount(1);
-  await expect(page.locator('.askai-tile')).toHaveCount(6);
+  await expect(page.locator('.askai')).toHaveCount(0);
+  await expect(page.locator('#m-data')).toContainText('Public data foundation');
+  await expect(page.locator('.meth-manifest')).toContainText('BEA Input-Output Accounts');
+});
+
+test('print view excludes the dark evidence band', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.emulateMedia({ media: 'print' });
+  await expect(page.locator('#edge')).toBeHidden();
 });
 
 test('choose-plan offers the three plans and a free start', async ({ page }) => {
@@ -341,8 +463,89 @@ test('choose-plan offers the three plans and a free start', async ({ page }) => 
 
 test('welcome closes the flow in full teal with one action', async ({ page }) => {
   await page.goto('/welcome?plan=free', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('h1')).toContainText(/You.re in\./);
+  await expect(page.locator('h1')).toContainText('Your Lumecon workspace is ready');
   await expect(page.locator('[data-welcome-kicker]')).toHaveText('Seed account ready');
-  await expect(page.locator('a.welc-btn')).toHaveAttribute('href', '/login');
+  await expect(page.locator('a.welc-btn')).toHaveAttribute('href', 'https://app.lumecon.ai');
   await expect(page.locator('.cedar-fab')).toHaveCount(0);
 });
+
+test('security.txt stays valid and does not silently lapse', async ({ page }) => {
+  // RFC 9116 requires Contact and Expires. An expired security.txt is
+  // treated as invalid by scanners and by researchers, and nothing else
+  // in the repo watches the date, so this is the thing that notices.
+  const res = await page.goto('/.well-known/security.txt');
+  expect(res?.status()).toBe(200);
+  const body = (await res!.text()) ?? '';
+
+  expect(body).toMatch(/^Contact:\s*\S+/m);
+  const expires = body.match(/^Expires:\s*(\S+)/m);
+  expect(expires, 'security.txt must carry an Expires field (RFC 9116 §2.5.5)').toBeTruthy();
+
+  const when = new Date(expires![1]);
+  expect(Number.isNaN(when.getTime()), `Expires is not a valid date: ${expires![1]}`).toBe(false);
+
+  const daysLeft = Math.round((when.getTime() - Date.now()) / 86_400_000);
+  // Fails while there is still time to renew, rather than after it lapses.
+  expect(daysLeft, `security.txt expires in ${daysLeft} days — renew it`).toBeGreaterThan(30);
+  // RFC 9116 §2.5.5: SHOULD be less than a year out.
+  expect(daysLeft, `Expires is ${daysLeft} days out; RFC 9116 asks for under a year`).toBeLessThan(
+    366,
+  );
+});
+
+test('security keeps one dark surface and preserves readable print text', async ({ page }) => {
+  await page.goto('/security', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.secpg .section--dark')).toHaveCount(1);
+  await expect(page.locator('.secpg-flow')).toHaveCount(0);
+  await expect(page.locator('main')).not.toContainText('Cedar Impact calculates');
+
+  await page.emulateMedia({ media: 'print' });
+  await expect(page.locator('.secpg-hero h1')).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-status dd').first()).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-hero .btn2')).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.secpg-hero .btn2')).toHaveCSS(
+    'background-color',
+    'rgb(255, 255, 255)',
+  );
+});
+
+test('privacy policy discloses Cedar topic memory', async ({ page }) => {
+  await page.goto('/privacy', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('main')).toContainText('topic identifier and timestamp');
+  await expect(page.locator('main')).toContainText('local storage for up to 30 days');
+});
+
+for (const route of ['/methodology', '/cedar']) {
+  test(`${route} dark sections retain readable text when printing without backgrounds`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ media: 'print', colorScheme: 'dark', reducedMotion: 'reduce' });
+    await page.goto(route, { waitUntil: 'networkidle' });
+    await expect(page.locator('#consentBanner')).toBeHidden();
+    const section = page.locator('.section--dark').first();
+    await expect(section).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(section).toHaveCSS('background-image', 'none');
+    const heading = section.locator('h1').first();
+    await expect(heading).toBeVisible();
+    const colors = await section
+      .locator('h1, h1 span, p, a, figcaption')
+      .evaluateAll((nodes) =>
+        nodes
+          .filter((node) => node.textContent?.trim())
+          .map((node) => getComputedStyle(node).color),
+      );
+    for (const color of colors) {
+      const channels = color
+        .match(/[\d.]+/g)
+        ?.slice(0, 3)
+        .map(Number);
+      expect(channels, color).toHaveLength(3);
+      const linear = channels!.map((value) => {
+        const channel = value / 255;
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+      });
+      const luminance = 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+      expect(1.05 / (luminance + 0.05), `${route}: ${color} on white`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+}

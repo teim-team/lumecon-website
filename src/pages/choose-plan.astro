@@ -37,26 +37,32 @@ import '../styles/flow.css';
   title="Choose your plan | Lumecon"
   description="Pick the Lumecon plan that fits how you work. Every plan runs the same economic model on the same data."
   canonical="https://lumecon.ai/choose-plan"
-  keywords="Lumecon plans, Lumecon choose plan, economic impact analysis pricing"
+  noindex={true}
   cedar={false}
 >
   <Nav />
   <main class="cpl tealfield" id="top" tabindex="-1">
     <Contours />
     <div class="cpl-inner">
-      <p class="tealfield__kicker">Your account is ready</p>
+      <p class="tealfield__kicker">Choose a plan</p>
       <h1 class="cpl-title">How will you use Lumecon?</h1>
       <p class="cpl-sub">
-        Every plan runs the same economic model on the same data foundation. Pick the size that fits
-        how you work; you can change it whenever you need.
+        Every paid plan runs the same economic model on the same data foundation. Choose the
+        collaboration and data capabilities your team needs; you can change plans later.
       </p>
       <div class="cpl-grid">
         {
           PLANS.map((p) => (
-            <a class="cpl-card" href={`/checkout?tier=${p.id}`} data-plan-link={p.id}>
-              {p.featured && <span class="cpl-card__flag">Recommended</span>}
-              <span class="cpl-card__name">{p.name}</span>
-              <span class="cpl-card__audience">&ldquo;{p.audience}&rdquo;</span>
+            <a
+              class={`cpl-card${p.featured ? ' cpl-card--featured' : ''}`}
+              href={`/checkout?tier=${p.id}`}
+              data-plan-link={p.id}
+            >
+              <span class="cpl-card__head">
+                <span class="cpl-card__name">{p.name}</span>
+                {p.featured && <span class="cpl-card__flag">Recommended</span>}
+              </span>
+              <span class="cpl-card__audience">{p.audience}</span>
               <span class="cpl-card__price">
                 {p.price}
                 <span class="cpl-card__per"> / year</span>

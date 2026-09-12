@@ -18,7 +18,7 @@ import { defineConfig, devices, chromium, webkit } from '@playwright/test';
  *   3. The container's /opt/pw-browsers/chromium symlink, as a fallback
  *      so the suite runs in sandboxes without any setup.
  * WebKit has no such fallback; its project simply requires a real
- * install (CI does one; the smoke workflow marks WebKit informational).
+ * install (CI installs it and requires the WebKit suite to pass).
  */
 function chromiumExecutablePath(): string | undefined {
   if (process.env.PW_CHROMIUM_EXECUTABLE) return process.env.PW_CHROMIUM_EXECUTABLE;
@@ -45,7 +45,7 @@ function webkitInstalled(): boolean {
     return false;
   }
 }
-const includeWebkit = webkitInstalled();
+const includeWebkit = Boolean(process.env.CI) || webkitInstalled();
 
 export default defineConfig({
   testDir: './tests',
@@ -55,7 +55,9 @@ export default defineConfig({
   workers: 1,
   reporter: process.env.CI ? [['github'], ['list']] : 'list',
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: 'https://localhost:4321',
+    // Only the local preview uses a temporary self-signed certificate.
+    ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
   },
   projects: [
@@ -77,8 +79,9 @@ export default defineConfig({
     ...(includeWebkit ? [{ name: 'webkit', use: { ...devices['Desktop Safari'] } }] : []),
   ],
   webServer: {
-    command: 'npm run preview -- --host 127.0.0.1 --port 4321',
-    url: 'http://localhost:4321',
+    command: 'node scripts/test/preview-https.mjs',
+    url: 'https://localhost:4321',
+    ignoreHTTPSErrors: true,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
   },

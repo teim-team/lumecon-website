@@ -15,7 +15,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import AskAI from '../components/AskAI.astro';
 import { site } from '../config';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -24,7 +23,7 @@ import '../styles/home.css';
 import '../styles/methodology.css';
 
 const description =
-  'How Cedar Impact, the economic impact analysis product on the intelligent economic analysis platform, builds an analysis: proven input-output foundations regionalized with current public data, higher-frequency signals and modern estimation methods, with economists responsible for assumptions and validation and a lineage behind every result.';
+  'Lumecon is the intelligent economic analysis platform. Cedar Impact is its economic impact analysis software, using regionalized input-output modeling on federal data.';
 
 const FAQ = [
   {
@@ -197,47 +196,63 @@ const jsonLd = [
   title="Methodology | Lumecon"
   description={description}
   canonical="https://lumecon.ai/methodology"
-  keywords="economic impact methodology, input-output modeling, direct indirect induced effects, BEA input-output accounts, social accounting matrix, location quotient, RAS balancing, economic multipliers, IMPLAN methodology comparison, REMI comparison, tribal economic impact methodology, traceable results"
   jsonLd={jsonLd}
 >
   <Nav isHome={false} />
-  <main class="meth" id="top" tabindex="-1">
-    <!-- Hero: the methodological position, then three principles. -->
-    <header class="meth-hero">
+  <main class="meth meth--research" id="top" tabindex="-1">
+    {/* Hero: the methodological position, then three principles. */}
+    <header class="meth-hero meth-hero--cover section--dark">
       <div class="meth-w">
         <p class="h-kicker reveal-soft">Methodology</p>
         <h1 class="meth-hero__title reveal-soft" data-stagger="1">
-          Proven foundations, <span class="brand-em">better inputs</span> and a model that keeps improving.
+          Established economic methods with <span class="brand-em">better inputs</span> for the economy
+          you are analyzing.
         </h1>
         <p class="meth-hero__lede reveal-soft" data-stagger="2">
-          Input-output analysis carries nearly a century of economic research. Cedar Impact, where
-          you run economic impact analysis on Lumecon, builds on that foundation with current public
-          data, modern regionalization, higher-frequency evidence where appropriate and transparent
-          validation. <span class="brand-em"
-            >Built on decades of economic science. Not frozen in it.</span
-          >
+          Lumecon is the intelligent economic analysis platform. Cedar Impact, its economic impact
+          analysis software, uses regionalized input-output analysis built from federal economic
+          data. It applies current public indicators where appropriate, documents regionalization
+          and validation and keeps the evidence behind each result available for review.
         </p>
+        <figure class="meth-hero__screen reveal-soft" data-stagger="3" data-zoom>
+          <picture>
+            <source
+              srcset="/app/trace-dark.webp"
+              media="(prefers-color-scheme: dark)"
+              width="1920"
+              height="1009"
+            />
+            <img
+              src="/app/trace.webp"
+              alt="Lumecon number lineage tracing economic output through direct, indirect and induced model layers. Shown with illustrative sample data."
+              width="1920"
+              height="1004"
+              decoding="async"
+            />
+          </picture>
+          <figcaption>The evidence behind a result, visible in the product.</figcaption>
+        </figure>
         <ol class="meth-principles" aria-label="Three principles">
-          <li class="reveal-soft" data-stagger="1" data-hover-reveal tabindex="0">
+          <li class="reveal-soft" data-stagger="1">
             <p class="meth-principles__k">Proven foundations</p>
-            <h3 class="meth-principles__t">The framework the field trusts</h3>
-            <p class="meth-principles__b hover-veil">
+            <h3 class="meth-principles__t">A framework used across the field</h3>
+            <p class="meth-principles__b">
               Regionalized input-output modeling with household and government accounts, the
-              framework the field has trusted for decades.
+              framework used across economic impact practice for decades.
             </p>
           </li>
-          <li class="reveal-soft" data-stagger="2" data-hover-reveal tabindex="0">
+          <li class="reveal-soft" data-stagger="2">
             <p class="meth-principles__k">Modern evidence</p>
             <h3 class="meth-principles__t">Close to present conditions</h3>
-            <p class="meth-principles__b hover-veil">
+            <p class="meth-principles__b">
               Current public datasets and higher-frequency indicators keep the model close to
               present conditions where the data support it.
             </p>
           </li>
-          <li class="reveal-soft" data-stagger="3" data-hover-reveal tabindex="0">
+          <li class="reveal-soft" data-stagger="3">
             <p class="meth-principles__k">Continuous improvement</p>
             <h3 class="meth-principles__t">Advancing as the evidence does</h3>
-            <p class="meth-principles__b hover-veil">
+            <p class="meth-principles__b">
               We invest in the model itself, and in the software around it. Data, methods and
               validation keep advancing as the evidence does.
             </p>
@@ -246,7 +261,7 @@ const jsonLd = [
       </div>
     </header>
 
-    <!-- 01 · The core model -->
+    {/* 01 · The core model */}
     <section class="meth-sec" aria-labelledby="m-core">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
@@ -269,12 +284,6 @@ const jsonLd = [
               suppliers&rsquo; requirements, the suppliers&rsquo; suppliers and so on. That inverse
               is the Leontief system, and it is the arithmetic at the center of every impact
               estimate.
-            </p>
-            <p class="reveal-soft" data-stagger="3">
-              We keep that proven core and supplement it with higher-frequency public indicators and
-              newer estimation methods, so an analysis can better reflect current economic
-              conditions rather than relying exclusively on the vintage of the underlying benchmark
-              tables.
             </p>
           </div>
           <div class="meth-eqs">
@@ -320,7 +329,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 02 · Regionalization -->
+    {/* 02 · Regionalization */}
     <section class="meth-sec" aria-labelledby="m-region">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
@@ -422,7 +431,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 03 · The three layers, as one analytical system -->
+    {/* 03 · The three layers, as one analytical system */}
     <section class="meth-sec" aria-labelledby="m-layers">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
@@ -505,17 +514,18 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 04 · Geographies -->
-    <!-- 05 · The data manifest -->
-    <section class="meth-sec" aria-labelledby="m-data">
+    {/* 04 · Geographies */}
+    {/* 05 · The data manifest */}
+    <section class="meth-sec meth-ledger" aria-labelledby="m-data">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
-          <h2 id="m-data">The data behind every analysis</h2>
+          <h2 id="m-data">Public data foundation</h2>
         </div>
         <p class="meth-sec__lede">
-          Lumecon is built from authoritative public datasets widely used in economic and regional
-          analysis. Benchmark sources set the model&rsquo;s structure; higher-frequency sources keep
-          its levels current; every source is citable.
+          Lumecon draws from authoritative public datasets widely used in economic and regional
+          analysis. The sources used depend on the geography and analysis. Where applicable,
+          benchmark sources set model structure and higher-frequency series help update levels;
+          sources used in a result are citable.
         </p>
         <ul class="meth-manifest">
           {
@@ -533,9 +543,9 @@ const jsonLd = [
           }
         </ul>
         <div class="meth-threeup meth-threeup--tight">
-          <div class="meth-prose" data-hover-reveal tabindex="0">
+          <div class="meth-prose">
             <h3>Data vintages</h3>
-            <p class="hover-veil">
+            <p>
               Every analysis states the data year it runs against, and that year is shown with the
               results (for example, 2025 data). Historical analyses run from 2015 to present where
               the underlying data support it. Where source datasets carry different vintages, the
@@ -543,9 +553,9 @@ const jsonLd = [
               year.
             </p>
           </div>
-          <div class="meth-prose" data-hover-reveal tabindex="0">
+          <div class="meth-prose">
             <h3>Between benchmarks</h3>
-            <p class="hover-veil">
+            <p>
               The benchmark input-output tables update on the schedule of the agencies that publish
               them. Between benchmarks, higher-frequency public series for employment, wages and
               prices update the levels the model scales against, where the data support it. The
@@ -553,9 +563,9 @@ const jsonLd = [
               the proven core stays intact while the levels stay current.
             </p>
           </div>
-          <div class="meth-prose" data-hover-reveal tabindex="0">
+          <div class="meth-prose">
             <h3>Built to evolve</h3>
-            <p class="hover-veil">
+            <p>
               The model is continually evaluated and improved as better data, regionalization
               approaches and validation evidence become available.{' '}
               <a class="gloss-link" href="/cedar">How Cedar supports that workflow</a>.
@@ -565,17 +575,19 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- The discipline, as cards: five commitments that used to be five
+    {
+      /* The discipline, as cards: five commitments that used to be five
          near-empty prose sections. Each card leads with its claim and
          opens in place for the full detail. An open card takes the full
-         row so the prose gets a real measure. -->
+         row so the prose gets a real measure. */
+    }
     <section class="meth-sec meth-deeper" aria-labelledby="m-deeper">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
           <h2 id="m-deeper">The commitments behind every analysis</h2>
         </div>
         <p class="meth-sec__lede">
-          Five things that hold no matter what you run. Open a card for the full detail.
+          These five commitments apply to every analysis; open each section for methodology detail.
         </p>
         <div class="mcards">
           <details class="mcard" id="m-geo">
@@ -590,10 +602,9 @@ const jsonLd = [
             </summary>
             <div class="mcard__body">
               <p>
-                Analyses run at the county, state and national level, and reservations and trust
-                lands are treated as first-class regions rather than approximations. Where an
-                analysis covers both a state and homelands, the two scopes are reported side by side
-                with the subset relationship stated explicitly, so nothing is double-counted.
+                Where an analysis covers both a state and homelands, the two scopes are reported
+                side by side with the subset relationship stated explicitly, so nothing is
+                double-counted.
               </p>
               <p>
                 Reservation and trust-land regions are constructed from the federal boundary files
@@ -635,6 +646,11 @@ const jsonLd = [
                 than as local government within Public Administration (92), because a nation that
                 runs administration, enterprises, housing, health and education programs is
                 understated by that single line.
+              </p>
+              <p>
+                <a class="inline-link" href="/naics"
+                  >See the twenty sectors and the Tribal Government category</a
+                >.
               </p>
             </div>
           </details>
@@ -695,7 +711,7 @@ const jsonLd = [
           <details class="mcard" id="m-compare">
             <summary class="mcard__face">
               <span class="mcard__kicker">Comparison</span>
-              <span class="mcard__title">The same foundation, built differently around it</span>
+              <span class="mcard__title">How Lumecon differs from established platforms</span>
               <span class="mcard__hook">
                 Established platforms and Lumecon draw on the same national statistical system; the
                 differences are architecture, workflow and price.
@@ -717,7 +733,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- 08 · Measures -->
+    {/* 08 · Measures */}
     <section class="meth-sec" aria-labelledby="m-measures">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
@@ -736,29 +752,22 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- Verification block for AI-assisted research: this page is the
-         thing to check an AI summary against. -->
-    <AskAI />
-
-    <!-- Mission close + estimates disclaimer -->
+    {/* Mission close + estimates disclaimer */}
     <section class="meth-mission" aria-labelledby="m-mission">
       <div class="meth-w">
         <h2 class="meth-mission__title" id="m-mission">
-          Every organization has an economic impact. <span class="brand-em"
-            >Every organization should be able to see it.</span
-          >
+          Bring your records into a method you can examine.
         </h2>
         <p class="meth-mission__lede">
-          Better modeling should widen access to rigorous analysis. Businesses, governments,
-          universities, nonprofits and Tribal Nations shape the economies around them. Our job is to
-          make that impact visible.
+          Review the equations, sources, limitations and result lineage, then evaluate the workflow
+          with your own analysis during the private beta.
         </p>
         <div class="meth-mission__cta">
           <a class="btn2 btn2--primary" href="/pricing">
             See pricing <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
           <a class="btn2 btn2--card" href="/signup?tier=free">
-            Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            Request beta access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
         <p class="meth-mission__fine">
@@ -771,7 +780,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <!-- FAQ -->
+    {/* FAQ */}
     <section class="meth-sec meth-faq" aria-labelledby="m-faq">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
@@ -780,10 +789,12 @@ const jsonLd = [
         <div class="meth-faq__list">
           {
             FAQ.map((item) => (
-              <div class="meth-faq__row">
-                <h3>{item.q}</h3>
+              <details class="meth-faq__row">
+                <summary>
+                  <h3>{item.q}</h3>
+                </summary>
                 <p>{item.a}</p>
-              </div>
+              </details>
             ))
           }
         </div>

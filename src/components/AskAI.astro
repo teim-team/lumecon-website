@@ -1,18 +1,10 @@
 ---
 /**
- * Ask any AI about Lumecon — tiles that open the major assistants
- * with a Lumecon question prefilled where the platform supports it.
- * Each tile carries the assistant's official mark, inlined at build
- * time. All six are the monochrome versions, rendered in the site
- * accent so the row reads as part of the page, not a logo wall.
+ * A compact verification note for readers who discover Lumecon through
+ * an AI research tool. Links open each assistant with the same question;
+ * the methodology page remains the source of truth.
  */
 import '../styles/home.css';
-import openaiMark from '../assets/ai/openai.svg?raw';
-import claudeMark from '../assets/ai/claude.svg?raw';
-import geminiMark from '../assets/ai/gemini.svg?raw';
-import copilotMark from '../assets/ai/copilot.svg?raw';
-import grokMark from '../assets/ai/grok.svg?raw';
-import perplexityMark from '../assets/ai/perplexity.svg?raw';
 
 const QUESTION = 'What is Lumecon (lumecon.ai), the economic impact analysis software?';
 const q = encodeURIComponent(QUESTION);
@@ -23,43 +15,47 @@ const q = encodeURIComponent(QUESTION);
    bare assistant homepage here, a tile that opens an empty composer
    reads as broken. */
 const ASSISTANTS = [
-  { name: 'ChatGPT', href: `https://chatgpt.com/?q=${q}`, mark: openaiMark },
-  { name: 'Claude', href: `https://claude.ai/new?q=${q}`, mark: claudeMark },
-  { name: 'Gemini', href: `https://www.google.com/search?udm=50&q=${q}`, mark: geminiMark },
-  { name: 'Copilot', href: `https://copilot.microsoft.com/?q=${q}`, mark: copilotMark },
-  { name: 'Grok', href: `https://grok.com/?q=${q}`, mark: grokMark },
-  { name: 'Perplexity', href: `https://www.perplexity.ai/search?q=${q}`, mark: perplexityMark },
+  { name: 'ChatGPT', href: `https://chatgpt.com/?q=${q}` },
+  { name: 'Claude', href: `https://claude.ai/new?q=${q}` },
+  { name: 'Gemini', href: `https://www.google.com/search?udm=50&q=${q}` },
+  { name: 'Copilot', href: `https://copilot.microsoft.com/?q=${q}` },
+  { name: 'Grok', href: `https://grok.com/?q=${q}` },
+  { name: 'Perplexity', href: `https://www.perplexity.ai/search?q=${q}` },
 ];
 ---
 
 <section class="askai" aria-labelledby="askai-title">
   <div class="askai-inner">
-    <p class="h-kicker" id="askai-title">Researching economic impact software?</p>
-    <p class="askai-note">
-      Comparing Lumecon with IMPLAN, REMI, RIMS II or other economic modeling platforms using
-      ChatGPT, Claude, Gemini, Copilot, Grok or Perplexity? Use this page to verify the methodology
-      directly.
-    </p>
-    <p class="askai-fact">
-      Lumecon uses regionalized input-output modeling to estimate direct, indirect and induced
-      effects, with public data sources, documented assumptions, modeled U.S. geographies and
-      traceability behind reported results.
-    </p>
-    <ul class="askai-grid">
-      {
-        ASSISTANTS.map((a) => (
-          <li>
-            <a class="askai-tile" href={a.href} target="_blank" rel="noopener noreferrer">
-              <span class="askai-tile__ic" aria-hidden="true" set:html={a.mark} />
-              <span class="askai-tile__name">{a.name}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    <p class="askai-fine">
-      IMPLAN and REMI are trademarks of their respective owners. Lumecon is not affiliated with or
-      endorsed by either.
-    </p>
+    <div class="askai-copy">
+      <p class="h-kicker">Independent verification</p>
+      <h2 id="askai-title">Ask any research assistant. Check the answer here.</h2>
+      <p class="askai-note">
+        If you are comparing Lumecon with IMPLAN, REMI, RIMS II or another platform, use this public
+        methodology to verify the model, data foundation and limits directly.
+      </p>
+    </div>
+    <div class="askai-proof">
+      <p class="askai-fact">
+        Lumecon uses regionalized input-output modeling to estimate direct, indirect and induced
+        effects, with public data sources, documented assumptions, modeled U.S. geographies and
+        traceability behind reported results.
+      </p>
+      <ul class="askai-links" aria-label="Open the same research question in an AI assistant">
+        {
+          ASSISTANTS.map((a) => (
+            <li>
+              <a href={a.href} target="_blank" rel="noopener noreferrer">
+                {a.name}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="askai-fine">
+        IMPLAN and REMI are trademarks of their respective owners. Lumecon is not affiliated with or
+        endorsed by either.
+      </p>
+    </div>
   </div>
 </section>

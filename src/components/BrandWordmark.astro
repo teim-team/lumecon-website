@@ -109,7 +109,7 @@ const markSrc = teal
     opacity: 0.68;
     line-height: 1.1;
   }
-  /* "luminate" emphasis. Inherits font + glow from the shared .lumin
+  /* "luminate" emphasis. Inherits font and color from the shared .lumin
      class in global.css; just adjusts size for the logo context. */
   .brandmark__tag em.lumin {
     font-size: 1.18em;
@@ -175,17 +175,16 @@ const markSrc = teal
     color: var(--accent-text);
     opacity: 0.72;
   }
+  .brandmark:hover .brandmark__name {
+    color: var(--navy);
+  }
   /* "luminate" keeps the brand gold as the single accent, even in the
      all-teal lockup, so the one sanctioned gold moment is preserved. */
   .brandmark--teal:hover .brandmark__name {
     color: var(--accent-text);
   }
-
-  .brandmark:hover .brandmark__name {
-    color: var(--navy);
-  }
   .brandmark:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 4px;
     border-radius: 2px;
   }

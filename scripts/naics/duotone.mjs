@@ -38,7 +38,9 @@ mkdirSync(OUT, { recursive: true });
 
 const ALL = [...SECTORS, TRIBAL_GOVERNMENT];
 const bySlug = (name) =>
-  ALL.find((s) => name === s.slug || name.startsWith(s.slug + '-') || name.startsWith(s.slug + '_'));
+  ALL.find(
+    (s) => name === s.slug || name.startsWith(s.slug + '-') || name.startsWith(s.slug + '_'),
+  );
 
 /**
  * Per-sector crop gravity overrides, checked against the rendered output.
@@ -76,7 +78,9 @@ function cropOverridesFor(name, slug) {
 /** Map a grayscale byte through the wash ramp, shadow -> highlight, the
  *  same linear per-channel lookup the NACA proposal's duotone() applies. */
 function ramp(g, wash) {
-  return [0, 1, 2].map((i) => Math.round(wash.shadow[i] + ((wash.highlight[i] - wash.shadow[i]) * g) / 255));
+  return [0, 1, 2].map((i) =>
+    Math.round(wash.shadow[i] + ((wash.highlight[i] - wash.shadow[i]) * g) / 255),
+  );
 }
 
 async function processOne(file, variantIndex = 0) {
@@ -115,9 +119,17 @@ async function processOne(file, variantIndex = 0) {
 
   const overrides = cropOverridesFor(name, sector.slug);
   const main = await washCrop(1200, 800, overrides.main || 'attention');
-  await sharp(main.gray.data, { raw: main.gray.info }).png().toFile(join(IN, `${name}.gray.png`));
-  await main.washed.clone().webp({ quality: 86 }).toFile(join(OUT, `${outName}.webp`));
-  await main.washed.resize(600, 400).webp({ quality: 84 }).toFile(join(OUT, `${outName}-sm.webp`));
+  await sharp(main.gray.data, { raw: main.gray.info })
+    .png()
+    .toFile(join(IN, `${name}.gray.png`));
+  await main.washed
+    .clone()
+    .webp({ quality: 86 })
+    .toFile(join(OUT, `${outName}.webp`));
+  await main.washed
+    .resize(600, 400)
+    .webp({ quality: 84 })
+    .toFile(join(OUT, `${outName}-sm.webp`));
   const wide = await washCrop(1500, 600, overrides.wide || 'attention');
   await wide.washed.webp({ quality: 84 }).toFile(join(OUT, `${outName}-wide.webp`));
   console.log(`${file} -> ${outName}.webp (${sector.wash})`);

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { scrollUntilCedarVisible } from './cedar-visibility';
 
 /**
  * Cedar FAB focus-trap (#9).
@@ -8,26 +9,19 @@ import { test, expect } from '@playwright/test';
  * the panel's own controls, and Escape must close it and return focus to
  * the FAB. Guards keyboard accessibility for the floating chat.
  *
- * Chromium only — focus semantics are engine-independent and headless
- * WebKit is unreliable in CI (see playwright.config.ts).
+ * Both Chromium and WebKit must keep keyboard focus inside the dialog.
  */
 
-test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', async ({
-  page,
-  browserName,
-}) => {
-  test.skip(
-    browserName !== 'chromium',
-    'Focus semantics are engine-independent; headless WebKit is unreliable in CI.',
-  );
+test('open Cedar panel traps Tab focus and Escape returns focus to the FAB', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
   const fab = page.locator('#cedarFab');
   const panel = page.locator('#cedarFabPanel');
-  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
 
+  await scrollUntilCedarVisible(page);
   await fab.click();
+  await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 5000 });
   await expect(panel.locator('[data-cedar-input]')).toBeFocused();
 
   // Tab through the dialog repeatedly; focus must never escape to the

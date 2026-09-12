@@ -4,8 +4,8 @@
    the hero shot (hairline border, small radius, soft shadow). */
 
 .tour {
-  background: var(--white);
-  border-top: 1px solid var(--rule);
+  background: var(--ground-bright);
+  border-top: 0;
   padding: clamp(4rem, 9vh, 7.5rem) var(--container-pad);
 }
 .tour-inner {
@@ -24,42 +24,46 @@
 .tour-kicker,
 .tour-row__kicker {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.74rem;
+  letter-spacing: 0.095em;
   text-transform: uppercase;
   color: var(--accent-text);
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
 }
-/* Which part of the platform this screenshot is from. Set in ink rather
-   than teal so it reads as a name above the kicker's claim, and the row
-   still has exactly one teal line. */
-/* The grid gap between text children is 0.7rem, which reads as a break
-   between the product name and the kicker it belongs with. Pull them into
-   one label block. */
+/* Which part of the platform this screenshot is from, on the same line as
+   the kicker rather than above it.
+   --------------------------------------------------------------------
+   These were two stacked mono uppercase eyebrows, and the upper one read
+   CEDAR IMPACT identically on all three rows, directly under a section
+   lede that had just named Cedar Impact. Two eyebrows over one heading is
+   an indecision the reader has to resolve. One line, product name in ink,
+   claim in teal, divided by a middot. */
 .tour-row__product {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 700;
-  margin: 0 0 -0.42rem 0;
+}
+.tour-row__product::after {
+  content: ' · ';
+  color: var(--ink-4);
+  font-weight: 400;
 }
 .tour-title {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  font-weight: var(--weight-display);
+  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
   line-height: 1.14;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-title);
   color: var(--ink);
   margin: 0;
 }
 .tour-lede {
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
-  line-height: 1.6;
+  text-wrap: pretty;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
+  max-width: var(--measure-lede);
 }
 /* One quiet line for the whole section, not a caption per shot: the
    figures below carry specific numbers for named places, and this is
@@ -76,14 +80,54 @@
   display: grid;
   gap: clamp(2.8rem, 7vh, 5rem);
 }
+/* The screenshot takes the outside edge.
+   --------------------------------------------------------------------
+   These are 1920px captures. In a 7-of-12 column inside a 1360px shell
+   they render at about 750px, which is 38% scale: every label in the app
+   lands under six pixels and the product turns into grey texture. The
+   thing the section exists to show was the thing you could not see.
+
+   Two changes buy back the width. The image column goes to 8 of 12, and
+   the figure bleeds from its column to the viewport edge on whichever side
+   it sits, which is also what gives the three rows a composition instead
+   of three identical half-and-half splits. Together that is roughly 910px
+   at 1440, about a fifth more scale.
+
+   Each capture now ends on a complete interface module instead of forcing
+   every view into the same ratio. The lightbox is the way through to detail,
+   and the shots are click-to-zoom.
+
+   The bleed distance is the gap between the shell's edge and the viewport
+   edge: half the difference between the viewport and the shell, where the
+   shell is itself capped by the padding on narrow screens. html and body
+   already carry `overflow-x: clip`, so the scrollbar's width cannot turn
+   this into a horizontal scroll. */
 .tour-row {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(1.6rem, 4vw, 3.2rem);
-  align-items: center;
+  grid-template-columns: minmax(0, 4.4fr) minmax(0, 7.6fr);
+  gap: 0;
+  /* Top-aligned, not centred. A three-line paragraph vertically centred
+     against a 560px image sits in a pool of its own whitespace with the
+     heading floating away from the top of the picture it introduces. */
+  align-items: start;
 }
 .tour-row--flip {
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-columns: minmax(0, 7.6fr) minmax(0, 4.4fr);
+}
+.tour-row .tour-row__shot {
+  margin-right: 0;
+  border-right: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  position: relative;
+  z-index: 2;
+}
+.tour-row--flip .tour-row__shot {
+  margin-right: 0;
+  margin-left: 0;
+  border-right: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
 }
 /* Keep text first in source order for screen readers; swap visually. */
 .tour-row--flip .tour-row__text {
@@ -93,22 +137,38 @@
   order: 1;
 }
 .tour-row__text {
+  position: relative;
+  z-index: 3;
+  align-self: center;
   display: grid;
   gap: 0.7rem;
   align-content: center;
+  margin-right: -2.75rem;
+  padding: clamp(1.4rem, 2.4vw, 2rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface-glass-strong);
+  box-shadow: var(--shadow-surface);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+}
+.tour-row--flip .tour-row__text {
+  margin-right: 0;
+  margin-left: -2.75rem;
 }
 .tour-row__title {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+  font-weight: var(--weight-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
   line-height: 1.2;
-  letter-spacing: -0.018em;
+  letter-spacing: var(--track-sub);
   color: var(--ink);
   margin: 0;
 }
 .tour-row__body {
-  font-size: clamp(0.98rem, 1.3vw, 1.08rem);
-  line-height: 1.62;
+  text-wrap: pretty;
+  font-size: clamp(0.98rem, 1.3vw, 1.05rem);
+  line-height: 1.68;
   color: var(--ink-2);
   margin: 0;
   max-width: 72ch;
@@ -116,49 +176,38 @@
 .tour-row__shot {
   margin: 0;
   border: 1px solid var(--rule);
-  border-radius: 6px;
+  border-radius: var(--radius-frame);
   overflow: hidden;
   background: var(--white);
-  box-shadow:
-    0 20px 48px -26px rgba(10, 15, 38, 0.32),
-    0 5px 14px -8px rgba(10, 15, 38, 0.16);
+  box-shadow: var(--shadow-frame);
 }
+/* Marketing captures now stop on complete interface boundaries. Preserve the
+   image's authored ratio instead of cropping through a map, project card or
+   control. Cedar's workflow captures keep their 16:9 rule in cedar-page.css. */
 .tour-row__shot img {
   display: block;
   width: 100%;
+  aspect-ratio: auto;
   height: auto;
 }
 
-/* Hover on the three product rows: a lift on the screenshot itself, matching
-   the pricing cards' vocabulary (rise + teal border + teal-cast shadow).
-
-   The lift used to be the whole response, deliberately without a pointer
-   cue, because there was nowhere to click. The screenshots open in the
-   lightbox now, so the cue is correct: `cursor: zoom-in` and the corner
-   badge come from lightbox.css, and the lift reads as the same gesture. */
-.tour-row__shot {
-  transition:
-    transform 0.25s var(--ease),
-    border-color 0.25s var(--ease),
-    box-shadow 0.25s var(--ease);
-}
-.tour-row:hover .tour-row__shot {
-  transform: translateY(var(--lift));
-  border-color: var(--accent);
-  box-shadow: var(--lift-shadow);
-}
-@media (prefers-reduced-motion: reduce) {
-  .tour-row__shot {
-    transition: none;
-  }
-  .tour-row:hover .tour-row__shot {
-    transform: none;
-  }
-}
 @media (max-width: 880px) {
   .tour-row,
   .tour-row--flip {
     grid-template-columns: minmax(0, 1fr);
+  }
+  /* Stacked, the shot is full width already; a bleed on one side only
+     would throw the column off its axis. */
+  .tour-row .tour-row__shot,
+  .tour-row--flip .tour-row__shot {
+    margin-left: 0;
+    margin-right: 0;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-frame);
+  }
+  .tour-row__text,
+  .tour-row--flip .tour-row__text {
+    margin: 0 0 -1rem;
   }
   /* Stack text above its screenshot on mobile, in both row variants. */
   .tour-row--flip .tour-row__text {

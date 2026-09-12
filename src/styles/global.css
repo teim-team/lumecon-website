@@ -1,16 +1,105 @@
+/* ---------- Self-hosted type ----------
+   Inter and JetBrains Mono ship with the site instead of arriving from
+   Google Fonts. Three reasons, in order of how much they matter:
+
+   1. The stylesheet used to load asynchronously (`preload as=style` with
+      an onload handler flipping it to a stylesheet), so every page painted
+      its headlines in a system fallback and then reflowed into Inter. On a
+      site whose whole argument is care, that flash was the first thing a
+      visitor saw.
+   2. The Google request only asked for the weight axis, so
+      `font-variation-settings: 'opsz'` in .display was inert: large type
+      was being drawn with body-text letterforms. These are the two-axis
+      builds, so `font-optical-sizing` finally does something.
+   3. font-src and style-src drop two third-party origins from the CSP,
+      and no visitor request leaves for fonts.gstatic.com.
+
+   Files are copied from the @fontsource-variable/inter and
+   @fontsource-variable/jetbrains-mono packages (both 5.3.0, devDependencies)
+   into public/fonts/ and committed, the same convention scripts/ uses for
+   generated output. To update: bump the packages and re-copy the four
+   `*-latin-*.woff2` files named below. unicode-range is copied from the
+   upstream CSS so latin-ext only downloads when a page needs it. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-opsz-normal.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext-opsz-normal.woff2') format('woff2-variations');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-opsz-italic.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   /* Lumecon Inc. — bold, modern govt-software palette.
      Pure white surfaces, saturated brand accents, no muddy mid-tones. */
-  --white: #ffffff;
-  --cream: #ffffff; /* same as white; sections separate via hairlines, not tint */
-  --paper: #f7f7f8; /* one rare softer surface (forms, panels), barely off-white */
-  --navy: #0a0f26; /* deeper, more saturated near-black-navy */
-  --navy2: #1a2046;
-  --navy-soft: rgba(10, 15, 38, 0.68);
-  --ink: #0a0f26;
-  --ink-2: #353b5c;
-  --ink-3: #6b6f8a;
-  --ink-4: #9da1b5;
+  /* ---- Ground and surface ----
+     --white is the page ground (the legacy name is used by the site's
+     section backgrounds); --surface is the cleaner raised white used for
+     product frames, plans, forms and overlays. The ground is shifted only
+     two cool steps from pure white. That is enough to let a real surface
+     read without coating the entire document in a texture or asking every
+     card to prove its depth with a heavy shadow. */
+  --ground: #f3f6f8;
+  --ground-bright: #fafcfd;
+  --surface: #ffffff;
+  --surface-2: #edf2f4;
+  --surface-inset: #e5ebee;
+  /* Legacy aliases. New work should name the material it needs rather
+     than treating every pale value as interchangeable white. */
+  --white: var(--ground);
+  --cream: var(--surface-2);
+  --paper: var(--surface-inset);
+  --surface-glass: rgba(255, 255, 255, 0.78);
+  --surface-glass-strong: rgba(255, 255, 255, 0.9);
+  --surface-edge: rgba(255, 255, 255, 0.92);
+  --radius-control: 8px;
+  --radius-frame: 14px;
+  --radius-panel: 20px;
+  --navy: #071824;
+  --navy2: #18364a;
+  --navy-soft: rgba(7, 24, 36, 0.68);
+  --action-top: #173a4f;
+  --action-bottom: #0a2232;
+  --action-hover-top: #1d4b63;
+  --action-hover-bottom: #0b3044;
+  --action-ink: #ffffff;
+  --ink: #071824;
+  --ink-2: #33434a;
+  --ink-3: #647279;
+  --ink-4: #93a0a5;
   --terra: #e04a2a; /* bold coral-orange */
   --terra-dark: #b33013;
   --terra-light: #f58057;
@@ -79,11 +168,11 @@
   --blue-deep: #1e40a6;
   --purple: #6e3dd8;
   --purple-rule: #6e3dd8;
-  --gray: #353b5c;
-  --graylt: #6b6f8a;
+  --gray: #33434a;
+  --graylt: #647279;
   --blush: #fff1ed;
-  --rule: rgba(10, 15, 38, 0.12);
-  --rule-strong: rgba(10, 15, 38, 0.24);
+  --rule: rgba(10, 28, 52, 0.1);
+  --rule-strong: rgba(10, 28, 52, 0.2);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   /* One shell width for the whole site: nav, home bands, tour, pricing
      and methodology all measure from this, so the wordmark, the section
@@ -110,6 +199,32 @@
      the same number gives different widths on a deck and a headline. */
   --measure-deck: 82ch;
   --measure-prose: 68ch;
+  /* Section ledes stay proportionate to their container rather than using a
+     fixed character measure. A section head is capped at 1180px inside the
+     1360px page container, so 75% of it reads as roughly 65% of the full
+     page at desktop while remaining responsive at every narrower width. */
+  --measure-lede: min(75%, 62rem);
+
+  /* ---- Display type scale ----
+     One place to set how the site sounds. Two things changed here.
+
+     Weight: display type was 700 everywhere, from the hero down to a
+     1.1rem card title. When every heading is set at the heaviest weight
+     the page has no hierarchy of voice, only of size, and a wall of 700
+     reads as loud rather than as confident. Inter at 600 with the optical
+     size axis engaged holds just as much authority at large sizes and
+     lets the hero be the only thing shouting.
+
+     Tracking: tightens as size grows, which is what the eye expects of
+     display type. These pair with `font-optical-sizing: auto` on body —
+     the self-hosted faces carry the opsz axis, so at 68px the browser now
+     draws genuinely display-cut letterforms (about 6% narrower, with
+     finer joins) instead of scaling up body shapes. */
+  --weight-display: 600;
+  --weight-hero: 675;
+  --track-display: -0.032em; /* hero h1 */
+  --track-title: -0.024em; /* section h2 */
+  --track-sub: -0.015em; /* card and row h3 */
   --container-pad: clamp(1.5rem, 4vw, 3rem);
   --mobile-pad: 1.8rem;
   --error-color: #dc2626;
@@ -118,12 +233,36 @@
   --accent-rgba-08: rgba(15, 181, 165, 0.08);
   --accent-rgba-18: rgba(15, 181, 165, 0.18);
   /* The hover vocabulary, shared by everything that lifts on hover: the tour
-     screenshots, the hero trio frames, the pricing cards and the edge icons.
-     One rise distance and one teal-cast shadow, so a new hover state is a
-     token reference rather than another hand-picked pair of numbers. */
+     screenshots, the hero product frame, the pricing cards and the edge icons.
+     One rise distance and one shadow, so a new hover state is a token
+     reference rather than another hand-picked pair of numbers.
+
+     The shadow is NEUTRAL. It used to be cast in teal
+     (rgba(10,127,116,.36)), which is the wrong physics: a shadow is the
+     absence of light, so it takes the colour of the surface it falls on,
+     not of the object above it. A teal-tinted shadow under a teal object
+     reads as self-illumination, which is what made the frames and buttons
+     look like backlit plastic rather than paper on a page. */
   --lift: -3px;
+  --surface-highlight: rgba(255, 255, 255, 0.88);
   --lift-shadow:
-    0 22px 48px -26px rgba(10, 127, 116, 0.36), 0 6px 16px -10px rgba(10, 15, 38, 0.14);
+    inset 0 1px 0 var(--surface-highlight), 0 2px 6px -2px rgba(10, 15, 38, 0.08),
+    0 26px 58px -28px rgba(10, 15, 38, 0.3);
+  /* Resting elevation for the things that carry a screenshot: a hairline
+     does most of the work and the shadow only separates the frame from the
+     page. Two layers, both neutral, both far weaker than the 0.5-alpha
+     drop shadows they replace. */
+  --shadow-frame:
+    inset 0 1px 0 var(--surface-highlight), 0 1px 3px -1px rgba(10, 15, 38, 0.08),
+    0 18px 44px -26px rgba(10, 15, 38, 0.26);
+  /* Buttons and small controls sit almost flat on the page. */
+  --shadow-control: 0 1px 2px rgba(10, 15, 38, 0.08);
+  --shadow-surface:
+    inset 0 1px 0 var(--surface-edge), 0 1px 2px rgba(10, 28, 52, 0.06),
+    0 9px 24px -18px rgba(10, 28, 52, 0.2), 0 28px 64px -40px rgba(10, 28, 52, 0.28);
+  --shadow-surface-high:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98), 0 2px 5px rgba(10, 28, 52, 0.07),
+    0 18px 42px -22px rgba(10, 28, 52, 0.24), 0 48px 96px -52px rgba(10, 28, 52, 0.34);
 
   /* Map palette. Source = gold (focal point), tribal = amber-gold
      (warm sibling, deeper than gold so reservations read as a
@@ -181,7 +320,16 @@ body {
   font-family: var(--font-sans);
   font-size: 18px;
   color: var(--navy);
-  background: var(--white);
+  background-color: var(--ground);
+  background-image:
+    linear-gradient(
+      112deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.68) 25%,
+      rgba(220, 237, 241, 0.22) 51%,
+      rgba(243, 246, 248, 0) 74%
+    ),
+    linear-gradient(180deg, #fcfeff 0, var(--ground) 34rem, #edf2f5 100%);
   -webkit-font-smoothing: antialiased;
   /* `clip`, not `hidden`: `hidden` turns <body> into its own scroll
      container on iOS Safari, which breaks momentum scrolling, the URL-
@@ -198,6 +346,10 @@ body {
   overscroll-behavior-x: none;
   line-height: 1.6;
   font-variant-numeric: tabular-nums;
+  /* The self-hosted Inter carries the opsz axis, so let the browser match
+     optical size to font size automatically. This is the single largest
+     difference between the old rendering and this one at display sizes. */
+  font-optical-sizing: auto;
 }
 
 /* ---------- Dark mode ----------
@@ -212,18 +364,40 @@ body {
    both light and dark surfaces. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --white: #0f1530;
-    --cream: #131838;
-    --paper: #181e40;
+    --ground: #0f1530;
+    --ground-bright: #151c3a;
+    --surface-2: #131838;
+    --surface-inset: #0b1026;
+    --white: var(--ground);
+    /* Raised surfaces step up from the ground here, the way they step
+       down from it in light mode. */
+    --surface: #161c3c;
+    --cream: var(--surface-2);
+    --paper: var(--surface-inset);
+    --surface-glass: rgba(22, 28, 60, 0.8);
+    --surface-glass-strong: rgba(22, 28, 60, 0.92);
+    --surface-edge: rgba(255, 255, 255, 0.09);
     --navy: #f1f3fa;
     --navy2: #bcc1d8;
     --navy-soft: rgba(241, 243, 250, 0.68);
+    --action-top: #ffffff;
+    --action-bottom: #e7f0f2;
+    --action-hover-top: #ffffff;
+    --action-hover-bottom: #d9e7ea;
+    --action-ink: #071824;
     --ink: #f1f3fa;
     --ink-2: #c9cedf;
     --ink-3: #8c92ab;
     --ink-4: #5f647b;
     --rule: rgba(255, 255, 255, 0.12);
     --rule-strong: rgba(255, 255, 255, 0.22);
+    --surface-highlight: rgba(255, 255, 255, 0.08);
+    --shadow-surface:
+      inset 0 1px 0 var(--surface-edge), 0 2px 4px rgba(0, 0, 0, 0.24),
+      0 18px 42px -22px rgba(0, 0, 0, 0.48);
+    --shadow-surface-high:
+      inset 0 1px 0 var(--surface-edge), 0 2px 5px rgba(0, 0, 0, 0.32),
+      0 28px 68px -28px rgba(0, 0, 0, 0.68);
     --accent-rgba-08: rgba(15, 181, 165, 0.14);
     --accent-rgba-18: rgba(15, 181, 165, 0.26);
     /* Light mode's --accent-bar is an opaque pale mint (#b8ede6) that reads
@@ -244,6 +418,17 @@ body {
     --graylt: #8c92ab;
     /* Highlight tints need more punch to read on a dark surface. */
     --gold: #ffc83d;
+  }
+
+  body {
+    background-image:
+      linear-gradient(
+        112deg,
+        rgba(54, 68, 118, 0.28) 0%,
+        rgba(31, 43, 80, 0.12) 34%,
+        rgba(15, 21, 48, 0) 66%
+      ),
+      linear-gradient(180deg, #101733 0, var(--ground) 34rem, #0b1026 100%);
   }
 
   /* The .btn dark overrides live in a second dark block AFTER the
@@ -282,55 +467,36 @@ body {
      cascade to nav.css's hardcoded-white background. */
 }
 
-/* ---------- Section-snap scrolling ----------
-   Marketing pages read as a sequence of self-contained "pages":
-   hero, workspace, why, products, cedar, contact, etc. Setting
-   snap-type on <html> + snap-align on each major section makes the
-   browser gently land on the next section when the visitor scrolls
-   close to a boundary. Proximity (not mandatory) keeps the feel
-   natural — small flicks still scroll freely, but a longer flick
-   snaps to the next page-sized section.
+/* Scroll-snap was removed, not disabled.
+   --------------------------------------------------------------------
+   The homepage used `scroll-snap-type: y proximity` on <html> to land on
+   section boundaries, and it was turned off because it fought momentum
+   scrolling on macOS trackpads and iOS Safari. What was left behind was
+   the whole apparatus set to `none`: the property declared three times
+   across two media queries, plus a `.snap-section` rule that no element
+   in the site carries. All of it did nothing. Gone.
 
-   The min-block-size pairing in each component CSS ensures sections
-   are at least one viewport tall (dvh accounts for mobile URL bars). */
+   `overflow-x: clip` and `scroll-padding-top` are load-bearing and stay:
+   `clip` rather than `hidden` avoids making <html> a scroll container,
+   and the padding keeps anchor jumps clear of the fixed nav. */
 html {
-  /* Scroll-snap intentionally OFF. We previously had
-       scroll-snap-type: y proximity
-     to give the homepage a "section-by-section" feel, but html-level
-     scroll-snap consistently caused "broken/jumpy scroll" reports on
-     macOS trackpads and iOS Safari (it fought momentum scrolling at
-     section boundaries). The .snap-section / scroll-snap-align hints on
-     children become inert without a snap container, so we leave them in
-     place as harmless markers. */
-  scroll-snap-type: none;
-  /* The headline highlight blocks bleed sideways (negative vw insets)
-     for an editorial look; clip the x-axis at the root so that bleed
-     can never become a horizontal scroll. `clip` (not `hidden`) avoids
-     making <html> a scroll container. */
   overflow-x: clip;
-  /* Reserve room for the fixed nav so anchor jumps land below it. */
   scroll-padding-top: clamp(4.5rem, 8vh, 5.5rem);
 }
-/* Disable snap on small landscape screens — phones in landscape have
-   too little vertical room for 100dvh sections to feel right. */
-@media (max-height: 480px) {
-  html {
-    scroll-snap-type: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-snap-type: none;
-  }
-}
-.snap-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
+
+/* Selection. The browser default is a saturated blue that belongs to no
+   part of this palette, and it is one of the few pieces of chrome a
+   reader triggers deliberately. Teal at low alpha keeps the text legible
+   underneath rather than reversing it out. */
+::selection {
+  background: var(--accent-rgba-18);
+  color: var(--ink);
 }
 
-/* Teal focus ring — UI accent, replaces default browser blue. */
+/* The text-safe teal also clears the 3:1 non-text contrast threshold
+   against the page ground; the brighter brand teal does not. */
 *:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-text);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -395,8 +561,10 @@ html {
   .why,
   .cta,
   .footer,
+  .edge,
   .scroll-progress,
-  .skip-link {
+  .skip-link,
+  .consent {
     display: none !important;
   }
   body,
@@ -443,76 +611,15 @@ html {
   text-decoration: none;
 }
 
-/* Editorial primitives — used by Hero, Products, Why, Cedar so the
-   whole homepage reads as one publication, not four pasted-together
-   sections. */
-.kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-mono);
-  font-size: var(--type-xs);
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--navy);
-  opacity: 0.78;
-  margin-bottom: 1.25rem;
-}
-.kicker::before {
-  content: '§';
-  color: var(--accent-text);
-  font-weight: 700;
-}
-.display {
-  font-family: var(--font-display);
-  font-variation-settings: 'opsz' 144;
-  font-weight: 500;
-  letter-spacing: -0.022em;
-  line-height: 0.98;
-}
-.display em {
-  font-style: italic;
-  font-weight: 400;
-  color: var(--gold);
-}
-
 /* Brand emphasis — the italic gold "luminate" wordplay that runs
    through the site, set in Inter italic so the brand ships exactly
-   two font families. The glow keyframe pulses softly so the word
-   literally luminates. Applied via the .lumin class wherever the
+   two font families. Applied via the .lumin class wherever the
    emphasis appears (logo wordmark, hero headlines, footer tagline). */
 .lumin {
   font-family: var(--font-sans);
   font-style: italic;
   font-weight: 500;
   color: var(--gold);
-  animation: luminate-glow 3.4s ease-in-out infinite;
-}
-@keyframes luminate-glow {
-  0%,
-  100% {
-    text-shadow: 0 0 0 rgba(240, 169, 26, 0);
-    filter: brightness(1);
-  }
-  50% {
-    text-shadow:
-      0 0 10px rgba(240, 169, 26, 0.5),
-      0 0 22px rgba(240, 169, 26, 0.28);
-    filter: brightness(1.08);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .lumin {
-    animation: none;
-  }
-}
-.lede {
-  font-size: clamp(1.05rem, 1.6vw, 1.32rem);
-  line-height: 1.55;
-  color: var(--navy);
-  opacity: 0.88;
-  max-width: 38rem;
 }
 
 a {
@@ -527,13 +634,20 @@ h3 {
 }
 h1,
 h2 {
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
   color: var(--navy);
+  /* Balance the rag. Without this the browser fills each line greedily and
+     leaves whatever is left on the last one, which is how a headline ends
+     up with a single orphaned word, or splits an emphasised phrase across
+     a break so half of it is teal on one line and half on the next. It is
+     a progressive enhancement: browsers that do not support it lay the
+     line out exactly as before. */
+  text-wrap: balance;
 }
 h3 {
-  font-weight: 600;
-  letter-spacing: -0.012em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-sub);
   line-height: 1.2;
   color: var(--navy);
 }
@@ -575,9 +689,6 @@ strong {
 
    Give the container `data-hover-reveal` and `tabindex="0"` so a keyboard
    can reach what a pointer can. */
-[data-hover-reveal] {
-  outline: none;
-}
 .hover-veil {
   opacity: 0;
   transform: translateY(6px);
@@ -603,32 +714,92 @@ strong {
   }
 }
 
-/* Prose that is one argument in consecutive paragraphs.
-   --------------------------------------------------------------------
-   Two prose columns only work when both sides are genuinely parallel and
-   run about the same length. Every text-only pair on this site failed
-   that: 321 characters against 568 and 355 against 181 on methodology,
-   248 against 129 and 65 against 127 on pricing. The short side left a
-   hole beside the long one and the eye had to travel back up the page to
-   start the second half.
+/* ---------- Inverted section ----------
+   One dark band, and the reason is compositional rather than decorative.
+   The page is otherwise a single white sheet running top to bottom, five
+   sections deep, each with the same rhythm: kicker, heading, lede, grid.
+   Hairlines separate them but nothing anchors the page, and a document
+   with no change of ground reads as long rather than as composed. A site
+   that separates only with hairlines is committing to that flatness.
 
-   Stacked at the deck measure they read as what they are. This lives in
-   global.css so a page adds `prose-stack` rather than inventing its own
-   `*__cols` grid; .meth-onecol is the same rule under the name the
-   methodology markup already uses. Genuine pairs, prose beside an
-   equation or a question beside its answer, keep their own two-column
-   rules. */
-.prose-stack,
-.meth-onecol {
-  display: grid;
-  gap: 1rem;
-  max-width: var(--measure-deck);
+   It works by rebinding the same tokens the global dark-mode block
+   rebinds, scoped to one element. Everything inside keeps referring to
+   --ink, --rule, --accent-text and so on, so no descendant needs to know
+   it is on a dark surface; this is the mechanism the whole site already
+   uses, applied locally.
+
+   Use it once per page at most. Two inverted bands is a stripe pattern,
+   which is the failure mode this is trying to avoid. */
+.section--dark {
+  --white: #0c1229;
+  --surface: #141b38;
+  --cream: #0c1229;
+  --paper: #080d20;
+  --ink: #f1f3fa;
+  --ink-2: #c2c8dc;
+  --ink-3: #8f95ae;
+  --ink-4: #676d85;
+  --navy: #f1f3fa;
+  --rule: rgba(255, 255, 255, 0.14);
+  --rule-strong: rgba(255, 255, 255, 0.26);
+  /* The deep chip teal fails AA on a dark surface (3.68:1); the light
+     teal lands at 10.66:1. Same swap the global dark block makes. */
+  --accent-text: var(--accent-light);
+  --cedar-text: var(--cedar-light);
+  background: linear-gradient(145deg, #091126 0%, #0d1933 56%, #082531 100%);
+  color: var(--ink);
+  /* The band runs edge to edge, so it needs no hairline to be found. */
+  border-top: none;
 }
-.prose-stack > p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--ink-2);
-  margin: 0;
+.section--dark {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+}
+.section--dark > * {
+  position: relative;
+  z-index: 1;
+}
+/* In dark mode the page is already dark, so the band distinguishes itself
+   by sitting slightly above the surrounding ground rather than below it. */
+@media (prefers-color-scheme: dark) {
+  .section--dark {
+    --white: #161c3c;
+    --surface: #1d2450;
+    --cream: #161c3c;
+    background: #161c3c;
+  }
+}
+/* Printed backgrounds may be disabled independently of the color scheme. */
+@media print {
+  .section--dark {
+    --white: #fff;
+    --surface: #fff;
+    --cream: #fff;
+    --paper: #fff;
+    --ink: #111;
+    --ink-2: #222;
+    --ink-3: #333;
+    --ink-4: #444;
+    --navy: #111;
+    --accent-text: #006c6c;
+    --cedar-text: #006c6c;
+    --rule: #999;
+    --rule-strong: #666;
+    background: #fff !important;
+    color: var(--ink);
+  }
+  .section--dark a,
+  .section--dark figcaption {
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+  .section--dark a {
+    color: var(--accent-text) !important;
+  }
+  .section--dark figcaption {
+    color: var(--ink-3) !important;
+  }
 }
 
 /* Container utility */
@@ -673,28 +844,23 @@ strong {
   border: 0;
 }
 
-.reveal {
-  opacity: 0;
+/* Scroll-reveal is an enhancement, never a visibility gate. Text stays fully
+   opaque throughout the transition so contrast does not dip while an audit,
+   a crawler or a fast-scrolling reader reaches a section. Only position moves. */
+.js .reveal {
   transform: translateY(18px);
-  transition:
-    opacity 0.7s var(--ease),
-    transform 0.7s var(--ease);
-  will-change: opacity, transform;
+  transition: transform 0.7s var(--ease);
+  will-change: transform;
 }
-.reveal.seen {
-  opacity: 1;
+.js .reveal.seen {
   transform: none;
 }
 /* A softer reveal for inline body text — smaller travel, faster. */
-.reveal-soft {
-  opacity: 0;
+.js .reveal-soft {
   transform: translateY(10px);
-  transition:
-    opacity 0.55s var(--ease),
-    transform 0.55s var(--ease);
+  transition: transform 0.55s var(--ease);
 }
-.reveal-soft.seen {
-  opacity: 1;
+.js .reveal-soft.seen {
   transform: none;
 }
 /* Stagger a whole section from one attribute.
@@ -711,38 +877,34 @@ strong {
    flicker on a fast connection. The observer only has to see the
    container, and BaseLayout already adds `.seen` to whatever it
    observes, so the same machinery drives both. */
-[data-reveal-group] > * {
-  opacity: 0;
+.js [data-reveal-group] > * {
   transform: translateY(10px);
-  transition:
-    opacity 0.55s var(--ease),
-    transform 0.55s var(--ease);
+  transition: transform 0.55s var(--ease);
 }
-[data-reveal-group].seen > * {
-  opacity: 1;
+.js [data-reveal-group].seen > * {
   transform: none;
 }
-[data-reveal-group].seen > *:nth-child(1) {
+.js [data-reveal-group].seen > *:nth-child(1) {
   transition-delay: 0ms;
 }
-[data-reveal-group].seen > *:nth-child(2) {
+.js [data-reveal-group].seen > *:nth-child(2) {
   transition-delay: 90ms;
 }
-[data-reveal-group].seen > *:nth-child(3) {
+.js [data-reveal-group].seen > *:nth-child(3) {
   transition-delay: 180ms;
 }
-[data-reveal-group].seen > *:nth-child(4) {
+.js [data-reveal-group].seen > *:nth-child(4) {
   transition-delay: 270ms;
 }
-[data-reveal-group].seen > *:nth-child(5) {
+.js [data-reveal-group].seen > *:nth-child(5) {
   transition-delay: 360ms;
 }
-[data-reveal-group].seen > *:nth-child(6) {
+.js [data-reveal-group].seen > *:nth-child(6) {
   transition-delay: 450ms;
 }
 /* Past six the delay stops growing: an eighth item would otherwise wait
    two thirds of a second after the section is already on screen. */
-[data-reveal-group].seen > *:nth-child(n + 7) {
+.js [data-reveal-group].seen > *:nth-child(n + 7) {
   transition-delay: 450ms;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -751,53 +913,42 @@ strong {
   .reveal-left,
   .reveal-right,
   .reveal-diagonal,
-  [data-reveal-group] > * {
+  [data-reveal-group] > *,
+  .js .reveal,
+  .js .reveal-soft,
+  .js .reveal-left,
+  .js .reveal-right,
+  .js .reveal-diagonal,
+  .js [data-reveal-group] > * {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
   }
 }
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-60px);
-  transition:
-    opacity 0.8s var(--ease),
-    transform 0.8s var(--ease);
+.js .reveal-left {
+  transform: translateX(-28px);
+  transition: transform 0.8s var(--ease);
 }
-.reveal-left.seen {
-  opacity: 1;
+.js .reveal-left.seen {
   transform: none;
 }
-.reveal-right {
-  opacity: 0;
-  transform: translateX(60px);
-  transition:
-    opacity 0.8s var(--ease),
-    transform 0.8s var(--ease);
+.js .reveal-right {
+  transform: translateX(28px);
+  transition: transform 0.8s var(--ease);
 }
-.reveal-right.seen {
-  opacity: 1;
+.js .reveal-right.seen {
   transform: none;
 }
-.reveal-diagonal {
-  opacity: 0;
-  transform: translate(30px, -20px);
-  transition:
-    opacity 0.9s var(--ease),
-    transform 0.9s var(--ease);
+.js .reveal-diagonal {
+  transform: translate(18px, -10px);
+  transition: transform 0.9s var(--ease);
 }
-.reveal-diagonal.seen {
-  opacity: 1;
+.js .reveal-diagonal.seen {
   transform: none;
 }
 
-/* Focus styles for keyboard navigation */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
 .btn:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-text);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px var(--accent-rgba-18);
 }
@@ -814,19 +965,19 @@ strong {
   font-weight: 500;
   letter-spacing: -0.005em;
   border-radius: 4px;
-  border: 1px solid var(--navy);
+  border: 1px solid var(--action-top);
   cursor: pointer;
   transition:
     background 0.15s var(--ease),
     color 0.15s var(--ease),
     border-color 0.15s var(--ease);
-  background: var(--navy);
-  color: var(--white);
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  color: var(--action-ink);
   text-decoration: none;
 }
 .btn:hover {
-  background: var(--navy2);
-  border-color: var(--navy2);
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  border-color: var(--action-hover-top);
 }
 .btn--ghost {
   background: transparent;
@@ -838,21 +989,21 @@ strong {
   color: var(--white);
   border-color: var(--navy);
 }
-/* Dark-mode button overrides. These sit AFTER the base .btn rules on
-   purpose: the token flip turns --navy near-white, so a dark-mode
-   primary would render as an inverted light pill. Keep accent teal as
-   the saturated action color in dark mode. (Declared here rather than
-   in the main dark block above because equal-specificity rules are
-   won by whichever comes later in the file.) */
+/* Dark surfaces use the same semantic action tokens. Their values invert to
+   a light control with navy ink, while teal remains the active accent. */
 @media (prefers-color-scheme: dark) {
   .btn {
-    background: var(--accent);
-    color: #0a0f26;
-    border-color: var(--accent);
+    background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+    color: var(--action-ink);
+    border-color: var(--action-top);
   }
   .btn:hover {
-    background: var(--accent-light);
-    border-color: var(--accent-light);
+    background: linear-gradient(
+      180deg,
+      var(--action-hover-top) 0%,
+      var(--action-hover-bottom) 100%
+    );
+    border-color: var(--action-hover-top);
   }
   .btn--ghost {
     background: transparent;

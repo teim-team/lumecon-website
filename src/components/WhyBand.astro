@@ -14,28 +14,36 @@ import '../styles/home.css';
 const CARDS = [
   {
     k: 'Every geography',
-    t: 'County to nation',
-    b: 'Counties, states, the nation, reservations and trust lands. No geography add-ons.',
+    t: 'One connected economic view',
+    b: 'Analyze counties, states, the nation, reservations and trust lands without buying geography add-ons.',
     art: 'geo',
+    width: 600,
+    height: 539,
   },
   {
-    k: 'Unlimited analysis',
-    t: 'No per-analysis fees',
-    b: 'Run as many projects and analyses as you need with one annual subscription.',
+    k: 'Unlimited analyses',
+    t: 'Designed for recurring work',
+    b: 'Update budgets, compare scenarios and return to prior analyses without starting the process again.',
     art: 'rerun',
+    width: 600,
+    height: 436,
   },
   {
-    k: 'Cedar included',
-    t: 'AI built into the workflow',
-    b: 'Cedar helps turn source documents into model-ready inputs, supports analysis and helps communicate results.',
+    k: 'Cedar',
+    t: 'Review inputs before they run',
+    b: 'Cedar organizes documents, proposes mappings and flags unresolved questions before values enter the model.',
     art: 'cedar',
+    width: 600,
+    height: 167,
     link: { href: '/cedar', label: 'Meet Cedar' },
   },
   {
-    k: 'Every kind of organization',
-    t: 'Built to adapt',
-    b: 'Workflows for governments, universities, nonprofits, businesses, Tribal Nations and consultants.',
+    k: 'Organizational context',
+    t: 'Made for the way you work',
+    b: 'Use one reviewable workflow across governments, universities, nonprofits, businesses, Tribal Nations and client work.',
     art: 'orgs',
+    width: 600,
+    height: 450,
   },
 ];
 ---
@@ -44,12 +52,13 @@ const CARDS = [
   <div class="whyw-inner">
     <header class="whyw-head">
       <p class="h-kicker">Why Lumecon</p>
-      <h2 class="whyw-title" id="whyw-title">Every plan gets the real platform.</h2>
+      <h2 class="whyw-title" id="whyw-title">
+        Keep records, assumptions and results in one reviewable workflow.
+      </h2>
       <p class="whyw-lede">
-        The economics don&rsquo;t change with the price. Every customer runs the same model on the
-        same data foundation; higher plans add collaboration, organizational memory and scale.{' '}
-        <a class="inline-link" href="/pricing">Compare plans</a>{' '}or{' '}
-        <a class="inline-link" href="/signup?tier=free">start free</a>.
+        Build an analysis once, then update, compare and report it without reconstructing the
+        process. <a class="inline-link" href="/pricing">Compare plans</a>{' '}or{' '}
+        <a class="inline-link" href="/signup?tier=free">request free access</a>.
       </p>
     </header>
     <div class="whyw-grid">
@@ -60,8 +69,8 @@ const CARDS = [
               <img
                 src={`/art/why-${c.art}.png`}
                 alt=""
-                width="300"
-                height="300"
+                width={c.width}
+                height={c.height}
                 loading="lazy"
                 decoding="async"
               />

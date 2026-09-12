@@ -10,7 +10,7 @@
    one), which read as a stray teal border mid-page. */
 #nav {
   padding: 1.1rem 0;
-  border-top: 4px solid var(--accent);
+  border-top: 0;
 }
 #nav.nav--fixed {
   position: fixed;
@@ -18,34 +18,37 @@
   width: 100%;
   z-index: 100;
   padding: 1.25rem 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0));
+  background: var(--ground-bright);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
   transition:
     background 0.25s var(--ease),
     padding 0.25s var(--ease),
     border-bottom-color 0.25s var(--ease);
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid rgba(10, 28, 52, 0.06);
 }
 #nav.nav--fixed.scrolled {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--ground-bright);
   padding: 0.75rem 0;
   border-bottom-color: var(--rule-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 16px 40px -32px rgba(10, 28, 52, 0.45);
 }
 #nav.nav--static {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* A solid ground keeps the navigation separate from content beneath it,
+     especially when the page begins with photography or a dark section. */
+  background: var(--ground-bright);
   border-bottom: 1px solid var(--rule);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .nav-w {
-  max-width: none;
-  margin: 0;
-  padding: 0 clamp(1rem, 2.2vw, 2rem);
+  max-width: calc(var(--container-max) + var(--container-pad) + var(--container-pad));
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,7 +81,7 @@
    inline row (wordmark + descriptor + "See your impact" + About + Join
    + auth pair) needs ~1080px, so below ~1120px the descriptor steps
    aside and the links keep the width. */
-@media (max-width: 1120px) {
+@media (max-width: 1280px) {
   .nav-brand__sep,
   .nav-brand__desc {
     display: none;
@@ -86,18 +89,15 @@
 }
 
 /* ---------- Dark mode ----------
-   The nav surface is a hardcoded translucent white above (it overlays
-   light pages), so it doesn't flip with the token swap. Repaint it dark
-   so the nav links — var(--navy), now light — stay visible. This lives
-   in nav.css (not global.css) because nav.css loads later and an
-   equal-specificity rule in global.css loses the cascade. */
+   The header stays opaque in either system theme, so links never depend on
+   whatever content happens to scroll beneath them. */
 @media (prefers-color-scheme: dark) {
   #nav.nav--fixed {
-    background: linear-gradient(180deg, rgba(10, 15, 38, 0.94), rgba(10, 15, 38, 0));
+    background: #0a0f26;
   }
   #nav.nav--fixed.scrolled,
   #nav.nav--static {
-    background: rgba(10, 15, 38, 0.94);
+    background: #0a0f26;
     border-bottom-color: var(--rule);
   }
 }
@@ -112,6 +112,7 @@
   border: none;
   border-radius: 6px;
   padding: 0.5rem 0.4rem;
+  min-height: 44px;
   cursor: pointer;
   font-family: var(--font-sans);
   font-size: 0.92rem;
@@ -186,7 +187,7 @@ html.navm-open {
   padding: 0.8rem 0;
   border-bottom: 1px solid var(--rule);
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   letter-spacing: -0.02em;
   color: var(--navy);
@@ -194,6 +195,9 @@ html.navm-open {
   transition: color 0.15s var(--ease);
 }
 .navm-list a:hover {
+  color: var(--accent-text);
+}
+.navm-list a[aria-current='page'] {
   color: var(--accent-text);
 }
 .navm-list__cta {
@@ -208,4 +212,115 @@ html.navm-open {
 }
 .navm-contact:hover {
   color: var(--accent-text);
+}
+
+/* VARIANT: the destinations are visible at desktop width.
+   --------------------------------------------------------------------
+   The bar was brand + Menu at every viewport. Below 1000px it still is;
+   above it the four destinations and the auth pair sit in the bar, which
+   is what every enterprise buyer expects to find and what stops Pricing
+   and Methodology from being two clicks behind a button. */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.7rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a,
+.nav-login {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--navy);
+  text-decoration: none;
+  padding: 0.35rem 0 0.3rem;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+.nav-links a:hover,
+.nav-login:hover {
+  color: var(--accent-text);
+  border-bottom-color: var(--accent-bar);
+}
+.nav-links a[aria-current='page'],
+.nav-login[aria-current='page'] {
+  color: var(--accent-text);
+  font-weight: 600;
+  border-bottom-color: var(--accent-text);
+}
+.nav-links__sep {
+  width: 1px;
+  height: 18px;
+  background: var(--rule);
+}
+.nav-signup {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--action-ink);
+  text-decoration: none;
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    var(--shadow-control);
+  transition:
+    background 0.15s var(--ease),
+    transform 0.08s var(--ease),
+    box-shadow 0.15s var(--ease);
+}
+.nav-signup:hover {
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 16px -12px rgba(10, 15, 38, 0.5);
+}
+.nav-signup:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-signup:active {
+    transform: none;
+  }
+}
+/* Below this the inline row stops fitting beside the wordmark and the
+   Menu overlay takes over again. */
+@media (max-width: 999px) {
+  .nav-links,
+  .nav-links__sep,
+  .nav-login,
+  .nav-signup {
+    display: none;
+  }
+}
+@media (min-width: 1000px) {
+  .navm-btn {
+    display: none;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .nav-signup {
+    color: var(--action-ink);
+    background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  }
+  .nav-signup:hover {
+    background: linear-gradient(
+      180deg,
+      var(--action-hover-top) 0%,
+      var(--action-hover-bottom) 100%
+    );
+  }
 }

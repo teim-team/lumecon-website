@@ -6,6 +6,11 @@
         "http://localhost/index.html",
         "http://localhost/pricing/index.html",
         "http://localhost/methodology/index.html",
+        "http://localhost/cedar/index.html",
+        "http://localhost/naics/index.html",
+        "http://localhost/glossary/index.html",
+        "http://localhost/ai-and-data-use/index.html",
+        "http://localhost/accessibility/index.html",
         "http://localhost/privacy/index.html",
         "http://localhost/terms/index.html"
       ],

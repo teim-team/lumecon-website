@@ -25,7 +25,7 @@ import '../styles/methodology.css';
 
 const site = siteConfig.url;
 const description =
-  'The two-digit NAICS sectors Lumecon classifies economic activity against, in plain language, plus the tribal government category and why two-digit coverage keeps analyses defensible.';
+  'The 20 NAICS sectors and the Tribal Government category Lumecon classifies economic activity into, and why the model works at the two-digit level.';
 
 // process.cwd() is the project root under both `astro dev` and `astro
 // build`; import.meta.url points at the compiled chunk during build and
@@ -69,7 +69,6 @@ const jsonLd = [
   title="Industry sectors | Lumecon"
   description={description}
   canonical="https://lumecon.ai/naics"
-  keywords="NAICS sectors, two-digit NAICS, NAICS 2 digit list, industry classification economic impact, NAICS 23 construction, NAICS 62 health care, tribal government classification"
   jsonLd={jsonLd}
 >
   <Nav isHome={false} />
@@ -78,14 +77,17 @@ const jsonLd = [
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Reference</p>
         <h1 class="meth-hero__title">
-          The sectors behind <span class="brand-em">every number</span>.
+          Industry sectors used in <span class="brand-em">Lumecon analyses</span>.
         </h1>
         <p class="meth-hero__lede">
-          Lumecon classifies economic activity at the two-digit NAICS sector level, where federal
-          administrative data is most complete. Complete data means fewer assumptions standing in
-          for missing values, so every multiplier rests on published figures. Hover over a sector to
-          see what belongs to it, and read{' '}
+          Lumecon presents economic activity at the two-digit NAICS sector level because public
+          county and state employment and wage data are generally more available there. This
+          reduces, but does not eliminate, estimation for suppressed and missing values. Open a
+          sector to see what belongs to it, and read{' '}
           <a class="gloss-link" href="/methodology#m-naics">why two digits</a> in the methodology.
+        </p>
+        <p class="naics-photo-note">
+          Photography on this page is illustrative and does not identify Lumecon customers.
         </p>
       </div>
     </header>
@@ -95,33 +97,49 @@ const jsonLd = [
         <ul class="naics-grid" role="list">
           {
             tiles.map((t) => (
-              <li
-                class="naics-tile"
-                id={`naics-${t.slug}`}
-                tabindex="0"
-                style={`--wash-shadow: ${rgb(t.colors.shadow)}; --wash-mid: ${rgb(t.colors.mid)}; --wash-hi: ${rgb(t.colors.highlight)};`}
-              >
-                <div class="naics-tile__media" aria-hidden="true">
-                  {t.photo ? (
-                    <img src={t.photo} alt="" width="600" height="400" loading="lazy" />
-                  ) : (
-                    <div class="naics-tile__field" />
-                  )}
-                  <span class="naics-tile__code">{t.code}</span>
-                </div>
-                <div class="naics-tile__bar">
-                  <h2 class="naics-tile__title">{t.title}</h2>
-                </div>
-                <p class="naics-tile__desc">{t.description}</p>
+              <li class="naics-cell">
+                <details
+                  class="naics-tile"
+                  id={`naics-${t.slug}`}
+                  style={`--wash-shadow: ${rgb(t.colors.shadow)}; --wash-mid: ${rgb(t.colors.mid)}; --wash-hi: ${rgb(t.colors.highlight)};`}
+                >
+                  <summary class="naics-tile__summary">
+                    <div class="naics-tile__media" aria-hidden="true">
+                      {t.photo ? (
+                        <img
+                          src={t.photo}
+                          alt=""
+                          width="600"
+                          height="400"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div class="naics-tile__field" />
+                      )}
+                    </div>
+                    <div class="naics-tile__bar">
+                      <div class="naics-tile__heading">
+                        <span class="naics-tile__code">{t.code}</span>
+                        <h2 class="naics-tile__title">{t.title}</h2>
+                      </div>
+                      <span class="naics-tile__cue" aria-hidden="true">
+                        View details <span class="naics-tile__plus" />
+                      </span>
+                    </div>
+                  </summary>
+                  <p class="naics-tile__desc">{t.description}</p>
+                </details>
               </li>
             ))
           }
         </ul>
         <p class="gloss-foot">
-          Tribal Government is a Lumecon category rather than a NAICS sector. NAICS files tribal
-          governments under local government within Public Administration (92); we track them as
-          their own category because a nation operates as a government, an employer and an
-          enterprise owner at once. For definitions of the terms used in results, see the{' '}
+          Tribal Government is a Lumecon category rather than a two-digit NAICS sector. NAICS places
+          American Indian and Alaska Native Tribal Governments in Public Administration (92);
+          Lumecon presents Tribal Government separately because a nation may operate as a
+          government, an employer and an enterprise owner at once. For definitions of the terms used
+          in results, see the{' '}
           <a class="gloss-link" href="/glossary">glossary</a>.
         </p>
       </div>
@@ -131,23 +149,98 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
+  .meth {
+    background: transparent;
+  }
+  .meth-hero {
+    padding-bottom: clamp(2.8rem, 5vw, 4.5rem);
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafb 56%, #edf3f4 100%);
+    border-bottom: 1px solid var(--rule);
+  }
+  .meth-hero .meth-w {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(28rem, 1.18fr);
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .meth-hero .h-kicker,
+  .meth-hero__title,
+  .meth-hero__lede {
+    grid-column: 1;
+  }
+  .meth-hero__title {
+    max-width: 14ch;
+    font-size: clamp(3rem, 4.8vw, 4.7rem);
+    line-height: 0.99;
+  }
+  .meth-hero__lede {
+    margin-bottom: 0;
+  }
+  .naics-photo-note {
+    grid-column: 1 / -1;
+    margin: 1.5rem 0 0;
+    color: var(--ink-2);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .meth-hero .meth-w::after {
+    content: '';
+    grid-column: 2;
+    grid-row: 1 / 4;
+    min-height: clamp(22rem, 31vw, 29rem);
+    background: url('/naics/manufacturing-v2-wide.webp') center / cover no-repeat;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-frame);
+    box-shadow: var(--shadow-surface-high);
+  }
   .naics-grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
-    gap: 1.1rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: clamp(0.8rem, 1.3vw, 1.15rem);
+  }
+  .naics-cell {
+    min-width: 0;
+    grid-column: span 3;
   }
   .naics-tile {
     position: relative;
     border: 1px solid var(--rule, rgba(10, 15, 38, 0.12));
-    border-radius: 8px;
+    height: 100%;
+    border-radius: var(--radius-frame);
     overflow: hidden;
-    background: var(--white, #fff);
+    background: #09132b;
     outline: none;
+    box-shadow: var(--shadow-surface);
   }
-  .naics-tile:focus-visible {
+  .naics-cell:nth-child(1),
+  .naics-cell:nth-child(8),
+  .naics-cell:nth-child(15) {
+    grid-column: span 6;
+  }
+  .naics-cell:nth-child(1) .naics-tile__media,
+  .naics-cell:nth-child(8) .naics-tile__media,
+  .naics-cell:nth-child(15) .naics-tile__media {
+    aspect-ratio: 3 / 1;
+  }
+  .naics-tile__summary {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    list-style: none;
+  }
+  .naics-tile__summary::-webkit-details-marker {
+    display: none;
+  }
+  .naics-tile__summary::marker {
+    content: '';
+  }
+  .naics-tile__summary:focus-visible {
+    outline: 3px solid rgba(95, 217, 204, 0.9);
+    outline-offset: -4px;
     box-shadow: 0 0 0 3px rgba(15, 181, 165, 0.35);
   }
   .naics-tile__media {
@@ -163,6 +256,18 @@ const jsonLd = [
     height: 100%;
     object-fit: cover;
   }
+  .naics-tile__media img {
+    transform: scale(1.01);
+    transition: transform 0.65s var(--ease);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .naics-tile__summary:hover .naics-tile__media img {
+      transform: scale(1.03);
+    }
+  }
+  .naics-tile__summary:focus-visible .naics-tile__media img {
+    transform: scale(1.03);
+  }
   /* Placeholder until the sector's processed photograph exists: the same
      duotone ramp the pipeline applies, as a quiet field. */
   .naics-tile__field {
@@ -171,23 +276,35 @@ const jsonLd = [
       linear-gradient(158deg, var(--wash-mid) 0%, var(--wash-shadow) 96%);
   }
   .naics-tile__code {
-    position: absolute;
-    left: 0.85rem;
-    bottom: 0.55rem;
     font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 1.7rem;
-    letter-spacing: 0.04em;
-    color: var(--wash-hi);
-    text-shadow: 0 1px 8px rgba(7, 10, 26, 0.35);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    color: #7fe3d8;
   }
   .naics-tile__bar {
-    border-top: 2px solid var(--wash-mid);
-    padding: 0.7rem 0.85rem 0.75rem;
-    /* Stays above the hover overlay so the sector name never dims. */
-    position: relative;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.85rem;
+    min-height: 5.3rem;
+    padding: 0.72rem 0.95rem 0.82rem;
     z-index: 1;
-    background: var(--white, #fff);
+    background: linear-gradient(
+      180deg,
+      rgba(6, 18, 40, 0) 0%,
+      rgba(6, 18, 40, 0.9) 52%,
+      rgba(6, 18, 40, 0.96) 100%
+    );
+  }
+  .naics-tile__heading {
+    min-width: 0;
+    display: grid;
+    gap: 0.24rem;
   }
   .naics-tile__title {
     margin: 0;
@@ -195,24 +312,56 @@ const jsonLd = [
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.35;
-    color: var(--ink, #0a0f26);
-    /* Two lines' worth of room whether the name needs one or two. Sector
-       names run from "Utilities" to "Mining, Quarrying, and Oil and Gas
-       Extraction", so without this the white bar was 44px under the short
-       ones and 62px under the long ones, and a row of tiles ended on a
-       ragged bottom edge. */
-    min-height: calc(2 * 1.35em);
+    color: #fff;
   }
-  /* The description slides over the media on hover or keyboard focus. */
+  .naics-tile__cue {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    padding-bottom: 0.08rem;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7fe3d8;
+  }
+  .naics-tile__plus {
+    position: relative;
+    width: 0.65rem;
+    height: 0.65rem;
+    transition: transform 0.2s var(--ease);
+  }
+  .naics-tile__plus::before,
+  .naics-tile__plus::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    background: currentColor;
+  }
+  .naics-tile__plus::before {
+    width: 100%;
+    height: 1px;
+  }
+  .naics-tile__plus::after {
+    width: 1px;
+    height: 100%;
+  }
+  .naics-tile[open] .naics-tile__plus {
+    transform: rotate(45deg);
+  }
+  /* The description opens through native disclosure semantics. */
   .naics-tile__desc {
     position: absolute;
     inset: 0;
     margin: 0;
-    padding: 0.95rem 1rem;
+    padding: 1rem 1.05rem 4.8rem;
     font-size: 0.86rem;
     line-height: 1.55;
-    color: var(--wash-hi);
-    background: color-mix(in srgb, var(--wash-shadow) 94%, transparent);
+    color: #fff;
+    background: rgba(5, 16, 34, 0.96);
     opacity: 0;
     transition: opacity 0.22s ease;
     display: flex;
@@ -220,26 +369,72 @@ const jsonLd = [
     overflow-y: auto;
     pointer-events: none;
   }
-  .naics-tile:hover .naics-tile__desc,
-  .naics-tile:focus-visible .naics-tile__desc,
-  .naics-tile:focus-within .naics-tile__desc {
+  .naics-tile[open] .naics-tile__desc {
     opacity: 1;
     pointer-events: auto;
   }
   @media (prefers-reduced-motion: reduce) {
-    .naics-tile__desc {
+    .naics-tile__desc,
+    .naics-tile__media img {
+      transition: none;
+    }
+    .naics-tile__summary:hover .naics-tile__media img,
+    .naics-tile__summary:focus-visible .naics-tile__media img {
+      transform: none;
+    }
+    .naics-tile__plus {
       transition: none;
     }
   }
-  /* Touch screens have no hover: show the description under the tile. */
-  @media (hover: none) {
-    .naics-tile__desc {
-      position: static;
-      opacity: 1;
-      pointer-events: auto;
-      background: none;
-      color: var(--ink-2, #353b5c);
-      padding: 0 0.85rem 0.9rem;
+  @media (max-width: 1050px) {
+    .meth-hero .meth-w {
+      grid-template-columns: minmax(0, 1fr) minmax(22rem, 1fr);
+    }
+    .naics-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .naics-cell {
+      grid-column: span 3;
+    }
+    .naics-cell:nth-child(1),
+    .naics-cell:nth-child(8),
+    .naics-cell:nth-child(15) {
+      grid-column: span 6;
+    }
+  }
+  @media (max-width: 860px) {
+    .meth-hero {
+      padding-top: 5.25rem;
+    }
+    .meth-hero .meth-w {
+      grid-template-columns: 1fr;
+    }
+    .meth-hero .meth-w::after {
+      grid-column: 1;
+      grid-row: 4;
+      min-height: clamp(15rem, 65vw, 22rem);
+      margin-top: 1.8rem;
+    }
+  }
+  @media (max-width: 640px) {
+    .naics-grid {
+      grid-template-columns: 1fr;
+    }
+    .naics-cell,
+    .naics-cell:nth-child(1),
+    .naics-cell:nth-child(8),
+    .naics-cell:nth-child(15) {
+      grid-column: auto;
+    }
+    .naics-cell:nth-child(1) .naics-tile__media,
+    .naics-cell:nth-child(8) .naics-tile__media,
+    .naics-cell:nth-child(15) .naics-tile__media {
+      aspect-ratio: 3 / 2;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .meth-hero {
+      background: linear-gradient(145deg, #171d3e 0%, #111833 56%, #0c2a31 100%);
     }
   }
   .gloss-foot {

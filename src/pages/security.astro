@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/security.css';
+
+const description =
+  'Lumecon’s current security program, product controls and SOC 2 preparation status for customer and procurement review.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Security | Lumecon',
+  url: `${site.url}/security`,
+  description,
+  isPartOf: { '@id': `${site.url}#website` },
+  publisher: { '@id': `${site.url}#org` },
+  inLanguage: 'en-US',
+};
+
+---
+
+<BaseLayout
+  title="Security | Lumecon"
+  description={description}
+  canonical={`${site.url}/security`}
+  jsonLd={jsonLd}
+  cedar={false}
+>
+  <Nav isHome={false} />
+  <main class="secpg" id="top" tabindex="-1">
+    <header class="secpg-hero section--dark">
+      <div class="secpg-w secpg-hero__grid">
+        <div class="secpg-hero__copy">
+          <p class="h-kicker">Security and trust</p>
+          <h1>Security you can examine.</h1>
+          <p>
+            Lumecon is formalizing its security program against the AICPA Trust Services Criteria,
+            with a future SOC 2 Type II examination as the target. We have not completed a SOC 2
+            examination and do not currently have a SOC 2 report.
+          </p>
+          <a class="btn2 btn2--primary" href={`mailto:${site.email}?subject=Security review`}>
+            Start a security review <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <aside class="secpg-status" aria-label="Security program status">
+          <p class="secpg-status__label">Current status</p>
+          <dl>
+            <div>
+              <dt>Product stage</dt>
+              <dd>Private beta</dd>
+            </div>
+            <div>
+              <dt>Control framework</dt>
+              <dd>AICPA Trust Services Criteria</dd>
+            </div>
+            <div>
+              <dt>Examination target</dt>
+              <dd>SOC 2 Type II</dd>
+            </div>
+            <div>
+              <dt>Report available</dt>
+              <dd>No</dd>
+            </div>
+          </dl>
+          <p>
+            The examination scope is still being defined. Customer-specific commitments belong in
+            the applicable agreement.
+          </p>
+        </aside>
+      </div>
+    </header>
+
+    <section class="secpg-program" aria-labelledby="sec-program-title">
+      <div class="secpg-w">
+        <header class="secpg-head">
+          <p class="h-kicker">Control program</p>
+          <h2 id="sec-program-title">What is implemented and what remains in progress.</h2>
+          <p>
+            During private beta, the deployed configuration and customer requirements are reviewed
+            before sensitive records move. Procurement documentation can cover hosting,
+            subprocessors, access management, retention and deletion, incident response and backup
+            and recovery.
+          </p>
+        </header>
+
+        <div class="secpg-program__grid">
+          <article>
+            <p class="secpg-program__state">Implemented in the product</p>
+            <h3>Application controls</h3>
+            <ul>
+              <li>
+                Authenticated access with server-side ownership checks for protected resources
+              </li>
+              <li>Project permissions enforced for participant roles and changes in access</li>
+              <li>Deleted accounts locked out with active sessions invalidated</li>
+              <li>Opt-in observability configuration with required personal-data redaction</li>
+            </ul>
+          </article>
+          <article>
+            <p class="secpg-program__state">Program work underway</p>
+            <h3>Readiness and evidence</h3>
+            <ul>
+              <li>Formal control inventory, ownership and evidence collection</li>
+              <li>Vendor, subprocessor and AI-provider review</li>
+              <li>Incident-response, backup and recovery testing and documentation</li>
+              <li>Examination scope, readiness review and independent auditor planning</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="secpg-caveat">
+          This page describes current product design and program status; it is not a certification,
+          audit opinion or contractual warranty. Confirm requirements and the deployed configuration
+          during procurement.
+        </p>
+      </div>
+    </section>
+
+    <section class="secpg-ai" aria-labelledby="sec-ai-title">
+      <div class="secpg-w secpg-ai__grid">
+        <div>
+          <p class="h-kicker">Cedar and customer data</p>
+          <h2 id="sec-ai-title">Provider terms are verified before sensitive content moves.</h2>
+        </div>
+        <div>
+          <p>
+            Some Cedar functions may use third-party AI providers. During private beta, Lumecon is
+            finalizing written terms and technical controls covering each provider&rsquo;s
+            processing purpose, retention, access and model-training practices. Those arrangements
+            are confirmed for the deployment and documented during security review before sensitive
+            customer content is routed to a provider.
+          </p>
+          <p>
+            Lumecon does not sell personal information or use customer information for third-party
+            advertising. Read the <a href="/ai-and-data-use">AI and Data Use statement</a> and{' '}
+            <a href="/privacy">Privacy Policy</a> for the current public terms.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="secpg-close" aria-labelledby="sec-close-title">
+      <div class="secpg-w secpg-close__grid">
+        <div>
+          <p class="h-kicker">Procurement</p>
+          <h2 id="sec-close-title">Bring your requirements to the review.</h2>
+        </div>
+        <div>
+          <p>
+            Government, Tribal, university and enterprise reviews differ. We will identify which
+            controls, provider agreements and evidence are complete, in progress or not yet
+            available for the deployment you are considering.
+          </p>
+          <a class="btn2 btn2--primary" href={`mailto:${site.email}?subject=Security review`}>
+            Contact the team <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

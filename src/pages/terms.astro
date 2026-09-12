@@ -8,8 +8,8 @@
  * results are decision-support estimates, the service ships as is
  * during beta, liability is capped at fees paid, customers own their
  * content and indemnify for it, and the model, software and marks stay
- * Lumecon's. Nothing on this page claims acceptance from anyone; the
- * signup flow will collect acceptance once counsel finalizes the text.
+ * Lumecon's. The draft is not binding; the signup flow will collect
+ * acceptance once counsel finalizes the text.
  */
 import { site } from '../config';
 import LegalLayout from '../layouts/LegalLayout.astro';
@@ -17,9 +17,8 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 
 <LegalLayout
   title="Terms of Service | Lumecon"
-  description="Terms of Service for the Lumecon platform and the Cedar product family: Cedar Impact, Cedar Commons, Cedar Grove and Cedar, the AI economic analyst. Covers software, subscriptions and advisory."
+  description="The terms governing use of Lumecon: accounts, subscriptions, acceptable use, intellectual property and the limits on how results may be relied on."
   canonical="https://lumecon.ai/terms"
-  keywords="Lumecon terms of service, economic impact analysis terms, Cedar AI terms, Lumecon legal"
 >
   <h1>Terms of Service</h1>
   <div class="date">
@@ -27,17 +26,15 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     them, not before.
   </div>
 
-  <details class="legal-sec">
+  <details class="legal-sec" open>
     <summary><h2 class="legal-subhead">1. Who we are and what these terms cover</h2></summary>
     <div class="legal-sec__body">
       <p>
-        Lumecon is an economic analysis platform operated by {site.legalEntity}. These terms govern
-        the Lumecon software, websites, subscriptions and advisory services, including the Cedar
-        product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the
-        shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI
-        economic analyst, in every plan. By creating an account or using the service you
-        agree to these terms on behalf of yourself and, where applicable, the organization you
-        represent.
+        Lumecon is an economic analysis platform operated by {site.legalEntity}. Once finalized and
+        accepted, these terms will govern the Lumecon software, websites, subscriptions and advisory
+        services, including the Cedar product family: Cedar Impact, where you run economic impact
+        analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data
+        library; and Cedar, the AI economic analyst, in every plan.
       </p>
     </div>
   </details>
@@ -58,11 +55,11 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     <summary><h2 class="legal-subhead">3. Accounts</h2></summary>
     <div class="legal-sec__body">
       <p>
-        You are responsible for your account credentials and for activity under your account.
-        Accounts belong to the organization that pays for them and may be reassigned within that
-        organization. You must be at least 18 and authorized to act for the organization you
-        register. We may suspend accounts that violate these terms or put the service or other
-        customers at risk.
+        You are responsible for your account credentials and for activity under your account. If an
+        account is created or paid for on behalf of an organization, the account belongs to that
+        organization and may be reassigned within it. You must be at least 18 and, when registering
+        for an organization, authorized to act for it. We may suspend accounts that violate these
+        terms or put the service or other customers at risk.
       </p>
     </div>
   </details>
@@ -73,9 +70,9 @@ import LegalLayout from '../layouts/LegalLayout.astro';
       <p>
         Paid plans are annual, priced as published or as agreed in an order form, and payable in
         advance. The published plan price is all-inclusive: applicable taxes and fees are included
-        in it, as stated on the pricing page. Subscriptions renew for successive annual terms
-        unless either party gives notice before renewal. Except where the law requires otherwise,
-        fees are not refundable. Plan prices may change at renewal with advance notice.
+        in it, as stated on the pricing page. Subscriptions renew for successive annual terms unless
+        either party gives notice before renewal. Except where the law requires otherwise, fees are
+        not refundable. Plan prices may change at renewal with advance notice.
       </p>
     </div>
   </details>
@@ -111,10 +108,10 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     <summary><h2 class="legal-subhead">7. Cedar and AI outputs</h2></summary>
     <div class="legal-sec__body">
       <p>
-        Cedar assists with intake, analysis, interpretation and reporting. Like all AI systems it
-        can be wrong, and its suggestions are inputs to your judgment rather than substitutes for
-        it. Assumptions Cedar proposes are surfaced for confirmation before results are finalized,
-        and the person running an analysis is responsible for that confirmation.
+        Cedar assists with document intake, proposed input mappings, interpretation and reporting.
+        Cedar Impact applies approved inputs to the economic model. Like all AI systems, Cedar can
+        be wrong, so the person running an analysis is responsible for reviewing and approving its
+        suggestions and the assumptions behind the final result.
       </p>
     </div>
   </details>
@@ -136,11 +133,12 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     <summary><h2 class="legal-subhead">9. Intellectual property</h2></summary>
     <div class="legal-sec__body">
       <p>
-        The Lumecon software, models, data architecture, documentation and websites are the
-        exclusive property of {site.legalEntity} and are protected by intellectual property law; Lumecon&rsquo;s
-        technology is patent pending. Lumecon, We luminate economies, Cedar, Local Economic Impact, Tribal
-        Economic Impact and Global Economic Impact are trademarks of {site.legalEntity}. These terms
-        grant you a right to use the service, not any ownership in it.
+        The Lumecon software, proprietary models, data architecture, documentation, website content
+        and other materials we create are owned by {site.legalEntity} or our licensors and are protected
+        by intellectual property law; Lumecon&rsquo;s technology is patent pending. Public data, customer
+        content and third-party materials remain subject to their own rights and licenses. Lumecon, We
+        luminate economies and Cedar are trademarks of {site.legalEntity}. These terms grant you a
+        right to use the service, not any ownership in it.
       </p>
     </div>
   </details>

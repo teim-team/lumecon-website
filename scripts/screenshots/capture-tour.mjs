@@ -70,6 +70,41 @@ async function stripChrome(page) {
   await page.waitForTimeout(250);
 }
 
+async function fitScrolledBoundary(
+  page,
+  anchorSelector,
+  boundarySelector,
+  { width = 1920, minHeight, maxHeight, topPadding = 24, bottomPadding = 20, label },
+) {
+  await page.setViewportSize({ width, height: maxHeight });
+  const positionAtAnchor = async () => {
+    await page.evaluate(
+      ({ selector, padding }) => {
+        const anchor = document.querySelector(selector);
+        if (!anchor) return;
+        const top = anchor.getBoundingClientRect().top + window.scrollY - padding;
+        window.scrollTo({ top, behavior: 'instant' });
+      },
+      { selector: anchorSelector, padding: topPadding },
+    );
+    await page.waitForTimeout(100);
+  };
+  await positionAtAnchor();
+  const box = await page.locator(boundarySelector).first().boundingBox();
+  if (!box) throw new Error(`capture-tour: could not find ${label}`);
+  const height = Math.max(minHeight, Math.ceil(box.y + box.height + bottomPadding));
+  if (height > maxHeight) {
+    throw new Error(`capture-tour: ${label} needs ${height}px, above ${maxHeight}px limit`);
+  }
+  await page.setViewportSize({ width, height });
+  await positionAtAnchor();
+  const fitted = await page.locator(boundarySelector).first().boundingBox();
+  if (!fitted || fitted.y + fitted.height > height + 1) {
+    throw new Error(`capture-tour: ${label} does not end inside the capture frame`);
+  }
+  return height;
+}
+
 for (const theme of ['light', 'dark']) {
   const suffix = theme === 'dark' ? '-dark' : '';
 
@@ -111,14 +146,15 @@ for (const theme of ['light', 'dark']) {
     return c;
   };
 
-  // Every frame lands as 3840x2160 raw and 1920x1080 optimized. The comparison
-  // page is short, so it reaches that from a smaller viewport at a higher scale
-  // factor rather than leaving the bottom of the frame blank.
-  const ctx = await makeContext(1920, 1080, 2);
-  const cmpCtx = await makeContext(1600, 900, 2.4);
+  // Each marketing frame stops on a complete product boundary. Trace ends just
+  // after its lineage panel; the board and comparison use a taller frame so a
+  // project card or the comparison controls are not sliced by the viewport.
+  const traceCtx = await makeContext(1920, 1120, 2);
+  const boardCtx = await makeContext(1920, 1200, 2);
+  const cmpCtx = await makeContext(1600, 1000, 2.4);
 
   // ---- trace: the lineage panel open on economic output -------------------
-  const trace = await ctx.newPage();
+  const trace = await traceCtx.newPage();
   await trace.goto(`${APP}/app/projects/${TARGET.b.projectId}/runs/${TARGET.b.runId}/results`, {
     waitUntil: 'networkidle',
   });
@@ -136,26 +172,25 @@ for (const theme of ['light', 'dark']) {
   });
   if (!opened) throw new Error('capture-tour: no .metric__trace control on the results page');
   await trace.waitForTimeout(1200);
-  // Frame on the headline so the lineage panel sits in the lower half with the
-  // figure it explains above it; the panel alone reads as a table with no
-  // subject.
-  await trace.evaluate(() => {
-    const h1 = document.querySelector('.reshead h1');
-    if (h1) window.scrollTo({ top: h1.getBoundingClientRect().top + window.scrollY - 24 });
+  // Include the complete results header, not just its headline, and stop after
+  // the full lineage panel. Measuring both boundaries prevents a clipped
+  // eyebrow at the top or the next card appearing at the bottom.
+  const traceHeight = await fitScrolledBoundary(trace, '.reshead', '.lineage', {
+    // Light and dark typography do not land at exactly the same height. Keep
+    // the floor below either natural boundary so a shorter dark panel does
+    // not reveal the clipped top of the following cards.
+    minHeight: 920,
+    maxHeight: 1120,
+    bottomPadding: 16,
+    label: 'results header and lineage panel',
   });
   await trace.waitForTimeout(500);
   await trace.screenshot({ path: `${OUT}/trace${suffix}.png` });
   await trace.close();
 
   // ---- dashboard: the Workspace board -------------------------------------
-  const board = await ctx.newPage();
+  const board = await boardCtx.newPage();
   await board.goto(`${APP}/app`, { waitUntil: 'networkidle' });
-  // The trace capture above ran in this same context, so the app remembers a
-  // results page and offers "pick up where you left off" over the board.
-  // Clear the remembered place and reload, or the marketing shot ships a
-  // resume toast covering a card.
-  await board.evaluate(() => localStorage.removeItem('teim:last-location'));
-  await board.reload({ waitUntil: 'networkidle' });
   await board.waitForTimeout(2600);
   await settleFonts(board);
   await stripChrome(board);
@@ -174,9 +209,10 @@ for (const theme of ['light', 'dark']) {
   await cmp.screenshot({ path: `${OUT}/compare${suffix}.png` });
   await cmp.close();
 
-  await ctx.close();
+  await traceCtx.close();
+  await boardCtx.close();
   await cmpCtx.close();
-  console.log(`tour${suffix}: trace, dashboard, compare`);
+  console.log(`tour${suffix}: trace ${traceHeight}px, dashboard, compare`);
 }
 await browser.close();
 console.log('tour capture done');

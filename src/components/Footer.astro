@@ -42,13 +42,15 @@ const GROUPS: {
     label: 'Reference',
     links: [
       { href: '/methodology', text: 'Methodology' },
+      { href: '/security', text: 'Security' },
       { href: '/glossary', text: 'Glossary' },
+      { href: '/naics', text: 'Industry sectors' },
     ],
   },
   {
     label: 'Account',
     links: [
-      { href: '/signup', text: 'Sign up' },
+      { href: '/signup', text: 'Request access' },
       { href: '/login', text: 'Log in' },
       { href: `mailto:${site.email}`, text: 'Contact', contact: true },
     ],
@@ -93,9 +95,11 @@ const GROUPS: {
     </nav>
   </div>
 
-  <!-- Compact navy strip for copyright + contact email so the
+  {
+    /* Compact navy strip for copyright + contact email so the
        dominant footer surface stays light and the navy footprint
-       shrinks to a single thin bar. -->
+       shrinks to a single thin bar. */
+  }
   <div class="footer-bar">
     <div class="footer-w">
       <div class="footer-bottom">

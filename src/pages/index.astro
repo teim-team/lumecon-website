@@ -5,6 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
+import EconomicPlaces from '../components/EconomicPlaces.astro';
 import WhyBand from '../components/WhyBand.astro';
 import ProductTour from '../components/ProductTour.astro';
 import Edge from '../components/Edge.astro';
@@ -24,56 +25,22 @@ const AUDIENCES = [
   'Consulting firms and independent professionals running economic impact analyses on behalf of outside clients',
 ];
 
-// Curated FAQ subset that powers the FAQPage JSON-LD on the
-// homepage (visible to search crawlers, not rendered as on-page
-// markup). The visible Cedar Q&A is the FAB on every page; this
-// array exists only for structured-data discoverability.
-const FAQ_ITEMS = [
-  {
-    q: 'What is Lumecon?',
-    a: 'Lumecon is the intelligent economic analysis platform. Cedar Impact, where you run economic impact analysis, turns budgets, financial statements, payroll and program records into credible analyses in minutes. Every analysis shows jobs, labor income, GDP contribution, economic output and tax impacts, separates direct, indirect and induced effects, and carries a lineage behind every number. Cedar, the AI economic analyst, is included in every plan.',
-  },
-  {
-    q: 'Is Lumecon an alternative to IMPLAN or REMI?',
-    a: 'Cedar Impact, where you run economic impact analysis on Lumecon, is in the same field as IMPLAN, RIMS II and REMI, and organizations evaluate it as an alternative to traditional economic modeling tools. It uses input-output modeling to estimate direct, indirect and induced effects, prices by flat annual subscription with no geography add-ons and no per-analysis fees, and every plan includes Cedar, the AI economic analyst. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
-  },
-  {
-    q: 'Who uses Lumecon?',
-    a: 'Lumecon is built for organizations that need to explain their economic impact clearly and credibly. That can include tribal governments, local governments, universities, foundations, developers, nonprofits and other institutions making investments in communities. The common thread: if your work affects jobs, spending, income, tax revenue or local development, Lumecon can help make that impact easier to understand.',
-  },
-  {
-    q: 'How does Lumecon support Tribal Nations?',
-    a: 'Tribal government, tribal enterprise and Whole Nation analysis are part of Lumecon itself, included in every plan. Whole Nation analysis brings a tribal government and its enterprises together in one integrated analysis, with statewide and homelands results side by side, so a Nation can show its combined economic footprint with clear, data-backed reports.',
-  },
-  {
-    q: 'Can cities, counties and other organizations use Lumecon?',
-    a: 'Lumecon is not only for tribal governments. We also support local economic impact analysis for cities, counties, public agencies, nonprofits, universities, developers and other organizations. The platform can help explain how a project, institution, investment or program affects a local or regional economy.',
-  },
-  {
-    q: 'What are economic multipliers?',
-    a: 'Economic multipliers estimate how one dollar of activity can ripple through a local economy. If an organization hires workers, buys supplies or funds construction, that activity directly supports jobs and spending. Then suppliers, workers and local businesses spend money again, creating additional effects. Economic impact analysis measures those layers in a clear and disciplined way.',
-  },
-  {
-    q: 'What geographies does Lumecon cover?',
-    a: 'Lumecon covers all federally recognized Tribal Nations and reservations, Alaska Native Corporation regions, Native Hawaiian Home Lands, every U.S. county, every U.S. state and the entire country. All of it is included in one annual subscription, not priced per geography.',
-  },
-  {
-    q: 'How much does Lumecon cost?',
-    a: 'Lumecon has four public plans. Seed is free: build a full analysis and see your direct effects, with full results unlocking on any paid plan. Sprout is $1,000 a year for one user, Sapling is $2,500 a year for up to 10 users with Cedar Commons, the shared project workspace, and Tree is $7,500 a year with unlimited organizational users, Cedar Grove, the advanced data library, and hands-on Cedar calibration. Every paid plan includes Cedar Impact in full, Cedar, unlimited analysis and every supported U.S. geography.',
-  },
-  {
-    q: 'Can I try Lumecon for free?',
-    a: 'Yes. Seed, the free account, is the real platform: create an account, bring your documents and build an analysis end to end, then see your direct effects on the results page. Indirect, induced and total impact unlock when you choose a paid plan.',
-  },
-  {
-    q: 'What is Cedar?',
-    a: "Cedar is Lumecon's AI economic analyst, included in every plan, and the name of the product family around it: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; and Cedar Grove, the advanced data library. See lumecon.ai/cedar for how the analyst works. The chat on this site is a lightweight Cedar that answers questions about Lumecon.",
-  },
-  {
-    q: 'Where was Lumecon built?',
-    a: 'Lumecon Inc. was built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researchers and engineers, with counsel from the Cornell Law Entrepreneurship Law Clinic. Prior professional experience includes the Federal Reserve Banks of Minneapolis and Philadelphia and the Federal Reserve Board of Governors in Washington, DC.',
-  },
-];
+// The homepage carried an 11-question FAQPage node, 681 words of answers,
+// emitted only as JSON-LD with nothing rendered on the page. It is gone.
+//
+// Google's structured data guidelines require marked-up content to be
+// visible to the user, and invisible markup is listed under its spam
+// policies, where the documented consequence is a manual action that
+// makes a site ineligible for rich results. Against that risk there was
+// no upside left to weigh: since August 2023 Google shows FAQ rich
+// results only for well-known government and health sites, which this is
+// not. Zero available benefit against a live guideline violation on the
+// most important page is a bad trade in both directions.
+//
+// The questions themselves are not lost. /pricing and /methodology both
+// carry FAQPage markup whose answers ARE rendered on the page, which is
+// the pattern done correctly, and llms.txt states the same facts for
+// retrieval systems.
 
 const jsonLd = [
   {
@@ -92,7 +59,7 @@ const jsonLd = [
     logo: `${site.url}/brand/lumecon-logo-mark-transparent.png`,
     image: `${site.url}/lumecon-og-image-1200x630.png`,
     description:
-      'Lumecon Inc. builds the intelligent economic analysis platform. Cedar Impact turns budgets, financial statements, payroll and program records into credible economic impact analyses in minutes, with Cedar, the AI economic analyst, in every plan. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Plans from $1,000 a year, free to try.',
+      'Lumecon Inc. builds the intelligent economic analysis platform. Cedar Impact turns budgets, financial statements, payroll and program records into traceable economic impact analyses, with Cedar, the AI economic analyst, in every plan. Built by economists, engineers and researchers with experience at the Federal Reserve and leading universities. Private beta access is opening in waves.',
     email: site.email,
     slogan: site.tagline,
     naics: '541512',
@@ -145,7 +112,7 @@ const jsonLd = [
       'Dartmouth College',
     ],
     keywords:
-      'economic impact analysis, IMPLAN, RIMS II, REMI, Lightcast, BEA multipliers, input-output modeling, alternative data, high-frequency data, tribal economic impact, policy analysis software, government analytics, Cornell',
+      'economic impact analysis, IMPLAN, RIMS II, REMI, Lightcast, BEA multipliers, input-output modeling, tribal economic impact, policy analysis software, government analytics, Cornell',
     potentialAction: {
       '@type': 'ContactAction',
       target: `mailto:${site.email}`,
@@ -194,16 +161,6 @@ const jsonLd = [
   },
   {
     '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    '@id': `${site.url}#faq`,
-    mainEntity: FAQ_ITEMS.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: { '@type': 'Answer', text: item.a },
-    })),
-  },
-  {
-    '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${site.url}#website`,
     url: site.url,
@@ -219,20 +176,20 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title="Lumecon | The Intelligent Economic Analysis Platform"
-  description="The intelligent economic analysis platform. Cedar Impact turns budgets, financial statements, payroll and program records into credible economic impact analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across counties, states, the nation, reservations and trust lands, with Cedar, the AI economic analyst, in every plan. Plans from $1,000 a year, free to try."
-  canonical="https://lumecon.ai/"
-  keywords="economic impact analysis, economic impact analysis software, economic impact analysis software, how to measure economic impact, IMPLAN, IMPLAN alternative, Implan, Implan alternative, RIMS II, RIMS 2, RIMS II alternative, BEA RIMS, REMI, Remi, REMI alternative, Lightcast, EMSI, Emsi, input-output modeling, fiscal multiplier, economic multipliers, alternative data, AI for government, AI for local government, AI for tribes, AI for tribal governments, AI for economic development, government AI software, tribal economic impact, tribal economic development software, reservation economics, ANCSA regions, Alaska Native Corporations, Native Hawaiian Organizations, AIANNH, Cedar AI, economic impact for grants, grant economic impact report, policy analysis software, government software, public-sector analytics, mission-driven organizations, CDFI, economic development organizations, Bureau of Economic Analysis, direct indirect induced effects, jobs output earnings, Cornell University, Cornell Brooks School, Cornell Law, Dartmouth, Federal Reserve, Center for Indian Country Development"
-  ogTitle="Measure the Economic Impact of Any Decision"
-  ogDescription="Credible economic impact analyses in minutes: jobs, labor income, GDP contribution, economic output and tax impacts across supported U.S. geographies, with Cedar AI in every plan. Plans from $1,000 a year, free to try."
-  ogImageAlt="Lumecon. Economic impact analysis software with Cedar AI in every plan. Plans from $1,000 a year, free to try."
+  title="Lumecon | the intelligent economic analysis platform"
+  description="Lumecon is the intelligent economic analysis platform. Turn organizational records and public data into traceable economic impact analyses with Cedar Impact."
+  canonical={site.url}
+  ogTitle="Lumecon | the intelligent economic analysis platform"
+  ogDescription="Lumecon is the intelligent economic analysis platform. Turn organizational records and public data into traceable economic impact analyses with Cedar Impact."
+  ogImageAlt="Lumecon economic impact analysis software, with Cedar in every plan."
   bodyClass="home-page"
   jsonLd={jsonLd}
 >
   <div class="scroll-progress" id="scrollProgress"></div>
   <Nav isHome={true} />
-  <main>
+  <main id="top" tabindex="-1">
     <Hero />
+    <EconomicPlaces />
     <WhyBand />
     <ProductTour />
     <Edge />
@@ -241,20 +198,12 @@ const jsonLd = [
   <Footer isHome={true} />
 </BaseLayout>
 
-<style is:global>
-  html {
-    scroll-behavior: smooth;
-  }
-</style>
-
 <script>
-  // Scroll & reveal constants
+  // Scroll progress and nav state. Reveal behavior is shared by every
+  // page in BaseLayout so its fallback and reduced-motion handling stay
+  // consistent here too.
   const NAV_SCROLL_THRESHOLD = 40; // px before nav gets 'scrolled' class
-  const STAGGER_DELAY_PER_ITEM = 150; // ms between staggered reveals
-  const REVEAL_THRESHOLD = 0.08;
-  const REVEAL_ROOT_MARGIN = '0px 0px -30px 0px';
 
-  // Scroll progress indicator + nav scroll state
   (function () {
     const nav = document.getElementById('nav');
     const progressBar = document.getElementById('scrollProgress');
@@ -279,27 +228,6 @@ const jsonLd = [
       },
       { passive: true },
     );
+    onScroll();
   })();
-
-  // Intersection observer for reveal animations (staggered product blocks)
-  const obs = new IntersectionObserver(
-    (es) => {
-      es.forEach((e) => {
-        if (e.isIntersecting) {
-          const el = e.target as HTMLElement;
-          const stagger = el.dataset.stagger;
-          if (stagger) {
-            setTimeout(() => el.classList.add('seen'), parseInt(stagger) * STAGGER_DELAY_PER_ITEM);
-          } else {
-            el.classList.add('seen');
-          }
-          obs.unobserve(e.target);
-        }
-      });
-    },
-    { threshold: REVEAL_THRESHOLD, rootMargin: REVEAL_ROOT_MARGIN },
-  );
-  document
-    .querySelectorAll('.reveal,.reveal-soft,.reveal-left,.reveal-right,.reveal-diagonal')
-    .forEach((el) => obs.observe(el));
 </script>

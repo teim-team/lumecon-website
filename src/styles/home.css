@@ -7,11 +7,11 @@
 /* ---------- shared primitives ---------- */
 .h-kicker {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.74rem;
+  letter-spacing: 0.095em;
   text-transform: uppercase;
   color: var(--accent-text);
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
 }
 .btn2 {
@@ -19,35 +19,83 @@
   align-items: center;
   gap: 0.55rem;
   padding: 0.85rem 1.5rem;
-  border-radius: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
   font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.005em;
   text-decoration: none;
   transition:
-    transform 0.15s var(--ease),
-    box-shadow 0.15s var(--ease),
-    background 0.15s var(--ease);
+    background 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    transform 0.08s var(--ease);
 }
+/* The primary action keeps a gradient, but a different kind of one.
+   --------------------------------------------------------------------
+   It was `linear-gradient(135deg, #0FB5A5, #0A7F74)` with a teal glow
+   beneath it and a lift on hover. Three things were wrong, and only one
+   of them was the gradient:
+
+   1. A 135deg ramp between two values of ONE hue does not read as colour,
+      it reads as light falling across a curved surface. That is a
+      simulated sheen, and it is the specific effect that dates a page.
+   2. The shadow was tinted with the button's own teal at 0.55 alpha. A
+      shadow takes the colour of the surface it falls on, so a teal shadow
+      under a teal button reads as neon. This was the single glossiest
+      object on the site, and it appeared on every page.
+   3. Lift plus glow on hover made an ordinary link behave like a physical
+      pill floating over the document.
+
+   What is here instead: the same hue, top to bottom rather than diagonal,
+   with a luminance shift small enough to be felt rather than seen. It
+   gives the surface material depth without pretending to be lit. The
+   shadow is neutral and almost flat. The lightest point (#0A8177) holds
+   4.75:1 against white, so the label stays AA at this size; do not
+   lighten the top stop without re-checking that. */
 .btn2--primary {
-  background: linear-gradient(135deg, #0fb5a5 0%, #0a7f74 100%);
-  color: #fff;
-  box-shadow: 0 10px 24px -12px rgba(10, 127, 116, 0.55);
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  color: var(--action-ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    var(--shadow-control);
 }
 .btn2--primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(10, 127, 116, 0.65);
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 16px -12px rgba(10, 15, 38, 0.5);
+}
+.btn2--primary .btn2-arrow {
+  color: var(--accent-light);
+}
+.section--dark .btn2--primary {
+  background: linear-gradient(180deg, #ffffff 0%, #e7f0f2 100%);
+  color: #071824;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 10px 24px -16px rgba(0, 0, 0, 0.72);
+}
+.section--dark .btn2--primary:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #d9e7ea 100%);
+}
+.section--dark .btn2--primary .btn2-arrow {
+  color: #0a7f74;
 }
 .btn2--card {
-  background: var(--white);
+  background: var(--surface);
   color: var(--navy);
-  border: 1px solid var(--rule);
-  box-shadow: 0 8px 20px -14px rgba(10, 15, 38, 0.35);
+  border: 1px solid var(--rule-strong);
+  box-shadow:
+    inset 0 1px 0 var(--surface-highlight),
+    var(--shadow-control);
 }
 .btn2--card:hover {
-  transform: translateY(-1px);
-  border-color: var(--rule-strong);
+  border-color: var(--navy);
+  box-shadow:
+    inset 0 1px 0 var(--surface-highlight),
+    0 6px 16px -12px rgba(10, 15, 38, 0.42);
 }
 .btn2 .btn2-arrow {
   font-weight: 400;
@@ -57,68 +105,20 @@
   transform: translateX(3px);
 }
 
-/* The real Lumecon mark as background art: cropped at the section
-   edge, quiet, never behind text. Dark mode re-lights the strokes. */
-.markart {
-  position: absolute;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-  opacity: 0.09;
-}
-@media (prefers-color-scheme: dark) {
-  .markart {
-    filter: invert(1) hue-rotate(180deg);
-    opacity: 0.13;
-  }
-}
-@media (max-width: 760px) {
-  .hero2 .markart,
-  .pr-hero .markart {
-    display: none;
-  }
-}
-
-/* ---------- hero ---------- */
-.hero2 {
-  position: relative;
-  overflow: hidden;
-  background: var(--white);
-  padding: clamp(6.5rem, 12vh, 9.5rem) var(--container-pad) clamp(3rem, 6vh, 4.5rem);
-}
-.markart--tr {
-  top: -190px;
-  right: -230px;
-}
-.hero2-inner {
-  position: relative;
-  z-index: 1;
-  max-width: var(--container-max);
-  margin: 0 auto;
-  display: grid;
-  justify-items: center;
-  text-align: center;
-  gap: 1.3rem;
-}
+/* ---------- hero type and actions ---------- */
 .hero2-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.3rem, 5.6vw, 4.3rem);
-  line-height: 1.06;
-  letter-spacing: -0.025em;
+  font-weight: var(--weight-hero);
   color: var(--ink);
   margin: 0;
-  max-width: 42ch;
 }
 .hero2-em {
   color: var(--accent-text);
 }
 .hero2-sub {
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-  line-height: 1.6;
+  text-wrap: pretty;
   color: var(--ink-2);
   margin: 0;
-  max-width: 82ch;
 }
 .hero2-sub strong {
   color: var(--accent-text);
@@ -128,180 +128,104 @@
   display: flex;
   gap: 0.8rem;
   flex-wrap: wrap;
-  justify-content: center;
   margin-top: 0.4rem;
 }
-@media (max-width: 560px) {
-  /* Compact hero: on a phone the headline + body + CTAs must land
-     inside the first screen with room to spare, and the CTA stack
-     must clear the docked Cedar launcher in the corner. */
-  .hero2 {
-    padding-top: 4.5rem;
-  }
-  .hero2-title {
-    font-size: 2rem;
-    line-height: 1.1;
-  }
-  .hero2-sub {
-    font-size: 0.94rem;
-    line-height: 1.5;
-    max-width: 36ch;
-  }
-  .hero2-inner {
-    gap: 0.85rem;
-  }
-  .hero2-cta {
-    gap: 0.6rem;
-  }
-  .hero2-cta .btn2 {
-    padding: 0.75rem 1.2rem;
-    font-size: 0.95rem;
-  }
-}
 
-/* ---------- trio money shot ----------
-   Three app pages stacked the way the refreshed IMPLAN hero stacks
-   its product panels, and they rotate: every few seconds the front
-   page cedes the center to the next one (paused on hover, off under
-   reduced motion). Position classes are swapped by the inline
-   script in Hero.astro; transforms carry the motion. */
-.trio {
-  position: relative;
+/* ---------- provenance row ----------
+   A quiet band closing the hero: label, the agencies behind the model,
+   and a route to the full manifest. Deliberately typographic. Agency
+   wordmarks would be a licensing question and, worse, would read as
+   endorsement; plain type states the fact and claims nothing else. */
+.proof {
   width: 100%;
   max-width: var(--container-max);
-  margin: clamp(1.6rem, 4vh, 3rem) auto 0;
-  aspect-ratio: 1240 / 545;
+  margin: clamp(1.4rem, 4vh, 2.6rem) auto 0;
+  padding-top: clamp(1.2rem, 3vh, 1.8rem);
+  border-top: 1px solid var(--rule);
+  /* A deliberate two-line block, label over agencies, rather than one row
+     that happens to wrap: at this width the label plus six agency names
+     cannot fit on a line, so letting it wrap put the label in a different
+     place at every breakpoint. */
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
 }
-.trio-frame {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 66%;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--white);
-  transform-origin: center top;
-  will-change: transform;
-  /* transform / box-shadow / opacity carry the 6.5s rotation, so they stay
-     slow. `translate` is reserved for the hover lift below and is the only
-     thing here that moves at pointer speed. */
-  transition:
-    transform 0.9s var(--ease),
-    box-shadow 0.9s var(--ease),
-    opacity 0.9s var(--ease),
-    translate 0.25s var(--ease),
-    border-color 0.25s var(--ease);
+.proof__label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
 }
-.trio-frame img {
-  display: block;
-  width: 100%;
-  height: auto;
+.proof__label:hover {
+  color: var(--accent-text);
 }
-.trio-pos-c {
-  transform: translateX(-50%);
-  z-index: 2;
-  box-shadow:
-    0 44px 96px -42px rgba(10, 15, 38, 0.5),
-    0 14px 30px -18px rgba(10, 15, 38, 0.22);
+.proof__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.4rem clamp(0.8rem, 1.8vw, 1.5rem);
 }
-.trio-pos-l {
-  transform: translateX(-98%) translateY(4%) scale(0.8);
-  z-index: 1;
-  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+.proof__list li {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
 }
-.trio-pos-r {
-  transform: translateX(-2%) translateY(4%) scale(0.8);
-  z-index: 1;
-  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+/* Separators are drawn, not typed, so a screen reader reads a list of
+   six agencies rather than six agencies interrupted by middots. */
+.proof__list li + li {
+  position: relative;
+  padding-left: clamp(0.8rem, 1.8vw, 1.5rem);
 }
-
-/* Hover on the hero trio. Same vocabulary as the product tour rows
-   (rise + teal border + teal-cast shadow), and the rotation is already
-   paused while the pointer is over the trio, so the lift is not fighting
-   a position change.
-
-   The lift uses the individual `translate` property rather than adding to
-   `transform`. Each position class owns its own transform (the side frames
-   carry a translateX, a translateY and a scale(0.8)), so a shared hover
-   rule cannot append to it without rewriting all three. `translate` is
-   applied outside `transform`, which also means the lift is a true 10px in
-   page space instead of 8px on the scaled side frames.
-
-   z-index raises the hovered frame over its neighbours: the frames overlap,
-   and a side frame lifting *underneath* the center one reads as a glitch. */
-.trio-frame:hover {
-  /* Three times the shared lift: these frames are far larger than a card,
-     so the same 3px would not read at all. */
-  translate: 0 calc(var(--lift) * 3);
-  border-color: var(--accent);
-  z-index: 3;
-  box-shadow: var(--lift-shadow);
-  /* Only on the way in: hover-out falls back to the 0.9s rotation timing
-     above, so a frame that rotates away while the pointer leaves does not
-     snap its shadow. */
-  transition:
-    translate 0.25s var(--ease),
-    border-color 0.25s var(--ease),
-    box-shadow 0.25s var(--ease);
-}
-@media (prefers-reduced-motion: reduce) {
-  .trio-frame:hover {
-    translate: none;
-  }
-}
-.trio-caption {
+.proof__list li + li::before {
+  content: '';
   position: absolute;
   left: 0;
-  right: 0;
-  top: 100%;
-  margin: 0.9rem auto 0;
-  text-align: center;
-  font-size: 0.82rem;
-  color: var(--ink-3);
-  max-width: 88ch;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 1px;
+  background: var(--rule);
 }
-/* Room for the absolutely-positioned caption below the frames. */
-.trio {
-  margin-bottom: 3rem;
+@media (max-width: 900px) {
+  .proof {
+    justify-items: start;
+  }
+  .proof__list {
+    justify-content: flex-start;
+  }
+  .proof__list li {
+    white-space: normal;
+  }
 }
-@media (max-width: 760px) {
-  .trio {
-    aspect-ratio: 1600 / 1010;
+@media (max-width: 560px) {
+  /* On a phone the separators fight the wrap; the list becomes a plain
+     stack of names and the rule above the band does the dividing. */
+  .proof__list {
+    gap: 0.25rem 1rem;
   }
-  .trio-frame {
-    width: 100%;
+  .proof__list li + li {
+    padding-left: 0;
   }
-  .trio-pos-c {
-    transform: translateX(-50%);
-    opacity: 1;
-    visibility: visible;
+  .proof__list li + li::before {
+    display: none;
   }
-  /* Only the center frame exists on a phone; the other two sit exactly
-     behind it at zero opacity and rotate through.
-
-     `visibility` is here because the screenshots are keyboard controls now:
-     they open the lightbox, so they are in the tab order, and a control
-     nobody can see should not be. The longhand is what lets the 0.9s fade
-     still play, by holding the visibility change until the fade has
-     finished. Setting `transition` in shorthand here would reset it to zero
-     delay and the frame would vanish instead of fading. */
-  .trio-pos-l,
-  .trio-pos-r {
-    transform: translateX(-50%) scale(0.96);
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-    transition-property: transform, box-shadow, opacity, translate, border-color, visibility;
-    transition-duration: 0.9s, 0.9s, 0.9s, 0.25s, 0.25s, 0s;
-    transition-delay: 0s, 0s, 0s, 0s, 0s, 0.9s;
+  .proof__list li {
+    font-size: 0.86rem;
   }
 }
 
 /* ---------- why (white, hairline, teim-app cards) ---------- */
 .whyw {
-  background: var(--white);
-  border-top: 1px solid var(--rule);
+  background: var(--surface-2);
+  border-top: 0;
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
 .whyw-inner {
@@ -318,31 +242,39 @@
 .whyw-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  /* Column gap does the separating now that the vertical rules are gone. */
-  gap: var(--gutter);
+  gap: 0;
+  overflow: hidden;
+  padding: clamp(0.85rem, 1.8vw, 1.4rem);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-surface);
 }
 /* No vertical rules between the cards. The illustrations already read as four
    distinct things, and a rule beside each one boxed them in. Column gap does
    the separating instead, which is why the grid below carries one. */
 .whyw-card {
-  padding: 0.4rem 0;
+  padding: clamp(0.8rem, 1.5vw, 1.35rem);
   display: grid;
   gap: 0.5rem;
   align-content: start;
 }
+.whyw-card + .whyw-card {
+  border-left: 1px solid var(--rule);
+}
 .whyw-card__k {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
   margin: 0;
 }
 .whyw-card__t {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.12rem;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--track-sub);
   color: var(--ink);
   margin: 0;
 }
@@ -355,7 +287,13 @@
 @media (max-width: 1199px) {
   .whyw-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 2.6rem;
+    row-gap: 0;
+  }
+  .whyw-card:nth-child(3) {
+    border-left: 0;
+  }
+  .whyw-card:nth-child(n + 3) {
+    border-top: 1px solid var(--rule);
   }
 }
 @media (max-width: 759px) {
@@ -364,15 +302,16 @@
     row-gap: 0;
   }
   .whyw-card {
-    padding: 0;
+    padding: 1.2rem 0.45rem;
   }
   /* Editorial sequence: eyebrow first, then the illustration large
      and centered, then left-aligned copy; hairline rules between
      features instead of vertical separators. */
   .whyw-card + .whyw-card {
+    border-left: 0;
     border-top: 1px solid var(--rule);
-    margin-top: 1.8rem;
-    padding-top: 1.8rem;
+    margin-top: 0;
+    padding-top: 1.2rem;
   }
   .whyw-card__k {
     order: -1;
@@ -417,19 +356,24 @@
 .flowsec-title,
 .whyw-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  font-weight: var(--weight-display);
+  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
   line-height: 1.14;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-title);
   color: var(--ink);
   margin: 0;
 }
 .flowsec-lede,
 .whyw-lede {
-  font-size: clamp(1rem, 1.4vw, 1.13rem);
-  line-height: 1.62;
+  text-wrap: pretty;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
+  /* These ran the full 1360px shell, which at this size is about 125
+     characters a line. The eye loses its place on the return sweep well
+     before that. */
+  max-width: var(--measure-lede);
 }
 /* Cedar teaser: one position statement + one real capture. The old
    five-step pipeline moved to /cedar as a diagram. */
@@ -438,7 +382,8 @@
   border: 1px solid var(--rule);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 24px 56px -30px rgba(10, 15, 38, 0.35);
+  box-shadow: var(--shadow-frame);
+  background: var(--surface);
 }
 .cedar-shot img {
   display: block;
@@ -454,21 +399,41 @@
 }
 /* ---------- ask any AI ---------- */
 .askai {
-  background: var(--white);
+  background: var(--surface-2);
   border-top: 1px solid var(--rule);
-  padding: clamp(2rem, 5vh, 3.2rem) var(--container-pad);
+  padding: clamp(2.4rem, 6vh, 4rem) var(--container-pad);
 }
 .askai-inner {
   max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
-  gap: 0.9rem;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+.askai-copy {
+  display: grid;
+  gap: 0.72rem;
+}
+.askai-copy h2 {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(1.65rem, 2.8vw, 2.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 .askai-note {
   font-size: 0.92rem;
+  line-height: 1.62;
   color: var(--ink-3);
   margin: 0;
-  max-width: 88ch;
+  max-width: 54ch;
+}
+.askai-proof {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.7rem;
+  border-top: 1px solid var(--rule-strong);
 }
 /* The plainly factual paragraph retrieval systems can quote. */
 .askai-fact {
@@ -484,59 +449,37 @@
   color: var(--ink-3);
   margin: 0;
 }
-.askai-grid {
+.askai-links {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
 }
-.askai-tile {
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: 1.1rem 0.8rem 0.95rem;
-  text-decoration: none;
-  color: var(--ink);
-  transition:
-    transform 0.2s var(--ease),
-    border-color 0.2s var(--ease),
-    box-shadow 0.2s var(--ease);
-}
-.askai-tile:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-  box-shadow: 0 14px 34px -18px rgba(10, 127, 116, 0.35);
-}
-.askai-tile__ic {
+.askai-links a {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 34px;
-  /* Official marks, monochrome, in the site accent. Teal on white
-     stays on --accent-text for contrast. */
+  align-items: baseline;
+  gap: 0.28rem;
+  padding: 0.35rem 0;
+  text-decoration: none;
+  font-size: 0.83rem;
+  font-weight: 650;
   color: var(--accent-text);
-  transition: transform 0.2s var(--ease);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
 }
-.askai-tile__ic svg {
-  width: 28px;
-  height: 28px;
+@media (hover: hover) {
+  .askai-links a:hover {
+    border-bottom-color: var(--accent-text);
+  }
 }
-.askai-tile:hover .askai-tile__ic {
-  transform: scale(1.08);
-}
-.askai-tile__name {
-  font-family: var(--font-sans);
-  font-size: 0.86rem;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-}
-@media (max-width: 880px) {
-  .askai-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+@media (max-width: 760px) {
+  .askai-inner {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+  .askai-copy h2 {
+    max-width: 18ch;
   }
 }
 
@@ -552,119 +495,153 @@
   border-bottom-color: var(--accent-text);
 }
 
-/* The mark keeps the app's slow anchor drift behind the hero. */
-.markart--tr {
-  transform-origin: 62% 40%;
-  animation: mark-drift 26s ease-in-out infinite;
-}
-@keyframes mark-drift {
-  0%,
-  100% {
-    transform: rotate(0deg) translate(0, 0);
-  }
-  50% {
-    transform: rotate(6deg) translate(-1rem, 0.8rem);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .markart--tr {
-    animation: none;
-  }
-}
-
-/* ---------- the edge grid ---------- */
+/* ---------- institutional evidence ledger ---------- */
 .edge {
   background: var(--white);
   border-top: 1px solid var(--rule);
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);
 }
-/* Extra air between the section header and the tile grid: the tiles are
-   mostly whitespace at rest, so they need room around them to read as a
-   deliberate row of icons rather than a gap in the page. */
 .edge-inner {
   max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
-  gap: clamp(2.6rem, 6vh, 4rem);
+  grid-template-columns: minmax(19rem, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+  gap: clamp(3rem, 7vw, 7.5rem);
 }
-.edge-grid {
+.edge-thesis {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* Gutters do all the separating: no box around a tile, no rule between
-     columns. */
-  gap: clamp(2.4rem, 5vh, 3.6rem) var(--gutter);
+  gap: 1rem;
 }
-/* Six tiles that lead with the icon, with the sentence held back until the
-   pointer arrives.
-
-   No card around them: the site separates with hairlines, not boxes, and a
-   border here drew a rectangle around what is mostly whitespace at rest. The
-   column rule is the same one the why cards use.
-
-   The sentence stays in normal flow. `opacity` does not affect layout, so a
-   hidden sentence still occupies its space and revealing one cannot reflow the
-   row or nudge the tiles beside it. That is also why there is no min-height
-   here and no absolute positioning: the tallest sentence in the set sets the
-   row height, grid stretch equalizes the rest, and nothing needs a magic
-   offset that a copy edit would silently break. */
-.edge-card {
-  padding: 0.2rem 0;
-  display: grid;
-  gap: 0.5rem;
-  align-content: start;
+.edge-thesis h2 {
+  max-width: 11ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4.5vw, 4.6rem);
+  font-weight: var(--weight-display);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
 }
-/* With no card to light up, the icon chip carries the hover: it takes the
-   accent border and lifts, the way the tour screenshots and the hero frames
-   do. */
-.edge-card:hover .edge-ic,
-.edge-card:focus-visible .edge-ic {
-  border-color: var(--accent);
-  background: var(--accent-rgba-18);
-  transform: translateY(var(--lift));
+.edge-thesis > p:not(.h-kicker) {
+  max-width: 48ch;
+  margin: 0.35rem 0 0;
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1.62;
 }
-/* The sentence itself uses the shared .hover-veil in global.css. */
-@media (prefers-reduced-motion: reduce) {
-  .edge-card:hover .edge-ic {
-    transform: none;
-  }
-}
-.edge-ic {
+.edge-thesis__link {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  /* The icon leads the tile now that the sentence is held back, so it is
-     sized to be the thing you see first rather than a bullet beside a label. */
-  width: 76px;
-  height: 76px;
-  border-radius: 12px;
-  background: var(--accent-rgba-08);
-  border: 1px solid var(--accent-bar);
+  justify-self: start;
+  gap: 0.55rem;
+  margin-top: 0.6rem;
   color: var(--accent-text);
-  margin-bottom: 0.55rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-bar);
+}
+.edge-thesis__link span {
+  transition: transform 0.2s var(--ease);
+}
+.edge-ledger {
+  border-top: 1px solid var(--rule-strong);
+}
+.edge-row {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: clamp(0.9rem, 2vw, 1.5rem);
+  align-items: start;
+  padding: clamp(1.25rem, 2.2vw, 1.8rem) 0;
+  border-bottom: 1px solid var(--rule);
+  color: inherit;
+  text-decoration: none;
   transition:
-    transform 0.2s var(--ease),
+    border-color 0.2s var(--ease),
     background 0.2s var(--ease);
 }
-.edge-ic svg {
-  width: 38px;
-  height: 38px;
+.edge-row__label {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.edge-row__icon {
+  color: var(--accent-text);
+}
+.edge-row__icon svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+.edge-row__copy {
+  display: grid;
+  gap: 0.42rem;
+}
+.edge-row__copy strong {
+  color: var(--ink);
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  font-weight: 620;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+.edge-row__body {
+  max-width: 65ch;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  line-height: 1.52;
+}
+.edge-row__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  justify-self: start;
+  margin-top: 0.25rem;
+  color: var(--accent-text);
+  font-size: 0.78rem;
+  font-weight: 620;
+}
+.edge-row__action b {
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: transform 0.2s var(--ease);
+}
+@media (hover: hover) {
+  .edge-row:hover {
+    border-bottom-color: var(--accent);
+    background: linear-gradient(90deg, rgba(15, 181, 165, 0.055), transparent 76%);
+  }
+  .edge-row:hover .edge-row__action b,
+  .edge-thesis__link:hover span {
+    transform: translateX(4px);
+  }
+}
+.edge-row:focus-visible,
+.edge-thesis__link:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 5px;
 }
 @media (max-width: 980px) {
-  .edge-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .edge-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .edge-thesis h2 {
+    max-width: 15ch;
   }
 }
 @media (max-width: 560px) {
-  .edge-grid {
+  .edge-row {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .edge-row__icon {
+    display: none;
   }
 }
 
-/* ---------- interactive hover states (the app's card feel) ---------- */
-.edge-card:hover .edge-ic {
-  transform: scale(1.08);
-  background: var(--accent-rgba-18);
-}
+/* ---------- interactive hover states ---------- */
 .tour-row__shot,
 .cedar-shot {
   transition:
@@ -681,11 +658,16 @@
   box-shadow: var(--lift-shadow);
 }
 @media (prefers-reduced-motion: reduce) {
-  .edge-card,
-  .whyw-card,
+  .btn2,
+  .btn2 .btn2-arrow,
   .tour-row__shot,
   .cedar-shot {
     transition: none;
+  }
+  .btn2:hover .btn2-arrow,
+  .tour-row__shot:hover,
+  .cedar-shot:hover {
+    transform: none;
   }
 }
 
@@ -720,23 +702,26 @@
   max-width: 100%;
   width: auto;
   height: auto;
-  transition: transform 0.25s var(--ease);
-}
-.whyw-card:hover .whyw-art img {
-  transform: translateY(-2px) scale(1.03);
 }
 .whyw-art svg {
   display: block;
   width: 100%;
   height: auto;
 }
+@media (max-width: 759px) {
+  .whyw-card[data-art='cedar'] .whyw-art img {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+}
 
 /* ---------- final CTA (sign-up close) ---------- */
 .fcta {
   position: relative;
   overflow: hidden;
-  background: var(--white);
-  border-top: 1px solid var(--rule);
+  background: var(--ground-bright);
+  border-top: 0;
   padding: clamp(4.5rem, 11vh, 8rem) var(--container-pad);
 }
 .fcta-inner {
@@ -749,33 +734,38 @@
   text-align: center;
   gap: 1.1rem;
 }
+/* The closing statement is allowed to be larger than a section heading
+   and smaller than the hero. It used to sit at 3.4rem/700, which put it
+   within a few pixels of the h1 and gave the page two things competing
+   to be the loudest. */
 .fcta-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
-  letter-spacing: -0.025em;
-  line-height: 1.06;
+  font-weight: var(--weight-display);
+  font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+  letter-spacing: var(--track-display);
+  line-height: 1.08;
   color: var(--ink);
   margin: 0;
 }
 .fcta-lede {
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.6;
+  text-wrap: pretty;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
-  max-width: 72ch;
+  max-width: 60ch;
 }
 .fcta-contact {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
   color: var(--ink-3);
-  margin: 0.4rem 0 0;
+  margin: 0.8rem 0 0;
 }
 .fcta-contact a {
   color: var(--accent-text);
+  font-weight: 500;
   text-decoration: none;
+  border-bottom: 1px solid var(--accent-bar);
 }
 .fcta-contact a:hover {
   text-decoration: underline;
@@ -786,14 +776,14 @@
    gets a visible press state; on desktop the same press reads as a
    satisfying click-down. Guarded for reduced motion below. */
 .btn2:active,
-.askai-tile:active,
+.askai-links a:active,
 .pr-plan:active {
   transform: scale(0.985);
   transition-duration: 0.06s;
 }
 @media (prefers-reduced-motion: reduce) {
   .btn2:active,
-  .askai-tile:active,
+  .askai-links a:active,
   .pr-plan:active {
     transform: none;
   }
@@ -808,5 +798,591 @@
   .edge {
     padding-top: 3rem;
     padding-bottom: 3rem;
+  }
+}
+
+/* ---------- homepage v5: luminous economic places ----------
+   The homepage now works like an editorial product story: a large, left-
+   aligned promise beside one readable product screen, then a full-width
+   photographic passage through the kinds of places the platform measures.
+   Light comes from the relationship between the mineral ground, clean white
+   instruments, the duotone photography and the raised application frame. */
+.hero2 {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafb 45%, #edf4f4 100%);
+  padding: clamp(7.5rem, 12vh, 9rem) var(--container-pad) clamp(2rem, 4vh, 3rem);
+  box-shadow: inset 0 -1px 0 var(--rule);
+}
+.hero2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    transparent 0 48%,
+    rgba(255, 255, 255, 0.7) 56%,
+    transparent 66%
+  );
+  opacity: 0.46;
+}
+.hero2 > .hero2-inner,
+.hero2 > .proof {
+  position: relative;
+  z-index: 1;
+}
+.hero2 > .hero2-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  align-items: center;
+  justify-items: stretch;
+  gap: clamp(3rem, 5.5vw, 5.8rem);
+  text-align: left;
+}
+.hero2-copy {
+  display: grid;
+  justify-items: start;
+  gap: clamp(1rem, 2.1vh, 1.45rem);
+  position: relative;
+  z-index: 3;
+}
+.hero2 .hero2-title {
+  max-width: 12ch;
+  font-size: clamp(3.25rem, 4.8vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+.hero2 .hero2-sub {
+  max-width: 58ch;
+  font-size: clamp(1rem, 1.2vw, 1.13rem);
+  line-height: 1.62;
+}
+.hero2 .hero2-cta {
+  justify-content: flex-start;
+  margin-top: 0.35rem;
+}
+.hero2 .hero2-cta .btn2 {
+  padding-inline: 1.25rem;
+  font-size: 0.95rem;
+}
+
+/* The photograph establishes the economic place. The screen overlaps it as
+   the instrument used to understand that place, not as another card in a
+   row. The harder top highlight and long neutral shadow give the frame the
+   crisp, finished surface the previous restrained stack was missing. */
+.hero2-stage {
+  position: relative;
+  min-width: 0;
+  min-height: clamp(31rem, 42vw, 38rem);
+  margin: 0;
+  isolation: isolate;
+}
+.hero2-stage::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 12% -5% 4% 6%;
+  background: linear-gradient(
+    145deg,
+    rgba(15, 181, 165, 0.2),
+    rgba(15, 181, 165, 0.04) 44%,
+    rgba(196, 151, 68, 0.12) 76%,
+    transparent
+  );
+  filter: blur(38px);
+  transform: skewY(-3deg);
+  pointer-events: none;
+}
+.hero2-photo {
+  position: absolute;
+  inset: 0 0 2.5rem 17%;
+  overflow: hidden;
+  background: #8a691f;
+  border: 1px solid rgba(10, 15, 38, 0.1);
+  border-radius: var(--radius-frame);
+  box-shadow: 0 22px 58px -38px rgba(10, 28, 52, 0.48);
+}
+.hero2-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% center;
+  transform: scale(1.012);
+}
+.hero2-photo__label {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.15rem;
+  margin: 0;
+  padding: 0.46rem 0.62rem 0.46rem 0.82rem;
+  border-left: 2px solid rgba(95, 217, 204, 0.9);
+  background: rgba(6, 18, 40, 0.84);
+  box-shadow: 0 8px 18px -14px rgba(3, 10, 25, 0.92);
+  color: rgba(255, 255, 255, 0.94);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.55;
+  letter-spacing: 0.1em;
+  text-align: right;
+  text-transform: uppercase;
+}
+.hero2-photo__label span {
+  display: block;
+  color: #fff;
+  font-weight: 700;
+}
+.hero2-screen {
+  position: absolute;
+  z-index: 2;
+  top: 16%;
+  left: -1rem;
+  width: calc(100% - 0.75rem);
+  overflow: hidden;
+  border: 1px solid rgba(10, 15, 38, 0.17);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface-high);
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.hero2-screen:hover {
+  transform: translateY(-4px);
+  border-color: rgba(10, 127, 116, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 6px rgba(10, 28, 52, 0.08),
+    0 34px 82px -34px rgba(10, 28, 52, 0.44);
+}
+.hero2-screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hero2-stage figcaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  color: var(--ink-3);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.hero2 > .proof {
+  max-width: var(--container-max);
+  margin: clamp(1.6rem, 3.5vh, 2.4rem) auto 0;
+  padding: clamp(1.05rem, 2vw, 1.35rem) clamp(1.2rem, 2.4vw, 1.8rem);
+  justify-items: start;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface-glass);
+  box-shadow: var(--shadow-surface);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+}
+.hero2 > .proof .proof__list {
+  justify-content: flex-start;
+}
+
+/* Economic places are deliberately full-bleed. They break the white-page
+   rhythm once, connect the product to the physical economy, and let the
+   existing licensed duotone system carry more of the brand. */
+.places {
+  background: #09132b;
+  color: #fff;
+  padding: clamp(3.6rem, 7vw, 6rem) var(--container-pad) 1.4rem;
+}
+.places-intro {
+  max-width: var(--container-max);
+  margin: 0 auto clamp(2rem, 4vw, 3.2rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
+  align-items: end;
+  gap: clamp(2rem, 5vw, 6rem);
+}
+.places-intro > div {
+  display: grid;
+  gap: 0.8rem;
+}
+.places-intro .h-kicker {
+  color: var(--accent-light);
+}
+.places-intro h2 {
+  max-width: 20ch;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+.places-intro ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1rem;
+  margin: 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  list-style: none;
+}
+.places-intro li {
+  position: relative;
+  padding-left: 0.9rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.places-intro li::before {
+  content: '';
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 5px;
+  height: 1px;
+  background: var(--accent-light);
+}
+.places-grid {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.place-panel {
+  position: relative;
+  min-width: 0;
+  min-height: clamp(22rem, 31vw, 27rem);
+  overflow: hidden;
+  background: #0a4750;
+  color: #fff;
+  text-decoration: none;
+  outline: none;
+}
+.place-panel img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.01);
+  transition: transform 0.65s var(--ease);
+}
+.place-panel[data-tone='bronze']::before,
+.place-panel[data-tone='gold']::before,
+.place-panel[data-tone='teal']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.place-panel[data-tone='bronze']::before {
+  background: linear-gradient(180deg, rgba(154, 95, 44, 0.05), rgba(154, 95, 44, 0.11));
+}
+.place-panel[data-tone='gold']::before {
+  background: linear-gradient(180deg, rgba(183, 137, 50, 0.04), rgba(183, 137, 50, 0.09));
+}
+.place-panel[data-tone='teal']::before {
+  background: linear-gradient(180deg, rgba(8, 126, 122, 0.03), rgba(8, 126, 122, 0.07));
+}
+.place-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(5, 14, 33, 0.02) 32%, rgba(5, 14, 33, 0.32) 100%);
+  pointer-events: none;
+}
+.place-panel__copy {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: clamp(1.35rem, 2.4vw, 2.25rem);
+  padding-top: clamp(3rem, 6vw, 5rem);
+  background: linear-gradient(
+    180deg,
+    rgba(6, 18, 40, 0) 0%,
+    rgba(6, 18, 40, 0.88) 48%,
+    rgba(6, 18, 40, 0.95) 100%
+  );
+}
+.place-panel__copy p {
+  margin: 0 0 0.7rem;
+  color: rgba(255, 255, 255, 0.76);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.place-panel__copy h3 {
+  max-width: 22ch;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.55vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+.place-panel__cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.place-panel__cue b {
+  color: var(--accent-light);
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: transform 0.2s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .place-panel:hover img {
+    transform: scale(1.03);
+  }
+  .place-panel:hover .place-panel__cue b {
+    transform: translateX(3px);
+  }
+}
+.place-panel:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--accent-light);
+}
+.place-panel:focus-visible .place-panel__cue b {
+  transform: translateX(3px);
+}
+.place-panel:active img {
+  transform: scale(1.018);
+}
+.places-note {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0.9rem 0 0;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+/* The value section moves to the approved working surface after the dark
+   places band. Using the surface token keeps the page's material system
+   coherent instead of introducing a one-off pale gradient. */
+.places + .whyw {
+  background: var(--surface-2);
+  border-top: 0;
+}
+.edge::before {
+  content: '';
+  position: absolute;
+  top: -6rem;
+  right: -4rem;
+  z-index: 0;
+  width: 28rem;
+  height: 28rem;
+  background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
+  filter: none;
+  opacity: 0.025;
+  pointer-events: none;
+}
+.tour {
+  background: var(--ground-bright);
+}
+
+@media (max-width: 1120px) {
+  .hero2 > .hero2-inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+  .hero2 .hero2-title {
+    font-size: clamp(3rem, 5vw, 4.3rem);
+  }
+  .hero2-stage {
+    min-height: clamp(27rem, 42vw, 33rem);
+  }
+  .hero2-screen {
+    left: -0.75rem;
+    width: calc(100% + 0.5rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero2 {
+    padding-top: 7.25rem;
+  }
+  .hero2 > .hero2-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.8rem;
+  }
+  .hero2-copy {
+    max-width: 44rem;
+  }
+  .hero2 .hero2-title {
+    font-size: clamp(3.15rem, 8vw, 4.8rem);
+  }
+  .hero2-stage {
+    min-height: clamp(28rem, 68vw, 36rem);
+  }
+  .hero2-photo {
+    left: 20%;
+  }
+  .hero2-screen {
+    left: 0;
+    width: 90%;
+  }
+  .places-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+  .place-panel {
+    min-height: clamp(17rem, 54vw, 25rem);
+  }
+  .place-panel__copy h3 {
+    max-width: 24ch;
+  }
+  .places-intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero2 {
+    padding-top: 5.9rem;
+    padding-bottom: 1.75rem;
+  }
+  .hero2 > .hero2-inner {
+    gap: 2rem;
+  }
+  .hero2-copy {
+    gap: 0.9rem;
+  }
+  .hero2 .hero2-title {
+    /* Keep the compact promise legible without letting it run past the
+       phone gutter at 375px. */
+    font-size: clamp(2.35rem, 10.6vw, 2.72rem);
+    line-height: 0.99;
+    letter-spacing: -0.05em;
+  }
+  .hero2 .hero2-sub {
+    max-width: 40ch;
+    font-size: 0.96rem;
+    line-height: 1.52;
+  }
+  .hero2 .hero2-cta {
+    width: 100%;
+  }
+  .hero2 .hero2-cta .btn2 {
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.82rem 1rem;
+  }
+  .hero2-stage {
+    min-height: clamp(20rem, 88vw, 23rem);
+  }
+  .hero2-photo {
+    /* Reserve a real caption lane below the photograph instead of letting
+       a wrapped caption sit on top of the image. */
+    inset: 2.75rem 0 4rem 18%;
+  }
+  .hero2-photo__label {
+    display: none;
+  }
+  .hero2-screen {
+    top: 0;
+    left: 0;
+    width: 96%;
+    border-radius: 8px;
+  }
+  .hero2-stage figcaption {
+    max-width: 30ch;
+    font-size: 0.72rem;
+  }
+  .hero2 > .proof {
+    margin-top: 1.25rem;
+  }
+  .place-panel {
+    min-height: 17rem;
+  }
+  .place-panel__copy {
+    padding: 1.25rem var(--container-pad);
+  }
+  .place-panel__copy h3 {
+    font-size: 1.65rem;
+  }
+  .places {
+    padding-inline: var(--container-pad);
+  }
+  .places-intro h2 {
+    font-size: clamp(2rem, 9vw, 2.65rem);
+  }
+  .places-intro ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .places-grid {
+    gap: 8px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .hero2 {
+    background: linear-gradient(145deg, #171d3e 0%, #111833 48%, #0c2a31 100%);
+  }
+  .hero2::before {
+    background: linear-gradient(
+      112deg,
+      transparent 0 48%,
+      rgba(255, 255, 255, 0.06) 56%,
+      transparent 66%
+    );
+  }
+  .hero2-photo {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .hero2-screen {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 2px 4px rgba(0, 0, 0, 0.25),
+      0 28px 64px -24px rgba(0, 0, 0, 0.72);
+  }
+  .places + .whyw {
+    background: var(--cream);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero2-screen,
+  .place-panel img,
+  .place-panel__cue b {
+    transition: none;
+  }
+  .hero2-screen:hover,
+  .place-panel:hover img,
+  .place-panel:hover .place-panel__cue b,
+  .place-panel:focus-visible .place-panel__cue b,
+  .place-panel:active img {
+    transform: none;
   }
 }

@@ -5,7 +5,7 @@
  * A working draft in the site's plain-language register for counsel to
  * review, replacing the "being prepared" placeholder. It describes what
  * the site and product actually do today: analytics off by default
- * behind the consent banner, the Google Fonts caveat, the beta-request
+ * behind the consent banner, the beta-request
  * form, Cedar chat, and the product's customer content. Positions kept
  * deliberately favorable: aggregated and de-identified improvement use,
  * standard service-provider and legal disclosures, and rights handled
@@ -17,24 +17,31 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 
 <LegalLayout
   title="Privacy Policy | Lumecon"
-  description="Privacy Policy for the Lumecon platform and the Cedar product family. Covers data collection, use, retention and Cedar AI handling."
+  description="How Lumecon collects, uses, shares, retains and protects personal information and customer content."
   canonical="https://lumecon.ai/privacy"
-  keywords="Lumecon privacy policy, data privacy, economic impact analysis privacy, Cedar AI privacy, tribal economic data privacy"
 >
   <h1>Privacy Policy</h1>
   <div class="date">Working draft, under review by counsel.</div>
 
-  <details class="legal-sec">
+  <details class="legal-sec" open>
     <summary><h2 class="legal-subhead">What we collect</h2></summary>
     <div class="legal-sec__body">
       <p>
-        We collect what you give us and what operating a website requires, and little else. When you
-        request beta access or contact us, that is your name, work email, organization, role and
-        whatever you tell us about what you want to measure. When you use the product, it holds the
-        documents and figures you bring to your analyses. When you talk to Cedar on this site, the
-        conversation is processed to answer you and reviewed in aggregate to improve the answers; do
-        not put sensitive information in a chat. Our servers keep the short-lived technical logs any
-        web service keeps.
+        We collect the information you provide, customer content needed to operate the product and
+        limited technical information needed to secure and support the service. An access request or
+        contact form may include your name, work email, organization, role and the analysis you want
+        to run. Product content may include documents and figures you select for an analysis. Our
+        servers may record request time, browser or device information, IP address and error details
+        when needed to operate and secure the service.
+      </p>
+      <p>
+        The website Cedar stores the current conversation in session storage for the open tab. After
+        a substantive Cedar answer, it also stores a topic identifier and timestamp in local storage
+        for up to 30 days so a later visit can receive one welcome-back prompt. That record does not
+        include the conversation text and is removed when it is used or found expired. Most questions
+        are answered in the browser. If a backend is enabled, an unmatched message and an anonymous
+        conversation identifier may be sent to the Lumecon API to produce an answer. Do not enter
+        confidential or sensitive information in the website chat.
       </p>
     </div>
   </details>
@@ -45,9 +52,9 @@ import LegalLayout from '../layouts/LegalLayout.astro';
       <p>
         We use contact and beta-request details to respond, to grant access and to tell you about
         the service you asked about. We use product content to run your analyses and support you. We
-        use aggregated and de-identified information to improve the model and the platform;
-        improvement work does not identify you or your organization. We do not sell personal
-        information, and we do not use your information for third-party advertising.
+        may use usage metadata and information that has been aggregated and de-identified to
+        maintain, secure and improve the service, as described in the applicable terms. We do not
+        sell personal information or use your information for third-party advertising.
       </p>
     </div>
   </details>
@@ -56,15 +63,11 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     <summary><h2 class="legal-subhead">Analytics and your consent</h2></summary>
     <div class="legal-sec__body">
       <p>
-        Analytics are off by default. We use privacy-friendly product analytics only after you opt
-        in through the consent banner, to understand which parts of the site are useful and to
-        improve them. One note on fonts: our pages load the Inter and JetBrains Mono typefaces from
-        Google Fonts, which means your browser requests those font files from Google's servers
-        (sending the IP address any web request carries). This is font delivery, not analytics; no
-        consent state changes it. If you decline, or until you choose, no analytics or tracking
-        scripts run, no analytics cookies are set, and no usage beacon is sent. You can change your
-        mind at any time through the Privacy choices control in the footer of every page, which
-        presents the consent banner again.
+        Optional analytics are disabled until you opt in. The site self-hosts its fonts and does not
+        load advertising trackers. If analytics are configured after consent, usage events may be
+        sent to the provider identified in the current subprocessor disclosure. Requests needed for
+        sign-up, login, checkout or a configured Cedar backend are service requests rather than
+        analytics. You can change your choice through the Privacy choices control in the footer.
       </p>
     </div>
   </details>
@@ -76,8 +79,7 @@ import LegalLayout from '../layouts/LegalLayout.astro';
         We share information with service providers who host and operate the platform for us, under
         obligations to protect it; when the law requires it; to protect the service, our customers
         or the public from harm; and as part of a financing, acquisition or similar transaction, in
-        which case this policy continues to apply to the information transferred. That list is
-        complete.
+        which case this policy continues to apply to the information transferred.
       </p>
     </div>
   </details>
@@ -86,11 +88,14 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     <summary><h2 class="legal-subhead">Retention and security</h2></summary>
     <div class="legal-sec__body">
       <p>
-        We keep information for as long as it serves the purpose you gave it to us for, plus what
-        the law and good records practice require, and then delete or de-identify it. Product
-        content is retained while your organization's account is active. We protect information with
-        measures appropriate to its sensitivity, and no method of transmission or storage is
-        perfectly secure.
+        We retain information only as long as needed for the purposes described here, our
+        contractual obligations and applicable law, then delete or de-identify it. Product content
+        remains while an account is active unless the applicable agreement states otherwise. Closing
+        an account ends access but may not trigger immediate deletion where retention is required by
+        law, security needs or the applicable agreement. Lumecon is formalizing its security program
+        against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the
+        target; it does not currently have a SOC 2 report. Current controls and readiness work are
+        described on the <a href="/security">Security page</a>.
       </p>
     </div>
   </details>

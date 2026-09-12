@@ -3,7 +3,7 @@
  * Lightbox: click a product screenshot to read it at full size.
  *
  * WHY
- * Every app screenshot on this site is a 1920x1080 render displayed at
+ * Every app screenshot on this site is a 1920px-wide render displayed at
  * roughly a third of that. The figures, the county map and the Cedar panel
  * are all in the picture and none of them can be read. A reader deciding
  * whether this software does what they need is exactly the reader who wants
@@ -25,7 +25,7 @@
  * `currentSrc` rather than `src`, so a <picture> that has resolved its dark
  * variant enlarges the dark one. The caption comes from a figcaption inside
  * the trigger, or failing that from the figure around it, which is how the
- * hero trio picks up its shared caption without any wiring.
+ * hero product stage picks up its caption without any wiring.
  *
  * NATIVE DIALOG (Brian's review, 2026-08)
  * The overlay is a real <dialog> opened with showModal(). The top layer, the
@@ -205,7 +205,10 @@ import '../styles/lightbox.css';
          role plus tabindex gives the same keyboard contract, and the alt
          text is already the accessible name. */
       img.setAttribute('role', 'button');
-      img.setAttribute('tabindex', '0');
+      /* A rotating group may deliberately expose only its active image to
+         the tab order. Respect an explicit tabindex; opt in everything
+         else by default. */
+      if (!img.hasAttribute('tabindex')) img.setAttribute('tabindex', '0');
       img.setAttribute('aria-haspopup', 'dialog');
 
       var badge = document.createElement('span');

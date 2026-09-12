@@ -1,15 +1,15 @@
 ---
 /**
- * Persistent Cedar launcher pill anchored to the bottom-right of every
- * page, styled to match the Ask Cedar launcher in the TEIM app (status
- * dot + "Ask Cedar" label + context line on a bordered surface card).
+ * Contextual Cedar launcher anchored to the bottom-right of marketing
+ * pages. It stays out of the opening composition, then appears once the
+ * page intro has passed. While the visitor scrolls, it steps away from
+ * controls and high-value reading surfaces rather than covering them.
  * Click toggles a self-contained Cedar chat panel that lives entirely
- * inside this component, so it works the same on every page.
+ * inside this component, so it works the same everywhere it is offered.
  *
- * A one-time-per-session nudge bubble (#cedarNudge) pops up above the
- * pill a few seconds after load, offering help with any questions. It
- * is skipped on /cedar (the inline chat page), hides as soon as the
- * chat opens, and stays dismissed for the rest of the session.
+ * The dormant nudge markup remains available for a future deliberate
+ * prompt, but it never opens itself. Unprompted bubbles competed with
+ * the page and made the product feel less considered.
  *
  * The chat conversation logic itself (classification, API call,
  * transcript rendering) lives in src/lib/cedarChat.ts. This
@@ -29,21 +29,17 @@ import CedarChat from './CedarChat.astro';
   type="button"
   class="cedar-fab"
   id="cedarFab"
-  aria-label="Ask Cedar a question"
   aria-expanded="false"
   aria-controls="cedarFabPanel"
+  aria-hidden="true"
+  aria-label="Ask Cedar"
+  tabindex="-1"
+  data-cedar-visibility="waiting"
   title="Ask Cedar"
 >
   <span class="cedar-fab__dot" aria-hidden="true"></span>
   <span class="cedar-fab__icon cedar-fab__icon--mark" aria-hidden="true">
-    <img
-      src="/brand/lumecon-logo-mark-teal.png"
-      alt=""
-      width="30"
-      height="30"
-      loading="lazy"
-      decoding="async"
-    />
+    <img src="/brand/lumecon-logo-mark-teal.png" alt="" width="30" height="30" decoding="async" />
   </span>
   <span class="cedar-fab__icon cedar-fab__icon--close" aria-hidden="true">
     <svg
@@ -66,9 +62,11 @@ import CedarChat from './CedarChat.astro';
   <span class="cedar-fab__label cedar-fab__label--close">Close</span>
 </button>
 
-<!-- One-time-per-session helper nudge. Hidden until the timer in the
+{
+  /* One-time-per-session helper nudge. Hidden until the timer in the
      script below shows it; role="status" announces the offer politely
-     to screen readers when it appears. -->
+     to screen readers when it appears. */
+}
 <div class="cedar-nudge" id="cedarNudge" role="status" hidden>
   <button
     type="button"
@@ -96,15 +94,18 @@ import CedarChat from './CedarChat.astro';
   </p>
 </div>
 
-<!-- Self-contained Cedar chat panel. Hidden until the FAB opens it.
+{
+  /* Self-contained Cedar chat panel. Hidden until the FAB opens it.
      Class-scoped (cedar-fab-panel + child .cedar-chat etc.) so it
      coexists with the inline Cedar chat on the homepage without
-     element-id collisions. -->
+     element-id collisions. */
+}
 <div
   class="cedar-fab-panel"
   id="cedarFabPanel"
   role="dialog"
   aria-label="Ask Cedar"
+  aria-modal="true"
   aria-hidden="true"
   hidden
 >
@@ -128,36 +129,55 @@ import CedarChat from './CedarChat.astro';
 </div>
 
 <script>
-  /* Bundled module: imports the shared Cedar chat runtime + the
-     observability surface from src/lib. Re-runs on view transitions
-     via astro:page-load. */
-  import { bootChat } from '../lib/cedarChat';
+  /* The launcher shell stays small. The full intent bank is loaded only
+     after someone opens Cedar, so a visitor who never uses chat does not
+     pay to download or initialize it. */
   import { trackEvent } from '../lib/observability';
+
+  let chatModule: Promise<typeof import('../lib/cedarChat')> | undefined;
+
+  const ensureChat = async (panel: HTMLElement): Promise<void> => {
+    try {
+      chatModule ??= import('../lib/cedarChat');
+      const { bootChat } = await chatModule;
+      bootChat(panel, { surface: 'fab' });
+    } catch (error) {
+      // A rejected dynamic import is otherwise cached for the rest of the
+      // page session. Clear it so closing and reopening Cedar can retry if a
+      // transient network interruption was the cause.
+      chatModule = undefined;
+      throw error;
+    }
+  };
 
   function setup(): void {
     const fab = document.getElementById('cedarFab');
     const panel = document.getElementById('cedarFabPanel');
     if (!fab || !panel) return;
 
-    // Boot the chat runtime (idempotent — guards on data-cedar-booted).
-    bootChat(panel, { surface: 'fab' });
-
     // FAB-specific open/close handlers. Guard against double-binding
     // when astro:page-load re-fires this script.
     if ((fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound) return;
     (fab as HTMLElement & { __cedarBound?: boolean }).__cedarBound = true;
 
+    const setChatLoading = (loading: boolean): void => {
+      panel.dataset.cedarLoading = loading ? 'true' : 'false';
+      panel.setAttribute('aria-busy', String(loading));
+      const chat = panel.querySelector<HTMLElement>('.cedar-chat');
+      if (chat) chat.inert = loading;
+      for (const control of panel.querySelectorAll<HTMLInputElement | HTMLButtonElement>(
+        '.cedar-chat input, .cedar-chat button',
+      )) {
+        control.disabled = loading;
+        if (control instanceof HTMLInputElement) {
+          control.placeholder = loading ? 'Opening Cedar…' : 'Ask Cedar a question...';
+        }
+      }
+    };
+
     // ---- Helper nudge (one per browser session) ----
     const nudge = document.getElementById('cedarNudge');
     const NUDGE_KEY = 'lumecon-cedar-nudge-seen';
-    const NUDGE_DELAY_MS = 4000;
-    const nudgeSeen = (): boolean => {
-      try {
-        return sessionStorage.getItem(NUDGE_KEY) === '1';
-      } catch {
-        return true; // storage unavailable: never show rather than nag every load
-      }
-    };
     const markNudgeSeen = (): void => {
       try {
         sessionStorage.setItem(NUDGE_KEY, '1');
@@ -169,27 +189,151 @@ import CedarChat from './CedarChat.astro';
       if (nudge && !nudge.hidden) nudge.hidden = true;
     };
 
-    const open = () => {
+    /* The launcher is supporting navigation, not part of the hero. Keep it
+       out of the opening composition, and do not let a fixed control cover
+       a price, definition, product screen or another control farther down
+       the page. The collision list combines semantic controls with the few
+       page surfaces whose whole rectangle carries meaning. */
+    const main = document.querySelector<HTMLElement>('main');
+    const intro = main?.firstElementChild instanceof HTMLElement ? main.firstElementChild : null;
+    const avoidSelector = [
+      'table',
+      '[data-zoom]',
+      '.pr-free',
+      '.pr-plan',
+      '.pr-grove',
+      '.meth-defs__row',
+      '.naics-tile',
+      '.place-panel',
+      '.footer',
+    ].join(',');
+    let visibilityFrame = 0;
+
+    const setLauncherVisibility = (visible: boolean, reason: 'waiting' | 'avoiding'): void => {
+      if (!visible && document.activeElement === fab) return;
+      fab.dataset.cedarVisibility = visible ? 'visible' : reason;
+      if (visible) {
+        fab.removeAttribute('aria-hidden');
+        fab.removeAttribute('tabindex');
+      } else {
+        fab.setAttribute('aria-hidden', 'true');
+        fab.setAttribute('tabindex', '-1');
+        hideNudge();
+      }
+    };
+
+    const introHasPassed = (): boolean => {
+      if (!intro) return window.scrollY > Math.min(240, window.innerHeight * 0.3);
+      const navBottom = document
+        .querySelector<HTMLElement>('body > nav')
+        ?.getBoundingClientRect().bottom;
+      const clearLine = Math.max(88, (navBottom || 72) + 16);
+      return intro.getBoundingClientRect().bottom <= clearLine;
+    };
+
+    const overlapsProtectedContent = (): boolean => {
+      const fabRect = fab.getBoundingClientRect();
+      const clearance = 10;
+      const zones = document.querySelectorAll<HTMLElement>(avoidSelector);
+      for (const zone of zones) {
+        if (
+          zone === fab ||
+          fab.contains(zone) ||
+          panel.contains(zone) ||
+          nudge?.contains(zone) ||
+          zone.hidden
+        ) {
+          continue;
+        }
+        const rect = zone.getBoundingClientRect();
+        if (!rect.width || !rect.height || rect.bottom <= 0 || rect.top >= window.innerHeight) {
+          continue;
+        }
+        if (
+          rect.right > fabRect.left - clearance &&
+          rect.left < fabRect.right + clearance &&
+          rect.bottom > fabRect.top - clearance &&
+          rect.top < fabRect.bottom + clearance
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const updateLauncherVisibility = (): void => {
+      visibilityFrame = 0;
+      if (document.body.classList.contains('cedar-popped')) return;
+      if (!introHasPassed()) {
+        setLauncherVisibility(false, 'waiting');
+        return;
+      }
+      setLauncherVisibility(!overlapsProtectedContent(), 'avoiding');
+    };
+
+    const scheduleLauncherVisibility = (): void => {
+      if (visibilityFrame) return;
+      visibilityFrame = window.requestAnimationFrame(updateLauncherVisibility);
+    };
+
+    let opening = false;
+    const open = async () => {
+      if (opening || document.body.classList.contains('cedar-popped')) return;
+      opening = true;
       markNudgeSeen();
       hideNudge();
+      setLauncherVisibility(true, 'waiting');
       panel.hidden = false;
       panel.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cedar-popped');
+      document
+        .querySelectorAll<HTMLElement>('body > nav, body > main, body > footer')
+        .forEach((el) => {
+          el.inert = true;
+        });
       fab.setAttribute('aria-expanded', 'true');
-      const input = panel.querySelector<HTMLInputElement>('[data-cedar-input]');
-      window.setTimeout(() => input?.focus({ preventScroll: true }), 180);
-      trackEvent('cedar.fab.open');
+      fab.setAttribute('aria-label', 'Close Cedar');
+      fab.setAttribute('title', 'Close Cedar');
+      setChatLoading(true);
+      try {
+        await ensureChat(panel);
+        // The visitor may have used the close button while Cedar was
+        // loading. Do not focus a hidden panel when the import finishes.
+        if (panel.hidden || !document.body.classList.contains('cedar-popped')) return;
+        setChatLoading(false);
+        const input = panel.querySelector<HTMLInputElement>('[data-cedar-input]');
+        window.setTimeout(() => {
+          if (!panel.hidden) input?.focus({ preventScroll: true });
+        }, 180);
+        trackEvent('cedar.fab.open');
+      } catch (error) {
+        console.error('Unable to start Cedar chat', error);
+        // Never leave the rest of the page inert behind an unresponsive
+        // dialog. Closing gives the visitor a clear retry path.
+        close();
+      } finally {
+        opening = false;
+      }
     };
     const close = () => {
       // If focus is inside the panel when it closes, hand it back to the
       // FAB so keyboard users aren't dropped at the top of the document.
       const returnFocus = panel.contains(document.activeElement);
+      setChatLoading(false);
       panel.hidden = true;
       panel.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cedar-popped');
+      document
+        .querySelectorAll<HTMLElement>('body > nav, body > main, body > footer')
+        .forEach((el) => {
+          el.inert = false;
+        });
       fab.setAttribute('aria-expanded', 'false');
+      fab.setAttribute('aria-label', 'Ask Cedar');
+      fab.setAttribute('title', 'Ask Cedar');
       if (returnFocus) (fab as HTMLElement).focus({ preventScroll: true });
       trackEvent('cedar.fab.close');
+      scheduleLauncherVisibility();
     };
 
     // The panel is a modal-ish dialog: while it's open, keep Tab focus
@@ -213,13 +357,14 @@ import CedarChat from './CedarChat.astro';
     fab.addEventListener('click', (e) => {
       e.stopPropagation();
       if (document.body.classList.contains('cedar-popped')) close();
-      else open();
+      else void open();
     });
+    fab.addEventListener('blur', scheduleLauncherVisibility);
 
     panel.querySelector('[data-cedar-fab-close]')?.addEventListener('click', () => close());
 
-    // Show the nudge a few seconds after load, once per session. Skipped
-    // on /cedar, where the inline chat already fills the page.
+    // Keep the dormant nudge's explicit dismiss path wired. There is no
+    // auto-show timer, and /cedar uses its inline chat instead of this FAB.
     if (nudge && !window.location.pathname.startsWith('/cedar')) {
       const dismiss = document.getElementById('cedarNudgeDismiss');
       dismiss?.addEventListener('click', () => {
@@ -233,7 +378,6 @@ import CedarChat from './CedarChat.astro';
          spam next to the quieter v3 design. The bubble markup stays
          (dismiss handler above) in case a future surface opens it
          deliberately, but nothing pops on its own. */
-      void NUDGE_DELAY_MS;
     }
     document.addEventListener('keydown', (e) => {
       if (!document.body.classList.contains('cedar-popped')) return;
@@ -271,6 +415,17 @@ import CedarChat from './CedarChat.astro';
       if (path.includes(panel) || path.includes(fab)) return;
       close();
     });
+
+    window.addEventListener('scroll', scheduleLauncherVisibility, { passive: true });
+    window.addEventListener('resize', scheduleLauncherVisibility, { passive: true });
+    window.addEventListener('load', scheduleLauncherVisibility, { once: true });
+    if ('ResizeObserver' in window && main) {
+      const layoutObserver = new ResizeObserver(scheduleLauncherVisibility);
+      layoutObserver.observe(main);
+      if (intro && intro !== main) layoutObserver.observe(intro);
+    }
+    void document.fonts?.ready.then(scheduleLauncherVisibility);
+    scheduleLauncherVisibility();
   }
 
   if (document.readyState === 'loading') {
@@ -293,9 +448,10 @@ import CedarChat from './CedarChat.astro';
     z-index: 80;
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1.25rem;
-    background: var(--white);
+    min-height: 44px;
+    gap: 0.55rem;
+    padding: 0.55rem 0.85rem;
+    background: var(--surface);
     color: var(--ink);
     border: 1px solid var(--rule-strong);
     border-radius: 0.5rem;
@@ -307,13 +463,24 @@ import CedarChat from './CedarChat.astro';
     font-size: 0.88rem;
     font-weight: 600;
     letter-spacing: -0.005em;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px);
     transition:
       background 0.2s var(--ease),
       box-shadow 0.2s var(--ease),
+      opacity 0.16s var(--ease),
       transform 0.2s var(--ease);
   }
-  /* Closed state = the launcher pill from the TEIM app: a bordered
-     surface card with the green status dot and two lines of copy. */
+  .cedar-fab[data-cedar-visibility='visible'] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  /* Closed state: a compact product-mark label. Keeping this to one line
+     prevents a persistent helper from covering definitions, prices or CTAs. */
   .cedar-fab:hover {
     background: var(--cream);
     transform: translateY(-2px);
@@ -330,10 +497,11 @@ import CedarChat from './CedarChat.astro';
     }
   }
   .cedar-fab:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 4px;
   }
   .cedar-fab__dot {
+    display: none;
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
@@ -352,11 +520,7 @@ import CedarChat from './CedarChat.astro';
     line-height: 1.2;
   }
   .cedar-fab__context {
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--ink-3);
-    line-height: 1.2;
-    margin-top: 0.1rem;
+    display: none;
   }
   .cedar-fab__icon {
     display: inline-flex;
@@ -368,9 +532,11 @@ import CedarChat from './CedarChat.astro';
     display: block;
   }
   .cedar-fab__icon--close,
-  .cedar-fab__label--close,
-  .cedar-fab__icon--mark {
+  .cedar-fab__label--close {
     display: none;
+  }
+  .cedar-fab__icon--mark {
+    display: inline-flex;
   }
   .cedar-fab__icon--mark img {
     display: block;
@@ -420,7 +586,7 @@ import CedarChat from './CedarChat.astro';
   /* Open state = a clear navy "Close" pill (the launcher steps aside). */
   body.cedar-popped .cedar-fab {
     background: var(--navy);
-    color: var(--white);
+    color: #fff;
     border-color: transparent;
     gap: 0.5rem;
     padding: 0.7rem 1.05rem;
@@ -466,23 +632,27 @@ import CedarChat from './CedarChat.astro';
   }
   .cedar-fab-panel__close {
     position: absolute;
-    top: 0.55rem;
-    right: 0.55rem;
+    top: 0.25rem;
+    right: 0.25rem;
     z-index: 3;
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: var(--ink-3);
+    color: #fff;
     cursor: pointer;
   }
   .cedar-fab-panel__close:hover {
-    background: var(--accent-rgba-08);
-    color: var(--navy);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+  .cedar-fab-panel__close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -4px;
   }
   .cedar-fab-panel__close svg {
     width: 14px;
@@ -491,7 +661,7 @@ import CedarChat from './CedarChat.astro';
   /* Leave room for the close button so it never overlaps the Online
      status in the chat header. */
   .cedar-fab-panel :global(.cedar-chat__status) {
-    margin-right: 2rem;
+    margin-right: 3rem;
   }
   .cedar-fab-panel :global(.cedar-chat) {
     width: 100%;
@@ -532,7 +702,7 @@ import CedarChat from './CedarChat.astro';
     z-index: 79;
     width: min(280px, calc(100vw - 1.8rem));
     padding: 0.9rem 1rem 0.85rem;
-    background: var(--white);
+    background: var(--surface);
     color: var(--ink);
     border: 1px solid var(--rule-strong);
     border-radius: 0.5rem;
@@ -552,7 +722,7 @@ import CedarChat from './CedarChat.astro';
     right: 30px;
     width: 12px;
     height: 12px;
-    background: var(--white);
+    background: var(--surface);
     border-right: 1px solid var(--rule-strong);
     border-bottom: 1px solid var(--rule-strong);
     transform: rotate(45deg);
@@ -566,7 +736,7 @@ import CedarChat from './CedarChat.astro';
     }
   }
   .cedar-nudge__text {
-    margin: 0 1.25rem 0 0;
+    margin: 0 2.35rem 0 0;
     font-family: var(--font-sans);
     font-size: 0.88rem;
     line-height: 1.45;
@@ -574,13 +744,13 @@ import CedarChat from './CedarChat.astro';
   }
   .cedar-nudge__dismiss {
     position: absolute;
-    top: 0.45rem;
-    right: 0.45rem;
+    top: 0.15rem;
+    right: 0.15rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     background: transparent;
     color: var(--ink-3);
@@ -593,8 +763,16 @@ import CedarChat from './CedarChat.astro';
     background: var(--cream);
   }
   .cedar-nudge__dismiss:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    :global(body.consent-pending) .cedar-fab,
+    :global(body.consent-pending) .cedar-nudge {
+      visibility: hidden;
+      pointer-events: none;
+    }
   }
 
   /* Mobile: the docked panel becomes a full-width bottom sheet. */
@@ -606,17 +784,20 @@ import CedarChat from './CedarChat.astro';
       bottom: 0;
       max-height: min(78dvh, 560px);
       padding-bottom: env(safe-area-inset-bottom, 0px);
-      background: var(--white);
+      background: var(--surface);
       border-radius: 8px 8px 0 0;
     }
     .cedar-fab-panel :global(.cedar-chat) {
       max-height: min(78dvh, 560px);
+      min-height: 0;
       border-left: 0;
       border-right: 0;
       border-radius: 8px 8px 0 0;
     }
     .cedar-fab-panel :global(.cedar-chat__transcript) {
-      max-height: 260px;
+      min-height: 0;
+      max-height: none;
+      flex: 1 1 auto;
     }
   }
 </style>

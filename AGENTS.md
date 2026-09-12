@@ -31,14 +31,38 @@ Design tells to hunt:
   identical boxes. Prefer strong axes, top-aligned content with
   natural copy lengths, and normalized visual weight over identical
   pixel dimensions.
-- Pronounced rounded corners and pills. This site's scale is 8px
-  cards/frames, 6px buttons/chips; eyebrows are plain mono
-  typography, not pill objects.
+- Pronounced rounded corners and pills. Controls use 8px, product
+  frames use 14px and genuine grouped panels use 18-20px. A radius
+  communicates one assembled object; it is not permission to wrap
+  every idea in a card. Eyebrows are plain mono typography, not pills.
 - Icons imprisoned in tinted circles or squares inside cards; the
   custom illustrations stand on their own.
-- Decorative gradients, glows, blobs, sparkles, dotted connectors
-  and other fake complexity. Only the real Lumecon mark is used as
-  background art.
+- Decorative blobs, sparkles, dotted connectors and other fake
+  complexity. Only the real Lumecon mark is used as background art.
+  Founder-approved treatments (2026-09) are about optical surface
+  quality and real economic context rather than ornament:
+  - A cool mineral page ground (#F3F6F8) beneath pure-white working
+    surfaces. Directional, low-frequency light planes may shape a
+    hero or product stage; they must not read as colored circles or
+    generic SaaS blobs. Never add grain/noise overlays.
+  - Translucency is reserved for navigation, captions over licensed
+    photography and copy panes that genuinely overlap a product
+    screen. Use crisp inset highlights and neutral multi-distance
+    shadows to separate working surfaces from the ground.
+  - Broad white, mineral and deep-navy planes may organize a long
+    page when the change of material carries meaning. Avoid a stripe
+    pattern and do not tint every individual content section.
+  - A two-stop vertical gradient on the primary button, dark enough
+    at its lightest stop to keep white text at 4.75:1. It reads as a
+    physical control, not as decoration. Deep research covers and
+    acquisition fields may use restrained directional gradients;
+    ordinary cards do not.
+  - Licensed sector photography may create a full-bleed editorial
+    passage or sit behind a real product screen. Use the committed
+    duotone derivatives, keep the photography subordinate to the
+    product argument and state clearly when people or facilities are
+    illustrative rather than customers. A solid image wash is allowed
+    when text needs contrast; decorative color gradients are not.
 - Repetitive section rhythm (eyebrow, giant heading, paragraph,
   cards) with no compositional variation.
 - Huge empty vertical gaps; phone sections carry less padding than
@@ -85,7 +109,9 @@ MarkArt background usage) and functional icons. The old topographic
 contour ring linework on the auth brand panels and teal flow surfaces
 read as random circles and is deliberately removed; do not reintroduce
 contour rings, orbit lines, or generic circle patterns as decoration.
-Soft radial glows are fine — they read as light, not shapes.
+Directional light fields are fine when they read as illumination on
+a plane. Avoid discrete radial circles; the moment a glow reads as a
+shape, remove it.
 
 ## Standing instruction: teal is semantic
 
@@ -220,27 +246,31 @@ docs/reconciliation-roadmap.md.
 Nothing in `scripts/` runs at build time; each is a generator whose
 output is committed. Run them when their inputs change.
 
-- Sector thumbnails (duotone): `scripts/naics/sectors.mjs` is the
+- Sector photography (duotone): `scripts/naics/sectors.mjs` is the
   single source for the 20 NAICS sectors + the Tribal Government
   category, their descriptions and wash colors; `/naics` and the
-  thumbnail pipeline both read it, so tiles and images cannot drift.
+  photography pipeline both read it, so tiles and images cannot drift.
   `node scripts/naics/duotone.mjs scripts/naics/sources` regenerates
   `public/naics/*.webp` (three crops per sector: 1200x800, 600x400
-  `-sm`, 1500x600 `-wide`). Sources are licensed Shutterstock
+  `-sm`, 1500x600 `-wide`). The `/naics` directory uses the small
+  crops and the homepage may use selected wide crops. Sources are
+  licensed Shutterstock
   originals named `<slug>_shutterstock_<imageID>_<downloadID>.jpeg`;
   the licensing record is `scripts/naics/LICENSES.md`. Never use the
   NACA proposal photos.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist
-  for the app to copy (the site itself only renders `-sm`). Edit
+  for the app to copy. Edit
   sectors.mjs, never naicsSectors.js directly.
 - Hero example screenshots: `scripts/screenshots/capture-examples.mjs`
   captures the 60 `public/app/ex-*.webp` hero images from a running
   teim-app dev server; `optimize-examples.mjs` compresses them.
-- Smoke tests: `npm run test:smoke` (Playwright; CI runs chromium +
-  webkit). In a sandbox without Google Fonts the home smoke test
-  fails on a blocked font request; every other failure is real.
+- Smoke tests: `npm run build` first (Playwright serves `dist/`), then
+  `npm run test:smoke` (CI runs chromium + webkit). The site makes no
+  third-party requests since the typefaces were self-hosted, so there is
+  no longer an environmental failure mode to discount: every failure is
+  real.
 
 Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
 originals) is tracked in git. Moving it to external storage is a

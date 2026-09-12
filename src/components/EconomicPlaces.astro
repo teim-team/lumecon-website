@@ -1,0 +1,88 @@
+---
+/**
+ * A photographic bridge between the promise in the hero and the platform
+ * capabilities below. These are sectors Lumecon supports, not customers or
+ * endorsements. All images are processed derivatives from the licensed
+ * Shutterstock sector library tracked in scripts/naics/.
+ */
+import '../styles/home.css';
+
+const PLACES = [
+  {
+    label: 'Public infrastructure',
+    title: 'See how capital investment moves through local industries.',
+    image: '/naics/construction-v2-wide.webp',
+    alt: 'Construction professionals reviewing work inside a large structural project.',
+    href: '/naics#naics-construction',
+    tone: 'bronze',
+  },
+  {
+    label: 'Tribal economies',
+    title: 'Bring government and enterprise activity into a whole-economy view.',
+    image: '/naics/tribalgov-v2-wide.webp',
+    alt: 'Rows of Tribal Nation flags displayed in a contemporary civic interior.',
+    href: '/naics#naics-tribalgov',
+    tone: 'gold',
+  },
+  {
+    label: 'Advanced manufacturing',
+    title: 'Trace construction and operations through regional supply chains.',
+    image: '/naics/manufacturing-v2-wide.webp',
+    alt: 'A robotic assembly system working on an electric vehicle platform.',
+    href: '/naics#naics-manufacturing',
+    tone: 'teal',
+  },
+];
+
+const MEASURES = [
+  'Jobs supported',
+  'Labor income',
+  'GDP contribution',
+  'Economic output',
+  'Tax impacts',
+];
+---
+
+<section class="places" aria-labelledby="places-title">
+  <header class="places-intro">
+    <div>
+      <p class="h-kicker">Built for the real economy</p>
+      <h2 id="places-title">Follow spending through the places and industries it reaches.</h2>
+    </div>
+    <ul aria-label="Measures reported by Lumecon">
+      {MEASURES.map((measure) => <li>{measure}</li>)}
+    </ul>
+  </header>
+
+  <div class="places-grid">
+    {
+      PLACES.map((place, index) => (
+        <a
+          class="place-panel reveal-soft"
+          data-stagger={String(index + 1)}
+          data-tone={place.tone}
+          href={place.href}
+          aria-label={`${place.label}: ${place.title}`}
+        >
+          <img
+            src={place.image}
+            alt={place.alt}
+            width="1500"
+            height="600"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="place-panel__copy">
+            <p>{place.label}</p>
+            <h3>{place.title}</h3>
+            <span class="place-panel__cue" aria-hidden="true">
+              Explore the sector <b>&rarr;</b>
+            </span>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+
+  <p class="places-note">Photography is illustrative and does not identify Lumecon customers.</p>
+</section>

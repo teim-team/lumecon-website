@@ -18,9 +18,11 @@ const chips = CHIP_IDS.map((id) => INTENTS.find((i) => i.id === id)).filter(
 ---
 
 <div class="cedar-chat">
-  <!-- Header matches the in-app Ask Cedar panel: teal band, status dot,
+  {
+    /* Header matches the in-app Ask Cedar panel: teal band, status dot,
        uppercase title and a context line, so the site chat and the
-       product chat read as the same surface. -->
+       product chat read as the same surface. */
+  }
   <header class="cedar-chat__header">
     <div class="cedar-chat__heading">
       <div class="cedar-chat__title-row">
@@ -101,6 +103,7 @@ const chips = CHIP_IDS.map((id) => INTENTS.find((i) => i.id === id)).filter(
     </button>
   </form>
   <p class="cedar-chat__disclaimer">
-    Cedar can make mistakes. Check important details, and treat figures as estimates.
+    Cedar can make mistakes. Verify important details against linked pages or with our team. This
+    site chat does not run analyses.
   </p>
 </div>

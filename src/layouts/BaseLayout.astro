@@ -7,7 +7,6 @@ interface Props {
   title: string;
   description: string;
   canonical: string;
-  keywords: string;
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
@@ -27,7 +26,6 @@ const {
   title,
   description,
   canonical,
-  keywords,
   ogTitle,
   ogDescription,
   ogImage,
@@ -67,7 +65,18 @@ const ogIA =
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content={keywords} />
+    {
+      /* No <meta name="keywords">. Google has ignored it for ranking since
+        2009 and Bing treats it as a spam signal at most, so it bought
+        nothing. What it cost was real: the homepage tag carried 1,090
+        characters listing IMPLAN four times, RIMS four times and REMI
+        three, with duplicate case variants, no editorial framing and none
+        of the non-affiliation disclaimer the visible copy and llms.txt
+        both carry. A hidden, disclaimer-free list of a competitor's marks
+        is the weakest possible version of a comparison claim. The
+        positioning stays where it works: visible copy, the JSON-LD
+        knowsAbout list, and llms.txt. */
+    }
     <meta name="robots" content={robotsValue} />
     <meta name="googlebot" content={robotsValue} />
     <meta name="bingbot" content={robotsValue} />
@@ -78,7 +87,8 @@ const ogIA =
     <meta name="format-detection" content="telephone=no" />
     <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonical} />
-    <!-- Content Security Policy. Static-host friendly (meta-tag enforced).
+    {
+      /* Content Security Policy. Static-host friendly (meta-tag enforced).
      'unsafe-inline' on script/style is required because Astro inlines
      per-page hydration shims and the JSON-LD blob below; revisit when
      we move off GitHub Pages and can set this as an HTTP header with
@@ -94,10 +104,11 @@ const ogIA =
      Strict-Transport-Security can only be set as HTTP *headers*, which
      static hosting (GitHub Pages) cannot emit. They are not enforced
      until a header-capable layer (Cloudflare, the API origin, etc.)
-     fronts the site; add `X-Frame-Options: DENY` there. -->
+     fronts the site; add `X-Frame-Options: DENY` there. */
+    }
     <meta
       http-equiv="Content-Security-Policy"
-      content={`default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src ${connectSrc}; upgrade-insecure-requests`}
+      content={`default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src ${connectSrc}; upgrade-insecure-requests`}
     />
     <meta
       http-equiv="Permissions-Policy"
@@ -105,7 +116,7 @@ const ogIA =
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
-    <!-- Favicons + app icons -->
+    {/* Favicons + app icons */}
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -121,8 +132,9 @@ const ogIA =
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="application-name" content="Lumecon" />
+    <link rel="describedby" type="text/plain" href="/llms.txt" />
 
-    <!-- Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews -->
+    {/* Open Graph: iMessage, Facebook, LinkedIn, Slack, Discord previews */}
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={ogT} />
@@ -136,7 +148,7 @@ const ogIA =
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogIA} />
 
-    <!-- Twitter / X card -->
+    {/* Twitter / X card */}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogT} />
     <meta name="twitter:description" content={ogD} />
@@ -144,20 +156,40 @@ const ogIA =
     <meta name="twitter:image:alt" content={ogIA} />
     <meta name="twitter:domain" content="lumecon.ai" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {
+      /* Type is self-hosted (see the @font-face block at the top of
+         global.css). Preloading the two faces every page actually paints
+         with means the first paint is already Inter: the old Google Fonts
+         link loaded asynchronously, so headlines rendered in a system
+         fallback and then reflowed. The latin-ext face is deliberately not
+         preloaded; its unicode-range keeps it from downloading at all on an
+         English page. */
+    }
+    {
+      /* The scroll-reveal gate. Every rule that starts an element at
+         opacity 0 is scoped to `html.js` (see global.css), so with
+         scripting unavailable nothing is ever hidden. This runs before
+         the stylesheet is applied to any content, so there is no flash of
+         visible-then-hidden. */
+    }
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      as="font"
+      type="font/woff2"
+      href="/fonts/inter-latin-opsz-normal.woff2"
+      crossorigin
     />
-    <noscript
-      ><link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700&display=swap"
-        rel="stylesheet"
-      /></noscript
-    >
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/jetbrains-mono-latin-wght-normal.woff2"
+      crossorigin
+    />
     {
       /* ClientRouter (Astro view transitions) intentionally NOT enabled.
     On iOS Safari the cross-page DOM swap interacted poorly with
@@ -166,11 +198,13 @@ const ogIA =
     more predictable on mobile, and the visual cost (no fade
     between pages) is negligible on a four-page marketing site. */
     }
-    <!-- The entity graph, on every page. The full Organization node lives
+    {
+      /* The entity graph, on every page. The full Organization node lives
          on the homepage; this compact pair rides everywhere so a crawler
          landing on any page still learns who publishes it, that lumecon.ai
          is the official source, and where the nodes join (@id). Duplicate
-         @ids merge in linked data, so the homepage's richer node wins. -->
+         @ids merge in linked data, so the homepage's richer node wins. */
+    }
     <script
       is:inline
       type="application/ld+json"
@@ -198,6 +232,21 @@ const ogIA =
             'The official website of Lumecon Inc. and the authoritative source of information about the Lumecon platform, Cedar, pricing and methodology.',
           about: { '@id': 'https://lumecon.ai#org' },
           publisher: { '@id': 'https://lumecon.ai#org' },
+          inLanguage: 'en-US',
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          '@id': 'https://lumecon.ai#application',
+          name: 'Lumecon',
+          url: 'https://lumecon.ai',
+          applicationCategory: 'BusinessApplication',
+          applicationSubCategory: 'Economic analysis and economic impact analysis software',
+          operatingSystem: 'Web',
+          description:
+            'The intelligent economic analysis platform. Cedar Impact turns organizational records and public economic data into traceable economic impact analyses with reviewable inputs, assumptions and results.',
+          provider: { '@id': 'https://lumecon.ai#org' },
+          isPartOf: { '@id': 'https://lumecon.ai#website' },
           inLanguage: 'en-US',
         },
       ])}
@@ -291,6 +340,17 @@ const ogIA =
             for (var i = 0; i < els.length; i++) els[i].classList.add('seen');
             return;
           }
+          // Failsafe. The gate above means nothing is hidden without
+          // scripting at all, but scripting can also be present and still
+          // fail to deliver: an observer that never fires, a container
+          // that never intersects, a viewport change mid-load. Content is
+          // not allowed to stay invisible because an animation did not
+          // run, so anything still unseen after this window is shown.
+          setTimeout(function () {
+            var stuck = document.querySelectorAll(selector);
+            for (var j = 0; j < stuck.length; j++) stuck[j].classList.add('seen');
+          }, 3000);
+
           var io = new IntersectionObserver(
             function (entries) {
               for (var i = 0; i < entries.length; i++) {
@@ -364,6 +424,19 @@ const ogIA =
         function jumpScrollTo(el) {
           el.scrollIntoView({ behavior: 'auto', block: 'start' });
         }
+        function prepareAndFocusTarget(el) {
+          const details = el.matches('details') ? el : el.closest('details');
+          if (details) details.open = true;
+          const focusTarget = el.matches('details') ? el.querySelector('summary') || el : el;
+          if (!focusTarget.matches('summary, a, button, input, select, textarea, [tabindex]')) {
+            focusTarget.setAttribute('tabindex', '-1');
+          }
+          try {
+            focusTarget.focus({ preventScroll: true });
+          } catch (_) {
+            focusTarget.focus();
+          }
+        }
         function stripHash() {
           try {
             history.replaceState(null, '', location.pathname + location.search);
@@ -381,6 +454,7 @@ const ogIA =
           if (target) {
             // Defer one frame so layout is settled before scroll-to.
             requestAnimationFrame(() => {
+              prepareAndFocusTarget(target);
               jumpScrollTo(target);
               stripHash();
             });
@@ -415,6 +489,7 @@ const ogIA =
           const target = document.querySelector(url.hash);
           if (!target) return;
           e.preventDefault();
+          prepareAndFocusTarget(target);
           smoothScrollTo(target);
           // Don't pushState — the URL stays as-is, no fragment added.
         });

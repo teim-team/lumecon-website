@@ -1,12 +1,12 @@
-/* /methodology — a designed methodology narrative on the full page
+/* /methodology — a designed research narrative on the full page
    width. Sections are separated by hairlines and numbered in mono;
    prose keeps a readable measure inside wide grids while equations,
    the flow diagram and the data manifest use the horizontal space.
-   No cards, pills or decorative fills: the mathematics, the sources
-   and the linework are the visual vocabulary. */
+   Technical sheets, source ledgers and the mathematics are the visual
+   vocabulary. */
 
 .meth {
-  background: var(--white);
+  background: transparent;
 }
 .meth-w {
   max-width: var(--container-max);
@@ -18,12 +18,12 @@
 .meth-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(6.5rem, 12vh, 9rem) 0 0;
+  padding: clamp(6.5rem, 12vh, 9rem) 0 clamp(2.5rem, 5vw, 4rem);
 }
 .meth-hero__title {
-  font-size: clamp(2rem, 4.6vw, 3.3rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 4.2vw, 3.05rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
   line-height: 1.06;
   /* No character cap: the title uses the full container width and
      balances its own lines. */
@@ -34,10 +34,14 @@
    shares the hero's row, so the deck runs the container like the title
    above it rather than stopping partway. */
 .meth-hero__lede {
-  font-size: clamp(1.02rem, 1.4vw, 1.18rem);
-  line-height: 1.65;
+  font-size: clamp(1.02rem, 1.4vw, 1.14rem);
+  line-height: 1.68;
   color: var(--ink-2);
-  max-width: none;
+  /* Was `none`, so this ran the whole 1360px shell: about 140 characters
+     a line, which is roughly twice a comfortable measure. Long lines are
+     not a neutral choice on a page whose job is to be read carefully. */
+  max-width: var(--measure-lede);
+  text-wrap: pretty;
   margin: 0 0 3rem;
 }
 /* Three principles: hairline-separated columns, no boxes. */
@@ -53,9 +57,8 @@
   margin: 0.28rem 0 0;
 }
 
-/* Each principle holds its sentence back until the pointer arrives, the same
-   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
-   label deepens as its sentence lands. */
+/* Every principle is readable at rest; the label shift is a light accent, not
+   a disclosure mechanism. */
 .meth-principles li {
   outline: none;
 }
@@ -83,9 +86,9 @@
 }
 .meth-principles__k {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.095em;
   text-transform: uppercase;
   color: var(--accent-text);
   margin: 0 0 0.5rem;
@@ -100,8 +103,8 @@
 
 /* ---------- numbered sections ---------- */
 .meth-sec {
-  border-top: 1px solid var(--rule);
-  padding: clamp(2.6rem, 5vw, 4rem) 0 clamp(2.8rem, 5vw, 4.2rem);
+  border-top: 0;
+  padding: clamp(4rem, 7vw, 6rem) 0;
 }
 .meth-sec__head {
   display: flex;
@@ -182,23 +185,36 @@
 .meth-eqs {
   display: flex;
   flex-direction: column;
-  gap: 1.9rem;
-  /* Hairline column rule ties the equation stack to the prose the
-     way the app's lineage panel sits beside results. */
-  border-left: 1px solid var(--rule);
-  padding-left: clamp(1.4rem, 2.5vw, 2.4rem);
+  min-width: 0;
+  gap: 1rem;
+  border-left: 0;
+  padding-left: 0;
 }
 .eqobj {
+  position: relative;
+  overflow: hidden;
   margin: 0;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
+}
+.eqobj::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 72%);
 }
 .eqobj__k {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.74rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.095em;
   text-transform: uppercase;
   color: var(--accent-text);
-  margin: 0 0 0.55rem;
+  margin: 0 0 0.8rem;
 }
 .eqobj__c {
   font-size: 0.88rem;
@@ -266,35 +282,13 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  counter-reset: flow;
+  border-block: 1px solid var(--rule);
 }
 .meth-flow li {
-  counter-increment: flow;
-  position: relative;
-  padding: 0.9rem 1.4rem 0 0;
+  padding: 1.25rem 1.4rem;
 }
 .meth-flow li + li {
   border-left: 1px solid var(--rule);
-  padding-left: 1.4rem;
-}
-/* Step index + a directional tick along the top rule. */
-.meth-flow li::before {
-  content: counter(flow, decimal-leading-zero);
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--accent-text);
-  margin-bottom: 0.55rem;
-}
-.meth-flow li:not(:last-child)::after {
-  content: '\2192';
-  position: absolute;
-  top: 0.82rem;
-  right: 0.45rem;
-  font-size: 0.85rem;
-  color: var(--ink-4);
 }
 .meth-flow__k {
   font-weight: 600;
@@ -315,15 +309,23 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--rule);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
 }
 .meth-manifest__row {
   display: grid;
   grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr) auto;
   gap: 1.5rem;
   align-items: baseline;
-  padding: 0.78rem 0;
+  padding: 0.9rem clamp(1rem, 2vw, 1.45rem);
   border-bottom: 1px solid var(--rule);
+  transition: background 0.18s var(--ease);
+}
+.meth-manifest__row:hover {
+  background: var(--accent-rgba-08);
 }
 .meth-manifest__name {
   font-family: var(--font-mono);
@@ -353,14 +355,22 @@
 /* ---------- measures ---------- */
 .meth-defs {
   margin: 0;
-  border-top: 1px solid var(--rule);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
 }
 .meth-defs__row {
   display: grid;
   grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr);
   gap: 1.5rem;
-  padding: 0.95rem 0;
+  padding: 1.1rem clamp(1rem, 2vw, 1.5rem);
   border-bottom: 1px solid var(--rule);
+  transition: background 0.18s var(--ease);
+}
+.meth-defs__row:hover {
+  background: var(--accent-rgba-08);
 }
 .meth-defs__row dt {
   font-weight: 600;
@@ -390,9 +400,9 @@
   max-width: 76rem;
 }
 .meth-mission__title {
-  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
-  font-weight: 700;
-  letter-spacing: -0.022em;
+  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
   line-height: 1.12;
   margin: 0 0 1.1rem;
 }
@@ -429,11 +439,34 @@
   border-top: 1px solid var(--rule);
 }
 .meth-faq__row {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(1.2rem, 3vw, 3rem);
-  padding: 1.3rem 0;
   border-bottom: 1px solid var(--rule);
+}
+.meth-faq__row summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  cursor: pointer;
+  list-style: none;
+}
+.meth-faq__row summary::-webkit-details-marker {
+  display: none;
+}
+.meth-faq__row summary::after {
+  content: '+';
+  flex: 0 0 auto;
+  color: var(--accent-text);
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+.meth-faq__row[open] summary::after {
+  content: '\2212';
+}
+.meth-faq__row summary:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 4px;
 }
 .meth-faq__row h3 {
   font-size: 1.02rem;
@@ -443,26 +476,23 @@
   margin: 0;
 }
 .meth-faq__row p {
+  max-width: var(--measure-prose);
   font-size: 0.98rem;
   line-height: 1.7;
   color: var(--ink-2);
-  margin: 0;
+  margin: -0.2rem 0 1.35rem;
 }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1024px) {
   .meth-flow {
     grid-template-columns: repeat(3, 1fr);
-    row-gap: 1.6rem;
   }
-  /* In a 3x2 wrap the left edge of each row loses its divider
-     naturally; suppress the arrow at each row's end. */
   .meth-flow li:nth-child(4) {
     border-left: 0;
-    padding-left: 0;
   }
-  .meth-flow li:nth-child(3)::after {
-    content: '';
+  .meth-flow li:nth-child(n + 4) {
+    border-top: 1px solid var(--rule);
   }
 }
 @media (max-width: 900px) {
@@ -485,37 +515,6 @@
   }
 }
 @media (max-width: 700px) {
-  /* Each principle keeps a headline visible at rest. Without one the band was
-   three mono labels over a lot of white, since the sentence below is held
-   back until hover. */
-  .meth-principles__t {
-    font-family: var(--font-display);
-    font-size: 1.02rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    margin: 0.28rem 0 0;
-  }
-
-  /* Each principle holds its sentence back until the pointer arrives, the same
-   .hover-veil pattern the homepage edge tiles and the Cedar facts use, and the
-   label deepens as its sentence lands. */
-  .meth-principles li {
-    outline: none;
-  }
-  .meth-principles__k {
-    transition: color 0.25s var(--ease);
-  }
-  .meth-principles li:hover .meth-principles__k,
-  .meth-principles li:focus-visible .meth-principles__k {
-    color: var(--accent-deep);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .meth-principles__k {
-      transition: none;
-    }
-  }
-
   .meth-principles {
     grid-template-columns: 1fr;
     gap: 1.3rem;
@@ -534,9 +533,6 @@
   .meth-flow li:first-child {
     border-top: 0;
     padding-top: 0;
-  }
-  .meth-flow li:not(:last-child)::after {
-    content: none;
   }
   .meth-manifest__row {
     grid-template-columns: 1fr;
@@ -569,42 +565,35 @@
   margin-bottom: 2.2rem;
 }
 .mcards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.1rem;
-  align-items: start;
-}
-@media (max-width: 860px) {
-  .mcards {
-    grid-template-columns: 1fr;
-  }
+  border-top: 1px solid var(--rule-strong);
 }
 .mcard {
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  background: var(--white);
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
   transition:
     border-color 0.2s var(--ease),
-    box-shadow 0.2s var(--ease),
-    transform 0.2s var(--ease);
+    background 0.2s var(--ease);
 }
-.mcard:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 16px 32px -20px rgba(10, 15, 38, 0.28);
+@media (hover: hover) {
+  .mcard:hover {
+    background: linear-gradient(90deg, var(--accent-rgba-08), transparent 72%);
+  }
 }
 .mcard[open] {
-  grid-column: 1 / -1;
-  transform: none;
-  border-color: var(--accent);
+  border-bottom-color: var(--accent-text);
 }
 .mcard__face {
   position: relative;
-  display: block;
-  padding: 1.35rem 3.4rem 1.35rem 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.8fr) minmax(12rem, 1.35fr) minmax(0, 2.2fr);
+  align-items: start;
+  gap: clamp(1rem, 2.5vw, 2.6rem);
+  padding: 1.35rem 3.2rem 1.35rem 0;
   cursor: pointer;
   list-style: none;
-  border-radius: 10px;
+  border-radius: 0;
 }
 .mcard__face::-webkit-details-marker {
   display: none;
@@ -621,7 +610,7 @@
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--accent-text);
 }
@@ -633,7 +622,7 @@
   letter-spacing: -0.01em;
   line-height: 1.3;
   color: var(--ink);
-  margin: 0.5rem 0 0.45rem;
+  margin: 0;
 }
 .mcard__hook {
   display: block;
@@ -676,12 +665,19 @@
   .mcard__plus {
     transition: none;
   }
-  .mcard:hover {
-    transform: none;
-  }
 }
 .mcard__body {
-  padding: 0 1.5rem 1.5rem;
+  padding: 0 0 1.5rem calc(7rem + clamp(1rem, 2.5vw, 2.6rem));
+}
+@media (max-width: 860px) {
+  .mcard__face {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.45rem;
+    padding-right: 2.5rem;
+  }
+  .mcard__body {
+    padding-left: 0;
+  }
 }
 .mcard__body p {
   max-width: var(--measure-prose);
@@ -723,6 +719,15 @@
   width: 0.95rem;
   height: 0.95rem;
   flex: none;
+  color: var(--ink-2);
+  opacity: 0.72;
+  transition:
+    color 0.2s var(--ease),
+    opacity 0.2s var(--ease);
+}
+.gloss-search:focus-within svg {
+  color: var(--accent-text);
+  opacity: 1;
 }
 .gloss-search input {
   flex: 1;
@@ -731,7 +736,8 @@
   outline: none;
   background: transparent;
   font: inherit;
-  font-size: 0.98rem;
+  /* A 16px floor prevents iOS Safari from zooming the page on focus. */
+  font-size: 1rem;
   color: var(--ink);
 }
 .gloss-count {
@@ -747,16 +753,156 @@
   padding: 1.2rem 0 0;
 }
 .gloss-defs .meth-defs__row {
-  transition: background-color 0.15s var(--ease);
+  transition: none;
 }
 /* The filter hides rows with the hidden attribute, and the UA's [hidden]
    rule is less specific than the row's own display, so say it outright. */
 .gloss-defs .meth-defs__row[hidden] {
   display: none;
 }
-.gloss-defs .meth-defs__row:hover {
-  background: var(--teal-tint, rgba(15, 181, 165, 0.06));
+/* ---------- v3 research cover and source ledger ---------- */
+.meth-hero--cover {
+  position: relative;
+  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+  background:
+    linear-gradient(128deg, rgba(15, 181, 165, 0.13), transparent 42%),
+    linear-gradient(145deg, #0d1933 0%, #091126 62%, #082631 100%);
 }
-.gloss-defs .meth-defs__row:hover dt {
-  color: var(--accent-text);
+.meth-hero--cover::after,
+.cedarpg-hero::after {
+  content: '';
+  position: absolute;
+  top: -8rem;
+  right: -5rem;
+  width: clamp(24rem, 38vw, 38rem);
+  height: clamp(24rem, 38vw, 38rem);
+  background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
+  filter: brightness(0) invert(1);
+  opacity: 0.035;
+  pointer-events: none;
+}
+.meth-hero--cover .meth-w {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(26rem, 7fr);
+  column-gap: clamp(3rem, 6vw, 6rem);
+  align-items: center;
+}
+.meth-hero--cover .h-kicker,
+.meth-hero--cover .meth-hero__title,
+.meth-hero--cover .meth-hero__lede {
+  grid-column: 1;
+}
+.meth-hero--cover .meth-hero__title {
+  max-width: 14ch;
+  font-size: clamp(2.8rem, 4.7vw, 4.7rem);
+  line-height: 0.99;
+}
+.meth-hero--cover .meth-hero__lede {
+  max-width: 58ch;
+  margin-bottom: 0;
+}
+.meth-hero__screen {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 34px 84px -38px rgba(0, 0, 0, 0.82);
+}
+.meth-hero__screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.meth-hero__screen figcaption {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--rule);
+  background: rgba(8, 17, 38, 0.92);
+  color: var(--ink-3);
+  font-size: 0.78rem;
+}
+.meth-hero--cover .meth-principles {
+  grid-column: 1 / -1;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding: clamp(1.5rem, 3vw, 2.2rem) 0;
+  border-inline: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.meth-hero--cover .meth-principles li + li {
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+.meth > .meth-sec.meth-ledger {
+  padding-block: clamp(4.5rem, 8vw, 7rem);
+  background:
+    linear-gradient(122deg, transparent 38%, rgba(15, 181, 165, 0.1) 100%),
+    linear-gradient(145deg, #e9f1f0 0%, #f7f9f8 54%, #e5edef 100%);
+  border-block: 1px solid rgba(7, 17, 38, 0.07);
+}
+.meth-ledger .meth-manifest {
+  --ink: #f5fafb;
+  --ink-2: rgba(238, 246, 248, 0.78);
+  --ink-3: rgba(238, 246, 248, 0.58);
+  --navy: #f5fafb;
+  --rule: rgba(255, 255, 255, 0.13);
+  --accent-text: #73e2d6;
+  --accent-rgba-08: rgba(95, 217, 204, 0.1);
+  border-color: rgba(95, 217, 204, 0.24);
+  background:
+    linear-gradient(112deg, rgba(15, 181, 165, 0.16) 0%, transparent 46%),
+    linear-gradient(145deg, #0b1b31 0%, #081426 58%, #07323a 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 34px 78px -42px rgba(7, 17, 38, 0.55);
+}
+.meth-ledger .meth-threeup {
+  margin-top: 2.4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+}
+.meth-ledger .meth-threeup > * + * {
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(1.2rem, 2.5vw, 2.2rem);
+}
+
+@media (max-width: 980px) {
+  .meth-hero--cover .meth-w {
+    grid-template-columns: 1fr;
+  }
+  .meth-hero--cover .h-kicker,
+  .meth-hero--cover .meth-hero__title,
+  .meth-hero--cover .meth-hero__lede,
+  .meth-hero__screen,
+  .meth-hero--cover .meth-principles {
+    grid-column: 1;
+  }
+  .meth-hero__screen {
+    grid-row: auto;
+    margin-top: 2.3rem;
+  }
+  .meth-hero--cover .meth-principles {
+    margin-top: 2rem;
+  }
+}
+@media (max-width: 900px) {
+  .meth-ledger .meth-threeup > * + * {
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding: 1.4rem 0 0;
+  }
+}
+@media (max-width: 700px) {
+  .meth-hero--cover .meth-principles li + li {
+    border-left: 0;
+    padding-left: 0;
+  }
 }

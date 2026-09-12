@@ -1,139 +1,101 @@
 ---
 /**
- * The Lumecon edge — the table-stakes capabilities buyers scan for
- * (cloud, security, AI native, authoritative data, data freshness,
- * methodology), each with a line icon drawn in the app's icon style
- * (thin strokes, sharp joins, teal chip). The header tells the
- * provenance story in evidence terms: who built it, on what
- * foundation, and what that makes possible.
- *
- * Six tiles that lead with the icon. At rest each shows its icon, label
- * and headline; the sentence underneath appears on hover. That is what
- * takes the density down: six paragraphs is most of the reading on this
- * part of the page, and a visitor scanning for "do they do security" only
- * needs the headline until they care.
- *
- * The reveal is the shared .hover-veil pattern in global.css, which the
- * Cedar page's "how it is built" facts use too.
+ * The institutional evidence close. Four linked rows replace the old
+ * six-card feature matrix so every interaction leads to the underlying
+ * methodology, product workflow or security status.
  */
 import '../styles/home.css';
 
-const CARDS = [
+const ROWS = [
   {
-    k: 'Cloud',
-    t: 'Runs in your browser',
-    b: 'Nothing to install or maintain.',
-    icon: 'cloud',
+    label: 'Method',
+    title: 'Regionalized methods with documented assumptions',
+    body: 'Input-output relationships are regionalized to the geography being analyzed, with direct, indirect and induced effects kept distinct.',
+    href: '/methodology#m-core',
+    action: 'Examine the model',
+    icon: 'model',
   },
   {
-    k: 'Security',
-    t: 'Secure by design',
-    b: 'Encrypted in transit and at rest with account-level data separation.',
+    label: 'Evidence',
+    title: 'Sources and vintages stay visible',
+    body: 'Federal economic data provides the foundation, with higher-frequency indicators used only where they add relevant information.',
+    href: '/methodology#m-data',
+    action: 'Review the sources',
+    icon: 'source',
+  },
+  {
+    label: 'Review',
+    title: 'Proposed inputs remain subject to human approval',
+    body: 'Cedar organizes source material and flags ambiguity. Cedar Impact performs the calculations after inputs and assumptions are reviewed.',
+    href: '/cedar',
+    action: 'See how Cedar works',
+    icon: 'review',
+  },
+  {
+    label: 'Security',
+    title: 'Controls open to procurement review',
+    body: 'Lumecon is working toward a future SOC 2 Type II examination. No SOC 2 examination has been completed and no report is currently available.',
+    href: '/security',
+    action: 'Read the current status',
     icon: 'shield',
-  },
-  {
-    k: 'AI native',
-    t: 'Cedar, from the beginning',
-    b: 'Cedar was designed into the workflow from the beginning, so it participates at every step from intake to reporting.',
-    icon: 'spark',
-  },
-  {
-    k: 'Authoritative data',
-    t: 'Census, BEA, BLS and more',
-    b: 'Built on the public sources the field already relies on.',
-    icon: 'bank',
-  },
-  {
-    k: 'Current evidence',
-    t: 'Data that keeps up',
-    b: 'Higher-frequency indicators supplement slower-moving benchmarks where they add information.',
-    icon: 'pulse',
-  },
-  {
-    k: 'Built to evolve',
-    t: 'Improving with the evidence',
-    b: 'The model, the data behind it and the software improve as the evidence does.',
-    icon: 'trend',
   },
 ];
 ---
 
 <section class="edge" id="edge" aria-labelledby="edge-title">
   <div class="edge-inner">
-    <header class="flowsec-head">
-      <p class="h-kicker">The Lumecon edge</p>
-      <h2 class="flowsec-title" id="edge-title">
-        Decades of economic science, <span class="brand-em">kept current with the economy.</span>
-      </h2>
-      <p class="flowsec-lede">
-        Built by economists, engineers and researchers with experience at the Federal Reserve and
-        leading universities, Lumecon combines the established foundation of input-output analysis
-        with current public data, modern estimation methods and software built for recurring
-        analysis. <span class="brand-em"
-          >We invest in the model, not just the software around it.</span
-        >{' '}
-        <a class="inline-link" href="/methodology">Read the methodology</a>.
+    <header class="edge-thesis">
+      <p class="h-kicker">Built for scrutiny</p>
+      <h2 id="edge-title">Economic analysis built to withstand review.</h2>
+      <p>
+        Lumecon combines established economic methods, current public data and a reviewable product
+        workflow. Its team includes economists, data scientists and engineers with experience at
+        Federal Reserve institutions and leading universities.
       </p>
+      <a class="edge-thesis__link" href="/methodology">
+        Read the methodology <span aria-hidden="true">&rarr;</span>
+      </a>
     </header>
 
-    <div class="edge-grid">
+    <div class="edge-ledger">
       {
-        CARDS.map((c) => (
-          <article class="edge-card" data-hover-reveal tabindex="0">
-            <span class="edge-ic" aria-hidden="true">
-              {c.icon === 'cloud' && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M7 17.5h10a4 4 0 0 0 .9-7.9 5.5 5.5 0 0 0-10.7-1A4.2 4.2 0 0 0 7 17.5Z" />
-                  <path d="M12 13.5v-4M10 11l2-1.9 2 1.9" stroke-width="1.25" />
+        ROWS.map((row) => (
+          <a class="edge-row" href={row.href}>
+            <span class="edge-row__icon" aria-hidden="true">
+              {row.icon === 'model' && (
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                  <path d="M4 25.5h24M6.5 25.5V14l6-4.5 6 4.5v11.5M18.5 16l7-5v14.5" />
+                  <path d="M10 18h5M10 21.5h5M22 17h3" opacity=".72" />
                 </svg>
               )}
-              {c.icon === 'shield' && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M12 3 19 5.8v5.1c0 4.5-3 7.6-7 9.1-4-1.5-7-4.6-7-9.1V5.8Z" />
-                  <path d="m8.8 11.8 2.2 2.2 4.2-4.2" stroke-width="1.4" />
+              {row.icon === 'source' && (
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                  <path d="M7 5.5h14l4 4v17H7z" />
+                  <path d="M21 5.5v4h4M11 14h10M11 18h10M11 22h7" opacity=".78" />
                 </svg>
               )}
-              {c.icon === 'spark' && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <rect x="6.5" y="6.5" width="11" height="11" />
-                  <path
-                    d="M9.5 3.5v3M14.5 3.5v3M9.5 17.5v3M14.5 17.5v3M3.5 9.5h3M3.5 14.5h3M17.5 9.5h3M17.5 14.5h3"
-                    stroke-width="1.2"
-                  />
-                  <path
-                    d="M12 9.4l.8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8Z"
-                    stroke-width="1.2"
-                  />
+              {row.icon === 'review' && (
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                  <path d="M7 6.5h18v19H7zM11 12h10M11 16h7" />
+                  <path d="m11 21 2.2 2.2 5-5" stroke-width="1.7" />
                 </svg>
               )}
-              {c.icon === 'bank' && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M4 9.2 12 4l8 5.2" />
-                  <path d="M5.5 9.5V17M9.8 9.5V17M14.2 9.5V17M18.5 9.5V17" stroke-width="1.25" />
-                  <path d="M4 17.5h16M4 20h16" stroke-width="1.4" />
-                </svg>
-              )}
-              {c.icon === 'pulse' && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M3 12.5h3.6l2-5.4 3.8 9.8 2-5.4H21" />
-                  <path d="M17.5 5.5v2.8M16.1 6.9h2.8" stroke-width="1.2" />
-                </svg>
-              )}
-              {c.icon === 'trend' && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M4 4v16h16" />
-                  <circle cx="8.2" cy="14.6" r="0.9" fill="currentColor" stroke="none" />
-                  <circle cx="12" cy="12.8" r="0.9" fill="currentColor" stroke="none" />
-                  <circle cx="15.2" cy="10" r="0.9" fill="currentColor" stroke="none" />
-                  <circle cx="18.6" cy="8.4" r="0.9" fill="currentColor" stroke="none" />
-                  <path d="M6.5 16.5 20 6.5" stroke-width="1.2" stroke-dasharray="2.4 2" />
+              {row.icon === 'shield' && (
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                  <path d="M16 4.5 25 8v6.5c0 6-3.8 10.2-9 12-5.2-1.8-9-6-9-12V8Z" />
+                  <path d="m11.5 15.5 3 3 6-6" stroke-width="1.7" />
                 </svg>
               )}
             </span>
-            <p class="whyw-card__k">{c.k}</p>
-            <h3 class="whyw-card__t">{c.t}</h3>
-            <p class="whyw-card__b hover-veil">{c.b}</p>
-          </article>
+            <span class="edge-row__copy">
+              <span class="edge-row__label">{row.label}</span>
+              <strong>{row.title}</strong>
+              <span class="edge-row__body">{row.body}</span>
+              <span class="edge-row__action">
+                {row.action} <b aria-hidden="true">&rarr;</b>
+              </span>
+            </span>
+          </a>
         ))
       }
     </div>

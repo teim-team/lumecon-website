@@ -83,9 +83,9 @@ export const INTENTS: CedarIntent[] = [
       'what this is',
     ],
     answer:
-      'We help organizations show their economic impact without a months-long consulting engagement. You upload what you have, we harmonize it against the public data sources serious models rely on (ACS, BEA, LODES, QCEW), and you get a defensible analysis with every assumption shown. The same analysis drops into a council memo, a grant narrative or a board deck.',
+      'Lumecon helps organizations turn budgets, payroll, program records and other source material into a structured economic impact analysis. Cedar helps organize the inputs, and the workflow presents key assumptions for review before results are finalized. The same analysis can support a council memo, grant narrative or board presentation.',
     expanded:
-      "Going deeper: Lumecon sits between expensive software and expensive consulting. The existing platforms charge per geography, per user, per data tier; the consultants who actually run them charge by the billable hour. We collapse both into one flat annual subscription: unlimited analyses, with every geography and data tier included. The model itself does what serious input-output models always do (direct, indirect, induced, total impact), but it's wrapped in a workflow built for cloud, modern data and AI from day one. Cedar handles the harmonization and surfaces every assumption so your team makes judgment calls instead of cleaning spreadsheets.",
+      'Going deeper: Lumecon combines an established input-output model with a guided data and review workflow. Paid plans use flat annual pricing and include unlimited analyses across supported geographies. Cedar helps structure source material and surface assumptions, while your team reviews the inputs, makes the judgment calls and decides how to present the result.',
   },
   {
     id: 'mission',
@@ -115,7 +115,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Lumecon means luminate economies. We exist because too much meaningful work goes unseen: organizations create jobs, house elders, improve roads and move money through their local economy in ways that are real but hard to prove. When that work is not measured well, it is easier to ignore, and funding gets harder to defend. Our job is to make the economically invisible visible, and to show what the numbers represent: people with paychecks, families with stability and communities with infrastructure. Economic impact analysis should make the human stakes impossible to miss, not abstract them away.',
     expanded:
-      "The deeper point: when an organization's value is not measured well, decision-makers miss most of it, community investments look smaller than they are, and the groups most often asked to prove their worth are the ones least able to afford the proof. Lumecon turns the administrative records you already keep into an analysis that shows the full picture, with every assumption visible so the result holds up to scrutiny. The goal is not just a number. It is evidence a council, a board or a funder can trust, and that reflects the people behind the work.",
+      "The deeper point: when an organization's value is not measured well, decision-makers can miss important activity, community investments may look smaller than they are, and the groups most often asked to prove their worth may be least able to afford the work. Lumecon turns administrative records into an analysis with key assumptions presented for review. The goal is evidence a council, board or funder can examine, with the people behind the work still visible.",
   },
   {
     id: 'why_now',
@@ -133,9 +133,9 @@ export const INTENTS: CedarIntent[] = [
       'why not sooner',
     ],
     answer:
-      "The old model does not serve enough people, and it does not use everything we now know. Economic impact analysis has been locked behind expensive software, consultant markups, geography-based pricing and per-seat fees, which prices out the organizations most often asked to prove their value. At the same time, economics itself has moved on, taking behavioral responses, institutional context, geography and causal methods seriously instead of assuming perfectly rational actors in clean markets. Lumecon is built around a different incentive: we would rather you stay and build stronger evidence over time than be charged again for every geography, dataset or seat. We also don't run a big sales team or hide pricing behind a sales call, because we respect your time and judgment and the pricing is on the page.",
+      'Economic impact analysis has often required separate software, data preparation and consulting work. Lumecon brings those steps into one guided product with public, flat annual pricing and no per-analysis or per-geography charges on paid plans. Public economic data, cloud software and assisted document workflows make it practical for more organizations to build and update their own evidence.',
     expanded:
-      'More on the methods part: richer public data, cheaper computing, better geographic tools and stronger causal methods mean an organization that expands a facility, builds housing, hires workers or invests in roads should be able to understand that impact better than ever. Better data makes estimates more precise, better geography makes local effects more realistic, better causal tools help separate correlation from impact, and grounded AI helps organize messy evidence without erasing context. The point is not to make impact analysis flashier. It is to make it more honest, more accessible and more connected to how economies actually work.',
+      'Richer public data, accessible computing and better geographic tools can make the workflow easier to review and repeat. Lumecon uses those tools to organize inputs and support an established input-output model; Cedar assists with the work but does not replace economic judgment.',
   },
   {
     id: 'cedar_naming',
@@ -155,7 +155,7 @@ export const INTENTS: CedarIntent[] = [
       'why is the ai called cedar',
     ],
     answer:
-      'The name is intentional. Most AI feels sterile, placeless and detached. A cedar is rooted, durable and protective, which is closer to what this should feel like: memory, place and care rather than automation for its own sake. Inside Lumecon, Cedar helps you work with messy source records, compliance forms, public datasets and analysis assumptions, and it organizes that evidence without stripping away where it came from or what it represents. Cedar is not just here to make analyses faster. It is here to help your economic evidence keep its roots.',
+      'Cedar is named for a durable, place-based symbol that fits Lumecon’s work with local economies and long-lived records. In the product, Cedar helps organize source material, propose inputs and flag questions for review; it does not replace the person who approves the analysis.',
   },
   {
     id: 'cedar_identity',
@@ -227,7 +227,7 @@ export const INTENTS: CedarIntent[] = [
       'upload audit',
     ],
     answer:
-      "I'm Cedar, Lumecon's AI economic analyst. Inside the platform I upload and process your data (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), structure it for the impact model, surface every assumption for your sign-off and act as a thought partner on the write-up. The substance and local context come from you. I handle the data wrangling and the polish. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what an analysis costs or how to reach the team.",
+      "I'm Cedar, Lumecon's AI economic analyst. Inside the platform I help process documents such as PDFs, spreadsheets and CSVs, structure inputs for the impact model, present key assumptions for review and assist with the write-up. The substance, approvals and local context come from you. Here on the site I'm a lighter version: ask me what Lumecon does, who it's for, what an analysis costs or how to reach the team.",
   },
   {
     id: 'audience',
@@ -267,9 +267,9 @@ export const INTENTS: CedarIntent[] = [
       'who use it',
     ],
     answer:
-      'Mostly governments, enterprises and mission-driven organizations: tribal nations, state and local agencies, universities, foundations, ports, transit agencies, large nonprofits and community development financial institutions. The common thread is they need to defend their numbers to a council, a board or a funder, and they need that defense to hold up to scrutiny. We build Lumecon together with these organizations. Where do you sit?',
+      'Lumecon is built for governments, enterprises and mission-driven organizations: Tribal Nations, state and local agencies, universities, foundations, ports, transit agencies, nonprofits and community development financial institutions. The common thread is a need to explain economic activity to a council, board or funder with the data and assumptions visible. Where do you sit?',
     expanded:
-      'Breaking it down: tribal nations and tribal enterprises (gaming, energy, government services, cultural institutions) run tribal government, tribal enterprise and Whole Nation analysis. Cities, counties, state DOTs, departments of commerce, workforce boards and treasury offices use Lumecon for capital project justification, grant rounds, bond measures and annual impact reports. Universities use it for the community ripple of operations, research, construction and student spending. Foundations use it to show donors and boards what grantmaking actually moved. Ports, airports and transit agencies use it for capital plans. CDFIs and community lenders use it for portfolio-level place-based impact. Under all of that sits one Lumecon application: the platform adapts to the kind of organization you are, and the Cedar products serve every audience on the same foundation.',
+      'Breaking it down: Tribal Nations and tribal enterprises can analyze government and enterprise activity together through Whole Nation analysis. Public agencies can examine capital projects, grant scenarios and bond programs. Universities can study operations, research and construction. Foundations, nonprofits and community lenders can analyze the economic activity associated with programs or portfolios. Ports, airports and transit agencies can evaluate capital and operating scenarios. It all happens in one Lumecon application on the same economic foundation.',
   },
   {
     id: 'tribal_platform',
@@ -326,9 +326,9 @@ export const INTENTS: CedarIntent[] = [
       'we a tribe',
     ],
     answer:
-      'Yes, deeply. Tribal Nations and tribal enterprises are core users of Lumecon, on the same application everyone else uses. Every plan includes tribal government, tribal enterprise and Whole Nation analysis; Whole Nation brings a tribal government and its enterprises together in one integrated analysis, with statewide and homelands scopes side by side. The platform handles the geographies the existing tools struggle with, reservations included, respects tribal data sovereignty and produces analyses you can hand to a council, a federal funder or a casino regulator. Are you with a Tribal Nation or a tribal enterprise?',
+      'Lumecon is designed to serve Tribal Nations and tribal enterprises on the same application as every other organization. The plan family includes Tribal Government, Tribal Enterprise and Whole Nation analysis; Whole Nation brings a tribal government and its enterprises together in one integrated analysis. Reservations and trust lands are modeled as supported geographies rather than automatic county proxies. Are you with a Tribal Nation or a tribal enterprise?',
     expanded:
-      "Going deeper for tribal nations: the platform treats reservation and off-reservation trust land, Alaska Native Regional and Village Corporations and Native Hawaiian Home Lands as fully supported geographies, not edge cases the legacy tools force into county approximations. Data sovereignty is a design priority: a single-tenant workspace, you control what's uploaded and shared, your records are not used to train a shared model, and cross-analysis learning runs only on anonymized aggregates. Typical outputs are gaming and enterprise impact analyses for a council or a federal funder (NIGC, BIA, Treasury), grant narratives and annual reports showing jobs, wages and the dollars kept in the regional economy.",
+      'Going deeper for Tribal Nations: the platform supports reservations and trust lands as modeled geographies rather than treating counties as automatic proxies. Data governance is a design priority: your organization controls what it uploads and shares, and specific security, retention and AI-use commitments can be reviewed before sensitive records move. Relevant use cases include government and enterprise impact analyses, grant support and annual reporting.',
   },
   {
     id: 'local_platform',
@@ -357,9 +357,9 @@ export const INTENTS: CedarIntent[] = [
       'non tribal',
     ],
     answer:
-      "Definitely. Cities, counties, state agencies, port and transit authorities, school districts and special districts all use Lumecon for the same kinds of questions: what does this project, program or bond actually do for the local economy, and how do we defend that number to a council, a board or the public? Tell me what level you're at (city, county, state agency) and I can be more specific.",
+      "Definitely. Lumecon is built so cities, counties, state agencies, port and transit authorities, school districts and special districts can examine the economic activity associated with a project, program or bond. Tell me what level you're at, and I can point to a relevant use case.",
     expanded:
-      'Across local government: cities and counties use it for capital projects, bonds, TIF and abatement decisions, business attraction and annual impact reports; state agencies (DOT, commerce, workforce, treasury, health) use it for capital programs, grant scoring and budget defense; ports, transit and special districts use it for capital plans and rate cases. It all runs on the same model and the same public data, so a number you cite to a council holds up the same way in a grant application or a rating-agency meeting.',
+      'Potential local-government use cases include capital projects, bonds, TIF and abatement scenarios, business attraction and annual impact reporting. State agencies can examine capital programs or compare scenarios, while ports, transit agencies and special districts can analyze capital and operating activity. The resulting estimates can inform public materials, but Lumecon does not guarantee that a council, funder or rating agency will accept them.',
   },
   {
     id: 'reports_outputs',
@@ -400,9 +400,9 @@ export const INTENTS: CedarIntent[] = [
       'reports does it produce',
     ],
     answer:
-      "On any paid plan, every analysis exports a report PDF, an Excel workbook and the underlying tables as CSV, so the numbers drop straight into whatever you present with; Seed, the free account, shows your direct effects on screen and exports unlock with a paid plan. Cedar is included on every plan, and on the write-up it works as a thought partner: it suggests structure, takes your feedback and helps you frame one set of numbers for the audience you're talking to (funders see the jobs-and-investment narrative, councils see local benefit, boards see strategic context, public meetings get the plain-language version), while the words, voice and local context come from you. The numbers are identical across versions; only the framing changes. Who's the audience you need to win over?",
+      'Paid plans export an Excel workbook, CSV tables and a printable summary. Seed shows direct effects on screen; exports and the indirect, induced and total results unlock on a paid plan. Cedar can suggest structure and help adapt an explanation for a funder, council, board or public meeting, while your team supplies the voice and local context. Who is the audience you need to reach?',
     expanded:
-      'On the deliverables: on any paid plan, every analysis exports a report PDF, an Excel workbook and the underlying tables as CSV (Seed shows your direct effects on screen; exports unlock with a paid plan). The numbers are identical however you present them; only the framing shifts: funders see the jobs-and-investment narrative, councils see local benefit, boards see strategic context, public meetings get the plain-language version. Cedar helps you brainstorm, tighten and present, and the strongest version always carries the context only you can add. The headline figures are traceable in the product, so when someone challenges a number you follow it to the multiplier, base year and the data behind it instead of defending a black box.',
+      'Paid deliverables include an Excel workbook, CSV tables and a printable summary; Seed shows direct effects on screen. Cedar can help brainstorm, tighten and present the narrative without changing the underlying results. The product is designed to connect headline figures to their source data and modeling assumptions so a reviewer can examine the basis for a result.',
   },
   {
     id: 'data_inputs',
@@ -438,9 +438,9 @@ export const INTENTS: CedarIntent[] = [
       'quickbooks',
     ],
     answer:
-      "Your administrative records (budgets, payroll, program data, vendor spend) plus the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW, County Business Patterns. We layer in alternative data where it helps (USASpending, the regional Fed banks, anonymized mobility, satellite land use) and our own signals built in-house: regional multipliers developed in-house and built to sharpen as analyses accumulate, plus methodology adjustments tuned by our data team. Don't worry if your data is messy or scattered across departments; the whole point of Cedar is to harmonize it for you. What does your data look like right now?",
+      'Lumecon combines the administrative records you provide, such as budgets, payroll, program data and vendor spending, with selected federal sources including ACS, BEA regional accounts, LODES, QCEW and County Business Patterns. The sources used depend on the geography, year and analysis. Cedar helps organize records and flags ambiguous mappings for review. What does your data look like right now?',
     expanded:
-      'More on data: you bring administrative records (budgets, payroll, program rosters, vendor and contract spend) in whatever shape they arrive (spreadsheets, PDFs, exports). Cedar matches them to NAICS codes, geographies and time periods, flags anything ambiguous for you to confirm and joins them to the public sources serious models rely on: ACS, BEA regional accounts, LODES, QCEW and County Business Patterns, plus higher-frequency alternative signals where they sharpen the estimate. Messy and scattered-across-departments is the normal starting point, not a blocker.',
+      'More on data: you bring administrative records such as budgets, payroll, program rosters and vendor or contract spending in spreadsheets, PDFs or exports. Cedar helps map them to NAICS codes, geographies and time periods, flags ambiguous items for confirmation and connects them to the documented public sources used by the analysis. Scattered records are a normal starting point.',
   },
   {
     id: 'multipliers',
@@ -480,7 +480,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'A multiplier estimates how each dollar of activity ripples through an economy. Three layers: direct (the spending itself, like wages, construction, supplies), indirect (the suppliers that get hired by the direct spenders) and induced (the local businesses that get hired when workers spend their paychecks). Add them up and you get total impact. Multipliers differ by industry and geography, which is why a casino in Connecticut has a different ripple than a wind farm in Nebraska.',
     expanded:
-      'Going one layer deeper: multipliers come from input-output models built on the BEA national accounts, regionalized down to your geography. Three things drive whether the ripple is big or small. One, regional purchase coefficients (RPCs): how much of a dollar stays local versus leaks out to suppliers in another state. Two, the industry mix of the spending, since wages in healthcare ripple differently than capital in heavy construction. Three, the wage-to-non-wage split, since worker spending is what drives induced effects. We surface each of those choices in the assumption layer of the report, so a reviewer can trace any number back to where it came from. The full write-up lives at /methodology.',
+      'Going one layer deeper: multipliers come from input-output relationships regionalized to the selected geography. Regional purchase coefficients, the industry mix and the division between labor and other spending all affect the estimate. Those choices and the data vintage should be documented with the analysis; the public methodology explains the framework.',
   },
   {
     id: 'software_vs_consulting',
@@ -510,9 +510,9 @@ export const INTENTS: CedarIntent[] = [
       'do i still need a consultant',
     ],
     answer:
-      'Lumecon is software your team runs, with support when you need it. The whole bet is that economic impact analysis should be something your team can run any time you need it, instead of a months-long consulting engagement. Cedar handles the data wrangling and the modeling while your team makes the judgment calls, and the Lumecon team will walk you through complex first-time analyses or unusual data situations even though the steady state is your team using the platform without us in the loop. Does your team have an economist on staff?',
+      'Lumecon is software your team runs, with support when you need it. Cedar helps organize source records and flag ambiguity, while Cedar Impact runs the economic model from reviewed inputs. Your team reviews assumptions and approves the analysis. The Lumecon team can help scope first-time or unusual projects. Who on your team would review the inputs and assumptions?',
     expanded:
-      "On software vs. consulting: the steady state is your team running analyses in the platform whenever you need one, with no per-analysis fee and no waiting on an outside firm. You don't need an economist on staff; Cedar picks defaults matched to your geography and project type and explains each one in plain English for your sign-off. The Lumecon team is there for a first analysis, an unusual data situation or a methodology-sensitive project, but the capability lives with you, not on a consultant's calendar.",
+      'Lumecon is designed for recurring analysis inside your organization. Cedar can help structure source material, surface candidate inputs and explain the workflow, but it does not replace review. Cedar Impact performs the calculations from approved inputs. For a first analysis, an unusual data situation or a methodology-sensitive project, the Lumecon team can help your reviewer scope the work.',
   },
   {
     id: 'pricing',
@@ -599,9 +599,9 @@ export const INTENTS: CedarIntent[] = [
       'nonprofit discount',
     ],
     answer:
-      'Lumecon has four plans. Seed is free: the real platform, where you build a full analysis and see your direct effects, with full results unlocking on any paid plan. The paid plans are flat annual subscriptions with no per-analysis or per-geography charges. Sprout is $1,000 a year for one user. Sapling is $2,500 a year for up to 10 users and adds Cedar Commons, the shared project workspace: shared projects, project notes, data collection and external collaborators; it is the most popular plan. Tree is $7,500 a year with unlimited users in one organization, adding Cedar Grove, the advanced data library, plus hands-on Cedar calibration to your terminology, workflows and recurring reporting. Every plan includes the full Lumecon model, unlimited projects and analyses, every supported U.S. geography (counties, states, the nation, reservations and trust lands), historical analysis from 2015 to the present where the data support it, every analysis type and Cedar itself. For comparison, legacy consulting engagements are commonly cited at $50K to $150K per analysis. The full grid is on the pricing page, no sales call required. Want me to break down what each plan includes?',
+      'Seed is the free private-beta plan, with access opening in waves. Paid plans are flat annual subscriptions: Sprout is $1,000 for one user, Sapling is $2,500 for up to 10 users and Tree is $7,500 for unlimited users in one organization. See the full comparison at /pricing, including what each plan unlocks.',
     expanded:
-      'More on what every plan includes: the full Lumecon model, unlimited projects and analyses, every supported U.S. geography (counties, states, the nation, reservations and trust lands), historical analysis from 2015 to the present where the underlying data support it, and all the analysis types: industry, organization, tribal government, tribal enterprise and Whole Nation analysis. Cedar is included on every plan too. Upload PDFs, spreadsheets and CSVs (budgets, financial statements, payroll, program records) and Cedar interprets them, maps them into the model, assists with setup and interpretation and helps turn the results into reporting. The plans differ in team size and organizational memory: Sprout ($1,000 a year) is one user, Sapling ($2,500) adds Cedar Commons, the shared project workspace, for up to 10 users, and Tree ($7,500) adds unlimited users within one organization, Cedar Grove (the advanced data library, reused across future analyses and reporting) and hands-on Cedar calibration. Two more things worth knowing. Seed, the free account: create one, bring your documents, build an analysis end to end at no cost and see your direct effects; indirect, induced and total impact unlock on any paid plan.',
+      'More on what the plans include: Cedar and supported U.S. geographies are available across the plan family. Paid plans include unlimited projects and analyses. Sprout is for one user, Sapling adds Cedar Commons for up to 10 users, and Tree adds unlimited users within one organization, Cedar Grove and hands-on Cedar calibration. During private beta, request Seed access to build an analysis and view direct effects at no cost; indirect, induced and total impact and exports unlock on a paid plan.',
   },
   {
     id: 'payment_plans',
@@ -638,7 +638,7 @@ export const INTENTS: CedarIntent[] = [
       'pay across the year',
     ],
     answer:
-      'Lumecon plans are annual licenses: Sprout is $1,000 a year, Sapling $2,500 and Tree $7,500. At those price points the subscription usually fits a single budget line, which is why there is no separate monthly plan. If you want certainty before spending anything, Seed, the free account, lets you bring your documents, build an analysis end to end at no cost and see your direct effects; full results unlock on any paid plan. And if your procurement or fiscal calendar needs a specific billing arrangement, email contact@lumecon.ai and the team will work with your purchasing office.',
+      'Lumecon plans are annual licenses: Sprout is $1,000 a year, Sapling is $2,500 and Tree is $7,500. There is no separate monthly plan. During private beta, you can request Seed access to build an analysis and view direct effects at no cost; full results unlock on a paid plan. If your procurement or fiscal calendar requires a specific billing arrangement, email contact@lumecon.ai.',
     expanded:
       'A bit more context on cost timing: every plan includes unlimited projects and analyses, so the annual license replaces the per-analysis spending pattern where each new analysis was its own procurement. One line item covers the year. For purchase orders, invoicing or anything else your finance office needs, contact@lumecon.ai reaches the team directly.',
   },
@@ -693,9 +693,9 @@ export const INTENTS: CedarIntent[] = [
       'run the analysis for us',
     ],
     answer:
-      'There is no add-on catalog to buy through: every plan already includes the full Lumecon model, unlimited projects and analyses, every supported U.S. geography and Cedar. On the write-up itself, Cedar helps you turn results into reporting: it suggests structure, drafts starting points, edits with you and reshapes the framing for a council, a funder or a board, while the substance and local context come from you. The deliverables are editable starting points, so your team can carry them into your own template and branding before anything goes out. Lumecon deliberately does not sell finished analyses, and if you want a firm to run the whole engagement, consulting firms license Lumecon for exactly that kind of client work.',
+      'There is no add-on catalog to buy through: every plan includes Cedar and the supported U.S. geographies, and paid plans include unlimited projects and analyses. Cedar can suggest structure, draft starting points and edit with you, while the substance and local context come from your team. Lumecon does not sell finished analyses; Sapling and Tree permit client work if a consulting firm will run the engagement for you.',
     expanded:
-      'A little more on why it works this way. A traditional consulting analysis runs $50K to $150K because the consultant is doing the data work, the modeling, the writing and the design from scratch every time. Inside Lumecon the data structuring, source record and modeling are part of the subscription, and Cedar carries much of the remaining writing load with you: brainstorming structure, drafting, editing and tuning the framing per audience. Lumecon stays out of the finished-analysis business on purpose, since consulting firms are customers too and competing with them on deliverables would be a poor way to treat them. If your team truly wants the engagement handled end to end, a consulting firm working on Lumecon is the right path, and contact@lumecon.ai can point you there.',
+      'A consulting engagement combines data preparation, modeling, writing and design as a service. Lumecon puts data structuring, modeling and review tools inside the subscription, and Cedar can help with brainstorming, drafting and editing. Lumecon does not sell finished analyses; if your team wants an engagement handled end to end, a consulting firm using Lumecon may be the better fit.',
   },
   {
     id: 'consultant_plan',
@@ -727,9 +727,9 @@ export const INTENTS: CedarIntent[] = [
       'for outside organizations',
     ],
     answer:
-      "Yes. Consultants use the same public plans as everyone else; commercial use starts with Sapling at $2,500 a year. Cedar Commons doubles as client intake and project workspaces, with up to 10 seats you can reassign as engagements change, and Tree at $7,500 a year serves larger practices with unlimited organizational users, Cedar Grove, the advanced data library, and Cedar calibrated to your firm's analytical and reporting workflow. Your methodology, client relationships and deliverables stay your own, and Lumecon does not sell finished analyses, so you are never bidding against your own software vendor.",
+      'Yes. Consultants can use the public plans, with client work permitted starting on Sapling at $2,500 a year. Sapling includes Cedar Commons, the shared project workspace, for up to 10 users; Tree adds unlimited organizational users, Cedar Grove and hands-on Cedar calibration. Your methodology, client relationships and deliverables remain your own, and Lumecon does not sell finished analyses.',
     expanded:
-      "How the plans map to a practice: Sapling covers a firm running client engagements with a small team, keeping each client's work in its own shared project with project-scoped external collaborators when a client should see their own analysis. Tree removes the seat ceiling and adds Cedar Grove, the advanced data library, plus hands-on Cedar calibration to your firm's analysis and reporting conventions. White-label and higher-volume partner arrangements are scoped case by case; email contact@lumecon.ai with a short note on your practice and volume and the team will put a structure together.",
+      'For a small practice, Sapling provides shared projects, project notes, data collection and outside collaborators. Tree removes the organizational user limit and adds Cedar Grove plus hands-on Cedar calibration. White-label and higher-volume arrangements are not standard plan features; ask contact@lumecon.ai what is currently available.',
   },
   {
     id: 'demo',
@@ -786,9 +786,9 @@ export const INTENTS: CedarIntent[] = [
       'can i see it',
     ],
     answer:
-      'Happy to set one up, and you have two easy paths. Seed, the free account, is self-serve: create one, bring the documents you already have, build an analysis end to end at no cost and see your direct effects, with the full results unlocking on any paid plan. For a guided walkthrough, use the contact form on this site or contact@lumecon.ai with three things up front: who you are, the kind of impact you want to measure and any timeline you are working with. The demo runs in your geography against an analysis scenario relevant to your work, so that context pays off quickly. What kind of impact are you hoping to measure?',
+      'Happy to set one up. During private beta, request Seed access to build an analysis and view direct effects at no cost. For a guided walkthrough, use the contact form or email contact@lumecon.ai with who you are, the kind of impact you want to measure and any deadline you are working toward. What kind of impact are you hoping to measure?',
     expanded:
-      "What a guided demo looks like: tell us your geography and the kind of impact you want to show, and we run an analysis in your region against a relevant scenario, walking through how Cedar processes your documents, surfaces assumptions and helps you build the write-up. It's concrete; you see your own use case. Seed, the free account, means you never have to wait on a calendar slot either: sign up, upload what you have and build the analysis yourself for free, then unlock the full results on whichever paid plan fits. If there's a grant or council deadline, say so and we'll move to fit it.",
+      'For a guided demo, tell us your geography and the kind of impact you want to show. We can walk through the product against a relevant scenario and explain how Cedar assists with documents, assumptions and the write-up. Seed access opens in waves during the private beta, so request access if you also want to evaluate the workflow yourself.',
   },
   {
     id: 'contact',
@@ -917,9 +917,9 @@ export const INTENTS: CedarIntent[] = [
       'export api',
     ],
     answer:
-      'Lumecon is a modern web platform with support for structured data, guided workflows and organization-level use. For integrations, team access, uploads or API questions, the best next step is to contact the Lumecon team directly.',
+      'During private beta, integration and API support are deployment-specific. Lumecon supports guided uploads and organization-level workflows; contact the team to confirm the current integration, API and access options for your deployment.',
     expanded:
-      'A bit more detail: the platform is a modern cloud web application with single-tenant workspaces, role-based access and US-region hosting. Data comes in through guided uploads (PDFs, spreadsheets and CSVs) and Cedar structures it against the public sources the model uses. Access scales by plan: one user on Sprout, up to 10 on Sapling with Cedar Commons and unlimited users within one organization on Tree. For API access or a specific integration question, email contact@lumecon.ai and the team will walk through what is available now and what is planned.',
+      'A bit more detail: data comes in through guided uploads such as PDFs, spreadsheets and CSVs, and Cedar helps structure it against the sources used by the analysis. Access scales by plan: one user on Sprout, up to 10 on Sapling with Cedar Commons and unlimited users within one organization on Tree. Hosting, security, API and integration capabilities should be confirmed with the team for the deployment you are considering.',
   },
   {
     id: 'security',
@@ -951,9 +951,9 @@ export const INTENTS: CedarIntent[] = [
       'government data',
     ],
     answer:
-      'Lumecon is built so each organization gets a single-tenant workspace with encryption in transit and at rest, role-based access controls and US-region cloud. The team handled PII and sensitive government data at the Federal Reserve Banks of Minneapolis and Philadelphia and at the Federal Reserve Board, so production-grade data handling is not a learning curve for us. For tribal data, the approach is designed so your data stays your data, every assumption is shown, and your records are not used to train a shared model. We are happy to confirm the specifics before anything sensitive moves.',
+      'Lumecon is formalizing controls for access management, data protection, vendor oversight, incident response and recovery. Its security program is being developed against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. Lumecon has not completed a SOC 2 examination and does not currently have a SOC 2 report. Review the current controls, hosting, retention, subprocessors and AI-provider terms before sensitive records move.',
     expanded:
-      "More specifics: workspaces are single-tenant, so your records never share a database with another customer's. Encryption applies in transit and at rest, access is role-based and you control who is on the account. Your raw records are not used to train a shared model; cross-analysis learning runs only on anonymized, aggregated signals. The team's background includes handling PII and sensitive government data at the Federal Reserve. For a security questionnaire, a data-processing agreement or a council review, email contact@lumecon.ai and the specifics get confirmed in writing before anything sensitive moves.",
+      'Security requirements vary by organization and deployment. Ask the team to confirm the current architecture, hosting region, encryption, access controls, subprocessors, retention and AI data-use terms in writing before you upload sensitive records. For a security questionnaire, procurement review or council review, email contact@lumecon.ai.',
   },
   {
     id: 'accuracy',
@@ -1000,9 +1000,9 @@ export const INTENTS: CedarIntent[] = [
       'stand up to our board',
     ],
     answer:
-      'Three things are designed to keep the numbers defensible. The direct, indirect, induced and total figures are calibrated and benchmarked as we built, so they line up with what a reviewer familiar with the established tools would expect. Cedar pulls from your actual data and the source record rather than guessing. And every assumption (the multiplier, the base year, the scaling) is shown and citable, so a reviewer can trace any number back to where it came from.',
+      'Lumecon is designed to make review possible: it uses an established input-output framework, Cedar works from the analysis records and available source material, and the product presents key inputs and modeling assumptions with the result. Reviewers should still examine the data, scope and assumptions before relying on an estimate.',
     expanded:
-      "More on how this stays defensible: the source of each number is tracked row by row, so when an analysis cites a BEA multiplier for NAICS 23 in your county, you can click through to the source table and the year it is from. Assumptions are versioned with the analysis, so changing the regional purchase coefficient preserves the prior run. Cedar's reasoning steps are logged alongside the numbers, so if anyone asks why we picked a particular industry bridge or wage assumption, the answer is in the report, not in someone's email. We would rather a reviewer challenge a specific number than wave away the whole approach, so the methodology behind any figure is available for review. Inside the product that lineage surfaces as Trace this number, and the full methodology write-up is public at /methodology.",
+      'A careful review starts with the analysis scope, source years, industry mappings and model assumptions. Lumecon is designed to present key inputs and assumptions with the result, and the public methodology explains the economic framework. Cedar can help explain that material, but its prose is not a substitute for reviewing the underlying data and model choices.',
   },
   {
     id: 'calculate_now',
@@ -1064,9 +1064,9 @@ export const INTENTS: CedarIntent[] = [
       'why you',
     ],
     answer:
-      'Same underlying economics to start: input-output modeling on the standard public accounts (BEA, Census, BLS) that every serious model leans on. To a point that part is the same everywhere, and our multipliers are derived from those public accounts, regionalized to your geography and calibrated as we built, not numbers we invent. Where Lumecon diverges is what we add on top: novel alternative and high-frequency data, federated learning across analyses and modern econometric and machine-learning methods layered on the input-output core. We are not frozen in 1930s-era input-output, because the economy moves fast and the tools should keep up. Are you comparing us against a specific tool?',
+      'Lumecon starts with established input-output methods and public economic data. Its differences are in the product around that foundation: public flat annual pricing, a guided workflow with Cedar, supported geographies that include reservations and trust lands, and a focus on traceable inputs and assumptions. Are you comparing us with a specific tool?',
     expanded:
-      "Concretely, what's different: pricing structure (flat annual vs. per-geography per-user per-tier), workflow (Cedar harmonizes inputs in minutes rather than analysts hand-cleaning for weeks), geographies (reservations, off-reservation trust land, Alaska Native regional corporations, Native Hawaiian Home Lands all fully supported, not edge cases), data freshness (high-frequency public feeds plus our own signals layered on the same BEA accounts) and clear assumptions (every one surfaced and citable). What's the same is the starting point: the input-output foundation and the public accounts everyone builds on. We calibrated and benchmarked as we built, so a reviewer familiar with the legacy tools recognizes the numbers, and from there we extend with modern econometric and machine-learning methods and higher-frequency data.",
+      'Concretely, Lumecon combines its input-output model with document intake, industry and geography mapping, assumption review, results and export workflows in one web product. Paid plans use flat annual pricing rather than per-analysis or per-geography charges. The public methodology explains the model and its data sources so you can compare the approach with another tool on specifics.',
   },
   {
     id: 'explain_simple',
@@ -1104,7 +1104,7 @@ export const INTENTS: CedarIntent[] = [
       'normal words',
     ],
     answer:
-      "Picture a new community college campus opening. The construction crew gets paid (direct). Those workers buy lunch nearby, and the campus orders supplies from a regional vendor (indirect). The vendor pays its staff, who spend on rent, groceries, kids' soccer, the dentist (induced). Add all that up and you have the total economic impact: the campus, plus the ripple. That's the story Lumecon tells, with the math defensible and every assumption visible.",
+      'Picture a new community college campus opening. The construction activity is direct. Purchases from regional suppliers are indirect. Spending by workers supported through those activities is induced. For any one measure, the three layers add to total impact. Lumecon presents the relevant inputs and assumptions alongside the estimate.',
   },
   {
     id: 'geographies',
@@ -1127,9 +1127,9 @@ export const INTENTS: CedarIntent[] = [
       'reservation level',
     ],
     answer:
-      'Every plan includes every supported U.S. geography: counties, states, the nation, reservations and trust lands. That means every U.S. county, every state, the nation as a whole, and reservations and trust lands across the country. Multi-region and overlapping-geography analyses work the same way, so a project that crosses three counties or sits on a reservation that overlaps two counties is still one analysis rather than three. There is no per-geography charge on any plan.',
+      'Every plan includes the supported U.S. geographies: counties, states, the nation, reservations and trust lands, with no per-geography charge. If your analysis spans multiple or overlapping regions, share the exact boundary with the team so they can confirm how it should be represented.',
     expanded:
-      'Going deeper: the supported geographies are counties, states, the nation, reservations and trust lands, and every plan gets all of them. Overlap is handled the way analysts need it: a reservation crossing two counties, a service area spanning three counties or a statewide program is still a single analysis. Historical analysis runs from 2015 to the present where the underlying data support it, so a geography can be tracked over time as well as at a point in time, and comparing regions side by side costs nothing extra.',
+      'Going deeper: counties, states, the nation, reservations and trust lands are included across the plan family. Historical analysis runs from 2015 to the present where the underlying data support it. Multi-region, custom-boundary and overlap questions should be confirmed against the geography and data available for that analysis.',
   },
   {
     id: 'historical_forward',
@@ -1170,7 +1170,7 @@ export const INTENTS: CedarIntent[] = [
       'pro forma projection',
     ],
     answer:
-      'Lumecon supports both directions. Historical analysis runs from 2015 to the present where the underlying data support it, so you can tell the story of what has already happened through annual impact reports and longitudinal analyses. You can also model forward to plan a budget, grant ask or capital project. The same data and methodology work either way and only the framing changes, and analyses sharpen over time as more of your data accumulates in the workspace.',
+      'Historical analysis runs from 2015 to the present where the underlying data support it. For a future project, you can model a stated spending or employment scenario, but the result is a conditional impact estimate rather than a forecast. Keep the period, inputs and assumptions explicit so readers know which kind of analysis they are seeing.',
   },
   {
     id: 'where_built',
@@ -1293,9 +1293,9 @@ export const INTENTS: CedarIntent[] = [
       'national objective',
     ],
     answer:
-      'Grant applications are one of the most common uses of Lumecon. Most federal and state grant programs (EDA, HUD CDBG, DOT BUILD, USDA Rural Development, EPA, NTIA broadband and ARC) want applicants to estimate jobs, private investment or regional benefit with a credible source behind the numbers. Lumecon produces the jobs, labor income and tax-impact figures with the methodology attached, so the same analysis drops into the grant narrative, the council packet and the board memo without any rework. Which grant program are you aiming at?',
+      'Grant preparation is a strong use case when a program asks for economic activity, jobs, labor income, GDP contribution, economic output or tax impacts. Requirements vary by program, so the notice of funding should control the scope. Lumecon can produce the economic-impact estimates and paid exports; your team carries the relevant figures and methodology into the application. Which grant program are you aiming at?',
     expanded:
-      'More on grants: most programs want a credible, sourced estimate of jobs, private investment or regional benefit, and Lumecon produces exactly that with the methodology attached so a reviewer can trace the headline figures. EDA wants jobs and leveraged private investment; HUD CDBG wants low-to-moderate-income benefit; DOT BUILD/RAISE wants benefit-cost framing; USDA Rural Development and NTIA broadband want jobs and output; ARC wants distress-area impact. The same analysis exports to the narrative, the budget justification and the council packet, so you build the numbers once instead of rebuilding them per reviewer.',
+      'Start with the program notice: an EDA, HUD, DOT, USDA, EPA, NTIA or ARC application can ask for different evidence, eligibility tests or benefit-cost work. Lumecon focuses on economic impact analysis, not eligibility, benefit-cost analysis or submission. Paid exports provide an Excel workbook, CSV tables and a printable summary that your team can use while preparing the required materials.',
   },
   {
     id: 'time_to_study',
@@ -1340,9 +1340,9 @@ export const INTENTS: CedarIntent[] = [
       'is it quick',
     ],
     answer:
-      'A standard analysis takes minutes once the data is in. The legacy path takes months because the analyst is harmonizing data by hand and re-running scenarios from scratch every time, while Cedar does the harmonization in minutes so the slow part becomes the judgment calls (which assumptions to surface, which scenario to model) rather than the spreadsheet work. Are you working against a deadline?',
+      'Turnaround depends on the completeness of the source records, the analysis scope and the review decisions your team needs to make. Once inputs and assumptions are ready, the model can run and be revised in the product without starting a new engagement. Are you working against a deadline?',
     expanded:
-      "Why it takes minutes instead of months: the legacy timeline is dominated by an analyst hand-cleaning data and re-keying it into a tool whose workflow predates the internet, then re-running from scratch for each scenario. Cedar harmonizes and pre-fits the model the moment your data lands, so the only human time left is judgment: which assumptions to surface, which scenario to model, what to override. The first defensible analysis comes back the same session the data's in; revisions are a re-run rather than a new engagement. Against a council vote or grant deadline, that's the difference between making it and missing it.",
+      'The workflow is designed to reduce repetitive data preparation and make revisions easier, but a defensible timeline still depends on data quality and human review. Share the geography, source records, analysis type and deadline with the team for a realistic estimate.',
   },
   {
     id: 'no_economist',
@@ -1370,7 +1370,7 @@ export const INTENTS: CedarIntent[] = [
       'no expertise',
     ],
     answer:
-      "You don't need one. Most organizations using Lumecon don't have an economist on staff, and that's exactly who the platform is built for. Cedar walks you through the data, picks defaults that match the geography and project type and flags every assumption in plain English before the analysis is finalized. Your team makes the judgment calls; the platform handles the modeling. For unusual or methodology-sensitive projects, the Lumecon team is one email away.",
+      "Lumecon is designed for teams with or without an economist on staff. Cedar guides data intake, suggests mappings and presents key assumptions for review, while your team supplies the context and approves the inputs. Methodology-sensitive projects may still benefit from an economist's review, and the Lumecon team is available to help scope that need.",
   },
   {
     id: 'state_agency_use',
@@ -1404,9 +1404,9 @@ export const INTENTS: CedarIntent[] = [
       'budget defense',
     ],
     answer:
-      'State DOTs, departments of commerce, workforce boards, treasury offices and health departments use Lumecon to justify capital programs, score grant rounds, defend budget asks at the legislature and produce annual impact reports. Typical artifacts: a defensible jobs / labor income / GDP figure for a capital plan, a multi-year impact narrative for a workforce program, a regional benefit comparison across counties for a competitive grant. Same model, different reports. Which agency are you with?',
+      'A state agency can use Lumecon to analyze the economic activity associated with a capital program, workforce initiative, grant scenario or other public investment. The standard results include jobs supported, labor income, GDP contribution, economic output and tax impacts on paid plans. Your team can use the exports while preparing legislative, budget or grant materials. Which agency are you with?',
     expanded:
-      'By agency: a state DOT models capital-program and corridor impact for the legislature and federal applications; a department of commerce scores grant rounds and incentive deals on equal footing; a workforce board shows the multi-year return on training programs; a treasury or budget office defends appropriations with jobs and GDP figures; a health department sizes the economic footprint of facilities and programs. Each gets the same direct, indirect, induced and total figures with the assumption ledger attached, reshaped into the artifact that office actually presents.',
+      'Possible scopes include a DOT capital program, a commerce department project comparison, a workforce program, an appropriation scenario or the footprint of a public facility. Lumecon estimates economic activity; it does not by itself score policy merit, prove return on investment or generate an agency submission.',
   },
   {
     id: 'county_city_use',
@@ -1435,9 +1435,9 @@ export const INTENTS: CedarIntent[] = [
       'annual community impact',
     ],
     answer:
-      'Cities and counties use Lumecon for capital project justification (fire station, library, transit line, parks), TIF and tax-abatement evaluation, school-district bond communication, business-attraction packages and annual community impact reports. EDOs especially use it to compare projects on equal footing and to put concrete numbers behind a recruitment pitch or an incentive ask, the kind of analysis that used to require an outside consultant per project. Are you on the city or county side?',
+      'Cities and counties can use Lumecon to analyze capital projects such as a fire station, library, transit line or park, as well as TIF, tax-abatement, business-attraction and annual-impact scenarios. The model estimates associated economic activity; it does not decide whether an incentive or project is good policy. Are you on the city or county side?',
     expanded:
-      'In practice for cities and counties: the common analyses are capital-project justification (a fire station, library, transit line or parks bond), TIF and tax-abatement evaluation, business-attraction and incentive analysis and the annual community impact report. Economic development offices use it to compare projects on equal footing and to put a defensible number behind a recruitment pitch. The output reshapes for the audience (council resolution, voter pamphlet, rating-agency deck) off one run, so the analysis that used to mean a consultant per project now lives in your workspace.',
+      'A consistent model can help a local-government team compare scenarios on the same basis. Paid exports provide an Excel workbook, CSV tables and a printable summary; the team remains responsible for turning those results into a council resolution, public communication or rating-agency material.',
   },
   {
     id: 'foundation_use',
@@ -1471,7 +1471,7 @@ export const INTENTS: CedarIntent[] = [
       'show our board',
     ],
     answer:
-      'Foundations and community grantmakers use Lumecon to show donors and boards what their dollars actually moved: jobs supported, wages generated, local business activity, regional ripple effects. The annual report stops reading as anecdote and starts reading as evidence. Community foundations especially use it for place-based portfolios: the dollars invested in a county or a neighborhood, with the economic ripple measured the same way every year.',
+      'A foundation or community grantmaker can use Lumecon to estimate the economic activity associated with a program, grant portfolio or place-based investment. Results can include jobs supported, labor income, GDP contribution and economic output, while the report should avoid claiming that the analysis proves broader social outcomes or causal attribution.',
   },
   {
     id: 'bond_measure',
@@ -1492,7 +1492,7 @@ export const INTENTS: CedarIntent[] = [
       'transit bond',
     ],
     answer:
-      'School districts, transit agencies, parks departments and municipalities use Lumecon to translate a bond program into the local economic impact that voters and oversight boards can recognize, including construction jobs, multi-year labor income, supplier spend kept in-region and operating impact once the asset is in service. The output drops into voter information pamphlets, council resolutions and rating-agency conversations and the same analysis supports the rating-agency presentation and the community town hall.',
+      'A school district, transit agency, parks department or municipality can model the economic activity associated with a bond-funded construction or operating scenario. Lumecon provides economic-impact results and paid exports; it does not generate voter information, a council resolution or a rating opinion, and your team should keep campaign and disclosure rules separate from the analysis.',
   },
   {
     id: 'compare_implan_workflow',
@@ -1533,9 +1533,9 @@ export const INTENTS: CedarIntent[] = [
       'how all this work',
     ],
     answer:
-      "On the legacy path, a consultant or analyst opens the existing platforms (software whose workflow predates the internet), hand-cleans the data, picks the multipliers, writes the report and comes back months later. On the Lumecon path, you drop your administrative data into the workspace, Cedar harmonizes and pre-fits the model, you review the assumptions Cedar surfaces (with direct, indirect, induced and total impact calibrated and benchmarked as we built), approve or adjust each one and export the report. The economist's judgment stays in the loop, but the data wrangling and re-runs do not, so what used to take months takes minutes.",
+      'In Lumecon, you bring administrative records into the workspace, Cedar helps structure them, and your team reviews the proposed mappings and assumptions before running the model. Results and revisions stay with the project, and paid plans provide exports for further reporting. The workflow supports economic judgment without claiming to replace it.',
     expanded:
-      "Step by step in the Lumecon workflow: (1) upload the records you already have (budgets, payroll, vendor lists, program data). (2) Cedar matches them against NAICS codes, geographies, time periods and surfaces anything ambiguous for you to confirm. (3) Cedar pre-fits the impact model with defaults tuned to your geography and project type, and lists every assumption inline. (4) Your team reviews, adjusts and approves. (5) Run the analysis; numbers come back in minutes with every assumption shown. (6) Cedar helps you write up the results as a thought partner, brainstorming structure and tuning the framing for each audience while you bring the local context, then you export the deliverables (report PDF, Excel workbook, CSV tables). The judgment calls that used to live in a senior analyst's head are now visible in the report.",
+      'Bring records such as budgets, payroll, vendor lists and program data into the workspace, then review the suggested NAICS, geography and time-period mappings alongside the assumptions presented for the analysis. After the model runs, Cedar can help explain the results. Paid exports include an Excel workbook, CSV tables and a printable summary. Your team remains responsible for the context and judgment behind the analysis.',
   },
   {
     id: 'roi_lumecon',
@@ -1576,9 +1576,9 @@ export const INTENTS: CedarIntent[] = [
       'vendor consolidation',
     ],
     answer:
-      "A single legacy impact analysis is commonly cited in the $50K to $150K range and ships months later. Lumecon starts at $1,000 a year and tops out at $7,500 for unlimited users in one organization, with unlimited projects and analyses across every supported geography on every plan. The legacy price tag is what a workflow looks like after fifty years of the same software owning the category; it's not a measure of how hard the work actually is. The math is mainstream economics; the BEA accounts behind it are public and free. In practice one subscription year costs a small fraction of a single legacy analysis and covers as many analyses as your team can run.",
+      "Lumecon's paid plans range from $1,000 a year for one user to $7,500 a year for unlimited users within one organization. Paid plans include unlimited projects and analyses across supported geographies. Consulting and software alternatives vary widely in scope and price, so the best comparison is your own quote or current license against the plan features on the pricing page.",
     expanded:
-      'To make the comparison concrete: at Sprout ($1,000 a year) one analysis already costs a small fraction of the commonly cited $50K to $150K legacy engagement, and every additional analysis that year is included. An organization that runs an annual impact analysis, two grant narratives and a council update in the same subscription year has produced four deliverables on one flat price. Your own past quotes are the best benchmark: bring one and the team will walk the numbers with you.',
+      'Sprout is $1,000 a year for one user, Sapling is $2,500 for up to 10 users and Tree is $7,500 for unlimited users within one organization. Because paid plans include unlimited projects and analyses, your expected volume matters when comparing costs. Bring a current quote or license and the team can compare the included capabilities directly.',
   },
   {
     id: 'data_residency',
@@ -1603,7 +1603,7 @@ export const INTENTS: CedarIntent[] = [
       'what region',
     ],
     answer:
-      "Lumecon runs on US-region cloud, with a single-tenant workspace per organization, encryption in transit and at rest, and role-based access controls. For organizations with sensitive procurement or compliance requirements (FedRAMP, HIPAA-adjacent, state PIIA, tribal data sovereignty), we'll walk through the specifics before any data leaves your environment. If you need a specific compliance posture or region, say so up front and we'll tell you whether it's something we already cover or something we'll need to scope.",
+      'Hosting region and deployment terms matter for many organizations. Tell the team your data-residency, security and compliance requirements, and they will confirm the current environment and any contract-specific commitments in writing before sensitive data moves.',
   },
   {
     id: 'onboarding',
@@ -1624,9 +1624,9 @@ export const INTENTS: CedarIntent[] = [
       'training',
     ],
     answer:
-      "Short kick-off call to scope the first analysis, then your team uploads the data you already have (budgets, payroll, program records, vendor lists). Cedar walks you through harmonization and surfaces every assumption before the first analysis runs. First defensible analysis comes back in minutes once the data's in. We usually do the first one alongside you so you see how the workspace handles your data, then your team takes the reins.",
+      'Onboarding starts by scoping the first analysis and uploading the records you already have, such as budgets, payroll, program records and vendor lists. Cedar guides the intake and presents key mappings and assumptions for review before the model runs. Timing depends on the completeness of the records and the review your team needs.',
     expanded:
-      'A typical first month: week one is the kick-off call and your initial uploads (budgets, payroll, program records, vendor lists in whatever shape they are in). Cedar harmonizes those against the public sources and lists every assumption for sign-off, which is where the human judgment happens. The first analysis usually runs within the first week or two, and we sit alongside your team for it. After that, refreshes are routine: update the data and rerun; the analysis reflects current conditions.',
+      'A typical onboarding covers the analysis scope, source records, proposed mappings and assumptions before the first run. The team can support the initial analysis, and later revisions reuse the saved project rather than starting from a blank file. Ask for a timing estimate based on your data and deadline.',
   },
   {
     id: 'effects_explained',
@@ -1650,9 +1650,9 @@ export const INTENTS: CedarIntent[] = [
       'counted twice',
     ],
     answer:
-      "Every analysis reports the same four numbers. Direct: the spending and jobs of the project itself. Indirect: the activity at the suppliers it buys from. Induced: the spending of all those workers' wages back into the local economy. Total impact is the three added together. Lumecon shows each layer separately so a reviewer can see exactly where the headline number comes from.",
+      'Paid results show direct, indirect, induced and total effects for measures such as jobs supported, labor income, GDP contribution and economic output; Seed shows direct effects only. Direct is the activity entered for the project or organization. Indirect is associated supplier activity. Induced is associated household spending. For any one measure, total is the three layers added together.',
     expanded:
-      "Why the split matters: a skeptical reviewer almost always asks 'how much of this is real and local?' Reporting direct, indirect and induced separately answers that on its face. Direct is hard to argue with (it's your actual spending and payroll). Indirect and induced are where multipliers and regional purchase coefficients do the work, deciding how much of each dollar stays in-region versus leaks out. Because Lumecon surfaces the assumption behind each layer, you can defend the total one component at a time instead of asking the room to trust a single black-box figure.",
+      'The split matters because direct inputs and modeled ripple effects are different kinds of evidence. Indirect and induced estimates depend on industry relationships, regional purchase coefficients and other assumptions. Presenting the layers separately lets a reviewer examine those differences rather than treating total impact as one unexplained figure.',
   },
   {
     id: 'alternative_data',
@@ -1673,7 +1673,7 @@ export const INTENTS: CedarIntent[] = [
       'web scraped',
     ],
     answer:
-      'Yes. Alongside the official sources every serious model uses (ACS, BEA, LODES, QCEW, County Business Patterns), Lumecon layers in alternative data: higher-frequency public feeds, anonymized mobility, satellite land use, USASpending and the regional Fed banks, plus our own signals built in-house and refined through federated learning as analyses accumulate. We also bring modern econometric and machine-learning methods to the input-output core, so an analysis can track a fast-moving economy between the slow official releases. We use the extra data and methods only where they measurably improve the estimate.',
+      'Lumecon currently builds its modeling foundation from documented public sources such as ACS, BEA regional accounts, LODES, QCEW and County Business Patterns, together with the records an organization provides. Additional datasets should be treated as part of an analysis only when they are listed in the methodology or Cedar Grove catalog with a defined role, geography and release date.',
   },
   {
     id: 'cedar_grove',
@@ -1690,7 +1690,7 @@ export const INTENTS: CedarIntent[] = [
       'data lake',
     ],
     answer:
-      "Cedar Grove is the advanced data library, and it comes with the Tree plan. It is your organization's persistent memory: the documents and datasets your team brings in stay organized in your workspace, integrated with Lumecon and reusable across every future analysis and report. Recurring work like annual impact reports, federal grant cycles and audited filings can start from a base your reviewers have already seen instead of from a blank file. Tree pairs Cedar Grove with hands-on Cedar calibration, so Cedar learns your organization's terminology, workflows and recurring reporting.",
+      "Cedar Grove is the advanced data library: harmonized public data alongside Lumecon's proprietary datasets as they are released. It is sold separately for $2,500 a year with unlimited organizational users and is included with Tree. Tree also includes hands-on Cedar calibration to your organization's terminology and workflows.",
   },
   {
     id: 'ai_vs_chatgpt',
@@ -1713,9 +1713,9 @@ export const INTENTS: CedarIntent[] = [
       'is cedar generative',
     ],
     answer:
-      'No. Cedar is trained and tailored on established economic data and a curated library of analyses and reference materials, with your own past analyses folded in as your workspace grows, so it answers from real sources rather than free-typing like a general chatbot. It does the data wrangling and surfaces every assumption for your sign-off; it does not invent the numbers. The economic math starts from mainstream input-output modeling and extends it with modern econometric and machine-learning methods, calibrated as we built, and a person approves each assumption before an analysis ships. The AI speeds the work without taking over the judgment.',
+      'Cedar is Lumecon’s AI economic analyst, not the economic model itself. It helps organize records, suggest mappings, present assumptions and draft explanations. Calculated impact figures come from the input-output model rather than a chatbot response, and users review the inputs and assumptions before finalizing an analysis.',
     expanded:
-      "The distinction in practice: a general chatbot generates plausible text and can confidently state a wrong number. Cedar is constrained to retrieve from established public data tables and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows), then map them into the model, so its outputs trace back to a source row rather than a guess. Anything ambiguous (an unclear vendor, an industry code that could go two ways) is flagged for a human to confirm rather than silently resolved. And the final figures aren't Cedar's opinion; they're the input-output model's output, calibrated and benchmarked as we built. The AI works as a fast, careful research assistant; your impact number comes from the model.",
+      "Like any generative AI system, Cedar can be wrong. It is designed to work from the analysis context and available reference material, flag ambiguous items for review and keep generated prose separate from the model's calculated results. Users remain responsible for confirming mappings, assumptions and final language.",
   },
   {
     id: 'sectors_industries',
@@ -1736,7 +1736,7 @@ export const INTENTS: CedarIntent[] = [
       'which industries',
     ],
     answer:
-      'All of them. The model is built on the full BEA / NAICS industry structure, so any sector your spending touches (construction, healthcare, manufacturing, retail, education, agriculture, gaming, tourism, energy, public administration) maps to the right multipliers. Cedar matches your records to the correct industry codes for you and flags anything ambiguous to confirm.',
+      'Lumecon works across the two-digit NAICS sectors shown on the industry-sectors page, including construction, healthcare, manufacturing, retail, education, agriculture, tourism, energy and public administration. Cedar suggests industry mappings and flags ambiguous records for review.',
   },
   {
     id: 'examples',
@@ -1766,9 +1766,9 @@ export const INTENTS: CedarIntent[] = [
       'live example',
     ],
     answer:
-      'The fastest way to see Lumecon is to try it: create a free account, bring your documents and build an analysis end to end. Full results unlock on any paid plan. For a walkthrough with numbers close to your use case, the team is one email away.',
+      'During private beta, request Seed access to bring your documents, build an analysis and view direct effects at no cost. Full results unlock on a paid plan. For a walkthrough using a scenario close to your use case, contact the team.',
     expanded:
-      "More on the example numbers: the map's figures come from live model runs over public data, so they demonstrate the real mechanics (direct, indirect, induced and total impact, jobs and labor income) rather than mocked-up screenshots. They are labelled illustrative because a real analysis starts from your records: your payroll, spending and programs change the inputs, and the result is specific to your organization. If you want the workflow against a scenario close to yours, ask for a demo and the team will run one in your geography.",
+      'The website examples are fictional, illustrative scenarios rather than customer results. They show the shape of direct, indirect, induced and total results, but they are not a substitute for running the model with your records and geography. Ask the team for a guided walkthrough if you want to discuss a comparable scenario.',
   },
   {
     id: 'team_access',
@@ -1820,9 +1820,9 @@ export const INTENTS: CedarIntent[] = [
       'will you sell our data',
     ],
     answer:
-      "Yes. Indigenous data sovereignty has been a design priority in Lumecon from the start. Your data stays yours: a single-tenant workspace, you control what's uploaded and shared, and we do not sell, syndicate or use your raw records to train models. Cross-analysis learning runs only on anonymized, aggregated signals. For specific governance frameworks (CARE, OCAP) or council requirements, we'll walk through the specifics before any data moves.",
+      'Indigenous data governance is a design priority. You retain ownership of content you provide and decide what to share; Lumecon processes that content to operate and support the service under the applicable terms. We do not sell personal information. Requirements under CARE, OCAP or a council policy should be reviewed and documented for the engagement before sensitive data moves.',
     expanded:
-      'Going deeper on governance: you decide what is uploaded, what stays internal and what appears in any shared output. Nothing you upload is sold, syndicated or used to train shared models, and cross-analysis learning runs only on anonymized, aggregated signals. The platform is built to line up with CARE and OCAP-style principles, and the team will put the specifics in writing for a council or data-governance review before any records move. Sovereignty language in a contract is treated as a normal part of working together.',
+      'Going deeper on governance: your organization decides what to upload and what to include in shared outputs. Specific commitments about model training, retention, deletion, subprocessors, publicity and governance frameworks depend on the finalized contract and deployment. The team welcomes a council or data-governance review before records move.',
   },
   {
     id: 'jobs_employment',
@@ -1847,7 +1847,7 @@ export const INTENTS: CedarIntent[] = [
       'how many positions',
     ],
     answer:
-      'Jobs are usually the headline. Every analysis breaks employment into direct, indirect and induced jobs plus the total, alongside labor income (wages) and economic output, so you can say not just how many jobs but where they land and what they pay. Jobs are reported as jobs supported, with annual labor income and tax impacts alongside, each with the multiplier and base year behind it citable in the report. Want the breakdown of how those job numbers are built, or which grant programs ask for them?',
+      'Paid results report jobs supported across the direct, indirect and induced layers and in total, alongside labor income, GDP contribution, economic output and tax impacts. The analysis should state whether employment represents annual jobs, average annual employment or job-years. Want the breakdown of how those job estimates are built?',
     expanded:
       'How the job numbers are built: direct jobs are the positions the project funds outright (construction crews, operating staff); indirect jobs sit at the suppliers those dollars flow to; induced jobs come from workers spending wages locally: the grocery clerk, the dentist, the landlord. Each layer is driven by industry-specific employment multipliers and the regional purchase coefficients that estimate how much stays in-region, so a labor-intensive program shows more jobs per dollar than a capital-heavy one. We report jobs supported with annual labor income alongside, so the employment story carries the earnings behind it.',
   },
@@ -1882,9 +1882,9 @@ export const INTENTS: CedarIntent[] = [
       'student spend',
     ],
     answer:
-      "Universities and colleges use Lumecon to size the community ripple of operations, research, construction and student and visitor spending, the number a president cites to the legislature, a board or the town. It separates the campus's direct footprint (payroll, procurement, capital projects) from the indirect and induced activity it drives across the region, so the figure holds up when a skeptic asks how much is really local. Are you looking at operations, a capital project or the whole institution?",
+      'A university or college can use Lumecon to estimate the economic activity associated with operations, research expenditures, construction, or student and visitor spending. The analysis separates direct activity from indirect and induced effects within the selected region. Are you looking at operations, a capital project or the whole institution?',
     expanded:
-      'For higher ed specifically: operating impact covers payroll, local procurement and facilities; research impact covers grant-funded activity and spinoffs; construction impact covers capital projects year by year; and student and visitor spending captures off-campus housing, retail and events. Each rolls up to a total regional impact with jobs and labor income, for one campus or a whole system. The same analysis reshapes for an accreditation report, a legislative ask, a bond or a town-gown briefing: one analysis serving several audiences.',
+      'Possible higher-education inputs include payroll, procurement, facilities, sponsored-research spending, capital projects and documented student or visitor spending. Spinoffs, technology transfer and other outcomes need their own inputs and careful attribution. Paid exports can support an institutional report, legislative briefing or town-gown discussion, but Lumecon does not generate those submissions.',
   },
   {
     id: 'nonprofit_use',
@@ -1907,9 +1907,9 @@ export const INTENTS: CedarIntent[] = [
       'donor report',
     ],
     answer:
-      'Nonprofits, community development financial institutions (CDFIs) and mission-driven organizations use Lumecon to turn program and portfolio activity into economic evidence donors, boards and funders recognize: jobs supported, wages generated and local business activity, measured the same way each year. For CDFIs especially, it sizes the place-based impact of a lending portfolio across a county or neighborhood. It moves the annual report from anecdote to a defensible number. Is this for a program, a grant or a donor report?',
+      'A nonprofit, community development financial institution or mission-driven organization can use Lumecon to estimate the economic activity associated with a program, grant portfolio, lending portfolio or vendor spending. The results can support a board, funder or donor narrative without substituting for outcome measurement or causal evaluation. Is this for a program, grant or donor report?',
     expanded:
-      'For nonprofits and CDFIs: bring program budgets, grant disbursements, loan portfolios or vendor spend, and Cedar maps them to the regional model so impact reads in jobs, labor income and output rather than just dollars out the door. CDFIs use it to show the ripple of a lending portfolio for CDFI Fund reporting and investor decks; foundations and direct-service nonprofits use it for annual reports, major-donor asks and grant applications. Because the methodology is attached, the number survives a skeptical board or a federal reviewer.',
+      'Bring program budgets, grant disbursements, loan portfolios or vendor spending, and Cedar can help suggest how those records map to industries and geographies for your review. Lumecon estimates economic activity; it does not complete CDFI Fund filings, measure every program outcome or guarantee that a reviewer will accept the result.',
   },
   {
     id: 'global_platform',
@@ -1962,7 +1962,7 @@ export const INTENTS: CedarIntent[] = [
       'indian country geography',
     ],
     answer:
-      'Trust land is a fully supported geography in Lumecon. Reservation land, off-reservation trust parcels, restricted-fee and allotted land, Alaska Native Regional and Village Corporation lands and Native Hawaiian Home Lands are all modeled directly, so an analysis reflects where activity actually happens instead of being flattened into a surrounding county. If your lands are checkerboarded across county lines, the analysis still treats them as one geography. Want to walk through your specific land base with the team?',
+      'Reservations and trust lands are supported geography categories in Lumecon. Because legal status and boundary data can be complex, confirm coverage for off-reservation trust parcels, restricted-fee land, allotments or a checkerboarded land base with the team before setting the analysis boundary. Want to walk through your specific geography?',
     followUps: ['indian_country', 'checkerboarding', 'tribal_platform'],
   },
 
@@ -1988,7 +1988,7 @@ export const INTENTS: CedarIntent[] = [
       'dependent indian communities',
     ],
     answer:
-      'Indian Country is a precise legal term. Federal law (18 U.S.C. § 1151) defines it as three kinds of land: all land within the limits of any Indian reservation, including rights-of-way; all dependent Indian communities; and all Indian allotments whose Indian titles have not been extinguished. The definition draws real lines: which government has jurisdiction, which federal rules apply and where a tribal economy’s analysis boundary should sit. Lumecon models these geographies directly instead of flattening them into a surrounding county.',
+      'Indian Country is a precise legal term. Federal law (18 U.S.C. § 1151) defines it as three kinds of land: all land within the limits of any Indian reservation, including rights-of-way; all dependent Indian communities; and all Indian allotments whose Indian titles have not been extinguished. The definition affects jurisdiction and can inform an analysis boundary. Lumecon supports reservations and trust lands; confirm how a specific legal boundary should be represented before running an analysis.',
     expanded:
       '"Dependent Indian communities" covers land set aside for a tribe under federal superintendence even without formal reservation status; the New Mexico pueblos are the classic example. Allotments are the parcels left over from the allotment era (ask me about checkerboarding for that story). Reservation boundaries are also durable: in McGirt v. Oklahoma (2020) the Supreme Court affirmed that a reservation persists until Congress explicitly disestablishes it. One caution for grant work: Indian Country is a jurisdictional definition, and individual federal programs can define eligible land their own way, so check the program statute when funding is on the line.',
     followUps: ['checkerboarding', 'tribal_sovereignty', 'tribal_platform'],
@@ -2007,9 +2007,9 @@ export const INTENTS: CedarIntent[] = [
       'mixed land ownership',
     ],
     answer:
-      'Checkerboarding is the patchwork of ownership inside many reservation boundaries: trust parcels, restricted-fee parcels and fee-simple parcels (often non-Indian owned) sitting side by side like squares on a board. It traces to the General Allotment (Dawes) Act of 1887, which broke communally held reservations into individual allotments and opened the "surplus" to sale. Tribal landholdings fell from roughly 138 million acres to about 48 million before the Indian Reorganization Act of 1934 ended the policy. The effect today is jurisdictional and statistical: county lines and Census geographies slice right through a land base. Lumecon treats a checkerboarded land base as one geography, so the analysis follows the tribe’s actual footprint.',
+      'Checkerboarding is the patchwork of ownership inside many reservation boundaries: trust parcels, restricted-fee parcels and fee-simple parcels sitting side by side like squares on a board. It traces to the General Allotment (Dawes) Act of 1887, which broke communally held reservations into individual allotments and opened the "surplus" to sale. Tribal landholdings fell from roughly 138 million acres to about 48 million before the Indian Reorganization Act of 1934 ended the policy. The effect today is jurisdictional and statistical: county lines and Census geographies can slice through a land base. For Lumecon, confirm the exact boundary data and treatment with the team rather than assuming the parcels automatically combine into one geography.',
     expanded:
-      'The other allotment legacy is fractionation. Allotted parcels passed to multiple heirs each generation, so a single parcel can now have dozens or even hundreds of co-owners, which complicates leasing and development; federal land buy-back programs have consolidated some of it. For analysis the upshot is simple: parcel-level ownership rarely matches any standard data geography, which is exactly why the platform models the land base directly instead of approximating it with a county.',
+      'The other allotment legacy is fractionation. Allotted parcels passed to multiple heirs each generation, so a single parcel can have dozens or even hundreds of co-owners, which complicates leasing and development; federal land buy-back programs have consolidated some of it. For analysis, parcel-level ownership may not match a standard data geography, so the boundary and available source data need explicit review.',
     followUps: ['indian_country', 'tribal_sovereignty', 'tribal_platform'],
   },
   {
@@ -2028,7 +2028,7 @@ export const INTENTS: CedarIntent[] = [
       'alaska',
     ],
     answer:
-      'Alaska works differently from the lower 48. The Alaska Native Claims Settlement Act of 1971 settled aboriginal land claims with roughly 44 million acres and $962.5 million, and the land went to for-profit corporations owned by Alaska Native shareholders rather than to reservations: twelve regional corporations plus roughly 200 village corporations. Alaska is also home to more federally recognized tribes than any other state, nearly 40 percent of the national list. Because ANCSA lands are mostly fee land, the Supreme Court held in the Venetie decision (1998) that they are generally not Indian Country; Metlakatla’s Annette Islands Reserve is the state’s one reservation. Lumecon models Alaska Native Regional and Village Corporation lands directly, so an analysis follows the corporation’s actual footprint.',
+      'Alaska works differently from the lower 48. The Alaska Native Claims Settlement Act of 1971 settled aboriginal land claims with roughly 44 million acres and $962.5 million, and the land went to for-profit corporations owned by Alaska Native shareholders rather than to reservations: twelve regional corporations plus roughly 200 village corporations. Alaska is also home to more federally recognized tribes than any other state, nearly 40 percent of the national list. Because ANCSA lands are mostly fee land, the Supreme Court held in the Venetie decision (1998) that they are generally not Indian Country; Metlakatla’s Annette Islands Reserve is the state’s one reservation. Lumecon’s standard geography list includes reservations and trust lands, so an Alaska Native corporation analysis needs its specific operating footprint and available data scoped with the team.',
     followUps: ['indian_country', 'tribal_platform', 'geographies'],
   },
   {
@@ -2097,7 +2097,7 @@ export const INTENTS: CedarIntent[] = [
       'regional council',
     ],
     answer:
-      'An Economic Development District is a multi-county region designated by the U.S. Economic Development Administration; there are roughly 400 of them, each anchored by a regional planning organization and a CEDS, the Comprehensive Economic Development Strategy the district keeps current. A current CEDS is the ticket to most EDA funding (public works, economic adjustment) and EDDs, councils of governments and MPOs are usually the bodies actually producing regional economic analysis. If you sit in one of those seats, Lumecon is built for exactly that work: impact analyses that drop into a CEDS update or an EDA application without a consulting engagement.',
+      'An Economic Development District is a multi-county region designated by the U.S. Economic Development Administration; there are roughly 400 of them, each anchored by a regional planning organization and a CEDS, the Comprehensive Economic Development Strategy the district keeps current. A current CEDS is important for many EDA funding paths. Lumecon can support the economic-impact analysis behind a CEDS update or application, while your team remains responsible for the required document and submission.',
     followUps: ['grant_applications', 'county_city_use', 'pricing'],
   },
   {
@@ -2117,7 +2117,7 @@ export const INTENTS: CedarIntent[] = [
       'revenue allocation',
     ],
     answer:
-      'Per-capita distributions and gaming-revenue allocations can be reflected in an analysis as part of how revenue flows into the local economy, since member spending is itself an economic channel. Cedar keeps those flows separate and labeled so a council or a regulator can see exactly how they were treated. How distributions are handled depends on your data, so this is a good one to scope with the team before an analysis runs.',
+      'Per-capita distributions and gaming-revenue allocations may be relevant to how revenue flows into a local economy, but their treatment depends on the question, geography and available data. They should be entered separately from government or enterprise operations and labeled clearly. Scope that treatment with the team before an analysis runs.',
   },
   {
     id: 'tribal_federal_reporting',
@@ -2137,7 +2137,7 @@ export const INTENTS: CedarIntent[] = [
       'self determination contract',
     ],
     answer:
-      'Lumecon produces the jobs, wages, supplier-activity and regional-impact figures that federal and trust reporting tends to ask for, with the methodology attached so the numbers hold up with BIA, Treasury, NIGC or a compact partner. The same analysis reshapes into a council packet, a federal report and an annual report without rebuilding the math. Which program or report are you preparing for?',
+      'Lumecon can produce economic-impact measures that may inform BIA, Treasury, NIGC, compact or trust-related reporting. It does not complete or submit agency forms, and requirements vary by program. Paid exports let your team carry the relevant results into a council packet, federal report or annual report. Which program or report are you preparing for?',
   },
 
   /* --- Local government / EDO --- */
@@ -2158,7 +2158,7 @@ export const INTENTS: CedarIntent[] = [
       'incentive justification',
     ],
     answer:
-      "Cities and counties use Lumecon to evaluate TIF districts and tax-abatement requests: model the jobs, wages and supplier activity a project would generate, then weigh that against the incentive on the table so a but-for case rests on defensible numbers rather than a developer's projection. Every assumption is surfaced, so when the request reaches council you can show your work. Want to see it run on a project you are weighing?",
+      'Cities and counties can use Lumecon to examine the economic-activity side of a TIF district or tax-abatement request: model jobs, labor income and supplier activity associated with a scenario, then review that estimate alongside the proposed incentive. The analysis should not be described as proving a but-for case, and its key inputs and assumptions should travel with it. Want to discuss a project you are weighing?',
   },
   {
     id: 'fiscal_impact',
@@ -2187,9 +2187,9 @@ export const INTENTS: CedarIntent[] = [
       'general fund',
     ],
     answer:
-      'Economic impact (jobs, wages and output across a region) and fiscal impact (the revenue and cost to one specific government) are related but distinct, and Lumecon is built around the economic-impact side with the supporting detail a fiscal analysis draws on. For a straight tax-revenue or net-fiscal question tied to your budget, tell the team your jurisdiction and project and they will walk through what the platform covers and where it stops.',
+      'Economic impact and fiscal impact are related but distinct. Lumecon is built for economic impact and can report estimated tax impacts on paid plans; it does not model the service costs or complete the net-revenue analysis a dedicated fiscal study requires. For a budget question, tell the team your jurisdiction and project so they can explain where the platform stops.',
     expanded:
-      "A bit more on the boundary: an economic impact analysis answers what activity a project supports across a region, while a fiscal impact analysis answers what one government collects and spends because of it (tax revenue in, service costs out). Lumecon's outputs carry much of what a fiscal analysis needs (jobs, wages, output and tax-relevant detail), and the team is straightforward about where a dedicated fiscal model is the better tool. If the question in front of your council is strictly budgetary, say so and they will point you honestly.",
+      'An economic impact analysis estimates activity associated with a project across a region. A fiscal impact analysis estimates what a specific government may collect and spend, including service costs. Lumecon results may be an input to that work, but they are not a substitute for a dedicated fiscal model.',
   },
   {
     id: 'business_attraction',
@@ -2208,7 +2208,7 @@ export const INTENTS: CedarIntent[] = [
       'lure a company',
     ],
     answer:
-      "Economic development offices use Lumecon to put defensible numbers behind a recruitment pitch or an incentive package: the jobs, payroll and supplier spend a prospect would bring, modeled the same way for every deal so you can compare offers on equal footing instead of negotiating off a company's own projections. The output drops into a council resolution, an incentive memo or a site-selection one-pager. Working an active deal? The team can show it on your numbers.",
+      'An economic development office can use Lumecon to estimate the jobs, labor income and supplier activity associated with a recruitment or incentive scenario. Applying the same scope and assumptions can make project comparisons more consistent, but the model does not decide what incentive to offer. Paid exports can support a council memo or site-selection analysis. Working on an active deal?',
   },
   {
     id: 'compare_projects',
@@ -2226,7 +2226,7 @@ export const INTENTS: CedarIntent[] = [
       'compare two projects',
     ],
     answer:
-      'Because every analysis runs on the same model and the same public data, projects come out measured the same way, so you can line them up on equal footing for a council packet or a capital plan instead of trusting numbers each consultant built differently. That apples-to-apples comparison is one of the most common reasons offices bring this in-house. Want to see two of your projects compared?',
+      'Using the same model, geography, period and assumptions can make two project scenarios easier to compare. Differences in source data or scope still matter, so the comparison should show those choices rather than treating every result as automatically equivalent. Want to discuss the projects you need to compare?',
   },
 
   /* --- State agency / procurement --- */
@@ -2254,7 +2254,7 @@ export const INTENTS: CedarIntent[] = [
       'piggyback contract',
     ],
     answer:
-      'For procurement, the cleanest path is to tell the team your buying requirements (a sole-source justification, an RFP or a cooperative or state contract vehicle) and they will work with your purchasing office on the right mechanism, including SAM and UEI registration where needed. Pricing is a flat annual subscription, which usually maps to a single line in a budget cycle. Email contact@lumecon.ai and we will get your procurement team what they need.',
+      'Tell the team which procurement requirements apply, such as an RFP, sole-source justification, cooperative contract, state vehicle, SAM registration or UEI. They will confirm which registrations and purchasing mechanisms are currently available. Pricing is a flat annual subscription. Email contact@lumecon.ai with the requirements and timeline.',
   },
   {
     id: 'comparability',
@@ -2273,7 +2273,7 @@ export const INTENTS: CedarIntent[] = [
       'compare grantees',
     ],
     answer:
-      'Running every analysis on the same model and the same public data is exactly what makes results comparable: across grantees in a competitive round, across projects in a capital plan and across years in a recurring report. A reviewer can score applicants on the same basis instead of refereeing methodologies that differ from one consultant to the next. That consistency is a core reason agencies bring this in-house. Want the team to show it on a grant round you run?',
+      'Results are most comparable when analyses use the same model, geography, period, data definitions and assumptions. Lumecon can help a team apply a consistent framework across grantees, projects or years, but the software does not make unlike inputs automatically comparable or score applicants on policy merit. Want to discuss the comparison you need?',
   },
   {
     id: 'transportation',
@@ -2292,7 +2292,7 @@ export const INTENTS: CedarIntent[] = [
       'rail project',
     ],
     answer:
-      'Transportation agencies use Lumecon for the economic-impact side of corridor, transit, highway and bridge projects: construction-phase jobs and supplier spend, multi-year labor income and the operating impact once the asset is in service, with the methodology attached for a legislative or federal application. For a formal benefit-cost analysis with discount rates, ask me about benefit-cost, since that is a related but distinct exercise. What corridor or project are you sizing?',
+      'A transportation agency can use Lumecon to estimate the economic activity associated with construction or operating spending for a corridor, transit, highway or bridge project. A formal benefit-cost analysis with discount rates is a separate exercise, and Lumecon does not produce it. What corridor or project are you sizing?',
   },
   {
     id: 'data_freshness',
@@ -2319,9 +2319,9 @@ export const INTENTS: CedarIntent[] = [
       'what year is the data',
     ],
     answer:
-      'The official accounts every serious model uses (BEA, ACS, LODES, QCEW, County Business Patterns) update on their own public release cycles, and Lumecon tracks the latest available data and tells you the base year behind any analysis. Between those slower official releases, we layer in higher-frequency public and alternative signals so an analysis reflects current conditions rather than data that is several years stale. The base year and how recent the data is are shown in the analysis, so a reviewer can see exactly what it is based on.',
+      'BEA, ACS, LODES, QCEW and County Business Patterns each publish on their own release cycle and often with a lag. An analysis should identify the source vintage or base year it uses rather than present older data as current. Ask the team to confirm which releases are available for your geography and period.',
     expanded:
-      'On timing specifics: BEA regional accounts and the ACS release annually, QCEW quarterly, LODES on a lagged annual cycle, and each analysis states the base year it used. The higher-frequency public and alternative signals layered between official releases narrow the gap between the world and the data describing it. If a reviewer asks why a figure reflects a prior year, the answer is on the analysis itself: official sources publish on a lag, and the analysis names its vintage rather than presenting old data as current.',
+      'BEA regional accounts and ACS data release annually, QCEW publishes quarterly data and LODES follows a lagged annual cycle. The latest publication is not always the same as the analysis year. Confirm the selected vintage and explain any lag in the final reporting.',
   },
 
   /* --- University --- */
@@ -2342,7 +2342,7 @@ export const INTENTS: CedarIntent[] = [
       'research impact',
     ],
     answer:
-      "University research activity models cleanly: sponsored-research and grant-funded expenditures, the jobs and supplier spend they support and downstream effects like spinoffs and tech transfer, separated from the campus's operating and construction footprint so the research story stands on its own. The same analysis reshapes for a legislative ask, a board update or a sponsored-programs annual report. Are you sizing research alone or the whole institution?",
+      "Sponsored-research and grant-funded expenditures can be analyzed separately from a university's operations or construction spending. The input-output model can estimate associated jobs, labor income and supplier activity. Spinoffs, technology transfer and long-run innovation effects require separate evidence and should not be inferred automatically. Are you sizing research spending alone or the whole institution?",
   },
   {
     id: 'system_vs_campus',
@@ -2361,7 +2361,7 @@ export const INTENTS: CedarIntent[] = [
       'campus by campus',
     ],
     answer:
-      'You can run a single campus, several campuses or a whole system and roll the results up or break them out by campus, because the geography and the institution are both inputs you control. A system office gets one consolidated figure plus per-campus detail off the same analysis. For a multi-campus system the team can scope seats and setup with you. Want to see a system rollup?',
+      'A campus or system analysis can be scoped around one institution or a defined group of institutions. Whether separate campus results can be combined cleanly depends on consistent periods, categories, geographies and overlap. Ask the team to confirm the current multi-campus workflow before promising a consolidated and per-campus export.',
   },
   {
     id: 'accreditation',
@@ -2379,7 +2379,7 @@ export const INTENTS: CedarIntent[] = [
       'institutional research report',
     ],
     answer:
-      'The economic-impact figures Lumecon produces drop into institutional reports and the narratives that support accreditation and board reporting: operations, research, construction and student and visitor spending, measured the same way each year so the trend is comparable. The numbers are identical across audiences; only the framing changes for an accreditor, the legislature or a town-gown briefing. What report are you preparing?',
+      'Lumecon results can inform institutional, accreditation or board reporting when economic impact is relevant. Paid exports provide an Excel workbook, CSV tables and a printable summary; Lumecon does not generate an accreditation submission. Keep the analysis scope and assumptions consistent if you plan to compare results across years. What report are you preparing?',
   },
 
   /* --- Foundation / philanthropy --- */
@@ -2399,7 +2399,7 @@ export const INTENTS: CedarIntent[] = [
       'take credit',
     ],
     answer:
-      'Attribution is a real and fair question, and the honest answer is that an economic-impact analysis sizes the activity associated with the dollars in scope; it does not by itself prove that none of it would have happened otherwise. Lumecon helps you stay credible by scoping the analysis to the activity you actually funded and surfacing every assumption, so you can describe your contribution without over-claiming credit for the whole. For additionality or counterfactual framing, the team can talk through how to present it responsibly.',
+      'Attribution is a real and fair question. Economic impact analysis sizes the activity associated with the dollars in scope; it does not by itself prove that none of the activity would have happened otherwise. Scope the analysis to the activity you funded and present the relevant assumptions so you can describe contribution without claiming causation. Additionality or counterfactual questions may require a separate method.',
   },
   {
     id: 'theory_of_change',
@@ -2413,7 +2413,7 @@ export const INTENTS: CedarIntent[] = [
       'results framework',
     ],
     answer:
-      'A theory of change or logic model is the qualitative frame for why a program works; Lumecon supplies the economic evidence that sits inside it, like the jobs, wages and local business activity your dollars supported. We do not build the logic model itself, but the impact figures plug into the outcomes section of one and make it concrete for a board or a donor. Want to see what those figures look like for a portfolio like yours?',
+      'A theory of change or logic model explains how a program is expected to lead to outcomes. Lumecon does not build or validate that logic model, but an economic impact estimate can provide evidence about jobs, labor income and business activity associated with the spending in scope. Those figures should be presented as one input, not as proof that the broader outcomes occurred.',
   },
   {
     id: 'anchor_institution',
@@ -2428,7 +2428,7 @@ export const INTENTS: CedarIntent[] = [
       'anchor based',
     ],
     answer:
-      'Anchor institutions (hospitals, universities, large nonprofits) are a natural fit: Lumecon sizes the regional ripple of their hiring, local procurement and capital spending, which is exactly the evidence an anchor strategy needs to show local economic benefit. A foundation backing an anchor grantee can measure that footprint the same way every year. Is this for your own institution or a grantee?',
+      'An anchor institution such as a hospital, university or large nonprofit can analyze the economic activity associated with payroll, procurement and capital spending. That estimate can inform an anchor strategy, but it does not by itself measure community outcomes or prove causation. Is this for your own institution or a grantee?',
   },
   {
     id: 'sroi_concept',
@@ -2443,7 +2443,7 @@ export const INTENTS: CedarIntent[] = [
       'social roi',
     ],
     answer:
-      'SROI (social return on investment) puts a single ratio on a broad mix of social outcomes; economic impact analysis is narrower and more standardized, measuring jobs, wages and business activity through input-output modeling. Lumecon does the latter, which is the piece funders and councils most often want sourced and defensible. It can be one credible, comparable input into an SROI story rather than a replacement for the whole framework.',
+      'SROI, or social return on investment, puts a ratio on a broader set of social outcomes. Economic impact analysis is narrower: it estimates jobs, labor income and business activity through input-output modeling. Lumecon does the latter, which can be one input to an SROI analysis but does not replace the outcome valuation and attribution work SROI requires.',
   },
 
   /* --- CDFI / community lending --- */
@@ -2463,7 +2463,7 @@ export const INTENTS: CedarIntent[] = [
       'loans deployed',
     ],
     answer:
-      'CDFIs use Lumecon to turn lending into economic evidence: the jobs, wages and local business activity a loan portfolio supports across the communities you serve, measured the same way each year for funders and your board. You bring the portfolio or deployment data; Cedar maps it to the regional model so impact reads in jobs and income, not just dollars out the door. Want to see it on a portfolio like yours?',
+      'A CDFI can use Lumecon to estimate the jobs, labor income and business activity associated with lending in a supported geography. You bring portfolio or deployment data, and Cedar can help suggest industry and geography mappings for review. The result is an economic impact estimate, not a measure of every borrower outcome. Want to discuss a portfolio like yours?',
   },
   {
     id: 'compliance_frameworks',
@@ -2482,7 +2482,7 @@ export const INTENTS: CedarIntent[] = [
       'cdfi compliance',
     ],
     answer:
-      'The economic-impact figures Lumecon produces support the impact narrative in CDFI Fund, CRA and investor reporting: jobs and local business activity tied to your lending and programs, with the methodology attached. Lumecon is not a compliance-filing system and does not submit AMIS or TLR data for you, but it gives you the defensible impact numbers those audiences want alongside the raw reporting. Tell the team your reporting cycle and they will show how it fits.',
+      'Lumecon economic-impact results may supplement a CDFI Fund, CRA or investor narrative when the reporting rules call for that evidence. Lumecon is not a compliance-filing system and does not submit AMIS or TLR data. Check the applicable instructions and use the paid exports only for the portions they actually support.',
   },
   {
     id: 'technical_assistance',
@@ -2498,7 +2498,7 @@ export const INTENTS: CedarIntent[] = [
       'advisory services impact',
     ],
     answer:
-      'Technical-assistance and small-business support programs can be included in an analysis as part of the activity your organization drives in the local economy, alongside lending or grantmaking. Cedar maps program spend and the activity it enables to the regional model so the ripple shows up in jobs and income. How your TA work is structured shapes the approach, so it is worth scoping with the team.',
+      'Documented spending for a technical-assistance or small-business support program may be included in an economic impact analysis. Cedar can help suggest how expenditure records map to industries and geographies for review. Outcomes enabled by the assistance, such as later business growth, need separate evidence and should not be assumed from program spending alone.',
   },
   {
     id: 'underserved_geo',
@@ -2516,7 +2516,7 @@ export const INTENTS: CedarIntent[] = [
       'target market',
     ],
     answer:
-      'Lumecon models down to small and rural geographies, including the census-tract-level and investment-area framing CDFIs and place-based funders work in, so impact in an underserved or distressed community is measured directly rather than washed out in a larger county average. Multi-tract or overlapping target markets still come out as one analysis. Want to see it on your target market?',
+      'Lumecon’s standard supported geographies are counties, states, the nation, reservations and trust lands. Do not assume census-tract, investment-area or custom multi-tract coverage; share the target-market boundary with the team so they can confirm what the current data and geography workflow support.',
   },
 
   /* --- Grants / consultants --- */
@@ -2543,9 +2543,9 @@ export const INTENTS: CedarIntent[] = [
       'across clients',
     ],
     answer:
-      "Consulting firms and independent professionals use Lumecon for client work on the public plans; commercial use starts with Sapling. The full platform, every supported geography, commercial and client use, client and project workspaces and Cedar come with it, and Tree adds unlimited organizational users, Cedar Grove and calibration to your firm's analytical and reporting workflow. Your client relationships, methodology and deliverables stay yours. White-label and larger partner arrangements are scoped case by case, so email contact@lumecon.ai with a short note on your practice and volume.",
+      'Consulting firms and independent professionals can run client work starting with Sapling. Sapling includes Cedar Commons, the shared project workspace, for up to 10 users; Tree adds unlimited organizational users, Cedar Grove and hands-on Cedar calibration. White-label and higher-volume arrangements are not standard public-plan features, so ask contact@lumecon.ai what is currently available.',
     expanded:
-      "On the reselling question specifically: commercial use is a right of the Sapling and Tree plans, so a firm can run engagements for outside clients inside Lumecon, keep each client's work in its own shared project and present its own deliverables on top. Lumecon does not sell finished analyses, so your firm's writing, judgment and client relationships remain the value your client is buying. White-label and higher-volume partner arrangements are scoped case by case at contact@lumecon.ai.",
+      'Sapling and Tree permit analysis work for outside clients. Cedar Commons provides shared projects, project notes, data collection and outside collaborators, while your firm remains responsible for its methodology, writing and client deliverables. Ask the team before promising white-label delivery or another workflow not listed on the pricing page.',
   },
   {
     id: 'bca',
@@ -2580,7 +2580,7 @@ export const INTENTS: CedarIntent[] = [
       'monte carlo',
     ],
     answer:
-      'A formal benefit-cost analysis (net present value, a discount rate, a benefit-cost ratio) is related to but distinct from an economic impact analysis, which sizes jobs, wages and regional activity. Lumecon produces the impact figures that feed the benefits side of a BCA, and the team can talk through how that supports a DOT RAISE or similar application that asks for OMB A-94 style framing. Which program are you preparing for?',
+      'A formal benefit-cost analysis uses measures such as net present value, a discount rate and a benefit-cost ratio. It is related to but distinct from economic impact analysis, and Lumecon does not produce a complete BCA. Some economic-impact inputs may be relevant, but a DOT RAISE or OMB A-94 analysis requires its own benefit definitions, counterfactual and discounting. Which program are you preparing for?',
   },
 
   /* --- Methodology (for the skeptical economist) --- */
@@ -2608,9 +2608,9 @@ export const INTENTS: CedarIntent[] = [
       'net new jobs vs',
     ],
     answer:
-      'Fair challenge, and an important one. A standard input-output analysis reports gross activity associated with the spending in scope; it does not automatically net out displacement, substitution or the opportunity cost of public funds. Lumecon handles this by letting you scope the analysis to net-new activity and by surfacing the assumptions, so you can present a gross figure and a more conservative net framing rather than hiding the distinction. For a project where displacement is central, the team can walk through how to bound it.',
+      'Fair challenge. A standard input-output analysis reports gross activity associated with the spending in scope; it does not automatically net out displacement, substitution or the opportunity cost of public funds. A net framing requires a defensible baseline and explicit adjustments supplied by the analyst. Ask the team how the current workflow can represent those inputs before promising both gross and net results.',
     expanded:
-      'Deeper on the distinction: gross impact counts all activity tied to the spending in scope; net impact asks what would have happened anyway and subtracts it. Netting requires judgment calls (how much local demand is displaced, how much spending is genuinely new to the region) and those calls should be visible, which is why the analysis surfaces them as named assumptions instead of burying them. A pattern reviewers tend to respect: lead with the net framing, show the gross figure alongside it and state the displacement assumption in one line.',
+      'Gross impact counts activity associated with the spending in scope. Net impact asks what would have happened anyway and adjusts for it. That requires judgment about displacement, substitution and additionality; input-output modeling alone does not supply the counterfactual.',
   },
   {
     id: 'significance_vs_impact',
@@ -2626,7 +2626,7 @@ export const INTENTS: CedarIntent[] = [
       'impact or significance',
     ],
     answer:
-      'Good distinction to insist on. Economic contribution or significance describes activity already present in a region; economic impact describes the change caused by a specific project or program relative to a counterfactual. Conflating them is a common way impact gets overstated. Lumecon lets you frame an analysis either way and labels which one it is reporting, so the headline number means what it says to a careful reader.',
+      'Good distinction to insist on. Economic contribution or significance describes ongoing activity already present in a region. A project impact analysis models activity associated with a defined change or scenario, but input-output analysis does not by itself establish causal attribution. The scope and baseline should be stated clearly so the result is not overstated.',
   },
   {
     id: 'multiplier_type',
@@ -2660,9 +2660,9 @@ export const INTENTS: CedarIntent[] = [
       'make and use tables',
     ],
     answer:
-      'Lumecon uses the standard input-output framework, so the Type I versus Type II distinction works as you would expect: Type I captures direct and indirect effects, while Type II and SAM add induced effects by closing the model on households. The multipliers come from the BEA make-and-use tables, regionalized to your geography and calibrated as we built, not parameters we invent. Each analysis states which it used, so the induced layer is never a black box. If you need a specific convention to match prior work, the team can set that.',
+      'In input-output analysis, Type I captures direct and indirect effects, while Type II or social-accounting-matrix approaches also model induced household spending. Lumecon reports direct, indirect and induced layers on paid plans. If a funder requires a specific multiplier convention, confirm the model configuration and documentation with the team before committing to it.',
     expanded:
-      'More detail: Type I multipliers close the model on industries only, so they capture the supply-chain (indirect) round but leave out household respending. Type II and SAM approaches close on households, adding the induced round, which produces larger totals and is the more common convention in public-facing analyses. Whichever the analysis uses is stated on its face, along with the base-year data behind the regionalization, so a reviewer can retrace the logic. If a funder or agency requires one convention, set it once and every analysis follows it.',
+      'Type I multipliers capture the supply-chain round and leave out household respending. Type II and social-accounting-matrix approaches add an induced round by closing the model on households. The selected convention, data vintage and regionalization method should be stated in the final analysis.',
   },
   {
     id: 'rpc_method',
@@ -2687,7 +2687,7 @@ export const INTENTS: CedarIntent[] = [
       'economic base analysis',
     ],
     answer:
-      'Regional purchase coefficients are central: they decide how much of each dollar stays in-region versus leaks out. Lumecon regionalizes the national accounts using established methods (location-quotient and supply-demand-pooling approaches), not anything opaque. The RPC and regionalization assumptions are shown per analysis, so you can see and adjust how local capture was estimated. For multi-region analyses, inter-regional feedback is handled explicitly.',
+      'Regional purchase coefficients estimate how much demand is supplied within the region rather than imported. Lumecon regionalizes national relationships using documented methods, including location-quotient and supply-demand-pooling approaches. The analysis should identify the regionalization assumptions; confirm any adjustment controls or multi-region treatment with the team.',
   },
   {
     id: 'io_assumptions',
@@ -2730,7 +2730,7 @@ export const INTENTS: CedarIntent[] = [
       'welfare analysis',
     ],
     answer:
-      'We are direct about what input-output models can and cannot do. The classic input-output core assumes fixed production coefficients, effectively elastic supply and linearity, treats people as perfectly rational and tends to treat geography as a fixed administrative boundary, so on its own it is a short-run, static estimate rather than a forecast. That core is the shared starting point for the whole field, and it is incomplete on its own. Lumecon keeps its strengths and layers on what economics has learned since: behavioral and causal methods, spatial tools, higher-frequency data and machine learning, so the estimate better reflects how economies actually work. Where the underlying assumptions still matter for your case, the analysis surfaces them so a reviewer can weigh them honestly.',
+      'Classic input-output models use fixed production relationships, linearity and a defined geography. They estimate economic activity associated with stated inputs over a specified period; by themselves they are not forecasts, benefit-cost analyses or causal estimates. Lumecon keeps that scope explicit and presents the relevant model assumptions for review.',
     expanded:
       'One level deeper: fixed coefficients mean the model assumes producers keep the same recipe as demand changes, which overstates impact when supply is tight. Linearity means twice the spending shows twice the impact, which is least reliable for very large projects relative to the local economy. The static, short-run frame means the number is a snapshot, and treating boundaries as fixed misses commuting and cross-border spending unless the regionalization handles it. These are the places a sharp reviewer will push, and the analysis shows the assumption behind each so you can answer directly instead of defending a black box.',
   },
@@ -2764,7 +2764,7 @@ export const INTENTS: CedarIntent[] = [
       'who are your subprocessors',
     ],
     answer:
-      'Lumecon runs on US-region cloud with encryption in transit and at rest, single-tenant workspaces and role-based access, and the team carries hands-on experience handling PII and sensitive government data across the Federal Reserve system. We are glad to complete a vendor security questionnaire, share which controls are in place today and talk through our certification roadmap (SOC 2 and similar) before anything sensitive moves. For a procurement review, email contact@lumecon.ai and we will get your security team a packet.',
+      'Lumecon is formalizing its security program against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. It has not completed a SOC 2 examination and does not currently have a SOC 2 report. During procurement review, the team can document which controls, assessments and provider agreements are complete, in progress or not yet available.',
   },
   {
     id: 'sso_auth',
@@ -2787,7 +2787,7 @@ export const INTENTS: CedarIntent[] = [
       'provisioning',
     ],
     answer:
-      'Access is governed by role-based controls within a single-tenant workspace per organization. For enterprise identity (SSO via SAML or OIDC, MFA, SCIM provisioning with Okta or Entra), tell the team your identity provider and requirements and they will confirm the setup for your deployment. This is a common procurement question, and we are glad to walk through it before you commit.',
+      'Enterprise identity capabilities vary by deployment. Tell the team whether you require SAML or OIDC single sign-on, MFA, SCIM provisioning, Okta or Entra, and they will confirm what is currently available before you commit.',
   },
   {
     id: 'sla_support',
@@ -2828,7 +2828,7 @@ export const INTENTS: CedarIntent[] = [
       'legal terms',
     ],
     answer:
-      'The team can provide a master service agreement and a data processing agreement, and will work through redlines with your legal and procurement offices. For specialized terms (a BAA or sector-specific clauses), say so up front and they will tell you what is in place and what needs scoping. Start at contact@lumecon.ai and we will get the paperwork moving.',
+      'Lumecon’s standard service and data-processing agreements are being finalized with counsel. Ask the team what is currently available and identify any government, Tribal, university or sector-specific requirements early in procurement.',
   },
   {
     id: 'billing_cancellation',
@@ -2872,7 +2872,7 @@ export const INTENTS: CedarIntent[] = [
       'data portability',
     ],
     answer:
-      'Your data stays in your single-tenant workspace, you control what is uploaded, and you can export your data and request deletion. Specific retention and deletion terms are set in the data processing agreement, so they are contractual rather than discretionary. If you have a particular retention or offboarding requirement, tell the team and they will confirm it in writing before anything sensitive moves.',
+      'You can request access to, correction of or deletion of personal information as described in the Privacy Policy. Product retention, export, deletion and offboarding terms should be confirmed in the applicable agreement before sensitive data moves. Tell the team about any required schedule or format so it can be addressed in writing.',
   },
   {
     id: 'accessibility',
@@ -2892,7 +2892,7 @@ export const INTENTS: CedarIntent[] = [
       'keyboard navigation',
     ],
     answer:
-      'Accessibility is a real requirement for public-sector buyers, and we treat it that way: the platform is built to WCAG 2.1 AA and Section 508, including keyboard navigation and screen-reader support. For a formal VPAT or a specific conformance requirement, tell the team where you are in procurement and they will share the documentation your review needs. Email contact@lumecon.ai for the details.',
+      'Lumecon is working toward substantial conformance with WCAG 2.2 AA. The website includes keyboard navigation, screen-reader support, visible focus states and reduced-motion handling. Confirm the product’s current status and any formal accessibility documentation during procurement.',
   },
 
   {
@@ -2930,7 +2930,7 @@ export const INTENTS: CedarIntent[] = [
       'secret key',
     ],
     answer:
-      'Those are the right questions for a security review. Lumecon runs on US-region cloud with encryption in transit and at rest and single-tenant workspaces; on the operational specifics (penetration testing, vulnerability disclosure, breach-notification timelines, backups and disaster recovery, audit logging and key management), we are glad to share what is in place today and what is on the roadmap as part of a security questionnaire. Some of these are still being formalized, and we would rather tell you exactly where each one stands than overstate it. Email contact@lumecon.ai and we will route your security team to the specifics.',
+      'Those controls should be verified through a current security review. Ask the team to state what is in place for penetration testing, vulnerability disclosure, breach notification, backups, disaster recovery, audit logging and key management, and what remains on the roadmap. Email contact@lumecon.ai before sensitive data moves.',
   },
   {
     id: 'local_capture',
@@ -2956,7 +2956,7 @@ export const INTENTS: CedarIntent[] = [
       'dollars stay in',
     ],
     answer:
-      'How much of each dollar stays in the local economy versus leaks out to suppliers elsewhere is exactly what the regional purchase coefficients in the model capture, and it is often the most important number for a community. Lumecon estimates local capture for your specific geography and surfaces the assumption, so you can show how much spending actually stayed in the region rather than asserting it. For a reservation or a rural county where leakage runs high, that local-versus-leaked split is front and center in the analysis.',
+      'Regional purchase coefficients estimate the share of demand supplied within the region rather than imported from elsewhere. They are modeled assumptions, not a direct observation of how much money actually stayed local. The selected coefficient and geography should be documented so a reviewer can understand the local-versus-imported estimate.',
   },
 
   /* --- Trust / people / press --- */
@@ -3061,9 +3061,9 @@ export const INTENTS: CedarIntent[] = [
       'cost of cedar',
     ],
     answer:
-      "I'm Cedar, Lumecon's AI economic analyst; here on the site you get a lightweight version of me. I answer questions about Lumecon, who it's for, the methodology, pricing and how to reach the team. The full Cedar inside the platform comes with every plan, Sprout included. There it uploads and processes your documents (PDFs, spreadsheets and CSVs, including budgets, financial statements, payroll and program records), interprets them, maps them into the model, assists with setup and interpretation and acts as a thought partner on the write-up, while the substance and local context come from you. You can also try it before paying anything: Seed, the free account, lets you bring your documents, build an analysis end to end and see your direct effects, with full results unlocking on any paid plan. Want me to point you to pricing, or to Seed?",
+      "I'm Cedar, Lumecon's AI economic analyst; here on the site you get a lightweight version of me. I answer questions about Lumecon, its methodology, pricing and how to reach the team. Inside the platform, Cedar helps process documents, suggest model mappings, support setup and interpretation and assist with the write-up, while the substance and local context come from you. Cedar is included across the plan family. During private beta, request Seed access to build an analysis and view direct effects at no cost; full results unlock on a paid plan. Want the pricing page or the access request?",
     expanded:
-      'More on the split: on this site Cedar is a free, lightweight version that never touches your data and exists to help you learn what Lumecon does. The product Cedar works on your actual records: it ingests budgets, financial statements, payroll and program data, matches them to the right industries and geographies, fits the model and flags every assumption for your sign-off, then helps shape a council memo, a grant narrative or a board deck while you supply the local context only you have. Every plan includes it. The Tree plan goes further with Cedar Grove, the advanced data library reused across future analyses and reporting, and hands-on calibration so Cedar picks up your terminology, workflows and recurring reports. The pricing page lays out the plans.',
+      'More on the split: on this site Cedar is a free, lightweight version that does not connect to customer product data. Inside the product, Cedar works with records such as budgets, financial statements, payroll and program data, suggests industry and geography mappings, presents key assumptions for review and helps shape an explanation while you supply the local context. Cedar is included across the plan family. Tree adds Cedar Grove and hands-on calibration to organizational terminology and workflows. The pricing page lays out the plans.',
   },
 
   {
@@ -3130,7 +3130,7 @@ export const INTENTS: CedarIntent[] = [
       'thats helpful',
     ],
     answer:
-      "That's kind of you to say. If it's useful, I can keep going on pricing, the methodology, who uses Lumecon or set up a demo. What would help most?",
+      "That's kind of you to say. If it's useful, I can keep going on pricing, the methodology, who Lumecon is for or set up a demo. What would help most?",
     variants: [
       'Appreciate that. What else can I help with?',
       "Thanks, happy to keep earning it. What's next?",
@@ -3157,7 +3157,7 @@ export const INTENTS: CedarIntent[] = [
       'Take care, and if something else comes up the contact form and contact@lumecon.ai are both monitored, so feel free to drop a line anytime.',
     variants: [
       'Talk soon. If a question surfaces later, the contact form and contact@lumecon.ai are both monitored.',
-      'Take care. The pricing page and Seed, the free account, are worth a look on your way out, and contact@lumecon.ai reaches the team anytime.',
+      'Take care. The pricing page and Seed access request are worth a look on your way out, and contact@lumecon.ai reaches the team anytime.',
     ],
   },
   {
@@ -3178,7 +3178,7 @@ export const INTENTS: CedarIntent[] = [
       'great',
     ],
     answer:
-      'Good. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow or who else uses Lumecon?',
+      'Good. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow or who Lumecon is for?',
     variants: [
       'Great. Should we keep pulling on this thread, or look at something else: pricing, a demo, the methodology?',
       "Good to hear. What's next?",
@@ -3236,7 +3236,7 @@ export const INTENTS: CedarIntent[] = [
       'i dont follow',
     ],
     answer:
-      "No problem. The easiest starting points are what Lumecon does, who uses it, how an analysis works or what it costs. If you've got a specific project in mind like a grant, a bond or an annual impact report, tell me about it and I'll point us at the right answer.",
+      "No problem. The easiest starting points are what Lumecon does, who it's for, how an analysis works or what it costs. If you've got a specific project in mind like a grant, a bond or an annual impact report, tell me about it and I'll point us at the right answer.",
     variants: [
       "Let me try a different angle. Tell me who you are (a tribal nation, a city, a foundation, a university) and I'll start from what Lumecon does for organizations like yours.",
       "Happy to reset. In one line: Lumecon turns records you already keep into a defensible economic impact analysis. Ask about cost, timing, data or the model and I'll go from there.",
@@ -3269,7 +3269,7 @@ export const INTENTS: CedarIntent[] = [
       'gross product',
     ],
     answer:
-      'Every analysis reports the standard measures economists and funders expect: output (the gross value of activity), value added (the contribution to GDP or to gross regional product at the local level), labor income (wages and benefits) and employment, each split into direct, indirect and induced effects. Value added is the cleanest read on net contribution because it nets out intermediate inputs, so it is the figure most comparable to a published GDP number. If a particular audience wants one specific measure, the analysis already carries all of them.',
+      'Lumecon reports economic output, GDP contribution or value added, labor income and employment, split into direct, indirect and induced effects. Labor income includes employee compensation and, where modeled, proprietor income. Value added excludes intermediate inputs, making it the measure most comparable with a published GDP figure.',
   },
   {
     id: 'modern_methods',
@@ -3309,9 +3309,9 @@ export const INTENTS: CedarIntent[] = [
       'how economies actually work',
     ],
     answer:
-      'Yes, and that is a real difference. The input-output core is the shared foundation for the whole field, and we start there on the standard public data so the numbers stay recognizable. On top of it we layer what economics has learned since: behavioral and causal methods, spatial tools, higher-frequency data and machine learning, with federated learning across analyses, all calibrated and benchmarked as we built. The idea is to start where everyone starts, then reflect how economies actually work, instead of assuming perfectly rational actors in clean markets the way a model frozen in 1930s-era input-output does. Where a method or assumption matters for your result, the analysis shows it.',
+      'Lumecon impact calculations use established input-output methods. Cedar and the product workflow help structure data, document inputs and support interpretation; they do not turn an input-output result into a causal estimate. When a question requires causal inference, forecasting, benefit-cost analysis or another method, that should be identified and handled separately.',
     expanded:
-      'The foundation traces to Wassily Leontief, who built input-output analysis to show how industries depend on one another through flows of goods and spending. That idea still matters, but it was developed before satellites, the internet, mobile data, cloud computing, modern administrative data, behavioral economics at scale and many of the causal tools now used to analyze effects across time and place. The field has since learned that consumers are not always perfectly rational, that workers and places respond in idiosyncratic ways, and that a local economy is a network of people, businesses, governments and institutions, not just a sector table. So we treat input-output as the foundation to build on: keep its strengths, and extend it with what economics knows now. Traditional analysis stays valid; this makes it more complete.',
+      'Input-output analysis traces how industries depend on one another through purchases and spending. It remains useful for estimating direct, indirect and induced activity under stated assumptions, but it does not answer every economic question. Lumecon keeps the calculation method separate from Cedar, which assists with intake, review and explanation.',
   },
   {
     id: 'cedar_thought_partner',
@@ -3341,7 +3341,7 @@ export const INTENTS: CedarIntent[] = [
       'bounce ideas',
     ],
     answer:
-      'Cedar is a thought partner, not a ghostwriter. It helps you brainstorm structure, drafts starting points, edits and gives you feedback and ideas, and it handles the polish and presentation so the write-up looks sharp for each audience. But the best reports are written with the context only you have: your program, your community, your goals. Cedar makes your work faster and clearer rather than replacing your judgment or inventing the substance.',
+      'Cedar is a thought partner, not a ghostwriter. It can help brainstorm structure, draft starting points and suggest edits, but your team supplies the program context, voice and final approval. Cedar assists with the explanation without replacing judgment or inventing the substance.',
   },
   {
     id: 'what_is_rag',
@@ -3360,7 +3360,7 @@ export const INTENTS: CedarIntent[] = [
       'what is rag based',
     ],
     answer:
-      "Short version: it's what keeps Cedar honest. Instead of answering from memory the way a typical chatbot does, Cedar is trained and tailored on trusted sources (established public data and a curated library of analyses and reference materials, with your own past analyses folded in as your workspace grows) and looks the facts up there before answering, with a trail back to where each piece came from. That is why Cedar's numbers trace to a real source rather than a guess. It works like a careful research assistant: it looks the facts up instead of improvising a plausible answer. (The technical name for this is retrieval-augmented generation, or RAG.)",
+      "Retrieval-augmented generation, or RAG, gives an AI system relevant reference material before it drafts an answer. It can improve grounding, but it does not guarantee correctness. Cedar's generated output still requires review, and calculated impact figures come from the economic model rather than from RAG.",
   },
   {
     id: 'what_is_chatbot',
@@ -3378,7 +3378,7 @@ export const INTENTS: CedarIntent[] = [
       'what is a chat bot',
     ],
     answer:
-      'A chatbot is a program you talk to in plain language. Most chatbots generate text from patterns they learned, which is handy but means they can sound confident while being wrong. What you are using here is a lightweight version of Cedar, constrained to a fixed set of Lumecon topics. Inside the platform, Cedar is an AI economic analyst: it answers from established public data and a curated library of analyses and reference materials (with your own past analyses folded in as your workspace grows), with a source trail rather than guesswork.',
+      'A chatbot is a program you talk to in plain language. Generative systems can sound confident while being wrong, so their output still needs review. This site uses a lightweight Cedar focused on Lumecon topics. Inside the product, Cedar assists with intake, mapping review, interpretation and explanation; calculated impact figures come from the economic model, not from a chat response.',
   },
   {
     id: 'guarantees',
@@ -3408,7 +3408,7 @@ export const INTENTS: CedarIntent[] = [
       'guarantee my',
     ],
     answer:
-      "I can't promise an outcome, and I'd be wary of anyone who does. Lumecon gives you credible, defensible economic impact analysis with every assumption shown; it does not guarantee that a grant gets funded, a vote passes or a specific number of jobs appears, since those depend on factors well outside any analysis. What an analysis does is put sound, sourced numbers behind your case so the people deciding have something solid to weigh. Want to see how the analysis is built, or talk to the team about your situation?",
+      "I can't promise an outcome, and I'd be wary of anyone who does. Lumecon provides economic impact estimates with key inputs and assumptions presented for review; it does not guarantee that a grant gets funded, a vote passes or a specific number of jobs appears. An analysis gives decision-makers sourced estimates to weigh alongside other evidence. Want to see how the analysis is built, or talk to the team about your situation?",
   },
   {
     id: 'hostile',
@@ -3485,7 +3485,7 @@ export const INTENTS: CedarIntent[] = [
       "Doing well, thanks for asking. I'm Cedar, and I'm at my best helping you get to know Lumecon. Want the quick version of what it does, who it's for (tribal nations, governments, foundations) or to watch a live impact analysis run?",
     variants: [
       "I'm well, thanks. More usefully: I can explain what Lumecon does, what it costs or how an analysis runs. What would help?",
-      "Doing fine, thank you. If you're browsing, Seed, the free account, is the fastest way to see what this platform actually does.",
+      "Doing fine, thank you. If you're browsing, you can review pricing or request Seed access to evaluate the platform during private beta.",
     ],
   },
   {
@@ -3514,7 +3514,7 @@ export const INTENTS: CedarIntent[] = [
       'wsg',
     ],
     answer:
-      "Hey, I'm Cedar, Lumecon's AI economic analyst. On the site I can answer questions about what Lumecon does, who uses it, how the math works, what an analysis costs or how to reach the team. What brings you in today?",
+      "Hey, I'm Cedar, Lumecon's AI economic analyst. On the site I can answer questions about what Lumecon does, who it's for, how the math works, what an analysis costs or how to reach the team. What brings you in today?",
     variants: [
       'Hi again. Where should we take it: pricing, methodology, geographies or a demo?',
       "Still here. Ask me anything about Lumecon, or describe what you're working on and I'll point you somewhere useful.",
@@ -3528,7 +3528,7 @@ export const OUT_OF_SCOPE_ANSWER =
   "I'm Cedar, Lumecon's AI economic analyst; on this site I'm best at answering questions about Lumecon, economic impact reporting and how to connect with the team. Try asking me what Lumecon does, who the platform is for or how economic impact analysis works.";
 
 export const FALLBACK_ANSWER =
-  'Let me point you the right way. I\'m a focused assistant, so I\'m sharpest on Lumecon itself. I can cover what Lumecon does and who it\'s for (tribal nations, cities and counties, state agencies, foundations, universities, nonprofits), how an analysis works and how the math holds up, grants and federal funding (EDA, HUD, DOT, EPA, USDA and more), pricing, geographies, jobs or how to reach the team. Try a word or two like "pricing," "tribal," "EPA grant," "jobs," or "demo," or email contact@lumecon.ai for anything specific.';
+  'Let me point you the right way. I\'m focused on Lumecon itself, so I\'m sharpest on what Lumecon does and who it\'s for (tribal nations, cities and counties, state agencies, foundations, universities, nonprofits), how an analysis works and how the math holds up, grants and federal funding (EDA, HUD, DOT, EPA, USDA and more), pricing, geographies, jobs or how to reach the team. Try a word or two like "pricing," "tribal," "EPA grant," "jobs," or "demo," or email contact@lumecon.ai for anything specific.';
 
 // Triggers that flip an unmatched message into OUT_OF_SCOPE rather than
 // the generic FALLBACK. Pure-spam strings still fall through.
@@ -3552,17 +3552,15 @@ export const OUT_OF_SCOPE_TRIGGERS = [
 // free-text input.
 export const CHIP_IDS = [
   'company_overview',
-  'tribal_platform',
+  'cedar_identity',
+  'security',
+  'competitors',
+  'pricing',
   'audience',
   'grant_applications',
-  'pricing',
   'county_city_use',
   'state_agency_use',
   'time_to_study',
   'demo',
-  'competitors',
-  'cedar_identity',
   'cedar_tiers',
-  'indian_country',
-  'eda_districts',
 ] as const;

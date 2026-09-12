@@ -15,7 +15,8 @@
   align-items: stretch;
   /* Fill the viewport below the sticky nav (~64px tall). */
   min-height: calc(100dvh - 64px);
-  background: var(--white);
+  padding: clamp(0.8rem, 2vw, 1.5rem);
+  background: transparent;
 }
 .asplit--signup {
   grid-template-columns: 1fr 1.05fr;
@@ -32,13 +33,26 @@
   /* The app's teal ramp, deepened so white body copy holds AA
      contrast on the site (the accessibility statement applies
      here too). */
-  background: linear-gradient(150deg, #0c9d8d 0%, #0a8577 42%, #06635a 100%);
+  background:
+    linear-gradient(145deg, rgba(6, 13, 34, 0.94), rgba(6, 42, 52, 0.82)),
+    url('/naics/construction-v2.webp') 52% center / cover no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 28px 70px -38px rgba(5, 12, 32, 0.8);
+}
+.asplit--login .asplit-brand {
+  border-radius: var(--radius-panel) 0 0 var(--radius-panel);
+}
+.asplit--signup .asplit-brand {
+  border-radius: 0 var(--radius-panel) var(--radius-panel) 0;
 }
 .asplit-brand__glow {
   position: absolute;
   border-radius: 50%;
   filter: blur(46px);
   pointer-events: none;
+  opacity: 0.45;
 }
 .asplit-brand__glow--a {
   width: 24rem;
@@ -64,7 +78,7 @@
   height: auto;
   pointer-events: none;
   filter: brightness(0) invert(1);
-  opacity: 0.12;
+  opacity: 0.08;
 }
 .asplit--login .asplit-brand__mark {
   right: -16%;
@@ -80,7 +94,7 @@
 }
 .asplit-brand__headline {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   font-size: clamp(2.2rem, 3.4vw, 3.4rem);
   line-height: 1.04;
   letter-spacing: -0.03em;
@@ -129,34 +143,55 @@
   height: 100%;
   display: block;
 }
+.asplit-brand__photo-note {
+  max-width: 26rem;
+  margin: 1.25rem 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  letter-spacing: 0.035em;
+}
 
 /* ---------- form column ---------- */
 .asplit-formcol {
   display: flex;
-  background: var(--white);
+  overflow: hidden;
+  background: var(--surface-glass-strong);
+  border: 1px solid var(--surface-edge);
+  box-shadow: var(--shadow-surface-high);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+.asplit--login .asplit-formcol {
+  border-left: 0;
+  border-radius: 0 var(--radius-panel) var(--radius-panel) 0;
+}
+.asplit--signup .asplit-formcol {
+  border-right: 0;
+  border-radius: var(--radius-panel) 0 0 var(--radius-panel);
 }
 .asplit-forminner {
   width: min(100%, 30rem);
   margin: auto;
-  padding: clamp(2.2rem, 5vh, 3.2rem) clamp(1.25rem, 4vw, 2rem);
+  padding: clamp(2.35rem, 5vh, 3.5rem) clamp(1.5rem, 4vw, 2.75rem);
 }
+/* No chip, for the same reason the homepage edge icons lost theirs: a
+   tinted rounded square around a single icon adds a rectangle that says
+   nothing and reads as template chrome. */
 .asplit-ic {
-  width: 50px;
-  height: 50px;
-  border-radius: 13px;
-  display: grid;
-  place-items: center;
-  background: var(--accent-rgba-08);
+  display: flex;
+  align-items: center;
   color: var(--accent-text);
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.75rem;
 }
 .asplit-ic svg {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
 .asplit-title {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   font-size: 1.55rem;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -179,28 +214,30 @@
   padding: 0.85rem 1.5rem;
   border-radius: 10px;
   font-size: 1rem;
-  /* The product's sign-in primary is teal; use the site's dark teal
-     token so white label text keeps AA contrast. */
-  background: var(--accent-text);
-  border-color: var(--accent-text);
-  color: #fff;
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  border-color: var(--action-top);
+  color: var(--action-ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 10px 24px -14px rgba(6, 58, 54, 0.55);
 }
 .asplit .auth-form .btn:hover {
-  background: #086a61;
-  border-color: #086a61;
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  border-color: var(--action-hover-top);
 }
-/* --accent-text flips to the light teal (#5fd9cc) in dark mode, which
-   fails AA under the white label. Pin the fill to the constant dark
-   teal chip token, which clears AA in both modes. */
 @media (prefers-color-scheme: dark) {
   .asplit .auth-form .btn {
-    background: var(--accent-chip);
-    border-color: var(--accent-chip);
-    color: #fff;
+    background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+    border-color: var(--action-top);
+    color: var(--action-ink);
   }
   .asplit .auth-form .btn:hover {
-    background: #086a61;
-    border-color: #086a61;
+    background: linear-gradient(
+      180deg,
+      var(--action-hover-top) 0%,
+      var(--action-hover-bottom) 100%
+    );
+    border-color: var(--action-hover-top);
   }
 }
 
@@ -225,7 +262,7 @@
   padding: 0 0.85rem;
   font-family: var(--font-mono);
   font-size: 0.62rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-3);
   line-height: 1;
@@ -314,6 +351,8 @@
   .asplit--signup {
     grid-template-columns: 1fr;
     min-height: 0;
+    gap: 0.75rem;
+    padding: 0.75rem;
   }
   .asplit-brand {
     padding: 2.1rem clamp(1.25rem, 5vw, 2rem) 2.3rem;
@@ -328,10 +367,22 @@
     padding: 0.6rem 0;
     font-size: 0.92rem;
   }
+  .asplit-brand__photo-note {
+    margin-top: 1rem;
+  }
   .asplit-brand__mark {
     width: 17rem;
   }
   .asplit-forminner {
     padding: 2rem clamp(1.25rem, 5vw, 2rem) 2.4rem;
+  }
+  .asplit-brand,
+  .asplit-formcol,
+  .asplit--login .asplit-brand,
+  .asplit--login .asplit-formcol,
+  .asplit--signup .asplit-brand,
+  .asplit--signup .asplit-formcol {
+    border: 1px solid var(--rule);
+    border-radius: 18px;
   }
 }

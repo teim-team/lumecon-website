@@ -12,7 +12,7 @@
  * looking for them anyway, and the commitment-pricing section is one
  * more question rather than a section of its own.
  *
- *   1. Hero: standard pricing, tailored modeling.
+ *   1. Hero: one model, clear annual pricing.
  *   2. Free-account band: don't take our word for it, before the tiers.
  *   3. Four plans led by Seed, the client-work marker, and Cedar Grove
  *      on its own.
@@ -45,9 +45,28 @@ import '../styles/home.css';
 import '../styles/pricing.css';
 
 const description =
-  'Pricing for the intelligent economic analysis platform. Every paid Lumecon plan includes Cedar Impact in full, unlimited analysis, every supported U.S. geography and Cedar. Higher plans add Cedar Commons, the shared project workspace, and Cedar Grove, the advanced data library, which is also available on its own. Paid plans start at $1,000 a year, prices are public, and Seed, the free account, lets you build a full analysis and see your direct effects without a credit card.';
+  'Every price on one page. Paid plans start at $1,000 a year with unlimited analyses, every supported U.S. geography and Cedar. Request Seed access for free.';
 
 const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://lumecon.ai/pricing#webpage',
+    name: 'Pricing | Lumecon',
+    url: 'https://lumecon.ai/pricing',
+    description,
+    isPartOf: { '@id': 'https://lumecon.ai#website' },
+    about: { '@id': 'https://lumecon.ai#application' },
+    publisher: { '@id': 'https://lumecon.ai#org' },
+    inLanguage: 'en-US',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://lumecon.ai' },
+        { '@type': 'ListItem', position: 2, name: 'Pricing', item: 'https://lumecon.ai/pricing' },
+      ],
+    },
+  },
   {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -89,69 +108,85 @@ const jsonLd = [
   title="Pricing | Lumecon"
   description={description}
   canonical="https://lumecon.ai/pricing"
-  keywords="Lumecon pricing, economic impact analysis pricing, economic impact software cost, IMPLAN alternative pricing, REMI alternative pricing, economic modeling software price, Cedar AI pricing, annual subscription, free economic impact software trial"
-  ogTitle="Lumecon pricing: standard pricing, tailored modeling"
+  ogTitle="Lumecon pricing: one model, clear annual pricing"
   ogDescription={description}
   jsonLd={jsonLd}
 >
   <Nav />
   <main class="pr" id="top" tabindex="-1">
-    <!-- 1. Hero: simplicity is the opening argument. -->
+    {/* 1. Hero: simplicity is the opening argument. */}
     <section class="pr-hero">
       <div class="pr-hero__inner" data-reveal-group>
-        <p class="h-kicker">Pricing</p>
-        <h1 class="pr-hero__title">
-          We tailor the modeling. <span class="hero2-em">Your pricing stays standard.</span>
-        </h1>
-        <p class="pr-hero__lede">
-          Every paid plan runs the full economic model with unlimited analysis, every supported U.S.
-          geography and Cedar. Higher plans add collaboration and scale. However complex your
-          organization is, the pricing stays simple.
-        </p>
-        <p class="pr-hero__callout">
-          Plans start at $1,000 a year, and every price is on this page.
-        </p>
-        <div class="pr-hero__ctas">
-          <a class="btn2 btn2--primary" href="/signup?tier=free">
-            Try Lumecon for free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
-          </a>
-          <a class="btn2 btn2--card" href="#plans">Compare plans</a>
+        <div class="pr-hero__copy">
+          <p class="h-kicker">Pricing</p>
+          <h1 class="pr-hero__title">
+            Complete economic analysis with <span class="hero2-em">transparent annual pricing.</span
+            >
+          </h1>
+          <p class="pr-hero__lede">
+            Every paid plan runs the same regionalized input-output model with unlimited analyses
+            and every supported U.S. geography. Higher plans add collaboration, organizational
+            memory and scale. No per-analysis fees or geography add-ons.
+          </p>
+          <p class="pr-hero__callout">
+            Plans start at $1,000 a year, and every price is on this page.
+          </p>
+          <div class="pr-hero__ctas">
+            <a class="btn2 btn2--primary" href="/signup?tier=free">
+              Request Seed access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+            <a class="btn2 btn2--card" href="#plans">Compare plans</a>
+          </div>
         </div>
+        <aside class="pr-hero__ledger" aria-label="Annual plan prices">
+          <p class="pr-hero__ledger-k">Annual access</p>
+          <ul>
+            {
+              ALL_PLANS.map((p) => (
+                <li class={p.featured ? 'is-featured' : ''}>
+                  <span>{p.name}</span>
+                  <strong>{p.price}</strong>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="pr-hero__ledger-note">
+            Every paid plan includes the same model, every supported geography and unlimited
+            analyses.
+          </p>
+        </aside>
       </div>
     </section>
 
-    <!-- 2. The free account, promoted: don't take our word for it. -->
+    {/* 2. The free account, promoted: don't take our word for it. */}
     <section class="pr-plans" id="plans" aria-label="Plans">
       <aside class="pr-free" aria-labelledby="free-title">
         <div class="pr-free__main">
-          <p class="h-kicker">Seed, the free account, is the real product</p>
-          <h2 class="pr-free__title" id="free-title">Don&rsquo;t take our word for it.</h2>
+          <p class="h-kicker">Evaluate Lumecon with Seed</p>
+          <h2 class="pr-free__title" id="free-title">Request Seed access.</h2>
           <p class="pr-free__body">
-            Create a free Seed account and use the actual Lumecon platform. Bring your documents,
-            work with Cedar, build an analysis end to end and see your direct effects on the results
-            page. There is no credit card, countdown or sales call. Indirect, induced and total
-            impact unlock when you choose a paid plan.
+            Access is opening in waves. Once admitted, bring your documents, work with Cedar, build
+            an analysis and review direct effects on the results page. Indirect, induced and total
+            effects unlock on a paid plan.
           </p>
         </div>
         <div class="pr-free__side">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
-            Try Lumecon free <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            Request Seed access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
-          <p class="pr-free__terms">No credit card &middot; No expiration &middot; No obligation</p>
+          <p class="pr-free__terms">No credit card, expiration or obligation.</p>
         </div>
       </aside>
 
-      <!-- 3. Four understandable plans, Seed first. -->
+      {/* 3. Four understandable plans, Seed first. */}
       <div class="pr-plans__grid">
         {
           ALL_PLANS.map((p) => (
-            <article
-              class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`}
-              id={`plan-${p.id}`}
-              data-plan-card={p.ctaHref}
-            >
-              {p.featured && <p class="pr-plan__flag">Recommended</p>}
-              <h2 class="pr-plan__name">{p.name}</h2>
+            <article class={`pr-plan${p.featured ? ' pr-plan--featured' : ''}`} id={`plan-${p.id}`}>
+              <div class="pr-plan__head">
+                <h2 class="pr-plan__name">{p.name}</h2>
+                {p.featured && <p class="pr-plan__flag">Recommended</p>}
+              </div>
               {/* Always rendered so the three cards keep the same rhythm.
                   Without the placeholder Sprout's price sat a chip-height
                   above the other two and the row read as ragged. */}
@@ -161,7 +196,7 @@ const jsonLd = [
               >
                 {CLIENT_WORK.chip}
               </p>
-              <p class="pr-plan__audience">&ldquo;{p.audience}&rdquo;</p>
+              <p class="pr-plan__audience">{p.audience}</p>
               <p class="pr-plan__price">
                 <span class="pr-plan__amount">{p.price}</span>
                 <span class="pr-plan__period">{p.period}</span>
@@ -182,15 +217,19 @@ const jsonLd = [
         }
       </div>
 
-      <!-- One line for what used to be a consultant band. The cards
-           carry the marker; this says what the marker means. -->
-      <p class="pr-plans__clientnote">{CLIENT_WORK.note}</p>
+      {
+        /* One line for what used to be a consultant band. The cards
+           carry the marker; this says what the marker means. */
+      }
+      <p class="pr-plans__clientnote" id="consultants">{CLIENT_WORK.note}</p>
 
-      <!-- Cedar Grove: the data library, sold on its own. It sits after
+      {
+        /* Cedar Grove: the data library, sold on its own. It sits after
            the plans rather than as a fourth card because it is not a
            fourth tier of the same thing: no economic model, no Cedar
            Commons, unlimited people. Pricing it here is also what shows
-           the model and Commons are the larger part of Tree. -->
+           the model and Commons are the larger part of Tree. */
+      }
       <aside class="pr-grove" id="cedar-grove" aria-labelledby="grove-title">
         <div class="pr-grove__main">
           <p class="h-kicker">{CEDAR_GROVE.kicker}</p>
@@ -227,10 +266,12 @@ const jsonLd = [
         </div>
       </aside>
 
-      <!-- Detail table, folded away by default. The cards answer the question
+      {
+        /* Detail table, folded away by default. The cards answer the question
            for most readers; the grid is for someone checking one capability.
            <details> rather than scripted state: no JavaScript, and keyboard
-           operable for free. -->
+           operable for free. */
+      }
       <details class="pr-more">
         <summary class="pr-more__summary">
           <span class="pr-more__label">Compare all plans</span>
@@ -265,31 +306,21 @@ const jsonLd = [
         </div>
       </details>
       <p class="pr-plans__note">
-        Every paid plan includes Cedar Impact in full, on the same data foundation; Seed shows
-        your direct effects. Prices include taxes and fees.{' '}
+        Every paid plan includes Cedar Impact in full, on the same data foundation; Seed shows your
+        direct effects. Prices include taxes and fees.{' '}
         <a class="inline-link" href="/cedar">Learn what Cedar does</a>.
       </p>
     </section>
 
-    <script is:inline>
-      /* The whole plan card is a click target for its primary CTA; the
-     links inside keep working as themselves. */
-      document.querySelectorAll('[data-plan-card]').forEach(function (card) {
-        card.addEventListener('click', function (e) {
-          if (e.target.closest('a')) return;
-          var href = card.getAttribute('data-plan-card');
-          if (href) window.location.href = href;
-        });
-      });
-    </script>
-
-    <!-- The FAQ is the body of the page now: everything the two prose
+    {
+      /* The FAQ is the body of the page now: everything the two prose
          sections and the commitment section used to argue is an answer
-         behind a one-sentence question. -->
+         behind a one-sentence question. */
+    }
     <section class="flowsec pr-faq" id="faq" aria-labelledby="faq-title">
       <div class="flowsec-inner">
         <header class="flowsec-head" data-reveal-group>
-          <h2 class="flowsec-title" id="faq-title">Pricing questions, answered plainly.</h2>
+          <h2 class="flowsec-title" id="faq-title">Questions about plans and billing.</h2>
         </header>
         <div class="pr-faq__list">
           {

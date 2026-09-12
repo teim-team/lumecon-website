@@ -46,6 +46,59 @@ async function ctx(width, height, colorScheme, isMobile = false) {
   return c;
 }
 
+/**
+ * Native lazy images only begin loading after they enter the viewport.
+ * A full-page screenshot does not perform that scroll itself, so without
+ * this pass it can look as if real artwork or product captures are missing.
+ * Prime each lazy image in reading order, confirm it decoded, then return to
+ * the page top before the actual capture.
+ */
+async function primeLazyImages(page) {
+  const lazyImages = page.locator('img[loading="lazy"]');
+  const count = await lazyImages.count();
+
+  for (let index = 0; index < count; index += 1) {
+    const image = lazyImages.nth(index);
+    await image.scrollIntoViewIfNeeded();
+    const result = await image.evaluate(async (node) => {
+      const img = node;
+      if (!img.complete) {
+        await Promise.race([
+          new Promise((resolve) => {
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+          }),
+          new Promise((resolve) => window.setTimeout(resolve, 7_500)),
+        ]);
+      }
+      if (!img.complete || !img.naturalWidth) return img.currentSrc || img.src;
+      try {
+        await img.decode();
+      } catch {
+        // A complete image may reject decode when it is already available;
+        // naturalWidth above remains the source-of-truth check.
+      }
+      return null;
+    });
+    if (result) throw new Error(`Lazy image did not load: ${result}`);
+  }
+
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await page.waitForTimeout(150);
+
+  const failed = await page.evaluate(() =>
+    Array.from(document.images)
+      .filter(
+        (img) =>
+          img.id !== 'lightboxImg' &&
+          img.getAttribute('src') &&
+          (!img.complete || !img.naturalWidth),
+      )
+      .map((img) => img.currentSrc || img.src),
+  );
+  if (failed.length) throw new Error(`Image asset check failed: ${failed.join(', ')}`);
+}
+
 const surfaces = [
   { name: 'desktop-light', c: await ctx(1440, 900, 'light') },
   { name: 'desktop-dark', c: await ctx(1440, 900, 'dark') },
@@ -62,14 +115,15 @@ async function shot(c, url, name, opts = {}) {
   const page = await c.newPage();
   await page.goto(BASE + url, { waitUntil: 'networkidle' });
   if (opts.before) await opts.before(page);
+  if (opts.full ?? true) await primeLazyImages(page);
   await page.waitForTimeout(opts.wait ?? 800);
   await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: opts.full ?? true });
   await page.close();
   console.log('shot', name);
 }
 
-// Every public page. /film is unlisted but still shippable; /naics is
-// deliberately unlisted in nav but indexed, so both stay in the sweep.
+// Every public page. /naics is deliberately unlisted in nav but indexed,
+// so it stays in the sweep.
 const PAGES = [
   ['/', 'home'],
   ['/cedar', 'cedar'],
@@ -83,10 +137,10 @@ const PAGES = [
   ['/welcome', 'welcome'],
   ['/accessibility', 'accessibility'],
   ['/ai-and-data-use', 'ai-and-data-use'],
+  ['/security', 'security'],
   ['/terms', 'terms'],
   ['/privacy', 'privacy'],
   ['/404', '404'],
-  ['/film', 'film'],
 ];
 
 for (const { name: surface, c } of surfaces) {
@@ -115,7 +169,7 @@ await shot(desktopLight, '/pricing', 'pricing-faq-open--desktop-light', {
     });
     if (!opened) {
       throw new Error(
-        'pricing FAQ disclosure (.pr-faq details.pr-more--faq) not found; the open-state shot would capture the closed default'
+        'pricing FAQ disclosure (.pr-faq details.pr-more--faq) not found; the open-state shot would capture the closed default',
       );
     }
     await page.waitForTimeout(300);
@@ -123,19 +177,41 @@ await shot(desktopLight, '/pricing', 'pricing-faq-open--desktop-light', {
   wait: 0,
 });
 
-// Cedar chat open, both themes: the docked panel has its own surface
-// styles and a disclaimer line that must hold on dark grounds too.
-for (const { name: surface, c } of [surfaces[0], surfaces[1]]) {
+// Cedar appears only after the opening composition and intentionally moves
+// away from dense controls. Capture a real, unobstructed viewport at #why,
+// then pin both its closed and open states.
+async function showCedarFab(page) {
+  const why = page.locator('#why');
+  await why.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(350);
+  const fab = page.locator('.cedar-fab');
+  await fab.waitFor({ state: 'visible', timeout: 5_000 });
+  return fab;
+}
+
+for (const { name: surface, c } of [surfaces[0], surfaces[1], surfaces[6]]) {
+  await shot(c, '/', `cedar-fab--${surface}`, {
+    full: false,
+    before: showCedarFab,
+    wait: 150,
+  });
+}
+
+// Cedar chat open: the docked panel has its own surface styles and a
+// disclaimer line that must hold on desktop, dark, and phone layouts.
+for (const { name: surface, c } of [surfaces[0], surfaces[1], surfaces[6]]) {
   await shot(c, '/', `cedar-chat-open--${surface}`, {
     full: false,
     before: async (page) => {
-      const fab = page.locator('[data-cedar-fab], .cedar-fab');
-      if (await fab.count()) {
-        await fab.first().click();
-        await page.waitForTimeout(600);
+      const fab = await showCedarFab(page);
+      await fab.click();
+      const panel = page.locator('#cedarFabPanel');
+      await panel.waitFor({ state: 'visible', timeout: 5_000 });
+      if ((await panel.getAttribute('aria-hidden')) !== 'false') {
+        throw new Error('Cedar panel did not enter its open state');
       }
     },
-    wait: 0,
+    wait: 550,
   });
 }
 

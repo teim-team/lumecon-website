@@ -24,23 +24,36 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium webkit
       - run: npm run build
-      # Chromium is the merge gate — deterministic here. WebKit runs too,
-      # but headless WebKit is unreliable in this CI runner (intermittent
-      # TLS-handshake failures loading external resources, plus layout /
-      # timing quirks the d3-geo map and the reveal scripts trip on). Those
-      # are environmental, not real regressions, and iOS Safari is covered
-      # by hand-QA — so WebKit is informational (continue-on-error) rather
-      # than a blocking check.
+        env:
+          PUBLIC_APP_URL: https://app.lumecon.ai
+          PUBLIC_API_URL: https://api.lumecon.ai
+      # Both browsers use a local HTTPS preview so the production CSP's
+      # upgrade-insecure-requests directive does not break Safari's assets.
       - name: Smoke — Chromium (required)
         run: npx playwright test --project=chromium
-      - name: Smoke — WebKit (informational)
+      - name: Smoke — WebKit (required)
         run: npx playwright test --project=webkit
-        continue-on-error: true
-      - if: failure()
+      - name: Capture review surfaces and keep the published copy audit current
+        run: |
+          npm run preview -- --host 127.0.0.1 > /tmp/lumecon-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill $preview_pid' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:4321/ >/dev/null; then break; fi
+            sleep 1
+          done
+          SHOT_BASE=http://127.0.0.1:4321 SHOT_OUT=artifacts/finish-pass-screenshots node scripts/screenshots/capture-finish-pass.mjs
+          DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
+          git diff --exit-code -- docs/site-copy-and-architecture.md
+      - if: always()
         uses: actions/upload-artifact@v7
         with:
           name: playwright-trace
           path: |
             test-results/
             playwright-report/
+            artifacts/finish-pass-screenshots/
+            docs/methodology-open-questions.pdf
+            docs/site-copy-and-architecture.md
+            /tmp/lumecon-preview.log
           retention-days: 7

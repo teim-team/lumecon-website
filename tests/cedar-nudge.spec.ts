@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { scrollUntilCedarVisible } from './cedar-visibility';
 
 /**
  * The Cedar helper nudge no longer auto-appears: unprompted popups
@@ -21,6 +22,9 @@ test('launcher pill shows the Ask Cedar label and context line', async ({ page }
   await page.goto('/', { waitUntil: 'networkidle' });
 
   const fab = page.locator('#cedarFab');
+  await expect(fab).toBeHidden();
+  await expect(fab).toHaveAttribute('data-cedar-visibility', 'waiting');
+  await scrollUntilCedarVisible(page);
   await expect(fab).toBeVisible();
   await expect(fab).toContainText('Ask Cedar');
   await expect(fab).toContainText('Questions about Lumecon');
@@ -29,4 +33,13 @@ test('launcher pill shows the Ask Cedar label and context line', async ({ page }
   await fab.click();
   await expect(page.locator('#cedarFabPanel')).toBeVisible();
   await expect(fab).toContainText('Close');
+});
+
+test('Cedar page uses its dedicated editorial surface without a duplicate launcher', async ({
+  page,
+}) => {
+  await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#cedarFab')).toHaveCount(0);
+  await expect(page.locator('.cedarpg .cedarpg-hero')).toHaveCount(1);
+  await expect(page.locator('.cedarpg [data-zoom]')).toHaveCount(4);
 });
