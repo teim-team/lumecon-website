@@ -53,6 +53,12 @@ body.legal-page h2 {
   border-bottom: 1px solid var(--rule);
   margin-bottom: 2.2rem;
 }
+/* When the open-all control follows the dateline, the dateline's margin
+   was sized for a section: the control takes the gap instead, so it
+   reads as part of the header rather than floating between rules. */
+.date:has(+ .fold-all-row) {
+  margin-bottom: 0.9rem;
+}
 /* Long-form body text. 17px with a relaxed leading is the readable
    floor for page-length reading; ink tokens (not --gray/--graylt)
    so the text flips with the dark-mode palette. */
