@@ -912,6 +912,113 @@ strong {
 .js [data-reveal-group].seen > *:nth-child(n + 7) {
   transition-delay: 450ms;
 }
+
+/* Disclosure folds. The site folds long content into <details> rows (the
+   methodology commitments, the legal sections, the pricing FAQ). Their
+   summaries already animate the plus sign; the body itself snapped open,
+   so a reader saw a block of text appear with no sense of where it came
+   from. The fold now unfolds: height and opacity over a quarter second,
+   and on close the content stays painted until the fold has shut.
+
+   CSS only, and progressive. ::details-content and interpolate-size are
+   what let a height animate to `auto`; a browser without them keeps the
+   snap it has today. The NAICS tiles are <details> too and are left out
+   on purpose: their description is an overlay with its own transition.
+   Reduced motion turns the whole thing off, not down. */
+@supports (interpolate-size: allow-keywords) {
+  .mcard,
+  .legal-sec,
+  .pr-more,
+  .meth-faq__row {
+    interpolate-size: allow-keywords;
+  }
+  .mcard::details-content,
+  .legal-sec::details-content,
+  .pr-more::details-content,
+  .meth-faq__row::details-content {
+    height: 0;
+    overflow: clip;
+    opacity: 0;
+    transition:
+      height 0.28s var(--ease),
+      opacity 0.22s var(--ease),
+      content-visibility 0.28s allow-discrete;
+  }
+  .mcard[open]::details-content,
+  .legal-sec[open]::details-content,
+  .pr-more[open]::details-content,
+  .meth-faq__row[open]::details-content {
+    height: auto;
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mcard::details-content,
+    .legal-sec::details-content,
+    .pr-more::details-content,
+    .meth-faq__row::details-content {
+      transition: none;
+    }
+  }
+}
+
+/* Open all / close all, for a page made of folds (FoldAll.astro). Plain
+   mono typography in the interactive teal, no pill and no border: the
+   audit's eyebrow rule, applied to a control. Hidden until its script
+   runs, because without JavaScript it would be a button that does
+   nothing. */
+.fold-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 1rem auto;
+  padding: 0.35rem 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  cursor: pointer;
+}
+.fold-all-row {
+  display: flex;
+  justify-content: flex-end;
+}
+/* Author display rules outrank the UA stylesheet's [hidden], so the
+   no-JavaScript state has to be spelled out. */
+.fold-all-row[hidden] {
+  display: none;
+}
+.fold-all::before {
+  content: '+';
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s var(--ease);
+}
+.fold-all[aria-pressed='true']::before {
+  transform: rotate(45deg);
+}
+.fold-all:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.fold-all:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fold-all::before {
+    transition: none;
+  }
+}
+/* A finger needs more than a line of 13px type to land on. */
+@media (pointer: coarse) {
+  .fold-all {
+    padding: 0.7rem 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-soft,

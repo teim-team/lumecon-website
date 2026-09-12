@@ -13,6 +13,7 @@
  */
 import { site } from '../config';
 import LegalLayout from '../layouts/LegalLayout.astro';
+import FoldAll from '../components/FoldAll.astro';
 ---
 
 <LegalLayout
@@ -25,6 +26,8 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     Working draft, under review by counsel. These terms take effect when you are asked to accept
     them, not before.
   </div>
+
+  <FoldAll selector="details.legal-sec" noun="sections" />
 
   <details class="legal-sec" open>
     <summary><h2 class="legal-subhead">1. Who we are and what these terms cover</h2></summary>

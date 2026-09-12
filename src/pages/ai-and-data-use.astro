@@ -14,6 +14,7 @@
  */
 import { site } from '../config';
 import LegalLayout from '../layouts/LegalLayout.astro';
+import FoldAll from '../components/FoldAll.astro';
 ---
 
 <LegalLayout
@@ -29,6 +30,8 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     Lumecon. This statement explains what Cedar processes, how AI is separated from the economic
     model and which data-protection commitments are currently in effect.
   </p>
+
+  <FoldAll selector="details.legal-sec" noun="sections" />
 
   <details class="legal-sec" open>
     <summary><h2 class="legal-subhead">1. Where AI sits in the platform</h2></summary>
