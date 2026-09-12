@@ -1,0 +1,46 @@
+name: Regenerate approved review documents
+
+on:
+  push:
+    branches:
+      - codex/lumecon-final-qa
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build and serve
+        run: |
+          npm run build
+          npm exec astro preview -- --host 127.0.0.1 --port 4330 > /tmp/lumecon-preview.log 2>&1 &
+          for attempt in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:4330 >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/lumecon-preview.log
+          exit 1
+      - name: Generate approved review documents
+        env:
+          DOCS_BASE_URL: http://127.0.0.1:4330
+        run: |
+          npm run docs:questions
+          npm run docs:copy
+      - uses: actions/upload-artifact@v7
+        with:
+          name: lumecon-approved-review-documents
+          path: |
+            docs/site-copy-and-architecture.md
+            docs/methodology-open-questions.pdf
+          retention-days: 3
