@@ -1,6 +1,6 @@
 /**
  * Full-site visual sweep: every public page at the audit widths from
- * AGENTS.md (1440, 1024, 768, 430, 375, plus 390 as the device-frame
+ * AGENTS.md (1440, 1024, 768, 430, 375, plus 1366 as a common laptop and 390 as the device-frame
  * phone), in both light and dark color schemes at the endpoints, plus
  * the signup page arriving from each real pricing tier. The output
  * grid is the review surface for theme and responsive regressions —
@@ -102,6 +102,7 @@ async function primeLazyImages(page) {
 const surfaces = [
   { name: 'desktop-light', c: await ctx(1440, 900, 'light') },
   { name: 'desktop-dark', c: await ctx(1440, 900, 'dark') },
+  { name: 'laptop-light', c: await ctx(1366, 768, 'light') },
   { name: 'tablet-light', c: await ctx(1024, 768, 'light') },
   { name: 'tablet-dark', c: await ctx(1024, 768, 'dark') },
   { name: 'tablet-narrow-light', c: await ctx(768, 1024, 'light') },
