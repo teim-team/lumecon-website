@@ -497,6 +497,15 @@
 
 /* ---------- institutional evidence ledger ---------- */
 .edge {
+  /* The mark art in .edge::before is absolutely positioned and bleeds off
+     the top-right corner, so this section has to be its containing block
+     and clip it. That containment lived on .edge.section--dark and was
+     removed with the dark treatment (fda4d1d), which let the mark escape
+     to the page's top-right corner and made every page width 4rem too
+     wide. */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background: var(--white);
   border-top: 1px solid var(--rule);
   padding: clamp(4rem, 9vh, 7rem) var(--container-pad);

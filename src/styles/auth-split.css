@@ -25,7 +25,12 @@
 /* ---------- teal brand panel ---------- */
 .asplit-brand {
   position: relative;
-  overflow: hidden;
+  /* `clip`, not `hidden`: the mark and the photo bleed past this box on
+     purpose, and a hidden-overflow box is still a scroll container that
+     scrollIntoView(), focus() and find-in-page will scroll to reach them
+     — which dragged the headline 58px under the panel's left edge in the
+     phone review captures. `clip` forbids scrolling entirely. */
+  overflow: clip;
   display: flex;
   align-items: center;
   padding: clamp(2.5rem, 5vw, 5rem);

@@ -204,6 +204,11 @@
      1360px page container, so 75% of it reads as roughly 65% of the full
      page at desktop while remaining responsive at every narrower width. */
   --measure-lede: min(75%, 62rem);
+  /* On a phone the same percentage leaves a quarter of a card empty beside
+     four-word lines, which is the arbitrary-max-width tell; the lede runs the
+     full column there and the cap returns as soon as there is a row to
+     share. Overridden below, not per consumer, so the four ledes that read
+     this token behave the same way. */
 
   /* ---- Display type scale ----
      One place to set how the site sounds. Two things changed here.
@@ -1030,4 +1035,10 @@ strong {
   z-index: 9999;
   pointer-events: none;
   transition: width 0.1s linear;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --measure-lede: none;
+  }
 }

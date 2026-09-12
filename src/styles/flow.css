@@ -9,7 +9,12 @@
 /* ---------- shared teal field ---------- */
 .tealfield {
   position: relative;
-  overflow: hidden;
+  /* `clip`, not `hidden`: the mark art bleeds past this surface on purpose,
+     and a hidden-overflow box is still a scroll container that
+     scrollIntoView(), focus() and find-in-page will scroll to reach it —
+     which shifted /choose-plan, /welcome and /checkout 62px left on a phone
+     and 230px on desktop in the review captures. `clip` forbids scrolling. */
+  overflow: clip;
   color: #fff;
   background:
     linear-gradient(128deg, rgba(15, 181, 165, 0.22), transparent 45%),

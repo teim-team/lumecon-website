@@ -1,0 +1,56 @@
+name: Lumecon polish visual QA
+
+on:
+  push:
+    branches: [codex/lumecon-polish-qa]
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # The production URLs the build is documented to need (AGENTS.md): without
+      # them Astro emits the login-only variant and the smoke suite's /welcome
+      # and CSP assertions fail before the screenshots and copy audit run.
+      - run: npm run build
+        env:
+          PUBLIC_APP_URL: https://app.lumecon.ai
+          PUBLIC_API_URL: https://api.lumecon.ai
+      - name: Smoke test
+        run: npx playwright test --project=chromium
+      - name: Serve built site
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4330 > /tmp/lumecon-preview.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4330/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/lumecon-preview.log
+          exit 1
+      - name: Capture responsive review images
+        run: |
+          CHROME_BIN="$(node -e "const { chromium } = require('playwright'); process.stdout.write(chromium.executablePath())")" \
+          SHOT_BASE=http://127.0.0.1:4330 \
+          SHOT_OUT=lumecon-polish-review \
+          node scripts/screenshot.mjs
+      - name: Audit crawler metadata and export rendered copy
+        run: DOCS_BASE_URL=http://127.0.0.1:4330 npm run docs:copy
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lumecon-polish-qa
+          path: |
+            lumecon-polish-review/
+            docs/site-copy-and-architecture.md
+            /tmp/lumecon-preview.log
+          retention-days: 7
