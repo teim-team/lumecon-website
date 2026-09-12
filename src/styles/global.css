@@ -1038,7 +1038,10 @@ strong {
     padding: 0.7rem 0;
   }
 }
-@media (prefers-reduced-motion: reduce) {
+/* Print is the other reader that never scrolls: a PDF made before the
+   failsafe has run must carry every section, so print media joins the
+   reduced-motion reset. */
+@media (prefers-reduced-motion: reduce), print {
   .reveal,
   .reveal-soft,
   .reveal-left,

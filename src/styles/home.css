@@ -688,32 +688,6 @@
   height: 205px;
   margin-bottom: 0.8rem;
 }
-/* The card is not a link, so it does not lift. Its drawing rises a
-   few pixels and its title takes the accent, enough to say the row is
-   alive under a pointer without pretending the card is a button. */
-.whyw-art img {
-  transition: transform 0.3s var(--ease);
-}
-.whyw-card__t {
-  transition: color 0.2s var(--ease);
-}
-@media (hover: hover) and (pointer: fine) {
-  .whyw-card:hover .whyw-art img {
-    transform: translateY(-4px);
-  }
-  .whyw-card:hover .whyw-card__t {
-    color: var(--accent-text);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .whyw-art img,
-  .whyw-card__t {
-    transition: none;
-  }
-  .whyw-card:hover .whyw-art img {
-    transform: none;
-  }
-}
 .whyw-card[data-art='orgs'] .whyw-art img {
   width: 100%;
 }

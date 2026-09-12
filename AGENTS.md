@@ -191,7 +191,11 @@ User-facing word choices, everywhere a customer reads:
 - The platform phrase (founder-approved 2026-08, verbatim): Lumecon
   is "the intelligent economic analysis platform". This is the
   category-level positioning, used in the homepage title, the hero
-  kicker, the canonical pitch and page metas. "Economic impact
+  kicker, the canonical pitch and page metas. In running text it stays
+  lowercase. Where it stands alone as a name (the homepage `<title>`
+  and `og:title`, which link previews in iMessage and elsewhere show,
+  and the nav tagline) it is title case, "The Intelligent Economic
+  Analysis Platform" (founder decision 2026-09-12). "Economic impact
   analysis" remains the search term customers type and stays the
   category wording on Cedar Impact surfaces.
 - "Intelligent", not "AI", is how the products are described. The
