@@ -172,54 +172,81 @@
 }
 .gm__map {
   margin: 0;
+  min-width: 0;
   padding: 1rem 1rem 0.9rem;
   border-right: 1px solid var(--gf-rule);
   display: flex;
   flex-direction: column;
+  justify-content: center;
+}
+/* The map keeps a readable minimum scale rather than shrinking with the
+   column. Below that width the canvas scrolls sideways, the same treatment
+   the finding charts get, because a boundary label rendered at five pixels
+   is not a label. */
+.gm__canvas {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 .gm__map svg {
   display: block;
-  flex: 1 1 auto;
-  min-height: 0;
+  min-width: 32rem;
   width: 100%;
   height: auto;
   border-radius: 4px;
 }
 .gm__map text {
   font-family: var(--font-mono);
+  /* A boundary line running through a label is the one thing that makes a
+     map look unfinished. The halo is painted behind the glyphs, not over
+     them. */
+  paint-order: stroke fill;
+  stroke: #f7f5f0;
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
-/* The topic in focus keeps its geography at full strength; the others
-   step back rather than disappear, since the map's point is that all three
-   kinds of coverage exist at once. */
+/* The topic in focus keeps its geography at full strength; the others step
+   back rather than disappear, since the map's point is that both kinds of
+   coverage exist at once over the same ground. */
 .gm__proxy,
 .gm__org,
-.gm__missing,
-.gm__service {
+.gm__trust,
+.gm__counties {
   transition: opacity 0.25s ease;
 }
-.gm[data-gm-topic='income'] .gm__proxy,
-.gm[data-gm-topic='income'] .gm__missing {
-  opacity: 0.35;
+.gm[data-gm-topic='income'] .gm__proxy {
+  opacity: 0.14;
 }
-.gm[data-gm-topic='employment'] .gm__org {
-  opacity: 0.45;
+.gm[data-gm-topic='employment'] .gm__proxy {
+  opacity: 0.85;
 }
-.gm[data-gm-topic='employment'] .gm__missing {
-  opacity: 0.35;
+.gm[data-gm-topic='employment'] .gm__org,
+.gm[data-gm-topic='employment'] .gm__trust {
+  opacity: 0.55;
 }
 .gm[data-gm-topic='outcomes'] .gm__proxy {
-  opacity: 0.25;
+  opacity: 0.1;
 }
-.gm[data-gm-topic='outcomes'] .gm__org {
-  opacity: 0.55;
+.gm[data-gm-topic='outcomes'] .gm__org,
+.gm[data-gm-topic='outcomes'] .gm__trust {
+  opacity: 0.4;
 }
 @media (prefers-reduced-motion: reduce) {
   .gm__proxy,
   .gm__org,
-  .gm__missing,
-  .gm__service {
+  .gm__trust,
+  .gm__counties {
     transition: none;
   }
+}
+.gm__vintage {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gf-ink-2);
 }
 .gm__legend {
   display: flex;
@@ -255,12 +282,17 @@
 .gm__sw--proxy {
   background: repeating-linear-gradient(45deg, rgba(24, 54, 74, 0.3) 0 1px, #f7f5f0 1px 4px);
 }
-.gm__sw--missing {
-  background: #e3ded5;
-  border-color: #b8ad9c;
-}
-.gm__sw--service {
+.gm__sw--trust {
   border: 1px dashed var(--gf-teal);
+  background: rgba(10, 127, 116, 0.12);
+}
+.gm__sw--state {
+  background: #efece5;
+  border-color: #c9cccf;
+}
+.gm__sw--neighbor {
+  background: #e6e2d8;
+  border-color: #a9a294;
 }
 .gm__panel {
   padding: 1.1rem 1.2rem 1.2rem;
@@ -339,9 +371,13 @@
 }
 @media (max-width: 700px) {
   .gm__body {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr), not 1fr: an auto-minimum track takes its width from the
+       map's minimum scale and pushes the whole card past the viewport. The
+       canvas is what scrolls, never the page. */
+    grid-template-columns: minmax(0, 1fr);
   }
   .gm__map {
+    min-width: 0;
     border-right: 0;
     border-bottom: 1px solid var(--gf-rule);
   }
@@ -621,9 +657,11 @@
   text-transform: uppercase;
   color: var(--gf-ink-2);
 }
+/* The caption sits on --gf-bg-2, where --gf-ink-3 reaches only 4.40:1 and
+   misses the 4.5:1 floor for small text. It takes the bar's own ink. */
 .gcrop__bar small {
   font-size: 0.58rem;
-  color: var(--gf-ink-3);
+  color: var(--gf-ink-2);
 }
 .gcrop__body {
   padding: 0.9rem 1rem 1rem;
