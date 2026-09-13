@@ -3,26 +3,30 @@
  * /cedar-grove — Cedar Grove by Lumecon.
  *
  * The product page for the standalone license. Cedar Press's hero is a
- * catalog because Press sells a shared catalog; Grove's hero is a staged
- * organizational evidence view, because what Grove sells is the connection
- * between a claim and what it rests on. One interactive frame demonstrates
- * it: pick a finding, read its coverage status, open the evidence record.
+ * catalog because Press sells a shared catalog; Grove's hero is a place,
+ * because what Grove sells is the connection between a claim and the
+ * geography and records it rests on. The page shows Grove's actual objects
+ * in order: the map for place, the graph for the claim, the evidence record
+ * for trust, the collection marks for the infrastructure.
  *
- * The frame uses an invented organization and invented values, labelled as
- * such on the frame. It never shows a real place or a real number, so the
- * page cannot attach fabricated figures to an actual community.
+ * Section rhythm: dark navy hero with the evidence map; deep teal band with
+ * the finding workflow (question, figure, evidence record); pale proof strip
+ * with staged product crops; deep ink registry of the twelve collections;
+ * pale license panel with the late bridge to Cedar Impact.
  *
- * The hero capture is different and says so in its caption: it is the app's
- * demonstration workspace, whose organization is invented but whose
- * geography is a real Census statistical area, because the app computes
- * coverage from real source geography rather than asserting it. Its
- * observations are demonstration values, labelled as such in the capture.
+ * Everything staged here uses an invented organization, an invented place
+ * and invented values, labelled as such on its face. No real Nation, no
+ * real area and no real number appears, so the page cannot attach fabricated
+ * figures to an actual community. The map distinguishes the organization's
+ * geography, its self-declared service area and the statistical proxy
+ * geography a source falls back to; it draws none of them from a real map.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../config';
 import { CEDAR_GROVE } from '../data/pricing';
+import { GROVE_COLLECTIONS } from '../data/groveCollections';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -70,6 +74,57 @@ const jsonLd = [
         name: 'Cedar Grove',
         item: 'https://lumecon.ai/cedar-grove',
       },
+    ],
+  },
+];
+
+/**
+ * The evidence map's topics. Each names the layer of the map it is about and
+ * carries the compact evidence panel: source, vintage, geography, status and
+ * limitation. The sources are real programs; the place and the status are
+ * staged for the invented Example Nation.
+ */
+const MAP_TOPICS = [
+  {
+    id: 'income',
+    label: 'Income and population',
+    status: 'direct',
+    statusLabel: 'Direct',
+    fields: [
+      ['Source', 'U.S. Census Bureau, American Community Survey, 5-year'],
+      ['Vintage', '2020–2024'],
+      ['Geography', 'The Nation’s area, as published'],
+      ['Limitation', 'Survey estimates: a margin of error accompanies every cell'],
+    ],
+  },
+  {
+    id: 'employment',
+    label: 'Employment and wages',
+    status: 'proxy',
+    statusLabel: 'County proxy',
+    fields: [
+      ['Source', 'Bureau of Labor Statistics, Quarterly Census of Employment and Wages'],
+      ['Vintage', '2024 annual averages'],
+      ['Geography', 'Three surrounding counties stand in for the area'],
+      [
+        'Limitation',
+        'County figures include employers outside the Nation. State the assumption or add records.',
+      ],
+    ],
+  },
+  {
+    id: 'outcomes',
+    label: 'Program outcomes',
+    status: 'missing',
+    statusLabel: 'Missing',
+    fields: [
+      ['Source', 'None yet'],
+      ['Vintage', 'Not covered'],
+      ['Geography', 'The program’s service area, beyond the Nation’s area'],
+      [
+        'Limitation',
+        'No public source links enrollment to later employment. The Nation’s own enrollment history would.',
+      ],
     ],
   },
 ];
@@ -160,6 +215,55 @@ const FINDINGS = [
     cite: null,
   },
 ];
+
+/** The proof strip: the four things an organization can always see. */
+const PROOF = [
+  {
+    title: 'Evidence supported',
+    text: 'Findings you can defend today, each with its claim class, how well the evidence fits it and whether the geography measured is the geography named.',
+  },
+  {
+    title: 'Direct or proxy',
+    text: 'Where a source does not publish your area, Grove names the wider geography that stood in and what that means for the number you are about to cite.',
+  },
+  {
+    title: 'Governed records',
+    text: 'The roster, payroll or enrollment file that moves a topic from proxy to direct, named before you assemble it and kept under your governance when it arrives.',
+  },
+  {
+    title: 'Reproducible',
+    text: 'Every figure carries an evidence record and a script that rebuilds it from the same rows, in Python, R or Stata.',
+  },
+];
+
+/** The staged coverage view: topic, status, and the source that answers it. */
+const COVERAGE_ROWS = [
+  ['Population', 'direct', 'Direct', 'ACS 5-year'],
+  ['Income', 'direct', 'Direct', 'ACS 5-year'],
+  ['Employment', 'proxy', 'County proxy', 'QCEW, three counties'],
+  ['Tribal employment', 'org', 'Organization data', 'Enterprise roster'],
+  ['Program outcomes', 'missing', 'Missing', 'No source'],
+];
+
+/** The staged evidence record, the rows the export carries. */
+const RECORD_ROWS = [
+  ['Measure', 'Per capita income (USD)'],
+  ['Geography', 'Example Nation'],
+  ['Universe', 'AIAN alone'],
+  ['Source', 'U.S. Census Bureau, ACS 5-year'],
+  ['Vintage', '2020–2024'],
+  ['Transformation', 'As published; nominal dollars'],
+  ['Uncertainty', '90 percent margin of error'],
+  ['Limits', 'Overlapping five-year periods'],
+];
+
+/** The staged bundle: the files the app names, with its own naming scheme. */
+const BUNDLE_FILES = [
+  ['lumecon-income-trend-example-nation.py', 'Script'],
+  ['lumecon-income-trend-example-nation.csv', 'Data'],
+  ['lumecon-income-trend-example-nation-provenance.csv', 'Provenance'],
+  ['lumecon-income-trend-example-nation-bundle.json', 'Manifest'],
+];
 ---
 
 <BaseLayout
@@ -185,40 +289,165 @@ const FINDINGS = [
         </p>
         <div class="grovepg-cta reveal-soft" data-stagger="3">
           <a class="btn2 btn2--primary" href="#license">
-            Request a Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            Request Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
           <a class="btn2 btn2--card" href="#frame">
-            See how a finding is held <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            See the evidence behind a finding <span class="btn2-arrow" aria-hidden="true"
+              >&rarr;</span
+            >
           </a>
         </div>
         {
-          /* The product itself, beside the copy: the Grove Overview, captured
-             from the app in both themes. Fades and rises in with the copy
-             (reveal-soft, staggered). Shown with the app's demonstration
-             workspace. */
+          /* The evidence map: the place the evidence is about, and what is
+             known about it directly, what is estimated from a wider
+             geography, and what needs better records. A research atlas
+             inside the product frame, not map software: no basemap, no
+             pins, no choropleth. The organization, its area and the counties
+             around it are invented and drawn by hand. */
         }
-        <figure class="grovepg-hero__screen reveal-soft" data-stagger="2" data-zoom>
-          <picture>
-            <source
-              srcset="/app/grove-overview-dark.webp"
-              media="(prefers-color-scheme: dark)"
-              width="1920"
-              height="1080"
-            />
-            <img
-              src="/app/grove-overview.webp"
-              alt="Cedar Grove overview for a demonstration organization: the lead figure with its identity line and claim, then the findings the evidence supports, the limits and next data needed, and the questions the evidence can answer."
-              width="1920"
-              height="1080"
-              decoding="async"
-            />
-          </picture>
-          <figcaption>
-            The Grove Overview: one lead figure, one claim, one limit, then the findings. The
-            organization and its observations are demonstration values; the area named is a Census
-            statistical area, used so the coverage shown is computed, not asserted.
-          </figcaption>
-        </figure>
+        <div class="gf gm reveal-soft" data-stagger="2" data-gm data-gm-topic="income">
+          <div class="gf__bar">
+            <span class="gf__brand">Cedar Grove <small>Example Nation</small></span>
+            <span class="gf__note">Evidence coverage · Illustrative</span>
+          </div>
+          <div class="gm__body">
+            <figure class="gm__map">
+              <svg viewBox="0 0 520 432" role="img" aria-labelledby="gm-title gm-desc">
+                <title id="gm-title">Evidence coverage map for an invented organization</title>
+                <desc id="gm-desc">
+                  The organization’s geography in teal, filled where sources publish it directly;
+                  the three surrounding counties hatched in navy where a source falls back to a
+                  county proxy; a service area in a dashed outline; and a warm gray area no source
+                  covers.
+                </desc>
+                <defs>
+                  <pattern
+                    id="gm-hatch"
+                    width="7"
+                    height="7"
+                    patternUnits="userSpaceOnUse"
+                    patternTransform="rotate(45)"
+                  >
+                    <line
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="7"
+                      stroke="#18364a"
+                      stroke-opacity="0.3"
+                      stroke-width="1.1"></line>
+                  </pattern>
+                </defs>
+                <rect x="0" y="0" width="520" height="432" fill="#f7f5f0"></rect>
+                <g transform="scale(1 1.137)">
+                  <g class="gm__counties" fill="none" stroke="#b9c1c6" stroke-width="1">
+                    <path d="M0 0H188L182 62L192 148L120 156L0 142Z"></path>
+                    <path d="M188 0H382L376 78L368 164L282 158L192 148L182 62Z"></path>
+                    <path d="M382 0H520V172L446 176L368 164L376 78Z"></path>
+                    <path d="M0 142L120 156L192 148L176 262L182 380H0Z"></path>
+                    <path d="M192 148L282 158L368 164L362 252L370 380H182L176 262Z"></path>
+                    <path d="M368 164L446 176L520 172V380H370L362 252Z"></path>
+                  </g>
+                  <g class="gm__proxy" fill="url(#gm-hatch)" stroke="none">
+                    <path d="M0 0H188L182 62L192 148L120 156L0 142Z"></path>
+                    <path d="M188 0H382L376 78L368 164L282 158L192 148L182 62Z"></path>
+                    <path d="M192 148L282 158L368 164L362 252L370 380H182L176 262Z"></path>
+                  </g>
+                  <path
+                    class="gm__missing"
+                    d="M104 180C100 150 108 122 126 110C134 132 132 160 138 186C146 220 176 246 210 258C190 280 160 292 140 276C116 256 104 214 104 180Z"
+                    fill="#e3ded5"
+                    stroke="#b8ad9c"
+                    stroke-width="1"
+                    stroke-dasharray="1.5 3"></path>
+                  <path
+                    class="gm__service"
+                    d="M104 78C190 40 320 46 392 92C420 140 418 220 384 268C344 316 236 322 176 292C118 262 90 190 96 130C98 108 100 92 104 78Z"
+                    fill="none"
+                    stroke="#0a7f74"
+                    stroke-width="1.2"
+                    stroke-dasharray="5 4"></path>
+                  <path
+                    class="gm__org"
+                    d="M150 112C200 90 270 84 330 104C352 128 356 176 338 214C318 250 262 262 214 250C168 238 134 196 138 156C140 138 142 124 150 112Z"
+                    fill="rgba(10, 127, 116, 0.16)"
+                    stroke="#0a7f74"
+                    stroke-width="1.8"></path>
+                </g>
+                <g
+                  class="gm__labels"
+                  font-family="var(--font-mono)"
+                  font-size="9.5"
+                  letter-spacing="1"
+                >
+                  <text
+                    x="240"
+                    y="200"
+                    fill="#0a7f74"
+                    font-weight="700"
+                    font-size="12"
+                    letter-spacing="0"
+                  >
+                    Example Nation
+                  </text>
+                  <text x="240" y="216" fill="#0a7f74">ORGANIZATION GEOGRAPHY</text>
+                  <text x="318" y="74" fill="#0a7f74">SERVICE AREA</text>
+                  <text x="26" y="38" fill="#18364a">COUNTY PROXY</text>
+                  <text x="26" y="418" fill="#18364a">COUNTY PROXY</text>
+                  <text x="404" y="38" fill="#647279">COUNTY</text>
+                  <text x="404" y="418" fill="#647279">COUNTY</text>
+                  <text x="118" y="320" fill="#6b6152">NO SOURCE YET</text>
+                </g>
+                <rect x="0.5" y="0.5" width="519" height="431" fill="none" stroke="#d9dcdf"></rect>
+              </svg>
+              <figcaption class="gm__legend" aria-label="Map key">
+                <span><i class="gm__sw gm__sw--org"></i>Organization geography</span>
+                <span><i class="gm__sw gm__sw--direct"></i>Direct evidence</span>
+                <span><i class="gm__sw gm__sw--proxy"></i>Statistical proxy</span>
+                <span><i class="gm__sw gm__sw--missing"></i>No source yet</span>
+                <span><i class="gm__sw gm__sw--service"></i>Service area</span>
+              </figcaption>
+            </figure>
+            <aside class="gm__panel" aria-label="Evidence for the selected topic">
+              <p class="gf__cap">What the evidence covers</p>
+              <div class="gm__topics" role="group" aria-label="Topics">
+                {
+                  MAP_TOPICS.map((t, i) => (
+                    <button
+                      type="button"
+                      class="gm__topic"
+                      data-gm-pick={t.id}
+                      aria-pressed={i === 0 ? 'true' : 'false'}
+                    >
+                      {t.label}
+                      <small class={`gf__status gf__status--${t.status}`}>{t.statusLabel}</small>
+                    </button>
+                  ))
+                }
+              </div>
+              {
+                MAP_TOPICS.map((t, i) => (
+                  <dl class="gm__fields" data-gm-fields={t.id} hidden={i !== 0}>
+                    {t.fields.map(([k, v]) => (
+                      <div>
+                        <dt>{k}</dt>
+                        <dd>{v}</dd>
+                      </div>
+                    ))}
+                    <div>
+                      <dt>Status</dt>
+                      <dd class={`gf__status gf__status--${t.status}`}>{t.statusLabel}</dd>
+                    </div>
+                  </dl>
+                ))
+              }
+              <p class="gm__foot">
+                Jurisdiction, service area, organization geography and statistical geography are
+                kept apart, never merged. The place and its values are invented.
+              </p>
+            </aside>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -229,7 +458,7 @@ const FINDINGS = [
     }
     <section class="grovepg-frameband section--dark" aria-labelledby="g-frame">
       <div class="meth-w">
-        <p class="h-kicker reveal-soft">How a finding is held</p>
+        <p class="h-kicker reveal-soft">The evidence behind a finding</p>
         <h2 class="grovepg-frameband__title reveal-soft" id="g-frame" data-stagger="1">
           Pick a question. Read what the evidence supports, and what it rests on.
         </h2>
@@ -484,148 +713,203 @@ const FINDINGS = [
     </section>
 
     {
-      /* The product contract, in the order a reader checks it. Not
-         "an advanced data library": that invites comparison with a data
-         portal. The four lines are what the frame above just showed. */
+      /* The proof strip: the four things an organization can always see,
+         shown through the product's own objects rather than explained
+         twice. Three staged crops: the coverage view, the evidence record,
+         the reproducibility bundle. Same invented Nation as the frame. */
     }
-    <section class="meth-sec" aria-labelledby="g-contract">
+    <section class="meth-sec grovepg-proof" aria-labelledby="g-proof">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <h2 class="reveal-soft" id="g-contract">
+          <h2 class="reveal-soft" id="g-proof">
             A private, living evidence workspace for your organization and its place.
           </h2>
         </div>
-        <p class="meth-sec__lede reveal-soft" data-stagger="1">
-          Not charts, and not an assistant. The promise is that your organization can always see
-          four things about the economy around it:
-        </p>
-        <ul class="grovepg-contract">
-          <li class="reveal-soft" data-stagger="1">
-            <h3>What the evidence supports</h3>
-            <p>
-              Findings you can defend today, each with its claim class, the confidence in the
-              calculation and whether the geography measured is the geography named.
-            </p>
-          </li>
-          <li class="reveal-soft" data-stagger="2">
-            <h3>What relies on a proxy</h3>
-            <p>
-              Where a source does not publish your area, Grove says which wider geography stood in,
-              and what that means for the number you are about to cite.
-            </p>
-          </li>
-          <li class="reveal-soft" data-stagger="3">
-            <h3>What you can add from your own records</h3>
-            <p>
-              The roster, payroll or enrollment file that would move a topic from proxy to direct,
-              named before you assemble it, and kept under your governance when it arrives.
-            </p>
-          </li>
-          <li class="reveal-soft" data-stagger="4">
-            <h3>How a conclusion can be checked</h3>
-            <p>
-              Every figure carries an evidence record: source and table, vintage, universe,
-              transformation, uncertainty, limits, a citation, and a script that rebuilds it.
-            </p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="meth-sec" aria-labelledby="g-objects" style="padding-top:0">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 class="reveal-soft" id="g-objects">The objects you work with.</h2>
-        </div>
-        <div class="grovepg-objects">
-          <article class="grovepg-object reveal-soft" data-stagger="1">
-            <p class="h-kicker">Evidence coverage</p>
-            <h3>Direct, proxy, organization data, missing.</h3>
-            <p>
-              The screen a council or board member should see after asking why a number is an
-              estimate. Every topic shows which source answers it, whether it measures your area
-              directly, what you have supplied and what is still missing.
-            </p>
-            <ul>
-              <li>Filters: needs action, direct, proxy, organization data, missing</li>
-              <li>The practical implication in one sentence, before the explanation</li>
-            </ul>
-          </article>
-          <article class="grovepg-object reveal-soft" data-stagger="2">
-            <p class="h-kicker">Evidence record</p>
-            <h3>Every figure, accountable.</h3>
-            <p>
-              Measure and definition, geography and identifier, population universe, source and
-              table, vintage, transformation, uncertainty, limits, where the evidence has been
-              reused across your work, and a citation you can copy.
-            </p>
-            <ul>
-              <li>Export: the evidence sheet, a printable page saved as PDF</li>
-              <li>Overview, Method, Data and Reproduce in one record</li>
-            </ul>
-          </article>
-          <article class="grovepg-object reveal-soft" data-stagger="3">
-            <p class="h-kicker">Reproduce</p>
-            <h3>Python, R or Stata, from the same rows.</h3>
-            <p>
-              The figure, the data file and the script come from one evidence definition, so they
-              cannot drift apart. The bundle carries the script, the clean data, the provenance
-              sidecar and a manifest naming sources, transformation and packages.
-            </p>
-            <ul>
-              <li>No watermark on scripts; provenance travels in the file header</li>
-              <li>Organization rows stay within the access scope they were shared under</li>
-            </ul>
-          </article>
-          <article class="grovepg-object reveal-soft" data-stagger="4">
-            <p class="h-kicker">Your records</p>
-            <h3>Layered over the gaps, under your governance.</h3>
-            <p>
-              A roster, payroll summary or enrollment history closes a topic no public source can
-              answer. Today Grove previews a file in your browser without retaining it; the governed
-              import path adds a named data steward, permissions, retention and an audit trail.
-            </p>
-            <ul>
-              <li>Local preview: browser only, nothing uploaded</li>
-              <li>Governed import: in development, terms published with it</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section
-      class="meth-sec"
-      id="collections"
-      aria-labelledby="g-collections"
-      style="padding-top:0"
-    >
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 class="reveal-soft" id="g-collections">
-            Twelve Lumecon collections, in every Grove.
-          </h2>
-        </div>
-        <p class="meth-sec__lede reveal-soft" data-stagger="1">
-          Beside the public programs, a Grove carries the collections Lumecon builds and maintains
-          for Indian Country: records resolved to the nation, corporation or organization behind
-          them, versioned, documented and cited. Every collection available during your term is
-          included, and each new one as it is released.
-        </p>
-        <ol class="grovepg-collections" data-reveal-group>
+        <ul class="grovepg-strip" data-reveal-group>
           {
-            CEDAR_GROVE.proprietaryDatasets.map((d) => (
+            PROOF.map((p) => (
               <li>
-                <h3>{d.name}</h3>
-                <p>{d.blurb}</p>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
               </li>
             ))
           }
-        </ol>
+        </ul>
+        <div class="grovepg-crops" data-reveal-group>
+          <figure class="gcrop">
+            <figcaption class="gcrop__bar">
+              <span>Evidence coverage</span>
+              <small>Illustrative</small>
+            </figcaption>
+            <div class="gcrop__body">
+              <div class="gcrop__chips" aria-hidden="true">
+                <span class="gcrop__chip gcrop__chip--on">Needs action</span>
+                <span class="gcrop__chip">Direct</span>
+                <span class="gcrop__chip">Proxy</span>
+                <span class="gcrop__chip">Organization data</span>
+                <span class="gcrop__chip">Missing</span>
+              </div>
+              <ul class="gcrop__rows">
+                {
+                  COVERAGE_ROWS.map(([topic, status, label, source]) => (
+                    <li>
+                      <span class="gcrop__topic">{topic}</span>
+                      <span class="gcrop__src">{source}</span>
+                      <span class={`gf__status gf__status--${status}`}>{label}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+              <p class="gcrop__impl">
+                Employment rests on a county proxy. State the assumption or add records.
+              </p>
+            </div>
+          </figure>
+          <figure class="gcrop">
+            <figcaption class="gcrop__bar">
+              <span>Evidence record</span>
+              <small>Illustrative</small>
+            </figcaption>
+            <div class="gcrop__body">
+              <p class="gcrop__title">Per capita income against the national figure</p>
+              <dl class="gcrop__rec">
+                {
+                  RECORD_ROWS.map(([k, v]) => (
+                    <>
+                      <dt>{k}</dt>
+                      <dd>{v}</dd>
+                    </>
+                  ))
+                }
+                <dt>Cite as</dt>
+                <dd class="gf__cite">
+                  U.S. Census Bureau, American Community Survey, 5-year, 2020–2024. Prepared with
+                  Lumecon Cedar Grove.
+                </dd>
+              </dl>
+            </div>
+          </figure>
+          <figure class="gcrop">
+            <figcaption class="gcrop__bar">
+              <span>Reproduce</span>
+              <small>Illustrative</small>
+            </figcaption>
+            <div class="gcrop__body">
+              <p class="gcrop__title">Reproducibility bundle</p>
+              <ul class="gcrop__files">
+                {
+                  BUNDLE_FILES.map(([file, kind]) => (
+                    <li>
+                      <span>{kind}</span>
+                      <code>{file}</code>
+                    </li>
+                  ))
+                }
+              </ul>
+              <pre
+                class="gcrop__manifest"
+                aria-hidden="true">{`"sources": [{
+  "provider": "U.S. Census Bureau",
+  "dataset": "ACS 5-year",
+  "vintage": "2020-2024" }],
+"transformation": "as published; nominal dollars",
+"restrictedData": "organization rows stay within
+  the access scope they were shared under"`}</pre>
+              <p class="gcrop__impl gcrop__impl--ok">
+                Script, data, provenance and manifest come from one evidence definition, so they
+                cannot drift apart.
+              </p>
+            </div>
+          </figure>
+        </div>
       </div>
     </section>
 
-    <section class="meth-sec" id="license" aria-labelledby="g-license" style="padding-top:0">
+    {
+      /* The registry: the twelve collections as a contiguous grid of the
+         Cedar Press marks, with one persistent detail panel. Hover, focus
+         or click selects on a wide screen; on a phone a tap selects and the
+         panel follows beneath the grid. Every line in the panel is read
+         from the Cedar Press catalog and its dataset documentation. */
+    }
+    <section
+      class="grovepg-registry section--dark"
+      id="collections"
+      aria-labelledby="g-collections"
+    >
+      <div class="meth-w">
+        <p class="h-kicker reveal-soft">Twelve maintained collections</p>
+        <h2 class="grovepg-registry__title reveal-soft" id="g-collections" data-stagger="1">
+          Twelve maintained collections, resolved to your place.
+        </h2>
+        <p class="grovepg-registry__lede reveal-soft" data-stagger="2">
+          Beside the public programs, a Grove carries the collections Lumecon builds and maintains
+          for Indian Country, each resolved to the nation, corporation or organization behind its
+          records. Every collection available during your term is included, and each new one as it
+          is released.
+        </p>
+        <div class="creg reveal-soft" data-stagger="3" data-creg>
+          <ol class="creg__grid">
+            {
+              GROVE_COLLECTIONS.map((c, i) => (
+                <li>
+                  <button
+                    type="button"
+                    class="creg__cell"
+                    data-creg-pick={c.id}
+                    aria-pressed={i === 0 ? 'true' : 'false'}
+                    aria-controls="creg-panel"
+                  >
+                    <span class="creg__num">{String(i + 1).padStart(2, '0')}</span>
+                    <svg
+                      class="creg__mark"
+                      viewBox="0 0 28 28"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      set:html={c.mark}
+                    />
+                    <span class="creg__name">{c.short}</span>
+                  </button>
+                </li>
+              ))
+            }
+          </ol>
+          <div class="creg__panel" id="creg-panel" aria-live="polite">
+            {
+              GROVE_COLLECTIONS.map((c, i) => (
+                <section
+                  class="creg__detail"
+                  data-creg-detail={c.id}
+                  hidden={i !== 0}
+                  aria-label={c.name}
+                >
+                  <p class="creg__cap">Collection {String(i + 1).padStart(2, '0')}</p>
+                  <h3>{c.name}</h3>
+                  <dl>
+                    <dt>Contributes</dt>
+                    <dd>{c.contributes}</dd>
+                    <dt>Resolved to</dt>
+                    <dd>{c.resolved}</dd>
+                    <dt>Coverage</dt>
+                    <dd>{c.coverage}</dd>
+                    <dt>Sources</dt>
+                    <dd>{c.sources}</dd>
+                    <dt>Access</dt>
+                    <dd>{c.access}</dd>
+                  </dl>
+                </section>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="meth-sec" id="license" aria-labelledby="g-license">
       <div class="meth-w">
         <div class="grovepg-license reveal-soft">
           <div>
@@ -659,7 +943,8 @@ const FINDINGS = [
               <li>Cedar, the AI economic analyst, grounded in your evidence</li>
             </ul>
             <a class="btn2 btn2--primary" href={CEDAR_GROVE.ctaHref}>
-              Request a Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+              {CEDAR_GROVE.ctaLabel}
+              <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
             </a>
             <p class="grovepg-license__note" style="margin-top:0.9rem">
               Prefer to talk first? <a href={`mailto:${site.email}`}>{site.email}</a>
@@ -683,20 +968,27 @@ const FINDINGS = [
   <Footer />
 
   <script>
-    // The evidence frame: pick a question, show its panel; open the record.
-    // No library, no state beyond the DOM.
-    document.querySelectorAll('[data-gf]').forEach((frame) => {
-      const picks = Array.from(frame.querySelectorAll<HTMLButtonElement>('[data-gf-pick]'));
-      const panels = Array.from(frame.querySelectorAll<HTMLElement>('[data-gf-panel]'));
-      picks.forEach((pick) => {
-        pick.addEventListener('click', () => {
-          const id = pick.getAttribute('data-gf-pick');
-          picks.forEach((p) => p.setAttribute('aria-pressed', p === pick ? 'true' : 'false'));
-          panels.forEach((panel) => {
-            panel.hidden = panel.getAttribute('data-gf-panel') !== id;
-          });
+    // One pattern, three times: a set of buttons picks which sibling panel
+    // shows. No library, no state beyond the DOM.
+    function wirePicker(root: Element, pickAttr: string, panelAttr: string, onPick?: () => void) {
+      const picks = Array.from(root.querySelectorAll<HTMLButtonElement>(`[${pickAttr}]`));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>(`[${panelAttr}]`));
+      const select = (pick: HTMLButtonElement) => {
+        const id = pick.getAttribute(pickAttr);
+        picks.forEach((p) => p.setAttribute('aria-pressed', p === pick ? 'true' : 'false'));
+        panels.forEach((panel) => {
+          panel.hidden = panel.getAttribute(panelAttr) !== id;
         });
-      });
+        if (id) root.setAttribute(`${pickAttr}ed`, id);
+        if (onPick) onPick();
+      };
+      return { picks, select };
+    }
+
+    // The evidence frame: pick a question, show its panel; open the record.
+    document.querySelectorAll('[data-gf]').forEach((frame) => {
+      const { picks, select } = wirePicker(frame, 'data-gf-pick', 'data-gf-panel');
+      picks.forEach((pick) => pick.addEventListener('click', () => select(pick)));
       frame.querySelectorAll<HTMLButtonElement>('[data-gf-record]').forEach((button) => {
         button.addEventListener('click', () => {
           const panel = button.closest<HTMLElement>('[data-gf-panel]');
@@ -706,6 +998,36 @@ const FINDINGS = [
           record.hidden = !open;
           button.setAttribute('aria-expanded', open ? 'true' : 'false');
           button.textContent = open ? 'Close evidence record' : 'Open evidence record';
+        });
+      });
+    });
+
+    // The evidence map: a topic selects its fields and the map emphasizes
+    // the geography that topic's evidence is about.
+    document.querySelectorAll<HTMLElement>('[data-gm]').forEach((map) => {
+      const { picks, select } = wirePicker(map, 'data-gm-pick', 'data-gm-fields', () => {
+        map.setAttribute('data-gm-topic', map.getAttribute('data-gm-picked') || 'income');
+      });
+      picks.forEach((pick) => pick.addEventListener('click', () => select(pick)));
+    });
+
+    // The registry: hover or focus previews on a wide screen, a click or tap
+    // selects everywhere; on a phone the panel sits under the grid, so a tap
+    // also brings it into view.
+    document.querySelectorAll<HTMLElement>('[data-creg]').forEach((reg) => {
+      const { picks, select } = wirePicker(reg, 'data-creg-pick', 'data-creg-detail');
+      const panel = reg.querySelector<HTMLElement>('.creg__panel');
+      const wide = () => window.matchMedia('(min-width: 901px)').matches;
+      picks.forEach((pick) => {
+        pick.addEventListener('click', () => {
+          select(pick);
+          if (!wide() && panel) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        });
+        pick.addEventListener('mouseenter', () => {
+          if (wide()) select(pick);
+        });
+        pick.addEventListener('focus', () => {
+          if (wide()) select(pick);
         });
       });
     });
