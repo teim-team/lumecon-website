@@ -166,35 +166,46 @@
 }
 
 /* ---------- the evidence map ---------- */
+/* The map above the panel, at every width.
+   Beside the panel the map column measured about 410 pixels at a 1440
+   viewport, so its boundary labels rendered around seven pixels and the
+   composition was cropping the one thing it exists to show. The card itself
+   never exceeds about 900 pixels, so even on a 1680 screen a side-by-side
+   map could not clear 550, and the column it stood in left a third of its
+   height empty. Stacked, the map takes the card's full width and the
+   evidence fields below read across it rather than down a narrow rail. */
 .gm__body {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(15rem, 1fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 .gm__map {
   margin: 0;
   min-width: 0;
   padding: 1rem 1rem 0.9rem;
-  border-right: 1px solid var(--gf-rule);
+  /* The map sits above the panel, so its edge is the rule under it. */
+  border-bottom: 1px solid var(--gf-rule);
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
-/* The map keeps a readable minimum scale rather than shrinking with the
-   column. Below that width the canvas scrolls sideways, the same treatment
-   the finding charts get, because a boundary label rendered at five pixels
-   is not a label. */
+/* The map needs a readable minimum scale, and it now has the card's full
+   width everywhere but a phone. There the canvas scrolls sideways, the same
+   treatment the finding charts get, because a boundary label rendered at
+   five pixels is not a label. The page itself never scrolls sideways. */
 .gm__canvas {
-  flex: 1 1 auto;
   min-height: 0;
   overflow-x: auto;
   overscroll-behavior-x: contain;
 }
 .gm__map svg {
   display: block;
-  min-width: 32rem;
   width: 100%;
   height: auto;
   border-radius: 4px;
+}
+@media (max-width: 700px) {
+  .gm__map svg {
+    min-width: 32rem;
+  }
 }
 .gm__map text {
   font-family: var(--font-mono);
@@ -282,8 +293,12 @@
 .gm__sw--proxy {
   background: repeating-linear-gradient(45deg, rgba(24, 54, 74, 0.3) 0 1px, #f7f5f0 1px 4px);
 }
+/* Solid, because the trust-land path is solid. The dashed key sent readers
+   looking for a dashed edge that is not on the map, which is worse than no
+   key at all for parcels this small. The lighter fill is what tells them
+   apart from the reservation. */
 .gm__sw--trust {
-  border: 1px dashed var(--gf-teal);
+  border: 1px solid var(--gf-teal);
   background: rgba(10, 127, 116, 0.12);
 }
 .gm__sw--state {
@@ -300,10 +315,19 @@
   flex-direction: column;
   gap: 0.6rem;
 }
+/* The panel has the card's full width now, so the three topics read as a
+   row rather than a column of wide, mostly empty buttons. They stay stacked
+   on a phone, where three across would break the labels. */
 .gm__topics {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.25rem;
+}
+@media (min-width: 720px) {
+  .gm__topics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
 }
 .gm__topic {
   display: block;
@@ -368,19 +392,6 @@
   font-size: 0.72rem;
   line-height: 1.5;
   color: var(--gf-ink-3);
-}
-@media (max-width: 700px) {
-  .gm__body {
-    /* minmax(0, 1fr), not 1fr: an auto-minimum track takes its width from the
-       map's minimum scale and pushes the whole card past the viewport. The
-       canvas is what scrolls, never the page. */
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .gm__map {
-    min-width: 0;
-    border-right: 0;
-    border-bottom: 1px solid var(--gf-rule);
-  }
 }
 
 /* ---------- the frame band: deep teal, the finding workflow ---------- */

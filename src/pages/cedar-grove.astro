@@ -51,7 +51,16 @@ import GROVE_MAP from '../data/groveMap.generated.json';
  * reservation. Every source below answers at a different one of those levels.
  */
 const MAP_COUNTY_LABELS = GROVE_MAP.counties.filter((county) => county.labelInFrame);
+/**
+ * The two areas, named separately.
+ *
+ * The map draws the reservation and its off-reservation trust land, and they
+ * are different legal categories with different published figures. One total
+ * would have to say which, and a caption that showed only the reservation's
+ * 22,241 under a map of both understated the subject by the trust land.
+ */
 const MAP_AREA_SQ_MI = GROVE_MAP.area.areaSqMi?.toLocaleString('en-US') ?? null;
+const MAP_TRUST_SQ_MI = GROVE_MAP.trustLand?.areaSqMi?.toLocaleString('en-US') ?? null;
 
 const description =
   'Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits.';
@@ -135,14 +144,14 @@ const MAP_TOPICS = [
     id: 'outcomes',
     label: 'Program outcomes',
     status: 'missing',
-    statusLabel: 'Missing',
+    statusLabel: 'No public source',
     fields: [
       ['Source', 'None yet'],
       ['Vintage', 'Not covered'],
-      ['Geography', 'The program’s service area, which no source publishes'],
+      ['Geography', 'A program service area, which no federal product publishes'],
       [
         'Limitation',
-        'No public source links enrollment to later employment. The nation’s own enrollment history would.',
+        'No federal product links a training program’s enrollment to later employment. That link needs the records of whoever runs the program.',
       ],
     ],
   },
@@ -345,10 +354,16 @@ const BUNDLE_FILES = [
                     lines behind them.
                   </desc>
                   <defs>
+                    {/* The hatched counties sit inside the geometry's scale
+                        group, so the tile is measured in generated units: at
+                        this scale a 7-unit tile printed about 34 pixels wide
+                        and the fine hatch in the key became three fat bands.
+                        `strokeScale` is the inverse of that scale, which is
+                        what puts the tile back into screen space. */}
                     <pattern
                       id="gm-hatch"
-                      width="7"
-                      height="7"
+                      width={7 * GROVE_MAP.strokeScale}
+                      height={7 * GROVE_MAP.strokeScale}
                       patternUnits="userSpaceOnUse"
                       patternTransform="rotate(45)"
                     >
@@ -356,25 +371,36 @@ const BUNDLE_FILES = [
                         x1="0"
                         y1="0"
                         x2="0"
-                        y2="7"
+                        y2={7 * GROVE_MAP.strokeScale}
                         stroke="#18364a"
                         stroke-opacity="0.5"
-                        stroke-width="1.1"></line>
+                        stroke-width={1.1 * GROVE_MAP.strokeScale}></line>
                     </pattern>
                   </defs>
                   <rect x="0" y="0" width="560" height="420" fill="#f7f5f0"></rect>
                   <g transform={GROVE_MAP.transform}>
-                    <g class="gm__states" fill="#efece5" stroke="#c9cccf" vector-effect="non-scaling-stroke">
-                      {GROVE_MAP.states.map((state) => <path d={state.d}></path>)}
+                    {/* vector-effect is a property of a shape, not something
+                        a group hands down, so these have to carry it
+                        themselves. On the group it did nothing and the scale
+                        multiplied every surrounding boundary to about five
+                        times the weight of the subject's own outline. */}
+                    <g class="gm__states" fill="#efece5" stroke="#c9cccf">
+                      {GROVE_MAP.states.map((state) => (
+                        <path d={state.d} vector-effect="non-scaling-stroke"></path>
+                      ))}
                     </g>
                     <g class="gm__proxy" fill="url(#gm-hatch)" stroke="none">
                       {GROVE_MAP.counties.map((county) => <path d={county.d}></path>)}
                     </g>
-                    <g class="gm__counties" fill="none" stroke="#b9c1c6" vector-effect="non-scaling-stroke">
-                      {GROVE_MAP.counties.map((county) => <path d={county.d}></path>)}
+                    <g class="gm__counties" fill="none" stroke="#b9c1c6">
+                      {GROVE_MAP.counties.map((county) => (
+                        <path d={county.d} vector-effect="non-scaling-stroke"></path>
+                      ))}
                     </g>
-                    <g class="gm__neighbors" fill="#e6e2d8" stroke="#a9a294" vector-effect="non-scaling-stroke">
-                      {GROVE_MAP.neighbors.map((land) => <path d={land.d}></path>)}
+                    <g class="gm__neighbors" fill="#e6e2d8" stroke="#a9a294">
+                      {GROVE_MAP.neighbors.map((land) => (
+                        <path d={land.d} vector-effect="non-scaling-stroke"></path>
+                      ))}
                     </g>
                     {
                       GROVE_MAP.trustLand ? (
@@ -456,8 +482,10 @@ const BUNDLE_FILES = [
                 <span><i class="gm__sw gm__sw--neighbor"></i>Another nation</span>
               </figcaption>
               <p class="gm__vintage">
-                {GROVE_MAP.vintage}. {MAP_AREA_SQ_MI ? `${MAP_AREA_SQ_MI} square miles` : null}, {GROVE_MAP.counties.length}{' '}
-                counties, {GROVE_MAP.states.length} states. {GROVE_MAP.simplification}
+                {GROVE_MAP.vintage}. {MAP_AREA_SQ_MI ? `${MAP_AREA_SQ_MI} square miles of reservation` : null}
+                {MAP_TRUST_SQ_MI ? ` and ${MAP_TRUST_SQ_MI} of off-reservation trust land` : null},
+                across {GROVE_MAP.counties.length} counties in {GROVE_MAP.states.length} states.{' '}
+                {GROVE_MAP.simplification}
               </p>
             </figure>
             <aside class="gm__panel" aria-label="Evidence for the selected topic">
@@ -494,9 +522,12 @@ const BUNDLE_FILES = [
                 ))
               }
               <p class="gm__foot">
-                Jurisdiction, service area, organization geography and statistical geography are
-                kept apart, never merged. The boundaries drawn here are Census geography at the
-                vintage named under the map. The map carries coverage, never values.
+                These are the federal products and the levels they publish at, for an area of this
+                kind. They are not an account of what the Navajo Nation holds: a nation&rsquo;s own
+                records answer questions no federal product reaches, and Cedar Grove reads those
+                too. Jurisdiction, service area, organization geography and statistical geography
+                are kept apart, never merged. The boundaries are Census geography at the vintage
+                named under the map, and the map carries coverage, never values.
               </p>
             </aside>
           </div>
