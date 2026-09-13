@@ -59,10 +59,13 @@
   .grovepg-hero .meth-w {
     grid-template-columns: 1fr;
   }
+  /* The capture is a desktop screen. Once the hero stacks it would render
+     at under half scale with the interface copy unreadable, and there is no
+     phone rendition of a desktop workspace to show instead; the staged
+     frame below carries the product on small screens with its own
+     composition. */
   .grovepg-hero__screen {
-    grid-column: 1;
-    grid-row: auto;
-    margin-top: 2.4rem;
+    display: none;
   }
 }
 
@@ -114,7 +117,7 @@
   font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.13em;
-  color: var(--accent-text);
+  color: var(--ink-3);
   margin-bottom: 0.35rem;
 }
 .grovepg-collections p {
@@ -443,7 +446,8 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gutter);
-  margin-top: 0.6rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
 }
 .grovepg-contract li {
   list-style: none;
@@ -603,4 +607,23 @@
 }
 .grovepg-bridge strong {
   color: var(--ink);
+}
+
+/* ---------- print ---------- */
+/* The global print sheet turns every dark section white; the hero and the
+   frame band set their own dark grounds and light type, so restore ink
+   here or the opening headings print as white on white. */
+@media print {
+  .grovepg-hero,
+  .grovepg-frameband {
+    background: #fff !important;
+  }
+  .grovepg-hero .h-kicker,
+  .grovepg-hero .meth-hero__title,
+  .grovepg-hero .meth-hero__lede,
+  .grovepg-frameband .h-kicker,
+  .grovepg-frameband__title,
+  .grovepg-frameband__lede {
+    color: var(--ink) !important;
+  }
 }

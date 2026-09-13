@@ -55,6 +55,7 @@ const PAGES = [
   ['/pricing', 'Pricing'],
   ['/methodology', 'Methodology'],
   ['/cedar', 'Cedar'],
+  ['/cedar-grove', 'Cedar Grove'],
   ['/glossary', 'Glossary'],
   ['/naics', 'NAICS sectors'],
   ['/signup', 'Sign up'],

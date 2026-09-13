@@ -185,7 +185,7 @@ export const CEDAR_GROVE = {
         'Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.',
     },
     {
-      name: 'Native Federal Advocacy & Engagement',
+      name: 'Native Federal Advocacy and Engagement',
       blurb:
         'Registered lobbying, agency meetings, consultations, regulatory comments and testimony, each resolved to the entity behind it.',
     },

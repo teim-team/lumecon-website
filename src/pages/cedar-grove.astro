@@ -11,6 +11,12 @@
  * The frame uses an invented organization and invented values, labelled as
  * such on the frame. It never shows a real place or a real number, so the
  * page cannot attach fabricated figures to an actual community.
+ *
+ * The hero capture is different and says so in its caption: it is the app's
+ * demonstration workspace, whose organization is invented but whose
+ * geography is a real Census statistical area, because the app computes
+ * coverage from real source geography rather than asserting it. Its
+ * observations are demonstration values, labelled as such in the capture.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -208,8 +214,9 @@ const FINDINGS = [
             />
           </picture>
           <figcaption>
-            The Grove Overview: one lead figure, one claim, one limit, then the findings. Shown with
-            demonstration data.
+            The Grove Overview: one lead figure, one claim, one limit, then the findings. The
+            organization and its observations are demonstration values; the area named is a Census
+            statistical area, used so the coverage shown is computed, not asserted.
           </figcaption>
         </figure>
       </div>
@@ -297,13 +304,13 @@ const FINDINGS = [
                               x="357"
                               y="56"
                               font-size="8.5"
-                              fill="#93a0a5"
+                              fill="#5b6970"
                               text-anchor="end"
                               letter-spacing="1"
                             >
                               DECENNIAL LONG-FORM
                             </text>
-                            <text x="369" y="56" font-size="8.5" fill="#93a0a5" letter-spacing="1">
+                            <text x="369" y="56" font-size="8.5" fill="#5b6970" letter-spacing="1">
                               ACS 5-YEAR
                             </text>
                             <path
