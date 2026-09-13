@@ -151,9 +151,9 @@ export const CEDAR_GROVE = {
   ctaHref: '/signup?product=cedar-grove',
   pageHref: '/cedar-grove',
   /**
-   * The Lumecon collections a Grove carries: the twelve Cedar Press
+   * The Lumecon collections a Grove carries: the twelve Lumecon
    * collections, read from the registry in `groveCollections.ts`, which
-   * names them as the Cedar Press catalog does. A collection is added
+   * names them as the Lumecon catalog does. A collection is added
    * there when the Cedar workspace rules it ready; the note covers what
    * arrives during a term.
    */

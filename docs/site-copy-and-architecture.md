@@ -24,10 +24,10 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
 | `/` | 731 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/pricing` | 1295 | Pricing \| Lumecon | 155 |
+| `/pricing` | 1297 | Pricing \| Lumecon | 155 |
 | `/methodology` | 2558 | Methodology \| Lumecon | 167 |
 | `/cedar` | 466 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-grove` | 1030 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 227 |
+| `/cedar-grove` | 1155 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 227 |
 | `/glossary` | 549 | Glossary \| Lumecon | 142 |
 | `/naics` | 658 | Industry sectors \| Lumecon | 146 |
 | `/signup` | 239 | Request beta access \| Lumecon | 118 |
@@ -41,7 +41,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 669 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1037 | Terms of Service \| Lumecon | 146 |
 | `/404` | 95 | Page Not Found \| Lumecon | 141 |
-| **Total** | **11364** | | |
+| **Total** | **11491** | | |
 
 ## Crawler metadata audit
 
@@ -386,7 +386,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1295
+- **Visible words:** 1297
 
 ### Architecture (heading outline)
 
@@ -562,7 +562,7 @@ Your subscription includes every Lumecon collection available in Cedar Grove dur
 - Natural Resource Revenues
 - Individually Owned Native Businesses
 - Native Nonprofits
-- Cedar Native Entity Enterprise Dataset
+- Cedar Native Entity Enterprise Dataset (Cedar NEED)
 What each collection contains
 
 $2,500 / YEAR
@@ -1267,7 +1267,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, BreadcrumbList
-- **Visible words:** 1030
+- **Visible words:** 1155
 
 ### Architecture (heading outline)
 
@@ -1286,7 +1286,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
     - **H3** Natural Resource Revenues
     - **H3** Individually Owned Native Businesses
     - **H3** Native Nonprofits
-    - **H3** Cedar Native Entity Enterprise Dataset
+    - **H3** Cedar Native Entity Enterprise Dataset (Cedar NEED)
   - **H2** Cedar Grove, for your whole organization.
 
 ### Copy, in document order
@@ -1328,8 +1328,11 @@ Cedar Grove connects maintained public data, Lumecon collections and the records
 
 - _link:_ [Request Grove →](#license)
 - _link:_ [See the evidence behind a finding →](#frame)
-- _label:_ Cedar Grove EXAMPLE NATION EVIDENCE COVERAGE · ILLUSTRATIVE
-_caption:_ ORGANIZATION GEOGRAPHY DIRECT EVIDENCE STATISTICAL PROXY NO SOURCE YET SERVICE AREA
+- _label:_ Cedar Grove NAVAJO NATION CENSUS TIGER/LINE 2018 · COVERAGE, NOT VALUES
+- _label:_ APACHE CO, AZ COCONINO CO, AZ NAVAJO CO, AZ BERNALILLO CO, NM CIBOLA CO, NM MCKINLEY CO, NM SAN JUAN CO, NM HOPI UTE MOUNTAIN ZUNI Navajo Nation AIANNH 2430
+_caption:_ RESERVATION OFF-RESERVATION TRUST LAND COUNTY A SOURCE FALLS BACK TO STATE LINE ANOTHER NATION
+CENSUS TIGER/LINE 2018 (TRIBAL AREAS); US-ATLAS COUNTIES-10M AND STATES-10M. 22,241 SQUARE MILES OF RESERVATION AND 1,892 OF OFF-RESERVATION TRUST LAND, ACROSS 9 COUNTIES IN 3 STATES. DETACHED PARCELS HOLDING UNDER ONE PERCENT OF AN AREA ARE NOT DRAWN AT THIS SCALE.
+
 
 > _section: `Evidence for the selected topic`_
 
@@ -1337,13 +1340,13 @@ WHAT THE EVIDENCE COVERS
 
 - _button:_ Income and population DIRECT
 - _button:_ Employment and wages COUNTY PROXY
-- _button:_ Program outcomes MISSING
+- _button:_ Program outcomes NO PUBLIC SOURCE
 - SOURCE
 - U.S. Census Bureau, American Community Survey, 5-year
 - VINTAGE
 - 2020–2024
 - GEOGRAPHY
-- The Nation’s area, as published
+- The reservation and its trust land, published as one AIANNH area
 - LIMITATION
 - Survey estimates: a margin of error accompanies every cell
 - STATUS
@@ -1353,9 +1356,9 @@ WHAT THE EVIDENCE COVERS
 - **[conditional]** Vintage
 - **[conditional]** 2024 annual averages
 - **[conditional]** Geography
-- **[conditional]** Three surrounding counties stand in for the area
+- **[conditional]** Nine counties in three states stand in for the reservation
 - **[conditional]** Limitation
-- **[conditional]** County figures include employers outside the Nation. State the assumption or add records.
+- **[conditional]** The county figures count employers across the whole county, most of which lies outside the reservation. State the assumption or add records.
 - **[conditional]** Status
 - **[conditional]** County proxy
 - **[conditional]** Source
@@ -1363,12 +1366,12 @@ WHAT THE EVIDENCE COVERS
 - **[conditional]** Vintage
 - **[conditional]** Not covered
 - **[conditional]** Geography
-- **[conditional]** The program’s service area, beyond the Nation’s area
+- **[conditional]** A program service area, which no federal product publishes
 - **[conditional]** Limitation
-- **[conditional]** No public source links enrollment to later employment. The Nation’s own enrollment history would.
+- **[conditional]** No federal product links a training program’s enrollment to later employment. That link needs the records of whoever runs the program.
 - **[conditional]** Status
-- **[conditional]** Missing
-Jurisdiction, service area, organization geography and statistical geography are kept apart, never merged. The place and its values are invented.
+- **[conditional]** No public source
+These are the federal products and the levels they publish at, for an area of this kind. They are not an account of what the Navajo Nation holds: a nation’s own records answer questions no federal product reaches, and Cedar Grove reads those too. Jurisdiction, service area, organization geography and statistical geography are kept apart, never merged. The boundaries are Census geography at the vintage named under the map, and the map carries coverage, never values.
 
 
 > _section: `grovepg-frameband`_
@@ -1560,7 +1563,7 @@ Beside the public programs, a Grove carries the collections Lumecon builds and m
 - 09 Natural Resources
 - 10 Native-Owned Businesses
 - 11 Native Nonprofits
-- 12 NEED
+- 12 Cedar NEED
 
 > _section: `Federal Funding to Indian Country`_
 
@@ -1577,8 +1580,8 @@ COLLECTION 01
 - Records from fiscal year 2007
 - SOURCES
 - USAspending assistance award archive and API
-- ACCESS
-- Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+- TERMS
+- Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `Federal Register`_
 
@@ -1595,8 +1598,8 @@ COLLECTION 01
 - **[conditional]** Records from 1994
 - **[conditional]** Sources
 - **[conditional]** federalregister.gov API
-- **[conditional]** Access
-- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `Congressional Votes and Proposed Legislation`_
 
@@ -1613,8 +1616,8 @@ COLLECTION 01
 - **[conditional]** Records from 1973, thin and gapped through the 1980s
 - **[conditional]** Sources
 - **[conditional]** congress.gov API for bills, actions and cosponsors; House and Senate roll-call records
-- **[conditional]** Access
-- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `Indian Country Deals`_
 
@@ -1631,8 +1634,8 @@ COLLECTION 01
 - **[conditional]** Records from 2000
 - **[conditional]** Sources
 - **[conditional]** Transaction announcements, agency records and Federal Register land and trust actions, manually reviewed
-- **[conditional]** Access
-- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `NAGPRA`_
 
@@ -1649,8 +1652,8 @@ COLLECTION 01
 - **[conditional]** Records from 1994, the first notice published under the Act
 - **[conditional]** Sources
 - **[conditional]** NAGPRA notices as published in the Federal Register
-- **[conditional]** Access
-- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `Native Federal Advocacy and Engagement`_
 
@@ -1667,8 +1670,8 @@ COLLECTION 01
 - **[conditional]** Records from 1999
 - **[conditional]** Sources
 - **[conditional]** Senate Lobbying Disclosure Act filings, tribal consultation notices, congressional hearing records and Federal Register ex parte notices
-- **[conditional]** Access
-- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `Federal Prime Contracting`_
 
@@ -1685,8 +1688,8 @@ COLLECTION 01
 - **[conditional]** Records from fiscal year 2000, where Native identification begins in the federal record; refreshed quarterly
 - **[conditional]** Sources
 - **[conditional]** FPDS-NG feed, USAspending award data and SAM contract awards
-- **[conditional]** Access
-- **[conditional]** Cedar Press+. Public records; the resolution to Native entities is Cedar’s work.
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `Federal Subcontracting`_
 
@@ -1703,8 +1706,8 @@ COLLECTION 01
 - **[conditional]** Records from fiscal year 2010, the statutory reporting floor
 - **[conditional]** Sources
 - **[conditional]** USAspending FSRS subaward data
-- **[conditional]** Access
-- **[conditional]** Cedar Press+. Filer-reported and unaudited; totals are stated with that limit.
+- **[conditional]** Terms
+- **[conditional]** Filer-reported and unaudited. Totals are stated with that limit.
 
 > _section: `Natural Resource Revenues`_
 
@@ -1721,8 +1724,8 @@ COLLECTION 01
 - **[conditional]** Records from 1880, through retrospectively published headright payments
 - **[conditional]** Sources
 - **[conditional]** ONRR Natural Resources Revenue Data and retrospectively published disbursement records
-- **[conditional]** Access
-- **[conditional]** Cedar Press+. Public records; the resolution to Native entities is Cedar’s work.
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
 > _section: `Individually Owned Native Businesses`_
 
@@ -1739,8 +1742,8 @@ COLLECTION 01
 - **[conditional]** A roster as captured on 2026-09-01; certifying offices archive no superseded lists
 - **[conditional]** Sources
 - **[conditional]** Nations’ TERO and commerce offices, shared with the project office by office
-- **[conditional]** Access
-- **[conditional]** Cedar Press+. A listing appears only under its nation’s stated terms.
+- **[conditional]** Terms
+- **[conditional]** A listing appears only under its nation’s stated terms.
 
 > _section: `Native Nonprofits`_
 
@@ -1757,15 +1760,15 @@ COLLECTION 01
 - **[conditional]** A register as captured on 2026-04-29, one row per filer with its latest period
 - **[conditional]** Sources
 - **[conditional]** IRS Business Master File monthly extracts
-- **[conditional]** Access
-- **[conditional]** Cedar Press+. Public records; the classification is Cedar’s work and stays reviewable.
+- **[conditional]** Terms
+- **[conditional]** Public records. The classification is Lumecon’s work and stays reviewable.
 
-> _section: `Cedar Native Entity Enterprise Dataset`_
+> _section: `Cedar Native Entity Enterprise Dataset (Cedar NEED)`_
 
 **[conditional]** Collection 12
 
 
-**H3: Cedar Native Entity Enterprise Dataset**
+**H3: Cedar Native Entity Enterprise Dataset (Cedar NEED)**
 
 - **[conditional]** Contributes
 - **[conditional]** Who owns whom across Indian Country’s enterprises: parent nations and corporations, their subsidiaries, holding companies and joint ventures, and how those ties change.
@@ -1775,8 +1778,8 @@ COLLECTION 01
 - **[conditional]** Observations from 2016, the earliest year any source named an enterprise or a tie
 - **[conditional]** Sources
 - **[conditional]** Entity records, enterprise registers and filings, reconciled edition by edition
-- **[conditional]** Access
-- **[conditional]** Cedar Press+. Unresolved ties stay unresolved; a provisional match is labeled provisional.
+- **[conditional]** Terms
+- **[conditional]** Unresolved ties stay unresolved. A provisional match is labeled provisional.
 
 > _section: `license`_
 
