@@ -127,7 +127,7 @@ const jsonLd = [
     serviceType: 'Economic Analysis Software',
     name: 'Lumecon',
     description:
-      'The intelligent economic analysis platform. Lumecon offers the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI economic analyst, in every plan.',
+      'The intelligent economic analysis platform. Lumecon offers the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the living evidence base for your organization’s economy; and Cedar, the AI economic analyst, in every plan.',
     url: site.url,
     provider: { '@type': 'Organization', name: site.legalName },
     areaServed: { '@type': 'Country', name: 'United States' },
@@ -141,7 +141,11 @@ const jsonLd = [
       itemListElement: [
         { '@type': 'Offer', name: 'Cedar Impact', description: 'Economic impact analysis' },
         { '@type': 'Offer', name: 'Cedar Commons', description: 'Shared project workspace' },
-        { '@type': 'Offer', name: 'Cedar Grove', description: 'Advanced data library' },
+        {
+          '@type': 'Offer',
+          name: 'Cedar Grove',
+          description: 'The living evidence base for your organization’s economy',
+        },
         { '@type': 'Offer', name: 'Cedar', description: 'AI economic analyst, in every plan' },
       ],
     },

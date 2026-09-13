@@ -1690,7 +1690,7 @@ export const INTENTS: CedarIntent[] = [
       'data lake',
     ],
     answer:
-      "Cedar Grove is the advanced data library: harmonized public data alongside Lumecon's proprietary datasets as they are released. It is sold separately for $2,500 a year with unlimited organizational users and is included with Tree. Tree also includes hands-on Cedar calibration to your organization's terminology and workflows.",
+      "Cedar Grove is the living evidence base for your organization's economy: maintained public data, Lumecon collections and the records your organization governs, with every finding connected to its source, geography, method, vintage and limits. It is licensed separately for $2,500 a year per organization with unlimited teammates and is included with Tree. Tree also includes hands-on Cedar calibration to your organization's terminology and workflows. Details at lumecon.ai/cedar-grove.",
   },
   {
     id: 'ai_vs_chatgpt',

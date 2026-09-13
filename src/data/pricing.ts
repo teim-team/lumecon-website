@@ -22,7 +22,7 @@
  *                  are, learns how you work and offers interpretation,
  *                  so the analysis is not done alone.
  *   Cedar Commons  the shared project workspace. Sapling and up.
- *   Cedar Grove    the advanced data library: harmonized public data and
+ *   Cedar Grove    the living evidence base for an organization's economy:
  *                  Lumecon's proprietary datasets. Sold on its own for
  *                  $2,500 with unlimited users, and included in Tree.
  *
@@ -113,7 +113,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'For organization-wide use.',
     tagline:
-      'Everything in Sapling, plus Cedar Grove, the advanced data library, organizational context and Cedar calibration across the organization.',
+      'Everything in Sapling, plus Cedar Grove, the evidence base for your organization’s economy, organizational context and Cedar calibration across the organization.',
     users: 'Unlimited users in one organization',
     clientWork: true,
     ctaLabel: 'Request Tree access',
@@ -137,26 +137,89 @@ export const CEDAR_GROVE = {
   kicker: 'Standalone subscription',
   price: '$2,500',
   period: '/ year',
-  users: 'Unlimited users',
-  headline: 'Use the data library on its own or as part of Tree.',
-  body: 'Cedar Grove is the advanced data library: public datasets cleaned, harmonized and kept analysis-ready, alongside released proprietary datasets from Lumecon. Subscribe to the library on its own, or receive it with Tree alongside Cedar Impact and Cedar Commons.',
+  users: 'Unlimited users in one organization',
+  headline: 'The living evidence base for your organization’s economy.',
+  body: 'Cedar Grove connects maintained public data, the twelve Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own with unlimited users, or receive the same Grove with Tree, which adds Cedar Impact and Cedar Commons; that is the whole difference between the two prices.',
   bullets: [
-    'Harmonized public data, maintained and versioned',
-    'Lumecon’s proprietary datasets, added as they are built',
-    'Unlimited people in your organization',
+    'Evidence coverage: direct, proxy, organization data, missing',
+    'Evidence records, evidence sheets and reproducibility bundles',
+    'Unlimited teammates in one organization',
   ],
-  ctaLabel: 'Request Cedar Grove access',
+  ctaLabel: 'Request a Grove',
   ctaHref: '/signup?product=cedar-grove',
+  pageHref: '/cedar-grove',
   /**
-   * The proprietary datasets are in active development. Named entries
-   * go in this array as each one ships, and the section renders the
-   * note alone while it is empty. Nothing here is a forward promise
-   * about a specific dataset: the claim is only that what we build,
-   * you get from us.
+   * The Lumecon collections a Grove carries: the twelve Cedar Press
+   * collections, named here as the Cedar Press catalog names them
+   * (cedar-press `src/features/grove/pressCatalog.js`). Each blurb is the
+   * catalog's own first sentence, shortened, never a new promise. A
+   * collection is added here when the Cedar workspace rules it ready;
+   * the note covers what arrives during a term.
    */
   proprietaryNote:
-    'The Cedar Grove catalog lists proprietary datasets as they are released. Your subscription includes the datasets available in Cedar Grove during your term.',
-  proprietaryDatasets: [] as { name: string; blurb: string }[],
+    'Your subscription includes every Lumecon collection available in Cedar Grove during your term, and each new collection as it is released.',
+  proprietaryDatasets: [
+    {
+      name: 'Federal Funding to Indian Country',
+      blurb:
+        'Every award the federal government reports sending into Indian Country, resolved to the Native entity behind the recipient.',
+    },
+    {
+      name: 'Federal Register',
+      blurb:
+        'Every notice, rule and comment window touching tribes, lands, water or recognition, matched to the entities it names.',
+    },
+    {
+      name: 'Congressional Votes and Proposed Legislation',
+      blurb:
+        'Bills, resolutions and roll-call votes from both chambers, tied to the tribes and Native organizations they affect.',
+    },
+    {
+      name: 'Indian Country Deals',
+      blurb:
+        'Material transactions and capital commitments involving Native nations, organizations and enterprises: acquisitions, financing, joint ventures and major projects.',
+    },
+    {
+      name: 'NAGPRA',
+      blurb:
+        'Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.',
+    },
+    {
+      name: 'Native Federal Advocacy & Engagement',
+      blurb:
+        'Registered lobbying, agency meetings, consultations, regulatory comments and testimony, each resolved to the entity behind it.',
+    },
+    {
+      name: 'Federal Prime Contracting',
+      blurb:
+        'Every prime award to tribally owned firms, ANC and NHO subsidiaries and 8(a) participants, rolled up to the parent nation or corporation.',
+    },
+    {
+      name: 'Federal Subcontracting',
+      blurb:
+        'The dollars below the prime layer: which vendors do the work, under whom and in which sectors.',
+    },
+    {
+      name: 'Natural Resource Revenues',
+      blurb:
+        'Energy and mineral activity on trust and restricted lands: production, the royalties it owes and the disbursements that follow.',
+    },
+    {
+      name: 'Individually Owned Native Businesses',
+      blurb:
+        'Businesses certified by their own nations’ TERO and commerce offices, credited to the office that certified them.',
+    },
+    {
+      name: 'Native Nonprofits',
+      blurb:
+        'Native-led, Native-serving and Native-focused nonprofits with their annual federal filings, labelled separately.',
+    },
+    {
+      name: 'Cedar Native Entity Enterprise Dataset',
+      blurb:
+        'Who owns whom across Indian Country’s enterprises: parent nations and corporations, subsidiaries, holding companies and joint ventures.',
+    },
+  ] as { name: string; blurb: string }[],
 };
 
 /** The readable detail table. `values` align with [SEED, ...PLANS] order. */
@@ -279,7 +342,7 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'What is Cedar Grove, and why is it sold separately?',
     a: [
-      'Cedar Grove is the advanced data library: harmonized public data plus the proprietary datasets we build. It is useful without Cedar Impact, so you can buy it on its own for $2,500 a year with unlimited users, and it comes with Tree.',
+      'Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits. It is useful without Cedar Impact, so you can license it on its own for $2,500 a year per organization with unlimited teammates, and it comes with Tree.',
     ],
   },
   {

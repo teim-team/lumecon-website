@@ -211,7 +211,11 @@ User-facing word choices, everywhere a customer reads:
     product beside Commons and Grove, not an engine label behind
     them. In the app the side rail says Cedar Impact.
   - "Cedar Commons, the shared project workspace"
-  - "Cedar Grove, the advanced data library"
+  - "Cedar Grove, the living evidence base for your organization’s
+    economy" (owner ruling 2026-09-13, replacing "the advanced data
+    library": the old line invited comparison with data portals and
+    undersold the product, which is the connection between a finding
+    and what it rests on)
   - "Cedar, the AI economic analyst, in every plan"
   - "Seed, the free account" (2026-08) — the fourth plan, first on
     /pricing: the real platform, where you build a full analysis and

@@ -12,7 +12,7 @@ Economic impact analysis software and an alternative to established modeling too
 
 ## One platform
 
-There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI economic analyst, in every plan. The product supports documented workflows for cities, counties, state agencies, universities, nonprofits, businesses, economic development organizations, Tribal Nations, tribal enterprises and consulting firms. Tree includes hands-on Cedar calibration to an organization's terminology and workflows.
+There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the living evidence base for your organization's economy; and Cedar, the AI economic analyst, in every plan. The product supports documented workflows for cities, counties, state agencies, universities, nonprofits, businesses, economic development organizations, Tribal Nations, tribal enterprises and consulting firms. Tree includes hands-on Cedar calibration to an organization's terminology and workflows.
 
 ## Pricing (public)
 
@@ -21,13 +21,13 @@ Prices include taxes and fees. Contact us to discuss multi-year or prepaid terms
 - Seed: Free. 1 user. The real platform: build a full analysis, work with Cedar and see your direct effects on the results page. Indirect, induced and total impact, and exports, unlock on any paid plan.
 - Sprout: $1,000/year. One user. Cedar Impact in full, Cedar, every supported U.S. geography and unlimited analyses.
 - Sapling: $2,500/year. Up to 10 users. Everything in Sprout plus Cedar Commons, the shared project workspace: shared projects, project notes, data collection and external collaborators. Recommended.
-- Tree: $7,500/year. Unlimited users in one organization. Everything in Sapling plus Cedar Grove, the advanced data library, and hands-on Cedar calibration.
+- Tree: $7,500/year. Unlimited users in one organization. Everything in Sapling plus Cedar Grove, the evidence base for the organization's economy, and hands-on Cedar calibration.
 
 - Client work is permitted on Sapling and Tree.
 
 ## Cedar
 
-Cedar is Lumecon's AI economic analyst and is included in every plan. It works across intake, analysis, interpretation and reporting: upload PDFs, spreadsheets and CSVs; Cedar identifies relevant information, proposes model inputs, flags gaps for review and helps explain the results. Cedar Impact performs the economic calculations. The person running the analysis approves inputs, assumptions and the final result. Full detail is at https://lumecon.ai/cedar. Cedar Grove is the advanced data library: harmonized public data plus released Lumecon proprietary datasets.
+Cedar is Lumecon's AI economic analyst and is included in every plan. It works across intake, analysis, interpretation and reporting: upload PDFs, spreadsheets and CSVs; Cedar identifies relevant information, proposes model inputs, flags gaps for review and helps explain the results. Cedar Impact performs the economic calculations. The person running the analysis approves inputs, assumptions and the final result. Full detail is at https://lumecon.ai/cedar. Cedar Grove is the living evidence base for an organization's economy: maintained public data, Lumecon collections and the records the organization governs, with every finding connected to its source, geography, method, vintage and limits. It is licensed on its own at $2,500 per organization per year with unlimited teammates, and included with Tree. Full detail is at https://lumecon.ai/cedar-grove.
 
 ## Methodology
 
