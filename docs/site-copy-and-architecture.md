@@ -23,30 +23,31 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 729 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/pricing` | 1194 | Pricing \| Lumecon | 155 |
-| `/methodology` | 2556 | Methodology \| Lumecon | 167 |
-| `/cedar` | 464 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/glossary` | 547 | Glossary \| Lumecon | 142 |
-| `/naics` | 656 | Industry sectors \| Lumecon | 146 |
-| `/signup` | 238 | Request beta access \| Lumecon | 118 |
-| `/login` | 118 | Log in \| Lumecon | 31 |
-| `/choose-plan` | 218 | Choose your plan \| Lumecon | 103 |
-| `/checkout` | 205 | Checkout \| Lumecon | 81 |
-| `/welcome` | 62 | Welcome to Lumecon | 32 |
-| `/accessibility` | 382 | Accessibility \| Lumecon | 141 |
-| `/ai-and-data-use` | 604 | AI and Data Use \| Lumecon | 133 |
-| `/security` | 433 | Security \| Lumecon | 118 |
-| `/privacy` | 667 | Privacy Policy \| Lumecon | 99 |
-| `/terms` | 1031 | Terms of Service \| Lumecon | 146 |
-| `/404` | 93 | Page Not Found \| Lumecon | 141 |
-| **Total** | **10197** | | |
+| `/` | 731 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/pricing` | 1295 | Pricing \| Lumecon | 155 |
+| `/methodology` | 2558 | Methodology \| Lumecon | 167 |
+| `/cedar` | 466 | Cedar, the AI economic analyst \| Lumecon | 151 |
+| `/cedar-grove` | 1030 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 227 |
+| `/glossary` | 549 | Glossary \| Lumecon | 142 |
+| `/naics` | 658 | Industry sectors \| Lumecon | 146 |
+| `/signup` | 239 | Request beta access \| Lumecon | 118 |
+| `/login` | 119 | Log in \| Lumecon | 31 |
+| `/choose-plan` | 223 | Choose your plan \| Lumecon | 103 |
+| `/checkout` | 207 | Checkout \| Lumecon | 81 |
+| `/welcome` | 63 | Welcome to Lumecon | 32 |
+| `/accessibility` | 384 | Accessibility \| Lumecon | 141 |
+| `/ai-and-data-use` | 606 | AI and Data Use \| Lumecon | 133 |
+| `/security` | 435 | Security \| Lumecon | 118 |
+| `/privacy` | 669 | Privacy Policy \| Lumecon | 99 |
+| `/terms` | 1037 | Terms of Service \| Lumecon | 146 |
+| `/404` | 95 | Page Not Found \| Lumecon | 141 |
+| **Total** | **11364** | | |
 
 ## Crawler metadata audit
 
 This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards, the llms.txt discovery link and JSON-LD against the built site.
 
-- **Sitemap URLs:** 11
+- **Sitemap URLs:** 12
 - **Status:** All checked crawler metadata is complete and consistent.
 
 ---
@@ -64,7 +65,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 729
+- **Visible words:** 731
 
 ### Architecture (heading outline)
 
@@ -96,15 +97,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -312,8 +315,9 @@ Prefer to talk to a person first? contact@lumecon.ai
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -382,7 +386,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1194
+- **Visible words:** 1295
 
 ### Architecture (heading outline)
 
@@ -392,7 +396,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
   - **H2** Sprout
   - **H2** Sapling
   - **H2** Tree
-  - **H2** Cedar Grove. Use the data library on its own or as part of Tree.
+  - **H2** Cedar Grove. The living evidence base for your organization’s economy.
   - **H2** Questions about plans and billing.
 
 ### Copy, in document order
@@ -406,15 +410,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -524,7 +530,7 @@ $7,500 / YEAR
 
 UNLIMITED USERS IN ONE ORGANIZATION
 
-Everything in Sapling, plus Cedar Grove, the advanced data library, organizational context and Cedar calibration across the organization.
+Everything in Sapling, plus Cedar Grove, the evidence base for your organization’s economy, organizational context and Cedar calibration across the organization.
 
 - _link:_ [Request Tree access →](/signup?tier=tree)
 Consultancies and partner organizations delivering analysis to someone else start at Sapling.
@@ -535,20 +541,37 @@ Consultancies and partner organizations delivering analysis to someone else star
 STANDALONE SUBSCRIPTION
 
 
-**H2: Cedar Grove. Use the data library on its own or as part of Tree.**
+**H2: Cedar Grove. The living evidence base for your organization’s economy.**
 
-Cedar Grove is the advanced data library: public datasets cleaned, harmonized and kept analysis-ready, alongside released proprietary datasets from Lumecon. Subscribe to the library on its own, or receive it with Tree alongside Cedar Impact and Cedar Commons.
+Cedar Grove connects maintained public data, the twelve Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own with unlimited users, or receive the same Grove with Tree, which adds Cedar Impact and Cedar Commons; that is the whole difference between the two prices.
 
-- Harmonized public data, maintained and versioned
-- Lumecon’s proprietary datasets, added as they are built
-- Unlimited people in your organization
-The Cedar Grove catalog lists proprietary datasets as they are released. Your subscription includes the datasets available in Cedar Grove during your term.
+- Evidence coverage: direct, proxy, organization data, missing
+- Evidence records, evidence sheets and reproducibility bundles
+- Unlimited teammates in one organization
+Your subscription includes every Lumecon collection available in Cedar Grove during your term, and each new collection as it is released.
+
+- _disclosure:_ The collections in the subscription
+- Federal Funding to Indian Country
+- Federal Register
+- Congressional Votes and Proposed Legislation
+- Indian Country Deals
+- NAGPRA
+- Native Federal Advocacy and Engagement
+- Federal Prime Contracting
+- Federal Subcontracting
+- Natural Resource Revenues
+- Individually Owned Native Businesses
+- Native Nonprofits
+- Cedar Native Entity Enterprise Dataset
+What each collection contains
 
 $2,500 / YEAR
 
-Unlimited users
+Unlimited users in one organization
 
-- _link:_ [Request Cedar Grove access →](/signup?product=cedar-grove)
+- _link:_ [Request Grove →](/signup?product=cedar-grove)
+See Cedar Grove
+
 - _disclosure:_ Compare all plansEvery capability, side by side
 Slide to compare plans →
 
@@ -648,7 +671,7 @@ Yes, starting with Sapling. Cedar Commons doubles as a client intake and project
 Tree serves larger consulting and partner organizations with unlimited organizational users, Cedar calibration and Cedar Grove.
 
 - _disclosure:_ What is Cedar Grove, and why is it sold separately?
-Cedar Grove is the advanced data library: harmonized public data plus the proprietary datasets we build. It is useful without Cedar Impact, so you can buy it on its own for $2,500 a year with unlimited users, and it comes with Tree.
+Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits. It is useful without Cedar Impact, so you can license it on its own for $2,500 a year per organization with unlimited teammates, and it comes with Tree.
 
 - _disclosure:_ Couldn’t an economist just buy multipliers and do this themselves?
 Yes. Experienced economists can perform many of these calculations themselves, and the arithmetic is rarely the hardest part.
@@ -676,8 +699,9 @@ Renewal, cancellation and notice terms will be stated in your order form or subs
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -745,7 +769,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2556
+- **Visible words:** 2558
 
 ### Architecture (heading outline)
 
@@ -780,15 +804,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1002,8 +1028,9 @@ Yes. Results are decision-support estimates and are labeled as such wherever the
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -1071,7 +1098,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 464
+- **Visible words:** 466
 
 ### Architecture (heading outline)
 
@@ -1096,15 +1123,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1195,8 +1224,597 @@ Source material, proposed inputs, assumptions and final calculations remain avai
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
+- Pricing
+REFERENCE
+
+- Methodology
+- Security
+- Glossary
+- Industry sectors
+ACCOUNT
+
+- Request access
+- Log in
+- Contact
+LEGAL
+
+- Terms
+- Privacy
+- AI and data use
+- Accessibility
+- _label:_ © 2026 Lumecon Inc. · All rights reserved · Patent pending.
+- _button:_ Privacy choices
+- _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+We use optional analytics to improve Lumecon. Privacy Policy
+
+- _button:_ Decline
+- _button:_ Accept
+
+---
+
+## `/cedar-grove` — Cedar Grove
+
+- **Title:** Cedar Grove, the living evidence base for your organization’s economy | Lumecon
+- **Meta description** (227 chars): Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits.
+- **og:description:** Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
+- **Canonical:** https://lumecon.ai/cedar-grove
+- **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, BreadcrumbList
+- **Visible words:** 1030
+
+### Architecture (heading outline)
+
+- **H1** The living evidence base for your organization’s economy.
+  - **H2** Pick a question. Read what the evidence supports, and what it rests on.
+  - **H2** A private, living evidence workspace for your organization and its place.
+  - **H2** Twelve maintained collections, resolved to your place.
+    - **H3** Federal Funding to Indian Country
+    - **H3** Federal Register
+    - **H3** Congressional Votes and Proposed Legislation
+    - **H3** Indian Country Deals
+    - **H3** NAGPRA
+    - **H3** Native Federal Advocacy and Engagement
+    - **H3** Federal Prime Contracting
+    - **H3** Federal Subcontracting
+    - **H3** Natural Resource Revenues
+    - **H3** Individually Owned Native Businesses
+    - **H3** Native Nonprofits
+    - **H3** Cedar Native Entity Enterprise Dataset
+  - **H2** Cedar Grove, for your whole organization.
+
+### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
+- _link:_ [Skip to main content](#top)
+
+> _section: `Main navigation`_
+
+- _link:_ [LUMECON](/)
+- _label:_ |
+- _label:_ The Intelligent Economic Analysis Platform
+- Cedar Impact
+- Cedar
+- Cedar Grove
+- Pricing
+- Methodology
+- _link:_ [Log in](/login)
+- _link:_ [Request access](/signup)
+- _button:_ Menu
+- **[conditional]** Cedar Impact
+- **[conditional]** Cedar
+- **[conditional]** Cedar Grove
+- **[conditional]** Pricing
+- **[conditional]** Methodology
+- **[conditional]** Log in
+- **[conditional]** Request access
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+
+> _section: `meth-hero`_
+
+CEDAR GROVE BY LUMECON
+
+
+**H1: The living evidence base for your organization’s economy.**
+
+Cedar Grove connects maintained public data, Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, so a number can be checked, cited and reproduced by the people who have to stand behind it.
+
+- _link:_ [Request Grove →](#license)
+- _link:_ [See the evidence behind a finding →](#frame)
+- _label:_ Cedar Grove EXAMPLE NATION EVIDENCE COVERAGE · ILLUSTRATIVE
+_caption:_ ORGANIZATION GEOGRAPHY DIRECT EVIDENCE STATISTICAL PROXY NO SOURCE YET SERVICE AREA
+
+> _section: `Evidence for the selected topic`_
+
+WHAT THE EVIDENCE COVERS
+
+- _button:_ Income and population DIRECT
+- _button:_ Employment and wages COUNTY PROXY
+- _button:_ Program outcomes MISSING
+- SOURCE
+- U.S. Census Bureau, American Community Survey, 5-year
+- VINTAGE
+- 2020–2024
+- GEOGRAPHY
+- The Nation’s area, as published
+- LIMITATION
+- Survey estimates: a margin of error accompanies every cell
+- STATUS
+- DIRECT
+- **[conditional]** Source
+- **[conditional]** Bureau of Labor Statistics, Quarterly Census of Employment and Wages
+- **[conditional]** Vintage
+- **[conditional]** 2024 annual averages
+- **[conditional]** Geography
+- **[conditional]** Three surrounding counties stand in for the area
+- **[conditional]** Limitation
+- **[conditional]** County figures include employers outside the Nation. State the assumption or add records.
+- **[conditional]** Status
+- **[conditional]** County proxy
+- **[conditional]** Source
+- **[conditional]** None yet
+- **[conditional]** Vintage
+- **[conditional]** Not covered
+- **[conditional]** Geography
+- **[conditional]** The program’s service area, beyond the Nation’s area
+- **[conditional]** Limitation
+- **[conditional]** No public source links enrollment to later employment. The Nation’s own enrollment history would.
+- **[conditional]** Status
+- **[conditional]** Missing
+Jurisdiction, service area, organization geography and statistical geography are kept apart, never merged. The place and its values are invented.
+
+
+> _section: `grovepg-frameband`_
+
+THE EVIDENCE BEHIND A FINDING
+
+
+**H2: Pick a question. Read what the evidence supports, and what it rests on.**
+
+- _label:_ Cedar Grove EXAMPLE NATION ILLUSTRATIVE EXAMPLE. NAMES AND VALUES ARE INVENTED.
+
+> _section: `Leadership questions`_
+
+A LEADERSHIP QUESTION
+
+- _button:_ Are our people’s incomes rising faster than the national figure? DIRECT
+- _button:_ Are we the largest employer in our region? COUNTY PROXY
+- _button:_ What happens to our citizens after they enroll in the workforce program? MISSING
+
+> _section: `Are our people’s incomes rising faster than the national figure?`_
+
+- MEASURE
+- Per capita income (USD, nominal)
+- UNIVERSE
+- AIAN alone
+- GEOGRAPHY
+- Example Nation
+- PERIOD
+- 1990–2024
+- SOURCE
+- ACS 5-year; decennial long-form for 1990 and 2000
+- STATUS
+- DIRECT
+- _label:_ Example Nation US, AIAN alone US, all residents DECENNIAL LONG-FORM ACS 5-YEAR 1990 2024
+Per capita income is estimated to have grown faster than the national AIAN figure.
+
+Published for the Nation’s area directly. Survey estimates carry margins of error.
+
+- _button:_ Open evidence record
+- _label:_ EVIDENCE SHEET (PDF) · REPRODUCE IN PYTHON, R OR STATA
+**[conditional]** Evidence record
+
+- **[conditional]** Source
+- **[conditional]** U.S. Census Bureau, American Community Survey, 5-year (2020–2024)
+- **[conditional]** Source (also)
+- **[conditional]** U.S. Census Bureau, decennial long-form estimates (1990, 2000)
+- **[conditional]** Transformation
+- **[conditional]** As published; nominal dollars; series joined across products at 2010
+- **[conditional]** Uncertainty
+- **[conditional]** A 90 percent margin of error accompanies every ACS cell
+- **[conditional]** Limits
+- **[conditional]** Overlapping five-year periods; decennial and ACS points are not strictly comparable
+- **[conditional]** Reproduce
+- **[conditional]** Python, R and Stata scripts read the same rows the figure draws
+- **[conditional]** Cite as
+- **[conditional]** U.S. Census Bureau, American Community Survey, 5-year, 2020–2024. Prepared with Lumecon Cedar Grove.
+
+> _section: `Are we the largest employer in our region?`_
+
+- **[conditional]** Measure
+- **[conditional]** Employment (headcount)
+- **[conditional]** Geography
+- **[conditional]** Three surrounding counties
+- **[conditional]** Period
+- **[conditional]** 2025
+- **[conditional]** Source
+- **[conditional]** Lumecon Employer Benchmark; the Nation’s own row from its records
+- **[conditional]** Status
+- **[conditional]** County proxy
+- _label:_ **[conditional]** BENCHMARK 2025Example NationRegional employer BRegional employer CRegional employer DRegional employer E
+**[conditional]** The Nation would rank first among the benchmarked employers in its region.
+
+**[conditional]** This comparison covers the three surrounding counties rather than the Nation’s area directly. State the assumption or add data.
+
+- _button:_ Open evidence record
+- _label:_ **[conditional]** Evidence sheet (PDF) · Reproduce in Python, R or Stata
+**[conditional]** Evidence record
+
+- **[conditional]** Source
+- **[conditional]** Lumecon Employer Benchmark 2025, assembled from public records
+- **[conditional]** Organization data
+- **[conditional]** Enterprise employment roster, 2019–2025, supplied by the Nation
+- **[conditional]** Transformation
+- **[conditional]** Ranked by headcount; headcount is not comparable with FTE figures
+- **[conditional]** Geography
+- **[conditional]** The benchmark publishes counties, so the county group stands in for the area
+- **[conditional]** Limits
+- **[conditional]** Comparators are named where public records allow; a peer cohort otherwise
+- **[conditional]** Reproduce
+- **[conditional]** Script, data file, provenance sidecar and manifest in one bundle
+- **[conditional]** Cite as
+- **[conditional]** Lumecon Employer Benchmark, 2025, and organization-supplied employment. Prepared with Lumecon Cedar Grove.
+
+> _section: `What happens to our citizens after they enroll in the workforce program?`_
+
+- **[conditional]** Measure
+- **[conditional]** Post-enrollment employment
+- **[conditional]** Geography
+- **[conditional]** Example Nation
+- **[conditional]** Period
+- **[conditional]** Not covered
+- **[conditional]** Source
+- **[conditional]** None yet
+- **[conditional]** Status
+- **[conditional]** Missing
+- _label:_ **[conditional]** PopulationIncomeEmploymentTribal employmentPost-enrollment employmentDIRECTDIRECTCOUNTY PROXYORGANIZATION DATAMISSING
+**[conditional]** Not yet supportable. No source links program enrollment to later employment.
+
+**[conditional]** Nothing answers this yet. An enrollment history with outcome fields from the Nation’s own records would; no public source can stand in.
+
+- _button:_ Open evidence record
+- _label:_ **[conditional]** Evidence sheet (PDF) · Reproduce in Python, R or Stata
+**[conditional]** Evidence record
+
+- **[conditional]** What Grove needs
+- **[conditional]** An enrollment history file: citizen id, program, enrollment year, outcome
+- **[conditional]** Path
+- **[conditional]** Local preview today; governed import with a named data steward when it lands
+- **[conditional]** Until then
+- **[conditional]** The question stays listed as unanswered rather than answered with a proxy
+
+> _section: `meth-sec`_
+
+
+**H2: A private, living evidence workspace for your organization and its place.**
+
+- Evidence supported Findings you can defend today, each with its claim class, how well the evidence fits it and whether the geography measured is the geography named.
+- Direct or proxy Where a source does not publish your area, Grove names the wider geography that stood in and what that means for the number you are about to cite.
+- Governed records The roster, payroll or enrollment file that moves a topic from proxy to direct, named before you assemble it and kept under your governance when it arrives.
+- Reproducible Every figure carries an evidence record and a script that rebuilds it from the same rows, in Python, R or Stata.
+_caption:_ EVIDENCE COVERAGE ILLUSTRATIVE
+- _label:_ NEEDS ACTION DIRECT PROXY ORGANIZATION DATA MISSING
+- Population ACS 5-year DIRECT
+- Income ACS 5-year DIRECT
+- Employment QCEW, three counties COUNTY PROXY
+- Tribal employment Enterprise roster ORGANIZATION DATA
+- Program outcomes No source MISSING
+Employment rests on a county proxy. State the assumption or add records.
+
+_caption:_ EVIDENCE RECORD ILLUSTRATIVE
+Per capita income against the national figure
+
+- MEASURE
+- Per capita income (USD)
+- GEOGRAPHY
+- Example Nation
+- UNIVERSE
+- AIAN alone
+- SOURCE
+- U.S. Census Bureau, ACS 5-year
+- VINTAGE
+- 2020–2024
+- TRANSFORMATION
+- As published; nominal dollars
+- UNCERTAINTY
+- 90 percent margin of error
+- LIMITS
+- Overlapping five-year periods
+- CITE AS
+- U.S. Census Bureau, American Community Survey, 5-year, 2020–2024. Prepared with Lumecon Cedar Grove.
+_caption:_ REPRODUCE ILLUSTRATIVE
+Reproducibility bundle
+
+- SCRIPT lumecon-income-trend-example-nation.py
+- DATA lumecon-income-trend-example-nation.csv
+- PROVENANCE lumecon-income-trend-example-nation-provenance.csv
+- MANIFEST lumecon-income-trend-example-nation-bundle.json
+- _label:_ "sources": [{ "provider": "U.S. Census Bureau", "dataset": "ACS 5-year", "vintage": "2020-2024" }], "transformation": "as published; nominal dollars", "restrictedData": "organization rows stay within the access scope they were shared under"
+Script, data, provenance and manifest come from one evidence definition, so they cannot drift apart.
+
+
+> _section: `collections`_
+
+TWELVE MAINTAINED COLLECTIONS
+
+
+**H2: Twelve maintained collections, resolved to your place.**
+
+Beside the public programs, a Grove carries the collections Lumecon builds and maintains for Indian Country, each resolved to the nation, corporation or organization behind its records. Every collection available during your term is included, and each new one as it is released.
+
+- 01 Federal Funding
+- 02 Federal Register
+- 03 Legislation
+- 04 Deals
+- 05 NAGPRA
+- 06 Advocacy
+- 07 Prime Contracting
+- 08 Subcontracting
+- 09 Natural Resources
+- 10 Native-Owned Businesses
+- 11 Native Nonprofits
+- 12 NEED
+
+> _section: `Federal Funding to Indian Country`_
+
+COLLECTION 01
+
+
+**H3: Federal Funding to Indian Country**
+
+- CONTRIBUTES
+- Every award the federal government reports sending into Indian Country: grants, loans, direct payments and insurance, award by award.
+- RESOLVED TO
+- Recipients resolved to the Native entity behind them, so an award to a subsidiary, a housing authority or a consortium is attributed to the nation or organization it belongs to.
+- COVERAGE
+- Records from fiscal year 2007
+- SOURCES
+- USAspending assistance award archive and API
+- ACCESS
+- Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `Federal Register`_
+
+**[conditional]** Collection 02
+
+
+**H3: Federal Register**
+
+- **[conditional]** Contributes
+- **[conditional]** Every notice, rule and comment window touching tribes, lands, water or recognition, caught while there is still time to respond.
+- **[conditional]** Resolved to
+- **[conditional]** Notices matched to the tribes, lands and organizations they name, including entities that appear under former or variant names.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1994
+- **[conditional]** Sources
+- **[conditional]** federalregister.gov API
+- **[conditional]** Access
+- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `Congressional Votes and Proposed Legislation`_
+
+**[conditional]** Collection 03
+
+
+**H3: Congressional Votes and Proposed Legislation**
+
+- **[conditional]** Contributes
+- **[conditional]** Bills, resolutions and roll-call votes from both chambers, followed from introduction to the floor: who sponsored, who voted and how.
+- **[conditional]** Resolved to
+- **[conditional]** Bills and votes tied to the tribes and Native organizations they affect, not only to the sponsors who filed them.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1973, thin and gapped through the 1980s
+- **[conditional]** Sources
+- **[conditional]** congress.gov API for bills, actions and cosponsors; House and Senate roll-call records
+- **[conditional]** Access
+- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `Indian Country Deals`_
+
+**[conditional]** Collection 04
+
+
+**H3: Indian Country Deals**
+
+- **[conditional]** Contributes
+- **[conditional]** Material transactions and capital commitments involving Native nations, organizations and enterprises: acquisitions, financing, joint ventures and major projects, with participants, announced value, status and timing.
+- **[conditional]** Resolved to
+- **[conditional]** Buyers, sellers, borrowers and issuers resolved to tribal governments, tribally owned enterprises, ANCs and NHOs.
+- **[conditional]** Coverage
+- **[conditional]** Records from 2000
+- **[conditional]** Sources
+- **[conditional]** Transaction announcements, agency records and Federal Register land and trust actions, manually reviewed
+- **[conditional]** Access
+- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `NAGPRA`_
+
+**[conditional]** Collection 05
+
+
+**H3: NAGPRA**
+
+- **[conditional]** Contributes
+- **[conditional]** Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.
+- **[conditional]** Resolved to
+- **[conditional]** Notices matched to the tribes and Native Hawaiian organizations named in them, across the naming changes of three decades.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1994, the first notice published under the Act
+- **[conditional]** Sources
+- **[conditional]** NAGPRA notices as published in the Federal Register
+- **[conditional]** Access
+- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `Native Federal Advocacy and Engagement`_
+
+**[conditional]** Collection 06
+
+
+**H3: Native Federal Advocacy and Engagement**
+
+- **[conditional]** Contributes
+- **[conditional]** Registered lobbying, agency meetings, tribal consultations, regulatory comments, congressional testimony and nonprofit lobbying disclosures, one entity-linked activity per row.
+- **[conditional]** Resolved to
+- **[conditional]** Each activity resolved to the tribe or Native organization behind it where the record supports the link; a row the record cannot place keeps its printed party name and a blank key rather than a guess.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1999
+- **[conditional]** Sources
+- **[conditional]** Senate Lobbying Disclosure Act filings, tribal consultation notices, congressional hearing records and Federal Register ex parte notices
+- **[conditional]** Access
+- **[conditional]** Cedar Press. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `Federal Prime Contracting`_
+
+**[conditional]** Collection 07
+
+
+**H3: Federal Prime Contracting**
+
+- **[conditional]** Contributes
+- **[conditional]** Every prime award to a firm, a tribal enterprise or a tribal government, with the agency, the dollars, the industry and the set-aside path it came through.
+- **[conditional]** Resolved to
+- **[conditional]** Vendors resolved to tribally owned firms, ANC and NHO subsidiaries and 8(a) participants, then rolled up to the parent nation or corporation.
+- **[conditional]** Coverage
+- **[conditional]** Records from fiscal year 2000, where Native identification begins in the federal record; refreshed quarterly
+- **[conditional]** Sources
+- **[conditional]** FPDS-NG feed, USAspending award data and SAM contract awards
+- **[conditional]** Access
+- **[conditional]** Cedar Press+. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `Federal Subcontracting`_
+
+**[conditional]** Collection 08
+
+
+**H3: Federal Subcontracting**
+
+- **[conditional]** Contributes
+- **[conditional]** The dollars below the prime layer: which vendors do the work, under whom and in which sectors.
+- **[conditional]** Resolved to
+- **[conditional]** Subawards matched to the same resolved entities as the prime contracts above them.
+- **[conditional]** Coverage
+- **[conditional]** Records from fiscal year 2010, the statutory reporting floor
+- **[conditional]** Sources
+- **[conditional]** USAspending FSRS subaward data
+- **[conditional]** Access
+- **[conditional]** Cedar Press+. Filer-reported and unaudited; totals are stated with that limit.
+
+> _section: `Natural Resource Revenues`_
+
+**[conditional]** Collection 09
+
+
+**H3: Natural Resource Revenues**
+
+- **[conditional]** Contributes
+- **[conditional]** Energy and mineral activity on trust and restricted lands: production volumes, the royalties it owes and the disbursements that follow.
+- **[conditional]** Resolved to
+- **[conditional]** Production and disbursements matched to the nations and allottees they belong to.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1880, through retrospectively published headright payments
+- **[conditional]** Sources
+- **[conditional]** ONRR Natural Resources Revenue Data and retrospectively published disbursement records
+- **[conditional]** Access
+- **[conditional]** Cedar Press+. Public records; the resolution to Native entities is Cedar’s work.
+
+> _section: `Individually Owned Native Businesses`_
+
+**[conditional]** Collection 10
+
+
+**H3: Individually Owned Native Businesses**
+
+- **[conditional]** Contributes
+- **[conditional]** Individually owned Native businesses, certified by their own nations’ TERO and commerce offices: who they are, what trades they work and what preference status their nation certifies.
+- **[conditional]** Resolved to
+- **[conditional]** Every listing carries the nation whose office certified it and is credited to the issuing TERO or commerce office.
+- **[conditional]** Coverage
+- **[conditional]** A roster as captured on 2026-09-01; certifying offices archive no superseded lists
+- **[conditional]** Sources
+- **[conditional]** Nations’ TERO and commerce offices, shared with the project office by office
+- **[conditional]** Access
+- **[conditional]** Cedar Press+. A listing appears only under its nation’s stated terms.
+
+> _section: `Native Nonprofits`_
+
+**[conditional]** Collection 11
+
+
+**H3: Native Nonprofits**
+
+- **[conditional]** Contributes
+- **[conditional]** Native-led and Native-serving nonprofits with their federal filings: budgets, revenue mixes and program spending.
+- **[conditional]** Resolved to
+- **[conditional]** Filers classified as Native-led, Native-serving or Native-focused, which are three different things and are labeled separately.
+- **[conditional]** Coverage
+- **[conditional]** A register as captured on 2026-04-29, one row per filer with its latest period
+- **[conditional]** Sources
+- **[conditional]** IRS Business Master File monthly extracts
+- **[conditional]** Access
+- **[conditional]** Cedar Press+. Public records; the classification is Cedar’s work and stays reviewable.
+
+> _section: `Cedar Native Entity Enterprise Dataset`_
+
+**[conditional]** Collection 12
+
+
+**H3: Cedar Native Entity Enterprise Dataset**
+
+- **[conditional]** Contributes
+- **[conditional]** Who owns whom across Indian Country’s enterprises: parent nations and corporations, their subsidiaries, holding companies and joint ventures, and how those ties change.
+- **[conditional]** Resolved to
+- **[conditional]** The structure the rest of the record resolves against, published as a collection in its own right: every tie names the nation or corporation behind it.
+- **[conditional]** Coverage
+- **[conditional]** Observations from 2016, the earliest year any source named an enterprise or a tie
+- **[conditional]** Sources
+- **[conditional]** Entity records, enterprise registers and filings, reconciled edition by edition
+- **[conditional]** Access
+- **[conditional]** Cedar Press+. Unresolved ties stay unresolved; a provisional match is labeled provisional.
+
+> _section: `license`_
+
+ONE LICENSE PER ORGANIZATION
+
+
+**H2: Cedar Grove, for your whole organization.**
+
+A Grove belongs to the organization, not to a seat. Everyone who works from your evidence works from the same one: the same findings, the same coverage, the same records, the same history.
+
+Onboarding is done with you. We anchor the Grove to your area, connect the public programs that publish it, and set up the records you want layered over the gaps.
+
+Unlimited users either way. Cedar Grove on its own is the evidence base; the Tree plan is the same Grove with Cedar Impact and Cedar Commons beside it, and that is the whole difference in price. Compare plans.
+
+$2,500 per organization, per year
+
+- Unlimited users in one organization
+- Twelve Lumecon collections, and each new one
+- Full history and evidence records
+- Exports, evidence sheets and reproducibility bundles
+- Cedar, the AI economic analyst, grounded in your evidence
+- _link:_ [Request Grove →](/signup?product=cedar-grove)
+Prefer to talk first? contact@lumecon.ai
+
+Also from Lumecon. Use this evidence base to model a project or policy in Cedar Impact, and to share the work in Cedar Commons. Grove stands on its own; the family is there when you need it.
+
+- _link:_ [See Cedar Impact →](/#product)
+
+> _section: `footer`_
+
+
+> _section: `Footer`_
+
+PRODUCT
+
+- Cedar Impact
+- Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -1239,7 +1857,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/glossary
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, DefinedTermSet
-- **Visible words:** 547
+- **Visible words:** 549
 
 ### Architecture (heading outline)
 
@@ -1256,15 +1874,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1326,8 +1946,9 @@ For the calculations behind these terms, read the methodology. Cedar can also ex
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -1395,7 +2016,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, DefinedTermSet
-- **Visible words:** 656
+- **Visible words:** 658
 
 ### Architecture (heading outline)
 
@@ -1412,15 +2033,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1472,8 +2095,9 @@ Tribal Government is a Lumecon category rather than a two-digit NAICS sector. NA
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -1539,7 +2163,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/signup
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 238
+- **Visible words:** 239
 
 ### Architecture (heading outline)
 
@@ -1556,15 +2180,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1653,7 +2279,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 118
+- **Visible words:** 119
 
 ### Architecture (heading outline)
 
@@ -1670,15 +2296,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1740,7 +2368,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/choose-plan
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 218
+- **Visible words:** 223
 
 ### Architecture (heading outline)
 
@@ -1757,15 +2385,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1781,7 +2411,7 @@ Every paid plan runs the same economic model on the same data foundation. Choose
 
 - _link:_ [Sprout For an individual analyst. $1,000 / year 1 USER Cedar Impact in full, Cedar and every supported geography Continue with Sprout →](/checkout?tier=sprout)
 - _link:_ [Sapling RECOMMENDED For teams and client work. $2,500 / year UP TO 10 USERS Adds Cedar Commons, the shared project workspace, with external collaborators Continue with Sapling →](/checkout?tier=sapling)
-- _link:_ [Tree For organization-wide use. $7,500 / year UNLIMITED USERS IN ONE ORGANIZATION Adds Cedar Grove, the advanced data library, and Cedar calibration Continue with Tree →](/checkout?tier=tree)
+- _link:_ [Tree For organization-wide use. $7,500 / year UNLIMITED USERS IN ONE ORGANIZATION Adds Cedar Grove, the evidence base for your organization’s economy, and Cedar calibration Continue with Tree →](/checkout?tier=tree)
 - _link:_ [Start free with Seed → See your direct effects free; full results unlock on any paid plan.](/signup?tier=free)
 Want the detail first? Compare plans. Using Lumecon for client work? Commercial use starts with Sapling.
 
@@ -1793,8 +2423,9 @@ Want the detail first? Compare plans. Using Lumecon for client work? Commercial 
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -1835,7 +2466,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/checkout
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 205
+- **Visible words:** 207
 
 ### Architecture (heading outline)
 
@@ -1852,15 +2483,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -1936,8 +2569,9 @@ You are purchasing the Sprout plan: $1,000 due today, billed annually. Your subs
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -1978,7 +2612,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/welcome
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 62
+- **Visible words:** 63
 
 ### Architecture (heading outline)
 
@@ -1995,15 +2629,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -2039,7 +2675,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/accessibility
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 382
+- **Visible words:** 384
 
 ### Architecture (heading outline)
 
@@ -2060,15 +2696,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -2118,8 +2756,9 @@ If any part of this site is difficult to use with assistive technology, or you s
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -2160,7 +2799,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/ai-and-data-use
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 604
+- **Visible words:** 606
 
 ### Architecture (heading outline)
 
@@ -2185,15 +2824,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -2257,8 +2898,9 @@ Write to contact@lumecon.ai and a person will answer. This page will be kept con
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -2301,7 +2943,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/security
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage
-- **Visible words:** 433
+- **Visible words:** 435
 
 ### Architecture (heading outline)
 
@@ -2323,15 +2965,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -2430,8 +3074,9 @@ Government, Tribal, university and enterprise reviews differ. We will identify w
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -2472,7 +3117,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/privacy
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 667
+- **Visible words:** 669
 
 ### Architecture (heading outline)
 
@@ -2496,15 +3141,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -2563,8 +3210,9 @@ We will update this policy as the service evolves. Material changes will be post
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -2605,7 +3253,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/terms
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1031
+- **Visible words:** 1037
 
 ### Architecture (heading outline)
 
@@ -2636,15 +3284,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -2659,7 +3309,7 @@ CLOSE ALL SECTIONS
 
 **H2: 1. Who we are and what these terms cover**
 
-Lumecon is an economic analysis platform operated by Lumecon Inc.. Once finalized and accepted, these terms will govern the Lumecon software, websites, subscriptions and advisory services, including the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the advanced data library; and Cedar, the AI economic analyst, in every plan.
+Lumecon is an economic analysis platform operated by Lumecon Inc.. Once finalized and accepted, these terms will govern the Lumecon software, websites, subscriptions and advisory services, including the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the living evidence base for your organization’s economy; and Cedar, the AI economic analyst, in every plan.
 
 
 **H2: 2. The service, including beta access**
@@ -2736,8 +3386,9 @@ We may update these terms as the service evolves; material changes will be notif
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -2778,7 +3429,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/404
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 93
+- **Visible words:** 95
 
 ### Architecture (heading outline)
 
@@ -2795,15 +3446,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 - Methodology
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** How it works
+- **[conditional]** Cedar Impact
 - **[conditional]** Cedar
+- **[conditional]** Cedar Grove
 - **[conditional]** Pricing
 - **[conditional]** Methodology
 - **[conditional]** Log in
@@ -2828,8 +3481,9 @@ Check the address or return to the Lumecon homepage.
 
 PRODUCT
 
-- How it works
+- Cedar Impact
 - Cedar
+- Cedar Grove
 - Pricing
 REFERENCE
 
@@ -2865,7 +3519,8 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 
 ### Sentences that appear verbatim on more than one page
 
-- **On `/` and `/pricing` and `/methodology` and `/cedar` and `/glossary` and `/naics` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
+- **On `/` and `/pricing` and `/methodology` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
+- **On `/pricing` and `/cedar-grove`:** "The living evidence base for your organization’s economy."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."

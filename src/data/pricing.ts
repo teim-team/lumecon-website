@@ -1,3 +1,5 @@
+import { GROVE_COLLECTIONS } from './groveCollections';
+
 /**
  * Pricing data — single source of truth for the /pricing page.
  *
@@ -145,81 +147,19 @@ export const CEDAR_GROVE = {
     'Evidence records, evidence sheets and reproducibility bundles',
     'Unlimited teammates in one organization',
   ],
-  ctaLabel: 'Request a Grove',
+  ctaLabel: 'Request Grove',
   ctaHref: '/signup?product=cedar-grove',
   pageHref: '/cedar-grove',
   /**
    * The Lumecon collections a Grove carries: the twelve Cedar Press
-   * collections, named here as the Cedar Press catalog names them
-   * (cedar-press `src/features/grove/pressCatalog.js`). Each blurb is the
-   * catalog's own first sentence, shortened, never a new promise. A
-   * collection is added here when the Cedar workspace rules it ready;
-   * the note covers what arrives during a term.
+   * collections, read from the registry in `groveCollections.ts`, which
+   * names them as the Cedar Press catalog does. A collection is added
+   * there when the Cedar workspace rules it ready; the note covers what
+   * arrives during a term.
    */
   proprietaryNote:
     'Your subscription includes every Lumecon collection available in Cedar Grove during your term, and each new collection as it is released.',
-  proprietaryDatasets: [
-    {
-      name: 'Federal Funding to Indian Country',
-      blurb:
-        'Every award the federal government reports sending into Indian Country, resolved to the Native entity behind the recipient.',
-    },
-    {
-      name: 'Federal Register',
-      blurb:
-        'Every notice, rule and comment window touching tribes, lands, water or recognition, matched to the entities it names.',
-    },
-    {
-      name: 'Congressional Votes and Proposed Legislation',
-      blurb:
-        'Bills, resolutions and roll-call votes from both chambers, tied to the tribes and Native organizations they affect.',
-    },
-    {
-      name: 'Indian Country Deals',
-      blurb:
-        'Material transactions and capital commitments involving Native nations, organizations and enterprises: acquisitions, financing, joint ventures and major projects.',
-    },
-    {
-      name: 'NAGPRA',
-      blurb:
-        'Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.',
-    },
-    {
-      name: 'Native Federal Advocacy & Engagement',
-      blurb:
-        'Registered lobbying, agency meetings, consultations, regulatory comments and testimony, each resolved to the entity behind it.',
-    },
-    {
-      name: 'Federal Prime Contracting',
-      blurb:
-        'Every prime award to tribally owned firms, ANC and NHO subsidiaries and 8(a) participants, rolled up to the parent nation or corporation.',
-    },
-    {
-      name: 'Federal Subcontracting',
-      blurb:
-        'The dollars below the prime layer: which vendors do the work, under whom and in which sectors.',
-    },
-    {
-      name: 'Natural Resource Revenues',
-      blurb:
-        'Energy and mineral activity on trust and restricted lands: production, the royalties it owes and the disbursements that follow.',
-    },
-    {
-      name: 'Individually Owned Native Businesses',
-      blurb:
-        'Businesses certified by their own nations’ TERO and commerce offices, credited to the office that certified them.',
-    },
-    {
-      name: 'Native Nonprofits',
-      blurb:
-        'Native-led, Native-serving and Native-focused nonprofits with their annual federal filings, labelled separately.',
-    },
-    {
-      name: 'Cedar Native Entity Enterprise Dataset',
-      blurb:
-        'Who owns whom across Indian Country’s enterprises: parent nations and corporations, subsidiaries, holding companies and joint ventures.',
-    },
-  ] as { name: string; blurb: string }[],
+  proprietaryDatasets: GROVE_COLLECTIONS.map((c) => ({ name: c.name, blurb: c.contributes })),
 };
 
 /** The readable detail table. `values` align with [SEED, ...PLANS] order. */
