@@ -1,0 +1,491 @@
+/* /cedar-grove — Cedar Grove by Lumecon.
+   Page-specific pieces on top of the methodology vocabulary: a dark hero
+   with the product frame under it, the interactive evidence frame, the
+   contract list, the license block and the late bridge to Cedar Impact.
+   The frame reuses the app's own grammar (mono captions, hairlines, teal
+   for the organization's series, navy for comparators, amber for a limit)
+   so the page shows the product rather than a generic data-platform look. */
+
+.grovepg-hero {
+  position: relative;
+  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(3rem, 6vw, 4.5rem);
+  background:
+    linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
+    linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
+}
+.grovepg-hero .meth-w {
+  position: relative;
+  z-index: 1;
+}
+.grovepg-hero .h-kicker,
+.grovepg-hero .meth-hero__title,
+.grovepg-hero .meth-hero__lede {
+  color: #fff;
+}
+.grovepg-hero .h-kicker {
+  color: #73e2d6;
+}
+.grovepg-hero .meth-hero__title {
+  max-width: 16ch;
+  font-size: clamp(2.4rem, 5vw, 4.1rem);
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+}
+.grovepg-hero .meth-hero__lede {
+  max-width: 58ch;
+  color: rgba(255, 255, 255, 0.82);
+}
+.grovepg-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 0 0 3rem;
+}
+.grovepg-hero .btn2--card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+.grovepg-hero .btn2--card:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- the evidence frame ----------
+   One product frame: pick a finding, read its coverage status, open the
+   record. It is a staged Grove, not a diagram, and it runs without any
+   library. */
+/* The frame keeps its own light palette whatever section it sits in: it is
+   a picture of the product on the dark hero, the way the homepage's app
+   captures are, so its colours are literal rather than the theme's tokens,
+   which the dark section flips. */
+.gf {
+  --gf-bg: #ffffff;
+  --gf-bg-2: #edf2f4;
+  --gf-ink: #071824;
+  --gf-ink-2: #33434a;
+  --gf-ink-3: #647279;
+  --gf-rule: rgba(10, 28, 52, 0.12);
+  --gf-teal: #0a7f74;
+  --gf-navy: #071824;
+  background: var(--gf-bg);
+  color: var(--gf-ink);
+  border: 1px solid var(--gf-rule);
+  border-radius: var(--radius-frame);
+  box-shadow: 0 30px 70px rgba(5, 17, 30, 0.35);
+  overflow: hidden;
+}
+.gf__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.2rem;
+  border-bottom: 1px solid var(--gf-rule);
+  background: var(--gf-bg-2);
+}
+.gf__brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.gf__brand small {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gf-ink-3);
+}
+.gf__note {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gf-ink-3);
+}
+.gf__body {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) minmax(0, 2.2fr);
+  min-height: 30rem;
+}
+.gf__side {
+  border-right: 1px solid var(--gf-rule);
+  padding: 1.2rem 1.1rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.gf__cap {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gf-teal);
+  margin: 0 0 0.5rem;
+}
+.gf__q {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--gf-ink);
+  font: inherit;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.gf__q:hover {
+  background: var(--gf-bg-2);
+}
+.gf__q[aria-pressed='true'] {
+  border-color: rgba(15, 181, 165, 0.35);
+  background: rgba(15, 181, 165, 0.08);
+  color: var(--gf-teal);
+  font-weight: 600;
+}
+.gf__q small {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gf-ink-3);
+  font-weight: 500;
+}
+.gf__main {
+  padding: 1.3rem 1.5rem 1.5rem;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.9rem;
+}
+.gf__ident {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.4rem;
+  margin: 0;
+  font-size: 0.78rem;
+}
+.gf__ident div {
+  display: flex;
+  gap: 0.4rem;
+  align-items: baseline;
+}
+.gf__ident dt {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gf-ink-3);
+}
+.gf__ident dd {
+  margin: 0;
+  color: var(--gf-ink-2);
+}
+.gf__status {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.gf__status--direct,
+.gf__status--org {
+  color: var(--gf-teal);
+}
+.gf__status--proxy,
+.gf__status--missing {
+  color: #c77a18;
+}
+.gf__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 1.4rem;
+  align-items: start;
+}
+.gf__fig {
+  border: 1px solid var(--gf-rule);
+  border-radius: 10px;
+  background: var(--gf-bg);
+  padding: 0.5rem 0.6rem;
+}
+.gf__fig svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--font-mono);
+}
+.gf__claim {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+}
+.gf__impl {
+  margin: 0.8rem 0 0;
+  padding-left: 0.75rem;
+  border-left: 2px solid #c77a18;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--gf-ink-2);
+}
+.gf__impl--ok {
+  border-left-color: var(--gf-teal);
+}
+.gf__acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.gf__btn {
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--gf-rule);
+  background: var(--gf-bg);
+  color: var(--gf-ink);
+  cursor: pointer;
+}
+.gf__btn--primary {
+  background: var(--gf-navy);
+  border-color: var(--gf-navy);
+  color: #fff;
+}
+.gf__btn:hover {
+  border-color: var(--gf-teal);
+}
+.gf__record {
+  border-top: 1px solid var(--gf-rule);
+  padding-top: 0.9rem;
+}
+.gf__record[hidden] {
+  display: none;
+}
+.gf__rec {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  gap: 0.35rem 1rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+}
+.gf__rec dt {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gf-ink-3);
+  padding-top: 0.2rem;
+}
+.gf__rec dd {
+  margin: 0;
+  color: var(--gf-ink-2);
+  line-height: 1.45;
+}
+.gf__cite {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+@media (max-width: 900px) {
+  .gf__body {
+    grid-template-columns: 1fr;
+  }
+  .gf__side {
+    border-right: 0;
+    border-bottom: 1px solid var(--gf-rule);
+  }
+  .gf__stage {
+    grid-template-columns: 1fr;
+  }
+  .gf__rec {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- the contract ---------- */
+.grovepg-contract {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gutter);
+  margin-top: 0.6rem;
+}
+.grovepg-contract li {
+  list-style: none;
+  padding-top: 1.2rem;
+  border-top: 2px solid var(--navy);
+}
+.grovepg-contract li:nth-child(2) {
+  border-top-color: var(--accent-text);
+}
+.grovepg-contract h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4rem;
+}
+.grovepg-contract p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+@media (max-width: 900px) {
+  .grovepg-contract {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+}
+
+/* ---------- objects: coverage, record, reproduce, your records ---------- */
+.grovepg-objects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+.grovepg-object {
+  padding: 1.4rem 1.5rem 1.5rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+}
+.grovepg-object h3 {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0.3rem 0 0.5rem;
+}
+.grovepg-object p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.grovepg-object ul {
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+}
+.grovepg-object li {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+.grovepg-object li::before {
+  content: '·';
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+@media (max-width: 900px) {
+  .grovepg-objects {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- license ---------- */
+.grovepg-license {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 1fr);
+  gap: var(--gutter);
+  align-items: start;
+  padding: 2rem 2.2rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}
+.grovepg-license h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0.3rem 0 0.8rem;
+}
+.grovepg-license p {
+  margin: 0 0 0.8rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.grovepg-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0.3rem 0 0.2rem;
+}
+.grovepg-price__amount {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.grovepg-price__period {
+  color: var(--ink-3);
+  font-size: 0.95rem;
+}
+.grovepg-license ul {
+  margin: 0.6rem 0 1.2rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+}
+.grovepg-license li {
+  font-size: 0.92rem;
+  color: var(--ink-2);
+}
+.grovepg-license li::before {
+  content: '';
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 0.6rem;
+  vertical-align: 0.1rem;
+}
+.grovepg-license__note {
+  font-size: 0.84rem !important;
+  color: var(--ink-3) !important;
+}
+@media (max-width: 900px) {
+  .grovepg-license {
+    grid-template-columns: 1fr;
+    padding: 1.5rem 1.3rem;
+  }
+}
+
+/* ---------- the late bridge ---------- */
+.grovepg-bridge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding: 1.4rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+.grovepg-bridge p {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.grovepg-bridge strong {
+  color: var(--ink);
+}

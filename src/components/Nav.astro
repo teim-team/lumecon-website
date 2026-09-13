@@ -27,6 +27,11 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
           <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>Cedar</a>
         </li>
         <li>
+          <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}
+            >Cedar Grove</a
+          >
+        </li>
+        <li>
           <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}
             >Pricing</a
           >
@@ -78,6 +83,11 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
       <li><a href="/#product">How it works</a></li>
       <li>
         <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>Cedar</a>
+      </li>
+      <li>
+        <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}
+          >Cedar Grove</a
+        >
       </li>
       <li>
         <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}>Pricing</a

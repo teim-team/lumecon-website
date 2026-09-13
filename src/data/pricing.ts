@@ -22,7 +22,7 @@
  *                  are, learns how you work and offers interpretation,
  *                  so the analysis is not done alone.
  *   Cedar Commons  the shared project workspace. Sapling and up.
- *   Cedar Grove    the advanced data library: harmonized public data and
+ *   Cedar Grove    the living evidence base for an organization's economy:
  *                  Lumecon's proprietary datasets. Sold on its own for
  *                  $2,500 with unlimited users, and included in Tree.
  *
@@ -113,7 +113,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'For organization-wide use.',
     tagline:
-      'Everything in Sapling, plus Cedar Grove, the advanced data library, organizational context and Cedar calibration across the organization.',
+      'Everything in Sapling, plus Cedar Grove, the evidence base for your organization’s economy, organizational context and Cedar calibration across the organization.',
     users: 'Unlimited users in one organization',
     clientWork: true,
     ctaLabel: 'Request Tree access',
@@ -138,15 +138,16 @@ export const CEDAR_GROVE = {
   price: '$2,500',
   period: '/ year',
   users: 'Unlimited users',
-  headline: 'Use the data library on its own or as part of Tree.',
-  body: 'Cedar Grove is the advanced data library: public datasets cleaned, harmonized and kept analysis-ready, alongside released proprietary datasets from Lumecon. Subscribe to the library on its own, or receive it with Tree alongside Cedar Impact and Cedar Commons.',
+  headline: 'The living evidence base for your organization’s economy.',
+  body: 'Cedar Grove connects maintained public data, Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own, or receive it with Tree alongside Cedar Impact and Cedar Commons.',
   bullets: [
-    'Harmonized public data, maintained and versioned',
-    'Lumecon’s proprietary datasets, added as they are built',
-    'Unlimited people in your organization',
+    'Evidence coverage: direct, proxy, organization data, missing',
+    'Evidence records, evidence sheets and reproducibility bundles',
+    'Unlimited teammates in one organization',
   ],
-  ctaLabel: 'Request Cedar Grove access',
+  ctaLabel: 'Request a Grove',
   ctaHref: '/signup?product=cedar-grove',
+  pageHref: '/cedar-grove',
   /**
    * The proprietary datasets are in active development. Named entries
    * go in this array as each one ships, and the section renders the
@@ -279,7 +280,7 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'What is Cedar Grove, and why is it sold separately?',
     a: [
-      'Cedar Grove is the advanced data library: harmonized public data plus the proprietary datasets we build. It is useful without Cedar Impact, so you can buy it on its own for $2,500 a year with unlimited users, and it comes with Tree.',
+      'Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits. It is useful without Cedar Impact, so you can license it on its own for $2,500 a year per organization with unlimited teammates, and it comes with Tree.',
     ],
   },
   {
