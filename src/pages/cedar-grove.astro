@@ -185,13 +185,48 @@ const FINDINGS = [
             See how a finding is held <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
         </div>
-
         {
-          /* The frame. A staged Grove: the leadership question on the left,
-             the claim and its figure in the middle, the coverage status and
-             the implication beside them, the record underneath on request. */
+          /* The product itself, beside the copy: the Grove Overview, captured
+             from the app in both themes. Fades and rises in with the copy
+             (reveal-soft, staggered). Shown with the app's demonstration
+             workspace. */
         }
-        <div class="gf reveal-soft" id="frame" data-stagger="3" data-gf>
+        <figure class="grovepg-hero__screen reveal-soft" data-stagger="2" data-zoom>
+          <picture>
+            <source
+              srcset="/app/grove-overview-dark.webp"
+              media="(prefers-color-scheme: dark)"
+              width="1920"
+              height="1080"
+            />
+            <img
+              src="/app/grove-overview.webp"
+              alt="Cedar Grove overview for a demonstration organization: the lead figure with its identity line and claim, then the findings the evidence supports, the limits and next data needed, and the questions the evidence can answer."
+              width="1920"
+              height="1080"
+              decoding="async"
+            />
+          </picture>
+          <figcaption>
+            The Grove Overview: one lead figure, one claim, one limit, then the findings. Shown with
+            demonstration data.
+          </figcaption>
+        </figure>
+      </div>
+    </header>
+
+    {
+      /* The frame. A staged Grove: the leadership question on the left,
+         the claim and its figure in the middle, the coverage status and
+         the implication beside them, the record underneath on request. */
+    }
+    <section class="grovepg-frameband section--dark" aria-labelledby="g-frame">
+      <div class="meth-w">
+        <p class="h-kicker reveal-soft">How a finding is held</p>
+        <h2 class="grovepg-frameband__title reveal-soft" id="g-frame" data-stagger="1">
+          Pick a question. Read what the evidence supports, and what it rests on.
+        </h2>
+        <div class="gf reveal-soft" id="frame" data-stagger="2" data-gf>
           <div class="gf__bar">
             <span class="gf__brand">Cedar Grove <small>Example Nation</small></span>
             <span class="gf__note">Illustrative example. Names and values are invented.</span>
@@ -439,7 +474,7 @@ const FINDINGS = [
           </div>
         </div>
       </div>
-    </header>
+    </section>
 
     {
       /* The product contract, in the order a reader checks it. Not
@@ -552,6 +587,37 @@ const FINDINGS = [
       </div>
     </section>
 
+    <section
+      class="meth-sec"
+      id="collections"
+      aria-labelledby="g-collections"
+      style="padding-top:0"
+    >
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 class="reveal-soft" id="g-collections">
+            Twelve Lumecon collections, in every Grove.
+          </h2>
+        </div>
+        <p class="meth-sec__lede reveal-soft" data-stagger="1">
+          Beside the public programs, a Grove carries the collections Lumecon builds and maintains
+          for Indian Country: records resolved to the nation, corporation or organization behind
+          them, versioned, documented and cited. Every collection available during your term is
+          included, and each new one as it is released.
+        </p>
+        <ol class="grovepg-collections" data-reveal-group>
+          {
+            CEDAR_GROVE.proprietaryDatasets.map((d) => (
+              <li>
+                <h3>{d.name}</h3>
+                <p>{d.blurb}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
     <section class="meth-sec" id="license" aria-labelledby="g-license" style="padding-top:0">
       <div class="meth-w">
         <div class="grovepg-license reveal-soft">
@@ -568,8 +634,9 @@ const FINDINGS = [
               programs that publish it, and set up the records you want layered over the gaps.
             </p>
             <p class="grovepg-license__note">
-              Cedar Grove is also included with the Tree plan alongside Cedar Impact and Cedar
-              Commons. <a href="/pricing">Compare plans.</a>
+              Unlimited users either way. Cedar Grove on its own is the evidence base; the Tree plan
+              is the same Grove with Cedar Impact and Cedar Commons beside it, and that is the whole
+              difference in price. <a href="/pricing">Compare plans.</a>
             </p>
           </div>
           <div>
@@ -578,10 +645,11 @@ const FINDINGS = [
               <span class="grovepg-price__period">per organization, per year</span>
             </p>
             <ul>
-              <li>Unlimited teammates</li>
+              <li>Unlimited users in one organization</li>
+              <li>Twelve Lumecon collections, and each new one</li>
               <li>Full history and evidence records</li>
               <li>Exports, evidence sheets and reproducibility bundles</li>
-              <li>Cedar, the evidence-aware assistant</li>
+              <li>Cedar, the AI economic analyst, grounded in your evidence</li>
             </ul>
             <a class="btn2 btn2--primary" href={CEDAR_GROVE.ctaHref}>
               Request a Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
