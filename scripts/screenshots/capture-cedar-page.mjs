@@ -38,6 +38,16 @@ const mockApi = async (route) => {
   // The board asks for drafts too, and an unanswered call leaves the projects
   // list in its error state rather than rendering the cards.
   if (p === '/project-drafts') return route.fulfill(json([]));
+  // Cedar Commons does not read /projects. It reads /commons/projects twice,
+  // once for active and once for archived, and Promise.all means a miss on
+  // either one puts the whole board in its retry state.
+  if (p === '/commons/projects') {
+    const url = new URL(route.request().url());
+    return route.fulfill(json(url.searchParams.get('archived') === 'archived' ? [] : PROJECTS));
+  }
+  if (p === '/workspace') {
+    return route.fulfill(json({ name: 'Economic Development Office', tier: 'tree', members: [] }));
+  }
   let m = p.match(/^\/projects\/([^/]+)\/runs\/([^/]+)\/results$/);
   if (m) return route.fulfill(json(RESULTS[m[2]]));
   m = p.match(/^\/projects\/([^/]+)\/runs\/([^/]+)$/);
@@ -114,15 +124,10 @@ console.log('cedar-wind-entities');
 await wiz.close();
 
 // ---- Cedar Commons ---------------------------------------------------------
-// KNOWN GAP. Cedar Commons loads its projects from an endpoint this mock does
-// not answer, and the board renders "These projects did not load" instead of
-// cards. cedar-context.webp is therefore still the pre-redesign capture, and
-// /cedar still carries one teal frame.
-//
-// The refusal below is deliberate. A capture script that cannot tell a broken
-// frame from a good one is how the published set drifted in the first place,
-// so this one would rather fail than write an error state into public/app.
-// Whoever wires the right endpoint can delete the throw.
+// The board's own retry state is indistinguishable from a real screenshot at a
+// glance, and publishing one is exactly how this set drifted before. So the
+// capture reads the page back and refuses to write anything if the projects
+// did not load, rather than trusting that the mocks are still right.
 const commons = await ctx.newPage();
 await commons.goto(`${APP}/app/workspace`, { waitUntil: 'networkidle' });
 await settle(commons, 4000);
