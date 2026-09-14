@@ -224,7 +224,7 @@ const jsonLd = [
       <p class="pr-plans__clientnote" id="consultants">{CLIENT_WORK.note}</p>
 
       {
-        /* Cedar Grove: the data library, sold on its own. It sits after
+        /* Cedar Grove: the evidence base, sold on its own. It sits after
            the plans rather than as a fourth card because it is not a
            fourth tier of the same thing: no economic model, no Cedar
            Commons, unlimited people. Pricing it here is also what shows
@@ -242,14 +242,30 @@ const jsonLd = [
           </ul>
           <p class="pr-grove__note">{CEDAR_GROVE.proprietaryNote}</p>
           {
+            /* The catalog is folded: names only, behind a summary, with the
+               page that describes each collection one link away. Pricing
+               says what the subscription includes; /cedar-grove says what
+               each collection is. Unfolded, twelve blurbs put a long scroll
+               between the plans and the comparison table. */
             CEDAR_GROVE.proprietaryDatasets.length > 0 && (
-              <ul class="pr-grove__datasets" role="list">
-                {CEDAR_GROVE.proprietaryDatasets.map((d) => (
-                  <li>
-                    <span class="pr-grove__dsname">{d.name}</span> {d.blurb}
-                  </li>
-                ))}
-              </ul>
+              <details class="pr-more pr-more--faq pr-grove__fold">
+                <summary class="pr-more__summary">
+                  <span class="pr-more__q">The collections in the subscription</span>
+                  <span class="pr-more__chev" aria-hidden="true" />
+                </summary>
+                <div class="pr-more__body">
+                  <ul class="pr-grove__datasets" role="list">
+                    {CEDAR_GROVE.proprietaryDatasets.map((d) => (
+                      <li>{d.name}</li>
+                    ))}
+                  </ul>
+                  <p class="pr-grove__datasets-more">
+                    <a href={`${CEDAR_GROVE.pageHref}#collections`}>
+                      What each collection contains
+                    </a>
+                  </p>
+                </div>
+              </details>
             )
           }
         </div>
@@ -263,6 +279,7 @@ const jsonLd = [
             {CEDAR_GROVE.ctaLabel}
             <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
+          <p class="pr-grove__users"><a href={CEDAR_GROVE.pageHref}>See Cedar Grove</a></p>
         </div>
       </aside>
 

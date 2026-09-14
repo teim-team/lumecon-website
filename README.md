@@ -3,8 +3,9 @@
 Public marketing site for **Lumecon Inc.**, the intelligent economic
 analysis platform. Lumecon offers the Cedar product family: **Cedar
 Impact**, where you run economic impact analysis; **Cedar Commons**, the
-shared project workspace; **Cedar Grove**, the advanced data library; and
-**Cedar**, the AI economic analyst, in every plan. Built as a static
+shared project workspace; **Cedar Grove**, the living evidence base for
+your organization’s economy; and **Cedar**, the AI economic analyst, in
+every plan. Built as a static
 [Astro](https://astro.build) site and deployed to GitHub Pages at
 [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
 authenticated product and its data layer live in sibling repositories (see

@@ -218,9 +218,12 @@ test('desktop nav shows the destinations inline, with no Menu button', async ({ 
   await page.setViewportSize({ width: 1000, height: 800 });
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
   const links = page.locator('.nav-links a');
-  await expect(links).toHaveCount(4);
-  for (const label of ['How it works', 'Cedar', 'Pricing', 'Methodology']) {
-    await expect(page.locator('.nav-links a', { hasText: label })).toBeVisible();
+  await expect(links).toHaveCount(5);
+  for (const label of ['Cedar Impact', 'Cedar', 'Cedar Grove', 'Pricing', 'Methodology']) {
+    // Exact text: "Cedar" is a prefix of two other destinations now.
+    await expect(
+      page.locator('.nav-links a', { hasText: new RegExp(`^\\s*${label}\\s*$`) }),
+    ).toBeVisible();
   }
   await expect(page.locator('.nav-signup')).toBeVisible();
   await expect(page.locator('.nav-links a[aria-current="page"]')).toHaveText('Pricing');

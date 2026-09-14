@@ -1,3 +1,5 @@
+import { GROVE_COLLECTIONS } from './groveCollections';
+
 /**
  * Pricing data — single source of truth for the /pricing page.
  *
@@ -22,7 +24,7 @@
  *                  are, learns how you work and offers interpretation,
  *                  so the analysis is not done alone.
  *   Cedar Commons  the shared project workspace. Sapling and up.
- *   Cedar Grove    the advanced data library: harmonized public data and
+ *   Cedar Grove    the living evidence base for an organization's economy:
  *                  Lumecon's proprietary datasets. Sold on its own for
  *                  $2,500 with unlimited users, and included in Tree.
  *
@@ -113,7 +115,7 @@ export const PLANS: Plan[] = [
     period: '/ year',
     audience: 'For organization-wide use.',
     tagline:
-      'Everything in Sapling, plus Cedar Grove, the advanced data library, organizational context and Cedar calibration across the organization.',
+      'Everything in Sapling, plus Cedar Grove, the evidence base for your organization’s economy, organizational context and Cedar calibration across the organization.',
     users: 'Unlimited users in one organization',
     clientWork: true,
     ctaLabel: 'Request Tree access',
@@ -128,49 +130,36 @@ export const CLIENT_WORK = {
 };
 
 /**
- * Cedar Grove, sold on its own: no economic engine, no Cedar Commons,
- * unlimited people inside your organization. Included at no extra cost in Tree.
- *
- * This copy used to say "it is the data, not the model", and sell the library
- * on being cleaned and harmonized. Grove's own go-to-market note is blunt that
- * this is the wrong pitch: "Grove's differentiation is not the data volume;
- * USAspending, SAM and the Census are free. It is that every figure can defend
- * itself." What the product actually builds is structural provenance, claim
- * linting, a two-way citation register and generated reproduction scripts, and
- * none of that was on this page. It is now.
- *
- * Nothing here promises a named dataset. `proprietaryDatasets` stays empty
- * until real release files land, and those are the founder's work and Havala's
- * review, not a marketing decision.
+ * Cedar Grove, sold on its own. It is the data, not the model: no
+ * economic engine, no Cedar Commons, unlimited people inside your
+ * organization. Included at no extra cost in Tree.
  */
 export const CEDAR_GROVE = {
   name: 'Cedar Grove',
   kicker: 'Standalone subscription',
   price: '$2,500',
   period: '/ year',
-  users: 'Unlimited users',
-  headline: 'Every figure carries the evidence for itself.',
-  body: 'Cedar Grove is the advanced data library. Public data arrives cleaned, harmonized and analysis-ready, with Lumecon\u2019s own datasets alongside it. What separates it is not the volume, because the federal sources are free to anyone: it is that every figure declares where it came from, what it is allowed to claim, and how to reproduce it. Subscribe to the library on its own, or receive it with Tree alongside Cedar Impact and Cedar Commons.',
+  users: 'Unlimited users in one organization',
+  headline: 'The living evidence base for your organization’s economy.',
+  body: 'Cedar Grove connects maintained public data, the twelve Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own with unlimited users, or receive the same Grove with Tree, which adds Cedar Impact and Cedar Commons; that is the whole difference between the two prices.',
   bullets: [
-    'Every source states its origin and the level it resolves to',
-    'A finding cannot claim more than its evidence supports',
-    'Python, R and Stata scripts, generated from the figure in front of you',
-    'A citation on every download, versioned so corrections reach you',
-    'Harmonized public data, maintained and versioned',
-    'Unlimited people in your organization',
+    'Evidence coverage: direct, proxy, organization data, missing',
+    'Evidence records, evidence sheets and reproducibility bundles',
+    'Unlimited teammates in one organization',
   ],
-  ctaLabel: 'Request Cedar Grove access',
+  ctaLabel: 'Request Grove',
   ctaHref: '/signup?product=cedar-grove',
+  pageHref: '/cedar-grove',
   /**
-   * The proprietary datasets are in active development. Named entries
-   * go in this array as each one ships, and the section renders the
-   * note alone while it is empty. Nothing here is a forward promise
-   * about a specific dataset: the claim is only that what we build,
-   * you get from us.
+   * The Lumecon collections a Grove carries: the twelve Lumecon
+   * collections, read from the registry in `groveCollections.ts`, which
+   * names them as the Lumecon catalog does. A collection is added
+   * there when the Cedar workspace rules it ready; the note covers what
+   * arrives during a term.
    */
   proprietaryNote:
-    'The Cedar Grove catalog lists proprietary datasets as they are released. Your subscription includes the datasets available in Cedar Grove during your term.',
-  proprietaryDatasets: [] as { name: string; blurb: string }[],
+    'Your subscription includes every Lumecon collection available in Cedar Grove during your term, and each new collection as it is released.',
+  proprietaryDatasets: GROVE_COLLECTIONS.map((c) => ({ name: c.name, blurb: c.contributes })),
 };
 
 /** The readable detail table. `values` align with [SEED, ...PLANS] order. */
@@ -293,7 +282,7 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'What is Cedar Grove, and why is it sold separately?',
     a: [
-      'Cedar Grove is the advanced data library: harmonized public data plus the proprietary datasets we build. It is useful without Cedar Impact, so you can buy it on its own for $2,500 a year with unlimited users, and it comes with Tree.',
+      'Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits. It is useful without Cedar Impact, so you can license it on its own for $2,500 a year per organization with unlimited teammates, and it comes with Tree.',
     ],
   },
   {
