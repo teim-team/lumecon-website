@@ -128,9 +128,20 @@ export const CLIENT_WORK = {
 };
 
 /**
- * Cedar Grove, sold on its own. It is the data, not the model: no
- * economic engine, no Cedar Commons, unlimited people inside your
- * organization. Included at no extra cost in Tree.
+ * Cedar Grove, sold on its own: no economic engine, no Cedar Commons,
+ * unlimited people inside your organization. Included at no extra cost in Tree.
+ *
+ * This copy used to say "it is the data, not the model", and sell the library
+ * on being cleaned and harmonized. Grove's own go-to-market note is blunt that
+ * this is the wrong pitch: "Grove's differentiation is not the data volume;
+ * USAspending, SAM and the Census are free. It is that every figure can defend
+ * itself." What the product actually builds is structural provenance, claim
+ * linting, a two-way citation register and generated reproduction scripts, and
+ * none of that was on this page. It is now.
+ *
+ * Nothing here promises a named dataset. `proprietaryDatasets` stays empty
+ * until real release files land, and those are the founder's work and Havala's
+ * review, not a marketing decision.
  */
 export const CEDAR_GROVE = {
   name: 'Cedar Grove',
@@ -138,11 +149,14 @@ export const CEDAR_GROVE = {
   price: '$2,500',
   period: '/ year',
   users: 'Unlimited users',
-  headline: 'Use the data library on its own or as part of Tree.',
-  body: 'Cedar Grove is the advanced data library: public datasets cleaned, harmonized and kept analysis-ready, alongside released proprietary datasets from Lumecon. Subscribe to the library on its own, or receive it with Tree alongside Cedar Impact and Cedar Commons.',
+  headline: 'Every figure carries the evidence for itself.',
+  body: 'Cedar Grove is the advanced data library. Public data arrives cleaned, harmonized and analysis-ready, with Lumecon\u2019s own datasets alongside it. What separates it is not the volume, because the federal sources are free to anyone: it is that every figure declares where it came from, what it is allowed to claim, and how to reproduce it. Subscribe to the library on its own, or receive it with Tree alongside Cedar Impact and Cedar Commons.',
   bullets: [
+    'Every source states its origin and the level it resolves to',
+    'A finding cannot claim more than its evidence supports',
+    'Python, R and Stata scripts, generated from the figure in front of you',
+    'A citation on every download, versioned so corrections reach you',
     'Harmonized public data, maintained and versioned',
-    'Lumecon’s proprietary datasets, added as they are built',
     'Unlimited people in your organization',
   ],
   ctaLabel: 'Request Cedar Grove access',
