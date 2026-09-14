@@ -27,7 +27,9 @@
 /* ---------- hero: dark navy, map-led ---------- */
 .grovepg-hero {
   position: relative;
-  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(3rem, 6vw, 4.5rem);
+  /* 13vh of top padding is generous on a tall monitor and expensive on a
+     laptop, where it is the difference between the CTA being visible and not. */
+  padding: clamp(5rem, 9vh, 10rem) 0 clamp(3rem, 6vw, 4.5rem);
   background:
     linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
     linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
@@ -200,6 +202,13 @@
   display: block;
   width: 100%;
   height: auto;
+  /* The drawing is close to square, so at the hero column's width it stood
+     682px tall and the hero came to 1281px: on a 13" laptop the map ran off
+     the bottom and you could not see it and the headline at once. Capping the
+     box against the viewport keeps both in frame. The SVG carries a viewBox,
+     so the default preserveAspectRatio fits the drawing inside the shorter
+     box rather than squashing it. */
+  max-height: min(52vh, 440px);
   border-radius: 4px;
 }
 @media (max-width: 700px) {
