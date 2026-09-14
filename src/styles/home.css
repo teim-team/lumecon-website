@@ -1073,7 +1073,15 @@
 .place-panel {
   position: relative;
   min-width: 0;
-  min-height: clamp(22rem, 31vw, 27rem);
+  /* The photography is authored 1500x600, and `cover` keeps only the fraction
+     of an image's width that the box's own ratio asks for. At the square-ish
+     1.08:1 these panels used to be, that was 43%: a wide frame cropped to its
+     middle, which is why three of them read as murky squares rather than as
+     places. 16:9 keeps 71% and still leaves room for the label, a three-line
+     headline and the cue. The floor is there so a narrow column cannot
+     collapse the copy, not to set the height. */
+  aspect-ratio: 16 / 9;
+  min-height: 15rem;
   overflow: hidden;
   background: #0a4750;
   color: #fff;

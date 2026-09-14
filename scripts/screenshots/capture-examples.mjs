@@ -122,7 +122,8 @@ async function fitScrolledBoundary(
   return height;
 }
 
-for (const theme of ['light', 'dark']) {
+// Light only. The site no longer serves night-mode captures.
+for (const theme of ['light']) {
   const suffix = theme === 'dark' ? '-dark' : '';
   const mockApi = async (route) => {
     const url = new URL(route.request().url());
@@ -162,6 +163,13 @@ for (const theme of ['light', 'dark']) {
     // captures carry a fake user's address tiled across the screenshot.
     await c.addInitScript(() => {
       window.__LUMECON_CAPTURE__ = true;
+      // The rail remembers its collapsed state per browser profile. Pin it, or
+      // two runs of this script disagree for a reason no diff explains.
+      try {
+        localStorage.setItem('teim.sidenav.collapsed', '0');
+      } catch {
+        /* the default is expanded anyway */
+      }
     });
     await c.route('**/*', mockApi);
     return c;
