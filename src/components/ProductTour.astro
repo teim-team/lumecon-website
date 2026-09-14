@@ -91,12 +91,6 @@ const ROWS = [
               data-zoom
             >
               <picture>
-                <source
-                  srcset={row.imgDark}
-                  media="(prefers-color-scheme: dark)"
-                  width={row.width}
-                  height={row.darkHeight}
-                />
                 {/* width/height are the intrinsic ratio, kept so the browser
                      reserves the box before the file arrives. The rendered size
                      is CSS-driven (`.tour-row__shot img`), so the shot scales
