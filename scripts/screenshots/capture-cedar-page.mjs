@@ -23,6 +23,23 @@ mkdirSync(OUT, { recursive: true });
 const APP = process.env.APP_URL || 'http://127.0.0.1:5173';
 const json = (body) => ({ status: 200, contentType: 'application/json', body: JSON.stringify(body) });
 
+// What Cedar is asked, and what it answers, in the two intake frames.
+//
+// Nothing here is a claim about a real project. The figures belong to the same
+// fictional wind build the rest of this capture uses. What the exchange is
+// meant to show is the behaviour that actually matters: Cedar says which
+// operations it could set up from the documents, and refuses to invent the one
+// figure it could not source, naming where it came up short instead.
+const CEDAR_QUESTION = 'Check my operations against the documents.';
+const CEDAR_ANSWER = [
+  'All three are set up from your documents, and two are model ready.',
+  '',
+  '**Grid interconnection** has no sales figure yet. The procurement workbook carries',
+  'the contract at $207.5M, and the substation line you flagged should split from labor.',
+  '',
+  'Want me to apply both? Nothing runs until you review it.',
+].join('\n');
+
 const browser = await chromium.launch(
   process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
 );
@@ -52,8 +69,25 @@ const mockApi = async (route) => {
   if (m) return route.fulfill(json(RESULTS[m[2]]));
   m = p.match(/^\/projects\/([^/]+)\/runs\/([^/]+)$/);
   if (m) return route.fulfill(json(RUNS[m[2]]));
-  m = p.match(/^\/projects\/([^/]+)\/cedar\/messages/);
-  if (m) return route.fulfill(json({ messages: [], threadId: null }));
+  // Cedar answering is the whole point of these frames, so the panel is shown
+  // mid-conversation rather than closed. The widget reads its local history
+  // first and falls back to the server, and a fresh capture context has no
+  // local history, so this transcript is what renders.
+  //
+  // Nothing here is a claim about a real project: the numbers belong to the
+  // same fictional wind build the rest of the capture uses, and the exchange
+  // shows the behaviour that matters, which is Cedar declining to guess at a
+  // figure it cannot source and saying which document it came up short on.
+  if (/\/cedar\/messages/.test(p)) {
+    // A POST is a question the capture just typed. Answering it is the point:
+    // Cedar with its panel closed, or open on an empty welcome, shows nothing
+    // about what Cedar is for. The API does not have to be up for the product
+    // to be photographed doing its job.
+    if (route.request().method() === 'POST') {
+      return route.fulfill(json({ answer: CEDAR_ANSWER, threadId: 'capture', contextUsed: null }));
+    }
+    return route.fulfill(json({ threadId: null, messages: [] }));
+  }
   m = p.match(/^\/projects\/([^/]+)$/);
   if (m) {
     const proj = PROJECTS.find((x) => x.id === m[1]);
@@ -84,6 +118,23 @@ const settle = async (page, ms = 1400) => {
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(ms);
 };
+// The launcher is a closed pill until it is clicked, and a closed pill says
+// nothing about what Cedar does. Every frame that has a Cedar shows it open.
+// The launcher is a closed pill until it is clicked, and a closed pill says
+// nothing about what Cedar does. Every frame that has a Cedar shows it open and
+// mid-answer, which means actually asking: the widget keeps its transcript in
+// local state, so a question typed here is the only way to put one on screen.
+const openCedar = async (page) => {
+  const launcher = page.locator('.cedar-widget__launcher');
+  if (!(await launcher.count())) return;
+  await launcher.first().click();
+  await page.waitForTimeout(1200);
+  const box = page.locator('.cedar-widget__panel input[type=text], .cedar-widget__panel textarea');
+  if (!(await box.count())) return;
+  await box.first().fill(CEDAR_QUESTION);
+  await box.first().press('Enter');
+  await page.waitForTimeout(2200);
+};
 const next = async (page) => {
   await page.locator('button').filter({ hasText: /^Next/ }).first().click();
   await settle(page, 2000);
@@ -107,6 +158,7 @@ await settle(wiz, 900);
 
 await next(wiz); // geography
 await next(wiz); // documents
+await openCedar(wiz);
 await wiz.screenshot({ path: join(OUT, 'cedar-wind-upload.png') });
 console.log('cedar-wind-upload');
 
@@ -119,6 +171,7 @@ for (const sector of ['Construction', 'Utilities', 'Professional services']) {
 }
 await settle(wiz, 900);
 await next(wiz); // details, now carrying three operations
+await openCedar(wiz);
 await wiz.screenshot({ path: join(OUT, 'cedar-wind-entities.png') });
 console.log('cedar-wind-entities');
 await wiz.close();
