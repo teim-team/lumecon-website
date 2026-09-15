@@ -24,19 +24,16 @@
   --gf-amber: #8a5309;
 }
 
-/* ---------- hero: dark navy, the product first ---------- */
-/* One column, and the capture under the words rather than beside them.
-   
-   It was a two-column grid: the headline in a 4.4fr column with an
-   interactive evidence map in a 7.6fr column beside it. The map is gone (see
-   the note in the hero markup) and what stands there now is the Home
-   carousel, which is the page's first and strongest product composition. A
-   hero image in half a column is not a hero. Full content width, in the same
-   1920x1080 frame the two compositions below use, so all three read as one
-   set. */
+/* ---------- hero: dark navy, the product top right ---------- */
+/* The site's hero, not a new one. Every product page here puts the words in a
+   4.5fr column and the capture in a 7.5fr column beside them, spanning the
+   rows: see .cedarpg-hero in cedar-page.css. This page had that shape, lost it
+   for a revision when the capture went full width under the words, and has it
+   back. A hero that composes differently from the other product pages reads as
+   a different site, not as emphasis. */
 .grovepg-hero {
   position: relative;
-  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(3.5rem, 7vw, 5rem);
+  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
   background:
     linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
     linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
@@ -44,6 +41,16 @@
 .grovepg-hero .meth-w {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 4.5fr) minmax(28rem, 7.5fr);
+  column-gap: clamp(3rem, 6vw, 6rem);
+  align-items: center;
+}
+.grovepg-hero .h-kicker,
+.grovepg-hero .meth-hero__title,
+.grovepg-hero .meth-hero__lede,
+.grovepg-hero .grovepg-cta {
+  grid-column: 1;
 }
 .grovepg-hero .h-kicker,
 .grovepg-hero .meth-hero__title,
@@ -54,10 +61,13 @@
   color: #73e2d6;
 }
 .grovepg-hero .meth-hero__title {
-  max-width: 20ch;
+  max-width: 15ch;
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  line-height: 1.02;
 }
 .grovepg-hero .meth-hero__lede {
-  max-width: 62ch;
+  max-width: 54ch;
+  margin-bottom: 1.6rem;
   color: rgba(233, 242, 250, 0.82);
 }
 .grovepg-hero .grovepg-cta {
@@ -72,20 +82,39 @@
   border-color: rgba(115, 226, 214, 0.6);
   background: rgba(7, 60, 59, 0.62);
 }
-/* The capture itself. A light frame on the dark ground, so the screenshot
-   reads as a held object rather than as a hole cut in the band. */
 .grovepg-hero__shot {
-  margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-frame);
+  grid-column: 2;
+  grid-row: 1 / 5;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.75);
+  margin: 0;
+  border: 1px solid rgba(95, 217, 204, 0.38);
+  border-radius: var(--radius-frame);
+  background: #f8fbfb;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(15, 181, 165, 0.08),
+    0 40px 96px -38px rgba(0, 0, 0, 0.9);
 }
 .grovepg-hero__shot img {
   display: block;
   width: 100%;
   height: auto;
+}
+@media (max-width: 980px) {
+  .grovepg-hero .meth-w {
+    grid-template-columns: 1fr;
+  }
+  .grovepg-hero .h-kicker,
+  .grovepg-hero .meth-hero__title,
+  .grovepg-hero .meth-hero__lede,
+  .grovepg-hero .grovepg-cta,
+  .grovepg-hero__shot {
+    grid-column: 1;
+  }
+  .grovepg-hero__shot {
+    grid-row: auto;
+    margin-top: 1.4rem;
+  }
 }
 
 /* ---------- the provenance strip ---------- */
