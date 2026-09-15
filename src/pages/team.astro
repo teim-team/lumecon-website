@@ -57,10 +57,24 @@ const firstName = (p: Person) => p.name.split(' ')[0];
  * Where this team trained, each institution once.
  *
  * Built from the people rather than typed out, so it cannot drift from
- * them. Order is the order people appear, which puts the leads' schools
- * first without ranking anybody's.
+ * them, and sorted alphabetically — not by the order people appear,
+ * which is an order only someone holding the roster could see.
+ *
+ * Sorted on the distinctive word rather than the literal string: nine
+ * of these thirteen begin "University of", so a literal sort files most
+ * of the shelf under U and the alphabet does no work. Oxford sits at O
+ * and Florida at F, which is the convention an index or a bibliography
+ * uses, and the reader scanning for a name finds it where they look.
+ *
+ * Deliberately not grouped by prestige. Ivy League or a top-50 list
+ * would be a ranking of the team's own schools, published by the team,
+ * and a credibility page that ranks itself is doing the opposite of
+ * what it is for. Alphabetical needs no source and makes no claim.
  */
-const schools = [...new Set(everyone.flatMap((p) => p.alumniOf ?? []))];
+const sortKey = (school: string) => school.replace(/^(The |University of )/, '');
+const schools = [...new Set(everyone.flatMap((p) => p.alumniOf ?? []))].sort((a, b) =>
+  sortKey(a).localeCompare(sortKey(b)),
+);
 
 const personLd = (p: Person) => ({
   '@type': 'Person',

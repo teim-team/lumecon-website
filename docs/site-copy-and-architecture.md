@@ -1258,19 +1258,19 @@ TRAINING AND RESEARCH BACKGROUND
 
 **H2: Where the team trained**
 
-- Cornell University
-- Dartmouth College
-- University of Florida
-- University of Oxford
-- Duke University
-- University of Wisconsin-Madison
-- University of Maryland, College Park
-- University of Illinois Urbana-Champaign
-- Yale University
-- Massachusetts Institute of Technology
 - University of Alaska Fairbanks
 - Brown University
+- Cornell University
+- Dartmouth College
+- Duke University
+- University of Florida
+- University of Illinois Urbana-Champaign
+- University of Maryland, College Park
+- Massachusetts Institute of Technology
+- University of Oxford
+- University of Wisconsin-Madison
 - University of Wisconsin-Whitewater
+- Yale University
 Read the methodology for Lumecon’s modeling approach. Read security for how Lumecon handles organization data.
 
 

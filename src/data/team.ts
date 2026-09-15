@@ -114,8 +114,10 @@ export interface Person {
   /** Whether this person is emitted under Organization.founder in the
    *  homepage JSON-LD. Independent of `title`: schema.org takes more
    *  than one founder, and what each is called is the title's business.
-   *  Elijah is Founder and CEO (2026-09); Michael is Co-Founder and
-   *  Founding Investor. */
+   *  Elijah is Founder and CEO; Michael is Founding Investor and appears
+   *  in that structured data only. He is deliberately absent from every
+   *  surface a visitor reads — /team, llms.txt and Cedar's answers —
+   *  which is the founder's decision (2026-09), not an oversight. */
   founder?: boolean;
   /** Degree-granting institutions only, used for Person.alumniOf
    *  JSON-LD and for the training shelf on /team. A program hosted at a
@@ -201,15 +203,14 @@ const TEAM: Person[] = [
     name: 'Michael Moreno',
     initials: 'MM',
     group: 'team',
-    title: 'Co-Founder and Founding Investor',
+    title: 'Founding Investor',
     tribalAffiliation:
       'Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California.',
     email: 'michael.moreno@lumecon.ai',
     founder: true,
-    summary:
-      'Co-founder and founding investor. His early support moved Lumecon from concept to product, alongside Elijah as enrolled members of the Coastal Band of the Chumash Nation.',
+    summary: 'Founding investor. His early support moved Lumecon from concept to product.',
     bio: [
-      'Michael Moreno is a co-founder and the founding investor of Lumecon. His early support helped launch the company and move it from concept to product.',
+      'Michael Moreno is the founding investor of Lumecon. His early support helped launch the company and move it from concept to product.',
     ],
   },
   {

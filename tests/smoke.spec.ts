@@ -1,3 +1,5 @@
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { test, expect } from '@playwright/test';
 
 /**
@@ -722,6 +724,12 @@ test('team page picks a person and shows that person', async ({ page }) => {
   expect(shelf).not.toContain('Michigan State University');
   expect(shelf).toContain('Cornell University');
 
+  // The shelf is alphabetical on the distinctive word, because nine of
+  // thirteen start "University of" and a literal sort would file most of
+  // it under U.
+  const key = (school: string) => school.replace(/^(The |University of )/, '');
+  expect(shelf).toEqual([...shelf].sort((a, b) => key(a).localeCompare(key(b))));
+
   // The core team is reachable; advisors are not given a work address.
   await page.locator('[data-face="laurel-wheeler"]').click();
   await expect(
@@ -757,4 +765,38 @@ test('team page picks a person and shows that person', async ({ page }) => {
   await expect(page.locator('[data-person="vod-vilfort"] a[href*="scholar.google"]')).toHaveCount(
     1,
   );
+});
+
+test('the founding investor is in structured data only, never in what a visitor reads', async ({
+  page,
+}) => {
+  // Founder's decision (2026-09): Michael Moreno stays in the homepage
+  // Organization.founder JSON-LD and appears on no surface a visitor
+  // reads. Cedar's answers live in a JS bundle rather than in page
+  // markup, so checking rendered text alone would have missed the two
+  // that named him — grep dist/, not just src/.
+  for (const route of ['/', '/team']) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    const visible = await page.evaluate(() => document.body.innerText);
+    expect(visible, route).not.toContain('Michael Moreno');
+  }
+  const assets = join(process.cwd(), 'dist', '_astro');
+  const bundles = readdirSync(assets).filter((f) => f.endsWith('.js'));
+  expect(bundles.length).toBeGreaterThan(0);
+  for (const file of bundles) {
+    expect(readFileSync(join(assets, file), 'utf8'), file).not.toContain('Michael Moreno');
+  }
+  // He is still the founding investor where machines read it.
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  const founders = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) => {
+    const blocks: Record<string, any>[] = nodes.flatMap((n) => {
+      const parsed = JSON.parse(n.textContent || '{}');
+      return Array.isArray(parsed) ? parsed : [parsed];
+    });
+    return blocks.filter((b) => b.founder).flatMap((b) => b.founder);
+  });
+  expect(founders).toEqual([
+    { '@type': 'Person', name: 'Elijah Moreno', jobTitle: 'Founder and CEO' },
+    { '@type': 'Person', name: 'Michael Moreno', jobTitle: 'Founding Investor' },
+  ]);
 });
