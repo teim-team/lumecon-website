@@ -11,11 +11,13 @@
  * Two shapes of prose live here and they are not interchangeable. `bio`
  * is the full paragraph record and is not rendered on /team; that page
  * runs on `education` and `experience`, which are the short, checkable
- * lines a reader scans down a column. Every line in them traces to the
- * pitch deck's team slide or to `bio` — nothing is written for the page.
- * Where a person has one point of experience on record they get one:
- * padding a column to match its neighbour is how a credibility page
- * stops being one.
+ * lines a reader reads one person at a time. Where a person has one
+ * point of experience on record they get one: padding an entry to match
+ * its neighbour is how a credibility page stops being one.
+ *
+ * `education` is ordered by attainment, highest first — doctorate, then
+ * master's, then bachelor's — so the strongest credential is the first
+ * thing read. It is not chronological.
  */
 
 export type PersonGroup = 'team' | 'advisor';
@@ -65,9 +67,9 @@ export interface Person {
    *  reserve the space. The generator writes each crop at its native
    *  resolution rather than upscaling, so leads and advisors differ. */
   photoSize?: number;
-  /** Short discipline label used in place of `title` on /team, where the
-   *  advisors' full titles would each repeat the section heading above
-   *  them. `title` stays canonical for JSON-LD and off-site use. */
+  /** Short discipline label used under the portrait on /team, where the
+   *  full titles run long and an advisor's would repeat the heading
+   *  above them. `title` stays canonical, and the panel shows it. */
   discipline?: string;
   /** Degrees, earliest first. Rendered as the education column on /team. */
   education?: string[];
@@ -87,6 +89,9 @@ export interface Person {
   founder?: boolean;
   /** Degree-granting institutions, used for Person.alumniOf JSON-LD. */
   alumniOf?: string[];
+  /** Where the person works now besides Lumecon, used for
+   *  Person.worksFor JSON-LD alongside Lumecon itself. */
+  currentAffiliations?: string[];
   /** Previous employers / fellowships / affiliations, used for
    *  Person.affiliation JSON-LD. Improves entity recognition in
    *  search ("Elijah Moreno + Federal Reserve" connects). */
@@ -102,15 +107,17 @@ const TEAM: Person[] = [
     initials: 'EM',
     group: 'team',
     title: 'Co-Founder and CEO',
+    discipline: 'Co-founder and CEO',
     email: 'elijah.moreno@lumecon.ai',
+    linkedin: 'https://www.linkedin.com/in/elijahmoreno',
     scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
     founder: true,
     photo: '/team/elijah-moreno.webp',
     photoSize: 284,
     education: [
-      'BA Economics, modified with Native American Studies, Dartmouth College',
-      'MPP, Cornell University',
       'PhD candidate in Public Policy, Cornell University',
+      'MPP, Cornell University',
+      'BA Economics, modified with Native American Studies, Dartmouth College',
     ],
     experience: [
       'Eight years producing tribal economic impact studies.',
@@ -173,15 +180,17 @@ const TEAM: Person[] = [
     initials: 'LW',
     group: 'team',
     title: 'Economics Lead',
+    discipline: 'Economics',
     email: 'laurel.wheeler@lumecon.ai',
     linkedin: 'https://ca.linkedin.com/in/laurel-wheeler',
     scholar: 'https://scholar.google.com/citations?user=oV06J_wAAAAJ&hl=en&oi=ao',
     photo: '/team/laurel-wheeler.webp',
     photoSize: 284,
     education: [
-      'BA Political Science, University of Florida',
+      'PhD Economics, Duke University',
+      'MA Economics, Duke University',
       'MSc Economics for Development, University of Oxford',
-      'MA and PhD Economics, Duke University',
+      'BA Political Science, University of Florida',
     ],
     experience: [
       'Economist at the Center for Indian Country Development, Federal Reserve Bank of Minneapolis.',
@@ -276,15 +285,17 @@ const TEAM: Person[] = [
     initials: 'IA',
     group: 'team',
     title: 'Input/Output Models Lead',
+    discipline: 'Input/output models',
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
     photo: '/team/isabella-agnes.webp',
     photoSize: 284,
     education: [
-      'BS Mathematics and BS Economics, University of Wisconsin-Madison',
       'Doctoral training in Economics, University of Maryland, College Park',
+      'BS Mathematics and BS Economics, University of Wisconsin-Madison',
     ],
     experience: [
+      'Data scientist at the Library of Congress.',
       'Economic modeling and public-sector data science for the District of Columbia government.',
       'Data scientist at the Board of Governors of the Federal Reserve System, and a research assistant at the Federal Reserve Bank of Philadelphia.',
     ],
@@ -296,9 +307,11 @@ const TEAM: Person[] = [
     ],
     alumniOf: ['University of Wisconsin-Madison', 'University of Maryland, College Park'],
     prevAffiliations: [
+      'Government of the District of Columbia',
       'Federal Reserve Bank of Philadelphia',
       'Board of Governors of the Federal Reserve System',
     ],
+    currentAffiliations: ['Library of Congress'],
     publications: [
       {
         title: 'Place-Based Labor Market Inequality',
@@ -317,19 +330,24 @@ const TEAM: Person[] = [
     initials: 'FA',
     group: 'team',
     title: 'Cedar Lead',
+    discipline: 'Cedar',
     email: 'francesca.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/francesca-agnes-a8106722b',
     scholar: 'https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ',
     photo: '/team/francesca-agnes.webp',
     photoSize: 284,
     education: ['BS Biology, University of Illinois Urbana-Champaign'],
-    experience: ['Builds the document intake and assumption workflow Cedar runs on.'],
+    experience: [
+      'Builds the document intake and assumption workflow Cedar runs on.',
+      'Also builds at Lira, the AI wearable company founded by Brian Kim.',
+    ],
     summary:
       "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Holds a bachelor's in Biology from the University of Illinois Urbana-Champaign.",
     bio: [
       "Francesca Agnes leads development of Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions and helping users move from messy data to usable analysis. She holds a bachelor's degree in Biology from the University of Illinois Urbana-Champaign.",
     ],
     alumniOf: ['University of Illinois Urbana-Champaign'],
+    currentAffiliations: ['Lira'],
   },
   {
     slug: 'kaylyn-lee',
@@ -337,12 +355,17 @@ const TEAM: Person[] = [
     initials: 'KL',
     group: 'team',
     title: 'Platform Lead',
+    discipline: 'Platform',
     email: 'kaylyn.lee@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/kaylynlee',
     photo: '/team/kaylyn-lee.webp',
     photoSize: 284,
     education: ['BS Computer Science with a minor in Business, Cornell University'],
-    experience: ['Builds the platform customers use.'],
+    currentAffiliations: ['Lira'],
+    experience: [
+      'Builds the platform customers use.',
+      'Also builds at Lira, the AI wearable company founded by Brian Kim.',
+    ],
     summary:
       "Leads development of the Lumecon platform experience. Holds a bachelor's in Computer Science, with a minor in Business, from Cornell University.",
     bio: [
@@ -378,13 +401,17 @@ const TEAM: Person[] = [
     initials: 'VV',
     group: 'advisor',
     title: 'Methodology Advisor',
+    // Unverified: LinkedIn is unreachable from the build environment, so
+    // this is the top result for the exact name on a linkedin.com-scoped
+    // search and a vanity slug that matches it, not a page anyone opened.
+    linkedin: 'https://www.linkedin.com/in/vodvilfort',
     scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
     photo: '/team/vod-vilfort.webp',
     photoSize: 144,
     discipline: 'Methodology',
     education: [
-      'BA Mathematics and Economics, Yale University',
       'PhD candidate in Economics, Massachusetts Institute of Technology',
+      'BA Mathematics and Economics, Yale University',
     ],
     experience: [
       'NSF Graduate Research Fellow.',
@@ -420,9 +447,9 @@ const TEAM: Person[] = [
     photoSize: 144,
     discipline: 'Data governance',
     education: [
-      'BS Education, University of Wisconsin-Whitewater',
-      'MA Urban Education Policy, Brown University',
       'PhD Statistics and Policy in Education, University of Alaska Fairbanks',
+      'MA Urban Education Policy, Brown University',
+      'BS Education, University of Wisconsin-Whitewater',
     ],
     experience: [
       'Builds data governance and privacy practice for sensitive administrative data.',

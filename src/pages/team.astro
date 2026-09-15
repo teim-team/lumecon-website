@@ -1,23 +1,31 @@
 ---
 /**
- * /team — who builds Lumecon, and what they trained in.
+ * /team — who builds Lumecon.
  *
- * A credibility page, sitting beside /methodology and /security: those
- * two argue that the economics and the handling of data hold up, and
- * this one says who is doing them. It makes that argument the cheapest
- * way available — a degree list and a couple of checkable prior posts
- * per person — and stops there. No manifesto, no values, no culture
- * copy; the other pages already carry the argument about the product.
+ * A credibility page, sitting with /methodology and /security: those two
+ * argue that the economics and the handling of data hold up, and this one
+ * says who is doing them.
  *
- * Content comes from src/data/team.ts, which stays the single record
- * for the team. The page renders `education` and `experience`, never
- * the long `bio` paragraphs, and it renders only people who have a
- * headshot: see the note on TEAM_ROSTER for why Michael Moreno is in
- * the data and not on the page.
+ * The page is one object. A reader meets the whole team at once as a row
+ * of portraits, picks one, and reads that person beside the row — the same
+ * picker the Grove collections registry uses, because the question is the
+ * same shape: a set of things you scan, one of which you want the record
+ * for. Eight people laid out as eight parallel records made the reader do
+ * the scanning; this way the page answers one person at a time and the row
+ * stays a group photograph.
  *
- * Portraits are the duotone circles cut from the pitch deck's team
- * slide by scripts/team/headshots.mjs, washed through the same teal
- * ramp as the licensed sector photography.
+ * It sits on the dark band deliberately. The portraits are duotone in the
+ * brand teal, and teal on deep navy is the strongest pairing the site has;
+ * on the pale ground the same row went flat. The band is also what keeps
+ * the page from being a white document between two white documents.
+ *
+ * Content comes from src/data/team.ts, which stays the single record for
+ * the team. The page renders `education` and `experience`, never the long
+ * `bio` paragraphs.
+ *
+ * Portraits: the deck's 1200px masters, resized and cut to a disc by
+ * scripts/team/headshots.mjs. They arrive already washed in WASHES.teal
+ * and evened for exposure, so nothing here re-colors them.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -35,8 +43,21 @@ const site = 'https://lumecon.ai';
 const description =
   'The economists, engineers and advisors who build Lumecon, with the degrees and the prior posts behind the model, the data systems and the platform.';
 
+const everyone = [...TEAM_ROSTER, ...ADVISOR_ROSTER];
+
 /** Display names carry a credential suffix; schema.org `name` should not. */
 const plainName = (p: Person) => p.name.replace(/,\s*(PhD|MPP)$/, '');
+/** The first name is enough under a portrait, and it lets five sit in a row. */
+const firstName = (p: Person) => p.name.split(' ')[0];
+
+/**
+ * Where this team trained, each institution once.
+ *
+ * Built from the people rather than typed out, so it cannot drift from
+ * them. Order is the order people appear, which puts the leads' schools
+ * first without ranking anybody's.
+ */
+const schools = [...new Set(everyone.flatMap((p) => p.alumniOf ?? []))];
 
 const personLd = (p: Person) => ({
   '@type': 'Person',
@@ -52,13 +73,14 @@ const personLd = (p: Person) => ({
   ...(p.prevAffiliations?.length
     ? { affiliation: p.prevAffiliations.map((n) => ({ '@type': 'Organization', name: n })) }
     : {}),
-  ...(p.group === 'team' ? { worksFor: { '@id': `${siteConfig.url}#org` } } : {}),
+  worksFor: [
+    ...(p.group === 'team' ? [{ '@id': `${siteConfig.url}#org` }] : []),
+    ...(p.currentAffiliations ?? []).map((n) => ({ '@type': 'Organization', name: n })),
+  ],
   ...([p.linkedin, p.scholar].filter(Boolean).length
     ? { sameAs: [p.linkedin, p.scholar].filter(Boolean) }
     : {}),
 });
-
-const everyone = [...TEAM_ROSTER, ...ADVISOR_ROSTER];
 
 const jsonLd = [
   {
@@ -88,6 +110,11 @@ const jsonLd = [
     ],
   },
 ];
+
+const GROUPS = [
+  { label: 'Team', people: TEAM_ROSTER },
+  { label: 'Advisors', people: ADVISOR_ROSTER },
+];
 ---
 
 <BaseLayout
@@ -97,7 +124,7 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
   <Nav isHome={false} />
-  <main class="meth" id="top" tabindex="-1">
+  <main class="meth team" id="top" tabindex="-1">
     <header class="meth-hero team-hero">
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Team</p>
@@ -106,111 +133,152 @@ const jsonLd = [
           team.
         </h1>
         <p class="meth-hero__lede">
-          These are the people who build the model, the data systems and the platform, and the
-          advisors who review the methodology, the data governance and the engineering behind them.
-          Each entry gives the degrees and a couple of prior posts, so the work can be weighed
-          against the people who did it.
+          Lumecon is built by economists who have published the research, engineers who have shipped
+          the systems and advisors who review both. Pick anyone below for their degrees, where they
+          have worked and how to reach them.
         </p>
       </div>
     </header>
 
-    {/* No section heading here. The hero says what this list is, and a
-         second "Team" under a "Team" kicker would only restate it; the
-         advisors below get a heading because they are a different kind
-         of entry. The section keeps an accessible name instead. */}
-    <section class="meth-sec team-sec" aria-label="Team">
+    <section class="team-band section--dark" aria-labelledby="t-roster">
       <div class="meth-w">
-        <ol class="roster" role="list">
-          {TEAM_ROSTER.map((p, i) => (
-            <li class="roster__row" id={p.slug}>
-              {/* Alt is empty on purpose: the name sits beside the
-                    portrait, so alt text would announce it twice. */}
-              <img
-                class="roster__photo"
-                src={p.photo}
-                width={p.photoSize}
-                height={p.photoSize}
-                alt=""
-                loading={i === 0 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
-              <div class="roster__id">
-                <h2 class="roster__name">{p.name}</h2>
-                <p class="roster__role">{p.discipline ?? p.title}</p>
+        <h2 class="visually-hidden" id="t-roster">
+          The people who build Lumecon
+        </h2>
+        <div class="roster" data-roster>
+          <div class="roster__rows">
+            {GROUPS.map((group) => (
+              <div class="roster__group">
+                <p class="roster__glabel">{group.label}</p>
+                <ul class="roster__row" role="list">
+                  {group.people.map((p) => (
+                    <li>
+                      <button
+                        type="button"
+                        class="face"
+                        data-face={p.slug}
+                        aria-pressed={p.slug === everyone[0].slug ? 'true' : 'false'}
+                        aria-controls="roster-panel"
+                        aria-label={`${p.name}, ${p.title}`}
+                      >
+                        {/* The portrait is the control's face; the button is
+                              named by its aria-label, so the image has
+                              nothing of its own to announce. */}
+                        <img
+                          class="face__photo"
+                          src={p.photo}
+                          width="480"
+                          height="480"
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        {/* A first name is what lets five portraits sit in a
+                            row. The aria-label above carries the full name
+                            and title and replaces this text rather than
+                            adding to it, so nothing is announced twice. */}
+                        <span class="face__name">{firstName(p)}</span>
+                        <span class="face__role">{p.discipline ?? p.title}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div class="roster__col">
-                <p class="roster__label">Education</p>
-                <ul class="roster__list roster__list--edu" role="list">
+            ))}
+          </div>
+
+          <div class="roster__panel" id="roster-panel" aria-live="polite">
+            {everyone.map((p, i) => (
+              <article class="pcard" data-person={p.slug} hidden={i !== 0} aria-label={p.name}>
+                <h3 class="pcard__name">{p.name}</h3>
+                <p class="pcard__role">{p.title}</p>
+
+                <p class="pcard__label">Education</p>
+                <ul class="pcard__list" role="list">
                   {p.education?.map((e) => (
                     <li>{e}</li>
                   ))}
                 </ul>
-              </div>
-              <div class="roster__col">
-                <p class="roster__label">Experience</p>
-                <ul class="roster__list" role="list">
+
+                <p class="pcard__label">Experience</p>
+                <ul class="pcard__list" role="list">
                   {p.experience?.map((e) => (
                     <li>{e}</li>
                   ))}
                 </ul>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
 
-    <section class="meth-sec team-sec" aria-labelledby="advisors">
-      <div class="meth-w">
-        <div class="team-sec__head">
-          <h2 id="advisors">Advisors</h2>
-          <p>
-            Three people outside the day-to-day work who review what the day-to-day work produces:
-            the empirical methodology, the handling of sensitive data and the engineering the
-            platform is built on.
-          </p>
+                {(p.email || p.linkedin || p.scholar) && (
+                  <p class="pcard__links">
+                    {p.email && (
+                      <a class="pcard__link" href={`mailto:${p.email}`}>
+                        <svg
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                          stroke-linejoin="round"
+                        >
+                          <rect x="1.4" y="3.4" width="13.2" height="9.2" rx="1.4" />
+                          <path d="M1.9 4.4 8 8.8l6.1-4.4" />
+                        </svg>
+                        {p.email}
+                      </a>
+                    )}
+                    {p.linkedin && (
+                      <a
+                        class="pcard__link"
+                        href={p.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+                          <path d="M3.6 5.9h2.1V13H3.6zM4.65 2.6a1.22 1.22 0 1 1 0 2.44 1.22 1.22 0 0 1 0-2.44zM7.3 5.9h2v.97h.03c.28-.53.96-1.09 1.98-1.09 2.12 0 2.51 1.39 2.51 3.2V13h-2.09V9.4c0-.86-.02-1.96-1.2-1.96-1.2 0-1.38.93-1.38 1.9V13H7.3z" />
+                        </svg>
+                        LinkedIn
+                      </a>
+                    )}
+                    {p.scholar && (
+                      <a
+                        class="pcard__link"
+                        href={p.scholar}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <svg
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M8 2.2 15 5.9 8 9.6 1 5.9z" />
+                          <path d="M3.8 7.4v3.3c0 1.2 1.9 2.1 4.2 2.1s4.2-.9 4.2-2.1V7.4" />
+                        </svg>
+                        Scholar
+                      </a>
+                    )}
+                  </p>
+                )}
+              </article>
+            ))}
+          </div>
         </div>
-        <ol class="roster roster--advisors" role="list">
-          {ADVISOR_ROSTER.map((p) => (
-            <li class="roster__row" id={p.slug}>
-              <img
-                class="roster__photo"
-                src={p.photo}
-                width={p.photoSize}
-                height={p.photoSize}
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
-              <div class="roster__id">
-                <h3 class="roster__name">{p.name}</h3>
-                <p class="roster__role">{p.discipline ?? p.title}</p>
-              </div>
-              <div class="roster__col">
-                <p class="roster__label">Education</p>
-                <ul class="roster__list roster__list--edu" role="list">
-                  {p.education?.map((e) => (
-                    <li>{e}</li>
-                  ))}
-                </ul>
-              </div>
-              <div class="roster__col">
-                <p class="roster__label">Experience</p>
-                <ul class="roster__list" role="list">
-                  {p.experience?.map((e) => (
-                    <li>{e}</li>
-                  ))}
-                </ul>
-              </div>
-            </li>
-          ))}
-        </ol>
       </div>
     </section>
 
-    <section class="team-close" aria-label="Further reading">
+    <section class="team-schools" aria-labelledby="t-schools">
       <div class="meth-w">
-        <p>
+        <h2 class="h-kicker" id="t-schools">
+          Where this team trained
+        </h2>
+        <ul class="schools" role="list">
+          {schools.map((school) => (
+            <li>{school}</li>
+          ))}
+        </ul>
+        <p class="team-close">
           For the economics these people are responsible for, read the{' '}
           <a href="/methodology">methodology</a>. For how Lumecon handles the data organizations
           bring to it, read <a href="/security">security</a>.
@@ -219,4 +287,41 @@ const jsonLd = [
     </section>
   </main>
   <Footer isHome={false} />
+
+  <script>
+    // Pick a portrait, show that person. Same pattern as the Grove
+    // registry: no library, no state beyond the DOM.
+    document.querySelectorAll('[data-roster]').forEach((roster) => {
+      const faces = Array.from(roster.querySelectorAll<HTMLButtonElement>('[data-face]'));
+      const cards = Array.from(roster.querySelectorAll<HTMLElement>('[data-person]'));
+      const panel = roster.querySelector<HTMLElement>('.roster__panel');
+      // Below this width the panel sits under the row rather than beside
+      // it, so a tap has to bring it into view.
+      const beside = () => window.matchMedia('(min-width: 901px)').matches;
+      const stillness = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const select = (face: HTMLButtonElement) => {
+        const slug = face.getAttribute('data-face');
+        faces.forEach((f) => f.setAttribute('aria-pressed', f === face ? 'true' : 'false'));
+        cards.forEach((card) => {
+          card.hidden = card.getAttribute('data-person') !== slug;
+        });
+      };
+
+      faces.forEach((face) => {
+        face.addEventListener('click', () => {
+          select(face);
+          if (!beside() && panel) {
+            panel.scrollIntoView({ block: 'nearest', behavior: stillness() ? 'auto' : 'smooth' });
+          }
+        });
+        // A pointer can leave again, so hovering previews. Focus does not:
+        // tabbing along the row would re-announce a whole record at every
+        // stop, for a selection the reader never made.
+        face.addEventListener('mouseenter', () => {
+          if (beside()) select(face);
+        });
+      });
+    });
+  </script>
 </BaseLayout>

@@ -266,16 +266,19 @@ output is committed. Run them when their inputs change.
   originals named `<slug>_shutterstock_<imageID>_<downloadID>.jpeg`;
   the licensing record is `scripts/naics/LICENSES.md`. Never use the
   NACA proposal photos.
-- Team headshots (duotone): `npm run team:headshots -- <team-slide.jpg>`
-  cuts the eight circular portraits out of the pitch deck's team slide
-  and washes them through the same `WASHES.teal` ramp the sector
-  photography uses, writing `public/team/<slug>.webp`. The slide is
-  exported from the deck at its native raster size (2112x1632) and is
-  deliberately **not** in the repo: the deck is confidential. The crop
-  coordinates in the script were measured off that slide, so re-measure
-  rather than nudge them if the slide is ever re-laid-out. Who appears,
-  and their education and experience lines, live in `src/data/team.ts`,
-  which stays the single record for the team.
+- Team headshots: `npm run team:headshots -- <dir>` resizes the deck's
+  1200px portrait masters and cuts each to a disc, writing
+  `public/team/<slug>.webp` at 480px. `<dir>` is `public/pitch/team` from
+  the deck branch in the app repository (`claude/pitch-deck-budget-update-838i7g`
+  in teim-app). Those masters are **already** washed in the teal duotone
+  and already evened for exposure by the deck's own
+  `scripts/pitch-portraits.py`, so this script deliberately does not
+  re-wash them; a second ramp on top of the first is the failure mode to
+  avoid. Never re-cut these from a rendered PDF page: a deck page is a
+  flattened raster, and the portraits come out at about a fifth of the
+  resolution the masters have. Who appears, and their education and
+  experience lines, live in `src/data/team.ts`, which stays the single
+  record for the team.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist

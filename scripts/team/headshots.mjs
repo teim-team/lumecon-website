@@ -1,99 +1,73 @@
 /**
- * Team headshot pipeline: the pitch deck's team slide in, the site's
- * committed duotone headshots out.
+ * Team headshots: the deck's portrait masters in, the site's circles out.
  *
  * Usage:
- *   node scripts/team/headshots.mjs <team-slide.jpg>
+ *   npm run team:headshots -- <dir>
  *
- * The source is the team slide of the Lumecon pitch deck, exported at its
- * native raster size (2112x1632). The deck is not in this repository and
- * must not be: it is confidential. Export the page, pass the path, commit
- * the eight webps this writes, and leave the slide out of git.
+ * `<dir>` is `public/pitch/team` from the deck branch in the app repository
+ * (`claude/pitch-deck-budget-update-838i7g` in teim-app), which holds the
+ * eight portraits as 1200x1200 masters. They arrive already washed in the
+ * teal duotone — the same SHADOW #09444A to HIGHLIGHT #86BFBA ramp that
+ * `WASHES.teal` in scripts/naics/sectors.mjs applies to the licensed sector
+ * photography — and already evened out for exposure by the deck's own
+ * scripts/pitch-portraits.py, which normalises each disc to a common mean
+ * and spread. Eight portraits shot by eight people in eight rooms is the
+ * problem that script solves, and it is solved; re-washing here would only
+ * put a second ramp on top of the first.
  *
- * Why regenerate rather than cut the slide up by hand: the deck washes the
- * eight portraits at two different depths (the first two leads print
- * noticeably darker than the other three), which reads as an uneven row
- * once they sit side by side at one size. Each crop is flattened to
- * luminance, stretched to the full range and washed through WASHES.teal
- * from scripts/naics/sectors.mjs — the same ramp, through the same lookup,
- * as every licensed photograph on the site. One treatment, and the color
- * keeps one source of truth.
+ * So this does two things and no more: resize, and cut the disc. The masters
+ * are square with image in the corners, and the deck clips them at render
+ * time, so the corners are cut here instead and written as transparency —
+ * a circle in the file, not a circle drawn by whatever CSS happens to be
+ * around it.
  *
- * Output: public/team/<slug>.webp, circular with transparent corners so a
- * headshot sits on any ground instead of carrying the slide's white with
- * it. Written at the crop's native size; nothing is upscaled, so the leads
- * carry 284px and the advisors 144px, and team.css renders each at half
- * that.
+ * Output: public/team/<slug>.webp at 480px, which is 2x the largest size the
+ * page renders (a 240px selected portrait). Nothing is upscaled; the masters
+ * have the resolution to spare.
  */
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { WASHES } from '../naics/sectors.mjs';
 
 const SRC = process.argv[2];
 if (!SRC) {
-  console.error('Usage: node scripts/team/headshots.mjs <team-slide.jpg>');
+  console.error('Usage: npm run team:headshots -- <dir with the deck portrait masters>');
   process.exit(1);
 }
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 'team');
 mkdirSync(OUT, { recursive: true });
 
-/**
- * Circle positions on the 2112x1632 slide, as [slug, left, top, size].
- * Measured off the slide rather than eyeballed: the washed pixels are the
- * only ones on the page where the green channel leads the red one, so
- * thresholding on that and reading the runs returns both bands exactly —
- * five 284px circles at y=510, three 144px circles at y=1342. Re-measure
- * the same way if the slide is ever re-laid-out; do not nudge these.
- */
-const CIRCLES = [
-  ['elijah-moreno', 124, 510, 284],
-  ['laurel-wheeler', 508, 510, 284],
-  ['isabella-agnes', 890, 510, 284],
-  ['francesca-agnes', 1274, 510, 284],
-  ['kaylyn-lee', 1656, 510, 284],
-  ['brian-kim', 124, 1342, 144],
-  ['vod-vilfort', 766, 1342, 144],
-  ['havala-hanson', 1406, 1342, 144],
+/** The deck names its files by first name; the site keys people by slug. */
+const PEOPLE = [
+  ['elijah', 'elijah-moreno'],
+  ['laurel', 'laurel-wheeler'],
+  ['isabella', 'isabella-agnes'],
+  ['francesca', 'francesca-agnes'],
+  ['kaylyn', 'kaylyn-lee'],
+  ['brian', 'brian-kim'],
+  ['vod', 'vod-vilfort'],
+  ['havala', 'havala-hanson'],
 ];
 
-/** Map a grayscale byte through the wash ramp, shadow -> highlight. The
- *  same linear per-channel lookup scripts/naics/duotone.mjs applies. */
-function ramp(g, wash) {
-  return [0, 1, 2].map((i) =>
-    Math.round(wash.shadow[i] + ((wash.highlight[i] - wash.shadow[i]) * g) / 255),
-  );
-}
+const SIZE = 480;
+/** Supersampled so the disc edge is smooth rather than stepped. */
+const mask = Buffer.from(
+  `<svg width="${SIZE}" height="${SIZE}"><circle cx="${SIZE / 2}" cy="${SIZE / 2}" r="${SIZE / 2}" fill="#fff"/></svg>`,
+);
 
-const wash = WASHES.teal;
-
-for (const [slug, left, top, size] of CIRCLES) {
-  const gray = await sharp(SRC)
-    .extract({ left, top, width: size, height: size })
-    .grayscale()
-    .normalise()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  const px = gray.data;
-  const rgb = Buffer.alloc((px.length / gray.info.channels) * 3);
-  for (let i = 0, o = 0; i < px.length; i += gray.info.channels, o += 3) {
-    const [r, g, b] = ramp(px[i], wash);
-    rgb[o] = r;
-    rgb[o + 1] = g;
-    rgb[o + 2] = b;
+for (const [stem, slug] of PEOPLE) {
+  const file = join(SRC, `${stem}.webp`);
+  if (!existsSync(file)) {
+    console.error(`missing ${file}`);
+    process.exit(1);
   }
-  // The crop is a circle printed on the slide's white page, so the corners
-  // have to be cut away rather than trusted: masking with dest-in keeps the
-  // circle's own antialiased edge and drops everything outside it.
-  const mask = Buffer.from(
-    `<svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#fff"/></svg>`,
-  );
-  await sharp(rgb, { raw: { width: size, height: size, channels: 3 } })
+  await sharp(file)
+    .resize(SIZE, SIZE, { fit: 'cover' })
     .ensureAlpha()
     .composite([{ input: mask, blend: 'dest-in' }])
-    .webp({ quality: 92, effort: 6 })
+    .webp({ quality: 90, effort: 6 })
     .toFile(join(OUT, `${slug}.webp`));
-  console.log(`${slug}.webp  ${size}x${size}`);
+  console.log(`${slug}.webp  ${SIZE}x${SIZE}`);
 }
 console.log('done');
