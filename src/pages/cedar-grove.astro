@@ -62,6 +62,22 @@ const MAP_COUNTY_LABELS = GROVE_MAP.counties.filter((county) => county.labelInFr
 const MAP_AREA_SQ_MI = GROVE_MAP.area.areaSqMi?.toLocaleString('en-US') ?? null;
 const MAP_TRUST_SQ_MI = GROVE_MAP.trustLand?.areaSqMi?.toLocaleString('en-US') ?? null;
 
+// `simplification` used to be one sentence. The generator now reports a rule
+// and a threshold per layer, because one figure described none of them: the
+// subject area is filtered at 0.1 percent, trust land at 1 percent and the
+// neighbouring areas at 2 percent. Printing the object rendered the literal
+// string "[object Object]" on the page, so the three figures are spelled out
+// here, derived rather than typed so the copy cannot drift from the geometry.
+const pct = (share: number) => `${+(share * 100).toFixed(2)}%`;
+const MAP_SIMPLIFICATION = (() => {
+  const s = GROVE_MAP.simplification;
+  if (typeof s === 'string') return s;
+  if (!s?.rule) return null;
+  const m = s.minParcelShare;
+  if (!m) return s.rule;
+  return `${s.rule} Reservation ${pct(m.area)}, trust land ${pct(m.trustLand)}, neighbouring nations ${pct(m.neighbors)}.`;
+})();
+
 const description =
   'Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits.';
 
@@ -485,7 +501,7 @@ const BUNDLE_FILES = [
                 {GROVE_MAP.vintage}. {MAP_AREA_SQ_MI ? `${MAP_AREA_SQ_MI} square miles of reservation` : null}
                 {MAP_TRUST_SQ_MI ? ` and ${MAP_TRUST_SQ_MI} of off-reservation trust land` : null},
                 across {GROVE_MAP.counties.length} counties in {GROVE_MAP.states.length} states.{' '}
-                {GROVE_MAP.simplification}
+                {MAP_SIMPLIFICATION}
               </p>
             </figure>
             <aside class="gm__panel" aria-label="Evidence for the selected topic">

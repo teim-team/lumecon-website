@@ -202,13 +202,19 @@
   display: block;
   width: 100%;
   height: auto;
-  /* The drawing is close to square, so at the hero column's width it stood
-     682px tall and the hero came to 1281px: on a 13" laptop the map ran off
-     the bottom and you could not see it and the headline at once. Capping the
-     box against the viewport keeps both in frame. The SVG carries a viewBox,
-     so the default preserveAspectRatio fits the drawing inside the shorter
-     box rather than squashing it. */
-  max-height: min(52vh, 440px);
+  /* The geometry is generated at 560x420, a ratio of 1.33, so left to itself
+     the map draws almost square and the hero card with it: at the hero
+     column's width that was 792x682 inside a hero 1281px tall, which on a 13"
+     laptop ran off the bottom. A near-square panel is also the wrong shape for
+     this column, which is wide.
+     The box is a 2:1 landscape rectangle now. The drawn geography occupies a
+     landscape strip inside that squarish viewBox, so the default
+     preserveAspectRatio fits the whole map into the wider box and fills it,
+     with only a thin margin above and below. Cropping to fill instead would
+     cut the Ute Mountain parcel off the top and the detached southern parcels
+     off the bottom, which are exactly the parcels the caption is about. */
+  aspect-ratio: 2 / 1;
+  max-height: min(40vh, 340px);
   border-radius: 4px;
 }
 @media (max-width: 700px) {
