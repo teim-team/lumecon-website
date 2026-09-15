@@ -1094,3 +1094,67 @@
     border-color: var(--rule) !important;
   }
 }
+
+/* The product tour band.
+   ---------------------------------------------------------------------
+   Only what differs from the site's own tour treatment lives here. The rows
+   reuse `.tour-row` and its glass-card-over-bleeding-screenshot composition
+   from tour.css, because that is the established Lumecon product shot and a
+   second implementation of it would drift from the first.
+   What differs is the ground: this band is the deep teal the fabricated
+   evidence frame used to sit on, kept because it separates the product from
+   the pale collection registry below it. On that ground the text card's own
+   light surface still reads, so only the heading colours need saying. */
+.grovetour {
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+  background: linear-gradient(180deg, #073c3b 0%, #052a2c 100%);
+}
+.grovetour .h-kicker {
+  color: #73e2d6;
+}
+.grovetour__title {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  max-width: 30ch;
+  margin: 0.5rem 0 0;
+}
+.grovetour__lede {
+  color: rgba(226, 244, 241, 0.78);
+  font-size: clamp(0.98rem, 1.3vw, 1.05rem);
+  line-height: 1.68;
+  max-width: 62ch;
+  margin: 0.9rem 0 clamp(2.4rem, 5vw, 3.4rem);
+  text-wrap: pretty;
+}
+/* The text card takes the band's own ground, not the page's.
+   `.section--dark` flips --ink to near-white and --ink-2 to pale grey, but it
+   does not touch --surface-glass-strong, which stays the light-mode glass at
+   90 percent white. The card therefore came out pale with white type on it and
+   the heading was invisible. Only the card's ground was wrong, so only the
+   card's ground is set here and the inherited light type does the rest. */
+.grovetour .tour-row__text {
+  background: rgba(6, 38, 40, 0.82);
+  border-color: rgba(115, 226, 214, 0.22);
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.75);
+}
+.grovetour .tour-row__kicker {
+  color: #73e2d6;
+}
+
+/* The screenshots are captures of a light-themed product on a dark band, so
+   they need an edge of their own: without one a light capture bleeds into the
+   teal at its corners and reads as a torn-out shape rather than a screen. */
+.grovetour .tour-row__shot {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+.grovetour .tour-row__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

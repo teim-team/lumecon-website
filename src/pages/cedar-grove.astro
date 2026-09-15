@@ -5,21 +5,38 @@
  * The product page for the standalone license. The press hero is a
  * catalog because Press sells a shared catalog; Grove's hero is a place,
  * because what Grove sells is the connection between a claim and the
- * geography and records it rests on. The page shows Grove's actual objects
- * in order: the map for place, the graph for the claim, the evidence record
- * for trust, the collection marks for the infrastructure.
+ * geography and records it rests on.
  *
  * Section rhythm: dark navy hero with the evidence map; deep teal band with
- * the finding workflow (question, figure, evidence record); pale proof strip
- * with staged product crops; deep ink registry of the twelve collections;
- * pale license panel with the late bridge to Cedar Impact.
+ * the product itself, five surfaces as captures of the running application;
+ * pale proof strip; deep ink registry of the collections; pale license panel
+ * with the late bridge to Cedar Impact.
  *
- * Everything staged here uses an invented organization, an invented place
- * and invented values, labelled as such on its face. No real Nation, no
- * real area and no real number appears, so the page cannot attach fabricated
- * figures to an actual community. The map distinguishes the organization's
- * geography, its self-declared service area and the statistical proxy
- * geography a source falls back to; it draws none of them from a real map.
+ * WHAT CHANGED, AND WHY IT MATTERED
+ * The teal band used to be a drawing of Grove. A panel with a fake title bar,
+ * a question list, a figure and three proof cards, all built here in Astro and
+ * CSS, all captioned "illustrative example, names and values are invented".
+ * Every other product page on this site shows captures of the running app, and
+ * that difference showed. Two things go wrong with a replica: it is a picture
+ * of a promise rather than evidence of a product, on a page whose whole
+ * argument is that a number should be traceable to its source; and it drifts,
+ * which it had, because Grove was rebuilt around a purpose carousel and five
+ * surfaces while the drawing still showed the interface it left behind.
+ * Those are real screenshots now, produced by
+ * scripts/screenshots/capture-grove.mjs and refreshed with it, on the same
+ * footing as every other product shot here. The workspace in them is Grove's
+ * demonstration workspace and its figures label themselves as demonstration
+ * data on their own faces, so no caption here has to promise it.
+ *
+ * THE MAP IS REAL AND IS THE ONE THING THAT ALWAYS WAS
+ * The geometry is Census TIGER/Line for the Navajo Nation and its trust land,
+ * generated and committed, because the boundary of a real place is not
+ * something a product page may draw by hand. The nine counties across three
+ * states include Bernalillo, Cibola and Socorro, which look wrong at a glance
+ * and are right: the Nation's non-contiguous chapters, To'hajiilee, Ramah and
+ * Alamo, sit in them, far from the main reservation. That is exactly why this
+ * Nation is the subject: it states the resolution problem better than any
+ * diagram could, because every source answers at a different level.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -32,6 +49,7 @@ import '../styles/nav.css';
 import '../styles/footer.css';
 import '../styles/home.css';
 import '../styles/methodology.css';
+import '../styles/tour.css';
 import '../styles/grove-page.css';
 import GROVE_MAP from '../data/groveMap.generated.json';
 
@@ -61,6 +79,143 @@ const MAP_COUNTY_LABELS = GROVE_MAP.counties.filter((county) => county.labelInFr
  */
 const MAP_AREA_SQ_MI = GROVE_MAP.area.areaSqMi?.toLocaleString('en-US') ?? null;
 const MAP_TRUST_SQ_MI = GROVE_MAP.trustLand?.areaSqMi?.toLocaleString('en-US') ?? null;
+
+// What the map leaves out, as a sentence.
+//
+// `simplification` used to be a string and the caption printed it directly.
+// Regenerating the geometry turned it into a record, and the template kept
+// interpolating it, so the provenance line under the map read
+// "[object Object]" on the live page. That is the worst possible place for it:
+// the sentence exists to tell a reader which parcels were dropped, on a page
+// whose whole claim is that a figure can be traced.
+//
+// The share is read out rather than left as "the share below", because the
+// rule's own wording promises a number the caption never showed. The string
+// branch stays so an older generated file still renders its own sentence.
+const SHARE_PCT = (share: number) =>
+  `${(share * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })} percent`;
+const MAP_MIN_SHARE = GROVE_MAP.simplification?.minParcelShare ?? null;
+const MAP_SIMPLIFICATION =
+  typeof GROVE_MAP.simplification === 'string'
+    ? GROVE_MAP.simplification
+    : (GROVE_MAP.simplification?.rule ?? '').replace(
+        'less than the share below of',
+        MAP_MIN_SHARE
+          ? `less than ${SHARE_PCT(MAP_MIN_SHARE.area)} (reservation), ${SHARE_PCT(MAP_MIN_SHARE.trustLand)} (trust land) or ${SHARE_PCT(MAP_MIN_SHARE.neighbors)} (another nation) of`
+          : 'a small share of',
+      );
+
+/**
+ * The five surfaces, as captured from the running product.
+ *
+ * The heights are the published files' own, read off the webp rather than
+ * typed, because they are the intrinsic ratio the browser reserves space with
+ * and a wrong one shifts the page as each image lands. Light and dark differ
+ * by a pixel on Library, which is real: the two themes wrap one source line
+ * differently.
+ *
+ * Re-capture with:
+ *   node scripts/screenshots/capture-grove.mjs && node scripts/screenshots/optimize-grove.mjs
+ */
+/**
+ * The collection count, spelled, from the list rather than from memory.
+ *
+ * "Twelve" was typed into the kicker, the heading and the licence list. It is
+ * true of the current registry and it is not a fact about this page: the grid
+ * below maps every entry in GROVE_COLLECTIONS, so a thirteenth would have
+ * drawn thirteen marks under a heading saying twelve, with nothing failing.
+ */
+const SPELLED = [
+  'zero',
+  'one',
+  'two',
+  'three',
+  'four',
+  'five',
+  'six',
+  'seven',
+  'eight',
+  'nine',
+  'ten',
+  'eleven',
+  'twelve',
+  'thirteen',
+  'fourteen',
+  'fifteen',
+  'sixteen',
+  'seventeen',
+  'eighteen',
+  'nineteen',
+  'twenty',
+];
+const spelledCount = (n: number, capital = false) => {
+  const word = SPELLED[n] ?? String(n);
+  return capital ? word.charAt(0).toUpperCase() + word.slice(1) : word;
+};
+const COLLECTION_COUNT = GROVE_COLLECTIONS.length;
+
+const GROVE_TOUR = [
+  {
+    id: 'home',
+    kicker: 'Home',
+    title: 'Start from what you are making, not from a blank workspace',
+    body: 'Five purposes, one carousel. Picking one sets the deliverable, the evidence it needs and the questions Grove will ask next, so a project begins as the thing it is for rather than as an empty folder.',
+    img: '/app/grove-home.webp',
+    imgDark: '/app/grove-home-dark.webp',
+    width: 1920,
+    height: 985,
+    darkHeight: 985,
+    alt: 'Cedar Grove home, asking what are you preparing, with five illustrated purpose plates on an arc. The selected plate reads Grant case or application, one of five, and names what you end up with: a need statement, cited figures and an evidence appendix.',
+  },
+  {
+    id: 'projects',
+    kicker: 'Projects',
+    title: 'Every project carries the purpose it was started for',
+    body: 'A project opens on the outline of its own deliverable, with each section marked by whether the evidence for it is measured here, standing in from a wider geography, or missing.',
+    img: '/app/grove-projects.webp',
+    imgDark: '/app/grove-projects-dark.webp',
+    width: 1920,
+    height: 737,
+    darkHeight: 737,
+    alt: 'Cedar Grove projects, showing five purpose covers. Each names its deliverable and what it produces, such as a need statement, cited figures and an evidence appendix.',
+  },
+  {
+    id: 'explore',
+    kicker: 'Explore',
+    title: 'The map and the figure are one instrument',
+    body: 'Selecting a place or a lens changes the coverage, the records and the figure together. Where a source does not publish your area, Grove names the counties standing in for it rather than quietly widening the geography.',
+    img: '/app/grove-explore.webp',
+    imgDark: '/app/grove-explore-dark.webp',
+    width: 1920,
+    height: 1684,
+    darkHeight: 1684,
+    alt: 'Cedar Grove explore, with a map of the Ponca OTSA outlined against Noble, Kay and Osage counties, a coverage breakdown reading four direct, two organization data, two county proxy, one partial and one missing, and a per capita income figure below it.',
+  },
+  {
+    id: 'library',
+    kicker: 'Library',
+    title: 'Sources shelved by the question they answer',
+    body: 'One shelf per question, not one list per file type. Each shelf shows how far its data reaches this particular place, and each source says who publishes it and whether this geography is published directly.',
+    img: '/app/grove-library.webp',
+    imgDark: '/app/grove-library-dark.webp',
+    width: 1920,
+    height: 1033,
+    darkHeight: 1032,
+    alt: 'Cedar Grove library, with shelves headed by questions such as who lives here and how are they doing, each showing a reach bar and the sources under it.',
+  },
+  {
+    id: 'outputs',
+    kicker: 'Outputs',
+    title: 'A briefing that carries its own evidence',
+    body: 'One figure, one claim, the provenance line under it and the export beside it. Each figure states its measure, universe, geography, period and source on its own face, so it stays readable once it has left the product.',
+    img: '/app/grove-outputs.webp',
+    imgDark: '/app/grove-outputs-dark.webp',
+    width: 1920,
+    height: 1366,
+    darkHeight: 1366,
+    alt: 'Cedar Grove outputs, with a population figure above the claim that the resident AIAN population is estimated to have grown 6 percent since 2010, its provenance line, and export controls.',
+  },
+];
 
 const description =
   'Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits.';
@@ -157,93 +312,6 @@ const MAP_TOPICS = [
   },
 ];
 
-/**
- * The staged findings. Invented organization, invented values. Each carries
- * the same fields the product's evidence record carries, so the frame
- * demonstrates the object rather than describing it.
- */
-const FINDINGS = [
-  {
-    id: 'income',
-    question: 'Are our people’s incomes rising faster than the national figure?',
-    claim: 'Per capita income is estimated to have grown faster than the national AIAN figure.',
-    status: 'direct',
-    statusLabel: 'Direct',
-    implication:
-      'Published for the Nation’s area directly. Survey estimates carry margins of error.',
-    figure: 'trend',
-    identity: [
-      ['Measure', 'Per capita income (USD, nominal)'],
-      ['Universe', 'AIAN alone'],
-      ['Geography', 'Example Nation'],
-      ['Period', '1990–2024'],
-      ['Source', 'ACS 5-year; decennial long-form for 1990 and 2000'],
-    ],
-    record: [
-      ['Source', 'U.S. Census Bureau, American Community Survey, 5-year (2020–2024)'],
-      ['Source (also)', 'U.S. Census Bureau, decennial long-form estimates (1990, 2000)'],
-      ['Transformation', 'As published; nominal dollars; series joined across products at 2010'],
-      ['Uncertainty', 'A 90 percent margin of error accompanies every ACS cell'],
-      [
-        'Limits',
-        'Overlapping five-year periods; decennial and ACS points are not strictly comparable',
-      ],
-      ['Reproduce', 'Python, R and Stata scripts read the same rows the figure draws'],
-    ],
-    cite: 'U.S. Census Bureau, American Community Survey, 5-year, 2020–2024. Prepared with Lumecon Cedar Grove.',
-  },
-  {
-    id: 'employer',
-    question: 'Are we the largest employer in our region?',
-    claim: 'The Nation would rank first among the benchmarked employers in its region.',
-    status: 'proxy',
-    statusLabel: 'County proxy',
-    implication:
-      'This comparison covers the three surrounding counties rather than the Nation’s area directly. State the assumption or add data.',
-    figure: 'bars',
-    identity: [
-      ['Measure', 'Employment (headcount)'],
-      ['Geography', 'Three surrounding counties'],
-      ['Period', '2025'],
-      ['Source', 'Lumecon Employer Benchmark; the Nation’s own row from its records'],
-    ],
-    record: [
-      ['Source', 'Lumecon Employer Benchmark 2025, assembled from public records'],
-      ['Organization data', 'Enterprise employment roster, 2019–2025, supplied by the Nation'],
-      ['Transformation', 'Ranked by headcount; headcount is not comparable with FTE figures'],
-      ['Geography', 'The benchmark publishes counties, so the county group stands in for the area'],
-      ['Limits', 'Comparators are named where public records allow; a peer cohort otherwise'],
-      ['Reproduce', 'Script, data file, provenance sidecar and manifest in one bundle'],
-    ],
-    cite: 'Lumecon Employer Benchmark, 2025, and organization-supplied employment. Prepared with Lumecon Cedar Grove.',
-  },
-  {
-    id: 'outcomes',
-    question: 'What happens to our citizens after they enroll in the workforce program?',
-    claim: 'Not yet supportable. No source links program enrollment to later employment.',
-    status: 'missing',
-    statusLabel: 'Missing',
-    implication:
-      'Nothing answers this yet. An enrollment history with outcome fields from the Nation’s own records would; no public source can stand in.',
-    figure: 'coverage',
-    identity: [
-      ['Measure', 'Post-enrollment employment'],
-      ['Geography', 'Example Nation'],
-      ['Period', 'Not covered'],
-      ['Source', 'None yet'],
-    ],
-    record: [
-      [
-        'What Grove needs',
-        'An enrollment history file: citizen id, program, enrollment year, outcome',
-      ],
-      ['Path', 'Local preview today; governed import with a named data steward when it lands'],
-      ['Until then', 'The question stays listed as unanswered rather than answered with a proxy'],
-    ],
-    cite: null,
-  },
-];
-
 /** The proof strip: the four things an organization can always see. */
 const PROOF = [
   {
@@ -262,35 +330,6 @@ const PROOF = [
     title: 'Reproducible',
     text: 'Every figure carries an evidence record and a script that rebuilds it from the same rows, in Python, R or Stata.',
   },
-];
-
-/** The staged coverage view: topic, status, and the source that answers it. */
-const COVERAGE_ROWS = [
-  ['Population', 'direct', 'Direct', 'ACS 5-year'],
-  ['Income', 'direct', 'Direct', 'ACS 5-year'],
-  ['Employment', 'proxy', 'County proxy', 'QCEW, three counties'],
-  ['Tribal employment', 'org', 'Organization data', 'Enterprise roster'],
-  ['Program outcomes', 'missing', 'Missing', 'No source'],
-];
-
-/** The staged evidence record, the rows the export carries. */
-const RECORD_ROWS = [
-  ['Measure', 'Per capita income (USD)'],
-  ['Geography', 'Example Nation'],
-  ['Universe', 'AIAN alone'],
-  ['Source', 'U.S. Census Bureau, ACS 5-year'],
-  ['Vintage', '2020–2024'],
-  ['Transformation', 'As published; nominal dollars'],
-  ['Uncertainty', '90 percent margin of error'],
-  ['Limits', 'Overlapping five-year periods'],
-];
-
-/** The staged bundle: the files the app names, with its own naming scheme. */
-const BUNDLE_FILES = [
-  ['lumecon-income-trend-example-nation.py', 'Script'],
-  ['lumecon-income-trend-example-nation.csv', 'Data'],
-  ['lumecon-income-trend-example-nation-provenance.csv', 'Provenance'],
-  ['lumecon-income-trend-example-nation-bundle.json', 'Manifest'],
 ];
 ---
 
@@ -319,7 +358,7 @@ const BUNDLE_FILES = [
           <a class="btn2 btn2--primary" href="#license">
             Request Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="btn2 btn2--card" href="#frame">
+          <a class="btn2 btn2--card" href="#tour">
             See the evidence behind a finding <span class="btn2-arrow" aria-hidden="true"
               >&rarr;</span
             >
@@ -348,18 +387,19 @@ const BUNDLE_FILES = [
                   </title>
                   <desc id="gm-desc">
                     Census boundaries. The reservation is filled in teal and its off-reservation
-                    trust land is outlined beside it. The {GROVE_MAP.counties.length} counties whose
-                    boundaries the reservation crosses are drawn around it, hatched where a source
-                    can answer only at the county level, with the {GROVE_MAP.states.length} state
-                    lines behind them.
+                    trust land is outlined beside it. The {GROVE_MAP.counties.length} counties whose boundaries
+                    the reservation crosses are drawn around it, hatched where a source can answer only
+                    at the county level, with the {GROVE_MAP.states.length} state lines behind them.
                   </desc>
                   <defs>
-                    {/* The hatched counties sit inside the geometry's scale
+                    {
+                      /* The hatched counties sit inside the geometry's scale
                         group, so the tile is measured in generated units: at
                         this scale a 7-unit tile printed about 34 pixels wide
                         and the fine hatch in the key became three fat bands.
                         `strokeScale` is the inverse of that scale, which is
-                        what puts the tile back into screen space. */}
+                        what puts the tile back into screen space. */
+                    }
                     <pattern
                       id="gm-hatch"
                       width={7 * GROVE_MAP.strokeScale}
@@ -379,28 +419,36 @@ const BUNDLE_FILES = [
                   </defs>
                   <rect x="0" y="0" width="560" height="420" fill="#f7f5f0"></rect>
                   <g transform={GROVE_MAP.transform}>
-                    {/* vector-effect is a property of a shape, not something
+                    {
+                      /* vector-effect is a property of a shape, not something
                         a group hands down, so these have to carry it
                         themselves. On the group it did nothing and the scale
                         multiplied every surrounding boundary to about five
-                        times the weight of the subject's own outline. */}
+                        times the weight of the subject's own outline. */
+                    }
                     <g class="gm__states" fill="#efece5" stroke="#c9cccf">
-                      {GROVE_MAP.states.map((state) => (
-                        <path d={state.d} vector-effect="non-scaling-stroke"></path>
-                      ))}
+                      {
+                        GROVE_MAP.states.map((state) => (
+                          <path d={state.d} vector-effect="non-scaling-stroke" />
+                        ))
+                      }
                     </g>
                     <g class="gm__proxy" fill="url(#gm-hatch)" stroke="none">
-                      {GROVE_MAP.counties.map((county) => <path d={county.d}></path>)}
+                      {GROVE_MAP.counties.map((county) => <path d={county.d} />)}
                     </g>
                     <g class="gm__counties" fill="none" stroke="#b9c1c6">
-                      {GROVE_MAP.counties.map((county) => (
-                        <path d={county.d} vector-effect="non-scaling-stroke"></path>
-                      ))}
+                      {
+                        GROVE_MAP.counties.map((county) => (
+                          <path d={county.d} vector-effect="non-scaling-stroke" />
+                        ))
+                      }
                     </g>
                     <g class="gm__neighbors" fill="#e6e2d8" stroke="#a9a294">
-                      {GROVE_MAP.neighbors.map((land) => (
-                        <path d={land.d} vector-effect="non-scaling-stroke"></path>
-                      ))}
+                      {
+                        GROVE_MAP.neighbors.map((land) => (
+                          <path d={land.d} vector-effect="non-scaling-stroke" />
+                        ))
+                      }
                     </g>
                     {
                       GROVE_MAP.trustLand ? (
@@ -471,7 +519,8 @@ const BUNDLE_FILES = [
                       AIANNH 2430
                     </text>
                   </g>
-                  <rect x="0.5" y="0.5" width="559" height="419" fill="none" stroke="#d9dcdf"></rect>
+                  <rect x="0.5" y="0.5" width="559" height="419" fill="none" stroke="#d9dcdf"
+                  ></rect>
                 </svg>
               </div>
               <figcaption class="gm__legend" aria-label="Map key">
@@ -482,10 +531,14 @@ const BUNDLE_FILES = [
                 <span><i class="gm__sw gm__sw--neighbor"></i>Another nation</span>
               </figcaption>
               <p class="gm__vintage">
-                {GROVE_MAP.vintage}. {MAP_AREA_SQ_MI ? `${MAP_AREA_SQ_MI} square miles of reservation` : null}
+                {GROVE_MAP.vintage}. {
+                  MAP_AREA_SQ_MI ? `${MAP_AREA_SQ_MI} square miles of reservation` : null
+                }
                 {MAP_TRUST_SQ_MI ? ` and ${MAP_TRUST_SQ_MI} of off-reservation trust land` : null},
-                across {GROVE_MAP.counties.length} counties in {GROVE_MAP.states.length} states.{' '}
-                {GROVE_MAP.simplification}
+                across {GROVE_MAP.counties.length} counties in {GROVE_MAP.states.length} states.{
+                  ' '
+                }
+                {MAP_SIMPLIFICATION}
               </p>
             </figure>
             <aside class="gm__panel" aria-label="Evidence for the selected topic">
@@ -540,267 +593,86 @@ const BUNDLE_FILES = [
          the claim and its figure in the middle, the coverage status and
          the implication beside them, the record underneath on request. */
     }
-    <section class="grovepg-frameband section--dark" aria-labelledby="g-frame">
+    {
+      /* The product, captured from the product.
+         This band used to be a drawing of Grove: a panel with a fake title
+         bar, a question list and a figure, all built in Astro and CSS and
+         captioned "illustrative example, names and values are invented". It
+         had two problems. A drawing is a picture of a promise rather than
+         evidence of a product, on a page whose whole argument is that a
+         number should be traceable. And it drifted: Grove was rebuilt around
+         a purpose carousel and five surfaces, and the drawing still showed an
+         interface the product had left behind.
+         These are real captures of the running application, on the same
+         footing as every other product shot on this site, produced by
+         scripts/screenshots/capture-grove.mjs and refreshed with it. The
+         workspace in them is Grove's demonstration workspace, and the figures
+         in it label themselves as demonstration data on their own faces, so
+         nothing here needs a caption promising that it is honest. */
+    }
+    <section class="grovetour section--dark" id="tour" aria-labelledby="g-frame">
       <div class="meth-w">
-        <p class="h-kicker reveal-soft">The evidence behind a finding</p>
-        <h2 class="grovepg-frameband__title reveal-soft" id="g-frame" data-stagger="1">
-          Pick a question. Read what the evidence supports, and what it rests on.
+        <p class="h-kicker reveal-soft">Inside Cedar Grove</p>
+        <h2 class="grovetour__title reveal-soft" id="g-frame" data-stagger="1">
+          Five surfaces. One question each.
         </h2>
-        <div class="gf reveal-soft" id="frame" data-stagger="2" data-gf>
-          <div class="gf__bar">
-            <span class="gf__brand">Cedar Grove <small>Example Nation</small></span>
-            <span class="gf__note">Illustrative example. Names and values are invented.</span>
-          </div>
-          <div class="gf__body">
-            <aside class="gf__side" aria-label="Leadership questions">
-              <p class="gf__cap">A leadership question</p>
-              {
-                FINDINGS.map((f, i) => (
-                  <button
-                    type="button"
-                    class="gf__q"
-                    data-gf-pick={f.id}
-                    aria-pressed={i === 0 ? 'true' : 'false'}
-                  >
-                    {f.question}
-                    <small class={`gf__status gf__status--${f.status}`}>{f.statusLabel}</small>
-                  </button>
-                ))
-              }
-            </aside>
-            <div class="gf__main">
-              {
-                FINDINGS.map((f, i) => (
-                  <section
-                    class="gf__panel"
-                    data-gf-panel={f.id}
-                    hidden={i !== 0}
-                    aria-label={f.question}
-                  >
-                    <dl class="gf__ident">
-                      {f.identity.map(([k, v]) => (
-                        <div>
-                          <dt>{k}</dt>
-                          <dd>{v}</dd>
-                        </div>
-                      ))}
-                      <div>
-                        <dt>Status</dt>
-                        <dd class={`gf__status gf__status--${f.status}`}>{f.statusLabel}</dd>
-                      </div>
-                    </dl>
-                    <div class="gf__stage">
-                      <div class="gf__fig" aria-hidden="true">
-                        {f.figure === 'trend' && (
-                          <svg viewBox="0 0 640 300">
-                            <text x="52" y="24" font-size="11" fill="#0a7f74" font-weight="700">
-                              Example Nation
-                            </text>
-                            <text x="180" y="24" font-size="11" fill="#33434a">
-                              US, AIAN alone
-                            </text>
-                            <text x="330" y="24" font-size="11" fill="#33434a">
-                              US, all residents
-                            </text>
-                            <line x1="52" x2="580" y1="212" y2="212" stroke="#e4e9ec" />
-                            <line x1="52" x2="580" y1="150" y2="150" stroke="#e4e9ec" />
-                            <line x1="52" x2="580" y1="88" y2="88" stroke="#e4e9ec" />
-                            <line
-                              x1="363"
-                              x2="363"
-                              y1="46"
-                              y2="266"
-                              stroke="#93a0a5"
-                              stroke-dasharray="3 4"
-                            />
-                            <text
-                              x="357"
-                              y="56"
-                              font-size="8.5"
-                              fill="#5b6970"
-                              text-anchor="end"
-                              letter-spacing="1"
-                            >
-                              DECENNIAL LONG-FORM
-                            </text>
-                            <text x="369" y="56" font-size="8.5" fill="#5b6970" letter-spacing="1">
-                              ACS 5-YEAR
-                            </text>
-                            <path
-                              d="M52 185 L207 149 L363 124 L518 91 L580 67"
-                              fill="none"
-                              stroke="#18364a"
-                              stroke-width="1.9"
-                              stroke-dasharray="5 4"
-                            />
-                            <path
-                              d="M52 232 L207 212 L363 183 L518 153 L580 132"
-                              fill="none"
-                              stroke="#18364a"
-                              stroke-width="1.9"
-                            />
-                            <path
-                              d="M52 242 L207 216 L363 187 L518 150 L580 123"
-                              fill="none"
-                              stroke="#0a7f74"
-                              stroke-width="2.6"
-                            />
-                            <g fill="#0a7f74">
-                              <circle cx="52" cy="242" r="3.2" />
-                              <circle cx="207" cy="216" r="3.2" />
-                              <circle cx="363" cy="187" r="3.2" />
-                              <circle cx="518" cy="150" r="3.2" />
-                              <circle cx="580" cy="123" r="4" />
-                            </g>
-                            <text x="52" y="288" font-size="11" fill="#647279">
-                              1990
-                            </text>
-                            <text x="580" y="288" font-size="11" fill="#647279" text-anchor="end">
-                              2024
-                            </text>
-                          </svg>
-                        )}
-                        {f.figure === 'bars' && (
-                          <svg viewBox="0 0 640 300">
-                            <text
-                              x="628"
-                              y="24"
-                              font-size="10"
-                              fill="#647279"
-                              text-anchor="end"
-                              letter-spacing="1"
-                            >
-                              BENCHMARK 2025
-                            </text>
-                            <g font-size="11" fill="#33434a">
-                              <text
-                                x="150"
-                                y="72"
-                                text-anchor="end"
-                                font-weight="700"
-                                fill="#071824"
-                              >
-                                Example Nation
-                              </text>
-                              <text x="150" y="122" text-anchor="end">
-                                Regional employer B
-                              </text>
-                              <text x="150" y="172" text-anchor="end">
-                                Regional employer C
-                              </text>
-                              <text x="150" y="222" text-anchor="end">
-                                Regional employer D
-                              </text>
-                              <text x="150" y="272" text-anchor="end">
-                                Regional employer E
-                              </text>
-                            </g>
-                            <rect x="166" y="56" width="420" height="24" fill="#0a7f74" />
-                            <rect x="166" y="106" width="370" height="24" fill="#18364a" />
-                            <rect x="166" y="156" width="335" height="24" fill="#18364a" />
-                            <rect x="166" y="206" width="272" height="24" fill="#18364a" />
-                            <rect x="166" y="256" width="234" height="24" fill="#18364a" />
-                          </svg>
-                        )}
-                        {f.figure === 'coverage' && (
-                          <svg viewBox="0 0 640 300">
-                            <g font-size="12" fill="#071824">
-                              <text x="40" y="60">
-                                Population
-                              </text>
-                              <text x="40" y="104">
-                                Income
-                              </text>
-                              <text x="40" y="148">
-                                Employment
-                              </text>
-                              <text x="40" y="192">
-                                Tribal employment
-                              </text>
-                              <text x="40" y="236">
-                                Post-enrollment employment
-                              </text>
-                            </g>
-                            <g font-size="9.5" letter-spacing="1" text-anchor="end">
-                              <text x="600" y="60" fill="#0a7f74">
-                                DIRECT
-                              </text>
-                              <text x="600" y="104" fill="#0a7f74">
-                                DIRECT
-                              </text>
-                              <text x="600" y="148" fill="#c77a18">
-                                COUNTY PROXY
-                              </text>
-                              <text x="600" y="192" fill="#0a7f74">
-                                ORGANIZATION DATA
-                              </text>
-                              <text x="600" y="236" fill="#c77a18" font-weight="700">
-                                MISSING
-                              </text>
-                            </g>
-                            <g stroke="#e4e9ec">
-                              <line x1="40" x2="600" y1="72" y2="72" />
-                              <line x1="40" x2="600" y1="116" y2="116" />
-                              <line x1="40" x2="600" y1="160" y2="160" />
-                              <line x1="40" x2="600" y1="204" y2="204" />
-                              <line x1="40" x2="600" y1="248" y2="248" />
-                            </g>
-                          </svg>
-                        )}
-                      </div>
-                      <div>
-                        <p class="gf__claim">{f.claim}</p>
-                        <p
-                          class={`gf__impl${f.status === 'direct' || f.status === 'org' ? ' gf__impl--ok' : ''}`}
-                        >
-                          {f.implication}
-                        </p>
-                      </div>
-                    </div>
-                    <div class="gf__acts">
-                      <button
-                        type="button"
-                        class="gf__btn gf__btn--primary"
-                        data-gf-record
-                        aria-expanded="false"
-                      >
-                        Open evidence record
-                      </button>
-                      <span class="gf__note">
-                        Evidence sheet (PDF) · Reproduce in Python, R or Stata
-                      </span>
-                    </div>
-                    <div class="gf__record" data-gf-recordpanel hidden>
-                      <p class="gf__cap">Evidence record</p>
-                      <dl class="gf__rec">
-                        {f.record.map(([k, v]) => (
-                          <>
-                            <dt>{k}</dt>
-                            <dd>{v}</dd>
-                          </>
-                        ))}
-                        {f.cite && (
-                          <>
-                            <dt>Cite as</dt>
-                            <dd class="gf__cite">{f.cite}</dd>
-                          </>
-                        )}
-                      </dl>
-                    </div>
-                  </section>
-                ))
-              }
-            </div>
-          </div>
+        <p class="grovetour__lede reveal-soft" data-stagger="2">
+          Grove opens on what you are preparing and stays on that until it is finished. The
+          screenshots below are the running product, in a demonstration workspace whose figures say
+          so on their own faces.
+        </p>
+
+        <div class="tour-rows">
+          {
+            GROVE_TOUR.map((row, i) => (
+              <article class={`tour-row${i % 2 === 1 ? ' tour-row--flip' : ''}`}>
+                <div class={`tour-row__text ${i % 2 === 1 ? 'reveal-right' : 'reveal-left'}`}>
+                  <p class="tour-row__kicker">{row.kicker}</p>
+                  <h3 class="tour-row__title">{row.title}</h3>
+                  <p class="tour-row__body">{row.body}</p>
+                </div>
+                {/* data-zoom: 1920px renders shown at a fraction of that, so a
+                    click opens the full size. See Lightbox.astro. */}
+                <figure
+                  class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
+                  data-zoom
+                >
+                  <picture>
+                    <source
+                      srcset={row.imgDark}
+                      media="(prefers-color-scheme: dark)"
+                      width={row.width}
+                      height={row.darkHeight}
+                    />
+                    {/* width/height carry the intrinsic ratio so the browser
+                        reserves the box before the file arrives; the rendered
+                        size is CSS-driven. */}
+                    <img
+                      src={row.img}
+                      alt={row.alt}
+                      width={row.width}
+                      height={row.height}
+                      sizes="(max-width: 900px) 100vw, 55vw"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                </figure>
+              </article>
+            ))
+          }
         </div>
       </div>
     </section>
 
     {
-      /* The proof strip: the four things an organization can always see,
-         shown through the product's own objects rather than explained
-         twice. Three staged crops: the coverage view, the evidence record,
-         the reproducibility bundle. Same invented Nation as the frame. */
+      /* The proof strip: the four things an organization can always see.
+         It used to be followed by three staged crops, hand-built panels
+         showing a coverage view, an evidence record and a reproducibility
+         bundle for an invented Nation. The tour above shows all three in the
+         running product now, so the crops were saying the same thing twice
+         and saying it in a drawing. The four sentences stay, because they are
+         the claim the screenshots are evidence for. */
     }
     <section class="meth-sec grovepg-proof" aria-labelledby="g-proof">
       <div class="meth-w">
@@ -819,93 +691,6 @@ const BUNDLE_FILES = [
             ))
           }
         </ul>
-        <div class="grovepg-crops" data-reveal-group>
-          <figure class="gcrop">
-            <figcaption class="gcrop__bar">
-              <span>Evidence coverage</span>
-              <small>Illustrative</small>
-            </figcaption>
-            <div class="gcrop__body">
-              <div class="gcrop__chips" aria-hidden="true">
-                <span class="gcrop__chip gcrop__chip--on">Needs action</span>
-                <span class="gcrop__chip">Direct</span>
-                <span class="gcrop__chip">Proxy</span>
-                <span class="gcrop__chip">Organization data</span>
-                <span class="gcrop__chip">Missing</span>
-              </div>
-              <ul class="gcrop__rows">
-                {
-                  COVERAGE_ROWS.map(([topic, status, label, source]) => (
-                    <li>
-                      <span class="gcrop__topic">{topic}</span>
-                      <span class="gcrop__src">{source}</span>
-                      <span class={`gf__status gf__status--${status}`}>{label}</span>
-                    </li>
-                  ))
-                }
-              </ul>
-              <p class="gcrop__impl">
-                Employment rests on a county proxy. State the assumption or add records.
-              </p>
-            </div>
-          </figure>
-          <figure class="gcrop">
-            <figcaption class="gcrop__bar">
-              <span>Evidence record</span>
-              <small>Illustrative</small>
-            </figcaption>
-            <div class="gcrop__body">
-              <p class="gcrop__title">Per capita income against the national figure</p>
-              <dl class="gcrop__rec">
-                {
-                  RECORD_ROWS.map(([k, v]) => (
-                    <>
-                      <dt>{k}</dt>
-                      <dd>{v}</dd>
-                    </>
-                  ))
-                }
-                <dt>Cite as</dt>
-                <dd class="gf__cite">
-                  U.S. Census Bureau, American Community Survey, 5-year, 2020–2024. Prepared with
-                  Lumecon Cedar Grove.
-                </dd>
-              </dl>
-            </div>
-          </figure>
-          <figure class="gcrop">
-            <figcaption class="gcrop__bar">
-              <span>Reproduce</span>
-              <small>Illustrative</small>
-            </figcaption>
-            <div class="gcrop__body">
-              <p class="gcrop__title">Reproducibility bundle</p>
-              <ul class="gcrop__files">
-                {
-                  BUNDLE_FILES.map(([file, kind]) => (
-                    <li>
-                      <span>{kind}</span>
-                      <code>{file}</code>
-                    </li>
-                  ))
-                }
-              </ul>
-              <pre
-                class="gcrop__manifest"
-                aria-hidden="true">{`"sources": [{
-  "provider": "U.S. Census Bureau",
-  "dataset": "ACS 5-year",
-  "vintage": "2020-2024" }],
-"transformation": "as published; nominal dollars",
-"restrictedData": "organization rows stay within
-  the access scope they were shared under"`}</pre>
-              <p class="gcrop__impl gcrop__impl--ok">
-                Script, data, provenance and manifest come from one evidence definition, so they
-                cannot drift apart.
-              </p>
-            </div>
-          </figure>
-        </div>
       </div>
     </section>
 
@@ -922,9 +707,11 @@ const BUNDLE_FILES = [
       aria-labelledby="g-collections"
     >
       <div class="meth-w">
-        <p class="h-kicker reveal-soft">Twelve maintained collections</p>
+        <p class="h-kicker reveal-soft">
+          {spelledCount(COLLECTION_COUNT, true)} maintained collections
+        </p>
         <h2 class="grovepg-registry__title reveal-soft" id="g-collections" data-stagger="1">
-          Twelve maintained collections, resolved to your place.
+          {spelledCount(COLLECTION_COUNT, true)} maintained collections, resolved to your place.
         </h2>
         <p class="grovepg-registry__lede reveal-soft" data-stagger="2">
           Beside the public programs, a Grove carries the collections Lumecon builds and maintains
@@ -1021,7 +808,7 @@ const BUNDLE_FILES = [
             </p>
             <ul>
               <li>Unlimited users in one organization</li>
-              <li>Twelve Lumecon collections, and each new one</li>
+              <li>{spelledCount(COLLECTION_COUNT, true)} Lumecon collections, and each new one</li>
               <li>Full history and evidence records</li>
               <li>Exports, evidence sheets and reproducibility bundles</li>
               <li>Cedar, the AI economic analyst, grounded in your evidence</li>
@@ -1068,23 +855,6 @@ const BUNDLE_FILES = [
       };
       return { picks, select };
     }
-
-    // The evidence frame: pick a question, show its panel; open the record.
-    document.querySelectorAll('[data-gf]').forEach((frame) => {
-      const { picks, select } = wirePicker(frame, 'data-gf-pick', 'data-gf-panel');
-      picks.forEach((pick) => pick.addEventListener('click', () => select(pick)));
-      frame.querySelectorAll<HTMLButtonElement>('[data-gf-record]').forEach((button) => {
-        button.addEventListener('click', () => {
-          const panel = button.closest<HTMLElement>('[data-gf-panel]');
-          const record = panel && panel.querySelector<HTMLElement>('[data-gf-recordpanel]');
-          if (!record) return;
-          const open = record.hidden;
-          record.hidden = !open;
-          button.setAttribute('aria-expanded', open ? 'true' : 'false');
-          button.textContent = open ? 'Close evidence record' : 'Open evidence record';
-        });
-      });
-    });
 
     // The evidence map: a topic selects its fields and the map emphasizes
     // the geography that topic's evidence is about.
