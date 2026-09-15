@@ -60,49 +60,126 @@ async function settleFonts(page) {
   await page.waitForTimeout(200);
 }
 
-// The five surfaces, in the order the rail lists them, which is also the order
-// the page tells the story in. `settle` is generous on Explore and Outputs:
-// both draw a figure whose line animates in, and a capture taken mid-draw
-// shows a trend line that stops halfway across its own axis.
-// `stop` is the LAST element matching the selector, so a repeated module (the
-// five shelves) frames on the end of the set rather than the end of the first.
-// Each was measured in the browser rather than guessed: an absent selector
-// silently falls back to the viewport and slices the figure in half, which is
-// how the first run of this script cut the Explore trend line across its own
-// axis.
+// ONE FRAME, 1920x1080.
+//
+// These used to be captured at whatever height the surface happened to run to,
+// measured from its last module: 985, 1019, 1475, 1856, 720. Five shots at five
+// aspect ratios down one marketing page, where every other product shot on this
+// site is 1920x1080 (see cedar.astro, three acts, three identical frames). The
+// page looked like a scrapbook, and each row's picture changed size when the
+// product changed, which is a layout the page could not compose against.
+//
+// A fixed frame is also a test. A surface that will not fit a screen is a
+// surface with more than one thing on it, and the two that did not fit were
+// the two that were overloaded: Explore stacked the map above the workbench,
+// so the coverage a lens changes sat a screen above the figure it changes, and
+// Outputs put a second findings list and a six-column ledger under the one
+// claim it exists to make. Both were fixed in the product rather than cropped
+// here. If a surface stops fitting again, `assertFits` below fails the run
+// rather than letting the page go back to irregular pictures.
+const FRAME = { width: 1920, height: 1080 };
+
+// The surfaces, in the order the rail lists them. `settle` is generous on
+// Explore and Outputs: both draw a figure whose line animates in, and a capture
+// taken mid-draw shows a trend line that stops halfway across its own axis.
 const SURFACES = [
-  { name: 'grove-home', path: '', settle: 1800, stop: '.gv-carousel__fact' },
-  { name: 'grove-projects', path: '/projects', settle: 1500, stop: '.gv-covers' },
-  { name: 'grove-explore', path: '/explore', settle: 2800, stop: '.gv-wb' },
-  { name: 'grove-library', path: '/library', settle: 1600, stop: '.gv-shelf' },
-  { name: 'grove-outputs', path: '/outputs', settle: 2800, stop: '.gv-pub' },
+  { name: 'grove-home', path: '', settle: 1800 },
+  { name: 'grove-projects', path: '/projects', settle: 1500 },
+  { name: 'grove-explore', path: '/explore', settle: 2800 },
+  { name: 'grove-library', path: '/library', settle: 1600 },
+  { name: 'grove-outputs', path: '/outputs', settle: 2800 },
 ];
 
 const browser = await chromium.launch(
   process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
 );
 
-// Stop the frame on a complete interface module rather than wherever the
-// viewport happens to fall, so no capture ends on half a card. Measured in the
-// DOM, so a longer place name or a different theme cannot slice it.
-async function frameHeight(page, selector) {
-  const bottom = await page.evaluate((sel) => {
-    const els = [...document.querySelectorAll(sel)];
-    if (!els.length) return null;
-    const r = els[els.length - 1].getBoundingClientRect();
-    return Math.ceil(r.bottom + window.scrollY);
-  }, selector);
-  // A missing selector is a bug in this file, not a reason to guess a height.
-  // Falling back to the viewport is what produced a sliced figure, and it did
-  // it silently, which is worse than stopping.
-  if (bottom == null) throw new Error(`capture-grove: no ${selector} on the page`);
-  return Math.min(Math.max(bottom + 48, 720), 2400);
+/**
+ * Fail if anything the surface draws falls below the frame.
+ *
+ * Not `document.scrollHeight <= 1080`: the page carries about 120px of bottom
+ * padding, and a real 1080px screen clips that same empty space. What must not
+ * be clipped is drawn content, so this measures the lowest element that paints
+ * anything and leaves a margin of air under it.
+ *
+ * Stopping is the point. The old script measured a height instead, so an
+ * overloaded surface produced a taller picture and nobody learned anything;
+ * this one says which surface stopped fitting and by how much.
+ *
+ * Verified by breaking it on purpose: raising the product's --gv-plot-w to
+ * 1600px failed the run with "grove-outputs draws to 1080px in a 1080px frame
+ * (span.gv-more__n)". Two earlier versions of this check passed everything
+ * while measuring nothing, because the deepest box on every surface was the
+ * page container: min-height 100vh, and in the dark theme carrying the
+ * surface's own gradient. A test that cannot fail is worse than no test.
+ */
+const FLOOR = 24;
+async function assertFits(page, name, height) {
+  const overflow = await page.evaluate(() => {
+    const main = document.querySelector('main') || document.body;
+    let lowest = 0;
+    let culprit = '';
+    const note = (bottom, el) => {
+      if (bottom <= lowest) return;
+      lowest = bottom;
+      culprit = `${el.tagName.toLowerCase()}.${(el.className.baseVal ?? el.className ?? '').toString().split(' ')[0]}`;
+    };
+    // Ink, not boxes. The page container is min-height:100vh with about 120px
+    // of bottom padding under the last thing on it, so measuring every box put
+    // the floor at the container every time and said nothing about the
+    // surface. What must stay above the fold is what paints: text, figures,
+    // and anything drawing its own background, border or shadow.
+    for (const el of main.querySelectorAll('*')) {
+      const r = el.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      // A closed <details> keeps boxes for its hidden children; they are not
+      // drawn, and the disclosure's own summary already stands for them.
+      if (el.closest('details:not([open])') && !el.closest('summary')) continue;
+      const style = getComputedStyle(el);
+      if (style.visibility === 'hidden' || style.opacity === '0') continue;
+      const bottom = r.bottom + window.scrollY;
+      // Only a leaf's own paint counts, plus the replaced elements. A
+      // container's background IS the ground: `.rd-page` is min-height:100vh,
+      // and in the dark theme it carries the surface's gradient, so counting
+      // container backgrounds put the floor at the viewport on every surface
+      // and the test said nothing. A panel's frame sits within a couple of
+      // dozen pixels of its last child, which is what FLOOR is for.
+      const leaf = el.childElementCount === 0;
+      const replaced = el.tagName === 'SVG' || el.tagName === 'IMG' || el.tagName === 'CANVAS';
+      const paints =
+        replaced ||
+        (leaf &&
+          (style.borderBottomWidth !== '0px' ||
+            (style.backgroundColor !== 'rgba(0, 0, 0, 0)' &&
+              style.backgroundColor !== 'transparent') ||
+            style.backgroundImage !== 'none' ||
+            style.boxShadow !== 'none'));
+      if (paints) note(bottom, el);
+      // Text measured through a Range, so the line box is what counts rather
+      // than a block that reserves room below its last line.
+      for (const node of el.childNodes) {
+        if (node.nodeType !== Node.TEXT_NODE || !node.textContent.trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        const rect = range.getBoundingClientRect();
+        if (rect.height >= 1) note(rect.bottom + window.scrollY, el);
+      }
+    }
+    return { lowest: Math.ceil(lowest), culprit };
+  });
+  if (overflow.lowest > height - FLOOR) {
+    throw new Error(
+      `capture-grove: ${name} draws to ${overflow.lowest}px in a ${height}px frame ` +
+        `(${overflow.culprit}). Restrain the surface; do not grow the frame.`,
+    );
+  }
+  return overflow.lowest;
 }
 
 for (const theme of ['light', 'dark']) {
   const suffix = theme === 'dark' ? '-dark' : '';
   const context = await browser.newContext({
-    viewport: { width: 1920, height: 1200 },
+    viewport: { ...FRAME },
     deviceScaleFactor: 2,
     colorScheme: theme,
   });
@@ -114,8 +191,10 @@ for (const theme of ['light', 'dark']) {
   // The rail collapses to an icon strip for every shot but Home. It is 264px
   // expanded and 75px collapsed, and on a marketing page each capture is shown
   // at about half size, so those 189px are the difference between a readable
-  // shelf and a grey texture. Home keeps the labelled rail because it is the
-  // shot that establishes the five surfaces. "1" is the value the app writes.
+  // shelf and a grey texture. Home keeps the labelled rail: it is the first
+  // frame on the page and the only one that says the product has named
+  // surfaces at all, which the tour stopped saying when it went to three acts.
+  // "1" is the value the app writes.
   await context.addInitScript(() => {
     try {
       if (!location.pathname.replace(/\/$/, "").endsWith("/grove")) {
@@ -145,11 +224,11 @@ for (const theme of ['light', 'dark']) {
     await page.goto(`${APP}/app/grove${surface.path}`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(surface.settle);
     await settleFonts(page);
-    const height = await frameHeight(page, surface.stop);
-    await page.setViewportSize({ width: 1920, height });
-    await page.waitForTimeout(400);
+    const drawn = await assertFits(page, surface.name, FRAME.height);
     await page.screenshot({ path: join(OUT, `${surface.name}${suffix}.png`) });
-    console.log(`${surface.name}${suffix}.png  ${1920}x${height}`);
+    console.log(
+      `${surface.name}${suffix}.png  ${FRAME.width}x${FRAME.height}  (draws to ${drawn})`,
+    );
     await page.close();
   }
   await context.close();
