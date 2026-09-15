@@ -593,11 +593,13 @@ test('team page picks a person and shows that person', async ({ page }) => {
     'false',
   );
 
-  // Every person carries both columns. An empty one is a data gap.
+  // Every person carries both blocks. An empty one is a data gap.
+  // Education is a list and experience is prose, so they are counted
+  // from different elements on purpose.
   const counts = await page.locator('[data-person]').evaluateAll((cards) =>
     cards.map((card) => ({
-      edu: card.querySelectorAll('.pcard__list')[0]?.children.length ?? 0,
-      exp: card.querySelectorAll('.pcard__list')[1]?.children.length ?? 0,
+      edu: card.querySelectorAll('.pcard__list li').length,
+      exp: card.querySelectorAll('.pcard__prose p').length,
     })),
   );
   for (const c of counts) {
@@ -605,13 +607,44 @@ test('team page picks a person and shows that person', async ({ page }) => {
     expect(c.exp).toBeGreaterThan(0);
   }
 
+  // A credential belongs under Education, not appended to a name: with
+  // suffixes on three of eight, the roster looked like it ranked itself.
+  const names = await page
+    .locator('.pcard__name')
+    .evaluateAll((nodes) => nodes.map((n) => (n.textContent || '').trim()));
+  for (const name of names) expect(name, name).not.toMatch(/,\s*(PhD|MPP|MA|MSc|BA|BS)\b/);
+
+  // One role vocabulary. The label under a portrait is the same string as
+  // the role in the record, except where a title is too long to sit under
+  // a portrait — which is exactly what `discipline` is for.
+  const roles = await page
+    .locator('[data-face]')
+    .evaluateAll((faces) =>
+      faces.map((face) => [
+        face.getAttribute('data-face'),
+        (face.querySelector('.face__role')?.textContent || '').trim(),
+      ]),
+    );
+  expect(Object.fromEntries(roles)).toEqual({
+    'elijah-moreno': 'Co-Founder and CEO',
+    'laurel-wheeler': 'Economics Lead',
+    'isabella-agnes': 'Input-Output Modeling Lead',
+    'francesca-agnes': 'Cedar Systems Lead',
+    'kaylyn-lee': 'Platform Lead',
+    'brian-kim': 'Engineering Advisor',
+    'vod-vilfort': 'Methodology Advisor',
+    'havala-hanson': 'Data Governance Advisor',
+  });
+  // Founder rule (AGENTS.md): "and", never "&", anywhere a visitor reads.
+  for (const [, role] of roles) expect(role).not.toContain('&');
+
   // Degrees run highest-attainment first, so no entry may open on a
   // bachelor's while carrying a higher degree further down.
   const eduLists = await page
     .locator('[data-person]')
     .evaluateAll((cards) =>
       cards.map((card) =>
-        Array.from(card.querySelectorAll('.pcard__list')[0].children).map((li) =>
+        Array.from(card.querySelectorAll('.pcard__list li')).map((li) =>
           (li.textContent || '').trim(),
         ),
       ),
@@ -622,6 +655,14 @@ test('team page picks a person and shows that person', async ({ page }) => {
     const ranks = list.map(rank);
     expect(ranks, list.join(' | ')).toEqual([...ranks].sort((a, b) => b - a));
   }
+
+  // Michigan State hosts the AEA Summer Training Program Elijah attended;
+  // it granted him no degree, so it must not reach the training shelf.
+  const shelf = await page
+    .locator('.schools li')
+    .evaluateAll((nodes) => nodes.map((n) => (n.textContent || '').trim()));
+  expect(shelf).not.toContain('Michigan State University');
+  expect(shelf).toContain('Cornell University');
 
   // The core team is reachable; advisors are not given a work address.
   await page.locator('[data-face="laurel-wheeler"]').click();

@@ -279,6 +279,15 @@ output is committed. Run them when their inputs change.
   resolution the masters have. Who appears, and their education and
   experience lines, live in `src/data/team.ts`, which stays the single
   record for the team.
+- Public roster for assistants: `npm run llms:roster` rewrites the
+  `## Team and advisors` block of `public/llms.txt` from the rendered
+  `/team` page (serve the build first, same as `docs:copy`). **Do not
+  hand-edit that block.** It used to be a second hand-written roster and
+  it drifted into a public-record mismatch: it named a person the page
+  does not show and published a fact about tribal membership that
+  appears nowhere a visitor can read. Anything that should be public
+  about a person goes on `/team` first and arrives in llms.txt because
+  it is there.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist

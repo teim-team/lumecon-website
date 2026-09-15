@@ -20,8 +20,12 @@
  * thing read. It is not chronological.
  *
  * public/llms.txt carries the same roster in prose, for crawlers and
- * assistants, and is written by hand rather than generated from here.
- * It has drifted from this file before. Change both together.
+ * assistants. It is GENERATED from the rendered /team page by
+ * `npm run llms:roster` — do not hand-edit that block. It used to be a
+ * second hand-written roster and it drifted: by the time it was caught
+ * it named a person the page does not show and published a fact about
+ * tribal membership that appears nowhere a visitor can read. Anything
+ * that should be public about a person goes on the page first.
  */
 
 export type PersonGroup = 'team' | 'advisor';
@@ -33,7 +37,7 @@ export type PersonGroup = 'team' | 'advisor';
  * year only when the item is a report or still a working paper. Never
  * combine two dates. `authors` lists every author in true published
  * order (comma-separated); the person's own name is bolded at render
- * time, so it must appear verbatim (minus any ", PhD" suffix).
+ * time, so it must appear verbatim.
  */
 export interface Publication {
   title: string;
@@ -50,7 +54,10 @@ export interface Publication {
 export interface Person {
   /** Short stable id (kebab-case). Used for anchor links and React-style keys. */
   slug: string;
-  /** Display name. */
+  /** Display name, with no credential suffix. A degree belongs under
+   *  Education, where every person's is listed the same way; appending
+   *  ", PhD" to three of eight names made the roster look like it ranked
+   *  itself. */
   name: string;
   /** Initials shown in the avatar circle. */
   initials: string;
@@ -64,20 +71,22 @@ export interface Person {
   /** Full bio paragraphs. The canonical prose record; /team does not
    *  render these (see the file header). */
   bio: string[];
-  /** Duotone headshot under public/team/, cut from the pitch deck's team
-   *  slide by scripts/team/headshots.mjs. */
+  /** Duotone headshot under public/team/, written at 480px square by
+   *  scripts/team/headshots.mjs from the deck's portrait masters. One
+   *  size for everyone, so the page declares it rather than carrying a
+   *  per-person number. */
   photo?: string;
-  /** The headshot's intrinsic square size, so the page can declare it and
-   *  reserve the space. The generator writes each crop at its native
-   *  resolution rather than upscaling, so leads and advisors differ. */
-  photoSize?: number;
-  /** Short discipline label used under the portrait on /team, where the
-   *  full titles run long and an advisor's would repeat the heading
-   *  above them. `title` stays canonical, and the panel shows it. */
+  /** Shorter label used under the portrait on /team, for the one title
+   *  too long to sit there. Everyone else's role is the same string in
+   *  both places, which is the point: a reader should not have to
+   *  reconcile two names for the same job. */
   discipline?: string;
-  /** Degrees, earliest first. Rendered as the education column on /team. */
+  /** Degrees, highest attainment first. Rendered as a list under
+   *  Education on /team, and the only place a credential appears. */
   education?: string[];
-  /** A couple of checkable points of experience, rendered on /team. */
+  /** Experience, as whole sentences. Rendered as paragraphs under
+   *  Experience on /team — prose, where education is a list, because
+   *  the two are different kinds of claim. */
   experience?: string[];
   /** Lumecon work email (firstname.lastname@lumecon.ai). Shown on the
    *  person's /team/<slug> page; advisors don't get one. */
@@ -98,7 +107,10 @@ export interface Person {
   /** Whether this person is a co-founder of Lumecon (used for
    *  Organization.founder JSON-LD). */
   founder?: boolean;
-  /** Degree-granting institutions, used for Person.alumniOf JSON-LD. */
+  /** Degree-granting institutions only, used for Person.alumniOf
+   *  JSON-LD and for the training shelf on /team. A program hosted at a
+   *  university is not a degree from it: the AEA Summer Training Program
+   *  at Michigan State is in prevAffiliations, not here. */
   alumniOf?: string[];
   /** Where the person works now besides Lumecon, used for
    *  Person.worksFor JSON-LD alongside Lumecon itself. */
@@ -114,25 +126,23 @@ export interface Person {
 const TEAM: Person[] = [
   {
     slug: 'elijah-moreno',
-    name: 'Elijah Moreno, MPP',
+    name: 'Elijah Moreno',
     initials: 'EM',
     group: 'team',
     title: 'Co-Founder and CEO',
-    discipline: 'Co-founder and CEO',
     email: 'elijah.moreno@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/elijahmoreno',
     scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
     founder: true,
     photo: '/team/elijah-moreno.webp',
-    photoSize: 284,
     education: [
-      'PhD candidate in Public Policy, Cornell University',
+      'PhD candidate, Public Policy, Cornell University',
       'MPP, Cornell University',
-      'BA Economics, modified with Native American Studies, Dartmouth College',
+      'BA, Economics, modified with Native American Studies, Dartmouth College',
     ],
     experience: [
-      'Eight years producing tribal economic impact studies.',
-      'Senior Research Assistant at the Center for Indian Country Development, Federal Reserve Bank of Minneapolis, where he built the Native entity enterprise dataset.',
+      'Eight years producing tribal economic-impact studies and related public-policy research.',
+      'Previously a Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis, where he helped build the Native entity enterprise dataset.',
     ],
     summary:
       "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians and the Taylor Policy Group.",
@@ -140,7 +150,7 @@ const TEAM: Person[] = [
       "Elijah Moreno is the co-founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments and institutions.",
       'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting.',
     ],
-    alumniOf: ['Cornell University', 'Dartmouth College', 'Michigan State University'],
+    alumniOf: ['Cornell University', 'Dartmouth College'],
     prevAffiliations: [
       'Federal Reserve Bank of Minneapolis (Center for Indian Country Development)',
       'American Economic Association Summer Training Program at Michigan State University',
@@ -187,25 +197,23 @@ const TEAM: Person[] = [
   },
   {
     slug: 'laurel-wheeler',
-    name: 'Laurel Wheeler, PhD',
+    name: 'Laurel Wheeler',
     initials: 'LW',
     group: 'team',
     title: 'Economics Lead',
-    discipline: 'Economics',
     email: 'laurel.wheeler@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/laurel-wheeler',
     scholar: 'https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ',
     photo: '/team/laurel-wheeler.webp',
-    photoSize: 284,
     education: [
-      'PhD Economics, Duke University',
-      'MA Economics, Duke University',
-      'MSc Economics for Development, University of Oxford',
-      'BA Political Science, University of Florida',
+      'PhD, Economics, Duke University',
+      'MA, Economics, Duke University',
+      'MSc, Economics for Development, University of Oxford',
+      'BA, Political Science, University of Florida',
     ],
     experience: [
-      'Economist at the Center for Indian Country Development, Federal Reserve Bank of Minneapolis.',
-      'Formerly a tenure-track economics professor at the University of Alberta.',
+      'Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon.',
+      'Previously a tenure-track economics professor at the University of Alberta.',
     ],
     summary:
       'Leads economic theory and tribal adaptation. PhD in Economics from Duke. Before Lumecon, she was an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).',
@@ -295,20 +303,18 @@ const TEAM: Person[] = [
     name: 'Isabella Agnes',
     initials: 'IA',
     group: 'team',
-    title: 'Input/Output Models Lead',
-    discipline: 'Input/output models',
+    title: 'Input-Output Modeling Lead',
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
     photo: '/team/isabella-agnes.webp',
-    photoSize: 284,
     education: [
-      'Doctoral training in Economics, University of Maryland, College Park',
-      'BS Mathematics and BS Economics, University of Wisconsin-Madison',
+      'Doctoral research in Economics, University of Maryland, College Park',
+      'BS, Mathematics, University of Wisconsin-Madison',
+      'BS, Economics, University of Wisconsin-Madison',
     ],
     experience: [
       'Data scientist at the Library of Congress.',
-      'Economic modeling and public-sector data science for the District of Columbia government.',
-      'Data scientist at the Board of Governors of the Federal Reserve System, and a research assistant at the Federal Reserve Bank of Philadelphia.',
+      'Her prior work includes economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.',
     ],
     summary:
       "Leads the multiplier system and input/output models. Holds bachelor's degrees in Mathematics and Economics from Wisconsin-Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
@@ -340,17 +346,15 @@ const TEAM: Person[] = [
     name: 'Francesca Agnes',
     initials: 'FA',
     group: 'team',
-    title: 'Cedar Lead',
-    discipline: 'Cedar',
+    title: 'Cedar Systems Lead',
     email: 'francesca.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/francesca-agnes-a8106722b',
     scholar: 'https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ',
     photo: '/team/francesca-agnes.webp',
-    photoSize: 284,
-    education: ['BS Biology, University of Illinois Urbana-Champaign'],
+    education: ['BS, Biology, University of Illinois Urbana-Champaign'],
     experience: [
-      'Builds the document intake and assumption workflow Cedar runs on.',
-      'Also builds at Lira, the AI wearable company founded by Brian Kim.',
+      'Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.',
+      'Also contributes to Lira, an AI wearable company.',
     ],
     summary:
       "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Holds a bachelor's in Biology from the University of Illinois Urbana-Champaign.",
@@ -366,16 +370,14 @@ const TEAM: Person[] = [
     initials: 'KL',
     group: 'team',
     title: 'Platform Lead',
-    discipline: 'Platform',
     email: 'kaylyn.lee@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/kaylynlee',
     photo: '/team/kaylyn-lee.webp',
-    photoSize: 284,
-    education: ['BS Computer Science with a minor in Business, Cornell University'],
+    education: ['BS, Computer Science, minor in Business, Cornell University'],
     currentAffiliations: ['Lira'],
     experience: [
-      'Builds the platform customers use.',
-      'Also builds at Lira, the AI wearable company founded by Brian Kim.',
+      'Builds the platform organizations use to scope, run and revisit analyses.',
+      'Also contributes to Lira, an AI wearable company.',
     ],
     summary:
       "Leads development of the Lumecon platform experience. Holds a bachelor's in Computer Science, with a minor in Business, from Cornell University.",
@@ -389,15 +391,13 @@ const TEAM: Person[] = [
     name: 'Brian Kim',
     initials: 'BK',
     group: 'advisor',
-    title: 'Technical Advisor',
+    title: 'Engineering Advisor',
     linkedin: 'https://www.linkedin.com/in/brian-kim-1a543466',
     photo: '/team/brian-kim.webp',
-    photoSize: 144,
-    discipline: 'Engineering',
-    education: ['BA Economics, Dartmouth College'],
+    education: ['BA, Economics, Dartmouth College'],
     experience: [
-      'Founder and CEO of Lira, an AI wearable.',
-      'Previously a senior software engineer at Modsy and at Chime.',
+      'Founder and CEO of Lira, an AI wearable company.',
+      'Previously a senior software engineer at Modsy and Chime.',
     ],
     summary:
       "Advises on software architecture, engineering systems and scalability and contributes on Cedar and data security. Holds a bachelor's in Economics from Dartmouth. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
@@ -415,15 +415,13 @@ const TEAM: Person[] = [
     title: 'Methodology Advisor',
     scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
     photo: '/team/vod-vilfort.webp',
-    photoSize: 144,
-    discipline: 'Methodology',
     education: [
-      'PhD candidate in Economics, Massachusetts Institute of Technology',
-      'BA Mathematics and Economics, Yale University',
+      'PhD candidate, Economics, Massachusetts Institute of Technology',
+      'BA, Mathematics and Economics, Yale University',
     ],
     experience: [
       'NSF Graduate Research Fellow.',
-      'Published in American Economic Review: Insights.',
+      'His research has appeared in American Economic Review: Insights.',
     ],
     summary:
       "Advises on empirical methodology, econometrics, model design and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
@@ -445,23 +443,22 @@ const TEAM: Person[] = [
   },
   {
     slug: 'havala-hanson',
-    name: 'Havala Hanson, PhD',
+    name: 'Havala Hanson',
     initials: 'HH',
     group: 'advisor',
-    title: 'Product, Data Security and Research Operations Advisor',
+    title: 'Data Governance, Security and Research Operations Advisor',
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
     scholar: 'https://scholar.google.com/citations?hl=en&user=vETE-QYAAAAJ',
     photo: '/team/havala-hanson.webp',
-    photoSize: 144,
-    discipline: 'Data governance',
+    discipline: 'Data Governance Advisor',
     education: [
-      'PhD Statistics and Policy in Education, University of Alaska Fairbanks',
-      'MA Urban Education Policy, Brown University',
-      'BS Education, University of Wisconsin-Whitewater',
+      'PhD, Statistics and Policy in Education, University of Alaska Fairbanks',
+      'MA, Urban Education Policy, Brown University',
+      'BS, Education, University of Wisconsin-Whitewater',
     ],
     experience: [
-      'Builds data governance and privacy practice for sensitive administrative data.',
-      'Supports cross-agency data sharing and manages research operations.',
+      'Builds data-governance and privacy practices for sensitive administrative data.',
+      'Supports cross-agency data sharing and research operations.',
     ],
     summary:
       'Advises on product direction, data governance, privacy and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.',

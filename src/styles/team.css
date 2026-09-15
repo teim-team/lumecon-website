@@ -7,13 +7,13 @@
    band is also what stops this page reading as a white document
    between two white documents.
 
-   Nothing here is a card except the panel, and the panel earns its
-   edges: its contents change when the reader picks someone, so the
-   boundary is telling them where to look. */
+   Nothing here is a card. The record is a detail surface flush to the
+   roster, divided from it by a hairline and structured by hairlines
+   inside — the one place on the page where density is warranted. */
 
 .team-hero__title {
-  font-size: clamp(2rem, 3.6vw, 2.9rem);
-  max-width: 24ch;
+  font-size: clamp(2.1rem, 4vw, 3.1rem);
+  max-width: 20ch;
 }
 .team-hero {
   padding-bottom: clamp(2rem, 4vw, 3rem);
@@ -23,14 +23,19 @@
 }
 
 .team-band {
-  padding: clamp(2.75rem, 5.5vw, 4.5rem) 0 clamp(3rem, 6vw, 5rem);
+  padding: clamp(2.75rem, 5.5vw, 4.5rem) 0 clamp(2.5rem, 5vw, 4rem);
 }
 
+/* stretch, not start: the hairline dividing the record from the roster
+   runs the full height of the band. Sized to its content it stopped
+   wherever the shortest record happened to end, which left an open
+   corner of navy below it and read as a rule that had run out rather
+   than a division. */
 .roster {
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(19rem, 4.4fr);
   gap: clamp(1.75rem, 3.4vw, 3.25rem);
-  align-items: start;
+  align-items: stretch;
 }
 
 .roster__group + .roster__group {
@@ -110,10 +115,11 @@
   color: var(--ink-2);
   transition: color 0.22s var(--ease);
 }
-/* --ink-3, not --ink-4. On the dark band --ink-4 measures 3.1 to 3.7:1
-   against the gradient's three stops, and 2.8 to 3.4:1 inside the
-   panel's wash: below AA at every point. It is the quietest ink on this
-   ground that is still legible on it. */
+/* --ink-3, not --ink-4. Against the band gradient's three stops --ink-4
+   measures 3.1 to 3.7:1, below AA at every one of them; --ink-3 lands
+   at 5.4 to 6.3:1. It is the quietest ink on this ground that is still
+   legible on it. Measured against the real stops, because axe reports
+   text over a gradient as *incomplete* rather than failing. */
 .face__role {
   display: block;
   font-family: var(--font-mono);
@@ -134,19 +140,21 @@
 }
 
 /* ---------- the record ---------- */
+/* The record is a detail surface flush against the roster, divided from
+   it by one hairline — not a rounded panel floating on the band. A
+   radius and a tinted fill would claim this arrived from somewhere
+   else; it is the same object as the row, opened. Its own internal
+   hairlines carry the density, and this is the one place on the page
+   where density is the right answer. */
 .roster__panel {
-  padding: clamp(1.3rem, 2.2vw, 1.75rem) clamp(1.3rem, 2.2vw, 1.85rem) clamp(1.5rem, 2.4vw, 1.9rem);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-panel);
-  background: rgba(255, 255, 255, 0.04);
-  position: sticky;
-  top: 6.5rem;
+  padding: 0 0 0.25rem clamp(1.5rem, 3vw, 2.75rem);
+  border-left: 1px solid var(--rule);
 }
 .pcard[hidden] {
   display: none;
 }
 .pcard__name {
-  font-size: clamp(1.2rem, 1.7vw, 1.45rem);
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
   font-weight: 650;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -182,7 +190,19 @@
   color: var(--ink-2);
 }
 .pcard__list li + li {
-  margin-top: 0.45rem;
+  margin-top: 0.4rem;
+}
+.pcard__prose {
+  margin: 0 0 1.2rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.pcard__prose p {
+  margin: 0;
+}
+.pcard__prose p + p {
+  margin-top: 0.6rem;
 }
 
 /* The links are the page's one piece of iconography, and each icon is
@@ -219,25 +239,31 @@
   padding: clamp(2.5rem, 5vw, 3.75rem) 0 clamp(3.5rem, 7vw, 5rem);
 }
 .team-schools .h-kicker {
-  margin-bottom: 1.1rem;
+  margin-bottom: 0.55rem;
 }
-/* A plain run of names, wrapping, separated by the same hairline the
-   rest of the page uses. Twelve institutions in one line of sight is
-   the argument; a grid of twelve boxes would be the same argument
-   made worse. */
+.team-schools__title {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0 0 clamp(1.2rem, 2.2vw, 1.75rem);
+}
+/* A reference shelf. One name per line, flowing down columns under a
+   single rule, so the eye can run a column looking for an institution
+   instead of reading a paragraph of proper nouns. Set as a wrapping run
+   of text this was a word cloud, which undersells the list. */
 .schools {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 0 2.25rem;
-  padding: 0;
-}
-.schools {
-  gap: 0.35rem clamp(1.4rem, 2.6vw, 2.4rem);
+  margin: 0 0 clamp(2rem, 3.5vw, 2.75rem);
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--rule);
+  columns: 4;
+  column-gap: clamp(1.5rem, 3vw, 3rem);
 }
 .schools li {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  break-inside: avoid;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  padding: 0.22rem 0;
   color: var(--ink-2);
 }
 
@@ -254,17 +280,33 @@
   text-underline-offset: 0.16em;
 }
 
+@media (max-width: 1024px) {
+  .schools {
+    columns: 3;
+  }
+}
 /* ---------- narrow ----------
-   The panel drops below the row instead of beside it, and the row
-   goes to three across, which is where a portrait stops being big
-   enough to recognise a face in. */
+   Portraits and names first, then the record under them. The role comes
+   off the portraits here: eight roles set three lines deep in 10px mono
+   under eight circles was a wall of uppercase doing a job the record
+   below already does properly, one tap away. The names stay — a face
+   without a name is not a roster. Three across is where a portrait
+   stops being big enough to recognise a face in. */
 @media (max-width: 900px) {
   .roster {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
+    gap: 1.6rem;
   }
   .roster__panel {
-    position: static;
+    padding: 1.4rem 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .face__role {
+    display: none;
+  }
+  .face__name {
+    margin-bottom: 0;
   }
   .roster__row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -274,12 +316,14 @@
     max-width: none;
   }
 }
+@media (max-width: 560px) {
+  .schools {
+    columns: 2;
+  }
+}
 @media (max-width: 420px) {
   .face__name {
     font-size: 0.85rem;
-  }
-  .face__role {
-    font-size: 0.58rem;
   }
 }
 

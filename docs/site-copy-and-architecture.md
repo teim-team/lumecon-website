@@ -26,7 +26,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/` | 733 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/pricing` | 1299 | Pricing \| Lumecon | 155 |
 | `/methodology` | 2560 | Methodology \| Lumecon | 167 |
-| `/team` | 283 | Team \| Lumecon | 147 |
+| `/team` | 282 | Team \| Lumecon | 115 |
 | `/cedar` | 468 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-grove` | 1178 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 227 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
@@ -42,7 +42,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **11824** | | |
+| **Total** | **11823** | | |
 
 ## Crawler metadata audit
 
@@ -1098,29 +1098,29 @@ We use optional analytics to improve Lumecon. Privacy Policy
 ## `/team` — Team
 
 - **Title:** Team | Lumecon
-- **Meta description** (147 chars): The economists, engineers and advisors who build Lumecon, with the degrees and the prior posts behind the model, the data systems and the platform.
-- **og:description:** The economists, engineers and advisors who build Lumecon, with the degrees and the prior posts behind the model, the data systems and the platform.
+- **Meta description** (115 chars): Meet the economists, engineers and advisors behind Lumecon’s models, data systems and reviewable economic analysis.
+- **og:description:** Meet the economists, engineers and advisors behind Lumecon’s models, data systems and reviewable economic analysis.
 - **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
 - **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
 - **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/team
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, AboutPage, BreadcrumbList
-- **Visible words:** 283
+- **Visible words:** 282
 
 ### Architecture (heading outline)
 
-- **H1** Economic modeling, data systems, platform engineering and Indian Country expertise in one team.
+- **H1** The people behind Lumecon’s models, data and platform.
   - **H2** The people who build Lumecon
-    - **H3** Elijah Moreno, MPP
-    - **H3** Laurel Wheeler, PhD
+    - **H3** Elijah Moreno
+    - **H3** Laurel Wheeler
     - **H3** Isabella Agnes
     - **H3** Francesca Agnes
     - **H3** Kaylyn Lee
     - **H3** Brian Kim
     - **H3** Vod Vilfort
-    - **H3** Havala Hanson, PhD
-  - **H2** WHERE THIS TEAM TRAINED
+    - **H3** Havala Hanson
+  - **H2** Where the team trained
 
 ### Copy, in document order
 
@@ -1157,9 +1157,9 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 TEAM
 
 
-**H1: Economic modeling, data systems, platform engineering and Indian Country expertise in one team.**
+**H1: The people behind Lumecon’s models, data and platform.**
 
-Lumecon is built by economists who have published the research, engineers who have shipped the systems and advisors who review both. Pick anyone below for their degrees, where they have worked and how to reach them.
+Lumecon brings together economists, engineers and advisors who build the models, data systems and review process behind each analysis. The team combines applied economic research, public-sector data experience and work in Indian Country.
 
 
 > _section: `team-band`_
@@ -1170,52 +1170,56 @@ Lumecon is built by economists who have published the research, engineers who ha
 TEAM
 
 - Elijah CO-FOUNDER AND CEO
-- Laurel ECONOMICS
-- Isabella INPUT/OUTPUT MODELS
-- Francesca CEDAR
-- Kaylyn PLATFORM
+- Laurel ECONOMICS LEAD
+- Isabella INPUT-OUTPUT MODELING LEAD
+- Francesca CEDAR SYSTEMS LEAD
+- Kaylyn PLATFORM LEAD
 ADVISORS
 
-- Brian ENGINEERING
-- Vod METHODOLOGY
-- Havala DATA GOVERNANCE
+- Brian ENGINEERING ADVISOR
+- Vod METHODOLOGY ADVISOR
+- Havala DATA GOVERNANCE ADVISOR
 
-> _section: `Elijah Moreno, MPP`_
+> _section: `Elijah Moreno`_
 
 
-**H3: Elijah Moreno, MPP**
+**H3: Elijah Moreno**
 
 CO-FOUNDER AND CEO
 
 EDUCATION
 
-- PhD candidate in Public Policy, Cornell University
+- PhD candidate, Public Policy, Cornell University
 - MPP, Cornell University
-- BA Economics, modified with Native American Studies, Dartmouth College
+- BA, Economics, modified with Native American Studies, Dartmouth College
 EXPERIENCE
 
-- Eight years producing tribal economic impact studies.
-- Senior Research Assistant at the Center for Indian Country Development, Federal Reserve Bank of Minneapolis, where he built the Native entity enterprise dataset.
+Eight years producing tribal economic-impact studies and related public-policy research.
+
+Previously a Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis, where he helped build the Native entity enterprise dataset.
+
 elijah.moreno@lumecon.ai LinkedIn Scholar
 
 
-> _section: `Laurel Wheeler, PhD`_
+> _section: `Laurel Wheeler`_
 
 
-**H3: Laurel Wheeler, PhD**
+**H3: Laurel Wheeler**
 
 **[conditional]** Economics Lead
 
 **[conditional]** Education
 
-- **[conditional]** PhD Economics, Duke University
-- **[conditional]** MA Economics, Duke University
-- **[conditional]** MSc Economics for Development, University of Oxford
-- **[conditional]** BA Political Science, University of Florida
+- **[conditional]** PhD, Economics, Duke University
+- **[conditional]** MA, Economics, Duke University
+- **[conditional]** MSc, Economics for Development, University of Oxford
+- **[conditional]** BA, Political Science, University of Florida
 **[conditional]** Experience
 
-- **[conditional]** Economist at the Center for Indian Country Development, Federal Reserve Bank of Minneapolis.
-- **[conditional]** Formerly a tenure-track economics professor at the University of Alberta.
+**[conditional]** Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon.
+
+**[conditional]** Previously a tenure-track economics professor at the University of Alberta.
+
 **[conditional]** laurel.wheeler@lumecon.aiLinkedInScholar
 
 
@@ -1224,17 +1228,19 @@ elijah.moreno@lumecon.ai LinkedIn Scholar
 
 **H3: Isabella Agnes**
 
-**[conditional]** Input/Output Models Lead
+**[conditional]** Input-Output Modeling Lead
 
 **[conditional]** Education
 
-- **[conditional]** Doctoral training in Economics, University of Maryland, College Park
-- **[conditional]** BS Mathematics and BS Economics, University of Wisconsin-Madison
+- **[conditional]** Doctoral research in Economics, University of Maryland, College Park
+- **[conditional]** BS, Mathematics, University of Wisconsin-Madison
+- **[conditional]** BS, Economics, University of Wisconsin-Madison
 **[conditional]** Experience
 
-- **[conditional]** Data scientist at the Library of Congress.
-- **[conditional]** Economic modeling and public-sector data science for the District of Columbia government.
-- **[conditional]** Data scientist at the Board of Governors of the Federal Reserve System, and a research assistant at the Federal Reserve Bank of Philadelphia.
+**[conditional]** Data scientist at the Library of Congress.
+
+**[conditional]** Her prior work includes economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.
+
 **[conditional]** isabella.agnes@lumecon.aiLinkedIn
 
 
@@ -1243,15 +1249,17 @@ elijah.moreno@lumecon.ai LinkedIn Scholar
 
 **H3: Francesca Agnes**
 
-**[conditional]** Cedar Lead
+**[conditional]** Cedar Systems Lead
 
 **[conditional]** Education
 
-- **[conditional]** BS Biology, University of Illinois Urbana-Champaign
+- **[conditional]** BS, Biology, University of Illinois Urbana-Champaign
 **[conditional]** Experience
 
-- **[conditional]** Builds the document intake and assumption workflow Cedar runs on.
-- **[conditional]** Also builds at Lira, the AI wearable company founded by Brian Kim.
+**[conditional]** Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.
+
+**[conditional]** Also contributes to Lira, an AI wearable company.
+
 **[conditional]** francesca.agnes@lumecon.aiLinkedInScholar
 
 
@@ -1264,11 +1272,13 @@ elijah.moreno@lumecon.ai LinkedIn Scholar
 
 **[conditional]** Education
 
-- **[conditional]** BS Computer Science with a minor in Business, Cornell University
+- **[conditional]** BS, Computer Science, minor in Business, Cornell University
 **[conditional]** Experience
 
-- **[conditional]** Builds the platform customers use.
-- **[conditional]** Also builds at Lira, the AI wearable company founded by Brian Kim.
+**[conditional]** Builds the platform organizations use to scope, run and revisit analyses.
+
+**[conditional]** Also contributes to Lira, an AI wearable company.
+
 **[conditional]** kaylyn.lee@lumecon.aiLinkedIn
 
 
@@ -1277,15 +1287,17 @@ elijah.moreno@lumecon.ai LinkedIn Scholar
 
 **H3: Brian Kim**
 
-**[conditional]** Technical Advisor
+**[conditional]** Engineering Advisor
 
 **[conditional]** Education
 
-- **[conditional]** BA Economics, Dartmouth College
+- **[conditional]** BA, Economics, Dartmouth College
 **[conditional]** Experience
 
-- **[conditional]** Founder and CEO of Lira, an AI wearable.
-- **[conditional]** Previously a senior software engineer at Modsy and at Chime.
+**[conditional]** Founder and CEO of Lira, an AI wearable company.
+
+**[conditional]** Previously a senior software engineer at Modsy and Chime.
+
 **[conditional]** LinkedIn
 
 
@@ -1298,42 +1310,47 @@ elijah.moreno@lumecon.ai LinkedIn Scholar
 
 **[conditional]** Education
 
-- **[conditional]** PhD candidate in Economics, Massachusetts Institute of Technology
-- **[conditional]** BA Mathematics and Economics, Yale University
+- **[conditional]** PhD candidate, Economics, Massachusetts Institute of Technology
+- **[conditional]** BA, Mathematics and Economics, Yale University
 **[conditional]** Experience
 
-- **[conditional]** NSF Graduate Research Fellow.
-- **[conditional]** Published in American Economic Review: Insights.
+**[conditional]** NSF Graduate Research Fellow.
+
+**[conditional]** His research has appeared in American Economic Review: Insights.
+
 **[conditional]** Scholar
 
 
-> _section: `Havala Hanson, PhD`_
+> _section: `Havala Hanson`_
 
 
-**H3: Havala Hanson, PhD**
+**H3: Havala Hanson**
 
-**[conditional]** Product, Data Security and Research Operations Advisor
+**[conditional]** Data Governance, Security and Research Operations Advisor
 
 **[conditional]** Education
 
-- **[conditional]** PhD Statistics and Policy in Education, University of Alaska Fairbanks
-- **[conditional]** MA Urban Education Policy, Brown University
-- **[conditional]** BS Education, University of Wisconsin-Whitewater
+- **[conditional]** PhD, Statistics and Policy in Education, University of Alaska Fairbanks
+- **[conditional]** MA, Urban Education Policy, Brown University
+- **[conditional]** BS, Education, University of Wisconsin-Whitewater
 **[conditional]** Experience
 
-- **[conditional]** Builds data governance and privacy practice for sensitive administrative data.
-- **[conditional]** Supports cross-agency data sharing and manages research operations.
+**[conditional]** Builds data-governance and privacy practices for sensitive administrative data.
+
+**[conditional]** Supports cross-agency data sharing and research operations.
+
 **[conditional]** LinkedInScholar
 
 
 > _section: `team-schools`_
 
+TRAINING AND RESEARCH BACKGROUND
 
-**H2: WHERE THIS TEAM TRAINED**
+
+**H2: Where the team trained**
 
 - Cornell University
 - Dartmouth College
-- Michigan State University
 - University of Florida
 - University of Oxford
 - Duke University
@@ -1345,7 +1362,7 @@ elijah.moreno@lumecon.ai LinkedIn Scholar
 - University of Alaska Fairbanks
 - Brown University
 - University of Wisconsin-Whitewater
-For the economics these people are responsible for, read the methodology. For how Lumecon handles the data organizations bring to it, read security.
+Read the methodology for Lumecon’s modeling approach. Read security for how Lumecon handles organization data.
 
 
 > _section: `footer`_

@@ -6,6 +6,11 @@
  * argue that the economics and the handling of data hold up, and this one
  * says who is doing them.
  *
+ * The hero makes one proposition. It used to be four department names in
+ * a row — economic modeling, data systems, platform engineering, Indian
+ * Country expertise — which is a capability list, not a claim, and the
+ * band underneath already shows the reader all four.
+ *
  * The page is one object. A reader meets the whole team at once as a row
  * of portraits, picks one, and reads that person beside the row — the same
  * picker the Grove collections registry uses, because the question is the
@@ -41,12 +46,10 @@ import '../styles/team.css';
 
 const site = 'https://lumecon.ai';
 const description =
-  'The economists, engineers and advisors who build Lumecon, with the degrees and the prior posts behind the model, the data systems and the platform.';
+  'Meet the economists, engineers and advisors behind Lumecon\u2019s models, data systems and reviewable economic analysis.';
 
 const everyone = [...TEAM_ROSTER, ...ADVISOR_ROSTER];
 
-/** Display names carry a credential suffix; schema.org `name` should not. */
-const plainName = (p: Person) => p.name.replace(/,\s*(PhD|MPP)$/, '');
 /** The first name is enough under a portrait, and it lets five sit in a row. */
 const firstName = (p: Person) => p.name.split(' ')[0];
 
@@ -62,7 +65,7 @@ const schools = [...new Set(everyone.flatMap((p) => p.alumniOf ?? []))];
 const personLd = (p: Person) => ({
   '@type': 'Person',
   '@id': `${site}/team#${p.slug}`,
-  name: plainName(p),
+  name: p.name,
   jobTitle: p.title,
   description: p.summary,
   ...(p.photo ? { image: `${site}${p.photo}` } : {}),
@@ -129,13 +132,12 @@ const GROUPS = [
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Team</p>
         <h1 class="meth-hero__title team-hero__title">
-          Economic modeling, data systems, platform engineering and Indian Country expertise in one
-          team.
+          The people behind Lumecon&rsquo;s models, data and platform.
         </h1>
         <p class="meth-hero__lede">
-          Lumecon is built by economists who have published the research, engineers who have shipped
-          the systems and advisors who review both. Pick anyone below for their degrees, where they
-          have worked and how to reach them.
+          Lumecon brings together economists, engineers and advisors who build the models, data
+          systems and review process behind each analysis. The team combines applied economic
+          research, public-sector data experience and work in Indian Country.
         </p>
       </div>
     </header>
@@ -200,12 +202,17 @@ const GROUPS = [
                   ))}
                 </ul>
 
+                {/* Experience is prose and education is a list, because
+                    they are different kinds of claim: a degree is a fact
+                    with a fixed shape, a post is a sentence. Running both
+                    as bullets made the panel one undifferentiated column
+                    of fragments. */}
                 <p class="pcard__label">Experience</p>
-                <ul class="pcard__list" role="list">
+                <div class="pcard__prose">
                   {p.experience?.map((e) => (
-                    <li>{e}</li>
+                    <p>{e}</p>
                   ))}
-                </ul>
+                </div>
 
                 {(p.email || p.linkedin || p.scholar) && (
                   <p class="pcard__links">
@@ -270,18 +277,22 @@ const GROUPS = [
 
     <section class="team-schools" aria-labelledby="t-schools">
       <div class="meth-w">
-        <h2 class="h-kicker" id="t-schools">
-          Where this team trained
+        <p class="h-kicker">Training and research background</p>
+        <h2 class="team-schools__title" id="t-schools">
+          Where the team trained
         </h2>
+        {/* A reference shelf: one institution per line, set in columns, so
+            it reads as a list a reader can scan for a name. As a wrapping
+            run of text it was a word cloud, which is the opposite of the
+            claim being made. */}
         <ul class="schools" role="list">
           {schools.map((school) => (
             <li>{school}</li>
           ))}
         </ul>
         <p class="team-close">
-          For the economics these people are responsible for, read the{' '}
-          <a href="/methodology">methodology</a>. For how Lumecon handles the data organizations
-          bring to it, read <a href="/security">security</a>.
+          Read the <a href="/methodology">methodology</a> for Lumecon&rsquo;s modeling approach.
+          Read <a href="/security">security</a> for how Lumecon handles organization data.
         </p>
       </div>
     </section>
