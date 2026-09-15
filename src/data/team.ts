@@ -104,8 +104,11 @@ export interface Person {
    *  LinkedIn. Drop any `oi=ao`, which records where a click came
    *  from and is not part of the address. */
   scholar?: string;
-  /** Whether this person is a co-founder of Lumecon (used for
-   *  Organization.founder JSON-LD). */
+  /** Whether this person is emitted under Organization.founder in the
+   *  homepage JSON-LD. Independent of `title`: schema.org takes more
+   *  than one founder, and what each is called is the title's business.
+   *  Elijah is Founder and CEO (2026-09); Michael is Co-Founder and
+   *  Founding Investor. */
   founder?: boolean;
   /** Degree-granting institutions only, used for Person.alumniOf
    *  JSON-LD and for the training shelf on /team. A program hosted at a
@@ -129,7 +132,7 @@ const TEAM: Person[] = [
     name: 'Elijah Moreno',
     initials: 'EM',
     group: 'team',
-    title: 'Co-Founder and CEO',
+    title: 'Founder and CEO',
     email: 'elijah.moreno@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/elijahmoreno',
     scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
@@ -145,9 +148,9 @@ const TEAM: Person[] = [
       'Previously a Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis, where he helped build the Native entity enterprise dataset.',
     ],
     summary:
-      "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians and the Taylor Policy Group.",
+      "Founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians and the Taylor Policy Group.",
     bio: [
-      "Elijah Moreno is the co-founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments and institutions.",
+      "Elijah Moreno is the founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments and institutions.",
       'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting.',
     ],
     alumniOf: ['Cornell University', 'Dartmouth College'],
@@ -515,7 +518,7 @@ const TEAM: Person[] = [
   },
 ];
 
-/** Co-founders, used by the homepage Organization.founder JSON-LD. */
+/** Emitted as Organization.founder in the homepage JSON-LD. */
 export const FOUNDERS = TEAM.filter((p) => p.founder);
 
 /** The two sections /team renders, in the order they appear there.

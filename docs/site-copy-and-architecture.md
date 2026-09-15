@@ -1169,7 +1169,7 @@ Lumecon brings together economists, engineers and advisors who build the models,
 
 TEAM
 
-- Elijah CO-FOUNDER AND CEO
+- Elijah FOUNDER AND CEO
 - Laurel ECONOMICS LEAD
 - Isabella INPUT-OUTPUT MODELING LEAD
 - Francesca CEDAR SYSTEMS LEAD
@@ -1185,7 +1185,7 @@ ADVISORS
 
 **H3: Elijah Moreno**
 
-CO-FOUNDER AND CEO
+FOUNDER AND CEO
 
 EDUCATION
 
