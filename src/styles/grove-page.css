@@ -1,60 +1,23 @@
-/* /cedar-grove — Cedar Grove by Lumecon.
-   Page-specific pieces on top of the methodology vocabulary. The page shows
-   Grove's own objects in order: the evidence map in the hero, the finding
-   workflow in the teal band, the proof strip with staged product crops, the
-   registry of the twelve collections on deep ink, and the license panel.
-   Every staged object reuses the app's own grammar (mono captions,
-   hairlines, teal for the organization, navy for comparators and proxies,
-   amber for a limit) so the page shows the product rather than a generic
-   data-platform look. */
+/* Cedar Grove product page.
+   The page presents three real frames from the application. The layout is
+   deliberately the same family as Cedar and Cedar Impact: a paired hero, two
+   intentional product moments and a quiet evidence infrastructure reference. */
 
-/* The staged objects keep one light palette whatever section they sit in:
-   they are pictures of the product, the way the homepage's app captures
-   are, so their colours are literal rather than the theme's tokens, which
-   the dark sections flip. */
-.grovepg {
-  --gf-bg: #ffffff;
-  --gf-bg-2: #edf2f4;
-  --gf-ink: #071824;
-  --gf-ink-2: #33434a;
-  --gf-ink-3: #647279;
-  --gf-rule: rgba(10, 28, 52, 0.12);
-  --gf-teal: #0a7f74;
-  --gf-navy: #071824;
-  --gf-amber: #8a5309;
-}
-
-/* ---------- hero: dark navy, the product top right ---------- */
-/* The site's hero, not a new one. Every product page here puts the words in a
-   4.5fr column and the capture in a 7.5fr column beside them, spanning the
-   rows: see .cedarpg-hero in cedar-page.css. This page had that shape, lost it
-   for a revision when the capture went full width under the words, and has it
-   back. A hero that composes differently from the other product pages reads as
-   a different site, not as emphasis. */
 .grovepg-hero {
-  position: relative;
   padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
-  background:
-    linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
-    linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
+  background: #071126;
 }
 .grovepg-hero .meth-w {
-  position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 4.5fr) minmax(28rem, 7.5fr);
-  column-gap: clamp(3rem, 6vw, 6rem);
+  gap: clamp(3rem, 6vw, 6rem);
   align-items: center;
 }
-.grovepg-hero .h-kicker,
-.grovepg-hero .meth-hero__title,
-.grovepg-hero .meth-hero__lede,
-.grovepg-hero .grovepg-cta {
-  grid-column: 1;
+.grovepg-hero__copy {
+  min-width: 0;
 }
 .grovepg-hero .h-kicker,
-.grovepg-hero .meth-hero__title,
-.grovepg-hero .meth-hero__lede {
+.grovepg-hero .meth-hero__title {
   color: #fff;
 }
 .grovepg-hero .h-kicker {
@@ -70,32 +33,32 @@
   margin-bottom: 1.6rem;
   color: rgba(233, 242, 250, 0.82);
 }
-.grovepg-hero .grovepg-cta {
-  margin-bottom: 0;
+.grovepg-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 .grovepg-hero .btn2--card {
   border-color: rgba(115, 226, 214, 0.34);
   color: #d9f4f0;
-  background: rgba(7, 60, 59, 0.42);
+  background: rgba(7, 60, 59, 0.5);
 }
 .grovepg-hero .btn2--card:hover {
-  border-color: rgba(115, 226, 214, 0.6);
-  background: rgba(7, 60, 59, 0.62);
+  border-color: rgba(115, 226, 214, 0.64);
+  background: rgba(7, 60, 59, 0.76);
 }
 .grovepg-hero__shot {
-  grid-column: 2;
-  grid-row: 1 / 5;
   overflow: hidden;
   margin: 0;
-  border: 1px solid rgba(95, 217, 204, 0.38);
+  border: 1px solid rgba(115, 226, 214, 0.38);
   border-radius: var(--radius-frame);
   background: #f8fbfb;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 0 0 1px rgba(15, 181, 165, 0.08),
-    0 40px 96px -38px rgba(0, 0, 0, 0.9);
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 32px 72px -34px rgba(0, 0, 0, 0.92);
 }
-.grovepg-hero__shot img {
+.grovepg-hero__shot img,
+.grovetour .tour-row__shot img {
   display: block;
   width: 100%;
   height: auto;
@@ -104,35 +67,64 @@
   .grovepg-hero .meth-w {
     grid-template-columns: 1fr;
   }
-  .grovepg-hero .h-kicker,
-  .grovepg-hero .meth-hero__title,
-  .grovepg-hero .meth-hero__lede,
-  .grovepg-hero .grovepg-cta,
   .grovepg-hero__shot {
-    grid-column: 1;
-  }
-  .grovepg-hero__shot {
-    grid-row: auto;
-    margin-top: 1.4rem;
+    margin-top: 0.6rem;
   }
 }
 
-/* ---------- the provenance strip ---------- */
-/* Six named facts under the outcome they belong to. Not cards: a strip of
-   terms, set close, so it reads as a specification rather than as four more
-   paragraphs of argument. */
+/* Two product moments, not a gallery. The writing sits on its own raised
+   surface so the screen remains a legible object instead of a flat image
+   beside a paragraph. */
+.grovetour {
+  padding: clamp(3.25rem, 6vw, 4.75rem) 0 clamp(3.75rem, 7vw, 5.75rem);
+  background: #063637;
+}
+.grovetour .tour-row__text {
+  padding: clamp(1.6rem, 2.6vw, 2.2rem);
+  background: #052022;
+  border-color: rgba(115, 226, 214, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(160, 240, 230, 0.13),
+    0 20px 48px -28px rgba(0, 0, 0, 0.76);
+}
+.grovetour .tour-row__kicker {
+  color: #73e2d6;
+}
+.grovetour .tour-row__shot {
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 22px 48px -28px rgba(0, 0, 0, 0.72);
+}
+
+/* A compact specification under the screenshots, not another card deck. */
 .grovepg-prov {
   padding: clamp(2.5rem, 5vw, 3.5rem) 0 clamp(3rem, 6vw, 4rem);
   background: var(--surface, #fff);
   border-bottom: 1px solid var(--rule);
 }
 .grovepg-prov__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1.4rem, 3vw, 2.4rem) clamp(2rem, 4vw, 3rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.grovepg-prov__term {
+  margin: 0 0 0.35rem;
+  color: var(--teal-ink, #0a7f74);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.grovepg-prov__gloss {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.97rem;
+  line-height: 1.55;
 }
 @media (max-width: 900px) {
   .grovepg-prov__list {
@@ -141,54 +133,64 @@
 }
 @media (max-width: 560px) {
   .grovepg-prov__list {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 1fr;
   }
 }
-.grovepg-prov__term {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--teal-ink, #0a7f74);
-}
-.grovepg-prov__gloss {
-  margin: 0;
-  font-size: 0.97rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-  max-width: 34ch;
-}
 
-/* ---------- the atlas: twelve marks, proving depth ---------- */
-/* Static. It was a picker over a five-field detail panel per collection,
-   which is a second product inside a marketing page. The marks are the
-   proof; what is in each collection is the conversation the licence starts. */
+/* The collection atlas proves depth without turning the marketing page into a
+   second browse interface. */
 .grovepg-atlas {
   padding: clamp(3rem, 6vw, 4.5rem) 0;
-  background: linear-gradient(180deg, #0b1730 0%, #071126 100%);
+  background: #081329;
+}
+.grovepg-atlas .h-kicker {
+  color: #73e2d6;
 }
 .grovepg-atlas__title {
+  max-width: 26ch;
   margin: 0 0 clamp(2rem, 4vw, 2.8rem);
   color: #fff;
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 2.4vw, 1.95rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
   font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.18;
-  max-width: 26ch;
+  letter-spacing: -0.02em;
+  line-height: 1.14;
 }
 .grovepg-atlas__grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1px;
-  background: rgba(115, 226, 214, 0.16);
-  border: 1px solid rgba(115, 226, 214, 0.16);
-  border-radius: var(--radius-frame);
   overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(115, 226, 214, 0.18);
+  border-radius: var(--radius-frame);
+  background: rgba(115, 226, 214, 0.18);
+}
+.grovepg-atlas__cell {
+  display: flex;
+  min-height: 104px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.3rem 0.75rem;
+  background: #081329;
+  color: #73e2d6;
+  text-align: center;
+}
+.grovepg-atlas__mark {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+.grovepg-atlas__name {
+  color: rgba(233, 242, 250, 0.74);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
 }
 @media (max-width: 900px) {
   .grovepg-atlas__grid {
@@ -200,191 +202,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-.grovepg-atlas__cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.75rem;
-  padding: 1.5rem 0.9rem 1.3rem;
-  background: #081329;
-  color: #73e2d6;
-  text-align: center;
-}
-.grovepg-atlas__mark {
-  width: 30px;
-  height: 30px;
-  flex: none;
-}
-.grovepg-atlas__name {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  line-height: 1.35;
-  color: rgba(233, 242, 250, 0.74);
-}
 
-/* ---------- the frame band: deep teal, the finding workflow ---------- */
-.grovepg-crops {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gutter);
-  margin-top: clamp(2rem, 4vw, 3rem);
-  align-items: start;
-}
-/* A crop: one product object at its own size, in the frame's light palette,
-   with a mono bar naming the object and marking it illustrative. */
-.gcrop {
-  margin: 0;
-  background: var(--gf-bg);
-  color: var(--gf-ink);
-  border: 1px solid var(--gf-rule);
-  border-radius: var(--radius-frame);
-  overflow: hidden;
-  box-shadow: var(--shadow-surface);
-}
-.gcrop__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 1rem;
-  border-bottom: 1px solid var(--gf-rule);
-  background: var(--gf-bg-2);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gf-ink-2);
-}
-.gcrop__body {
-  padding: 0.9rem 1rem 1rem;
-  font-size: 0.82rem;
-}
-.gcrop__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-bottom: 0.7rem;
-}
-.gcrop__chip {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.22rem 0.5rem;
-  border: 1px solid var(--gf-rule);
-  border-radius: 999px;
-  color: var(--gf-ink-3);
-}
-.gcrop__chip--on {
-  border-color: rgba(15, 181, 165, 0.45);
-  background: rgba(15, 181, 165, 0.08);
-  color: var(--gf-teal);
-}
-.gcrop__rows {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.gcrop__rows li {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
-  gap: 0.6rem;
-  align-items: baseline;
-  padding: 0.45rem 0;
-  border-top: 1px solid var(--gf-rule);
-}
-.gcrop__topic {
-  color: var(--gf-ink);
-}
-.gcrop__src {
-  font-size: 0.74rem;
-  color: var(--gf-ink-3);
-}
-.gcrop__impl {
-  margin: 0.8rem 0 0;
-  padding-left: 0.7rem;
-  border-left: 2px solid var(--gf-amber);
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: var(--gf-ink-2);
-}
-.gcrop__impl--ok {
-  border-left-color: var(--gf-teal);
-}
-.gcrop__title {
-  margin: 0 0 0.6rem;
-  font-family: var(--font-display);
-  font-size: 0.98rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.gcrop__rec {
-  display: grid;
-  grid-template-columns: 6.6rem minmax(0, 1fr);
-  gap: 0.3rem 0.7rem;
-  margin: 0;
-  font-size: 0.8rem;
-}
-.gcrop__rec dt {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-  padding-top: 0.18rem;
-}
-.gcrop__rec dd {
-  margin: 0;
-  color: var(--gf-ink-2);
-  line-height: 1.45;
-}
-.gcrop__files {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.gcrop__files li {
-  display: grid;
-  gap: 0.15rem;
-  padding: 0.4rem 0;
-  border-top: 1px solid var(--gf-rule);
-}
-.gcrop__files code {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--gf-ink);
-  overflow-wrap: anywhere;
-}
-.gcrop__files span {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-  white-space: nowrap;
-}
-.gcrop__manifest {
-  margin: 0.7rem 0 0;
-  padding: 0.6rem 0.7rem;
-  border: 1px solid var(--gf-rule);
-  border-radius: var(--radius-control);
-  background: var(--gf-bg-2);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  line-height: 1.5;
-  color: var(--gf-ink-2);
-  overflow-x: auto;
-  white-space: pre;
-}
-@media (max-width: 1000px) {
-  .grovepg-crops {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ---------- license ---------- */
+/* License and product bridge. */
 .grovepg-license {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 1fr);
@@ -396,18 +215,18 @@
   background: var(--surface);
 }
 .grovepg-license h2 {
+  margin: 0.3rem 0 0.8rem;
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.6vw, 2.1rem);
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.15;
-  margin: 0.3rem 0 0.8rem;
 }
 .grovepg-license p {
   margin: 0 0 0.8rem;
+  color: var(--ink-2);
   font-size: 0.98rem;
   line-height: 1.65;
-  color: var(--ink-2);
 }
 .grovepg-price {
   display: flex;
@@ -426,23 +245,46 @@
   font-size: 0.95rem;
 }
 .grovepg-license ul {
-  margin: 0.6rem 0 1.2rem;
-  padding: 0;
-  list-style: none;
   display: grid;
   gap: 0.35rem;
+  list-style: none;
+  margin: 0.6rem 0 1.2rem;
+  padding: 0;
 }
 .grovepg-license li {
-  font-size: 0.92rem;
   color: var(--ink-2);
+  font-size: 0.92rem;
 }
 .grovepg-license li + li {
   padding-top: 0.35rem;
   border-top: 1px solid var(--rule);
 }
 .grovepg-license__note {
-  font-size: 0.84rem !important;
   color: var(--ink-3) !important;
+  font-size: 0.84rem !important;
+}
+.grovepg-license__note--contact {
+  margin-top: 0.9rem !important;
+}
+.grovepg-bridge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-top: 2.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+.grovepg-bridge p {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+.grovepg-bridge strong {
+  color: var(--ink);
 }
 @media (max-width: 900px) {
   .grovepg-license {
@@ -450,32 +292,6 @@
     padding: 1.5rem 1.3rem;
   }
 }
-
-/* ---------- the late bridge ---------- */
-.grovepg-bridge {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  padding: 1.4rem 0 0;
-  border-top: 1px solid var(--rule);
-}
-.grovepg-bridge p {
-  margin: 0;
-  max-width: 60ch;
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: var(--ink-2);
-}
-.grovepg-bridge strong {
-  color: var(--ink);
-}
-
-/* ---------- print ---------- */
-/* The global print sheet turns every dark section white; the hero, the tour
-   band and the atlas set their own dark grounds and light type, so restore
-   ink here or the headings print as white on white. */
 @media print {
   .grovepg-hero,
   .grovetour,
@@ -486,6 +302,7 @@
   .grovepg-hero .meth-hero__title,
   .grovepg-hero .meth-hero__lede,
   .grovetour .tour-row__kicker,
+  .grovepg-atlas .h-kicker,
   .grovepg-atlas__title,
   .grovepg-atlas__cell,
   .grovepg-atlas__name {
@@ -494,66 +311,4 @@
   .grovepg-atlas__cell {
     border-color: var(--rule) !important;
   }
-}
-
-/* The product tour band.
-   ---------------------------------------------------------------------
-   Only what differs from the site's own tour treatment lives here. The rows
-   reuse `.tour-row` and its glass-card-over-bleeding-screenshot composition
-   from tour.css, because that is the established Lumecon product shot and a
-   second implementation of it would drift from the first.
-   What differs is the ground: this band is the deep teal the fabricated
-   evidence frame used to sit on, kept because it separates the product from
-   the pale collection registry below it. On that ground the text card's own
-   light surface still reads, so only the heading colours need saying. */
-.grovetour {
-  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
-  background: linear-gradient(180deg, #073c3b 0%, #052a2c 100%);
-}
-/* No heading over the band. It carried a kicker, a title and a lede saying
-   what the screens below were, and it said it while pointing at three
-   captures that show it: the two compositions here name themselves, PROOF and
-   OUTCOME, and each carries its own sentence. A band heading over two labelled
-   rows is the third time the page introduces the same thing. */
-/* The text card takes the band's own ground, not the page's.
-   `.section--dark` flips --ink to near-white and --ink-2 to pale grey, but it
-   does not touch --surface-glass-strong, which stays the light-mode glass at
-   90 percent white. The card therefore came out pale with white type on it and
-   the heading was invisible. Only the card's ground was wrong, so only the
-   card's ground is set here and the inherited light type does the rest.
-
-   It is a raised panel rather than a tint. The screenshots beside it read as
-   windows, because they have an edge, a ground of their own and a shadow under
-   them; at 82 percent opacity with a 30px-blurred shadow the text sat on the
-   band instead of on top of it, so the row read as one elevated object and one
-   flat one. It is nearly opaque now, on a tighter shadow that resolves close to
-   the edge, which is what actually reads as height. The lit top edge is the
-   same inset highlight the product's own surfaces use. */
-.grovetour .tour-row__text {
-  background: rgba(5, 32, 34, 0.97);
-  border-color: rgba(115, 226, 214, 0.26);
-  box-shadow:
-    inset 0 1px 0 rgba(160, 240, 230, 0.13),
-    0 2px 6px -1px rgba(0, 0, 0, 0.42),
-    0 28px 52px -22px rgba(0, 0, 0, 0.72);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  padding: clamp(1.6rem, 2.6vw, 2.2rem);
-}
-.grovetour .tour-row__kicker {
-  color: #73e2d6;
-}
-
-/* The screenshots are captures of a light-themed product on a dark band, so
-   they need an edge of their own: without one a light capture bleeds into the
-   teal at its corners and reads as a torn-out shape rather than a screen. */
-.grovetour .tour-row__shot {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-  overflow: hidden;
-}
-.grovetour .tour-row__shot img {
-  display: block;
-  width: 100%;
-  height: auto;
 }
