@@ -24,7 +24,6 @@ const shot = (name: string) => {
 
 const heroShot = {
   img: shot('grove-home'),
-  imgDark: shot('grove-home-dark'),
   alt: 'Cedar Grove Home with illustrated analysis purposes arranged in a carousel.',
 };
 
@@ -35,7 +34,6 @@ const tour = [
     title: 'Choose the work. Grove changes with it.',
     body: 'A grant case, benefits report, feasibility analysis, economic impact analysis or evidence exploration starts with its own task menu, evidence lenses and save action, so the workspace stays focused on the work at hand.',
     img: shot('grove-workspace'),
-    imgDark: shot('grove-workspace-dark'),
     alt: 'A Cedar Grove Grant project with a purpose-specific task menu, evidence source shelf, figure and actions to download, inspect or save evidence.',
   },
   {
@@ -44,7 +42,6 @@ const tour = [
     title: 'A figure should not leave its evidence behind.',
     body: 'Download the figure and the rows beneath it, open its evidence record or reproduce it in code. Source, vintage, geography and limitations stay attached.',
     img: shot('grove-outputs'),
-    imgDark: shot('grove-outputs-dark'),
     alt: 'Cedar Grove Outputs showing an evidence figure, provenance and export actions.',
   },
 ];
@@ -123,23 +120,15 @@ const jsonLd = [
         </div>
 
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
-          <picture>
-            <source
-              srcset={heroShot.imgDark}
-              media="(prefers-color-scheme: dark)"
-              width={FRAME.width}
-              height={FRAME.height}
-            />
-            <img
-              src={heroShot.img}
-              alt={heroShot.alt}
-              width={FRAME.width}
-              height={FRAME.height}
-              sizes="(max-width: 980px) 100vw, 58vw"
-              fetchpriority="high"
-              decoding="async"
-            />
-          </picture>
+          <img
+            src={heroShot.img}
+            alt={heroShot.alt}
+            width={FRAME.width}
+            height={FRAME.height}
+            sizes="(max-width: 980px) 100vw, 58vw"
+            fetchpriority="high"
+            decoding="async"
+          />
         </figure>
       </div>
     </header>
@@ -159,23 +148,15 @@ const jsonLd = [
                   class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
                   data-zoom
                 >
-                  <picture>
-                    <source
-                      srcset={row.imgDark}
-                      media="(prefers-color-scheme: dark)"
-                      width={FRAME.width}
-                      height={FRAME.height}
-                    />
-                    <img
-                      src={row.img}
-                      alt={row.alt}
-                      width={FRAME.width}
-                      height={FRAME.height}
-                      sizes="(max-width: 900px) 100vw, 55vw"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </picture>
+                  <img
+                    src={row.img}
+                    alt={row.alt}
+                    width={FRAME.width}
+                    height={FRAME.height}
+                    sizes="(max-width: 900px) 100vw, 55vw"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </figure>
               </article>
             ))
