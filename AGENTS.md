@@ -266,6 +266,28 @@ output is committed. Run them when their inputs change.
   originals named `<slug>_shutterstock_<imageID>_<downloadID>.jpeg`;
   the licensing record is `scripts/naics/LICENSES.md`. Never use the
   NACA proposal photos.
+- Team headshots: `npm run team:headshots -- <dir>` resizes the deck's
+  1200px portrait masters and cuts each to a disc, writing
+  `public/team/<slug>.webp` at 480px. `<dir>` is `public/pitch/team` from
+  the deck branch in the app repository (`claude/pitch-deck-budget-update-838i7g`
+  in teim-app). Those masters are **already** washed in the teal duotone
+  and already evened for exposure by the deck's own
+  `scripts/pitch-portraits.py`, so this script deliberately does not
+  re-wash them; a second ramp on top of the first is the failure mode to
+  avoid. Never re-cut these from a rendered PDF page: a deck page is a
+  flattened raster, and the portraits come out at about a fifth of the
+  resolution the masters have. Who appears, and their education and
+  experience lines, live in `src/data/team.ts`, which stays the single
+  record for the team.
+- Public roster for assistants: `npm run llms:roster` rewrites the
+  `## Team and advisors` block of `public/llms.txt` from the rendered
+  `/team` page (serve the build first, same as `docs:copy`). **Do not
+  hand-edit that block.** It used to be a second hand-written roster and
+  it drifted into a public-record mismatch: it named a person the page
+  does not show and published a fact about tribal membership that
+  appears nowhere a visitor can read. Anything that should be public
+  about a person goes on `/team` first and arrives in llms.txt because
+  it is there.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist

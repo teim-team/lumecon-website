@@ -13,11 +13,15 @@
  * fourteen to find one.
  *
  * Grouping costs height, because the deepest group sets the band, so
- * the groups are balanced to four: Contact lives under Account (the
+ * the groups are kept close to even: Contact lives under Account (the
  * most actionable link, accented), LinkedIn sits in the bottom bar
  * beside the email, and "Privacy choices" stays there too, which is
  * where a preference control belongs anyway. The bottom bar is navy —
  * the one dark strip that actually terminates the document.
+ *
+ * Reference runs to five because /team belongs with the other two
+ * pages that exist to be checked, Methodology and Security, and
+ * nowhere else in this footer. One extra line of band is the price.
  */
 import { site } from '../config';
 
@@ -43,6 +47,7 @@ const GROUPS: {
     label: 'Reference',
     links: [
       { href: '/methodology', text: 'Methodology' },
+      { href: '/team', text: 'Team' },
       { href: '/security', text: 'Security' },
       { href: '/glossary', text: 'Glossary' },
       { href: '/naics', text: 'Industry sectors' },
@@ -71,52 +76,54 @@ const GROUPS: {
 <footer class={isHome ? 'footer footer--home' : 'footer'}>
   <div class="footer-w">
     <nav class="footer-groups" aria-label="Footer">
-      {
-        GROUPS.map((g) => (
-          <div class="footer-group">
-            <p class="footer-group__label">{g.label}</p>
-            <ul class="footer-group__list" role="list">
-              {g.links.map((l) => (
-                <li>
-                  {l.ext ? (
-                    <a href={l.href} target="_blank" rel="noopener noreferrer me">
-                      {l.text}
-                    </a>
-                  ) : (
-                    <a class={l.contact ? 'footer-links__contact' : undefined} href={l.href}>
-                      {l.text}
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
+      {GROUPS.map((g) => (
+        <div class="footer-group">
+          <p class="footer-group__label">{g.label}</p>
+          <ul class="footer-group__list" role="list">
+            {g.links.map((l) => (
+              <li>
+                {l.ext ? (
+                  <a href={l.href} target="_blank" rel="noopener noreferrer me">
+                    {l.text}
+                  </a>
+                ) : (
+                  <a class={l.contact ? 'footer-links__contact' : undefined} href={l.href}>
+                    {l.text}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </nav>
   </div>
 
-  {
-    /* Compact navy strip for copyright + contact email so the
+  {/* Compact navy strip for copyright + contact email so the
        dominant footer surface stays light and the navy footprint
-       shrinks to a single thin bar. */
-  }
+       shrinks to a single thin bar. */}
   <div class="footer-bar">
     <div class="footer-w">
       <div class="footer-bottom">
         <div class="footer-legal">
-          &copy; <span id="copyrightYear">{site.copyrightYear}</span>{' '}{site.legalEntity} &middot;
+          &copy; <span id="copyrightYear">{site.copyrightYear}</span> {site.legalEntity} &middot;
           All rights reserved &middot; Patent pending.
         </div>
         <div class="footer-bottom__right">
-          <button type="button" class="footer-linkbtn" id="privacyChoices">Privacy choices</button>
+          <button type="button" class="footer-linkbtn" id="privacyChoices">
+            Privacy choices
+          </button>
           <a
             href="https://www.linkedin.com/company/lumecon-ai"
             class="footer-linkbtn footer-linkbtn--a"
             target="_blank"
-            rel="noopener noreferrer me">LinkedIn</a
+            rel="noopener noreferrer me"
           >
-          <a href={`mailto:${site.email}`} class="footer-email mono">{site.email}</a>
+            LinkedIn
+          </a>
+          <a href={`mailto:${site.email}`} class="footer-email mono">
+            {site.email}
+          </a>
         </div>
       </div>
     </div>

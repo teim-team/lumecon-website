@@ -1,11 +1,31 @@
 /**
  * Team data — single source of truth for the team.
  *
- * The site no longer renders team pages; this data feeds the founder
- * entries in the homepage JSON-LD and stays the canonical record for
- * bios used off-site (llms.txt, reports). `group` partitions Team vs.
- * Advisors & Contributors. Order within each section is the order
- * listed below.
+ * Feeds /team, the founder entries in the homepage JSON-LD, and the
+ * canonical record for bios used off-site (llms.txt, reports). `group`
+ * partitions Team vs. Advisors. Order within each section is the order
+ * listed below, and it is the pitch deck's team-slide order: the leads
+ * economics-first and the platform last, the advisors Brian, Vod,
+ * Havala. Reorder here, not on the page.
+ *
+ * Two shapes of prose live here and they are not interchangeable. `bio`
+ * is the full paragraph record and is not rendered on /team; that page
+ * runs on `education` and `experience`, which are the short, checkable
+ * lines a reader reads one person at a time. Where a person has one
+ * point of experience on record they get one: padding an entry to match
+ * its neighbour is how a credibility page stops being one.
+ *
+ * `education` is ordered by attainment, highest first — doctorate, then
+ * master's, then bachelor's — so the strongest credential is the first
+ * thing read. It is not chronological.
+ *
+ * public/llms.txt carries the same roster in prose, for crawlers and
+ * assistants. It is GENERATED from the rendered /team page by
+ * `npm run llms:roster` — do not hand-edit that block. It used to be a
+ * second hand-written roster and it drifted: by the time it was caught
+ * it named a person the page does not show and published a fact about
+ * tribal membership that appears nowhere a visitor can read. Anything
+ * that should be public about a person goes on the page first.
  */
 
 export type PersonGroup = 'team' | 'advisor';
@@ -17,7 +37,7 @@ export type PersonGroup = 'team' | 'advisor';
  * year only when the item is a report or still a working paper. Never
  * combine two dates. `authors` lists every author in true published
  * order (comma-separated); the person's own name is bolded at render
- * time, so it must appear verbatim (minus any ", PhD" suffix).
+ * time, so it must appear verbatim.
  */
 export interface Publication {
   title: string;
@@ -34,7 +54,10 @@ export interface Publication {
 export interface Person {
   /** Short stable id (kebab-case). Used for anchor links and React-style keys. */
   slug: string;
-  /** Display name. */
+  /** Display name, with no credential suffix. A degree belongs under
+   *  Education, where every person's is listed the same way; appending
+   *  ", PhD" to three of eight names made the roster look like it ranked
+   *  itself. */
   name: string;
   /** Initials shown in the avatar circle. */
   initials: string;
@@ -45,22 +68,65 @@ export interface Person {
   /** Short summary used for the page meta description and Person
    *  JSON-LD (not rendered as visible copy). */
   summary: string;
-  /** Full bio paragraphs shown on the person's /team/<slug> page. */
+  /** Full bio paragraphs. The canonical prose record; /team does not
+   *  render these (see the file header). */
   bio: string[];
+  /** Duotone headshot under public/team/, written at 480px square by
+   *  scripts/team/headshots.mjs from the deck's portrait masters. One
+   *  size for everyone, so the page declares it rather than carrying a
+   *  per-person number. */
+  photo?: string;
+  /** Shorter label used under the portrait on /team, for the one title
+   *  too long to sit there. Everyone else's role is the same string in
+   *  both places, which is the point: a reader should not have to
+   *  reconcile two names for the same job. */
+  discipline?: string;
+  /** Degrees, highest attainment first. Rendered as a list under
+   *  Education on /team, and the only place a credential appears. */
+  education?: string[];
+  /** Experience, as whole sentences. Rendered as paragraphs under
+   *  Experience on /team — prose, where education is a list, because
+   *  the two are different kinds of claim. */
+  experience?: string[];
+  /** Tribal enrollment, rendered under its own label on /team. It is
+   *  neither a degree nor a post, and filing it under either would
+   *  misstate what it is. It is on the page because it is a material
+   *  fact about a company that works in Indian Country — and because
+   *  llms.txt is generated from the page, stating it here is what makes
+   *  it public rather than a claim only crawlers could read. */
+  tribalAffiliation?: string;
   /** Lumecon work email (firstname.lastname@lumecon.ai). Shown on the
    *  person's /team/<slug> page; advisors don't get one. */
   email?: string;
-  /** Public LinkedIn profile URL. Rendered as an icon link on the
-   *  person's /team/<slug> page and emitted as Person.sameAs. */
+  /** Public LinkedIn profile URL, as supplied by the person. Rendered
+   *  as a link on /team and emitted as Person.sameAs. Absent means the
+   *  person has no profile, not that one has yet to be found: Vod
+   *  Vilfort has none (founder, 2026-09). Never fill this from a search
+   *  result — a wrong profile on a credibility page is worse than no
+   *  profile, and the addresses here are canonical, without the
+   *  `utm_source=share_via` parameters a shared link carries. */
   linkedin?: string;
-  /** Google Scholar profile URL. Rendered as an icon link and
-   *  emitted as Person.sameAs alongside LinkedIn. */
+  /** Google Scholar profile URL, in the canonical `?hl=en&user=` form.
+   *  Rendered as a link and emitted as Person.sameAs alongside
+   *  LinkedIn. Drop any `oi=ao`, which records where a click came
+   *  from and is not part of the address. */
   scholar?: string;
-  /** Whether this person is a co-founder of Lumecon (used for
-   *  Organization.founder JSON-LD). */
+  /** Whether this person is emitted under Organization.founder in the
+   *  homepage JSON-LD. Independent of `title`: schema.org takes more
+   *  than one founder, and what each is called is the title's business.
+   *  Elijah is Founder and CEO; Michael is Founding Investor and appears
+   *  in that structured data only. He is deliberately absent from every
+   *  surface a visitor reads — /team, llms.txt and Cedar's answers —
+   *  which is the founder's decision (2026-09), not an oversight. */
   founder?: boolean;
-  /** Degree-granting institutions, used for Person.alumniOf JSON-LD. */
+  /** Degree-granting institutions only, used for Person.alumniOf
+   *  JSON-LD and for the training shelf on /team. A program hosted at a
+   *  university is not a degree from it: the AEA Summer Training Program
+   *  at Michigan State is in prevAffiliations, not here. */
   alumniOf?: string[];
+  /** Where the person works now besides Lumecon, used for
+   *  Person.worksFor JSON-LD alongside Lumecon itself. */
+  currentAffiliations?: string[];
   /** Previous employers / fellowships / affiliations, used for
    *  Person.affiliation JSON-LD. Improves entity recognition in
    *  search ("Elijah Moreno + Federal Reserve" connects). */
@@ -72,22 +138,38 @@ export interface Person {
 const TEAM: Person[] = [
   {
     slug: 'elijah-moreno',
-    name: 'Elijah Moreno, MPP',
+    name: 'Elijah Moreno',
     initials: 'EM',
     group: 'team',
-    title: 'Co-Founder and CEO',
+    title: 'Founder and CEO',
     email: 'elijah.moreno@lumecon.ai',
+    linkedin: 'https://www.linkedin.com/in/elijahmoreno',
     scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
     founder: true,
-    summary:
-      "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians and the Taylor Policy Group.",
-    bio: [
-      "Elijah Moreno is the co-founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments and institutions.",
-      'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting.',
+    photo: '/team/elijah-moreno.webp',
+    education: [
+      'PhD candidate, Public Policy, Cornell University',
+      'MPP, Cornell University',
+      'BA, Economics, modified with Native American Studies, Dartmouth College',
     ],
-    alumniOf: ['Cornell University', 'Dartmouth College', 'Michigan State University'],
+    experience: [
+      'Eight years producing tribal economic-impact studies and related public-policy research.',
+      'Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis. There he led the construction of the Native Entity Enterprise Dataset, the first comprehensive dataset of Native entity enterprises, and launched and led research on Native federal contracting.',
+      'Research Fellow at the Project on Indigenous Governance and Development at the Harvard Kennedy School, and a co-author of the third edition of Social and Economic Changes in American Indian Reservations.',
+      'Previously a research analyst at the Taylor Policy Group and a Wilma Mankiller Fellow at the National Congress of American Indians.',
+    ],
+    tribalAffiliation:
+      'Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California.',
+    summary:
+      "Founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the Project on Indigenous Governance and Development at the Harvard Kennedy School, the National Congress of American Indians and the Taylor Policy Group. Enrolled member of the Coastal Band of the Chumash Nation.",
+    bio: [
+      "Elijah Moreno is the founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments and institutions.",
+      'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a Research Fellow at the Project on Indigenous Governance and Development at the Harvard Kennedy School, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group. He led the construction of the Native Entity Enterprise Dataset, the first comprehensive dataset of Native entity enterprises, and launched and led research on Native-entity federal contracting.',
+    ],
+    alumniOf: ['Cornell University', 'Dartmouth College'],
     prevAffiliations: [
       'Federal Reserve Bank of Minneapolis (Center for Indian Country Development)',
+      'Project on Indigenous Governance and Development, Harvard Kennedy School',
       'American Economic Association Summer Training Program at Michigan State University',
       'National Congress of American Indians',
       'Taylor Policy Group, Inc.',
@@ -121,39 +203,36 @@ const TEAM: Person[] = [
     name: 'Michael Moreno',
     initials: 'MM',
     group: 'team',
-    title: 'Co-Founder and Founding Investor',
+    title: 'Founding Investor',
+    tribalAffiliation:
+      'Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California.',
     email: 'michael.moreno@lumecon.ai',
     founder: true,
-    summary:
-      'Co-founder and founding investor. His early support moved Lumecon from concept to product, alongside Elijah as enrolled members of the Coastal Band of the Chumash Nation.',
+    summary: 'Founding investor. His early support moved Lumecon from concept to product.',
     bio: [
-      'Michael Moreno is a co-founder and the founding investor of Lumecon. His early support helped launch the company and move it from concept to product.',
+      'Michael Moreno is the founding investor of Lumecon. His early support helped launch the company and move it from concept to product.',
     ],
-  },
-  {
-    slug: 'kaylyn-lee',
-    name: 'Kaylyn Lee',
-    initials: 'KL',
-    group: 'team',
-    title: 'Platform Lead',
-    email: 'kaylyn.lee@lumecon.ai',
-    linkedin: 'https://www.linkedin.com/in/kaylynlee',
-    summary:
-      "Leads development of the Lumecon platform experience. Holds a bachelor's in Computer Science, with a minor in Business, from Cornell University.",
-    bio: [
-      "Kaylyn Lee leads development of the Lumecon platform experience, helping turn the company's economic impact tools into an organized, usable, customer-facing product. She holds a bachelor's degree in Computer Science, with a minor in Business, from Cornell University.",
-    ],
-    alumniOf: ['Cornell University'],
   },
   {
     slug: 'laurel-wheeler',
-    name: 'Laurel Wheeler, PhD',
+    name: 'Laurel Wheeler',
     initials: 'LW',
     group: 'team',
     title: 'Economics Lead',
     email: 'laurel.wheeler@lumecon.ai',
-    linkedin: 'https://ca.linkedin.com/in/laurel-wheeler',
-    scholar: 'https://scholar.google.com/citations?user=oV06J_wAAAAJ&hl=en&oi=ao',
+    linkedin: 'https://www.linkedin.com/in/laurel-wheeler',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ',
+    photo: '/team/laurel-wheeler.webp',
+    education: [
+      'PhD, Economics, Duke University',
+      'MA, Economics, Duke University',
+      'MSc, Economics for Development, University of Oxford',
+      'BA, Political Science, University of Florida',
+    ],
+    experience: [
+      'Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon.',
+      'Previously a tenure-track economics professor at the University of Alberta.',
+    ],
     summary:
       'Leads economic theory and tribal adaptation. PhD in Economics from Duke. Before Lumecon, she was an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).',
     bio: [
@@ -242,9 +321,19 @@ const TEAM: Person[] = [
     name: 'Isabella Agnes',
     initials: 'IA',
     group: 'team',
-    title: 'Input/Output Models Lead',
+    title: 'Input-Output Modeling Lead',
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
+    photo: '/team/isabella-agnes.webp',
+    education: [
+      'Doctoral research in Economics, University of Maryland, College Park',
+      'BS, Mathematics, University of Wisconsin-Madison',
+      'BS, Economics, University of Wisconsin-Madison',
+    ],
+    experience: [
+      'Data scientist at the Library of Congress.',
+      'Her prior work includes economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.',
+    ],
     summary:
       "Leads the multiplier system and input/output models. Holds bachelor's degrees in Mathematics and Economics from Wisconsin-Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
     bio: [
@@ -253,9 +342,11 @@ const TEAM: Person[] = [
     ],
     alumniOf: ['University of Wisconsin-Madison', 'University of Maryland, College Park'],
     prevAffiliations: [
+      'Government of the District of Columbia',
       'Federal Reserve Bank of Philadelphia',
       'Board of Governors of the Federal Reserve System',
     ],
+    currentAffiliations: ['Library of Congress'],
     publications: [
       {
         title: 'Place-Based Labor Market Inequality',
@@ -273,23 +364,59 @@ const TEAM: Person[] = [
     name: 'Francesca Agnes',
     initials: 'FA',
     group: 'team',
-    title: 'Cedar Lead',
+    title: 'Cedar Systems Lead',
     email: 'francesca.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/francesca-agnes-a8106722b',
     scholar: 'https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ',
+    photo: '/team/francesca-agnes.webp',
+    education: ['BS, Biology, University of Illinois Urbana-Champaign'],
+    experience: [
+      'Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.',
+      'Also contributes to Lira, an AI wearable company.',
+    ],
     summary:
       "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Holds a bachelor's in Biology from the University of Illinois Urbana-Champaign.",
     bio: [
       "Francesca Agnes leads development of Cedar, Lumecon's AI-assisted workflow for organizing source records, surfacing assumptions and helping users move from messy data to usable analysis. She holds a bachelor's degree in Biology from the University of Illinois Urbana-Champaign.",
     ],
     alumniOf: ['University of Illinois Urbana-Champaign'],
+    currentAffiliations: ['Lira'],
+  },
+  {
+    slug: 'kaylyn-lee',
+    name: 'Kaylyn Lee',
+    initials: 'KL',
+    group: 'team',
+    title: 'Platform Lead',
+    email: 'kaylyn.lee@lumecon.ai',
+    linkedin: 'https://www.linkedin.com/in/kaylynlee',
+    photo: '/team/kaylyn-lee.webp',
+    education: ['BS, Computer Science, minor in Business, Cornell University'],
+    currentAffiliations: ['Lira'],
+    experience: [
+      'Builds the platform organizations use to scope, run and revisit analyses.',
+      'Also contributes to Lira, an AI wearable company.',
+    ],
+    summary:
+      "Leads development of the Lumecon platform experience. Holds a bachelor's in Computer Science, with a minor in Business, from Cornell University.",
+    bio: [
+      "Kaylyn Lee leads development of the Lumecon platform experience, helping turn the company's economic impact tools into an organized, usable, customer-facing product. She holds a bachelor's degree in Computer Science, with a minor in Business, from Cornell University.",
+    ],
+    alumniOf: ['Cornell University'],
   },
   {
     slug: 'brian-kim',
     name: 'Brian Kim',
     initials: 'BK',
     group: 'advisor',
-    title: 'Technical Advisor',
+    title: 'Engineering Advisor',
+    linkedin: 'https://www.linkedin.com/in/brian-kim-1a543466',
+    photo: '/team/brian-kim.webp',
+    education: ['BA, Economics, Dartmouth College'],
+    experience: [
+      'Founder and CEO of Lira, an AI wearable company.',
+      'Previously a senior software engineer at Modsy and Chime.',
+    ],
     summary:
       "Advises on software architecture, engineering systems and scalability and contributes on Cedar and data security. Holds a bachelor's in Economics from Dartmouth. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
     bio: [
@@ -299,13 +426,58 @@ const TEAM: Person[] = [
     prevAffiliations: ['Modsy', 'Chime'],
   },
   {
+    slug: 'vod-vilfort',
+    name: 'Vod Vilfort',
+    initials: 'VV',
+    group: 'advisor',
+    title: 'Methodology Advisor',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
+    photo: '/team/vod-vilfort.webp',
+    education: [
+      'PhD candidate, Economics, Massachusetts Institute of Technology',
+      'BA, Mathematics and Economics, Yale University',
+    ],
+    experience: [
+      'NSF Graduate Research Fellow.',
+      'His research has appeared in American Economic Review: Insights.',
+    ],
+    summary:
+      "Advises on empirical methodology, econometrics, model design and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
+    bio: [
+      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design and research standards. He holds a bachelor's degree in Mathematics and Economics from Yale University and is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
+    ],
+    alumniOf: ['Yale University', 'Massachusetts Institute of Technology'],
+    publications: [
+      {
+        title: 'Interpreting TSLS Estimators in Information Provision Experiments',
+        authors: 'Vod Vilfort, Whitney Zhang',
+        year: '2025',
+        venue: 'American Economic Review: Insights, 7(3): 376–95',
+        summary:
+          'Formalizes the exclusion and monotonicity conditions under which two-stage least squares recovers a positive-weighted average of causal effects in information-provision experiments, with practical guidance on which estimators researchers can trust.',
+        url: 'https://doi.org/10.1257/aeri.20240353',
+      },
+    ],
+  },
+  {
     slug: 'havala-hanson',
-    name: 'Havala Hanson, PhD',
+    name: 'Havala Hanson',
     initials: 'HH',
     group: 'advisor',
-    title: 'Product, Data Security and Research Operations Advisor',
+    title: 'Data Governance, Security and Research Operations Advisor',
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
-    scholar: 'https://scholar.google.com/citations?user=vETE-QYAAAAJ&hl=en&oi=ao',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=vETE-QYAAAAJ',
+    photo: '/team/havala-hanson.webp',
+    discipline: 'Data Governance Advisor',
+    education: [
+      'PhD, Statistics and Policy in Education, University of Alaska Fairbanks',
+      'MA, Urban Education Policy, Brown University',
+      'BS, Education, University of Wisconsin-Whitewater',
+    ],
+    experience: [
+      'Builds data-governance and privacy practices for sensitive administrative data.',
+      'Supports cross-agency data sharing and research operations.',
+    ],
     summary:
       'Advises on product direction, data governance, privacy and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.',
     bio: [
@@ -359,32 +531,15 @@ const TEAM: Person[] = [
       },
     ],
   },
-  {
-    slug: 'vod-vilfort',
-    name: 'Vod Vilfort',
-    initials: 'VV',
-    group: 'advisor',
-    title: 'Methodology Advisor',
-    scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
-    summary:
-      "Advises on empirical methodology, econometrics, model design and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
-    bio: [
-      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design and research standards. He holds a bachelor's degree in Mathematics and Economics from Yale University and is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
-    ],
-    alumniOf: ['Yale University', 'Massachusetts Institute of Technology'],
-    publications: [
-      {
-        title: 'Interpreting TSLS Estimators in Information Provision Experiments',
-        authors: 'Vod Vilfort, Whitney Zhang',
-        year: '2025',
-        venue: 'American Economic Review: Insights, 7(3): 376–95',
-        summary:
-          'Formalizes the exclusion and monotonicity conditions under which two-stage least squares recovers a positive-weighted average of causal effects in information-provision experiments, with practical guidance on which estimators researchers can trust.',
-        url: 'https://doi.org/10.1257/aeri.20240353',
-      },
-    ],
-  },
 ];
 
-/** Co-founders, used by the homepage Organization.founder JSON-LD. */
+/** Emitted as Organization.founder in the homepage JSON-LD. */
 export const FOUNDERS = TEAM.filter((p) => p.founder);
+
+/** The two sections /team renders, in the order they appear there.
+ *  Michael Moreno is in TEAM and in llms.txt but not here: the page runs
+ *  on a headshot, a degree list and a line of experience, and the record
+ *  holds none of the three for him. An entry with the photograph and both
+ *  columns empty would read as an omission rather than as a person. */
+export const TEAM_ROSTER = TEAM.filter((p) => p.group === 'team' && p.photo);
+export const ADVISOR_ROSTER = TEAM.filter((p) => p.group === 'advisor' && p.photo);

@@ -2977,7 +2977,7 @@ export const INTENTS: CedarIntent[] = [
       'sounds too good',
     ],
     answer:
-      'Fair to ask. Lumecon is a real company building economic impact analysis software, founded by brothers Elijah and Michael Moreno, with a team that has worked across the Federal Reserve system and trained at schools like Cornell, Dartmouth, Oxford and MIT. The math is mainstream economics and the core data is public, so there is no black box and no catch: the product is the software that makes the analysis fast, usable and auditable. Email contact@lumecon.ai with any question and a person will answer.',
+      'Fair to ask. Lumecon is a real company building economic impact analysis software, founded by Elijah Moreno, with a team that has worked across the Federal Reserve system and trained at schools like Cornell, Dartmouth, Oxford and MIT. The math is mainstream economics and the core data is public, so there is no black box and no catch: the product is the software that makes the analysis fast, usable and auditable. Email contact@lumecon.ai with any question and a person will answer.',
   },
   {
     id: 'leadership',
@@ -2998,7 +2998,7 @@ export const INTENTS: CedarIntent[] = [
       'who is the ceo',
     ],
     answer:
-      'Lumecon was founded by brothers Elijah Moreno and Michael Moreno, enrolled members of the Coastal Band of the Chumash Nation. Elijah is the CEO; the broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. Want an introduction to the team? contact@lumecon.ai reaches them directly.',
+      'Lumecon was founded by Elijah Moreno, who is the CEO and an enrolled member of the Coastal Band of the Chumash Nation. The broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. Every one of them is at lumecon.ai/team, with their degrees and where they have worked. Want an introduction? contact@lumecon.ai reaches them directly.',
   },
   {
     id: 'press_media',

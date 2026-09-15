@@ -220,18 +220,32 @@ html.navm-open {
    above it the four destinations and the auth pair sit in the bar, which
    is what every enterprise buyer expects to find and what stops Pricing
    and Methodology from being two clicks behind a button. */
+/* The gaps are fluid, and every label is nowrap.
+   --------------------------------------------------------------------
+   With six destinations the row no longer fits between 1000px — where
+   it replaces the Menu button — and about 1200px. Fixed gaps meant it
+   dealt with that by wrapping "Cedar Impact" and "Request access" onto
+   two lines each, which is the worst of the options available: the bar
+   grew taller and the labels stopped reading as single destinations.
+   Closing the gaps first, and never breaking a label, keeps one line. */
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 1.6rem;
+  gap: clamp(0.85rem, 1.5vw, 1.6rem);
 }
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.7rem;
+  gap: clamp(0.8rem, 1.45vw, 1.7rem);
   list-style: none;
   margin: 0;
   padding: 0;
+}
+.nav-links a,
+.nav-login,
+.nav-signup,
+.nav-brand__desc {
+  white-space: nowrap;
 }
 .nav-links a,
 .nav-login {
