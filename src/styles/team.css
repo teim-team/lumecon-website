@@ -146,12 +146,29 @@
    else; it is the same object as the row, opened. Its own internal
    hairlines carry the density, and this is the one place on the page
    where density is the right answer. */
+/* Every record is stacked in one grid cell, so the surface is always as
+   tall as the longest of them and the band does not resize when the
+   reader picks someone else. Sized to the current record it jumped 276px
+   at 1440 and 478px at 1100 the moment you clicked away from the
+   default, which threw the whole page below it.
+
+   The unpicked records keep the `hidden` attribute and are hidden with
+   `visibility`, not `display`: visibility:hidden is excluded from the
+   accessibility tree and its links are unfocusable, exactly like
+   display:none, but it still occupies its cell, which is the entire
+   point. Do not "simplify" this back to display:none. */
 .roster__panel {
+  display: grid;
   padding: 0 0 0.25rem clamp(1.5rem, 3vw, 2.75rem);
   border-left: 1px solid var(--rule);
 }
+.pcard {
+  grid-area: 1 / 1;
+  align-self: start;
+}
 .pcard[hidden] {
-  display: none;
+  display: block;
+  visibility: hidden;
 }
 .pcard__name {
   font-size: clamp(1.25rem, 1.8vw, 1.55rem);

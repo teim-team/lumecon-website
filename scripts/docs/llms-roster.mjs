@@ -65,7 +65,8 @@ const { groups, people } = await page.evaluate(() => {
           name: text(card.querySelector('.pcard__name')),
           role: text(card.querySelector('.pcard__role')),
           education: Array.from(card.querySelectorAll('.pcard__list li')).map(text),
-          experience: Array.from(card.querySelectorAll('.pcard__prose p')).map(text),
+          experience: Array.from(card.querySelectorAll('[data-field="experience"] p')).map(text),
+          tribal: Array.from(card.querySelectorAll('[data-field="tribal"] p')).map(text),
           links: Array.from(card.querySelectorAll('.pcard__link')).map((a) => a.href),
         },
       ]),
@@ -89,6 +90,7 @@ for (const group of groups) {
       `${person.name}, ${person.role}.`,
       person.education.length ? `Education: ${person.education.join('; ')}.` : '',
       ...person.experience,
+      ...person.tribal,
       // The page renders the address as a mailto: link; the roster wants
       // the address.
       person.links.length ? person.links.map((l) => l.replace(/^mailto:/, '')).join(' · ') : '',

@@ -599,7 +599,7 @@ test('team page picks a person and shows that person', async ({ page }) => {
   const counts = await page.locator('[data-person]').evaluateAll((cards) =>
     cards.map((card) => ({
       edu: card.querySelectorAll('.pcard__list li').length,
-      exp: card.querySelectorAll('.pcard__prose p').length,
+      exp: card.querySelectorAll('[data-field="experience"] p').length,
     })),
   );
   for (const c of counts) {
@@ -655,6 +655,64 @@ test('team page picks a person and shows that person', async ({ page }) => {
     const ranks = list.map(rank);
     expect(ranks, list.join(' | ')).toEqual([...ranks].sort((a, b) => b - a));
   }
+
+  // Tribal enrollment is its own block, never folded into Experience,
+  // and it reaches the structured data as Person.memberOf.
+  await page.locator('[data-face="elijah-moreno"]').click();
+  await expect(page.locator('[data-person="elijah-moreno"] [data-field="tribal"] p')).toHaveText(
+    /Coastal Band of the Chumash Nation, a non-federally recognized tribe in California/,
+  );
+  await expect(page.locator('[data-person="laurel-wheeler"] [data-field="tribal"]')).toHaveCount(0);
+  const memberOf = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) => {
+    const blocks: Record<string, any>[] = nodes.flatMap((n) => {
+      const parsed = JSON.parse(n.textContent || '{}');
+      return Array.isArray(parsed) ? parsed : [parsed];
+    });
+    return blocks
+      .filter((block) => block['@type'] === 'AboutPage')
+      .flatMap((block) =>
+        (block.mainEntity.itemListElement as Record<string, any>[]).map((entry) => entry.item),
+      )
+      .filter((person) => person.memberOf)
+      .map((person) => person.memberOf.name);
+  });
+  expect(memberOf).toEqual(['Coastal Band of the Chumash Nation']);
+
+  // The surface is as tall as the longest record, always: sized to the
+  // current one the band jumped 276px at 1440 and 478px at 1100 the
+  // moment a reader clicked away from the default.
+  const bandHeights: number[] = [];
+  for (const slug of ['elijah-moreno', 'kaylyn-lee', 'brian-kim', 'laurel-wheeler']) {
+    await page.locator(`[data-face="${slug}"]`).click();
+    bandHeights.push(Math.round((await page.locator('.team-band').boundingBox())?.height ?? 0));
+  }
+  expect(new Set(bandHeights).size, bandHeights.join(', ')).toBe(1);
+
+  // That works by stacking the records and hiding all but one with
+  // `visibility`, which keeps them out of the accessibility tree and out
+  // of the tab order exactly as display:none would. Prove the second
+  // part rather than trusting it: no link in a hidden record may take
+  // focus.
+  await page.locator('[data-face="elijah-moreno"]').click();
+  const hiddenLinkStyles = await page
+    .locator('[data-person][hidden] a')
+    .evaluateAll((links) => links.map((a) => getComputedStyle(a).visibility));
+  expect(hiddenLinkStyles.length).toBeGreaterThan(0);
+  expect(hiddenLinkStyles.every((v) => v === 'hidden')).toBe(true);
+  await page.locator('[data-face="havala-hanson"]').focus();
+  const reached: string[] = [];
+  for (let i = 0; i < 6; i++) {
+    await page.keyboard.press('Tab');
+    reached.push(
+      await page.evaluate(() => {
+        const card = (document.activeElement as HTMLElement)?.closest('[data-person]');
+        return card
+          ? `${card.getAttribute('data-person')}:${card.hasAttribute('hidden')}`
+          : 'other';
+      }),
+    );
+  }
+  for (const stop of reached) expect(stop, reached.join(' ')).not.toContain(':true');
 
   // Michigan State hosts the AEA Summer Training Program Elijah attended;
   // it granted him no degree, so it must not reach the training shelf.

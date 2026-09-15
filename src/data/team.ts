@@ -88,6 +88,13 @@ export interface Person {
    *  Experience on /team — prose, where education is a list, because
    *  the two are different kinds of claim. */
   experience?: string[];
+  /** Tribal enrollment, rendered under its own label on /team. It is
+   *  neither a degree nor a post, and filing it under either would
+   *  misstate what it is. It is on the page because it is a material
+   *  fact about a company that works in Indian Country — and because
+   *  llms.txt is generated from the page, stating it here is what makes
+   *  it public rather than a claim only crawlers could read. */
+  tribalAffiliation?: string;
   /** Lumecon work email (firstname.lastname@lumecon.ai). Shown on the
    *  person's /team/<slug> page; advisors don't get one. */
   email?: string;
@@ -145,17 +152,22 @@ const TEAM: Person[] = [
     ],
     experience: [
       'Eight years producing tribal economic-impact studies and related public-policy research.',
-      'Previously a Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis, where he helped build the Native entity enterprise dataset.',
+      'Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis. There he led the construction of the Native Entity Enterprise Dataset, the first comprehensive dataset of Native entity enterprises, and launched and led research on Native federal contracting.',
+      'Research Fellow at the Project on Indigenous Governance and Development at the Harvard Kennedy School, and a co-author of the third edition of Social and Economic Changes in American Indian Reservations.',
+      'Previously a research analyst at the Taylor Policy Group and a Wilma Mankiller Fellow at the National Congress of American Indians.',
     ],
+    tribalAffiliation:
+      'Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California.',
     summary:
-      "Founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians and the Taylor Policy Group.",
+      "Founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the Project on Indigenous Governance and Development at the Harvard Kennedy School, the National Congress of American Indians and the Taylor Policy Group. Enrolled member of the Coastal Band of the Chumash Nation.",
     bio: [
       "Elijah Moreno is the founder and CEO of Lumecon. He holds a bachelor's degree in Economics (modified with Native American Studies, with a minor in Public Policy) from Dartmouth College and a master's in Public Policy from Cornell University and is a PhD candidate in Public Policy at Cornell University, where his research focuses on local economic development, public finance, tribal governments and institutions.",
-      'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group. He has built novel datasets, including the Native Entity Enterprise dataset and conducted extensive research on Native-entity federal contracting.',
+      'Before Lumecon, Elijah was a Senior Research Assistant at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis, a Research Fellow at the Project on Indigenous Governance and Development at the Harvard Kennedy School, a two-time participant in the American Economic Association Summer Training Program at Michigan State University, a Wilma Mankiller Fellow at the National Congress of American Indians and a research analyst at the Taylor Policy Group. He led the construction of the Native Entity Enterprise Dataset, the first comprehensive dataset of Native entity enterprises, and launched and led research on Native-entity federal contracting.',
     ],
     alumniOf: ['Cornell University', 'Dartmouth College'],
     prevAffiliations: [
       'Federal Reserve Bank of Minneapolis (Center for Indian Country Development)',
+      'Project on Indigenous Governance and Development, Harvard Kennedy School',
       'American Economic Association Summer Training Program at Michigan State University',
       'National Congress of American Indians',
       'Taylor Policy Group, Inc.',
@@ -190,6 +202,8 @@ const TEAM: Person[] = [
     initials: 'MM',
     group: 'team',
     title: 'Co-Founder and Founding Investor',
+    tribalAffiliation:
+      'Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California.',
     email: 'michael.moreno@lumecon.ai',
     founder: true,
     summary:

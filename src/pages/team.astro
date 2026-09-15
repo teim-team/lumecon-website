@@ -76,6 +76,9 @@ const personLd = (p: Person) => ({
   ...(p.prevAffiliations?.length
     ? { affiliation: p.prevAffiliations.map((n) => ({ '@type': 'Organization', name: n })) }
     : {}),
+  ...(p.tribalAffiliation
+    ? { memberOf: { '@type': 'Organization', name: 'Coastal Band of the Chumash Nation' } }
+    : {}),
   worksFor: [
     ...(p.group === 'team' ? [{ '@id': `${siteConfig.url}#org` }] : []),
     ...(p.currentAffiliations ?? []).map((n) => ({ '@type': 'Organization', name: n })),
@@ -208,11 +211,25 @@ const GROUPS = [
                     as bullets made the panel one undifferentiated column
                     of fragments. */}
                 <p class="pcard__label">Experience</p>
-                <div class="pcard__prose">
+                {/* data-field, because two blocks on this card are prose
+                    and the generators that read this page have to tell
+                    them apart. */}
+                <div class="pcard__prose" data-field="experience">
                   {p.experience?.map((e) => (
                     <p>{e}</p>
                   ))}
                 </div>
+
+                {/* Its own block, not a line of Experience: enrollment in
+                    a nation is not a post someone held. */}
+                {p.tribalAffiliation && (
+                  <>
+                    <p class="pcard__label">Tribal affiliation</p>
+                    <div class="pcard__prose" data-field="tribal">
+                      <p>{p.tribalAffiliation}</p>
+                    </div>
+                  </>
+                )}
 
                 {(p.email || p.linkedin || p.scholar) && (
                   <p class="pcard__links">

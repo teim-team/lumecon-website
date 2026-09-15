@@ -26,7 +26,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/` | 733 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/pricing` | 1299 | Pricing \| Lumecon | 155 |
 | `/methodology` | 2560 | Methodology \| Lumecon | 167 |
-| `/team` | 282 | Team \| Lumecon | 115 |
+| `/team` | 369 | Team \| Lumecon | 115 |
 | `/cedar` | 468 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-grove` | 1178 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 227 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
@@ -42,7 +42,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **11823** | | |
+| **Total** | **11910** | | |
 
 ## Crawler metadata audit
 
@@ -1106,20 +1106,20 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/team
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, AboutPage, BreadcrumbList
-- **Visible words:** 282
+- **Visible words:** 369
 
 ### Architecture (heading outline)
 
 - **H1** The people behind Lumecon’s models, data and platform.
   - **H2** The people who build Lumecon
     - **H3** Elijah Moreno
-    - **H3** Laurel Wheeler
-    - **H3** Isabella Agnes
-    - **H3** Francesca Agnes
-    - **H3** Kaylyn Lee
-    - **H3** Brian Kim
-    - **H3** Vod Vilfort
-    - **H3** Havala Hanson
+    - **H3** 
+    - **H3** 
+    - **H3** 
+    - **H3** 
+    - **H3** 
+    - **H3** 
+    - **H3** 
   - **H2** Where the team trained
 
 ### Copy, in document order
@@ -1196,7 +1196,15 @@ EXPERIENCE
 
 Eight years producing tribal economic-impact studies and related public-policy research.
 
-Previously a Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis, where he helped build the Native entity enterprise dataset.
+Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis. There he led the construction of the Native Entity Enterprise Dataset, the first comprehensive dataset of Native entity enterprises, and launched and led research on Native federal contracting.
+
+Research Fellow at the Project on Indigenous Governance and Development at the Harvard Kennedy School, and a co-author of the third edition of Social and Economic Changes in American Indian Reservations.
+
+Previously a research analyst at the Taylor Policy Group and a Wilma Mankiller Fellow at the National Congress of American Indians.
+
+TRIBAL AFFILIATION
+
+Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California.
 
 elijah.moreno@lumecon.ai LinkedIn Scholar
 
@@ -1204,142 +1212,43 @@ elijah.moreno@lumecon.ai LinkedIn Scholar
 > _section: `Laurel Wheeler`_
 
 
-**H3: Laurel Wheeler**
-
-**[conditional]** Economics Lead
-
-**[conditional]** Education
-
-- **[conditional]** PhD, Economics, Duke University
-- **[conditional]** MA, Economics, Duke University
-- **[conditional]** MSc, Economics for Development, University of Oxford
-- **[conditional]** BA, Political Science, University of Florida
-**[conditional]** Experience
-
-**[conditional]** Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon.
-
-**[conditional]** Previously a tenure-track economics professor at the University of Alberta.
-
-**[conditional]** laurel.wheeler@lumecon.aiLinkedInScholar
+**H3: **
 
 
 > _section: `Isabella Agnes`_
 
 
-**H3: Isabella Agnes**
-
-**[conditional]** Input-Output Modeling Lead
-
-**[conditional]** Education
-
-- **[conditional]** Doctoral research in Economics, University of Maryland, College Park
-- **[conditional]** BS, Mathematics, University of Wisconsin-Madison
-- **[conditional]** BS, Economics, University of Wisconsin-Madison
-**[conditional]** Experience
-
-**[conditional]** Data scientist at the Library of Congress.
-
-**[conditional]** Her prior work includes economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.
-
-**[conditional]** isabella.agnes@lumecon.aiLinkedIn
+**H3: **
 
 
 > _section: `Francesca Agnes`_
 
 
-**H3: Francesca Agnes**
-
-**[conditional]** Cedar Systems Lead
-
-**[conditional]** Education
-
-- **[conditional]** BS, Biology, University of Illinois Urbana-Champaign
-**[conditional]** Experience
-
-**[conditional]** Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.
-
-**[conditional]** Also contributes to Lira, an AI wearable company.
-
-**[conditional]** francesca.agnes@lumecon.aiLinkedInScholar
+**H3: **
 
 
 > _section: `Kaylyn Lee`_
 
 
-**H3: Kaylyn Lee**
-
-**[conditional]** Platform Lead
-
-**[conditional]** Education
-
-- **[conditional]** BS, Computer Science, minor in Business, Cornell University
-**[conditional]** Experience
-
-**[conditional]** Builds the platform organizations use to scope, run and revisit analyses.
-
-**[conditional]** Also contributes to Lira, an AI wearable company.
-
-**[conditional]** kaylyn.lee@lumecon.aiLinkedIn
+**H3: **
 
 
 > _section: `Brian Kim`_
 
 
-**H3: Brian Kim**
-
-**[conditional]** Engineering Advisor
-
-**[conditional]** Education
-
-- **[conditional]** BA, Economics, Dartmouth College
-**[conditional]** Experience
-
-**[conditional]** Founder and CEO of Lira, an AI wearable company.
-
-**[conditional]** Previously a senior software engineer at Modsy and Chime.
-
-**[conditional]** LinkedIn
+**H3: **
 
 
 > _section: `Vod Vilfort`_
 
 
-**H3: Vod Vilfort**
-
-**[conditional]** Methodology Advisor
-
-**[conditional]** Education
-
-- **[conditional]** PhD candidate, Economics, Massachusetts Institute of Technology
-- **[conditional]** BA, Mathematics and Economics, Yale University
-**[conditional]** Experience
-
-**[conditional]** NSF Graduate Research Fellow.
-
-**[conditional]** His research has appeared in American Economic Review: Insights.
-
-**[conditional]** Scholar
+**H3: **
 
 
 > _section: `Havala Hanson`_
 
 
-**H3: Havala Hanson**
-
-**[conditional]** Data Governance, Security and Research Operations Advisor
-
-**[conditional]** Education
-
-- **[conditional]** PhD, Statistics and Policy in Education, University of Alaska Fairbanks
-- **[conditional]** MA, Urban Education Policy, Brown University
-- **[conditional]** BS, Education, University of Wisconsin-Whitewater
-**[conditional]** Experience
-
-**[conditional]** Builds data-governance and privacy practices for sensitive administrative data.
-
-**[conditional]** Supports cross-agency data sharing and research operations.
-
-**[conditional]** LinkedInScholar
+**H3: **
 
 
 > _section: `team-schools`_
