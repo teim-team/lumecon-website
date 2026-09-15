@@ -1,997 +1,209 @@
-/* /cedar-grove — Cedar Grove by Lumecon.
-   Page-specific pieces on top of the methodology vocabulary. The page shows
-   Grove's own objects in order: the evidence map in the hero, the finding
-   workflow in the teal band, the proof strip with staged product crops, the
-   registry of the twelve collections on deep ink, and the license panel.
-   Every staged object reuses the app's own grammar (mono captions,
-   hairlines, teal for the organization, navy for comparators and proxies,
-   amber for a limit) so the page shows the product rather than a generic
-   data-platform look. */
+/* Cedar Grove product page.
+   The page presents three real frames from the application. The layout is
+   deliberately the same family as Cedar and Cedar Impact: a paired hero, two
+   intentional product moments and a quiet evidence infrastructure reference. */
 
-/* The staged objects keep one light palette whatever section they sit in:
-   they are pictures of the product, the way the homepage's app captures
-   are, so their colours are literal rather than the theme's tokens, which
-   the dark sections flip. */
-.grovepg {
-  --gf-bg: #ffffff;
-  --gf-bg-2: #edf2f4;
-  --gf-ink: #071824;
-  --gf-ink-2: #33434a;
-  --gf-ink-3: #647279;
-  --gf-rule: rgba(10, 28, 52, 0.12);
-  --gf-teal: #0a7f74;
-  --gf-navy: #071824;
-  --gf-amber: #8a5309;
-}
-
-/* ---------- hero: dark navy, map-led ---------- */
 .grovepg-hero {
-  position: relative;
-  /* 13vh of top padding is generous on a tall monitor and expensive on a
-     laptop, where it is the difference between the CTA being visible and not. */
-  padding: clamp(5rem, 9vh, 10rem) 0 clamp(3rem, 6vw, 4.5rem);
-  background:
-    linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
-    linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
+  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
+  background: #071126;
 }
 .grovepg-hero .meth-w {
-  position: relative;
-  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 4.4fr) minmax(28rem, 7.6fr);
-  column-gap: clamp(3rem, 6vw, 6rem);
+  grid-template-columns: minmax(0, 4.5fr) minmax(28rem, 7.5fr);
+  gap: clamp(3rem, 6vw, 6rem);
   align-items: center;
 }
-.grovepg-hero .h-kicker,
-.grovepg-hero .meth-hero__title,
-.grovepg-hero .meth-hero__lede,
-.grovepg-hero .grovepg-cta {
-  grid-column: 1;
-}
-.grovepg-hero .grovepg-cta {
-  margin-bottom: 0;
-}
-.grovepg-hero .gm {
-  grid-column: 2;
-  grid-row: 1 / 5;
+.grovepg-hero__copy {
+  min-width: 0;
 }
 .grovepg-hero .h-kicker,
-.grovepg-hero .meth-hero__title,
-.grovepg-hero .meth-hero__lede {
+.grovepg-hero .meth-hero__title {
   color: #fff;
 }
 .grovepg-hero .h-kicker {
   color: #73e2d6;
 }
 .grovepg-hero .meth-hero__title {
-  max-width: 14ch;
-  font-size: clamp(2.2rem, 3.4vw, 3.3rem);
-  letter-spacing: -0.02em;
-  line-height: 1.06;
+  max-width: 15ch;
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  line-height: 1.02;
 }
 .grovepg-hero .meth-hero__lede {
-  max-width: none;
-  color: rgba(255, 255, 255, 0.82);
+  max-width: 54ch;
+  margin-bottom: 1.6rem;
+  color: rgba(233, 242, 250, 0.82);
 }
 .grovepg-cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 0 0 3rem;
+  gap: 0.75rem;
 }
 .grovepg-hero .btn2--card {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.28);
-  color: #fff;
+  border-color: rgba(115, 226, 214, 0.34);
+  color: #d9f4f0;
+  background: rgba(7, 60, 59, 0.5);
 }
 .grovepg-hero .btn2--card:hover {
-  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(115, 226, 214, 0.64);
+  background: rgba(7, 60, 59, 0.76);
 }
-@media (max-width: 1000px) {
+.grovepg-hero__shot {
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(115, 226, 214, 0.38);
+  border-radius: var(--radius-frame);
+  background: #f8fbfb;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 32px 72px -34px rgba(0, 0, 0, 0.92);
+}
+.grovepg-hero__shot img,
+.grovetour .tour-row__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 980px) {
   .grovepg-hero .meth-w {
     grid-template-columns: 1fr;
   }
-  .grovepg-hero .gm {
-    grid-column: 1;
-    grid-row: auto;
-    margin-top: 2.4rem;
+  .grovepg-hero__shot {
+    margin-top: 0.6rem;
   }
 }
 
-/* ---------- the product frame (shared by the map and the finding frame) ---------- */
-.gf {
-  background: var(--gf-bg);
-  color: var(--gf-ink);
-  border: 1px solid var(--gf-rule);
-  border-radius: var(--radius-frame);
-  box-shadow: 0 30px 70px rgba(5, 17, 30, 0.35);
-  overflow: hidden;
+/* Two product moments, not a gallery. The writing sits on its own raised
+   surface so the screen remains a legible object instead of a flat image
+   beside a paragraph. */
+.grovetour {
+  padding: clamp(3.25rem, 6vw, 4.75rem) 0 clamp(3.75rem, 7vw, 5.75rem);
+  background: #063637;
 }
-.gf__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem 1.2rem;
-  border-bottom: 1px solid var(--gf-rule);
-  background: var(--gf-bg-2);
+.grovetour .tour-row__text {
+  padding: clamp(1.6rem, 2.6vw, 2.2rem);
+  background: #052022;
+  border-color: rgba(115, 226, 214, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(160, 240, 230, 0.13),
+    0 20px 48px -28px rgba(0, 0, 0, 0.76);
 }
-.gf__brand {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.92rem;
-}
-.gf__brand small {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-}
-.gf__note {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-}
-.gf__cap {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--gf-teal);
-  margin: 0 0 0.5rem;
-}
-.gf__status {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-.gf__status--direct,
-.gf__status--org {
-  color: var(--gf-teal);
-}
-.gf__status--proxy,
-.gf__status--missing {
-  color: var(--gf-amber);
-}
-.gf__cite {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  line-height: 1.5;
-}
-
-/* ---------- the evidence map ---------- */
-/* The map above the panel, at every width.
-   Beside the panel the map column measured about 410 pixels at a 1440
-   viewport, so its boundary labels rendered around seven pixels and the
-   composition was cropping the one thing it exists to show. The card itself
-   never exceeds about 900 pixels, so even on a 1680 screen a side-by-side
-   map could not clear 550, and the column it stood in left a third of its
-   height empty. Stacked, the map takes the card's full width and the
-   evidence fields below read across it rather than down a narrow rail. */
-.gm__body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-}
-.gm__map {
-  margin: 0;
-  min-width: 0;
-  padding: 1rem 1rem 0.9rem;
-  /* The map sits above the panel, so its edge is the rule under it. */
-  border-bottom: 1px solid var(--gf-rule);
-  display: flex;
-  flex-direction: column;
-}
-/* The map needs a readable minimum scale, and it now has the card's full
-   width everywhere but a phone. There the canvas scrolls sideways, the same
-   treatment the finding charts get, because a boundary label rendered at
-   five pixels is not a label. The page itself never scrolls sideways. */
-.gm__canvas {
-  min-height: 0;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-}
-.gm__map svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  /* The geometry is generated at 560x420, a ratio of 1.33, so left to itself
-     the map draws almost square and the hero card with it: at the hero
-     column's width that was 792x682 inside a hero 1281px tall, which on a 13"
-     laptop ran off the bottom. A near-square panel is also the wrong shape for
-     this column, which is wide.
-     The box is a 2:1 landscape rectangle now. The drawn geography occupies a
-     landscape strip inside that squarish viewBox, so the default
-     preserveAspectRatio fits the whole map into the wider box and fills it,
-     with only a thin margin above and below. Cropping to fill instead would
-     cut the Ute Mountain parcel off the top and the detached southern parcels
-     off the bottom, which are exactly the parcels the caption is about. */
-  aspect-ratio: 2 / 1;
-  max-height: min(40vh, 340px);
-  border-radius: 4px;
-}
-@media (max-width: 700px) {
-  .gm__map svg {
-    min-width: 32rem;
-  }
-}
-.gm__map text {
-  font-family: var(--font-mono);
-  /* A boundary line running through a label is the one thing that makes a
-     map look unfinished. The halo is painted behind the glyphs, not over
-     them. */
-  paint-order: stroke fill;
-  stroke: #f7f5f0;
-  stroke-width: 3px;
-  stroke-linejoin: round;
-}
-/* The topic in focus keeps its geography at full strength; the others step
-   back rather than disappear, since the map's point is that both kinds of
-   coverage exist at once over the same ground. */
-.gm__proxy,
-.gm__org,
-.gm__trust,
-.gm__counties {
-  transition: opacity 0.25s ease;
-}
-.gm[data-gm-topic='income'] .gm__proxy {
-  opacity: 0.14;
-}
-.gm[data-gm-topic='employment'] .gm__proxy {
-  opacity: 0.85;
-}
-.gm[data-gm-topic='employment'] .gm__org,
-.gm[data-gm-topic='employment'] .gm__trust {
-  opacity: 0.55;
-}
-.gm[data-gm-topic='outcomes'] .gm__proxy {
-  opacity: 0.1;
-}
-.gm[data-gm-topic='outcomes'] .gm__org,
-.gm[data-gm-topic='outcomes'] .gm__trust {
-  opacity: 0.4;
-}
-@media (prefers-reduced-motion: reduce) {
-  .gm__proxy,
-  .gm__org,
-  .gm__trust,
-  .gm__counties {
-    transition: none;
-  }
-}
-.gm__vintage {
-  margin: 0.5rem 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gf-ink-2);
-}
-.gm__legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 1.1rem;
-  margin: 0.8rem 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-}
-.gm__legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.gm__sw {
-  display: inline-block;
-  width: 0.85rem;
-  height: 0.6rem;
-  border: 1px solid #b9c1c6;
-  background: #f7f5f0;
-}
-.gm__sw--org {
-  border-color: var(--gf-teal);
-  border-width: 1.5px;
-}
-.gm__sw--direct {
-  border-color: var(--gf-teal);
-  background: rgba(10, 127, 116, 0.16);
-}
-.gm__sw--proxy {
-  background: repeating-linear-gradient(45deg, rgba(24, 54, 74, 0.3) 0 1px, #f7f5f0 1px 4px);
-}
-/* Solid, because the trust-land path is solid. The dashed key sent readers
-   looking for a dashed edge that is not on the map, which is worse than no
-   key at all for parcels this small. The lighter fill is what tells them
-   apart from the reservation. */
-.gm__sw--trust {
-  border: 1px solid var(--gf-teal);
-  background: rgba(10, 127, 116, 0.12);
-}
-.gm__sw--state {
-  background: #efece5;
-  border-color: #c9cccf;
-}
-.gm__sw--neighbor {
-  background: #e6e2d8;
-  border-color: #a9a294;
-}
-.gm__panel {
-  padding: 1.1rem 1.2rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-/* The panel has the card's full width now, so the three topics read as a
-   row rather than a column of wide, mostly empty buttons. They stay stacked
-   on a phone, where three across would break the labels. */
-.gm__topics {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.25rem;
-}
-@media (min-width: 720px) {
-  .gm__topics {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-}
-.gm__topic {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.5rem 0.7rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-control);
-  background: transparent;
-  color: var(--gf-ink);
-  font: inherit;
-  font-size: 0.88rem;
-  line-height: 1.35;
-  cursor: pointer;
-}
-.gm__topic:hover {
-  background: var(--gf-bg-2);
-}
-.gm__topic[aria-pressed='true'] {
-  border-color: rgba(15, 181, 165, 0.35);
-  background: rgba(15, 181, 165, 0.08);
-  font-weight: 600;
-}
-.gm__topic small {
-  display: block;
-  margin-top: 0.1rem;
-  font-weight: 500;
-}
-.gm__fields {
-  margin: 0.2rem 0 0;
-  padding-top: 0.7rem;
-  border-top: 1px solid var(--gf-rule);
-  display: grid;
-  gap: 0.45rem;
-  font-size: 0.8rem;
-}
-.gm__fields[hidden] {
-  display: none;
-}
-.gm__fields div {
-  display: grid;
-  grid-template-columns: 5.2rem minmax(0, 1fr);
-  gap: 0.5rem;
-  align-items: baseline;
-}
-.gm__fields dt {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-}
-.gm__fields dd {
-  margin: 0;
-  color: var(--gf-ink-2);
-  line-height: 1.45;
-}
-.gm__foot {
-  margin: auto 0 0;
-  padding-top: 0.7rem;
-  border-top: 1px solid var(--gf-rule);
-  font-size: 0.72rem;
-  line-height: 1.5;
-  color: var(--gf-ink-3);
-}
-
-/* ---------- the frame band: deep teal, the finding workflow ---------- */
-.grovepg-frameband {
-  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
-  background: linear-gradient(180deg, #073c3b 0%, #052a2c 100%);
-}
-.grovepg-frameband .h-kicker {
+.grovetour .tour-row__kicker {
   color: #73e2d6;
 }
-.grovepg-frameband__title {
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.15;
-  max-width: 30ch;
-  margin: 0.4rem 0 1.6rem;
+.grovetour .tour-row__shot {
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 22px 48px -28px rgba(0, 0, 0, 0.72);
 }
 
-/* ---------- the evidence frame ----------
-   One product frame: pick a finding, read its coverage status, open the
-   record. It is a staged Grove, not a diagram, and it runs without any
-   library. */
-.gf__body {
-  display: grid;
-  grid-template-columns: minmax(15rem, 1fr) minmax(0, 2.2fr);
-  min-height: 30rem;
+/* A compact specification under the screenshots, not another card deck. */
+.grovepg-prov {
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0 clamp(3rem, 6vw, 4rem);
+  background: var(--surface, #fff);
+  border-bottom: 1px solid var(--rule);
 }
-.gf__side {
-  border-right: 1px solid var(--gf-rule);
-  padding: 1.2rem 1.1rem 1.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.gf__q {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.7rem 0.8rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-control);
-  background: transparent;
-  color: var(--gf-ink);
-  font: inherit;
-  font-size: 0.92rem;
-  line-height: 1.4;
-  cursor: pointer;
-}
-.gf__q:hover {
-  background: var(--gf-bg-2);
-}
-.gf__q[aria-pressed='true'] {
-  border-color: rgba(15, 181, 165, 0.35);
-  background: rgba(15, 181, 165, 0.08);
-  color: var(--gf-teal);
-  font-weight: 600;
-}
-.gf__q small {
-  display: block;
-  margin-top: 0.2rem;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-  font-weight: 500;
-}
-.gf__main {
-  padding: 1.3rem 1.5rem 1.5rem;
-}
-.gf__panel {
-  display: grid;
-  grid-template-rows: auto auto auto auto;
-  gap: 0.9rem;
-}
-.gf__panel[hidden] {
-  display: none;
-}
-.gf__ident {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 1.4rem;
-  margin: 0;
-  font-size: 0.78rem;
-}
-.gf__ident div {
-  display: flex;
-  gap: 0.4rem;
-  align-items: baseline;
-}
-.gf__ident dt {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-}
-.gf__ident dd {
-  margin: 0;
-  color: var(--gf-ink-2);
-}
-.gf__stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: 1.4rem;
-  align-items: start;
-}
-.gf__fig {
-  border: 1px solid var(--gf-rule);
-  border-radius: 10px;
-  background: var(--gf-bg);
-  padding: 0.5rem 0.6rem;
-}
-.gf__fig svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  font-family: var(--font-mono);
-}
-.gf__claim {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
-  font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.012em;
-}
-.gf__impl {
-  margin: 0.8rem 0 0;
-  padding-left: 0.75rem;
-  border-left: 2px solid var(--gf-amber);
-  font-size: 0.86rem;
-  line-height: 1.5;
-  color: var(--gf-ink-2);
-}
-.gf__impl--ok {
-  border-left-color: var(--gf-teal);
-}
-.gf__acts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-.gf__btn {
-  font: inherit;
-  font-size: 0.86rem;
-  font-weight: 600;
-  padding: 0.5rem 0.9rem;
-  border-radius: var(--radius-control);
-  border: 1px solid var(--gf-rule);
-  background: var(--gf-bg);
-  color: var(--gf-ink);
-  cursor: pointer;
-}
-.gf__btn--primary {
-  background: var(--gf-navy);
-  border-color: var(--gf-navy);
-  color: #fff;
-}
-.gf__btn:hover {
-  border-color: var(--gf-teal);
-}
-.gf__record {
-  border-top: 1px solid var(--gf-rule);
-  padding-top: 0.9rem;
-}
-.gf__record[hidden] {
-  display: none;
-}
-.gf__rec {
-  display: grid;
-  grid-template-columns: 9.5rem minmax(0, 1fr);
-  gap: 0.35rem 1rem;
-  margin: 0.5rem 0 0;
-  font-size: 0.82rem;
-}
-.gf__rec dt {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-  padding-top: 0.2rem;
-}
-.gf__rec dd {
-  margin: 0;
-  color: var(--gf-ink-2);
-  line-height: 1.45;
-}
-@media (max-width: 900px) {
-  .gf__body {
-    grid-template-columns: 1fr;
-  }
-  /* A phone reads the figure at its drawn size and scrolls it sideways;
-     shrinking a 640-unit canvas to 340px made every label illegible. */
-  .gf__fig {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .gf__fig svg {
-    min-width: 560px;
-  }
-  .gf__side {
-    border-right: 0;
-    border-bottom: 1px solid var(--gf-rule);
-  }
-  .gf__stage {
-    grid-template-columns: 1fr;
-  }
-  .gf__rec {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ---------- proof: pale paper, the strip and three staged crops ---------- */
-.grovepg-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--gutter);
-  margin: 0.6rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-.grovepg-strip li {
-  padding-top: 1.1rem;
-  border-top: 2px solid var(--navy);
-}
-.grovepg-strip h3 {
-  font-family: var(--font-display);
-  font-size: 1.02rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  margin: 0 0 0.35rem;
-}
-.grovepg-strip p {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: var(--ink-2);
-}
-.grovepg-crops {
+.grovepg-prov__list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gutter);
-  margin-top: clamp(2rem, 4vw, 3rem);
-  align-items: start;
-}
-/* A crop: one product object at its own size, in the frame's light palette,
-   with a mono bar naming the object and marking it illustrative. */
-.gcrop {
-  margin: 0;
-  background: var(--gf-bg);
-  color: var(--gf-ink);
-  border: 1px solid var(--gf-rule);
-  border-radius: var(--radius-frame);
-  overflow: hidden;
-  box-shadow: var(--shadow-surface);
-}
-.gcrop__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 1rem;
-  border-bottom: 1px solid var(--gf-rule);
-  background: var(--gf-bg-2);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gf-ink-2);
-}
-/* The caption sits on --gf-bg-2, where --gf-ink-3 reaches only 4.40:1 and
-   misses the 4.5:1 floor for small text. It takes the bar's own ink. */
-.gcrop__bar small {
-  font-size: 0.58rem;
-  color: var(--gf-ink-2);
-}
-.gcrop__body {
-  padding: 0.9rem 1rem 1rem;
-  font-size: 0.82rem;
-}
-.gcrop__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-bottom: 0.7rem;
-}
-.gcrop__chip {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.22rem 0.5rem;
-  border: 1px solid var(--gf-rule);
-  border-radius: 999px;
-  color: var(--gf-ink-3);
-}
-.gcrop__chip--on {
-  border-color: rgba(15, 181, 165, 0.45);
-  background: rgba(15, 181, 165, 0.08);
-  color: var(--gf-teal);
-}
-.gcrop__rows {
+  gap: clamp(1.4rem, 3vw, 2.4rem) clamp(2rem, 4vw, 3rem);
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.gcrop__rows li {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
-  gap: 0.6rem;
-  align-items: baseline;
-  padding: 0.45rem 0;
-  border-top: 1px solid var(--gf-rule);
-}
-.gcrop__topic {
-  color: var(--gf-ink);
-}
-.gcrop__src {
-  font-size: 0.74rem;
-  color: var(--gf-ink-3);
-}
-.gcrop__impl {
-  margin: 0.8rem 0 0;
-  padding-left: 0.7rem;
-  border-left: 2px solid var(--gf-amber);
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: var(--gf-ink-2);
-}
-.gcrop__impl--ok {
-  border-left-color: var(--gf-teal);
-}
-.gcrop__title {
-  margin: 0 0 0.6rem;
-  font-family: var(--font-display);
-  font-size: 0.98rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.gcrop__rec {
-  display: grid;
-  grid-template-columns: 6.6rem minmax(0, 1fr);
-  gap: 0.3rem 0.7rem;
-  margin: 0;
-  font-size: 0.8rem;
-}
-.gcrop__rec dt {
+.grovepg-prov__term {
+  margin: 0 0 0.35rem;
+  color: var(--teal-ink, #0a7f74);
   font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.13em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--gf-ink-3);
-  padding-top: 0.18rem;
 }
-.gcrop__rec dd {
+.grovepg-prov__gloss {
+  max-width: 34ch;
   margin: 0;
-  color: var(--gf-ink-2);
-  line-height: 1.45;
-}
-.gcrop__files {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.gcrop__files li {
-  display: grid;
-  gap: 0.15rem;
-  padding: 0.4rem 0;
-  border-top: 1px solid var(--gf-rule);
-}
-.gcrop__files code {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--gf-ink);
-  overflow-wrap: anywhere;
-}
-.gcrop__files span {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gf-ink-3);
-  white-space: nowrap;
-}
-.gcrop__manifest {
-  margin: 0.7rem 0 0;
-  padding: 0.6rem 0.7rem;
-  border: 1px solid var(--gf-rule);
-  border-radius: var(--radius-control);
-  background: var(--gf-bg-2);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  line-height: 1.5;
-  color: var(--gf-ink-2);
-  overflow-x: auto;
-  white-space: pre;
-}
-@media (max-width: 1000px) {
-  .grovepg-strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.4rem var(--gutter);
-  }
-  .grovepg-crops {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 600px) {
-  .grovepg-strip {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ---------- the registry: deep ink, the twelve marks ---------- */
-.grovepg-registry {
-  padding: clamp(4rem, 7vw, 6rem) 0;
-  background: #071126;
-  color: #fff;
-}
-.grovepg-registry .h-kicker {
-  color: #73e2d6;
-}
-.grovepg-registry__title {
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.15;
-  max-width: 28ch;
-  margin: 0.4rem 0 0.8rem;
-}
-.grovepg-registry__lede {
-  max-width: var(--measure-deck);
-  margin: 0 0 2rem;
-  font-size: 1.02rem;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.76);
-}
-.creg {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(18rem, 5fr);
-  gap: clamp(1.5rem, 3vw, 3rem);
-  align-items: start;
-}
-/* A contiguous 4 × 3 grid with hairline dividers: one surface, not twelve
-   raised cards. The dividers are drawn by the cells' own edges, so the grid
-   has no gaps to leak the ground through. */
-.creg__grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  border-left: 1px solid rgba(255, 255, 255, 0.16);
-}
-.creg__grid li {
-  border-right: 1px solid rgba(255, 255, 255, 0.16);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-}
-.creg__cell {
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  gap: 0.9rem;
-  width: 100%;
-  min-height: 9.5rem;
-  padding: 0.9rem 1rem 1rem;
-  text-align: left;
-  border: 0;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.86);
-  font: inherit;
-  cursor: pointer;
-  transition:
-    background 0.18s ease,
-    color 0.18s ease;
-}
-.creg__cell:hover,
-.creg__cell:focus-visible {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-}
-.creg__cell:focus-visible {
-  outline: 2px solid #73e2d6;
-  outline-offset: -2px;
-}
-.creg__cell[aria-pressed='true'] {
-  background: rgba(15, 181, 165, 0.12);
-  color: #fff;
-}
-.creg__num {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.13em;
-  color: rgba(255, 255, 255, 0.5);
-}
-.creg__cell[aria-pressed='true'] .creg__num {
-  color: #73e2d6;
-}
-.creg__mark {
-  width: 2rem;
-  height: 2rem;
-  color: #73e2d6;
-}
-.creg__name {
-  align-self: end;
-  font-family: var(--font-display);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-}
-.creg__panel {
-  padding: 1.2rem 1.3rem 1.3rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-frame);
-  background: rgba(255, 255, 255, 0.03);
-  min-height: 100%;
-}
-.creg__detail[hidden] {
-  display: none;
-}
-.creg__cap {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: #73e2d6;
-  margin: 0 0 0.4rem;
-}
-.creg__detail h3 {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: -0.012em;
-  line-height: 1.2;
-  margin: 0 0 0.9rem;
-  color: #fff;
-}
-.creg__detail dl {
-  display: grid;
-  grid-template-columns: 6.4rem minmax(0, 1fr);
-  gap: 0.55rem 0.9rem;
-  margin: 0;
-  font-size: 0.86rem;
-}
-.creg__detail dt {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  padding-top: 0.22rem;
-}
-.creg__detail dd {
-  margin: 0;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--ink-2);
+  font-size: 0.97rem;
+  line-height: 1.55;
 }
 @media (max-width: 900px) {
-  .creg {
-    grid-template-columns: 1fr;
-  }
-  .creg__grid {
+  .grovepg-prov__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .creg__cell {
-    min-height: 7.5rem;
-  }
-  .creg__detail dl {
+}
+@media (max-width: 560px) {
+  .grovepg-prov__list {
     grid-template-columns: 1fr;
-    gap: 0.2rem 0;
-  }
-  .creg__detail dd + dt {
-    margin-top: 0.5rem;
   }
 }
 
-/* ---------- license ---------- */
+/* The collection atlas proves depth without turning the marketing page into a
+   second browse interface. */
+.grovepg-atlas {
+  padding: clamp(3rem, 6vw, 4.5rem) 0;
+  background: #081329;
+}
+.grovepg-atlas .h-kicker {
+  color: #73e2d6;
+}
+.grovepg-atlas__title {
+  max-width: 26ch;
+  margin: 0 0 clamp(2rem, 4vw, 2.8rem);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.14;
+}
+.grovepg-atlas__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(115, 226, 214, 0.18);
+  border-radius: var(--radius-frame);
+  background: rgba(115, 226, 214, 0.18);
+}
+.grovepg-atlas__cell {
+  display: flex;
+  min-height: 104px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.3rem 0.75rem;
+  background: #081329;
+  color: #73e2d6;
+  text-align: center;
+}
+.grovepg-atlas__mark {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+.grovepg-atlas__name {
+  color: rgba(233, 242, 250, 0.74);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+}
+@media (max-width: 900px) {
+  .grovepg-atlas__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .grovepg-atlas__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* License and product bridge. */
 .grovepg-license {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 1fr);
@@ -1003,18 +215,18 @@
   background: var(--surface);
 }
 .grovepg-license h2 {
+  margin: 0.3rem 0 0.8rem;
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.6vw, 2.1rem);
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.15;
-  margin: 0.3rem 0 0.8rem;
 }
 .grovepg-license p {
   margin: 0 0 0.8rem;
+  color: var(--ink-2);
   font-size: 0.98rem;
   line-height: 1.65;
-  color: var(--ink-2);
 }
 .grovepg-price {
   display: flex;
@@ -1033,23 +245,46 @@
   font-size: 0.95rem;
 }
 .grovepg-license ul {
-  margin: 0.6rem 0 1.2rem;
-  padding: 0;
-  list-style: none;
   display: grid;
   gap: 0.35rem;
+  list-style: none;
+  margin: 0.6rem 0 1.2rem;
+  padding: 0;
 }
 .grovepg-license li {
-  font-size: 0.92rem;
   color: var(--ink-2);
+  font-size: 0.92rem;
 }
 .grovepg-license li + li {
   padding-top: 0.35rem;
   border-top: 1px solid var(--rule);
 }
 .grovepg-license__note {
-  font-size: 0.84rem !important;
   color: var(--ink-3) !important;
+  font-size: 0.84rem !important;
+}
+.grovepg-license__note--contact {
+  margin-top: 0.9rem !important;
+}
+.grovepg-bridge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-top: 2.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+.grovepg-bridge p {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+.grovepg-bridge strong {
+  color: var(--ink);
 }
 @media (max-width: 900px) {
   .grovepg-license {
@@ -1057,55 +292,23 @@
     padding: 1.5rem 1.3rem;
   }
 }
-
-/* ---------- the late bridge ---------- */
-.grovepg-bridge {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  padding: 1.4rem 0 0;
-  border-top: 1px solid var(--rule);
-}
-.grovepg-bridge p {
-  margin: 0;
-  max-width: 60ch;
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: var(--ink-2);
-}
-.grovepg-bridge strong {
-  color: var(--ink);
-}
-
-/* ---------- print ---------- */
-/* The global print sheet turns every dark section white; the hero, the
-   frame band and the registry set their own dark grounds and light type,
-   so restore ink here or the headings print as white on white. */
 @media print {
   .grovepg-hero,
-  .grovepg-frameband,
-  .grovepg-registry {
+  .grovetour,
+  .grovepg-atlas {
     background: #fff !important;
   }
   .grovepg-hero .h-kicker,
   .grovepg-hero .meth-hero__title,
   .grovepg-hero .meth-hero__lede,
-  .grovepg-frameband .h-kicker,
-  .grovepg-frameband__title,
-  .grovepg-registry,
-  .grovepg-registry .h-kicker,
-  .grovepg-registry__title,
-  .grovepg-registry__lede,
-  .creg__cell,
-  .creg__detail h3,
-  .creg__detail dd {
+  .grovetour .tour-row__kicker,
+  .grovepg-atlas .h-kicker,
+  .grovepg-atlas__title,
+  .grovepg-atlas__cell,
+  .grovepg-atlas__name {
     color: var(--ink) !important;
   }
-  .creg__grid,
-  .creg__grid li,
-  .creg__panel {
+  .grovepg-atlas__cell {
     border-color: var(--rule) !important;
   }
 }
