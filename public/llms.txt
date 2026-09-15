@@ -51,18 +51,20 @@ Economic impact analysis, input-output modeling, direct effects, indirect effect
 
 Full roster with degrees and prior posts: https://lumecon.ai/team
 
-- Elijah Moreno, Co-Founder and CEO. PhD candidate in Public Policy at Cornell University; A.B. Dartmouth College; M.P.P. Cornell. Previously Senior Research Assistant at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), Wilma Mankiller Fellow at the National Congress of American Indians, research analyst at Taylor Policy Group, Inc. Enrolled member of the Coastal Band of the Chumash Nation.
+Degrees below are listed highest first, matching the site. Profile links are canonical addresses.
+
+- Elijah Moreno, Co-Founder and CEO. PhD candidate in Public Policy (Cornell), M.P.P. (Cornell), A.B. Economics modified with Native American Studies (Dartmouth). Eight years producing tribal economic impact studies. Previously Senior Research Assistant at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), where he built the Native entity enterprise dataset; Wilma Mankiller Fellow at the National Congress of American Indians; research analyst at Taylor Policy Group, Inc. Enrolled member of the Coastal Band of the Chumash Nation. https://www.linkedin.com/in/elijahmoreno · https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ
 - Michael Moreno, Co-Founder and Founding Investor. Enrolled member of the Coastal Band of the Chumash Nation.
-- Laurel Wheeler, Economics Lead. B.A. Political Science (Florida), M.S. Economics for Development (Oxford), M.A. and Ph.D. Economics (Duke). Previously economist at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis).
-- Isabella Agnes, Input/Output Models Lead. B.S. Mathematics and Economics (Wisconsin-Madison), doctoral training in Economics (Maryland). Previously research assistant at the Federal Reserve Bank of Philadelphia and data scientist at the Board of Governors of the Federal Reserve System.
-- Francesca Agnes, Cedar Lead. Biology, University of Illinois Urbana-Champaign.
-- Kaylyn Lee, Platform Lead. B.S. Computer Science with a minor in Business, Cornell University.
+- Laurel Wheeler, Economics Lead. Ph.D. Economics (Duke), M.A. Economics (Duke), M.Sc. Economics for Development (Oxford), B.A. Political Science (Florida). Previously economist at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis) and a tenure-track economics professor at the University of Alberta. https://www.linkedin.com/in/laurel-wheeler · https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ
+- Isabella Agnes, Input/Output Models Lead. Doctoral training in Economics (Maryland), B.S. Mathematics and B.S. Economics (Wisconsin-Madison). Data scientist at the Library of Congress. Previously economic modeling and public-sector data science for the District of Columbia government, data scientist at the Board of Governors of the Federal Reserve System and research assistant at the Federal Reserve Bank of Philadelphia. https://www.linkedin.com/in/maria-isabella-agnes-741569b7
+- Francesca Agnes, Cedar Lead. B.S. Biology (Illinois Urbana-Champaign). Builds the document intake and assumption workflow Cedar runs on. Also builds at Lira, the AI wearable company founded by Brian Kim. https://www.linkedin.com/in/francesca-agnes-a8106722b · https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ
+- Kaylyn Lee, Platform Lead. B.S. Computer Science with a minor in Business (Cornell). Builds the platform customers use. Also builds at Lira, the AI wearable company founded by Brian Kim. https://www.linkedin.com/in/kaylynlee
 
-## Advisors and Contributors
+## Advisors
 
-- Brian Kim, Technical Advisor. Previously senior software engineer at Modsy and Chime.
-- Vod Vilfort, Methodology Advisor. PhD candidate in Economics at MIT, focused on econometrics.
-- Havala Hanson, Product, Data Security and Research Operations Advisor. Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin-Whitewater).
+- Brian Kim, Technical Advisor (engineering). B.A. Economics (Dartmouth). Founder and CEO of Lira, an AI wearable; previously a senior software engineer at Modsy and at Chime. https://www.linkedin.com/in/brian-kim-1a543466
+- Vod Vilfort, Methodology Advisor. PhD candidate in Economics (MIT), focused on econometrics; B.A. Mathematics and Economics (Yale). NSF Graduate Research Fellow, published in American Economic Review: Insights. https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ
+- Havala Hanson, Product, Data Security and Research Operations Advisor (data governance). Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin-Whitewater). Builds data governance and privacy practice for sensitive administrative data, and supports cross-agency data sharing and research operations. https://www.linkedin.com/in/havala-hanson · https://scholar.google.com/citations?hl=en&user=vETE-QYAAAAJ
 
 ## Origin
 

@@ -18,6 +18,10 @@
  * `education` is ordered by attainment, highest first — doctorate, then
  * master's, then bachelor's — so the strongest credential is the first
  * thing read. It is not chronological.
+ *
+ * public/llms.txt carries the same roster in prose, for crawlers and
+ * assistants, and is written by hand rather than generated from here.
+ * It has drifted from this file before. Change both together.
  */
 
 export type PersonGroup = 'team' | 'advisor';
@@ -78,11 +82,18 @@ export interface Person {
   /** Lumecon work email (firstname.lastname@lumecon.ai). Shown on the
    *  person's /team/<slug> page; advisors don't get one. */
   email?: string;
-  /** Public LinkedIn profile URL. Rendered as an icon link on the
-   *  person's /team/<slug> page and emitted as Person.sameAs. */
+  /** Public LinkedIn profile URL, as supplied by the person. Rendered
+   *  as a link on /team and emitted as Person.sameAs. Absent means the
+   *  person has no profile, not that one has yet to be found: Vod
+   *  Vilfort has none (founder, 2026-09). Never fill this from a search
+   *  result — a wrong profile on a credibility page is worse than no
+   *  profile, and the addresses here are canonical, without the
+   *  `utm_source=share_via` parameters a shared link carries. */
   linkedin?: string;
-  /** Google Scholar profile URL. Rendered as an icon link and
-   *  emitted as Person.sameAs alongside LinkedIn. */
+  /** Google Scholar profile URL, in the canonical `?hl=en&user=` form.
+   *  Rendered as a link and emitted as Person.sameAs alongside
+   *  LinkedIn. Drop any `oi=ao`, which records where a click came
+   *  from and is not part of the address. */
   scholar?: string;
   /** Whether this person is a co-founder of Lumecon (used for
    *  Organization.founder JSON-LD). */
@@ -182,8 +193,8 @@ const TEAM: Person[] = [
     title: 'Economics Lead',
     discipline: 'Economics',
     email: 'laurel.wheeler@lumecon.ai',
-    linkedin: 'https://ca.linkedin.com/in/laurel-wheeler',
-    scholar: 'https://scholar.google.com/citations?user=oV06J_wAAAAJ&hl=en&oi=ao',
+    linkedin: 'https://www.linkedin.com/in/laurel-wheeler',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ',
     photo: '/team/laurel-wheeler.webp',
     photoSize: 284,
     education: [
@@ -379,6 +390,7 @@ const TEAM: Person[] = [
     initials: 'BK',
     group: 'advisor',
     title: 'Technical Advisor',
+    linkedin: 'https://www.linkedin.com/in/brian-kim-1a543466',
     photo: '/team/brian-kim.webp',
     photoSize: 144,
     discipline: 'Engineering',
@@ -401,10 +413,6 @@ const TEAM: Person[] = [
     initials: 'VV',
     group: 'advisor',
     title: 'Methodology Advisor',
-    // Unverified: LinkedIn is unreachable from the build environment, so
-    // this is the top result for the exact name on a linkedin.com-scoped
-    // search and a vanity slug that matches it, not a page anyone opened.
-    linkedin: 'https://www.linkedin.com/in/vodvilfort',
     scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
     photo: '/team/vod-vilfort.webp',
     photoSize: 144,
@@ -442,7 +450,7 @@ const TEAM: Person[] = [
     group: 'advisor',
     title: 'Product, Data Security and Research Operations Advisor',
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
-    scholar: 'https://scholar.google.com/citations?user=vETE-QYAAAAJ&hl=en&oi=ao',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=vETE-QYAAAAJ',
     photo: '/team/havala-hanson.webp',
     photoSize: 144,
     discipline: 'Data governance',

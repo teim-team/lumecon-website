@@ -630,4 +630,32 @@ test('team page picks a person and shows that person', async ({ page }) => {
   ).toHaveCount(1);
   await page.locator('[data-face="brian-kim"]').click();
   await expect(page.locator('[data-person="brian-kim"] a[href^="mailto:"]')).toHaveCount(0);
+
+  // Profile links are the founder-supplied addresses. Seven people have
+  // LinkedIn and Vod Vilfort has none, which is a fact about him rather
+  // than a gap to be filled from a search result.
+  const linkedin = await page
+    .locator('[data-person]')
+    .evaluateAll((cards) =>
+      cards.map((card) => [
+        card.getAttribute('data-person'),
+        card.querySelector('a[href*="linkedin.com"]')?.getAttribute('href') ?? null,
+      ]),
+    );
+  expect(Object.fromEntries(linkedin)).toEqual({
+    'elijah-moreno': 'https://www.linkedin.com/in/elijahmoreno',
+    'laurel-wheeler': 'https://www.linkedin.com/in/laurel-wheeler',
+    'isabella-agnes': 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
+    'francesca-agnes': 'https://www.linkedin.com/in/francesca-agnes-a8106722b',
+    'kaylyn-lee': 'https://www.linkedin.com/in/kaylynlee',
+    'brian-kim': 'https://www.linkedin.com/in/brian-kim-1a543466',
+    'vod-vilfort': null,
+    'havala-hanson': 'https://www.linkedin.com/in/havala-hanson',
+  });
+  // A shared LinkedIn URL carries utm_source=share_via; the canonical
+  // address does not, and that is what gets emitted as Person.sameAs.
+  for (const [, href] of linkedin) expect(href ?? '').not.toContain('utm_');
+  await expect(page.locator('[data-person="vod-vilfort"] a[href*="scholar.google"]')).toHaveCount(
+    1,
+  );
 });
