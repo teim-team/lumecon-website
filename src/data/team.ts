@@ -1,11 +1,21 @@
 /**
  * Team data — single source of truth for the team.
  *
- * The site no longer renders team pages; this data feeds the founder
- * entries in the homepage JSON-LD and stays the canonical record for
- * bios used off-site (llms.txt, reports). `group` partitions Team vs.
- * Advisors & Contributors. Order within each section is the order
- * listed below.
+ * Feeds /team, the founder entries in the homepage JSON-LD, and the
+ * canonical record for bios used off-site (llms.txt, reports). `group`
+ * partitions Team vs. Advisors. Order within each section is the order
+ * listed below, and it is the pitch deck's team-slide order: the leads
+ * economics-first and the platform last, the advisors Brian, Vod,
+ * Havala. Reorder here, not on the page.
+ *
+ * Two shapes of prose live here and they are not interchangeable. `bio`
+ * is the full paragraph record and is not rendered on /team; that page
+ * runs on `education` and `experience`, which are the short, checkable
+ * lines a reader scans down a column. Every line in them traces to the
+ * pitch deck's team slide or to `bio` — nothing is written for the page.
+ * Where a person has one point of experience on record they get one:
+ * padding a column to match its neighbour is how a credibility page
+ * stops being one.
  */
 
 export type PersonGroup = 'team' | 'advisor';
@@ -45,8 +55,24 @@ export interface Person {
   /** Short summary used for the page meta description and Person
    *  JSON-LD (not rendered as visible copy). */
   summary: string;
-  /** Full bio paragraphs shown on the person's /team/<slug> page. */
+  /** Full bio paragraphs. The canonical prose record; /team does not
+   *  render these (see the file header). */
   bio: string[];
+  /** Duotone headshot under public/team/, cut from the pitch deck's team
+   *  slide by scripts/team/headshots.mjs. */
+  photo?: string;
+  /** The headshot's intrinsic square size, so the page can declare it and
+   *  reserve the space. The generator writes each crop at its native
+   *  resolution rather than upscaling, so leads and advisors differ. */
+  photoSize?: number;
+  /** Short discipline label used in place of `title` on /team, where the
+   *  advisors' full titles would each repeat the section heading above
+   *  them. `title` stays canonical for JSON-LD and off-site use. */
+  discipline?: string;
+  /** Degrees, earliest first. Rendered as the education column on /team. */
+  education?: string[];
+  /** A couple of checkable points of experience, rendered on /team. */
+  experience?: string[];
   /** Lumecon work email (firstname.lastname@lumecon.ai). Shown on the
    *  person's /team/<slug> page; advisors don't get one. */
   email?: string;
@@ -79,6 +105,17 @@ const TEAM: Person[] = [
     email: 'elijah.moreno@lumecon.ai',
     scholar: 'https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ',
     founder: true,
+    photo: '/team/elijah-moreno.webp',
+    photoSize: 284,
+    education: [
+      'BA Economics, modified with Native American Studies, Dartmouth College',
+      'MPP, Cornell University',
+      'PhD candidate in Public Policy, Cornell University',
+    ],
+    experience: [
+      'Eight years producing tribal economic impact studies.',
+      'Senior Research Assistant at the Center for Indian Country Development, Federal Reserve Bank of Minneapolis, where he built the Native entity enterprise dataset.',
+    ],
     summary:
       "Co-founder and CEO. PhD candidate in Public Policy at Cornell, with a bachelor's from Dartmouth and a master's from Cornell. Before Lumecon, he worked at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development), the National Congress of American Indians and the Taylor Policy Group.",
     bio: [
@@ -131,21 +168,6 @@ const TEAM: Person[] = [
     ],
   },
   {
-    slug: 'kaylyn-lee',
-    name: 'Kaylyn Lee',
-    initials: 'KL',
-    group: 'team',
-    title: 'Platform Lead',
-    email: 'kaylyn.lee@lumecon.ai',
-    linkedin: 'https://www.linkedin.com/in/kaylynlee',
-    summary:
-      "Leads development of the Lumecon platform experience. Holds a bachelor's in Computer Science, with a minor in Business, from Cornell University.",
-    bio: [
-      "Kaylyn Lee leads development of the Lumecon platform experience, helping turn the company's economic impact tools into an organized, usable, customer-facing product. She holds a bachelor's degree in Computer Science, with a minor in Business, from Cornell University.",
-    ],
-    alumniOf: ['Cornell University'],
-  },
-  {
     slug: 'laurel-wheeler',
     name: 'Laurel Wheeler, PhD',
     initials: 'LW',
@@ -154,6 +176,17 @@ const TEAM: Person[] = [
     email: 'laurel.wheeler@lumecon.ai',
     linkedin: 'https://ca.linkedin.com/in/laurel-wheeler',
     scholar: 'https://scholar.google.com/citations?user=oV06J_wAAAAJ&hl=en&oi=ao',
+    photo: '/team/laurel-wheeler.webp',
+    photoSize: 284,
+    education: [
+      'BA Political Science, University of Florida',
+      'MSc Economics for Development, University of Oxford',
+      'MA and PhD Economics, Duke University',
+    ],
+    experience: [
+      'Economist at the Center for Indian Country Development, Federal Reserve Bank of Minneapolis.',
+      'Formerly a tenure-track economics professor at the University of Alberta.',
+    ],
     summary:
       'Leads economic theory and tribal adaptation. PhD in Economics from Duke. Before Lumecon, she was an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).',
     bio: [
@@ -245,6 +278,16 @@ const TEAM: Person[] = [
     title: 'Input/Output Models Lead',
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
+    photo: '/team/isabella-agnes.webp',
+    photoSize: 284,
+    education: [
+      'BS Mathematics and BS Economics, University of Wisconsin-Madison',
+      'Doctoral training in Economics, University of Maryland, College Park',
+    ],
+    experience: [
+      'Economic modeling and public-sector data science for the District of Columbia government.',
+      'Data scientist at the Board of Governors of the Federal Reserve System, and a research assistant at the Federal Reserve Bank of Philadelphia.',
+    ],
     summary:
       "Leads the multiplier system and input/output models. Holds bachelor's degrees in Mathematics and Economics from Wisconsin-Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
     bio: [
@@ -277,6 +320,10 @@ const TEAM: Person[] = [
     email: 'francesca.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/francesca-agnes-a8106722b',
     scholar: 'https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ',
+    photo: '/team/francesca-agnes.webp',
+    photoSize: 284,
+    education: ['BS Biology, University of Illinois Urbana-Champaign'],
+    experience: ['Builds the document intake and assumption workflow Cedar runs on.'],
     summary:
       "Leads Cedar, Lumecon's AI-assisted workflow for organizing source records and surfacing assumptions. Holds a bachelor's in Biology from the University of Illinois Urbana-Champaign.",
     bio: [
@@ -285,11 +332,38 @@ const TEAM: Person[] = [
     alumniOf: ['University of Illinois Urbana-Champaign'],
   },
   {
+    slug: 'kaylyn-lee',
+    name: 'Kaylyn Lee',
+    initials: 'KL',
+    group: 'team',
+    title: 'Platform Lead',
+    email: 'kaylyn.lee@lumecon.ai',
+    linkedin: 'https://www.linkedin.com/in/kaylynlee',
+    photo: '/team/kaylyn-lee.webp',
+    photoSize: 284,
+    education: ['BS Computer Science with a minor in Business, Cornell University'],
+    experience: ['Builds the platform customers use.'],
+    summary:
+      "Leads development of the Lumecon platform experience. Holds a bachelor's in Computer Science, with a minor in Business, from Cornell University.",
+    bio: [
+      "Kaylyn Lee leads development of the Lumecon platform experience, helping turn the company's economic impact tools into an organized, usable, customer-facing product. She holds a bachelor's degree in Computer Science, with a minor in Business, from Cornell University.",
+    ],
+    alumniOf: ['Cornell University'],
+  },
+  {
     slug: 'brian-kim',
     name: 'Brian Kim',
     initials: 'BK',
     group: 'advisor',
     title: 'Technical Advisor',
+    photo: '/team/brian-kim.webp',
+    photoSize: 144,
+    discipline: 'Engineering',
+    education: ['BA Economics, Dartmouth College'],
+    experience: [
+      'Founder and CEO of Lira, an AI wearable.',
+      'Previously a senior software engineer at Modsy and at Chime.',
+    ],
     summary:
       "Advises on software architecture, engineering systems and scalability and contributes on Cedar and data security. Holds a bachelor's in Economics from Dartmouth. Before Lumecon, he was a senior software engineer at Modsy and Chime.",
     bio: [
@@ -299,6 +373,42 @@ const TEAM: Person[] = [
     prevAffiliations: ['Modsy', 'Chime'],
   },
   {
+    slug: 'vod-vilfort',
+    name: 'Vod Vilfort',
+    initials: 'VV',
+    group: 'advisor',
+    title: 'Methodology Advisor',
+    scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
+    photo: '/team/vod-vilfort.webp',
+    photoSize: 144,
+    discipline: 'Methodology',
+    education: [
+      'BA Mathematics and Economics, Yale University',
+      'PhD candidate in Economics, Massachusetts Institute of Technology',
+    ],
+    experience: [
+      'NSF Graduate Research Fellow.',
+      'Published in American Economic Review: Insights.',
+    ],
+    summary:
+      "Advises on empirical methodology, econometrics, model design and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
+    bio: [
+      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design and research standards. He holds a bachelor's degree in Mathematics and Economics from Yale University and is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
+    ],
+    alumniOf: ['Yale University', 'Massachusetts Institute of Technology'],
+    publications: [
+      {
+        title: 'Interpreting TSLS Estimators in Information Provision Experiments',
+        authors: 'Vod Vilfort, Whitney Zhang',
+        year: '2025',
+        venue: 'American Economic Review: Insights, 7(3): 376–95',
+        summary:
+          'Formalizes the exclusion and monotonicity conditions under which two-stage least squares recovers a positive-weighted average of causal effects in information-provision experiments, with practical guidance on which estimators researchers can trust.',
+        url: 'https://doi.org/10.1257/aeri.20240353',
+      },
+    ],
+  },
+  {
     slug: 'havala-hanson',
     name: 'Havala Hanson, PhD',
     initials: 'HH',
@@ -306,6 +416,18 @@ const TEAM: Person[] = [
     title: 'Product, Data Security and Research Operations Advisor',
     linkedin: 'https://www.linkedin.com/in/havala-hanson',
     scholar: 'https://scholar.google.com/citations?user=vETE-QYAAAAJ&hl=en&oi=ao',
+    photo: '/team/havala-hanson.webp',
+    photoSize: 144,
+    discipline: 'Data governance',
+    education: [
+      'BS Education, University of Wisconsin-Whitewater',
+      'MA Urban Education Policy, Brown University',
+      'PhD Statistics and Policy in Education, University of Alaska Fairbanks',
+    ],
+    experience: [
+      'Builds data governance and privacy practice for sensitive administrative data.',
+      'Supports cross-agency data sharing and manages research operations.',
+    ],
     summary:
       'Advises on product direction, data governance, privacy and research operations. PhD in Statistics and Policy in Education from the University of Alaska Fairbanks.',
     bio: [
@@ -359,32 +481,15 @@ const TEAM: Person[] = [
       },
     ],
   },
-  {
-    slug: 'vod-vilfort',
-    name: 'Vod Vilfort',
-    initials: 'VV',
-    group: 'advisor',
-    title: 'Methodology Advisor',
-    scholar: 'https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ',
-    summary:
-      "Advises on empirical methodology, econometrics, model design and research standards. Bachelor's in Mathematics and Economics from Yale and a PhD candidate in Economics at MIT, focused on econometrics.",
-    bio: [
-      "Vod Vilfort advises Lumecon on empirical methodology, econometrics, model design and research standards. He holds a bachelor's degree in Mathematics and Economics from Yale University and is a PhD candidate in Economics at the Massachusetts Institute of Technology, with a focus on econometrics.",
-    ],
-    alumniOf: ['Yale University', 'Massachusetts Institute of Technology'],
-    publications: [
-      {
-        title: 'Interpreting TSLS Estimators in Information Provision Experiments',
-        authors: 'Vod Vilfort, Whitney Zhang',
-        year: '2025',
-        venue: 'American Economic Review: Insights, 7(3): 376–95',
-        summary:
-          'Formalizes the exclusion and monotonicity conditions under which two-stage least squares recovers a positive-weighted average of causal effects in information-provision experiments, with practical guidance on which estimators researchers can trust.',
-        url: 'https://doi.org/10.1257/aeri.20240353',
-      },
-    ],
-  },
 ];
 
 /** Co-founders, used by the homepage Organization.founder JSON-LD. */
 export const FOUNDERS = TEAM.filter((p) => p.founder);
+
+/** The two sections /team renders, in the order they appear there.
+ *  Michael Moreno is in TEAM and in llms.txt but not here: the page runs
+ *  on a headshot, a degree list and a line of experience, and the record
+ *  holds none of the three for him. An entry with the photograph and both
+ *  columns empty would read as an omission rather than as a person. */
+export const TEAM_ROSTER = TEAM.filter((p) => p.group === 'team' && p.photo);
+export const ADVISOR_ROSTER = TEAM.filter((p) => p.group === 'advisor' && p.photo);

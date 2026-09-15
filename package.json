@@ -16,6 +16,7 @@
     "test:smoke": "playwright test",
     "naics:duotone": "node scripts/naics/duotone.mjs scripts/naics/sources",
     "naics:export-app": "node scripts/naics/export-app.mjs",
+    "team:headshots": "node scripts/team/headshots.mjs",
     "shots:examples": "node scripts/screenshots/capture-examples.mjs",
     "docs:copy": "node scripts/docs/export-copy.mjs",
     "docs:questions": "node scripts/docs/methodology-questions.mjs"

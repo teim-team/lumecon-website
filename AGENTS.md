@@ -266,6 +266,16 @@ output is committed. Run them when their inputs change.
   originals named `<slug>_shutterstock_<imageID>_<downloadID>.jpeg`;
   the licensing record is `scripts/naics/LICENSES.md`. Never use the
   NACA proposal photos.
+- Team headshots (duotone): `npm run team:headshots -- <team-slide.jpg>`
+  cuts the eight circular portraits out of the pitch deck's team slide
+  and washes them through the same `WASHES.teal` ramp the sector
+  photography uses, writing `public/team/<slug>.webp`. The slide is
+  exported from the deck at its native raster size (2112x1632) and is
+  deliberately **not** in the repo: the deck is confidential. The crop
+  coordinates in the script were measured off that slide, so re-measure
+  rather than nudge them if the slide is ever re-laid-out. Who appears,
+  and their education and experience lines, live in `src/data/team.ts`,
+  which stays the single record for the team.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist

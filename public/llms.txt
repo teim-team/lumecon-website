@@ -49,18 +49,20 @@ Economic impact analysis, input-output modeling, direct effects, indirect effect
 
 ## Founders and team
 
+Full roster with degrees and prior posts: https://lumecon.ai/team
+
 - Elijah Moreno, Co-Founder and CEO. PhD candidate in Public Policy at Cornell University; A.B. Dartmouth College; M.P.P. Cornell. Previously Senior Research Assistant at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), Wilma Mankiller Fellow at the National Congress of American Indians, research analyst at Taylor Policy Group, Inc. Enrolled member of the Coastal Band of the Chumash Nation.
 - Michael Moreno, Co-Founder and Founding Investor. Enrolled member of the Coastal Band of the Chumash Nation.
-- Kaylyn Lee, Platform Lead. B.S. Computer Science with a minor in Business, Cornell University.
 - Laurel Wheeler, Economics Lead. B.A. Political Science (Florida), M.S. Economics for Development (Oxford), M.A. and Ph.D. Economics (Duke). Previously economist at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis).
 - Isabella Agnes, Input/Output Models Lead. B.S. Mathematics and Economics (Wisconsin-Madison), doctoral training in Economics (Maryland). Previously research assistant at the Federal Reserve Bank of Philadelphia and data scientist at the Board of Governors of the Federal Reserve System.
 - Francesca Agnes, Cedar Lead. Biology, University of Illinois Urbana-Champaign.
+- Kaylyn Lee, Platform Lead. B.S. Computer Science with a minor in Business, Cornell University.
 
 ## Advisors and Contributors
 
 - Brian Kim, Technical Advisor. Previously senior software engineer at Modsy and Chime.
-- Havala Hanson, Product, Data Security and Research Operations Advisor. Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin-Whitewater).
 - Vod Vilfort, Methodology Advisor. PhD candidate in Economics at MIT, focused on econometrics.
+- Havala Hanson, Product, Data Security and Research Operations Advisor. Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin-Whitewater).
 
 ## Origin
 
