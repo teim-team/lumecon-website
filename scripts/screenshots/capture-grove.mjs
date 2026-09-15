@@ -111,6 +111,18 @@ for (const theme of ['light', 'dark']) {
   await context.addInitScript(() => {
     window.__LUMECON_CAPTURE__ = true;
   });
+  // The rail collapses to an icon strip for every shot but Home. It is 264px
+  // expanded and 75px collapsed, and on a marketing page each capture is shown
+  // at about half size, so those 189px are the difference between a readable
+  // shelf and a grey texture. Home keeps the labelled rail because it is the
+  // shot that establishes the five surfaces. "1" is the value the app writes.
+  await context.addInitScript(() => {
+    try {
+      if (!location.pathname.replace(/\/$/, "").endsWith("/grove")) {
+        localStorage.setItem("teim.sidenav.collapsed", "1");
+      }
+    } catch { /* not persisted */ }
+  });
   const PASSTHROUGH = [
     '/account',
     '/auth',

@@ -52,6 +52,7 @@ import '../styles/methodology.css';
 import '../styles/tour.css';
 import '../styles/grove-page.css';
 import GROVE_MAP from '../data/groveMap.generated.json';
+import GROVE_SHOTS from '../data/groveShots.generated.json';
 
 /**
  * The map's subject, and the counties it is drawn with.
@@ -108,15 +109,20 @@ const MAP_SIMPLIFICATION =
 /**
  * The five surfaces, as captured from the running product.
  *
- * The heights are the published files' own, read off the webp rather than
- * typed, because they are the intrinsic ratio the browser reserves space with
- * and a wrong one shifts the page as each image lands. Light and dark differ
- * by a pixel on Library, which is real: the two themes wrap one source line
- * differently.
+ * The intrinsic sizes come from `groveShots.generated.json`, which the optimize
+ * step writes from the files it actually produced. They were typed here, and the
+ * first time the captures changed shape (the rail collapsed for every shot but
+ * Home) all five went stale together, which is a layout shift on every row as
+ * the images land. A number that describes a file belongs with the file.
  *
  * Re-capture with:
  *   node scripts/screenshots/capture-grove.mjs && node scripts/screenshots/optimize-grove.mjs
  */
+const shot = (name: string) => {
+  const size = (GROVE_SHOTS.sizes as Record<string, { width: number; height: number }>)[name];
+  if (!size) throw new Error(`cedar-grove: no captured size for ${name}; re-run optimize-grove.mjs`);
+  return size;
+};
 /**
  * The collection count, spelled, from the list rather than from memory.
  *
@@ -162,9 +168,9 @@ const GROVE_TOUR = [
     body: 'Five purposes, one carousel. Picking one sets the deliverable, the evidence it needs and the questions Grove will ask next, so a project begins as the thing it is for rather than as an empty folder.',
     img: '/app/grove-home.webp',
     imgDark: '/app/grove-home-dark.webp',
-    width: 1920,
-    height: 985,
-    darkHeight: 985,
+    width: shot('grove-home').width,
+    height: shot('grove-home').height,
+    darkHeight: shot('grove-home-dark').height,
     alt: 'Cedar Grove home, asking what are you preparing, with five illustrated purpose plates on an arc. The selected plate reads Grant case or application, one of five, and names what you end up with: a need statement, cited figures and an evidence appendix.',
   },
   {
@@ -174,9 +180,9 @@ const GROVE_TOUR = [
     body: 'A project opens on the outline of its own deliverable, with each section marked by whether the evidence for it is measured here, standing in from a wider geography, or missing.',
     img: '/app/grove-projects.webp',
     imgDark: '/app/grove-projects-dark.webp',
-    width: 1920,
-    height: 737,
-    darkHeight: 737,
+    width: shot('grove-projects').width,
+    height: shot('grove-projects').height,
+    darkHeight: shot('grove-projects-dark').height,
     alt: 'Cedar Grove projects, showing five purpose covers. Each names its deliverable and what it produces, such as a need statement, cited figures and an evidence appendix.',
   },
   {
@@ -186,9 +192,9 @@ const GROVE_TOUR = [
     body: 'Selecting a place or a lens changes the coverage, the records and the figure together. Where a source does not publish your area, Grove names the counties standing in for it rather than quietly widening the geography.',
     img: '/app/grove-explore.webp',
     imgDark: '/app/grove-explore-dark.webp',
-    width: 1920,
-    height: 1684,
-    darkHeight: 1684,
+    width: shot('grove-explore').width,
+    height: shot('grove-explore').height,
+    darkHeight: shot('grove-explore-dark').height,
     alt: 'Cedar Grove explore, with a map of the Ponca OTSA outlined against Noble, Kay and Osage counties, a coverage breakdown reading four direct, two organization data, two county proxy, one partial and one missing, and a per capita income figure below it.',
   },
   {
@@ -198,9 +204,9 @@ const GROVE_TOUR = [
     body: 'One shelf per question, not one list per file type. Each shelf shows how far its data reaches this particular place, and each source says who publishes it and whether this geography is published directly.',
     img: '/app/grove-library.webp',
     imgDark: '/app/grove-library-dark.webp',
-    width: 1920,
-    height: 1033,
-    darkHeight: 1032,
+    width: shot('grove-library').width,
+    height: shot('grove-library').height,
+    darkHeight: shot('grove-library-dark').height,
     alt: 'Cedar Grove library, with shelves headed by questions such as who lives here and how are they doing, each showing a reach bar and the sources under it.',
   },
   {
@@ -210,9 +216,9 @@ const GROVE_TOUR = [
     body: 'One figure, one claim, the provenance line under it and the export beside it. Each figure states its measure, universe, geography, period and source on its own face, so it stays readable once it has left the product.',
     img: '/app/grove-outputs.webp',
     imgDark: '/app/grove-outputs-dark.webp',
-    width: 1920,
-    height: 1366,
-    darkHeight: 1366,
+    width: shot('grove-outputs').width,
+    height: shot('grove-outputs').height,
+    darkHeight: shot('grove-outputs-dark').height,
     alt: 'Cedar Grove outputs, with a population figure above the claim that the resident AIAN population is estimated to have grown 6 percent since 2010, its provenance line, and export controls.',
   },
 ];

@@ -1135,11 +1135,25 @@
    does not touch --surface-glass-strong, which stays the light-mode glass at
    90 percent white. The card therefore came out pale with white type on it and
    the heading was invisible. Only the card's ground was wrong, so only the
-   card's ground is set here and the inherited light type does the rest. */
+   card's ground is set here and the inherited light type does the rest.
+
+   It is a raised panel rather than a tint. The screenshots beside it read as
+   windows, because they have an edge, a ground of their own and a shadow under
+   them; at 82 percent opacity with a 30px-blurred shadow the text sat on the
+   band instead of on top of it, so the row read as one elevated object and one
+   flat one. It is nearly opaque now, on a tighter shadow that resolves close to
+   the edge, which is what actually reads as height. The lit top edge is the
+   same inset highlight the product's own surfaces use. */
 .grovetour .tour-row__text {
-  background: rgba(6, 38, 40, 0.82);
-  border-color: rgba(115, 226, 214, 0.22);
-  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.75);
+  background: rgba(5, 32, 34, 0.97);
+  border-color: rgba(115, 226, 214, 0.26);
+  box-shadow:
+    inset 0 1px 0 rgba(160, 240, 230, 0.13),
+    0 2px 6px -1px rgba(0, 0, 0, 0.42),
+    0 28px 52px -22px rgba(0, 0, 0, 0.72);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: clamp(1.6rem, 2.6vw, 2.2rem);
 }
 .grovetour .tour-row__kicker {
   color: #73e2d6;
