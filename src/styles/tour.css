@@ -181,9 +181,11 @@
   background: var(--white);
   box-shadow: var(--shadow-frame);
 }
-/* Marketing captures now stop on complete interface boundaries. Preserve the
-   image's authored ratio instead of cropping through a map, project card or
-   control. Cedar's workflow captures keep their 16:9 rule in cedar-page.css. */
+/* The capture's own ratio, never a crop. Every marketing capture on this site
+   is authored at 1920x1080 by the script that takes it, so this resolves to
+   16:9 on every row; it stays `auto` because the ratio belongs to the file,
+   and a rule here would crop through a map or a control the day one changed.
+   Cedar's workflow captures state the same 16:9 in cedar-page.css. */
 .tour-row__shot img {
   display: block;
   width: 100%;

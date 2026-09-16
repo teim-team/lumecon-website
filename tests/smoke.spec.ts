@@ -520,7 +520,65 @@ test('privacy policy discloses Cedar topic memory', async ({ page }) => {
   await expect(page.locator('main')).toContainText('local storage for up to 30 days');
 });
 
-for (const route of ['/methodology', '/cedar']) {
+test('cedar grove shows three captures of the product, in one frame, per theme', async ({
+  page,
+}) => {
+  await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('defensible case');
+
+  // Three compositions: the Home carousel in the hero, then two tour rows.
+  // Four would mean the page had drifted back into being a tour of the
+  // navigation, which is what it was cut down from.
+  await expect(page.locator('.grovepg-hero__shot img')).toHaveCount(1);
+  await expect(page.locator('.grovetour .tour-row__shot img')).toHaveCount(2);
+
+  // Every capture is offered in both themes. The capture step shoots each
+  // surface twice; the dark halves used to ship in public/app unreferenced,
+  // which left a sheet of white product on a page that had gone dark.
+  const sources = page.locator('.grovepg-hero__shot source, .grovetour .tour-row__shot source');
+  await expect(sources).toHaveCount(3);
+  for (const attr of await sources.evaluateAll((nodes) =>
+    nodes.map((node) => ({
+      media: node.getAttribute('media'),
+      srcset: node.getAttribute('srcset'),
+    })),
+  )) {
+    expect(attr.media).toBe('(prefers-color-scheme: dark)');
+    expect(attr.srcset).toMatch(/-dark\.webp$/);
+  }
+
+  // One frame, stated by the file rather than typed into the page: every
+  // capture declares the same intrinsic box, so no row shifts as it lands.
+  const boxes = await page
+    .locator(
+      '.grovepg-hero__shot img, .grovetour .tour-row__shot img, .grovepg-hero__shot source, .grovetour .tour-row__shot source',
+    )
+    .evaluateAll((nodes) =>
+      nodes.map((node) => `${node.getAttribute('width')}x${node.getAttribute('height')}`),
+    );
+  expect(new Set(boxes)).toEqual(new Set(['1920x1080']));
+});
+
+test('cedar grove never names a real place beside a fixture', async ({ page }) => {
+  // The captures on this page are of a demonstration workspace that does not
+  // exist, and the numbers in them are fixtures. An earlier pass photographed
+  // the Ponca OTSA and the three Oklahoma counties it sits across, which put
+  // real nations and real places under invented figures on a public marketing
+  // page. The capture step guards this at source; this guards the published
+  // HTML, including the alt text, which no capture-time check can see.
+  await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
+  const text = [
+    await page.locator('main').innerText(),
+    ...(await page
+      .locator('main img')
+      .evaluateAll((nodes) => nodes.map((node) => node.getAttribute('alt') ?? ''))),
+  ].join('\n');
+  for (const place of ['Ponca', 'Noble', 'Kay County', 'Osage', 'Oklahoma', 'Navajo']) {
+    expect(text, `${place} appears beside demonstration figures`).not.toContain(place);
+  }
+});
+
+for (const route of ['/methodology', '/cedar', '/cedar-grove']) {
   test(`${route} dark sections retain readable text when printing without backgrounds`, async ({
     page,
   }) => {
