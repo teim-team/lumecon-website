@@ -4,7 +4,7 @@ A reference for the look, feel, and voice of the Lumecon surfaces.
 
 > **This file is a summary, not the source of truth.** Every value here is
 > transcribed from a stylesheet that ships. When the two disagree, the
-> stylesheet is right and this file is stale — fix it here rather than working
+> stylesheet is right and this file is stale. Fix it here rather than working
 > around it.
 >
 > | Surface                      | Source of truth                                  |
@@ -71,14 +71,14 @@ above. New work names the material it needs instead.
 | `--rule`        | `rgba(10, 28, 52, 0.1)` | Hairline dividers, card borders   |
 | `--rule-strong` | `rgba(10, 28, 52, 0.2)` | Stronger borders, ghost outlines  |
 
-### Accent — **teal**
+### Accent: **teal**
 
 Teal is the working UI accent: eyebrows, numbers, focus rings, hovers,
 dividers, icon highlights, links.
 
 | Token           | Hex       | Use                                                  |
 | --------------- | --------- | ---------------------------------------------------- |
-| `--accent`      | `#0FB5A5` | The bright brand step — fills and rules, not text     |
+| `--accent`      | `#0FB5A5` | The bright brand step. Fills and rules, not text      |
 | `--accent-light`| `#5FD9CC` | Hover / light fills; teal text in dark mode           |
 | `--accent-bar`  | `#B8EDE6` | Soft highlight fill, link underline                   |
 | `--accent-deep` | `#0A8A7E` | Button hover                                          |
@@ -90,25 +90,25 @@ dividers, icon highlights, links.
 > white text on top is `--accent-chip`. In dark mode `--accent-text` flips to
 > `--accent-light`.
 
-### Brand gold — **reserved, and not a data color either**
+### Brand gold: **reserved, and not a data color either**
 
 | Token          | Hex       | Use                                  |
 | -------------- | --------- | ------------------------------------ |
 | `--gold`       | `#F0A91A` | The wordmark and the word _luminate_ |
 | `--gold-light` | `#FFD24B` | Glow / emphasis                      |
 
-> **Gold is brand-only.** Not buttons, not links, not generic UI — and **not
+> **Gold is brand-only.** Not buttons, not links, not generic UI, and **not
 > charts**. `teim-app`'s token file is explicit: _"Gold is brand-only (the
 > wordmark + the italic word *luminate*); it must never appear in UI chrome.
 > Amber is the AA-safe DATA color (charts, deltas), never gold."_ The two were
 > once conflated under a single `--amber: #F0A91A`; they are now separate and
 > must stay separate.
 
-### Amber — the data color
+### Amber: the data color
 
 | Token     | Hex       | Use                                          |
 | --------- | --------- | -------------------------------------------- |
-| `--amber` | `#C77A18` | **Data visualization only** — chart series, deltas |
+| `--amber` | `#C77A18` | **Data visualization only.** Chart series, deltas  |
 
 The marketing site carries the same hue as `--map-tribal` (`#C77A18`, deep
 `#7A4708`) in the map palette. It is one color with one job: the warm
@@ -128,7 +128,7 @@ text, so text uses `--cedar-text`.
 
 ### Supporting
 
-- **Terra (coral)** `--terra` `#E04A2A` — used sparingly. Kept out of the map
+- **Terra (coral)** `--terra` `#E04A2A`, used sparingly. Kept out of the map
   palette, where it fights both the gold source and the teal spillover.
 - **Map palette:** source region = gold; tribal / reservation layer = amber-gold
   `#C77A18` (deep `#7A4708`); spillover = teal. Warm focal point, cool spillover.
@@ -195,7 +195,7 @@ second headline.
 ### Serif
 
 `--font-serif` on the marketing site resolves to `Georgia, 'Times New Roman',
-serif` — **no third webfont ships there**. `teim-app` does self-host Spectral
+serif`, and **no third webfont ships there**. `teim-app` does self-host Spectral
 italic 500, used only for the word _luminate_. See §11.
 
 ---
@@ -206,8 +206,8 @@ A standalone heading is a mono kicker above a bare Inter headline, with the
 section opening on its own hairline rule. Nothing sits behind the type.
 
 > **The marker-highlight device is retired.** Earlier versions of this guide
-> described a hand-drawn marker rectangle — sharp-cornered, gradient-smeared,
-> rotated a degree or two, wiping in on scroll — behind standalone headlines.
+> described a hand-drawn marker rectangle behind standalone headlines:
+> sharp-cornered, gradient-smeared, rotated a degree or two, wiping in on scroll.
 > **The site no longer ships it.** There is no such rule anywhere in
 > `src/styles/`, and `legal.css`, the closest thing the site has to a document
 > page, sets a bare h1 under a kicker. `--accent-bar` survives only as a 1px
@@ -228,19 +228,28 @@ What separates sections now:
 ## 5. Shape & layout language
 
 - **Hairline separation.** Sections divide with 1px rules, not color blocks.
+- **A row of things is divided, not boxed.** This is the rule most often got
+  wrong. `.whyw-card` carries no border, no background, no radius and no
+  shadow; siblings are separated by a single `border-left: 1px solid var(--rule)`
+  and `.edge-row` by a single `border-bottom`. The comment in `home.css` is the
+  reason: _"a rule beside each one boxed them in. Column gap does the
+  separating instead."_ Giving every tile in a KPI row its own bordered,
+  rounded container is the generic-dashboard look, and it is not this brand.
+  Box something only when it is the one element on the page that must interrupt
+  the reader.
 - **Container:** max-width `1440px` (`--container-max`); horizontal padding
   `clamp(1.5rem, 4vw, 3rem)`. A section header block caps at `1180px`
   (`--head-max`) so a heading does not stop short of the content it introduces.
 - **Reading measures:** `--measure-deck` `82ch`, `--measure-prose` `68ch`,
-  `--measure-lede` `min(75%, 62rem)`. Read them from the tokens — `ch` resolves
+  `--measure-lede` `min(75%, 62rem)`. Read them from the tokens, because `ch` resolves
   against each element's own font size, so one number gives different widths on
   a deck and a headline.
-- **Radii** — three, and only three:
+- **Radii.** Three, and only three:
 
   | Token              | Value  | Use                                       |
   | ------------------ | ------ | ----------------------------------------- |
   | `--radius-control` | `8px`  | Buttons, small controls, callouts          |
-  | `--radius-frame`   | `14px` | Cards, tiles, tables, panels — the default |
+  | `--radius-frame`   | `14px` | Cards, tiles, tables, panels. The default  |
   | `--radius-panel`   | `20px` | Large panels                               |
 
   The app names the same values `--radius-field` (12px, dense inputs),
@@ -249,7 +258,7 @@ What separates sections now:
 - **Elevation:** a hairline does most of the work; the shadow only separates a
   frame from the page. `--lift` is `-3px` and `--lift-shadow` /
   `--shadow-frame` / `--shadow-control` are the whole vocabulary. **Shadows are
-  neutral, never tinted** — a shadow is the absence of light, so it takes the
+  neutral, never tinted**, because a shadow is the absence of light and takes the
   color of the surface it falls on. A teal shadow under a teal object reads as
   backlit plastic.
 - **Left accent bars:** a filled `--surface-2` panel with a hairline all round
@@ -277,7 +286,7 @@ Charts are the one place a second hue is required, and the rules are narrow.
 - A teal **fill** needs more chroma than teal **text**: `--accent-text`
   `#0A7F74` reads gray as a large fill. Step it up for marks.
 - **One axis.** Never two y-scales on one chart. Two measures of different
-  scale become two charts side by side — and the caption must say the scales
+  scale become two charts side by side, and the caption must say the scales
   differ, or a reader will compare the heights anyway.
 - **Sequential for magnitude** (one hue, light→dark), **categorical for
   identity**, **diverging for polarity** (two hues, neutral gray midpoint).
@@ -306,7 +315,7 @@ Charts are the one place a second hue is required, and the rules are narrow.
 ## 9. Logo & wordmark
 
 - Wordmark **LUMECON** (Inter, bold, tracked-out) paired with a **cedar tree mark**.
-- The word **"luminate"** in the tagline gets the gold italic treatment — the
+- The word **"luminate"** in the tagline gets the gold italic treatment, the
   one place gold leads.
 - OG / link-preview image uses a **pure white** background to match the logo's
   white square.
@@ -329,6 +338,32 @@ Charts are the one place a second hue is required, and the rules are narrow.
 - Inclusive and community-centered, especially toward tribal nations and
   mission-driven organizations.
 
+### House style
+
+Small mechanical rules. They exist because copy that breaks them reads as
+generated rather than written, and that is the opposite of what the brand is
+selling.
+
+- **American spelling.** Color, not colour. Analyze, organize, summarize,
+  labeled, center. This includes CSS comments, variable names and commit
+  messages. (`prefers-color-scheme` is a CSS property name, so "colour" there
+  is not a style preference, it is a bug.)
+- **Avoid the em dash.** The dropped-in em-dash aside is the single loudest
+  tell in machine-written prose. Use a comma, a colon, a period, or restructure
+  the sentence. An en dash in a numeric or date range (February–August) is
+  correct and stays. A dash as a nil marker in a table column is fine.
+- **Write full sentences.** No dramatic fragments, no one-word sentences for
+  emphasis. Compare the site's own copy: "Cedar organizes documents, proposes
+  mappings and flags unresolved questions before values enter the model."
+  Headings may be noun phrases; body copy may not.
+- **No Oxford comma**, matching the site: "governments, universities,
+  nonprofits, businesses, Tribal Nations and client work."
+- **Label, don't editorialize.** A mono kicker is a noun phrase naming what
+  follows ("Every geography", "Funding and cash"), never an instruction to the
+  reader ("Read this carefully") or a rhetorical question.
+- **Don't stack rule-of-three constructions.** One is rhetoric; three in a row
+  is a tic.
+
 ---
 
 ## 11. Known divergences
@@ -345,7 +380,7 @@ The app's ink scale and rule color are the older values the marketing site has
 since moved off. Treat the site's as the direction of travel.
 
 `BrandWordmark.astro` states that _luminate_ renders in "Spectral italic,
-already in the font stack." On lumecon.ai it does not — no Spectral face ships
+already in the font stack." On lumecon.ai it does not, because no Spectral face ships
 there, so it falls back to Georgia italic. Either ship the face or change the
 comment; do not assume the deck and the site render the tagline the same way.
 
@@ -365,7 +400,7 @@ comment; do not assume the deck and the site render the tagline the same way.
 
 **Don't**
 
-- Don't use gold as a generic accent — **or as a chart color**.
+- Don't use gold as a generic accent, **or as a chart color**.
 - Don't put a marker highlight behind a headline. It is retired (§4).
 - Don't use `--accent` for text, or `--cedar` for body text; both fail AA.
 - Don't tint a shadow.

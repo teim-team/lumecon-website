@@ -316,7 +316,7 @@ Weights: `--weight-regular 400` · `--weight-medium 500` · `--weight-semi 600`
 ### Color scheme
 
 Cool, modern palette: near-white surfaces with a **teal** UI accent, **gold**
-reserved for the brand wordmark, and **amber** as the one data colour.
+reserved for the brand wordmark, and **amber** as the one data color.
 
 The page ground is not pure white. It sits two cool steps off, so a genuinely
 white surface can rise off it without every card proving its depth with a heavy
@@ -333,14 +333,14 @@ shadow.
 | `--ink-2`                  | `#33434A`                    | body text                                                               |
 | `--ink-3`                  | `#647279`                    | muted text, captions                                                    |
 | `--ink-4`                  | `#93A0A5`                    | faintest text, dots, ticks                                              |
-| `--accent`                 | `#0FB5A5`                    | **teal accent** — fills, rules, focus rings (2.6:1 on white: not text)  |
-| `--accent-text`            | `#0A7F74`                    | **teal text, links** — 4.88:1 on white (AA)                            |
+| `--accent`                 | `#0FB5A5`                    | **teal accent.** Fills, rules, focus rings (2.6:1 on white, so not text) |
+| `--accent-text`            | `#0A7F74`                    | **teal text and links.** 4.88:1 on white (AA)                           |
 | `--accent-chip`            | `#0A7F74`                    | surfaces carrying white text (chips / bubbles / send)                   |
 | `--accent-deep`            | `#0A8A7E`                    | button hover                                                            |
 | `--accent-light` / `--accent-bar` | `#5FD9CC` / `#B8EDE6` | teal tints; `--accent-bar` is the 1px link underline                    |
-| `--gold`                   | `#F0A91A`                    | **wordmark and "luminate" only — not UI, not charts**                   |
-| `--cedar` / `--cedar-text` | `#0E8B4F` / `#0B5E36`        | Cedar AI fills / cedar-green **text** (`--cedar` fails AA for body)     |
-| `--map-tribal`             | `#C77A18`                    | map tribal-lands layer — the same hue as the product's `--amber`, **the data colour** |
+| `--gold`                   | `#F0A91A`                    | **wordmark and "luminate" only. Not UI, not charts**                    |
+| `--cedar` / `--cedar-text` | `#0E8B4F` / `#0B5E36`        | Cedar AI fills, and cedar-green **text** (`--cedar` fails AA for body)  |
+| `--map-tribal`             | `#C77A18`                    | map tribal-lands layer, the same hue as the product's `--amber`, **the data color** |
 | `--terra`                  | `#E04A2A`                    | warm highlight, used sparingly                                          |
 | `--blue` / `--purple`      | `#2E5BD6` / `#6E3DD8`        | highlight tints                                                         |
 | `--rule` / `--rule-strong` | `rgba(10,28,52,.1)` / `.2`   | hairline borders                                                        |
@@ -350,25 +350,25 @@ shadow.
 `--surface-2` and `--surface-inset`. New work names the material it needs.
 
 **Contrast rule.** Anything a reader has to read uses `--accent-text` or
-`--cedar-text`; `--accent` and `--cedar` are fill colours and both fail AA as
+`--cedar-text`; `--accent` and `--cedar` are fill colors and both fail AA as
 body text. Dark mode flips them to their lighter steps.
 
-**Gold is not a chart colour.** For data, teal is series one and amber
+**Gold is not a chart color.** For data, teal is series one and amber
 `#C77A18` is series two — the same ruling the product's design system states
 explicitly. Gold appears only in the wordmark and the word *luminate*.
 
-Notes: corner radii are a three-step scale — `--radius-control` **8px**
-(buttons, small controls), `--radius-frame` **14px** (cards, frames, tables,
-panels — the default) and `--radius-panel` **20px** (large panels). Shadows are
-**neutral, never tinted**: `--lift -3px` with `--lift-shadow` / `--shadow-frame`
-/ `--shadow-control` is the whole vocabulary. A `prefers-colour-scheme: dark`
+Notes: corner radii are a three-step scale. `--radius-control` is **8px**
+(buttons, small controls), `--radius-frame` is **14px** (cards, frames, tables,
+panels, the default) and `--radius-panel` is **20px** (large panels). Shadows are
+**neutral, never tinted**: `--lift -3px` with `--lift-shadow`, `--shadow-frame`
+and `--shadow-control` is the whole vocabulary. A `prefers-color-scheme: dark`
 block in `global.css` selects dark steps for the surface and ink tokens — it
 does not simply invert them.
 
 > The `.hl-block` marker-smear system behind headlines **no longer exists**. A
 > standalone heading is a mono kicker over a bare Inter headline, with the
-> section opening on a hairline rule. See `docs/brand/brand-aesthetic.md` §4 —
-> do not reintroduce it from an old deck or exported PDF.
+> section opening on a hairline rule. See `docs/brand/brand-aesthetic.md` §4.
+> Do not reintroduce it from an old deck or an exported PDF.
 
 ## Where this fits: the product ecosystem
 
