@@ -8,7 +8,7 @@ your organization’s economy; and **Cedar**, the AI economic analyst, in
 every plan. Built as a static
 [Astro](https://astro.build) site and deployed to GitHub Pages at
 [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
-authenticated product and its data layer live in sibling repositories (see
+authenticated product, the model engine and Cedar live in sibling repositories (see
 [The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
 The site follows a one-argument-per-page architecture: the homepage says
@@ -132,7 +132,7 @@ src/
                                   standalone, consultant licensing
                   team.ts         team + advisors (feeds founder JSON-LD)
                   cedarIntents.ts Cedar chat intent bank
-  assets/       Build-time inlined assets (the AI assistant brand marks)
+  assets/       Build-time inlined assets (the Cedar brand marks)
   lib/          api.ts (ApiResult fallback), cedarChat.ts (chat runtime),
                 consent.ts, observability.ts (consent-gated analytics shim),
                 flowState.ts (signup/checkout hand-off), passwordRules.ts
@@ -349,7 +349,7 @@ product and the data it runs on live in sibling `teim-team` repositories:
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`teim-app`**    | The authenticated product where the Cedar family lives — Cedar Impact, Cedar Commons and Cedar Grove in one React 19 + Vite SPA with a Fastify backend. ("TEIM" survives only in repo/DB/resource names, never as user-facing branding.) It also carries its own in-app marketing surface under a separate visual brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate visual brands** — do not cross-import styles or tokens.                                                                                                            |
 | **`cedar`**       | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents and keeps only compressed chat memory; it never stores project data, files, or results.                                                                                                                                                  | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a _separate_, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
-| **`teim-engine`** | The economic-accounts data layer: EPA `stateior` StateIO supply/use tables shipped as CSV.                                                                                                                                                                                                                                                                          | Upstream of the impact math the site describes. Keep the homepage "foundational data" strip consistent with the public sources the engine actually draws on.                                                                                                                                      |
+| **`teim-engine`** | The model engine behind Cedar Impact: a Python service that takes an analysis and a geography, fetches Census, BLS and BEA data, regionalizes a state input-output table, closes it as a social accounting matrix and returns direct, indirect and induced effects. It vendors the EPA `stateior` StateIO supply/use tables as CSV as its base structure. ("TEIM" is the model's and the repository's name only.) | The `teim-app` backend submits runs to it over an authenticated HTTP API. Every number the site's /methodology page describes is computed here, so keep that page, and the homepage "foundational data" strip, consistent with what the engine actually implements and draws on. |
 
 ### Cedar service contract (server-to-server)
 
@@ -358,7 +358,7 @@ shape. The **authenticated app — not this marketing site — is the intended
 caller**, because Cedar needs the `user` + `project` context an anonymous
 visitor here doesn't have.
 
-- **Endpoint:** `POST /api/v1/messages` (the only public endpoint today).
+- **Endpoint:** `POST /api/v1/messages` for conversation. Document extraction is a separate asynchronous pair, `POST /api/v1/documents/extract` and `GET /api/v1/documents/extract/{jobId}`, which the app backend calls for the intake documents step.
 - **Auth:** `Authorization: Bearer <CEDAR_INTERNAL_API_KEY>` (shared secret).
   Missing/bad token → 401.
 - **Health:** `GET /ready` → 200 (503 if Postgres is down). Point uptime
@@ -380,7 +380,7 @@ visitor here doesn't have.
 
 ### Underlying data (teim-engine)
 
-teim-engine assembles EPA `stateior` StateIO accounts as CSV: years
+teim-engine's base structure is the EPA `stateior` StateIO accounts, vendored as CSV: years
 **2015–2023**, **50 states + DC**, **71 BEA Summary sectors**, five tables per
 region (`Industry_Output`, `Make`, `Use`, `Domestic_Use`, `Import`) with the
 identity `Use = Domestic_Use + Import` (the in-region vs. rest-of-US split).
@@ -412,7 +412,7 @@ page-ownership rule); this list records the product/brand calls.
 - **Numbers are used sparingly.** No mono section numbering; equations
   (Eq. 01…) and ordered flow steps keep their numbers because order is
   the content.
-- **Screenshots are real captures at a uniform 1600x1000** from teim-app
+- **Screenshots are real captures, 1920px wide** (heights vary by surface: 1004 for the lineage panel, 1200 for the workspace, comparison and Cedar captures, 1080 for Grove, 1170 for the hero results page) from teim-app
   (1440px shell, demo user Wassily Leontief), taken via the mock-route
   pipeline in the session scratchpad; the hero trio never shuffles
   positions, only the center frame advances in order.

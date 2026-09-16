@@ -89,7 +89,7 @@ state; end-to-end accessibility tests.
   scripts/screenshots/examples-data.mjs (cross-footing effects,
   plausible multipliers, wages and tax shares; the module throws if
   an edit breaks plausibility); scripts/screenshots/ regenerates all
-  60 captures, light and dark at one uniform 1600x1000 frame.
+  30 captures (ten examples as results, map and compare), 1920px wide; only `ex-wind-results.webp` is referenced since the hero moved to a single screen.
 - Cedar is never "our site assistant": FAQ schema and the site
   chat's self-descriptions present Cedar as Lumecon's AI economic
   analyst, with the site chat as a lightweight version (item 15).
