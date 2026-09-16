@@ -422,12 +422,20 @@ test('cedar page tells the AI story with three real captures, no diagrams', asyn
   await expect(page.locator('.meth-hero__lede')).toContainText('Lumecon’s AI economic analyst');
   // Exactly the three-shot story, told through the shared product tour:
   // upload, entities in the loop, partner context. Diagrams were removed by
-  // design; no screenshot repeats.
+  // design; no screenshot repeats within the tour. The hero cover reuses
+  // the entities frame (it used to be that frame's -dark twin, until the
+  // night-mode captures were retired), so the per-capture counts are
+  // scoped to the tour rows rather than the whole page.
   await expect(page.locator('.cedarpg-diagram')).toHaveCount(0);
-  await expect(page.locator('.tour-row__shot img')).toHaveCount(3);
-  await expect(page.locator('img[src="/app/cedar-wind-upload.webp"]')).toHaveCount(1);
-  await expect(page.locator('img[src="/app/cedar-wind-entities.webp"]')).toHaveCount(1);
-  await expect(page.locator('img[src="/app/cedar-context.webp"]')).toHaveCount(1);
+  const shots = page.locator('.tour-row__shot img');
+  await expect(shots).toHaveCount(3);
+  await expect(shots.and(page.locator('[src="/app/cedar-wind-upload.webp"]'))).toHaveCount(1);
+  await expect(shots.and(page.locator('[src="/app/cedar-wind-entities.webp"]'))).toHaveCount(1);
+  await expect(shots.and(page.locator('[src="/app/cedar-context.webp"]'))).toHaveCount(1);
+  await expect(page.locator('.cedarpg-hero__screen img')).toHaveAttribute(
+    'src',
+    /^\/app\/cedar-(wind-upload|wind-entities|context)\.webp$/,
+  );
   await expect(page.locator('#navMenu a[href="/cedar"]')).toHaveCount(1);
   await expect(page.locator('footer a[href="/cedar"]')).toHaveCount(1);
 });
