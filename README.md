@@ -302,41 +302,73 @@ ladder (rem):
 | `--type-display` | `clamp(2.8rem, 7.5vw, 6rem)` | display / hero                   |
 
 Headlines are fluid: the homepage hero (`.hero2-title`) is
-`clamp(2.3rem, 5.6vw, 4.3rem)` at weight 700. Eyebrows / kickers are mono,
-uppercase, ~0.64–0.82rem with wide letter-spacing.
+`clamp(3.25rem, 4.8vw, 4.8rem)` at `--weight-hero` (675). Section headings use
+`--weight-display` (600), not 700 — a page where every heading sits at the
+heaviest weight has hierarchy of size but none of voice. Tracking tightens as
+size grows: `--track-display -0.032em` (hero h1), `--track-title -0.024em`
+(section h2), `--track-sub -0.015em` (card h3).
+
+Eyebrows / kickers are mono, uppercase, letter-spaced. The canonical values are
+the product's section-band tokens: **0.62rem at 0.14em tracking**.
 Weights: `--weight-regular 400` · `--weight-medium 500` · `--weight-semi 600`
 · `--weight-bold 700` · `--weight-black 800`.
 
 ### Color scheme
 
-Cool, modern palette: white/near-black-navy surfaces with a **teal** UI accent
-and **gold** reserved for the brand wordmark.
+Cool, modern palette: near-white surfaces with a **teal** UI accent, **gold**
+reserved for the brand wordmark, and **amber** as the one data colour.
 
-| Token                             | Hex                          | Role                                                                    |
-| --------------------------------- | ---------------------------- | ----------------------------------------------------------------------- |
-| `--white`                         | `#FFFFFF`                    | primary surface                                                         |
-| `--paper`                         | `#F7F7F8`                    | rare soft surface (forms/panels)                                        |
-| `--navy` / `--ink`                | `#0A0F26`                    | primary text / darkest surface                                          |
-| `--ink-2`                         | `#353B5C`                    | body text                                                               |
-| `--ink-3`                         | `#6B6F8A`                    | muted text, eyebrows                                                    |
-| `--ink-4`                         | `#9DA1B5`                    | faint dividers/dots                                                     |
-| `--accent`                        | `#0FB5A5`                    | **teal UI accent** — eyebrows, focus rings, hovers, dividers            |
-| `--accent-deep`                   | `#0A8A7E`                    | accent text/links, hovers                                               |
-| `--accent-chip`                   | `#0A7F74`                    | white-on-teal surfaces (chips/bubbles/send) — deepened to clear WCAG AA |
-| `--accent-light` / `--accent-bar` | `#5FD9CC` / `#B8EDE6`        | teal tints (highlights, bands)                                          |
-| `--gold`                          | `#F0A91A`                    | **reserved for the wordmark / "luminate" emphasis — not a UI accent**   |
-| `--green`                         | `#0E8B4F`                    | highlight tint / "complete" status                                      |
-| `--terra`                         | `#E04A2A`                    | warm highlight tint                                                     |
-| `--blue` / `--purple`             | `#2E5BD6` / `#6E3DD8`        | highlight tints                                                         |
-| `--rule` / `--rule-strong`        | `rgba(10,15,38,.12)` / `.24` | hairline borders                                                        |
-| `--error-color`                   | `#DC2626`                    | error / validation                                                      |
-| `--map-tribal`                    | `#C77A18`                    | map: tribal-lands layer                                                 |
+The page ground is not pure white. It sits two cool steps off, so a genuinely
+white surface can rise off it without every card proving its depth with a heavy
+shadow.
 
-Notes: corner radii are deliberately tight — a two-step scale of **8px**
-(cards, frames, panels) and **6px** (buttons, chips, small elements);
-headline highlights use the `.hl-block` smear system with rotating tints; a
-`prefers-color-scheme: dark` block in `global.css` flips the surface/ink
-tokens (teal/gold stay put).
+| Token                      | Value                        | Role                                                                    |
+| -------------------------- | ---------------------------- | ----------------------------------------------------------------------- |
+| `--ground`                 | `#F3F6F8`                    | the page ground                                                         |
+| `--ground-bright`          | `#FAFCFD`                    | lifted ground                                                           |
+| `--surface`                | `#FFFFFF`                    | raised white: product frames, plans, forms, overlays                    |
+| `--surface-2`              | `#EDF2F4`                    | filled panels and callouts                                              |
+| `--surface-inset`          | `#E5EBEE`                    | inset wells, chart tracks                                               |
+| `--navy` / `--ink`         | `#071824`                    | primary text                                                            |
+| `--ink-2`                  | `#33434A`                    | body text                                                               |
+| `--ink-3`                  | `#647279`                    | muted text, captions                                                    |
+| `--ink-4`                  | `#93A0A5`                    | faintest text, dots, ticks                                              |
+| `--accent`                 | `#0FB5A5`                    | **teal accent** — fills, rules, focus rings (2.6:1 on white: not text)  |
+| `--accent-text`            | `#0A7F74`                    | **teal text, links** — 4.88:1 on white (AA)                            |
+| `--accent-chip`            | `#0A7F74`                    | surfaces carrying white text (chips / bubbles / send)                   |
+| `--accent-deep`            | `#0A8A7E`                    | button hover                                                            |
+| `--accent-light` / `--accent-bar` | `#5FD9CC` / `#B8EDE6` | teal tints; `--accent-bar` is the 1px link underline                    |
+| `--gold`                   | `#F0A91A`                    | **wordmark and "luminate" only — not UI, not charts**                   |
+| `--cedar` / `--cedar-text` | `#0E8B4F` / `#0B5E36`        | Cedar AI fills / cedar-green **text** (`--cedar` fails AA for body)     |
+| `--map-tribal`             | `#C77A18`                    | map tribal-lands layer — the same hue as the product's `--amber`, **the data colour** |
+| `--terra`                  | `#E04A2A`                    | warm highlight, used sparingly                                          |
+| `--blue` / `--purple`      | `#2E5BD6` / `#6E3DD8`        | highlight tints                                                         |
+| `--rule` / `--rule-strong` | `rgba(10,28,52,.1)` / `.2`   | hairline borders                                                        |
+| `--error-color`            | `#DC2626`                    | error / validation                                                      |
+
+`--white`, `--cream` and `--paper` remain as legacy aliases of `--ground`,
+`--surface-2` and `--surface-inset`. New work names the material it needs.
+
+**Contrast rule.** Anything a reader has to read uses `--accent-text` or
+`--cedar-text`; `--accent` and `--cedar` are fill colours and both fail AA as
+body text. Dark mode flips them to their lighter steps.
+
+**Gold is not a chart colour.** For data, teal is series one and amber
+`#C77A18` is series two — the same ruling the product's design system states
+explicitly. Gold appears only in the wordmark and the word *luminate*.
+
+Notes: corner radii are a three-step scale — `--radius-control` **8px**
+(buttons, small controls), `--radius-frame` **14px** (cards, frames, tables,
+panels — the default) and `--radius-panel` **20px** (large panels). Shadows are
+**neutral, never tinted**: `--lift -3px` with `--lift-shadow` / `--shadow-frame`
+/ `--shadow-control` is the whole vocabulary. A `prefers-colour-scheme: dark`
+block in `global.css` selects dark steps for the surface and ink tokens — it
+does not simply invert them.
+
+> The `.hl-block` marker-smear system behind headlines **no longer exists**. A
+> standalone heading is a mono kicker over a bare Inter headline, with the
+> section opening on a hairline rule. See `docs/brand/brand-aesthetic.md` §4 —
+> do not reintroduce it from an old deck or exported PDF.
 
 ## Where this fits: the product ecosystem
 
