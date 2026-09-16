@@ -180,7 +180,7 @@
      which was set for prose and left a wide empty gutter on the sections
      that carry cards, tables and screenshots. Legal pages keep their own
      narrower prose measure in legal.css. */
-  --container-max: 1360px;
+  --container-max: 1440px;
   /* Cap for a section header block (kicker + title + lede). Section heads
      used to sit at a hard 900px, which stopped a heading well short of the
      content it introduced even when the section itself ran to 1240px. The

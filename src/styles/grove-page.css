@@ -4,7 +4,11 @@
    intentional product moments and a quiet evidence infrastructure reference. */
 
 .grovepg-hero {
-  padding: clamp(7.5rem, 13vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
+  /* 13vh of top padding is generous on a tall monitor and expensive on a
+     laptop, where it is the difference between the CTA being visible and not.
+     It costs more here than it did over the map: the hero now carries a
+     1920x1080 capture in the wider column, so the fold is lower to begin with. */
+  padding: clamp(5rem, 9vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
   background: #071126;
 }
 .grovepg-hero .meth-w {

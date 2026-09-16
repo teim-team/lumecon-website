@@ -47,20 +47,25 @@ Governments and mission-driven organizations: cities, counties, state agencies, 
 
 Economic impact analysis, input-output modeling, direct effects, indirect effects, induced effects, multipliers, jobs supported, economic output, labor income, GDP contribution, tax impacts, IMPLAN alternative, RIMS II alternative, REMI alternative, tribal economics, reservation economics, AIANNH geography, Whole Nation analysis, economic development, public-sector analytics.
 
-## Founders and team
+## Team and advisors
 
-- Elijah Moreno, Co-Founder and CEO. PhD candidate in Public Policy at Cornell University; A.B. Dartmouth College; M.P.P. Cornell. Previously Senior Research Assistant at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis), Wilma Mankiller Fellow at the National Congress of American Indians, research analyst at Taylor Policy Group, Inc. Enrolled member of the Coastal Band of the Chumash Nation.
-- Michael Moreno, Co-Founder and Founding Investor. Enrolled member of the Coastal Band of the Chumash Nation.
-- Kaylyn Lee, Platform Lead. B.S. Computer Science with a minor in Business, Cornell University.
-- Laurel Wheeler, Economics Lead. B.A. Political Science (Florida), M.S. Economics for Development (Oxford), M.A. and Ph.D. Economics (Duke). Previously economist at the Center for Indian Country Development (Federal Reserve Bank of Minneapolis).
-- Isabella Agnes, Input/Output Models Lead. B.S. Mathematics and Economics (Wisconsin-Madison), doctoral training in Economics (Maryland). Previously research assistant at the Federal Reserve Bank of Philadelphia and data scientist at the Board of Governors of the Federal Reserve System.
-- Francesca Agnes, Cedar Lead. Biology, University of Illinois Urbana-Champaign.
+Generated from https://lumecon.ai/team by scripts/docs/llms-roster.mjs. The page is
+the only roster; nothing is stated here that a visitor cannot read there. Degrees
+are listed highest attainment first.
 
-## Advisors and Contributors
+### Team
 
-- Brian Kim, Technical Advisor. Previously senior software engineer at Modsy and Chime.
-- Havala Hanson, Product, Data Security and Research Operations Advisor. Ph.D. Statistics and Policy in Education (Alaska Fairbanks), M.A. Urban Education Policy (Brown), B.S. Education (Wisconsin-Whitewater).
-- Vod Vilfort, Methodology Advisor. PhD candidate in Economics at MIT, focused on econometrics.
+- Elijah Moreno, Founder and CEO. Education: PhD candidate, Public Policy, Cornell University; MPP, Cornell University; BA, Economics, modified with Native American Studies, Dartmouth College. Eight years producing tribal economic-impact studies and related public-policy research. Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis. There he led the construction of the Native Entity Enterprise Dataset, the first comprehensive dataset of Native entity enterprises, and launched and led research on Native federal contracting. Research Fellow at the Project on Indigenous Governance and Development at the Harvard Kennedy School, and a co-author of the third edition of Social and Economic Changes in American Indian Reservations. Previously a research analyst at the Taylor Policy Group and a Wilma Mankiller Fellow at the National Congress of American Indians. Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California. elijah.moreno@lumecon.ai · https://www.linkedin.com/in/elijahmoreno · https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ
+- Laurel Wheeler, Economics Lead. Education: PhD, Economics, Duke University; MA, Economics, Duke University; MSc, Economics for Development, University of Oxford; BA, Political Science, University of Florida. Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon. Previously a tenure-track economics professor at the University of Alberta. laurel.wheeler@lumecon.ai · https://www.linkedin.com/in/laurel-wheeler · https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ
+- Isabella Agnes, Input-Output Modeling Lead. Education: Doctoral research in Economics, University of Maryland, College Park; BS, Mathematics, University of Wisconsin-Madison; BS, Economics, University of Wisconsin-Madison. Data scientist at the Library of Congress. Her prior work includes economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia. isabella.agnes@lumecon.ai · https://www.linkedin.com/in/maria-isabella-agnes-741569b7
+- Francesca Agnes, Cedar Systems Lead. Education: BS, Biology, University of Illinois Urbana-Champaign. Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis. Also contributes to Lira, an AI wearable company. francesca.agnes@lumecon.ai · https://www.linkedin.com/in/francesca-agnes-a8106722b · https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ
+- Kaylyn Lee, Platform Lead. Education: BS, Computer Science, minor in Business, Cornell University. Builds the platform organizations use to scope, run and revisit analyses. Also contributes to Lira, an AI wearable company. kaylyn.lee@lumecon.ai · https://www.linkedin.com/in/kaylynlee
+
+### Advisors
+
+- Brian Kim, Engineering Advisor. Education: BA, Economics, Dartmouth College. Founder and CEO of Lira, an AI wearable company. Previously a senior software engineer at Modsy and Chime. https://www.linkedin.com/in/brian-kim-1a543466
+- Vod Vilfort, Methodology Advisor. Education: PhD candidate, Economics, Massachusetts Institute of Technology; BA, Mathematics and Economics, Yale University. NSF Graduate Research Fellow. His research has appeared in American Economic Review: Insights. https://scholar.google.com/citations?hl=en&user=Mp6y_pgAAAAJ
+- Havala Hanson, Data Governance, Security and Research Operations Advisor. Education: PhD, Statistics and Policy in Education, University of Alaska Fairbanks; MA, Urban Education Policy, Brown University; BS, Education, University of Wisconsin-Whitewater. Builds data-governance and privacy practices for sensitive administrative data. Supports cross-agency data sharing and research operations. https://www.linkedin.com/in/havala-hanson · https://scholar.google.com/citations?hl=en&user=vETE-QYAAAAJ
 
 ## Origin
 

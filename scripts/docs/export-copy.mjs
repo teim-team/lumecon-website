@@ -54,6 +54,7 @@ const PAGES = [
   ['/', 'Homepage'],
   ['/pricing', 'Pricing'],
   ['/methodology', 'Methodology'],
+  ['/team', 'Team'],
   ['/cedar', 'Cedar'],
   ['/cedar-grove', 'Cedar Grove'],
   ['/glossary', 'Glossary'],

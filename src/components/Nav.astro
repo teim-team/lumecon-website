@@ -16,43 +16,58 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
   <div class="nav-w">
     <div class="nav-brand">
       <BrandWordmark size="sm" teal ariaLabel={`${site.legalName} home`} taglineHidden={true} />
-      <span class="nav-brand__sep" aria-hidden="true">|</span>
+      <span class="nav-brand__sep" aria-hidden="true">
+        |
+      </span>
       <span class="nav-brand__desc">The Intelligent Economic Analysis Platform</span>
     </div>
 
     <div class="nav-right">
       <ul class="nav-links">
-        <li><a href="/#product">Cedar Impact</a></li>
         <li>
-          <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>Cedar</a>
+          <a href="/#product">Cedar Impact</a>
         </li>
         <li>
-          <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}
-            >Cedar Grove</a
-          >
+          <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>
+            Cedar
+          </a>
         </li>
         <li>
-          <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}
-            >Pricing</a
-          >
+          <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}>
+            Cedar Grove
+          </a>
         </li>
         <li>
-          <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}
-            >Methodology</a
-          >
+          <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}>
+            Pricing
+          </a>
+        </li>
+        <li>
+          <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}>
+            Methodology
+          </a>
+        </li>
+        <li>
+          <a href="/team" aria-current={currentPath === '/team' ? 'page' : undefined}>
+            Team
+          </a>
         </li>
       </ul>
       <span class="nav-links__sep" aria-hidden="true"></span>
       <a
         class="nav-login"
         href="/login"
-        aria-current={currentPath === '/login' ? 'page' : undefined}>Log in</a
+        aria-current={currentPath === '/login' ? 'page' : undefined}
       >
+        Log in
+      </a>
       <a
         class="nav-signup"
         href="/signup"
-        aria-current={currentPath === '/signup' ? 'page' : undefined}>Request access</a
+        aria-current={currentPath === '/signup' ? 'page' : undefined}
       >
+        Request access
+      </a>
 
       <button
         class="navm-btn"
@@ -62,54 +77,70 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
         aria-controls="navMenu"
       >
         <span class="navm-btn__label">Menu</span>
-        <span class="navm-btn__bars" aria-hidden="true"
-          ><span></span><span></span><span></span></span
-        >
+        <span class="navm-btn__bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
       </button>
     </div>
   </div>
 </nav>
 
-{
-  /* The overlay must be a SIBLING of <nav>, not a child: the nav bar
+{/* The overlay must be a SIBLING of <nav>, not a child: the nav bar
      carries backdrop-filter (always on inner pages, on scroll on the
      homepage), and a filtered ancestor becomes the containing block
      for position: fixed descendants. Inside the nav, the "full
-     screen" overlay was silently confined to the bar's own box. */
-}
+     screen" overlay was silently confined to the bar's own box. */}
 <div class="navm" id="navMenu" hidden>
   <div class="navm-inner">
     <ul class="navm-list">
-      <li><a href="/#product">Cedar Impact</a></li>
       <li>
-        <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>Cedar</a>
+        <a href="/#product">Cedar Impact</a>
       </li>
       <li>
-        <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}
-          >Cedar Grove</a
-        >
+        <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>
+          Cedar
+        </a>
       </li>
       <li>
-        <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}>Pricing</a
-        >
+        <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}>
+          Cedar Grove
+        </a>
       </li>
       <li>
-        <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}
-          >Methodology</a
-        >
+        <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}>
+          Pricing
+        </a>
       </li>
       <li>
-        <a href="/login" aria-current={currentPath === '/login' ? 'page' : undefined}>Log in</a>
+        <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}>
+          Methodology
+        </a>
+      </li>
+      <li>
+        <a href="/team" aria-current={currentPath === '/team' ? 'page' : undefined}>
+          Team
+        </a>
+      </li>
+      <li>
+        <a href="/login" aria-current={currentPath === '/login' ? 'page' : undefined}>
+          Log in
+        </a>
       </li>
       <li>
         <a
           class="navm-list__cta"
           href="/signup"
-          aria-current={currentPath === '/signup' ? 'page' : undefined}>Request access</a
+          aria-current={currentPath === '/signup' ? 'page' : undefined}
         >
+          Request access
+        </a>
       </li>
     </ul>
-    <a class="navm-contact" href={`mailto:${site.email}`}>{site.email}</a>
+    <a class="navm-contact" href={`mailto:${site.email}`}>
+      {site.email}
+    </a>
   </div>
 </div>
 
