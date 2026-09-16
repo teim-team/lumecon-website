@@ -47,7 +47,12 @@
   color: #d9f4f0;
   background: rgba(7, 60, 59, 0.5);
 }
-.grovepg-hero .btn2--card:hover {
+/* The secondary hero action is re-skinned for the navy band, so its hover
+   has to be re-stated here too — and with it the focus twin, because a
+   keyboard user gets the same affordance or the state is decoration. The
+   transition is inherited from .btn2 in home.css. */
+.grovepg-hero .btn2--card:hover,
+.grovepg-hero .btn2--card:focus-visible {
   border-color: rgba(115, 226, 214, 0.64);
   background: rgba(7, 60, 59, 0.76);
 }
@@ -296,6 +301,128 @@
     padding: 1.5rem 1.3rem;
   }
 }
+/* ---------- Motion ----------
+   Nothing below is a new motion system. The reveals are the house primitives
+   in global.css, driven by the observer BaseLayout already runs, and this
+   page opts into them from its markup: `data-reveal-group` on the hero copy,
+   the provenance list, the atlas heading and the atlas grid; `reveal-left` /
+   `reveal-right` on the two alternating tour rows; `reveal-soft` on the
+   licence panel and the bridge. What this section adds is the other half —
+   hover and focus on the surfaces that are actually this page's own — in the
+   house vocabulary: --ease, 0.25s for a small interaction, and the shared
+   --lift distance every other frame on the site rises by.
+
+   Two things deliberately hold still after they arrive. The atlas cells and
+   the provenance terms are not links and open nothing; giving them a hover
+   would promise a click that does not exist, and eighteen tiles that all
+   respond to the pointer is a browse interface, which is the thing the atlas
+   was cut down from. A page where everything moves says less than one where
+   the right things do. */
+
+/* The three captures.
+   They are the page's argument, and they are also the only objects on it a
+   reader can open: each figure carries `data-zoom`, so a click enlarges the
+   full 1920x1080 file (see lightbox.css). The hover therefore has somewhere
+   real to go, and is allowed to say so.
+
+   It says it the way the rest of the site does — the frame rises by --lift,
+   its hairline warms to the page's teal, the shadow under it deepens — and it
+   does nothing else. No scale: these are rasters shown at roughly a third of
+   their intrinsic width, and scaling one resamples type that is already at
+   the edge of legible. No crop, inset or pan: the frame is 1920x1080 and
+   stays 1920x1080, identically on all three. No veil, cursor-tracking or play
+   affordance, because a still capture cannot honour the interaction those
+   imply. The one thing the hover promises, the lightbox delivers.
+
+   THE LIFT IS `translate`, NOT `transform`, AND THAT IS THE WHOLE TRICK
+   Each of these figures is a reveal target as well as a hover target, and the
+   two want different durations out of the same property: the reveal travels
+   on `transform` over half a second or more, the hover lifts in a quarter.
+   One `transition` cannot give `transform` both. So the lift is written on
+   the independent `translate` property, which composites with the reveal's
+   `transform` rather than overwriting it. Each keeps its own duration, the
+   reveal's opacity fade is left alone, and a pointer arriving mid-reveal does
+   not cut the reveal short. A browser without independent transform
+   properties simply does not lift; the border and shadow still answer.
+
+   `:focus-within` rather than `:focus-visible` because the control is the
+   <img> inside the figure — Lightbox gives it role=button and tabindex=0 —
+   so the keyboard lands one level in from the surface that lifts. The ring
+   itself is already drawn by [data-zoom]:focus-within in lightbox.css; this
+   gives the keyboard the same lift the pointer gets. */
+.grovepg .grovepg-hero__shot {
+  transition:
+    opacity 0.5s var(--ease),
+    transform 0.55s var(--ease),
+    translate 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.grovepg .grovetour .tour-row__shot {
+  /* Same five, but the first two restate the longer reveal-left/right timing
+     these rows actually use, so overriding the shorthand does not quietly
+     shorten their travel. */
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.8s var(--ease),
+    translate 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.grovepg-hero__shot:hover,
+.grovepg-hero__shot:focus-within {
+  translate: 0 var(--lift);
+  border-color: rgba(115, 226, 214, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 40px 84px -32px rgba(0, 0, 0, 0.96);
+}
+/* The tour frames sit on the deep teal band and set their own resting border
+   and shadow, so the hover has to answer at that depth. The shared
+   --lift-shadow is cast in navy for a white page and would be invisible here:
+   same rise, same curve, same 0.25s, a black the band can actually show. */
+.grovetour .tour-row__shot:hover,
+.grovetour .tour-row__shot:focus-within {
+  translate: 0 var(--lift);
+  border-color: rgba(115, 226, 214, 0.56);
+  box-shadow: 0 30px 62px -26px rgba(0, 0, 0, 0.84);
+}
+
+/* The arrow on a .btn2 slides on hover (home.css). Keyboard gets it too. */
+.grovepg .btn2:focus-visible .btn2-arrow {
+  transform: translateX(3px);
+}
+
+/* The licence fine print carries two links — the plan comparison and the
+   contact address — which inherited `a { color: inherit }` and so read as
+   body text with an inert cursor. `.inline-link` is the house treatment for
+   a link inside running copy; it brings its own hover, and the focus twin
+   belongs with it. */
+.grovepg .inline-link:focus-visible {
+  border-bottom-color: var(--accent-text);
+}
+
+/* Reduced motion turns the movement off, not down: no transitions, and no
+   travel on any state that had some. Colour and shadow changes stay, because
+   they are what tells a reader the frame is a thing they can open — the same
+   division home.css makes for the frames on the other product pages. */
+@media (prefers-reduced-motion: reduce) {
+  .grovepg .grovepg-hero__shot,
+  .grovepg .grovetour .tour-row__shot,
+  .grovepg .inline-link {
+    transition: none;
+  }
+  .grovepg-hero__shot:hover,
+  .grovepg-hero__shot:focus-within,
+  .grovetour .tour-row__shot:hover,
+  .grovetour .tour-row__shot:focus-within {
+    translate: none;
+  }
+  .grovepg .btn2:focus-visible .btn2-arrow {
+    transform: none;
+  }
+}
+
 @media print {
   .grovepg-hero,
   .grovetour,
