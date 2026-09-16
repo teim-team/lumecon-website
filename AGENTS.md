@@ -294,7 +294,8 @@ output is committed. Run them when their inputs change.
   for the app to copy. Edit
   sectors.mjs, never naicsSectors.js directly.
 - Hero example screenshots: `scripts/screenshots/capture-examples.mjs`
-  captures the 60 `public/app/ex-*.webp` hero images from a running
+  captures the 30 `public/app/ex-*.webp` example images (ten examples,
+  each as results, map and compare) from a running
   teim-app dev server; `optimize-examples.mjs` compresses them.
 - Smoke tests: `npm run build` first (Playwright serves `dist/`), then
   `npm run test:smoke` (CI runs chromium + webkit). The site makes no
