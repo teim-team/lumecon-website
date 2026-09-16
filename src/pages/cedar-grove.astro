@@ -153,18 +153,25 @@ const jsonLd = [
   <main class="meth grovepg" id="top" tabindex="-1">
     <header class="meth-hero grovepg-hero section--dark">
       <div class="meth-w">
-        <div class="grovepg-hero__copy">
-          <p class="h-kicker reveal-soft">Cedar Grove</p>
-          <h1 class="meth-hero__title reveal-soft" data-stagger="1">
-            Turn a local question into a defensible case.
-          </h1>
-          <p class="meth-hero__lede reveal-soft" data-stagger="2">
+        {
+          /* `data-reveal-group` rather than a `reveal-soft` and a hand-counted
+            `data-stagger` on each line. The container gives every direct child
+            the soft reveal and steps it by 90ms from :nth-child, so the order
+            is the document's and a line can move without renumbering the ones
+            below it. See global.css. The capture beside this block is a
+            sibling rather than a child, so it keeps its explicit stagger in
+            order to land with the buttons. */
+        }
+        <div class="grovepg-hero__copy" data-reveal-group>
+          <p class="h-kicker">Cedar Grove</p>
+          <h1 class="meth-hero__title">Turn a local question into a defensible case.</h1>
+          <p class="meth-hero__lede">
             Cedar Grove connects maintained public data, Lumecon collections and the records your
             organization governs. Every finding stays connected to its source, geography, method,
             vintage and limits, so a number can be checked, cited and reproduced by the people who
             have to stand behind it.
           </p>
-          <div class="grovepg-cta reveal-soft" data-stagger="3">
+          <div class="grovepg-cta">
             <a class="btn2 btn2--primary" href="#license">
               Request Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
             </a>
@@ -262,10 +269,12 @@ const jsonLd = [
 
     <section class="grovepg-atlas section--dark" id="collections" aria-labelledby="g-collections">
       <div class="meth-w">
-        <p class="h-kicker reveal-soft">Evidence infrastructure</p>
-        <h2 class="grovepg-atlas__title reveal-soft" id="g-collections">
-          The collections behind the evidence.
-        </h2>
+        <div class="grovepg-atlas__head" data-reveal-group>
+          <p class="h-kicker">Evidence infrastructure</p>
+          <h2 class="grovepg-atlas__title" id="g-collections">
+            The collections behind the evidence.
+          </h2>
+        </div>
         <ol class="grovepg-atlas__grid" data-reveal-group>
           {
             GROVE_COLLECTIONS.map((collection) => (
@@ -306,7 +315,7 @@ const jsonLd = [
             </p>
             <p class="grovepg-license__note">
               Grove stands on its own. Tree adds Cedar Impact and Cedar Commons beside the same
-              evidence base. <a href="/pricing">Compare plans.</a>
+              evidence base. <a class="inline-link" href="/pricing">Compare plans.</a>
             </p>
           </div>
           <div>
@@ -326,7 +335,7 @@ const jsonLd = [
               <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
             </a>
             <p class="grovepg-license__note grovepg-license__note--contact">
-              Prefer to talk first? <a href={`mailto:${site.email}`}>{site.email}</a>
+              Prefer to talk first? <a class="inline-link" href={`mailto:${site.email}`}>{site.email}</a>
             </p>
           </div>
         </div>
