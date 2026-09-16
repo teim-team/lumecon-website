@@ -168,8 +168,12 @@ const GROUPS = [
           <div class="roster__rows">
             {GROUPS.map((group) => (
               <div class="roster__group">
-                <p class="roster__glabel">{group.label}</p>
-                <ul class="roster__row" role="list">
+                <p class="roster__glabel reveal-soft">{group.label}</p>
+                {/* The row is its own reveal group, so the faces arrive
+                    one after another rather than as a block. Eight people
+                    appearing in sequence is a page introducing a team;
+                    eight appearing at once is a table. */}
+                <ul class="roster__row" role="list" data-reveal-group>
                   {group.people.map((p) => (
                     <li>
                       <button
@@ -206,7 +210,14 @@ const GROUPS = [
             ))}
           </div>
 
-          <div class="roster__panel" id="roster-panel" aria-live="polite">
+          {/* The record follows the row it belongs to rather than
+              arriving alongside it. */}
+          <div
+            class="roster__panel reveal-soft"
+            data-stagger="3"
+            id="roster-panel"
+            aria-live="polite"
+          >
             {everyone.map((p, i) => (
               <article class="pcard" data-person={p.slug} hidden={i !== 0} aria-label={p.name}>
                 <h3 class="pcard__name">{p.name}</h3>
@@ -307,7 +318,7 @@ const GROUPS = [
     </section>
 
     <section class="team-schools" aria-labelledby="t-schools">
-      <div class="meth-w">
+      <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Training and research background</p>
         <h2 class="team-schools__title" id="t-schools">
           Where the team trained

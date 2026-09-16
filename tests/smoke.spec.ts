@@ -767,6 +767,52 @@ test('team page picks a person and shows that person', async ({ page }) => {
   );
 });
 
+test('team page motion reveals content and never strands it', async ({ page }) => {
+  // Scroll-reveal's failure mode is content that stays invisible, so the
+  // guarantees are the ones worth pinning, not the animation itself.
+  const stillFaded = () =>
+    page.evaluate(() =>
+      [...document.querySelectorAll('.reveal-soft, [data-reveal-group] > *')]
+        .filter((el) => parseFloat(getComputedStyle(el).opacity) < 0.99)
+        .map((el) => el.className || el.tagName),
+    );
+
+  // Reduced motion: shown at once, nothing faded, nothing to wait for.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/team', { waitUntil: 'networkidle' });
+  expect(await stillFaded()).toEqual([]);
+
+  // With motion, everything lands once it has been scrolled past —
+  // including the advisors row and the training shelf, both of which
+  // start below the fold.
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/team', { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    for (let y = 0; y < document.body.scrollHeight; y += 400) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 80));
+    }
+  });
+  await expect.poll(stillFaded, { timeout: 5000 }).toEqual([]);
+
+  // The record fades when the selection changes. On a wide screen the
+  // change is triggered by hovering the portraits, so the reader is not
+  // looking at the panel when it happens; the fade is what says it did.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.locator('[data-face="brian-kim"]').click();
+  const opacity = await page.evaluate(() =>
+    parseFloat(getComputedStyle(document.querySelector('.pcard:not([hidden])')!).opacity),
+  );
+  expect(opacity).toBeLessThan(1);
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        parseFloat(getComputedStyle(document.querySelector('.pcard:not([hidden])')!).opacity),
+      ),
+    )
+    .toBe(1);
+});
+
 test('the founding investor is in structured data only, never in what a visitor reads', async ({
   page,
 }) => {
