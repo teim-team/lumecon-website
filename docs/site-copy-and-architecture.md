@@ -28,11 +28,11 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/methodology` | 2560 | Methodology \| Lumecon | 167 |
 | `/team` | 369 | Team \| Lumecon | 115 |
 | `/cedar` | 468 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-grove` | 1178 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 227 |
+| `/cedar-grove` | 458 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
 | `/signup` | 240 | Request beta access \| Lumecon | 118 |
-| `/login` | 116 | Log in \| Lumecon | 31 |
+| `/login` | 120 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 209 | Checkout \| Lumecon | 81 |
 | `/welcome` | 64 | Welcome to Lumecon | 32 |
@@ -42,7 +42,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **11910** | | |
+| **Total** | **11194** | | |
 
 ## Crawler metadata audit
 
@@ -1516,34 +1516,22 @@ We use optional analytics to improve Lumecon. Privacy Policy
 ## `/cedar-grove` — Cedar Grove
 
 - **Title:** Cedar Grove, the living evidence base for your organization’s economy | Lumecon
-- **Meta description** (227 chars): Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits.
-- **og:description:** Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits.
+- **Meta description** (140 chars): Cedar Grove connects maintained public data, Lumecon collections and governed records so every finding can be checked, cited and reproduced.
+- **og:description:** Cedar Grove connects maintained public data, Lumecon collections and governed records so every finding can be checked, cited and reproduced.
 - **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
 - **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
 - **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, BreadcrumbList
-- **Visible words:** 1178
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
+- **Visible words:** 458
 
 ### Architecture (heading outline)
 
-- **H1** The living evidence base for your organization’s economy.
-  - **H2** Pick a question. Read what the evidence supports, and what it rests on.
-  - **H2** A private, living evidence workspace for your organization and its place.
-  - **H2** Twelve maintained collections, resolved to your place.
-    - **H3** Federal Funding to Indian Country
-    - **H3** Federal Register
-    - **H3** Congressional Votes and Proposed Legislation
-    - **H3** Indian Country Deals
-    - **H3** NAGPRA
-    - **H3** Native Federal Advocacy and Engagement
-    - **H3** Federal Prime Contracting
-    - **H3** Federal Subcontracting
-    - **H3** Natural Resource Revenues
-    - **H3** Individually Owned Native Businesses
-    - **H3** Native Nonprofits
-    - **H3** Cedar Native Entity Enterprise Dataset (Cedar NEED)
+- **H1** Turn a local question into a defensible case.
+  - **H2** Choose the work. Grove changes with it.
+  - **H2** A figure should not leave its evidence behind.
+  - **H2** The collections behind the evidence.
   - **H2** Cedar Grove, for your whole organization.
 
 ### Copy, in document order
@@ -1578,467 +1566,67 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 
 > _section: `meth-hero`_
 
-CEDAR GROVE BY LUMECON
+CEDAR GROVE
 
 
-**H1: The living evidence base for your organization’s economy.**
+**H1: Turn a local question into a defensible case.**
 
 Cedar Grove connects maintained public data, Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, so a number can be checked, cited and reproduced by the people who have to stand behind it.
 
 - _link:_ [Request Grove →](#license)
-- _link:_ [See the evidence behind a finding →](#frame)
-- _label:_ Cedar Grove NAVAJO NATION CENSUS TIGER/LINE 2018 · COVERAGE, NOT VALUES
-- _label:_ APACHE CO, AZ COCONINO CO, AZ NAVAJO CO, AZ BERNALILLO CO, NM CIBOLA CO, NM MCKINLEY CO, NM SAN JUAN CO, NM HOPI UTE MOUNTAIN ZUNI Navajo Nation AIANNH 2430
-_caption:_ RESERVATION OFF-RESERVATION TRUST LAND COUNTY A SOURCE FALLS BACK TO STATE LINE ANOTHER NATION
-CENSUS TIGER/LINE 2018 (TRIBAL AREAS); US-ATLAS COUNTIES-10M AND STATES-10M. 22,241 SQUARE MILES OF RESERVATION AND 1,892 OF OFF-RESERVATION TRUST LAND, ACROSS 9 COUNTIES IN 3 STATES. DETACHED PARCELS HOLDING LESS THAN THE SHARE BELOW OF THEIR LAYER'S AREA ARE NOT DRAWN AT THIS SCALE. INTERIOR RINGS ARE KEPT WITH THE PARCEL THAT CONTAINS THEM. RESERVATION 0.1%, TRUST LAND 1%, NEIGHBOURING NATIONS 2%.
+- _link:_ [See how it works →](#tour)
+- _image alt:_ Cedar Grove Home, asking what are you preparing, with five illustrated purpose plates on an arc. The plate at the front reads Grant case or application and names what it produces: a need statement, cited figures and an evidence appendix.
+
+> _section: `Cedar Grove in the product`_
 
 
-> _section: `Evidence for the selected topic`_
+> _section: `tour-row`_
 
-WHAT THE EVIDENCE COVERS
-
-- _button:_ Income and population DIRECT
-- _button:_ Employment and wages COUNTY PROXY
-- _button:_ Program outcomes NO PUBLIC SOURCE
-- SOURCE
-- U.S. Census Bureau, American Community Survey, 5-year
-- VINTAGE
-- 2020–2024
-- GEOGRAPHY
-- The reservation and its trust land, published as one AIANNH area
-- LIMITATION
-- Survey estimates: a margin of error accompanies every cell
-- STATUS
-- DIRECT
-- **[conditional]** Source
-- **[conditional]** Bureau of Labor Statistics, Quarterly Census of Employment and Wages
-- **[conditional]** Vintage
-- **[conditional]** 2024 annual averages
-- **[conditional]** Geography
-- **[conditional]** Nine counties in three states stand in for the reservation
-- **[conditional]** Limitation
-- **[conditional]** The county figures count employers across the whole county, most of which lies outside the reservation. State the assumption or add records.
-- **[conditional]** Status
-- **[conditional]** County proxy
-- **[conditional]** Source
-- **[conditional]** None yet
-- **[conditional]** Vintage
-- **[conditional]** Not covered
-- **[conditional]** Geography
-- **[conditional]** A program service area, which no federal product publishes
-- **[conditional]** Limitation
-- **[conditional]** No federal product links a training program’s enrollment to later employment. That link needs the records of whoever runs the program.
-- **[conditional]** Status
-- **[conditional]** No public source
-These are the federal products and the levels they publish at, for an area of this kind. They are not an account of what the Navajo Nation holds: a nation’s own records answer questions no federal product reaches, and Cedar Grove reads those too. Jurisdiction, service area, organization geography and statistical geography are kept apart, never merged. The boundaries are Census geography at the vintage named under the map, and the map carries coverage, never values.
+CURATED WORKSPACE
 
 
-> _section: `grovepg-frameband`_
+**H2: Choose the work. Grove changes with it.**
 
-THE EVIDENCE BEHIND A FINDING
+A grant case, benefits report, feasibility analysis, economic impact analysis or evidence exploration starts with its own task menu, evidence lenses and save action, so the workspace stays focused on the work at hand.
 
-
-**H2: Pick a question. Read what the evidence supports, and what it rests on.**
-
-- _label:_ Cedar Grove EXAMPLE NATION ILLUSTRATIVE EXAMPLE. NAMES AND VALUES ARE INVENTED.
-
-> _section: `Leadership questions`_
-
-A LEADERSHIP QUESTION
-
-- _button:_ Are our people’s incomes rising faster than the national figure? DIRECT
-- _button:_ Are we the largest employer in our region? COUNTY PROXY
-- _button:_ What happens to our citizens after they enroll in the workforce program? MISSING
-
-> _section: `Are our people’s incomes rising faster than the national figure?`_
-
-- MEASURE
-- Per capita income (USD, nominal)
-- UNIVERSE
-- AIAN alone
-- GEOGRAPHY
-- Example Nation
-- PERIOD
-- 1990–2024
-- SOURCE
-- ACS 5-year; decennial long-form for 1990 and 2000
-- STATUS
-- DIRECT
-- _label:_ Example Nation US, AIAN alone US, all residents DECENNIAL LONG-FORM ACS 5-YEAR 1990 2024
-Per capita income is estimated to have grown faster than the national AIAN figure.
-
-Published for the Nation’s area directly. Survey estimates carry margins of error.
-
-- _button:_ Open evidence record
-- _label:_ EVIDENCE SHEET (PDF) · REPRODUCE IN PYTHON, R OR STATA
-**[conditional]** Evidence record
-
-- **[conditional]** Source
-- **[conditional]** U.S. Census Bureau, American Community Survey, 5-year (2020–2024)
-- **[conditional]** Source (also)
-- **[conditional]** U.S. Census Bureau, decennial long-form estimates (1990, 2000)
-- **[conditional]** Transformation
-- **[conditional]** As published; nominal dollars; series joined across products at 2010
-- **[conditional]** Uncertainty
-- **[conditional]** A 90 percent margin of error accompanies every ACS cell
-- **[conditional]** Limits
-- **[conditional]** Overlapping five-year periods; decennial and ACS points are not strictly comparable
-- **[conditional]** Reproduce
-- **[conditional]** Python, R and Stata scripts read the same rows the figure draws
-- **[conditional]** Cite as
-- **[conditional]** U.S. Census Bureau, American Community Survey, 5-year, 2020–2024. Prepared with Lumecon Cedar Grove.
-
-> _section: `Are we the largest employer in our region?`_
-
-- **[conditional]** Measure
-- **[conditional]** Employment (headcount)
-- **[conditional]** Geography
-- **[conditional]** Three surrounding counties
-- **[conditional]** Period
-- **[conditional]** 2025
-- **[conditional]** Source
-- **[conditional]** Lumecon Employer Benchmark; the Nation’s own row from its records
-- **[conditional]** Status
-- **[conditional]** County proxy
-- _label:_ **[conditional]** BENCHMARK 2025Example NationRegional employer BRegional employer CRegional employer DRegional employer E
-**[conditional]** The Nation would rank first among the benchmarked employers in its region.
-
-**[conditional]** This comparison covers the three surrounding counties rather than the Nation’s area directly. State the assumption or add data.
-
-- _button:_ Open evidence record
-- _label:_ **[conditional]** Evidence sheet (PDF) · Reproduce in Python, R or Stata
-**[conditional]** Evidence record
-
-- **[conditional]** Source
-- **[conditional]** Lumecon Employer Benchmark 2025, assembled from public records
-- **[conditional]** Organization data
-- **[conditional]** Enterprise employment roster, 2019–2025, supplied by the Nation
-- **[conditional]** Transformation
-- **[conditional]** Ranked by headcount; headcount is not comparable with FTE figures
-- **[conditional]** Geography
-- **[conditional]** The benchmark publishes counties, so the county group stands in for the area
-- **[conditional]** Limits
-- **[conditional]** Comparators are named where public records allow; a peer cohort otherwise
-- **[conditional]** Reproduce
-- **[conditional]** Script, data file, provenance sidecar and manifest in one bundle
-- **[conditional]** Cite as
-- **[conditional]** Lumecon Employer Benchmark, 2025, and organization-supplied employment. Prepared with Lumecon Cedar Grove.
-
-> _section: `What happens to our citizens after they enroll in the workforce program?`_
-
-- **[conditional]** Measure
-- **[conditional]** Post-enrollment employment
-- **[conditional]** Geography
-- **[conditional]** Example Nation
-- **[conditional]** Period
-- **[conditional]** Not covered
-- **[conditional]** Source
-- **[conditional]** None yet
-- **[conditional]** Status
-- **[conditional]** Missing
-- _label:_ **[conditional]** PopulationIncomeEmploymentTribal employmentPost-enrollment employmentDIRECTDIRECTCOUNTY PROXYORGANIZATION DATAMISSING
-**[conditional]** Not yet supportable. No source links program enrollment to later employment.
-
-**[conditional]** Nothing answers this yet. An enrollment history with outcome fields from the Nation’s own records would; no public source can stand in.
-
-- _button:_ Open evidence record
-- _label:_ **[conditional]** Evidence sheet (PDF) · Reproduce in Python, R or Stata
-**[conditional]** Evidence record
-
-- **[conditional]** What Grove needs
-- **[conditional]** An enrollment history file: citizen id, program, enrollment year, outcome
-- **[conditional]** Path
-- **[conditional]** Local preview today; governed import with a named data steward when it lands
-- **[conditional]** Until then
-- **[conditional]** The question stays listed as unanswered rather than answered with a proxy
-
-> _section: `meth-sec`_
+- _image alt:_ A Cedar Grove Grant project with a purpose-specific task menu, evidence source shelf, figure and actions to download, inspect or save evidence.
+EVIDENCE THAT TRAVELS
 
 
-**H2: A private, living evidence workspace for your organization and its place.**
+**H2: A figure should not leave its evidence behind.**
 
-- Evidence supported Findings you can defend today, each with its claim class, how well the evidence fits it and whether the geography measured is the geography named.
-- Direct or proxy Where a source does not publish your area, Grove names the wider geography that stood in and what that means for the number you are about to cite.
-- Governed records The roster, payroll or enrollment file that moves a topic from proxy to direct, named before you assemble it and kept under your governance when it arrives.
-- Reproducible Every figure carries an evidence record and a script that rebuilds it from the same rows, in Python, R or Stata.
-_caption:_ EVIDENCE COVERAGE ILLUSTRATIVE
-- _label:_ NEEDS ACTION DIRECT PROXY ORGANIZATION DATA MISSING
-- Population ACS 5-year DIRECT
-- Income ACS 5-year DIRECT
-- Employment QCEW, three counties COUNTY PROXY
-- Tribal employment Enterprise roster ORGANIZATION DATA
-- Program outcomes No source MISSING
-Employment rests on a county proxy. State the assumption or add records.
+Download the figure and the rows beneath it, open its evidence record or reproduce it in code. Source, vintage, geography and limitations stay attached.
 
-_caption:_ EVIDENCE RECORD ILLUSTRATIVE
-Per capita income against the national figure
+- _image alt:_ Cedar Grove Outputs showing an evidence figure, provenance and export actions.
 
-- MEASURE
-- Per capita income (USD)
-- GEOGRAPHY
-- Example Nation
-- UNIVERSE
-- AIAN alone
-- SOURCE
-- U.S. Census Bureau, ACS 5-year
-- VINTAGE
-- 2020–2024
-- TRANSFORMATION
-- As published; nominal dollars
-- UNCERTAINTY
-- 90 percent margin of error
-- LIMITS
-- Overlapping five-year periods
-- CITE AS
-- U.S. Census Bureau, American Community Survey, 5-year, 2020–2024. Prepared with Lumecon Cedar Grove.
-_caption:_ REPRODUCE ILLUSTRATIVE
-Reproducibility bundle
+> _section: `What travels with every number`_
 
-- SCRIPT lumecon-income-trend-example-nation.py
-- DATA lumecon-income-trend-example-nation.csv
-- PROVENANCE lumecon-income-trend-example-nation-provenance.csv
-- MANIFEST lumecon-income-trend-example-nation-bundle.json
-- _label:_ "sources": [{ "provider": "U.S. Census Bureau", "dataset": "ACS 5-year", "vintage": "2020-2024" }], "transformation": "as published; nominal dollars", "restrictedData": "organization rows stay within the access scope they were shared under"
-Script, data, provenance and manifest come from one evidence definition, so they cannot drift apart.
-
+- SOURCE Which published product or governed record the value came from.
+- VINTAGE Which release or reporting period is being read.
+- GEOGRAPHY The place measured, or the wider place used as a proxy.
+- DEFINITION The measure and population the number actually represents.
+- LIMITATION What the evidence cannot be asked to establish.
+- REPRODUCE The code and rows needed to rebuild the figure.
 
 > _section: `collections`_
 
-TWELVE MAINTAINED COLLECTIONS
-
-
-**H2: Twelve maintained collections, resolved to your place.**
-
-Beside the public programs, a Grove carries the collections Lumecon builds and maintains for Indian Country, each resolved to the nation, corporation or organization behind its records. Every collection available during your term is included, and each new one as it is released.
-
-- 01 Federal Funding
-- 02 Federal Register
-- 03 Legislation
-- 04 Deals
-- 05 NAGPRA
-- 06 Advocacy
-- 07 Prime Contracting
-- 08 Subcontracting
-- 09 Natural Resources
-- 10 Native-Owned Businesses
-- 11 Native Nonprofits
-- 12 Cedar NEED
-
-> _section: `Federal Funding to Indian Country`_
-
-COLLECTION 01
-
-
-**H3: Federal Funding to Indian Country**
-
-- CONTRIBUTES
-- Every award the federal government reports sending into Indian Country: grants, loans, direct payments and insurance, award by award.
-- RESOLVED TO
-- Recipients resolved to the Native entity behind them, so an award to a subsidiary, a housing authority or a consortium is attributed to the nation or organization it belongs to.
-- COVERAGE
-- Records from fiscal year 2007
-- SOURCES
-- USAspending assistance award archive and API
-- TERMS
-- Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `Federal Register`_
-
-**[conditional]** Collection 02
-
-
-**H3: Federal Register**
-
-- **[conditional]** Contributes
-- **[conditional]** Every notice, rule and comment window touching tribes, lands, water or recognition, caught while there is still time to respond.
-- **[conditional]** Resolved to
-- **[conditional]** Notices matched to the tribes, lands and organizations they name, including entities that appear under former or variant names.
-- **[conditional]** Coverage
-- **[conditional]** Records from 1994
-- **[conditional]** Sources
-- **[conditional]** federalregister.gov API
-- **[conditional]** Terms
-- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `Congressional Votes and Proposed Legislation`_
-
-**[conditional]** Collection 03
-
-
-**H3: Congressional Votes and Proposed Legislation**
-
-- **[conditional]** Contributes
-- **[conditional]** Bills, resolutions and roll-call votes from both chambers, followed from introduction to the floor: who sponsored, who voted and how.
-- **[conditional]** Resolved to
-- **[conditional]** Bills and votes tied to the tribes and Native organizations they affect, not only to the sponsors who filed them.
-- **[conditional]** Coverage
-- **[conditional]** Records from 1973, thin and gapped through the 1980s
-- **[conditional]** Sources
-- **[conditional]** congress.gov API for bills, actions and cosponsors; House and Senate roll-call records
-- **[conditional]** Terms
-- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `Indian Country Deals`_
-
-**[conditional]** Collection 04
-
-
-**H3: Indian Country Deals**
-
-- **[conditional]** Contributes
-- **[conditional]** Material transactions and capital commitments involving Native nations, organizations and enterprises: acquisitions, financing, joint ventures and major projects, with participants, announced value, status and timing.
-- **[conditional]** Resolved to
-- **[conditional]** Buyers, sellers, borrowers and issuers resolved to tribal governments, tribally owned enterprises, ANCs and NHOs.
-- **[conditional]** Coverage
-- **[conditional]** Records from 2000
-- **[conditional]** Sources
-- **[conditional]** Transaction announcements, agency records and Federal Register land and trust actions, manually reviewed
-- **[conditional]** Terms
-- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `NAGPRA`_
-
-**[conditional]** Collection 05
-
-
-**H3: NAGPRA**
-
-- **[conditional]** Contributes
-- **[conditional]** Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.
-- **[conditional]** Resolved to
-- **[conditional]** Notices matched to the tribes and Native Hawaiian organizations named in them, across the naming changes of three decades.
-- **[conditional]** Coverage
-- **[conditional]** Records from 1994, the first notice published under the Act
-- **[conditional]** Sources
-- **[conditional]** NAGPRA notices as published in the Federal Register
-- **[conditional]** Terms
-- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `Native Federal Advocacy and Engagement`_
-
-**[conditional]** Collection 06
-
-
-**H3: Native Federal Advocacy and Engagement**
-
-- **[conditional]** Contributes
-- **[conditional]** Registered lobbying, agency meetings, tribal consultations, regulatory comments, congressional testimony and nonprofit lobbying disclosures, one entity-linked activity per row.
-- **[conditional]** Resolved to
-- **[conditional]** Each activity resolved to the tribe or Native organization behind it where the record supports the link; a row the record cannot place keeps its printed party name and a blank key rather than a guess.
-- **[conditional]** Coverage
-- **[conditional]** Records from 1999
-- **[conditional]** Sources
-- **[conditional]** Senate Lobbying Disclosure Act filings, tribal consultation notices, congressional hearing records and Federal Register ex parte notices
-- **[conditional]** Terms
-- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `Federal Prime Contracting`_
-
-**[conditional]** Collection 07
-
-
-**H3: Federal Prime Contracting**
-
-- **[conditional]** Contributes
-- **[conditional]** Every prime award to a firm, a tribal enterprise or a tribal government, with the agency, the dollars, the industry and the set-aside path it came through.
-- **[conditional]** Resolved to
-- **[conditional]** Vendors resolved to tribally owned firms, ANC and NHO subsidiaries and 8(a) participants, then rolled up to the parent nation or corporation.
-- **[conditional]** Coverage
-- **[conditional]** Records from fiscal year 2000, where Native identification begins in the federal record; refreshed quarterly
-- **[conditional]** Sources
-- **[conditional]** FPDS-NG feed, USAspending award data and SAM contract awards
-- **[conditional]** Terms
-- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `Federal Subcontracting`_
-
-**[conditional]** Collection 08
-
-
-**H3: Federal Subcontracting**
-
-- **[conditional]** Contributes
-- **[conditional]** The dollars below the prime layer: which vendors do the work, under whom and in which sectors.
-- **[conditional]** Resolved to
-- **[conditional]** Subawards matched to the same resolved entities as the prime contracts above them.
-- **[conditional]** Coverage
-- **[conditional]** Records from fiscal year 2010, the statutory reporting floor
-- **[conditional]** Sources
-- **[conditional]** USAspending FSRS subaward data
-- **[conditional]** Terms
-- **[conditional]** Filer-reported and unaudited. Totals are stated with that limit.
-
-> _section: `Natural Resource Revenues`_
-
-**[conditional]** Collection 09
-
-
-**H3: Natural Resource Revenues**
-
-- **[conditional]** Contributes
-- **[conditional]** Energy and mineral activity on trust and restricted lands: production volumes, the royalties it owes and the disbursements that follow.
-- **[conditional]** Resolved to
-- **[conditional]** Production and disbursements matched to the nations and allottees they belong to.
-- **[conditional]** Coverage
-- **[conditional]** Records from 1880, through retrospectively published headright payments
-- **[conditional]** Sources
-- **[conditional]** ONRR Natural Resources Revenue Data and retrospectively published disbursement records
-- **[conditional]** Terms
-- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
-
-> _section: `Individually Owned Native Businesses`_
-
-**[conditional]** Collection 10
-
-
-**H3: Individually Owned Native Businesses**
-
-- **[conditional]** Contributes
-- **[conditional]** Individually owned Native businesses, certified by their own nations’ TERO and commerce offices: who they are, what trades they work and what preference status their nation certifies.
-- **[conditional]** Resolved to
-- **[conditional]** Every listing carries the nation whose office certified it and is credited to the issuing TERO or commerce office.
-- **[conditional]** Coverage
-- **[conditional]** A roster as captured on 2026-09-01; certifying offices archive no superseded lists
-- **[conditional]** Sources
-- **[conditional]** Nations’ TERO and commerce offices, shared with the project office by office
-- **[conditional]** Terms
-- **[conditional]** A listing appears only under its nation’s stated terms.
-
-> _section: `Native Nonprofits`_
-
-**[conditional]** Collection 11
-
-
-**H3: Native Nonprofits**
-
-- **[conditional]** Contributes
-- **[conditional]** Native-led and Native-serving nonprofits with their federal filings: budgets, revenue mixes and program spending.
-- **[conditional]** Resolved to
-- **[conditional]** Filers classified as Native-led, Native-serving or Native-focused, which are three different things and are labeled separately.
-- **[conditional]** Coverage
-- **[conditional]** A register as captured on 2026-04-29, one row per filer with its latest period
-- **[conditional]** Sources
-- **[conditional]** IRS Business Master File monthly extracts
-- **[conditional]** Terms
-- **[conditional]** Public records. The classification is Lumecon’s work and stays reviewable.
-
-> _section: `Cedar Native Entity Enterprise Dataset (Cedar NEED)`_
-
-**[conditional]** Collection 12
-
-
-**H3: Cedar Native Entity Enterprise Dataset (Cedar NEED)**
-
-- **[conditional]** Contributes
-- **[conditional]** Who owns whom across Indian Country’s enterprises: parent nations and corporations, their subsidiaries, holding companies and joint ventures, and how those ties change.
-- **[conditional]** Resolved to
-- **[conditional]** The structure the rest of the record resolves against, published as a collection in its own right: every tie names the nation or corporation behind it.
-- **[conditional]** Coverage
-- **[conditional]** Observations from 2016, the earliest year any source named an enterprise or a tie
-- **[conditional]** Sources
-- **[conditional]** Entity records, enterprise registers and filings, reconciled edition by edition
-- **[conditional]** Terms
-- **[conditional]** Unresolved ties stay unresolved. A provisional match is labeled provisional.
+EVIDENCE INFRASTRUCTURE
+
+
+**H2: The collections behind the evidence.**
+
+- Federal Funding
+- Federal Register
+- Legislation
+- Deals
+- NAGPRA
+- Advocacy
+- Prime Contracting
+- Subcontracting
+- Natural Resources
+- Native-Owned Businesses
+- Native Nonprofits
+- Cedar NEED
 
 > _section: `license`_
 
@@ -2047,23 +1635,23 @@ ONE LICENSE PER ORGANIZATION
 
 **H2: Cedar Grove, for your whole organization.**
 
-A Grove belongs to the organization, not to a seat. Everyone who works from your evidence works from the same one: the same findings, the same coverage, the same records, the same history.
+A Grove belongs to the organization, not to a seat. Everyone works from the same evidence record, with the same sources, coverage and history.
 
-Onboarding is done with you. We anchor the Grove to your area, connect the public programs that publish it, and set up the records you want layered over the gaps.
+Onboarding is done with you. We anchor Grove to the places that matter, connect the public programs that publish them and set up the records you want layered over the gaps.
 
-Unlimited users either way. Cedar Grove on its own is the evidence base; the Tree plan is the same Grove with Cedar Impact and Cedar Commons beside it, and that is the whole difference in price. Compare plans.
+Grove stands on its own. Tree adds Cedar Impact and Cedar Commons beside the same evidence base. Compare plans.
 
 $2,500 per organization, per year
 
 - Unlimited users in one organization
-- Twelve Lumecon collections, and each new one
-- Full history and evidence records
-- Exports, evidence sheets and reproducibility bundles
-- Cedar, the AI economic analyst, grounded in your evidence
+- Maintained Lumecon collections and new releases
+- Project evidence logs and coverage checks
+- Figures, data exports and reproducibility bundles
+- Cedar, grounded in the evidence you have selected
 - _link:_ [Request Grove →](/signup?product=cedar-grove)
 Prefer to talk first? contact@lumecon.ai
 
-Also from Lumecon. Use this evidence base to model a project or policy in Cedar Impact, and to share the work in Cedar Commons. Grove stands on its own; the family is there when you need it.
+Also from Lumecon. Use Grove to prepare evidence for Cedar Impact, then carry the modeled result back with its assumptions and sources intact.
 
 - _link:_ [See Cedar Impact →](/#product)
 
@@ -2550,7 +2138,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 116
+- **Visible words:** 120
 
 ### Architecture (heading outline)
 
@@ -2612,8 +2200,8 @@ Enter your work email and password to continue.
 - _link:_ [Forgot password?](/login?reset=1)
 - _button:_ Log in
 - _button:_ Back to sign in
-- _label:_ **[conditional]** or
-- _link:_ [Continue with Google](/login?google=1)
+- _label:_ OR
+- _link:_ [Continue with Google](https://api.lumecon.ai/auth/google)
 New to Lumecon? Request beta access
 
 
@@ -2934,7 +2522,7 @@ SUBSCRIPTION CONFIRMED
 
 Open Lumecon to review your workspace and begin your first analysis.
 
-- _link:_ [Open Lumecon →](/login)
+- _link:_ [Open Lumecon →](https://app.lumecon.ai)
 Use the account credentials provided with your access invitation.
 
 - _image alt:_ The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data.
@@ -3819,7 +3407,6 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 ### Sentences that appear verbatim on more than one page
 
 - **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
-- **On `/pricing` and `/cedar-grove`:** "The living evidence base for your organization’s economy."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."
