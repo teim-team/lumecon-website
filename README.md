@@ -164,6 +164,13 @@ flows to the page, the footer, the JSON-LD, and the sitemap. Changing a
 plan, a product one-liner, or a Cedar chat answer is a single edit in the
 relevant data file.
 
+Navigation is grouped rather than flat: `Nav.astro` holds a `NAV` array of
+four top-level items, three of which open a short panel (Product, which is
+where the Cedar family lives, Resources and Company). Adding a page means
+adding a line to that array, not arguing for one of the slots in a row that
+had already run out of width. The same array renders the phone overlay as
+headed sections.
+
 `src/data/planFirstAnalysis.js` goes one step further and is worth knowing
 about before editing anything onboarding-related. It holds the scoping
 questions, the branching rules, the records catalog, the capability matrix

@@ -23,27 +23,27 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 747 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/pricing` | 1303 | Pricing \| Lumecon | 155 |
-| `/methodology` | 2564 | Methodology \| Lumecon | 167 |
-| `/team` | 373 | Team \| Lumecon | 115 |
-| `/cedar` | 472 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-grove` | 462 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
-| `/glossary` | 555 | Glossary \| Lumecon | 142 |
-| `/naics` | 664 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1717 | Plan your first analysis \| Lumecon | 173 |
-| `/signup` | 254 | Request beta access \| Lumecon | 118 |
-| `/login` | 120 | Log in \| Lumecon | 31 |
-| `/choose-plan` | 229 | Choose your plan \| Lumecon | 103 |
-| `/checkout` | 213 | Checkout \| Lumecon | 81 |
-| `/welcome` | 64 | Welcome to Lumecon | 32 |
-| `/accessibility` | 390 | Accessibility \| Lumecon | 141 |
-| `/ai-and-data-use` | 612 | AI and Data Use \| Lumecon | 133 |
-| `/security` | 441 | Security \| Lumecon | 118 |
-| `/privacy` | 675 | Privacy Policy \| Lumecon | 99 |
-| `/terms` | 1043 | Terms of Service \| Lumecon | 146 |
-| `/404` | 101 | Page Not Found \| Lumecon | 141 |
-| **Total** | **12999** | | |
+| `/` | 743 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/pricing` | 1299 | Pricing \| Lumecon | 155 |
+| `/methodology` | 2560 | Methodology \| Lumecon | 167 |
+| `/team` | 369 | Team \| Lumecon | 115 |
+| `/cedar` | 468 | Cedar, the AI economic analyst \| Lumecon | 151 |
+| `/cedar-grove` | 458 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/glossary` | 551 | Glossary \| Lumecon | 142 |
+| `/naics` | 660 | Industry sectors \| Lumecon | 146 |
+| `/start` | 1713 | Plan your first analysis \| Lumecon | 173 |
+| `/signup` | 250 | Request beta access \| Lumecon | 118 |
+| `/login` | 116 | Log in \| Lumecon | 31 |
+| `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
+| `/checkout` | 209 | Checkout \| Lumecon | 81 |
+| `/welcome` | 60 | Welcome to Lumecon | 32 |
+| `/accessibility` | 386 | Accessibility \| Lumecon | 141 |
+| `/ai-and-data-use` | 608 | AI and Data Use \| Lumecon | 133 |
+| `/security` | 437 | Security \| Lumecon | 118 |
+| `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
+| `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
+| `/404` | 97 | Page Not Found \| Lumecon | 141 |
+| **Total** | **12919** | | |
 
 ## Crawler metadata audit
 
@@ -67,7 +67,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 747
+- **Visible words:** 743
 
 ### Architecture (heading outline)
 
@@ -99,21 +99,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -392,7 +388,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1303
+- **Visible words:** 1299
 
 ### Architecture (heading outline)
 
@@ -416,21 +412,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -779,7 +771,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2564
+- **Visible words:** 2560
 
 ### Architecture (heading outline)
 
@@ -814,21 +806,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1110,7 +1098,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/team
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, AboutPage, BreadcrumbList
-- **Visible words:** 373
+- **Visible words:** 369
 
 ### Architecture (heading outline)
 
@@ -1137,21 +1125,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1357,7 +1341,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 472
+- **Visible words:** 468
 
 ### Architecture (heading outline)
 
@@ -1382,21 +1366,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1530,7 +1510,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 462
+- **Visible words:** 458
 
 ### Architecture (heading outline)
 
@@ -1551,21 +1531,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1715,7 +1691,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/glossary
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, DefinedTermSet
-- **Visible words:** 555
+- **Visible words:** 551
 
 ### Architecture (heading outline)
 
@@ -1732,21 +1708,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1878,7 +1850,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, DefinedTermSet
-- **Visible words:** 664
+- **Visible words:** 660
 
 ### Architecture (heading outline)
 
@@ -1895,21 +1867,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2031,7 +1999,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1717
+- **Visible words:** 1713
 
 ### Architecture (heading outline)
 
@@ -2054,21 +2022,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2285,7 +2249,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/signup
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 254
+- **Visible words:** 250
 
 ### Architecture (heading outline)
 
@@ -2302,21 +2266,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2403,7 +2363,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 120
+- **Visible words:** 116
 
 ### Architecture (heading outline)
 
@@ -2420,21 +2380,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2494,7 +2450,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/choose-plan
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 229
+- **Visible words:** 225
 
 ### Architecture (heading outline)
 
@@ -2511,21 +2467,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2596,7 +2548,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/checkout
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 213
+- **Visible words:** 209
 
 ### Architecture (heading outline)
 
@@ -2613,21 +2565,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2746,7 +2694,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/welcome
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 64
+- **Visible words:** 60
 
 ### Architecture (heading outline)
 
@@ -2763,21 +2711,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2811,7 +2755,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/accessibility
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 390
+- **Visible words:** 386
 
 ### Architecture (heading outline)
 
@@ -2832,21 +2776,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2939,7 +2879,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/ai-and-data-use
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 612
+- **Visible words:** 608
 
 ### Architecture (heading outline)
 
@@ -2964,21 +2904,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -3087,7 +3023,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/security
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage
-- **Visible words:** 441
+- **Visible words:** 437
 
 ### Architecture (heading outline)
 
@@ -3109,21 +3045,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -3265,7 +3197,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/privacy
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 675
+- **Visible words:** 671
 
 ### Architecture (heading outline)
 
@@ -3289,21 +3221,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -3405,7 +3333,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/terms
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1043
+- **Visible words:** 1039
 
 ### Architecture (heading outline)
 
@@ -3436,21 +3364,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -3585,7 +3509,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/404
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 101
+- **Visible words:** 97
 
 ### Architecture (heading outline)
 
@@ -3602,21 +3526,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
