@@ -70,21 +70,25 @@ const jsonLd = [
 >
   <Nav isHome={false} />
   <main class="meth start" id="top" tabindex="-1">
-    <header class="meth-hero start-hero">
-      <div class="meth-w start-hero__grid">
-        <div class="start-hero__head">
-          <p class="h-kicker">Getting started</p>
-          <h1 class="meth-hero__title">
+    <header class="meth-hero meth-hero--cover start-hero section--dark">
+      <div class="meth-w">
+        <div class="start-hero__copy">
+          <p class="h-kicker reveal-soft">Getting started</p>
+          <h1 class="meth-hero__title reveal-soft" data-stagger="1">
             Plan your <span class="brand-em">first analysis</span>.
           </h1>
-          <p class="meth-hero__lede">
+          <p class="meth-hero__lede reveal-soft" data-stagger="2">
             Most organizations do not need everything to begin. They need one question worth
             answering, a boundary around it and the records they already have. Six questions
             propose a starting scope and the short list of records it needs.
           </p>
         </div>
 
-        <div class="start-hero__flow">
+        {/* The flow is this page's product, so it is staged the way a
+            product screen is staged on the other pages: a working surface
+            on the dark ground, with a caption under it. */}
+        <div class="start-stage reveal-soft" data-stagger="3">
+          <div class="start-stage__inner">
           <form class="pf" id="pf-form" novalidate>
             <div class="pf-rail" data-pf-rail hidden>
               <p class="pf-rail__label" data-pf-label></p>
@@ -179,21 +183,38 @@ const jsonLd = [
               economist will work through it with you.
             </p>
           </form>
-        </div>
-
-        <div class="start-hero__more">
-          <ul class="start-promise" role="list">
-            <li>What you can learn with the information you already have.</li>
-            <li>The minimum this particular question needs.</li>
-            <li>What more information would make possible.</li>
-            <li>Who has to help you get started.</li>
-          </ul>
-          <p class="start-hero__note">
-            Nothing is uploaded here and no answer is stored. Not sure is a real answer, and where
-            too much is open the recommendation is a conversation rather than a plan built on
-            guesses.
+          </div>
+          <p class="start-stage__foot">
+            Nothing is uploaded here and no answer is stored. Not sure is a real answer.
           </p>
         </div>
+
+        <ol class="start-promise" aria-label="What this gives you">
+          <li class="reveal-soft" data-stagger="1">
+            <p class="start-promise__k">What you can learn now</p>
+            <p class="start-promise__b">
+              What the records you already hold support, before anyone gathers anything new.
+            </p>
+          </li>
+          <li class="reveal-soft" data-stagger="2">
+            <p class="start-promise__k">The minimum for your question</p>
+            <p class="start-promise__b">
+              A short list, tied to the scope you chose rather than to everything we can read.
+            </p>
+          </li>
+          <li class="reveal-soft" data-stagger="3">
+            <p class="start-promise__k">What more would make possible</p>
+            <p class="start-promise__b">
+              What each further record changes about the method, and what it does not.
+            </p>
+          </li>
+          <li class="reveal-soft" data-stagger="4">
+            <p class="start-promise__k">Who has to help</p>
+            <p class="start-promise__b">
+              The two or three people the scope needs, and who approves sharing records.
+            </p>
+          </li>
+        </ol>
       </div>
     </header>
 
@@ -201,6 +222,64 @@ const jsonLd = [
       <div class="meth-w">
         <h2 id="s-plan" class="visually-hidden">Your starting plan</h2>
         <div class="pf-plan" id="pf-plan" tabindex="-1" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="meth-sec start-sec start-sec--surface" aria-labelledby="s-output">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="s-output">What a first analysis returns</h2>
+          <p class="meth-sec__lede">
+            The same four measures whatever the scope, separated into the activity itself, the
+            suppliers it buys from and the household spending its wages support. Every figure
+            stays connected to the record it came from.
+          </p>
+        </div>
+        <div class="start-output">
+          <ol class="start-output__list" role="list">
+            <li>
+              <p class="start-output__k">Jobs supported</p>
+              <p class="start-output__b">
+                Reported as jobs supported, never as jobs created. A contribution analysis has no
+                counterfactual to claim one.
+              </p>
+            </li>
+            <li>
+              <p class="start-output__k">Labor income</p>
+              <p class="start-output__b">
+                Wages, salaries and proprietor income, which is what drives the household spending
+                in the third layer.
+              </p>
+            </li>
+            <li>
+              <p class="start-output__k">Value added</p>
+              <p class="start-output__b">
+                The contribution to regional GDP. Labor income is a component of it, never a figure
+                to add alongside.
+              </p>
+            </li>
+            <li>
+              <p class="start-output__k">Economic output</p>
+              <p class="start-output__b">
+                Total production supported in the region, with the direct, indirect and induced
+                shares shown separately.
+              </p>
+            </li>
+          </ol>
+          <figure class="start-output__shot" data-zoom>
+            <picture>
+              <img
+                src="/app/ex-nation-results.webp"
+                alt="A completed Lumecon analysis showing jobs supported, GDP contribution, labor income and economic output, with the direct, indirect and induced split beneath. Shown with illustrative sample data."
+                width="1920"
+                height="1312"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <figcaption>A completed analysis. Illustrative sample data, not a customer.</figcaption>
+          </figure>
+        </div>
       </div>
     </section>
 
@@ -254,6 +333,31 @@ const jsonLd = [
             reformatting anything.
           </p>
         </div>
+        <ul class="start-core" role="list">
+          {
+            ['financials', 'payroll', 'headcount'].map((id, i) => (
+              <li>
+                <p class="start-core__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+                <div>
+                  <p class="start-core__what">{RECORDS[id].what}</p>
+                  <p class="start-core__why">{RECORDS[id].why}</p>
+                  {RECORDS[id].alternative ? (
+                    <p class="start-core__alt">
+                      <span class="start-records__altk">Also works</span>{' '}
+                      {RECORDS[id].alternative}
+                    </p>
+                  ) : null}
+                </div>
+                <p class="start-core__holder">{RECORDS[id].holder}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="start-core__note">
+          Almost every analysis begins with these three, for one year. What else is needed depends
+          on the scope, which is what the questions above work out.
+        </p>
+
         <details class="start-fold">
           <summary class="start-fold__sum">
             The full list, with who usually holds each one

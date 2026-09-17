@@ -7,107 +7,133 @@
    so it is allowed to draw one. Nothing else is boxed.
    --------------------------------------------------------------- */
 
-.start-promise {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
-  max-width: 46ch;
+/* ---------------------------------------------------------------
+   The cover.
+
+   Same composition as /methodology and /cedar-grove: a dark band, the
+   argument on the left, a working surface on the right. The difference
+   is what sits on the surface. Those pages stage a screenshot of the
+   product; this page's product is the flow itself, so the flow is what
+   gets staged, live.
+   --------------------------------------------------------------- */
+
+/* One grid item per column. The shared cover lets its copy be three
+   separate grid items and spans the stage across all of them, which is
+   right when the copy is the taller side. Here the stage is, and the
+   spanning item would stretch the copy's rows down its whole height. */
+.start-hero .meth-w {
+  grid-template-rows: auto;
+  align-items: start;
 }
-.start-promise li {
-  position: relative;
-  padding-left: 1.1rem;
-  font-size: 0.98rem;
-  line-height: 1.55;
-  color: var(--ink-2);
+.start-hero__copy {
+  grid-column: 1;
 }
-.start-promise li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.62em;
-  width: 0.4rem;
-  height: 1px;
-  background: var(--accent-text);
+.start-hero .h-kicker {
+  margin-bottom: 0.9rem;
+}
+.start-hero .meth-hero__title {
+  max-width: 11ch;
+}
+.start-hero .meth-hero__lede {
+  max-width: 44ch;
+  margin-bottom: 0;
 }
 
-.start-sec {
+.start-stage {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+}
+.start-stage__inner {
+  /* A white surface inside the inverted band, so the tokens go back to
+     their light values rather than every control inside having to know
+     where it is. These are the :root values, not new ones. */
+  --white: #f3f6f8;
+  --surface: #ffffff;
+  --cream: #edf2f4;
+  --paper: #e5ebee;
+  --ink: #071824;
+  --ink-2: #33434a;
+  --ink-3: #647279;
+  --ink-4: #93a0a5;
+  --navy: #071824;
+  --rule: rgba(10, 28, 52, 0.1);
+  --rule-strong: rgba(10, 28, 52, 0.2);
+  --accent-text: #0a7f74;
+
+  padding: clamp(1.4rem, 2.4vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 34px 84px -38px rgba(0, 0, 0, 0.82);
+}
+.start-stage__foot {
+  margin: 0.85rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* The four things the flow returns, read as a row under the cover, the
+   way /methodology lists its three principles. */
+.start-promise {
+  list-style: none;
+  margin: clamp(2.4rem, 5vw, 3.6rem) 0 0;
+  padding: 1.6rem 0 0;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.2rem, 2.6vw, 2.6rem);
+  grid-column: 1 / -1;
+}
+.start-promise__k {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.start-promise__b {
+  margin: 0.45rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.start-sec--plan {
   border-top: 1px solid var(--rule);
 }
 
-/* Desktop reads as two columns, the argument beside the first question.
-   A phone is its own composition: the question comes second, straight after
-   the headline, and the supporting copy follows it rather than pushing it
-   off the screen. */
-.start-hero__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-areas:
-    'head flow'
-    'more flow';
-  gap: clamp(1.8rem, 3vw, 2.6rem) clamp(2.4rem, 5vw, 5rem);
-  align-items: start;
-}
-.start-hero__head {
-  grid-area: head;
-}
-.start-hero__flow {
-  grid-area: flow;
-}
-.start-hero__more {
-  grid-area: more;
-}
-.start-hero__head .meth-hero__lede {
-  max-width: 46ch;
-  /* The grid gap already separates the argument from the flow beside it,
-     so the lede's own 3rem does nothing but push the first question down
-     a screen. */
-  margin-bottom: 0;
-}
-/* This page opens on a question rather than on a statement, so it carries
-   less headroom than the reference pages that share this hero. */
-.start-hero {
-  padding-top: clamp(5rem, 9vh, 7.5rem);
-}
-.start-hero__note {
-  margin: 1.6rem 0 0;
-  font-size: var(--fs-sm-2);
-  line-height: 1.6;
-  color: var(--ink-4);
-  max-width: 52ch;
-}
-/* The flow keeps the page's own ground rather than a panel of its own: the
-   only boundaries in the column are the ones a person can select. */
-.start-hero__flow {
-  padding-top: 0.45rem;
-}
-.start-sec--plan {
-  border-top: 1px solid var(--rule-strong);
-}
-/* Once the plan exists it is the thing to read. The four promises above the
-   flow have been kept, so the hero closes up rather than holding a column of
-   air beside three lines of chrome. */
-.start-hero__grid:has(.pf--done) .start-hero__more {
-  display: none;
-}
-
 @media (max-width: 980px) {
-  .start-hero__grid {
+  .start-hero .meth-w {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      'head'
-      'flow'
-      'more';
-    gap: 1.6rem;
   }
-  /* On a phone the question is directly beneath the headline, so the
-     headroom above it matters more than it does on a wide screen. */
-  .start-hero {
-    padding-top: clamp(4.2rem, 7vh, 5.5rem);
+  .start-hero .meth-hero__title,
+  .start-hero .meth-hero__lede {
+    max-width: none;
+  }
+  .start-stage {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 1.8rem;
+  }
+  .start-hero__copy {
+    grid-column: 1;
   }
   .start-promise {
-    margin-top: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .start-promise {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
   }
 }
 
@@ -633,6 +659,135 @@
   max-width: 72ch;
 }
 
+/* ---------------------------------------------------------------
+   What a first analysis returns.
+
+   The one band on a white plane rather than the page ground, and the
+   one product capture on the page. A long document wants its material
+   to change where the subject does: everything above is about getting
+   started, this is what getting started produces.
+   --------------------------------------------------------------- */
+
+.start-sec--surface {
+  background: var(--surface);
+}
+.start-output {
+  display: grid;
+  grid-template-columns: minmax(16rem, 4fr) minmax(0, 7fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+  margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+}
+.start-output__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.start-output__list li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+}
+.start-output__list li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-output__k {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+.start-output__b {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.start-output__shot {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
+}
+.start-output__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.start-output__shot figcaption {
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+
+/* ---------- the three records almost every analysis starts with ---------- */
+
+.start-core {
+  list-style: none;
+  margin: clamp(1.6rem, 2.6vw, 2.2rem) 0 0;
+  padding: 0;
+}
+.start-core li {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr) minmax(9rem, 14rem);
+  gap: 1.4rem;
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+.start-core li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-core__n {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-text);
+}
+.start-core__what {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--navy);
+}
+.start-core__why {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+.start-core__alt {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 62ch;
+}
+.start-core__holder {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+.start-core__note {
+  margin: 1.1rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 72ch;
+}
+
 /* ---------- record catalog fold ---------- */
 
 .start-fold {
@@ -824,8 +979,17 @@
 /* ---------- phone ---------- */
 
 @media (max-width: 860px) {
-  .start-call {
+  .start-call,
+  .start-output {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .start-core li {
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+    gap: 0.9rem;
+  }
+  .start-core__holder {
+    grid-column: 2;
+    margin-top: 0.3rem;
   }
   .start-matrix__row {
     grid-template-columns: minmax(0, 1fr);
@@ -870,8 +1034,8 @@
 
 @media print {
   .start-promise,
-  .start-hero__head .meth-hero__lede,
-  .start-hero__more,
+  .meth-hero__lede,
+  .start-stage,
   .pf-head,
   .pf,
   .start-sec:not(#top) .start-matrix,
@@ -887,9 +1051,6 @@
   .start-sec[aria-labelledby='s-call'],
   .start-sec[aria-labelledby='s-coverage'] {
     display: none !important;
-  }
-  .meth-hero__lede {
-    display: none;
   }
   .pf-plan {
     border-top: 0;
