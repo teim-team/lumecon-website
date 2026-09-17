@@ -169,6 +169,39 @@ credible; /cedar says why Lumecon's use of AI is different; the
 glossary defines terms and nothing more. Do not re-explain Cedar on
 other pages beyond a one-line pointer to /cedar.
 
+## Standing instruction: the copy document is a CI gate (2026-09)
+
+The smoke workflow's last step regenerates
+`docs/site-copy-and-architecture.md` from the built site and runs
+`git diff --exit-code` on it. Change any visible copy and that file is
+stale, so the job fails even when every test passed, which is how it
+reads in the log: 63 chromium and 63 webkit green, then a failure.
+
+Regenerate and commit it in the same change:
+
+```
+npm run build && npm run preview -- --host 127.0.0.1 &
+DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
+```
+
+`astro preview` is a singleton, so stop an existing one first
+(`npx astro preview stop`) or the second call silently serves nothing.
+
+## Standing instruction: verify with `npm run build` (2026-09)
+
+`npm run build` is `astro check && astro build`, and it is what all three
+workflows run. Run it before pushing, and read the whole result.
+
+`astro check` prints errors first and finishes with the warning and hint
+counts, so `astro check | tail -3` shows `0 warnings / 0 hints` on a run
+that failed. That exact mistake shipped a type error to `main`, where it
+broke the Pages deploy, the smoke job and Lighthouse at once, because each
+of them starts with the same build.
+
+The error itself is worth knowing too: indexing a keyed object with a
+`string[]`'s element type fails, because `string` has no index signature on
+it. Use `as const` on the id list so each element is a literal key.
+
 ## No ampersands in displayed copy (2026-07)
 
 Write "and", never "&", anywhere a visitor can read it (founder

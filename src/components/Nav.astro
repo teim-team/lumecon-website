@@ -27,7 +27,15 @@ const { isHome = false } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 type NavLink = { href: string; text: string; desc?: string };
-type NavItem = { id: string; label: string; href?: string; links?: NavLink[] };
+type NavItem = {
+  id: string;
+  label: string;
+  href?: string;
+  links?: NavLink[];
+  /** One quiet link under a group's list, for a destination that belongs
+      with the group without competing with its products. */
+  foot?: NavLink;
+};
 
 const NAV: NavItem[] = [
   {
@@ -42,13 +50,14 @@ const NAV: NavItem[] = [
         desc: "The living evidence base for your organization's economy.",
       },
     ],
+    foot: { href: '/start', text: 'Not sure where to start? Plan your first analysis' },
   },
   { id: 'pricing', label: 'Pricing', href: '/pricing' },
   {
     id: 'resources',
     label: 'Resources',
     links: [
-      { href: '/start', text: 'Plan your first analysis', desc: 'Six questions to a starting scope.' },
+      { href: '/start', text: 'Plan your first analysis', desc: 'Find a scope you can run, and what to bring.' },
       { href: '/methodology', text: 'Methodology', desc: 'The economics, with the equations.' },
       { href: '/glossary', text: 'Glossary', desc: 'The terms, defined plainly.' },
       { href: '/naics', text: 'Industry sectors', desc: 'What the classification covers.' },
@@ -97,7 +106,11 @@ const holdsCurrent = (item: NavItem) =>
                   {item.label}
                   <span class="nav-toggle__chev" aria-hidden="true"></span>
                 </button>
-                <div class="nav-panel" id={`navp-${item.id}`} hidden>
+                <div
+                  class={`nav-panel${item.links.some((l) => l.desc) ? '' : ' nav-panel--plain'}`}
+                  id={`navp-${item.id}`}
+                  hidden
+                >
                   <ul role="list">
                     {item.links.map((l) => (
                       <li>
@@ -113,6 +126,11 @@ const holdsCurrent = (item: NavItem) =>
                       </li>
                     ))}
                   </ul>
+                  {item.foot ? (
+                    <p class="nav-panel__foot">
+                      <a href={item.foot.href}>{item.foot.text}</a>
+                    </p>
+                  ) : null}
                 </div>
               </li>
             ) : (

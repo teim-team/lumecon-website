@@ -10,20 +10,13 @@ import { test, expect, type Page } from '@playwright/test';
  * shapes: that a feasible starting scope comes back, and that nothing
  * missing is treated as known.
  *
- * The flow shows one question at a time and a single-answer question
- * advances itself, so the helpers below drive it the way a person does.
+ * One screen at a time, and every screen is confirmed with Continue, so
+ * an answer can be read back before it moves.
  */
 
-/**
- * Answer the screen that is on show. A screen holds one question, or the
- * few that only make sense together, so the helper takes them as a map. A
- * screen that needs no Continue button advances itself.
- */
-async function step(page: Page, answers: Record<string, string | string[]>) {
+async function fill(page: Page, answers: Record<string, string | string[]>) {
   const showing = page.locator('fieldset.pf-q:visible');
   await expect(showing).toHaveCount(1);
-  // Pin the screen by id: the bare ":visible" locator would resolve to
-  // whichever screen comes next and never report the current one as gone.
   const id = await showing.getAttribute('data-step');
   const screen = page.locator(`[data-step="${id}"]`);
   for (const [name, value] of Object.entries(answers)) {
@@ -31,22 +24,19 @@ async function step(page: Page, answers: Record<string, string | string[]>) {
       await screen.locator(`input[name="${name}"][value="${one}"]`).check();
     }
   }
-  const next = page.locator('[data-pf-next]');
-  if (await next.isVisible()) {
-    const label = await page.locator('[data-pf-next-label]').textContent();
-    if (label?.match(/continue/i)) await next.click();
-  }
+  return screen;
+}
+
+/** Answer the screen on show and confirm it. */
+async function step(page: Page, answers: Record<string, string | string[]>) {
+  const screen = await fill(page, answers);
+  await page.locator('[data-pf-next]').click();
   await expect(screen).toBeHidden({ timeout: 3000 });
 }
 
 /** Answer the last screen and read the plan back. */
 async function finish(page: Page, answers: Record<string, string | string[]>) {
-  const screen = page.locator('fieldset.pf-q:visible');
-  for (const [name, value] of Object.entries(answers)) {
-    for (const one of Array.isArray(value) ? value : [value]) {
-      await screen.locator(`input[name="${name}"][value="${one}"]`).check();
-    }
-  }
+  await fill(page, answers);
   await page.locator('[data-pf-next]').click();
   const panel = page.locator('#pf-plan');
   await expect(panel).toBeVisible();
@@ -60,56 +50,83 @@ test.beforeEach(async ({ page }) => {
 
 test('the flow opens on one question and asks for no records', async ({ page }) => {
   await expect(page).toHaveTitle(/Plan your first analysis/i);
-  // Six screens and seven conditional follow-ups ship in the markup, so the
-  // page still works with no JavaScript. One screen is on show.
-  await expect(page.locator('fieldset.pf-q')).toHaveCount(13);
+  // Every screen ships in the markup, so the page still works with no
+  // JavaScript. One of them is on show.
+  await expect(page.locator('fieldset.pf-q')).toHaveCount(14);
   await expect(page.locator('fieldset.pf-q:visible')).toHaveCount(1);
-  await expect(page.locator('[data-step="purpose"]')).toBeVisible();
-  await expect(page.locator('[data-pf-label]')).toHaveText('Question 1 of 6');
-  // Every initial question offers a real "not sure".
-  for (const name of ['goal', 'audience', 'boundary', 'where', 'records_held']) {
-    await expect(page.locator(`input[name="${name}"][value="not_sure"]`)).toHaveCount(1);
-  }
-  // The reference material renders statically, with no tailored plan at all.
-  await expect(page.locator('.start-matrix__row')).toHaveCount(7);
-  await expect(page.locator('.start-call__outline li')).toHaveCount(5);
+  await expect(page.locator('[data-step="goal"]')).toBeVisible();
+
+  // Four fixed stages, so the end cannot move while somebody works.
+  await expect(page.locator('.pf-rail__item')).toHaveCount(4);
+  await expect(page.locator('.pf-rail__item[aria-current="step"]')).toContainText('Goal');
+  await expect(page.locator('#pf-form')).not.toContainText(/Question \d+ of \d+/);
+
   // Nothing on the public flow asks for a financial record.
   await expect(page.locator('input[type="file"]')).toHaveCount(0);
   await expect(page.getByText(/Records are shared inside the product/i)).toBeVisible();
 });
 
+test('nothing advances until the answer is confirmed', async ({ page }) => {
+  const next = page.locator('[data-pf-next]');
+  await expect(next).toBeDisabled();
+  await page.locator('[data-step="goal"] input[value="current_operations"]').check();
+  // Still on the same question: the choice can be read back and changed.
+  await expect(page.locator('[data-step="goal"]')).toBeVisible();
+  await expect(next).toBeEnabled();
+  await page.locator('[data-step="goal"] input[value="project"]').check();
+  await expect(page.locator('[data-step="goal"]')).toBeVisible();
+  await next.click();
+  await expect(page.locator('[data-step="audience"]')).toBeVisible();
+});
+
 test('a single-location enterprise gets a bounded scope from records it already has', async ({
   page,
 }) => {
-  await step(page, { goal: 'annual_contribution', audience: 'leadership' });
+  await step(page, { goal: 'current_operations' });
+  await step(page, { audience: 'leadership' });
   await step(page, { boundary: 'one_enterprise' });
   await step(page, { where: 'one_site' });
   await step(page, { activities: 'retail_fuel' });
   await step(page, { records_held: 'centralized' });
-  const panel = await finish(page, { available: ['audited_financials', 'payroll', 'roster'] });
+  const panel = await finish(page, {
+    available: ['audited_financials', 'payroll', 'roster'],
+  });
 
-  await expect(panel.locator('.pf-scope')).toContainText('one enterprise');
-  await expect(panel.locator('.pf-scope')).toContainText('one reporting year');
-  // Structure and records are read separately and never merged.
-  await expect(panel.locator('.pf-read__v').first()).toHaveText('One operation, one place');
-  await expect(panel.locator('.pf-read__v').nth(1)).toHaveText('Enough in hand to start');
+  // The recommendation leads, with the scope as facts rather than prose.
+  await expect(panel.locator('.pf-lead__title')).toContainText('one enterprise');
+  await expect(panel.locator('.pf-facts')).toContainText('One reporting year');
+  await expect(panel.locator('.pf-facts')).toContainText('One location');
 
-  const begin = panel.locator('.pf-block', { hasText: 'Needed to begin' });
-  await expect(begin).toContainText('financial statement');
-  await expect(begin).toContainText('payroll summary');
-  await expect(begin).toContainText('places work is performed');
-  // Nothing about entities that do not exist here.
-  await expect(begin).not.toContainText('entities in scope');
+  // One concrete next action, drawn from what they already hold.
+  const act = panel.locator('.pf-lead__act');
+  await expect(act).toContainText('financial statement');
+  await expect(act).toContainText('A first read is a review');
+  await expect(act.getByRole('link', { name: /onboarding call/i })).toBeVisible();
+
+  // Records they said they can reach are shown as in hand, not re-requested.
+  const have = panel.locator('.pf-block', { hasText: 'Already available' });
+  await expect(have).toContainText('financial statement');
+  await expect(have.locator('.pf-check__have').first()).toHaveText('In hand');
+  // A roster carries the work locations and the headcount, so nothing in
+  // this scope is outstanding: the block for what is missing is absent
+  // rather than repeating what they just said they hold.
+  await expect(have).toContainText('Work locations');
+  await expect(
+    panel.locator('.pf-block', { hasText: 'Needed to complete this analysis' }),
+  ).toHaveCount(0);
+  await expect(have).not.toContainText('Entities and their main activities');
+
   // Vendor spending is a later question, and it is not sold as an input.
-  const later = panel.locator('.pf-block', { hasText: 'Optional, for later questions' });
-  await expect(later).toContainText('accounts payable or vendor listing');
+  const later = panel.locator('.pf-block', { hasText: 'For later questions' });
+  await expect(later).toContainText('Vendor or accounts payable listing');
   await expect(later).toContainText('not a model input today');
 });
 
 test('a multistate contractor is given one state to start, and told what stays open', async ({
   page,
 }) => {
-  await step(page, { goal: 'defend_a_number', audience: 'funder' });
+  await step(page, { goal: 'current_operations' });
+  await step(page, { audience: ['funder', 'leadership'] });
   await step(page, { boundary: 'one_enterprise' });
   await step(page, { where: 'multi_state' });
   // The follow-up that answer unlocks comes next, and gaming's does not.
@@ -123,33 +140,35 @@ test('a multistate contractor is given one state to start, and told what stays o
   await step(page, { records_held: 'centralized' });
   const panel = await finish(page, { available: ['audited_financials', 'payroll', 'awards'] });
 
-  await expect(panel.locator('.pf-scope')).toContainText('state that holds most of the activity');
-  // Structure reports the parts that exist and nothing more: one entity
-  // working in several states is not the same reading as a group of them.
-  // Centralized records do not soften it, and it does not soften them.
-  const structure = panel.locator('.pf-read').first();
-  await expect(structure).toContainText('Activity in more than one state');
-  await expect(structure).toContainText('Federal contracting');
-  await expect(structure).not.toContainText('Several entities');
-  await expect(panel.locator('.pf-read__v').nth(1)).toHaveText('Enough in hand to start');
-
-  await expect(panel.locator('.pf-block', { hasText: 'Needed to begin' })).toContainText(
+  await expect(panel.locator('.pf-facts')).toContainText('state holding most of the activity');
+  // The award listing they hold is what carries place of performance, so it
+  // reads as in hand; what is left is what they did not mention.
+  await expect(panel.locator('.pf-block', { hasText: 'Already available' })).toContainText(
     'place of performance',
   );
+  const begin = panel.locator('.pf-block', { hasText: 'Needed to complete this analysis' });
+  await expect(begin).toContainText('Work locations');
+  // Starting a conversation is distinguished from running the analysis.
+  await expect(begin).toContainText('A first conversation needs none of these');
 
-  const notYet = panel.locator('.pf-block', { hasText: 'What it will not show yet' });
-  await expect(notYet).toContainText('single combined figure across states');
-  await expect(notYet).toContainText('Subcontracted work');
-
-  const open = panel.locator('.pf-block', { hasText: 'To settle on the call' });
-  await expect(open).toContainText('Which state the first analysis covers');
-  await expect(open).toContainText('passes through to subcontractors');
+  // Limitations are available, not buried: they sit in the detail fold.
+  const more = panel.locator('.pf-more');
+  await more.locator('summary').click();
+  await expect(more).toContainText('single combined figure across states');
+  await expect(more).toContainText('Subcontracted work');
+  await expect(more).toContainText('Which state the first analysis covers');
+  await expect(more).toContainText('passes through to subcontractors');
+  // Structure reports the parts that exist: one entity working in several
+  // states is not the same reading as a group of them.
+  await expect(more).toContainText('Activity in more than one state');
+  await expect(more).not.toContainText('Several entities');
 });
 
 test('subsidiaries with separate records get a boundary question and a coordinator', async ({
   page,
 }) => {
-  await step(page, { goal: 'annual_contribution', audience: 'leadership' });
+  await step(page, { goal: 'current_operations' });
+  await step(page, { audience: 'leadership' });
   await step(page, { boundary: 'several_enterprises' });
   await step(page, { intercompany: 'yes' });
   await step(page, { where: 'multi_site_one_state' });
@@ -159,28 +178,22 @@ test('subsidiaries with separate records get a boundary question and a coordinat
   await step(page, { records_held: 'separate' });
   const panel = await finish(page, { available: 'internal_financials' });
 
-  await expect(panel.locator('.pf-scope')).toContainText('a named set of enterprises');
+  await expect(panel.locator('.pf-lead__title')).toContainText('a named set of enterprises');
+  const begin = panel.locator('.pf-block', { hasText: 'Needed to complete this analysis' });
+  await expect(begin).toContainText('Entities and their main activities');
+  await expect(begin).toContainText('Transactions between the selected entities');
 
-  const begin = panel.locator('.pf-block', { hasText: 'Needed to begin' });
-  await expect(begin).toContainText('list of the entities in scope');
-  await expect(begin).toContainText('transactions between the entities');
-
-  // Partial records are named as partial, not scored.
-  await expect(panel.locator('.pf-read__v').nth(1)).toHaveText('Some records in hand');
-  await expect(panel.locator('.pf-read').nth(1)).toContainText('separate entities or departments');
-
-  const people = panel.locator('.pf-block', { hasText: 'Who needs to help' });
-  await expect(people).toContainText('coordinator who knows which office holds what');
-  await expect(people).toContainText('approve sharing records');
-
-  // Combined gaming figures are reported as combined, not silently split.
-  await expect(panel.locator('.pf-block', { hasText: 'What it will not show yet' })).toContainText(
-    'reported together',
-  );
+  await panel.locator('.pf-more summary').click();
+  await expect(panel.locator('.pf-more')).toContainText('Some records in hand');
+  await expect(panel.locator('.pf-more')).toContainText('coordinator who knows which office holds what');
+  // Roles are named as roles, not as a required meeting.
+  await expect(panel.locator('.pf-more')).toContainText('One person often covers');
+  await expect(panel.locator('.pf-more')).toContainText('reported together');
 });
 
 test('a government analysis models the government as its own account', async ({ page }) => {
-  await step(page, { goal: 'whole_economy', audience: 'public' });
+  await step(page, { goal: 'enterprises_and_government' });
+  await step(page, { audience: 'public' });
   await step(page, { boundary: 'government_and_enterprises' });
   await step(page, { intercompany: 'no' });
   await step(page, { where: 'multi_site_one_state' });
@@ -188,20 +201,16 @@ test('a government analysis models the government as its own account', async ({ 
   await step(page, { records_held: 'centralized' });
   const panel = await finish(page, { available: ['budget', 'payroll'] });
 
-  await expect(panel.locator('.pf-scope')).toContainText(
+  await expect(panel.locator('.pf-lead__title')).toContainText(
     'government together with its enterprises',
   );
-
-  await expect(panel.locator('.pf-block', { hasText: 'Needed to begin' })).toContainText(
-    'government annual financial report',
+  await expect(panel.locator('.pf-block', { hasText: 'Already available' })).toContainText(
+    'Government annual financial report',
   );
-  await expect(
-    panel.locator('.pf-block', { hasText: 'What a first analysis reports' }),
-  ).toContainText('its own account');
-  await expect(panel.locator('.pf-block', { hasText: 'Who needs to help' })).toContainText(
-    'treasurer',
-  );
-  await expect(panel.locator('.pf-block', { hasText: 'To settle on the call' })).toContainText(
+  await panel.locator('.pf-more summary').click();
+  await expect(panel.locator('.pf-more')).toContainText('its own account');
+  await expect(panel.locator('.pf-more')).toContainText('treasurer');
+  await expect(panel.locator('.pf-more')).toContainText(
     'transfers between the enterprises and the government',
   );
 });
@@ -209,7 +218,8 @@ test('a government analysis models the government as its own account', async ({ 
 test('too much unanswered recommends a conversation instead of inventing a plan', async ({
   page,
 }) => {
-  await step(page, { goal: 'not_sure', audience: 'not_sure' });
+  await step(page, { goal: 'not_sure' });
+  await step(page, { audience: 'not_sure' });
   await step(page, { boundary: 'not_sure' });
   await step(page, { where: 'not_sure' });
   await step(page, { activities: 'not_sure' });
@@ -217,34 +227,66 @@ test('too much unanswered recommends a conversation instead of inventing a plan'
   const panel = await finish(page, { available: 'none_yet' });
 
   await expect(panel.locator('.pf-callout')).toContainText('scoping conversation');
-  // No scope sentence is manufactured from answers that were not given.
-  await expect(panel.locator('.pf-scope')).toHaveCount(0);
-  await expect(panel.locator('.pf-block', { hasText: 'To settle on the call' })).toContainText(
-    'who approves sharing them',
-  );
+  // No scope facts are manufactured from answers that were not given.
+  await expect(panel.locator('.pf-facts')).toHaveCount(0);
+  await expect(panel.locator('.pf-lead__act')).toContainText('Arrange an onboarding call');
+  await expect(panel.locator('.pf-lead__act')).toContainText('Nothing has to be gathered first');
 });
 
-test('an answer that is walked back takes its follow-up with it', async ({ page }) => {
-  await step(page, { goal: 'annual_contribution', audience: 'leadership' });
+test('"not sure" cannot sit beside a substantive answer', async ({ page }) => {
+  await step(page, { goal: 'current_operations' });
+  const screen = page.locator('[data-step="audience"]');
+  await screen.locator('input[value="leadership"]').check();
+  await screen.locator('input[value="funder"]').check();
+  await screen.locator('input[value="not_sure"]').check();
+  await expect(screen.locator('input[value="leadership"]')).not.toBeChecked();
+  await expect(screen.locator('input[value="funder"]')).not.toBeChecked();
+  // And the reverse: a real answer clears "not sure".
+  await screen.locator('input[value="public"]').check();
+  await expect(screen.locator('input[value="not_sure"]')).not.toBeChecked();
+  await expect(screen.locator('input[value="public"]')).toBeChecked();
+});
+
+test('back preserves answers, and dropping a follow-up clears only that', async ({ page }) => {
+  await step(page, { goal: 'current_operations' });
+  await step(page, { audience: 'leadership' });
   await step(page, { boundary: 'several_enterprises' });
   await expect(page.locator('[data-step="intercompany"]')).toBeVisible();
   await step(page, { intercompany: 'yes' });
 
-  // Back twice, to the question that opened the follow-up, and change it.
   await page.locator('[data-pf-back]').click();
   await expect(page.locator('[data-step="intercompany"]')).toBeVisible();
+  // The answer is still there on the way back.
+  await expect(page.locator('input[name="intercompany"][value="yes"]')).toBeChecked();
   await page.locator('[data-pf-back]').click();
   await expect(page.locator('[data-step="boundary"]')).toBeVisible();
-  await step(page, { boundary: 'one_enterprise' });
+  await expect(page.locator('input[name="boundary"][value="several_enterprises"]')).toBeChecked();
 
-  // The follow-up is gone from the path, and so is the answer it held.
+  // Changing it drops the follow-up, and the follow-up's answer with it.
+  await page.locator('[data-step="boundary"] input[value="one_enterprise"]').check();
+  await page.locator('[data-pf-next]').click();
   await expect(page.locator('[data-step="where"]')).toBeVisible();
   await expect(page.locator('input[name="intercompany"]:checked')).toHaveCount(0);
-  await expect(page.locator('[data-pf-label]')).toHaveText('Question 3 of 6');
+  // Earlier answers survive.
+  await expect(page.locator('input[name="goal"][value="current_operations"]')).toBeChecked();
+});
+
+test('the summary fills in as answers accumulate, and goes back to a question', async ({ page }) => {
+  await expect(page.locator('[data-sum]')).toBeHidden();
+  await step(page, { goal: 'current_operations' });
+  const sum = page.locator('[data-sum]');
+  await expect(sum).toBeVisible();
+  await expect(sum).toContainText('Our current operations');
+  await step(page, { audience: 'leadership' });
+  await expect(sum).toContainText('council, board or executive leadership');
+  // A line in the summary goes back to the question that set it.
+  await sum.locator('[data-sum-jump="goal"]').click();
+  await expect(page.locator('[data-step="goal"]')).toBeVisible();
 });
 
 test('a plan carries no invented confidence figure, and survives a reload', async ({ page }) => {
-  await step(page, { goal: 'one_project', audience: 'funder' });
+  await step(page, { goal: 'project' });
+  await step(page, { audience: 'funder' });
   await step(page, { boundary: 'one_project' });
   await step(page, { where: 'one_site' });
   await step(page, { activities: 'construction' });
@@ -252,20 +294,43 @@ test('a plan carries no invented confidence figure, and survives a reload', asyn
   const panel = await finish(page, { available: ['capital', 'audited_financials'] });
 
   // Coverage language is factual. Nothing claims a percentage improvement,
-  // a confidence score or an error bar anywhere in a tailored plan.
+  // a confidence score, an assigned economist or a time estimate.
   const text = (await panel.innerText()).toLowerCase();
   expect(text).not.toMatch(/\d+\s?%/);
   expect(text).not.toContain('confidence');
   expect(text).not.toContain('accuracy');
+  expect(text).not.toMatch(/\bminutes\b/);
 
   // The answers live in the address bar, so a coordinator can share them.
   expect(page.url()).toContain('#');
   expect(page.url()).toContain('boundary=one_project');
   await page.reload({ waitUntil: 'networkidle' });
-  await expect(page.locator('#pf-plan .pf-scope')).toContainText('one project');
+  await expect(page.locator('#pf-plan .pf-lead__title')).toContainText('one project');
 
   // A shared plan can still be reopened and edited.
   await page.locator('[data-pf-back]').click();
   await expect(page.locator('[data-step="available"]')).toBeVisible();
   await expect(page.locator('#pf-plan')).toBeHidden();
+});
+
+test('the reference sections stand on their own, and can be skipped', async ({ page }) => {
+  // Six capability questions, each leading with what it lets you ask.
+  await expect(page.locator('.start-cap__tab')).toHaveCount(6);
+  await expect(page.locator('.start-cap__tab').first()).toContainText('?');
+  await expect(page.locator('.start-cap__panel:visible')).toHaveCount(1);
+  await page.locator('.start-cap__tab', { hasText: 'bought locally' }).click();
+  const panel = page.locator('.start-cap__panel:visible');
+  // Work that is not available is labeled as future work, not as a status code.
+  await expect(panel).toContainText('Future work');
+  await expect(panel).toContainText('not a model input');
+
+  // The call is an invitation with three outcomes, not a facilitator agenda.
+  await expect(page.locator('.start-call__out li')).toHaveCount(3);
+  await expect(page.locator('.start-call')).not.toContainText('min');
+  await expect(page.locator('.start-call')).toContainText('Goes to a short form');
+
+  // Coverage is one labeled example, with its denominator named.
+  await expect(page.locator('.start-cov__eg')).toContainText('illustrative');
+  await expect(page.locator('.start-cov__eg')).toContainText('8 of 10');
+  await expect(page.locator('.start-cov__eg')).toContainText('denominator');
 });

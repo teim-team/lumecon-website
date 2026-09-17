@@ -23,7 +23,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 743 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/` | 740 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/pricing` | 1299 | Pricing \| Lumecon | 155 |
 | `/methodology` | 2560 | Methodology \| Lumecon | 167 |
 | `/team` | 369 | Team \| Lumecon | 115 |
@@ -31,8 +31,8 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/cedar-grove` | 458 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1713 | Plan your first analysis \| Lumecon | 173 |
-| `/signup` | 250 | Request beta access \| Lumecon | 118 |
+| `/start` | 1007 | Plan your first analysis \| Lumecon | 165 |
+| `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 209 | Checkout \| Lumecon | 81 |
@@ -43,7 +43,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **12919** | | |
+| **Total** | **12207** | | |
 
 ## Crawler metadata audit
 
@@ -67,7 +67,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 743
+- **Visible words:** 740
 
 ### Architecture (heading outline)
 
@@ -305,7 +305,7 @@ Request free access during the private beta. Once admitted, you can upload your 
 
 - _link:_ [Request free access →](/signup?tier=free)
 - _link:_ [Compare plans →](/pricing)
-Not sure what you would run first? Plan your first analysis in six questions, or write to contact@lumecon.ai.
+Not sure what you would run first? Plan your first analysis, or write to contact@lumecon.ai.
 
 
 > _section: `footer`_
@@ -1991,24 +1991,25 @@ We use optional analytics to improve Lumecon. Privacy Policy
 **Intended job of this page:** What an organization can begin with, and what it would take.
 
 - **Title:** Plan your first analysis | Lumecon
-- **Meta description** (173 chars): Six questions that turn an interest in economic impact analysis into a first analysis you can actually run: a bounded scope, the records to start with and who needs to help.
-- **og:description:** Six questions that turn an interest in economic impact analysis into a first analysis you can actually run: a bounded scope, the records to start with and who needs to help.
+- **Meta description** (165 chars): Start with the records you already have. A few questions find a scope you can actually run, the records to bring first and what more information would make possible.
+- **og:description:** Start with the records you already have. A few questions find a scope you can actually run, the records to bring first and what more information would make possible.
 - **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
 - **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
 - **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1713
+- **Visible words:** 1007
 
 ### Architecture (heading outline)
 
 - **H1** Plan your first analysis.
   - **H2** Your starting plan
-  - **H2** What more information makes possible
-  - **H2** Every record we might ask for
-  - **H2** The first call
-  - **H2** How we report coverage
+  - **H2** What a first analysis can show
+  - **H2** What more records would let you ask
+  - **H2** Start with the records you already have
+  - **H2** We can help you choose a starting point.
+  - **H2** How coverage is reported
   - **H2** Start with one question, not everything at once.
 
 ### Copy, in document order
@@ -2044,35 +2045,37 @@ GETTING STARTED
 
 **H1: Plan your first analysis.**
 
-Most organizations do not need everything to begin. They need one question worth answering, a boundary around it and the records they already have. Six questions propose a starting scope and the short list of records it needs.
+Start with the records you already have. Answer a few questions to find a scope you can run and see what to bring.
 
-QUESTION 1 OF 6
+**[conditional]** Your answers so far
 
-- _label:_ What would you like to understand, and who will use the results?
-What would you like to understand?
+- GOAL
+- SCOPE
+- RECORDS
+- PLAN
+- _label:_ What would you like to understand? Our current operations The recurring footprint of activity already happening. A project or expansion One facility, development or program, usually one time. Our enterprises and government together The government modeled alongside the operations it funds and is funded by. Help me choose
+- _label:_ **[conditional]** Who will use the results?
+**[conditional]** Choose everyone who will read it.
 
-- _label:_ What our operations contribute in a year The recurring economic footprint of activity already happening. What one project or expansion would support A single facility, development or program, usually one time. How our enterprises and our government together support the economy The government modeled alongside the operations it funds and is funded by. A figure we can defend to someone outside the organization A funder, an agency or a legislature has asked, and the number has to hold up. Not sure yet
-Who will use the results?
-
-- _label:_ Our council, board or executive leadership A funder, a federal agency or a legislature Our members, citizens or the wider public An internal planning or finance team Not sure yet
-- _label:_ **[conditional]** 02What is being analyzed?
+- _label:_ **[conditional]** Our council, board or executive leadershipA funder, a federal agency or a legislatureOur members, citizens or the wider publicAn internal planning or finance teamNot sure yet
+- _label:_ **[conditional]** What is being analyzed?
 **[conditional]** This sets what the first analysis covers. It can grow later.
 
 - _label:_ **[conditional]** One enterprise or operationSeveral enterprises under one ownerThe government itselfThe government and its enterprises togetherThe government is modeled as its own account alongside the operations.One specific project or facilityNot sure yet
-- _label:_ **[conditional]** 02Do the entities in scope buy from, sell to or fund each other?YesNo, they operate independentlyNot sure
-- _label:_ **[conditional]** 03Where does the activity take place?One locationSeveral locations, all in one stateSeveral locations across more than one stateNot sure, or it varies by operation
-- _label:_ **[conditional]** 03Is most of the activity in one state?Yes, one state holds most of itNo, it is spread fairly evenlyNot sure
-- _label:_ **[conditional]** 04What activities are involved?
+- _label:_ **[conditional]** Do the entities in scope buy from, sell to or fund each other?YesNo, they operate independentlyNot sure
+- _label:_ **[conditional]** Where does the activity take place?One locationSeveral locations, all in one stateSeveral locations across more than one stateNot sure, or it varies by operation
+- _label:_ **[conditional]** Is most of the activity in one state?Yes, one state holds most of itNo, it is spread fairly evenlyNot sure
+- _label:_ **[conditional]** What activities are involved?
 **[conditional]** Choose every activity that applies.
 
 - _label:_ **[conditional]** GamingHotel, food service or entertainmentRetail, fuel or convenienceConstruction or developmentFederal contractingHealth or social servicesEducationAgriculture, forestry, energy or other natural resourcesProfessional, technical or financial servicesGovernment administration or public programsSomething elseNot sure
-- _label:_ **[conditional]** 04Does the first analysis include the hotel, food, entertainment or retail operations at the same site?Yes, they belong in the first analysisNo, gaming only to startNot sure
-- _label:_ **[conditional]** 04Can economic output and payroll be separated for those operations?Yes, our records break them outNo, they arrive as one combined figureNot sure
-- _label:_ **[conditional]** 04Where is the contract work performed?Mostly at our own locationsMostly at government or customer sites elsewhereA mix of bothNot sure
-- _label:_ **[conditional]** 04Does a large share of contract value pass through to subcontractors?Yes, subcontracting is a large shareNo, most work is performed in houseNot sure
-- _label:_ **[conditional]** 04Does contract revenue combine several kinds of work under one line?Yes, one line covers several kinds of workNo, the lines are already separatedNot sure
-- _label:_ **[conditional]** 05Are records centralized or held separately?One finance office holds them for everything in scopeCentralized for some operations, separate for othersEach entity or department keeps its ownNot sure
-- _label:_ **[conditional]** 06Which existing records could you readily access?
+- _label:_ **[conditional]** Does the first analysis include the hotel, food, entertainment or retail operations at the same site?Yes, they belong in the first analysisNo, gaming only to startNot sure
+- _label:_ **[conditional]** Can economic output and payroll be separated for those operations?Yes, our records break them outNo, they arrive as one combined figureNot sure
+- _label:_ **[conditional]** Where is the contract work performed?Mostly at our own locationsMostly at government or customer sites elsewhereA mix of bothNot sure
+- _label:_ **[conditional]** Does a large share of contract value pass through to subcontractors?Yes, subcontracting is a large shareNo, most work is performed in houseNot sure
+- _label:_ **[conditional]** Does contract revenue combine several kinds of work under one line?Yes, one line covers several kinds of workNo, the lines are already separatedNot sure
+- _label:_ **[conditional]** Are records centralized or held separately?One finance office holds them for everything in scopeCentralized for some operations, separate for othersEach entity or department keeps its ownNot sure
+- _label:_ **[conditional]** Which existing records could you readily access?
 **[conditional]** Choose anything you could put your hands on in a week or so.
 
 - _label:_ **[conditional]** Audited financial statements or an annual reportInternal financial statements or a trial balanceAn adopted budget or appropriationA payroll summary, a W-3 or quarterly 941sAn employee roster or headcount by locationAn accounts payable or vendor listingA grant or contract award listingRecords of capital projectsNone of these are within reach yet
@@ -2081,81 +2084,132 @@ Who will use the results?
 - _button:_ Continue →
 - _button:_ Back
 - _button:_ Start over
-- What you can learn with the information you already have.
-- The minimum this particular question needs.
-- What more information would make possible.
-- Who has to help you get started.
-Nothing is uploaded here and no answer is stored. Not sure is a real answer, and where too much is open the recommendation is a conversation rather than a plan built on guesses.
+Nothing is uploaded here and no answer is stored. Not sure is a real answer.
 
+- WHAT YOU CAN LEARN NOW What the records you already hold support, before anyone gathers anything new.
+- THE MINIMUM FOR YOUR QUESTION A short list, tied to the scope you chose rather than to everything we can read.
+- WHAT MORE WOULD MAKE POSSIBLE What each further record changes about the method, and what it does not.
+- WHO HAS TO HELP The two or three people the scope needs, and who approves sharing records.
 
 > _section: `meth-sec`_
 
 
 **H2: Your starting plan**
 
-
-**H2: What more information makes possible**
-
-These describe what becomes possible analytically, not a ranking of quality and not a price list. Which of them matters depends entirely on the question being asked. More information can move an estimate in either direction, narrow what the analysis can support, or surface double counting.
-
-- A defined activity, a year, a geography and an operating measure Supports a first estimate, with the allocation and local purchasing assumptions stated alongside it. AVAILABLE TODAY
-- Records separated by entity and work location Each operation is reported in its own sector and the region is built from the places work is actually performed, in place of an assumed split across operations. One primary sector is carried per operation today, so operations that should be reported separately are recorded separately. AVAILABLE TODAY
-- Vendor and subcontractor spending with usable locations Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house. Local purchasing is currently estimated from regional trade data. Vendor level spending is not an input the model accepts, and the method for using it is open. IN RESEARCH UNDER REVIEW
-- Identified transactions between the entities in scope Supports combining entities while removing activity already counted inside another entity in the same boundary. Handled today as a preparation step before intake. The consolidation rule needs economist sign-off. PROPOSED UNDER REVIEW
-- Enterprise distributions and government spending records Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers. The engine models the government as its own account. Several government detail fields are not yet carried end to end through the product. AVAILABLE TODAY UNDER REVIEW
-- Comparable records across years Supports reporting change over time, limited by consistent coverage and consistent accounting between the years. One analysis covers one year. Several years run as a series of analyses. AVAILABLE TODAY
-- Interviews, photographs and other contextual material Supports interpretation and reporting. It does not enter the calculation. AVAILABLE TODAY
-Available means the product accepts the input and reports the result today. Proposed means the behavior is specified and not yet wired through the product. In research means the treatment itself is still open. Rows marked under review are provisional until the economics team signs them off.
+**[conditional]** Lumecon Plan your first analysis
 
 
-**H2: Every record we might ask for**
+**H2: What a first analysis can show**
+
+Typical results include the four measures below, separated into the activity itself, the suppliers it buys from and the household spending its wages support. Which of them an analysis can report depends on the scope and the records behind it.
+
+- _image alt:_ A completed Lumecon analysis showing jobs supported, GDP contribution, labor income and economic output, with the direct, indirect and induced split beneath. Shown with illustrative sample data.
+_caption:_ A completed analysis. Illustrative sample data, not a customer.
+- Jobs supported Never jobs created: a contribution analysis has no counterfactual.
+- Labor income Wages, salaries and proprietor income.
+- Value added The contribution to regional GDP.
+- Economic output Total production supported in the region.
+Labor income is a component of value added, which is a component of economic output. They are layers of the same activity, so they are never added together. See the glossary for each term in full.
+
+
+**H2: What more records would let you ask**
+
+Each of these answers a question the analysis cannot otherwise reach. Choose one to see what it supports. More information can move an estimate in either direction, narrow what the analysis can support, or surface double counting.
+
+- How is our activity distributed across the places we operate?
+- Can we combine our entities without counting the same activity twice?
+- How does money move between our enterprises and our government?
+- How has this changed over time?
+- How do we explain this to the people it is for?
+- How much of what we buy is actually bought locally?
+How is our activity distributed across the places we operate?
+
+BRING records separated by entity and work location
+
+Each operation is reported in its own sector, and the region is built from the places work is actually performed rather than from an assumed split across operations.
+
+One primary sector is carried per operation, so operations that should be reported separately are recorded separately.
+
+Available today.
+
+**[conditional]** Can we combine our entities without counting the same activity twice?
+
+**[conditional]** Bring a listing of transactions between the entities in scope
+
+**[conditional]** Supports combining entities while removing activity already counted inside another entity in the same boundary.
+
+**[conditional]** Handled today as a preparation step before intake, not inside the model.
+
+**[conditional]** How does money move between our enterprises and our government?
+
+**[conditional]** Bring enterprise distributions and government spending records
+
+**[conditional]** Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers.
+
+**[conditional]** Available today, though several government detail fields are not yet carried end to end through the product.
+
+**[conditional]** How has this changed over time?
+
+**[conditional]** Bring comparable records across years
+
+**[conditional]** Supports reporting change over time, limited by consistent coverage and consistent accounting between the years.
+
+**[conditional]** Available today. One analysis covers one year; several years run as a series.
+
+**[conditional]** How do we explain this to the people it is for?
+
+**[conditional]** Bring interviews, photographs and other contextual material
+
+**[conditional]** Supports interpretation and reporting. It does not enter the calculation.
+
+**[conditional]** Available today, in reporting rather than in the model.
+
+**[conditional]** How much of what we buy is actually bought locally?
+
+**[conditional]** Bring vendor and subcontractor spending with usable locations
+
+**[conditional]** Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house.
+
+**[conditional]** Future work. Local purchasing is estimated from regional trade data today, and vendor records are not a model input.
+
+
+**H2: Start with the records you already have**
 
 Bring what exists. We would rather read the report you already produce than have you build a spreadsheet for us, and we will tell you what it supports before you spend time reformatting anything.
 
-- _disclosure:_ The full list, with who usually holds each one
-- The most recent completed financial statement for what is in scope Carries economic output and the reporting year every other figure is matched to. ALSO WORKS An internal statement or trial balance, where audited figures are not final yet. FINANCE OFFICE OR CONTROLLER
-- The adopted budget or appropriation for the year Stands in for a completed statement, and shows what the government spends. BUDGET OFFICE OR FINANCE DIRECTOR
-- A payroll summary for the same year Labor income drives the household spending the analysis reports. ALSO WORKS A W-3, four quarterly 941s, or the payroll line of the financial statement. PAYROLL OR HUMAN RESOURCES
-- Employee count for the same year Jobs are reported directly, and the count is checked against payroll. ALSO WORKS A point in time headcount from the HR system, labeled as the date it was taken. HUMAN RESOURCES
-- A list of the places work is performed, with city and state Sets the region the results are reported for and the local data the model uses. ALSO WORKS Worksite addresses already held in the payroll system. OPERATIONS OR HUMAN RESOURCES
-- A list of the entities in scope and the main line of business of each Each operation is reported in its own sector, so the list decides the sectors. ALSO WORKS An organization chart, where it names the operating entities. ADMINISTRATION OR GENERAL COUNSEL
-- The government annual financial report or adopted budget Government spending, payroll and headcount are modeled as their own account. TRIBAL TREASURER, FINANCE DIRECTOR OR COMPTROLLER
-- What funds the government: grants, contracts, transfers in, and any taxes collected Separates money arriving from outside the region from money recirculating inside it. ALSO WORKS The revenue section of the annual financial report. GRANTS OFFICE OR FINANCE
-- Records of distributions from the enterprises to the government or to citizens Transfers are treated as transfers, which is what keeps them from being counted twice. FINANCE OFFICE
-- A listing of transactions between the entities in scope Activity inside the boundary is already counted in another entity’s figures. ALSO WORKS Consolidating eliminations from the audit workpapers, where a consolidation exists. CONTROLLER OR EXTERNAL AUDITOR
-- A contract or grant award listing, with place of performance Places the work in the region where it is performed, and shows what passes through to subcontractors. ALSO WORKS A contracts register, or the public award records the agency already publishes. CONTRACTS OR GRANTS ADMINISTRATION
-- Records of capital projects in the year, with amounts One time construction and equipment are modeled separately from recurring operations. ALSO WORKS The capital section of the budget or the fixed asset addition schedule. FINANCE OR PROJECT MANAGEMENT
-- An accounts payable or vendor listing with vendor city and state Recorded for review of how purchasing is treated. It is not a model input today. ACCOUNTS PAYABLE
-- The same records for earlier years Reporting change over time needs consistent coverage and consistent accounting across the years. FINANCE OFFICE
-- Photographs, program descriptions or interviews Used in reporting and interpretation. It does not enter the calculation. COMMUNICATIONS OR PROGRAM STAFF
+- Latest financial statement for the selected operations Carries economic output and the reporting year every other figure is matched to. Alternatives, and who usually holds it An internal statement or trial balance, where audited figures are not final yet. FINANCE OFFICE OR CONTROLLER
+- Payroll summary for the same year Labor income drives the household spending the analysis reports. Alternatives, and who usually holds it A W-3, or four quarterly 941s covering the same year, or the payroll line of the financial statement. PAYROLL OR HUMAN RESOURCES
+- Employee count for the same year Jobs are reported directly, and the count is checked against payroll. Alternatives, and who usually holds it A point in time headcount, labeled with the date it was taken, or the count already on the payroll summary. HUMAN RESOURCES
+These three, for one year, cover the common case. What else a particular analysis needs depends on its scope, which is what the questions above work out. Some of what looks like a separate request is often already inside a record you hold.
+
 Nothing is uploaded here. Records are shared inside the product, where access is controlled and every file stays connected to the analysis it supports.
 
+HELP GETTING STARTED
 
-**H2: The first call**
 
-Thirty minutes with an economist. We invite the people the open questions need, not every department, and it ends with four things settled.
+**H2: We can help you choose a starting point.**
 
-- 5 MIN What you want to understand The question and the audience. Write the sentence down and read it back.
-- 8 MIN The boundary What is in, what is out, which year. Name what is being left for later rather than leaving it undecided.
-- 7 MIN Records and who holds them Walk the checklist. For anything not in hand, get a name rather than a promise. Ask who approves sharing.
-- 5 MIN What this will and will not show State the assumptions the first analysis will carry. Say plainly what it cannot support yet.
-- 5 MIN First file review Offer it: send one existing report, and Lumecon says what it supports and which gaps matter. No reformatting first.
-YOU LEAVE WITH
+Bring one report you already have. An economist will tell you what it supports, which gaps matter for your question and which do not.
 
-- One question and its audience. Written in a sentence the organization would recognize.
-- A bounded operation, geography and period. One boundary, one region, one year.
-- A named data contact. One person who can reach the records, and the person who approves sharing them.
-- A small set of next actions. Two or three, each with a name against it.
+- _link:_ [Arrange an onboarding call →](/signup?intent=scoping)
+Goes to a short form. The team replies by email to arrange a time.
 
-**H2: How we report coverage**
+- Agree a question worth answering One question, and who it is for, written in a sentence you would recognize.
+- Look at what you already have Bring one existing report. We say what it supports and what it does not.
+- Name what comes next The records or decisions still open, and who in your organization holds them.
+REFERENCE
 
-An analysis reports what it observed and what it assumed. These are counts and shares with a stated denominator, shown only where that denominator is known. None of them is a statement about the accuracy of the model, and none of them is a confidence score.
 
-- Payroll assigned to a known work location The share of payroll in scope that carries a work location. OUT OF Total payroll in scope.
-- Vendor spending with usable location information The share of recorded vendor spending that carries a usable city and state. OUT OF Total vendor spending recorded.
-- Entities represented How many entities in the agreed boundary have records in hand. OUT OF The agreed list of entities.
-- Inputs observed, estimated or missing Each material input, marked with where its value came from. OUT OF The list of inputs the analysis requires.
-Where a total is unknown, the share is not shown. A figure such as "82 percent of payroll carries a work location" says what it says, and nothing about whether the multipliers are right.
+**H2: How coverage is reported**
+
+An analysis reports what it observed and what it assumed. Coverage tells you which records are represented. It does not measure overall model accuracy, and it is never a confidence score.
+
+The indicators, their denominators and how estimation is flagged are set out in the methodology.
+
+_caption:_ AN ILLUSTRATIVE EXAMPLE, NOT YOUR FIGURES
+8 of 10
+
+selected operations have records in hand. The denominator is the agreed list of operations, so the figure changes when the scope does.
 
 
 > _section: `fcta`_
@@ -2167,7 +2221,7 @@ NEXT STEP
 
 Send one report you already have. An economist will tell you what it supports, which gaps matter for your question and which do not.
 
-- _link:_ [Ask for a scoping conversation →](/signup?intent=scoping)
+- _link:_ [Arrange an onboarding call →](/signup?intent=scoping)
 - _link:_ [Read the methodology →](/methodology)
 Or write to contact@lumecon.ai.
 
@@ -2249,7 +2303,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/signup
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 250
+- **Visible words:** 247
 
 ### Architecture (heading outline)
 
@@ -2283,7 +2337,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 
 **H1: Lumecon is in private beta**
 
-Access is being introduced in phases. Tell us about your organization and the first analysis you want to run, and our team will follow up about availability. Not sure yet?Plan your first analysis in six questions and bring the answer here.
+Access is being introduced in phases. Tell us about your organization and the first analysis you want to run, and our team will follow up about availability. Not sure yet?Plan your first analysis and bring the answer here.
 
 **[conditional]** PlanChange plan
 

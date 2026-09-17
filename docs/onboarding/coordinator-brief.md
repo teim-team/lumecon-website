@@ -27,12 +27,12 @@ and nothing should be reformatted before someone has looked at it.
 
 ## 3. What else exists, and what each one adds
 
-- **Records separated by entity and work location.** Each operation is reported in its own sector and the region is built from the places work is actually performed, in place of an assumed split across operations.
-- **Vendor and subcontractor spending with usable locations.** _(in research)_ Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house.
-- **Identified transactions between the entities in scope.** _(proposed)_ Supports combining entities while removing activity already counted inside another entity in the same boundary.
-- **Enterprise distributions and government spending records.** Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers.
-- **Comparable records across years.** Supports reporting change over time, limited by consistent coverage and consistent accounting between the years.
-- **Interviews, photographs and other contextual material.** Supports interpretation and reporting. It does not enter the calculation.
+- **records separated by entity and work location.** Each operation is reported in its own sector, and the region is built from the places work is actually performed rather than from an assumed split across operations.
+- **a listing of transactions between the entities in scope.** _(proposed)_ Supports combining entities while removing activity already counted inside another entity in the same boundary.
+- **enterprise distributions and government spending records.** Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers.
+- **comparable records across years.** Supports reporting change over time, limited by consistent coverage and consistent accounting between the years.
+- **interviews, photographs and other contextual material.** Supports interpretation and reporting. It does not enter the calculation.
+- **vendor and subcontractor spending with usable locations.** _(in research)_ Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house.
 
 More information does not automatically mean a larger number. It can move an
 estimate in either direction, narrow what we can support, or show where
