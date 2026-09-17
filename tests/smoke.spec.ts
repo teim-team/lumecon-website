@@ -440,6 +440,51 @@ test('accessibility statement is published and linked from the footer', async ({
   await expect(page.locator('footer a[href="/accessibility"]')).toHaveText('Accessibility');
 });
 
+test('contact is a page, and every route on it goes somewhere real', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('Talk to a person');
+
+  // The navigation and the footer link the page, not a mailto. A menu
+  // mailto is a dead end for anyone without a desktop mail client.
+  await expect(page.locator('#navp-company a[href="/contact"]')).toHaveCount(1);
+  await expect(page.locator('footer a[href="/contact"]')).toHaveCount(1);
+  await expect(page.locator('#navp-company a[href^="mailto:"]')).toHaveCount(0);
+
+  // Four routes, each pointing at the page that answers most of it.
+  for (const href of ['/signup', '/start', '/security', '/accessibility']) {
+    await expect(page.locator(`.contact-routes a[href="${href}"]`)).toHaveCount(1);
+  }
+
+  // The form is real and required fields are marked as such.
+  for (const name of ['name', 'email', 'organization', 'message']) {
+    await expect(page.locator(`.contact-form [name="${name}"]`)).toHaveCount(1);
+  }
+  // The honeypot is present and off-screen rather than display:none, so a
+  // bot filling every field still trips it.
+  const honeypot = page.locator('.contact-hp input');
+  await expect(honeypot).toHaveCount(1);
+  const box = await page.locator('.contact-hp').boundingBox();
+  expect(box === null || box.x < 0).toBeTruthy();
+
+  // No response time is promised, because none has been set.
+  const text = await page.locator('main').innerText();
+  expect(text).not.toMatch(/within \d+ (hours|business days|days)/i);
+  // One inbox, so no invented aliases.
+  expect(text).not.toContain('security@');
+  expect(text).not.toContain('press@');
+});
+
+test('the contact form reports a missing field instead of submitting', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  await page.locator('.contact-form [name="name"]').fill('Test Person');
+  await page.locator('[data-contact-submit]').click();
+  const status = page.locator('[data-contact-status]');
+  await expect(status).toBeVisible();
+  await expect(status).toContainText('email');
+  // Nothing navigated away to a mailto on an incomplete form.
+  expect(page.url()).toContain('/contact');
+});
+
 test('skip link targets real content on subpages', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('main#top')).toHaveCount(1);

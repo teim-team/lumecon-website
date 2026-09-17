@@ -32,6 +32,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
 | `/start` | 1007 | Plan your first analysis \| Lumecon | 165 |
+| `/contact` | 288 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
@@ -43,13 +44,13 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **12207** | | |
+| **Total** | **12495** | | |
 
 ## Crawler metadata audit
 
 This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards, the llms.txt discovery link and JSON-LD against the built site.
 
-- **Sitemap URLs:** 14
+- **Sitemap URLs:** 15
 - **Status:** All checked crawler metadata is complete and consistent.
 
 ---
@@ -2292,6 +2293,157 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 ---
 
+## `/contact` — Contact
+
+**Intended job of this page:** How to reach a person, and where each kind of message goes.
+
+- **Title:** Contact | Lumecon
+- **Meta description** (145 chars): Reach the Lumecon team: general questions, security disclosures, accessibility, and where to go for beta access or help scoping a first analysis.
+- **og:description:** Reach the Lumecon team: general questions, security disclosures, accessibility, and where to go for beta access or help scoping a first analysis.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
+- **Canonical:** https://lumecon.ai/contact
+- **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+- **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, ContactPage
+- **Visible words:** 288
+
+### Architecture (heading outline)
+
+- **H1** Talk to a person.
+  - **H2** Send a message
+  - **H2** Or go straight there
+
+### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
+- _link:_ [Skip to main content](#top)
+
+> _section: `Main navigation`_
+
+- _link:_ [LUMECON](/)
+- _label:_ |
+- _label:_ The Intelligent Economic Analysis Platform
+- Product
+- Pricing
+- Resources
+- Company
+- _link:_ [Log in](/login)
+- _link:_ [Request access](/signup)
+- _button:_ Menu
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** Pricing
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
+- **[conditional]** Log in
+- **[conditional]** Request access
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+
+> _section: `meth-hero`_
+
+CONTACT
+
+
+**H1: Talk to a person.**
+
+Questions about the model, a procurement review, a partnership, or something the site does not answer. Write below or to contact@lumecon.ai, whichever you prefer.
+
+
+> _section: `meth-sec`_
+
+
+**H2: Send a message**
+
+Fields marked * are required.
+
+- _label:_ Name *
+- _label:_ Email *
+- _label:_ Organization
+- _label:_ What can we help with? *
+- _label:_ Company website
+- _button:_ Send →
+Goes to contact@lumecon.ai. We do not have a published response time, so we will not promise one.
+
+
+> _section: `contact-routes`_
+
+
+**H2: Or go straight there**
+
+- Access to the beta Access is opening in waves. The request form collects the profile the product needs, so it is faster than an email. Request access →
+- Not sure what to ask for A few questions propose a starting scope and the records it needs. Bring the answer to a call. Plan your first analysis →
+- Security disclosure Report a vulnerability with the subject line Security review. The control program and the disclosure policy are published. Read the security page →
+- Accessibility Tell us what you hit, with the subject line Accessibility. The conformance statement names what is known and unresolved. Read the accessibility statement →
+Lumecon reads one inbox, so the routes above are subject lines rather than separate addresses. Nothing you send here is used to train a model. How we handle AI and data.
+
+
+> _section: `footer`_
+
+
+> _section: `Footer`_
+
+PRODUCT
+
+- Cedar Impact
+- Cedar
+- Cedar Grove
+- Pricing
+REFERENCE
+
+- Methodology
+- Team
+- Security
+- Glossary
+- Industry sectors
+ACCOUNT
+
+- Plan your first analysis
+- Request access
+- Log in
+- Contact
+LEGAL
+
+- Terms
+- Privacy
+- AI and data use
+- Accessibility
+- _label:_ © 2026 Lumecon Inc. · All rights reserved · Patent pending.
+- _button:_ Privacy choices
+- _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
+- _button:_ Who is Lumecon for?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
+We use optional analytics to improve Lumecon. Privacy Policy
+
+- _button:_ Decline
+- _button:_ Accept
+
+---
+
 ## `/signup` — Sign up
 
 - **Title:** Request beta access | Lumecon
@@ -3653,7 +3805,7 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 
 ### Sentences that appear verbatim on more than one page
 
-- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/start` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
+- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/start` and `/contact` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."

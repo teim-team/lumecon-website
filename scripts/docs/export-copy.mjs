@@ -60,6 +60,7 @@ const PAGES = [
   ['/glossary', 'Glossary'],
   ['/naics', 'NAICS sectors'],
   ['/start', 'Plan your first analysis'],
+  ['/contact', 'Contact'],
   ['/signup', 'Sign up'],
   ['/login', 'Log in'],
   ['/choose-plan', 'Choose plan'],
@@ -102,6 +103,7 @@ const OWNERSHIP = {
   '/glossary': 'Defines terms and nothing more.',
   '/naics': 'What the sector classification covers.',
   '/start': 'What an organization can begin with, and what it would take.',
+  '/contact': 'How to reach a person, and where each kind of message goes.',
 };
 
 /** Claims worth counting because they are the ones that recur. */
