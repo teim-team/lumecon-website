@@ -140,9 +140,14 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
 
 test('homepage uses clear free-access language and Cedar starts on demand', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
-  await expect(page.locator('.hero2 .hero2-cta a[href="/signup?tier=free"]')).toHaveText(
-    /Request free access/,
-  );
+  // The header's filled button is Request access, so the hero's is too: one
+  // primary action per page, not a header and a hero asking for different
+  // things. Pricing stays beside it as the secondary.
+  const heroCta = page.locator('.hero2 .hero2-cta a');
+  await expect(heroCta).toHaveText([/Request free access/, /See plans and pricing/]);
+  await expect(heroCta.first()).toHaveClass(/btn2--primary/);
+  await expect(heroCta.first()).toHaveAttribute('href', '/signup?tier=free');
+  await expect(heroCta.nth(1)).not.toHaveClass(/btn2--primary/);
 
   await page.locator('#why').scrollIntoViewIfNeeded();
   const fab = page.locator('.cedar-fab');
@@ -250,6 +255,13 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await page.locator('#navt-resources').click();
   await expect(page.locator('#navp-product')).toBeHidden();
   await expect(page.locator('#navp-resources')).toBeVisible();
+  // The starting guide leads Resources, so the newest reader meets it first.
+  await expect(page.locator('#navp-resources .nav-panel__text')).toHaveText([
+    'Plan your first analysis',
+    'Methodology',
+    'Industry sectors',
+    'Glossary',
+  ]);
   await expect(page.locator('#navp-resources a[href="/start"]')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('#navp-resources')).toBeHidden();

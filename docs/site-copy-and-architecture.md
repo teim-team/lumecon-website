@@ -109,7 +109,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -124,8 +124,8 @@ THE INTELLIGENT ECONOMIC ANALYSIS PLATFORM
 
 Lumecon brings your organization’s records, authoritative public data and a regional economic model into one reviewable workflow. Cedar structures the inputs and flags uncertainty; you approve the assumptions, Cedar Impact calculates the results and every estimate keeps its source trail.
 
-- _link:_ [See plans and pricing →](/pricing)
 - _link:_ [Request free access →](/signup?tier=free)
+- _link:_ [See plans and pricing →](/pricing)
 - _image alt:_ (no alt)
 RENEWABLE ENERGY IOWA
 
@@ -422,7 +422,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -816,7 +816,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1135,7 +1135,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1376,7 +1376,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1541,7 +1541,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1718,7 +1718,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1877,7 +1877,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2033,7 +2033,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2334,7 +2334,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2481,7 +2481,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2595,7 +2595,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2682,7 +2682,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2780,7 +2780,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2926,7 +2926,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2991,7 +2991,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3119,7 +3119,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3260,7 +3260,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3436,7 +3436,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3579,7 +3579,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3741,7 +3741,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access

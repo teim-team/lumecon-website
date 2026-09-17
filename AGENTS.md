@@ -333,8 +333,21 @@ output is committed. Run them when their inputs change.
 - Smoke tests: `npm run build` first (Playwright serves `dist/`), then
   `npm run test:smoke` (CI runs chromium + webkit). The site makes no
   third-party requests since the typefaces were self-hosted, so there is
-  no longer an environmental failure mode to discount: every failure is
-  real.
+  no network failure mode to discount.
+- **Build the way CI does, or two tests fail for no reason.** The smoke
+  workflow builds with `PUBLIC_APP_URL=https://app.lumecon.ai` and
+  `PUBLIC_API_URL=https://api.lumecon.ai`; Astro inlines both at build
+  time. There is no tracked `.env`, so a plain `npm run build` produces
+  the login-only fallback and these two fail:
+  *the production build preserves the app handoff and API CSP* and
+  *welcome closes the flow in full teal with one action*. Locally:
+
+  ```sh
+  PUBLIC_APP_URL=https://app.lumecon.ai PUBLIC_API_URL=https://api.lumecon.ai npm run build
+  ```
+
+  Those two are the only known environmental failures. Anything else is
+  real: check before discounting it, never the other way round.
 
 Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
 originals) is tracked in git. Moving it to external storage is a
