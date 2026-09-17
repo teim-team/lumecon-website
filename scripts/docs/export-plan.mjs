@@ -18,8 +18,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
-  STEP_GROUPS,
-  FOLLOW_UPS,
+  STAGES,
+  SCREENS,
   CAPABILITY_MATRIX,
   COVERAGE_INDICATORS,
   RECORDS,
@@ -47,8 +47,8 @@ const CASES = [
   {
     name: 'A single-location enterprise',
     answers: {
-      goal: 'annual_contribution',
-      audience: 'leadership',
+      goal: 'current_operations',
+      audience: ['leadership'],
       boundary: 'one_enterprise',
       where: 'one_site',
       activities: ['retail_fuel'],
@@ -59,8 +59,8 @@ const CASES = [
   {
     name: 'A multistate contractor with centralized records',
     answers: {
-      goal: 'defend_a_number',
-      audience: 'funder',
+      goal: 'current_operations',
+      audience: ['funder'],
       boundary: 'one_enterprise',
       where: 'multi_state',
       multi_state_anchor: 'concentrated',
@@ -75,8 +75,8 @@ const CASES = [
   {
     name: 'A group of subsidiaries whose records sit apart',
     answers: {
-      goal: 'annual_contribution',
-      audience: 'leadership',
+      goal: 'current_operations',
+      audience: ['leadership'],
       boundary: 'several_enterprises',
       intercompany: 'yes',
       where: 'multi_site_one_state',
@@ -90,8 +90,8 @@ const CASES = [
   {
     name: 'A government analysis',
     answers: {
-      goal: 'whole_economy',
-      audience: 'public',
+      goal: 'enterprises_and_government',
+      audience: ['public'],
       boundary: 'government_and_enterprises',
       where: 'multi_site_one_state',
       activities: ['government_admin'],
@@ -103,7 +103,7 @@ const CASES = [
     name: 'Not enough answered to plan',
     answers: {
       goal: 'not_sure',
-      audience: 'not_sure',
+      audience: ['not_sure'],
       boundary: 'not_sure',
       where: 'not_sure',
       records_held: 'not_sure',
@@ -146,27 +146,35 @@ function guide() {
     '',
   );
 
-  out.push('## 1. The six questions', '');
-  out.push('Numbered as the person meets them: one screen each.', '');
-  for (const [i, group] of STEP_GROUPS.entries()) {
-    out.push(`### ${String(i + 1).padStart(2, '0')}. ${group.label}`, '');
-    for (const q of group.questions) {
-      if (group.questions.length > 1) out.push(`**${q.label}**`, '');
-      out.push(`**Purpose.** ${q.purpose}`, '');
-      if (q.help) out.push(`_Shown to the person: ${q.help}_`, '');
-      out.push(`_Answer type: ${q.kind === 'multi' ? 'choose any' : 'choose one'}._`, '');
-      for (const o of q.options) out.push(`- ${optionLine(o)}`);
-      out.push('');
-    }
-    const follows = FOLLOW_UPS.filter((f) =>
-      group.questions.some((q) => q.id === f.after),
-    );
-    for (const f of follows) {
-      out.push(`#### Follow-up: ${f.label}`, '');
-      out.push(`**Asked when.** \`${f.showWhen.toString().replace(/\s+/g, ' ')}\``, '');
-      out.push(`**Why it changes the scope.** ${f.purpose}`, '');
-      for (const o of f.options) out.push(`- ${optionLine(o)}`);
-      out.push('');
+  out.push('## 1. The questions', '');
+  out.push(
+    'Four fixed stages, so the end never moves while somebody is working.',
+    'Follow-ups sit inside the stage of the question that opens them, and are',
+    'asked only where the answer changes the proposed scope or the records',
+    'requested.',
+    '',
+  );
+  for (const stage of STAGES) {
+    if (!stage.screens.length) continue;
+    out.push(`### Stage: ${stage.label}`, '');
+    for (const screen of SCREENS.filter((s) => s.stage === stage.id)) {
+      if (screen.follow) {
+        const f = screen.follow;
+        out.push(`#### Follow-up: ${f.label}`, '');
+        out.push(`**Asked when.** \`${f.showWhen.toString().replace(/\s+/g, ' ')}\``, '');
+        out.push(`**Why it changes the scope.** ${f.purpose}`, '');
+        for (const o of f.options) out.push(`- ${optionLine(o)}`);
+        out.push('');
+        continue;
+      }
+      for (const q of screen.questions) {
+        out.push(`#### ${q.label}`, '');
+        out.push(`**Purpose.** ${q.purpose}`, '');
+        if (q.help) out.push(`_Shown to the person: ${q.help}_`, '');
+        out.push(`_Answer type: ${q.kind === 'multi' ? 'choose any' : 'choose one'}._`, '');
+        for (const o of q.options) out.push(`- ${optionLine(o)}`);
+        out.push('');
+      }
     }
   }
 
@@ -179,13 +187,13 @@ function guide() {
     'estimate: better information can move an estimate in either direction,',
     'narrow what the analysis can support, or reveal double counting.',
     '',
-    '| Information | Analytical benefit | Status | Review |',
-    '|---|---|---|---|',
+    '| What it lets you ask | Information | Analytical benefit | Status | Review |',
+    '|---|---|---|---|---|',
   );
   for (const row of CAPABILITY_MATRIX) {
     const benefit = row.note ? `${row.benefit} _${row.note}_` : row.benefit;
     out.push(
-      `| ${row.information} | ${benefit} | ${STATUS[row.status]} | ${row.review ? '**Needs sign-off**' : 'Settled'} |`,
+      `| ${row.question} | ${row.information} | ${benefit} | ${STATUS[row.status]} | ${row.review ? '**Needs sign-off**' : 'Settled'} |`,
     );
   }
   out.push('');

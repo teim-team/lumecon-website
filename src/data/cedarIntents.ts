@@ -1624,7 +1624,7 @@ export const INTENTS: CedarIntent[] = [
       'training',
     ],
     answer:
-      'Onboarding starts by scoping one first analysis, then uploading the records you already have, such as budgets, payroll, program records and vendor lists. Cedar guides the intake and presents key mappings and assumptions for review before the model runs. Six questions at lumecon.ai/start propose a starting scope and the short list of records it needs, which is the fastest way to see whether you can begin now.',
+      'Onboarding starts by scoping one first analysis, then uploading the records you already have, such as budgets, payroll, program records and vendor lists. Cedar guides the intake and presents key mappings and assumptions for review before the model runs. A few questions at lumecon.ai/start propose a starting scope and the short list of records it needs, which is the fastest way to see whether you can begin now.',
     expanded:
       'A typical onboarding covers the analysis scope, source records, proposed mappings and assumptions before the first run. The team can support the initial analysis, and later revisions reuse the saved project rather than starting from a blank file. Ask for a timing estimate based on your data and deadline.',
   },
@@ -1655,7 +1655,7 @@ export const INTENTS: CedarIntent[] = [
       'what can we do with what we have',
     ],
     answer:
-      'Less than people expect. A first analysis needs a defined activity, a year, a geography and an operating measure in dollars, usually from a financial statement or an adopted budget, plus payroll and a headcount. Everything else refines it. Six questions at lumecon.ai/start propose a starting scope for your situation, the records to begin with and who usually holds each one. What are you hoping to measure?',
+      'Less than people expect. A first analysis needs a defined activity, a year, a geography and an operating measure in dollars, usually from a financial statement or an adopted budget, plus payroll and a headcount. Everything else refines it. A few questions at lumecon.ai/start propose a starting scope for your situation, the records to begin with and who usually holds each one. What are you hoping to measure?',
     expanded:
       'Two things get confused here. How complicated an organization is, several entities, several states, federal contracting, is a separate question from whether its records are reachable. A complex organization often has excellent records, and a single operation often cannot reach its own. The planning flow reads them separately and neither one disqualifies you. Where too much is still open, the honest answer is a short call with an economist rather than a plan built on guesses. Records are shared inside the product, never through the website.',
   },

@@ -69,40 +69,35 @@
 export const QUESTIONS = /** @type {Question[]} */ ([
   {
     id: 'goal',
-    group: 'purpose',
     kind: 'single',
     label: 'What would you like to understand?',
     purpose: 'Establish the first useful output.',
     options: [
       {
-        value: 'annual_contribution',
-        label: 'What our operations contribute in a year',
-        note: 'The recurring economic footprint of activity already happening.',
+        value: 'current_operations',
+        label: 'Our current operations',
+        note: 'The recurring footprint of activity already happening.',
       },
       {
-        value: 'one_project',
-        label: 'What one project or expansion would support',
-        note: 'A single facility, development or program, usually one time.',
+        value: 'project',
+        label: 'A project or expansion',
+        note: 'One facility, development or program, usually one time.',
       },
       {
-        value: 'whole_economy',
-        label: 'How our enterprises and our government together support the economy',
+        value: 'enterprises_and_government',
+        label: 'Our enterprises and government together',
         note: 'The government modeled alongside the operations it funds and is funded by.',
       },
-      {
-        value: 'defend_a_number',
-        label: 'A figure we can defend to someone outside the organization',
-        note: 'A funder, an agency or a legislature has asked, and the number has to hold up.',
-      },
-      { value: 'not_sure', label: 'Not sure yet' },
+      { value: 'not_sure', label: 'Help me choose' },
     ],
   },
   {
     id: 'audience',
-    group: 'purpose',
-    kind: 'single',
+    kind: 'multi',
     label: 'Who will use the results?',
-    purpose: 'Set the reporting register and the level of documentation the first output needs.',
+    purpose:
+      'Set the reporting register and how much documentation the first output has to carry. A result that has to be defended outside the organization is a different job from one that informs a budget meeting.',
+    help: 'Choose everyone who will read it.',
     options: [
       { value: 'leadership', label: 'Our council, board or executive leadership' },
       { value: 'funder', label: 'A funder, a federal agency or a legislature' },
@@ -195,37 +190,33 @@ export const QUESTIONS = /** @type {Question[]} */ ([
   },
 ]);
 
-/** Labels for screens that carry more than one question. */
-const GROUP_LABELS = {
-  purpose: 'What would you like to understand, and who will use the results?',
-};
+/**
+ * The four stages, fixed. An earlier version numbered every screen, so
+ * answering a question that opened a follow-up moved the total from six to
+ * seven to eight: the finish line receded as you worked. A stage set that
+ * cannot grow says where you are without promising how many taps are left,
+ * which is not knowable until the answers are in.
+ *
+ * `screens` lists the initial questions in the stage. A follow-up belongs
+ * to the stage of the question that opens it.
+ */
+export const STAGES = [
+  { id: 'goal', label: 'Goal', screens: ['goal', 'audience'] },
+  { id: 'scope', label: 'Scope', screens: ['boundary', 'where', 'activities'] },
+  { id: 'records', label: 'Records', screens: ['records_held', 'available'] },
+  { id: 'plan', label: 'Plan', screens: [] },
+];
 
 /**
- * The six screens. A screen holds one question, or the small number that
- * only make sense together. Derived from QUESTIONS so the count on screen
- * and the questions themselves cannot drift apart.
- *
- * `selfAdvancing` marks a screen that needs no Continue button: one
- * question, one answer, move on.
+ * Multiple-answer questions carry a "not sure" that means the opposite of
+ * every other option on the screen, so it cannot sit alongside them. This
+ * names which value is exclusive for a given question.
  */
-export const STEP_GROUPS = (() => {
-  /** @type {{id: string, label: string, questions: Question[], selfAdvancing: boolean}[]} */
-  const groups = [];
-  const byId = new Map();
-  for (const q of QUESTIONS) {
-    const id = q.group || q.id;
-    if (!byId.has(id)) {
-      const group = { id, label: GROUP_LABELS[id] || q.label, questions: [], selfAdvancing: false };
-      byId.set(id, group);
-      groups.push(group);
-    }
-    byId.get(id).questions.push(q);
-  }
-  for (const group of groups) {
-    group.selfAdvancing = group.questions.length === 1 && group.questions[0].kind === 'single';
-  }
-  return groups;
-})();
+export const EXCLUSIVE_VALUE = {
+  audience: 'not_sure',
+  activities: 'not_sure',
+  available: 'none_yet',
+};
 
 /**
  * Conditional follow-ups. Each is asked only when its answer would change
@@ -338,6 +329,27 @@ export const FOLLOW_UPS = [
   },
 ];
 
+/**
+ * Every screen in order, each tagged with the stage it belongs to.
+ * @typedef {Question & {after: string, showWhen: (a: Record<string, any>) => boolean}} FollowUp
+ */
+export const SCREENS = (() => {
+  /** @type {{id: string, stage: string, questions: Question[], follow?: FollowUp}[]} */
+  const out = [];
+  const byId = new Map(QUESTIONS.map((q) => [q.id, q]));
+  for (const stage of STAGES) {
+    for (const id of stage.screens) {
+      const question = byId.get(id);
+      if (!question) continue;
+      out.push({ id, stage: stage.id, questions: [question] });
+      for (const follow of FOLLOW_UPS) {
+        if (follow.after === id) out.push({ id: follow.id, stage: stage.id, follow, questions: [] });
+      }
+    }
+  }
+  return out;
+})();
+
 /* ------------------------------------------------------------------ *
  * 2. What each additional information component makes possible
  * ------------------------------------------------------------------ */
@@ -357,66 +369,75 @@ export const FOLLOW_UPS = [
 export const CAPABILITY_MATRIX = [
   {
     id: 'baseline',
-    information: 'A defined activity, a year, a geography and an operating measure',
+    question: 'What does our activity support in the regional economy?',
+    information: 'a defined activity, a year, a geography and an operating measure',
     benefit:
       'Supports a first estimate, with the allocation and local purchasing assumptions stated alongside it.',
     status: 'available',
+    availability: 'Available today.',
     review: false,
   },
   {
     id: 'by_entity_location',
-    information: 'Records separated by entity and work location',
+    question: 'How is our activity distributed across the places we operate?',
+    information: 'records separated by entity and work location',
     benefit:
-      'Each operation is reported in its own sector and the region is built from the places work is actually performed, in place of an assumed split across operations.',
+      'Each operation is reported in its own sector, and the region is built from the places work is actually performed rather than from an assumed split across operations.',
     status: 'available',
+    availability: 'Available today.',
     review: false,
-    note:
-      'One primary sector is carried per operation today, so operations that should be reported separately are recorded separately.',
-  },
-  {
-    id: 'vendor_spend',
-    information: 'Vendor and subcontractor spending with usable locations',
-    benefit:
-      'Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house.',
-    status: 'research',
-    review: true,
-    note:
-      'Local purchasing is currently estimated from regional trade data. Vendor level spending is not an input the model accepts, and the method for using it is open.',
+    note: 'One primary sector is carried per operation, so operations that should be reported separately are recorded separately.',
   },
   {
     id: 'intercompany',
-    information: 'Identified transactions between the entities in scope',
+    question: 'Can we combine our entities without counting the same activity twice?',
+    information: 'a listing of transactions between the entities in scope',
     benefit:
       'Supports combining entities while removing activity already counted inside another entity in the same boundary.',
     status: 'proposed',
+    availability: 'Handled today as a preparation step before intake, not inside the model.',
     review: true,
-    note: 'Handled today as a preparation step before intake. The consolidation rule needs economist sign-off.',
   },
   {
     id: 'gov_flows',
-    information: 'Enterprise distributions and government spending records',
+    question: 'How does money move between our enterprises and our government?',
+    information: 'enterprise distributions and government spending records',
     benefit:
       'Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers.',
     status: 'available',
+    availability:
+      'Available today, though several government detail fields are not yet carried end to end through the product.',
     review: true,
-    note:
-      'The engine models the government as its own account. Several government detail fields are not yet carried end to end through the product.',
   },
   {
     id: 'multi_year',
-    information: 'Comparable records across years',
+    question: 'How has this changed over time?',
+    information: 'comparable records across years',
     benefit:
       'Supports reporting change over time, limited by consistent coverage and consistent accounting between the years.',
     status: 'available',
+    availability: 'Available today. One analysis covers one year; several years run as a series.',
     review: false,
-    note: 'One analysis covers one year. Several years run as a series of analyses.',
   },
   {
     id: 'context',
-    information: 'Interviews, photographs and other contextual material',
+    question: 'How do we explain this to the people it is for?',
+    information: 'interviews, photographs and other contextual material',
     benefit: 'Supports interpretation and reporting. It does not enter the calculation.',
     status: 'available',
+    availability: 'Available today, in reporting rather than in the model.',
     review: false,
+  },
+  {
+    id: 'vendor_spend',
+    question: 'How much of what we buy is actually bought locally?',
+    information: 'vendor and subcontractor spending with usable locations',
+    benefit:
+      'Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house.',
+    status: 'research',
+    availability:
+      'Future work. Local purchasing is estimated from regional trade data today, and vendor records are not a model input.',
+    review: true,
   },
 ];
 
@@ -464,94 +485,111 @@ export const COVERAGE_INDICATORS = [
  */
 export const RECORDS = {
   financials: {
-    what: 'The most recent completed financial statement for what is in scope',
+    what: 'Latest financial statement for the selected operations',
     why: 'Carries economic output and the reporting year every other figure is matched to.',
     alternative: 'An internal statement or trial balance, where audited figures are not final yet.',
     holder: 'Finance office or controller',
+    satisfiedBy: ['audited_financials', 'internal_financials'],
   },
   budget: {
-    what: 'The adopted budget or appropriation for the year',
+    what: 'The adopted budget for the year',
     why: 'Stands in for a completed statement, and shows what the government spends.',
     alternative: '',
     holder: 'Budget office or finance director',
+    satisfiedBy: ['budget'],
   },
   payroll: {
-    what: 'A payroll summary for the same year',
+    what: 'Payroll summary for the same year',
     why: 'Labor income drives the household spending the analysis reports.',
-    alternative: 'A W-3, four quarterly 941s, or the payroll line of the financial statement.',
+    alternative:
+      'A W-3, or four quarterly 941s covering the same year, or the payroll line of the financial statement.',
     holder: 'Payroll or human resources',
+    satisfiedBy: ['payroll'],
   },
   headcount: {
     what: 'Employee count for the same year',
     why: 'Jobs are reported directly, and the count is checked against payroll.',
-    alternative: 'A point in time headcount from the HR system, labeled as the date it was taken.',
+    alternative:
+      'A point in time headcount, labeled with the date it was taken, or the count already on the payroll summary.',
     holder: 'Human resources',
+    satisfiedBy: ['roster', 'payroll'],
   },
   locations: {
-    what: 'A list of the places work is performed, with city and state',
-    why: 'Sets the region the results are reported for and the local data the model uses.',
+    what: 'Work locations',
+    why: 'Set the region the results are reported for and the local data the model uses.',
     alternative: 'Worksite addresses already held in the payroll system.',
     holder: 'Operations or human resources',
+    satisfiedBy: ['roster'],
   },
   entity_list: {
-    what: 'A list of the entities in scope and the main line of business of each',
+    what: 'Entities and their main activities',
     why: 'Each operation is reported in its own sector, so the list decides the sectors.',
     alternative: 'An organization chart, where it names the operating entities.',
     holder: 'Administration or general counsel',
+    satisfiedBy: [],
   },
   gov_financials: {
-    what: 'The government annual financial report or adopted budget',
+    what: 'Government annual financial report or adopted budget',
     why: 'Government spending, payroll and headcount are modeled as their own account.',
     alternative: '',
     holder: 'Tribal treasurer, finance director or comptroller',
+    satisfiedBy: ['budget', 'audited_financials'],
   },
   gov_funding: {
-    what: 'What funds the government: grants, contracts, transfers in, and any taxes collected',
+    what: 'What funds the government: grants, contracts, transfers in, taxes collected',
     why: 'Separates money arriving from outside the region from money recirculating inside it.',
     alternative: 'The revenue section of the annual financial report.',
     holder: 'Grants office or finance',
+    satisfiedBy: ['awards'],
   },
   distributions: {
-    what: 'Records of distributions from the enterprises to the government or to citizens',
+    what: 'Distributions from the enterprises to the government or to citizens',
     why: 'Transfers are treated as transfers, which is what keeps them from being counted twice.',
     alternative: '',
     holder: 'Finance office',
+    satisfiedBy: [],
   },
   intercompany: {
-    what: 'A listing of transactions between the entities in scope',
-    why: 'Activity inside the boundary is already counted in another entity’s figures.',
+    what: 'Transactions between the selected entities',
+    why: 'Activity inside the boundary is already counted in another entity\u2019s figures.',
     alternative: 'Consolidating eliminations from the audit workpapers, where a consolidation exists.',
     holder: 'Controller or external auditor',
+    satisfiedBy: [],
   },
   awards: {
-    what: 'A contract or grant award listing, with place of performance',
-    why: 'Places the work in the region where it is performed, and shows what passes through to subcontractors.',
+    what: 'Contract or grant awards, with place of performance',
+    why: 'Places the work where it is performed, and shows what passes through to subcontractors.',
     alternative: 'A contracts register, or the public award records the agency already publishes.',
     holder: 'Contracts or grants administration',
+    satisfiedBy: ['awards'],
   },
   capital: {
-    what: 'Records of capital projects in the year, with amounts',
+    what: 'Capital projects in the year, with amounts',
     why: 'One time construction and equipment are modeled separately from recurring operations.',
-    alternative: 'The capital section of the budget or the fixed asset addition schedule.',
+    alternative: 'The capital section of the budget, or the fixed asset addition schedule.',
     holder: 'Finance or project management',
+    satisfiedBy: ['capital'],
   },
   vendor_listing: {
-    what: 'An accounts payable or vendor listing with vendor city and state',
+    what: 'Vendor or accounts payable listing, with vendor city and state',
     why: 'Recorded for review of how purchasing is treated. It is not a model input today.',
     alternative: '',
     holder: 'Accounts payable',
+    satisfiedBy: ['vendor_listing'],
   },
   prior_years: {
     what: 'The same records for earlier years',
-    why: 'Reporting change over time needs consistent coverage and consistent accounting across the years.',
+    why: 'Reporting change over time needs consistent coverage and accounting across the years.',
     alternative: '',
     holder: 'Finance office',
+    satisfiedBy: [],
   },
   context: {
     what: 'Photographs, program descriptions or interviews',
     why: 'Used in reporting and interpretation. It does not enter the calculation.',
     alternative: '',
     holder: 'Communications or program staff',
+    satisfiedBy: [],
   },
 };
 
@@ -659,8 +697,10 @@ export function readScope(a) {
   if (!boundaryText) {
     return {
       settled: false,
+      title: 'Start with a scoping conversation.',
       sentence:
         'The boundary is the first thing to settle. One conversation is usually enough to name it.',
+      facts: [],
       bounds: [],
     };
   }
@@ -679,9 +719,40 @@ export function readScope(a) {
     bounds.push('Only work performed inside the region is reported there.');
   }
 
+  /* The facts a coordinator repeats, kept as fields rather than buried in
+     the sentence, so the plan can lead with them. */
+  const facts = [
+    { k: 'Covers', v: boundaryText },
+    {
+      k: 'Where',
+      v: {
+        one_site: 'One location',
+        multi_site_one_state: 'One state, several locations',
+        multi_state:
+          a.multi_state_anchor === 'concentrated'
+            ? 'The state holding most of the activity, first'
+            : 'One state first, the others as their own analyses',
+        not_sure: 'To be settled on the call',
+      }[a.where],
+    },
+    { k: 'Period', v: 'One reporting year' },
+  ];
+  if (a.goal && a.goal !== 'not_sure') {
+    facts.push({
+      k: 'Purpose',
+      v: {
+        current_operations: 'What current operations contribute',
+        project: 'What one project or expansion would support',
+        enterprises_and_government: 'Enterprises and government together',
+      }[a.goal],
+    });
+  }
+
   return {
     settled: true,
+    title: `Start with ${boundaryText}, for one year.`,
     sentence: `Start with ${boundaryText}, ${placeText}, for one reporting year.`,
+    facts,
     bounds,
   };
 }
@@ -714,7 +785,7 @@ export function readFirstOutput(a) {
       'Subcontracted work attributed to the subcontractor rather than to your organization, until the pass-through share is known.',
     );
   }
-  if (a.goal === 'defend_a_number' || a.audience === 'funder') {
+  if (has(a.audience, 'funder')) {
     can.push('An export carrying the inputs, the assumptions and the data vintages behind the figure.');
   }
   notYet.push(
@@ -804,7 +875,48 @@ export function readChecklist(a) {
   const seen = new Set();
   return picks
     .filter((p) => (seen.has(p.id) ? false : seen.add(p.id)))
-    .map((p) => ({ ...p, ...RECORDS[p.id], why: p.why || RECORDS[p.id].why }));
+    .map((p) => {
+      const record = RECORDS[p.id];
+      /* A record the person has already said they can reach is not another
+         thing to chase. It is shown as in hand, on the same list, so the
+         list reads as progress rather than as a demand. */
+      const have = (record.satisfiedBy || []).some((v) => has(a.available, v));
+      return { ...p, ...record, why: p.why || record.why, have };
+    });
+}
+
+/**
+ * The one thing to do next, chosen from what is already in hand rather
+ * than from what is missing. A first file review needs one document, not
+ * the whole checklist, and saying so is the difference between a plan
+ * somebody starts this week and a plan somebody files.
+ */
+export function readNextAction(_answers, checklist) {
+  const inHand = checklist.filter((r) => r.have);
+  const money = inHand.find((r) => r.id === 'financials' || r.id === 'gov_financials');
+
+  if (money) {
+    return {
+      title: `Send us the ${money.what.toLowerCase()}.`,
+      detail:
+        'One document is enough to start. An economist reads it and tells you what it supports for the scope above, and which of the gaps below actually matter for your question.',
+      caveat: 'A first read is a review, not a confirmation that the analysis can run on it.',
+    };
+  }
+  if (inHand.length > 0) {
+    return {
+      title: `Send us the ${inHand[0].what.toLowerCase()}.`,
+      detail:
+        'It is not the whole list, and it does not need to be. An economist reads what you have and says what it supports and what it does not.',
+      caveat: 'A first read is a review, not a confirmation that the analysis can run on it.',
+    };
+  }
+  return {
+    title: 'Arrange an onboarding call.',
+    detail:
+      'Nothing has to be gathered first. The call works out which records exist, who holds them and which of them your question actually needs.',
+    caveat: '',
+  };
 }
 
 /** Who needs to help, derived from the unresolved questions rather than from rank. */
@@ -841,7 +953,7 @@ export function readParticipants(a) {
       why: 'Government spending and what funds it.',
     });
   }
-  if (a.audience === 'funder' || a.goal === 'defend_a_number') {
+  if (has(a.audience, 'funder') || has(a.audience, 'public')) {
     people.push({
       role: 'Whoever will present the result',
       why: 'They should hear the assumptions before they have to defend them.',
@@ -853,7 +965,7 @@ export function readParticipants(a) {
 /** Questions the onboarding call should settle, drawn from the answers given. */
 export function readOpenQuestions(a) {
   const q = [];
-  if (a.goal === 'not_sure' || a.audience === 'not_sure')
+  if (a.goal === 'not_sure' || has(a.audience, 'not_sure'))
     q.push('What the first analysis is for, and who reads it.');
   if (a.boundary === 'not_sure') q.push('What the first analysis covers.');
   if (a.where === 'not_sure') q.push('Which region the results are reported for.');
@@ -888,13 +1000,9 @@ export function readOpenQuestions(a) {
  * assumptions.
  */
 export function readConfidence(a) {
-  const unsure = [
-    a.goal,
-    a.audience,
-    a.boundary,
-    a.where,
-    a.records_held,
-  ].filter((v) => v === 'not_sure').length;
+  const unsure =
+    [a.goal, a.boundary, a.where, a.records_held].filter((v) => v === 'not_sure').length +
+    (has(a.audience, 'not_sure') ? 1 : 0);
   const noActivities = has(a.activities, 'not_sure') || (a.activities || []).length === 0;
   const noRecords = has(a.available, 'none_yet') || (a.available || []).length === 0;
 
@@ -926,13 +1034,15 @@ export function readConfidence(a) {
 /** Everything the result panel, the printed checklist and the call outline read. */
 export function derivePlan(answers) {
   const a = answers || {};
+  const checklist = readChecklist(a);
   return {
     confidence: readConfidence(a),
     scope: readScope(a),
     structure: readStructure(a),
     records: readRecords(a),
     firstOutput: readFirstOutput(a),
-    checklist: readChecklist(a),
+    checklist,
+    nextAction: readNextAction(a, checklist),
     participants: readParticipants(a),
     openQuestions: readOpenQuestions(a),
   };
@@ -980,6 +1090,26 @@ export const CALL_OUTLINE = [
     title: 'First file review',
     detail:
       'Offer it: send one existing report, and Lumecon says what it supports and which gaps matter. No reformatting first.',
+  },
+];
+
+/**
+ * What the public page says a call is for. The minute-by-minute outline
+ * above is facilitator material: useful to whoever runs the call, and the
+ * wrong thing to put in front of somebody deciding whether to book one.
+ */
+export const CALL_PUBLIC_OUTCOMES = [
+  {
+    label: 'Agree a question worth answering',
+    detail: 'One question, and who it is for, written in a sentence you would recognize.',
+  },
+  {
+    label: 'Look at what you already have',
+    detail: 'Bring one existing report. We say what it supports and what it does not.',
+  },
+  {
+    label: 'Name what comes next',
+    detail: 'The records or decisions still open, and who in your organization holds them.',
   },
 ];
 

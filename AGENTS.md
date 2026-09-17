@@ -169,6 +169,24 @@ credible; /cedar says why Lumecon's use of AI is different; the
 glossary defines terms and nothing more. Do not re-explain Cedar on
 other pages beyond a one-line pointer to /cedar.
 
+## Standing instruction: the copy document is a CI gate (2026-09)
+
+The smoke workflow's last step regenerates
+`docs/site-copy-and-architecture.md` from the built site and runs
+`git diff --exit-code` on it. Change any visible copy and that file is
+stale, so the job fails even when every test passed, which is how it
+reads in the log: 63 chromium and 63 webkit green, then a failure.
+
+Regenerate and commit it in the same change:
+
+```
+npm run build && npm run preview -- --host 127.0.0.1 &
+DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
+```
+
+`astro preview` is a singleton, so stop an existing one first
+(`npx astro preview stop`) or the second call silently serves nothing.
+
 ## Standing instruction: verify with `npm run build` (2026-09)
 
 `npm run build` is `astro check && astro build`, and it is what all three

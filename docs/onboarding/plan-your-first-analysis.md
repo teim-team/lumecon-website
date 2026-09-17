@@ -18,29 +18,33 @@ single-location organization frequently cannot reach its own. Neither
 dimension assigns anyone to an advanced onboarding path, and they are never
 combined into one score.
 
-## 1. The six questions
+## 1. The questions
 
-Numbered as the person meets them: one screen each.
+Four fixed stages, so the end never moves while somebody is working.
+Follow-ups sit inside the stage of the question that opens them, and are
+asked only where the answer changes the proposed scope or the records
+requested.
 
-### 01. What would you like to understand, and who will use the results?
+### Stage: Goal
 
-**What would you like to understand?**
+#### What would you like to understand?
 
 **Purpose.** Establish the first useful output.
 
 _Answer type: choose one._
 
-- What our operations contribute in a year (The recurring economic footprint of activity already happening.)
-- What one project or expansion would support (A single facility, development or program, usually one time.)
-- How our enterprises and our government together support the economy (The government modeled alongside the operations it funds and is funded by.)
-- A figure we can defend to someone outside the organization (A funder, an agency or a legislature has asked, and the number has to hold up.)
-- Not sure yet
+- Our current operations (The recurring footprint of activity already happening.)
+- A project or expansion (One facility, development or program, usually one time.)
+- Our enterprises and government together (The government modeled alongside the operations it funds and is funded by.)
+- Help me choose
 
-**Who will use the results?**
+#### Who will use the results?
 
-**Purpose.** Set the reporting register and the level of documentation the first output needs.
+**Purpose.** Set the reporting register and how much documentation the first output has to carry. A result that has to be defended outside the organization is a different job from one that informs a budget meeting.
 
-_Answer type: choose one._
+_Shown to the person: Choose everyone who will read it._
+
+_Answer type: choose any._
 
 - Our council, board or executive leadership
 - A funder, a federal agency or a legislature
@@ -48,7 +52,9 @@ _Answer type: choose one._
 - An internal planning or finance team
 - Not sure yet
 
-### 02. What is being analyzed?
+### Stage: Scope
+
+#### What is being analyzed?
 
 **Purpose.** Define the analysis boundary.
 
@@ -73,7 +79,7 @@ _Answer type: choose one._
 - No, they operate independently
 - Not sure
 
-### 03. Where does the activity take place?
+#### Where does the activity take place?
 
 **Purpose.** Distinguish one location, several locations in one state, and several states.
 
@@ -94,7 +100,7 @@ _Answer type: choose one._
 - No, it is spread fairly evenly
 - Not sure
 
-### 04. What activities are involved?
+#### What activities are involved?
 
 **Purpose.** Identify the branches that change the scope, federal contracting and gaming above all.
 
@@ -166,7 +172,9 @@ _Answer type: choose any._
 - No, the lines are already separated
 - Not sure
 
-### 05. Are records centralized or held separately?
+### Stage: Records
+
+#### Are records centralized or held separately?
 
 **Purpose.** Identify coordination needs, which is a different question from what exists.
 
@@ -177,7 +185,7 @@ _Answer type: choose one._
 - Each entity or department keeps its own
 - Not sure
 
-### 06. Which existing records could you readily access?
+#### Which existing records could you readily access?
 
 **Purpose.** Find a practical starting point. This is about reach, not about what exists somewhere.
 
@@ -203,15 +211,15 @@ benefit column as a change in method, never as a change in the size of the
 estimate: better information can move an estimate in either direction,
 narrow what the analysis can support, or reveal double counting.
 
-| Information | Analytical benefit | Status | Review |
-|---|---|---|---|
-| A defined activity, a year, a geography and an operating measure | Supports a first estimate, with the allocation and local purchasing assumptions stated alongside it. | Available today | Settled |
-| Records separated by entity and work location | Each operation is reported in its own sector and the region is built from the places work is actually performed, in place of an assumed split across operations. _One primary sector is carried per operation today, so operations that should be reported separately are recorded separately._ | Available today | Settled |
-| Vendor and subcontractor spending with usable locations | Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house. _Local purchasing is currently estimated from regional trade data. Vendor level spending is not an input the model accepts, and the method for using it is open._ | In research | **Needs sign-off** |
-| Identified transactions between the entities in scope | Supports combining entities while removing activity already counted inside another entity in the same boundary. _Handled today as a preparation step before intake. The consolidation rule needs economist sign-off._ | Proposed | **Needs sign-off** |
-| Enterprise distributions and government spending records | Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers. _The engine models the government as its own account. Several government detail fields are not yet carried end to end through the product._ | Available today | **Needs sign-off** |
-| Comparable records across years | Supports reporting change over time, limited by consistent coverage and consistent accounting between the years. _One analysis covers one year. Several years run as a series of analyses._ | Available today | Settled |
-| Interviews, photographs and other contextual material | Supports interpretation and reporting. It does not enter the calculation. | Available today | Settled |
+| What it lets you ask | Information | Analytical benefit | Status | Review |
+|---|---|---|---|---|
+| What does our activity support in the regional economy? | a defined activity, a year, a geography and an operating measure | Supports a first estimate, with the allocation and local purchasing assumptions stated alongside it. | Available today | Settled |
+| How is our activity distributed across the places we operate? | records separated by entity and work location | Each operation is reported in its own sector, and the region is built from the places work is actually performed rather than from an assumed split across operations. _One primary sector is carried per operation, so operations that should be reported separately are recorded separately._ | Available today | Settled |
+| Can we combine our entities without counting the same activity twice? | a listing of transactions between the entities in scope | Supports combining entities while removing activity already counted inside another entity in the same boundary. | Proposed | **Needs sign-off** |
+| How does money move between our enterprises and our government? | enterprise distributions and government spending records | Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers. | Available today | **Needs sign-off** |
+| How has this changed over time? | comparable records across years | Supports reporting change over time, limited by consistent coverage and consistent accounting between the years. | Available today | Settled |
+| How do we explain this to the people it is for? | interviews, photographs and other contextual material | Supports interpretation and reporting. It does not enter the calculation. | Available today | Settled |
+| How much of what we buy is actually bought locally? | vendor and subcontractor spending with usable locations | Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house. | In research | **Needs sign-off** |
 
 ## 3. The records catalog
 
@@ -221,20 +229,20 @@ question for the call rather than a blank to fill in.
 
 | Record | Why it matters | Validated alternative | Usually held by |
 |---|---|---|---|
-| The most recent completed financial statement for what is in scope | Carries economic output and the reporting year every other figure is matched to. | An internal statement or trial balance, where audited figures are not final yet. | Finance office or controller |
-| The adopted budget or appropriation for the year | Stands in for a completed statement, and shows what the government spends. | _none validated_ | Budget office or finance director |
-| A payroll summary for the same year | Labor income drives the household spending the analysis reports. | A W-3, four quarterly 941s, or the payroll line of the financial statement. | Payroll or human resources |
-| Employee count for the same year | Jobs are reported directly, and the count is checked against payroll. | A point in time headcount from the HR system, labeled as the date it was taken. | Human resources |
-| A list of the places work is performed, with city and state | Sets the region the results are reported for and the local data the model uses. | Worksite addresses already held in the payroll system. | Operations or human resources |
-| A list of the entities in scope and the main line of business of each | Each operation is reported in its own sector, so the list decides the sectors. | An organization chart, where it names the operating entities. | Administration or general counsel |
-| The government annual financial report or adopted budget | Government spending, payroll and headcount are modeled as their own account. | _none validated_ | Tribal treasurer, finance director or comptroller |
-| What funds the government: grants, contracts, transfers in, and any taxes collected | Separates money arriving from outside the region from money recirculating inside it. | The revenue section of the annual financial report. | Grants office or finance |
-| Records of distributions from the enterprises to the government or to citizens | Transfers are treated as transfers, which is what keeps them from being counted twice. | _none validated_ | Finance office |
-| A listing of transactions between the entities in scope | Activity inside the boundary is already counted in another entity’s figures. | Consolidating eliminations from the audit workpapers, where a consolidation exists. | Controller or external auditor |
-| A contract or grant award listing, with place of performance | Places the work in the region where it is performed, and shows what passes through to subcontractors. | A contracts register, or the public award records the agency already publishes. | Contracts or grants administration |
-| Records of capital projects in the year, with amounts | One time construction and equipment are modeled separately from recurring operations. | The capital section of the budget or the fixed asset addition schedule. | Finance or project management |
-| An accounts payable or vendor listing with vendor city and state | Recorded for review of how purchasing is treated. It is not a model input today. | _none validated_ | Accounts payable |
-| The same records for earlier years | Reporting change over time needs consistent coverage and consistent accounting across the years. | _none validated_ | Finance office |
+| Latest financial statement for the selected operations | Carries economic output and the reporting year every other figure is matched to. | An internal statement or trial balance, where audited figures are not final yet. | Finance office or controller |
+| The adopted budget for the year | Stands in for a completed statement, and shows what the government spends. | _none validated_ | Budget office or finance director |
+| Payroll summary for the same year | Labor income drives the household spending the analysis reports. | A W-3, or four quarterly 941s covering the same year, or the payroll line of the financial statement. | Payroll or human resources |
+| Employee count for the same year | Jobs are reported directly, and the count is checked against payroll. | A point in time headcount, labeled with the date it was taken, or the count already on the payroll summary. | Human resources |
+| Work locations | Set the region the results are reported for and the local data the model uses. | Worksite addresses already held in the payroll system. | Operations or human resources |
+| Entities and their main activities | Each operation is reported in its own sector, so the list decides the sectors. | An organization chart, where it names the operating entities. | Administration or general counsel |
+| Government annual financial report or adopted budget | Government spending, payroll and headcount are modeled as their own account. | _none validated_ | Tribal treasurer, finance director or comptroller |
+| What funds the government: grants, contracts, transfers in, taxes collected | Separates money arriving from outside the region from money recirculating inside it. | The revenue section of the annual financial report. | Grants office or finance |
+| Distributions from the enterprises to the government or to citizens | Transfers are treated as transfers, which is what keeps them from being counted twice. | _none validated_ | Finance office |
+| Transactions between the selected entities | Activity inside the boundary is already counted in another entity’s figures. | Consolidating eliminations from the audit workpapers, where a consolidation exists. | Controller or external auditor |
+| Contract or grant awards, with place of performance | Places the work where it is performed, and shows what passes through to subcontractors. | A contracts register, or the public award records the agency already publishes. | Contracts or grants administration |
+| Capital projects in the year, with amounts | One time construction and equipment are modeled separately from recurring operations. | The capital section of the budget, or the fixed asset addition schedule. | Finance or project management |
+| Vendor or accounts payable listing, with vendor city and state | Recorded for review of how purchasing is treated. It is not a model input today. | _none validated_ | Accounts payable |
+| The same records for earlier years | Reporting change over time needs consistent coverage and accounting across the years. | _none validated_ | Finance office |
 | Photographs, program descriptions or interviews | Used in reporting and interpretation. It does not enter the calculation. | _none validated_ | Communications or program staff |
 
 Which category a record falls into depends on the scope. Something optional
@@ -313,8 +321,10 @@ the flow actually produces, so it is the thing to review.
 
 ```
 {
-  "goal": "annual_contribution",
-  "audience": "leadership",
+  "goal": "current_operations",
+  "audience": [
+    "leadership"
+  ],
   "boundary": "one_enterprise",
   "where": "one_site",
   "activities": [
@@ -344,15 +354,15 @@ the flow actually produces, so it is the thing to review.
 
 **Needed to begin.**
 
-- The most recent completed financial statement for what is in scope. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
-- A payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
+- Latest financial statement for the selected operations. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
+- Payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
 - Employee count for the same year. Jobs are reported directly, and the count is checked against payroll. _(Human resources)_
-- A list of the places work is performed, with city and state. Sets the region the results are reported for and the local data the model uses. _(Operations or human resources)_
+- Work locations. Set the region the results are reported for and the local data the model uses. _(Operations or human resources)_
 
 **Optional, for later questions.**
 
-- An accounts payable or vendor listing with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
-- The same records for earlier years. Reporting change over time needs consistent coverage and consistent accounting across the years. _(Finance office)_
+- Vendor or accounts payable listing, with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
+- The same records for earlier years. Reporting change over time needs consistent coverage and accounting across the years. _(Finance office)_
 - Photographs, program descriptions or interviews. Used in reporting and interpretation. It does not enter the calculation. _(Communications or program staff)_
 
 **Who needs to help.**
@@ -365,8 +375,10 @@ the flow actually produces, so it is the thing to review.
 
 ```
 {
-  "goal": "defend_a_number",
-  "audience": "funder",
+  "goal": "current_operations",
+  "audience": [
+    "funder"
+  ],
   "boundary": "one_enterprise",
   "where": "multi_state",
   "multi_state_anchor": "concentrated",
@@ -405,20 +417,20 @@ the flow actually produces, so it is the thing to review.
 
 **Needed to begin.**
 
-- The most recent completed financial statement for what is in scope. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
-- A payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
+- Latest financial statement for the selected operations. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
+- Payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
 - Employee count for the same year. Jobs are reported directly, and the count is checked against payroll. _(Human resources)_
-- A list of the places work is performed, with city and state. With activity in more than one state, this is what decides which state the first analysis covers. _(Operations or human resources)_
-- A contract or grant award listing, with place of performance. Work performed outside the region belongs to the place it happens, so place of performance is needed at the start. _(Contracts or grants administration)_
+- Work locations. With activity in more than one state, this is what decides which state the first analysis covers. _(Operations or human resources)_
+- Contract or grant awards, with place of performance. Work performed outside the region belongs to the place it happens, so place of performance is needed at the start. _(Contracts or grants administration)_
 
 **Useful for refining or extending.**
 
-- Records of capital projects in the year, with amounts. One time construction and equipment are modeled separately from recurring operations. _(Finance or project management)_
+- Capital projects in the year, with amounts. One time construction and equipment are modeled separately from recurring operations. _(Finance or project management)_
 
 **Optional, for later questions.**
 
-- An accounts payable or vendor listing with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
-- The same records for earlier years. Reporting change over time needs consistent coverage and consistent accounting across the years. _(Finance office)_
+- Vendor or accounts payable listing, with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
+- The same records for earlier years. Reporting change over time needs consistent coverage and accounting across the years. _(Finance office)_
 - Photographs, program descriptions or interviews. Used in reporting and interpretation. It does not enter the calculation. _(Communications or program staff)_
 
 **Who needs to help.**
@@ -439,8 +451,10 @@ the flow actually produces, so it is the thing to review.
 
 ```
 {
-  "goal": "annual_contribution",
-  "audience": "leadership",
+  "goal": "current_operations",
+  "audience": [
+    "leadership"
+  ],
   "boundary": "several_enterprises",
   "intercompany": "yes",
   "where": "multi_site_one_state",
@@ -474,17 +488,17 @@ the flow actually produces, so it is the thing to review.
 
 **Needed to begin.**
 
-- The most recent completed financial statement for what is in scope. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
-- A payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
+- Latest financial statement for the selected operations. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
+- Payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
 - Employee count for the same year. Jobs are reported directly, and the count is checked against payroll. _(Human resources)_
-- A list of the places work is performed, with city and state. Several locations in one state means the county detail matters to the result. _(Operations or human resources)_
-- A list of the entities in scope and the main line of business of each. Each operation is reported in its own sector, so the list decides the sectors. _(Administration or general counsel)_
-- A listing of transactions between the entities in scope. You have said the entities transact with each other, so this is needed before their figures are combined. _(Controller or external auditor)_
+- Work locations. Several locations in one state means the county detail matters to the result. _(Operations or human resources)_
+- Entities and their main activities. Each operation is reported in its own sector, so the list decides the sectors. _(Administration or general counsel)_
+- Transactions between the selected entities. You have said the entities transact with each other, so this is needed before their figures are combined. _(Controller or external auditor)_
 
 **Optional, for later questions.**
 
-- An accounts payable or vendor listing with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
-- The same records for earlier years. Reporting change over time needs consistent coverage and consistent accounting across the years. _(Finance office)_
+- Vendor or accounts payable listing, with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
+- The same records for earlier years. Reporting change over time needs consistent coverage and accounting across the years. _(Finance office)_
 - Photographs, program descriptions or interviews. Used in reporting and interpretation. It does not enter the calculation. _(Communications or program staff)_
 
 **Who needs to help.**
@@ -504,8 +518,10 @@ the flow actually produces, so it is the thing to review.
 
 ```
 {
-  "goal": "whole_economy",
-  "audience": "public",
+  "goal": "enterprises_and_government",
+  "audience": [
+    "public"
+  ],
   "boundary": "government_and_enterprises",
   "where": "multi_site_one_state",
   "activities": [
@@ -535,23 +551,23 @@ the flow actually produces, so it is the thing to review.
 
 **Needed to begin.**
 
-- The most recent completed financial statement for what is in scope. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
-- A payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
+- Latest financial statement for the selected operations. Carries economic output and the reporting year every other figure is matched to. _(Finance office or controller)_
+- Payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
 - Employee count for the same year. Jobs are reported directly, and the count is checked against payroll. _(Human resources)_
-- The government annual financial report or adopted budget. Government spending, payroll and headcount are modeled as their own account. _(Tribal treasurer, finance director or comptroller)_
-- A list of the places work is performed, with city and state. Several locations in one state means the county detail matters to the result. _(Operations or human resources)_
-- A list of the entities in scope and the main line of business of each. Each operation is reported in its own sector, so the list decides the sectors. _(Administration or general counsel)_
+- Government annual financial report or adopted budget. Government spending, payroll and headcount are modeled as their own account. _(Tribal treasurer, finance director or comptroller)_
+- Work locations. Several locations in one state means the county detail matters to the result. _(Operations or human resources)_
+- Entities and their main activities. Each operation is reported in its own sector, so the list decides the sectors. _(Administration or general counsel)_
 
 **Useful for refining or extending.**
 
-- What funds the government: grants, contracts, transfers in, and any taxes collected. Separates money arriving from outside the region from money recirculating inside it. _(Grants office or finance)_
-- A listing of transactions between the entities in scope. Activity inside the boundary is already counted in another entity’s figures. _(Controller or external auditor)_
-- Records of distributions from the enterprises to the government or to citizens. Transfers are treated as transfers, which is what keeps them from being counted twice. _(Finance office)_
+- What funds the government: grants, contracts, transfers in, taxes collected. Separates money arriving from outside the region from money recirculating inside it. _(Grants office or finance)_
+- Transactions between the selected entities. Activity inside the boundary is already counted in another entity’s figures. _(Controller or external auditor)_
+- Distributions from the enterprises to the government or to citizens. Transfers are treated as transfers, which is what keeps them from being counted twice. _(Finance office)_
 
 **Optional, for later questions.**
 
-- An accounts payable or vendor listing with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
-- The same records for earlier years. Reporting change over time needs consistent coverage and consistent accounting across the years. _(Finance office)_
+- Vendor or accounts payable listing, with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
+- The same records for earlier years. Reporting change over time needs consistent coverage and accounting across the years. _(Finance office)_
 - Photographs, program descriptions or interviews. Used in reporting and interpretation. It does not enter the calculation. _(Communications or program staff)_
 
 **Who needs to help.**
@@ -561,6 +577,7 @@ the flow actually produces, so it is the thing to review.
 - Someone who can approve sharing records outside the organization. Worth naming early. It is the step that most often adds weeks later.
 - Someone who can say which entities are in scope. The boundary is a decision, not a lookup.
 - The treasurer, finance director or comptroller. Government spending and what funds it.
+- Whoever will present the result. They should hear the assumptions before they have to defend them.
 
 **To settle on the call.**
 
@@ -571,7 +588,9 @@ the flow actually produces, so it is the thing to review.
 ```
 {
   "goal": "not_sure",
-  "audience": "not_sure",
+  "audience": [
+    "not_sure"
+  ],
   "boundary": "not_sure",
   "where": "not_sure",
   "records_held": "not_sure",
@@ -593,14 +612,14 @@ the flow actually produces, so it is the thing to review.
 
 **Needed to begin.**
 
-- The most recent completed financial statement for what is in scope. Whatever the boundary turns out to be, this is the record that anchors it. _(Finance office or controller)_
-- A payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
-- A list of the places work is performed, with city and state. Sets the region the results are reported for and the local data the model uses. _(Operations or human resources)_
+- Latest financial statement for the selected operations. Whatever the boundary turns out to be, this is the record that anchors it. _(Finance office or controller)_
+- Payroll summary for the same year. Labor income drives the household spending the analysis reports. _(Payroll or human resources)_
+- Work locations. Set the region the results are reported for and the local data the model uses. _(Operations or human resources)_
 
 **Optional, for later questions.**
 
-- An accounts payable or vendor listing with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
-- The same records for earlier years. Reporting change over time needs consistent coverage and consistent accounting across the years. _(Finance office)_
+- Vendor or accounts payable listing, with vendor city and state. Recorded for review of how purchasing is treated. It is not a model input today. _(Accounts payable)_
+- The same records for earlier years. Reporting change over time needs consistent coverage and accounting across the years. _(Finance office)_
 - Photographs, program descriptions or interviews. Used in reporting and interpretation. It does not enter the calculation. _(Communications or program staff)_
 
 **Who needs to help.**

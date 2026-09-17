@@ -400,7 +400,10 @@ html.navm-open {
   top: calc(100% + 0.75rem);
   left: -1rem;
   z-index: 10;
-  min-width: 16.5rem;
+  /* Wide enough that a product description sits on one line. At 16.5rem
+     every one of them wrapped to two or three, which made the panel read
+     as less considered than the rest of the site. */
+  min-width: 22rem;
   padding: 0.5rem;
   border: 1px solid var(--rule);
   border-radius: var(--radius-panel);
@@ -445,12 +448,34 @@ html.navm-open {
 }
 .nav-panel__desc {
   display: block;
-  margin-top: 0.1rem;
+  margin-top: 0.12rem;
   font-size: 0.78rem;
   line-height: 1.45;
   color: var(--ink-3);
   white-space: normal;
-  max-width: 17rem;
+  max-width: 24rem;
+}
+/* A group with no descriptions needs no width beyond its labels. */
+.nav-panel--plain {
+  min-width: 12rem;
+}
+/* One quiet way into the starting guide from the product group, where
+   somebody deciding what Lumecon is would look for it. */
+.nav-panel__foot {
+  margin: 0.35rem 0 0;
+  padding: 0.55rem 0.65rem 0.15rem;
+  border-top: 1px solid var(--rule);
+}
+.nav-panel__foot a {
+  font-size: 0.82rem;
+  color: var(--accent-text);
+  text-decoration: none;
+  border-bottom: 0;
+}
+.nav-panel__foot a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  border-bottom: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

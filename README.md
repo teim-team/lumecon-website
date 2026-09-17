@@ -25,8 +25,8 @@ licensing; prices include taxes and fees); **/methodology** argues the economics
 the six-stage flow, the data manifest, validation, lineage and comparisons);
 the glossary defines terms and
 nothing more; **/start** answers the question a reader has before any of
-those, which is what their own organization could begin with (six
-questions, a proposed starting scope, a printable checklist of records
+those, which is what their own organization could begin with (a short
+scoping flow, a proposed starting scope, a printable checklist of records
 they already own, and what more information would make possible).
 Around those: a sign-up page that takes private-beta
 requests through the contact endpoint, log-in, choose-plan and checkout
