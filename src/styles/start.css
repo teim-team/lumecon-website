@@ -60,6 +60,15 @@
 }
 .start-hero__head .meth-hero__lede {
   max-width: 46ch;
+  /* The grid gap already separates the argument from the flow beside it,
+     so the lede's own 3rem does nothing but push the first question down
+     a screen. */
+  margin-bottom: 0;
+}
+/* This page opens on a question rather than on a statement, so it carries
+   less headroom than the reference pages that share this hero. */
+.start-hero {
+  padding-top: clamp(5rem, 9vh, 7.5rem);
 }
 .start-hero__note {
   margin: 1.6rem 0 0;
@@ -90,7 +99,12 @@
       'head'
       'flow'
       'more';
-    gap: 2rem;
+    gap: 1.6rem;
+  }
+  /* On a phone the question is directly beneath the headline, so the
+     headroom above it matters more than it does on a wide screen. */
+  .start-hero {
+    padding-top: clamp(4.2rem, 7vh, 5.5rem);
   }
   .start-promise {
     margin-top: 0;
