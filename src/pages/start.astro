@@ -44,6 +44,11 @@ const site = siteConfig.url;
 const description =
   'Six questions that turn an interest in economic impact analysis into a first analysis you can actually run: a bounded scope, the records to start with and who needs to help.';
 
+/* A literal tuple, so each id indexes RECORDS as a known key. A plain
+   string[] infers `string`, which has no index signature on that object,
+   and `astro check` rejects it: that is what broke the build on main. */
+const CORE_RECORD_IDS = ['financials', 'payroll', 'headcount'] as const;
+
 const STATUS_LABEL: Record<string, string> = {
   available: 'Available today',
   proposed: 'Proposed',
@@ -335,7 +340,7 @@ const jsonLd = [
         </div>
         <ul class="start-core" role="list">
           {
-            ['financials', 'payroll', 'headcount'].map((id, i) => (
+            CORE_RECORD_IDS.map((id, i) => (
               <li>
                 <p class="start-core__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
                 <div>
