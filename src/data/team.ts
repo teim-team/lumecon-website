@@ -218,7 +218,7 @@ const TEAM: Person[] = [
     name: 'Laurel Wheeler',
     initials: 'LW',
     group: 'team',
-    title: 'Economics Lead',
+    title: 'Principal Economist',
     email: 'laurel.wheeler@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/laurel-wheeler',
     scholar: 'https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ',
@@ -234,9 +234,9 @@ const TEAM: Person[] = [
       'Previously a tenure-track economics professor at the University of Alberta.',
     ],
     summary:
-      'Leads economic theory and tribal adaptation. PhD in Economics from Duke. Before Lumecon, she was an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).',
+      "Leads Lumecon's economics, from economic theory to tribal adaptation. PhD in Economics from Duke. Before Lumecon, she was an economist at the Federal Reserve Bank of Minneapolis (Center for Indian Country Development).",
     bio: [
-      "Laurel Wheeler leads Lumecon's economic theory and tribal adaptation work, helping ensure the platform reflects credible economic reasoning and the institutional realities of the communities it serves. She holds a bachelor's degree in Political Science from the University of Florida, a master's in Economics for Development from the University of Oxford and a master's and PhD in Economics from Duke University.",
+      "Laurel Wheeler leads Lumecon's economics, including its economic theory and tribal adaptation work, helping ensure the platform reflects credible economic reasoning and the institutional realities of the communities it serves. She holds a bachelor's degree in Political Science from the University of Florida, a master's in Economics for Development from the University of Oxford and a master's and PhD in Economics from Duke University.",
       'Before Lumecon, Laurel was an economist at the Center for Indian Country Development within the Federal Reserve Bank of Minneapolis.',
     ],
     alumniOf: ['University of Florida', 'University of Oxford', 'Duke University'],
