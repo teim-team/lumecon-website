@@ -24,7 +24,11 @@ Nation, Cedar Commons, Cedar Grove on its own, and consultant
 licensing; prices include taxes and fees); **/methodology** argues the economics are credible (equations,
 the six-stage flow, the data manifest, validation, lineage and comparisons);
 the glossary defines terms and
-nothing more. Around those: a sign-up page that takes private-beta
+nothing more; **/start** answers the question a reader has before any of
+those, which is what their own organization could begin with (six
+questions, a proposed starting scope, a printable checklist of records
+they already own, and what more information would make possible).
+Around those: a sign-up page that takes private-beta
 requests through the contact endpoint, log-in, choose-plan and checkout
 pages that post to the product API when a backend is configured, /naics
 (deliberately
@@ -79,11 +83,12 @@ npm run dev        # local dev server at http://localhost:4321
 | `npm run format:check`     | Prettier check, no writes                                |
 | `npm run test:smoke`       | Playwright smoke tests — **build first**, see below      |
 | `npm run docs:copy`        | Regenerate `docs/site-copy-and-architecture.md`          |
+| `npm run docs:plan`        | Regenerate the onboarding resources in `docs/onboarding/`|
 | `npm run naics:duotone`    | Regenerate the sector thumbnails                         |
 | `npm run naics:export-app` | Regenerate the app's sector data                         |
 | `npm run shots:examples`   | Recapture the hero example screenshots                   |
 
-The last three are generators whose output is committed. Nothing in
+`docs:plan` and the last three are generators whose output is committed. Nothing in
 `scripts/` runs at build time; run them when their inputs change. See
 [AGENTS.md](./AGENTS.md) for what each one owns.
 
@@ -158,6 +163,27 @@ reused data is centralized in `src/data/` so a change lands in one place and
 flows to the page, the footer, the JSON-LD, and the sitemap. Changing a
 plan, a product one-liner, or a Cedar chat answer is a single edit in the
 relevant data file.
+
+Navigation is grouped rather than flat: `Nav.astro` holds a `NAV` array of
+four top-level items, three of which open a short panel (Product, which is
+where the Cedar family lives, Resources and Company). Adding a page means
+adding a line to that array, not arguing for one of the slots in a row that
+had already run out of width. The same array renders the phone overlay as
+headed sections.
+
+`src/data/planFirstAnalysis.js` goes one step further and is worth knowing
+about before editing anything onboarding-related. It holds the scoping
+questions, the branching rules, the records catalog, the capability matrix
+and the onboarding call outline, plus the pure functions that turn a set of
+answers into a proposed scope and a checklist. `/start` renders it, the
+browser evaluates the same functions to build a tailored plan, and
+`npm run docs:plan` writes the internal guide and the coordinator brief
+from it. The website, the economist-led call and the material a coordinator
+circulates inside their organization therefore cannot say different things.
+Two rules are load-bearing in that file: organizational complexity and data
+readiness are scored separately and never merged, and every capability
+carries a status (`available`, `proposed`, `research`) so nothing on the
+public page promises an output the product does not produce.
 
 ## SEO & crawlers
 

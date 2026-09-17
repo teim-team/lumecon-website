@@ -23,7 +23,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 733 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/` | 743 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/pricing` | 1299 | Pricing \| Lumecon | 155 |
 | `/methodology` | 2560 | Methodology \| Lumecon | 167 |
 | `/team` | 369 | Team \| Lumecon | 115 |
@@ -31,24 +31,25 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/cedar-grove` | 458 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
-| `/signup` | 240 | Request beta access \| Lumecon | 118 |
-| `/login` | 120 | Log in \| Lumecon | 31 |
+| `/start` | 1713 | Plan your first analysis \| Lumecon | 173 |
+| `/signup` | 250 | Request beta access \| Lumecon | 118 |
+| `/login` | 116 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 209 | Checkout \| Lumecon | 81 |
-| `/welcome` | 64 | Welcome to Lumecon | 32 |
+| `/welcome` | 60 | Welcome to Lumecon | 32 |
 | `/accessibility` | 386 | Accessibility \| Lumecon | 141 |
 | `/ai-and-data-use` | 608 | AI and Data Use \| Lumecon | 133 |
 | `/security` | 437 | Security \| Lumecon | 118 |
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **11194** | | |
+| **Total** | **12919** | | |
 
 ## Crawler metadata audit
 
 This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards, the llms.txt discovery link and JSON-LD against the built site.
 
-- **Sitemap URLs:** 13
+- **Sitemap URLs:** 14
 - **Status:** All checked crawler metadata is complete and consistent.
 
 ---
@@ -66,7 +67,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 733
+- **Visible words:** 743
 
 ### Architecture (heading outline)
 
@@ -98,21 +99,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -308,7 +305,7 @@ Request free access during the private beta. Once admitted, you can upload your 
 
 - _link:_ [Request free access →](/signup?tier=free)
 - _link:_ [Compare plans →](/pricing)
-Prefer to talk to a person first? contact@lumecon.ai
+Not sure what you would run first? Plan your first analysis in six questions, or write to contact@lumecon.ai.
 
 
 > _section: `footer`_
@@ -331,6 +328,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -414,21 +412,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -718,6 +712,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -811,21 +806,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1050,6 +1041,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -1133,21 +1125,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1294,6 +1282,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -1377,21 +1366,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1493,6 +1478,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -1545,21 +1531,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1675,6 +1657,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -1725,21 +1708,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1812,6 +1791,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -1887,21 +1867,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -1964,6 +1940,259 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
+- Request access
+- Log in
+- Contact
+LEGAL
+
+- Terms
+- Privacy
+- AI and data use
+- Accessibility
+- _label:_ © 2026 Lumecon Inc. · All rights reserved · Patent pending.
+- _button:_ Privacy choices
+- _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
+- _button:_ Who is Lumecon for?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
+We use optional analytics to improve Lumecon. Privacy Policy
+
+- _button:_ Decline
+- _button:_ Accept
+
+---
+
+## `/start` — Plan your first analysis
+
+**Intended job of this page:** What an organization can begin with, and what it would take.
+
+- **Title:** Plan your first analysis | Lumecon
+- **Meta description** (173 chars): Six questions that turn an interest in economic impact analysis into a first analysis you can actually run: a bounded scope, the records to start with and who needs to help.
+- **og:description:** Six questions that turn an interest in economic impact analysis into a first analysis you can actually run: a bounded scope, the records to start with and who needs to help.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
+- **Canonical:** https://lumecon.ai/start
+- **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+- **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
+- **Visible words:** 1713
+
+### Architecture (heading outline)
+
+- **H1** Plan your first analysis.
+  - **H2** Your starting plan
+  - **H2** What more information makes possible
+  - **H2** Every record we might ask for
+  - **H2** The first call
+  - **H2** How we report coverage
+  - **H2** Start with one question, not everything at once.
+
+### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
+- _link:_ [Skip to main content](#top)
+
+> _section: `Main navigation`_
+
+- _link:_ [LUMECON](/)
+- _label:_ |
+- _label:_ The Intelligent Economic Analysis Platform
+- Product
+- Pricing
+- Resources
+- Company
+- _link:_ [Log in](/login)
+- _link:_ [Request access](/signup)
+- _button:_ Menu
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** Pricing
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
+- **[conditional]** Log in
+- **[conditional]** Request access
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+
+> _section: `meth-hero`_
+
+GETTING STARTED
+
+
+**H1: Plan your first analysis.**
+
+Most organizations do not need everything to begin. They need one question worth answering, a boundary around it and the records they already have. Six questions propose a starting scope and the short list of records it needs.
+
+QUESTION 1 OF 6
+
+- _label:_ What would you like to understand, and who will use the results?
+What would you like to understand?
+
+- _label:_ What our operations contribute in a year The recurring economic footprint of activity already happening. What one project or expansion would support A single facility, development or program, usually one time. How our enterprises and our government together support the economy The government modeled alongside the operations it funds and is funded by. A figure we can defend to someone outside the organization A funder, an agency or a legislature has asked, and the number has to hold up. Not sure yet
+Who will use the results?
+
+- _label:_ Our council, board or executive leadership A funder, a federal agency or a legislature Our members, citizens or the wider public An internal planning or finance team Not sure yet
+- _label:_ **[conditional]** 02What is being analyzed?
+**[conditional]** This sets what the first analysis covers. It can grow later.
+
+- _label:_ **[conditional]** One enterprise or operationSeveral enterprises under one ownerThe government itselfThe government and its enterprises togetherThe government is modeled as its own account alongside the operations.One specific project or facilityNot sure yet
+- _label:_ **[conditional]** 02Do the entities in scope buy from, sell to or fund each other?YesNo, they operate independentlyNot sure
+- _label:_ **[conditional]** 03Where does the activity take place?One locationSeveral locations, all in one stateSeveral locations across more than one stateNot sure, or it varies by operation
+- _label:_ **[conditional]** 03Is most of the activity in one state?Yes, one state holds most of itNo, it is spread fairly evenlyNot sure
+- _label:_ **[conditional]** 04What activities are involved?
+**[conditional]** Choose every activity that applies.
+
+- _label:_ **[conditional]** GamingHotel, food service or entertainmentRetail, fuel or convenienceConstruction or developmentFederal contractingHealth or social servicesEducationAgriculture, forestry, energy or other natural resourcesProfessional, technical or financial servicesGovernment administration or public programsSomething elseNot sure
+- _label:_ **[conditional]** 04Does the first analysis include the hotel, food, entertainment or retail operations at the same site?Yes, they belong in the first analysisNo, gaming only to startNot sure
+- _label:_ **[conditional]** 04Can economic output and payroll be separated for those operations?Yes, our records break them outNo, they arrive as one combined figureNot sure
+- _label:_ **[conditional]** 04Where is the contract work performed?Mostly at our own locationsMostly at government or customer sites elsewhereA mix of bothNot sure
+- _label:_ **[conditional]** 04Does a large share of contract value pass through to subcontractors?Yes, subcontracting is a large shareNo, most work is performed in houseNot sure
+- _label:_ **[conditional]** 04Does contract revenue combine several kinds of work under one line?Yes, one line covers several kinds of workNo, the lines are already separatedNot sure
+- _label:_ **[conditional]** 05Are records centralized or held separately?One finance office holds them for everything in scopeCentralized for some operations, separate for othersEach entity or department keeps its ownNot sure
+- _label:_ **[conditional]** 06Which existing records could you readily access?
+**[conditional]** Choose anything you could put your hands on in a week or so.
+
+- _label:_ **[conditional]** Audited financial statements or an annual reportInternal financial statements or a trial balanceAn adopted budget or appropriationA payroll summary, a W-3 or quarterly 941sAn employee roster or headcount by locationAn accounts payable or vendor listingA grant or contract award listingRecords of capital projectsNone of these are within reach yet
+**[conditional]** Your plan is below. Change an answer and it rebuilds.
+
+- _button:_ Continue →
+- _button:_ Back
+- _button:_ Start over
+- What you can learn with the information you already have.
+- The minimum this particular question needs.
+- What more information would make possible.
+- Who has to help you get started.
+Nothing is uploaded here and no answer is stored. Not sure is a real answer, and where too much is open the recommendation is a conversation rather than a plan built on guesses.
+
+
+> _section: `meth-sec`_
+
+
+**H2: Your starting plan**
+
+
+**H2: What more information makes possible**
+
+These describe what becomes possible analytically, not a ranking of quality and not a price list. Which of them matters depends entirely on the question being asked. More information can move an estimate in either direction, narrow what the analysis can support, or surface double counting.
+
+- A defined activity, a year, a geography and an operating measure Supports a first estimate, with the allocation and local purchasing assumptions stated alongside it. AVAILABLE TODAY
+- Records separated by entity and work location Each operation is reported in its own sector and the region is built from the places work is actually performed, in place of an assumed split across operations. One primary sector is carried per operation today, so operations that should be reported separately are recorded separately. AVAILABLE TODAY
+- Vendor and subcontractor spending with usable locations Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house. Local purchasing is currently estimated from regional trade data. Vendor level spending is not an input the model accepts, and the method for using it is open. IN RESEARCH UNDER REVIEW
+- Identified transactions between the entities in scope Supports combining entities while removing activity already counted inside another entity in the same boundary. Handled today as a preparation step before intake. The consolidation rule needs economist sign-off. PROPOSED UNDER REVIEW
+- Enterprise distributions and government spending records Supports reporting government activity and enterprise proceeds as distinct accounts, with transfers between them treated as transfers. The engine models the government as its own account. Several government detail fields are not yet carried end to end through the product. AVAILABLE TODAY UNDER REVIEW
+- Comparable records across years Supports reporting change over time, limited by consistent coverage and consistent accounting between the years. One analysis covers one year. Several years run as a series of analyses. AVAILABLE TODAY
+- Interviews, photographs and other contextual material Supports interpretation and reporting. It does not enter the calculation. AVAILABLE TODAY
+Available means the product accepts the input and reports the result today. Proposed means the behavior is specified and not yet wired through the product. In research means the treatment itself is still open. Rows marked under review are provisional until the economics team signs them off.
+
+
+**H2: Every record we might ask for**
+
+Bring what exists. We would rather read the report you already produce than have you build a spreadsheet for us, and we will tell you what it supports before you spend time reformatting anything.
+
+- _disclosure:_ The full list, with who usually holds each one
+- The most recent completed financial statement for what is in scope Carries economic output and the reporting year every other figure is matched to. ALSO WORKS An internal statement or trial balance, where audited figures are not final yet. FINANCE OFFICE OR CONTROLLER
+- The adopted budget or appropriation for the year Stands in for a completed statement, and shows what the government spends. BUDGET OFFICE OR FINANCE DIRECTOR
+- A payroll summary for the same year Labor income drives the household spending the analysis reports. ALSO WORKS A W-3, four quarterly 941s, or the payroll line of the financial statement. PAYROLL OR HUMAN RESOURCES
+- Employee count for the same year Jobs are reported directly, and the count is checked against payroll. ALSO WORKS A point in time headcount from the HR system, labeled as the date it was taken. HUMAN RESOURCES
+- A list of the places work is performed, with city and state Sets the region the results are reported for and the local data the model uses. ALSO WORKS Worksite addresses already held in the payroll system. OPERATIONS OR HUMAN RESOURCES
+- A list of the entities in scope and the main line of business of each Each operation is reported in its own sector, so the list decides the sectors. ALSO WORKS An organization chart, where it names the operating entities. ADMINISTRATION OR GENERAL COUNSEL
+- The government annual financial report or adopted budget Government spending, payroll and headcount are modeled as their own account. TRIBAL TREASURER, FINANCE DIRECTOR OR COMPTROLLER
+- What funds the government: grants, contracts, transfers in, and any taxes collected Separates money arriving from outside the region from money recirculating inside it. ALSO WORKS The revenue section of the annual financial report. GRANTS OFFICE OR FINANCE
+- Records of distributions from the enterprises to the government or to citizens Transfers are treated as transfers, which is what keeps them from being counted twice. FINANCE OFFICE
+- A listing of transactions between the entities in scope Activity inside the boundary is already counted in another entity’s figures. ALSO WORKS Consolidating eliminations from the audit workpapers, where a consolidation exists. CONTROLLER OR EXTERNAL AUDITOR
+- A contract or grant award listing, with place of performance Places the work in the region where it is performed, and shows what passes through to subcontractors. ALSO WORKS A contracts register, or the public award records the agency already publishes. CONTRACTS OR GRANTS ADMINISTRATION
+- Records of capital projects in the year, with amounts One time construction and equipment are modeled separately from recurring operations. ALSO WORKS The capital section of the budget or the fixed asset addition schedule. FINANCE OR PROJECT MANAGEMENT
+- An accounts payable or vendor listing with vendor city and state Recorded for review of how purchasing is treated. It is not a model input today. ACCOUNTS PAYABLE
+- The same records for earlier years Reporting change over time needs consistent coverage and consistent accounting across the years. FINANCE OFFICE
+- Photographs, program descriptions or interviews Used in reporting and interpretation. It does not enter the calculation. COMMUNICATIONS OR PROGRAM STAFF
+Nothing is uploaded here. Records are shared inside the product, where access is controlled and every file stays connected to the analysis it supports.
+
+
+**H2: The first call**
+
+Thirty minutes with an economist. We invite the people the open questions need, not every department, and it ends with four things settled.
+
+- 5 MIN What you want to understand The question and the audience. Write the sentence down and read it back.
+- 8 MIN The boundary What is in, what is out, which year. Name what is being left for later rather than leaving it undecided.
+- 7 MIN Records and who holds them Walk the checklist. For anything not in hand, get a name rather than a promise. Ask who approves sharing.
+- 5 MIN What this will and will not show State the assumptions the first analysis will carry. Say plainly what it cannot support yet.
+- 5 MIN First file review Offer it: send one existing report, and Lumecon says what it supports and which gaps matter. No reformatting first.
+YOU LEAVE WITH
+
+- One question and its audience. Written in a sentence the organization would recognize.
+- A bounded operation, geography and period. One boundary, one region, one year.
+- A named data contact. One person who can reach the records, and the person who approves sharing them.
+- A small set of next actions. Two or three, each with a name against it.
+
+**H2: How we report coverage**
+
+An analysis reports what it observed and what it assumed. These are counts and shares with a stated denominator, shown only where that denominator is known. None of them is a statement about the accuracy of the model, and none of them is a confidence score.
+
+- Payroll assigned to a known work location The share of payroll in scope that carries a work location. OUT OF Total payroll in scope.
+- Vendor spending with usable location information The share of recorded vendor spending that carries a usable city and state. OUT OF Total vendor spending recorded.
+- Entities represented How many entities in the agreed boundary have records in hand. OUT OF The agreed list of entities.
+- Inputs observed, estimated or missing Each material input, marked with where its value came from. OUT OF The list of inputs the analysis requires.
+Where a total is unknown, the share is not shown. A figure such as "82 percent of payroll carries a work location" says what it says, and nothing about whether the multipliers are right.
+
+
+> _section: `fcta`_
+
+NEXT STEP
+
+
+**H2: Start with one question, not everything at once.**
+
+Send one report you already have. An economist will tell you what it supports, which gaps matter for your question and which do not.
+
+- _link:_ [Ask for a scoping conversation →](/signup?intent=scoping)
+- _link:_ [Read the methodology →](/methodology)
+Or write to contact@lumecon.ai.
+
+
+> _section: `footer`_
+
+
+> _section: `Footer`_
+
+PRODUCT
+
+- Cedar Impact
+- Cedar
+- Cedar Grove
+- Pricing
+REFERENCE
+
+- Methodology
+- Team
+- Security
+- Glossary
+- Industry sectors
+ACCOUNT
+
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -2020,7 +2249,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/signup
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 240
+- **Visible words:** 250
 
 ### Architecture (heading outline)
 
@@ -2037,28 +2266,24 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
 
 **H1: Lumecon is in private beta**
 
-Access is being introduced in phases. Tell us about your organization and the first analysis you want to run, and our team will follow up about availability.
+Access is being introduced in phases. Tell us about your organization and the first analysis you want to run, and our team will follow up about availability. Not sure yet?Plan your first analysis in six questions and bring the answer here.
 
 **[conditional]** PlanChange plan
 
@@ -2138,7 +2363,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 120
+- **Visible words:** 116
 
 ### Architecture (heading outline)
 
@@ -2155,21 +2380,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2246,21 +2467,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2299,6 +2516,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -2347,21 +2565,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2448,6 +2662,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -2479,7 +2694,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/welcome
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 64
+- **Visible words:** 60
 
 ### Architecture (heading outline)
 
@@ -2496,21 +2711,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2565,21 +2776,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2640,6 +2847,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -2696,21 +2904,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2785,6 +2989,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -2840,21 +3045,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -2964,6 +3165,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -3019,21 +3221,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -3103,6 +3301,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -3165,21 +3364,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -3282,6 +3477,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -3330,21 +3526,17 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [LUMECON](/)
 - _label:_ |
 - _label:_ The Intelligent Economic Analysis Platform
-- Cedar Impact
-- Cedar
-- Cedar Grove
+- Product
 - Pricing
-- Methodology
-- Team
+- Resources
+- Company
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** Cedar Impact
-- **[conditional]** Cedar
-- **[conditional]** Cedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** Methodology
-- **[conditional]** Team
+- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
@@ -3380,6 +3572,7 @@ REFERENCE
 - Industry sectors
 ACCOUNT
 
+- Plan your first analysis
 - Request access
 - Log in
 - Contact
@@ -3406,7 +3599,7 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 
 ### Sentences that appear verbatim on more than one page
 
-- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
+- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/start` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."

@@ -216,20 +216,51 @@ test('menu overlay opens full screen from the opaque nav', async ({ page }) => {
   await expect(page.locator('#nav')).toHaveCSS('background-color', 'rgb(250, 252, 253)');
 });
 
-test('desktop nav shows the destinations inline, with no Menu button', async ({ page }) => {
+test('desktop nav groups the destinations, with no Menu button', async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 800 });
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
-  const links = page.locator('.nav-links a');
-  await expect(links).toHaveCount(6);
-  for (const label of ['Cedar Impact', 'Cedar', 'Cedar Grove', 'Pricing', 'Methodology', 'Team']) {
-    // Exact text: "Cedar" is a prefix of two other destinations now.
+  // Four top-level items: three groups and Pricing on its own.
+  await expect(page.locator('.nav-links > .nav-item')).toHaveCount(4);
+  for (const label of ['Product', 'Resources', 'Company']) {
+    await expect(page.locator('.nav-toggle', { hasText: label })).toBeVisible();
+  }
+  await expect(page.locator('.nav-links > .nav-item > a[aria-current="page"]')).toHaveText(
+    'Pricing',
+  );
+  await expect(page.locator('.nav-signup')).toBeVisible();
+  await expect(page.locator('#navMenuBtn')).toBeHidden();
+
+  // A panel opens on its button and closes on Escape, and the whole Cedar
+  // family lives in one of them.
+  await expect(page.locator('#navp-product')).toBeHidden();
+  await page.locator('#navt-product').click();
+  await expect(page.locator('#navp-product')).toBeVisible();
+  await expect(page.locator('#navt-product')).toHaveAttribute('aria-expanded', 'true');
+  // Match the link's own label, not its accessible name: each link also
+  // carries a one-line description, and "Cedar" is a prefix of the other
+  // two destinations.
+  for (const label of ['Cedar Impact', 'Cedar', 'Cedar Grove']) {
     await expect(
-      page.locator('.nav-links a', { hasText: new RegExp(`^\\s*${label}\\s*$`) }),
+      page.locator('#navp-product .nav-panel__text', {
+        hasText: new RegExp(`^\\s*${label}\\s*$`),
+      }),
     ).toBeVisible();
   }
-  await expect(page.locator('.nav-signup')).toBeVisible();
-  await expect(page.locator('.nav-links a[aria-current="page"]')).toHaveText('Pricing');
-  await expect(page.locator('#navMenuBtn')).toBeHidden();
+  // Opening another closes the first: one panel at a time.
+  await page.locator('#navt-resources').click();
+  await expect(page.locator('#navp-product')).toBeHidden();
+  await expect(page.locator('#navp-resources')).toBeVisible();
+  await expect(page.locator('#navp-resources a[href="/start"]')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#navp-resources')).toBeHidden();
+});
+
+test('a page inside a group is marked on the group that holds it', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.nav-toggle[data-current="true"]')).toHaveText(/Resources/);
+  await page.locator('#navt-resources').click();
+  await expect(page.locator('#navp-resources a[aria-current="page"]')).toHaveText(/Methodology/);
 });
 
 test('menu closes cleanly when the viewport crosses into desktop navigation', async ({ page }) => {

@@ -1,0 +1,1073 @@
+/* ---------------------------------------------------------------
+   /start - Plan your first analysis.
+
+   The page borrows methodology.css for its hero, section heads and
+   hairline rows; this file adds only what the scoping flow itself
+   needs. Boundaries here do real work: an option row is selectable,
+   so it is allowed to draw one. Nothing else is boxed.
+   --------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------
+   The cover.
+
+   Same composition as /methodology and /cedar-grove: a dark band, the
+   argument on the left, a working surface on the right. The difference
+   is what sits on the surface. Those pages stage a screenshot of the
+   product; this page's product is the flow itself, so the flow is what
+   gets staged, live.
+   --------------------------------------------------------------- */
+
+/* One grid item per column. The shared cover lets its copy be three
+   separate grid items and spans the stage across all of them, which is
+   right when the copy is the taller side. Here the stage is, and the
+   spanning item would stretch the copy's rows down its whole height. */
+.start-hero .meth-w {
+  grid-template-rows: auto;
+  align-items: start;
+}
+.start-hero__copy {
+  grid-column: 1;
+}
+.start-hero .h-kicker {
+  margin-bottom: 0.9rem;
+}
+.start-hero .meth-hero__title {
+  max-width: 11ch;
+}
+.start-hero .meth-hero__lede {
+  max-width: 44ch;
+  margin-bottom: 0;
+}
+
+.start-stage {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+}
+.start-stage__inner {
+  /* A white surface inside the inverted band, so the tokens go back to
+     their light values rather than every control inside having to know
+     where it is. These are the :root values, not new ones. */
+  --white: #f3f6f8;
+  --surface: #ffffff;
+  --cream: #edf2f4;
+  --paper: #e5ebee;
+  --ink: #071824;
+  --ink-2: #33434a;
+  --ink-3: #647279;
+  --ink-4: #93a0a5;
+  --navy: #071824;
+  --rule: rgba(10, 28, 52, 0.1);
+  --rule-strong: rgba(10, 28, 52, 0.2);
+  --accent-text: #0a7f74;
+
+  padding: clamp(1.4rem, 2.4vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 34px 84px -38px rgba(0, 0, 0, 0.82);
+}
+.start-stage__foot {
+  margin: 0.85rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* The four things the flow returns, read as a row under the cover, the
+   way /methodology lists its three principles. */
+.start-promise {
+  list-style: none;
+  margin: clamp(2.4rem, 5vw, 3.6rem) 0 0;
+  padding: 1.6rem 0 0;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.2rem, 2.6vw, 2.6rem);
+  grid-column: 1 / -1;
+}
+.start-promise__k {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.start-promise__b {
+  margin: 0.45rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.start-sec--plan {
+  border-top: 1px solid var(--rule);
+}
+
+@media (max-width: 980px) {
+  .start-hero .meth-w {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .start-hero .meth-hero__title,
+  .start-hero .meth-hero__lede {
+    max-width: none;
+  }
+  .start-stage {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 1.8rem;
+  }
+  .start-hero__copy {
+    grid-column: 1;
+  }
+  .start-promise {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .start-promise {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
+  }
+}
+
+/* ---------- the flow ----------
+   Without JavaScript this is six stacked questions, which works. With it,
+   one question at a time in a fixed frame: the whole flow occupies about
+   the height of a paragraph of the page it sits in, and answering a
+   single-choice question moves to the next one on its own. */
+
+.pf {
+  margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+  max-width: 46rem;
+}
+.pf--stepped {
+  display: grid;
+  grid-template-rows: auto minmax(15.5rem, auto) auto;
+  gap: 1.35rem;
+}
+.pf--stepped.pf--done {
+  grid-template-rows: auto;
+  gap: 0;
+}
+
+.pf-rail {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.pf-rail__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  white-space: nowrap;
+}
+.pf-rail__bar {
+  flex: 1;
+  height: 2px;
+  background: var(--rule);
+  overflow: hidden;
+}
+.pf-rail__bar span {
+  display: block;
+  height: 100%;
+  width: var(--pf-progress, 0%);
+  background: var(--accent-chip);
+  transition: width 0.28s var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-rail__bar span {
+    transition: none;
+  }
+}
+
+.pf-q {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+/* The screen takes focus when it replaces the last one, which is a move
+   for assistive technology rather than a visible state. */
+.pf-q:focus {
+  outline: none;
+}
+.pf--stepped .pf-q {
+  align-self: start;
+}
+.pf-q__legend {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0;
+  margin-bottom: 0.9rem;
+}
+.pf-q__num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ink-4);
+}
+.pf--stepped .pf-q__num {
+  display: none;
+}
+.pf-q__label {
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--navy);
+}
+.pf-q__help {
+  margin: -0.5rem 0 0.9rem;
+  font-size: var(--fs-md);
+  color: var(--ink-3);
+  max-width: 52ch;
+}
+.pf-q--follow .pf-q__label {
+  font-size: clamp(1.02rem, 1.5vw, 1.18rem);
+}
+
+.pf-part + .pf-part {
+  margin-top: 1.15rem;
+  padding-top: 1.05rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-part__label {
+  margin: 0 0 0.6rem;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.pf-opts {
+  display: grid;
+  gap: 0.4rem;
+}
+.pf-opts--tight {
+  grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
+}
+.pf-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color 0.16s var(--ease),
+    background 0.16s var(--ease);
+}
+.pf-opt:hover {
+  border-color: var(--accent-light);
+}
+.pf-opt input {
+  margin: 0.18rem 0 0;
+  accent-color: var(--accent-chip);
+  flex: none;
+}
+.pf-opt:has(input:checked) {
+  border-color: var(--accent-chip);
+  background: var(--accent-rgba-08);
+}
+.pf-opt:has(input:focus-visible) {
+  outline: 2px solid var(--accent-chip);
+  outline-offset: 2px;
+}
+.pf-opt__body {
+  display: block;
+  min-width: 0;
+}
+.pf-opt__label {
+  display: block;
+  font-size: var(--fs-base);
+  line-height: 1.45;
+  color: var(--navy);
+}
+.pf-opt__note {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+/* .btn2 and .pf-actions set their own display, which outranks the user
+   agent's [hidden] rule, so a hidden control would still be drawn and still
+   be clickable. FoldAll documents the same trap. */
+.pf [hidden] {
+  display: none !important;
+}
+.pf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.1rem;
+}
+.pf--stepped .pf-actions {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-actions .btn2--primary[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.pf-back {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--fs-md);
+  color: var(--ink-3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.pf-back:hover {
+  color: var(--accent-text);
+}
+.pf-done {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+.pf-noscript {
+  margin: 1.1rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 46rem;
+}
+
+/* ---------- the plan ---------- */
+
+.pf-plan {
+  margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+  max-width: 62rem;
+}
+.pf-plan:focus {
+  outline: none;
+}
+.pf-scope {
+  margin: 0.7rem 0 0;
+  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--navy);
+  max-width: 34ch;
+}
+.pf-bounds {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.pf-bounds li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: var(--fs-md-2);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.pf-bounds li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.4rem;
+  height: 1px;
+  background: var(--ink-4);
+}
+.pf-caveat,
+.pf-callout {
+  margin: 1.2rem 0 0;
+  font-size: var(--fs-lg);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 52ch;
+}
+.pf-callout {
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--accent-chip);
+  color: var(--navy);
+}
+.pf-callout p {
+  margin: 0;
+}
+
+.pf-reads {
+  display: grid;
+  gap: 1.6rem 2.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  margin-top: clamp(1.8rem, 3vw, 2.4rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-read__k {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.pf-read__v {
+  margin: 0.3rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.pf-read ul {
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+.pf-read li {
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.pf-read__d {
+  margin: 0.55rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.pf-reads__note {
+  margin: 0.9rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-4);
+  max-width: 58ch;
+}
+
+.pf-block {
+  margin-top: clamp(1.9rem, 3vw, 2.5rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-block h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+.pf-block__note {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 58ch;
+}
+.pf-list {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.pf-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: var(--fs-md-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+.pf-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 0.4rem;
+  height: 1px;
+  background: var(--accent-text);
+}
+.pf-list--not li::before {
+  background: var(--ink-4);
+}
+
+.pf-checks {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.pf-check {
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.pf-check:first-child {
+  border-top: 1px solid var(--rule);
+}
+.pf-check__what {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--navy);
+  max-width: 60ch;
+}
+.pf-check__why {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+.pf-check__alt,
+.pf-check__holder {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 68ch;
+}
+.pf-check__alt span,
+.pf-check__holder span {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-right: 0.4rem;
+}
+
+.pf-people {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.pf-people li {
+  font-size: var(--fs-md-2);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 68ch;
+}
+.pf-people__role {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.pf-plan__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: clamp(1.9rem, 3vw, 2.5rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-plan__actions .btn2--card {
+  cursor: pointer;
+  font: inherit;
+}
+.pf-plan__foot {
+  margin: 1rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-4);
+  max-width: 58ch;
+}
+
+/* ---------- capability matrix ---------- */
+
+.start-matrix {
+  list-style: none;
+  margin: clamp(1.6rem, 2.6vw, 2.2rem) 0 0;
+  padding: 0;
+}
+.start-matrix__row {
+  display: grid;
+  grid-template-columns: minmax(13rem, 20rem) minmax(0, 1fr) auto;
+  gap: 1.4rem;
+  align-items: baseline;
+  padding: 1.05rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.start-matrix__row:first-child {
+  border-top: 1px solid var(--rule);
+}
+.start-matrix__info {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--navy);
+}
+.start-matrix__body {
+  min-width: 0;
+}
+.start-matrix__benefit {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.start-matrix__note {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.start-matrix__status {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: right;
+  white-space: nowrap;
+}
+.start-matrix__status--available {
+  color: var(--accent-text);
+}
+.start-matrix__review {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--terra-dark);
+}
+.start-foot {
+  margin: 1.2rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 72ch;
+}
+
+/* ---------------------------------------------------------------
+   What a first analysis returns.
+
+   The one band on a white plane rather than the page ground, and the
+   one product capture on the page. A long document wants its material
+   to change where the subject does: everything above is about getting
+   started, this is what getting started produces.
+   --------------------------------------------------------------- */
+
+.start-sec--surface {
+  background: var(--surface);
+}
+.start-output {
+  display: grid;
+  grid-template-columns: minmax(16rem, 4fr) minmax(0, 7fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+  margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+}
+.start-output__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.start-output__list li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+}
+.start-output__list li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-output__k {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+.start-output__b {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.start-output__shot {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
+}
+.start-output__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.start-output__shot figcaption {
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+
+/* ---------- the three records almost every analysis starts with ---------- */
+
+.start-core {
+  list-style: none;
+  margin: clamp(1.6rem, 2.6vw, 2.2rem) 0 0;
+  padding: 0;
+}
+.start-core li {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr) minmax(9rem, 14rem);
+  gap: 1.4rem;
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+.start-core li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-core__n {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-text);
+}
+.start-core__what {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--navy);
+}
+.start-core__why {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+.start-core__alt {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 62ch;
+}
+.start-core__holder {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+.start-core__note {
+  margin: 1.1rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 72ch;
+}
+
+/* ---------- record catalog fold ---------- */
+
+.start-fold {
+  margin-top: clamp(1.4rem, 2.4vw, 2rem);
+  border-top: 1px solid var(--rule);
+}
+.start-fold__sum {
+  padding: 1rem 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.start-fold__sum::-webkit-details-marker {
+  display: none;
+}
+.start-fold__sum::after {
+  content: '+';
+  font-family: var(--font-mono);
+  color: var(--accent-text);
+}
+.start-fold[open] .start-fold__sum::after {
+  content: '\2212';
+}
+.start-records {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+.start-records__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9rem, 14rem);
+  gap: 1.4rem;
+  padding: 0.95rem 0;
+  border-top: 1px solid var(--rule);
+}
+.start-records__what {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--navy);
+}
+.start-records__why {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+.start-records__alt {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.start-records__altk {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-right: 0.4rem;
+}
+.start-records__holder {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+
+/* ---------- the call ---------- */
+
+.start-call {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.4rem);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+  align-items: start;
+}
+.start-call__outline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.start-call__outline li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0.2rem 1.2rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--rule);
+}
+.start-call__outline li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-call__min {
+  grid-row: span 2;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding-top: 0.2em;
+}
+.start-call__title {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--navy);
+}
+.start-call__detail {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+.start-call__out ul {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+.start-call__out li {
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+.start-call__outk {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+/* ---------- coverage ---------- */
+
+.start-cov {
+  list-style: none;
+  margin: clamp(1.6rem, 2.6vw, 2.2rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1.6rem 2.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+.start-cov__label {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--navy);
+}
+.start-cov__measures {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.start-cov__denom {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.start-cov__denomk {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-right: 0.4rem;
+}
+
+.start-cta {
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------- phone ---------- */
+
+@media (max-width: 860px) {
+  .start-call,
+  .start-output {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .start-core li {
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+    gap: 0.9rem;
+  }
+  .start-core__holder {
+    grid-column: 2;
+    margin-top: 0.3rem;
+  }
+  .start-matrix__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+  .start-matrix__status {
+    text-align: left;
+  }
+  .start-matrix__review {
+    display: inline;
+    margin-left: 0.6rem;
+  }
+  .start-records__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 560px) {
+  /* The frame that stops the desktop column jumping between questions is
+     dead space on a phone, where the flow sits at the top of the page. */
+  .pf--stepped {
+    grid-template-rows: auto auto auto;
+  }
+  .pf-opts--tight {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .start-call__outline li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+  .start-call__min {
+    grid-row: auto;
+    padding-top: 0;
+  }
+}
+
+/* ---------- print: the tailored one-page checklist ----------
+   Printing a plan should produce the checklist and nothing else. The
+   questions, the reference sections and the page chrome are for the
+   screen; on paper the plan is the document. */
+
+@media print {
+  .start-promise,
+  .meth-hero__lede,
+  .start-stage,
+  .pf-head,
+  .pf,
+  .start-sec:not(#top) .start-matrix,
+  .start-fold,
+  .start-call,
+  .start-cov,
+  .start-cta,
+  .pf-plan__actions {
+    display: none !important;
+  }
+  .start-sec[aria-labelledby='s-more'],
+  .start-sec[aria-labelledby='s-records'],
+  .start-sec[aria-labelledby='s-call'],
+  .start-sec[aria-labelledby='s-coverage'] {
+    display: none !important;
+  }
+  .pf-plan {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+    max-width: 44rem;
+  }
+  .start-sec {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .pf-block,
+  .pf-reads,
+  .pf-check {
+    break-inside: avoid;
+  }
+  .pf-scope {
+    font-size: 1.15rem;
+  }
+}

@@ -2,6 +2,21 @@
 /**
  * Nav — brand on the left, core destinations inline on desktop and a
  * full-screen menu below the point where that row stops fitting.
+ *
+ * The destinations are grouped. Six flat links had already reached the
+ * width the bar can hold, which is why the gaps below are fluid and why
+ * every new page had to argue for one of the slots. More than that, the
+ * flat row said nothing about how the pages relate: Cedar, Cedar Impact
+ * and Cedar Grove are one product family and read as three unrelated
+ * destinations beside Pricing and Team.
+ *
+ * So: four top-level items, three of which open a short list. A group can
+ * take a new page without the bar growing, which is the point. Each panel
+ * is a disclosure button, open on click or keyboard and on hover as an
+ * enhancement, closed by Escape or a click outside. On a phone the same
+ * groups render as headed sections in the existing overlay, with no
+ * toggles: a list that is already one per line gains nothing from being
+ * folded again.
  */
 import { site } from '../config';
 import BrandWordmark from './BrandWordmark.astro';
@@ -10,6 +25,49 @@ interface Props {
 }
 const { isHome = false } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+type NavLink = { href: string; text: string; desc?: string };
+type NavItem = { id: string; label: string; href?: string; links?: NavLink[] };
+
+const NAV: NavItem[] = [
+  {
+    id: 'product',
+    label: 'Product',
+    links: [
+      { href: '/#product', text: 'Cedar Impact', desc: 'Where you run economic impact analysis.' },
+      { href: '/cedar', text: 'Cedar', desc: 'The AI economic analyst, in every plan.' },
+      {
+        href: '/cedar-grove',
+        text: 'Cedar Grove',
+        desc: "The living evidence base for your organization's economy.",
+      },
+    ],
+  },
+  { id: 'pricing', label: 'Pricing', href: '/pricing' },
+  {
+    id: 'resources',
+    label: 'Resources',
+    links: [
+      { href: '/start', text: 'Plan your first analysis', desc: 'Six questions to a starting scope.' },
+      { href: '/methodology', text: 'Methodology', desc: 'The economics, with the equations.' },
+      { href: '/glossary', text: 'Glossary', desc: 'The terms, defined plainly.' },
+      { href: '/naics', text: 'Industry sectors', desc: 'What the classification covers.' },
+    ],
+  },
+  {
+    id: 'company',
+    label: 'Company',
+    links: [
+      { href: '/team', text: 'Team' },
+      { href: '/security', text: 'Security' },
+      { href: `mailto:${site.email}`, text: 'Contact' },
+    ],
+  },
+];
+
+/** True when this group holds the page being viewed, so the parent marks it. */
+const holdsCurrent = (item: NavItem) =>
+  Boolean(item.links?.some((l) => l.href.replace(/\/$/, '') === currentPath));
 ---
 
 <nav id="nav" class={isHome ? 'nav--fixed' : 'nav--static'} aria-label="Main navigation">
@@ -24,34 +82,51 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
     <div class="nav-right">
       <ul class="nav-links">
-        <li>
-          <a href="/#product">Cedar Impact</a>
-        </li>
-        <li>
-          <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>
-            Cedar
-          </a>
-        </li>
-        <li>
-          <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}>
-            Cedar Grove
-          </a>
-        </li>
-        <li>
-          <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}>
-            Pricing
-          </a>
-        </li>
-        <li>
-          <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}>
-            Methodology
-          </a>
-        </li>
-        <li>
-          <a href="/team" aria-current={currentPath === '/team' ? 'page' : undefined}>
-            Team
-          </a>
-        </li>
+        {
+          NAV.map((item) =>
+            item.links ? (
+              <li class="nav-item" data-nav-group>
+                <button
+                  type="button"
+                  class="nav-toggle"
+                  id={`navt-${item.id}`}
+                  aria-expanded="false"
+                  aria-controls={`navp-${item.id}`}
+                  data-current={holdsCurrent(item) ? 'true' : undefined}
+                >
+                  {item.label}
+                  <span class="nav-toggle__chev" aria-hidden="true"></span>
+                </button>
+                <div class="nav-panel" id={`navp-${item.id}`} hidden>
+                  <ul role="list">
+                    {item.links.map((l) => (
+                      <li>
+                        <a
+                          href={l.href}
+                          aria-current={
+                            l.href.replace(/\/$/, '') === currentPath ? 'page' : undefined
+                          }
+                        >
+                          <span class="nav-panel__text">{l.text}</span>
+                          {l.desc ? <span class="nav-panel__desc">{l.desc}</span> : null}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li class="nav-item">
+                <a
+                  href={item.href}
+                  aria-current={item.href === currentPath ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
       </ul>
       <span class="nav-links__sep" aria-hidden="true"></span>
       <a
@@ -95,34 +170,33 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 <div class="navm" id="navMenu" hidden>
   <div class="navm-inner">
     <ul class="navm-list">
-      <li>
-        <a href="/#product">Cedar Impact</a>
-      </li>
-      <li>
-        <a href="/cedar" aria-current={currentPath === '/cedar' ? 'page' : undefined}>
-          Cedar
-        </a>
-      </li>
-      <li>
-        <a href="/cedar-grove" aria-current={currentPath === '/cedar-grove' ? 'page' : undefined}>
-          Cedar Grove
-        </a>
-      </li>
-      <li>
-        <a href="/pricing" aria-current={currentPath === '/pricing' ? 'page' : undefined}>
-          Pricing
-        </a>
-      </li>
-      <li>
-        <a href="/methodology" aria-current={currentPath === '/methodology' ? 'page' : undefined}>
-          Methodology
-        </a>
-      </li>
-      <li>
-        <a href="/team" aria-current={currentPath === '/team' ? 'page' : undefined}>
-          Team
-        </a>
-      </li>
+      {
+        NAV.map((item) =>
+          item.links ? (
+            <li class="navm-group">
+              <p class="navm-group__label">{item.label}</p>
+              <ul role="list">
+                {item.links.map((l) => (
+                  <li>
+                    <a
+                      href={l.href}
+                      aria-current={l.href.replace(/\/$/, '') === currentPath ? 'page' : undefined}
+                    >
+                      {l.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ) : (
+            <li>
+              <a href={item.href} aria-current={item.href === currentPath ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ),
+        )
+      }
       <li>
         <a href="/login" aria-current={currentPath === '/login' ? 'page' : undefined}>
           Log in
@@ -145,6 +219,87 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 </div>
 
 <script>
+  /* The grouped destinations. A disclosure button each: click or keyboard
+     opens, Escape or a click outside closes, and a pointer opening one
+     while another is open swaps them rather than stacking. Hover is an
+     enhancement layered on top, so nothing here depends on a pointer. */
+  (function () {
+    const groups = Array.from(document.querySelectorAll('[data-nav-group]'));
+    if (!groups.length) return;
+
+    const parts = groups.map((group) => ({
+      group,
+      toggle: group.querySelector<HTMLButtonElement>('.nav-toggle'),
+      panel: group.querySelector<HTMLElement>('.nav-panel'),
+      /* A pointer opens a panel on the way to clicking its button. Without
+         this the click would read the panel as already open and close the
+         thing the person was reaching for. */
+      openedByHover: false,
+    }));
+
+    let hoverTimer = 0;
+
+    function setOpen(part: (typeof parts)[number], open: boolean) {
+      if (!part.toggle || !part.panel) return;
+      part.panel.hidden = !open;
+      part.toggle.setAttribute('aria-expanded', String(open));
+      part.group.classList.toggle('on', open);
+    }
+
+    function closeAll(except?: (typeof parts)[number]) {
+      for (const part of parts) if (part !== except) setOpen(part, false);
+    }
+
+    for (const part of parts) {
+      part.toggle?.addEventListener('click', () => {
+        const open = part.toggle?.getAttribute('aria-expanded') === 'true' && !part.openedByHover;
+        part.openedByHover = false;
+        closeAll(part);
+        setOpen(part, !open);
+      });
+
+      /* Hovering a sibling swaps panels immediately; leaving the group
+         waits a moment, so crossing the gap between the button and its
+         panel does not close it under the pointer. */
+      part.group.addEventListener('pointerenter', (event) => {
+        if ((event as PointerEvent).pointerType === 'touch') return;
+        window.clearTimeout(hoverTimer);
+        closeAll(part);
+        part.openedByHover = part.toggle?.getAttribute('aria-expanded') !== 'true';
+        setOpen(part, true);
+      });
+      part.group.addEventListener('pointerleave', (event) => {
+        if ((event as PointerEvent).pointerType === 'touch') return;
+        hoverTimer = window.setTimeout(() => {
+          part.openedByHover = false;
+          setOpen(part, false);
+        }, 140);
+      });
+
+      /* Tabbing out of the last link in a panel should close it, the same
+         way clicking elsewhere does. */
+      part.group.addEventListener('focusout', (event) => {
+        const next = (event as FocusEvent).relatedTarget as Node | null;
+        if (next && part.group.contains(next)) return;
+        setOpen(part, false);
+      });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      const open = parts.find((part) => part.toggle?.getAttribute('aria-expanded') === 'true');
+      if (!open) return;
+      setOpen(open, false);
+      open.toggle?.focus();
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target as Node;
+      if (parts.some((part) => part.group.contains(target))) return;
+      closeAll();
+    });
+  })();
+
   (function () {
     const btn = document.getElementById('navMenuBtn');
     const menu = document.getElementById('navMenu');
@@ -199,8 +354,12 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
         document.activeElement === btn || menu.contains(document.activeElement);
       close(false);
       if (hadOverlayFocus) {
+        /* The current page may live inside a closed panel, and focus cannot
+           land on something hidden. The group's own button carries the same
+           mark, so it is the right destination when there is one. */
         const destination =
-          document.querySelector<HTMLElement>('.nav-links a[aria-current="page"]') ||
+          document.querySelector<HTMLElement>('.nav-toggle[data-current="true"]') ||
+          document.querySelector<HTMLElement>('.nav-links > .nav-item > a[aria-current="page"]') ||
           document.querySelector<HTMLElement>('.nav-brand a');
         destination?.focus();
       }

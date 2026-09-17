@@ -222,12 +222,15 @@ html.navm-open {
    and Methodology from being two clicks behind a button. */
 /* The gaps are fluid, and every label is nowrap.
    --------------------------------------------------------------------
-   With six destinations the row no longer fits between 1000px — where
+   With six destinations the row no longer fit between 1000px — where
    it replaces the Menu button — and about 1200px. Fixed gaps meant it
    dealt with that by wrapping "Cedar Impact" and "Request access" onto
    two lines each, which is the worst of the options available: the bar
    grew taller and the labels stopped reading as single destinations.
-   Closing the gaps first, and never breaking a label, keeps one line. */
+   Closing the gaps first, and never breaking a label, keeps one line.
+   The destinations are now grouped into four items, which is what took
+   the pressure off the row for good; the fluid gaps stay because a group
+   label can still grow. */
 .nav-right {
   display: flex;
   align-items: center;
@@ -337,4 +340,155 @@ html.navm-open {
       var(--action-hover-bottom) 100%
     );
   }
+}
+
+/* ---------------------------------------------------------------
+   Grouped destinations.
+
+   Four top-level items where there were six links, three of them
+   opening a short panel. The panel is a real assembled surface, so it
+   carries the panel radius and one neutral shadow; nothing else here
+   gains a border. A group holding the current page marks its button
+   the same way a current link marks itself, so the bar still says
+   where you are.
+   --------------------------------------------------------------- */
+
+.nav-item {
+  position: relative;
+}
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  border: 0;
+  background: none;
+  padding: 0.35rem 0 0.3rem;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--navy);
+  white-space: nowrap;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+.nav-toggle:hover,
+.nav-item.on .nav-toggle {
+  color: var(--accent-text);
+}
+.nav-toggle[data-current='true'] {
+  color: var(--accent-text);
+  border-bottom-color: var(--accent-text);
+}
+.nav-toggle__chev {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-0.12em) rotate(45deg);
+  transition: transform 0.18s var(--ease);
+}
+.nav-item.on .nav-toggle__chev {
+  transform: translateY(0.04em) rotate(-135deg);
+}
+
+.nav-panel {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: -1rem;
+  z-index: 10;
+  min-width: 16.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 24px 48px -30px rgba(10, 28, 52, 0.42);
+}
+/* The gap between the button and the panel would drop a hovering pointer
+   out of the group, so the group's own box is extended to cover it. */
+.nav-panel::before {
+  content: '';
+  position: absolute;
+  inset: -0.85rem 0 100% 0;
+}
+.nav-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-panel a {
+  display: block;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-control);
+  border-bottom: 0;
+  text-decoration: none;
+  transition: background 0.14s var(--ease);
+}
+.nav-panel a:hover {
+  background: var(--accent-rgba-08);
+  border-bottom: 0;
+}
+.nav-panel__text {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--navy);
+}
+.nav-panel a:hover .nav-panel__text,
+.nav-panel a[aria-current='page'] .nav-panel__text {
+  color: var(--accent-text);
+}
+.nav-panel__desc {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+  white-space: normal;
+  max-width: 17rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-toggle,
+  .nav-toggle__chev,
+  .nav-panel a {
+    transition: none;
+  }
+}
+
+/* The overlay keeps the same grouping, as headed sections. A list that is
+   already one destination per line gains nothing from folding. */
+.navm-group {
+  display: block;
+}
+.navm-group__label {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.navm-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+/* Twelve destinations at the full display size is a long scroll on a
+   phone. Inside a group the label carries the hierarchy, so the links
+   themselves can sit a step down and the whole menu stays close to one
+   screen. */
+.navm-group a {
+  font-size: clamp(1.15rem, 3.4vw, 1.5rem);
+  padding: 0.6rem 0;
+}
+.navm-group + li {
+  margin-top: 0.4rem;
 }
