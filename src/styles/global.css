@@ -570,6 +570,8 @@ html {
   .scroll-progress,
   .skip-link,
   .consent,
+  .cedar-fab,
+  .cedar-chat,
   .fold-all-row {
     display: none !important;
   }

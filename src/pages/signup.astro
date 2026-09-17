@@ -103,7 +103,8 @@ const ORGANIZATION_TYPE_OPTIONS = [
         <h1 class="asplit-title">Lumecon is in private beta</h1>
         <p class="asplit-tagline">
           Access is being introduced in phases. Tell us about your organization and the first
-          analysis you want to run, and our team will follow up about availability.
+          analysis you want to run, and our team will follow up about availability. Not sure yet?
+          <a href="/start">Plan your first analysis</a> in six questions and bring the answer here.
         </p>
         {
           /* If /signup arrived from a pricing tier CTA, the URL query
@@ -246,6 +247,21 @@ const ORGANIZATION_TYPE_OPTIONS = [
       ]}
     />
   </main>
+
+  <script is:inline>
+    /* /start -> Signup handoff. The planning flow links here carrying the
+       starting scope it proposed, so the request arrives with the thinking
+       already attached. Set as a value, never as markup, and capped at the
+       field's own maxlength. */
+    (function () {
+      var qs = new URLSearchParams(window.location.search);
+      var interest = qs.get('interest');
+      if (!interest) return;
+      var field = document.querySelector('textarea[name="interest"]');
+      if (!field || field.value) return;
+      field.value = interest.slice(0, 1000);
+    })();
+  </script>
 
   <script is:inline>
     /* Pricing -> Signup handoff. A pricing tier CTA links to /signup?tier=X

@@ -19,6 +19,7 @@
     "team:headshots": "node scripts/team/headshots.mjs",
     "shots:examples": "node scripts/screenshots/capture-examples.mjs",
     "docs:copy": "node scripts/docs/export-copy.mjs",
+    "docs:plan": "node scripts/docs/export-plan.mjs",
     "llms:roster": "node scripts/docs/llms-roster.mjs",
     "docs:questions": "node scripts/docs/methodology-questions.mjs"
   },

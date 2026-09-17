@@ -59,6 +59,7 @@ const PAGES = [
   ['/cedar-grove', 'Cedar Grove'],
   ['/glossary', 'Glossary'],
   ['/naics', 'NAICS sectors'],
+  ['/start', 'Plan your first analysis'],
   ['/signup', 'Sign up'],
   ['/login', 'Log in'],
   ['/choose-plan', 'Choose plan'],
@@ -100,6 +101,7 @@ const OWNERSHIP = {
   '/security': 'Current product controls and security-program status.',
   '/glossary': 'Defines terms and nothing more.',
   '/naics': 'What the sector classification covers.',
+  '/start': 'What an organization can begin with, and what it would take.',
 };
 
 /** Claims worth counting because they are the ones that recur. */
