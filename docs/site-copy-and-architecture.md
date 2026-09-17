@@ -1170,7 +1170,7 @@ Lumecon brings together economists, engineers and advisors who build the models,
 TEAM
 
 - Elijah FOUNDER AND CEO
-- Laurel ECONOMICS LEAD
+- Laurel PRINCIPAL ECONOMIST
 - Isabella INPUT-OUTPUT MODELING LEAD
 - Francesca CEDAR SYSTEMS LEAD
 - Kaylyn PLATFORM LEAD

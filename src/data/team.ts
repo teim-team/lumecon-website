@@ -218,7 +218,7 @@ const TEAM: Person[] = [
     name: 'Laurel Wheeler',
     initials: 'LW',
     group: 'team',
-    title: 'Economics Lead',
+    title: 'Principal Economist',
     email: 'laurel.wheeler@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/laurel-wheeler',
     scholar: 'https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ',

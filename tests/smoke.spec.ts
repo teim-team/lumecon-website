@@ -695,7 +695,7 @@ test('team page picks a person and shows that person', async ({ page }) => {
     );
   expect(Object.fromEntries(roles)).toEqual({
     'elijah-moreno': 'Founder and CEO',
-    'laurel-wheeler': 'Economics Lead',
+    'laurel-wheeler': 'Principal Economist',
     'isabella-agnes': 'Input-Output Modeling Lead',
     'francesca-agnes': 'Cedar Systems Lead',
     'kaylyn-lee': 'Platform Lead',
