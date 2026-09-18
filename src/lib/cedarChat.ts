@@ -437,6 +437,18 @@ function renderRich(text: string): string {
     /\bhttps?:\/\/[^\s<]+/g,
     (m) => `<a href="${m}" target="_blank" rel="noopener noreferrer">${m}</a>`,
   );
+  /* `lumecon.ai/<path>` written bare in an answer. Seven answers in the
+     intent bank point somewhere this way and every one of them rendered as
+     inert text: the rule above needs a scheme, and the internal-path rule
+     below needs whitespace before the slash, which "lumecon.ai/" does not
+     have. The link goes to the path, not to the absolute URL, so it stays
+     a same-site navigation. Runs before the email rule, which cannot match
+     these anyway (no `@`), and before the internal-path rule, whose
+     leading-boundary requirement the emitted `href="/…"` does not satisfy. */
+  html = html.replace(
+    /\blumecon\.ai(\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9-]+)*)/gi,
+    (_m, path: string) => `<a href="${path}">lumecon.ai${path}</a>`,
+  );
   html = html.replace(
     /\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g,
     '<a href="mailto:$1">$1</a>',

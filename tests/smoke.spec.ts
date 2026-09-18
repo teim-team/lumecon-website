@@ -1844,6 +1844,39 @@ test('the commons team shapes open one at a time, by click and by keyboard', asy
   await expect(visibleCopy).toHaveAttribute('data-surf-copy', 'consultancy');
 });
 
+test('every mobile crop declares its own size, not the fallback\'s', async ({ page }) => {
+  await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+  /* A <source> without width/height leaves the browser reserving the box
+     the fallback <img> declares — 1920x1200 — and then jumping to the
+     crop's taller ratio when it decodes, which on a lazy image happens
+     under the reader's thumb. Checked against the files themselves, so a
+     re-crop that changes a dimension fails here rather than shipping a
+     wrong reservation. */
+  const declared = await page.locator('picture source[media]').evaluateAll((nodes) =>
+    nodes.map((n) => ({
+      src: n.getAttribute('srcset') || '',
+      w: Number(n.getAttribute('width')),
+      h: Number(n.getAttribute('height')),
+    })),
+  );
+  expect(declared.length).toBeGreaterThan(0);
+  for (const { src, w, h } of declared) {
+    expect(w, `${src} declares a width`).toBeGreaterThan(0);
+    expect(h, `${src} declares a height`).toBeGreaterThan(0);
+    const real = await page.evaluate(
+      (url) =>
+        new Promise<{ w: number; h: number }>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+          img.onerror = () => reject(new Error(`could not load ${url}`));
+          img.src = url;
+        }),
+      src,
+    );
+    expect(real, `${src} declares its real size`).toEqual({ w, h });
+  }
+});
+
 test.describe('commons team shapes with no working script', () => {
   test.use({ javaScriptEnabled: false });
 
@@ -1856,6 +1889,27 @@ test.describe('commons team shapes with no working script', () => {
        one `false` tells a screen reader that visible content is collapsed,
        behind a disabled control that offers no way to reconcile it. */
     await expect(page.locator('[data-surf-tab][aria-expanded="true"]')).toHaveCount(2);
+  });
+
+  test('each case sits with its own screenshot', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+    /* Visible is not the same as placed. The row is a two-column grid with
+       three children, so the second figure auto-flowed into row 2 column 1
+       — the 335px copy column — and sat away from the copy it belongs to.
+       Measured: panel one at x=383 w=849, panel two at x=48 w=335. */
+    const box = async (sel: string, i: number) =>
+      (await page.locator(sel).nth(i).boundingBox())!;
+    const copies = [await box('[data-surf-copy]', 0), await box('[data-surf-copy]', 1)];
+    const panels = [await box('[data-surf-panel]', 0), await box('[data-surf-panel]', 1)];
+    // Each figure follows its own copy, and the second copy follows the
+    // first figure: one column, interleaved, rather than three blocks.
+    expect(panels[0].y).toBeGreaterThan(copies[0].y);
+    expect(copies[1].y).toBeGreaterThan(panels[0].y);
+    expect(panels[1].y).toBeGreaterThan(copies[1].y);
+    // And neither figure is squeezed into the narrow copy column.
+    expect(Math.round(panels[0].width)).toBe(Math.round(panels[1].width));
+    expect(panels[1].width).toBeGreaterThan(copies[1].width);
   });
 });
 
@@ -1910,6 +1964,22 @@ test.describe('the product pages on a phone', () => {
       }
       window.scrollTo(0, 0);
     });
+
+    /* Let the lazy images that DID start loading finish before reading
+       them. Without this the test raced the decode: chromium happened to
+       have them decoded by the time the scroll walk returned and WebKit
+       did not, so CI went red on WebKit alone with `naturalWidth === 0`
+       against a crop that was perfectly fine. Waiting on `complete`
+       keeps the assertion's teeth — a 404 also completes, with
+       naturalWidth 0, which is exactly what the check below catches. */
+    await page.waitForFunction(
+      () =>
+        [...document.querySelectorAll('.cm-acts img')]
+          .filter((n) => (n as HTMLImageElement).currentSrc)
+          .every((n) => (n as HTMLImageElement).complete),
+      null,
+      { timeout: 15000 },
+    );
 
     /* Only the frames that actually loaded: the unselected team shape is
        `display: none`, so its lazy image never fetches and reports an empty
@@ -2071,6 +2141,56 @@ test.describe('the product pages on a phone', () => {
     expect(layers.nav, 'the nav is a fixed, stacked header').toBeGreaterThan(0);
     expect(layers.panel, 'the dialog sits above the nav').toBeGreaterThan(layers.nav);
     await expect(page.locator('.cedar-fab-panel .cedar-chat__header')).toBeVisible();
+  });
+
+  test('the grove atlas labels stay inside their tiles, and the last one clears the fade', async ({
+    page,
+  }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    const grid = page.locator('.grovepg-atlas__grid');
+    await grid.scrollIntoViewIfNeeded();
+    // "Native-Owned Businesses" is 170px against a 132px tile, and with
+    // `white-space: nowrap` it spilled 19px into its neighbour. The tile's
+    // width is held by `flex: 0 0 auto`, so nothing needed the nowrap.
+    const spills = await page.locator('.grovepg-atlas__cell').evaluateAll((cells) =>
+      cells
+        .map((c) => {
+          const n = c.querySelector('.grovepg-atlas__name');
+          if (!n) return null;
+          const over = Math.round(n.getBoundingClientRect().right - c.getBoundingClientRect().right);
+          return over > 0 ? `${n.textContent?.trim()} +${over}px` : null;
+        })
+        .filter(Boolean),
+    );
+    expect(spills, 'no label spills its tile').toEqual([]);
+
+    // At the end of the scroll the fade used to still cover the last tile,
+    // so the row went on claiming there was more to the right.
+    const clear = await grid.evaluate((g) => {
+      g.scrollLeft = g.scrollWidth;
+      const cells = g.querySelectorAll('.grovepg-atlas__cell');
+      const last = cells[cells.length - 1].getBoundingClientRect();
+      const box = g.getBoundingClientRect();
+      return last.right <= box.left + box.width * 0.88;
+    });
+    expect(clear, 'the last tile clears the fade at full scroll').toBe(true);
+  });
+
+  test('the grove price puts its period under the numeral', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    // The ≤560px override sat above the base rule in the same file, and at
+    // equal specificity source order won: the override did nothing, and
+    // "per organization, per year" kept wrapping halfway up a 2.6rem
+    // numeral. Measured, not asserted on the declaration.
+    const rows = await page.locator('.grovepg-price').first().evaluate((el) => {
+      const amt = el.querySelector('.grovepg-price__amount')!.getBoundingClientRect();
+      const per = el.querySelector('.grovepg-price__period')!.getBoundingClientRect();
+      return { amtBottom: amt.bottom, perTop: per.top };
+    });
+    expect(rows.perTop, 'the period sits below the numeral').toBeGreaterThanOrEqual(
+      rows.amtBottom - 2,
+    );
   });
 
   test('the grove hero buttons are one column at one width', async ({ page }) => {

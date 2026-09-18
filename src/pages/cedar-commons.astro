@@ -125,6 +125,8 @@ const SHAPES = [
     body: 'Finance holds one set, the enterprises hold others, and a board member or outside counsel may need to read the result without touching it. Four staff here, two outside people, and each outside person is bound to the single project they were brought in for.',
     shot: '/app/commons-collaborators.webp',
     narrow: '/app/commons-collaborators-narrow.webp',
+    narrowW: 900,
+    narrowH: 866,
     alt: 'An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the one project they can reach. Shown with sample data.',
     cap: 'Prairie Wind, on Tree. The external roster names the project beside each person, so the boundary is readable rather than assumed.',
   },
@@ -135,6 +137,8 @@ const SHAPES = [
     body: 'A consultant opens a project per engagement and brings that client’s finance and operations people into it, and only into it. One client’s contacts never see another client’s work, and a project the client does not own names the organization sponsoring it, so nobody is unsure whose subscription is paying.',
     shot: '/app/commons-collaborators-consultant.webp',
     narrow: '/app/commons-collaborators-consultant-narrow.webp',
+    narrowW: 900,
+    narrowH: 709,
     alt: 'A consultancy’s collaborator view: one internal person and three client contacts across two different clients, each listed with the single project they can reach. Shown with sample data.',
     cap: 'Ferreira, on Sapling. Three client contacts from two clients, four of ten seats in use — an outside collaborator occupies a seat, the same as a colleague.',
   },
@@ -327,8 +331,17 @@ const jsonLd = [
                 id={`surf-${x.id}`}
                 data-zoom
               >
+                {/* The crop's own dimensions, not the fallback's. Without
+                    them a phone reserves the 1920x1200 box the <img> declares
+                    and then jumps to the crop's taller ratio when it decodes,
+                    which on a lazy image happens mid-scroll. */}
                 <picture>
-                  <source media="(max-width: 700px)" srcset={x.narrow} />
+                  <source
+                    media="(max-width: 700px)"
+                    srcset={x.narrow}
+                    width={x.narrowW}
+                    height={x.narrowH}
+                  />
                   <img src={x.shot} alt={x.alt} width="1920" height="1200" loading="lazy" decoding="async" />
                 </picture>
                 <figcaption class="cedarpg-cap">{x.cap} Shown with sample data.</figcaption>
@@ -351,7 +364,12 @@ const jsonLd = [
           </div>
           <figure class="tour-row__shot reveal-left" data-zoom>
             <picture>
-              <source media="(max-width: 700px)" srcset="/app/commons-documents-narrow.webp" />
+              <source
+                media="(max-width: 700px)"
+                srcset="/app/commons-documents-narrow.webp"
+                width="760"
+                height="879"
+              />
               <img
                 src="/app/commons-documents.webp"
                 alt="The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data."

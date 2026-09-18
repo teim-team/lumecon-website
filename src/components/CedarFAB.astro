@@ -424,6 +424,35 @@ import CedarChat from './CedarChat.astro';
       let pollTimer: number | undefined;
       let deadline = 0;
 
+      /* The bubble's own rectangle, not the launcher's. `visible` is
+         computed from the 60px FAB, and the bubble is up to 300px wide
+         sitting above and to the left of it — so the launcher can be
+         clear of a screenshot, a price or a control while the bubble
+         covers it. The bubble is `hidden` when this runs and therefore
+         has no box to measure, so the box is derived from the same
+         numbers the stylesheet uses. */
+      const nudgeWouldOverlap = (): boolean => {
+        const fabRect = fab.getBoundingClientRect();
+        const width = Math.min(300, window.innerWidth - 27.2);
+        const height = 120; // two lines of copy plus its padding and tail
+        const gap = 10;
+        const box = {
+          left: fabRect.right - width,
+          right: fabRect.right,
+          top: fabRect.top - gap - height,
+          bottom: fabRect.top - gap,
+        };
+        for (const zone of document.querySelectorAll<HTMLElement>(avoidSelector)) {
+          if (zone === fab || fab.contains(zone) || panel.contains(zone) || zone.hidden) continue;
+          const r = zone.getBoundingClientRect();
+          if (!r.width || !r.height || r.bottom <= 0 || r.top >= window.innerHeight) continue;
+          if (r.right > box.left && r.left < box.right && r.bottom > box.top && r.top < box.bottom) {
+            return true;
+          }
+        }
+        return false;
+      };
+
       const canShow = (): boolean =>
         PHONE.matches &&
         !nudgeSeen() &&
@@ -433,7 +462,8 @@ import CedarChat from './CedarChat.astro';
         /* `visible` is the launcher's own ready state (see
            setLauncherVisibility). While it is 'waiting' or 'avoiding'
            there is nothing on screen for the bubble to point at. */
-        fab.dataset.cedarVisibility === 'visible';
+        fab.dataset.cedarVisibility === 'visible' &&
+        !nudgeWouldOverlap();
 
       const stopPolling = (): void => {
         window.clearTimeout(pollTimer);
@@ -947,16 +977,26 @@ import CedarChat from './CedarChat.astro';
       max-height: none;
       flex: 1 1 auto;
     }
-    /* The form keeps clear of the home indicator now that nothing sits
-       between it and the bottom of the screen. */
-    .cedar-fab-panel :global(.cedar-chat__form) {
-      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    /* The page sets viewport-fit=cover, so on a notched phone the safe
+       areas fall INSIDE an `inset: 0` dialog. Pad the dialog's own edges
+       rather than a child: the bottom-most child is the disclaimer, not
+       the form, so padding the form left the disclaimer under the home
+       indicator and the header under the status bar. */
+    .cedar-fab-panel {
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      padding-left: env(safe-area-inset-left, 0px);
+      padding-right: env(safe-area-inset-right, 0px);
+      /* The inset padding shrinks the content box, so the chat inside has
+         to be the box rather than the viewport. */
+      box-sizing: border-box;
     }
     /* A full-screen dialog's close control has to be unmissable: it is
-       the only way back to the page. */
+       the only way back to the page. Offset by the same inset, since it
+       is positioned against the dialog's padding box. */
     .cedar-fab-panel__close {
-      top: 0.4rem;
-      right: 0.4rem;
+      top: calc(0.4rem + env(safe-area-inset-top, 0px));
+      right: calc(0.4rem + env(safe-area-inset-right, 0px));
       width: 48px;
       height: 48px;
     }

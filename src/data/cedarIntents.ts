@@ -414,6 +414,15 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['security', 'multipliers', 'onboarding'],
     chip: 'What data does it use?',
     triggers: [
+      /* "Explain your data collection methods" used to reach a
+         workspace answer about seats, then nothing at all once that
+         trigger was scoped. It is a question about sources. */
+      'data collection',
+      'collection methods',
+      'how do you collect data',
+      'how you collect data',
+      'how is the data collected',
+      'where does your data come from',
       'what data',
       'where does the data come',
       'users upload data',
@@ -1760,7 +1769,13 @@ export const INTENTS: CedarIntent[] = [
       'viewer access',
       'project notes',
       'note thread',
-      'data collection',
+      /* Scoped to collaborative intake. The bare phrase "data collection"
+         also matches "explain your data collection methods", which is a
+         question about sources and belongs to data_inputs, not to a
+         workspace answer about seats and permissions. */
+      'collect records from',
+      'collecting records from',
+      'collect data from my team',
       'collect records',
       'collect documents',
       'collect the data',
@@ -3105,7 +3120,7 @@ export const INTENTS: CedarIntent[] = [
       'how many of you are there',
     ],
     answer:
-      'Lumecon was founded by Elijah Moreno, who is the CEO and an enrolled member of the Coastal Band of the Chumash Nation. The broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. Every one of them is at lumecon.ai/team, with their degrees and where they have worked. Want an introduction? contact@lumecon.ai reaches them directly.',
+      'Lumecon is a small team and does not publish a headcount, but everyone working on the product is named on the team page with their background and their work. It was founded by Elijah Moreno, who is the CEO and an enrolled member of the Coastal Band of the Chumash Nation. The broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. Every one of them is at lumecon.ai/team, with their degrees and where they have worked. Want an introduction? contact@lumecon.ai reaches them directly.',
   },
   {
     id: 'press_media',

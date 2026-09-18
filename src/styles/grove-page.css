@@ -221,15 +221,6 @@
   .grovepg-cta .btn2 {
     justify-content: center;
   }
-  /* "per organization, per year" beside a 2.6rem numeral wraps to a second
-     line halfway up the price. Under it, it reads as one figure. */
-  .grovepg-price {
-    display: block;
-  }
-  .grovepg-price__period {
-    display: block;
-    margin-top: 0.1rem;
-  }
 }
 /* At phone width twelve tiles in a grid are a wall: two columns by six rows
    is roughly 770px of picker standing between the section's own sentence
@@ -262,9 +253,24 @@
     width: 8.25rem;
     scroll-snap-align: start;
   }
-  /* The tile is the scroll item, so the name must not force it wider. */
+  /* The tile's width is already fixed by `flex: 0 0 auto`, so nothing here
+     needed `nowrap` to hold it — and with it, the one label wider than a
+     tile ("Native-Owned Businesses", 170px against 132px) spilled 19px into
+     its neighbour. Measured at 390px: every other label fits on one line
+     and is unaffected. */
   .grovepg-atlas__name {
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  /* --- #4: trailing room so the last tile clears the fade ---
+     The mask fades the rightmost 12% of the scroller at every scroll
+     position, so at maximum scroll the final tile sat half-faded and the
+     row still read as "there is more to the right". A scroll-padding
+     item after the last tile gives it somewhere to go. */
+  .grovepg-atlas__grid::after {
+    content: '';
+    flex: 0 0 auto;
+    width: 15%;
   }
 }
 
@@ -308,6 +314,23 @@
 .grovepg-price__period {
   color: var(--ink-3);
   font-size: 0.95rem;
+}
+
+/* "per organization, per year" beside a 2.6rem numeral wraps to a second
+   line halfway up the price. Under it, it reads as one figure.
+
+   This block lives HERE, after the two rules it overrides, and not up in
+   the other ≤560px section above: both selectors are single classes, so at
+   equal specificity source order decides, and from up there the base
+   `display: flex` won and the override did nothing at all. */
+@media (max-width: 560px) {
+  .grovepg-price {
+    display: block;
+  }
+  .grovepg-price__period {
+    display: block;
+    margin-top: 0.1rem;
+  }
 }
 .grovepg-license ul {
   display: grid;

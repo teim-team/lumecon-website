@@ -147,6 +147,54 @@
 }
 
 /* ---------------------------------------------------------------------
+   The no-script fallback, laid out rather than merely visible.
+
+   Everything ships open so the section reads as two described cases when
+   the script does not run. But the row is a two-column grid with three
+   children — the copy block, then a figure per shape — so the second
+   figure auto-flowed into row 2 column 1, which is the 335px copy column,
+   and landed away from the copy it belongs to. Measured with JavaScript
+   disabled at 1280px: panel one at x=383 w=849, panel two at x=48 w=335.
+
+   `display: contents` on the copy block promotes the tabs and the two
+   copies to grid items of the row itself, so `order` can interleave them
+   with their figures: tabs, copy, figure, copy, figure. One column,
+   because a case and its screenshot side by side is what the script's
+   own layout is for.
+
+   `.cm-surf--js` is added by the script, so this is exactly the state
+   where the script has not run — the same hook the disabled tabs use. */
+.cm-acts [data-surf]:not(.cm-surf--js) {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) .tour-row__text {
+  display: contents;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) .cm-surf__tabs {
+  order: 0;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-copy='organization'] {
+  order: 1;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-panel='organization'] {
+  order: 2;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-copy='consultancy'] {
+  order: 3;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-panel='consultancy'] {
+  order: 4;
+}
+/* The figures bleed to the viewport edge in the scripted layout, which is
+   a two-column composition. In one column they sit in the text's measure. */
+.cm-acts [data-surf]:not(.cm-surf--js) .tour-row__shot {
+  margin: 0;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------
    The closing band: three short answers side by side, sized to read as a
    footnote to the two rows rather than a third act.
    --------------------------------------------------------------------- */

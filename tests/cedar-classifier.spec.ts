@@ -70,6 +70,25 @@ test('cedar routes representative questions to the right intent', async ({ page 
   }
 });
 
+test('a page Cedar names in an answer is a link, not inert text', async ({ page }) => {
+  const panel = await openCedar(page);
+  /* Seven answers point somewhere as `lumecon.ai/<path>`, and every one of
+     them rendered as plain text: renderRich's URL rule needs a scheme and
+     its internal-path rule needs whitespace before the slash, which
+     "lumecon.ai/" does not have. A destination a visitor cannot click is a
+     destination the answer did not give them. */
+  const bubble = await ask(panel, 'what is cedar commons');
+  await expect(bubble).toContainText('shared project workspace');
+  const link = bubble.locator('a[href="/cedar-commons"]');
+  await expect(link, 'the named page is clickable').toHaveCount(1);
+  await expect(link).toHaveText(/lumecon\.ai\/cedar-commons/);
+
+  // And the same treatment reaches the answers that were already written
+  // this way before the fix.
+  const grove = await ask(panel, 'what is cedar grove');
+  await expect(grove.locator('a[href="/cedar-grove"]')).toHaveCount(1);
+});
+
 test('cedar sends an off-topic question to the out-of-scope reply', async ({ page }) => {
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'who is the president of mexico');
