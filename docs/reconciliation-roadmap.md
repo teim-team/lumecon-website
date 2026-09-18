@@ -205,6 +205,29 @@ Markdown rather than in components and therefore reads as configuration.
 | `teim-engine` | The README's first line said the engine takes "a project description and a tribal location". `--geo-level` has taken `tribal_region`, `county` or `state` since August, and the MRIO path runs several regions at once. This site advertises "counties, states, the nation, reservations and trust lands", so the engine's own README was the document understating what ships. | Fixed 2026-09-18. |
 | `teim-engine` | The Quickstart listed the two upstream data keys and stopped, but `ENGINE_API_KEY` has been required to serve HTTP since the fail-closed change of 2026-09-13. Anyone following it got `503` on every call with nothing to explain why. | Fixed 2026-09-18. |
 
+### Second pass, same day
+
+The first pass wrote rules into four repositories and then missed their
+loudest violations, which is worth recording as a pattern rather than as six
+separate corrections: **a rule is not enforced until something runs it.**
+
+| Repo | Found on the second pass | Status |
+| --- | --- | --- |
+| `cedar` | The copy lock added in the morning forbids ampersands, and the results templates it governs printed `State & Local`, `Notes & Assumptions` and an em dash. Worse, the results table renamed three of its four columns: `Employment`, `Labor Income` and `Value Added` against the product's `Jobs supported`, `Labor income` and `GDP contribution`. Cedar exists to explain numbers the customer is reading on that page, so it was making them translate between two surfaces of one product. | Fixed, and made mechanical: `tests/test_prompt_copy_lock.py` pins the ampersand rule, the naming rules and the results headers, mutation-checked. |
+| `teim-engine` | **§7b Tier 2 is built** (`tier2.py` plus tests) while two decision-log rows still say it is not, and it appeared in no document at all. It also had no `AGENTS.md`, alone among the five. | Corrected. The open half is narrower than "build Tier 2": the metrics exist, and what is missing is a runner, because `validation/` is gitignored so no committed script can reach the IMPLAN reference figures. |
+| `teim-app` | The README's first paragraph said Lumecon's platforms "also include Local Economic Impact and Global Economic Impact" — two products this site retired. It also called Cedar and the engine externally owned, contradicting the correction made to its own `SECURITY.md` hours earlier. | Fixed. |
+| `cedar-press` | `docs/TERMINAL_HANDOFF.md`, the one file its README says to read after every pull, still pointed at `r7-audit-integration` as the branch going to review. That branch merged as PR #84 and is deleted. | Corrected, with the trap named: a stale local `main` ref still corroborates the old text, so compare against `origin/main`. |
+| all | The ampersand guidance written in the morning said to grep the HTML entity. A plain `&` in a string literal does not match that, which is how teim-app's `Settings.jsx` tabs survived the sweep. | Guidance corrected everywhere, with a regex that catches both forms. |
+
+Two ampersands are deliberately **not** fixed, each for a different reason, and
+both have a named closing action rather than a note. Cedar Press's collection
+`Native Federal Advocacy & Engagement` is embedded verbatim in the citation
+written into every downloaded CSV, so it waits for a version bump on that
+collection (item 11 in that repository's handoff). teim-app's two Settings tab
+labels are already fixed by its **open PR #170**, which rescued the change from
+a branch that had carried it since July; a second branch editing the same two
+lines would conflict for no gain.
+
 Two things were found and deliberately **not** fixed, because they are not
 mine to decide:
 
@@ -232,7 +255,7 @@ does, not by how likely it is.
 | `lumecon-website` | `AGENTS.md` (the AI-frontend-tell audit, teal is semantic, page ownership, the copy document as a CI gate) | Changing visible copy without regenerating `docs/site-copy-and-architecture.md`, which fails the smoke job after every test has passed. |
 | `teim-app` | `AGENTS.md` §10 | The accounting identities. A results surface that lets labor income exceed value added publishes a wrong number about a real nation's economy. |
 | `cedar` | `AGENTS.md` §7 | That a prompt change is a product-copy change. It reads as configuration and ships as voice. |
-| `teim-engine` | `SECURITY.md`, "What a reviewer should check" | That the auth guard still fails closed, and that a new endpoint remembers to call it. The guard is inline in each handler, so it can be forgotten. |
+| `teim-engine` | `AGENTS.md` §4 for the modelling half, `SECURITY.md` for the security half | A plausible-looking input that silently shrinks the reported impact and raises nothing. It has happened three times, each unnoticed for months. |
 | `cedar-press` | `AGENTS.md` (the data workspace gates) and `README.md` for the client's copy rules | A gate failure stepped around rather than fixed. |
 
 Two checks belong to whoever reviews across repositories, because no single
