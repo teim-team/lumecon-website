@@ -13,25 +13,6 @@
   border-top: 1px solid var(--rule);
 }
 
-/* A product frame. The screenshots carry their own chrome, so the page adds
-   a hairline and nothing else: no shadow, no rounded plate, no card. */
-.cm-figure {
-  margin: 0;
-}
-.cm-figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-}
-.cm-figure figcaption {
-  margin-top: 0.7rem;
-  color: var(--ink-2);
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-
 /* The two axes, across the measure: two columns of prose, each a full
    thought, rather than one narrow column beside a picture. */
 .cm-axes__list {

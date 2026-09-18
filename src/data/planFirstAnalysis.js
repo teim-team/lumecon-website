@@ -1200,8 +1200,11 @@ export const READINESS_ESSENTIALS = [
   },
   {
     label: 'A clear first question',
-    // A single question, asked once and clearly: one mark, one stop.
-    mark: '<circle cx="14" cy="14" r="10.5"/><path d="M10.6 10.8a3.5 3.5 0 0 1 6.8 1.2c0 2.3-3.4 2.9-3.4 5.1"/><path d="M14 20.9v.1"/>',
+    /* A single question, asked once and clearly: one mark, one stop. No
+       enclosing ring — the circles in the other three marks are a head and
+       a gate, drawn because the thing has one; a ring around a glyph is a
+       container, which AGENTS.md rules out. */
+    mark: '<path d="M8.6 9.4a5.5 5.5 0 0 1 10.8 1.5c0 3.6-5.4 4.4-5.4 7.9"/><path d="M14 23.6v.1"/>',
     body: 'What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize.',
     note: 'One question is enough to start. The second is easier once the first is answered.',
   },

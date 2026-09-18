@@ -28,7 +28,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/methodology` | 2562 | Methodology \| Lumecon | 167 |
 | `/team` | 371 | Team \| Lumecon | 115 |
 | `/cedar` | 470 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-commons` | 712 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
+| `/cedar-commons` | 720 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
 | `/cedar-grove` | 565 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 553 | Glossary \| Lumecon | 142 |
 | `/naics` | 662 | Industry sectors \| Lumecon | 146 |
@@ -45,7 +45,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
 | `/404` | 99 | Page Not Found \| Lumecon | 141 |
-| **Total** | **13758** | | |
+| **Total** | **13766** | | |
 
 ## Crawler metadata audit
 
@@ -1519,7 +1519,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-commons
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 712
+- **Visible words:** 720
 
 ### Architecture (heading outline)
 
@@ -1659,10 +1659,10 @@ Compare plans
 
 The starting guide helps you prepare: the first question, the records, and who can approve sharing them. This is where that work happens once you have.
 
-- Seed $0 Not included 1 user
-- Sprout $1,000 Not included 1 user
-- Sapling $2,500 Included. Shared projects, project notes, data collection and outside collaborators. Up to 10 users
-- Tree $7,500 Included across the organization. Unlimited users in one organization
+- Seed $0 / year Not included 1 user
+- Sprout $1,000 / year Not included 1 user
+- Sapling $2,500 / year Included. Shared projects, project notes, data collection and outside collaborators. Up to 10 users
+- Tree $7,500 / year Included across the organization. Unlimited users in one organization
 
 > _section: `footer`_
 

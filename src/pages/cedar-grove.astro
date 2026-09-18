@@ -294,14 +294,18 @@ const jsonLd = [
         <div class="grovepg-atlas__reg" data-atlas>
           <ol class="grovepg-atlas__grid" data-reveal-group>
             {
-              GROVE_COLLECTIONS.map((collection, i) => (
+              GROVE_COLLECTIONS.map((collection) => (
+                /* `aria-expanded="true"` on every control: with no script
+                   every panel is open, and saying otherwise tells a screen
+                   reader that visible content is collapsed. The script sets
+                   the real state as it enables them. */
                 <li class="grovepg-atlas__cell">
                   <button
                     type="button"
                     class="grovepg-atlas__btn"
                     disabled
                     data-atlas-tab={collection.id}
-                    aria-expanded={i === 0 ? 'true' : 'false'}
+                    aria-expanded="true"
                     aria-controls={`atlas-${collection.id}`}
                   >
                     <svg

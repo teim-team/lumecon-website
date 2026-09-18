@@ -177,7 +177,9 @@ const ALL_PLANS = [SEED, ...PLANS];
 const COMMONS_ROW = PLAN_TABLE_ROWS.find((r) => r.label === 'Cedar Commons');
 const PLAN_LINES = ALL_PLANS.map((plan, i) => ({
   name: plan.name,
-  price: plan.price,
+  /* Price AND period. `$2,500` on its own reads as monthly or one-off;
+     these are annual, and the source keeps the period in its own field. */
+  price: `${plan.price}${plan.period ? ` ${plan.period.trim()}` : ''}`,
   /* `plan.users` rather than the comparison table's Users row: that row is
      written for a table cell ("1"), and reads as a stray numeral in prose. */
   users: plan.users,
@@ -294,13 +296,13 @@ const jsonLd = [
           <div class="tour-row__text reveal-left">
             <div class="cm-surf__tabs" role="list">
               {
-                SHAPES.map((x, i) => (
+                SHAPES.map((x) => (
                   <button
                     type="button"
                     class="cm-surf__tab"
                     disabled
                     data-surf-tab={x.id}
-                    aria-expanded={i === 0 ? 'true' : 'false'}
+                    aria-expanded="true"
                     aria-controls={`surf-${x.id}`}
                   >
                     {x.tab}

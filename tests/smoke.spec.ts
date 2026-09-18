@@ -1066,7 +1066,9 @@ test('cedar commons claims only what the product actually does', async ({ page }
   await expect(page.locator('#cm-plans')).toContainText('Sapling');
   const plans = page.locator('.cm-plans__tier');
   await expect(plans).toHaveCount(4);
-  await expect(plans.nth(2)).toContainText('$2,500');
+  /* Price with its billing period: "$2,500" alone reads as monthly or
+     one-off, and these are annual. */
+  await expect(plans.nth(2)).toContainText('$2,500 / year');
   await expect(plans.nth(3)).toContainText('Unlimited users in one organization');
   await expect(page.locator('a[href="/pricing"]').first()).toBeVisible();
   // The guide prepares, this page is where the work happens. One link each.
@@ -1213,6 +1215,8 @@ test.describe('grove collections with no working script', () => {
     // And the tiles are inert, so a keyboard user does not tab through twelve
     // controls that cannot answer.
     await expect(page.locator('[data-atlas-tab]:not([disabled])')).toHaveCount(0);
+    // All twelve are expanded and all twelve say so.
+    await expect(page.locator('[data-atlas-tab][aria-expanded="true"]')).toHaveCount(12);
   });
 });
 
@@ -1616,6 +1620,10 @@ test.describe('commons team shapes with no working script', () => {
     await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(2);
     await expect(page.locator('[data-surf-copy]:visible')).toHaveCount(2);
     await expect(page.locator('[data-surf-tab]:not([disabled])')).toHaveCount(0);
+    /* And every control says so. Both states ARE expanded here, so marking
+       one `false` tells a screen reader that visible content is collapsed,
+       behind a disabled control that offers no way to reconcile it. */
+    await expect(page.locator('[data-surf-tab][aria-expanded="true"]')).toHaveCount(2);
   });
 });
 
