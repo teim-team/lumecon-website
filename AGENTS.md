@@ -348,6 +348,15 @@ output is committed. Run them when their inputs change.
 
   Those two are the only known environmental failures. Anything else is
   real: check before discounting it, never the other way round.
+- **`astro check` passing is not the build passing.** `npm run build` is
+  `astro check && astro build`, and the two fail in different places. A
+  grep for the check's `Result / 0 errors` summary reports green while
+  `astro build` is failing underneath it: a malformed stylesheet gives
+  `[lightningcss minify] Invalid empty selector` and writes **no `dist/`
+  at all**, which looks like success to any filter watching the top of the
+  output. Read to the end and confirm the last line is `[build] Complete!`
+  with a page count. `ls dist/<route>/index.html` settles it in one
+  command.
 
 Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
 originals) is tracked in git. Moving it to external storage is a

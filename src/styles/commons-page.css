@@ -1,6 +1,16 @@
+
 /* Cedar Commons page.
    Hairlines and columns, no cards: a boundary has to communicate selection
    or interactivity, and nothing on this page is either. */
+
+/* `.cm-sec--surface` rather than `.start-sec--surface`: that one is defined
+   only in start.css, which this page does not import, so the class was inert
+   and both sections rendered on the page ground instead of the working
+   plane. */
+.cm-sec--surface {
+  background: var(--surface);
+  border-top: 1px solid var(--rule);
+}
 
 .cm-roles {
   margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
@@ -91,8 +101,36 @@
   line-height: 1.6;
 }
 
+/* Two columns rather than an essay-width cap with the container left empty:
+   the statement on the left, what each plan includes on the right. */
 .cm-plans {
-  max-width: 62ch;
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+.cm-plans__tiers {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cm-plans__tier {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+}
+.cm-plans__tier:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.cm-plans__tier b {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.cm-plans__tier span {
+  color: var(--ink-2);
+  line-height: 1.55;
 }
 .cm-plans h2 {
   margin: 0.4rem 0 0.8rem;
@@ -117,6 +155,7 @@
 @media (max-width: 860px) {
   .cm-connected,
   .cm-cases,
+  .cm-plans,
   .cm-roles__row {
     grid-template-columns: minmax(0, 1fr);
   }

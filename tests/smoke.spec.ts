@@ -1020,6 +1020,46 @@ test('cedar commons claims only what the product actually does', async ({ page }
   await expect(page.locator('main a[href="/start"]')).toHaveCount(1);
 });
 
+test('cedar commons is reachable from the footer, and declares itself', async ({ page }) => {
+  await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+
+  // A sibling product page is discoverable from the bottom of any page, not
+  // only from the header.
+  await expect(page.locator('footer a[href="/cedar-commons"]')).toHaveCount(1);
+
+  // Its own WebPage node, as both sibling product pages carry.
+  const types = await page
+    .locator('script[type="application/ld+json"]')
+    .evaluateAll((nodes) =>
+      nodes.flatMap((n) => {
+        try {
+          const parsed = JSON.parse(n.textContent ?? '');
+          return (Array.isArray(parsed) ? parsed : [parsed]).map((x) => x['@type']);
+        } catch {
+          return [];
+        }
+      }),
+    );
+  expect(types).toContain('WebPage');
+
+  /* The capture carries named facilities and economic results. Every product
+     shot on this site says it is sample data, and a visitor must not take
+     these for customers. */
+  await expect(page.locator('.cedarpg-hero__screen figcaption')).toContainText('sample data');
+  await expect(page.locator('.cedarpg-hero__screen img')).toHaveAttribute(
+    'alt',
+    /sample data/,
+  );
+
+  /* The surface sections must actually have a surface: the class was first
+     copied from start.css, which this page does not import, so it was inert
+     and both sections rendered on the page ground. */
+  const surfaces = page.locator('.cm-sec--surface');
+  await expect(surfaces).toHaveCount(2);
+  const bg = await surfaces.first().evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(bg).not.toMatch(/rgba\(0, 0, 0, 0\)/);
+});
+
 test('cedar commons sits between Cedar and Cedar Grove in the product menu', async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 800 });
   await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });

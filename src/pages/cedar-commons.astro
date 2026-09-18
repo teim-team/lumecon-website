@@ -122,6 +122,16 @@ const CASES = [
 const jsonLd = [
   {
     '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Cedar Commons, the shared project workspace | Lumecon',
+    url: `${site.url}/cedar-commons`,
+    description,
+    isPartOf: { '@id': `${site.url}#website` },
+    publisher: { '@id': `${site.url}#org` },
+    inLanguage: 'en-US',
+  },
+  {
+    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
@@ -159,12 +169,14 @@ const jsonLd = [
         <figure class="cedarpg-hero__screen reveal-soft" data-stagger="3" data-zoom>
           <img
             src="/app/cedar-context.webp"
-            alt="The Cedar Commons board, showing the shared projects an organization has access to, each card carrying its status and the comment activity on it."
+            alt="The Cedar Commons board, showing the shared projects an organization has access to, each card carrying its status and the comment activity on it. Shown with sample data."
             width="1920"
             height="1200"
             decoding="async"
           />
-          <figcaption>The projects an organization is working on, in one place.</figcaption>
+          <figcaption>
+            The projects an organization is working on, in one place. Shown with sample data.
+          </figcaption>
         </figure>
       </div>
     </header>
@@ -197,7 +209,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <section class="meth-sec start-sec--surface" aria-labelledby="cm-connected">
+    <section class="meth-sec cm-sec--surface" aria-labelledby="cm-connected">
       <div class="meth-w">
         <div class="meth-sec__head">
           <h2 id="cm-connected">How the work stays connected</h2>
@@ -238,7 +250,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <section class="meth-sec start-sec--surface" aria-labelledby="cm-plans">
+    <section class="meth-sec cm-sec--surface" aria-labelledby="cm-plans">
       <div class="meth-w">
         <div class="cm-plans">
           <div>
@@ -259,6 +271,20 @@ const jsonLd = [
               approve sharing them. This is where that work happens once you have.
             </p>
           </div>
+          <ul class="cm-plans__tiers" role="list">
+            <li class="cm-plans__tier">
+              <b>Seed and Sprout</b>
+              <span>One person. Cedar Impact and Cedar, without shared projects.</span>
+            </li>
+            <li class="cm-plans__tier">
+              <b>Sapling</b>
+              <span>Cedar Commons for up to ten people in one organization.</span>
+            </li>
+            <li class="cm-plans__tier">
+              <b>Tree</b>
+              <span>Cedar Commons across the organization, with no seat limit, beside Cedar Grove.</span>
+            </li>
+          </ul>
         </div>
       </div>
     </section>

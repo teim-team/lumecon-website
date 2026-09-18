@@ -23,29 +23,29 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 740 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/pricing` | 1299 | Pricing \| Lumecon | 155 |
-| `/methodology` | 2560 | Methodology \| Lumecon | 167 |
-| `/team` | 369 | Team \| Lumecon | 115 |
-| `/cedar` | 468 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-commons` | 664 | Cedar Commons, the shared project workspace \| Lumecon | 231 |
-| `/cedar-grove` | 563 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
-| `/glossary` | 551 | Glossary \| Lumecon | 142 |
-| `/naics` | 660 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1423 | Plan your first analysis \| Lumecon | 165 |
-| `/contact` | 286 | Contact \| Lumecon | 145 |
+| `/` | 742 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/pricing` | 1301 | Pricing \| Lumecon | 155 |
+| `/methodology` | 2562 | Methodology \| Lumecon | 167 |
+| `/team` | 371 | Team \| Lumecon | 115 |
+| `/cedar` | 470 | Cedar, the AI economic analyst \| Lumecon | 151 |
+| `/cedar-commons` | 706 | Cedar Commons, the shared project workspace \| Lumecon | 231 |
+| `/cedar-grove` | 565 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/glossary` | 553 | Glossary \| Lumecon | 142 |
+| `/naics` | 662 | Industry sectors \| Lumecon | 146 |
+| `/start` | 1425 | Plan your first analysis \| Lumecon | 165 |
+| `/contact` | 288 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
-| `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
-| `/checkout` | 209 | Checkout \| Lumecon | 81 |
+| `/choose-plan` | 227 | Choose your plan \| Lumecon | 103 |
+| `/checkout` | 211 | Checkout \| Lumecon | 81 |
 | `/welcome` | 60 | Welcome to Lumecon | 32 |
-| `/accessibility` | 386 | Accessibility \| Lumecon | 141 |
-| `/ai-and-data-use` | 608 | AI and Data Use \| Lumecon | 133 |
-| `/security` | 437 | Security \| Lumecon | 118 |
-| `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
-| `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
-| `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **13678** | | |
+| `/accessibility` | 388 | Accessibility \| Lumecon | 141 |
+| `/ai-and-data-use` | 610 | AI and Data Use \| Lumecon | 133 |
+| `/security` | 439 | Security \| Lumecon | 118 |
+| `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
+| `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
+| `/404` | 99 | Page Not Found \| Lumecon | 141 |
+| **Total** | **13756** | | |
 
 ## Crawler metadata audit
 
@@ -69,7 +69,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 740
+- **Visible words:** 742
 
 ### Architecture (heading outline)
 
@@ -319,6 +319,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -390,7 +391,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1299
+- **Visible words:** 1301
 
 ### Architecture (heading outline)
 
@@ -703,6 +704,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -773,7 +775,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2560
+- **Visible words:** 2562
 
 ### Architecture (heading outline)
 
@@ -1032,6 +1034,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1100,7 +1103,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/team
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, AboutPage, BreadcrumbList
-- **Visible words:** 369
+- **Visible words:** 371
 
 ### Architecture (heading outline)
 
@@ -1273,6 +1276,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1343,7 +1347,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 468
+- **Visible words:** 470
 
 ### Architecture (heading outline)
 
@@ -1469,6 +1473,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1513,8 +1518,8 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/cedar-commons
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-- **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 664
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
+- **Visible words:** 706
 
 ### Architecture (heading outline)
 
@@ -1562,8 +1567,8 @@ CEDAR COMMONS
 Finance holds one set of records, the enterprises hold others, and someone has to keep it moving. Cedar Commons is the shared project workspace: bring those people into the analysis that needs them, each with access suited to their part, and keep the documents, the questions and the notes with the project rather than scattered across inboxes.
 
 - _link:_ [Request free access →](/signup?tier=free)
-- _image alt:_ The Cedar Commons board, showing the shared projects an organization has access to, each card carrying its status and the comment activity on it.
-_caption:_ The projects an organization is working on, in one place.
+- _image alt:_ The Cedar Commons board, showing the shared projects an organization has access to, each card carrying its status and the comment activity on it. Shown with sample data.
+_caption:_ The projects an organization is working on, in one place. Shown with sample data.
 
 > _section: `meth-sec`_
 
@@ -1625,6 +1630,9 @@ Compare plans · Plan your first analysis
 
 The starting guide helps you prepare: the first question, the records, and who can approve sharing them. This is where that work happens once you have.
 
+- Seed and Sprout One person. Cedar Impact and Cedar, without shared projects.
+- Sapling Cedar Commons for up to ten people in one organization.
+- Tree Cedar Commons across the organization, with no seat limit, beside Cedar Grove.
 
 > _section: `footer`_
 
@@ -1635,6 +1643,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1703,7 +1712,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 563
+- **Visible words:** 565
 
 ### Architecture (heading outline)
 
@@ -2045,6 +2054,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2090,7 +2100,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/glossary
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, DefinedTermSet
-- **Visible words:** 551
+- **Visible words:** 553
 
 ### Architecture (heading outline)
 
@@ -2179,6 +2189,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2249,7 +2260,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, DefinedTermSet
-- **Visible words:** 660
+- **Visible words:** 662
 
 ### Architecture (heading outline)
 
@@ -2328,6 +2339,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2398,7 +2410,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1423
+- **Visible words:** 1425
 
 ### Architecture (heading outline)
 
@@ -2661,6 +2673,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2731,7 +2744,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/contact
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, ContactPage
-- **Visible words:** 286
+- **Visible words:** 288
 
 ### Architecture (heading outline)
 
@@ -2811,6 +2824,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3080,7 +3094,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/choose-plan
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 225
+- **Visible words:** 227
 
 ### Architecture (heading outline)
 
@@ -3135,6 +3149,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3178,7 +3193,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/checkout
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 209
+- **Visible words:** 211
 
 ### Architecture (heading outline)
 
@@ -3281,6 +3296,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3385,7 +3401,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/accessibility
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 386
+- **Visible words:** 388
 
 ### Architecture (heading outline)
 
@@ -3466,6 +3482,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3509,7 +3526,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/ai-and-data-use
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 608
+- **Visible words:** 610
 
 ### Architecture (heading outline)
 
@@ -3608,6 +3625,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3653,7 +3671,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/security
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage
-- **Visible words:** 437
+- **Visible words:** 439
 
 ### Architecture (heading outline)
 
@@ -3784,6 +3802,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3827,7 +3846,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/privacy
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 671
+- **Visible words:** 673
 
 ### Architecture (heading outline)
 
@@ -3920,6 +3939,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3963,7 +3983,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/terms
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1039
+- **Visible words:** 1041
 
 ### Architecture (heading outline)
 
@@ -4096,6 +4116,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -4139,7 +4160,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/404
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 97
+- **Visible words:** 99
 
 ### Architecture (heading outline)
 
@@ -4191,6 +4212,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
