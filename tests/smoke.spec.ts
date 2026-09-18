@@ -1018,7 +1018,7 @@ test('cedar commons claims only what the product actually does', async ({ page }
      in plain words. "Append-only" is the implementation's name for it and
      belongs in detailed help, not in the sentence a buyer reads, so this
      asserts the guarantee rather than the jargon. */
-  expect(body).toContain('rather than letting it be edited');
+  expect(body).toContain('a note is kept, not edited');
   expect(body, 'implementation jargon belongs in help, not here').not.toContain('append-only');
 
   /* A seat is one person, counted across memberships, non-owner project
@@ -1566,7 +1566,7 @@ test('the commons team shapes open one at a time, by click and by keyboard', asy
   await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
   const tabs = page.locator('[data-surf-tab]');
   await expect(tabs).toHaveCount(2);
-  await expect(tabs).toHaveText(['Our organization', 'A consultancy and its clients']);
+  await expect(tabs).toHaveText(['An organization', 'A consultancy']);
 
   // `:visible`, never the `hidden` PROPERTY. The UA sheet's
   // `[hidden] { display: none }` loses to any author `display` rule, so a
@@ -1598,6 +1598,14 @@ test('the commons team shapes open one at a time, by click and by keyboard', asy
     .evaluateAll((nodes) => nodes.map((n) => (n as HTMLImageElement).getAttribute('src')));
   expect(shots).toHaveLength(2);
   expect(new Set(shots).size).toBe(2);
+
+  /* The copy and the screenshot live in different parents — the copy inside
+     the overlapping panel, the screenshot in the bleeding figure beside it —
+     so a state is a pair. Both halves have to switch together, or the page
+     describes one team shape beside a picture of the other. */
+  const visibleCopy = page.locator('[data-surf-copy]:visible');
+  await expect(visibleCopy).toHaveCount(1);
+  await expect(visibleCopy).toHaveAttribute('data-surf-copy', 'consultancy');
 });
 
 test.describe('commons team shapes with no working script', () => {
@@ -1606,6 +1614,7 @@ test.describe('commons team shapes with no working script', () => {
   test('both shapes are readable, and no tab is a dead control', async ({ page }) => {
     await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(2);
+    await expect(page.locator('[data-surf-copy]:visible')).toHaveCount(2);
     await expect(page.locator('[data-surf-tab]:not([disabled])')).toHaveCount(0);
   });
 });
@@ -1639,4 +1648,101 @@ test('every cedar commons capture actually loads', async ({ page }) => {
       ),
     )
     .toEqual([]);
+});
+
+test.describe('the product pages on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+
+  test('cedar commons serves a cropped capture, not a shrunken one', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    // A 1920px desktop capture scaled into a 358px column renders every
+    // label in the product under four pixels: the thing the section exists
+    // to show becomes the thing you cannot see. Each content frame has a
+    // `-narrow` crop, and `<picture>` is what picks it.
+    /* The rows are below the fold and their images are lazy, and the
+       reveal script holds them until they are scrolled to, so walk the page
+       first. */
+    await page.evaluate(async () => {
+      for (const el of document.querySelectorAll('[class*="reveal"]')) el.classList.add('is-in');
+      for (let y = 0; y < document.body.scrollHeight; y += 400) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 60));
+      }
+      window.scrollTo(0, 0);
+    });
+
+    /* Only the frames that actually loaded: the unselected team shape is
+       `display: none`, so its lazy image never fetches and reports an empty
+       `currentSrc`. That is correct behaviour, not a missing crop — the
+       declared-source check below is what covers it. */
+    const chosen = await page.locator('.cm-acts img').evaluateAll((nodes) =>
+      nodes
+        .map((n) => ({
+          src: (n as HTMLImageElement).currentSrc,
+          width: (n as HTMLImageElement).naturalWidth,
+        }))
+        .filter((x) => x.src),
+    );
+    expect(chosen.length).toBeGreaterThan(0);
+    for (const { src, width } of chosen) {
+      expect(src, 'a phone must get the cropped variant').toContain('-narrow.webp');
+      /* And the crop has to be a real file. A `<source>` pointing at
+         something that does not exist falls back silently to the full
+         frame, which is the state this test exists to prevent, so check
+         the image decoded at the crop's own width rather than at 1920. */
+      expect(width, 'the crop decoded').toBeGreaterThan(0);
+      expect(width, 'the narrow crops are under 1000px wide').toBeLessThan(1000);
+    }
+
+    /* Every declared narrow source, including the one behind the
+       unselected state, has to resolve. Checked over the wire rather than
+       through the renderer, which would let a 404 pass as a fallback. */
+    const declared = await page
+      .locator('.cm-acts source[media]')
+      .evaluateAll((nodes) => nodes.map((n) => n.getAttribute('srcset') || ''));
+    expect(declared.length).toBeGreaterThan(0);
+    for (const href of declared) {
+      expect(href).toContain('-narrow.webp');
+      const res = await page.request.get(href);
+      expect(res.status(), `${href} should exist`).toBe(200);
+    }
+  });
+
+  test('cedar commons keeps both team tabs on one line', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    const boxes = await page
+      .locator('[data-surf-tab]')
+      .evaluateAll((nodes) => nodes.map((n) => n.getBoundingClientRect().top));
+    // A tab clipped at the panel's edge reads as broken rather than as
+    // scrollable, and two rows of tabs above the copy they label is worse.
+    expect(new Set(boxes.map(Math.round)).size, 'both tabs on one row').toBe(1);
+    const strip = page.locator('.cm-surf__tabs');
+    const fits = await strip.evaluate((el) => el.scrollWidth <= el.clientWidth + 1);
+    expect(fits, 'both tabs fit without scrolling at 390px').toBe(true);
+  });
+
+  test('the grove atlas is a swipeable strip, not a wall of tiles', async ({ page }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    const grid = page.locator('.grovepg-atlas__grid');
+    await grid.scrollIntoViewIfNeeded();
+    // Twelve tiles as a two-column grid is roughly 770px of picker between
+    // the section's question and the panel that answers it.
+    const height = (await grid.boundingBox())!.height;
+    expect(height, 'one row, not six').toBeLessThan(200);
+    // And it actually scrolls, rather than clipping eleven tiles away.
+    const [scrollWidth, clientWidth] = await grid.evaluate((el) => [el.scrollWidth, el.clientWidth]);
+    expect(scrollWidth).toBeGreaterThan(clientWidth);
+    await expect(page.locator('.grovepg-atlas__cell')).toHaveCount(12);
+  });
+
+  test('the grove hero buttons are one column at one width', async ({ page }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    const widths = await page
+      .locator('.grovepg-cta .btn2')
+      .evaluateAll((nodes) => nodes.map((n) => Math.round(n.getBoundingClientRect().width)));
+    expect(widths).toHaveLength(2);
+    // Two buttons sized to their own labels sit at two different widths in a
+    // full-bleed column, which reads as a mistake rather than a hierarchy.
+    expect(new Set(widths).size, 'both buttons the same width').toBe(1);
+  });
 });

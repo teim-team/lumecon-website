@@ -28,7 +28,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/methodology` | 2562 | Methodology \| Lumecon | 167 |
 | `/team` | 371 | Team \| Lumecon | 115 |
 | `/cedar` | 470 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-commons` | 714 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
+| `/cedar-commons` | 712 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
 | `/cedar-grove` | 565 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 553 | Glossary \| Lumecon | 142 |
 | `/naics` | 662 | Industry sectors \| Lumecon | 146 |
@@ -45,7 +45,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
 | `/404` | 99 | Page Not Found \| Lumecon | 141 |
-| **Total** | **13760** | | |
+| **Total** | **13758** | | |
 
 ## Crawler metadata audit
 
@@ -1519,15 +1519,20 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-commons
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 714
+- **Visible words:** 712
 
 ### Architecture (heading outline)
 
 - **H1** An analysis is finished by more than one person.
   - **H2** Who can see what
+  - **H2** Two shapes of project team
     - **H3** The records are spread across your own offices.
     - **H3** The records belong to someone who is not you at all.
-  - **H2** What they do once they are in
+  - **H2** They bring the records you do not hold.
+  - **H2** Before you invite anyone
+    - **H3** A viewer changes nothing
+    - **H3** A note is kept, not edited
+    - **H3** An outside collaborator occupies a seat
   - **H2** Cedar Commons comes with Sapling and above.
 
 ### Copy, in document order
@@ -1576,50 +1581,71 @@ _caption:_ The analyses an organization is working on, in one place. Shown with 
 
 Access is granted project by project, never organization-wide. Two things decide it, and they are independent of each other.
 
-- Whose organization they belong to INTERNAL OR EXTERNAL
+- INTERNAL OR EXTERNAL Whose organization they belong to
 - Internal is someone working for or on behalf of the organization sponsoring the analysis. External is a client, a partner or an outside advisor. An external collaborator reaches the one project they were invited to and nothing else in the organization.
-- What they can do on that project OWNER, COLLABORATOR OR VIEWER
+- OWNER, COLLABORATOR OR VIEWER What they can do on that project
 - The owner adds someone by email and decides what they may do. A collaborator contributes. A viewer reads and changes nothing. The same person can be a collaborator on one project and a viewer on another, and the roster reports it per project rather than averaging it into one label.
-- _button:_ Our organization
-- _button:_ A consultancy and its clients
 
-> _section: `surf-organization`_
+> _section: `tour`_
 
+
+**H2: Two shapes of project team**
+
+
+> _section: `tour-row`_
+
+- _button:_ An organization
+- _button:_ A consultancy
 
 **H3: The records are spread across your own offices.**
 
 Finance holds one set, the enterprises hold others, and a board member or outside counsel may need to read the result without touching it. Four staff here, two outside people, and each outside person is bound to the single project they were brought in for.
-
-- _image alt:_ An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the one project they can reach. Shown with sample data.
-_caption:_ Prairie Wind, on Tree. The external roster names the project beside each person, so the boundary is readable rather than assumed. Shown with sample data.
-
-> _section: `surf-consultancy`_
 
 
 **H3: The records belong to someone who is not you at all.**
 
 **[conditional]** A consultant opens a project per engagement and brings that client’s finance and operations people into it, and only into it. One client’s contacts never see another client’s work, and a project the client does not own names the organization sponsoring it, so nobody is unsure whose subscription is paying.
 
+- _image alt:_ An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the one project they can reach. Shown with sample data.
+_caption:_ Prairie Wind, on Tree. The external roster names the project beside each person, so the boundary is readable rather than assumed. Shown with sample data.
 - _image alt:_ A consultancy’s collaborator view: one internal person and three client contacts across two different clients, each listed with the single project they can reach. Shown with sample data.
 _caption:_ Ferreira, on Sapling. Three client contacts from two clients, four of ten seats in use — an outside collaborator occupies a seat, the same as a colleague. Shown with sample data.
-An outside collaborator occupies a seat on your plan, the same as a colleague, and the seat is released when you remove them. Sapling is ten people in one organization however they are split between staff and outside contributors; Tree has no limit. Compare plans.
 
+**H2: They bring the records you do not hold.**
+
+A record lands on the project rather than in one person’s library, carrying who added it and when. Everyone on the project sees what is already there, so nobody sends the payroll summary twice, and a figure questioned a year later still has the file it came from beside it.
+
+- _image alt:_ The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data.
+_caption:_ Four records on one analysis, from three people. Shown with sample data.
 
 > _section: `meth-sec`_
 
 
-**H2: What they do once they are in**
+**H2: Before you invite anyone**
 
-You are asking people for things you do not have. What they hand over arrives on the project rather than in your inbox.
+The three questions people ask before they let a colleague, a client or an auditor near their own records.
 
-- They add the records you do not hold
-- A record lands on the project, not in one person’s library, with the contributor and the date on it. Everyone on the project sees what is already there, so nobody sends the payroll summary twice.
-- They answer questions about them
-- Cedar works inside the project, for whoever is on it and within what their access allows, so a question about a figure is asked where the figure is.
-- They settle what the figure means
-- Which payroll summary is the audited one, what the scope actually is, why a contract was held back. The thread keeps it, rather than letting it be edited into something tidier later.
-- _image alt:_ The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data.
-_caption:_ Four records on one analysis, from three people. A viewer reads them and adds none. Shown with sample data.
+READING
+
+
+**H3: A viewer changes nothing**
+
+Read-only is a permission, not a convention. A viewer sees the analysis, the records and the thread, and the routes that add to any of them refuse them.
+
+RECORDING
+
+
+**H3: A note is kept, not edited**
+
+What was said about an assumption stays as it was said. The thread is a record of the decision rather than of what someone later wished the decision had been.
+
+PAYING
+
+
+**H3: An outside collaborator occupies a seat**
+
+A seat is a person, not a job title, so a client contact counts the same as a colleague. Sapling is ten people in one organization however they are split; Tree has no limit.
+
 Working with a consultant? Share the starting guide with them, or begin a project together in Lumecon.
 
 INCLUDED, NOT SOLD SEPARATELY

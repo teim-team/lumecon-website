@@ -209,9 +209,62 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-@media (max-width: 520px) {
+
+/* Stacked, two buttons sized to their own labels sit at two different
+   widths against a full-bleed column, which reads as a mistake rather than
+   as a hierarchy. One column, both stretched. */
+@media (max-width: 560px) {
+  .grovepg-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .grovepg-cta .btn2 {
+    justify-content: center;
+  }
+  /* "per organization, per year" beside a 2.6rem numeral wraps to a second
+     line halfway up the price. Under it, it reads as one figure. */
+  .grovepg-price {
+    display: block;
+  }
+  .grovepg-price__period {
+    display: block;
+    margin-top: 0.1rem;
+  }
+}
+/* At phone width twelve tiles in a grid are a wall: two columns by six rows
+   is roughly 770px of picker standing between the section's own sentence
+   and the panel that answers it, and a reader has to scroll past all of it
+   to find out what any of them say.
+
+   A single swipeable row instead. The picker keeps its shape as one
+   horizontal object, the panel sits directly under it, and snapping makes
+   the swipe land on a tile rather than between two. Arrow keys already move
+   focus along the strip, and a focused control is scrolled into view by the
+   browser, so keyboard movement follows the swipe for free.
+
+   `mask-image` fades the right edge, which is what says there is more. It
+   degrades to no fade where it is unsupported, never to a hidden tile. */
+@media (max-width: 620px) {
   .grovepg-atlas__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+  }
+  .grovepg-atlas__grid::-webkit-scrollbar {
+    display: none;
+  }
+  .grovepg-atlas__cell {
+    flex: 0 0 auto;
+    width: 8.25rem;
+    scroll-snap-align: start;
+  }
+  /* The tile is the scroll item, so the name must not force it wider. */
+  .grovepg-atlas__name {
+    white-space: nowrap;
   }
 }
 
