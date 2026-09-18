@@ -1,14 +1,11 @@
 /**
  * Turn the raw /cedar-commons captures into the webp assets the page ships.
  *
- * Two kinds of output:
- *   - full frames at 1920px, the same treatment every other app shot on this
- *     site gets, for the hero and the four per-project surfaces;
- *   - one crop, of the Collaborators view, for the section that is about who
- *     is on a project rather than about the whole screen. The crop is taken
- *     in source pixels (the capture is 3200x2000: a 1600x1000 viewport at
- *     deviceScaleFactor 2), so it moves if the app's layout does. Recheck it
- *     after a recapture rather than assuming.
+ * Full frames at 1920px, the same treatment every other app shot on this
+ * site gets. `crop` is supported and currently unused: a crop is taken in
+ * source pixels (the capture is 3200x2000, a 1600x1000 viewport at
+ * deviceScaleFactor 2), so it moves whenever the app's layout does and has
+ * to be rechecked after a recapture rather than assumed.
  *
  * Usage:
  *   node scripts/screenshots/optimize-commons.mjs <rawDir>
@@ -34,25 +31,19 @@ if (!raw) {
 }
 const frame = (name) => join(raw, `${name}.png`);
 
-// The two rosters, without the invite rail beside them: this section is
-// about who is on a project, and the form is a different subject.
-const ROSTER_CROP = { left: 580, top: 520, width: 1530, height: 1450 };
-
+/* Only what /cedar-commons ships. The page carries four frames, each doing a
+   job no other frame does; publishing the rest would put unused binaries on
+   the site and invite the page to become an inventory of drawers again,
+   which is what it was told to stop being.
+   The raw directory still holds every surface the capture drives — the
+   access drawer, the Cedar panel, the note thread, both variants of each —
+   so cutting one of those later is a one-line addition here and no
+   re-capture. */
 const JOBS = [
   { src: frame('commons-board-org'), name: 'commons-board-org' },
-  { src: frame('commons-board-consultant'), name: 'commons-board-consultant' },
   { src: frame('commons-collaborators-org'), name: 'commons-collaborators' },
   { src: frame('commons-collaborators-consultant'), name: 'commons-collaborators-consultant' },
-  {
-    src: frame('commons-collaborators-org'),
-    name: 'commons-roles',
-    crop: ROSTER_CROP,
-    width: 1400,
-  },
-  { src: frame('commons-access-org'), name: 'commons-access' },
   { src: frame('commons-documents-org'), name: 'commons-documents' },
-  { src: frame('commons-cedar-org'), name: 'commons-cedar' },
-  { src: frame('commons-notes-org'), name: 'commons-notes' },
 ];
 
 for (const job of JOBS) {

@@ -4,11 +4,18 @@
  * HOW TO RUN
  *   In the app repository, on the branch that carries the Commons surface:
  *     npx vite dev --port 4400 --host 127.0.0.1
- *   Then here, both runs into the SAME directory (every frame carries its
- *   variant, so they no longer overwrite each other):
+ *   Then here, in one command:
+ *     npm run shots:commons
+ *
+ *   That is both variants plus the optimizer, deliberately as one script:
+ *   running the capture and forgetting the optimizer leaves the committed
+ *   webp files stale while the raw PNGs look freshly taken, which is how a
+ *   caption reading "four of ten seats in use" came to sit under a frame
+ *   still showing "1 of 10". The equivalent by hand, into one directory
+ *   (every frame carries its variant, so the two passes do not overwrite
+ *   each other):
  *     node scripts/screenshots/capture-commons.mjs <rawDir>
  *     CAPTURE_VARIANT=consultant node scripts/screenshots/capture-commons.mjs <rawDir>
- *   Then cut and optimize:
  *     node scripts/screenshots/optimize-commons.mjs <rawDir>
  *
  * Chromium comes from PW_CHROMIUM, else Playwright's own managed browser,
@@ -205,6 +212,20 @@ const MEMBERS = CONSULTANT ? CONSULTANCY_MEMBERS : ORG_MEMBERS;
 /* The drawer reads `note.author` (an object), not a flat `authorName`:
    with the wrong shape every note renders as "Someone" behind a "?" avatar,
    which is what the first pass shipped. */
+/* Mirrors server/lib/organizationSeats.js countOrganizationSeats: the union
+   of organization members, non-owner participants on the organization's
+   projects, and the owner. One person, one seat. */
+const seatsUsed = () => {
+  const ids = new Set(MEMBERS.map((m) => m.id));
+  ids.add(OWNER.id);
+  for (const project of PROJECTS) {
+    for (const p of project.participants) {
+      if (p.role !== 'owner') ids.add(p.id);
+    }
+  }
+  return ids.size;
+};
+
 const NOTES = [
   { id: 'n1', projectId: 'p-wind', author: MARCUS,
     body: 'FY2026 payroll summary is the audited one, not the draft I sent in February. Employment figure is 214, not 208.',
@@ -260,7 +281,18 @@ const mock = async (route) => {
         },
         members: MEMBERS,
         pendingInvites: [],
-        seats: MEMBERS.length,
+        /* `{ used, max }`, the shape `resolveSeatMeter` reads. A bare number
+           makes `fromServer` false, so the meter silently falls back to
+           counting MEMBERS alone and renders "1 of 10 internal
+           collaborators" beside three external ones — which is the exact
+           symptom `countOrganizationSeats`' own comment records as already
+           fixed in the product. The capture reproduced it, the product does
+           not.
+
+           `used` is computed the way the server computes it: memberships,
+           plus every non-owner project participant across the
+           organization's projects, plus the owner, each person once. */
+        seats: { used: seatsUsed(), max: CONSULTANT ? 10 : null },
         isOwner: true,
       }),
     );
@@ -469,6 +501,31 @@ const collab = await required(
 await collab.click();
 await page.waitForTimeout(1200);
 await assertClean('the Collaborators view');
+
+/* The seat meter has two wordings, and which one appears says where the
+   number came from. "N of M seats in use" is the server's own count
+   (members + non-owner participants + pending invites, each person once).
+   "N of M internal collaborators" is the client's fallback, which counts
+   members alone and reads "1 of 10" for an organization already at its cap
+   through shared projects. Publishing the fallback would show a capability
+   the product does not have, so a capped plan must reach the first wording. */
+const seatLabel = (await page.locator('.ws2-seats__label').count())
+  ? (await page.locator('.ws2-seats__label').first().innerText()).trim()
+  : (await page.locator('.ws2-plan__seats-unlimited').first().innerText()).trim();
+/* Case-insensitive: the label is uppercased in CSS and `innerText` returns
+   the transformed text, so a case-sensitive pattern never matched and the
+   guard passed on the very state it exists to catch. Found by mutation. */
+if (/internal collaborators?$/i.test(seatLabel) && !/^unlimited/i.test(seatLabel)) {
+  await browser.close();
+  throw new Error(
+    `capture-commons: the seat meter fell back to counting members alone ` +
+      `("${seatLabel}"); nothing further written.\n` +
+      '  GET /workspace must answer `seats: { used, max }`, not a bare number:\n' +
+      '  resolveSeatMeter() only trusts the object form.',
+  );
+}
+console.log('seat meter:', seatLabel);
+
 await shot('commons-collaborators');
 
 // Back to Projects for the per-project drawers.

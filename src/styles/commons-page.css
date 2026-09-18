@@ -32,24 +32,13 @@
   line-height: 1.55;
 }
 
-/* The two axes, beside the roster they produce. The left column also carries
-   the examples heading, so the roster never sits next to an empty half. */
-.cm-axes {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: clamp(2rem, 4vw, 3.5rem);
-  align-items: start;
-  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
-}
-.cm-axes__col {
-  display: grid;
-  align-content: start;
-  gap: 1.4rem;
-}
+/* The two axes, across the measure: two columns of prose, each a full
+   thought, rather than one narrow column beside a picture. */
 .cm-axes__list {
   display: grid;
-  gap: 1.4rem;
-  margin: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.25rem) clamp(2rem, 4vw, 3.5rem);
+  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
 }
 .cm-axes__row dt {
   display: flex;
@@ -74,64 +63,6 @@
   line-height: 1.6;
 }
 
-.cm-sub {
-  margin: 0.6rem 0 0.5rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 2vw, 1.4rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-}
-.cm-sub__lede {
-  max-width: 68ch;
-  margin: 0;
-  color: var(--ink-2);
-  line-height: 1.6;
-}
-
-.cm-roles {
-  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-}
-/* Two columns rather than a capped measure with the row left empty: who on
-   the left, what they do on the right. */
-.cm-roles__row {
-  display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-  gap: 0.4rem clamp(2rem, 4vw, 3.5rem);
-  align-items: baseline;
-  padding: 1.1rem 0;
-  border-top: 1px solid var(--rule);
-}
-.cm-roles__row:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
-.cm-roles__who {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  align-items: baseline;
-  margin: 0;
-  font-size: 1.0625rem;
-  font-weight: 600;
-}
-/* Which access the person needs, as plain mono. Not a pill. */
-.cm-roles__access {
-  font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3, var(--ink-2));
-}
-.cm-roles__what {
-  margin: 0;
-  color: var(--ink-2);
-  line-height: 1.6;
-}
 .cm-note {
   max-width: 68ch;
   margin: 1.5rem 0 0;
@@ -141,7 +72,34 @@
   line-height: 1.6;
 }
 
-/* The four surfaces: a strip of selectable controls, then the one that is
+/* What a contributor does: three lines of prose beside the single capture
+   that earns one. The other two are things /cedar and the analysis pages
+   already argue, so they stay as text rather than borrowing a picture. */
+.cm-give {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: clamp(1.75rem, 3.5vw, 3rem);
+  align-items: start;
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+}
+.cm-give__list {
+  display: grid;
+  gap: 1.4rem;
+  margin: 0;
+}
+.cm-give__row dt {
+  margin-bottom: 0.35rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.cm-give__row dd {
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+/* The two team shapes: a strip of selectable controls, then the one that is
    open. Ships with every panel visible and the tabs disabled, so with no
    script the section is a complete description rather than four dead words;
    `.cm-surf--js` is added by the script and is what collapses it. */
@@ -231,36 +189,6 @@
   line-height: 1.6;
 }
 
- /* One case per row, for the same reason the surfaces panel runs full
-   measure: two board captures side by side are a pair of thumbnails
-   nobody can read. */
-.cm-cases {
-  display: grid;
-  gap: clamp(2.5rem, 5vw, 4rem);
-  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
-}
-.cm-case__copy {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: 0.5rem clamp(2rem, 4vw, 3.5rem);
-  align-items: start;
-}
-.cm-case h3 {
-  margin: 0.5rem 0 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 2vw, 1.4rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-}
-.cm-case p {
-  color: var(--ink-2);
-  line-height: 1.6;
-}
-.cm-case .cm-figure {
-  margin-top: 1.25rem;
-}
-
 /* Two columns rather than an essay-width cap with the container left empty:
    the statement on the left, what each plan includes on the right. */
 .cm-plans {
@@ -345,15 +273,11 @@
 }
 
 @media (max-width: 860px) {
-  .cm-axes,
+  .cm-axes__list,
+  .cm-give,
   .cm-surf__copy,
-  .cm-case__copy,
-  .cm-plans,
-  .cm-roles__row {
+  .cm-plans {
     grid-template-columns: minmax(0, 1fr);
-  }
-  .cm-roles__who {
-    margin-bottom: 0.35rem;
   }
   /* The strip scrolls rather than wrapping to three rows on a narrow screen,
      which would push the panel it controls off the bottom of the viewport. */

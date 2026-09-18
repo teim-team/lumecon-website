@@ -28,7 +28,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/methodology` | 2562 | Methodology \| Lumecon | 167 |
 | `/team` | 371 | Team \| Lumecon | 115 |
 | `/cedar` | 470 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-commons` | 983 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
+| `/cedar-commons` | 714 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
 | `/cedar-grove` | 565 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 553 | Glossary \| Lumecon | 142 |
 | `/naics` | 662 | Industry sectors \| Lumecon | 146 |
@@ -45,7 +45,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
 | `/404` | 99 | Page Not Found \| Lumecon | 141 |
-| **Total** | **14029** | | |
+| **Total** | **13760** | | |
 
 ## Crawler metadata audit
 
@@ -1519,21 +1519,15 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-commons
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 983
+- **Visible words:** 714
 
 ### Architecture (heading outline)
 
 - **H1** An analysis is finished by more than one person.
-  - **H2** Who is on a project
-    - **H3** How a project team is often put together
-  - **H2** One project, four things in it
-    - **H3** Who is on this project
-    - **H3** What the analysis is built from
-    - **H3** Questions, asked where the figures are
-    - **H3** What was decided, next to what it decided
-  - **H2** Two ways it is used
-    - **H3** Finance holds one set of records. The enterprises hold others.
-    - **H3** The consultant runs the project. The client owns the records.
+  - **H2** Who can see what
+    - **H3** The records are spread across your own offices.
+    - **H3** The records belong to someone who is not you at all.
+  - **H2** What they do once they are in
   - **H2** Cedar Commons comes with Sapling and above.
 
 ### Copy, in document order
@@ -1569,7 +1563,7 @@ CEDAR COMMONS
 
 **H1: An analysis is finished by more than one person.**
 
-Finance holds one set of records, the enterprises hold others, and someone has to keep it moving. Cedar Commons is the shared project workspace: bring those people into the analysis that needs them, each with access suited to their part, and keep the records, the questions and the notes with the project rather than scattered across inboxes.
+The payroll figures sit with finance. The headcounts sit with operations. Whether either can leave the building at all sits with somebody else again. Cedar Commons is where those people join the analysis that needs them, each reaching the one project they were invited to and nothing else.
 
 - _link:_ [Request free access →](/signup?tier=free)
 - _image alt:_ The Cedar Commons board: three shared analyses, each carrying its status, the people on it and the records and notes it holds. Shown with sample data.
@@ -1578,106 +1572,55 @@ _caption:_ The analyses an organization is working on, in one place. Shown with 
 > _section: `meth-sec`_
 
 
-**H2: Who is on a project**
+**H2: Who can see what**
 
-A project carries its own people rather than everyone in the organization, so nobody is handed access to work that is not theirs.
+Access is granted project by project, never organization-wide. Two things decide it, and they are independent of each other.
 
-- Which organization they belong to INTERNAL OR EXTERNAL
-- Internal is someone working for or on behalf of the organization sponsoring the analysis. External is a client, a partner or an outside advisor, who reaches the one project they were invited to and nothing else in the organization.
+- Whose organization they belong to INTERNAL OR EXTERNAL
+- Internal is someone working for or on behalf of the organization sponsoring the analysis. External is a client, a partner or an outside advisor. An external collaborator reaches the one project they were invited to and nothing else in the organization.
 - What they can do on that project OWNER, COLLABORATOR OR VIEWER
-- The owner opens the project and decides who else is on it. A collaborator contributes records, asks questions and adds to the thread. A viewer reads all of it and changes none of it. The same person can be a collaborator on one project and a viewer on another, and the roster says so.
+- The owner adds someone by email and decides what they may do. A collaborator contributes. A viewer reads and changes nothing. The same person can be a collaborator on one project and a viewer on another, and the roster reports it per project rather than averaging it into one label.
+- _button:_ Our organization
+- _button:_ A consultancy and its clients
 
-**H3: How a project team is often put together**
-
-Examples, not rules. Lumecon does not assign these, your organization does, and the same title lands differently in different places: an executive sponsor who owns the question may need to contribute, not only read.
-
-- _image alt:_ Two rosters side by side: four internal collaborators with their permissions, and two external collaborators, each listed with the single project they can reach. Shown with sample data.
-_caption:_ Internal and external are kept apart, and each outside person is listed with the exact projects they reach. Shown with sample data.
-- The project lead INTERNAL, OWNER Opens the project, brings people in and keeps track of what is still unanswered.
-- Finance, payroll and operations INTERNAL, COLLABORATOR Contribute the records the analysis is built from, and answer questions about how a figure was produced.
-- An executive sponsor or board member INTERNAL, EITHER Sometimes reads and nothing more. Sometimes owns the question, sets the scope and needs to contribute. Both are normal.
-- An outside economist or consultant EXTERNAL, COLLABORATOR Works in the project with the organization, on the same records and the same assumptions.
-- Outside counsel or an auditor EXTERNAL, VIEWER Reads the analysis and the material behind it, on one project, without being given a way to change any of it.
-Access is set when you add someone and can be changed or removed later. Cedar works inside a project for whoever is on it, within what their access allows: how Cedar works.
+> _section: `surf-organization`_
 
 
-**H2: One project, four things in it**
+**H3: The records are spread across your own offices.**
 
-The reason a figure can still be defended a year later is that the material behind it never left the project. Open one to see it.
+Finance holds one set, the enterprises hold others, and a board member or outside counsel may need to read the result without touching it. Four staff here, two outside people, and each outside person is bound to the single project they were brought in for.
 
-- _button:_ People
-- _button:_ Records
-- _button:_ Questions
-- _button:_ Notes
+- _image alt:_ An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the one project they can reach. Shown with sample data.
+_caption:_ Prairie Wind, on Tree. The external roster names the project beside each person, so the boundary is readable rather than assumed. Shown with sample data.
 
-> _section: `surf-people`_
+> _section: `surf-consultancy`_
 
 
-**H3: Who is on this project**
+**H3: The records belong to someone who is not you at all.**
 
-Access is granted project by project, not organization-wide. The owner adds someone by email, says whether they are internal or external and what they may do, and removes them when their part is done. Everyone on the project can see who else is.
+**[conditional]** A consultant opens a project per engagement and brings that client’s finance and operations people into it, and only into it. One client’s contacts never see another client’s work, and a project the client does not own names the organization sponsoring it, so nobody is unsure whose subscription is paying.
 
-- _image alt:_ The project access panel for a shared analysis, listing four people with their permission and whether each is internal or external, and the form for adding one more. Shown with sample data.
-
-> _section: `surf-documents`_
-
-
-**H3: What the analysis is built from**
-
-**[conditional]** Records belong to the project rather than to whoever uploaded them, so the payroll summary finance contributed and the headcount file operations contributed sit in one list, each showing who added it and when. Nobody has to ask what is already there before sending it again.
-
-- _image alt:_ The documents panel for a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date and its state. Shown with sample data.
-
-> _section: `surf-questions`_
-
-
-**H3: Questions, asked where the figures are**
-
-**[conditional]** Cedar works inside the project, against that project’s own material, for whoever is on it and within what their access allows. A question about a figure is asked and answered next to the figure rather than in a thread nobody can find later.
-
-- _image alt:_ Cedar answering a question inside a shared analysis, naming which figures in that project have no source document attached and who entered one of them by hand. Shown with sample data.
-
-> _section: `surf-notes`_
-
-
-**H3: What was decided, next to what it decided**
-
-**[conditional]** A project has its own thread. Which payroll figure is the audited one, what scope was agreed, why a contract was held out of the analysis: it stays readable beside the work it shaped, so a figure questioned a year later still has its reasoning attached.
-
-- _image alt:_ The note thread on a shared analysis, four people resolving which payroll figure is the audited one and agreeing the scope of the analysis. Shown with sample data.
-All four follow the same rule. A collaborator contributes: adds a record, asks a question, leaves a note. A viewer reads every one of them and changes none. And a note is kept rather than edited or deleted, so the thread stays a record of what was actually said rather than of what someone later wished had been said.
+- _image alt:_ A consultancy’s collaborator view: one internal person and three client contacts across two different clients, each listed with the single project they can reach. Shown with sample data.
+_caption:_ Ferreira, on Sapling. Three client contacts from two clients, four of ten seats in use — an outside collaborator occupies a seat, the same as a colleague. Shown with sample data.
+An outside collaborator occupies a seat on your plan, the same as a colleague, and the seat is released when you remove them. Sapling is ten people in one organization however they are split between staff and outside contributors; Tree has no limit. Compare plans.
 
 
 > _section: `meth-sec`_
 
 
-**H2: Two ways it is used**
+**H2: What they do once they are in**
 
+You are asking people for things you do not have. What they hand over arrives on the project rather than in your inbox.
 
-> _section: `cm-case`_
-
-AN ORGANIZATION COORDINATING ITS OWN ANALYSIS
-
-
-**H3: Finance holds one set of records. The enterprises hold others.**
-
-The project lead opens the analysis and brings in the people who can reach each set. An executive sponsor follows it without being asked to operate anything. Outside counsel reads one project and no others. The records, the questions and the notes stay in one place, so nobody is reconstructing from an inbox when a figure is questioned six months later.
-
-- _image alt:_ An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the single project they can reach. Shown with sample data.
-_caption:_ Four staff, two outside people, and the exact project each outside person reaches. Shown with sample data.
-A CONSULTANT WORKING WITH A CLIENT
-
-
-**H3: The consultant runs the project. The client owns the records.**
-
-The consultant opens a project for each engagement and invites that client’s finance and operations people to it, and only to it. One client’s contacts never see another client’s work. A project the client does not own names the organization sponsoring it, so nobody is confused about whose subscription is paying or whose work they are looking at.
-
-- _image alt:_ A consultancy’s board, showing two client analyses side by side, each carrying its own contributors and activity. Shown with sample data.
-_caption:_ Two engagements on one board, each with its own client contacts. Shown with sample data.
+- They add the records you do not hold
+- A record lands on the project, not in one person’s library, with the contributor and the date on it. Everyone on the project sees what is already there, so nobody sends the payroll summary twice.
+- They answer questions about them
+- Cedar works inside the project, for whoever is on it and within what their access allows, so a question about a figure is asked where the figure is.
+- They settle what the figure means
+- Which payroll summary is the audited one, what the scope actually is, why a contract was held back. The thread keeps it, rather than letting it be edited into something tidier later.
+- _image alt:_ The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data.
+_caption:_ Four records on one analysis, from three people. A viewer reads them and adds none. Shown with sample data.
 Working with a consultant? Share the starting guide with them, or begin a project together in Lumecon.
-
-
-> _section: `meth-sec`_
 
 INCLUDED, NOT SOLD SEPARATELY
 

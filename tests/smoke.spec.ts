@@ -1018,8 +1018,40 @@ test('cedar commons claims only what the product actually does', async ({ page }
      in plain words. "Append-only" is the implementation's name for it and
      belongs in detailed help, not in the sentence a buyer reads, so this
      asserts the guarantee rather than the jargon. */
-  expect(body).toContain('kept rather than edited or deleted');
+  expect(body).toContain('rather than letting it be edited');
   expect(body, 'implementation jargon belongs in help, not here').not.toContain('append-only');
+
+  /* A seat is one person, counted across memberships, non-owner project
+     participants and pending invites (server/lib/organizationSeats.js).
+     An outside collaborator therefore costs a seat, and a consultancy
+     choosing Sapling needs to know that before it buys, not after. */
+  expect(body, 'the seat rule is a buying fact').toContain('occupies a seat');
+
+  /* Four captures, not nine. Each has to do a job no other frame does; an
+     inventory of drawers is what this page had and was told to stop being. */
+  const frames = await page
+    .locator('main img[src^="/app/"]')
+    .evaluateAll((nodes) => nodes.map((n) => (n as HTMLImageElement).getAttribute('src')));
+  expect(frames.length, 'three to four product frames, no more').toBeLessThanOrEqual(4);
+  expect(new Set(frames).size, 'no frame used twice').toBe(frames.length);
+
+  /* Differentiation, asserted rather than hoped for. Cedar Impact, Cedar and
+     Cedar Grove already argue that the material stays attached to the work;
+     this page is about the people who hold material you cannot reach. It
+     must not re-run their argument, and must not re-explain Cedar (AGENTS.md
+     gives each page one argument and allows a one-line pointer). */
+  for (const borrowed of [
+    'stays connected to its source',
+    'reviewable workflow',
+    'evidence behind every result',
+  ]) {
+    expect(body, `${borrowed} belongs to another page`).not.toContain(borrowed);
+  }
+  const cedarSentences = (await page.locator('main').innerText())
+    .split(/(?<=[.!?])\s+/)
+    .filter((sentence) => /\bCedar\b(?! Commons| Impact| Grove)/.test(sentence));
+  expect(cedarSentences.length, `Cedar gets one sentence here, not ${cedarSentences.length}`)
+    .toBeLessThanOrEqual(2);
 
   /* Data requests and approval tracking are proposals with no route on the
      branch being incorporated. A product page is not where a proposal goes,
@@ -1530,11 +1562,11 @@ test('the founding investor is in structured data only, never in what a visitor 
   ]);
 });
 
-test('the commons surfaces open one at a time, by click and by keyboard', async ({ page }) => {
+test('the commons team shapes open one at a time, by click and by keyboard', async ({ page }) => {
   await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
   const tabs = page.locator('[data-surf-tab]');
-  await expect(tabs).toHaveCount(4);
-  await expect(tabs).toHaveText(['People', 'Records', 'Questions', 'Notes']);
+  await expect(tabs).toHaveCount(2);
+  await expect(tabs).toHaveText(['Our organization', 'A consultancy and its clients']);
 
   // `:visible`, never the `hidden` PROPERTY. The UA sheet's
   // `[hidden] { display: none }` loses to any author `display` rule, so a
@@ -1545,38 +1577,35 @@ test('the commons surfaces open one at a time, by click and by keyboard', async 
   await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(1);
   await expect(tabs.first()).toHaveAttribute('aria-expanded', 'true');
 
-  await tabs.nth(2).click();
+  await tabs.nth(1).click();
   const open = page.locator('[data-surf-panel]:visible');
   await expect(open).toHaveCount(1);
-  await expect(open).toHaveAttribute('id', 'surf-questions');
+  await expect(open).toHaveAttribute('id', 'surf-consultancy');
   await expect(tabs.first()).toHaveAttribute('aria-expanded', 'false');
-  await expect(tabs.nth(2)).toHaveAttribute('aria-expanded', 'true');
+  await expect(tabs.nth(1)).toHaveAttribute('aria-expanded', 'true');
 
   // Arrow keys walk the strip and wrap, so neither end is a dead stop.
-  await tabs.nth(2).focus();
+  await tabs.nth(1).focus();
   await page.keyboard.press('ArrowRight');
-  await expect(open).toHaveAttribute('id', 'surf-notes');
-  await page.keyboard.press('ArrowRight');
-  await expect(open).toHaveAttribute('id', 'surf-people');
+  await expect(open).toHaveAttribute('id', 'surf-organization');
   await page.keyboard.press('ArrowLeft');
-  await expect(open).toHaveAttribute('id', 'surf-notes');
+  await expect(open).toHaveAttribute('id', 'surf-consultancy');
 
-  // Every panel carries a real capture of the product, and each capture is
-  // its own: the point of the section is that these four surfaces differ,
-  // which the same image four times would contradict.
+  // The two states are two real captures of the same screen. The same image
+  // twice would make the comparison the section exists for into a caption.
   const shots = await page
     .locator('[data-surf-panel] img')
     .evaluateAll((nodes) => nodes.map((n) => (n as HTMLImageElement).getAttribute('src')));
-  expect(shots).toHaveLength(4);
-  expect(new Set(shots).size).toBe(4);
+  expect(shots).toHaveLength(2);
+  expect(new Set(shots).size).toBe(2);
 });
 
-test.describe('commons surfaces with no working script', () => {
+test.describe('commons team shapes with no working script', () => {
   test.use({ javaScriptEnabled: false });
 
-  test('all four surfaces are readable, and no tab is a dead control', async ({ page }) => {
+  test('both shapes are readable, and no tab is a dead control', async ({ page }) => {
     await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(4);
+    await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(2);
     await expect(page.locator('[data-surf-tab]:not([disabled])')).toHaveCount(0);
   });
 });
