@@ -1,0 +1,476 @@
+/* ---------------------------------------------------------------
+   /why-lumecon
+
+   Borrows the methodology shell (hero, section rhythm, wrapper) and
+   the tour-row composition, and adds only what this page's own
+   material needs: a price set as typography rather than as cards, a
+   lineage written out so it can be read on a phone, a row of real
+   portraits, and three hairline destinations.
+
+   Deliberately no card grid anywhere. Every concept here is either a
+   destination (hairline row), a figure (typography) or a person
+   (portrait); none of them is an object that needs a boundary drawn
+   around it.
+   --------------------------------------------------------------- */
+
+/* The alternating material planes that organize the page. Surface
+   sections sit on the working white, the rest on the page ground, so
+   the argument reads as four movements rather than one long scroll. */
+.why-sec--surface {
+  background: var(--surface);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.why-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.5rem, 3vw, 2.2rem);
+}
+/* The secondary action is re-skinned for the navy cover, the same way
+   the Grove hero does it, and the focus twin comes with it — a
+   keyboard user gets the affordance or the state is decoration. */
+.why .meth-hero--cover .btn2--card {
+  border-color: rgba(115, 226, 214, 0.34);
+  color: #d9f4f0;
+  background: rgba(7, 60, 59, 0.5);
+}
+.why .meth-hero--cover .btn2--card:hover,
+.why .meth-hero--cover .btn2--card:focus-visible {
+  border-color: rgba(115, 226, 214, 0.6);
+  background: rgba(7, 60, 59, 0.78);
+  color: #fff;
+}
+
+/* ---------- The price ---------- */
+/* One numeral carrying the argument, with the inclusions beneath it as
+   three hairline rows. Three cards would make the price one of four
+   equal things, which is the opposite of what this section says. */
+.why-price {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+}
+.why-price__fig {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0;
+  flex-wrap: wrap;
+}
+.why-price__amt {
+  font-size: clamp(3.2rem, 8vw, 5.4rem);
+  font-weight: var(--weight-display);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+.why-price__per {
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.why-price__sub {
+  margin: 0.7rem 0 0;
+  font-size: var(--fs-sm-2);
+  color: var(--ink-3);
+}
+.why-price__list {
+  list-style: none;
+  margin: clamp(1.8rem, 3.5vw, 2.6rem) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0;
+}
+.why-price__list li {
+  border-top: 1px solid var(--rule);
+  padding: 1.1rem 1.6rem 1.2rem 0;
+}
+.why-price__k {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.35;
+}
+.why-price__b {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.why-price__foot {
+  margin: clamp(1.4rem, 2.5vw, 1.9rem) 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-sm-2);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: var(--measure-deck);
+}
+
+/* ---------- The work rows ---------- */
+.why-acts .tour-row + .tour-row {
+  margin-top: clamp(3rem, 6vw, 5.5rem);
+}
+.why-acts .tour-row__title {
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+}
+.why-cap {
+  margin-top: 0.7rem;
+  font-size: var(--fs-3xs);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+/* The sentence that says what the product does NOT do. Quieter than
+   the claim above it, and it has to stay: an unqualified speed claim
+   is the one thing on this page nothing supports. */
+.why-note {
+  font-size: var(--fs-sm-2);
+  color: var(--ink-3);
+  border-left: 2px solid var(--rule-strong);
+  padding-left: 0.9rem;
+}
+
+/* ---------- The written-out lineage ---------- */
+/* Not a screenshot. This is the part a reader is invited to check, and
+   a 1920px capture scaled into a phone column cannot be read. */
+.why-trace {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+}
+.why-trace__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  margin: 0 0 1.4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+.why-trace__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.why-trace__total {
+  font-size: clamp(1.6rem, 3.6vw, 2.5rem);
+  font-weight: var(--weight-display);
+  letter-spacing: -0.025em;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+.why-trace__cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: clamp(1.8rem, 4vw, 3.4rem);
+}
+.why-trace__k {
+  margin: 0 0 0.9rem;
+  font-size: var(--fs-sm-2);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.why-trace__cols ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.1rem;
+}
+.why-trace__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0 0 0.4rem;
+}
+.why-trace__n {
+  font-size: var(--fs-sm-2);
+  font-weight: 600;
+  color: var(--navy);
+}
+.why-trace__v {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm-2);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* The bar is the share, drawn at the share's own width. It carries no
+   information the numbers do not, so it is thin and unlabeled and the
+   screen reader never meets it. */
+.why-trace__bar {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+.why-trace__bar::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--share, 0%);
+  background: var(--accent);
+  border-radius: 2px;
+}
+.why-trace__note {
+  margin: 0.4rem 0 0;
+  font-size: var(--fs-3xs);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.why-trace__pct {
+  font-family: var(--font-mono);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.why-trace__foot {
+  margin: clamp(1.8rem, 3.5vw, 2.6rem) 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-sm-2);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: var(--measure-deck);
+}
+.why-trace__sample {
+  margin: 0.7rem 0 0;
+  font-size: var(--fs-3xs);
+  color: var(--ink-3);
+}
+
+/* ---------- Complexity points ---------- */
+.why-points {
+  list-style: none;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.why-points li {
+  border-top: 1px solid var(--rule);
+  padding: 1.05rem 0 1.1rem;
+}
+.why-points__k {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  color: var(--navy);
+}
+.why-points__b {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* ---------- The people ---------- */
+.why-people {
+  list-style: none;
+  margin: clamp(1.8rem, 3.5vw, 2.6rem) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(1rem, 2.2vw, 2rem);
+}
+.why-person {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.why-person__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transition: box-shadow 0.22s var(--ease);
+}
+.why-person:hover .why-person__photo,
+.why-person:focus-visible .why-person__photo {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.why-person:focus-visible {
+  outline: none;
+}
+.why-person:focus-visible .why-person__photo {
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 5px rgba(15, 181, 165, 0.35);
+}
+.why-person__n {
+  margin: 0.85rem 0 0.1rem;
+  font-size: var(--fs-sm-2);
+  font-weight: 600;
+  color: var(--navy);
+}
+.why-person:hover .why-person__n {
+  color: var(--accent-text);
+}
+.why-person__t {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.why-person__b {
+  margin: 0.55rem 0 0;
+  font-size: var(--fs-3xs);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.why-people__foot {
+  margin: clamp(1.6rem, 3vw, 2.2rem) 0 0;
+  font-size: var(--fs-sm-2);
+  color: var(--ink-2);
+}
+
+/* ---------- Where to check us ---------- */
+.why-checks {
+  list-style: none;
+  margin: clamp(1.4rem, 3vw, 2rem) 0 0;
+  padding: 0;
+}
+.why-checks li {
+  display: grid;
+  grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+  gap: 0.5rem clamp(1.5rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--rule);
+  padding: clamp(1.3rem, 2.5vw, 1.9rem) 0;
+}
+.why-checks li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.why-checks__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.why-checks__t {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  color: var(--navy);
+}
+.why-checks__b {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: var(--measure-deck);
+}
+.why-checks__a {
+  display: inline-block;
+  margin-top: 0.7rem;
+  font-size: var(--fs-sm-2);
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+.why-checks__a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Close ---------- */
+.why-close {
+  border-top: 0;
+}
+.why-close__t {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2.7rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.why-close__b {
+  margin: 1rem 0 0;
+  font-size: var(--fs-md-2);
+  line-height: 1.7;
+  max-width: 44rem;
+  opacity: 0.86;
+}
+.why-close__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.4rem;
+  margin-top: clamp(1.6rem, 3vw, 2.2rem);
+}
+.why-close .btn2--card {
+  border-color: rgba(115, 226, 214, 0.34);
+  color: #d9f4f0;
+  background: rgba(7, 60, 59, 0.5);
+}
+.why-close .btn2--card:hover,
+.why-close .btn2--card:focus-visible {
+  border-color: rgba(115, 226, 214, 0.6);
+  background: rgba(7, 60, 59, 0.78);
+  color: #fff;
+}
+.why-close__link {
+  font-size: var(--fs-sm-2);
+  font-weight: 600;
+  color: #9fe6dc;
+  text-decoration: none;
+}
+.why-close__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Narrow ---------- */
+@media (max-width: 900px) {
+  /* Five portraits across a phone column is five 60px faces. Three
+     then two keeps a face readable, which is the only reason they
+     are here. */
+  .why-people {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2rem 1rem;
+  }
+}
+@media (max-width: 620px) {
+  .why-people {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .why-checks li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+  .why-price__list li {
+    padding-right: 0;
+  }
+  .why-hero__cta,
+  .why-close__cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .why-hero__cta .btn2,
+  .why-close__cta .btn2 {
+    justify-content: center;
+  }
+  .why-close__link {
+    text-align: center;
+  }
+  /* The two columns of the lineage stack, and the long operation names
+     get their own line above the figure rather than being squeezed
+     against it. */
+  .why-trace__row {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+}

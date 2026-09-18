@@ -234,7 +234,7 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
   // Four top-level items: three groups and Pricing on its own.
   await expect(page.locator('.nav-links > .nav-item')).toHaveCount(4);
-  for (const label of ['Product', 'Resources', 'Company']) {
+  for (const label of ['Product', 'Why Lumecon', 'Resources']) {
     await expect(page.locator('.nav-toggle', { hasText: label })).toBeVisible();
   }
   await expect(page.locator('.nav-links > .nav-item > a[aria-current="page"]')).toHaveText(
@@ -273,6 +273,137 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await expect(page.locator('#navp-resources a[href="/start"]')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('#navp-resources')).toBeHidden();
+});
+
+test('the nav runs Product, Why Lumecon, Pricing, Resources', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  // Order is the decision, not just membership: the buyer's question sits
+  // beside the product, before the price, and Resources stays last because
+  // it is where a reader goes to check the work rather than be persuaded.
+  const top = await page
+    .locator('.nav-links > .nav-item')
+    .evaluateAll((nodes) =>
+      nodes.map((n) =>
+        (n.querySelector('.nav-toggle, :scope > a')?.textContent || '').trim(),
+      ),
+    );
+  expect(top).toEqual(['Product', 'Why Lumecon', 'Pricing', 'Resources']);
+
+  await page.locator('#navt-why').click();
+  await expect(page.locator('#navp-why .nav-panel__text')).toHaveText([
+    'Why Lumecon',
+    'Our team',
+    'Security and data governance',
+    'Contact',
+  ]);
+  // The group is led by the page that answers its own question.
+  await expect(page.locator('#navp-why a').first()).toHaveAttribute('href', '/why-lumecon');
+  // Methodology stays under Resources.
+  await expect(page.locator('#navp-why a[href="/methodology"]')).toHaveCount(0);
+  await page.locator('#navt-resources').click();
+  await expect(page.locator('#navp-resources a[href="/methodology"]')).toBeVisible();
+});
+
+test('why lumecon reads its evidence from the same sources the rest of the site does', async ({
+  page,
+}) => {
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+
+  /* The entry price is imported from src/data/pricing.ts rather than typed
+     into the prose. Checked against what /pricing renders, because a price
+     restated on a second page is a price that drifts. */
+  const shown = (await page.locator('.why-price__amt').innerText()).trim();
+  await page.goto('/pricing', { waitUntil: 'networkidle' });
+  const allPlans = await page.locator('.pr-plan').allInnerTexts();
+  expect(
+    allPlans.some((t) => t.includes(shown)),
+    `the entry price ${shown} appears on /pricing`,
+  ).toBe(true);
+
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  /* The lineage is written out rather than screenshotted, so a reader can
+     check it — which means it has to be checkable. Both decompositions of
+     the same total have to add to that total. */
+  const sums = await page.evaluate(() => {
+    const num = (s: string) => Number(s.replace(/[^0-9]/g, ''));
+    const total = num(document.querySelector('.why-trace__total')!.textContent || '');
+    return [...document.querySelectorAll('.why-trace__col')].map((col) => ({
+      total,
+      sum: [...col.querySelectorAll('.why-trace__v')].reduce(
+        (a, n) => a + num(n.textContent || ''),
+        0,
+      ),
+    }));
+  });
+  expect(sums.length, 'two decompositions').toBe(2);
+  for (const { total, sum } of sums) expect(sum, 'the parts add to the total').toBe(total);
+});
+
+test('why lumecon claims no time saving, and states the security status with its limits', async ({
+  page,
+}) => {
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  const text = await page.evaluate(() => document.body.innerText);
+
+  // Nothing has been measured, so nothing may be claimed. These are the
+  // shapes a speed claim takes.
+  expect(text).not.toMatch(/\b\d+\s*(%|percent)\s*(faster|quicker|less time)/i);
+  expect(text).not.toMatch(/\b(saves?|cuts?|reduces?)\s+[^.]{0,20}\b\d+\s*(%|percent|hours|weeks|days)/i);
+  expect(text, 'says plainly that it does not make other people faster').toContain(
+    'have not measured a time saving',
+  );
+
+  // The security line is the one /security publishes, limits intact.
+  expect(text).toContain('No SOC 2 examination has been completed');
+  await expect(page.locator('main a[href="/security"]')).toHaveCount(1);
+  // And the methodology is linked prominently, not just from the footer.
+  await expect(page.locator('main a[href^="/methodology"]')).not.toHaveCount(0);
+});
+
+test('why lumecon shows the staff with a real line each, and the portraits load', async ({
+  page,
+}) => {
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  await page.evaluate(() => {
+    for (const el of document.querySelectorAll('[class*="reveal"]')) el.classList.add('is-in');
+  });
+  const people = page.locator('.why-person');
+  await expect(people).toHaveCount(5);
+  await people.first().scrollIntoViewIfNeeded();
+  await page.waitForTimeout(400);
+  const rows = await people.evaluateAll((nodes) =>
+    nodes.map((n) => ({
+      href: n.getAttribute('href'),
+      line: (n.querySelector('.why-person__b')?.textContent || '').trim().length,
+      loaded: (n.querySelector('img') as HTMLImageElement).naturalWidth > 0,
+    })),
+  );
+  for (const r of rows) {
+    // Every portrait is a real file and every person carries a sentence:
+    // an empty one would mean the record and this page had drifted apart.
+    expect(r.loaded, `${r.href} portrait loaded`).toBe(true);
+    expect(r.line, `${r.href} has a line`).toBeGreaterThan(20);
+    expect(r.href).toMatch(/^\/team\//);
+  }
+});
+
+test('methodology keeps the method and sends the comparison to why lumecon', async ({ page }) => {
+  await page.goto('/methodology', { waitUntil: 'networkidle' });
+  // Assumptions and limits are their own labeled section, findable without
+  // opening four disclosures.
+  const limits = page.locator('#m-limits');
+  await expect(limits).toBeVisible();
+  await expect(limits).toHaveText(/assumes, and where it stops/i);
+  const body = await page.locator('.meth-limits__body').innerText();
+  for (const topic of ['two-digit NAICS', 'counterfactual', 'nominal dollars']) {
+    expect(body, `limits names ${topic}`).toContain(topic);
+  }
+  // The buyer-facing comparison moved, and left a route behind.
+  await expect(page.locator('.meth-crosslink a[href="/why-lumecon"]')).toBeVisible();
+  await expect(page.locator('#m-compare')).toHaveCount(0);
+  // The equations stayed.
+  await expect(page.locator('#m-core')).toBeVisible();
 });
 
 test('a page inside a group is marked on the group that holds it', async ({ page }) => {
@@ -603,9 +734,9 @@ test('contact is a page, and every route on it goes somewhere real', async ({ pa
 
   // The navigation and the footer link the page, not a mailto. A menu
   // mailto is a dead end for anyone without a desktop mail client.
-  await expect(page.locator('#navp-company a[href="/contact"]')).toHaveCount(1);
+  await expect(page.locator('#navp-why a[href="/contact"]')).toHaveCount(1);
   await expect(page.locator('footer a[href="/contact"]')).toHaveCount(1);
-  await expect(page.locator('#navp-company a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator('#navp-why a[href^="mailto:"]')).toHaveCount(0);
 
   // Four routes, each pointing at the page that answers most of it.
   for (const href of ['/signup', '/start', '/security', '/accessibility']) {

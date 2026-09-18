@@ -52,6 +52,7 @@ function chromiumExecutable() {
  */
 const PAGES = [
   ['/', 'Homepage'],
+  ['/why-lumecon', 'Why Lumecon'],
   ['/pricing', 'Pricing'],
   ['/methodology', 'Methodology'],
   ['/team', 'Team'],
@@ -97,6 +98,7 @@ function canonicalKey(url) {
 /** The one-line job each page is supposed to do (AGENTS.md, "Page ownership"). */
 const OWNERSHIP = {
   '/': 'Why Lumecon matters.',
+  '/why-lumecon': 'Why an organization chooses the platform.',
   '/pricing': 'What it costs and why the pricing is different.',
   '/methodology': 'Why the economics are credible.',
   '/cedar': "Why Lumecon's use of AI is different.",
