@@ -27,12 +27,15 @@ import '../styles/home.css';
         estimate keeps its source trail.
       </p>
 
+      {/* The filled button matches the header's, so the page asks for one
+          thing rather than two. Pricing stays beside it for the visitor who
+          wants the cost before the account. */}
       <div class="hero2-cta reveal-soft" data-stagger="3">
-        <a class="btn2 btn2--primary" href="/pricing">
-          See plans and pricing <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
-        </a>
-        <a class="btn2 btn2--card" href="/signup?tier=free">
+        <a class="btn2 btn2--primary" href="/signup?tier=free">
           Request free access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn2 btn2--card" href="/pricing">
+          See plans and pricing <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
         </a>
       </div>
     </div>

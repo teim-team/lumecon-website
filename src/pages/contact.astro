@@ -1,0 +1,326 @@
+---
+/**
+ * /contact — one page for reaching a person, replacing the `mailto:`
+ * that sat in the navigation.
+ *
+ * A mailto in a menu is a dead end for anyone without a desktop mail
+ * client configured, it cannot say what the message should contain, and
+ * it cannot route anything. This can do all three.
+ *
+ * It is deliberately not a second /signup. Access requests belong there,
+ * with the profile fields the product needs; this is for everything
+ * else, and it says so rather than competing.
+ *
+ * One inbox, honestly. Lumecon has a single address, so the specific
+ * routes below are subject lines rather than invented aliases: no
+ * security@ or press@ that nobody reads. Nothing here promises a
+ * response time, because no service level has been set.
+ *
+ * The form posts through lib/api.ts to POST /v1/contact when
+ * PUBLIC_API_URL is configured, and falls back to a prefilled email so
+ * a visitor on the static deploy is never dead-ended. Same shape as the
+ * signup page's handler, deliberately: one submission path to reason
+ * about, one honeypot, one fallback.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site as siteConfig } from '../config';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
+import '../styles/contact.css';
+
+const site = siteConfig.url;
+const description =
+  'Reach the Lumecon team: general questions, security disclosures, accessibility, and where to go for beta access or help scoping a first analysis.';
+
+/* Every route lands in the same inbox. What differs is the subject line
+   and, for two of them, the page that answers most of the question
+   before anyone has to write. */
+const ROUTES = [
+  {
+    k: 'Access to the beta',
+    body: 'Access is opening in waves. The request form collects the profile the product needs, so it is faster than an email.',
+    href: '/signup',
+    cta: 'Request access',
+  },
+  {
+    k: 'Not sure what to ask for',
+    body: 'A few questions propose a starting scope and the records it needs. Bring the answer to a call.',
+    href: '/start',
+    cta: 'Plan your first analysis',
+  },
+  {
+    k: 'Security disclosure',
+    body: 'Report a vulnerability with the subject line Security review. The control program and the disclosure policy are published.',
+    href: '/security',
+    cta: 'Read the security page',
+  },
+  {
+    k: 'Accessibility',
+    body: 'Tell us what you hit, with the subject line Accessibility. The conformance statement names what is known and unresolved.',
+    href: '/accessibility',
+    cta: 'Read the accessibility statement',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+      { '@type': 'ListItem', position: 2, name: 'Contact', item: `${site}/contact` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${site}/contact`,
+    url: `${site}/contact`,
+    name: 'Contact Lumecon',
+    description,
+    mainEntity: {
+      '@type': 'Organization',
+      '@id': `${site}#org`,
+      name: siteConfig.legalName,
+      email: siteConfig.email,
+    },
+  },
+];
+---
+
+<BaseLayout
+  title="Contact | Lumecon"
+  description={description}
+  canonical="https://lumecon.ai/contact"
+  jsonLd={jsonLd}
+>
+  <Nav isHome={false} />
+  <main class="meth contact" id="top" tabindex="-1">
+    <header class="meth-hero">
+      <div class="meth-w" data-reveal-group>
+        <p class="h-kicker">Contact</p>
+        {/* No .brand-em here on purpose. Teal is semantic (AGENTS.md: actions,
+          economic concepts, and the approved recurring phrases). "person" is
+          none of those, so highlighting it would invent a slogan for one
+          page and break the teal-only skim. */}
+        <h1 class="meth-hero__title">Talk to a person.</h1>
+        <p class="meth-hero__lede">
+          Questions about the model, a procurement review, a partnership, or something the site
+          does not answer. Write below or to{' '}
+          <a class="gloss-link" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>, whichever
+          you prefer.
+        </p>
+      </div>
+    </header>
+
+    <section class="meth-sec contact-sec" aria-labelledby="c-form">
+      <div class="meth-w">
+        <div class="contact-grid">
+          <div class="contact-formcol">
+            <h2 id="c-form" class="contact-h2">Send a message</h2>
+            <p class="contact-sub">
+              Fields marked <span class="contact-req" aria-hidden="true">*</span> are required.
+            </p>
+            {/* method="post" is load-bearing, not decoration. Without it a browser
+          whose script is blocked or broken submits a GET to this same URL and
+          puts the name, email, organization and message in the query string
+          and the history, having delivered nothing. */}
+            <form
+              class="contact-form"
+              method="post"
+              data-contact-form
+              data-contact-email={siteConfig.email}
+              novalidate
+            >
+              <label class="contact-field">
+                <span>Name <span class="contact-req" aria-hidden="true">*</span></span>
+                <input type="text" name="name" autocomplete="name" maxlength="200" required />
+              </label>
+              <label class="contact-field">
+                <span>Email <span class="contact-req" aria-hidden="true">*</span></span>
+                <input type="email" name="email" autocomplete="email" maxlength="200" required />
+              </label>
+              <label class="contact-field">
+                <span>Organization</span>
+                <input
+                  type="text"
+                  name="organization"
+                  autocomplete="organization"
+                  maxlength="200"
+                />
+              </label>
+              <label class="contact-field">
+                <span>What can we help with? <span class="contact-req" aria-hidden="true">*</span></span>
+                <textarea name="message" rows="6" maxlength="4000" required></textarea>
+              </label>
+
+              {
+                /* Honeypot. A real visitor never sees it, so anything in it
+                   is a bot and the submission is dropped silently. */
+              }
+              <div class="contact-hp" aria-hidden="true" data-copy-ignore>
+                <label>
+                  Company website
+                  <input type="text" name="website" tabindex="-1" autocomplete="off" />
+                </label>
+              </div>
+
+              <p class="contact-status" data-contact-status role="status" aria-live="polite" hidden>
+              </p>
+
+              <div class="contact-actions">
+                {/* Disabled in the markup and enabled by the handler. Without
+                    a script there is nothing that can deliver this form, and an
+                    enabled button would take the visitor's text and discard it.
+                    The noscript line below says where to write instead. */}
+                <button class="btn2 btn2--primary" type="submit" disabled data-contact-submit>
+                  Send <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+                </button>
+                <noscript>
+                  <p class="contact-note">
+                    This form needs JavaScript to send. Write to{' '}
+                    <a class="gloss-link" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>{' '}
+                    instead and it reaches the same place.
+                  </p>
+                </noscript>
+                <p class="contact-note">
+                  Goes to {siteConfig.email}. We do not have a published response time, so we will
+                  not promise one.
+                </p>
+              </div>
+            </form>
+          </div>
+
+          <aside class="contact-routes" aria-labelledby="c-routes">
+            <h2 id="c-routes" class="contact-h2">Or go straight there</h2>
+            <ul role="list">
+              {
+                ROUTES.map((r) => (
+                  <li>
+                    <p class="contact-routes__k">{r.k}</p>
+                    <p class="contact-routes__b">{r.body}</p>
+                    <a class="contact-routes__a" href={r.href}>
+                      {r.cta} <span aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="contact-routes__foot">
+              Lumecon reads one inbox, so the routes above are subject lines rather than separate
+              addresses. Nothing you send here is used to train a model.{' '}
+              <a class="gloss-link" href="/ai-and-data-use">How we handle AI and data</a>.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+
+  <script>
+    import { submitContact, apiConfigured } from '../lib/api';
+    import { trackEvent, trackError } from '../lib/observability';
+
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    const status = form?.querySelector<HTMLElement>('[data-contact-status]');
+    const submitBtn = form?.querySelector<HTMLButtonElement>('[data-contact-submit]');
+    /* One address, read from config rather than repeated as a literal. */
+    const inbox = form?.dataset.contactEmail || 'contact@lumecon.ai';
+
+    /* The button ships disabled so a browser with no working script cannot
+       take a message it has no way to send. Enabling it is the handler
+       announcing itself. */
+    submitBtn?.removeAttribute('disabled');
+
+    function setStatus(variant: 'ok' | 'err' | 'info', text: string) {
+      if (!status) return;
+      status.textContent = text;
+      status.hidden = false;
+      status.classList.remove('contact-status--ok', 'contact-status--err');
+      if (variant === 'ok') status.classList.add('contact-status--ok');
+      if (variant === 'err') status.classList.add('contact-status--err');
+    }
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '').trim();
+      const email = String(data.get('email') ?? '').trim();
+      const organization = String(data.get('organization') ?? '').trim();
+      const message = String(data.get('message') ?? '').trim();
+
+      /* The honeypot is filled: accept it as far as the visitor can see,
+         and send nothing. Telling a bot it failed only teaches it. */
+      if (String(data.get('website') ?? '').trim()) {
+        setStatus('ok', 'Thanks, your message is on its way.');
+        form.reset();
+        return;
+      }
+
+      /* Announce the problem and put the cursor in the field it is about.
+         The status is aria-live, so a screen reader hears it either way;
+         without the focus move a sighted keyboard user is told something
+         is wrong and left standing on the Send button. */
+      const fail = (field: string, text: string) => {
+        setStatus('err', text);
+        form.querySelector<HTMLElement>(`[name="${field}"]`)?.focus();
+        return undefined;
+      };
+
+      if (!name) return fail('name', 'Enter your name.');
+      if (!email) return fail('email', 'Enter an email we can reply to.');
+      /* A typo here is the one error the visitor cannot recover from: the
+         message sends, the reply goes nowhere, and neither side knows. It
+         is a deliberately loose shape check, not an attempt to decide what
+         a valid address is. */
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return fail('email', 'That email address looks incomplete. Check it, so a reply can reach you.');
+      }
+      if (!message) return fail('message', 'Tell us what you need.');
+
+      submitBtn?.setAttribute('disabled', 'true');
+      setStatus('info', 'One moment...');
+
+      try {
+        if (apiConfigured()) {
+          const res = await submitContact({
+            name,
+            email,
+            organization,
+            message,
+            source: 'contact-page',
+          });
+          if (res.ok) {
+            trackEvent('contact.message', { hasOrganization: Boolean(organization) });
+            setStatus('ok', 'Thanks, your message is with the team.');
+            form.reset();
+            submitBtn?.removeAttribute('disabled');
+            return;
+          }
+        }
+        /* No backend, or it failed: a prefilled email keeps the message
+           moving instead of dead-ending the visitor. */
+        const subject = encodeURIComponent('Lumecon enquiry');
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\n${organization ? `Organization: ${organization}\n` : ''}\n${message}\n`,
+        );
+        window.location.href = `mailto:${inbox}?subject=${subject}&body=${body}`;
+        setStatus('info', 'Opening your email client so you can reach us directly...');
+        submitBtn?.removeAttribute('disabled');
+      } catch (err: unknown) {
+        trackError(err, { where: 'contact.message' });
+        setStatus(
+          'err',
+          `Something went wrong on our end. Try again in a moment, or email ${inbox}.`,
+        );
+        submitBtn?.removeAttribute('disabled');
+      }
+    });
+  </script>
+</BaseLayout>

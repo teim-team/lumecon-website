@@ -140,9 +140,14 @@ test('pricing shows four public plans, Seed first, with Sapling recommended', as
 
 test('homepage uses clear free-access language and Cedar starts on demand', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
-  await expect(page.locator('.hero2 .hero2-cta a[href="/signup?tier=free"]')).toHaveText(
-    /Request free access/,
-  );
+  // The header's filled button is Request access, so the hero's is too: one
+  // primary action per page, not a header and a hero asking for different
+  // things. Pricing stays beside it as the secondary.
+  const heroCta = page.locator('.hero2 .hero2-cta a');
+  await expect(heroCta).toHaveText([/Request free access/, /See plans and pricing/]);
+  await expect(heroCta.first()).toHaveClass(/btn2--primary/);
+  await expect(heroCta.first()).toHaveAttribute('href', '/signup?tier=free');
+  await expect(heroCta.nth(1)).not.toHaveClass(/btn2--primary/);
 
   await page.locator('#why').scrollIntoViewIfNeeded();
   const fab = page.locator('.cedar-fab');
@@ -250,6 +255,13 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await page.locator('#navt-resources').click();
   await expect(page.locator('#navp-product')).toBeHidden();
   await expect(page.locator('#navp-resources')).toBeVisible();
+  // The starting guide leads Resources, so the newest reader meets it first.
+  await expect(page.locator('#navp-resources .nav-panel__text')).toHaveText([
+    'Plan your first analysis',
+    'Methodology',
+    'Industry sectors',
+    'Glossary',
+  ]);
   await expect(page.locator('#navp-resources a[href="/start"]')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('#navp-resources')).toBeHidden();
@@ -440,6 +452,288 @@ test('accessibility statement is published and linked from the footer', async ({
   await expect(page.locator('footer a[href="/accessibility"]')).toHaveText('Accessibility');
 });
 
+test('contact is a page, and every route on it goes somewhere real', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('Talk to a person');
+
+  // The navigation and the footer link the page, not a mailto. A menu
+  // mailto is a dead end for anyone without a desktop mail client.
+  await expect(page.locator('#navp-company a[href="/contact"]')).toHaveCount(1);
+  await expect(page.locator('footer a[href="/contact"]')).toHaveCount(1);
+  await expect(page.locator('#navp-company a[href^="mailto:"]')).toHaveCount(0);
+
+  // Four routes, each pointing at the page that answers most of it.
+  for (const href of ['/signup', '/start', '/security', '/accessibility']) {
+    await expect(page.locator(`.contact-routes a[href="${href}"]`)).toHaveCount(1);
+  }
+
+  // The form is real and required fields are marked as such.
+  for (const name of ['name', 'email', 'organization', 'message']) {
+    await expect(page.locator(`.contact-form [name="${name}"]`)).toHaveCount(1);
+  }
+  // The honeypot is present and off-screen rather than display:none, so a
+  // bot filling every field still trips it.
+  const honeypot = page.locator('.contact-hp input');
+  await expect(honeypot).toHaveCount(1);
+  const box = await page.locator('.contact-hp').boundingBox();
+  expect(box === null || box.x < 0).toBeTruthy();
+
+  // No response time is promised, because none has been set.
+  const text = await page.locator('main').innerText();
+  expect(text).not.toMatch(/within \d+ (hours|business days|days)/i);
+  // One inbox, so no invented aliases.
+  expect(text).not.toContain('security@');
+  expect(text).not.toContain('press@');
+});
+
+test('the contact form reports a missing field instead of submitting', async ({ page }) => {
+  // Belt and braces: this test cannot get past validation today, but a future
+  // edit to the fixture must not be able to turn it into a production POST.
+  await page.route('**/v1/contact', (route) => route.abort());
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  await page.locator('.contact-form [name="name"]').fill('Test Person');
+  await page.locator('[data-contact-submit]').click();
+  const status = page.locator('[data-contact-status]');
+  await expect(status).toBeVisible();
+  await expect(status).toContainText('email');
+  // Nothing navigated away to a mailto on an incomplete form.
+  expect(page.url()).toContain('/contact');
+  // The error puts the cursor in the field it is about, so a keyboard user
+  // is not told something is wrong and left standing on the Send button.
+  await expect(page.locator('.contact-form [name="email"]')).toBeFocused();
+});
+
+test('the contact form catches an email that cannot receive a reply', async ({ page }) => {
+  /* CI builds with PUBLIC_API_URL=https://api.lumecon.ai, so a submit that
+     gets past validation issues a real POST to production, on both browsers,
+     on every run. Today it fails and falls through to the mail link; the day
+     that endpoint accepts traffic it would file a contact record from every
+     CI run instead. Intercepted here so this test can never reach the
+     network, and so the valid-address case asserts the handler's own
+     behaviour rather than whatever production happens to answer. */
+  const submitted: string[] = [];
+  await page.route('**/v1/contact', async (route) => {
+    submitted.push(route.request().postData() ?? '');
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true }),
+    });
+  });
+
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  await page.locator('.contact-form [name="name"]').fill('Test Person');
+  await page.locator('.contact-form [name="message"]').fill('A question about the model.');
+  const status = page.locator('[data-contact-status]');
+
+  // A typo here is the one error the visitor cannot recover from: the message
+  // sends and the reply goes nowhere, with neither side any the wiser.
+  for (const bad of ['not-an-email', 'missing@domain', 'two@@at.com', 'space bar@x.com']) {
+    await page.locator('.contact-form [name="email"]').fill(bad);
+    await page.locator('[data-contact-submit]').click();
+    await expect(status).toContainText('looks incomplete', { timeout: 2000 });
+    expect(page.url()).toContain('/contact');
+  }
+
+  // Nothing reached the network while the address was malformed: validation
+  // runs before the request, not after it.
+  expect(submitted).toHaveLength(0);
+
+  // A real address is not blocked by the check, and does reach the handler.
+  await page.locator('.contact-form [name="email"]').fill('person@example.org');
+  await page.locator('[data-contact-submit]').click();
+  await expect(status).not.toContainText('looks incomplete');
+  await expect.poll(() => submitted.length).toBe(1);
+  expect(submitted[0]).toContain('person@example.org');
+});
+
+test.describe('contact in the dark colour scheme', () => {
+  test.use({ colorScheme: 'dark' });
+
+  test('a validation error stays readable', async ({ page }) => {
+    /* --terra-dark is a light-mode ink with no dark override: measured at
+       2.86:1 on the dark ground, against the 4.5:1 small-text requirement.
+       A validation error was hardest to read for exactly the people most
+       likely to depend on it. Measured against the real rendered
+       background rather than the token, so a later change to either side
+       is caught. */
+    await page.route('**/v1/contact', (route) => route.abort());
+    await page.goto('/contact', { waitUntil: 'networkidle' });
+    await page.locator('[data-contact-submit]').click();
+    const status = page.locator('[data-contact-status]');
+    await expect(status).toBeVisible();
+
+    const ratio = await status.evaluate((el) => {
+      const parse = (c: string) => c.match(/\d+/g)!.slice(0, 3).map(Number);
+      const bgOf = (n: Element | null) => {
+        for (let e = n; e; e = e.parentElement) {
+          const c = getComputedStyle(e).backgroundColor;
+          if (c && !/rgba\(0, 0, 0, 0\)/.test(c)) return parse(c);
+        }
+        return [255, 255, 255];
+      };
+      const lum = (rgb: number[]) => {
+        const c = rgb
+          .map((v) => v / 255)
+          .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const a = lum(parse(getComputedStyle(el).color));
+      const b = lum(bgOf(el));
+      return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
+test.describe('contact with no working script', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('a submit cannot put the message in the URL or the history', async ({ page }) => {
+    /* With neither method nor action the browser GETs this same URL, so the
+       name, email, organization and message land in the query string, the
+       history and any referrer, having delivered nothing. Verified to be a
+       real leak before the fix: the URL came back carrying all three. */
+    await page.goto('/contact', { waitUntil: 'domcontentloaded' });
+    await page.fill('input[name="name"]', 'Ada Lovelace');
+    await page.fill('input[name="email"]', 'ada@example.org');
+    await page.fill('textarea[name="message"]', 'Sensitive message body');
+    /* Inert without a script: POST to a static page cannot deliver anything,
+       so an enabled button would take the message and discard it. */
+    await expect(page.locator('[data-contact-submit]')).toBeDisabled();
+
+    await page.locator('[data-contact-submit]').click({ force: true }).catch(() => {});
+    // Enter in a text field can submit a form regardless of the button, which
+    // is why method="post" stays as the second line of defence.
+    await page.locator('input[name="email"]').press('Enter').catch(() => {});
+    await page.waitForTimeout(500);
+
+    const url = page.url();
+    for (const secret of ['Ada', 'Lovelace', 'ada%40example.org', 'Sensitive']) {
+      expect(url, `no-script submit leaked ${secret}`).not.toContain(secret);
+    }
+    /* And the visitor is told where to write instead of being dead-ended.
+       Asserted on the markup, not the text: with scripting disabled this way
+       the parser can still hold noscript content as raw text, so the element
+       has no text nodes to read even though the browser renders it. */
+    const fallback = await page
+      .locator('noscript')
+      .evaluateAll((nodes) => nodes.map((n) => n.innerHTML).join(' '));
+    expect(fallback).toContain('reaches the same place');
+    expect(fallback).toContain('contact@lumecon.ai');
+  });
+});
+
+test('the contact handler enables the button it ships disabled', async ({ page }) => {
+  // The markup ships `disabled` so a broken script cannot take a message it
+  // has no way to send. That only works if the handler reliably undoes it.
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  await expect(page.locator('[data-contact-submit]')).toBeEnabled();
+});
+
+test('the contact fallback address is the one in config, not a second copy', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'domcontentloaded' });
+  // The client script reads the address off the form rather than repeating
+  // it as a literal, so changing config cannot leave a stale address behind.
+  await expect(page.locator('[data-contact-form]')).toHaveAttribute(
+    'data-contact-email',
+    'contact@lumecon.ai',
+  );
+});
+
+test('the readiness section is a primer, and its accents actually render', async ({ page }) => {
+  await page.goto('/start', { waitUntil: 'networkidle' });
+  const sec = page.locator('[aria-labelledby="s-ready"]');
+  await expect(sec).toBeVisible();
+
+  // Four essentials, and the team guide folded away so the page stays a
+  // primer rather than becoming a readiness audit.
+  await expect(sec.locator('.ready-four__item')).toHaveCount(4);
+  await expect(sec.locator('.ready-more')).not.toHaveAttribute('open', /.*/);
+  // The floor line has to be present: without it this reads as an entry exam.
+  await expect(sec.locator('.ready-floor')).toContainText('do not need every record');
+  // The review path is named as normal, not as an obstacle.
+  await sec.locator('.ready-more > summary').click();
+  await expect(sec.locator('.ready-gov')).toContainText('Council');
+  await expect(sec.locator('.ready-team__row')).toHaveCount(6);
+
+  // An undefined CSS custom property makes the whole declaration invalid and
+  // disappears with no error, which is how this shipped at 0px the first
+  // time. Assert the accents resolved to something real.
+  const style = await sec.evaluate((el) => {
+    const floor = getComputedStyle(el.querySelector('.ready-floor')!);
+    const num = getComputedStyle(el.querySelector('.ready-four__n')!);
+    const eyebrow = getComputedStyle(el.querySelector('.ready-team__holds')!);
+    return {
+      border: parseFloat(floor.borderLeftWidth),
+      numColor: num.color,
+      accent: getComputedStyle(document.documentElement)
+        .getPropertyValue('--accent-text')
+        .trim(),
+      eyebrowRadius: parseFloat(eyebrow.borderTopLeftRadius) || 0,
+      eyebrowBg: eyebrow.backgroundColor,
+    };
+  });
+  expect(style.border).toBeGreaterThan(0);
+
+  // AGENTS.md: eyebrows are plain mono typography, not pills. A radius
+  // communicates one assembled object, and this is a label on a row.
+  expect(style.eyebrowRadius).toBe(0);
+  expect(style.eyebrowBg).toMatch(/rgba\(0, 0, 0, 0\)|transparent/);
+
+  // Teal is semantic. Ordering numerals are not actions, not economic
+  // concepts and not approved brand phrases, so a reader skimming only the
+  // teal must not meet "01 02 03 04".
+  const toRgb = (hex: string) => {
+    const m = /^#?([0-9a-f]{6})$/i.exec(hex);
+    if (!m) return null;
+    const n = parseInt(m[1], 16);
+    return `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`;
+  };
+  const accentRgb = toRgb(style.accent);
+  expect(accentRgb, 'accent token should resolve to a hex colour').toBeTruthy();
+  expect(style.numColor).not.toBe(accentRgb);
+
+  // Consultant-led work is the same analysis coordinated differently, so it
+  // gets one line inside the fold, not a competing section or a second CTA.
+  const consultant = sec.locator('.ready-consultant');
+  await expect(consultant).toContainText('Working with a consultant?');
+  await expect(consultant).toContainText('begin a project together');
+  await expect(sec.locator('.ready-consultant a')).toHaveCount(0);
+});
+
+test('every dark cover hero carries the corner mark', async ({ page }) => {
+  // One brand mark bled off the top-right of each dark cover. Cedar Grove
+  // and Security were missing it while methodology, the starting guide and
+  // Cedar had it, which read as three surfaces instead of one.
+  const covers: [string, string][] = [
+    ['/methodology', '.meth-hero--cover'],
+    ['/start', '.meth-hero--cover'],
+    ['/cedar', '.cedarpg-hero'],
+    ['/cedar-grove', '.grovepg-hero'],
+    ['/security', '.secpg-hero'],
+  ];
+  for (const [path, sel] of covers) {
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
+    const mark = await page.locator(sel).first().evaluate((el) => {
+      const cs = getComputedStyle(el, '::after');
+      const host = getComputedStyle(el);
+      return {
+        image: cs.backgroundImage,
+        opacity: cs.opacity,
+        clipped: host.overflow,
+        positioned: host.position,
+      };
+    });
+    expect(mark.image, `${path} hero mark`).toContain('lumecon-logo-mark');
+    // Decoration, not a design element competing with the copy.
+    expect(Number(mark.opacity), `${path} mark opacity`).toBeLessThan(0.1);
+    // Without both of these the mark widens the page instead of bleeding off it.
+    expect(mark.positioned, `${path} hero positioning`).not.toBe('static');
+    expect(mark.clipped, `${path} hero overflow`).toContain('hidden');
+  }
+});
+
 test('skip link targets real content on subpages', async ({ page }) => {
   await page.goto('/methodology', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('main#top')).toHaveCount(1);
@@ -596,6 +890,57 @@ test('cedar grove shows three captures of the product, in one frame, per theme',
       nodes.map((node) => `${node.getAttribute('width')}x${node.getAttribute('height')}`),
     );
   expect(new Set(boxes)).toEqual(new Set(['1920x1080']));
+});
+
+test('the grove collections open one at a time, by click and by keyboard', async ({ page }) => {
+  await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+  const tabs = page.locator('[data-atlas-tab]');
+  await expect(tabs).toHaveCount(12);
+
+  // A picker, not twelve open panels: one collection at a time, and the
+  // control says which.
+  await expect(page.locator('[data-atlas-panel]:visible')).toHaveCount(1);
+  await expect(tabs.first()).toHaveAttribute('aria-expanded', 'true');
+
+  // Each tile opens its own collection, and the detail is the argument the
+  // page is making: what it contributes, plus coverage, sources and terms.
+  await tabs.nth(4).click();
+  const open = page.locator('[data-atlas-panel]:visible');
+  await expect(open).toHaveCount(1);
+  await expect(tabs.first()).toHaveAttribute('aria-expanded', 'false');
+  await expect(tabs.nth(4)).toHaveAttribute('aria-expanded', 'true');
+  await expect(open.locator('dt')).toHaveText([
+    'What Lumecon resolved',
+    'Coverage',
+    'Sources',
+    'Terms',
+  ]);
+
+  // Arrow keys walk the strip and wrap, so neither end is a dead stop.
+  const nameOf = () => open.locator('h3').textContent();
+  await tabs.nth(4).focus();
+  const atFive = await nameOf();
+  await page.keyboard.press('ArrowRight');
+  expect(await nameOf()).not.toBe(atFive);
+  await page.keyboard.press('ArrowLeft');
+  expect(await nameOf()).toBe(atFive);
+  await tabs.first().focus();
+  await page.keyboard.press('ArrowLeft');
+  expect(await nameOf()).not.toBe(atFive);
+});
+
+test.describe('grove collections with no working script', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('every collection is readable, and no tile is a dead control', async ({ page }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
+    // The panels ship open, so the section is a complete list rather than
+    // twelve unlabelled icons.
+    await expect(page.locator('[data-atlas-panel]:visible')).toHaveCount(12);
+    // And the tiles are inert, so a keyboard user does not tab through twelve
+    // controls that cannot answer.
+    await expect(page.locator('[data-atlas-tab]:not([disabled])')).toHaveCount(0);
+  });
 });
 
 test('cedar grove never names a real place beside a fixture', async ({ page }) => {

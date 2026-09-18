@@ -28,10 +28,11 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/methodology` | 2560 | Methodology \| Lumecon | 167 |
 | `/team` | 369 | Team \| Lumecon | 115 |
 | `/cedar` | 468 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-grove` | 458 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/cedar-grove` | 563 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1007 | Plan your first analysis \| Lumecon | 165 |
+| `/start` | 1423 | Plan your first analysis \| Lumecon | 165 |
+| `/contact` | 286 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
@@ -43,13 +44,13 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **12207** | | |
+| **Total** | **13014** | | |
 
 ## Crawler metadata audit
 
 This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards, the llms.txt discovery link and JSON-LD against the built site.
 
-- **Sitemap URLs:** 14
+- **Sitemap URLs:** 15
 - **Status:** All checked crawler metadata is complete and consistent.
 
 ---
@@ -108,7 +109,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -123,8 +124,8 @@ THE INTELLIGENT ECONOMIC ANALYSIS PLATFORM
 
 Lumecon brings your organization’s records, authoritative public data and a regional economic model into one reviewable workflow. Cedar structures the inputs and flags uncertainty; you approve the assumptions, Cedar Impact calculates the results and every estimate keeps its source trail.
 
-- _link:_ [See plans and pricing →](/pricing)
 - _link:_ [Request free access →](/signup?tier=free)
+- _link:_ [See plans and pricing →](/pricing)
 - _image alt:_ (no alt)
 RENEWABLE ENERGY IOWA
 
@@ -421,7 +422,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -815,7 +816,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1134,7 +1135,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1375,7 +1376,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1510,7 +1511,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 458
+- **Visible words:** 563
 
 ### Architecture (heading outline)
 
@@ -1518,6 +1519,18 @@ We use optional analytics to improve Lumecon. Privacy Policy
   - **H2** Choose the work. Grove changes with it.
   - **H2** A figure should not leave its evidence behind.
   - **H2** The collections behind the evidence.
+    - **H3** Federal Funding to Indian Country
+    - **H3** Federal Register
+    - **H3** Congressional Votes and Proposed Legislation
+    - **H3** Indian Country Deals
+    - **H3** NAGPRA
+    - **H3** Native Federal Advocacy and Engagement
+    - **H3** Federal Prime Contracting
+    - **H3** Federal Subcontracting
+    - **H3** Natural Resource Revenues
+    - **H3** Individually Owned Native Businesses
+    - **H3** Native Nonprofits
+    - **H3** Cedar Native Entity Enterprise Dataset (Cedar NEED)
   - **H2** Cedar Grove, for your whole organization.
 
 ### Copy, in document order
@@ -1540,7 +1553,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1597,6 +1610,8 @@ EVIDENCE INFRASTRUCTURE
 
 **H2: The collections behind the evidence.**
 
+Twelve collections. Open one to see what it contributes, what Lumecon resolved in it, how far back it reaches and what its records permit.
+
 - Federal Funding
 - Federal Register
 - Legislation
@@ -1609,6 +1624,198 @@ EVIDENCE INFRASTRUCTURE
 - Native-Owned Businesses
 - Native Nonprofits
 - Cedar NEED
+
+> _section: `atlas-funding`_
+
+
+**H3: Federal Funding to Indian Country**
+
+Every award the federal government reports sending into Indian Country: grants, loans, direct payments and insurance, award by award.
+
+- WHAT LUMECON RESOLVED
+- Recipients resolved to the Native entity behind them, so an award to a subsidiary, a housing authority or a consortium is attributed to the nation or organization it belongs to.
+- COVERAGE
+- Records from fiscal year 2007
+- SOURCES
+- USAspending assistance award archive and API
+- TERMS
+- Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-federal-register`_
+
+
+**H3: Federal Register**
+
+**[conditional]** Every notice, rule and comment window touching tribes, lands, water or recognition, caught while there is still time to respond.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Notices matched to the tribes, lands and organizations they name, including entities that appear under former or variant names.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1994
+- **[conditional]** Sources
+- **[conditional]** federalregister.gov API
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-legislation`_
+
+
+**H3: Congressional Votes and Proposed Legislation**
+
+**[conditional]** Bills, resolutions and roll-call votes from both chambers, followed from introduction to the floor: who sponsored, who voted and how.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Bills and votes tied to the tribes and Native organizations they affect, not only to the sponsors who filed them.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1973, thin and gapped through the 1980s
+- **[conditional]** Sources
+- **[conditional]** congress.gov API for bills, actions and cosponsors; House and Senate roll-call records
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-deals`_
+
+
+**H3: Indian Country Deals**
+
+**[conditional]** Material transactions and capital commitments involving Native nations, organizations and enterprises: acquisitions, financing, joint ventures and major projects, with participants, announced value, status and timing.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Buyers, sellers, borrowers and issuers resolved to tribal governments, tribally owned enterprises, ANCs and NHOs.
+- **[conditional]** Coverage
+- **[conditional]** Records from 2000
+- **[conditional]** Sources
+- **[conditional]** Transaction announcements, agency records and Federal Register land and trust actions, manually reviewed
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-nagpra`_
+
+
+**H3: NAGPRA**
+
+**[conditional]** Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Notices matched to the tribes and Native Hawaiian organizations named in them, across the naming changes of three decades.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1994, the first notice published under the Act
+- **[conditional]** Sources
+- **[conditional]** NAGPRA notices as published in the Federal Register
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-lobbying`_
+
+
+**H3: Native Federal Advocacy and Engagement**
+
+**[conditional]** Registered lobbying, agency meetings, tribal consultations, regulatory comments, congressional testimony and nonprofit lobbying disclosures, one entity-linked activity per row.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Each activity resolved to the tribe or Native organization behind it where the record supports the link; a row the record cannot place keeps its printed party name and a blank key rather than a guess.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1999
+- **[conditional]** Sources
+- **[conditional]** Senate Lobbying Disclosure Act filings, tribal consultation notices, congressional hearing records and Federal Register ex parte notices
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-contractors`_
+
+
+**H3: Federal Prime Contracting**
+
+**[conditional]** Every prime award to a firm, a tribal enterprise or a tribal government, with the agency, the dollars, the industry and the set-aside path it came through.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Vendors resolved to tribally owned firms, ANC and NHO subsidiaries and 8(a) participants, then rolled up to the parent nation or corporation.
+- **[conditional]** Coverage
+- **[conditional]** Records from fiscal year 2000, where Native identification begins in the federal record; refreshed quarterly
+- **[conditional]** Sources
+- **[conditional]** FPDS-NG feed, USAspending award data and SAM contract awards
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-subcontracting`_
+
+
+**H3: Federal Subcontracting**
+
+**[conditional]** The dollars below the prime layer: which vendors do the work, under whom and in which sectors.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Subawards matched to the same resolved entities as the prime contracts above them.
+- **[conditional]** Coverage
+- **[conditional]** Records from fiscal year 2010, the statutory reporting floor
+- **[conditional]** Sources
+- **[conditional]** USAspending FSRS subaward data
+- **[conditional]** Terms
+- **[conditional]** Filer-reported and unaudited. Totals are stated with that limit.
+
+> _section: `atlas-natural-resources`_
+
+
+**H3: Natural Resource Revenues**
+
+**[conditional]** Energy and mineral activity on trust and restricted lands: production volumes, the royalties it owes and the disbursements that follow.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Production and disbursements matched to the nations and allottees they belong to.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1880, through retrospectively published headright payments
+- **[conditional]** Sources
+- **[conditional]** ONRR Natural Resources Revenue Data and retrospectively published disbursement records
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-owned`_
+
+
+**H3: Individually Owned Native Businesses**
+
+**[conditional]** Individually owned Native businesses, certified by their own nations’ TERO and commerce offices: who they are, what trades they work and what preference status their nation certifies.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Every listing carries the nation whose office certified it and is credited to the issuing TERO or commerce office.
+- **[conditional]** Coverage
+- **[conditional]** A roster as captured on 2026-09-01; certifying offices archive no superseded lists
+- **[conditional]** Sources
+- **[conditional]** Nations’ TERO and commerce offices, shared with the project office by office
+- **[conditional]** Terms
+- **[conditional]** A listing appears only under its nation’s stated terms.
+
+> _section: `atlas-nonprofits`_
+
+
+**H3: Native Nonprofits**
+
+**[conditional]** Native-led and Native-serving nonprofits with their federal filings: budgets, revenue mixes and program spending.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Filers classified as Native-led, Native-serving or Native-focused, which are three different things and are labeled separately.
+- **[conditional]** Coverage
+- **[conditional]** A register as captured on 2026-04-29, one row per filer with its latest period
+- **[conditional]** Sources
+- **[conditional]** IRS Business Master File monthly extracts
+- **[conditional]** Terms
+- **[conditional]** Public records. The classification is Lumecon’s work and stays reviewable.
+
+> _section: `atlas-need`_
+
+
+**H3: Cedar Native Entity Enterprise Dataset (Cedar NEED)**
+
+**[conditional]** Who owns whom across Indian Country’s enterprises: parent nations and corporations, their subsidiaries, holding companies and joint ventures, and how those ties change.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** The structure the rest of the record resolves against, published as a collection in its own right: every tie names the nation or corporation behind it.
+- **[conditional]** Coverage
+- **[conditional]** Observations from 2016, the earliest year any source named an enterprise or a tie
+- **[conditional]** Sources
+- **[conditional]** Entity records, enterprise registers and filings, reconciled edition by edition
+- **[conditional]** Terms
+- **[conditional]** Unresolved ties stay unresolved. A provisional match is labeled provisional.
 
 > _section: `license`_
 
@@ -1717,7 +1924,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1876,7 +2083,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -1999,7 +2206,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1007
+- **Visible words:** 1423
 
 ### Architecture (heading outline)
 
@@ -2007,6 +2214,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
   - **H2** Your starting plan
   - **H2** What a first analysis can show
   - **H2** What more records would let you ask
+  - **H2** Prepare your organization for an analysis
   - **H2** Start with the records you already have
   - **H2** We can help you choose a starting point.
   - **H2** How coverage is reported
@@ -2032,7 +2240,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2173,6 +2381,32 @@ Available today.
 **[conditional]** Future work. Local purchasing is estimated from regional trade data today, and vendor records are not a model input.
 
 
+**H2: Prepare your organization for an analysis**
+
+The work stalls on coordination more often than on data. Four things make it go smoothly, and none of them has to be settled before you start.
+
+- 01 A project lead One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear. Not necessarily the most senior person, and they do not have to hold any of the records themselves.
+- 02 A clear first question What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize. One question is enough to start. The second is easier once the first is answered.
+- 03 The right record holders Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on. Usually several people across several offices, which is normal and worth mapping early.
+- 04 The right approval path Whoever can authorize records being shared, and whether a review has to happen before they move. The person who holds a record and the person who can release it are often not the same person.
+You do not need every record, or every person, before you begin. It helps to know who can help when the project needs them.
+
+- _disclosure:_ What a project team looks like
+A composite of how organizations that run these analyses well are arranged. One person may hold several of these, and a small organization often has three people rather than six.
+
+- Project lead COORDINATION Keeps the project moving, decides whom to involve, and tracks what is still unanswered.
+- Executive sponsor AUTHORITY Settles scope, priority and access questions that need someone able to decide them.
+- Finance or accounting RECORDS Statements, budgets and the figures every other number is built from.
+- Payroll or human resources RECORDS Employment and compensation, which is where jobs and labor income come from.
+- Operations or enterprise leads KNOWLEDGE How a specific operation actually runs, which no document states plainly.
+- Governance liaison APPROVAL The Council, board, enterprise leadership or legal route, where one is required before records are shared.
+Some organizations need leadership, board, Council or legal review before records are shared. Naming that step at the start means the timeline reflects how the organization actually works, instead of the project discovering it halfway through.
+
+The onboarding call works through whichever of these is unsettled. What the call covers.
+
+Working with a consultant? Share this guide with your client, or begin a project together in Lumecon.
+
+
 **H2: Start with the records you already have**
 
 Bring what exists. We would rather read the report you already produce than have you build a spreadsheet for us, and we will tell you what it supports before you spend time reformatting anything.
@@ -2292,6 +2526,156 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 ---
 
+## `/contact` — Contact
+
+**Intended job of this page:** How to reach a person, and where each kind of message goes.
+
+- **Title:** Contact | Lumecon
+- **Meta description** (145 chars): Reach the Lumecon team: general questions, security disclosures, accessibility, and where to go for beta access or help scoping a first analysis.
+- **og:description:** Reach the Lumecon team: general questions, security disclosures, accessibility, and where to go for beta access or help scoping a first analysis.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
+- **Canonical:** https://lumecon.ai/contact
+- **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+- **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, ContactPage
+- **Visible words:** 286
+
+### Architecture (heading outline)
+
+- **H1** Talk to a person.
+  - **H2** Send a message
+  - **H2** Or go straight there
+
+### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
+- _link:_ [Skip to main content](#top)
+
+> _section: `Main navigation`_
+
+- _link:_ [LUMECON](/)
+- _label:_ |
+- _label:_ The Intelligent Economic Analysis Platform
+- Product
+- Pricing
+- Resources
+- Company
+- _link:_ [Log in](/login)
+- _link:_ [Request access](/signup)
+- _button:_ Menu
+- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** Pricing
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
+- **[conditional]** CompanyTeamSecurityContact
+- **[conditional]** Log in
+- **[conditional]** Request access
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+
+> _section: `meth-hero`_
+
+CONTACT
+
+
+**H1: Talk to a person.**
+
+Questions about the model, a procurement review, a partnership, or something the site does not answer. Write below or to contact@lumecon.ai, whichever you prefer.
+
+
+> _section: `meth-sec`_
+
+
+**H2: Send a message**
+
+Fields marked * are required.
+
+- _label:_ Name *
+- _label:_ Email *
+- _label:_ Organization
+- _label:_ What can we help with? *
+- _button:_ Send →
+Goes to contact@lumecon.ai. We do not have a published response time, so we will not promise one.
+
+
+> _section: `contact-routes`_
+
+
+**H2: Or go straight there**
+
+- Access to the beta Access is opening in waves. The request form collects the profile the product needs, so it is faster than an email. Request access →
+- Not sure what to ask for A few questions propose a starting scope and the records it needs. Bring the answer to a call. Plan your first analysis →
+- Security disclosure Report a vulnerability with the subject line Security review. The control program and the disclosure policy are published. Read the security page →
+- Accessibility Tell us what you hit, with the subject line Accessibility. The conformance statement names what is known and unresolved. Read the accessibility statement →
+Lumecon reads one inbox, so the routes above are subject lines rather than separate addresses. Nothing you send here is used to train a model. How we handle AI and data.
+
+
+> _section: `footer`_
+
+
+> _section: `Footer`_
+
+PRODUCT
+
+- Cedar Impact
+- Cedar
+- Cedar Grove
+- Pricing
+REFERENCE
+
+- Methodology
+- Team
+- Security
+- Glossary
+- Industry sectors
+ACCOUNT
+
+- Plan your first analysis
+- Request access
+- Log in
+- Contact
+LEGAL
+
+- Terms
+- Privacy
+- AI and data use
+- Accessibility
+- _label:_ © 2026 Lumecon Inc. · All rights reserved · Patent pending.
+- _button:_ Privacy choices
+- _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
+- _button:_ Who is Lumecon for?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
+We use optional analytics to improve Lumecon. Privacy Policy
+
+- _button:_ Decline
+- _button:_ Accept
+
+---
+
 ## `/signup` — Sign up
 
 - **Title:** Request beta access | Lumecon
@@ -2329,7 +2713,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2443,7 +2827,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2530,7 +2914,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2628,7 +3012,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2774,7 +3158,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2839,7 +3223,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -2967,7 +3351,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3108,7 +3492,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3284,7 +3668,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3427,7 +3811,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3589,7 +3973,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _button:_ Menu
 - **[conditional]** ProductCedar ImpactCedarCedar Grove
 - **[conditional]** Pricing
-- **[conditional]** ResourcesPlan your first analysisMethodologyGlossaryIndustry sectors
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
 - **[conditional]** Log in
 - **[conditional]** Request access
@@ -3653,7 +4037,7 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 
 ### Sentences that appear verbatim on more than one page
 
-- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/start` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
+- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/start` and `/contact` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."

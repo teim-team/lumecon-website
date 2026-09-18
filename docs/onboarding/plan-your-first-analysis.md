@@ -8,15 +8,18 @@ serve: introduce questions as they become relevant, rather than putting the
 whole possible project in front of an organization before a small starting
 scope has been agreed.
 
-**Two dimensions, read separately.** Organizational complexity covers
+**Three dimensions, read separately.** Organizational complexity covers
 multiple entities, work locations, states, industries, transactions between
 entities, federal contracting and the links between enterprises and a
 government. Data readiness covers whether records are centralized,
 reachable, consistently defined, geographically identifiable and approved
-for sharing. A complex organization frequently has excellent records. A
-single-location organization frequently cannot reach its own. Neither
-dimension assigns anyone to an advanced onboarding path, and they are never
-combined into one score.
+for sharing. Analysis readiness covers coordination: who keeps the work
+moving, who holds each record and who can authorize releasing it. A complex
+organization frequently has excellent records. A single-location
+organization frequently cannot reach its own. An organization with both can
+still wait weeks because nobody established that sharing required a review.
+No dimension assigns anyone to an advanced onboarding path, none is scored,
+and they are never combined into one number.
 
 ## 1. The questions
 
@@ -248,6 +251,41 @@ question for the call rather than a blank to fill in.
 Which category a record falls into depends on the scope. Something optional
 for one analysis is essential for another, so the tiering is computed from
 the answers rather than fixed to the record.
+
+## 3b. Analysis readiness
+
+The third dimension, and the one that most often stalls a project. Ask for
+these on the call rather than before it, and take a name where one exists
+rather than a department.
+
+- **A project lead.** One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear. _Not necessarily the most senior person, and they do not have to hold any of the records themselves._
+- **A clear first question.** What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize. _One question is enough to start. The second is easier once the first is answered._
+- **The right record holders.** Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on. _Usually several people across several offices, which is normal and worth mapping early._
+- **The right approval path.** Whoever can authorize records being shared, and whether a review has to happen before they move. _The person who holds a record and the person who can release it are often not the same person._
+
+> You do not need every record, or every person, before you begin. It helps to know who can help when the project needs them.
+
+The two roles most often conflated are the person who **holds** a record and
+the person who can **authorize releasing** it. Ask for them separately: a
+project can have every record it needs and still wait on an approval nobody
+named.
+
+A working team, where an organization has one. One person often holds
+several of these, and a small organization commonly has three people rather
+than six:
+
+- **Project lead** _(coordination)_. Keeps the project moving, decides whom to involve, and tracks what is still unanswered.
+- **Executive sponsor** _(authority)_. Settles scope, priority and access questions that need someone able to decide them.
+- **Finance or accounting** _(records)_. Statements, budgets and the figures every other number is built from.
+- **Payroll or human resources** _(records)_. Employment and compensation, which is where jobs and labor income come from.
+- **Operations or enterprise leads** _(knowledge)_. How a specific operation actually runs, which no document states plainly.
+- **Governance liaison** _(approval)_. The Council, board, enterprise leadership or legal route, where one is required before records are shared.
+
+**On the review path.** Some organizations need leadership, board, Council or legal review before records are shared. Naming that step at the start means the timeline reflects how the organization actually works, instead of the project discovering it halfway through.
+
+**Consultant-led work.** Working with a consultant? Share this guide with your client, or begin a project together in Lumecon. The
+records, the approval path and the final interpretation stay with the
+client, so ask who on their side holds each one.
 
 ## 4. The call
 

@@ -32,6 +32,11 @@ import {
   CAPABILITY_MATRIX,
   RECORDS,
   CALL_PUBLIC_OUTCOMES,
+  READINESS_ESSENTIALS,
+  READINESS_TEAM,
+  READINESS_GOVERNANCE,
+  READINESS_FLOOR,
+  READINESS_CONSULTANT,
 } from '../data/planFirstAnalysis.js';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -338,6 +343,76 @@ const jsonLd = [
             }
           </div>
         </div>
+      </div>
+    </section>
+
+    {/* Analysis readiness, which is not data readiness. The flow above
+        reads the organization and the records as two independent things;
+        this is the third, and the one that most often stalls a project.
+        Deliberately a short primer and not an audit: a public page that
+        interrogates an organization about its internal authority before
+        it has seen anything of value is the thing to avoid. */}
+    <section class="meth-sec start-sec start-sec--quiet" aria-labelledby="s-ready">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="s-ready">Prepare your organization for an analysis</h2>
+          <p class="meth-sec__lede">
+            The work stalls on coordination more often than on data. Four things make it go
+            smoothly, and none of them has to be settled before you start.
+          </p>
+        </div>
+
+        <ol class="ready-four" role="list">
+          {
+            READINESS_ESSENTIALS.map((item, i) => (
+              <li class="ready-four__item">
+                <p class="ready-four__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+                <div>
+                  <h3 class="ready-four__label">{item.label}</h3>
+                  <p class="ready-four__body">{item.body}</p>
+                  <p class="ready-four__note">{item.note}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="ready-floor">{READINESS_FLOOR}</p>
+
+        <details class="ready-more">
+          <summary>What a project team looks like</summary>
+          <div class="ready-more__body">
+            <p class="ready-more__lede">
+              A composite of how organizations that run these analyses well are arranged. One
+              person may hold several of these, and a small organization often has three people
+              rather than six.
+            </p>
+            <ul class="ready-team" role="list">
+              {
+                READINESS_TEAM.map((m) => (
+                  <li class="ready-team__row">
+                    <p class="ready-team__role">
+                      {m.role} <span class="ready-team__holds">{m.holds}</span>
+                    </p>
+                    <p class="ready-team__body">{m.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="ready-gov">{READINESS_GOVERNANCE}</p>
+            <p class="ready-more__foot">
+              The onboarding call works through whichever of these is unsettled.{' '}
+              <a class="gloss-link" href="#s-call">What the call covers</a>.
+            </p>
+            {/* One line, not a section. Consultant-led work is the same
+                analysis with the coordination arranged differently, so it
+                gets a redirection rather than a second audience the page
+                has to serve in full. */}
+            <p class="ready-consultant">
+              <strong>{READINESS_CONSULTANT.lede}</strong> {READINESS_CONSULTANT.body}
+            </p>
+          </div>
+        </details>
       </div>
     </section>
 

@@ -60,6 +60,7 @@ const PAGES = [
   ['/glossary', 'Glossary'],
   ['/naics', 'NAICS sectors'],
   ['/start', 'Plan your first analysis'],
+  ['/contact', 'Contact'],
   ['/signup', 'Sign up'],
   ['/login', 'Log in'],
   ['/choose-plan', 'Choose plan'],
@@ -102,6 +103,7 @@ const OWNERSHIP = {
   '/glossary': 'Defines terms and nothing more.',
   '/naics': 'What the sector classification covers.',
   '/start': 'What an organization can begin with, and what it would take.',
+  '/contact': 'How to reach a person, and where each kind of message goes.',
 };
 
 /** Claims worth counting because they are the ones that recur. */
@@ -183,8 +185,18 @@ function scrape() {
   // marked for what it is.
   const isConditional = (el) => el.hasAttribute('hidden') || el.closest('[hidden]') !== null;
 
+  /* Present in the DOM, deliberately not copy. A spam honeypot has to stay
+     reachable to a form-filling bot, so it cannot be `hidden` or removed,
+     but it is not something a visitor reads and it must not be counted or
+     reviewed as a real field. Opt-in rather than a blanket `aria-hidden`
+     rule, which would also strip the decorative arrows out of every button
+     label across the site. */
+  const isIgnored = (el) =>
+    el.hasAttribute('data-copy-ignore') || el.closest('[data-copy-ignore]') !== null;
+
   const walk = (node, conditional = false) => {
     for (const el of node.children) {
+      if (isIgnored(el)) continue;
       const tag = el.tagName;
       if (SKIP.has(tag)) continue;
       // Native dialogs are closed without a `hidden` attribute. Their
@@ -274,7 +286,25 @@ function scrape() {
     twitterImageAlt: meta('twitter:image:alt'),
     jsonld: [...new Set(jsonld.flat())],
     jsonldErrors,
-    wordCount: clean(root.innerText).split(/\s+/).filter(Boolean).length,
+    /* Counted with the ignored subtrees hidden. Skipping them in the block
+       walker alone left the honeypot out of the listing but still inside
+       this total, which is read as the page's visible words.
+
+       Hidden in place and restored, NOT counted on a detached clone:
+       `innerText` is layout-dependent, so on a node outside the document it
+       degrades to something closer to `textContent` and starts counting copy
+       no visitor sees. Measured: that mistake took the homepage from 740
+       words to 2947. */
+    wordCount: (() => {
+      const ignored = [...root.querySelectorAll('[data-copy-ignore]')];
+      const prior = ignored.map((el) => el.style.display);
+      for (const el of ignored) el.style.display = 'none';
+      const n = clean(root.innerText).split(/\s+/).filter(Boolean).length;
+      ignored.forEach((el, i) => {
+        el.style.display = prior[i];
+      });
+      return n;
+    })(),
     blocks,
   };
 }

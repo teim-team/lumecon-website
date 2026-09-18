@@ -40,13 +40,17 @@ something was being counted twice.
 
 ## 4. Who we need
 
-- Someone who can pull the financial statements.
-- Someone who can pull payroll and headcount.
-- Someone who can approve sharing records outside the organization.
-- Where records sit in different offices, one person tracking who has been asked.
+- **A project lead.** One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear.
+- **A clear first question.** What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize.
+- **The right record holders.** Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on.
+- **The right approval path.** Whoever can authorize records being shared, and whether a review has to happen before they move.
+
+You do not need every record, or every person, before you begin. It helps to know who can help when the project needs them.
 
 Not every department, and not senior leadership at every call. People join
 when the open questions need them.
+
+**On approvals.** Some organizations need leadership, board, Council or legal review before records are shared. Naming that step at the start means the timeline reflects how the organization actually works, instead of the project discovering it halfway through.
 
 ## 5. The call
 

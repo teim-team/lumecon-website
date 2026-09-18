@@ -27,6 +27,11 @@ import {
   CALL_OUTLINE,
   CALL_NOTES,
   OPEN_METHODOLOGY_QUESTIONS,
+  READINESS_ESSENTIALS,
+  READINESS_TEAM,
+  READINESS_GOVERNANCE,
+  READINESS_FLOOR,
+  READINESS_CONSULTANT,
   derivePlan,
 } from '../../src/data/planFirstAnalysis.js';
 
@@ -134,15 +139,18 @@ function guide() {
     'whole possible project in front of an organization before a small starting',
     'scope has been agreed.',
     '',
-    '**Two dimensions, read separately.** Organizational complexity covers',
+    '**Three dimensions, read separately.** Organizational complexity covers',
     'multiple entities, work locations, states, industries, transactions between',
     'entities, federal contracting and the links between enterprises and a',
     'government. Data readiness covers whether records are centralized,',
     'reachable, consistently defined, geographically identifiable and approved',
-    'for sharing. A complex organization frequently has excellent records. A',
-    'single-location organization frequently cannot reach its own. Neither',
-    'dimension assigns anyone to an advanced onboarding path, and they are never',
-    'combined into one score.',
+    'for sharing. Analysis readiness covers coordination: who keeps the work',
+    'moving, who holds each record and who can authorize releasing it. A complex',
+    'organization frequently has excellent records. A single-location',
+    'organization frequently cannot reach its own. An organization with both can',
+    'still wait weeks because nobody established that sharing required a review.',
+    'No dimension assigns anyone to an advanced onboarding path, none is scored,',
+    'and they are never combined into one number.',
     '',
   );
 
@@ -216,6 +224,39 @@ function guide() {
     'Which category a record falls into depends on the scope. Something optional',
     'for one analysis is essential for another, so the tiering is computed from',
     'the answers rather than fixed to the record.',
+    '',
+  );
+
+  out.push('## 3b. Analysis readiness', '');
+  out.push(
+    'The third dimension, and the one that most often stalls a project. Ask for',
+    'these on the call rather than before it, and take a name where one exists',
+    'rather than a department.',
+    '',
+  );
+  for (const item of READINESS_ESSENTIALS) {
+    out.push(`- **${item.label}.** ${item.body} _${item.note}_`);
+  }
+  out.push('', `> ${READINESS_FLOOR}`, '');
+  out.push(
+    'The two roles most often conflated are the person who **holds** a record and',
+    'the person who can **authorize releasing** it. Ask for them separately: a',
+    'project can have every record it needs and still wait on an approval nobody',
+    'named.',
+    '',
+    'A working team, where an organization has one. One person often holds',
+    'several of these, and a small organization commonly has three people rather',
+    'than six:',
+    '',
+  );
+  for (const m of READINESS_TEAM) {
+    out.push(`- **${m.role}** _(${m.holds.toLowerCase()})_. ${m.body}`);
+  }
+  out.push('', `**On the review path.** ${READINESS_GOVERNANCE}`, '');
+  out.push(
+    `**Consultant-led work.** ${READINESS_CONSULTANT.lede} ${READINESS_CONSULTANT.body} The`,
+    'records, the approval path and the final interpretation stay with the',
+    'client, so ask who on their side holds each one.',
     '',
   );
 
@@ -368,14 +409,17 @@ function brief() {
   );
 
   out.push('## 4. Who we need', '');
+  for (const item of READINESS_ESSENTIALS) {
+    out.push(`- **${item.label}.** ${item.body}`);
+  }
   out.push(
-    '- Someone who can pull the financial statements.',
-    '- Someone who can pull payroll and headcount.',
-    '- Someone who can approve sharing records outside the organization.',
-    '- Where records sit in different offices, one person tracking who has been asked.',
+    '',
+    READINESS_FLOOR,
     '',
     'Not every department, and not senior leadership at every call. People join',
     'when the open questions need them.',
+    '',
+    `**On approvals.** ${READINESS_GOVERNANCE}`,
     '',
   );
 

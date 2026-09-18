@@ -1163,6 +1163,7 @@
   .start-cta,
   .start-sec[aria-labelledby='s-output'],
   .start-sec[aria-labelledby='s-more'],
+  .start-sec[aria-labelledby='s-ready'],
   .start-sec[aria-labelledby='s-records'],
   .start-sec[aria-labelledby='s-call'],
   .start-sec[aria-labelledby='s-coverage'],
@@ -1249,4 +1250,135 @@
   .pf-check__more div {
     display: block !important;
   }
+}
+
+
+/* ---------------- prepare your organization ---------------- */
+
+/* Four numbered essentials, then the team guide folded away. The fold is
+   the point: the four are the message, and a visitor who wants the full
+   arrangement can open it without the page becoming an audit. */
+.ready-four {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3vw, 2.75rem) clamp(2rem, 4vw, 3.5rem);
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ready-four__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 1rem;
+  align-items: start;
+}
+.ready-four__n {
+  margin: 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.6;
+  color: var(--ink-3, var(--ink-2));
+}
+.ready-four__label {
+  margin: 0 0 0.4rem;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+}
+.ready-four__body {
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.ready-four__note {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink-3, var(--ink-2));
+}
+.ready-floor {
+  margin: clamp(2rem, 4vw, 2.75rem) 0 0;
+  padding: 0 0 0 1.15rem;
+  border-left: 2px solid var(--rule);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+.ready-more {
+  margin: 1.5rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+.ready-more > summary {
+  padding: 1rem 0 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ready-more__lede,
+.ready-more__foot {
+  margin: 1rem 0 0;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.ready-team {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ready-team__row {
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+.ready-team__row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.ready-team__role {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: baseline;
+  margin: 0 0 0.3rem;
+  font-weight: 600;
+}
+/* What they bring, not a rank. Four values repeat across six rows, so the
+   shape of the team is legible at a glance. */
+/* Plain mono typography, no pill: a radius communicates one assembled
+   object, and this is a label on a row rather than a control. Hierarchy
+   does the separating, which is what the eyebrow style is for. */
+.ready-team__holds {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3, var(--ink-2));
+}
+.ready-team__body {
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.ready-gov {
+  margin: 1.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  line-height: 1.6;
+}
+
+@media (max-width: 860px) {
+  .ready-four {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ready-consultant {
+  margin: 1.25rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.ready-consultant strong {
+  color: var(--ink);
 }
