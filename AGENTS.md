@@ -163,11 +163,22 @@ carries the idea. Review test: if someone remembers only the teal
 phrases, do they understand what makes Lumecon different?
 
 Page ownership (keep each page making one argument): the homepage
-says why Lumecon matters; /pricing says what it costs and why the
-pricing is different; /methodology says why the economics are
-credible; /cedar says why Lumecon's use of AI is different; the
-glossary defines terms and nothing more. Do not re-explain Cedar on
-other pages beyond a one-line pointer to /cedar.
+says why Lumecon matters and hands off; **/why-lumecon (2026-09) owns
+the buyer's argument** — why an organization should choose this, with
+price, preparation work, traceability and the team as its evidence;
+/pricing says what it costs and why the pricing is different;
+/methodology says why the economics are credible and where they stop,
+and sends the comparison against established platforms to
+/why-lumecon rather than answering it; /start says what getting
+started involves; /cedar says why Lumecon's use of AI is different;
+the glossary defines terms and nothing more. Do not re-explain Cedar
+on other pages beyond a one-line pointer to /cedar.
+
+The four questions, so a new page knows which one it is answering:
+Why Lumecon — why should our organization choose this? · the product
+pages — what can we do with it? · Methodology — how are the estimates
+built, and what are their limits? · Plan your first analysis — what
+does getting started involve?
 
 ## Standing instruction: the copy document is a CI gate (2026-09)
 

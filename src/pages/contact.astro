@@ -26,6 +26,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site as siteConfig } from '../config';
+import { TEAM_ROSTER } from '../data/team';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -115,6 +116,30 @@ const jsonLd = [
           <a class="gloss-link" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>, whichever
           you prefer.
         </p>
+        {/* The headline promises a person and the page showed none, leaving
+            the house hero band mostly empty beneath two lines of text. These
+            are the same portraits /team runs on, from the same record — the
+            staff only, since an advisor does not read this inbox. It is the
+            page's own claim made checkable, not decoration. */}
+        <div class="contact-who">
+          <ul class="contact-faces" role="list">
+            {TEAM_ROSTER.map((p) => (
+              <li>
+                <img
+                  src={p.photo}
+                  alt={p.name}
+                  width="480"
+                  height="480"
+                  decoding="async"
+                />
+              </li>
+            ))}
+          </ul>
+          <p class="contact-who__line">
+            Everyone at Lumecon is named, with their background and their work.{' '}
+            <a class="contact-who__a" href="/team">See the team <span aria-hidden="true">&rarr;</span></a>
+          </p>
+        </div>
       </div>
     </header>
 
@@ -137,14 +162,18 @@ const jsonLd = [
               data-contact-email={siteConfig.email}
               novalidate
             >
-              <label class="contact-field">
-                <span>Name <span class="contact-req" aria-hidden="true">*</span></span>
-                <input type="text" name="name" autocomplete="name" maxlength="200" required />
-              </label>
-              <label class="contact-field">
-                <span>Email <span class="contact-req" aria-hidden="true">*</span></span>
-                <input type="email" name="email" autocomplete="email" maxlength="200" required />
-              </label>
+              {/* Two short fields, one row. Four full-width controls in a
+                  column read as a longer form than this is. */}
+              <div class="contact-row">
+                <label class="contact-field">
+                  <span>Name <span class="contact-req" aria-hidden="true">*</span></span>
+                  <input type="text" name="name" autocomplete="name" maxlength="200" required />
+                </label>
+                <label class="contact-field">
+                  <span>Email <span class="contact-req" aria-hidden="true">*</span></span>
+                  <input type="email" name="email" autocomplete="email" maxlength="200" required />
+                </label>
+              </div>
               <label class="contact-field">
                 <span>Organization</span>
                 <input
@@ -190,14 +219,15 @@ const jsonLd = [
                 </noscript>
                 <p class="contact-note">
                   Goes to {siteConfig.email}. We do not have a published response time, so we will
-                  not promise one.
+                  not promise one. Nothing you send here is used to train a model:{' '}
+                  <a class="gloss-link" href="/ai-and-data-use">how we handle AI and data</a>.
                 </p>
               </div>
             </form>
           </div>
 
           <aside class="contact-routes" aria-labelledby="c-routes">
-            <h2 id="c-routes" class="contact-h2">Or go straight there</h2>
+            <h2 id="c-routes" class="contact-h2 contact-h2--aside">Or go straight there</h2>
             <ul role="list">
               {
                 ROUTES.map((r) => (
@@ -213,8 +243,7 @@ const jsonLd = [
             </ul>
             <p class="contact-routes__foot">
               Lumecon reads one inbox, so the routes above are subject lines rather than separate
-              addresses. Nothing you send here is used to train a model.{' '}
-              <a class="gloss-link" href="/ai-and-data-use">How we handle AI and data</a>.
+              addresses.
             </p>
           </aside>
         </div>

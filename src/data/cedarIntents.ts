@@ -240,6 +240,11 @@ export const INTENTS: CedarIntent[] = [
       'who is this for',
       'who is this platform for',
       'who is lumecon for',
+      'who is it for',
+      'who it is for',
+      'who are you for',
+      'who is lumecon built for',
+      'who is this built for',
       'who is the platform made for',
       'what kinds of clients',
       'what kind of clients',
@@ -409,6 +414,15 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['security', 'multipliers', 'onboarding'],
     chip: 'What data does it use?',
     triggers: [
+      /* "Explain your data collection methods" used to reach a
+         workspace answer about seats, then nothing at all once that
+         trigger was scoped. It is a question about sources. */
+      'data collection',
+      'collection methods',
+      'how do you collect data',
+      'how you collect data',
+      'how is the data collected',
+      'where does your data come from',
       'what data',
       'where does the data come',
       'users upload data',
@@ -715,6 +729,11 @@ export const INTENTS: CedarIntent[] = [
       'plan for me as a consultant',
       'lumecon for consultants',
       'for consultants',
+      'can consultants use',
+      'consultants use it',
+      'consultants use this',
+      'use it as a consultant',
+      'as a consultant',
       'consulting firm',
       'consulting firms',
       'as a consulting firm',
@@ -1031,7 +1050,7 @@ export const INTENTS: CedarIntent[] = [
   {
     id: 'competitors',
     followUps: ['modern_methods', 'accuracy', 'pricing'],
-    chip: 'How is this different from IMPLAN / RIMS / Lightcast?',
+    chip: 'How is this different from IMPLAN?',
     triggers: [
       'is this like implan',
       'compete with implan',
@@ -1384,6 +1403,11 @@ export const INTENTS: CedarIntent[] = [
       'state treasury',
       'state agency use case',
       'state agency uses',
+      'how do state agencies use',
+      'state agencies use it',
+      'state agencies use this',
+      'state agency use',
+      'do state agencies use',
       'department of commerce',
       'department of transportation',
       'state legislature',
@@ -1707,6 +1731,65 @@ export const INTENTS: CedarIntent[] = [
       'Lumecon currently builds its modeling foundation from documented public sources such as ACS, BEA regional accounts, LODES, QCEW and County Business Patterns, together with the records an organization provides. Additional datasets should be treated as part of an analysis only when they are listed in the methodology or Cedar Grove catalog with a defined role, geography and release date.',
   },
   {
+    id: 'cedar_commons',
+    followUps: ['team_access', 'pricing', 'cedar_grove'],
+    chip: 'What is Cedar Commons?',
+    triggers: [
+      'cedar commons',
+      'what is cedar commons',
+      'the commons',
+      'commons tier',
+      'shared workspace',
+      'shared project',
+      'shared projects',
+      'share a project',
+      'share an analysis',
+      'work on it together',
+      'work together',
+      'work on a project',
+      'work on the same project',
+      'work on projects together',
+      'together on a project',
+      'more than one person',
+      'two people',
+      'someone else on the project',
+      'add someone to a project',
+      'add people to a project',
+      'external collaborator',
+      'external collaborators',
+      'outside collaborator',
+      'outside collaborators',
+      'invite someone',
+      'invite people',
+      'invite a client',
+      'invite my team',
+      'bring someone in',
+      'who can see what',
+      'read only access',
+      'viewer access',
+      'project notes',
+      'note thread',
+      /* Scoped to collaborative intake. The bare phrase "data collection"
+         also matches "explain your data collection methods", which is a
+         question about sources and belongs to data_inputs, not to a
+         workspace answer about seats and permissions. */
+      'collect records from',
+      'collecting records from',
+      'collect data from my team',
+      'collect records',
+      'collect documents',
+      'collect the data',
+      'gather records',
+      'gather documents',
+      'get records from',
+      'someone else has the data',
+    ],
+    answer:
+      "Cedar Commons is the shared project workspace: where the people who hold the records join the analysis that needs them. The owner adds someone by email and sets two things \u2014 whether they are internal to the organization sponsoring the work or external to it, and whether they contribute to that project or only read it. An external collaborator reaches the one project they were invited to and nothing else in the organization. Records land on the project rather than in one person's library, carrying who added them and when, so nobody sends the payroll summary twice. Included with Sapling and Tree. Details at lumecon.ai/cedar-commons.",
+    expanded:
+      "Two things people usually ask next. Seats: a seat is a person, counted once across organization members, project collaborators and pending invitations, and an outside collaborator occupies a seat the same as a colleague \u2014 Sapling is up to 10 people in one organization however they are split, and Tree has no limit. Permissions: a viewer is read-only as an enforced permission rather than a convention, and the same person can contribute to one project and only read another, reported per project rather than averaged into one label. The note thread on a project is kept as it was written rather than edited later, so a figure questioned a year on still has both the file and the discussion beside it. See lumecon.ai/cedar-commons.",
+  },
+  {
     id: 'cedar_grove',
     followUps: ['cedar_tiers', 'cedar_naming', 'pricing'],
     chip: 'What is Cedar Grove?',
@@ -1820,7 +1903,7 @@ export const INTENTS: CedarIntent[] = [
       'user limit',
     ],
     answer:
-      "Access scales by plan: one user on Sprout, up to 10 on Sapling and unlimited users within one organization on Tree, all on flat annual subscriptions with no per-seat metering. Sapling and Tree include Cedar Commons, the shared project workspace: shared projects, project notes, data collection and external collaborators, so an analysis doesn't stall on one analyst's desk. If your whole organization should be in the platform, Tree is built for exactly that.",
+      "Access scales by plan: one user on Sprout, up to 10 on Sapling and unlimited users within one organization on Tree, all on flat annual subscriptions with no per-seat metering. Sapling and Tree include Cedar Commons, the shared project workspace: shared projects, project notes, data collection and external collaborators, so an analysis doesn't stall on one analyst's desk. If your whole organization should be in the platform, Tree is built for exactly that. The workspace itself is at lumecon.ai/cedar-commons.",
   },
   {
     id: 'data_sovereignty',
@@ -3027,9 +3110,17 @@ export const INTENTS: CedarIntent[] = [
       'who owns the company',
       'leadership team',
       'who is the ceo',
+      'how big is the team',
+      'how big is lumecon',
+      'how many employees',
+      'work at lumecon',
+      'people work at lumecon',
+      'company size',
+      'size of the team',
+      'how many of you are there',
     ],
     answer:
-      'Lumecon was founded by Elijah Moreno, who is the CEO and an enrolled member of the Coastal Band of the Chumash Nation. The broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. Every one of them is at lumecon.ai/team, with their degrees and where they have worked. Want an introduction? contact@lumecon.ai reaches them directly.',
+      'Lumecon is a small team and does not publish a headcount, but everyone working on the product is named on the team page with their background and their work. It was founded by Elijah Moreno, who is the CEO and an enrolled member of the Coastal Band of the Chumash Nation. The broader team leads economics, the platform, the input-output models, Cedar and data governance, with backgrounds spanning the Federal Reserve system and Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford. Every one of them is at lumecon.ai/team, with their degrees and where they have worked. Want an introduction? contact@lumecon.ai reaches them directly.',
   },
   {
     id: 'press_media',
@@ -3581,17 +3672,25 @@ export const OUT_OF_SCOPE_TRIGGERS = [
 // Intents shown as starter chips inside the welcome bubble. Picks the
 // most actionable prompts; the full intent bank is still reachable via
 // free-text input.
+/* The first five are rendered; the rest sit behind "See more options".
+   Order is therefore a real decision, not a list: these five are the
+   questions a first-time visitor actually opens with, and they have to
+   fit a phone, where Cedar now takes the whole screen. The product
+   pages follow in the extras, each one reachable by name. */
 export const CHIP_IDS = [
   'company_overview',
   'cedar_identity',
-  'security',
-  'competitors',
   'pricing',
+  'competitors',
+  'time_to_study',
+  // ---- behind "See more options" ----
+  'demo',
   'audience',
+  'cedar_commons',
+  'cedar_grove',
+  'security',
   'grant_applications',
   'county_city_use',
   'state_agency_use',
-  'time_to_study',
-  'demo',
   'cedar_tiers',
 ] as const;

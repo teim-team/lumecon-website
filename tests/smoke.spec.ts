@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test, expect } from '@playwright/test';
+import { scrollUntilCedarVisible } from './cedar-visibility';
 
 /**
  * Smoke suite. Catches the regressions we've actually hit (broken icon
@@ -160,12 +161,15 @@ test('homepage uses clear free-access language and Cedar starts on demand', asyn
   const prompts = await panel
     .locator('.cedar-chip')
     .evaluateAll((chips) => chips.slice(0, 5).map((chip) => chip.textContent?.trim()));
+  /* The five that are rendered, in order. The rest sit behind "See more
+     options", so this list is the whole of what a visitor is offered
+     before they ask for more — worth pinning rather than sampling. */
   expect(prompts).toEqual([
     'What is Lumecon?',
     'What is Cedar?',
-    'Is my data safe?',
-    'How is this different from IMPLAN / RIMS / Lightcast?',
     'How much does it cost?',
+    'How is this different from IMPLAN?',
+    'How long does an analysis take?',
   ]);
 });
 
@@ -230,7 +234,7 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
   // Four top-level items: three groups and Pricing on its own.
   await expect(page.locator('.nav-links > .nav-item')).toHaveCount(4);
-  for (const label of ['Product', 'Resources', 'Company']) {
+  for (const label of ['Product', 'Why Lumecon', 'Resources']) {
     await expect(page.locator('.nav-toggle', { hasText: label })).toBeVisible();
   }
   await expect(page.locator('.nav-links > .nav-item > a[aria-current="page"]')).toHaveText(
@@ -269,6 +273,137 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await expect(page.locator('#navp-resources a[href="/start"]')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('#navp-resources')).toBeHidden();
+});
+
+test('the nav runs Product, Why Lumecon, Pricing, Resources', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  // Order is the decision, not just membership: the buyer's question sits
+  // beside the product, before the price, and Resources stays last because
+  // it is where a reader goes to check the work rather than be persuaded.
+  const top = await page
+    .locator('.nav-links > .nav-item')
+    .evaluateAll((nodes) =>
+      nodes.map((n) =>
+        (n.querySelector('.nav-toggle, :scope > a')?.textContent || '').trim(),
+      ),
+    );
+  expect(top).toEqual(['Product', 'Why Lumecon', 'Pricing', 'Resources']);
+
+  await page.locator('#navt-why').click();
+  await expect(page.locator('#navp-why .nav-panel__text')).toHaveText([
+    'Why Lumecon',
+    'Our team',
+    'Security and data governance',
+    'Contact',
+  ]);
+  // The group is led by the page that answers its own question.
+  await expect(page.locator('#navp-why a').first()).toHaveAttribute('href', '/why-lumecon');
+  // Methodology stays under Resources.
+  await expect(page.locator('#navp-why a[href="/methodology"]')).toHaveCount(0);
+  await page.locator('#navt-resources').click();
+  await expect(page.locator('#navp-resources a[href="/methodology"]')).toBeVisible();
+});
+
+test('why lumecon reads its evidence from the same sources the rest of the site does', async ({
+  page,
+}) => {
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+
+  /* The entry price is imported from src/data/pricing.ts rather than typed
+     into the prose. Checked against what /pricing renders, because a price
+     restated on a second page is a price that drifts. */
+  const shown = (await page.locator('.why-price__amt').innerText()).trim();
+  await page.goto('/pricing', { waitUntil: 'networkidle' });
+  const allPlans = await page.locator('.pr-plan').allInnerTexts();
+  expect(
+    allPlans.some((t) => t.includes(shown)),
+    `the entry price ${shown} appears on /pricing`,
+  ).toBe(true);
+
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  /* The lineage is written out rather than screenshotted, so a reader can
+     check it — which means it has to be checkable. Both decompositions of
+     the same total have to add to that total. */
+  const sums = await page.evaluate(() => {
+    const num = (s: string) => Number(s.replace(/[^0-9]/g, ''));
+    const total = num(document.querySelector('.why-trace__total')!.textContent || '');
+    return [...document.querySelectorAll('.why-trace__col')].map((col) => ({
+      total,
+      sum: [...col.querySelectorAll('.why-trace__v')].reduce(
+        (a, n) => a + num(n.textContent || ''),
+        0,
+      ),
+    }));
+  });
+  expect(sums.length, 'two decompositions').toBe(2);
+  for (const { total, sum } of sums) expect(sum, 'the parts add to the total').toBe(total);
+});
+
+test('why lumecon claims no time saving, and states the security status with its limits', async ({
+  page,
+}) => {
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  const text = await page.evaluate(() => document.body.innerText);
+
+  // Nothing has been measured, so nothing may be claimed. These are the
+  // shapes a speed claim takes.
+  expect(text).not.toMatch(/\b\d+\s*(%|percent)\s*(faster|quicker|less time)/i);
+  expect(text).not.toMatch(/\b(saves?|cuts?|reduces?)\s+[^.]{0,20}\b\d+\s*(%|percent|hours|weeks|days)/i);
+  expect(text, 'says plainly that it does not make other people faster').toContain(
+    'have not measured a time saving',
+  );
+
+  // The security line is the one /security publishes, limits intact.
+  expect(text).toContain('No SOC 2 examination has been completed');
+  await expect(page.locator('main a[href="/security"]')).toHaveCount(1);
+  // And the methodology is linked prominently, not just from the footer.
+  await expect(page.locator('main a[href^="/methodology"]')).not.toHaveCount(0);
+});
+
+test('why lumecon shows the staff with a real line each, and the portraits load', async ({
+  page,
+}) => {
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  await page.evaluate(() => {
+    for (const el of document.querySelectorAll('[class*="reveal"]')) el.classList.add('is-in');
+  });
+  const people = page.locator('.why-person');
+  await expect(people).toHaveCount(5);
+  await people.first().scrollIntoViewIfNeeded();
+  await page.waitForTimeout(400);
+  const rows = await people.evaluateAll((nodes) =>
+    nodes.map((n) => ({
+      href: n.getAttribute('href'),
+      line: (n.querySelector('.why-person__b')?.textContent || '').trim().length,
+      loaded: (n.querySelector('img') as HTMLImageElement).naturalWidth > 0,
+    })),
+  );
+  for (const r of rows) {
+    // Every portrait is a real file and every person carries a sentence:
+    // an empty one would mean the record and this page had drifted apart.
+    expect(r.loaded, `${r.href} portrait loaded`).toBe(true);
+    expect(r.line, `${r.href} has a line`).toBeGreaterThan(20);
+    expect(r.href).toMatch(/^\/team\//);
+  }
+});
+
+test('methodology keeps the method and sends the comparison to why lumecon', async ({ page }) => {
+  await page.goto('/methodology', { waitUntil: 'networkidle' });
+  // Assumptions and limits are their own labeled section, findable without
+  // opening four disclosures.
+  const limits = page.locator('#m-limits');
+  await expect(limits).toBeVisible();
+  await expect(limits).toHaveText(/assumes, and where it stops/i);
+  const body = await page.locator('.meth-limits__body').innerText();
+  for (const topic of ['two-digit NAICS', 'counterfactual', 'nominal dollars']) {
+    expect(body, `limits names ${topic}`).toContain(topic);
+  }
+  // The buyer-facing comparison moved, and left a route behind.
+  await expect(page.locator('.meth-crosslink a[href="/why-lumecon"]')).toBeVisible();
+  await expect(page.locator('#m-compare')).toHaveCount(0);
+  // The equations stayed.
+  await expect(page.locator('#m-core')).toBeVisible();
 });
 
 test('a page inside a group is marked on the group that holds it', async ({ page }) => {
@@ -599,9 +734,9 @@ test('contact is a page, and every route on it goes somewhere real', async ({ pa
 
   // The navigation and the footer link the page, not a mailto. A menu
   // mailto is a dead end for anyone without a desktop mail client.
-  await expect(page.locator('#navp-company a[href="/contact"]')).toHaveCount(1);
+  await expect(page.locator('#navp-why a[href="/contact"]')).toHaveCount(1);
   await expect(page.locator('footer a[href="/contact"]')).toHaveCount(1);
-  await expect(page.locator('#navp-company a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator('#navp-why a[href^="mailto:"]')).toHaveCount(0);
 
   // Four routes, each pointing at the page that answers most of it.
   for (const href of ['/signup', '/start', '/security', '/accessibility']) {
@@ -1018,7 +1153,7 @@ test('cedar commons claims only what the product actually does', async ({ page }
      in plain words. "Append-only" is the implementation's name for it and
      belongs in detailed help, not in the sentence a buyer reads, so this
      asserts the guarantee rather than the jargon. */
-  expect(body).toContain('rather than letting it be edited');
+  expect(body).toContain('a note is kept, not edited');
   expect(body, 'implementation jargon belongs in help, not here').not.toContain('append-only');
 
   /* A seat is one person, counted across memberships, non-owner project
@@ -1066,7 +1201,9 @@ test('cedar commons claims only what the product actually does', async ({ page }
   await expect(page.locator('#cm-plans')).toContainText('Sapling');
   const plans = page.locator('.cm-plans__tier');
   await expect(plans).toHaveCount(4);
-  await expect(plans.nth(2)).toContainText('$2,500');
+  /* Price with its billing period: "$2,500" alone reads as monthly or
+     one-off, and these are annual. */
+  await expect(plans.nth(2)).toContainText('$2,500 / year');
   await expect(plans.nth(3)).toContainText('Unlimited users in one organization');
   await expect(page.locator('a[href="/pricing"]').first()).toBeVisible();
   // The guide prepares, this page is where the work happens. One link each.
@@ -1213,6 +1350,8 @@ test.describe('grove collections with no working script', () => {
     // And the tiles are inert, so a keyboard user does not tab through twelve
     // controls that cannot answer.
     await expect(page.locator('[data-atlas-tab]:not([disabled])')).toHaveCount(0);
+    // All twelve are expanded and all twelve say so.
+    await expect(page.locator('[data-atlas-tab][aria-expanded="true"]')).toHaveCount(12);
   });
 });
 
@@ -1528,6 +1667,92 @@ test('team page motion reveals content and never strands it', async ({ page }) =
     .toBe(1);
 });
 
+test('the footer is the same footer on every page', async ({ page }) => {
+  /* Reported from a phone: the footer on /contact looked unlike the
+     others — labels larger and dark instead of teal, link lists indented.
+     It does not reproduce, and it is not a per-page difference: /contact
+     serves the same stylesheets as /glossary and renders a pixel-identical
+     footer.
+
+     What the reported screenshot actually shows is one stylesheet missing.
+     `_astro/nav.*.css` carries BOTH the design tokens (`--accent-text`)
+     and the universal `*{margin:0;padding:0}` reset, while the footer's own
+     rules are inlined in each page's <style>. Lose that one file and you
+     get exactly the three symptoms together: the inline rules still
+     uppercase and letter-space the label, `--accent-text` resolves to
+     nothing so the colour falls back to inherited dark, and the reset is
+     gone so every `ul` takes the UA's 40px indent. A failed or truncated
+     stylesheet, not a page.
+
+     Note what this test can and cannot do. It pins parity, which catches a
+     real per-page divergence — the thing that was suspected. It cannot
+     catch a stylesheet that fails to arrive over a phone network.
+
+     Measured rather than compared as strings, because the footers do
+     differ legitimately — the current page's own link is accented. */
+  const shapes: Record<string, unknown>[] = [];
+  for (const route of ['/contact', '/security', '/glossary', '/pricing', '/team']) {
+    await page.goto(route, { waitUntil: 'networkidle' });
+    shapes.push(
+      await page.evaluate(() => {
+        const label = document.querySelector('.footer-group__label')!;
+        const link = document.querySelector('.footer-group__list a')!;
+        const cs = getComputedStyle(label);
+        return {
+          labelSize: cs.fontSize,
+          labelColor: cs.color,
+          labelTransform: cs.textTransform,
+          listIndent: Math.round(link.getBoundingClientRect().x - label.getBoundingClientRect().x),
+          groups: document.querySelectorAll('.footer-group').length,
+          links: document.querySelectorAll('.footer-group__list a').length,
+        };
+      }),
+    );
+  }
+  for (const shape of shapes) expect(shape).toEqual(shapes[0]);
+  // And the indent specifically, which is what the report described.
+  expect(shapes[0]).toMatchObject({ listIndent: 0, groups: 4, labelTransform: 'uppercase' });
+});
+
+test('contact shows the people it promises, and only the staff', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  // The headline says "Talk to a person" and the page showed none, which
+  // also left the house hero band mostly empty under two lines of text.
+  const faces = page.locator('.contact-faces img');
+  await expect(faces).toHaveCount(5);
+  const names = await faces.evaluateAll((nodes) =>
+    nodes.map((n) => (n as HTMLImageElement).alt),
+  );
+  expect(names).toContain('Elijah Moreno');
+  // An advisor does not read this inbox, so no advisor appears beside a
+  // form. They are on /team, where the distinction is made.
+  for (const advisor of ['Brian Kim', 'Vod Vilfort', 'Havala Hanson']) {
+    expect(names, 'advisors are not staff').not.toContain(advisor);
+  }
+  // The portraits are real files, not a broken row of alt text.
+  const decoded = await faces.evaluateAll((nodes) =>
+    nodes.every((n) => (n as HTMLImageElement).naturalWidth > 0),
+  );
+  expect(decoded, 'every portrait loaded').toBe(true);
+  await expect(page.locator('.contact-who__a')).toHaveAttribute('href', '/team');
+});
+
+test('the contact form pairs its two short fields, and stacks them on a phone', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  const rowTops = async () =>
+    page
+      .locator('.contact-row .contact-field input')
+      .evaluateAll((nodes) => nodes.map((n) => Math.round(n.getBoundingClientRect().top)));
+  // Four full-width controls in a column read as a longer form than this is.
+  expect(new Set(await rowTops()).size, 'name and email share a row').toBe(1);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(150);
+  expect(new Set(await rowTops()).size, 'and stack on a phone').toBe(2);
+});
+
 test('the founding investor is in structured data only, never in what a visitor reads', async ({
   page,
 }) => {
@@ -1536,10 +1761,21 @@ test('the founding investor is in structured data only, never in what a visitor 
   // reads. Cedar's answers live in a JS bundle rather than in page
   // markup, so checking rendered text alone would have missed the two
   // that named him — grep dist/, not just src/.
-  for (const route of ['/', '/team']) {
+  /* /contact renders the same roster record as a row of portraits, so it
+     is in this loop too — and checked as markup rather than as visible
+     text, because a name in an `alt` attribute never reaches innerText. */
+  for (const route of ['/', '/team', '/contact']) {
     await page.goto(route, { waitUntil: 'domcontentloaded' });
     const visible = await page.evaluate(() => document.body.innerText);
     expect(visible, route).not.toContain('Michael Moreno');
+    /* Markup minus the structured data, which is exactly where he is
+       allowed to be — on `/` he is a JSON-LD Organization.founder. */
+    const rendered = await page.evaluate(() => {
+      const clone = document.documentElement.cloneNode(true) as HTMLElement;
+      for (const n of clone.querySelectorAll('script[type="application/ld+json"]')) n.remove();
+      return clone.outerHTML;
+    });
+    expect(rendered, `${route} markup`).not.toContain('Michael Moreno');
   }
   const assets = join(process.cwd(), 'dist', '_astro');
   const bundles = readdirSync(assets).filter((f) => f.endsWith('.js'));
@@ -1566,7 +1802,7 @@ test('the commons team shapes open one at a time, by click and by keyboard', asy
   await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
   const tabs = page.locator('[data-surf-tab]');
   await expect(tabs).toHaveCount(2);
-  await expect(tabs).toHaveText(['Our organization', 'A consultancy and its clients']);
+  await expect(tabs).toHaveText(['An organization', 'A consultancy']);
 
   // `:visible`, never the `hidden` PROPERTY. The UA sheet's
   // `[hidden] { display: none }` loses to any author `display` rule, so a
@@ -1598,6 +1834,47 @@ test('the commons team shapes open one at a time, by click and by keyboard', asy
     .evaluateAll((nodes) => nodes.map((n) => (n as HTMLImageElement).getAttribute('src')));
   expect(shots).toHaveLength(2);
   expect(new Set(shots).size).toBe(2);
+
+  /* The copy and the screenshot live in different parents — the copy inside
+     the overlapping panel, the screenshot in the bleeding figure beside it —
+     so a state is a pair. Both halves have to switch together, or the page
+     describes one team shape beside a picture of the other. */
+  const visibleCopy = page.locator('[data-surf-copy]:visible');
+  await expect(visibleCopy).toHaveCount(1);
+  await expect(visibleCopy).toHaveAttribute('data-surf-copy', 'consultancy');
+});
+
+test('every mobile crop declares its own size, not the fallback\'s', async ({ page }) => {
+  await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+  /* A <source> without width/height leaves the browser reserving the box
+     the fallback <img> declares — 1920x1200 — and then jumping to the
+     crop's taller ratio when it decodes, which on a lazy image happens
+     under the reader's thumb. Checked against the files themselves, so a
+     re-crop that changes a dimension fails here rather than shipping a
+     wrong reservation. */
+  const declared = await page.locator('picture source[media]').evaluateAll((nodes) =>
+    nodes.map((n) => ({
+      src: n.getAttribute('srcset') || '',
+      w: Number(n.getAttribute('width')),
+      h: Number(n.getAttribute('height')),
+    })),
+  );
+  expect(declared.length).toBeGreaterThan(0);
+  for (const { src, w, h } of declared) {
+    expect(w, `${src} declares a width`).toBeGreaterThan(0);
+    expect(h, `${src} declares a height`).toBeGreaterThan(0);
+    const real = await page.evaluate(
+      (url) =>
+        new Promise<{ w: number; h: number }>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+          img.onerror = () => reject(new Error(`could not load ${url}`));
+          img.src = url;
+        }),
+      src,
+    );
+    expect(real, `${src} declares its real size`).toEqual({ w, h });
+  }
 });
 
 test.describe('commons team shapes with no working script', () => {
@@ -1606,7 +1883,33 @@ test.describe('commons team shapes with no working script', () => {
   test('both shapes are readable, and no tab is a dead control', async ({ page }) => {
     await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(2);
+    await expect(page.locator('[data-surf-copy]:visible')).toHaveCount(2);
     await expect(page.locator('[data-surf-tab]:not([disabled])')).toHaveCount(0);
+    /* And every control says so. Both states ARE expanded here, so marking
+       one `false` tells a screen reader that visible content is collapsed,
+       behind a disabled control that offers no way to reconcile it. */
+    await expect(page.locator('[data-surf-tab][aria-expanded="true"]')).toHaveCount(2);
+  });
+
+  test('each case sits with its own screenshot', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+    /* Visible is not the same as placed. The row is a two-column grid with
+       three children, so the second figure auto-flowed into row 2 column 1
+       — the 335px copy column — and sat away from the copy it belongs to.
+       Measured: panel one at x=383 w=849, panel two at x=48 w=335. */
+    const box = async (sel: string, i: number) =>
+      (await page.locator(sel).nth(i).boundingBox())!;
+    const copies = [await box('[data-surf-copy]', 0), await box('[data-surf-copy]', 1)];
+    const panels = [await box('[data-surf-panel]', 0), await box('[data-surf-panel]', 1)];
+    // Each figure follows its own copy, and the second copy follows the
+    // first figure: one column, interleaved, rather than three blocks.
+    expect(panels[0].y).toBeGreaterThan(copies[0].y);
+    expect(copies[1].y).toBeGreaterThan(panels[0].y);
+    expect(panels[1].y).toBeGreaterThan(copies[1].y);
+    // And neither figure is squeezed into the narrow copy column.
+    expect(Math.round(panels[0].width)).toBe(Math.round(panels[1].width));
+    expect(panels[1].width).toBeGreaterThan(copies[1].width);
   });
 });
 
@@ -1639,4 +1942,265 @@ test('every cedar commons capture actually loads', async ({ page }) => {
       ),
     )
     .toEqual([]);
+});
+
+test.describe('the product pages on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+
+  test('cedar commons serves a cropped capture, not a shrunken one', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    // A 1920px desktop capture scaled into a 358px column renders every
+    // label in the product under four pixels: the thing the section exists
+    // to show becomes the thing you cannot see. Each content frame has a
+    // `-narrow` crop, and `<picture>` is what picks it.
+    /* The rows are below the fold and their images are lazy, and the
+       reveal script holds them until they are scrolled to, so walk the page
+       first. */
+    await page.evaluate(async () => {
+      for (const el of document.querySelectorAll('[class*="reveal"]')) el.classList.add('is-in');
+      for (let y = 0; y < document.body.scrollHeight; y += 400) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 60));
+      }
+      window.scrollTo(0, 0);
+    });
+
+    /* Let the lazy images that DID start loading finish before reading
+       them. Without this the test raced the decode: chromium happened to
+       have them decoded by the time the scroll walk returned and WebKit
+       did not, so CI went red on WebKit alone with `naturalWidth === 0`
+       against a crop that was perfectly fine. Waiting on `complete`
+       keeps the assertion's teeth — a 404 also completes, with
+       naturalWidth 0, which is exactly what the check below catches. */
+    await page.waitForFunction(
+      () =>
+        [...document.querySelectorAll('.cm-acts img')]
+          .filter((n) => (n as HTMLImageElement).currentSrc)
+          .every((n) => (n as HTMLImageElement).complete),
+      null,
+      { timeout: 15000 },
+    );
+
+    /* Only the frames that actually loaded: the unselected team shape is
+       `display: none`, so its lazy image never fetches and reports an empty
+       `currentSrc`. That is correct behaviour, not a missing crop — the
+       declared-source check below is what covers it. */
+    const chosen = await page.locator('.cm-acts img').evaluateAll((nodes) =>
+      nodes
+        .map((n) => ({
+          src: (n as HTMLImageElement).currentSrc,
+          width: (n as HTMLImageElement).naturalWidth,
+        }))
+        .filter((x) => x.src),
+    );
+    expect(chosen.length).toBeGreaterThan(0);
+    for (const { src, width } of chosen) {
+      expect(src, 'a phone must get the cropped variant').toContain('-narrow.webp');
+      /* And the crop has to be a real file. A `<source>` pointing at
+         something that does not exist falls back silently to the full
+         frame, which is the state this test exists to prevent, so check
+         the image decoded at the crop's own width rather than at 1920. */
+      expect(width, 'the crop decoded').toBeGreaterThan(0);
+      expect(width, 'the narrow crops are under 1000px wide').toBeLessThan(1000);
+    }
+
+    /* Every declared narrow source, including the one behind the
+       unselected state, has to resolve. Checked over the wire rather than
+       through the renderer, which would let a 404 pass as a fallback. */
+    const declared = await page
+      .locator('.cm-acts source[media]')
+      .evaluateAll((nodes) => nodes.map((n) => n.getAttribute('srcset') || ''));
+    expect(declared.length).toBeGreaterThan(0);
+    for (const href of declared) {
+      expect(href).toContain('-narrow.webp');
+      const res = await page.request.get(href);
+      expect(res.status(), `${href} should exist`).toBe(200);
+    }
+  });
+
+  test('cedar commons keeps both team tabs on one line', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    const boxes = await page
+      .locator('[data-surf-tab]')
+      .evaluateAll((nodes) => nodes.map((n) => n.getBoundingClientRect().top));
+    // A tab clipped at the panel's edge reads as broken rather than as
+    // scrollable, and two rows of tabs above the copy they label is worse.
+    expect(new Set(boxes.map(Math.round)).size, 'both tabs on one row').toBe(1);
+    const strip = page.locator('.cm-surf__tabs');
+    const fits = await strip.evaluate((el) => el.scrollWidth <= el.clientWidth + 1);
+    expect(fits, 'both tabs fit without scrolling at 390px').toBe(true);
+  });
+
+  test('the grove atlas is a swipeable strip, not a wall of tiles', async ({ page }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    const grid = page.locator('.grovepg-atlas__grid');
+    await grid.scrollIntoViewIfNeeded();
+    // Twelve tiles as a two-column grid is roughly 770px of picker between
+    // the section's question and the panel that answers it.
+    const height = (await grid.boundingBox())!.height;
+    expect(height, 'one row, not six').toBeLessThan(200);
+    // And it actually scrolls, rather than clipping eleven tiles away.
+    const [scrollWidth, clientWidth] = await grid.evaluate((el) => [el.scrollWidth, el.clientWidth]);
+    expect(scrollWidth).toBeGreaterThan(clientWidth);
+    await expect(page.locator('.grovepg-atlas__cell')).toHaveCount(12);
+  });
+
+  /* ---- Cedar on a phone ----
+     A phone is where the launcher has the least to work with: no label
+     beside it, the least room to read an answer, and a corner it shares
+     with the consent banner. These four cover the shape that was agreed
+     for it, and each one has a real failure behind it. */
+
+  test('the launcher is a round mark on a phone, not a text pill', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    const fab = page.locator('#cedarFab');
+    const box = (await fab.boundingBox())!;
+    // 44px is the accessible minimum; a tap target carrying no label
+    // beside it should be comfortably past it.
+    expect(Math.round(box.width), 'square').toBe(Math.round(box.height));
+    expect(box.width, 'a real thumb target').toBeGreaterThanOrEqual(56);
+  });
+
+  test('the welcome bubble greets once the launcher settles', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    // A first-time visitor answers the consent banner, which owns this
+    // same corner and holds the bubble back until it is gone.
+    await page.locator('[data-consent="denied"]').click();
+    await scrollUntilCedarVisible(page);
+    const nudge = page.locator('#cedarNudge');
+    await expect(nudge).toBeVisible({ timeout: 25000 });
+    // The bubble is the only thing on the screen that says what the
+    // circle beside it is, so it has to say it.
+    await expect(nudge).toContainText('Cedar');
+  });
+
+  test('tapping the welcome bubble opens Cedar and leaves it open', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    await page.locator('[data-consent="denied"]').click();
+    await scrollUntilCedarVisible(page);
+    const nudge = page.locator('#cedarNudge');
+    await expect(nudge).toBeVisible({ timeout: 25000 });
+    await nudge.locator('.cedar-nudge__text').click();
+    const panel = page.locator('#cedarFabPanel');
+    // "Leaves it open" is the assertion that matters: the same click used
+    // to bubble to the document-level close-on-outside-click handler,
+    // which saw it land outside the panel it had just opened and shut it
+    // again, so the bubble looked inert.
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 6000 });
+    await page.waitForTimeout(400);
+    await expect(panel).toBeVisible();
+  });
+
+  test('Cedar fills the screen on a phone', async ({ page }) => {
+    /* The panel scales in. Measuring the box mid-animation reports a
+       frame of the transform rather than the layout, so settle it. */
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    await page.locator('[data-consent="denied"]').click();
+    await (await scrollUntilCedarVisible(page)).click();
+    const panel = page.locator('#cedarFabPanel');
+    await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 6000 });
+    const box = (await panel.boundingBox())!;
+    /* The layout viewport, not the configured one: a classic scrollbar
+       takes a few pixels off the width, and a panel that correctly fills
+       what is left is not a failure. */
+    const view = await page.evaluate(() => ({
+      width: document.documentElement.clientWidth,
+      height: window.innerHeight,
+    }));
+    // A docked sheet on a 390px screen left the prompt rail clipped
+    // mid-word. Reading an answer is the whole point of the surface.
+    expect(Math.round(box.width), 'full width').toBe(view.width);
+    expect(box.height, 'full height').toBeGreaterThanOrEqual(view.height - 1);
+    expect(Math.round(box.x)).toBe(0);
+    expect(Math.round(box.y)).toBe(0);
+    // And the starter prompts are whole, not cut off at the edge.
+    const overflow = await panel
+      .locator('.cedar-chip:not([hidden])')
+      .evaluateAll(
+        (nodes, w) => nodes.some((n) => n.getBoundingClientRect().right > (w as number)),
+        view.width,
+      );
+    expect(overflow, 'no prompt runs off the screen').toBe(false);
+
+    /* And the nav does not paint over it. Both are fixed and they
+       overlap at the top of the screen, so the one with the higher
+       z-index wins: underneath, the dialog loses its own title bar and
+       its close button — the only way back to the page — while still
+       reporting a full-viewport box. Compared as numbers rather than
+       by hit-testing, because `open()` makes the nav inert and
+       `elementFromPoint` then looks straight through it, which would
+       make a hit test pass while the nav is still visibly on top. */
+    const close = page.locator('.cedar-fab-panel__close');
+    await expect(close).toBeVisible();
+    const layers = await page.evaluate(() => {
+      const z = (sel: string) => Number(getComputedStyle(document.querySelector(sel)!).zIndex);
+      return { panel: z('#cedarFabPanel'), nav: z('body > nav') };
+    });
+    expect(layers.nav, 'the nav is a fixed, stacked header').toBeGreaterThan(0);
+    expect(layers.panel, 'the dialog sits above the nav').toBeGreaterThan(layers.nav);
+    await expect(page.locator('.cedar-fab-panel .cedar-chat__header')).toBeVisible();
+  });
+
+  test('the grove atlas labels stay inside their tiles, and the last one clears the fade', async ({
+    page,
+  }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    const grid = page.locator('.grovepg-atlas__grid');
+    await grid.scrollIntoViewIfNeeded();
+    // "Native-Owned Businesses" is 170px against a 132px tile, and with
+    // `white-space: nowrap` it spilled 19px into its neighbour. The tile's
+    // width is held by `flex: 0 0 auto`, so nothing needed the nowrap.
+    const spills = await page.locator('.grovepg-atlas__cell').evaluateAll((cells) =>
+      cells
+        .map((c) => {
+          const n = c.querySelector('.grovepg-atlas__name');
+          if (!n) return null;
+          const over = Math.round(n.getBoundingClientRect().right - c.getBoundingClientRect().right);
+          return over > 0 ? `${n.textContent?.trim()} +${over}px` : null;
+        })
+        .filter(Boolean),
+    );
+    expect(spills, 'no label spills its tile').toEqual([]);
+
+    // At the end of the scroll the fade used to still cover the last tile,
+    // so the row went on claiming there was more to the right.
+    const clear = await grid.evaluate((g) => {
+      g.scrollLeft = g.scrollWidth;
+      const cells = g.querySelectorAll('.grovepg-atlas__cell');
+      const last = cells[cells.length - 1].getBoundingClientRect();
+      const box = g.getBoundingClientRect();
+      return last.right <= box.left + box.width * 0.88;
+    });
+    expect(clear, 'the last tile clears the fade at full scroll').toBe(true);
+  });
+
+  test('the grove price puts its period under the numeral', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    // The ≤560px override sat above the base rule in the same file, and at
+    // equal specificity source order won: the override did nothing, and
+    // "per organization, per year" kept wrapping halfway up a 2.6rem
+    // numeral. Measured, not asserted on the declaration.
+    const rows = await page.locator('.grovepg-price').first().evaluate((el) => {
+      const amt = el.querySelector('.grovepg-price__amount')!.getBoundingClientRect();
+      const per = el.querySelector('.grovepg-price__period')!.getBoundingClientRect();
+      return { amtBottom: amt.bottom, perTop: per.top };
+    });
+    expect(rows.perTop, 'the period sits below the numeral').toBeGreaterThanOrEqual(
+      rows.amtBottom - 2,
+    );
+  });
+
+  test('the grove hero buttons are one column at one width', async ({ page }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    const widths = await page
+      .locator('.grovepg-cta .btn2')
+      .evaluateAll((nodes) => nodes.map((n) => Math.round(n.getBoundingClientRect().width)));
+    expect(widths).toHaveLength(2);
+    // Two buttons sized to their own labels sit at two different widths in a
+    // full-bleed column, which reads as a mistake rather than a hierarchy.
+    expect(new Set(widths).size, 'both buttons the same width').toBe(1);
+  });
 });

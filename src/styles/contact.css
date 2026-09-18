@@ -159,3 +159,74 @@
     max-width: none;
   }
 }
+
+/* ---------------------------------------------------------------
+   Who you are writing to
+
+   The house hero band is sized for a page that carries something
+   under its lede, and this one carried nothing: two lines of text
+   and roughly 200px of empty ground beneath a headline that
+   promises a person. These are /team's own portraits, from the same
+   record, staff only — an advisor does not read this inbox. No ring,
+   no overlap, no count: a row of the people, and the line that says
+   where to read about them.
+   --------------------------------------------------------------- */
+.contact-who {
+  margin-top: clamp(1.8rem, 3.5vw, 2.6rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1.4rem;
+}
+.contact-faces {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.55rem;
+}
+.contact-faces img {
+  display: block;
+  width: clamp(2.6rem, 4.4vw, 3.25rem);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+.contact-who__line {
+  margin: 0;
+  max-width: 26rem;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.contact-who__a {
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.contact-who__a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Name and Email share a row above 720px. Below it they stack, because
+   two 8rem fields side by side are worse than two full-width ones. */
+.contact-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+@media (max-width: 720px) {
+  .contact-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The sidebar is a shortcut, not the second half of a pair. At the same
+   size as "Send a message" the two headings read as equal choices and the
+   form stopped being the thing this page is for. */
+.contact-h2--aside {
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  color: var(--ink-2);
+}

@@ -117,19 +117,28 @@ const AXES = [
 const SHAPES = [
   {
     id: 'organization',
-    tab: 'Our organization',
+    /* Short enough that both tabs fit on one line at 358px. The panel's
+       own heading carries the description; a tab clipped mid-word at the
+       card's edge reads as broken rather than as scrollable. */
+    tab: 'An organization',
     title: 'The records are spread across your own offices.',
     body: 'Finance holds one set, the enterprises hold others, and a board member or outside counsel may need to read the result without touching it. Four staff here, two outside people, and each outside person is bound to the single project they were brought in for.',
     shot: '/app/commons-collaborators.webp',
+    narrow: '/app/commons-collaborators-narrow.webp',
+    narrowW: 900,
+    narrowH: 866,
     alt: 'An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the one project they can reach. Shown with sample data.',
     cap: 'Prairie Wind, on Tree. The external roster names the project beside each person, so the boundary is readable rather than assumed.',
   },
   {
     id: 'consultancy',
-    tab: 'A consultancy and its clients',
+    tab: 'A consultancy',
     title: 'The records belong to someone who is not you at all.',
     body: 'A consultant opens a project per engagement and brings that client’s finance and operations people into it, and only into it. One client’s contacts never see another client’s work, and a project the client does not own names the organization sponsoring it, so nobody is unsure whose subscription is paying.',
     shot: '/app/commons-collaborators-consultant.webp',
+    narrow: '/app/commons-collaborators-consultant-narrow.webp',
+    narrowW: 900,
+    narrowH: 709,
     alt: 'A consultancy’s collaborator view: one internal person and three client contacts across two different clients, each listed with the single project they can reach. Shown with sample data.',
     cap: 'Ferreira, on Sapling. Three client contacts from two clients, four of ten seats in use — an outside collaborator occupies a seat, the same as a colleague.',
   },
@@ -140,18 +149,29 @@ const SHAPES = [
    analysis has its own page, and re-arguing either here would be borrowing
    their argument. Only the first carries a capture, because contributing a
    record is the thing no other surface in Lumecon does. */
-const CONTRIBUTIONS = [
+/* The three guarantees, as a closing band of short answers with a mark
+   each — the same shape /cedar closes on. They are guarantees rather than
+   features on purpose: each one is a thing the server enforces, and each
+   answers the question a person actually has before they invite someone
+   into their own records. */
+const GUARANTEES = [
   {
-    k: 'They add the records you do not hold',
-    b: 'A record lands on the project, not in one person’s library, with the contributor and the date on it. Everyone on the project sees what is already there, so nobody sends the payroll summary twice.',
+    eyebrow: 'Reading',
+    t: 'A viewer changes nothing',
+    b: 'Read-only is a permission, not a convention. A viewer sees the analysis, the records and the thread, and the routes that add to any of them refuse them.',
+    mark: '<path d="M2.5 14s4.2-7 11.5-7 11.5 7 11.5 7-4.2 7-11.5 7S2.5 14 2.5 14Z"/><circle cx="14" cy="14" r="3.4"/>',
   },
   {
-    k: 'They answer questions about them',
-    b: 'Cedar works inside the project, for whoever is on it and within what their access allows, so a question about a figure is asked where the figure is.',
+    eyebrow: 'Recording',
+    t: 'A note is kept, not edited',
+    b: 'What was said about an assumption stays as it was said. The thread is a record of the decision rather than of what someone later wished the decision had been.',
+    mark: '<path d="M7 4.5h14v19H7z"/><path d="M11 10h6M11 14h6M11 18h3.5"/><path d="M4.5 8.5v11"/>',
   },
   {
-    k: 'They settle what the figure means',
-    b: 'Which payroll summary is the audited one, what the scope actually is, why a contract was held back. The thread keeps it, rather than letting it be edited into something tidier later.',
+    eyebrow: 'Paying',
+    t: 'An outside collaborator occupies a seat',
+    b: 'A seat is a person, not a job title, so a client contact counts the same as a colleague. Sapling is ten people in one organization however they are split; Tree has no limit.',
+    mark: '<circle cx="10.5" cy="10" r="3.6"/><path d="M4 22.5c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><circle cx="20.5" cy="10" r="3"/><path d="M18 16.4c3.1.3 5.5 2.9 5.5 6.1"/>',
   },
 ];
 
@@ -161,7 +181,9 @@ const ALL_PLANS = [SEED, ...PLANS];
 const COMMONS_ROW = PLAN_TABLE_ROWS.find((r) => r.label === 'Cedar Commons');
 const PLAN_LINES = ALL_PLANS.map((plan, i) => ({
   name: plan.name,
-  price: plan.price,
+  /* Price AND period. `$2,500` on its own reads as monthly or one-off;
+     these are annual, and the source keeps the period in its own field. */
+  price: `${plan.price}${plan.period ? ` ${plan.period.trim()}` : ''}`,
   /* `plan.users` rather than the comparison table's Users row: that row is
      written for a table cell ("1"), and reads as a stray numeral in prose. */
   users: plan.users,
@@ -232,7 +254,9 @@ const jsonLd = [
       </div>
     </header>
 
-    <section class="meth-sec" aria-labelledby="cm-team">
+    {/* The definition beat: two axes, side by side, no picture. Short
+        enough to read before the page asks you to look at anything. */}
+    <section class="meth-sec cm-sec--surface" aria-labelledby="cm-team">
       <div class="meth-w">
         <div class="meth-sec__head">
           <h2 id="cm-team">Who can see what</h2>
@@ -241,108 +265,153 @@ const jsonLd = [
             and they are independent of each other.
           </p>
         </div>
-
         <dl class="cm-axes__list">
           {
             AXES.map((a) => (
               <div class="cm-axes__row">
                 <dt>
-                  {a.k}
                   <span class="cm-axes__field">{a.field}</span>
+                  {a.k}
                 </dt>
                 <dd>{a.b}</dd>
               </div>
             ))
           }
         </dl>
-
-        {/* Two states of one surface. Every other product page shows
-            something you operate alone, so this comparison — the same
-            screen, two shapes of team — is the one only this page can
-            make. Ships expanded with the controls disabled; the script
-            collapses and enables them. */}
-        <div class="cm-surf" data-surf>
-          <div class="cm-surf__tabs" role="list">
-            {
-              SHAPES.map((x, i) => (
-                <button
-                  type="button"
-                  class="cm-surf__tab"
-                  disabled
-                  data-surf-tab={x.id}
-                  aria-expanded={i === 0 ? 'true' : 'false'}
-                  aria-controls={`surf-${x.id}`}
-                >
-                  {x.tab}
-                </button>
-              ))
-            }
-          </div>
-
-          <div class="cm-surf__panels">
-            {
-              SHAPES.map((x) => (
-                <article class="cm-surf__panel" id={`surf-${x.id}`} data-surf-panel={x.id}>
-                  <div class="cm-surf__copy">
-                    <h3>{x.title}</h3>
-                    <p>{x.body}</p>
-                  </div>
-                  <figure class="cm-figure" data-zoom>
-                    <img src={x.shot} alt={x.alt} width="1920" height="1200" loading="lazy" decoding="async" />
-                    <figcaption>{x.cap} Shown with sample data.</figcaption>
-                  </figure>
-                </article>
-              ))
-            }
-          </div>
-        </div>
-
-        <p class="cm-note">
-          An outside collaborator occupies a seat on your plan, the same as a colleague, and the
-          seat is released when you remove them. Sapling is ten people in one organization however
-          they are split between staff and outside contributors; Tree has no limit.{' '}
-          <a class="inline-link" href="/pricing">Compare plans</a>.
-        </p>
       </div>
     </section>
 
-    <section class="meth-sec cm-sec--surface" aria-labelledby="cm-connected">
-      <div class="meth-w">
-        <div class="meth-sec__head">
-          <h2 id="cm-connected">What they do once they are in</h2>
-          <p class="meth-sec__lede">
-            You are asking people for things you do not have. What they hand over arrives on the
-            project rather than in your inbox.
-          </p>
-        </div>
+    {/* The house composition (`tour-row`, shared with /cedar and the
+        homepage): a copy panel overlapping a screenshot that bleeds to the
+        viewport edge, alternating sides. These are 1920px captures, and a
+        half-and-half split renders them at a scale where every label in the
+        product turns to grey texture — the bleed is what buys the width
+        back.
 
-        <div class="cm-give">
-          <dl class="cm-give__list">
+        The first row carries the two-state control inside its copy panel,
+        which is the one composition on this site that swaps its own
+        screenshot. Every other product page shows something a person
+        operates alone, so the same screen in two shapes of team is the
+        comparison only this page can make. */}
+    <section class="tour cm-acts" aria-labelledby="cm-shapes">
+      <div class="tour-inner tour-rows">
+        <h2 class="visually-hidden" id="cm-shapes">Two shapes of project team</h2>
+        <article class="tour-row cm-row" data-surf>
+          <div class="tour-row__text reveal-left">
+            <div class="cm-surf__tabs" role="list">
+              {
+                SHAPES.map((x) => (
+                  <button
+                    type="button"
+                    class="cm-surf__tab"
+                    disabled
+                    data-surf-tab={x.id}
+                    aria-expanded="true"
+                    aria-controls={`surf-${x.id}`}
+                  >
+                    {x.tab}
+                  </button>
+                ))
+              }
+            </div>
             {
-              CONTRIBUTIONS.map((c) => (
-                <div class="cm-give__row">
-                  <dt>{c.k}</dt>
-                  <dd>{c.b}</dd>
+              SHAPES.map((x) => (
+                <div class="cm-surf__copy" data-surf-copy={x.id}>
+                  <h3 class="tour-row__title">{x.title}</h3>
+                  <p class="tour-row__body">{x.body}</p>
                 </div>
               ))
             }
-          </dl>
-          <figure class="cm-figure" data-zoom>
-            <img
-              src="/app/commons-documents.webp"
-              alt="The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data."
-              width="1920"
-              height="1200"
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>
-              Four records on one analysis, from three people. A viewer reads them and adds none.
-              Shown with sample data.
+          </div>
+          {
+            SHAPES.map((x) => (
+              <figure
+                class="tour-row__shot reveal-right"
+                data-surf-panel={x.id}
+                id={`surf-${x.id}`}
+                data-zoom
+              >
+                {/* The crop's own dimensions, not the fallback's. Without
+                    them a phone reserves the 1920x1200 box the <img> declares
+                    and then jumps to the crop's taller ratio when it decodes,
+                    which on a lazy image happens mid-scroll. */}
+                <picture>
+                  <source
+                    media="(max-width: 700px)"
+                    srcset={x.narrow}
+                    width={x.narrowW}
+                    height={x.narrowH}
+                  />
+                  <img src={x.shot} alt={x.alt} width="1920" height="1200" loading="lazy" decoding="async" />
+                </picture>
+                <figcaption class="cedarpg-cap">{x.cap} Shown with sample data.</figcaption>
+              </figure>
+            ))
+          }
+        </article>
+
+        <article class="tour-row tour-row--flip" aria-labelledby="cm-give">
+          <div class="tour-row__text reveal-right">
+            <h2 class="tour-row__title" id="cm-give">
+              They bring the records you do not hold.
+            </h2>
+            <p class="tour-row__body">
+              A record lands on the project rather than in one person&rsquo;s library, carrying who
+              added it and when. Everyone on the project sees what is already there, so nobody
+              sends the payroll summary twice, and a figure questioned a year later still has the
+              file it came from beside it.
+            </p>
+          </div>
+          <figure class="tour-row__shot reveal-left" data-zoom>
+            <picture>
+              <source
+                media="(max-width: 700px)"
+                srcset="/app/commons-documents-narrow.webp"
+                width="760"
+                height="879"
+              />
+              <img
+                src="/app/commons-documents.webp"
+                alt="The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data."
+                width="1920"
+                height="1200"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <figcaption class="cedarpg-cap">
+              Four records on one analysis, from three people. Shown with sample data.
             </figcaption>
           </figure>
-        </div>
+        </article>
+      </div>
+    </section>
 
+    {/* Three short answers side by side, sized to read as a footnote to the
+        two rows above rather than a third act. Same shape /cedar closes on. */}
+    <section class="meth-sec cm-band" aria-labelledby="cm-guarantees">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="cm-guarantees">Before you invite anyone</h2>
+          <p class="meth-sec__lede">
+            The three questions people ask before they let a colleague, a client or an auditor near
+            their own records.
+          </p>
+        </div>
+        <div class="cm-guards">
+          {
+            GUARANTEES.map((g, i) => (
+              <div class="cm-guard reveal-soft" data-stagger={i + 1}>
+                <span class="cm-guard__icon" aria-hidden="true">
+                  <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={g.mark} />
+                </span>
+                <p class="h-kicker">{g.eyebrow}</p>
+                <h3 class="cm-guard__t">{g.t}</h3>
+                <p class="cm-guard__b">{g.b}</p>
+              </div>
+            ))
+          }
+        </div>
         <p class="cm-note">
           Working with a consultant?{' '}
           <a class="inline-link" href="/start">Share the starting guide with them</a>, or begin a
@@ -396,40 +465,46 @@ const jsonLd = [
   <Footer />
 
   <script>
-    /* The four surfaces. Everything ships open, so with no script the section
-       reads as four described capabilities rather than four unlabelled words;
-       the class added here is what collapses it into a picker. Same shape as
+    /* The two team shapes. Everything ships open, so with no script the
+       section reads as two described cases rather than two dead words; the
+       class added here is what collapses it into a control. Same shape as
        /start's capability panels and Cedar Grove's atlas: a disclosure set,
        one open at a time, with `aria-expanded` maintained on the control.
 
+       Unlike those two, the copy and the screenshot live in different
+       parents — the copy inside the overlapping panel, the screenshot in
+       the bleeding figure beside it — so a state is a PAIR of elements
+       rather than one panel. Both carry the same id.
+
        Pointer, touch and keyboard all reach it. The controls are real
        buttons, so a tap is a click and Enter and Space already activate
-       them; the arrow-key handler below adds the movement a reader expects
-       of a strip of related controls. */
+       them; the arrow-key handler adds the movement a reader expects of a
+       strip of related controls. */
     const surf = document.querySelector<HTMLElement>('[data-surf]');
     if (surf) {
       surf.classList.add('cm-surf--js');
       const tabs = Array.from(surf.querySelectorAll<HTMLButtonElement>('[data-surf-tab]'));
-      /* The tabs ship disabled. Without this script every panel is open and
-         the tabs have nothing to do, so offering four focusable controls
-         that answer nothing would just be four dead tab stops. */
+      /* The tabs ship disabled. Without this script both states are shown
+         and the tabs have nothing to do, so offering two focusable controls
+         that answer nothing would just be two dead tab stops. */
       for (const tab of tabs) tab.removeAttribute('disabled');
-      const panels = Array.from(surf.querySelectorAll<HTMLElement>('[data-surf-panel]'));
+      const parts = Array.from(
+        surf.querySelectorAll<HTMLElement>('[data-surf-panel], [data-surf-copy]'),
+      );
+      const idOf = (el: HTMLElement) => el.dataset.surfPanel || el.dataset.surfCopy;
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
       const show = (id: string) => {
         for (const tab of tabs) {
           tab.setAttribute('aria-expanded', String(tab.dataset.surfTab === id));
         }
-        for (const panel of panels) {
-          panel.hidden = panel.dataset.surfPanel !== id;
-        }
-        /* On a phone the tab strip and the panel do not fit together, so the
-           answer to a tap can land below the fold and the page looks like it
-           did nothing. `nearest` only scrolls when the panel is actually out
-           of view, so this is a no-op on a desktop. */
-        const open = panels.find((panel) => !panel.hidden);
-        open?.scrollIntoView({
+        for (const part of parts) part.hidden = idOf(part) !== id;
+        /* On a phone the control and its screenshot do not fit together, so
+           the answer to a tap can land below the fold and the page looks
+           like it did nothing. `nearest` only scrolls when the figure is
+           actually out of view, so this is a no-op on a desktop. */
+        const shot = parts.find((part) => part.dataset.surfPanel && !part.hidden);
+        shot?.scrollIntoView({
           block: 'nearest',
           behavior: reduced.matches ? 'auto' : 'smooth',
         });
@@ -457,7 +532,7 @@ const jsonLd = [
       if (tabs[0]) {
         const first = tabs[0].dataset.surfTab;
         for (const tab of tabs) tab.setAttribute('aria-expanded', String(tab.dataset.surfTab === first));
-        for (const panel of panels) panel.hidden = panel.dataset.surfPanel !== first;
+        for (const part of parts) part.hidden = idOf(part) !== first;
       }
     }
   </script>

@@ -13,25 +13,6 @@
   border-top: 1px solid var(--rule);
 }
 
-/* A product frame. The screenshots carry their own chrome, so the page adds
-   a hairline and nothing else: no shadow, no rounded plate, no card. */
-.cm-figure {
-  margin: 0;
-}
-.cm-figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-}
-.cm-figure figcaption {
-  margin-top: 0.7rem;
-  color: var(--ink-2);
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-
 /* The two axes, across the measure: two columns of prose, each a full
    thought, rather than one narrow column beside a picture. */
 .cm-axes__list {
@@ -41,15 +22,15 @@
   margin: clamp(1.5rem, 3vw, 2rem) 0 0;
 }
 .cm-axes__row dt {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  align-items: baseline;
   margin-bottom: 0.4rem;
   font-size: 1.0625rem;
   font-weight: 600;
 }
+/* Above the heading, not beside it: inline, the mono label read as the
+   first two words of the sentence it was labelling. */
 .cm-axes__field {
+  display: block;
+  margin-bottom: 0.3rem;
   font-family: var(--font-mono, ui-monospace, monospace);
   font-size: 0.68rem;
   font-weight: 500;
@@ -72,58 +53,62 @@
   line-height: 1.6;
 }
 
-/* What a contributor does: three lines of prose beside the single capture
-   that earns one. The other two are things /cedar and the analysis pages
-   already argue, so they stay as text rather than borrowing a picture. */
-.cm-give {
-  display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-  gap: clamp(1.75rem, 3.5vw, 3rem);
-  align-items: start;
-  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
-}
-.cm-give__list {
-  display: grid;
-  gap: 1.4rem;
-  margin: 0;
-}
-.cm-give__row dt {
-  margin-bottom: 0.35rem;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.35;
-}
-.cm-give__row dd {
-  margin: 0;
-  color: var(--ink-2);
-  line-height: 1.6;
-}
+/* ---------------------------------------------------------------------
+   The two rows, on the shared `tour-row` composition.
 
-/* The two team shapes: a strip of selectable controls, then the one that is
-   open. Ships with every panel visible and the tabs disabled, so with no
-   script the section is a complete description rather than four dead words;
-   `.cm-surf--js` is added by the script and is what collapses it. */
-.cm-surf {
-  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+   `tour.css` supplies the geometry: a copy panel that overlaps a
+   screenshot bleeding to the viewport edge, alternating sides. This page
+   only sets the column ratio and the surface tone, exactly as
+   cedar-page.css does for /cedar, so the three product pages compose the
+   same way instead of each inventing a layout.
+   --------------------------------------------------------------------- */
+.cm-acts {
+  border-top: 1px solid var(--rule);
+  background: linear-gradient(145deg, var(--ground-bright), var(--ground));
+  /* The rows carry their own vertical rhythm (`padding-block` below), so
+     the section's own padding would stack on top of the first and last
+     row's and open a band of empty ground at each end. Same reason
+     cedar-page.css zeroes it there. */
+  padding-block: 0;
 }
+.cm-acts .tour-rows {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  gap: 0;
+}
+.cm-acts .tour-row,
+.cm-acts .tour-row--flip {
+  align-items: center;
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+.cm-acts .tour-row {
+  grid-template-columns: minmax(16rem, 3.4fr) minmax(0, 8.6fr);
+}
+.cm-acts .tour-row--flip {
+  grid-template-columns: minmax(0, 8.6fr) minmax(16rem, 3.4fr);
+}
+/* A little wider than /cedar's 3fr, because this panel carries the control
+   as well as the copy and a two-word tab must not wrap. */
+
+/* The control lives inside the overlapping panel. These ARE selection
+   controls, so they carry a boundary: that is the case the no-cardification
+   rule allows. */
 .cm-surf__tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--rule);
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
 }
-/* These ARE selection controls, so they carry a boundary: that is what the
-   no-cardification rule is for, and this is the case it allows. */
 .cm-surf__tab {
   appearance: none;
   border: 1px solid var(--rule);
   border-radius: 8px;
   background: transparent;
-  padding: 0.5rem 0.95rem;
+  padding: 0.38rem 0.7rem;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   font-weight: 600;
+  line-height: 1.25;
   color: var(--ink-2);
   cursor: pointer;
   transition:
@@ -147,43 +132,104 @@
   color: var(--accent-text);
   background: var(--accent-wash, transparent);
 }
-
-.cm-surf__panels {
-  display: grid;
-  gap: clamp(2rem, 4vw, 3rem);
-}
-/* Explicit, and load-bearing: the UA sheet's `[hidden] { display: none }`
-   loses to any author `display` declaration, so without this rule the
-   `.cm-surf__panel` grid below keeps every panel on screen and the picker is
-   inert while still looking selected. The Grove atlas carries the same rule
-   for the same reason. A probe that reads the `hidden` PROPERTY cannot catch
-   this; only one that measures what is rendered can. */
-.cm-surf__panel[hidden] {
+/* Load-bearing, and the UA sheet loses to it: `[hidden] { display: none }`
+   is overridden by any author `display`, so without these two rules both
+   states render at once while reporting `hidden === true`, and the control
+   is inert while still looking selected. A probe that reads the property
+   cannot catch that; only one that measures what is rendered can. */
+.cm-surf__copy[hidden],
+.cm-acts .tour-row__shot[hidden] {
   display: none;
-}
-/* The capture runs the full measure rather than sitting in a column beside
-   the copy: these are 16:10 product frames, and half a column renders them
-   too small to read, which defeats showing them at all. */
-.cm-surf__panel {
-  display: grid;
-  gap: clamp(1.25rem, 2.5vw, 1.9rem);
-  padding-top: clamp(1.5rem, 3vw, 2.25rem);
 }
 .cm-surf__copy {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-  gap: 0.5rem clamp(2rem, 4vw, 3.5rem);
-  align-items: baseline;
+  gap: 0.7rem;
 }
-.cm-surf__copy h3 {
+
+/* ---------------------------------------------------------------------
+   The no-script fallback, laid out rather than merely visible.
+
+   Everything ships open so the section reads as two described cases when
+   the script does not run. But the row is a two-column grid with three
+   children — the copy block, then a figure per shape — so the second
+   figure auto-flowed into row 2 column 1, which is the 335px copy column,
+   and landed away from the copy it belongs to. Measured with JavaScript
+   disabled at 1280px: panel one at x=383 w=849, panel two at x=48 w=335.
+
+   `display: contents` on the copy block promotes the tabs and the two
+   copies to grid items of the row itself, so `order` can interleave them
+   with their figures: tabs, copy, figure, copy, figure. One column,
+   because a case and its screenshot side by side is what the script's
+   own layout is for.
+
+   `.cm-surf--js` is added by the script, so this is exactly the state
+   where the script has not run — the same hook the disabled tabs use. */
+.cm-acts [data-surf]:not(.cm-surf--js) {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) .tour-row__text {
+  display: contents;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) .cm-surf__tabs {
+  order: 0;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-copy='organization'] {
+  order: 1;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-panel='organization'] {
+  order: 2;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-copy='consultancy'] {
+  order: 3;
+}
+.cm-acts [data-surf]:not(.cm-surf--js) [data-surf-panel='consultancy'] {
+  order: 4;
+}
+/* The figures bleed to the viewport edge in the scripted layout, which is
+   a two-column composition. In one column they sit in the text's measure. */
+.cm-acts [data-surf]:not(.cm-surf--js) .tour-row__shot {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 2vw, 1.4rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
+  width: 100%;
 }
-.cm-surf__copy p {
+
+/* ---------------------------------------------------------------------
+   The closing band: three short answers side by side, sized to read as a
+   footnote to the two rows rather than a third act.
+   --------------------------------------------------------------------- */
+.cm-band {
+  background: var(--surface);
+  border-top: 1px solid var(--rule);
+}
+.cm-guards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter, clamp(1.5rem, 3vw, 2.5rem));
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+}
+.cm-guard {
+  padding-top: 1.1rem;
+  border-top: 2px solid var(--rule);
+}
+.cm-guard__icon {
+  display: block;
+  color: var(--ink-3, var(--ink-2));
+}
+.cm-guard__icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.cm-guard .h-kicker {
+  margin: 0.8rem 0 0.35rem;
+}
+.cm-guard__t {
+  margin: 0 0 0.45rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.cm-guard__b {
   margin: 0;
   color: var(--ink-2);
   line-height: 1.6;
@@ -266,25 +312,66 @@
    one, and at phone width the heading was squeezed into a four-word column.
    Scoped here rather than fixed in methodology.css, which would move the
    layout of pages this change has not been checked against. */
+/* `.meth-sec__head` is a flex row with no wrap, so a heading and its deck
+   sit side by side at every width. On the other pages that use it the first
+   head carries no deck, so it has never shown; every head on this page has
+   one, and at phone width the heading was squeezed into a four-word column.
+   Scoped here rather than fixed in methodology.css, which would move the
+   layout of pages this change has not been checked against. */
 @media (max-width: 700px) {
   .cedarpg .meth-sec__head {
     flex-wrap: wrap;
   }
 }
 
+/* The rows stack slightly before the shared tour does, so reset the shared
+   alternating overlap and visual order at this page's own breakpoint —
+   exactly as cedar-page.css does for /cedar. */
+@media (max-width: 900px) {
+  .cm-acts .tour-row,
+  .cm-acts .tour-row--flip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cm-acts .tour-row__text,
+  .cm-acts .tour-row--flip .tour-row__text {
+    order: 1;
+    margin: 0 0 -1rem;
+  }
+  .cm-acts .tour-row .tour-row__shot,
+  .cm-acts .tour-row--flip .tour-row__shot {
+    order: 2;
+    margin-inline: 0;
+  }
+  .cm-guards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 860px) {
   .cm-axes__list,
-  .cm-give,
-  .cm-surf__copy,
   .cm-plans {
     grid-template-columns: minmax(0, 1fr);
   }
-  /* The strip scrolls rather than wrapping to three rows on a narrow screen,
-     which would push the panel it controls off the bottom of the viewport. */
+}
+
+@media (max-width: 700px) {
+  .cm-acts .tour-row,
+  .cm-acts .tour-row--flip {
+    padding-block: 3rem;
+  }
+  /* One column: two of these side by side at 358px give each about 22
+     characters, which breaks every heading across three lines. */
+  .cm-guards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+  }
+  /* The tabs are the first thing in the panel and must not wrap to two
+     rows above the copy they label. */
   .cm-surf__tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
+    padding-bottom: 0.15rem;
   }
   .cm-surf__tabs::-webkit-scrollbar {
     display: none;

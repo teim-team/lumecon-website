@@ -67,6 +67,32 @@ const NAV: NavItem[] = [
     ],
     foot: { href: '/start', text: 'Not sure where to start? Plan your first analysis' },
   },
+  /* Why Lumecon replaced Company (2026-09). "Company" named the
+     organization and buried the buyer's own question under it; the
+     three pages beneath it — the people, how their information is
+     handled, and how to reach someone — are all answers to "why
+     should we choose this", so the group is now named for the
+     question and led by the page that answers it. Methodology stays
+     under Resources, where a reader goes to check the work rather
+     than to be persuaded, and /why-lumecon links to it prominently. */
+  {
+    id: 'why',
+    label: 'Why Lumecon',
+    links: [
+      {
+        href: '/why-lumecon',
+        text: 'Why Lumecon',
+        desc: 'Why an organization chooses the platform.',
+      },
+      { href: '/team', text: 'Our team', desc: 'The people behind the models, data and software.' },
+      {
+        href: '/security',
+        text: 'Security and data governance',
+        desc: 'How organizational information is handled.',
+      },
+      { href: '/contact', text: 'Contact', desc: 'A direct route to the team.' },
+    ],
+  },
   { id: 'pricing', label: 'Pricing', href: '/pricing' },
   {
     id: 'resources',
@@ -76,15 +102,6 @@ const NAV: NavItem[] = [
       { href: '/methodology', text: 'Methodology', desc: 'The economics, with the equations.' },
       { href: '/naics', text: 'Industry sectors', desc: 'What the classification covers.' },
       { href: '/glossary', text: 'Glossary', desc: 'The terms, defined plainly.' },
-    ],
-  },
-  {
-    id: 'company',
-    label: 'Company',
-    links: [
-      { href: '/team', text: 'Team' },
-      { href: '/security', text: 'Security' },
-      { href: '/contact', text: 'Contact' },
     ],
   },
 ];
