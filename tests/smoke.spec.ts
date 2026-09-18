@@ -930,6 +930,45 @@ test('privacy policy discloses Cedar topic memory', async ({ page }) => {
   await expect(page.locator('main')).toContainText('local storage for up to 30 days');
 });
 
+test('cedar commons claims only what the product actually does', async ({ page }) => {
+  await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('more than one person');
+
+  // Each of these is answerable by a real route: participants with a role,
+  // an append-only note thread, Cedar inside a project, documents on the
+  // project's intake.
+  const body = (await page.locator('main').innerText()).toLowerCase();
+  for (const claim of ['collaborator', 'viewer', 'append-only', 'by email']) {
+    expect(body, `should describe ${claim}`).toContain(claim);
+  }
+
+  /* Data requests and approval tracking are proposals with no route on the
+     branch being incorporated. A product page is not where a proposal goes,
+     so the page must not imply either is available. */
+  for (const unbuilt of ['assign a request', 'data request', 'approval workflow', 'track approvals']) {
+    expect(body, `must not claim ${unbuilt}`).not.toContain(unbuilt);
+  }
+
+  // Included with a plan, never sold separately.
+  await expect(page.locator('#cm-plans')).toContainText('Sapling and Tree');
+  await expect(page.locator('a[href="/pricing"]').first()).toBeVisible();
+  // The guide prepares, this page is where the work happens. One link each.
+  await expect(page.locator('main a[href="/start"]')).toHaveCount(1);
+});
+
+test('cedar commons sits between Cedar and Cedar Grove in the product menu', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.nav-toggle[data-current="true"]')).toHaveText(/Product/);
+  await page.locator('#navt-product').click();
+  await expect(page.locator('#navp-product .nav-panel__text')).toHaveText([
+    'Cedar Impact',
+    'Cedar',
+    'Cedar Commons',
+    'Cedar Grove',
+  ]);
+});
+
 test('cedar grove shows three captures of the product, in one frame, per theme', async ({
   page,
 }) => {
