@@ -31,7 +31,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/cedar-grove` | 458 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1007 | Plan your first analysis \| Lumecon | 165 |
+| `/start` | 1406 | Plan your first analysis \| Lumecon | 165 |
 | `/contact` | 288 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
@@ -44,7 +44,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **12495** | | |
+| **Total** | **12894** | | |
 
 ## Crawler metadata audit
 
@@ -2000,7 +2000,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1007
+- **Visible words:** 1406
 
 ### Architecture (heading outline)
 
@@ -2008,6 +2008,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
   - **H2** Your starting plan
   - **H2** What a first analysis can show
   - **H2** What more records would let you ask
+  - **H2** Prepare your organization for an analysis
   - **H2** Start with the records you already have
   - **H2** We can help you choose a starting point.
   - **H2** How coverage is reported
@@ -2172,6 +2173,30 @@ Available today.
 **[conditional]** Would replace the modeled estimate of what is purchased locally with observed purchasing, and would separate subcontracted work from work performed in house.
 
 **[conditional]** Future work. Local purchasing is estimated from regional trade data today, and vendor records are not a model input.
+
+
+**H2: Prepare your organization for an analysis**
+
+The work stalls on coordination more often than on data. Four things make it go smoothly, and none of them has to be settled before you start.
+
+- 01 A project lead One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear. Not necessarily the most senior person, and they do not have to hold any of the records themselves.
+- 02 A clear first question What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize. One question is enough to start. The second is easier once the first is answered.
+- 03 The right record holders Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on. Usually several people across several offices, which is normal and worth mapping early.
+- 04 The right approval path Whoever can authorize records being shared, and whether a review has to happen before they move. The person who holds a record and the person who can release it are often not the same person.
+You do not need every record, or every person, before you begin. It helps to know who can help when the project needs them.
+
+- _disclosure:_ What a project team looks like
+A composite of how organizations that run these analyses well are arranged. One person may hold several of these, and a small organization often has three people rather than six.
+
+- Project lead COORDINATION Keeps the project moving, decides whom to involve, and tracks what is still unanswered.
+- Executive sponsor AUTHORITY Settles scope, priority and access questions that need someone able to decide them.
+- Finance or accounting RECORDS Statements, budgets and the figures every other number is built from.
+- Payroll or human resources RECORDS Employment and compensation, which is where jobs and labor income come from.
+- Operations or enterprise leads KNOWLEDGE How a specific operation actually runs, which no document states plainly.
+- Governance liaison APPROVAL The Council, board, enterprise leadership or legal route, where one is required before records are shared.
+Some organizations need leadership, board, Council or legal review before records are shared. Naming that step at the start means the timeline reflects how the organization actually works, instead of the project discovering it halfway through.
+
+The onboarding call works through whichever of these is unsettled. What the call covers.
 
 
 **H2: Start with the records you already have**

@@ -531,6 +531,41 @@ test('the contact fallback address is the one in config, not a second copy', asy
   );
 });
 
+test('the readiness section is a primer, and its accents actually render', async ({ page }) => {
+  await page.goto('/start', { waitUntil: 'networkidle' });
+  const sec = page.locator('[aria-labelledby="s-ready"]');
+  await expect(sec).toBeVisible();
+
+  // Four essentials, and the team guide folded away so the page stays a
+  // primer rather than becoming a readiness audit.
+  await expect(sec.locator('.ready-four__item')).toHaveCount(4);
+  await expect(sec.locator('.ready-more')).not.toHaveAttribute('open', /.*/);
+  // The floor line has to be present: without it this reads as an entry exam.
+  await expect(sec.locator('.ready-floor')).toContainText('do not need every record');
+  // The review path is named as normal, not as an obstacle.
+  await sec.locator('.ready-more > summary').click();
+  await expect(sec.locator('.ready-gov')).toContainText('Council');
+  await expect(sec.locator('.ready-team__row')).toHaveCount(6);
+
+  // An undefined CSS custom property makes the whole declaration invalid and
+  // disappears with no error, which is how this shipped at 0px the first
+  // time. Assert the accents resolved to something real.
+  const accents = await sec.evaluate((el) => {
+    const floor = getComputedStyle(el.querySelector('.ready-floor')!);
+    const num = getComputedStyle(el.querySelector('.ready-four__n')!);
+    const pill = getComputedStyle(el.querySelector('.ready-team__holds')!);
+    return {
+      border: parseFloat(floor.borderLeftWidth),
+      numColor: num.color,
+      pillBg: pill.backgroundColor,
+      sectionBg: getComputedStyle(el).backgroundColor,
+    };
+  });
+  expect(accents.border).toBeGreaterThan(0);
+  // The pill must not dissolve into the band it sits on.
+  expect(accents.pillBg).not.toBe(accents.sectionBg);
+});
+
 test('every dark cover hero carries the corner mark', async ({ page }) => {
   // One brand mark bled off the top-right of each dark cover. Cedar Grove
   // and Security were missing it while methodology, the starting guide and

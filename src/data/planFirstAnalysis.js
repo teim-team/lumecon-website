@@ -1161,3 +1161,92 @@ export const OPEN_METHODOLOGY_QUESTIONS = [
     blocks: 'The vendor spending row, which is marked research.',
   },
 ];
+
+/* ---------------------------------------------------------------------
+   Analysis readiness.
+
+   Distinct from data readiness, and deliberately kept apart from it. The
+   flow above reads two things independently: how complicated the
+   organization is, and which records exist. This is a third question,
+   and it is the one that most often stalls a project: who coordinates
+   the work, who can settle a scope question, who holds each record, and
+   who is allowed to release it.
+
+   The last two are frequently different people. A project can have every
+   record it needs and still wait weeks because nobody established that
+   sharing them required a Council, board or legal review.
+
+   None of this is a test, and none of it is scored. An organization does
+   not need the full set before starting. Naming who can help when the
+   project needs them is the whole point.
+   --------------------------------------------------------------------- */
+
+/** The four things that most affect whether a first analysis goes smoothly. */
+export const READINESS_ESSENTIALS = [
+  {
+    label: 'A project lead',
+    body: 'One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear.',
+    note: 'Not necessarily the most senior person, and they do not have to hold any of the records themselves.',
+  },
+  {
+    label: 'A clear first question',
+    body: 'What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize.',
+    note: 'One question is enough to start. The second is easier once the first is answered.',
+  },
+  {
+    label: 'The right record holders',
+    body: 'Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on.',
+    note: 'Usually several people across several offices, which is normal and worth mapping early.',
+  },
+  {
+    label: 'The right approval path',
+    body: 'Whoever can authorize records being shared, and whether a review has to happen before they move.',
+    note: 'The person who holds a record and the person who can release it are often not the same person.',
+  },
+];
+
+/**
+ * What a working project team looks like. A composite of how organizations
+ * that run these analyses well are actually arranged, not a description of
+ * any one organization.
+ */
+export const READINESS_TEAM = [
+  {
+    role: 'Project lead',
+    holds: 'Coordination',
+    body: 'Keeps the project moving, decides whom to involve, and tracks what is still unanswered.',
+  },
+  {
+    role: 'Executive sponsor',
+    holds: 'Authority',
+    body: 'Settles scope, priority and access questions that need someone able to decide them.',
+  },
+  {
+    role: 'Finance or accounting',
+    holds: 'Records',
+    body: 'Statements, budgets and the figures every other number is built from.',
+  },
+  {
+    role: 'Payroll or human resources',
+    holds: 'Records',
+    body: 'Employment and compensation, which is where jobs and labor income come from.',
+  },
+  {
+    role: 'Operations or enterprise leads',
+    holds: 'Knowledge',
+    body: 'How a specific operation actually runs, which no document states plainly.',
+  },
+  {
+    role: 'Governance liaison',
+    holds: 'Approval',
+    body: 'The Council, board, enterprise leadership or legal route, where one is required before records are shared.',
+  },
+];
+
+/** Said plainly, because the review path is a normal step and not a problem. */
+export const READINESS_GOVERNANCE =
+  'Some organizations need leadership, board, Council or legal review before records are shared. Naming that step at the start means the timeline reflects how the organization actually works, instead of the project discovering it halfway through.';
+
+/** The reassurance that keeps this from reading as an entry exam. */
+export const READINESS_FLOOR =
+  'You do not need every record, or every person, before you begin. It helps to know who can help when the project needs them.';
