@@ -19,6 +19,16 @@
 /* The same corner mark the other dark covers carry, at the same size and
    opacity. Kept in step with methodology.css `.meth-hero--cover::after`;
    this page does not load that stylesheet. */
+/* The watermark is a 608px ghost at 2.5-3.5% opacity, and it was being
+   drawn from a 616 KB PNG that every page in the site downloaded for the
+   purpose. Same artwork as WebP is 64 KB. The PNG stays in the repo
+   because the structured data points at it as the organization's logo,
+   where a crawler may fetch it once; no page pulls it on load any more.
+   Written as two declarations rather than one. A browser that does not
+   understand `image-set()` discards that line as invalid and keeps the
+   plain `url()` above it, which is the PNG; one that does understand it
+   takes the WebP. Either way exactly one file is fetched, and a browser
+   without WebP is not left with a rule it cannot parse. */
 .secpg-hero::after {
   content: '';
   position: absolute;
@@ -27,6 +37,10 @@
   width: clamp(24rem, 38vw, 38rem);
   height: clamp(24rem, 38vw, 38rem);
   background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
+  background-image: image-set(
+    url('/brand/lumecon-logo-mark-transparent.webp') type('image/webp'),
+    url('/brand/lumecon-logo-mark-transparent.png') type('image/png')
+  );
   filter: brightness(0) invert(1);
   opacity: 0.035;
   pointer-events: none;

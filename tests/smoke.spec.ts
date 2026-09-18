@@ -275,6 +275,91 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await expect(page.locator('#navp-resources')).toBeHidden();
 });
 
+test('what crawlers are told matches what the site actually serves', async ({ page }) => {
+  /* Three lists used to describe this site and none of them knew about
+     the others: the sitemap (from the filesystem), the copy document's own
+     array, and llms.txt's prose. /why-lumecon shipped into the first and
+     was missing from the other two. They read one inventory now, and this
+     is what keeps them honest — a page added to the site and forgotten in
+     src/data/siteMap.ts fails here rather than going quietly missing from
+     what an assistant is given. */
+  const { SITE_PAGES, INDEXED_PAGES, LLMS_PAGES } = await import('../src/data/siteMap');
+
+  // 1. The sitemap and the inventory name the same indexed pages.
+  const xml = await (await page.request.get('/sitemap-0.xml')).text();
+  const inSitemap = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map((m) => new URL(m[1]).pathname.replace(/\/$/, '') || '/')
+    .sort();
+  const declared = INDEXED_PAGES.map((p) => p.path).sort();
+  expect(inSitemap, 'sitemap and inventory agree').toEqual(declared);
+
+  // 2. Every page in the inventory is actually served, and the noindex
+  //    ones really carry the robots directive that keeps them out.
+  for (const entry of SITE_PAGES) {
+    const url = entry.visit ?? entry.path;
+    const res = await page.request.get(url);
+    const ok = entry.path === '/404' ? [200, 404] : [200];
+    expect(ok, `${url} is served`).toContain(res.status());
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    const robots = await page
+      .locator('meta[name="robots"]')
+      .evaluateAll((n) => n.map((x) => x.getAttribute('content') || '').join(' '));
+    if (entry.indexing === 'noindex') {
+      expect(robots, `${entry.path} is noindex`).toMatch(/noindex/);
+    } else {
+      expect(robots, `${entry.path} is indexable`).not.toMatch(/noindex/);
+    }
+  }
+
+  // 3. llms.txt lists exactly those pages, and lists nothing the site
+  //    does not serve. An assistant reading a stale URL is worse than one
+  //    reading a short list.
+  const llms = await (await page.request.get('/llms.txt')).text();
+  const listed = [...llms.matchAll(/^- https:\/\/lumecon\.ai(\/[a-z0-9-]*)? —/gm)].map(
+    (m) => m[1] || '/',
+  );
+  expect(listed.sort(), 'llms.txt lists the indexed pages').toEqual(
+    LLMS_PAGES.map((p) => p.path).sort(),
+  );
+  for (const entry of LLMS_PAGES) {
+    expect(llms, `llms.txt states what ${entry.path} is for`).toContain(entry.question);
+  }
+  // Every other lumecon.ai URL named anywhere in the file resolves too.
+  const referenced = [...new Set([...llms.matchAll(/https:\/\/lumecon\.ai(\/[a-z0-9-]+)/g)].map((m) => m[1]))];
+  for (const path of referenced) {
+    const res = await page.request.get(path);
+    expect(res.status(), `llms.txt points at a real page: ${path}`).toBe(200);
+  }
+});
+
+test('robots.txt welcomes assistants and points at the sitemap', async ({ page }) => {
+  const robots = await (await page.request.get('/robots.txt')).text();
+  expect(robots).toContain('Sitemap: https://lumecon.ai/sitemap-index.xml');
+  // The crawlers this site is deliberately written for.
+  for (const agent of ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended']) {
+    expect(robots, `${agent} has a group`).toContain(`User-agent: ${agent}`);
+  }
+  /* robots.txt has no inheritance: a crawler matches one group and ignores
+     every other, so each group has to repeat the two Disallow lines. A
+     group that lost them would quietly expose what the others withhold. */
+  /* Split on blank lines, not on every `User-agent:`. A group may list
+     SEVERAL agents before one shared rule set — which is how this file
+     keeps the repetition to three copies instead of twenty-two — so
+     splitting per agent line cuts one group into pieces that each look
+     like they are missing their rules. */
+  const groups = robots
+    .split(/\n\s*\n/)
+    .map((g) => g.replace(/^\s*#.*$/gm, '').trim())
+    .filter((g) => g.startsWith('User-agent:'));
+  expect(groups.length).toBeGreaterThanOrEqual(3);
+  for (const group of groups) {
+    expect(group, 'every group withholds /_headers').toContain('Disallow: /_headers');
+    expect(group, 'every group withholds /404').toContain('Disallow: /404');
+  }
+  const sitemapXml = await (await page.request.get('/sitemap-index.xml')).text();
+  expect(sitemapXml).toContain('sitemap-0.xml');
+});
+
 test('the nav runs Product, Why Lumecon, Pricing, Resources', async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 800 });
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
