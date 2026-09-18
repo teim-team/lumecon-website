@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test, expect } from '@playwright/test';
+import { scrollUntilCedarVisible } from './cedar-visibility';
 
 /**
  * Smoke suite. Catches the regressions we've actually hit (broken icon
@@ -160,12 +161,15 @@ test('homepage uses clear free-access language and Cedar starts on demand', asyn
   const prompts = await panel
     .locator('.cedar-chip')
     .evaluateAll((chips) => chips.slice(0, 5).map((chip) => chip.textContent?.trim()));
+  /* The five that are rendered, in order. The rest sit behind "See more
+     options", so this list is the whole of what a visitor is offered
+     before they ask for more — worth pinning rather than sampling. */
   expect(prompts).toEqual([
     'What is Lumecon?',
     'What is Cedar?',
-    'Is my data safe?',
-    'How is this different from IMPLAN / RIMS / Lightcast?',
     'How much does it cost?',
+    'How is this different from IMPLAN?',
+    'How long does an analysis take?',
   ]);
 });
 
@@ -1741,6 +1745,104 @@ test.describe('the product pages on a phone', () => {
     const [scrollWidth, clientWidth] = await grid.evaluate((el) => [el.scrollWidth, el.clientWidth]);
     expect(scrollWidth).toBeGreaterThan(clientWidth);
     await expect(page.locator('.grovepg-atlas__cell')).toHaveCount(12);
+  });
+
+  /* ---- Cedar on a phone ----
+     A phone is where the launcher has the least to work with: no label
+     beside it, the least room to read an answer, and a corner it shares
+     with the consent banner. These four cover the shape that was agreed
+     for it, and each one has a real failure behind it. */
+
+  test('the launcher is a round mark on a phone, not a text pill', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    const fab = page.locator('#cedarFab');
+    const box = (await fab.boundingBox())!;
+    // 44px is the accessible minimum; a tap target carrying no label
+    // beside it should be comfortably past it.
+    expect(Math.round(box.width), 'square').toBe(Math.round(box.height));
+    expect(box.width, 'a real thumb target').toBeGreaterThanOrEqual(56);
+  });
+
+  test('the welcome bubble greets once the launcher settles', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    // A first-time visitor answers the consent banner, which owns this
+    // same corner and holds the bubble back until it is gone.
+    await page.locator('[data-consent="denied"]').click();
+    await scrollUntilCedarVisible(page);
+    const nudge = page.locator('#cedarNudge');
+    await expect(nudge).toBeVisible({ timeout: 25000 });
+    // The bubble is the only thing on the screen that says what the
+    // circle beside it is, so it has to say it.
+    await expect(nudge).toContainText('Cedar');
+  });
+
+  test('tapping the welcome bubble opens Cedar and leaves it open', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    await page.locator('[data-consent="denied"]').click();
+    await scrollUntilCedarVisible(page);
+    const nudge = page.locator('#cedarNudge');
+    await expect(nudge).toBeVisible({ timeout: 25000 });
+    await nudge.locator('.cedar-nudge__text').click();
+    const panel = page.locator('#cedarFabPanel');
+    // "Leaves it open" is the assertion that matters: the same click used
+    // to bubble to the document-level close-on-outside-click handler,
+    // which saw it land outside the panel it had just opened and shut it
+    // again, so the bubble looked inert.
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 6000 });
+    await page.waitForTimeout(400);
+    await expect(panel).toBeVisible();
+  });
+
+  test('Cedar fills the screen on a phone', async ({ page }) => {
+    /* The panel scales in. Measuring the box mid-animation reports a
+       frame of the transform rather than the layout, so settle it. */
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    await page.locator('[data-consent="denied"]').click();
+    await (await scrollUntilCedarVisible(page)).click();
+    const panel = page.locator('#cedarFabPanel');
+    await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 6000 });
+    const box = (await panel.boundingBox())!;
+    /* The layout viewport, not the configured one: a classic scrollbar
+       takes a few pixels off the width, and a panel that correctly fills
+       what is left is not a failure. */
+    const view = await page.evaluate(() => ({
+      width: document.documentElement.clientWidth,
+      height: window.innerHeight,
+    }));
+    // A docked sheet on a 390px screen left the prompt rail clipped
+    // mid-word. Reading an answer is the whole point of the surface.
+    expect(Math.round(box.width), 'full width').toBe(view.width);
+    expect(box.height, 'full height').toBeGreaterThanOrEqual(view.height - 1);
+    expect(Math.round(box.x)).toBe(0);
+    expect(Math.round(box.y)).toBe(0);
+    // And the starter prompts are whole, not cut off at the edge.
+    const overflow = await panel
+      .locator('.cedar-chip:not([hidden])')
+      .evaluateAll(
+        (nodes, w) => nodes.some((n) => n.getBoundingClientRect().right > (w as number)),
+        view.width,
+      );
+    expect(overflow, 'no prompt runs off the screen').toBe(false);
+
+    /* And the nav does not paint over it. Both are fixed and they
+       overlap at the top of the screen, so the one with the higher
+       z-index wins: underneath, the dialog loses its own title bar and
+       its close button — the only way back to the page — while still
+       reporting a full-viewport box. Compared as numbers rather than
+       by hit-testing, because `open()` makes the nav inert and
+       `elementFromPoint` then looks straight through it, which would
+       make a hit test pass while the nav is still visibly on top. */
+    const close = page.locator('.cedar-fab-panel__close');
+    await expect(close).toBeVisible();
+    const layers = await page.evaluate(() => {
+      const z = (sel: string) => Number(getComputedStyle(document.querySelector(sel)!).zIndex);
+      return { panel: z('#cedarFabPanel'), nav: z('body > nav') };
+    });
+    expect(layers.nav, 'the nav is a fixed, stacked header').toBeGreaterThan(0);
+    expect(layers.panel, 'the dialog sits above the nav').toBeGreaterThan(layers.nav);
+    await expect(page.locator('.cedar-fab-panel .cedar-chat__header')).toBeVisible();
   });
 
   test('the grove hero buttons are one column at one width', async ({ page }) => {

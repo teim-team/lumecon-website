@@ -345,7 +345,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -356,15 +356,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -730,7 +732,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -741,15 +743,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -1060,7 +1064,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -1071,15 +1075,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -1302,7 +1308,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -1313,15 +1319,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -1699,7 +1707,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -1710,15 +1718,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -2245,7 +2255,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2256,15 +2266,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -2395,7 +2407,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2406,15 +2418,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -2729,7 +2743,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2740,15 +2754,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
@@ -2880,7 +2896,7 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2891,15 +2907,17 @@ LEGAL
 
 - _button:_ What is Lumecon?
 - _button:_ What is Cedar?
-- _button:_ Is my data safe?
-- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
 - _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
 - _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
 - _button:_ Can it support grant applications?
 - _button:_ How do cities and counties use it?
 - _button:_ How do state agencies use it?
-- _button:_ How long does an analysis take?
-- _button:_ Can I see a demo?
 - _button:_ Free vs paid Cedar?
 - _button:_ See more options
 - _label:_ **[conditional]** Ask Cedar
