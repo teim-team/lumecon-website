@@ -12,6 +12,9 @@
   background: #071126;
 }
 .grovepg-hero .meth-w {
+  /* Above the corner mark the hero now carries, same as Cedar's. */
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 4.5fr) minmax(28rem, 7.5fr);
   gap: clamp(3rem, 6vw, 6rem);

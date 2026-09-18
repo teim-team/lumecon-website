@@ -122,7 +122,7 @@ const jsonLd = [
             <p class="contact-sub">
               Fields marked <span class="contact-req" aria-hidden="true">*</span> are required.
             </p>
-            <form class="contact-form" data-contact-form novalidate>
+            <form class="contact-form" data-contact-form data-contact-email={siteConfig.email} novalidate>
               <label class="contact-field">
                 <span>Name <span class="contact-req" aria-hidden="true">*</span></span>
                 <input type="text" name="name" autocomplete="name" maxlength="200" required />
@@ -205,6 +205,8 @@ const jsonLd = [
     const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
     const status = form?.querySelector<HTMLElement>('[data-contact-status]');
     const submitBtn = form?.querySelector<HTMLButtonElement>('[data-contact-submit]');
+    /* One address, read from config rather than repeated as a literal. */
+    const inbox = form?.dataset.contactEmail || 'contact@lumecon.ai';
 
     function setStatus(variant: 'ok' | 'err' | 'info', text: string) {
       if (!status) return;
@@ -231,9 +233,26 @@ const jsonLd = [
         return;
       }
 
-      if (!name) return setStatus('err', 'Enter your name.');
-      if (!email) return setStatus('err', 'Enter an email we can reply to.');
-      if (!message) return setStatus('err', 'Tell us what you need.');
+      /* Announce the problem and put the cursor in the field it is about.
+         The status is aria-live, so a screen reader hears it either way;
+         without the focus move a sighted keyboard user is told something
+         is wrong and left standing on the Send button. */
+      const fail = (field: string, text: string) => {
+        setStatus('err', text);
+        form.querySelector<HTMLElement>(`[name="${field}"]`)?.focus();
+        return undefined;
+      };
+
+      if (!name) return fail('name', 'Enter your name.');
+      if (!email) return fail('email', 'Enter an email we can reply to.');
+      /* A typo here is the one error the visitor cannot recover from: the
+         message sends, the reply goes nowhere, and neither side knows. It
+         is a deliberately loose shape check, not an attempt to decide what
+         a valid address is. */
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return fail('email', 'That email address looks incomplete. Check it, so a reply can reach you.');
+      }
+      if (!message) return fail('message', 'Tell us what you need.');
 
       submitBtn?.setAttribute('disabled', 'true');
       setStatus('info', 'One moment...');
@@ -261,14 +280,14 @@ const jsonLd = [
         const body = encodeURIComponent(
           `Name: ${name}\nEmail: ${email}\n${organization ? `Organization: ${organization}\n` : ''}\n${message}\n`,
         );
-        window.location.href = `mailto:contact@lumecon.ai?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:${inbox}?subject=${subject}&body=${body}`;
         setStatus('info', 'Opening your email client so you can reach us directly...');
         submitBtn?.removeAttribute('disabled');
       } catch (err: unknown) {
         trackError(err, { where: 'contact.message' });
         setStatus(
           'err',
-          'Something went wrong on our end. Try again in a moment, or email contact@lumecon.ai.',
+          `Something went wrong on our end. Try again in a moment, or email ${inbox}.`,
         );
         submitBtn?.removeAttribute('disabled');
       }

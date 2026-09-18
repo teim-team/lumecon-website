@@ -495,6 +495,72 @@ test('the contact form reports a missing field instead of submitting', async ({ 
   await expect(status).toContainText('email');
   // Nothing navigated away to a mailto on an incomplete form.
   expect(page.url()).toContain('/contact');
+  // The error puts the cursor in the field it is about, so a keyboard user
+  // is not told something is wrong and left standing on the Send button.
+  await expect(page.locator('.contact-form [name="email"]')).toBeFocused();
+});
+
+test('the contact form catches an email that cannot receive a reply', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  await page.locator('.contact-form [name="name"]').fill('Test Person');
+  await page.locator('.contact-form [name="message"]').fill('A question about the model.');
+  const status = page.locator('[data-contact-status]');
+
+  // A typo here is the one error the visitor cannot recover from: the message
+  // sends and the reply goes nowhere, with neither side any the wiser.
+  for (const bad of ['not-an-email', 'missing@domain', 'two@@at.com', 'space bar@x.com']) {
+    await page.locator('.contact-form [name="email"]').fill(bad);
+    await page.locator('[data-contact-submit]').click();
+    await expect(status).toContainText('looks incomplete', { timeout: 2000 });
+    expect(page.url()).toContain('/contact');
+  }
+
+  // A real address is not blocked by the check.
+  await page.locator('.contact-form [name="email"]').fill('person@example.org');
+  await page.locator('[data-contact-submit]').click();
+  await expect(status).not.toContainText('looks incomplete');
+});
+
+test('the contact fallback address is the one in config, not a second copy', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'domcontentloaded' });
+  // The client script reads the address off the form rather than repeating
+  // it as a literal, so changing config cannot leave a stale address behind.
+  await expect(page.locator('[data-contact-form]')).toHaveAttribute(
+    'data-contact-email',
+    'contact@lumecon.ai',
+  );
+});
+
+test('every dark cover hero carries the corner mark', async ({ page }) => {
+  // One brand mark bled off the top-right of each dark cover. Cedar Grove
+  // and Security were missing it while methodology, the starting guide and
+  // Cedar had it, which read as three surfaces instead of one.
+  const covers: [string, string][] = [
+    ['/methodology', '.meth-hero--cover'],
+    ['/start', '.meth-hero--cover'],
+    ['/cedar', '.cedarpg-hero'],
+    ['/cedar-grove', '.grovepg-hero'],
+    ['/security', '.secpg-hero'],
+  ];
+  for (const [path, sel] of covers) {
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
+    const mark = await page.locator(sel).first().evaluate((el) => {
+      const cs = getComputedStyle(el, '::after');
+      const host = getComputedStyle(el);
+      return {
+        image: cs.backgroundImage,
+        opacity: cs.opacity,
+        clipped: host.overflow,
+        positioned: host.position,
+      };
+    });
+    expect(mark.image, `${path} hero mark`).toContain('lumecon-logo-mark');
+    // Decoration, not a design element competing with the copy.
+    expect(Number(mark.opacity), `${path} mark opacity`).toBeLessThan(0.1);
+    // Without both of these the mark widens the page instead of bleeding off it.
+    expect(mark.positioned, `${path} hero positioning`).not.toBe('static');
+    expect(mark.clipped, `${path} hero overflow`).toContain('hidden');
+  }
 });
 
 test('skip link targets real content on subpages', async ({ page }) => {

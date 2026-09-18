@@ -6,10 +6,34 @@
   margin-inline: auto;
 }
 .secpg-hero {
+  /* relative + hidden so the mark below can bleed off the corner without
+     widening the page. The other dark covers inherit this from .meth-hero;
+     this hero does not use that class, so it states it. */
+  position: relative;
+  overflow: hidden;
   padding: clamp(8rem, 14vw, 11rem) var(--container-pad) clamp(4rem, 8vw, 7rem);
   background:
     linear-gradient(112deg, rgba(15, 181, 165, 0.16), transparent 47%),
     linear-gradient(148deg, #073944 0%, #08283a 42%, #081329 100%);
+}
+/* The same corner mark the other dark covers carry, at the same size and
+   opacity. Kept in step with methodology.css `.meth-hero--cover::after`;
+   this page does not load that stylesheet. */
+.secpg-hero::after {
+  content: '';
+  position: absolute;
+  top: -8rem;
+  right: -5rem;
+  width: clamp(24rem, 38vw, 38rem);
+  height: clamp(24rem, 38vw, 38rem);
+  background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
+  filter: brightness(0) invert(1);
+  opacity: 0.035;
+  pointer-events: none;
+}
+.secpg-hero__grid {
+  position: relative;
+  z-index: 1;
 }
 .secpg-hero__grid {
   display: grid;

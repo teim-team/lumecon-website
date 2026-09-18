@@ -768,8 +768,13 @@
     linear-gradient(128deg, rgba(15, 181, 165, 0.13), transparent 42%),
     linear-gradient(145deg, #0d1933 0%, #091126 62%, #082631 100%);
 }
+/* The mark, bled off the top-right corner of a dark cover hero. Every
+   dark cover carries it, so the family reads as one surface: methodology,
+   the starting guide, Cedar and Cedar Grove. Security carries the same
+   thing from its own stylesheet, since it does not load this one. */
 .meth-hero--cover::after,
-.cedarpg-hero::after {
+.cedarpg-hero::after,
+.grovepg-hero::after {
   content: '';
   position: absolute;
   top: -8rem;
