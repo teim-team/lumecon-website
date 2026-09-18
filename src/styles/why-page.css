@@ -13,12 +13,27 @@
    around it.
    --------------------------------------------------------------- */
 
-/* The alternating material planes that organize the page. Surface
-   sections sit on the working white, the rest on the page ground, so
-   the argument reads as four movements rather than one long scroll. */
-.why-sec--surface {
+/* ONE plane, not a stripe per section.
+   -------------------------------------------------------------------
+   This was a surface on the price, the trace and the people, with the
+   mineral ground between each — white, mineral, white, mineral, for
+   nearly every consecutive section. That is the stripe pattern AGENTS.md
+   names, and the alternation carried no meaning: it changed material
+   between two sections making the same argument.
+
+   The three sections that ARE one argument — what it costs, what it
+   saves you doing, and what stands behind the number — now share a
+   single white plane, and the internal borders are dropped so it reads
+   as one surface. Everything after it (who it is for, who builds it,
+   where to check) stays on the ground. Three planes, each change of
+   material meaning a change of subject. */
+.why-plane {
   background: var(--surface);
+}
+.why-plane:not(.why-plane + .why-plane) {
   border-top: 1px solid var(--rule);
+}
+.why-plane:not(:has(+ .why-plane)) {
   border-bottom: 1px solid var(--rule);
 }
 

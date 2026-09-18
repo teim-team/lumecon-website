@@ -58,6 +58,7 @@ import Footer from '../components/Footer.astro';
 import { site } from '../config';
 import { PLANS, CLIENT_WORK } from '../data/pricing';
 import { TEAM_ROSTER } from '../data/team';
+import { RESULTS } from '../../scripts/screenshots/examples-data.mjs';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -89,20 +90,49 @@ const INCLUDED = [
   },
 ];
 
-/* The lineage in the hero screenshot, as figures a reader can add up.
-   Same sample analysis, same run: economic output of $1,240,500,000
-   decomposed two ways, each of which sums to the total. */
-const TRACE_TOTAL = 1_240_500_000;
-const BY_LAYER = [
-  { k: 'Direct', v: 744_300_000, b: 'The activity itself.' },
-  { k: 'Indirect', v: 310_125_000, b: 'The suppliers it buys from.' },
-  { k: 'Induced', v: 186_075_000, b: 'Household spending its wages support.' },
-];
-const BY_OPERATION = [
-  { k: 'Resort and gaming operations', v: 607_845_000 },
-  { k: 'Retail village and leasing', v: 384_555_000 },
-  { k: 'Government and member services', v: 248_100_000 },
-];
+/* The lineage written out below is READ from the same fixture the hero
+   screenshot is captured from — `r-nation-b`, state scope, in
+   scripts/screenshots/examples-data.mjs. Hard-coding it meant the prose
+   could silently come to describe a different run than the picture above
+   it the next time that fixture moved and the capture was retaken. This
+   import runs in the frontmatter, so it is build-time only; nothing from
+   the screenshot tooling reaches the browser. */
+/* The fixture is a plain .mjs with no types of its own, so the shape is
+   declared here, at the boundary, rather than asserted away. If the
+   fixture drops one of these fields the build fails rather than
+   rendering `undefined` into the page. */
+interface EffectRow {
+  scope: string;
+  effect_type: string;
+  output_impact: number;
+}
+interface EntityRow {
+  scope: string;
+  entity_name: string;
+  output_impact: number;
+}
+interface FixtureRun {
+  outputs: Record<string, { output: number }>;
+  tables: { by_effect: EffectRow[]; by_entity: EntityRow[] };
+}
+const TRACE_RUN = (RESULTS as unknown as Record<string, FixtureRun>)['r-nation-b'];
+const inState = <T extends { scope: string }>(rows: T[]): T[] =>
+  rows.filter((r) => r.scope === 'state');
+const TRACE_TOTAL: number = TRACE_RUN.outputs.state.output;
+const LAYER_NOTE: Record<string, string> = {
+  direct: 'The activity itself.',
+  indirect: 'The suppliers it buys from.',
+  induced: 'Household spending its wages support.',
+};
+const BY_LAYER = inState(TRACE_RUN.tables.by_effect).map((r) => ({
+  k: r.effect_type.charAt(0).toUpperCase() + r.effect_type.slice(1),
+  v: r.output_impact,
+  b: LAYER_NOTE[r.effect_type],
+}));
+const BY_OPERATION = inState(TRACE_RUN.tables.by_entity).map((r) => ({
+  k: r.entity_name,
+  v: r.output_impact,
+}));
 const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
 const pct = (n: number) => `${Math.round((n / TRACE_TOTAL) * 100)}%`;
 
@@ -123,20 +153,13 @@ const COMPLEX = [
   },
 ];
 
-/* One line of real experience per person, drawn from the same record
-   /team runs on. Not a bio — the sentence that says why this person's
-   background matters to someone buying the product. */
-const WHY_THEM: Record<string, string> = {
-  'elijah-moreno':
-    'Eight years of tribal economic-impact studies, at the Federal Reserve Bank of Minneapolis and the Harvard Kennedy School.',
-  'laurel-wheeler':
-    'PhD economist, previously at the Center for Indian Country Development and a tenure-track professor at Alberta.',
-  'isabella-agnes':
-    'Built economic models and public-sector data systems at the Federal Reserve Board and the District of Columbia.',
-  'francesca-agnes':
-    'Builds the intake and assumption-review systems that turn an organization’s records into reviewable inputs.',
-  'kaylyn-lee': 'Builds the platform organizations use to scope, run and return to analyses.',
-};
+/* The line under each portrait is READ from the roster, not written here.
+   A second hand-written set of experience claims is a second thing to keep
+   true: the canonical record would move and this page would quietly keep
+   the old sentence, and a new person with a photograph would render
+   nothing at all. `experience[0]` is already the one-line form — it is
+   what /team shows first for each person. */
+const whyThem = (p: (typeof TEAM_ROSTER)[number]): string => p.experience?.[0] ?? p.title;
 
 const CHECKS = [
   {
@@ -233,7 +256,7 @@ const jsonLd = [
     {/* 01 · Price. Typography rather than a card grid: the number is the
         argument, and three cards would make the number one of four
         equal things. */}
-    <section class="meth-sec why-sec--surface" aria-labelledby="w-price">
+    <section class="meth-sec why-plane" aria-labelledby="w-price">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
           <h2 id="w-price">A price you can plan around.</h2>
@@ -273,7 +296,7 @@ const jsonLd = [
 
     {/* 02 · The work before the analysis. Two real captures; no figure
         for time saved, because none has been measured. */}
-    <section class="meth-sec why-acts" aria-labelledby="w-work">
+    <section class="meth-sec why-plane why-acts" aria-labelledby="w-work">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
           <h2 id="w-work">Spend more time on the economic questions.</h2>
@@ -289,13 +312,13 @@ const jsonLd = [
             <h3 class="tour-row__title" id="w-work-intake">
               Bring the records you already have.
             </h3>
+            {/* One pointer, no second explanation of Cedar: /cedar owns
+                that argument (AGENTS.md, page ownership). What belongs
+                here is the preparation work this page is about. */}
             <p class="tour-row__body">
-              Budgets, audited statements, payroll summaries and program reports go in as they are.
-              Cedar reads them, proposes how each figure maps to an operation and an industry, and
-              shows what it could not resolve. Nothing is calculated until a person has reviewed
-              the inputs and the assumptions.
-            </p>
-            <p class="tour-row__body">
+              Budgets, audited statements, payroll summaries and program reports go in as they are,
+              rather than being retyped into a template first. Nothing is calculated until a person
+              has reviewed the inputs and the assumptions.{' '}
               <a class="inline-link" href="/cedar">How Cedar works</a>.
             </p>
           </div>
@@ -352,7 +375,7 @@ const jsonLd = [
         screenshot: this is the one part of the page a reader should be
         able to check, and a 1920px capture at phone width cannot be
         read. The figures are the sample run in the hero. */}
-    <section class="meth-sec why-sec--surface" aria-labelledby="w-trace">
+    <section class="meth-sec why-plane" aria-labelledby="w-trace">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
           <h2 id="w-trace">See what supports the result.</h2>
@@ -474,7 +497,7 @@ const jsonLd = [
 
     {/* 05 · The people. Real portraits and one line each of real
         experience from the same record /team runs on. */}
-    <section class="meth-sec why-sec--surface" aria-labelledby="w-people">
+    <section class="meth-sec" aria-labelledby="w-people">
       <div class="meth-w">
         <div class="meth-sec__head reveal-soft">
           <h2 id="w-people">Meet the people doing the work.</h2>
@@ -487,7 +510,11 @@ const jsonLd = [
           {
             TEAM_ROSTER.map((p) => (
               <li class="reveal-soft">
-                <a class="why-person" href={`/team/${p.slug}`}>
+                {/* `/team` — there is no per-person route. `/team/<slug>`
+                    was a link to a page that does not exist: the build
+                    emits dist/team/index.html and the portraits, nothing
+                    else. The roster page shows every one of them. */}
+                <a class="why-person" href="/team">
                   <img
                     class="why-person__photo"
                     src={p.photo}
@@ -499,7 +526,7 @@ const jsonLd = [
                   />
                   <p class="why-person__n">{p.name}</p>
                   <p class="why-person__t">{p.title}</p>
-                  <p class="why-person__b">{WHY_THEM[p.slug]}</p>
+                  <p class="why-person__b">{whyThem(p)}</p>
                 </a>
               </li>
             ))

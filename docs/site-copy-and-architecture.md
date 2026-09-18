@@ -24,9 +24,9 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
 | `/` | 745 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/why-lumecon` | 1226 | Why Lumecon \| Lumecon | 239 |
+| `/why-lumecon` | 1198 | Why Lumecon \| Lumecon | 239 |
 | `/pricing` | 1302 | Pricing \| Lumecon | 155 |
-| `/methodology` | 2774 | Methodology \| Lumecon | 167 |
+| `/methodology` | 2782 | Methodology \| Lumecon | 167 |
 | `/team` | 372 | Team \| Lumecon | 115 |
 | `/cedar` | 471 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 674 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1042 | Terms of Service \| Lumecon | 146 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15242** | | |
+| **Total** | **15222** | | |
 
 ## Crawler metadata audit
 
@@ -393,7 +393,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/why-lumecon
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1226
+- **Visible words:** 1198
 
 ### Architecture (heading outline)
 
@@ -476,9 +476,7 @@ Most of the effort in an impact study is not the economics. It is finding the re
 
 **H3: Bring the records you already have.**
 
-Budgets, audited statements, payroll summaries and program reports go in as they are. Cedar reads them, proposes how each figure maps to an operation and an industry, and shows what it could not resolve. Nothing is calculated until a person has reviewed the inputs and the assumptions.
-
-How Cedar works.
+Budgets, audited statements, payroll summaries and program reports go in as they are, rather than being retyped into a template first. Nothing is calculated until a person has reviewed the inputs and the assumptions. How Cedar works.
 
 - _image alt:_ The intake step of a Lumecon analysis with three operations set up from uploaded documents, and Cedar reporting that two are ready while one is missing a sales figure, asking the person to confirm before anything runs. Shown with illustrative sample data.
 _caption:_ Cedar checks the operations against the documents and waits. Illustrative sample data.
@@ -539,11 +537,11 @@ _caption:_ State and homelands, switchable, with the subset relationship stated 
 
 The model, the data and the software are built by people who did this work somewhere else first, mostly inside the institutions that publish the data the model runs on.
 
-- Elijah Moreno FOUNDER AND CEO Eight years of tribal economic-impact studies, at the Federal Reserve Bank of Minneapolis and the Harvard Kennedy School.
-- Laurel Wheeler PRINCIPAL ECONOMIST PhD economist, previously at the Center for Indian Country Development and a tenure-track professor at Alberta.
-- Isabella Agnes INPUT-OUTPUT MODELING LEAD Built economic models and public-sector data systems at the Federal Reserve Board and the District of Columbia.
-- Francesca Agnes CEDAR SYSTEMS LEAD Builds the intake and assumption-review systems that turn an organization’s records into reviewable inputs.
-- Kaylyn Lee PLATFORM LEAD Builds the platform organizations use to scope, run and return to analyses.
+- Elijah Moreno FOUNDER AND CEO Eight years producing tribal economic-impact studies and related public-policy research.
+- Laurel Wheeler PRINCIPAL ECONOMIST Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon.
+- Isabella Agnes INPUT-OUTPUT MODELING LEAD Data scientist at the Library of Congress.
+- Francesca Agnes CEDAR SYSTEMS LEAD Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.
+- Kaylyn Lee PLATFORM LEAD Builds the platform organizations use to scope, run and revisit analyses.
 Degrees, prior posts and published work for everyone here.
 
 
@@ -1030,7 +1028,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2774
+- **Visible words:** 2782
 
 ### Architecture (heading outline)
 
@@ -1272,7 +1270,7 @@ A regionalized input-output model built from the national economic accounts, ext
 
 **H3: Is Lumecon an alternative to IMPLAN or REMI?**
 
-Organizations evaluate Lumecon as an alternative to IMPLAN, RIMS II and REMI. The input-output foundation is shared across the field; Lumecon differs in its fully public, citable data foundation, the per-figure lineage with source tags, reservation and trust-land modeling and flat subscription pricing. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.
+Organizations evaluate Lumecon as an alternative to IMPLAN, RIMS II and REMI. The input-output foundation is shared across the field, so the differences are not in the economics: they are in the data architecture, the workflow and the price, and they are set out on the Why Lumecon page at lumecon.ai/why-lumecon. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.
 
 
 **H3: How does Lumecon handle suppressed government data?**
@@ -4588,7 +4586,7 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 | Geography coverage (counties / states / nation / reservations) | `/` ×1, `/why-lumecon` ×1, `/pricing` ×2, `/methodology` ×1, `/checkout` ×3 |
 | Unlimited analyses / no per-analysis fees | `/` ×1, `/why-lumecon` ×1, `/pricing` ×3, `/signup` ×1, `/checkout` ×3 |
 | Cedar included in every plan | `/signup` ×1, `/checkout` ×3, `/terms` ×1 |
-| Traceability / lineage | `/` ×2, `/why-lumecon` ×2, `/methodology` ×6, `/login` ×1 |
+| Traceability / lineage | `/` ×2, `/why-lumecon` ×2, `/methodology` ×5, `/login` ×1 |
 | Same model / same data foundation | `/why-lumecon` ×1, `/pricing` ×5, `/choose-plan` ×1 |
 
 ---

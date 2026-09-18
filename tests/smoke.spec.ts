@@ -375,17 +375,65 @@ test('why lumecon shows the staff with a real line each, and the portraits load'
   const rows = await people.evaluateAll((nodes) =>
     nodes.map((n) => ({
       href: n.getAttribute('href'),
+      name: (n.querySelector('.why-person__n')?.textContent || '').trim(),
+      body: (n.querySelector('.why-person__b')?.textContent || '').trim(),
       line: (n.querySelector('.why-person__b')?.textContent || '').trim().length,
       loaded: (n.querySelector('img') as HTMLImageElement).naturalWidth > 0,
     })),
   );
+  /* And the line under each face is the roster's own, not a second copy
+     kept in this page. A parallel map goes stale silently: the record
+     moves, the buyer-facing page keeps the old sentence. */
+  const { TEAM_ROSTER } = await import('../src/data/team');
+  for (const person of TEAM_ROSTER) {
+    const card = rows.find((r) => r.name === person.name);
+    expect(card, `${person.name} has a card`).toBeTruthy();
+    expect(card!.body, `${person.name}'s line comes from the roster`).toBe(
+      person.experience?.[0] ?? person.title,
+    );
+  }
   for (const r of rows) {
     // Every portrait is a real file and every person carries a sentence:
     // an empty one would mean the record and this page had drifted apart.
     expect(r.loaded, `${r.href} portrait loaded`).toBe(true);
     expect(r.line, `${r.href} has a line`).toBeGreaterThan(20);
-    expect(r.href).toMatch(/^\/team\//);
+    /* Fetch it. The first version of this check asserted the href's SHAPE
+       — `/^\/team\//` — and passed while all five links pointed at
+       `/team/<slug>`, which is not a route: the build emits
+       dist/team/index.html and the portraits and nothing else, so every
+       card landed on the 404 page. A link test that does not follow the
+       link is not a link test. */
+    const res = await page.request.get(r.href!);
+    expect(res.status(), `${r.href} resolves`).toBe(200);
   }
+});
+
+test('why lumecon reads its lineage from the screenshot fixture', async ({ page }) => {
+  /* The figures written out under "See what supports the result" describe
+     the run in the hero capture. Hard-coded, they could come to describe a
+     different run the next time that fixture moved and the screenshot was
+     retaken, and the sum check above would not notice — it only proves the
+     numbers agree with each other. This compares them to the fixture. */
+  const { RESULTS } = (await import('../scripts/screenshots/examples-data.mjs')) as {
+    RESULTS: Record<string, any>;
+  };
+  const run = RESULTS['r-nation-b'];
+  const inState = (rows: any[]) => rows.filter((r) => r.scope === 'state');
+  const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  await expect(page.locator('.why-trace__total')).toHaveText(usd(run.outputs.state.output));
+
+  const cols = page.locator('.why-trace__col');
+  await expect(cols.nth(0).locator('.why-trace__v')).toHaveText(
+    inState(run.tables.by_effect).map((r: any) => usd(r.output_impact)),
+  );
+  await expect(cols.nth(1).locator('.why-trace__v')).toHaveText(
+    inState(run.tables.by_entity).map((r: any) => usd(r.output_impact)),
+  );
+  await expect(cols.nth(1).locator('.why-trace__n')).toHaveText(
+    inState(run.tables.by_entity).map((r: any) => r.entity_name),
+  );
 });
 
 test('methodology keeps the method and sends the comparison to why lumecon', async ({ page }) => {
