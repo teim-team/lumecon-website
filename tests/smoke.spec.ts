@@ -562,6 +562,13 @@ test('the readiness section is a primer, and its accents actually render', async
     };
   });
   expect(accents.border).toBeGreaterThan(0);
+
+  // Consultant-led work is the same analysis coordinated differently, so it
+  // gets one line inside the fold, not a competing section or a second CTA.
+  const consultant = sec.locator('.ready-consultant');
+  await expect(consultant).toContainText('Working with a consultant?');
+  await expect(consultant).toContainText('begin a project together');
+  await expect(sec.locator('.ready-consultant a')).toHaveCount(0);
   // The pill must not dissolve into the band it sits on.
   expect(accents.pillBg).not.toBe(accents.sectionBg);
 });

@@ -1250,3 +1250,15 @@ export const READINESS_GOVERNANCE =
 /** The reassurance that keeps this from reading as an entry exam. */
 export const READINESS_FLOOR =
   'You do not need every record, or every person, before you begin. It helps to know who can help when the project needs them.';
+
+/**
+ * Consultant-led work. The same guide serves both sides: an organization
+ * coordinating its own analysis, and a consultant preparing one for a
+ * client. Deliberately one line rather than a section, because it is a
+ * redirection for the minority of readers who need it, not a second
+ * audience the page has to serve in full.
+ */
+export const READINESS_CONSULTANT = {
+  lede: 'Working with a consultant?',
+  body: 'Share this guide with your client, or begin a project together in Lumecon.',
+};

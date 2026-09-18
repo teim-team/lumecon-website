@@ -36,6 +36,7 @@ import {
   READINESS_TEAM,
   READINESS_GOVERNANCE,
   READINESS_FLOOR,
+  READINESS_CONSULTANT,
 } from '../data/planFirstAnalysis.js';
 import '../styles/global.css';
 import '../styles/nav.css';
@@ -402,6 +403,13 @@ const jsonLd = [
             <p class="ready-more__foot">
               The onboarding call works through whichever of these is unsettled.{' '}
               <a class="gloss-link" href="#s-call">What the call covers</a>.
+            </p>
+            {/* One line, not a section. Consultant-led work is the same
+                analysis with the coordination arranged differently, so it
+                gets a redirection rather than a second audience the page
+                has to serve in full. */}
+            <p class="ready-consultant">
+              <strong>{READINESS_CONSULTANT.lede}</strong> {READINESS_CONSULTANT.body}
             </p>
           </div>
         </details>

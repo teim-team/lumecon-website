@@ -31,7 +31,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/cedar-grove` | 458 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1406 | Plan your first analysis \| Lumecon | 165 |
+| `/start` | 1423 | Plan your first analysis \| Lumecon | 165 |
 | `/contact` | 288 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
@@ -44,7 +44,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **12894** | | |
+| **Total** | **12911** | | |
 
 ## Crawler metadata audit
 
@@ -2000,7 +2000,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1406
+- **Visible words:** 1423
 
 ### Architecture (heading outline)
 
@@ -2197,6 +2197,8 @@ A composite of how organizations that run these analyses well are arranged. One 
 Some organizations need leadership, board, Council or legal review before records are shared. Naming that step at the start means the timeline reflects how the organization actually works, instead of the project discovering it halfway through.
 
 The onboarding call works through whichever of these is unsettled. What the call covers.
+
+Working with a consultant? Share this guide with your client, or begin a project together in Lumecon.
 
 
 **H2: Start with the records you already have**
