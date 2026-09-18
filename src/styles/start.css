@@ -1272,13 +1272,17 @@
   gap: 0 1rem;
   align-items: start;
 }
-.ready-four__n {
-  margin: 0;
-  font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.8rem;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.6;
+/* Replaces the 01-04 numbering. Sized and baseline-nudged to sit with the
+   first line of the label rather than floating above it.
+   Not teal: AGENTS.md reserves teal for links and actions, economic
+   concepts and the approved brand phrases, and a decorative mark beside a
+   heading is none of those. It carries the same weight the numerals had. */
+.ready-four__mark {
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-top: 0.05rem;
   color: var(--ink-3, var(--ink-2));
+  flex: none;
 }
 .ready-four__label {
   margin: 0 0 0.4rem;

@@ -28,11 +28,11 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/methodology` | 2562 | Methodology \| Lumecon | 167 |
 | `/team` | 371 | Team \| Lumecon | 115 |
 | `/cedar` | 470 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-commons` | 706 | Cedar Commons, the shared project workspace \| Lumecon | 231 |
+| `/cedar-commons` | 714 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
 | `/cedar-grove` | 565 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 553 | Glossary \| Lumecon | 142 |
 | `/naics` | 662 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1425 | Plan your first analysis \| Lumecon | 165 |
+| `/start` | 1421 | Plan your first analysis \| Lumecon | 165 |
 | `/contact` | 288 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
@@ -45,7 +45,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
 | `/404` | 99 | Page Not Found \| Lumecon | 141 |
-| **Total** | **13756** | | |
+| **Total** | **13760** | | |
 
 ## Crawler metadata audit
 
@@ -1511,25 +1511,24 @@ We use optional analytics to improve Lumecon. Privacy Policy
 **Intended job of this page:** Where an organization finishes an analysis together.
 
 - **Title:** Cedar Commons, the shared project workspace | Lumecon
-- **Meta description** (231 chars): Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the documents, questions and notes with the project.
-- **og:description:** Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the documents, questions and notes with the project.
+- **Meta description** (237 chars): Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the records, the questions and the notes with the project.
+- **og:description:** Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the records, the questions and the notes with the project.
 - **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
 - **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
 - **Twitter card:** summary_large_image
 - **Canonical:** https://lumecon.ai/cedar-commons
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 706
+- **Visible words:** 714
 
 ### Architecture (heading outline)
 
 - **H1** An analysis is finished by more than one person.
-  - **H2** How the team contributes
-  - **H2** How the work stays connected
-  - **H2** Two ways it is used
-    - **H3** Finance holds one set of records, the enterprises hold others.
-    - **H3** The consultant runs the project. The client owns the records.
-  - **H2** Cedar Commons comes with Sapling and Tree.
+  - **H2** Who can see what
+    - **H3** The records are spread across your own offices.
+    - **H3** The records belong to someone who is not you at all.
+  - **H2** What they do once they are in
+  - **H2** Cedar Commons comes with Sapling and above.
 
 ### Copy, in document order
 
@@ -1564,75 +1563,80 @@ CEDAR COMMONS
 
 **H1: An analysis is finished by more than one person.**
 
-Finance holds one set of records, the enterprises hold others, and someone has to keep it moving. Cedar Commons is the shared project workspace: bring those people into the analysis that needs them, each with access suited to their part, and keep the documents, the questions and the notes with the project rather than scattered across inboxes.
+The payroll figures sit with finance. The headcounts sit with operations. Whether either can leave the building at all sits with somebody else again. Cedar Commons is where those people join the analysis that needs them, each reaching the one project they were invited to and nothing else.
 
 - _link:_ [Request free access →](/signup?tier=free)
-- _image alt:_ The Cedar Commons board, showing the shared projects an organization has access to, each card carrying its status and the comment activity on it. Shown with sample data.
-_caption:_ The projects an organization is working on, in one place. Shown with sample data.
+- _image alt:_ The Cedar Commons board: three shared analyses, each carrying its status, the people on it and the records and notes it holds. Shown with sample data.
+_caption:_ The analyses an organization is working on, in one place. Shown with sample data.
 
 > _section: `meth-sec`_
 
 
-**H2: How the team contributes**
+**H2: Who can see what**
 
-A project carries its own people rather than everyone in the organization, so nobody is handed access to work that is not theirs.
+Access is granted project by project, never organization-wide. Two things decide it, and they are independent of each other.
 
-- The project lead OWNER Opens the project, brings people in by email and keeps track of what is still unanswered.
-- Finance, payroll and operations COLLABORATOR Supply the records the analysis is built from, and answer questions about how a figure was produced.
-- Leadership VIEWER Reads the analysis and the thread behind it without needing to change anything.
-- An outside economist or consultant COLLABORATOR Works in the project with the organization, on the same records and the same assumptions.
-A role is set when you add someone and can be changed or removed later. Collaborators contribute to the analysis; viewers read it.
+- Whose organization they belong to INTERNAL OR EXTERNAL
+- Internal is someone working for or on behalf of the organization sponsoring the analysis. External is a client, a partner or an outside advisor. An external collaborator reaches the one project they were invited to and nothing else in the organization.
+- What they can do on that project OWNER, COLLABORATOR OR VIEWER
+- The owner adds someone by email and decides what they may do. A collaborator contributes. A viewer reads and changes nothing. The same person can be a collaborator on one project and a viewer on another, and the roster reports it per project rather than averaging it into one label.
+- _button:_ Our organization
+- _button:_ A consultancy and its clients
 
-
-**H2: How the work stays connected**
-
-The reason a figure can still be defended a year later is that the material behind it never left the project.
-
-- The people on it
-- A project carries its own participants rather than every person in the organization. You add someone by email, give them a collaborator or viewer role, and remove them when their part is done.
-- The documents
-- What was uploaded during intake belongs to that project, and is what Cedar reads when it proposes inputs. The source material and the figures derived from it do not drift apart.
-- The questions
-- Cedar answers from inside a project, against that project’s own material, so a question about a figure is asked where the figure lives rather than in a separate thread.
-- The notes
-- A project has a note thread, and it is append-only: a note is not edited or deleted. What was said about an assumption stays readable next to the analysis it shaped.
-
-**H2: Two ways it is used**
+> _section: `surf-organization`_
 
 
-> _section: `cm-case`_
+**H3: The records are spread across your own offices.**
 
-AN ORGANIZATION COORDINATING ITS OWN ANALYSIS
+Finance holds one set, the enterprises hold others, and a board member or outside counsel may need to read the result without touching it. Four staff here, two outside people, and each outside person is bound to the single project they were brought in for.
 
+- _image alt:_ An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the one project they can reach. Shown with sample data.
+_caption:_ Prairie Wind, on Tree. The external roster names the project beside each person, so the boundary is readable rather than assumed. Shown with sample data.
 
-**H3: Finance holds one set of records, the enterprises hold others.**
-
-The project lead opens the analysis and brings in the people who can reach each set. Leadership joins as a viewer to follow it without being asked to operate anything. The records, the questions and the notes stay in one project, so nobody is reconstructing from an inbox when a figure is questioned six months later.
-
-A CONSULTANT WORKING WITH A CLIENT
+> _section: `surf-consultancy`_
 
 
-**H3: The consultant runs the project. The client owns the records.**
+**H3: The records belong to someone who is not you at all.**
 
-The consultant opens the project and invites the client’s finance and operations people to it, and only to it. A project the client does not own names the organization sponsoring it, so nobody is confused about whose subscription is paying or whose work they are looking at.
+**[conditional]** A consultant opens a project per engagement and brings that client’s finance and operations people into it, and only into it. One client’s contacts never see another client’s work, and a project the client does not own names the organization sponsoring it, so nobody is unsure whose subscription is paying.
+
+- _image alt:_ A consultancy’s collaborator view: one internal person and three client contacts across two different clients, each listed with the single project they can reach. Shown with sample data.
+_caption:_ Ferreira, on Sapling. Three client contacts from two clients, four of ten seats in use — an outside collaborator occupies a seat, the same as a colleague. Shown with sample data.
+An outside collaborator occupies a seat on your plan, the same as a colleague, and the seat is released when you remove them. Sapling is ten people in one organization however they are split between staff and outside contributors; Tree has no limit. Compare plans.
 
 
 > _section: `meth-sec`_
+
+
+**H2: What they do once they are in**
+
+You are asking people for things you do not have. What they hand over arrives on the project rather than in your inbox.
+
+- They add the records you do not hold
+- A record lands on the project, not in one person’s library, with the contributor and the date on it. Everyone on the project sees what is already there, so nobody sends the payroll summary twice.
+- They answer questions about them
+- Cedar works inside the project, for whoever is on it and within what their access allows, so a question about a figure is asked where the figure is.
+- They settle what the figure means
+- Which payroll summary is the audited one, what the scope actually is, why a contract was held back. The thread keeps it, rather than letting it be edited into something tidier later.
+- _image alt:_ The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data.
+_caption:_ Four records on one analysis, from three people. A viewer reads them and adds none. Shown with sample data.
+Working with a consultant? Share the starting guide with them, or begin a project together in Lumecon.
 
 INCLUDED, NOT SOLD SEPARATELY
 
 
-**H2: Cedar Commons comes with Sapling and Tree.**
+**H2: Cedar Commons comes with Sapling and above.**
 
-Sapling includes it for up to ten people in one organization. Tree includes it across the organization, with no seat limit. There is no separate Commons purchase, and nothing here is an add-on.
+There is no separate Commons purchase and nothing here is an add-on. The difference between the plans that include it is how many people can be in your organization, not how much of the workspace you get.
 
-Compare plans · Plan your first analysis
+Compare plans
 
 The starting guide helps you prepare: the first question, the records, and who can approve sharing them. This is where that work happens once you have.
 
-- Seed and Sprout One person. Cedar Impact and Cedar, without shared projects.
-- Sapling Cedar Commons for up to ten people in one organization.
-- Tree Cedar Commons across the organization, with no seat limit, beside Cedar Grove.
+- Seed $0 Not included 1 user
+- Sprout $1,000 Not included 1 user
+- Sapling $2,500 Included. Shared projects, project notes, data collection and outside collaborators. Up to 10 users
+- Tree $7,500 Included across the organization. Unlimited users in one organization
 
 > _section: `footer`_
 
@@ -2410,7 +2414,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1425
+- **Visible words:** 1421
 
 ### Architecture (heading outline)
 
@@ -2589,10 +2593,10 @@ Available today.
 
 The work stalls on coordination more often than on data. Four things make it go smoothly, and none of them has to be settled before you start.
 
-- 01 A project lead One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear. Not necessarily the most senior person, and they do not have to hold any of the records themselves.
-- 02 A clear first question What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize. One question is enough to start. The second is easier once the first is answered.
-- 03 The right record holders Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on. Usually several people across several offices, which is normal and worth mapping early.
-- 04 The right approval path Whoever can authorize records being shared, and whether a review has to happen before they move. The person who holds a record and the person who can release it are often not the same person.
+- A project lead One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear. Not necessarily the most senior person, and they do not have to hold any of the records themselves.
+- A clear first question What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize. One question is enough to start. The second is easier once the first is answered.
+- The right record holders Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on. Usually several people across several offices, which is normal and worth mapping early.
+- The right approval path Whoever can authorize records being shared, and whether a review has to happen before they move. The person who holds a record and the person who can release it are often not the same person.
 You do not need every record, or every person, before you begin. It helps to know who can help when the project needs them.
 
 - _disclosure:_ What a project team looks like
