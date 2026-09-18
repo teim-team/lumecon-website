@@ -11,7 +11,12 @@
  *     after a recapture rather than assuming.
  *
  * Usage:
- *   node scripts/screenshots/optimize-commons.mjs <rawOrgDir> <rawConsultantDir>
+ *   node scripts/screenshots/optimize-commons.mjs <rawDir>
+ *
+ * One directory, because every raw frame carries the variant that produced
+ * it (`commons-board-org.png`, `commons-board-consultant.png`, ...). An
+ * earlier version took two directories, which was the workaround for the
+ * two capture runs overwriting each other's files.
  */
 import sharp from 'sharp';
 import { existsSync, mkdirSync } from 'node:fs';
@@ -22,41 +27,45 @@ const here = dirname(fileURLToPath(import.meta.url));
 const out = join(here, '..', '..', 'public', 'app');
 mkdirSync(out, { recursive: true });
 
-const [orgDir, conDir] = process.argv.slice(2);
-if (!orgDir || !conDir) {
-  console.error('Usage: node scripts/screenshots/optimize-commons.mjs <rawOrg> <rawConsultant>');
+const [raw] = process.argv.slice(2);
+if (!raw) {
+  console.error('Usage: node scripts/screenshots/optimize-commons.mjs <rawDir>');
   process.exit(1);
 }
+const frame = (name) => join(raw, `${name}.png`);
 
 // The two rosters, without the invite rail beside them: this section is
 // about who is on a project, and the form is a different subject.
 const ROSTER_CROP = { left: 580, top: 520, width: 1530, height: 1450 };
 
 const JOBS = [
-  { src: join(orgDir, 'commons-board.png'), name: 'commons-board-org' },
-  { src: join(conDir, 'commons-board.png'), name: 'commons-board-consultant' },
-  { src: join(orgDir, 'commons-collaborators.png'), name: 'commons-collaborators' },
+  { src: frame('commons-board-org'), name: 'commons-board-org' },
+  { src: frame('commons-board-consultant'), name: 'commons-board-consultant' },
+  { src: frame('commons-collaborators-org'), name: 'commons-collaborators' },
+  { src: frame('commons-collaborators-consultant'), name: 'commons-collaborators-consultant' },
   {
-    src: join(conDir, 'commons-collaborators.png'),
-    name: 'commons-collaborators-consultant',
-  },
-  {
-    src: join(orgDir, 'commons-collaborators.png'),
+    src: frame('commons-collaborators-org'),
     name: 'commons-roles',
     crop: ROSTER_CROP,
     width: 1400,
   },
-  { src: join(orgDir, 'commons-access.png'), name: 'commons-access' },
-  { src: join(orgDir, 'commons-documents.png'), name: 'commons-documents' },
-  { src: join(orgDir, 'commons-cedar.png'), name: 'commons-cedar' },
-  { src: join(orgDir, 'commons-notes.png'), name: 'commons-notes' },
+  { src: frame('commons-access-org'), name: 'commons-access' },
+  { src: frame('commons-documents-org'), name: 'commons-documents' },
+  { src: frame('commons-cedar-org'), name: 'commons-cedar' },
+  { src: frame('commons-notes-org'), name: 'commons-notes' },
 ];
 
 for (const job of JOBS) {
+  /* A missing raw frame fails the run rather than quietly leaving the
+     committed webp stale, which is the same rule the capture script now
+     applies to a control it cannot find. */
   if (!existsSync(job.src)) {
-    console.error(`missing ${job.src}`);
-    process.exitCode = 1;
-    continue;
+    throw new Error(
+      `optimize-commons: missing ${job.src}.\n` +
+        '  Run both capture passes into this directory first:\n' +
+        '    node scripts/screenshots/capture-commons.mjs <rawDir>\n' +
+        '    CAPTURE_VARIANT=consultant node scripts/screenshots/capture-commons.mjs <rawDir>',
+    );
   }
   let pipeline = sharp(job.src);
   if (job.crop) pipeline = pipeline.extract(job.crop);

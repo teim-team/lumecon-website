@@ -4,9 +4,15 @@
  * HOW TO RUN
  *   In the app repository, on the branch that carries the Commons surface:
  *     npx vite dev --port 4400 --host 127.0.0.1
- *   Then here:
- *     node scripts/screenshots/capture-commons.mjs <outDir>
- *     CAPTURE_VARIANT=consultant node scripts/screenshots/capture-commons.mjs <outDir>
+ *   Then here, both runs into the SAME directory (every frame carries its
+ *   variant, so they no longer overwrite each other):
+ *     node scripts/screenshots/capture-commons.mjs <rawDir>
+ *     CAPTURE_VARIANT=consultant node scripts/screenshots/capture-commons.mjs <rawDir>
+ *   Then cut and optimize:
+ *     node scripts/screenshots/optimize-commons.mjs <rawDir>
+ *
+ * Chromium comes from PW_CHROMIUM, else Playwright's own managed browser,
+ * else the container's /opt/pw-browsers/chromium.
  *
  * WHY A DEV SERVER AND NOT A BUILD
  * The Commons board watermarks itself with the viewer's identity, by design:
@@ -28,7 +34,7 @@
  * failure cannot be published as a screenshot.
  */
 import { chromium } from '@playwright/test';
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const APP = 'http://127.0.0.1:4400';
@@ -309,7 +315,26 @@ const mock = async (route) => {
   return route.fulfill(json({}));
 };
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+/* Chromium, resolved the way the rest of this repository resolves it.
+   `PW_CHROMIUM` wins (the convention in capture-cedar-page.mjs,
+   capture-examples.mjs and capture-tour.mjs); otherwise Playwright's own
+   managed browser, which `npm ci` installs; otherwise the managed
+   container's symlink, which is the same three-step order
+   playwright.config.ts uses. Hardcoding the container path meant the
+   documented command failed on a normal checkout before it opened a page. */
+function chromiumLaunchOptions() {
+  if (process.env.PW_CHROMIUM) return { executablePath: process.env.PW_CHROMIUM };
+  try {
+    const pinned = chromium.executablePath();
+    if (pinned && existsSync(pinned)) return {};
+  } catch {
+    /* fall through */
+  }
+  const fallback = '/opt/pw-browsers/chromium';
+  return existsSync(fallback) ? { executablePath: fallback } : {};
+}
+
+const browser = await chromium.launch(chromiumLaunchOptions());
 const ctx = await browser.newContext({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 2 });
 await ctx.addInitScript(() => {
   /* The sanctioned capture hatch. ProtectedSurface honours it only when the
@@ -337,9 +362,32 @@ const page = await ctx.newPage();
 const errs = [];
 page.on('pageerror', (e) => errs.push(e.message));
 
+/* Every frame carries its variant, so the two documented commands can share
+   one output directory: run separately into the same folder, the consultant
+   pass used to overwrite `commons-board.png` and `commons-collaborators.png`
+   from the organization pass, and neither board variant survived without an
+   undocumented rename. */
+const VARIANT = CONSULTANT ? 'consultant' : 'org';
 const shot = async (name, clip) => {
-  await page.screenshot({ path: join(OUT, `${name}.png`), ...(clip ? { clip } : {}) });
-  console.log('wrote', name);
+  const file = `${name}-${VARIANT}.png`;
+  await page.screenshot({ path: join(OUT, file), ...(clip ? { clip } : {}) });
+  console.log('wrote', file);
+};
+
+/* A frame this script promises to produce. If its control cannot be found,
+   the run fails rather than exiting 0 with the previously committed
+   screenshot left stale on disk: a missing output is the failure mode a
+   capture generator exists to prevent. */
+const required = async (what, locator) => {
+  if (!(await locator.count())) {
+    await browser.close();
+    throw new Error(
+      `capture-commons: could not find ${what}; nothing further written.\n` +
+        '  The control was renamed or the surface changed. Fix the locator\n' +
+        '  rather than letting the committed frame go stale.',
+    );
+  }
+  return locator;
 };
 
 /* Every <img> that actually decoded. A published frame must not contain a
@@ -414,23 +462,31 @@ await shot('commons-board');
 /* The Collaborators view. Two rosters, because there are two kinds of
    person: organization members, and external collaborators holding
    project-scoped access with a per-project role. */
-const collab = page.locator('button[role="tab"]', { hasText: /^Collaborators$/ }).first();
-if (await collab.count()) {
-  await collab.click();
-  await page.waitForTimeout(1200);
-  await assertClean('the Collaborators view');
-  await shot('commons-collaborators');
-}
+const collab = await required(
+  'the Collaborators tab',
+  page.locator('button[role="tab"]', { hasText: /^Collaborators$/ }).first(),
+);
+await collab.click();
+await page.waitForTimeout(1200);
+await assertClean('the Collaborators view');
+await shot('commons-collaborators');
 
 // Back to Projects for the per-project drawers.
-const projTab = page.locator('button[role="tab"]', { hasText: /^Projects$/ }).first();
-if (await projTab.count()) { await projTab.click(); await page.waitForTimeout(900); }
+const projTab = await required(
+  'the Projects tab',
+  page.locator('button[role="tab"]', { hasText: /^Projects$/ }).first(),
+);
+await projTab.click();
+await page.waitForTimeout(900);
 
 const CARD = CONSULTANT ? 'Wind Ridge Energy Expansion' : 'Wind Ridge Energy Expansion';
 
 // Questions: Cedar answering about this project's own evidence.
-const cedarBtn = page.locator(`button[aria-label^="Ask Cedar about ${CARD}"]`).first();
-if (await cedarBtn.count()) {
+const cedarBtn = await required(
+  `the Cedar chip on ${CARD}`,
+  page.locator(`button[aria-label^="Ask Cedar about ${CARD}"]`).first(),
+);
+{
   await cedarBtn.click();
   await page.waitForTimeout(1500);
   /* The card's chip scopes the widget to the project and asks it to open.
@@ -450,8 +506,11 @@ if (await cedarBtn.count()) {
 }
 
 // Notes: the thread that records what was decided about the numbers.
-const notesBtn = page.locator(`button[title="Project notes"]`).first();
-if (await notesBtn.count()) {
+const notesBtn = await required(
+  'the project-notes chip',
+  page.locator('button[title="Project notes"]').first(),
+);
+{
   await notesBtn.click();
   await page.waitForTimeout(1400);
   await assertClean('the notes drawer');
@@ -461,8 +520,11 @@ if (await notesBtn.count()) {
 
 // Documents: the records the project was built from, and who contributed
 // each one. Project-scoped, not per uploader.
-const docsBtn = page.locator(`button[title="Project documents"]`).first();
-if (await docsBtn.count()) {
+const docsBtn = await required(
+  'the project-documents chip',
+  page.locator('button[title="Project documents"]').first(),
+);
+{
   await docsBtn.click();
   await page.waitForTimeout(1400);
   await assertClean('the documents drawer');
@@ -471,18 +533,20 @@ if (await docsBtn.count()) {
 }
 
 // People: the per-project access panel, where an invitation is scoped.
-const menu = page.locator(`button[aria-label^="Actions for ${CARD}"]`).first();
-if (await menu.count()) {
-  await menu.click();
-  await page.waitForTimeout(500);
-  const manage = page.locator('[role="menuitem"]', { hasText: /Manage collaborators/ }).first();
-  if (await manage.count()) {
-    await manage.click();
-    await page.waitForTimeout(1500);
-    await assertClean('the access drawer');
-    await shot('commons-access');
-  }
-}
+const menu = await required(
+  `the actions menu on ${CARD}`,
+  page.locator(`button[aria-label^="Actions for ${CARD}"]`).first(),
+);
+await menu.click();
+await page.waitForTimeout(500);
+const manage = await required(
+  'the "Manage collaborators" item',
+  page.locator('[role="menuitem"]', { hasText: /Manage collaborators/ }).first(),
+);
+await manage.click();
+await page.waitForTimeout(1500);
+await assertClean('the access drawer');
+await shot('commons-access');
 
 console.log('--- final text sample ---');
 console.log((await page.evaluate(() => document.body.innerText)).slice(0, 400));
