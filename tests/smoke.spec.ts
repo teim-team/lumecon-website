@@ -892,6 +892,57 @@ test('cedar grove shows three captures of the product, in one frame, per theme',
   expect(new Set(boxes)).toEqual(new Set(['1920x1080']));
 });
 
+test('the grove collections open one at a time, by click and by keyboard', async ({ page }) => {
+  await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+  const tabs = page.locator('[data-atlas-tab]');
+  await expect(tabs).toHaveCount(12);
+
+  // A picker, not twelve open panels: one collection at a time, and the
+  // control says which.
+  await expect(page.locator('[data-atlas-panel]:visible')).toHaveCount(1);
+  await expect(tabs.first()).toHaveAttribute('aria-expanded', 'true');
+
+  // Each tile opens its own collection, and the detail is the argument the
+  // page is making: what it contributes, plus coverage, sources and terms.
+  await tabs.nth(4).click();
+  const open = page.locator('[data-atlas-panel]:visible');
+  await expect(open).toHaveCount(1);
+  await expect(tabs.first()).toHaveAttribute('aria-expanded', 'false');
+  await expect(tabs.nth(4)).toHaveAttribute('aria-expanded', 'true');
+  await expect(open.locator('dt')).toHaveText([
+    'What Lumecon resolved',
+    'Coverage',
+    'Sources',
+    'Terms',
+  ]);
+
+  // Arrow keys walk the strip and wrap, so neither end is a dead stop.
+  const nameOf = () => open.locator('h3').textContent();
+  await tabs.nth(4).focus();
+  const atFive = await nameOf();
+  await page.keyboard.press('ArrowRight');
+  expect(await nameOf()).not.toBe(atFive);
+  await page.keyboard.press('ArrowLeft');
+  expect(await nameOf()).toBe(atFive);
+  await tabs.first().focus();
+  await page.keyboard.press('ArrowLeft');
+  expect(await nameOf()).not.toBe(atFive);
+});
+
+test.describe('grove collections with no working script', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('every collection is readable, and no tile is a dead control', async ({ page }) => {
+    await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
+    // The panels ship open, so the section is a complete list rather than
+    // twelve unlabelled icons.
+    await expect(page.locator('[data-atlas-panel]:visible')).toHaveCount(12);
+    // And the tiles are inert, so a keyboard user does not tab through twelve
+    // controls that cannot answer.
+    await expect(page.locator('[data-atlas-tab]:not([disabled])')).toHaveCount(0);
+  });
+});
+
 test('cedar grove never names a real place beside a fixture', async ({ page }) => {
   // The captures on this page are of a demonstration workspace that does not
   // exist, and the numbers in them are fixtures. An earlier pass photographed
