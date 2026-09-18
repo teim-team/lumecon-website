@@ -479,9 +479,28 @@ product and the data it runs on live in sibling `teim-team` repositories:
 
 | Repo              | What it is                                                                                                                                                                                                                                                                                                                                                          | Relationship to this site                                                                                                                                                                                                                                                                         |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`teim-app`**    | The authenticated product where the Cedar family lives — Cedar Impact, Cedar Commons and Cedar Grove in one React 19 + Vite SPA with a Fastify backend. ("TEIM" survives only in repo/DB/resource names, never as user-facing branding.) It also carries its own in-app marketing surface under a separate visual brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate visual brands** — do not cross-import styles or tokens.                                                                                                            |
-| **`cedar`**       | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents and keeps only compressed chat memory; it never stores project data, files, or results.                                                                                                                                                  | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a _separate_, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
+| **`teim-app`**    | The authenticated product where the Cedar family lives — Cedar Impact, Cedar Commons and Cedar Grove in one React 19 + Vite SPA with a Fastify backend. ("TEIM" is intended to survive only in repo/DB/resource names; **it has not yet, see the note below the table.**) Its public routes are sign-in, /terms, /privacy, /methodology and /verify; it carries **no** in-app marketing surface today. | This site sends visitors into the product (sign-up / "open workspace"). The two are **deliberately separate design systems** — do not cross-import styles or tokens, in either direction. The app self-hosts Inter, JetBrains Mono and Spectral italic; the DM Sans / Nunito / **Fraunces** / DM Mono / Crimson faces it once used are retired as off-brand and no longer loaded (`src/index.css`). |
+| **`cedar`**       | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents. What it persists: compressed chat memory, raw agent conversation items, and document extraction jobs including cached per-file digests. Runs, numerical results and the economics stay in the product. **The digests are the nuance** — they are compact summaries and candidate values derived from a customer's uploaded documents, so "Cedar stores nothing of the project" is too strong a claim to make on a customer-facing page. Deriving the exact wording from a real data-flow spec is P0 item 9 in `docs/reconciliation-roadmap.md`. | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a _separate_, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
 | **`teim-engine`** | The model engine behind Cedar Impact: a Python service that takes an analysis and a geography, fetches Census, BLS and BEA data, regionalizes a state input-output table, closes it as a social accounting matrix and returns direct, indirect and induced effects. It vendors the EPA `stateior` StateIO supply/use tables as CSV as its base structure. ("TEIM" is the model's and the repository's name only.) | The `teim-app` backend submits runs to it over an authenticated HTTP API. Every number the site's /methodology page describes is computed here, so keep that page, and the homepage "foundational data" strip, consistent with what the engine actually implements and draws on. |
+
+Two notes on the table, both as of the 2026-09-18 cross-repository audit:
+
+- **The naming rule is a rule, not a description of today.** "TEIM" is meant to
+  live only in repository, database and resource names, and the app has not got
+  there: **"Tribal Economic Impact" is still its visible brand**, in the
+  side-rail wordmark, the public shell, the wizard cover, the Terms, Privacy and
+  Methodology page titles, the email sender and subject lines, and the export
+  filename prefix. That is the entry-point taxonomy this site retired. It is a
+  founder and counsel decision rather than a copy sweep, because Terms §9 still
+  claims those names as marks and the export filename is a data contract
+  customers already hold. Inventory in `teim-app/AGENTS.md` §9, tracked as item
+  9 in `docs/reconciliation-roadmap.md`.
+- **Every sibling now publishes a `SECURITY.md` and an `AGENTS.md`.** Until this
+  audit, `cedar` and `teim-engine` published neither, while `teim-app`'s policy
+  put both out of its own scope and told researchers to report issues there "to
+  their owners". Each repository's `AGENTS.md` carries a reviewer checklist;
+  `docs/reconciliation-roadmap.md` indexes them and lists the two checks that
+  belong to whoever reviews across repositories.
 
 ### Cedar service contract (server-to-server)
 
@@ -490,9 +509,12 @@ shape. The **authenticated app — not this marketing site — is the intended
 caller**, because Cedar needs the `user` + `project` context an anonymous
 visitor here doesn't have.
 
-- **Endpoint:** `POST /api/v1/messages` for conversation. Document extraction is a separate asynchronous pair, `POST /api/v1/documents/extract` and `GET /api/v1/documents/extract/{jobId}`, which the app backend calls for the intake documents step.
+- **Endpoint:** `POST /api/v1/messages` for conversation. Document extraction is a separate asynchronous pair, `POST /api/v1/documents/extract` and `GET /api/v1/documents/extract/{jobId}`, which the app backend calls for the intake documents step. The document routes are mounted a second time without the version prefix, at `/documents/extract`, because that is the app's default `CEDAR_DOCUMENT_API_PATH`; both paths are the same handlers behind the same auth.
 - **Auth:** `Authorization: Bearer <CEDAR_INTERNAL_API_KEY>` (shared secret).
-  Missing/bad token → 401.
+  Missing or bad token → 401. Cedar **fails closed**, so an unset
+  `CEDAR_INTERNAL_API_KEY` on Cedar's side → **503** on every protected route,
+  with no opt-out. Treat 503 as "Cedar is misconfigured", not as "Cedar is
+  down". `teim-engine` answers 503 for the same condition.
 - **Health:** `GET /ready` → 200 (503 if Postgres is down). Point uptime
   checks here, not at `/health`.
 - **Wire format:** **camelCase** in both directions (snake_case tolerated,
