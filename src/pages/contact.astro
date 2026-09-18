@@ -104,7 +104,11 @@ const jsonLd = [
     <header class="meth-hero">
       <div class="meth-w" data-reveal-group>
         <p class="h-kicker">Contact</p>
-        <h1 class="meth-hero__title">Talk to a <span class="brand-em">person</span>.</h1>
+        {/* No .brand-em here on purpose. Teal is semantic (AGENTS.md: actions,
+          economic concepts, and the approved recurring phrases). "person" is
+          none of those, so highlighting it would invent a slogan for one
+          page and break the teal-only skim. */}
+        <h1 class="meth-hero__title">Talk to a person.</h1>
         <p class="meth-hero__lede">
           Questions about the model, a procurement review, a partnership, or something the site
           does not answer. Write below or to{' '}
@@ -122,7 +126,17 @@ const jsonLd = [
             <p class="contact-sub">
               Fields marked <span class="contact-req" aria-hidden="true">*</span> are required.
             </p>
-            <form class="contact-form" data-contact-form data-contact-email={siteConfig.email} novalidate>
+            {/* method="post" is load-bearing, not decoration. Without it a browser
+          whose script is blocked or broken submits a GET to this same URL and
+          puts the name, email, organization and message in the query string
+          and the history, having delivered nothing. */}
+            <form
+              class="contact-form"
+              method="post"
+              data-contact-form
+              data-contact-email={siteConfig.email}
+              novalidate
+            >
               <label class="contact-field">
                 <span>Name <span class="contact-req" aria-hidden="true">*</span></span>
                 <input type="text" name="name" autocomplete="name" maxlength="200" required />
@@ -149,7 +163,7 @@ const jsonLd = [
                 /* Honeypot. A real visitor never sees it, so anything in it
                    is a bot and the submission is dropped silently. */
               }
-              <div class="contact-hp" aria-hidden="true">
+              <div class="contact-hp" aria-hidden="true" data-copy-ignore>
                 <label>
                   Company website
                   <input type="text" name="website" tabindex="-1" autocomplete="off" />
@@ -163,6 +177,13 @@ const jsonLd = [
                 <button class="btn2 btn2--primary" type="submit" data-contact-submit>
                   Send <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
                 </button>
+                <noscript>
+                  <p class="contact-note">
+                    This form needs JavaScript to send. Write to{' '}
+                    <a class="gloss-link" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>{' '}
+                    instead and it reaches the same place.
+                  </p>
+                </noscript>
                 <p class="contact-note">
                   Goes to {siteConfig.email}. We do not have a published response time, so we will
                   not promise one.

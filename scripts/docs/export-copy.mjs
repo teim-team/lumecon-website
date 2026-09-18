@@ -185,8 +185,18 @@ function scrape() {
   // marked for what it is.
   const isConditional = (el) => el.hasAttribute('hidden') || el.closest('[hidden]') !== null;
 
+  /* Present in the DOM, deliberately not copy. A spam honeypot has to stay
+     reachable to a form-filling bot, so it cannot be `hidden` or removed,
+     but it is not something a visitor reads and it must not be counted or
+     reviewed as a real field. Opt-in rather than a blanket `aria-hidden`
+     rule, which would also strip the decorative arrows out of every button
+     label across the site. */
+  const isIgnored = (el) =>
+    el.hasAttribute('data-copy-ignore') || el.closest('[data-copy-ignore]') !== null;
+
   const walk = (node, conditional = false) => {
     for (const el of node.children) {
+      if (isIgnored(el)) continue;
       const tag = el.tagName;
       if (SKIP.has(tag)) continue;
       // Native dialogs are closed without a `hidden` attribute. Their

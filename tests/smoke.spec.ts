@@ -487,6 +487,9 @@ test('contact is a page, and every route on it goes somewhere real', async ({ pa
 });
 
 test('the contact form reports a missing field instead of submitting', async ({ page }) => {
+  // Belt and braces: this test cannot get past validation today, but a future
+  // edit to the fixture must not be able to turn it into a production POST.
+  await page.route('**/v1/contact', (route) => route.abort());
   await page.goto('/contact', { waitUntil: 'networkidle' });
   await page.locator('.contact-form [name="name"]').fill('Test Person');
   await page.locator('[data-contact-submit]').click();
@@ -501,6 +504,23 @@ test('the contact form reports a missing field instead of submitting', async ({ 
 });
 
 test('the contact form catches an email that cannot receive a reply', async ({ page }) => {
+  /* CI builds with PUBLIC_API_URL=https://api.lumecon.ai, so a submit that
+     gets past validation issues a real POST to production, on both browsers,
+     on every run. Today it fails and falls through to the mail link; the day
+     that endpoint accepts traffic it would file a contact record from every
+     CI run instead. Intercepted here so this test can never reach the
+     network, and so the valid-address case asserts the handler's own
+     behaviour rather than whatever production happens to answer. */
+  const submitted: string[] = [];
+  await page.route('**/v1/contact', async (route) => {
+    submitted.push(route.request().postData() ?? '');
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true }),
+    });
+  });
+
   await page.goto('/contact', { waitUntil: 'networkidle' });
   await page.locator('.contact-form [name="name"]').fill('Test Person');
   await page.locator('.contact-form [name="message"]').fill('A question about the model.');
@@ -515,10 +535,47 @@ test('the contact form catches an email that cannot receive a reply', async ({ p
     expect(page.url()).toContain('/contact');
   }
 
-  // A real address is not blocked by the check.
+  // Nothing reached the network while the address was malformed: validation
+  // runs before the request, not after it.
+  expect(submitted).toHaveLength(0);
+
+  // A real address is not blocked by the check, and does reach the handler.
   await page.locator('.contact-form [name="email"]').fill('person@example.org');
   await page.locator('[data-contact-submit]').click();
   await expect(status).not.toContainText('looks incomplete');
+  await expect.poll(() => submitted.length).toBe(1);
+  expect(submitted[0]).toContain('person@example.org');
+});
+
+test.describe('contact with no working script', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('a submit cannot put the message in the URL or the history', async ({ page }) => {
+    /* With neither method nor action the browser GETs this same URL, so the
+       name, email, organization and message land in the query string, the
+       history and any referrer, having delivered nothing. Verified to be a
+       real leak before the fix: the URL came back carrying all three. */
+    await page.goto('/contact', { waitUntil: 'domcontentloaded' });
+    await page.fill('input[name="name"]', 'Ada Lovelace');
+    await page.fill('input[name="email"]', 'ada@example.org');
+    await page.fill('textarea[name="message"]', 'Sensitive message body');
+    await page.locator('[data-contact-submit]').click().catch(() => {});
+    await page.waitForTimeout(500);
+
+    const url = page.url();
+    for (const secret of ['Ada', 'Lovelace', 'ada%40example.org', 'Sensitive']) {
+      expect(url, `no-script submit leaked ${secret}`).not.toContain(secret);
+    }
+    /* And the visitor is told where to write instead of being dead-ended.
+       Asserted on the markup, not the text: with scripting disabled this way
+       the parser can still hold noscript content as raw text, so the element
+       has no text nodes to read even though the browser renders it. */
+    const fallback = await page
+      .locator('noscript')
+      .evaluateAll((nodes) => nodes.map((n) => n.innerHTML).join(' '));
+    expect(fallback).toContain('reaches the same place');
+    expect(fallback).toContain('contact@lumecon.ai');
+  });
 });
 
 test('the contact fallback address is the one in config, not a second copy', async ({ page }) => {
