@@ -1536,6 +1536,92 @@ test('team page motion reveals content and never strands it', async ({ page }) =
     .toBe(1);
 });
 
+test('the footer is the same footer on every page', async ({ page }) => {
+  /* Reported from a phone: the footer on /contact looked unlike the
+     others — labels larger and dark instead of teal, link lists indented.
+     It does not reproduce, and it is not a per-page difference: /contact
+     serves the same stylesheets as /glossary and renders a pixel-identical
+     footer.
+
+     What the reported screenshot actually shows is one stylesheet missing.
+     `_astro/nav.*.css` carries BOTH the design tokens (`--accent-text`)
+     and the universal `*{margin:0;padding:0}` reset, while the footer's own
+     rules are inlined in each page's <style>. Lose that one file and you
+     get exactly the three symptoms together: the inline rules still
+     uppercase and letter-space the label, `--accent-text` resolves to
+     nothing so the colour falls back to inherited dark, and the reset is
+     gone so every `ul` takes the UA's 40px indent. A failed or truncated
+     stylesheet, not a page.
+
+     Note what this test can and cannot do. It pins parity, which catches a
+     real per-page divergence — the thing that was suspected. It cannot
+     catch a stylesheet that fails to arrive over a phone network.
+
+     Measured rather than compared as strings, because the footers do
+     differ legitimately — the current page's own link is accented. */
+  const shapes: Record<string, unknown>[] = [];
+  for (const route of ['/contact', '/security', '/glossary', '/pricing', '/team']) {
+    await page.goto(route, { waitUntil: 'networkidle' });
+    shapes.push(
+      await page.evaluate(() => {
+        const label = document.querySelector('.footer-group__label')!;
+        const link = document.querySelector('.footer-group__list a')!;
+        const cs = getComputedStyle(label);
+        return {
+          labelSize: cs.fontSize,
+          labelColor: cs.color,
+          labelTransform: cs.textTransform,
+          listIndent: Math.round(link.getBoundingClientRect().x - label.getBoundingClientRect().x),
+          groups: document.querySelectorAll('.footer-group').length,
+          links: document.querySelectorAll('.footer-group__list a').length,
+        };
+      }),
+    );
+  }
+  for (const shape of shapes) expect(shape).toEqual(shapes[0]);
+  // And the indent specifically, which is what the report described.
+  expect(shapes[0]).toMatchObject({ listIndent: 0, groups: 4, labelTransform: 'uppercase' });
+});
+
+test('contact shows the people it promises, and only the staff', async ({ page }) => {
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  // The headline says "Talk to a person" and the page showed none, which
+  // also left the house hero band mostly empty under two lines of text.
+  const faces = page.locator('.contact-faces img');
+  await expect(faces).toHaveCount(5);
+  const names = await faces.evaluateAll((nodes) =>
+    nodes.map((n) => (n as HTMLImageElement).alt),
+  );
+  expect(names).toContain('Elijah Moreno');
+  // An advisor does not read this inbox, so no advisor appears beside a
+  // form. They are on /team, where the distinction is made.
+  for (const advisor of ['Brian Kim', 'Vod Vilfort', 'Havala Hanson']) {
+    expect(names, 'advisors are not staff').not.toContain(advisor);
+  }
+  // The portraits are real files, not a broken row of alt text.
+  const decoded = await faces.evaluateAll((nodes) =>
+    nodes.every((n) => (n as HTMLImageElement).naturalWidth > 0),
+  );
+  expect(decoded, 'every portrait loaded').toBe(true);
+  await expect(page.locator('.contact-who__a')).toHaveAttribute('href', '/team');
+});
+
+test('the contact form pairs its two short fields, and stacks them on a phone', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  const rowTops = async () =>
+    page
+      .locator('.contact-row .contact-field input')
+      .evaluateAll((nodes) => nodes.map((n) => Math.round(n.getBoundingClientRect().top)));
+  // Four full-width controls in a column read as a longer form than this is.
+  expect(new Set(await rowTops()).size, 'name and email share a row').toBe(1);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(150);
+  expect(new Set(await rowTops()).size, 'and stack on a phone').toBe(2);
+});
+
 test('the founding investor is in structured data only, never in what a visitor reads', async ({
   page,
 }) => {
@@ -1544,10 +1630,21 @@ test('the founding investor is in structured data only, never in what a visitor 
   // reads. Cedar's answers live in a JS bundle rather than in page
   // markup, so checking rendered text alone would have missed the two
   // that named him — grep dist/, not just src/.
-  for (const route of ['/', '/team']) {
+  /* /contact renders the same roster record as a row of portraits, so it
+     is in this loop too — and checked as markup rather than as visible
+     text, because a name in an `alt` attribute never reaches innerText. */
+  for (const route of ['/', '/team', '/contact']) {
     await page.goto(route, { waitUntil: 'domcontentloaded' });
     const visible = await page.evaluate(() => document.body.innerText);
     expect(visible, route).not.toContain('Michael Moreno');
+    /* Markup minus the structured data, which is exactly where he is
+       allowed to be — on `/` he is a JSON-LD Organization.founder. */
+    const rendered = await page.evaluate(() => {
+      const clone = document.documentElement.cloneNode(true) as HTMLElement;
+      for (const n of clone.querySelectorAll('script[type="application/ld+json"]')) n.remove();
+      return clone.outerHTML;
+    });
+    expect(rendered, `${route} markup`).not.toContain('Michael Moreno');
   }
   const assets = join(process.cwd(), 'dist', '_astro');
   const bundles = readdirSync(assets).filter((f) => f.endsWith('.js'));

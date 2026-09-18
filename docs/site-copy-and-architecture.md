@@ -33,7 +33,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/glossary` | 553 | Glossary \| Lumecon | 142 |
 | `/naics` | 662 | Industry sectors \| Lumecon | 146 |
 | `/start` | 1421 | Plan your first analysis \| Lumecon | 165 |
-| `/contact` | 288 | Contact \| Lumecon | 145 |
+| `/contact` | 303 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 227 | Choose your plan \| Lumecon | 103 |
@@ -45,7 +45,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
 | `/404` | 99 | Page Not Found \| Lumecon | 141 |
-| **Total** | **13766** | | |
+| **Total** | **13781** | | |
 
 ## Crawler metadata audit
 
@@ -2790,7 +2790,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/contact
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, ContactPage
-- **Visible words:** 288
+- **Visible words:** 303
 
 ### Architecture (heading outline)
 
@@ -2833,6 +2833,8 @@ CONTACT
 
 Questions about the model, a procurement review, a partnership, or something the site does not answer. Write below or to contact@lumecon.ai, whichever you prefer.
 
+Everyone at Lumecon is named, with their background and their work. See the team →
+
 
 > _section: `meth-sec`_
 
@@ -2841,12 +2843,11 @@ Questions about the model, a procurement review, a partnership, or something the
 
 Fields marked * are required.
 
-- _label:_ Name *
-- _label:_ Email *
+- _label:_ Name * Email *
 - _label:_ Organization
 - _label:_ What can we help with? *
 - _button:_ Send →
-Goes to contact@lumecon.ai. We do not have a published response time, so we will not promise one.
+Goes to contact@lumecon.ai. We do not have a published response time, so we will not promise one. Nothing you send here is used to train a model: how we handle AI and data.
 
 
 > _section: `contact-routes`_
@@ -2858,7 +2859,7 @@ Goes to contact@lumecon.ai. We do not have a published response time, so we will
 - Not sure what to ask for A few questions propose a starting scope and the records it needs. Bring the answer to a call. Plan your first analysis →
 - Security disclosure Report a vulnerability with the subject line Security review. The control program and the disclosure policy are published. Read the security page →
 - Accessibility Tell us what you hit, with the subject line Accessibility. The conformance statement names what is known and unresolved. Read the accessibility statement →
-Lumecon reads one inbox, so the routes above are subject lines rather than separate addresses. Nothing you send here is used to train a model. How we handle AI and data.
+Lumecon reads one inbox, so the routes above are subject lines rather than separate addresses.
 
 
 > _section: `footer`_
