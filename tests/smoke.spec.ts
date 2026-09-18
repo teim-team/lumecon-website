@@ -309,6 +309,54 @@ test('the phone menu folds, opens one group at a time, and fits one screen', asy
     const box = await menu.locator(sel).boundingBox();
     expect(box!.height, `${sel} tap target`).toBeGreaterThanOrEqual(44);
   }
+
+  /* The CTA takes the approved two-stop gradient and the theme-aware ink.
+     An earlier version filled it with `--navy` and hardcoded white text;
+     `--navy` flips to near-white in dark mode, so that was invisible there.
+     Asserted as a gradient with a real stop count, not a colour literal, so
+     the check survives a palette change. */
+  const cta = await menu.locator('.navm-list__cta').evaluate((el) => {
+    const cs = getComputedStyle(el);
+    return {
+      image: cs.backgroundImage,
+      stops: [...cs.backgroundImage.matchAll(/rgba?\(/g)].length,
+      color: cs.color,
+    };
+  });
+  expect(cta.image).toContain('gradient');
+  expect(cta.stops).toBeGreaterThanOrEqual(2);
+  expect(cta.color, 'the CTA ink must come from a token, not a literal').not.toBe('');
+});
+
+test.describe('the phone menu in the dark colour scheme', () => {
+  test.use({ colorScheme: 'dark' });
+
+  test('the CTA stays readable', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('#navMenuBtn').click();
+    const ratio = await page.locator('.navm-list__cta').evaluate((el) => {
+      const parse = (c: string) => c.match(/\d+/g)!.slice(0, 3).map(Number);
+      const lum = (rgb: number[]) => {
+        const c = rgb
+          .map((v) => v / 255)
+          .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const cs = getComputedStyle(el);
+      const fg = lum(parse(cs.color));
+      // Every stop of the gradient, so the worst one is what is asserted.
+      const stops = [...cs.backgroundImage.matchAll(/rgba?\(([^)]+)\)/g)].map((m) =>
+        m[1].split(',').slice(0, 3).map(Number),
+      );
+      const ratios = stops.map((s) => {
+        const b = lum(s);
+        return (Math.max(fg, b) + 0.05) / (Math.min(fg, b) + 0.05);
+      });
+      return Math.min(...ratios);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
 });
 
 test('the phone menu traps focus around its toggles, not just its links', async ({ page }) => {
@@ -328,17 +376,33 @@ test('the phone menu traps focus around its toggles, not just its links', async 
   await page.keyboard.press('Shift+Tab');
   await expect(page.locator('#navMenuBtn')).toBeFocused();
 
-  // And nothing inside a folded panel is tabbable.
-  const reachable = await page.locator('#navMenu').evaluate((menu) =>
-    Array.from(menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
-      (el) => el.offsetParent !== null,
-    ).length,
-  );
-  const linksInFoldedPanels = await page
+  /* And nothing inside a folded panel is tabbable. Walked with real Tab
+     presses rather than counted: an earlier version of this asserted
+     `reachable < reachable + folded`, which is true for any positive
+     `folded` no matter what the trap does, so it could not fail. */
+  const foldedHrefs = await page
     .locator('#navMenu [data-navm-panel][hidden] a')
-    .count();
-  expect(linksInFoldedPanels).toBeGreaterThan(0);
-  expect(reachable).toBeLessThan(reachable + linksInFoldedPanels);
+    .evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).getAttribute('href')));
+  expect(foldedHrefs.length).toBeGreaterThan(0);
+
+  const visited: string[] = [];
+  for (let i = 0; i < 12; i += 1) {
+    await page.keyboard.press('Tab');
+    const here = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement | null;
+      if (!el) return null;
+      return el.getAttribute('href') ?? el.getAttribute('data-navm-tab') ?? el.id ?? el.tagName;
+    });
+    if (here) visited.push(here);
+  }
+  // Tabbing all the way round never lands on a destination inside a folded
+  // panel, which is the property the trap has to hold.
+  for (const href of foldedHrefs) {
+    expect(visited, `tab order reached ${href} inside a folded panel`).not.toContain(href);
+  }
+  // And it does reach the toggles, so the walk above was not simply stuck.
+  expect(visited).toContain('product');
+  expect(visited).toContain('resources');
 });
 
 test('the phone menu opens the group holding the current page', async ({ page }) => {
