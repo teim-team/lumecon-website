@@ -19,9 +19,11 @@
     "team:headshots": "node scripts/team/headshots.mjs",
     "shots:examples": "node scripts/screenshots/capture-examples.mjs",
     "shots:commons": "node scripts/screenshots/capture-commons.mjs .shots-commons && CAPTURE_VARIANT=consultant node scripts/screenshots/capture-commons.mjs .shots-commons && node scripts/screenshots/optimize-commons.mjs .shots-commons",
-    "docs:copy": "node scripts/docs/export-copy.mjs",
+    "docs:copy": "node --experimental-strip-types scripts/docs/export-copy.mjs",
     "docs:plan": "node scripts/docs/export-plan.mjs",
     "llms:roster": "node scripts/docs/llms-roster.mjs",
+    "stress": "node --experimental-strip-types scripts/test/stress.mjs",
+    "llms:pages": "node --experimental-strip-types scripts/docs/llms-pages.mjs",
     "docs:questions": "node scripts/docs/methodology-questions.mjs"
   },
   "dependencies": {

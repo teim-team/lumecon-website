@@ -275,6 +275,91 @@ test('desktop nav groups the destinations, with no Menu button', async ({ page }
   await expect(page.locator('#navp-resources')).toBeHidden();
 });
 
+test('what crawlers are told matches what the site actually serves', async ({ page }) => {
+  /* Three lists used to describe this site and none of them knew about
+     the others: the sitemap (from the filesystem), the copy document's own
+     array, and llms.txt's prose. /why-lumecon shipped into the first and
+     was missing from the other two. They read one inventory now, and this
+     is what keeps them honest — a page added to the site and forgotten in
+     src/data/siteMap.ts fails here rather than going quietly missing from
+     what an assistant is given. */
+  const { SITE_PAGES, INDEXED_PAGES, LLMS_PAGES } = await import('../src/data/siteMap');
+
+  // 1. The sitemap and the inventory name the same indexed pages.
+  const xml = await (await page.request.get('/sitemap-0.xml')).text();
+  const inSitemap = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map((m) => new URL(m[1]).pathname.replace(/\/$/, '') || '/')
+    .sort();
+  const declared = INDEXED_PAGES.map((p) => p.path).sort();
+  expect(inSitemap, 'sitemap and inventory agree').toEqual(declared);
+
+  // 2. Every page in the inventory is actually served, and the noindex
+  //    ones really carry the robots directive that keeps them out.
+  for (const entry of SITE_PAGES) {
+    const url = entry.visit ?? entry.path;
+    const res = await page.request.get(url);
+    const ok = entry.path === '/404' ? [200, 404] : [200];
+    expect(ok, `${url} is served`).toContain(res.status());
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    const robots = await page
+      .locator('meta[name="robots"]')
+      .evaluateAll((n) => n.map((x) => x.getAttribute('content') || '').join(' '));
+    if (entry.indexing === 'noindex') {
+      expect(robots, `${entry.path} is noindex`).toMatch(/noindex/);
+    } else {
+      expect(robots, `${entry.path} is indexable`).not.toMatch(/noindex/);
+    }
+  }
+
+  // 3. llms.txt lists exactly those pages, and lists nothing the site
+  //    does not serve. An assistant reading a stale URL is worse than one
+  //    reading a short list.
+  const llms = await (await page.request.get('/llms.txt')).text();
+  const listed = [...llms.matchAll(/^- https:\/\/lumecon\.ai(\/[a-z0-9-]*)? —/gm)].map(
+    (m) => m[1] || '/',
+  );
+  expect(listed.sort(), 'llms.txt lists the indexed pages').toEqual(
+    LLMS_PAGES.map((p) => p.path).sort(),
+  );
+  for (const entry of LLMS_PAGES) {
+    expect(llms, `llms.txt states what ${entry.path} is for`).toContain(entry.question);
+  }
+  // Every other lumecon.ai URL named anywhere in the file resolves too.
+  const referenced = [...new Set([...llms.matchAll(/https:\/\/lumecon\.ai(\/[a-z0-9-]+)/g)].map((m) => m[1]))];
+  for (const path of referenced) {
+    const res = await page.request.get(path);
+    expect(res.status(), `llms.txt points at a real page: ${path}`).toBe(200);
+  }
+});
+
+test('robots.txt welcomes assistants and points at the sitemap', async ({ page }) => {
+  const robots = await (await page.request.get('/robots.txt')).text();
+  expect(robots).toContain('Sitemap: https://lumecon.ai/sitemap-index.xml');
+  // The crawlers this site is deliberately written for.
+  for (const agent of ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended']) {
+    expect(robots, `${agent} has a group`).toContain(`User-agent: ${agent}`);
+  }
+  /* robots.txt has no inheritance: a crawler matches one group and ignores
+     every other, so each group has to repeat the two Disallow lines. A
+     group that lost them would quietly expose what the others withhold. */
+  /* Split on blank lines, not on every `User-agent:`. A group may list
+     SEVERAL agents before one shared rule set — which is how this file
+     keeps the repetition to three copies instead of twenty-two — so
+     splitting per agent line cuts one group into pieces that each look
+     like they are missing their rules. */
+  const groups = robots
+    .split(/\n\s*\n/)
+    .map((g) => g.replace(/^\s*#.*$/gm, '').trim())
+    .filter((g) => g.startsWith('User-agent:'));
+  expect(groups.length).toBeGreaterThanOrEqual(3);
+  for (const group of groups) {
+    expect(group, 'every group withholds /_headers').toContain('Disallow: /_headers');
+    expect(group, 'every group withholds /404').toContain('Disallow: /404');
+  }
+  const sitemapXml = await (await page.request.get('/sitemap-index.xml')).text();
+  expect(sitemapXml).toContain('sitemap-0.xml');
+});
+
 test('the nav runs Product, Why Lumecon, Pricing, Resources', async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 800 });
   await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
@@ -375,17 +460,65 @@ test('why lumecon shows the staff with a real line each, and the portraits load'
   const rows = await people.evaluateAll((nodes) =>
     nodes.map((n) => ({
       href: n.getAttribute('href'),
+      name: (n.querySelector('.why-person__n')?.textContent || '').trim(),
+      body: (n.querySelector('.why-person__b')?.textContent || '').trim(),
       line: (n.querySelector('.why-person__b')?.textContent || '').trim().length,
       loaded: (n.querySelector('img') as HTMLImageElement).naturalWidth > 0,
     })),
   );
+  /* And the line under each face is the roster's own, not a second copy
+     kept in this page. A parallel map goes stale silently: the record
+     moves, the buyer-facing page keeps the old sentence. */
+  const { TEAM_ROSTER } = await import('../src/data/team');
+  for (const person of TEAM_ROSTER) {
+    const card = rows.find((r) => r.name === person.name);
+    expect(card, `${person.name} has a card`).toBeTruthy();
+    expect(card!.body, `${person.name}'s line comes from the roster`).toBe(
+      person.experience?.[0] ?? person.title,
+    );
+  }
   for (const r of rows) {
     // Every portrait is a real file and every person carries a sentence:
     // an empty one would mean the record and this page had drifted apart.
     expect(r.loaded, `${r.href} portrait loaded`).toBe(true);
     expect(r.line, `${r.href} has a line`).toBeGreaterThan(20);
-    expect(r.href).toMatch(/^\/team\//);
+    /* Fetch it. The first version of this check asserted the href's SHAPE
+       — `/^\/team\//` — and passed while all five links pointed at
+       `/team/<slug>`, which is not a route: the build emits
+       dist/team/index.html and the portraits and nothing else, so every
+       card landed on the 404 page. A link test that does not follow the
+       link is not a link test. */
+    const res = await page.request.get(r.href!);
+    expect(res.status(), `${r.href} resolves`).toBe(200);
   }
+});
+
+test('why lumecon reads its lineage from the screenshot fixture', async ({ page }) => {
+  /* The figures written out under "See what supports the result" describe
+     the run in the hero capture. Hard-coded, they could come to describe a
+     different run the next time that fixture moved and the screenshot was
+     retaken, and the sum check above would not notice — it only proves the
+     numbers agree with each other. This compares them to the fixture. */
+  const { RESULTS } = (await import('../scripts/screenshots/examples-data.mjs')) as {
+    RESULTS: Record<string, any>;
+  };
+  const run = RESULTS['r-nation-b'];
+  const inState = (rows: any[]) => rows.filter((r) => r.scope === 'state');
+  const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  await expect(page.locator('.why-trace__total')).toHaveText(usd(run.outputs.state.output));
+
+  const cols = page.locator('.why-trace__col');
+  await expect(cols.nth(0).locator('.why-trace__v')).toHaveText(
+    inState(run.tables.by_effect).map((r: any) => usd(r.output_impact)),
+  );
+  await expect(cols.nth(1).locator('.why-trace__v')).toHaveText(
+    inState(run.tables.by_entity).map((r: any) => usd(r.output_impact)),
+  );
+  await expect(cols.nth(1).locator('.why-trace__n')).toHaveText(
+    inState(run.tables.by_entity).map((r: any) => r.entity_name),
+  );
 });
 
 test('methodology keeps the method and sends the comparison to why lumecon', async ({ page }) => {

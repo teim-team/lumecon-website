@@ -44,47 +44,19 @@ function chromiumExecutable() {
 }
 
 /**
- * Every public page, in the order a reader would meet them. A third
- * element is the URL to actually visit when it differs from the path we
- * file the page under: /checkout redirects to /choose-plan unless it is
- * handed a valid paid tier, so without the query it exported choose-plan
- * twice and checkout not at all.
+ * The page inventory is READ from src/data/siteMap.ts, not kept here.
+ * It used to be a second array with its own order, its own labels and
+ * its own noindex set, and it fell behind the site the first time a page
+ * was added: /why-lumecon appeared in the sitemap automatically and was
+ * silently missing from this document until the array was edited by hand.
  */
-const PAGES = [
-  ['/', 'Homepage'],
-  ['/why-lumecon', 'Why Lumecon'],
-  ['/pricing', 'Pricing'],
-  ['/methodology', 'Methodology'],
-  ['/team', 'Team'],
-  ['/cedar', 'Cedar'],
-  ['/cedar-commons', 'Cedar Commons'],
-  ['/cedar-grove', 'Cedar Grove'],
-  ['/glossary', 'Glossary'],
-  ['/naics', 'NAICS sectors'],
-  ['/start', 'Plan your first analysis'],
-  ['/contact', 'Contact'],
-  ['/signup', 'Sign up'],
-  ['/login', 'Log in'],
-  ['/choose-plan', 'Choose plan'],
-  ['/checkout', 'Checkout', '/checkout?tier=sprout'],
-  ['/welcome', 'Welcome'],
-  ['/accessibility', 'Accessibility'],
-  ['/ai-and-data-use', 'AI and data use'],
-  ['/security', 'Security'],
-  ['/privacy', 'Privacy'],
-  ['/terms', 'Terms'],
-  ['/404', 'Not found'],
-];
+const { SITE_PAGES } = await import(resolve(ROOT, 'src/data/siteMap.ts'));
+const PAGES = SITE_PAGES.map((p) => [p.path, p.label, p.visit ?? p.path]);
 
 const CANONICAL_ORIGIN = 'https://lumecon.ai';
-const NOINDEX_PATHS = new Set([
-  '/signup',
-  '/login',
-  '/choose-plan',
-  '/checkout',
-  '/welcome',
-  '/404',
-]);
+const NOINDEX_PATHS = new Set(
+  SITE_PAGES.filter((p) => p.indexing === 'noindex').map((p) => p.path),
+);
 
 // Browsers normalize an origin-only URL to include a trailing slash when
 // reading link.href, while Astro's sitemap intentionally serializes the root
@@ -95,20 +67,12 @@ function canonicalKey(url) {
   return `${parsed.origin}${parsed.pathname === '/' ? '' : parsed.pathname}`;
 }
 
-/** The one-line job each page is supposed to do (AGENTS.md, "Page ownership"). */
-const OWNERSHIP = {
-  '/': 'Why Lumecon matters.',
-  '/why-lumecon': 'Why an organization chooses the platform.',
-  '/pricing': 'What it costs and why the pricing is different.',
-  '/methodology': 'Why the economics are credible.',
-  '/cedar': "Why Lumecon's use of AI is different.",
-  '/cedar-commons': 'Where an organization finishes an analysis together.',
-  '/security': 'Current product controls and security-program status.',
-  '/glossary': 'Defines terms and nothing more.',
-  '/naics': 'What the sector classification covers.',
-  '/start': 'What an organization can begin with, and what it would take.',
-  '/contact': 'How to reach a person, and where each kind of message goes.',
-};
+/**
+ * The one-line job each page is supposed to do (AGENTS.md, "Page
+ * ownership"), read from the same inventory. It was a second hand-kept
+ * map that listed eleven of the site's pages and omitted the rest.
+ */
+const OWNERSHIP = Object.fromEntries(SITE_PAGES.map((p) => [p.path, p.question]));
 
 /** Claims worth counting because they are the ones that recur. */
 const CLAIMS = {

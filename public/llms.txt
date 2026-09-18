@@ -12,7 +12,35 @@ Economic impact analysis software and an alternative to established modeling too
 
 ## One platform
 
-There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the living evidence base for your organization's economy; and Cedar, the AI economic analyst, in every plan. The product supports documented workflows for cities, counties, state agencies, universities, nonprofits, businesses, economic development organizations, Tribal Nations, tribal enterprises and consulting firms. Tree includes hands-on Cedar calibration to an organization's terminology and workflows.
+There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the living evidence base for your organization's economy; and Cedar, the AI economic analyst, in every plan. The product supports documented workflows for cities, counties, state agencies, universities, nonprofits, businesses, economic development organizations, Tribal Nations, tribal enterprises and consulting firms. The case for choosing Lumecon — pricing, the preparation work it removes, the lineage behind each figure and the team's background — is set out at https://lumecon.ai/why-lumecon. Tree includes hands-on Cedar calibration to an organization's terminology and workflows.
+
+## Pages
+
+Every page below answers one question. The question is what the page is for,
+not a description of its layout. Paths are stable; the list is generated from
+the site's own page inventory, so it does not fall behind the site.
+
+- https://lumecon.ai/ — What is Lumecon, and why does it matter?
+- https://lumecon.ai/why-lumecon — Why should our organization choose this?
+- https://lumecon.ai/pricing — What does it cost, and why is the pricing shaped this way?
+- https://lumecon.ai/cedar — What is Cedar, the AI economic analyst, and what does it do?
+- https://lumecon.ai/cedar-commons — How do several people finish one analysis together?
+- https://lumecon.ai/cedar-grove — What is the evidence base for an organization's economy?
+- https://lumecon.ai/methodology — How are the estimates constructed, and where do they stop?
+- https://lumecon.ai/start — What does getting started involve, and what do we need to bring?
+- https://lumecon.ai/naics — What does the industry classification cover?
+- https://lumecon.ai/glossary — What do the terms mean?
+- https://lumecon.ai/team — Who builds the models, the data and the software?
+- https://lumecon.ai/security — How is organizational information handled, and what is assured today?
+- https://lumecon.ai/ai-and-data-use — How is AI used, and what happens to the data it touches?
+- https://lumecon.ai/contact — How do we reach a person, and where does each kind of message go?
+- https://lumecon.ai/accessibility — What is conformant, and what is known to be unresolved?
+- https://lumecon.ai/privacy — What is collected, and what is done with it?
+- https://lumecon.ai/terms — What are the terms of use?
+
+Sign-up, log-in, plan selection, checkout and the post-purchase welcome are
+steps in a flow rather than destinations. They are excluded here and marked
+noindex on the site.
 
 ## Pricing (public)
 
@@ -80,5 +108,3 @@ Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researche
 - Email: contact@lumecon.ai
 - LinkedIn: https://www.linkedin.com/company/lumecon-ai
 - Web: https://lumecon.ai
-
-## Optional

@@ -249,7 +249,11 @@
   padding-top: 1rem;
   border-top: 1px solid var(--rule);
 }
+/* WCAG 2.5.8 target size: 24px minimum for a standalone target. Measured
+   at 375px this link was 21px tall, so the hit area is grown rather than
+   the type — the line looks the same and the target clears the floor. */
 .pcard__link {
+  min-height: 24px;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;

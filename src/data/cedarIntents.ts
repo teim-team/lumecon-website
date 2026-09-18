@@ -866,6 +866,11 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['consultant_plan', 'contact', 'demo'],
     chip: "I'm an investor or partner",
     triggers: [
+      'work together',
+      'can we work together',
+      'partner with you',
+      'partner with lumecon',
+      'work with you on',
       "i'm an investor",
       'an investor',
       'are you raising',
@@ -1745,7 +1750,11 @@ export const INTENTS: CedarIntent[] = [
       'share a project',
       'share an analysis',
       'work on it together',
-      'work together',
+      /* Not the bare "work together": "Can we work together?" is a
+         partnership question and belongs to `partnerships`, not to an
+         answer about seats and permissions. */
+      'work together on a project',
+      'work together on an analysis',
       'work on a project',
       'work on the same project',
       'work on projects together',
