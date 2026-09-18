@@ -216,6 +216,10 @@ test('menu overlay opens full screen from the opaque nav', async ({ page }) => {
   const viewport = page.viewportSize();
   if (!box || !viewport) throw new Error('no menu box');
   expect(box.height).toBeGreaterThan(viewport.height * 0.9);
+  // The overlay is an accordion now, so a destination inside a group is
+  // reached by opening its group rather than by scrolling past every other.
+  await expect(menu.locator('a', { hasText: 'Methodology' })).toBeHidden();
+  await menu.locator('[data-navm-tab="resources"]').click();
   await expect(menu.locator('a', { hasText: 'Methodology' })).toBeVisible();
   await expect(page.locator('#nav')).toHaveCSS('backdrop-filter', 'none');
   await expect(page.locator('#nav')).toHaveCSS('background-color', 'rgb(250, 252, 253)');
@@ -273,6 +277,79 @@ test('a page inside a group is marked on the group that holds it', async ({ page
   await expect(page.locator('.nav-toggle[data-current="true"]')).toHaveText(/Resources/);
   await page.locator('#navt-resources').click();
   await expect(page.locator('#navp-resources a[aria-current="page"]')).toHaveText(/Methodology/);
+});
+
+test('the phone menu folds, opens one group at a time, and fits one screen', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.locator('#navMenuBtn').click();
+  const menu = page.locator('#navMenu');
+  await expect(menu).toBeVisible();
+
+  // Folded: the top level is the four groups plus Log in and the CTA, and
+  // it fits without scrolling. Expanded, this was twelve-plus destinations
+  // shrunk down to fit, which is what made it clunky.
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(0);
+  const overflows = await menu.evaluate((el) => el.scrollHeight > window.innerHeight);
+  expect(overflows, 'the folded menu should not need scrolling').toBe(false);
+
+  // One at a time, and a second tap on the open group returns to the top level.
+  await menu.locator('[data-navm-tab="product"]').click();
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(1);
+  await expect(menu.locator('[data-navm-tab="product"]')).toHaveAttribute('aria-expanded', 'true');
+  await menu.locator('[data-navm-tab="resources"]').click();
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(1);
+  await expect(menu.locator('[data-navm-tab="product"]')).toHaveAttribute('aria-expanded', 'false');
+  await menu.locator('[data-navm-tab="resources"]').click();
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(0);
+
+  // Thumb-sized controls, and the CTA is the header's action, not a sixth
+  // line in the list.
+  for (const sel of ['[data-navm-tab="product"]', '.navm-list__cta']) {
+    const box = await menu.locator(sel).boundingBox();
+    expect(box!.height, `${sel} tap target`).toBeGreaterThanOrEqual(44);
+  }
+});
+
+test('the phone menu traps focus around its toggles, not just its links', async ({ page }) => {
+  /* Regression. The trap collected `menu.querySelectorAll('a')`, so when the
+     overlay became an accordion the group toggles fell outside it, and
+     opening the menu tried to focus the first link, which now sits inside a
+     folded panel. Focusing a hidden element silently does nothing, so the
+     menu opened with focus nowhere. */
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.locator('#navMenuBtn').click();
+
+  // Opening lands on the first thing a person can actually reach.
+  await expect(page.locator('[data-navm-tab="product"]')).toBeFocused();
+
+  // Backwards from there wraps to the button that opened it.
+  await page.keyboard.press('Shift+Tab');
+  await expect(page.locator('#navMenuBtn')).toBeFocused();
+
+  // And nothing inside a folded panel is tabbable.
+  const reachable = await page.locator('#navMenu').evaluate((menu) =>
+    Array.from(menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
+      (el) => el.offsetParent !== null,
+    ).length,
+  );
+  const linksInFoldedPanels = await page
+    .locator('#navMenu [data-navm-panel][hidden] a')
+    .count();
+  expect(linksInFoldedPanels).toBeGreaterThan(0);
+  expect(reachable).toBeLessThan(reachable + linksInFoldedPanels);
+});
+
+test('the phone menu opens the group holding the current page', async ({ page }) => {
+  // The menu should show where you are rather than making you find it.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/methodology', { waitUntil: 'networkidle' });
+  await page.locator('#navMenuBtn').click();
+  const open = page.locator('#navMenu [data-navm-panel]:visible');
+  await expect(open).toHaveCount(1);
+  await expect(open).toHaveAttribute('data-navm-panel', 'resources');
+  await expect(open.locator('a[aria-current="page"]')).toHaveText(/Methodology/);
 });
 
 test('menu closes cleanly when the viewport crosses into desktop navigation', async ({ page }) => {
