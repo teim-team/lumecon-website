@@ -32,7 +32,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/glossary` | 551 | Glossary \| Lumecon | 142 |
 | `/naics` | 660 | Industry sectors \| Lumecon | 146 |
 | `/start` | 1423 | Plan your first analysis \| Lumecon | 165 |
-| `/contact` | 288 | Contact \| Lumecon | 145 |
+| `/contact` | 286 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
@@ -44,7 +44,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
 | `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **12911** | | |
+| **Total** | **12909** | | |
 
 ## Crawler metadata audit
 
@@ -2333,7 +2333,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/contact
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, ContactPage
-- **Visible words:** 288
+- **Visible words:** 286
 
 ### Architecture (heading outline)
 

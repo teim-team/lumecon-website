@@ -286,7 +286,25 @@ function scrape() {
     twitterImageAlt: meta('twitter:image:alt'),
     jsonld: [...new Set(jsonld.flat())],
     jsonldErrors,
-    wordCount: clean(root.innerText).split(/\s+/).filter(Boolean).length,
+    /* Counted with the ignored subtrees hidden. Skipping them in the block
+       walker alone left the honeypot out of the listing but still inside
+       this total, which is read as the page's visible words.
+
+       Hidden in place and restored, NOT counted on a detached clone:
+       `innerText` is layout-dependent, so on a node outside the document it
+       degrades to something closer to `textContent` and starts counting copy
+       no visitor sees. Measured: that mistake took the homepage from 740
+       words to 2947. */
+    wordCount: (() => {
+      const ignored = [...root.querySelectorAll('[data-copy-ignore]')];
+      const prior = ignored.map((el) => el.style.display);
+      for (const el of ignored) el.style.display = 'none';
+      const n = clean(root.innerText).split(/\s+/).filter(Boolean).length;
+      ignored.forEach((el, i) => {
+        el.style.display = prior[i];
+      });
+      return n;
+    })(),
     blocks,
   };
 }

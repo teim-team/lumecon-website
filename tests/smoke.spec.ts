@@ -598,7 +598,14 @@ test.describe('contact with no working script', () => {
     await page.fill('input[name="name"]', 'Ada Lovelace');
     await page.fill('input[name="email"]', 'ada@example.org');
     await page.fill('textarea[name="message"]', 'Sensitive message body');
-    await page.locator('[data-contact-submit]').click().catch(() => {});
+    /* Inert without a script: POST to a static page cannot deliver anything,
+       so an enabled button would take the message and discard it. */
+    await expect(page.locator('[data-contact-submit]')).toBeDisabled();
+
+    await page.locator('[data-contact-submit]').click({ force: true }).catch(() => {});
+    // Enter in a text field can submit a form regardless of the button, which
+    // is why method="post" stays as the second line of defence.
+    await page.locator('input[name="email"]').press('Enter').catch(() => {});
     await page.waitForTimeout(500);
 
     const url = page.url();
@@ -615,6 +622,13 @@ test.describe('contact with no working script', () => {
     expect(fallback).toContain('reaches the same place');
     expect(fallback).toContain('contact@lumecon.ai');
   });
+});
+
+test('the contact handler enables the button it ships disabled', async ({ page }) => {
+  // The markup ships `disabled` so a broken script cannot take a message it
+  // has no way to send. That only works if the handler reliably undoes it.
+  await page.goto('/contact', { waitUntil: 'networkidle' });
+  await expect(page.locator('[data-contact-submit]')).toBeEnabled();
 });
 
 test('the contact fallback address is the one in config, not a second copy', async ({ page }) => {

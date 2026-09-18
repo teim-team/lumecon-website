@@ -1298,9 +1298,8 @@
 }
 .ready-floor {
   margin: clamp(2rem, 4vw, 2.75rem) 0 0;
-  padding: 1.05rem 1.25rem;
-  border-left: 3px solid var(--accent-text);
-  background: var(--surface);
+  padding: 0 0 0 1.15rem;
+  border-left: 2px solid var(--rule);
   font-size: 1.0625rem;
   line-height: 1.55;
 }
@@ -1362,9 +1361,8 @@
 }
 .ready-gov {
   margin: 1.5rem 0 0;
-  padding: 1rem 1.25rem;
-  border-radius: 10px;
-  background: var(--surface);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
   line-height: 1.6;
 }
 

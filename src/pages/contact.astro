@@ -174,7 +174,11 @@ const jsonLd = [
               </p>
 
               <div class="contact-actions">
-                <button class="btn2 btn2--primary" type="submit" data-contact-submit>
+                {/* Disabled in the markup and enabled by the handler. Without
+                    a script there is nothing that can deliver this form, and an
+                    enabled button would take the visitor's text and discard it.
+                    The noscript line below says where to write instead. */}
+                <button class="btn2 btn2--primary" type="submit" disabled data-contact-submit>
                   Send <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
                 </button>
                 <noscript>
@@ -228,6 +232,11 @@ const jsonLd = [
     const submitBtn = form?.querySelector<HTMLButtonElement>('[data-contact-submit]');
     /* One address, read from config rather than repeated as a literal. */
     const inbox = form?.dataset.contactEmail || 'contact@lumecon.ai';
+
+    /* The button ships disabled so a browser with no working script cannot
+       take a message it has no way to send. Enabling it is the handler
+       announcing itself. */
+    submitBtn?.removeAttribute('disabled');
 
     function setStatus(variant: 'ok' | 'err' | 'info', text: string) {
       if (!status) return;
