@@ -1278,7 +1278,7 @@
   font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.6;
-  color: var(--accent-text);
+  color: var(--ink-3, var(--ink-2));
 }
 .ready-four__label {
   margin: 0 0 0.4rem;
@@ -1344,17 +1344,16 @@
 }
 /* What they bring, not a rank. Four values repeat across six rows, so the
    shape of the team is legible at a glance. */
+/* Plain mono typography, no pill: a radius communicates one assembled
+   object, and this is a label on a row rather than a control. Hierarchy
+   does the separating, which is what the eyebrow style is for. */
 .ready-team__holds {
-  padding: 0.12rem 0.5rem;
-  border-radius: 999px;
-  /* The section itself is --surface-2, so the pill takes the plain
-     surface to read as a chip rather than dissolving into the band. */
-  background: var(--surface);
-  font-size: 0.75rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-2);
+  color: var(--ink-3, var(--ink-2));
 }
 .ready-team__body {
   margin: 0;

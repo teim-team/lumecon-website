@@ -369,6 +369,11 @@ body {
    both light and dark surfaces. */
 @media (prefers-color-scheme: dark) {
   :root {
+    /* #b33013 is a light-mode ink. On the dark ground it measures 2.86:1
+       against the 4.5:1 small-text requirement, so a validation error was
+       hardest to read for the people most likely to need it. This value
+       measures 6.29:1 or better on ground, surface and surface-2. */
+    --terra-dark: #f08060;
     --ground: #0f1530;
     --ground-bright: #151c3a;
     --surface-2: #131838;

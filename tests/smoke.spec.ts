@@ -547,6 +547,45 @@ test('the contact form catches an email that cannot receive a reply', async ({ p
   expect(submitted[0]).toContain('person@example.org');
 });
 
+test.describe('contact in the dark colour scheme', () => {
+  test.use({ colorScheme: 'dark' });
+
+  test('a validation error stays readable', async ({ page }) => {
+    /* --terra-dark is a light-mode ink with no dark override: measured at
+       2.86:1 on the dark ground, against the 4.5:1 small-text requirement.
+       A validation error was hardest to read for exactly the people most
+       likely to depend on it. Measured against the real rendered
+       background rather than the token, so a later change to either side
+       is caught. */
+    await page.route('**/v1/contact', (route) => route.abort());
+    await page.goto('/contact', { waitUntil: 'networkidle' });
+    await page.locator('[data-contact-submit]').click();
+    const status = page.locator('[data-contact-status]');
+    await expect(status).toBeVisible();
+
+    const ratio = await status.evaluate((el) => {
+      const parse = (c: string) => c.match(/\d+/g)!.slice(0, 3).map(Number);
+      const bgOf = (n: Element | null) => {
+        for (let e = n; e; e = e.parentElement) {
+          const c = getComputedStyle(e).backgroundColor;
+          if (c && !/rgba\(0, 0, 0, 0\)/.test(c)) return parse(c);
+        }
+        return [255, 255, 255];
+      };
+      const lum = (rgb: number[]) => {
+        const c = rgb
+          .map((v) => v / 255)
+          .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const a = lum(parse(getComputedStyle(el).color));
+      const b = lum(bgOf(el));
+      return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
 test.describe('contact with no working script', () => {
   test.use({ javaScriptEnabled: false });
 
@@ -607,18 +646,39 @@ test('the readiness section is a primer, and its accents actually render', async
   // An undefined CSS custom property makes the whole declaration invalid and
   // disappears with no error, which is how this shipped at 0px the first
   // time. Assert the accents resolved to something real.
-  const accents = await sec.evaluate((el) => {
+  const style = await sec.evaluate((el) => {
     const floor = getComputedStyle(el.querySelector('.ready-floor')!);
     const num = getComputedStyle(el.querySelector('.ready-four__n')!);
-    const pill = getComputedStyle(el.querySelector('.ready-team__holds')!);
+    const eyebrow = getComputedStyle(el.querySelector('.ready-team__holds')!);
     return {
       border: parseFloat(floor.borderLeftWidth),
       numColor: num.color,
-      pillBg: pill.backgroundColor,
-      sectionBg: getComputedStyle(el).backgroundColor,
+      accent: getComputedStyle(document.documentElement)
+        .getPropertyValue('--accent-text')
+        .trim(),
+      eyebrowRadius: parseFloat(eyebrow.borderTopLeftRadius) || 0,
+      eyebrowBg: eyebrow.backgroundColor,
     };
   });
-  expect(accents.border).toBeGreaterThan(0);
+  expect(style.border).toBeGreaterThan(0);
+
+  // AGENTS.md: eyebrows are plain mono typography, not pills. A radius
+  // communicates one assembled object, and this is a label on a row.
+  expect(style.eyebrowRadius).toBe(0);
+  expect(style.eyebrowBg).toMatch(/rgba\(0, 0, 0, 0\)|transparent/);
+
+  // Teal is semantic. Ordering numerals are not actions, not economic
+  // concepts and not approved brand phrases, so a reader skimming only the
+  // teal must not meet "01 02 03 04".
+  const toRgb = (hex: string) => {
+    const m = /^#?([0-9a-f]{6})$/i.exec(hex);
+    if (!m) return null;
+    const n = parseInt(m[1], 16);
+    return `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`;
+  };
+  const accentRgb = toRgb(style.accent);
+  expect(accentRgb, 'accent token should resolve to a hex colour').toBeTruthy();
+  expect(style.numColor).not.toBe(accentRgb);
 
   // Consultant-led work is the same analysis coordinated differently, so it
   // gets one line inside the fold, not a competing section or a second CTA.
@@ -626,8 +686,6 @@ test('the readiness section is a primer, and its accents actually render', async
   await expect(consultant).toContainText('Working with a consultant?');
   await expect(consultant).toContainText('begin a project together');
   await expect(sec.locator('.ready-consultant a')).toHaveCount(0);
-  // The pill must not dissolve into the band it sits on.
-  expect(accents.pillBg).not.toBe(accents.sectionBg);
 });
 
 test('every dark cover hero carries the corner mark', async ({ page }) => {
