@@ -24,7 +24,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
 | `/` | 745 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/why-lumecon` | 1186 | Why Lumecon \| Lumecon | 239 |
+| `/why-lumecon` | 1187 | Why Lumecon \| Lumecon | 239 |
 | `/pricing` | 1302 | Pricing \| Lumecon | 155 |
 | `/cedar` | 471 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15210** | | |
+| **Total** | **15211** | | |
 
 ## Crawler metadata audit
 
@@ -393,7 +393,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/why-lumecon
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1186
+- **Visible words:** 1187
 
 ### Architecture (heading outline)
 
@@ -483,7 +483,7 @@ _caption:_ Cedar checks the operations against the documents and waits. Illustra
 
 **H3: The second analysis is not the first one again.**
 
-A completed analysis stays with its inputs, assumptions and sources. Next budget cycle you update what changed rather than reassembling the whole thing, and two years or two scenarios can be put side by side in jobs, labor income, GDP contribution, output and tax impacts.
+A completed analysis stays with its inputs, assumptions and sources. Next budget cycle you update what changed rather than reassembling the whole thing, and two years or two scenarios can be put side by side in jobs, labor income, GDP contribution, economic output and tax impacts.
 
 The product cannot make other people faster. Approvals, a council agenda and the wait for a figure only one department holds still take the time they take. We have not measured a time saving and do not claim one.
 

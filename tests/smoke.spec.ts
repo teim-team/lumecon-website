@@ -2225,6 +2225,47 @@ test.describe('the product pages on a phone', () => {
     await expect(panel).toBeVisible();
   });
 
+  test('the welcome bubble steps aside from protected content, not only the launcher', async ({
+    page,
+  }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    await page.locator('[data-consent="denied"]').click();
+    await scrollUntilCedarVisible(page);
+    const nudge = page.locator('#cedarNudge');
+    await expect(nudge).toBeVisible({ timeout: 25000 });
+
+    /* Walking the real pages does not produce this collision — checked on
+       eight of them with the guard removed, and the bubble never lands on
+       a protected zone the 60px launcher has not already stepped around.
+       So the collision is built here rather than hunted for: put a zone
+       from the avoid list exactly where the bubble is and let the
+       launcher's own controller run.
+
+       The reveal already tested the bubble's rectangle. What this pins is
+       that it keeps being tested AFTER the bubble is up, which is what
+       polling stopping had quietly ended. */
+    const box = (await nudge.boundingBox())!;
+    await page.evaluate(({ x, y, width, height }) => {
+      const zone = document.createElement('div');
+      // `.naics-tile` is on the launcher's avoid list; any of them works.
+      zone.className = 'naics-tile';
+      Object.assign(zone.style, {
+        position: 'fixed',
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        zIndex: '1',
+      });
+      document.body.append(zone);
+      window.dispatchEvent(new Event('scroll'));
+    }, box);
+
+    await expect(nudge, 'the bubble yields to what it would have covered').toBeHidden({
+      timeout: 4000,
+    });
+  });
+
   test('Cedar fills the screen on a phone', async ({ page }) => {
     /* The panel scales in. Measuring the box mid-animation reports a
        frame of the transform rather than the layout, so settle it. */

@@ -892,6 +892,10 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['where_built', 'mission', 'contact'],
     chip: 'Are you hiring?',
     triggers: [
+      'work at lumecon',
+      'i want to work at',
+      'apply to lumecon',
+      'any openings',
       'are you hiring',
       'work for lumecon',
       'have internships',
@@ -908,7 +912,7 @@ export const INTENTS: CedarIntent[] = [
       'join lumecon',
     ],
     answer:
-      'We are a small team of nine and interest is always welcome. Email contact@lumecon.ai with a résumé, the kind of work you want to do and a paragraph on what draws you to the work, and the team will reach back when a fit opens.',
+      'We are a small team and interest is always welcome. Email contact@lumecon.ai with a résumé, the kind of work you want to do and a paragraph on what draws you to the work, and the team will reach back when a fit opens.',
   },
   {
     id: 'technical',
@@ -3122,8 +3126,11 @@ export const INTENTS: CedarIntent[] = [
       'how big is the team',
       'how big is lumecon',
       'how many employees',
-      'work at lumecon',
+      /* NOT the bare 'work at lumecon': "I want to work at Lumecon" is an
+         application, not a question about how big the company is, and it
+         belongs to `hiring`. Only the counting phrasings stay here. */
       'people work at lumecon',
+      'how many people work at',
       'company size',
       'size of the team',
       'how many of you are there',
