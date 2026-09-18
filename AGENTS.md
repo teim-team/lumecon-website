@@ -217,9 +217,25 @@ it. Use `as const` on the id list so each element is a literal key.
 
 Write "and", never "&", anywhere a visitor can read it (founder
 rule; ampersands read as unprofessional). Code identifiers and TS
-types are exempt. Same rule applies in teim-app.
+types are exempt. The same rule applies in every sibling repository,
+not only teim-app.
 
-## Vocabulary standard (2026-07, both repos)
+Grep for the HTML entity as well as the character. Checking for a bare
+`&` is what let `Help &amp; support` sit in teim-app's footer and
+`Requests &amp; support` in Cedar Press's settings, both found on
+2026-09-18. The Cedar Press one had a correct `aria-label` two lines
+above it, so a screen reader was given the right wording and the
+screen was not.
+
+## Vocabulary standard (2026-07; all five repositories)
+
+This site is the **North Star**: where a sibling repository and this file
+disagree about what something is called, this file wins and the sibling is the
+one to correct. As of 2026-09-18 each sibling carries the relevant part of this
+standard in its own `AGENTS.md`, so a contributor who never opens this file
+still meets it. `cedar` is the one to watch, because its product copy is written
+as Markdown agent prompts and therefore reads as configuration rather than as
+voice.
 
 User-facing word choices, everywhere a customer reads:
 - "analysis / analyses", not "study/studies" ("project" is the
@@ -275,6 +291,15 @@ User-facing word choices, everywhere a customer reads:
   comments and CSS comments, both of which ship in the built
   output. It was found in `dist/methodology/index.html` that way in
   2026-08. Grep `dist/`, not just `src/`.
+  **Open, founder call (raised 2026-09-18):** the rule as written says
+  "anywhere a crawler can reach", and a public GitHub repository is
+  crawler-reachable. `cedar-press`'s own public `README.md` names the
+  product and links this site, and `teim-app`'s and `cedar`'s do too.
+  Either the rule means "nothing in the built site", in which case it
+  should say so, or it means what it says, in which case those READMEs
+  are out of bounds. The two readings are currently inconsistent.
+  Pending that call, nothing was changed in either direction and no
+  reference to Cedar Press was added to this repository.
 - There is deliberately no platform page. The five product names are
   introduced where they do work on the pages that already exist, not
   gathered onto a page of their own.
