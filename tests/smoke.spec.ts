@@ -216,6 +216,10 @@ test('menu overlay opens full screen from the opaque nav', async ({ page }) => {
   const viewport = page.viewportSize();
   if (!box || !viewport) throw new Error('no menu box');
   expect(box.height).toBeGreaterThan(viewport.height * 0.9);
+  // The overlay is an accordion now, so a destination inside a group is
+  // reached by opening its group rather than by scrolling past every other.
+  await expect(menu.locator('a', { hasText: 'Methodology' })).toBeHidden();
+  await menu.locator('[data-navm-tab="resources"]').click();
   await expect(menu.locator('a', { hasText: 'Methodology' })).toBeVisible();
   await expect(page.locator('#nav')).toHaveCSS('backdrop-filter', 'none');
   await expect(page.locator('#nav')).toHaveCSS('background-color', 'rgb(250, 252, 253)');
@@ -273,6 +277,143 @@ test('a page inside a group is marked on the group that holds it', async ({ page
   await expect(page.locator('.nav-toggle[data-current="true"]')).toHaveText(/Resources/);
   await page.locator('#navt-resources').click();
   await expect(page.locator('#navp-resources a[aria-current="page"]')).toHaveText(/Methodology/);
+});
+
+test('the phone menu folds, opens one group at a time, and fits one screen', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.locator('#navMenuBtn').click();
+  const menu = page.locator('#navMenu');
+  await expect(menu).toBeVisible();
+
+  // Folded: the top level is the four groups plus Log in and the CTA, and
+  // it fits without scrolling. Expanded, this was twelve-plus destinations
+  // shrunk down to fit, which is what made it clunky.
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(0);
+  const overflows = await menu.evaluate((el) => el.scrollHeight > window.innerHeight);
+  expect(overflows, 'the folded menu should not need scrolling').toBe(false);
+
+  // One at a time, and a second tap on the open group returns to the top level.
+  await menu.locator('[data-navm-tab="product"]').click();
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(1);
+  await expect(menu.locator('[data-navm-tab="product"]')).toHaveAttribute('aria-expanded', 'true');
+  await menu.locator('[data-navm-tab="resources"]').click();
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(1);
+  await expect(menu.locator('[data-navm-tab="product"]')).toHaveAttribute('aria-expanded', 'false');
+  await menu.locator('[data-navm-tab="resources"]').click();
+  await expect(menu.locator('[data-navm-panel]:visible')).toHaveCount(0);
+
+  // Thumb-sized controls, and the CTA is the header's action, not a sixth
+  // line in the list.
+  for (const sel of ['[data-navm-tab="product"]', '.navm-list__cta']) {
+    const box = await menu.locator(sel).boundingBox();
+    expect(box!.height, `${sel} tap target`).toBeGreaterThanOrEqual(44);
+  }
+
+  /* The CTA takes the approved two-stop gradient and the theme-aware ink.
+     An earlier version filled it with `--navy` and hardcoded white text;
+     `--navy` flips to near-white in dark mode, so that was invisible there.
+     Asserted as a gradient with a real stop count, not a colour literal, so
+     the check survives a palette change. */
+  const cta = await menu.locator('.navm-list__cta').evaluate((el) => {
+    const cs = getComputedStyle(el);
+    return {
+      image: cs.backgroundImage,
+      stops: [...cs.backgroundImage.matchAll(/rgba?\(/g)].length,
+      color: cs.color,
+    };
+  });
+  expect(cta.image).toContain('gradient');
+  expect(cta.stops).toBeGreaterThanOrEqual(2);
+  expect(cta.color, 'the CTA ink must come from a token, not a literal').not.toBe('');
+});
+
+test.describe('the phone menu in the dark colour scheme', () => {
+  test.use({ colorScheme: 'dark' });
+
+  test('the CTA stays readable', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('#navMenuBtn').click();
+    const ratio = await page.locator('.navm-list__cta').evaluate((el) => {
+      const parse = (c: string) => c.match(/\d+/g)!.slice(0, 3).map(Number);
+      const lum = (rgb: number[]) => {
+        const c = rgb
+          .map((v) => v / 255)
+          .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const cs = getComputedStyle(el);
+      const fg = lum(parse(cs.color));
+      // Every stop of the gradient, so the worst one is what is asserted.
+      const stops = [...cs.backgroundImage.matchAll(/rgba?\(([^)]+)\)/g)].map((m) =>
+        m[1].split(',').slice(0, 3).map(Number),
+      );
+      const ratios = stops.map((s) => {
+        const b = lum(s);
+        return (Math.max(fg, b) + 0.05) / (Math.min(fg, b) + 0.05);
+      });
+      return Math.min(...ratios);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
+test('the phone menu traps focus around its toggles, not just its links', async ({ page }) => {
+  /* Regression. The trap collected `menu.querySelectorAll('a')`, so when the
+     overlay became an accordion the group toggles fell outside it, and
+     opening the menu tried to focus the first link, which now sits inside a
+     folded panel. Focusing a hidden element silently does nothing, so the
+     menu opened with focus nowhere. */
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.locator('#navMenuBtn').click();
+
+  // Opening lands on the first thing a person can actually reach.
+  await expect(page.locator('[data-navm-tab="product"]')).toBeFocused();
+
+  // Backwards from there wraps to the button that opened it.
+  await page.keyboard.press('Shift+Tab');
+  await expect(page.locator('#navMenuBtn')).toBeFocused();
+
+  /* And nothing inside a folded panel is tabbable. Walked with real Tab
+     presses rather than counted: an earlier version of this asserted
+     `reachable < reachable + folded`, which is true for any positive
+     `folded` no matter what the trap does, so it could not fail. */
+  const foldedHrefs = await page
+    .locator('#navMenu [data-navm-panel][hidden] a')
+    .evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).getAttribute('href')));
+  expect(foldedHrefs.length).toBeGreaterThan(0);
+
+  const visited: string[] = [];
+  for (let i = 0; i < 12; i += 1) {
+    await page.keyboard.press('Tab');
+    const here = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement | null;
+      if (!el) return null;
+      return el.getAttribute('href') ?? el.getAttribute('data-navm-tab') ?? el.id ?? el.tagName;
+    });
+    if (here) visited.push(here);
+  }
+  // Tabbing all the way round never lands on a destination inside a folded
+  // panel, which is the property the trap has to hold.
+  for (const href of foldedHrefs) {
+    expect(visited, `tab order reached ${href} inside a folded panel`).not.toContain(href);
+  }
+  // And it does reach the toggles, so the walk above was not simply stuck.
+  expect(visited).toContain('product');
+  expect(visited).toContain('resources');
+});
+
+test('the phone menu opens the group holding the current page', async ({ page }) => {
+  // The menu should show where you are rather than making you find it.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/methodology', { waitUntil: 'networkidle' });
+  await page.locator('#navMenuBtn').click();
+  const open = page.locator('#navMenu [data-navm-panel]:visible');
+  await expect(open).toHaveCount(1);
+  await expect(open).toHaveAttribute('data-navm-panel', 'resources');
+  await expect(open.locator('a[aria-current="page"]')).toHaveText(/Methodology/);
 });
 
 test('menu closes cleanly when the viewport crosses into desktop navigation', async ({ page }) => {
@@ -851,6 +992,85 @@ test('privacy policy discloses Cedar topic memory', async ({ page }) => {
   await page.goto('/privacy', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('main')).toContainText('topic identifier and timestamp');
   await expect(page.locator('main')).toContainText('local storage for up to 30 days');
+});
+
+test('cedar commons claims only what the product actually does', async ({ page }) => {
+  await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('h1')).toContainText('more than one person');
+
+  // Each of these is answerable by a real route: participants with a role,
+  // an append-only note thread, Cedar inside a project, documents on the
+  // project's intake.
+  const body = (await page.locator('main').innerText()).toLowerCase();
+  for (const claim of ['collaborator', 'viewer', 'append-only', 'by email']) {
+    expect(body, `should describe ${claim}`).toContain(claim);
+  }
+
+  /* Data requests and approval tracking are proposals with no route on the
+     branch being incorporated. A product page is not where a proposal goes,
+     so the page must not imply either is available. */
+  for (const unbuilt of ['assign a request', 'data request', 'approval workflow', 'track approvals']) {
+    expect(body, `must not claim ${unbuilt}`).not.toContain(unbuilt);
+  }
+
+  // Included with a plan, never sold separately.
+  await expect(page.locator('#cm-plans')).toContainText('Sapling and Tree');
+  await expect(page.locator('a[href="/pricing"]').first()).toBeVisible();
+  // The guide prepares, this page is where the work happens. One link each.
+  await expect(page.locator('main a[href="/start"]')).toHaveCount(1);
+});
+
+test('cedar commons is reachable from the footer, and declares itself', async ({ page }) => {
+  await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+
+  // A sibling product page is discoverable from the bottom of any page, not
+  // only from the header.
+  await expect(page.locator('footer a[href="/cedar-commons"]')).toHaveCount(1);
+
+  // Its own WebPage node, as both sibling product pages carry.
+  const types = await page
+    .locator('script[type="application/ld+json"]')
+    .evaluateAll((nodes) =>
+      nodes.flatMap((n) => {
+        try {
+          const parsed = JSON.parse(n.textContent ?? '');
+          return (Array.isArray(parsed) ? parsed : [parsed]).map((x) => x['@type']);
+        } catch {
+          return [];
+        }
+      }),
+    );
+  expect(types).toContain('WebPage');
+
+  /* The capture carries named facilities and economic results. Every product
+     shot on this site says it is sample data, and a visitor must not take
+     these for customers. */
+  await expect(page.locator('.cedarpg-hero__screen figcaption')).toContainText('sample data');
+  await expect(page.locator('.cedarpg-hero__screen img')).toHaveAttribute(
+    'alt',
+    /sample data/,
+  );
+
+  /* The surface sections must actually have a surface: the class was first
+     copied from start.css, which this page does not import, so it was inert
+     and both sections rendered on the page ground. */
+  const surfaces = page.locator('.cm-sec--surface');
+  await expect(surfaces).toHaveCount(2);
+  const bg = await surfaces.first().evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(bg).not.toMatch(/rgba\(0, 0, 0, 0\)/);
+});
+
+test('cedar commons sits between Cedar and Cedar Grove in the product menu', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.nav-toggle[data-current="true"]')).toHaveText(/Product/);
+  await page.locator('#navt-product').click();
+  await expect(page.locator('#navp-product .nav-panel__text')).toHaveText([
+    'Cedar Impact',
+    'Cedar',
+    'Cedar Commons',
+    'Cedar Grove',
+  ]);
 });
 
 test('cedar grove shows three captures of the product, in one frame, per theme', async ({

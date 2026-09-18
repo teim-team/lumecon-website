@@ -23,34 +23,35 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 740 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/pricing` | 1299 | Pricing \| Lumecon | 155 |
-| `/methodology` | 2560 | Methodology \| Lumecon | 167 |
-| `/team` | 369 | Team \| Lumecon | 115 |
-| `/cedar` | 468 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-grove` | 563 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
-| `/glossary` | 551 | Glossary \| Lumecon | 142 |
-| `/naics` | 660 | Industry sectors \| Lumecon | 146 |
-| `/start` | 1423 | Plan your first analysis \| Lumecon | 165 |
-| `/contact` | 286 | Contact \| Lumecon | 145 |
+| `/` | 742 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/pricing` | 1301 | Pricing \| Lumecon | 155 |
+| `/methodology` | 2562 | Methodology \| Lumecon | 167 |
+| `/team` | 371 | Team \| Lumecon | 115 |
+| `/cedar` | 470 | Cedar, the AI economic analyst \| Lumecon | 151 |
+| `/cedar-commons` | 706 | Cedar Commons, the shared project workspace \| Lumecon | 231 |
+| `/cedar-grove` | 565 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/glossary` | 553 | Glossary \| Lumecon | 142 |
+| `/naics` | 662 | Industry sectors \| Lumecon | 146 |
+| `/start` | 1425 | Plan your first analysis \| Lumecon | 165 |
+| `/contact` | 288 | Contact \| Lumecon | 145 |
 | `/signup` | 247 | Request beta access \| Lumecon | 118 |
 | `/login` | 116 | Log in \| Lumecon | 31 |
-| `/choose-plan` | 225 | Choose your plan \| Lumecon | 103 |
-| `/checkout` | 209 | Checkout \| Lumecon | 81 |
+| `/choose-plan` | 227 | Choose your plan \| Lumecon | 103 |
+| `/checkout` | 211 | Checkout \| Lumecon | 81 |
 | `/welcome` | 60 | Welcome to Lumecon | 32 |
-| `/accessibility` | 386 | Accessibility \| Lumecon | 141 |
-| `/ai-and-data-use` | 608 | AI and Data Use \| Lumecon | 133 |
-| `/security` | 437 | Security \| Lumecon | 118 |
-| `/privacy` | 671 | Privacy Policy \| Lumecon | 99 |
-| `/terms` | 1039 | Terms of Service \| Lumecon | 146 |
-| `/404` | 97 | Page Not Found \| Lumecon | 141 |
-| **Total** | **13014** | | |
+| `/accessibility` | 388 | Accessibility \| Lumecon | 141 |
+| `/ai-and-data-use` | 610 | AI and Data Use \| Lumecon | 133 |
+| `/security` | 439 | Security \| Lumecon | 118 |
+| `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
+| `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
+| `/404` | 99 | Page Not Found \| Lumecon | 141 |
+| **Total** | **13756** | | |
 
 ## Crawler metadata audit
 
 This checks canonical consistency, sitemap membership, robots directives, Open Graph, Twitter cards, the llms.txt discovery link and JSON-LD against the built site.
 
-- **Sitemap URLs:** 15
+- **Sitemap URLs:** 16
 - **Status:** All checked crawler metadata is complete and consistent.
 
 ---
@@ -68,7 +69,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 740
+- **Visible words:** 742
 
 ### Architecture (heading outline)
 
@@ -107,7 +108,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -318,6 +319,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -389,7 +391,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1299
+- **Visible words:** 1301
 
 ### Architecture (heading outline)
 
@@ -420,7 +422,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -702,6 +704,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -772,7 +775,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2560
+- **Visible words:** 2562
 
 ### Architecture (heading outline)
 
@@ -814,7 +817,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -1031,6 +1034,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1099,7 +1103,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/team
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, AboutPage, BreadcrumbList
-- **Visible words:** 369
+- **Visible words:** 371
 
 ### Architecture (heading outline)
 
@@ -1133,7 +1137,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -1272,6 +1276,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1342,7 +1347,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 468
+- **Visible words:** 470
 
 ### Architecture (heading outline)
 
@@ -1374,7 +1379,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -1468,6 +1473,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1500,6 +1506,201 @@ We use optional analytics to improve Lumecon. Privacy Policy
 
 ---
 
+## `/cedar-commons` — Cedar Commons
+
+**Intended job of this page:** Where an organization finishes an analysis together.
+
+- **Title:** Cedar Commons, the shared project workspace | Lumecon
+- **Meta description** (231 chars): Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the documents, questions and notes with the project.
+- **og:description:** Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the documents, questions and notes with the project.
+- **og:image:** https://lumecon.ai/lumecon-og-image-1200x630.png
+- **og:image alt:** Lumecon. Economic impact analysis software for governments, enterprises and mission-driven organizations.
+- **Twitter card:** summary_large_image
+- **Canonical:** https://lumecon.ai/cedar-commons
+- **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+- **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
+- **Visible words:** 706
+
+### Architecture (heading outline)
+
+- **H1** An analysis is finished by more than one person.
+  - **H2** How the team contributes
+  - **H2** How the work stays connected
+  - **H2** Two ways it is used
+    - **H3** Finance holds one set of records, the enterprises hold others.
+    - **H3** The consultant runs the project. The client owns the records.
+  - **H2** Cedar Commons comes with Sapling and Tree.
+
+### Copy, in document order
+
+_Lines marked **[conditional]** are hidden by default and appear only in some states, e.g. a plan badge that needs a `?tier=` parameter. They are not what a default visitor sees._
+
+- _link:_ [Skip to main content](#top)
+
+> _section: `Main navigation`_
+
+- _link:_ [LUMECON](/)
+- _label:_ |
+- _label:_ The Intelligent Economic Analysis Platform
+- Product
+- Pricing
+- Resources
+- Company
+- _link:_ [Log in](/login)
+- _link:_ [Request access](/signup)
+- _button:_ Menu
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
+- **[conditional]** Pricing
+- **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
+- **[conditional]** CompanyTeamSecurityContact
+- **[conditional]** Log in
+- **[conditional]** Request access
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+
+> _section: `meth-hero`_
+
+CEDAR COMMONS
+
+
+**H1: An analysis is finished by more than one person.**
+
+Finance holds one set of records, the enterprises hold others, and someone has to keep it moving. Cedar Commons is the shared project workspace: bring those people into the analysis that needs them, each with access suited to their part, and keep the documents, the questions and the notes with the project rather than scattered across inboxes.
+
+- _link:_ [Request free access →](/signup?tier=free)
+- _image alt:_ The Cedar Commons board, showing the shared projects an organization has access to, each card carrying its status and the comment activity on it. Shown with sample data.
+_caption:_ The projects an organization is working on, in one place. Shown with sample data.
+
+> _section: `meth-sec`_
+
+
+**H2: How the team contributes**
+
+A project carries its own people rather than everyone in the organization, so nobody is handed access to work that is not theirs.
+
+- The project lead OWNER Opens the project, brings people in by email and keeps track of what is still unanswered.
+- Finance, payroll and operations COLLABORATOR Supply the records the analysis is built from, and answer questions about how a figure was produced.
+- Leadership VIEWER Reads the analysis and the thread behind it without needing to change anything.
+- An outside economist or consultant COLLABORATOR Works in the project with the organization, on the same records and the same assumptions.
+A role is set when you add someone and can be changed or removed later. Collaborators contribute to the analysis; viewers read it.
+
+
+**H2: How the work stays connected**
+
+The reason a figure can still be defended a year later is that the material behind it never left the project.
+
+- The people on it
+- A project carries its own participants rather than every person in the organization. You add someone by email, give them a collaborator or viewer role, and remove them when their part is done.
+- The documents
+- What was uploaded during intake belongs to that project, and is what Cedar reads when it proposes inputs. The source material and the figures derived from it do not drift apart.
+- The questions
+- Cedar answers from inside a project, against that project’s own material, so a question about a figure is asked where the figure lives rather than in a separate thread.
+- The notes
+- A project has a note thread, and it is append-only: a note is not edited or deleted. What was said about an assumption stays readable next to the analysis it shaped.
+
+**H2: Two ways it is used**
+
+
+> _section: `cm-case`_
+
+AN ORGANIZATION COORDINATING ITS OWN ANALYSIS
+
+
+**H3: Finance holds one set of records, the enterprises hold others.**
+
+The project lead opens the analysis and brings in the people who can reach each set. Leadership joins as a viewer to follow it without being asked to operate anything. The records, the questions and the notes stay in one project, so nobody is reconstructing from an inbox when a figure is questioned six months later.
+
+A CONSULTANT WORKING WITH A CLIENT
+
+
+**H3: The consultant runs the project. The client owns the records.**
+
+The consultant opens the project and invites the client’s finance and operations people to it, and only to it. A project the client does not own names the organization sponsoring it, so nobody is confused about whose subscription is paying or whose work they are looking at.
+
+
+> _section: `meth-sec`_
+
+INCLUDED, NOT SOLD SEPARATELY
+
+
+**H2: Cedar Commons comes with Sapling and Tree.**
+
+Sapling includes it for up to ten people in one organization. Tree includes it across the organization, with no seat limit. There is no separate Commons purchase, and nothing here is an add-on.
+
+Compare plans · Plan your first analysis
+
+The starting guide helps you prepare: the first question, the records, and who can approve sharing them. This is where that work happens once you have.
+
+- Seed and Sprout One person. Cedar Impact and Cedar, without shared projects.
+- Sapling Cedar Commons for up to ten people in one organization.
+- Tree Cedar Commons across the organization, with no seat limit, beside Cedar Grove.
+
+> _section: `footer`_
+
+
+> _section: `Footer`_
+
+PRODUCT
+
+- Cedar Impact
+- Cedar
+- Cedar Commons
+- Cedar Grove
+- Pricing
+REFERENCE
+
+- Methodology
+- Team
+- Security
+- Glossary
+- Industry sectors
+ACCOUNT
+
+- Plan your first analysis
+- Request access
+- Log in
+- Contact
+LEGAL
+
+- Terms
+- Privacy
+- AI and data use
+- Accessibility
+- _label:_ © 2026 Lumecon Inc. · All rights reserved · Patent pending.
+- _button:_ Privacy choices
+- _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
+- _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+**[conditional]** Hi, I'm Cedar. If you have any questions about Lumecon or economic impact analysis, I'm happy to help.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ Is my data safe?
+- _button:_ How is this different from IMPLAN / RIMS / Lightcast?
+- _button:_ How much does it cost?
+- _button:_ Who is Lumecon for?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
+We use optional analytics to improve Lumecon. Privacy Policy
+
+- _button:_ Decline
+- _button:_ Accept
+
+---
+
 ## `/cedar-grove` — Cedar Grove
 
 - **Title:** Cedar Grove, the living evidence base for your organization’s economy | Lumecon
@@ -1511,7 +1712,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 563
+- **Visible words:** 565
 
 ### Architecture (heading outline)
 
@@ -1551,7 +1752,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -1853,6 +2054,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -1898,7 +2100,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/glossary
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, DefinedTermSet
-- **Visible words:** 551
+- **Visible words:** 553
 
 ### Architecture (heading outline)
 
@@ -1922,7 +2124,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -1987,6 +2189,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2057,7 +2260,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, DefinedTermSet
-- **Visible words:** 660
+- **Visible words:** 662
 
 ### Architecture (heading outline)
 
@@ -2081,7 +2284,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -2136,6 +2339,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2206,7 +2410,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1423
+- **Visible words:** 1425
 
 ### Architecture (heading outline)
 
@@ -2238,7 +2442,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -2469,6 +2673,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2539,7 +2744,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/contact
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, ContactPage
-- **Visible words:** 286
+- **Visible words:** 288
 
 ### Architecture (heading outline)
 
@@ -2565,7 +2770,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -2619,6 +2824,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2711,7 +2917,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -2825,7 +3031,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -2888,7 +3094,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/choose-plan
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 225
+- **Visible words:** 227
 
 ### Architecture (heading outline)
 
@@ -2912,7 +3118,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -2943,6 +3149,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -2986,7 +3193,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/checkout
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 209
+- **Visible words:** 211
 
 ### Architecture (heading outline)
 
@@ -3010,7 +3217,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3089,6 +3296,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3156,7 +3364,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3193,7 +3401,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/accessibility
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 386
+- **Visible words:** 388
 
 ### Architecture (heading outline)
 
@@ -3221,7 +3429,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3274,6 +3482,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3317,7 +3526,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/ai-and-data-use
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 608
+- **Visible words:** 610
 
 ### Architecture (heading outline)
 
@@ -3349,7 +3558,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3416,6 +3625,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3461,7 +3671,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/security
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage
-- **Visible words:** 437
+- **Visible words:** 439
 
 ### Architecture (heading outline)
 
@@ -3490,7 +3700,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3592,6 +3802,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3635,7 +3846,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/privacy
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 671
+- **Visible words:** 673
 
 ### Architecture (heading outline)
 
@@ -3666,7 +3877,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3728,6 +3939,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3771,7 +3983,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/terms
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1039
+- **Visible words:** 1041
 
 ### Architecture (heading outline)
 
@@ -3809,7 +4021,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3904,6 +4116,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -3947,7 +4160,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/404
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 97
+- **Visible words:** 99
 
 ### Architecture (heading outline)
 
@@ -3971,7 +4184,7 @@ _Lines marked **[conditional]** are hidden by default and appear only in some st
 - _link:_ [Log in](/login)
 - _link:_ [Request access](/signup)
 - _button:_ Menu
-- **[conditional]** ProductCedar ImpactCedarCedar Grove
+- **[conditional]** ProductCedar ImpactCedarCedar CommonsCedar GroveNot sure where to start? Plan your first analysis
 - **[conditional]** Pricing
 - **[conditional]** ResourcesPlan your first analysisMethodologyIndustry sectorsGlossary
 - **[conditional]** CompanyTeamSecurityContact
@@ -3999,6 +4212,7 @@ PRODUCT
 
 - Cedar Impact
 - Cedar
+- Cedar Commons
 - Cedar Grove
 - Pricing
 REFERENCE
@@ -4037,7 +4251,7 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 
 ### Sentences that appear verbatim on more than one page
 
-- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-grove` and `/glossary` and `/naics` and `/start` and `/contact` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
+- **On `/` and `/pricing` and `/methodology` and `/team` and `/cedar` and `/cedar-commons` and `/cedar-grove` and `/glossary` and `/naics` and `/start` and `/contact` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/accessibility` and `/ai-and-data-use` and `/security` and `/privacy` and `/terms` and `/404`:** "We use optional analytics to improve Lumecon."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."
