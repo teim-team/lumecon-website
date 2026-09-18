@@ -3,43 +3,51 @@
  * /cedar-commons — Cedar Commons, the shared project workspace.
  *
  * WHAT THIS PAGE MAY CLAIM
- * Every capability described here was read off the branch that is being
- * incorporated (`claude/landing-page-collections-redesign-07dx8v` in the app
- * repository), not off a design or a conversation. The routes behind each
- * claim:
+ * Every capability described here was read off the branch being incorporated
+ * (`claude/landing-page-collections-redesign-07dx8v` in the app repository,
+ * open as teim-app#163), not off a design or a conversation. The routes
+ * behind each claim:
  *
  *   - a project has participants beyond its owner, added by email with a
- *     role, listed and removed  ->  GET/POST /projects/:projectId/participants,
+ *     role AND a kind, listed and removed  ->
+ *     GET/POST /projects/:projectId/participants,
  *     DELETE /projects/:projectId/participants/:userId
- *   - the role is `collaborator` or `viewer`, from that route's own body
- *     schema. (Workspace roles are a separate set: admin, member, viewer.)
- *   - notes on a project, append-only  ->  GET/POST /projects/:projectId/notes,
- *     and migration 024, "a note is not edited or deleted"
+ *   - the two axes: `kind` is internal | external and `role` is
+ *     collaborator | viewer beside the owner, both from that route's own
+ *     body schema and from migration 027, which states what each means.
+ *     Organization membership is its own set (admin, member, viewer).
+ *   - the Collaborators view splits the two rosters and reports a role per
+ *     project, "Varies by project" when they differ  ->  src/pages/Workspace.jsx
+ *   - notes on a project  ->  GET/POST /projects/:projectId/notes, and
+ *     migration 024, "a note is not edited or deleted"
  *   - Cedar answers inside a project  ->  /projects/:projectId/cedar/messages
- *   - documents belong to the project's intake draft, which is what Cedar
- *     reads  ->  migration 005, `draft_project_id`
- *   - the board's participant avatars, note counts, status tabs and search
- *     ->  src/pages/workspaceProjectsModel.js
+ *   - documents belong to the project rather than to whoever uploaded them
+ *     ->  GET/POST /projects/:projectId/documents and migration 030
+ *     (teim-app#172). Before that change a document was reachable only
+ *     through its uploader, so this page could not have described it.
+ *   - the board's participant avatars, note and record counts, status tabs
+ *     and search  ->  src/pages/workspaceProjectsModel.js
  *   - a project you do not own names the organization sponsoring it
  *     ->  `sponsorName` in that same model
  *
  * WHAT THIS PAGE MAY NOT CLAIM, AND WHY
  * Assigning data requests and tracking approvals are proposals. They exist
- * in no route on that branch, checked directly. They are the natural next
- * step and they are discussed in `docs/analysis-readiness.md`, but a
- * product page is not where a proposal goes. Nothing here says a request
- * can be assigned, an approval tracked, or a decision recorded as its own
- * object: what exists is an append-only note thread, and that is what the
- * page describes.
+ * in no route, checked directly. They are the natural next step and they are
+ * discussed in `docs/analysis-readiness.md`, but a product page is not where
+ * a proposal goes. Nothing here says a request can be assigned, an approval
+ * tracked, or a decision recorded as its own object: what exists is a note
+ * thread, and that is what the page describes. Implementation words stay out
+ * of the selling copy too — the thread's append-only guarantee is real and
+ * belongs in help, not in a headline.
  *
- * THE HERO SHOT
- * `/app/cedar-context.webp` is a real capture of the running board, driven
- * by a mocked API from `scripts/screenshots/capture-cedar-page.mjs`, the
- * same convention as every other app shot on this site. It shows an owner's
- * own board. It should be re-shot from the incorporating branch with
- * participants and notes in the fixtures, so the hero shows collaborators
- * rather than implying them; the capture script already drives
- * `/app/workspace` and only needs participants in its PROJECTS fixture.
+ * THE SCREENSHOTS
+ * Every frame is the running application, driven by a mocked API from
+ * `scripts/screenshots/capture-commons.mjs` and cut by
+ * `optimize-commons.mjs`. The capture refuses to write a frame whose board
+ * failed to load or that contains a broken image, so a retry state or a
+ * missing brand mark cannot reach this page. Nine distinct frames, no frame
+ * used twice: the whole point of the section it sits in is what it alone
+ * shows.
  *
  * RELATIONSHIP TO /start
  * The starting guide helps an organization prepare. This page shows where
@@ -50,6 +58,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../config';
+import { SEED, PLANS, PLAN_TABLE_ROWS } from '../data/pricing';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/footer.css';
@@ -60,64 +69,124 @@ import '../styles/cedar-page.css';
 import '../styles/commons-page.css';
 
 const description =
-  'Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the documents, questions and notes with the project.';
+  'Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the records, the questions and the notes with the project.';
 
-/* What a person can actually do, each line answerable by a route. */
-const CONTRIBUTIONS = [
+/* The two axes, which the product really has and which a single list of
+   "roles" hides. `kind` answers whose organization someone belongs to;
+   `role` answers what they can do on one project. */
+const AXES = [
   {
-    who: 'The project lead',
-    what: 'Opens the project, brings people in by email and keeps track of what is still unanswered.',
-    access: 'Owner',
+    k: 'Which organization they belong to',
+    field: 'Internal or external',
+    b: 'Internal is someone working for or on behalf of the organization sponsoring the analysis. External is a client, a partner or an outside advisor, who reaches the one project they were invited to and nothing else in the organization.',
   },
   {
-    who: 'Finance, payroll and operations',
-    what: 'Supply the records the analysis is built from, and answer questions about how a figure was produced.',
-    access: 'Collaborator',
-  },
-  {
-    who: 'Leadership',
-    what: 'Reads the analysis and the thread behind it without needing to change anything.',
-    access: 'Viewer',
-  },
-  {
-    who: 'An outside economist or consultant',
-    what: 'Works in the project with the organization, on the same records and the same assumptions.',
-    access: 'Collaborator',
+    k: 'What they can do on that project',
+    field: 'Owner, collaborator or viewer',
+    b: 'The owner opens the project and decides who else is on it. A collaborator contributes records, asks questions and adds to the thread. A viewer reads all of it and changes none of it. The same person can be a collaborator on one project and a viewer on another, and the roster says so.',
   },
 ];
 
-/* Every item here is a real surface. Nothing aspirational. */
-const CONNECTED = [
+/* Examples, and labelled as examples in the copy below: the product does not
+   assign these, an organization does. */
+const COMPOSITION = [
   {
-    k: 'The people on it',
-    b: 'A project carries its own participants rather than every person in the organization. You add someone by email, give them a collaborator or viewer role, and remove them when their part is done.',
+    who: 'The project lead',
+    access: 'Internal, owner',
+    what: 'Opens the project, brings people in and keeps track of what is still unanswered.',
   },
   {
-    k: 'The documents',
-    b: 'What was uploaded during intake belongs to that project, so the source material and the figures drawn from it do not drift apart or end up in two different places.',
+    who: 'Finance, payroll and operations',
+    access: 'Internal, collaborator',
+    what: 'Contribute the records the analysis is built from, and answer questions about how a figure was produced.',
   },
   {
-    k: 'The questions',
-    b: 'A question about a figure is asked where the figure lives, against that project’s own material, rather than in a separate thread nobody can find later.',
+    who: 'An executive sponsor or board member',
+    access: 'Internal, either',
+    what: 'Sometimes reads and nothing more. Sometimes owns the question, sets the scope and needs to contribute. Both are normal.',
   },
   {
-    k: 'The notes',
-    b: 'A project has a note thread, and it is append-only: a note is not edited or deleted. What was said about an assumption stays readable next to the analysis it shaped.',
+    who: 'An outside economist or consultant',
+    access: 'External, collaborator',
+    what: 'Works in the project with the organization, on the same records and the same assumptions.',
+  },
+  {
+    who: 'Outside counsel or an auditor',
+    access: 'External, viewer',
+    what: 'Reads the analysis and the material behind it, on one project, without being given a way to change any of it.',
+  },
+];
+
+/* One project, and the four things it carries. Each is a real surface with a
+   real route, and each has its own capture. */
+const SURFACES = [
+  {
+    id: 'people',
+    tab: 'People',
+    title: 'Who is on this project',
+    body: 'Access is granted project by project, not organization-wide. The owner adds someone by email, says whether they are internal or external and what they may do, and removes them when their part is done. Everyone on the project can see who else is.',
+    shot: '/app/commons-access.webp',
+    alt: 'The project access panel for a shared analysis, listing four people with their permission and whether each is internal or external, and the form for adding one more. Shown with sample data.',
+  },
+  {
+    id: 'documents',
+    tab: 'Records',
+    title: 'What the analysis is built from',
+    body: 'Records belong to the project rather than to whoever uploaded them, so the payroll summary finance contributed and the headcount file operations contributed sit in one list, each showing who added it and when. Nobody has to ask what is already there before sending it again.',
+    shot: '/app/commons-documents.webp',
+    alt: 'The documents panel for a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date and its state. Shown with sample data.',
+  },
+  {
+    id: 'questions',
+    tab: 'Questions',
+    title: 'Questions, asked where the figures are',
+    body: 'Cedar works inside the project, against that project’s own material, for whoever is on it and within what their access allows. A question about a figure is asked and answered next to the figure rather than in a thread nobody can find later.',
+    shot: '/app/commons-cedar.webp',
+    alt: 'Cedar answering a question inside a shared analysis, naming which figures in that project have no source document attached and who entered one of them by hand. Shown with sample data.',
+  },
+  {
+    id: 'notes',
+    tab: 'Notes',
+    title: 'What was decided, next to what it decided',
+    body: 'A project has its own thread. Which payroll figure is the audited one, what scope was agreed, why a contract was held out of the analysis: it stays readable beside the work it shaped, so a figure questioned a year later still has its reasoning attached.',
+    shot: '/app/commons-notes.webp',
+    alt: 'The note thread on a shared analysis, four people resolving which payroll figure is the audited one and agreeing the scope of the analysis. Shown with sample data.',
   },
 ];
 
 const CASES = [
   {
     kicker: 'An organization coordinating its own analysis',
-    title: 'Finance holds one set of records, the enterprises hold others.',
-    body: 'The project lead opens the analysis and brings in the people who can reach each set. Leadership joins as a viewer to follow it without being asked to operate anything. The records, the questions and the notes stay in one project, so nobody is reconstructing from an inbox when a figure is questioned six months later.',
+    title: 'Finance holds one set of records. The enterprises hold others.',
+    body: 'The project lead opens the analysis and brings in the people who can reach each set. An executive sponsor follows it without being asked to operate anything. Outside counsel reads one project and no others. The records, the questions and the notes stay in one place, so nobody is reconstructing from an inbox when a figure is questioned six months later.',
+    shot: '/app/commons-collaborators.webp',
+    alt: 'An organization’s collaborator view: four internal people with their permissions, and two external people, each listed with the single project they can reach. Shown with sample data.',
+    cap: 'Four staff, two outside people, and the exact project each outside person reaches.',
   },
   {
     kicker: 'A consultant working with a client',
     title: 'The consultant runs the project. The client owns the records.',
-    body: 'The consultant opens the project and invites the client’s finance and operations people to it, and only to it. A project the client does not own names the organization sponsoring it, so nobody is confused about whose subscription is paying or whose work they are looking at.',
+    body: 'The consultant opens a project for each engagement and invites that client’s finance and operations people to it, and only to it. One client’s contacts never see another client’s work. A project the client does not own names the organization sponsoring it, so nobody is confused about whose subscription is paying or whose work they are looking at.',
+    shot: '/app/commons-board-consultant.webp',
+    alt: 'A consultancy’s board, showing two client analyses side by side, each carrying its own contributors and activity. Shown with sample data.',
+    cap: 'Two engagements on one board, each with its own client contacts.',
   },
 ];
+
+/* Plan inclusion, read from the pricing source rather than restated here, so
+   a price or a seat count can never drift from /pricing. */
+const ALL_PLANS = [SEED, ...PLANS];
+const COMMONS_ROW = PLAN_TABLE_ROWS.find((r) => r.label === 'Cedar Commons');
+const PLAN_LINES = ALL_PLANS.map((plan, i) => ({
+  name: plan.name,
+  price: plan.price,
+  /* `plan.users` rather than the comparison table's Users row: that row is
+     written for a table cell ("1"), and reads as a stray numeral in prose. */
+  users: plan.users,
+  commons: COMMONS_ROW?.values[i] ?? '',
+  included: !(COMMONS_ROW?.values[i] ?? '').startsWith('Not included'),
+}));
+const FIRST_INCLUDED = PLAN_LINES.find((p) => p.included);
 
 const jsonLd = [
   {
@@ -158,8 +227,8 @@ const jsonLd = [
         <p class="meth-hero__lede reveal-soft" data-stagger="2">
           Finance holds one set of records, the enterprises hold others, and someone has to keep it
           moving. Cedar Commons is the shared project workspace: bring those people into the
-          analysis that needs them, each with access suited to their part, and keep the documents,
-          the questions and the notes with the project rather than scattered across inboxes.
+          analysis that needs them, each with access suited to their part, and keep the records, the
+          questions and the notes with the project rather than scattered across inboxes.
         </p>
         <div class="cedarpg-cta reveal-soft" data-stagger="3">
           <a class="btn2 btn2--primary" href="/signup?tier=free">
@@ -168,14 +237,14 @@ const jsonLd = [
         </div>
         <figure class="cedarpg-hero__screen reveal-soft" data-stagger="3" data-zoom>
           <img
-            src="/app/cedar-context.webp"
-            alt="The Cedar Commons board, showing the shared projects an organization has access to, each card carrying its status and the comment activity on it. Shown with sample data."
+            src="/app/commons-board-org.webp"
+            alt="The Cedar Commons board: three shared analyses, each carrying its status, the people on it and the records and notes it holds. Shown with sample data."
             width="1920"
             height="1200"
             decoding="async"
           />
           <figcaption>
-            The projects an organization is working on, in one place. Shown with sample data.
+            The analyses an organization is working on, in one place. Shown with sample data.
           </figcaption>
         </figure>
       </div>
@@ -184,15 +253,54 @@ const jsonLd = [
     <section class="meth-sec" aria-labelledby="cm-team">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <h2 id="cm-team">How the team contributes</h2>
+          <h2 id="cm-team">Who is on a project</h2>
           <p class="meth-sec__lede">
             A project carries its own people rather than everyone in the organization, so nobody is
             handed access to work that is not theirs.
           </p>
         </div>
+
+        <div class="cm-axes">
+          <div class="cm-axes__col">
+          <dl class="cm-axes__list">
+            {
+              AXES.map((a) => (
+                <div class="cm-axes__row">
+                  <dt>
+                    {a.k}
+                    <span class="cm-axes__field">{a.field}</span>
+                  </dt>
+                  <dd>{a.b}</dd>
+                </div>
+              ))
+            }
+          </dl>
+            <h3 class="cm-sub">How a project team is often put together</h3>
+            <p class="cm-sub__lede">
+              Examples, not rules. Lumecon does not assign these, your organization does, and the
+              same title lands differently in different places: an executive sponsor who owns the
+              question may need to contribute, not only read.
+            </p>
+          </div>
+          <figure class="cm-figure cm-figure--roster" data-zoom>
+            <img
+              src="/app/commons-roles.webp"
+              alt="Two rosters side by side: four internal collaborators with their permissions, and two external collaborators, each listed with the single project they can reach. Shown with sample data."
+              width="1400"
+              height="1327"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              Internal and external are kept apart, and each outside person is listed with the exact
+              projects they reach. Shown with sample data.
+            </figcaption>
+          </figure>
+        </div>
+
         <ul class="cm-roles" role="list">
           {
-            CONTRIBUTIONS.map((c) => (
+            COMPOSITION.map((c) => (
               <li class="cm-roles__row">
                 <p class="cm-roles__who">
                   {c.who} <span class="cm-roles__access">{c.access}</span>
@@ -203,9 +311,8 @@ const jsonLd = [
           }
         </ul>
         <p class="cm-note">
-          A role is set when you add someone and can be changed or removed later. Collaborators
-          contribute to the analysis; viewers read it. Cedar works inside a project for whoever is
-          on it, within what their role allows:{' '}
+          Access is set when you add someone and can be changed or removed later. Cedar works inside
+          a project for whoever is on it, within what their access allows:{' '}
           <a class="inline-link" href="/cedar">how Cedar works</a>.
         </p>
       </div>
@@ -214,22 +321,56 @@ const jsonLd = [
     <section class="meth-sec cm-sec--surface" aria-labelledby="cm-connected">
       <div class="meth-w">
         <div class="meth-sec__head">
-          <h2 id="cm-connected">How the work stays connected</h2>
+          <h2 id="cm-connected">One project, four things in it</h2>
           <p class="meth-sec__lede">
             The reason a figure can still be defended a year later is that the material behind it
-            never left the project.
+            never left the project. Open one to see it.
           </p>
         </div>
-        <dl class="cm-connected">
-          {
-            CONNECTED.map((c) => (
-              <div>
-                <dt>{c.k}</dt>
-                <dd>{c.b}</dd>
-              </div>
-            ))
-          }
-        </dl>
+
+        <div class="cm-surf" data-surf>
+          <div class="cm-surf__tabs" role="list">
+            {
+              SURFACES.map((s, i) => (
+                <button
+                  type="button"
+                  class="cm-surf__tab"
+                  disabled
+                  data-surf-tab={s.id}
+                  aria-expanded={i === 0 ? 'true' : 'false'}
+                  aria-controls={`surf-${s.id}`}
+                >
+                  {s.tab}
+                </button>
+              ))
+            }
+          </div>
+
+          <div class="cm-surf__panels">
+            {
+              SURFACES.map((s) => (
+                <article class="cm-surf__panel" id={`surf-${s.id}`} data-surf-panel={s.id}>
+                  <div class="cm-surf__copy">
+                    <h3>{s.title}</h3>
+                    <p>{s.body}</p>
+                  </div>
+                  {/* data-zoom: these are 1920px captures shown at a fraction
+                      of that, and at phone width at a small fraction. The
+                      site's lightbox is what makes them legible there. */}
+                  <figure class="cm-figure" data-zoom>
+                    <img src={s.shot} alt={s.alt} width="1920" height="1200" loading="lazy" decoding="async" />
+                  </figure>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+        <p class="cm-note">
+          All four follow the same rule. A collaborator contributes: adds a record, asks a
+          question, leaves a note. A viewer reads every one of them and changes none. And a note is
+          kept rather than edited or deleted, so the thread stays a record of what was actually
+          said rather than of what someone later wished had been said.
+        </p>
       </div>
     </section>
 
@@ -242,13 +383,26 @@ const jsonLd = [
           {
             CASES.map((c) => (
               <article class="cm-case">
-                <p class="h-kicker">{c.kicker}</p>
-                <h3>{c.title}</h3>
-                <p>{c.body}</p>
+                <div class="cm-case__copy">
+                  <div>
+                    <p class="h-kicker">{c.kicker}</p>
+                    <h3>{c.title}</h3>
+                  </div>
+                  <p>{c.body}</p>
+                </div>
+                <figure class="cm-figure" data-zoom>
+                  <img src={c.shot} alt={c.alt} width="1920" height="1200" loading="lazy" decoding="async" />
+                  <figcaption>{c.cap} Shown with sample data.</figcaption>
+                </figure>
               </article>
             ))
           }
         </div>
+        <p class="cm-note">
+          Working with a consultant?{' '}
+          <a class="inline-link" href="/start">Share the starting guide with them</a>, or begin a
+          project together in Lumecon.
+        </p>
       </div>
     </section>
 
@@ -257,39 +411,109 @@ const jsonLd = [
         <div class="cm-plans">
           <div>
             <p class="h-kicker">Included, not sold separately</p>
-            <h2 id="cm-plans">Cedar Commons comes with Sapling and Tree.</h2>
+            <h2 id="cm-plans">
+              Cedar Commons comes with {FIRST_INCLUDED?.name} and above.
+            </h2>
             <p>
-              Sapling includes it for up to ten people in one organization. Tree includes it across
-              the organization, with no seat limit. There is no separate Commons purchase, and
-              nothing here is an add-on.
+              There is no separate Commons purchase and nothing here is an add-on. The difference
+              between the plans that include it is how many people can be in your organization, not
+              how much of the workspace you get.
             </p>
             <p class="cm-plans__links">
               <a class="inline-link" href="/pricing">Compare plans</a>
-              <span aria-hidden="true">&middot;</span>
-              <a class="inline-link" href="/start">Plan your first analysis</a>
             </p>
+            {/* One link to the starting guide on this page, and it is the
+                consultant line in the section above: the guide prepares an
+                organization, this page shows where the work happens once
+                they have, and each page points at the other once. */}
             <p class="cm-plans__note">
               The starting guide helps you prepare: the first question, the records, and who can
               approve sharing them. This is where that work happens once you have.
             </p>
           </div>
           <ul class="cm-plans__tiers" role="list">
-            <li class="cm-plans__tier">
-              <b>Seed and Sprout</b>
-              <span>One person. Cedar Impact and Cedar, without shared projects.</span>
-            </li>
-            <li class="cm-plans__tier">
-              <b>Sapling</b>
-              <span>Cedar Commons for up to ten people in one organization.</span>
-            </li>
-            <li class="cm-plans__tier">
-              <b>Tree</b>
-              <span>Cedar Commons across the organization, with no seat limit, beside Cedar Grove.</span>
-            </li>
+            {
+              PLAN_LINES.map((p) => (
+                <li class={`cm-plans__tier${p.included ? '' : ' cm-plans__tier--out'}`}>
+                  <b>
+                    {p.name} <span class="cm-plans__price">{p.price}</span>
+                  </b>
+                  <span>{p.commons}</span>
+                  <span class="cm-plans__users">{p.users}</span>
+                </li>
+              ))
+            }
           </ul>
         </div>
       </div>
     </section>
   </main>
   <Footer />
+
+  <script>
+    /* The four surfaces. Everything ships open, so with no script the section
+       reads as four described capabilities rather than four unlabelled words;
+       the class added here is what collapses it into a picker. Same shape as
+       /start's capability panels and Cedar Grove's atlas: a disclosure set,
+       one open at a time, with `aria-expanded` maintained on the control.
+
+       Pointer, touch and keyboard all reach it. The controls are real
+       buttons, so a tap is a click and Enter and Space already activate
+       them; the arrow-key handler below adds the movement a reader expects
+       of a strip of related controls. */
+    const surf = document.querySelector<HTMLElement>('[data-surf]');
+    if (surf) {
+      surf.classList.add('cm-surf--js');
+      const tabs = Array.from(surf.querySelectorAll<HTMLButtonElement>('[data-surf-tab]'));
+      /* The tabs ship disabled. Without this script every panel is open and
+         the tabs have nothing to do, so offering four focusable controls
+         that answer nothing would just be four dead tab stops. */
+      for (const tab of tabs) tab.removeAttribute('disabled');
+      const panels = Array.from(surf.querySelectorAll<HTMLElement>('[data-surf-panel]'));
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      const show = (id: string) => {
+        for (const tab of tabs) {
+          tab.setAttribute('aria-expanded', String(tab.dataset.surfTab === id));
+        }
+        for (const panel of panels) {
+          panel.hidden = panel.dataset.surfPanel !== id;
+        }
+        /* On a phone the tab strip and the panel do not fit together, so the
+           answer to a tap can land below the fold and the page looks like it
+           did nothing. `nearest` only scrolls when the panel is actually out
+           of view, so this is a no-op on a desktop. */
+        const open = panels.find((panel) => !panel.hidden);
+        open?.scrollIntoView({
+          block: 'nearest',
+          behavior: reduced.matches ? 'auto' : 'smooth',
+        });
+      };
+
+      for (const [i, tab] of tabs.entries()) {
+        tab.addEventListener('click', () => show(tab.dataset.surfTab as string));
+        tab.addEventListener('keydown', (event: KeyboardEvent) => {
+          const step =
+            event.key === 'ArrowRight' || event.key === 'ArrowDown'
+              ? 1
+              : event.key === 'ArrowLeft' || event.key === 'ArrowUp'
+                ? -1
+                : 0;
+          if (!step) return;
+          event.preventDefault();
+          const next = tabs[(i + step + tabs.length) % tabs.length];
+          next.focus();
+          show(next.dataset.surfTab as string);
+        });
+      }
+
+      /* The initial state is set directly rather than through `show`, which
+         scrolls. Landing on the page should not move it. */
+      if (tabs[0]) {
+        const first = tabs[0].dataset.surfTab;
+        for (const tab of tabs) tab.setAttribute('aria-expanded', String(tab.dataset.surfTab === first));
+        for (const panel of panels) panel.hidden = panel.dataset.surfPanel !== first;
+      }
+    }
+  </script>
 </BaseLayout>

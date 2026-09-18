@@ -790,6 +790,12 @@ test('the readiness section is a primer, and its accents actually render', async
   // Four essentials, and the team guide folded away so the page stays a
   // primer rather than becoming a readiness audit.
   await expect(sec.locator('.ready-four__item')).toHaveCount(4);
+  // One mark per essential, decorative: the heading beside it carries the
+  // meaning, so the icon must not be announced as content.
+  await expect(sec.locator('.ready-four__mark')).toHaveCount(4);
+  await expect(sec.locator('.ready-four__mark[aria-hidden="true"]')).toHaveCount(4);
+  // And no numerals, which is what these replaced.
+  await expect(sec.locator('.ready-four__n')).toHaveCount(0);
   await expect(sec.locator('.ready-more')).not.toHaveAttribute('open', /.*/);
   // The floor line has to be present: without it this reads as an entry exam.
   await expect(sec.locator('.ready-floor')).toContainText('do not need every record');
@@ -803,7 +809,7 @@ test('the readiness section is a primer, and its accents actually render', async
   // time. Assert the accents resolved to something real.
   const style = await sec.evaluate((el) => {
     const floor = getComputedStyle(el.querySelector('.ready-floor')!);
-    const num = getComputedStyle(el.querySelector('.ready-four__n')!);
+    const num = getComputedStyle(el.querySelector('.ready-four__mark')!);
     const eyebrow = getComputedStyle(el.querySelector('.ready-team__holds')!);
     return {
       border: parseFloat(floor.borderLeftWidth),
@@ -822,9 +828,10 @@ test('the readiness section is a primer, and its accents actually render', async
   expect(style.eyebrowRadius).toBe(0);
   expect(style.eyebrowBg).toMatch(/rgba\(0, 0, 0, 0\)|transparent/);
 
-  // Teal is semantic. Ordering numerals are not actions, not economic
-  // concepts and not approved brand phrases, so a reader skimming only the
-  // teal must not meet "01 02 03 04".
+  // Teal is semantic. The four marks (which replaced "01 02 03 04", because
+  // a numeral implies an order this section's own lede denies) are not
+  // actions, not economic concepts and not approved brand phrases, so a
+  // reader skimming only the teal must not meet them either.
   const toRgb = (hex: string) => {
     const m = /^#?([0-9a-f]{6})$/i.exec(hex);
     if (!m) return null;
@@ -998,13 +1005,21 @@ test('cedar commons claims only what the product actually does', async ({ page }
   await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('more than one person');
 
-  // Each of these is answerable by a real route: participants with a role,
-  // an append-only note thread, Cedar inside a project, documents on the
-  // project's intake.
+  /* Each of these is answerable by a real route: participants carrying BOTH
+     axes (`kind` internal|external and `role` collaborator|viewer, migration
+     027), documents belonging to the project rather than to their uploader
+     (migration 030), Cedar inside a project, and a note thread. */
   const body = (await page.locator('main').innerText()).toLowerCase();
-  for (const claim of ['collaborator', 'viewer', 'append-only', 'by email']) {
+  for (const claim of ['internal', 'external', 'collaborator', 'viewer', 'by email']) {
     expect(body, `should describe ${claim}`).toContain(claim);
   }
+
+  /* The note thread really is append-only, and the page really does say so —
+     in plain words. "Append-only" is the implementation's name for it and
+     belongs in detailed help, not in the sentence a buyer reads, so this
+     asserts the guarantee rather than the jargon. */
+  expect(body).toContain('kept rather than edited or deleted');
+  expect(body, 'implementation jargon belongs in help, not here').not.toContain('append-only');
 
   /* Data requests and approval tracking are proposals with no route on the
      branch being incorporated. A product page is not where a proposal goes,
@@ -1014,7 +1029,13 @@ test('cedar commons claims only what the product actually does', async ({ page }
   }
 
   // Included with a plan, never sold separately.
-  await expect(page.locator('#cm-plans')).toContainText('Sapling and Tree');
+  /* Read from src/data/pricing.ts rather than restated on the page, so a
+     price or a seat count cannot drift from /pricing. */
+  await expect(page.locator('#cm-plans')).toContainText('Sapling');
+  const plans = page.locator('.cm-plans__tier');
+  await expect(plans).toHaveCount(4);
+  await expect(plans.nth(2)).toContainText('$2,500');
+  await expect(plans.nth(3)).toContainText('Unlimited users in one organization');
   await expect(page.locator('a[href="/pricing"]').first()).toBeVisible();
   // The guide prepares, this page is where the work happens. One link each.
   await expect(page.locator('main a[href="/start"]')).toHaveCount(1);
@@ -1507,4 +1528,86 @@ test('the founding investor is in structured data only, never in what a visitor 
     { '@type': 'Person', name: 'Elijah Moreno', jobTitle: 'Founder and CEO' },
     { '@type': 'Person', name: 'Michael Moreno', jobTitle: 'Founding Investor' },
   ]);
+});
+
+test('the commons surfaces open one at a time, by click and by keyboard', async ({ page }) => {
+  await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+  const tabs = page.locator('[data-surf-tab]');
+  await expect(tabs).toHaveCount(4);
+  await expect(tabs).toHaveText(['People', 'Records', 'Questions', 'Notes']);
+
+  // `:visible`, never the `hidden` PROPERTY. The UA sheet's
+  // `[hidden] { display: none }` loses to any author `display` rule, so a
+  // panel can report hidden === true and still be fully on screen. An
+  // earlier version of this section shipped exactly that: every panel
+  // rendered, the picker inert, and a probe that read the property called
+  // it working.
+  await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(1);
+  await expect(tabs.first()).toHaveAttribute('aria-expanded', 'true');
+
+  await tabs.nth(2).click();
+  const open = page.locator('[data-surf-panel]:visible');
+  await expect(open).toHaveCount(1);
+  await expect(open).toHaveAttribute('id', 'surf-questions');
+  await expect(tabs.first()).toHaveAttribute('aria-expanded', 'false');
+  await expect(tabs.nth(2)).toHaveAttribute('aria-expanded', 'true');
+
+  // Arrow keys walk the strip and wrap, so neither end is a dead stop.
+  await tabs.nth(2).focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(open).toHaveAttribute('id', 'surf-notes');
+  await page.keyboard.press('ArrowRight');
+  await expect(open).toHaveAttribute('id', 'surf-people');
+  await page.keyboard.press('ArrowLeft');
+  await expect(open).toHaveAttribute('id', 'surf-notes');
+
+  // Every panel carries a real capture of the product, and each capture is
+  // its own: the point of the section is that these four surfaces differ,
+  // which the same image four times would contradict.
+  const shots = await page
+    .locator('[data-surf-panel] img')
+    .evaluateAll((nodes) => nodes.map((n) => (n as HTMLImageElement).getAttribute('src')));
+  expect(shots).toHaveLength(4);
+  expect(new Set(shots).size).toBe(4);
+});
+
+test.describe('commons surfaces with no working script', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('all four surfaces are readable, and no tab is a dead control', async ({ page }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('[data-surf-panel]:visible')).toHaveCount(4);
+    await expect(page.locator('[data-surf-tab]:not([disabled])')).toHaveCount(0);
+  });
+});
+
+test('every cedar commons capture actually loads', async ({ page }) => {
+  // The first pass of this page shipped frames with a missing brand mark and
+  // blank sector art, because the app repository's public/ directory is not
+  // on every branch that carries the Commons UI. The capture script now
+  // refuses to write a frame containing a broken image; this is the same
+  // check on the published side, where a mis-named or un-copied asset would
+  // show up instead.
+  await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+  await page.evaluate(() => {
+    for (const img of document.images) img.loading = 'eager';
+  });
+  await page.evaluate(async () => {
+    for (let y = 0; y < document.body.scrollHeight; y += 500) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 60));
+    }
+  });
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        Array.from(document.images)
+          // The lightbox ships an empty <img> it fills on open; it is not a
+          // page asset and has nothing to fail at.
+          .filter((i) => i.getAttribute('src'))
+          .filter((i) => i.complete && i.naturalWidth === 0)
+          .map((i) => new URL(i.currentSrc).pathname),
+      ),
+    )
+    .toEqual([]);
 });

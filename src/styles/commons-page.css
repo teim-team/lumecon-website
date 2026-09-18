@@ -1,7 +1,8 @@
 
 /* Cedar Commons page.
    Hairlines and columns, no cards: a boundary has to communicate selection
-   or interactivity, and nothing on this page is either. */
+   or interactivity, and most of this page is neither. The one exception is
+   the surfaces picker, whose tabs are genuinely selectable and say so. */
 
 /* `.cm-sec--surface` rather than `.start-sec--surface`: that one is defined
    only in start.css, which this page does not import, so the class was inert
@@ -10,6 +11,82 @@
 .cm-sec--surface {
   background: var(--surface);
   border-top: 1px solid var(--rule);
+}
+
+/* A product frame. The screenshots carry their own chrome, so the page adds
+   a hairline and nothing else: no shadow, no rounded plate, no card. */
+.cm-figure {
+  margin: 0;
+}
+.cm-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+}
+.cm-figure figcaption {
+  margin-top: 0.7rem;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+/* The two axes, beside the roster they produce. The left column also carries
+   the examples heading, so the roster never sits next to an empty half. */
+.cm-axes {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+}
+.cm-axes__col {
+  display: grid;
+  align-content: start;
+  gap: 1.4rem;
+}
+.cm-axes__list {
+  display: grid;
+  gap: 1.4rem;
+  margin: 0;
+}
+.cm-axes__row dt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.cm-axes__field {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3, var(--ink-2));
+}
+.cm-axes__row dd {
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+.cm-sub {
+  margin: 0.6rem 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.cm-sub__lede {
+  max-width: 68ch;
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.6;
 }
 
 .cm-roles {
@@ -64,41 +141,124 @@
   line-height: 1.6;
 }
 
-.cm-connected {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.6rem, 3vw, 2.4rem) clamp(2rem, 4vw, 3.5rem);
+/* The four surfaces: a strip of selectable controls, then the one that is
+   open. Ships with every panel visible and the tabs disabled, so with no
+   script the section is a complete description rather than four dead words;
+   `.cm-surf--js` is added by the script and is what collapses it. */
+.cm-surf {
   margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
 }
-.cm-connected dt {
-  margin-bottom: 0.4rem;
-  font-size: 1.0625rem;
-  font-weight: 600;
+.cm-surf__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
 }
-.cm-connected dd {
-  margin: 0;
+/* These ARE selection controls, so they carry a boundary: that is what the
+   no-cardification rule is for, and this is the case it allows. */
+.cm-surf__tab {
+  appearance: none;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: transparent;
+  padding: 0.5rem 0.95rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--ink-2);
-  line-height: 1.6;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease;
+}
+.cm-surf__tab:disabled {
+  cursor: default;
+}
+.cm-surf--js .cm-surf__tab:hover {
+  border-color: var(--accent-line, var(--ink-3, var(--ink-2)));
+  color: var(--ink);
+}
+.cm-surf__tab:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+.cm-surf--js .cm-surf__tab[aria-expanded='true'] {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+  background: var(--accent-wash, transparent);
 }
 
-.cm-cases {
+.cm-surf__panels {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 4vw, 3.5rem);
-  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+  gap: clamp(2rem, 4vw, 3rem);
 }
-.cm-case h3 {
-  margin: 0.5rem 0 0.6rem;
+/* Explicit, and load-bearing: the UA sheet's `[hidden] { display: none }`
+   loses to any author `display` declaration, so without this rule the
+   `.cm-surf__panel` grid below keeps every panel on screen and the picker is
+   inert while still looking selected. The Grove atlas carries the same rule
+   for the same reason. A probe that reads the `hidden` PROPERTY cannot catch
+   this; only one that measures what is rendered can. */
+.cm-surf__panel[hidden] {
+  display: none;
+}
+/* The capture runs the full measure rather than sitting in a column beside
+   the copy: these are 16:10 product frames, and half a column renders them
+   too small to read, which defeats showing them at all. */
+.cm-surf__panel {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 1.9rem);
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+.cm-surf__copy {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: 0.5rem clamp(2rem, 4vw, 3.5rem);
+  align-items: baseline;
+}
+.cm-surf__copy h3 {
+  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(1.15rem, 2vw, 1.4rem);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
-.cm-case p:last-child {
+.cm-surf__copy p {
   margin: 0;
   color: var(--ink-2);
   line-height: 1.6;
+}
+
+ /* One case per row, for the same reason the surfaces panel runs full
+   measure: two board captures side by side are a pair of thumbnails
+   nobody can read. */
+.cm-cases {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+}
+.cm-case__copy {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 0.5rem clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+.cm-case h3 {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.cm-case p {
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.cm-case .cm-figure {
+  margin-top: 1.25rem;
 }
 
 /* Two columns rather than an essay-width cap with the container left empty:
@@ -125,12 +285,32 @@
   border-top: 0;
 }
 .cm-plans__tier b {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: baseline;
   margin-bottom: 0.2rem;
 }
+.cm-plans__price {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink-3, var(--ink-2));
+}
 .cm-plans__tier span {
+  display: block;
   color: var(--ink-2);
   line-height: 1.55;
+}
+.cm-plans__users {
+  font-size: 0.9rem;
+}
+/* A plan that does not include Commons is still listed, because "which plans
+   do not" is part of the answer. It recedes rather than disappearing. */
+.cm-plans__tier--out b,
+.cm-plans__tier--out span {
+  color: var(--ink-3, var(--ink-2));
 }
 .cm-plans h2 {
   margin: 0.4rem 0 0.8rem;
@@ -152,14 +332,40 @@
   border-top: 1px solid var(--rule);
 }
 
+/* `.meth-sec__head` is a flex row with no wrap, so a heading and its deck
+   sit side by side at every width. On the other pages that use it the first
+   head carries no deck, so it has never shown; every head on this page has
+   one, and at phone width the heading was squeezed into a four-word column.
+   Scoped here rather than fixed in methodology.css, which would move the
+   layout of pages this change has not been checked against. */
+@media (max-width: 700px) {
+  .cedarpg .meth-sec__head {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 860px) {
-  .cm-connected,
-  .cm-cases,
+  .cm-axes,
+  .cm-surf__copy,
+  .cm-case__copy,
   .cm-plans,
   .cm-roles__row {
     grid-template-columns: minmax(0, 1fr);
   }
   .cm-roles__who {
     margin-bottom: 0.35rem;
+  }
+  /* The strip scrolls rather than wrapping to three rows on a narrow screen,
+     which would push the panel it controls off the bottom of the viewport. */
+  .cm-surf__tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .cm-surf__tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .cm-surf__tab {
+    flex: none;
   }
 }

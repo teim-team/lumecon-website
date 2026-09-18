@@ -364,9 +364,22 @@ const jsonLd = [
 
         <ol class="ready-four" role="list">
           {
-            READINESS_ESSENTIALS.map((item, i) => (
+            READINESS_ESSENTIALS.map((item) => (
               <li class="ready-four__item">
-                <p class="ready-four__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+                {/* Decorative: the heading beside it carries the meaning, and
+                    the numbering these replaced implied an order the section's
+                    own lede denies. */}
+                <svg
+                  class="ready-four__mark"
+                  viewBox="0 0 28 28"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  set:html={item.mark}
+                />
                 <div>
                   <h3 class="ready-four__label">{item.label}</h3>
                   <p class="ready-four__body">{item.body}</p>

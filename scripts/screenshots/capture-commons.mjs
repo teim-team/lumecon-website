@@ -49,33 +49,104 @@ const OWNER = CONSULTANT
       email: 'priya@ferreira-econ.example',
       name: 'Priya Raman',
       workspaceTier: 'sapling',
+      cedarEntitled: true,
+      cedarChatConfigured: true,
+      cedarDocumentImportEntitled: true,
+      cedarDocumentImportAvailable: true,
       emailVerifiedAt: '2026-01-04T10:00:00.000Z',
       workspace: { id: 'w-2', name: 'Ferreira Economic Consulting', tier: 'sapling' },
     }
   : {
-  id: 'u-owner',
-  email: 'dana@example.org',
-  name: 'Dana Whitecloud',
-  workspaceTier: 'tree',
-  emailVerifiedAt: '2026-01-04T10:00:00.000Z',
-  workspace: { id: 'w-1', name: 'Prairie Wind Development Authority', tier: 'tree' },
-};
+      id: 'u-owner',
+      email: 'dana@example.org',
+      name: 'Dana Whitecloud',
+      workspaceTier: 'tree',
+      cedarEntitled: true,
+      cedarChatConfigured: true,
+      cedarDocumentImportEntitled: true,
+      cedarDocumentImportAvailable: true,
+      emailVerifiedAt: '2026-01-04T10:00:00.000Z',
+      workspace: { id: 'w-1', name: 'Prairie Wind Development Authority', tier: 'tree' },
+    };
 
 const ORG_NAME = CONSULTANT ? 'Ferreira Economic Consulting' : 'Prairie Wind Development Authority';
 
-const PEOPLE = [
-  { id: 'u-owner', name: 'Dana Whitecloud', email: 'dana@example.org', role: 'owner' },
-  { id: 'u-fin', name: 'Marcus Oldbear', email: 'marcus@example.org', role: 'collaborator' },
-  { id: 'u-ops', name: 'Sofia Reyes', email: 'sofia@example.org', role: 'collaborator' },
-  { id: 'u-lead', name: 'Aaron Fields', email: 'aaron@example.org', role: 'viewer' },
-  { id: 'u-con', name: 'Priya Raman', email: 'priya@ferreira-econ.example', role: 'collaborator' },
+/* Two axes, because the product has two.
+   `kind` says whose organization a person belongs to: internal is staff of
+   the sponsoring organization, external is a client, partner or advisor
+   holding project-scoped access and nothing wider. `role` says what they
+   can do on one project: owner, collaborator or viewer. The Collaborators
+   view splits on `kind` (organization members above, external
+   collaborators below) and reports `role` per project, so a fixture with
+   no `kind` renders an empty external roster. */
+const DANA = { id: 'u-owner', name: 'Dana Whitecloud', email: 'dana@example.org' };
+const MARCUS = { id: 'u-fin', name: 'Marcus Oldbear', email: 'marcus@example.org' };
+const SOFIA = { id: 'u-ops', name: 'Sofia Reyes', email: 'sofia@example.org' };
+const AARON = { id: 'u-exec', name: 'Aaron Fields', email: 'aaron@example.org' };
+const PRIYA = { id: 'u-con', name: 'Priya Raman', email: 'priya@ferreira-econ.example' };
+const ELENA = { id: 'u-law', name: 'Elena Marsh', email: 'elena@northline-law.example' };
+const TERESA = { id: 'u-coop', name: 'Teresa Nakai', email: 'teresa@riverbend-coop.example' };
+
+const at = (person, role, kind) => ({ ...person, role, kind });
+
+/* The organization roster: who is on staff. External collaborators never
+   appear here, which is the boundary the page describes. */
+const ORG_MEMBERS = [
+  { ...DANA, role: 'admin' },
+  { ...MARCUS, role: 'member' },
+  { ...SOFIA, role: 'member' },
+  { ...AARON, role: 'member' },
 ];
+const CONSULTANCY_MEMBERS = [{ ...PRIYA, role: 'admin' }];
+
+/* Records contributed to the project, by more than one person: the whole
+   point of the project-scoped document listing. `uploader` is the join the
+   listing route performs; `status` comes from the spreadsheet parser. */
+const DOCUMENTS = [
+  { id: 'd1', projectId: 'p-wind', originalFileName: 'FY2026-payroll-summary-audited.xlsx',
+    contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    fileSizeBytes: 184320, sourceType: 'spreadsheet', status: 'parsed',
+    createdAt: '2026-03-02T15:04:00.000Z', uploader: MARCUS },
+  { id: 'd2', projectId: 'p-wind', originalFileName: 'operations-headcount-by-site.csv',
+    contentType: 'text/csv', fileSizeBytes: 21504, sourceType: 'spreadsheet',
+    status: 'parsed', createdAt: '2026-03-03T10:50:00.000Z', uploader: SOFIA },
+  { id: 'd3', projectId: 'p-wind', originalFileName: 'substation-contract-schedule.csv',
+    contentType: 'text/csv', fileSizeBytes: 8192, sourceType: 'spreadsheet',
+    status: 'needs_review', createdAt: '2026-03-03T11:20:00.000Z', uploader: SOFIA },
+  { id: 'd4', projectId: 'p-wind', originalFileName: 'interconnection-capital-plan.xlsx',
+    contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    fileSizeBytes: 402432, sourceType: 'spreadsheet', status: 'parsed',
+    createdAt: '2026-03-04T09:15:00.000Z', uploader: DANA },
+  /* The second client's project, so the consultant board does not show a
+     record count of zero next to copy about collecting records. */
+  { id: 'd5', projectId: 'p-coop', originalFileName: 'store-payroll-2026.csv',
+    contentType: 'text/csv', fileSizeBytes: 15360, sourceType: 'spreadsheet',
+    status: 'parsed', createdAt: '2026-02-19T13:40:00.000Z', uploader: TERESA },
+  { id: 'd6', projectId: 'p-coop', originalFileName: 'supplier-spend-by-county.xlsx',
+    contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    fileSizeBytes: 96256, sourceType: 'spreadsheet', status: 'parsed',
+    createdAt: '2026-02-20T08:05:00.000Z', uploader: PRIYA },
+  /* And the organization board's other two projects, so the board reads as
+     three live analyses rather than one worked example beside two stubs. */
+  { id: 'd7', projectId: 'p-health', originalFileName: 'clinic-staffing-plan.xlsx',
+    contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    fileSizeBytes: 71680, sourceType: 'spreadsheet', status: 'parsed',
+    createdAt: '2026-02-24T11:00:00.000Z', uploader: AARON },
+  { id: 'd8', projectId: 'p-rail', originalFileName: 'terminal-construction-draws.csv',
+    contentType: 'text/csv', fileSizeBytes: 30720, sourceType: 'spreadsheet',
+    status: 'parsed', createdAt: '2025-11-12T16:30:00.000Z', uploader: MARCUS },
+  { id: 'd9', projectId: 'p-rail', originalFileName: 'corridor-employment-2025.csv',
+    contentType: 'text/csv', fileSizeBytes: 12288, sourceType: 'spreadsheet',
+    status: 'parsed', createdAt: '2025-11-14T09:10:00.000Z', uploader: MARCUS },
+];
+
+const documentCountFor = (id) => DOCUMENTS.filter((d) => d.projectId === id).length;
 
 const proj = (id, name, location, businessType, year, participants, noteCount, status) => ({
   id,
   name,
   ownerId: OWNER.id,
-  organizationId: 'w-1',
+  organizationId: CONSULTANT ? 'w-2' : 'w-1',
   analysisYear: year,
   archivedAt: null,
   createdAt: '2026-02-02T10:00:00.000Z',
@@ -86,51 +157,83 @@ const proj = (id, name, location, businessType, year, participants, noteCount, s
   latestRunCompletedAt: status === 'draft' ? null : '2026-03-04T16:20:00.000Z',
   participants,
   noteCount,
+  documentCount: documentCountFor(id),
   sponsorName: null,
 });
 
+/* The consultant board. Priya owns both, each for a different client, and
+   each client's contacts reach only their own project. */
 const CLIENT_PROJECTS = [
   {
     ...proj('p-wind', 'Wind Ridge Energy Expansion', 'Nebraska', 'Utilities', 2026,
-      [PEOPLE[4], PEOPLE[0], PEOPLE[1]], 6, 'draft'),
-    ownerId: 'u-owner',
+      [at(PRIYA, 'owner', 'internal'), at(DANA, 'collaborator', 'external'), at(MARCUS, 'viewer', 'external')],
+      5, 'draft'),
     sponsorName: 'Prairie Wind Development Authority',
+  },
+  {
+    ...proj('p-coop', 'Riverbend Grocery Cooperative', 'Iowa', 'Retail Trade', 2026,
+      [at(PRIYA, 'owner', 'internal'), at(TERESA, 'collaborator', 'external')],
+      3, 'complete'),
+    sponsorName: 'Riverbend Food Council',
   },
 ];
 
+/* The organization board. Staff hold most of the access; one consultant and
+   one outside counsel hold project-scoped access at different permissions. */
 const OWN_PROJECTS = [
   proj('p-wind', 'Wind Ridge Energy Expansion', 'Nebraska', 'Utilities', 2026,
-    [PEOPLE[0], PEOPLE[1], PEOPLE[2]], 4, 'draft'),
+    [at(DANA, 'owner', 'internal'), at(MARCUS, 'collaborator', 'internal'),
+     at(SOFIA, 'collaborator', 'internal'), at(PRIYA, 'collaborator', 'external')],
+    5, 'draft'),
   proj('p-health', 'Community Health Campus', 'South Dakota', 'Healthcare', 2026,
-    [PEOPLE[0], PEOPLE[3]], 2, 'draft'),
-  proj('p-rail', 'Rail Corridor and Terminal', 'Nebraska', 'Public Infrastructure', 2025,
-    [PEOPLE[0], PEOPLE[1]], 1, 'complete'),
+    [at(DANA, 'owner', 'internal'), at(AARON, 'viewer', 'internal'), at(ELENA, 'viewer', 'external')],
+    3, 'draft'),
+  proj('p-rail', 'Rail Corridor and Terminal', 'Nebraska', 'Transportation and Warehousing', 2025,
+    [at(DANA, 'owner', 'internal'), at(MARCUS, 'collaborator', 'internal')],
+    2, 'complete'),
 ];
 
 const PROJECTS = CONSULTANT ? CLIENT_PROJECTS : OWN_PROJECTS;
+const MEMBERS = CONSULTANT ? CONSULTANCY_MEMBERS : ORG_MEMBERS;
 
+/* The drawer reads `note.author` (an object), not a flat `authorName`:
+   with the wrong shape every note renders as "Someone" behind a "?" avatar,
+   which is what the first pass shipped. */
 const NOTES = [
-  { id: 'n1', projectId: 'p-wind', authorName: 'Marcus Oldbear',
+  { id: 'n1', projectId: 'p-wind', author: MARCUS,
     body: 'FY2026 payroll summary is the audited one, not the draft I sent in February. Employment figure is 214, not 208.',
     createdAt: '2026-03-02T15:12:00.000Z' },
-  { id: 'n2', projectId: 'p-wind', authorName: 'Dana Whitecloud',
+  { id: 'n2', projectId: 'p-wind', author: DANA,
     body: 'Updated. Using 214 across both operations. Sofia, does the substation contract belong in this analysis or the next one?',
     createdAt: '2026-03-03T09:40:00.000Z' },
-  { id: 'n3', projectId: 'p-wind', authorName: 'Sofia Reyes',
+  { id: 'n3', projectId: 'p-wind', author: SOFIA,
     body: 'Next one. It is not committed until the interconnection agreement is signed, and that is a 2027 decision.',
     createdAt: '2026-03-03T11:05:00.000Z' },
-  { id: 'n4', projectId: 'p-wind', authorName: 'Dana Whitecloud',
-    body: 'Noted. Scope is the two operating sites only, reporting year 2026.',
+  { id: 'n4', projectId: 'p-wind', author: PRIYA,
+    body: 'Then I will hold the substation out of the model and note it as a 2027 decision in the assumptions.',
+    createdAt: '2026-03-03T14:30:00.000Z' },
+  { id: 'n5', projectId: 'p-wind', author: DANA,
+    body: 'Agreed. Scope is the two operating sites only, reporting year 2026.',
     createdAt: '2026-03-04T16:20:00.000Z' },
 ];
 
+/* The widget renders `message.text` and keys the bubble off `role`. A
+   `content` field (the server's own column name) renders empty bubbles,
+   which is what the first pass shipped. */
 const CEDAR = [
-  { id: 'c1', role: 'user', content: 'Which figures in this project still have no source document?',
+  { id: 'c1', role: 'user',
+    text: 'Which figures in this project still have no source document?',
     createdAt: '2026-03-04T16:25:00.000Z' },
   { id: 'c2', role: 'assistant',
-    content:
-      'Two. The substation line carries a value with no document attached, and the 2026 payroll figure was entered by hand after Marcus flagged the February draft. Everything else traces to a file in this project.',
+    text:
+      'Two. The substation line carries a value with no document attached, and the 2026 payroll figure was entered by hand after Marcus flagged the February draft. Everything else in this project traces to a file someone uploaded here.',
     createdAt: '2026-03-04T16:25:04.000Z' },
+  { id: 'c3', role: 'user', text: 'Who entered the payroll figure?',
+    createdAt: '2026-03-04T16:26:10.000Z' },
+  { id: 'c4', role: 'assistant',
+    text:
+      'Dana Whitecloud, on March 3, after Marcus Oldbear noted that the audited summary reads 214 rather than 208. The note is on this project.',
+    createdAt: '2026-03-04T16:26:13.000Z' },
 ];
 
 const mock = async (route) => {
@@ -138,25 +241,64 @@ const mock = async (route) => {
   const p = url.pathname;
   if (p === '/me') return route.fulfill(json(OWNER));
   if (p === '/events') return route.fulfill(json({}));
+  /* The real response shape: Workspace.jsx reads `data.org`, `data.members`,
+     `data.pendingInvites` and `data.isOwner`. A flat object leaves the header
+     on its "Your organization" fallback, which is what the first pass shipped. */
   if (p === '/workspace')
     return route.fulfill(
       json({
-        id: 'w-1',
-        organizationId: 'w-1',
-        organizationName: ORG_NAME,
-        name: ORG_NAME,
-        tier: CONSULTANT ? 'sapling' : 'tree',
-        members: PEOPLE.map((x) => ({ ...x, role: x.role === 'owner' ? 'admin' : 'member' })),
-        invites: [],
+        org: {
+          id: CONSULTANT ? 'w-2' : 'w-1',
+          name: ORG_NAME,
+          tier: CONSULTANT ? 'sapling' : 'tree',
+        },
+        members: MEMBERS,
+        pendingInvites: [],
+        seats: MEMBERS.length,
+        isOwner: true,
       }),
     );
   if (p === '/commons/projects' || p === '/projects')
     return route.fulfill(json(url.searchParams.get('archived') === 'archived' ? [] : PROJECTS));
   if (p === '/project-drafts') return route.fulfill(json([]));
+  /* Two shapes, deliberately, because the product has two. The board's
+     avatar stack reads the flat `participants` on the project payload
+     (id/name/email); the access drawer reads GET /projects/:id/participants,
+     whose rows are `{ projectId, userId, role, kind, user }` (see
+     server/repositories/projectParticipants.js toParticipant). Serving the
+     flat shape here renders every row as "Someone" and hides the owner's
+     invite form, which is what the first pass shipped. */
   let m = p.match(/^\/projects\/([^/]+)\/participants$/);
   if (m) {
     const found = PROJECTS.find((x) => x.id === m[1]);
-    return route.fulfill(json({ participants: found ? found.participants : [] }));
+    return route.fulfill(
+      json({
+        /* The drawer takes its authority from the response, not from the
+           project payload: `isOwner` decides whether the invite form renders
+           at all, and `canAddParticipants` whether the plan allows it. */
+        isOwner: (found ? found.ownerId : null) === OWNER.id,
+        canAddParticipants: true,
+        participants: (found ? found.participants : []).map((x) => ({
+          projectId: m[1],
+          userId: x.id,
+          role: x.role,
+          kind: x.kind,
+          createdAt: '2026-02-02T10:00:00.000Z',
+          user: { id: x.id, name: x.name, email: x.email },
+        })),
+      }),
+    );
+  }
+  m = p.match(/^\/projects\/([^/]+)\/documents$/);
+  if (m) {
+    const id = m[1];
+    return route.fulfill(
+      json({
+        documents: DOCUMENTS.filter((d) => d.projectId === id),
+        // Mirrors the route's viewer gate, so the add control renders.
+        canContribute: true,
+      }),
+    );
   }
   m = p.match(/^\/projects\/([^/]+)\/notes$/);
   if (m) return route.fulfill(json({ notes: NOTES.filter((n) => n.projectId === m[1]) }));
@@ -200,38 +342,146 @@ const shot = async (name, clip) => {
   console.log('wrote', name);
 };
 
+/* Every <img> that actually decoded. A published frame must not contain a
+   broken image, and the two that broke in the first pass were exactly the
+   ones a reader notices: the Lumecon mark on the rail, and the sector
+   photograph on each project card. Both live in the app's public/
+   directory, which is NOT on every branch that carries the Commons UI, so
+   this is a real failure mode and not a hypothetical one. A <img> that
+   failed to load reports naturalWidth 0. */
+const brokenImages = async () =>
+  page.evaluate(() =>
+    Array.from(document.images)
+      .filter((img) => img.currentSrc && img.complete && img.naturalWidth === 0)
+      .map((img) => new URL(img.currentSrc).pathname),
+  );
+
+const assertClean = async (where) => {
+  const broken = await brokenImages();
+  if (broken.length) {
+    await browser.close();
+    throw new Error(
+      `capture-commons: ${broken.length} broken image(s) on ${where}; nothing written.\n` +
+        `  ${[...new Set(broken)].join('\n  ')}\n` +
+        `  In the app repository these live under public/. If they are missing:\n` +
+        `    git checkout origin/<branch-with-the-assets> -- public/`,
+    );
+  }
+};
+
+const closeAnyDrawer = async () => {
+  /* Escape is not reliable here: the Cedar widget and the drawers listen on
+     different roots, and a stray Escape that lands on the board leaves the
+     next frame showing whatever was open before. Click the drawer's own
+     close control, then confirm nothing is left open. */
+  const close = page.locator('[aria-label="Close"], button[title="Close"], .wsnotes__close, .wsshare__close').first();
+  if (await close.count()) {
+    await close.click().catch(() => {});
+  } else {
+    await page.keyboard.press('Escape');
+  }
+  await page.waitForTimeout(800);
+};
+
 await page.goto(`${APP}/app/workspace`, { waitUntil: 'networkidle' });
 await page.waitForTimeout(3000);
 
 /* Refuse to write anything if the board did not load, so a retry state can
    never be published as a screenshot. */
-const broken = await page.evaluate(() =>
+const brokenText = await page.evaluate(() =>
   /did not load|Reconnecting|Authentication unavailable|malformed/i.test(document.body.innerText),
 );
-if (broken) {
+if (brokenText) {
   await browser.close();
   throw new Error('capture-commons: the board did not load; nothing written.');
 }
-
+/* And refuse if the board loaded but the sector photography did not: a
+   card wearing an empty gradient is not a capture of this product. */
+const sectorPhotos = await page.evaluate(
+  () => Array.from(document.images).filter((i) => /\/naics\//.test(i.currentSrc)).length,
+);
+if (!sectorPhotos) {
+  await browser.close();
+  throw new Error(
+    'capture-commons: no sector photograph rendered on any card; nothing written.\n' +
+      '  Check that the fixture business types resolve (resolveSectorSlug) and that\n' +
+      '  the app repository has public/naics/.',
+  );
+}
+await assertClean('the board');
 await shot('commons-board');
 
-// The Collaborators tab: who is on the projects, and with what access.
-const collab = page.locator('button, [role="tab"]', { hasText: /^Collaborators$/ }).first();
+/* The Collaborators view. Two rosters, because there are two kinds of
+   person: organization members, and external collaborators holding
+   project-scoped access with a per-project role. */
+const collab = page.locator('button[role="tab"]', { hasText: /^Collaborators$/ }).first();
 if (await collab.count()) {
   await collab.click();
   await page.waitForTimeout(1200);
+  await assertClean('the Collaborators view');
   await shot('commons-collaborators');
 }
 
-// Back to Projects, then open one to reach its notes and Cedar.
-const projTab = page.locator('button, [role="tab"]', { hasText: /^Projects$/ }).first();
-if (await projTab.count()) { await projTab.click(); await page.waitForTimeout(800); }
+// Back to Projects for the per-project drawers.
+const projTab = page.locator('button[role="tab"]', { hasText: /^Projects$/ }).first();
+if (await projTab.count()) { await projTab.click(); await page.waitForTimeout(900); }
 
-const card = page.locator('text=Wind Ridge Energy Expansion').first();
-if (await card.count()) {
-  await card.click();
-  await page.waitForTimeout(2000);
-  await shot('commons-project-open');
+const CARD = CONSULTANT ? 'Wind Ridge Energy Expansion' : 'Wind Ridge Energy Expansion';
+
+// Questions: Cedar answering about this project's own evidence.
+const cedarBtn = page.locator(`button[aria-label^="Ask Cedar about ${CARD}"]`).first();
+if (await cedarBtn.count()) {
+  await cedarBtn.click();
+  await page.waitForTimeout(1500);
+  /* The card's chip scopes the widget to the project and asks it to open.
+     Registering a new surface re-hydrates the transcript, which can land
+     after the open request and leave the panel collapsed, so if the dock is
+     still showing its launcher, click it. */
+  const launcher = page.locator('button', { hasText: /^Ask Cedar/ }).last();
+  const panelOpen = await page.locator('.cedarw--open, [data-cedar-open="true"]').count();
+  if (!panelOpen && (await launcher.count())) {
+    await launcher.click();
+    await page.waitForTimeout(1500);
+  }
+  await page.waitForTimeout(800);
+  await assertClean('the Cedar panel');
+  await shot('commons-cedar');
+  await closeAnyDrawer();
+}
+
+// Notes: the thread that records what was decided about the numbers.
+const notesBtn = page.locator(`button[title="Project notes"]`).first();
+if (await notesBtn.count()) {
+  await notesBtn.click();
+  await page.waitForTimeout(1400);
+  await assertClean('the notes drawer');
+  await shot('commons-notes');
+  await closeAnyDrawer();
+}
+
+// Documents: the records the project was built from, and who contributed
+// each one. Project-scoped, not per uploader.
+const docsBtn = page.locator(`button[title="Project documents"]`).first();
+if (await docsBtn.count()) {
+  await docsBtn.click();
+  await page.waitForTimeout(1400);
+  await assertClean('the documents drawer');
+  await shot('commons-documents');
+  await closeAnyDrawer();
+}
+
+// People: the per-project access panel, where an invitation is scoped.
+const menu = page.locator(`button[aria-label^="Actions for ${CARD}"]`).first();
+if (await menu.count()) {
+  await menu.click();
+  await page.waitForTimeout(500);
+  const manage = page.locator('[role="menuitem"]', { hasText: /Manage collaborators/ }).first();
+  if (await manage.count()) {
+    await manage.click();
+    await page.waitForTimeout(1500);
+    await assertClean('the access drawer');
+    await shot('commons-access');
+  }
 }
 
 console.log('--- final text sample ---');

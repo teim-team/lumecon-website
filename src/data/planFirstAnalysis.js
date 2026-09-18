@@ -1182,24 +1182,40 @@ export const OPEN_METHODOLOGY_QUESTIONS = [
    --------------------------------------------------------------------- */
 
 /** The four things that most affect whether a first analysis goes smoothly. */
+/**
+ * `mark` is the inner geometry of a 28x28 line icon, drawn by the page with
+ * `stroke="currentColor"` and no fill, the same convention the Cedar Grove
+ * collections use. It replaces the 01-04 numbering these four carried: a
+ * number implies an order, and the section's own lede says none of them has
+ * to be settled before you start. The icons are decorative; each item's
+ * heading carries the meaning, so the SVG is aria-hidden.
+ */
 export const READINESS_ESSENTIALS = [
   {
     label: 'A project lead',
+    // One figure, with the arc of people they coordinate behind them.
+    mark: '<circle cx="11.5" cy="9" r="4"/><path d="M4.5 22.5c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M19.5 7.2a4 4 0 0 1 0 7.2"/><path d="M21 22.5c0-2.6-1-4.9-2.6-6.4"/>',
     body: 'One person who keeps the work coordinated, brings in whoever is needed, and makes sure an open question does not quietly disappear.',
     note: 'Not necessarily the most senior person, and they do not have to hold any of the records themselves.',
   },
   {
     label: 'A clear first question',
+    // A single question, asked once and clearly: one mark, one stop.
+    mark: '<circle cx="14" cy="14" r="10.5"/><path d="M10.6 10.8a3.5 3.5 0 0 1 6.8 1.2c0 2.3-3.4 2.9-3.4 5.1"/><path d="M14 20.9v.1"/>',
     body: 'What the organization needs to understand or communicate first, written in a sentence someone outside the project would recognize.',
     note: 'One question is enough to start. The second is easier once the first is answered.',
   },
   {
     label: 'The right record holders',
+    // Several records, in several hands: two sheets, offset.
+    mark: '<path d="M10 10h7.5l3.5 3.5V24H10z"/><path d="M17.5 10v3.5H21"/><path d="M7 19V4.5h7.5L18 8"/>',
     body: 'Whoever can reach the finance, payroll, operations, contracts or program records the analysis draws on.',
     note: 'Usually several people across several offices, which is normal and worth mapping early.',
   },
   {
     label: 'The right approval path',
+    // The record moves along a path, through one gate that has to clear it.
+    mark: '<path d="M3 14h5.5"/><path d="M19.5 14H25"/><circle cx="14" cy="14" r="5.5"/><path d="m11.7 14 1.7 1.8 3-3.6"/>',
     body: 'Whoever can authorize records being shared, and whether a review has to happen before they move.',
     note: 'The person who holds a record and the person who can release it are often not the same person.',
   },
