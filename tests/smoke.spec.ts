@@ -2098,33 +2098,48 @@ test.describe('the product pages on a phone', () => {
       window.scrollTo(0, 0);
     });
 
-    /* Let the lazy images that DID start loading finish before reading
-       them. Without this the test raced the decode: chromium happened to
-       have them decoded by the time the scroll walk returned and WebKit
-       did not, so CI went red on WebKit alone with `naturalWidth === 0`
-       against a crop that was perfectly fine. Waiting on `complete`
-       keeps the assertion's teeth — a 404 also completes, with
-       naturalWidth 0, which is exactly what the check below catches. */
+    /* Only the images that are actually RENDERED, waited on until they
+       have finished loading.
+       ---------------------------------------------------------------
+       Two engine differences meet here, and the first fix got only one
+       of them. Reading `naturalWidth` straight after the scroll walk
+       raced the decode: Chromium happened to be done, WebKit was not.
+       Waiting on `complete` fixed that and then hung on WebKit for 15
+       seconds instead, because the filter was "has a currentSrc" — and
+       the unselected team shape is `display: none`, which on Chromium
+       means its lazy image never starts and reports an empty
+       `currentSrc`, while on WebKit it gets a `currentSrc` from the
+       <picture> and then never loads, so `complete` stays false for
+       ever.
+
+       "Is it on the screen" is true in both engines and is what the
+       test actually means. The unselected shape is covered by the
+       declared-source check below instead. */
+    const RENDERED = '.cm-acts img';
     await page.waitForFunction(
-      () =>
-        [...document.querySelectorAll('.cm-acts img')]
-          .filter((n) => (n as HTMLImageElement).currentSrc)
-          .every((n) => (n as HTMLImageElement).complete),
+      () => {
+        const shown = [...document.querySelectorAll('.cm-acts img')].filter(
+          (n) =>
+            (n as HTMLElement).getClientRects().length > 0 &&
+            getComputedStyle(n).visibility !== 'hidden',
+        );
+        return shown.length > 0 && shown.every((n) => (n as HTMLImageElement).complete);
+      },
       null,
       { timeout: 15000 },
     );
 
-    /* Only the frames that actually loaded: the unselected team shape is
-       `display: none`, so its lazy image never fetches and reports an empty
-       `currentSrc`. That is correct behaviour, not a missing crop — the
-       declared-source check below is what covers it. */
-    const chosen = await page.locator('.cm-acts img').evaluateAll((nodes) =>
+    const chosen = await page.locator(RENDERED).evaluateAll((nodes) =>
       nodes
+        .filter(
+          (n) =>
+            (n as HTMLElement).getClientRects().length > 0 &&
+            getComputedStyle(n).visibility !== 'hidden',
+        )
         .map((n) => ({
           src: (n as HTMLImageElement).currentSrc,
           width: (n as HTMLImageElement).naturalWidth,
-        }))
-        .filter((x) => x.src),
+        })),
     );
     expect(chosen.length).toBeGreaterThan(0);
     for (const { src, width } of chosen) {
@@ -2223,6 +2238,47 @@ test.describe('the product pages on a phone', () => {
     await expect(panel).toHaveAttribute('data-cedar-booted', '1', { timeout: 6000 });
     await page.waitForTimeout(400);
     await expect(panel).toBeVisible();
+  });
+
+  test('the welcome bubble steps aside from protected content, not only the launcher', async ({
+    page,
+  }) => {
+    await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    await page.locator('[data-consent="denied"]').click();
+    await scrollUntilCedarVisible(page);
+    const nudge = page.locator('#cedarNudge');
+    await expect(nudge).toBeVisible({ timeout: 25000 });
+
+    /* Walking the real pages does not produce this collision — checked on
+       eight of them with the guard removed, and the bubble never lands on
+       a protected zone the 60px launcher has not already stepped around.
+       So the collision is built here rather than hunted for: put a zone
+       from the avoid list exactly where the bubble is and let the
+       launcher's own controller run.
+
+       The reveal already tested the bubble's rectangle. What this pins is
+       that it keeps being tested AFTER the bubble is up, which is what
+       polling stopping had quietly ended. */
+    const box = (await nudge.boundingBox())!;
+    await page.evaluate(({ x, y, width, height }) => {
+      const zone = document.createElement('div');
+      // `.naics-tile` is on the launcher's avoid list; any of them works.
+      zone.className = 'naics-tile';
+      Object.assign(zone.style, {
+        position: 'fixed',
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        zIndex: '1',
+      });
+      document.body.append(zone);
+      window.dispatchEvent(new Event('scroll'));
+    }, box);
+
+    await expect(nudge, 'the bubble yields to what it would have covered').toBeHidden({
+      timeout: 4000,
+    });
   });
 
   test('Cedar fills the screen on a phone', async ({ page }) => {

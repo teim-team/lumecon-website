@@ -45,6 +45,7 @@ import {
 } from '../data/cedarIntents';
 import { cedarChat as cedarChatApi, apiConfigured } from './api';
 import { trackEvent, trackError } from './observability';
+import { renderRich } from './richText';
 
 export type CedarSurface = 'fab' | 'inline';
 
@@ -419,46 +420,7 @@ function thinkingPause(answer: string): number {
    reply), never on raw user input (user bubbles stay textContent). The
    clickable contact email and /pricing, /demo links make the reply feel
    like a finished product and double as conversion paths. */
-const INTERNAL_PATHS = 'pricing|about|map|cedar|signup|join|glossary|demo';
-function escapeHtml(s: string): string {
-  // Escape quotes too, not just &<>: a URL containing a double quote must
-  // not be able to break out of the href="..." attribute we build below.
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-function renderRich(text: string): string {
-  let html = escapeHtml(text);
-  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(
-    /\bhttps?:\/\/[^\s<]+/g,
-    (m) => `<a href="${m}" target="_blank" rel="noopener noreferrer">${m}</a>`,
-  );
-  /* `lumecon.ai/<path>` written bare in an answer. Seven answers in the
-     intent bank point somewhere this way and every one of them rendered as
-     inert text: the rule above needs a scheme, and the internal-path rule
-     below needs whitespace before the slash, which "lumecon.ai/" does not
-     have. The link goes to the path, not to the absolute URL, so it stays
-     a same-site navigation. Runs before the email rule, which cannot match
-     these anyway (no `@`), and before the internal-path rule, whose
-     leading-boundary requirement the emitted `href="/…"` does not satisfy. */
-  html = html.replace(
-    /\blumecon\.ai(\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9-]+)*)/gi,
-    (_m, path: string) => `<a href="${path}">lumecon.ai${path}</a>`,
-  );
-  html = html.replace(
-    /\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g,
-    '<a href="mailto:$1">$1</a>',
-  );
-  html = html.replace(
-    new RegExp(`(^|[\\s(])(/(?:${INTERNAL_PATHS}))\\b`, 'g'),
-    '$1<a href="$2">$2</a>',
-  );
-  return html;
-}
+
 
 /* Reveal a reply word-by-word so it reads as Cedar composing rather
    than a block of text snapping in, then finalize to the rich (linked)

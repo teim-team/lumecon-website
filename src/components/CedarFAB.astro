@@ -226,6 +226,10 @@ import CedarChat from './CedarChat.astro';
       '.footer',
     ].join(',');
     let visibilityFrame = 0;
+    /* Filled in by the nudge block below, which owns the bubble's
+       geometry. Declared here because the visibility controller runs on
+       every scroll frame and has to be able to call it. */
+    let reviewNudgePlacement: () => void = () => {};
 
     const setLauncherVisibility = (visible: boolean, reason: 'waiting' | 'avoiding'): void => {
       if (!visible && document.activeElement === fab) return;
@@ -287,6 +291,12 @@ import CedarChat from './CedarChat.astro';
         return;
       }
       setLauncherVisibility(!overlapsProtectedContent(), 'avoiding');
+      /* The bubble has its own, much larger rectangle, and it is already
+         on screen by the time this runs. Checking only the launcher let
+         it drift over a screenshot or a price while the 60px circle
+         underneath stayed clear. The nudge block installs this; until it
+         does, it is a no-op. */
+      reviewNudgePlacement();
     };
 
     const scheduleLauncherVisibility = (): void => {
@@ -508,6 +518,15 @@ import CedarChat from './CedarChat.astro';
         stopPolling();
         armNudge();
       });
+
+      /* Once the bubble is up, `tryShow` has stopped polling, so nothing
+         was re-testing its rectangle. A visitor who kept scrolling took
+         it across whatever the launcher had politely stepped around. The
+         launcher's own controller calls this on every frame it runs. */
+      reviewNudgePlacement = () => {
+        if (!nudge || nudge.hidden) return;
+        if (nudgeWouldOverlap() || !PHONE.matches) hideNudge();
+      };
 
       /* Tapping the bubble opens Cedar, because a person who reaches
          for a message that says "ask me" is asking. */
