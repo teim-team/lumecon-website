@@ -28,7 +28,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/methodology` | 2562 | Methodology \| Lumecon | 167 |
 | `/team` | 371 | Team \| Lumecon | 115 |
 | `/cedar` | 470 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-commons` | 706 | Cedar Commons, the shared project workspace \| Lumecon | 231 |
+| `/cedar-commons` | 720 | Cedar Commons, the shared project workspace \| Lumecon | 231 |
 | `/cedar-grove` | 565 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/glossary` | 553 | Glossary \| Lumecon | 142 |
 | `/naics` | 662 | Industry sectors \| Lumecon | 146 |
@@ -45,7 +45,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 673 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1041 | Terms of Service \| Lumecon | 146 |
 | `/404` | 99 | Page Not Found \| Lumecon | 141 |
-| **Total** | **13756** | | |
+| **Total** | **13770** | | |
 
 ## Crawler metadata audit
 
@@ -1519,7 +1519,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-commons
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 706
+- **Visible words:** 720
 
 ### Architecture (heading outline)
 
@@ -1581,7 +1581,7 @@ A project carries its own people rather than everyone in the organization, so no
 - Finance, payroll and operations COLLABORATOR Supply the records the analysis is built from, and answer questions about how a figure was produced.
 - Leadership VIEWER Reads the analysis and the thread behind it without needing to change anything.
 - An outside economist or consultant COLLABORATOR Works in the project with the organization, on the same records and the same assumptions.
-A role is set when you add someone and can be changed or removed later. Collaborators contribute to the analysis; viewers read it.
+A role is set when you add someone and can be changed or removed later. Collaborators contribute to the analysis; viewers read it. Cedar works inside a project for whoever is on it, within what their role allows: how Cedar works.
 
 
 **H2: How the work stays connected**
@@ -1591,9 +1591,9 @@ The reason a figure can still be defended a year later is that the material behi
 - The people on it
 - A project carries its own participants rather than every person in the organization. You add someone by email, give them a collaborator or viewer role, and remove them when their part is done.
 - The documents
-- What was uploaded during intake belongs to that project, and is what Cedar reads when it proposes inputs. The source material and the figures derived from it do not drift apart.
+- What was uploaded during intake belongs to that project, so the source material and the figures drawn from it do not drift apart or end up in two different places.
 - The questions
-- Cedar answers from inside a project, against that project’s own material, so a question about a figure is asked where the figure lives rather than in a separate thread.
+- A question about a figure is asked where the figure lives, against that project’s own material, rather than in a separate thread nobody can find later.
 - The notes
 - A project has a note thread, and it is append-only: a note is not edited or deleted. What was said about an assumption stays readable next to the analysis it shaped.
 
