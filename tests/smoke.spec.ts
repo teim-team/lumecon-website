@@ -2098,33 +2098,48 @@ test.describe('the product pages on a phone', () => {
       window.scrollTo(0, 0);
     });
 
-    /* Let the lazy images that DID start loading finish before reading
-       them. Without this the test raced the decode: chromium happened to
-       have them decoded by the time the scroll walk returned and WebKit
-       did not, so CI went red on WebKit alone with `naturalWidth === 0`
-       against a crop that was perfectly fine. Waiting on `complete`
-       keeps the assertion's teeth — a 404 also completes, with
-       naturalWidth 0, which is exactly what the check below catches. */
+    /* Only the images that are actually RENDERED, waited on until they
+       have finished loading.
+       ---------------------------------------------------------------
+       Two engine differences meet here, and the first fix got only one
+       of them. Reading `naturalWidth` straight after the scroll walk
+       raced the decode: Chromium happened to be done, WebKit was not.
+       Waiting on `complete` fixed that and then hung on WebKit for 15
+       seconds instead, because the filter was "has a currentSrc" — and
+       the unselected team shape is `display: none`, which on Chromium
+       means its lazy image never starts and reports an empty
+       `currentSrc`, while on WebKit it gets a `currentSrc` from the
+       <picture> and then never loads, so `complete` stays false for
+       ever.
+
+       "Is it on the screen" is true in both engines and is what the
+       test actually means. The unselected shape is covered by the
+       declared-source check below instead. */
+    const RENDERED = '.cm-acts img';
     await page.waitForFunction(
-      () =>
-        [...document.querySelectorAll('.cm-acts img')]
-          .filter((n) => (n as HTMLImageElement).currentSrc)
-          .every((n) => (n as HTMLImageElement).complete),
+      () => {
+        const shown = [...document.querySelectorAll('.cm-acts img')].filter(
+          (n) =>
+            (n as HTMLElement).getClientRects().length > 0 &&
+            getComputedStyle(n).visibility !== 'hidden',
+        );
+        return shown.length > 0 && shown.every((n) => (n as HTMLImageElement).complete);
+      },
       null,
       { timeout: 15000 },
     );
 
-    /* Only the frames that actually loaded: the unselected team shape is
-       `display: none`, so its lazy image never fetches and reports an empty
-       `currentSrc`. That is correct behaviour, not a missing crop — the
-       declared-source check below is what covers it. */
-    const chosen = await page.locator('.cm-acts img').evaluateAll((nodes) =>
+    const chosen = await page.locator(RENDERED).evaluateAll((nodes) =>
       nodes
+        .filter(
+          (n) =>
+            (n as HTMLElement).getClientRects().length > 0 &&
+            getComputedStyle(n).visibility !== 'hidden',
+        )
         .map((n) => ({
           src: (n as HTMLImageElement).currentSrc,
           width: (n as HTMLImageElement).naturalWidth,
-        }))
-        .filter((x) => x.src),
+        })),
     );
     expect(chosen.length).toBeGreaterThan(0);
     for (const { src, width } of chosen) {
