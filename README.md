@@ -42,9 +42,9 @@ organization type instead. On the static deploy (no backend configured),
 Cedar's chat is answered entirely by a local keyword classifier and
 calls no upstream provider; when `PUBLIC_API_URL` is set it calls the
 Cedar backend and falls back to the local classifier on any error. The
-Cedar launcher opens a chat docked to the bottom edge of the viewport (a
-full-width bottom sheet on phones), matching the product's pinned
-widget.
+Cedar launcher opens a chat docked to the bottom edge of the viewport,
+matching the product's pinned widget; on a phone it takes the whole
+screen instead.
 
 ## Tech stack
 
@@ -82,15 +82,35 @@ npm run dev        # local dev server at http://localhost:4321
 | `npm run format`           | Prettier write across `src/`                             |
 | `npm run format:check`     | Prettier check, no writes                                |
 | `npm run test:smoke`       | Playwright smoke tests — **build first**, see below      |
+| `npm run stress`           | Concurrency and leak stress against a running preview    |
 | `npm run docs:copy`        | Regenerate `docs/site-copy-and-architecture.md`          |
 | `npm run docs:plan`        | Regenerate the onboarding resources in `docs/onboarding/`|
+| `npm run docs:questions`   | Regenerate the methodology open-questions PDF            |
+| `npm run llms:pages`       | Rewrite the `## Pages` block in `public/llms.txt`        |
+| `npm run llms:roster`      | Rewrite the roster block in `public/llms.txt` from /team |
 | `npm run naics:duotone`    | Regenerate the sector thumbnails                         |
 | `npm run naics:export-app` | Regenerate the app's sector data                         |
+| `npm run team:headshots`   | Regenerate the team portraits                            |
 | `npm run shots:examples`   | Recapture the hero example screenshots                   |
+| `npm run shots:commons`    | Recapture the Cedar Commons frames, both variants        |
 
-`docs:plan` and the last three are generators whose output is committed. Nothing in
-`scripts/` runs at build time; run them when their inputs change. See
-[AGENTS.md](./AGENTS.md) for what each one owns.
+Everything below `test:smoke` except `stress` is a generator whose output is
+committed. Nothing in `scripts/` runs at build time; run them when their inputs
+change. See [AGENTS.md](./AGENTS.md) for what each one owns.
+
+`docs:copy`, `llms:pages` and `stress` read `src/data/siteMap.ts` and so run
+under `node --experimental-strip-types`. `docs:copy` and `llms:roster` also need
+the built site being served — see Testing below for the preview command.
+
+`npm run stress` walks every page with a dozen concurrent clients, half of them
+on a phone viewport, several rounds each, then drives Cedar and the disclosure
+sets hard and reports node counts before and after. It is not part of CI: run it
+against a preview when touching anything that holds state.
+
+```bash
+npm run build && npm run preview &
+STRESS_BASE_URL=http://127.0.0.1:4321 npm run stress
+```
 
 ## Testing
 
@@ -107,12 +127,25 @@ run against your last build**. Forgetting `npm run build` means testing
 stale output, which usually looks like a test failing for a change you
 already made.
 
-`tests/` holds four specs: `smoke.spec.ts` (routes, hero rotation, pricing,
-auth flows, heading and asset checks, `security.txt` expiry) plus three
-covering the Cedar chat classifier, its focus trap, and the nudge. CI runs
-Chromium and WebKit as required gates; a failure in either browser blocks
-the smoke job. In sandboxes without the pinned browser, the config falls
-back to a system Chromium — `PW_CHROMIUM_EXECUTABLE` overrides it.
+`tests/` holds six specs: `smoke.spec.ts` (routes, hero rotation, pricing,
+auth flows, heading and asset checks, `security.txt` expiry, the crawl
+surface, and a per-width pass over the product pages on a phone), three
+covering the Cedar chat — classifier, focus trap and nudge — one for the
+plan flow, and `rich-text.spec.ts`, which is a pure unit spec with no
+browser navigation at all.
+
+CI runs Chromium and WebKit as required gates; a failure in either browser
+blocks the smoke job. In sandboxes without the pinned browser, the config
+falls back to a system Chromium — `PW_CHROMIUM_EXECUTABLE` overrides it.
+
+**WebKit is not optional, and it has caught what Chromium could not.** The
+two engines disagree about a lazy `<picture>` image inside a `display: none`
+element: Chromium leaves `currentSrc` empty, WebKit populates it and then
+never loads the image. A test that keyed off `currentSrc` passed on one and
+hung for fifteen seconds on the other. If WebKit will not install in your
+environment, say so rather than treating a Chromium-only run as a pass.
+
+`npm run stress` is separate and is not in CI. See Scripts above.
 
 There is no lint step beyond `astro check` and Prettier. `format:check` is
 **not** wired into CI today; run it before pushing.
@@ -125,21 +158,36 @@ src/
                   FinalCta, Nav, Footer, CedarFAB, CedarChat,
                   Lightbox, ConsentBanner, Contours, AuthBrandPanel,
                   MarkArt, BrandWordmark)
-  pages/        One file per route: index, cedar, pricing, methodology,
-                  glossary, naics, signup, login, choose-plan, checkout,
-                  welcome, accessibility, ai-and-data-use, security,
-                  terms, privacy and 404
+  pages/        One file per route. Marketing: index, why-lumecon,
+                  pricing, cedar, cedar-commons, cedar-grove, methodology,
+                  start, naics, glossary, team, contact. Reference and
+                  legal: security, ai-and-data-use, accessibility, privacy,
+                  terms. Flow: signup, login, choose-plan, checkout,
+                  welcome. Plus 404.
+                The inventory of all of them, with the question each one
+                  answers, is src/data/siteMap.ts — see below.
   layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
                 LegalLayout.astro — legal/reference wrapper (methodology,
                 glossary, terms, privacy, ai-and-data-use)
   data/         Single sources of truth:
+                  siteMap.ts      every page, the question it answers and
+                                  whether it is indexed. Read by the copy
+                                  export, the llms.txt page list and the
+                                  stress script; checked against the
+                                  sitemap by the smoke suite
                   pricing.ts      plans, comparison rows, Cedar Grove
                                   standalone, consultant licensing
-                  team.ts         team + advisors (feeds founder JSON-LD)
+                  team.ts         team + advisors (feeds founder JSON-LD,
+                                  the /team page, the llms.txt roster and
+                                  the staff row on /why-lumecon)
                   cedarIntents.ts Cedar chat intent bank
+                  groveCollections.ts  the Cedar Grove atlas
+                  planFirstAnalysis.js the /start scoping model
   assets/       Build-time inlined assets (the Cedar brand marks)
   lib/          api.ts (ApiResult fallback), cedarChat.ts (chat runtime),
-                consent.ts, observability.ts (consent-gated analytics shim),
+                richText.ts (the reply linkifier, its own module so a test
+                can import it without booting the chat), consent.ts,
+                observability.ts (consent-gated analytics shim),
                 flowState.ts (signup/checkout hand-off), passwordRules.ts
   styles/       global.css + per-section stylesheets
 public/         Static assets: brand marks, app screenshots (light + dark),
@@ -148,12 +196,17 @@ public/         Static assets: brand marks, app screenshots (light + dark),
                 .well-known/security.txt
 scripts/        Generators whose output is committed, never run at build
                 time: naics/ (sector data + duotone thumbnails + app
-                export), screenshots/ (hero examples), docs/ (the copy and
-                architecture export)
+                export), screenshots/ (hero examples, the Cedar Commons
+                frames), team/ (portraits), docs/ (the copy and
+                architecture export, the onboarding resources, the
+                llms.txt roster and page list). Plus test/stress.mjs,
+                which generates nothing and is run by hand.
 docs/           Brand brief, legal review, the reconciliation roadmap
                 (the cross-repo tracker AGENTS.md refers to), and the
                 generated copy/architecture export
-tests/          Playwright specs (smoke, Cedar classifier, focus trap, nudge)
+tests/          Playwright specs: smoke (the bulk), Cedar classifier,
+                Cedar focus trap, Cedar nudge, the plan flow, and
+                rich-text (a pure unit spec for the reply linkifier)
 ```
 
 ### Where content lives
@@ -165,11 +218,18 @@ plan, a product one-liner, or a Cedar chat answer is a single edit in the
 relevant data file.
 
 Navigation is grouped rather than flat: `Nav.astro` holds a `NAV` array of
-four top-level items, three of which open a short panel (Product, which is
-where the Cedar family lives, Resources and Company). Adding a page means
-adding a line to that array, not arguing for one of the slots in a row that
-had already run out of width. The same array renders the phone overlay as
-headed sections.
+four top-level items, three of which open a short panel — Product (where the
+Cedar family lives), Why Lumecon (the buyer's argument, the team, security
+and contact), and Resources (the starting guide, methodology, sectors and
+glossary), with Pricing on its own. The same array renders the phone overlay
+as headed sections.
+
+Adding a page is two edits, and both matter: a line in that `NAV` array so a
+reader can reach it, and an entry in `src/data/siteMap.ts` so the copy
+export, `llms.txt` and the stress walk all know it exists. A smoke test
+compares the inventory against the generated sitemap, so a page added to the
+site and forgotten in the inventory fails CI rather than going quietly
+missing from what crawlers and assistants are given.
 
 `src/data/planFirstAnalysis.js` goes one step further and is worth knowing
 about before editing anything onboarding-related. It holds the scoping
@@ -197,9 +257,19 @@ public page promises an output the product does not produce.
   assistants' crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot,
   Google-Extended and peers) so the product is discoverable through AI
   search.
-- `public/llms.txt` provides an AI-readable site summary kept consistent
-  with the on-page copy; the generated sitemap is `sitemap-index.xml`
-  (there is no hand-maintained sitemap file).
+- `public/llms.txt` is the AI-readable site summary. Two of its blocks are
+  generated rather than written: `## Pages`, from `src/data/siteMap.ts`
+  (`npm run llms:pages`), and the roster, from the rendered `/team` page
+  (`npm run llms:roster`). The rest is prose kept consistent with the
+  on-page copy by hand. A smoke test requires the page list to match the
+  inventory, and every `lumecon.ai` URL anywhere in the file to resolve.
+- The generated sitemap is `sitemap-index.xml` (there is no hand-maintained
+  sitemap file), and a smoke test requires it to name exactly the pages
+  `siteMap.ts` marks as indexed.
+- `robots.txt` has no inheritance: a crawler matches one group and ignores
+  every other, so each group repeats its `Disallow` lines rather than
+  stating them once. A smoke test checks each group still carries them —
+  a group that lost them would quietly expose what the others withhold.
 - A light/dark `theme-color` and `prefers-color-scheme` support adapt the
   site to the visitor's OS appearance without a manual toggle.
 
@@ -208,10 +278,14 @@ public page promises an output the product does not produce.
 GitHub Actions workflows in `.github/workflows/`:
 
 - **deploy.yml** — builds and deploys to GitHub Pages on push to `main`.
-- **smoke.yml** — installs Chromium and runs the Playwright smoke test on PRs
-  and pushes to `main`.
+- **smoke.yml** — installs Chromium and WebKit and runs the Playwright suite
+  on PRs and pushes to `main`. It also regenerates
+  `docs/site-copy-and-architecture.md` and `git diff --exit-code`s it, so a
+  copy change pushed without re-running `npm run docs:copy` fails the job.
 - **lighthouse.yml** — runs Lighthouse CI against the build (budgets in
   `lighthouserc.json`).
+- **codex-polish-qa.yml** and **regenerate-approved-review-documents.yml** —
+  review automation; both regenerate the copy document the same way.
 
 The custom domain is set via `CNAME`. `public/.nojekyll` ships so the site
 is still correct if anyone ever switches Pages to "deploy from a branch" —
@@ -475,7 +549,14 @@ page-ownership rule); this list records the product/brand calls.
   pipeline in the session scratchpad; the hero trio never shuffles
   positions, only the center frame advances in order.
 - **Cedar chat docks to the bottom edge** when open, on the site and in
-  the product; it is never a floating window.
+  the product; it is never a floating window. **On a phone (2026-09) it is
+  full-screen instead** — `inset: 0`, `100dvh`, above the site nav, with the
+  safe-area insets on the dialog's own edges. The docked sheet gave the
+  transcript about half a screen and clipped the last starter prompt
+  mid-word. The launcher there is a 60px circle with the brand mark, and a
+  greeting bubble appears once per visit, phone only, after the opening
+  composition has been read past; it yields to the same protected content
+  the launcher avoids, and tapping it opens Cedar.
 - **Auth pages are mirrored counterparts** built on the product's
   sign-in screen (teim-app AuthGate): /login puts the teal brand panel
   left and the form right (continuity: pick up where you left off);

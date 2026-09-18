@@ -332,6 +332,25 @@ output is committed. Run them when their inputs change.
   appears nowhere a visitor can read. Anything that should be public
   about a person goes on `/team` first and arrives in llms.txt because
   it is there.
+- Page inventory for crawlers and assistants: `src/data/siteMap.ts` is
+  the single record of what pages exist, the question each one answers
+  and whether it is indexed. `npm run llms:pages` rewrites the
+  `## Pages` block of `public/llms.txt` from it (no browser, no running
+  site), and `npm run docs:copy` and `npm run stress` read it too.
+  **Adding a page is two edits**: a line in `Nav.astro`'s `NAV` array so
+  a reader can reach it, and an entry here so the copy document, llms.txt
+  and the stress walk know it exists. A smoke test compares the inventory
+  against the generated sitemap and fails when they disagree — that check
+  exists because /why-lumecon shipped into the sitemap automatically,
+  was silently skipped by the copy export until its array was edited by
+  hand, and was named nowhere at all in llms.txt.
+- Stress: `npm run stress` against a running preview. Not a generator and
+  not in CI. A dozen concurrent clients walk every page several rounds
+  each, half on a phone viewport, then one client drives Cedar and the
+  disclosure sets hard and reports node counts before and after, so a
+  leak is a number rather than a hunch. It distinguishes a request
+  cancelled by navigating away from one that failed — the first version
+  did not, and reported 115 failures that were all cancellations.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist
@@ -341,6 +360,14 @@ output is committed. Run them when their inputs change.
   captures the 30 `public/app/ex-*.webp` example images (ten examples,
   each as results, map and compare) from a running
   teim-app dev server; `optimize-examples.mjs` compresses them.
+- Cedar Commons frames: `npm run shots:commons` captures both variants
+  (an organization and a consultancy) against a mocked API and then cuts
+  the `-narrow` phone crops. It refuses to write a frame whose board did
+  not load, that contains a broken image, or whose seat meter fell back
+  to counting members alone, so a retry state or a wrong seat count
+  cannot reach the page. Run the whole script: re-capturing the raw PNGs
+  without re-running the optimizer leaves a stale webp under a fresh
+  caption.
 - Smoke tests: `npm run build` first (Playwright serves `dist/`), then
   `npm run test:smoke` (CI runs chromium + webkit). The site makes no
   third-party requests since the typefaces were self-hosted, so there is
