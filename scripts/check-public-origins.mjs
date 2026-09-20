@@ -24,6 +24,16 @@ import { resolve } from "node:path";
 
 const REQUIRED = ["PUBLIC_APP_URL", "PUBLIC_API_URL"];
 
+// https://fetch.spec.whatwg.org/#bad-port -- ports Fetch blocks outright.
+const BLOCKED_PORTS = new Set([
+  1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 69, 77, 79,
+  87, 95, 101, 102, 103, 104, 109, 110, 111, 113, 115, 117, 119, 123, 135, 137,
+  139, 143, 161, 179, 389, 427, 465, 512, 513, 514, 515, 526, 530, 531, 532,
+  540, 548, 554, 556, 563, 587, 601, 636, 989, 990, 993, 995, 1719, 1720, 1723,
+  2049, 3659, 4045, 4190, 5060, 5061, 6000, 6566, 6665, 6666, 6667, 6668, 6669,
+  6679, 6697, 10080,
+]);
+
 /** Why `value` is not usable as a production origin, or null when it is. */
 export function originProblem(name, value) {
   const original = value ?? "";
@@ -47,6 +57,11 @@ export function originProblem(name, value) {
   // protect it.
   if (url.protocol !== "https:") {
     return `${name} must be https, got ${url.protocol}//`;
+  }
+  // Ports the Fetch standard refuses before opening a connection, so a
+  // request to one fails in the browser with no network activity at all.
+  if (url.port && BLOCKED_PORTS.has(Number(url.port))) {
+    return `${name} uses port ${url.port}, which browsers refuse to fetch from`;
   }
   // Checked before the dot rule below so an unreachable address is named as
   // such. Enumerating a few spellings is not enough: `https://10.0.0.1` and

@@ -70,6 +70,19 @@ export function syncHeaders(contents, apiOrigin) {
     .join("\n");
 }
 
+/** The sources listed in a page's meta-CSP `connect-src`, or null. */
+export function metaConnectSrc(html) {
+  // The delimiter is captured and back-referenced rather than excluded from
+  // the value: a CSP is full of single quotes ('self', 'unsafe-inline'), so a
+  // [^"'] class stops at the first source and the directive is never found.
+  const tag = html.match(/<meta[^>]*http-equiv=(["'])Content-Security-Policy\1[^>]*>/i);
+  if (!tag) return null;
+  const meta = tag[0].match(/content=(["'])([\s\S]*?)\1/i);
+  if (!meta) return null;
+  const directive = meta[2].split(";").map((d) => d.trim()).find((d) => /^connect-src\b/i.test(d));
+  return directive ? directive.split(/\s+/).slice(1) : null;
+}
+
 /** The href the welcome page's single call-to-action actually carries. */
 export function welcomeButtonHref(html) {
   const match = html.match(/<a[^>]*class="[^"]*\bwelc-btn\b[^"]*"[^>]*href="([^"]*)"/i)
@@ -118,8 +131,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
   // emitted a fallback for the missing one, and on a host that runs only
   // `npm run build` nothing downstream would ever catch it. So a partial
   // configuration falls through and fails on the missing value below.
+  // ...and only outside CI. Cloudflare Pages, Netlify and GitHub Actions all
+  // set CI=true and all run the same `npm run build` a contributor does, so
+  // "no variables" is not by itself evidence of a local build -- it is also
+  // exactly what a newly created or accidentally cleared hosted deploy looks
+  // like, with Astro's login-only fallbacks already emitted.
   const noneSet = !process.env.PUBLIC_API_URL && !process.env.PUBLIC_APP_URL;
-  if (skipIfUnset && noneSet) {
+  if (skipIfUnset && noneSet && !process.env.CI) {
     console.log(
       "PUBLIC_APP_URL/PUBLIC_API_URL unset: leaving dist/_headers as committed " +
         "(it names the production API). This build is local-only.",
@@ -147,9 +165,23 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
   // The build is what ships, so assert against it rather than against the
   // intent. A variable that was set but never reached Astro looks identical
   // to one that was never set, in the only place it matters.
+  // Read the directive, not the document. Searching the whole page for the
+  // origin passes on any site whose PUBLIC_API_URL is its own origin, because
+  // the canonical link and the Open Graph tags already contain that string --
+  // reproduced against a fallback build: connect-src was 'self' and the check
+  // still reported success. Exactly the substring mistake fixed below for the
+  // welcome button, left in place one line above it.
   const home = readFileSync(join(dist, "index.html"), "utf8");
-  if (!home.includes(apiOrigin)) {
-    console.error(`dist/index.html does not name ${apiOrigin}; the CSP fell back to 'self'.`);
+  const connectSrc = metaConnectSrc(home);
+  if (connectSrc === null) {
+    console.error("dist/index.html has no meta CSP connect-src to verify.");
+    process.exit(1);
+  }
+  if (!connectSrc.includes(apiOrigin)) {
+    console.error(
+      `dist/index.html's connect-src is ${JSON.stringify(connectSrc.join(" "))}, ` +
+        `which does not name ${apiOrigin}; the CSP fell back.`,
+    );
     process.exit(1);
   }
   // Check the button, not the page. welcome.astro hardcodes

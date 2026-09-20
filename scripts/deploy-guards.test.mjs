@@ -11,6 +11,7 @@ import {
   withConnectSrc,
   syncHeaders,
   welcomeButtonHref,
+  metaConnectSrc,
   PRODUCTION_API_ORIGIN,
   PUBLIC_HEADERS_PATH,
 } from "./sync-headers-csp.mjs";
@@ -338,4 +339,56 @@ test("addresses adjacent to the IPv6 documentation range stay allowed", () => {
   for (const host of ["[2001:db7::1]", "[2001:db9::1]", "[2001:4860:4860::8888]", "[2606:4700::1111]"]) {
     assert.equal(isNonPublicHost(host), false, host);
   }
+});
+
+// ---------------------------------------------------------------------------
+// Fifth review round.
+// ---------------------------------------------------------------------------
+
+test("the CSP check reads the directive, not the whole document", () => {
+  // Reproduced against a real fallback build: connect-src was 'self', the
+  // page contained "https://lumecon.ai" twice in its canonical and OG tags,
+  // and the old whole-page substring search reported success. The same
+  // mistake already fixed for the welcome button, one line above it.
+  const fellBack =
+    '<link rel="canonical" href="https://lumecon.ai/">' +
+    '<meta property="og:url" content="https://lumecon.ai/">' +
+    "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; connect-src 'self'; img-src 'self' data:\">";
+  assert.ok(fellBack.includes("https://lumecon.ai"), "the old check would have passed");
+  assert.deepEqual(metaConnectSrc(fellBack), ["'self'"]);
+
+  const configured =
+    "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; connect-src 'self' https://api.lumecon.ai; font-src 'self'\">";
+  assert.deepEqual(metaConnectSrc(configured), ["'self'", "https://api.lumecon.ai"]);
+});
+
+test("the CSP parser survives the single quotes a policy is full of", () => {
+  // A [^"'] content class stops at the first 'self' and finds no directive,
+  // which reads as "no CSP to verify" rather than as a mismatch. Caught by
+  // running it against a real build rather than a hand-written fixture.
+  const real =
+    "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; " +
+    "style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.lumecon.ai; " +
+    "upgrade-insecure-requests\">";
+  assert.deepEqual(metaConnectSrc(real), ["'self'", "https://api.lumecon.ai"]);
+  assert.equal(metaConnectSrc("<html><body>no meta here</body></html>"), null);
+  assert.equal(
+    metaConnectSrc("<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'\">"),
+    null,
+    "a policy with no connect-src has nothing to verify",
+  );
+});
+
+test("ports the browser refuses to fetch from are rejected", () => {
+  // https://fetch.spec.whatwg.org/#bad-port -- these fail in the browser
+  // before any network connection, so nothing server-side would ever see it.
+  for (const port of [22, 25, 110, 6667]) {
+    assert.match(
+      originProblem("PUBLIC_API_URL", `https://api.lumecon.ai:${port}`) ?? "",
+      /refuse to fetch/,
+      `port ${port}`,
+    );
+  }
+  // A non-standard but perfectly fetchable port stays allowed.
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:8443"), null);
 });
