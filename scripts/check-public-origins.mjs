@@ -191,6 +191,17 @@ export function redactCredentials(value) {
 
   const head = scrub(raw.slice(0, bounds.start));
   const marker = bounds.lastAt === null ? "" : "<redacted>@";
+
+  // The scan says there is userinfo and the parser could not read the value,
+  // so nothing knows what the secret *is* and `secrets` is empty -- the scrub
+  // below would be a no-op over whatever follows. A malformed port is enough
+  // to get here: `new URL` rejects `https://user:hunter2@app.lumecon.ai:hunter2`
+  // outright, and the password sits in the port. So the authority goes the
+  // way the tail already went: not cleaned, omitted.
+  if (bounds.lastAt !== null && !found) {
+    return `${head}${marker}\u2026`;
+  }
+
   const hostStart = bounds.lastAt === null ? bounds.start : bounds.lastAt + 1;
   const host = scrub(raw.slice(hostStart, bounds.end));
   // The tail is dropped, not scrubbed. See the note above for why.
@@ -237,6 +248,20 @@ function describeOriginProblem(name, value) {
   // protect it.
   if (url.protocol !== "https:") {
     return `${name} must be https, got ${url.protocol}//`;
+  }
+  // `new URL(raw)` with no base canonicalizes `https:/api.lumecon.ai` and
+  // `https:api.lumecon.ai` to the intended origin, so every component check
+  // below passes. The browser does not: the raw value is what Astro inlines,
+  // and `${API_BASE}${path}` is resolved against the *document*, where a
+  // scheme without `//` is a relative path. Measured -- both spellings become
+  // `https://lumecon.ai/api.lumecon.ai/auth/login`, so every API call lands on
+  // the marketing site while the CSP and the post-build check stay green,
+  // because they only ever see the canonicalized origin.
+  //
+  // Applied to both variables: PUBLIC_APP_URL is inlined into an href and
+  // resolves against the document in exactly the same way.
+  if (!/^https:\/\//i.test(raw)) {
+    return `${name} must begin with "https://", got ${JSON.stringify(redactCredentials(raw))}; a scheme without two forward slashes is resolved as a path relative to the page`;
   }
   // Ports the Fetch standard refuses before opening a connection, so a
   // request to one fails in the browser with no network activity at all.
@@ -476,6 +501,11 @@ function isNonPublicIpv6(hostname) {
   if (groups[0] >= 0xfec0 && groups[0] <= 0xfeff) return true;
   // ff00::/8 multicast -- never a unicast origin a browser can fetch from.
   if (groups[0] >= 0xff00) return true;
+  // 2002::/16, 6to4 transition space. It sits inside 2000::/3, so the scope
+  // rule cannot reach it, and it encodes an IPv4 address rather than naming an
+  // ordinarily reachable destination -- the v6 counterpart of the 192.88.99.0/24
+  // relay prefix refused above.
+  if (groups[0] === 0x2002) return true;
   // 2001:db8::/32, the IPv6 documentation range: the same trap as the IPv4
   // TEST-NET blocks, and just as likely to be copied out of an example.
   if (groups[0] === 0x2001 && groups[1] === 0x0db8) return true;

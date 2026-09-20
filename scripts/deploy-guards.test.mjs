@@ -1165,3 +1165,81 @@ test("the deprecated 6to4 anycast block is not public", () => {
     assert.equal(isNonPublicHost(host), false, host);
   }
 });
+
+test("an unreadable value never has its authority printed", () => {
+  // Ninth credential finding, and the mechanism is new: a malformed port
+  // makes `new URL` reject the whole value, so the parser cannot say what the
+  // secret is, `secrets` is empty, and the scrub is a no-op over whatever the
+  // scan left standing. The password sat in the port.
+  assert.throws(() => new URL("https://user:hunter2@app.lumecon.ai:hunter2"),
+    "premise: an invalid port makes the whole value unparseable");
+
+  for (const value of [
+    "https://user:hunter2@app.lumecon.ai:hunter2",
+    "https://user:hunter2@app.lumecon.ai:99999999",
+    "https://user:hunter2@app.lumecon.ai:hunter2/hunter2?t=hunter2",
+    " https:\\\\user:hunter2@app.lumecon.ai:hunter2",
+  ]) {
+    const redacted = redactCredentials(value);
+    assert.ok(!redacted.includes("hunter2"), `leaked: ${redacted}`);
+    // Not cleaned, omitted -- the same answer the tail already got, for the
+    // same reason: there is no way to normalize what nothing can read.
+    assert.match(redacted, /<redacted>@…$/, redacted);
+    for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
+      const problem = originProblem(name, value);
+      assert.ok(problem && !problem.includes("hunter2"), `${name}: ${problem}`);
+    }
+  }
+
+  // When the parser *can* read the value the host is still printed, because
+  // then the secret is known and the scrub is real. Omitting it either way
+  // would throw away the diagnostic for the common case.
+  assert.equal(
+    redactCredentials("https://user:hunter2@app.lumecon.ai"),
+    "https://<redacted>@app.lumecon.ai",
+  );
+});
+
+test("6to4 transition space is not an ordinary destination", () => {
+  // 2002::/16 sits inside 2000::/3, so the scope rule cannot reach it, and it
+  // encodes an IPv4 address rather than naming a reachable host -- the v6
+  // counterpart of the 192.88.99.0/24 relay prefix.
+  for (const host of ["[2002::1]", "[2002:808:808::1]", "[2002:ffff:ffff::1]"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+    assert.match(originProblem("PUBLIC_APP_URL", `https://${host}`) ?? "", /non-public/, host);
+  }
+  // Matched as the /16, so its neighbours stay usable.
+  for (const host of ["[2001::1]", "[2003::1]", "[2606:4700::1111]"]) {
+    assert.equal(isNonPublicHost(host), false, host);
+  }
+});
+
+test("the value must carry a real authority, not just a scheme", () => {
+  // `new URL(raw)` with no base canonicalizes these to the intended origin,
+  // so every component check passed. The browser does not: the raw value is
+  // what ships, and `${API_BASE}${path}` resolves against the *document*,
+  // where a scheme without `//` is a relative path.
+  assert.equal(
+    new URL("https:api.lumecon.ai/auth/login", "https://lumecon.ai/welcome").href,
+    "https://lumecon.ai/api.lumecon.ai/auth/login",
+    "premise: it resolves against the page, not as an origin",
+  );
+  assert.equal(
+    new URL("https:/api.lumecon.ai/auth/login", "https://lumecon.ai/welcome").href,
+    "https://lumecon.ai/api.lumecon.ai/auth/login",
+  );
+
+  // Both variables: PUBLIC_APP_URL is inlined into an href and resolves the
+  // same way, so scoping this to the API base would leave the handoff broken.
+  for (const value of ["https:/api.lumecon.ai", "https:api.lumecon.ai", "https:\\\\api.lumecon.ai"]) {
+    for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
+      assert.match(originProblem(name, value) ?? "", /must begin with/, `${name} ${value}`);
+    }
+  }
+
+  // The canonical form is untouched, case-insensitively, and the earlier
+  // scheme rule still owns plain http.
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
+  assert.equal(originProblem("PUBLIC_API_URL", "HTTPS://api.lumecon.ai"), null);
+  assert.match(originProblem("PUBLIC_API_URL", "http://api.lumecon.ai") ?? "", /must be https/);
+});
