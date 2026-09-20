@@ -786,7 +786,7 @@ export const INTENTS: CedarIntent[] = [
       'can i see it',
     ],
     answer:
-      'Happy to set one up. During private beta, request Seed access to build an analysis and view direct effects at no cost. For a guided walkthrough, use the contact form or email contact@lumecon.ai with who you are, the kind of impact you want to measure and any deadline you are working toward. What kind of impact are you hoping to measure?',
+      'During private beta, request Seed access to build an analysis and view direct effects at no cost. For a guided walkthrough, use the contact form or email contact@lumecon.ai with who you are, the kind of impact you want to measure and any deadline you are working toward. What kind of impact are you hoping to measure?',
     expanded:
       'For a guided demo, tell us your geography and the kind of impact you want to show. We can walk through the product against a relevant scenario and explain how Cedar assists with documents, assumptions and the write-up. Seed access opens in waves during the private beta, so request access if you also want to evaluate the workflow yourself.',
   },
@@ -2977,7 +2977,7 @@ export const INTENTS: CedarIntent[] = [
       'sounds too good',
     ],
     answer:
-      'Fair to ask. Lumecon is a real company building economic impact analysis software, founded by Elijah Moreno, with a team that has worked across the Federal Reserve system and trained at schools like Cornell, Dartmouth, Oxford and MIT. The math is mainstream economics and the core data is public, so there is no black box and no catch: the product is the software that makes the analysis fast, usable and auditable. Email contact@lumecon.ai with any question and a person will answer.',
+      'Lumecon is a real company building economic impact analysis software, founded by Elijah Moreno, with a team that has worked across the Federal Reserve system and trained at schools like Cornell, Dartmouth, Oxford and MIT. The math is mainstream economics and the core data is public, so there is no black box and no catch: the product is the software that makes the analysis fast and auditable. Email contact@lumecon.ai with any question and a person will answer.',
   },
   {
     id: 'leadership',
@@ -3018,7 +3018,7 @@ export const INTENTS: CedarIntent[] = [
       'for a story',
     ],
     answer:
-      'Happy to help with a story. The fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline and what you are working on and a person will get back to you. For background, the methodology page explains how an analysis is built.',
+      'For a story, the fastest route is the contact form or contact@lumecon.ai with your outlet, your deadline and what you are working on and a person will get back to you. For background, the methodology page explains how an analysis is built.',
   },
 
   /* --- Upsell: free vs paid Cedar (the one new chip) --- */
@@ -3082,7 +3082,7 @@ export const INTENTS: CedarIntent[] = [
       'what else',
     ],
     answer:
-      "Happy to keep going. To give you something specific instead of repeating myself, pick what's most useful: the methodology, the workflow, the pricing, the data we use or a demo. You can also describe the problem you're trying to solve and I'll route us there.",
+      "So I give you something specific rather than repeat myself, pick what's most useful: the methodology, the workflow, the pricing, the data we use or a demo. You can also describe the problem you're trying to solve and I'll route us there.",
   },
   {
     id: 'thanks',
@@ -3102,8 +3102,8 @@ export const INTENTS: CedarIntent[] = [
       "You're welcome. Anything else I can help with, like pricing, geographies, a demo or the workflow?",
     variants: [
       'Anytime. What else can I cover?',
-      'Glad it helped. Want to keep going on this thread, or switch topics?',
-      "Of course. I'm here if anything else comes up.",
+      'Want to keep going on this thread, or switch topics?',
+      "I'm here if anything else comes up.",
     ],
   },
   {
@@ -3180,7 +3180,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Good. Want me to keep going on this thread, or switch to something else like pricing, a demo, the workflow or who Lumecon is for?',
     variants: [
-      'Great. Should we keep pulling on this thread, or look at something else: pricing, a demo, the methodology?',
+      'Keep pulling on this thread, or look at something else: pricing, a demo, the methodology?',
       "Good to hear. What's next?",
     ],
   },
@@ -3239,7 +3239,7 @@ export const INTENTS: CedarIntent[] = [
       "No problem. The easiest starting points are what Lumecon does, who it's for, how an analysis works or what it costs. If you've got a specific project in mind like a grant, a bond or an annual impact report, tell me about it and I'll point us at the right answer.",
     variants: [
       "Let me try a different angle. Tell me who you are (a tribal nation, a city, a foundation, a university) and I'll start from what Lumecon does for organizations like yours.",
-      "Happy to reset. In one line: Lumecon turns records you already keep into a defensible economic impact analysis. Ask about cost, timing, data or the model and I'll go from there.",
+      "In one line: Lumecon turns records you already keep into a defensible economic impact analysis. Ask about cost, timing, data or the model and I'll go from there.",
     ],
   },
   {
