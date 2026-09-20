@@ -266,6 +266,17 @@ function describeOriginProblem(name, value) {
   if (isIpv6Literal && name === "PUBLIC_API_URL") {
     return `${name} cannot be an IPv6 literal: CSP host-source syntax has no form for one, so connect-src would silently drop it and keep only 'self', blocking every API call`;
   }
+  // Same failure, different spelling. CSP's host-source grammar has no place
+  // for a terminal root dot either, so `https://api.lumecon.ai.` produces a
+  // source the browser discards -- and the post-build check confirms it,
+  // because it looks for the same token it just wrote. Rejected rather than
+  // normalized: stripping the dot for the policy while the value keeps it for
+  // `${API_BASE}${path}` would leave the request origin and the authorized
+  // source differing by exactly the character in question. The fix for the
+  // deploy is to drop the dot, which is unambiguous.
+  if (name === "PUBLIC_API_URL" && url.hostname.endsWith(".")) {
+    return `${name} must not end in a root dot: CSP host-source syntax has no form for one, so connect-src would silently drop it and keep only 'self', blocking every API call`;
+  }
   // `new URL` is far more permissive than DNS: it happily parses
   // `https://*.lumecon.ai` (a wildcard copied out of an allowlist) and
   // `https://api..lumecon.ai` (a doubled-dot typo). Both then satisfy the
@@ -502,9 +513,14 @@ function isNonPublicIpv6(hostname) {
   // including the ones wrapping a perfectly public address.
   const zeroPrefix = groups.slice(0, 5).every((g) => g === 0);
   if (zeroPrefix && (groups[5] === 0xffff || groups[5] === 0)) {
+    if (groups[6] === 0 && groups[7] === 0) return true;
+    // Only the mapped form, ::ffff:0:0/96, carries IPv4 semantics. The
+    // IPv4-compatible form `::a.b.c.d` was deprecated by RFC 4291 and is not
+    // a routed destination, so `[::8.8.8.8]` is unreachable however public
+    // 8.8.8.8 is -- it was being judged as the address it merely embeds.
+    if (groups[5] === 0) return true;
     const a = groups[6] >> 8, b = groups[6] & 0xff;
     const c = groups[7] >> 8, d = groups[7] & 0xff;
-    if (groups[6] === 0 && groups[7] === 0) return true;
     return isNonPublicIpv4(`${a}.${b}.${c}.${d}`);
   }
 

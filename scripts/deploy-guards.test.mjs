@@ -325,13 +325,46 @@ test("a hostname DNS cannot resolve is refused, however happily URL parses it", 
   assert.match(originProblem("PUBLIC_API_URL", "https://api-.lumecon.ai") ?? "", /hyphen/);
 });
 
-test("a root-anchored hostname is allowed, since it actually resolves", () => {
-  // One trailing dot is unusual in configuration but valid DNS. Refusing it
-  // would block a deploy that works, which is the failure this guard has in
-  // the other direction.
+test("a root-anchored hostname resolves, and only the API base refuses it", () => {
+  // One trailing dot is unusual in configuration but valid DNS, so refusing
+  // it as a *name* would block a deploy that works. That still holds, and is
+  // still asserted -- through `invalidDnsLabel` and through PUBLIC_APP_URL.
   assert.equal(invalidDnsLabel("api.lumecon.ai."), null);
-  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai."), null);
   assert.equal(invalidDnsLabel("my-api.lumecon.ai"), null);
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://api.lumecon.ai."), null);
+
+  // But this assertion used to pass for PUBLIC_API_URL, and that was wrong
+  // for a reason the DNS argument cannot see: that value becomes a
+  // `connect-src` host-source, and CSP's grammar has no place for a terminal
+  // dot -- so the browser discards the source and keeps `'self'`, while the
+  // post-build check confirms it by looking for the token it just wrote.
+  // Same shape as the IPv6-literal rule, and scoped the same way.
+  assert.match(
+    originProblem("PUBLIC_API_URL", "https://api.lumecon.ai.") ?? "",
+    /root dot/,
+  );
+  // An ordinary API origin is untouched, and a root-dotted *special-use* name
+  // still gets the more specific diagnosis.
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
+  assert.match(originProblem("PUBLIC_API_URL", "https://localhost.") ?? "", /non-public/);
+});
+
+test("only the IPv4-mapped form carries IPv4 semantics", () => {
+  // `::ffff:0:0/96` is the mapped form and is judged as the address it
+  // carries. The IPv4-compatible form `::a.b.c.d` was deprecated by RFC 4291
+  // and is not a routed destination, so `[::8.8.8.8]` is unreachable however
+  // public 8.8.8.8 is -- it was being judged as the address it merely embeds.
+  for (const host of ["[::8.8.8.8]", "[::1.1.1.1]", "[::0.0.0.1]"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+  }
+  // The mapped form keeps both directions.
+  assert.equal(isNonPublicHost("[::ffff:8.8.8.8]"), false);
+  assert.equal(isNonPublicHost("[::ffff:1.1.1.1]"), false);
+  assert.equal(isNonPublicHost("[::ffff:127.0.0.1]"), true);
+  assert.equal(isNonPublicHost("[::ffff:10.0.0.1]"), true);
+  // And the two all-zero cases stay refused.
+  assert.equal(isNonPublicHost("[::]"), true);
+  assert.equal(isNonPublicHost("[::1]"), true);
 });
 
 // ---------------------------------------------------------------------------
