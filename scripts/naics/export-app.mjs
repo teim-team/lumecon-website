@@ -11,7 +11,7 @@
 import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SECTORS, TRIBAL_GOVERNMENT, WASHES } from './sectors.mjs';
+import { SECTORS, TRIBAL_GOVERNMENT, CONTEXT_FALLBACKS, WASHES } from './sectors.mjs';
 
 // How many photographs each sector actually ships, counted from the
 // generated files (slug-sm.webp plus slug-v2-sm.webp, slug-v3-sm.webp, ...)
@@ -42,7 +42,9 @@ const out = `// GENERATED FILE, do not edit by hand.
 // Regenerate: node scripts/naics/export-app.mjs > ../teim-app/src/data/naicsSectors.js
 // The washed images live in public/naics/ (copied from the website build):
 //   /naics/<slug>-sm.webp    600x400 tile
-//   /naics/<slug>-wide.webp  1500x600 study-card banner
+//   /naics/<slug>-wide.webp  1500x600 analysis-card banner
+// The contextual fallbacks are cut smaller (840x560 / 600x400 / 1000x400)
+// because their masters are 1000px; see scripts/naics/fallbacks.mjs.
 
 export const NAICS_SECTORS = ${JSON.stringify(SECTORS.map(entry), null, 2)};
 
@@ -51,5 +53,12 @@ export const TRIBAL_GOVERNMENT_SECTOR = ${JSON.stringify(entry(TRIBAL_GOVERNMENT
 export const ALL_SECTORS = [...NAICS_SECTORS, TRIBAL_GOVERNMENT_SECTOR];
 
 export const SECTOR_BY_SLUG = Object.fromEntries(ALL_SECTORS.map((s) => [s.slug, s]));
+
+// Covers for an analysis with no resolvable primary sector. Kept OUT of
+// ALL_SECTORS and SECTOR_BY_SLUG on purpose: nothing that resolves a NAICS
+// code should be able to reach one, because these carry no analytic meaning.
+// Their wash is \`slate\`, which is not a sector wash, so the colour itself
+// does not assert an industry.
+export const CONTEXT_FALLBACK_COVERS = ${JSON.stringify(CONTEXT_FALLBACKS.map(entry), null, 2)};
 `;
 process.stdout.write(out);
