@@ -33,10 +33,26 @@ jobs:
           cache: npm
       - run: npm ci
       # PUBLIC_* values are inlined at build time. Without them the site
-      # builds "login-only": Open Lumecon falls back to /login and the
-      # auth/checkout forms degrade to the contact-email path. Set the
-      # repository variables to activate the product handoff.
+      # builds "login-only": Open Lumecon falls back to /login, the
+      # auth/checkout forms degrade to the contact-email path, and the CSP
+      # loses the API origin. None of that fails anything, so the workflow
+      # went green and published a quietly degraded site. These two steps
+      # make that a failed deploy instead.
+      - name: Check the public origins are deployable
+        run: node scripts/check-public-origins.mjs
+        env:
+          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
+          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
       - run: npm run build
+        env:
+          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
+          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
+      # Derives _headers' connect-src from the same PUBLIC_API_URL the meta
+      # CSP uses, then asserts dist really carries both origins rather than
+      # the fallbacks. A variable that was set but never reached Astro looks
+      # identical to one that was never set, in the only place it matters.
+      - name: Sync the header CSP and verify the build
+        run: node scripts/sync-headers-csp.mjs dist
         env:
           PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
           PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}

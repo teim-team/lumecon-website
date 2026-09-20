@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/check-public-origins.mjs --skip-if-unset",
     "build": "astro check && astro build",
+    "postbuild": "node scripts/sync-headers-csp.mjs dist --skip-if-unset",
     "preview": "astro preview",
     "check": "astro check",
     "format": "prettier --write 'src/**/*.{astro,ts,css,json}'",
@@ -24,7 +26,8 @@
     "llms:roster": "node scripts/docs/llms-roster.mjs",
     "stress": "node --experimental-strip-types scripts/test/stress.mjs",
     "llms:pages": "node --experimental-strip-types scripts/docs/llms-pages.mjs",
-    "docs:questions": "node scripts/docs/methodology-questions.mjs"
+    "docs:questions": "node scripts/docs/methodology-questions.mjs",
+    "test:scripts": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

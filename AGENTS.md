@@ -343,6 +343,27 @@ docs/reconciliation-roadmap.md.
 Nothing in `scripts/` runs at build time; each is a generator whose
 output is committed. Run them when their inputs change.
 
+Two exceptions, both deliberate, both about deploy safety rather than
+generated content. Each takes `--skip-if-unset`, so a contributor's build
+with no production origins is a no-op, and the deploy workflow calls both
+scripts *without* that flag, so a deploy can never skip them.
+
+- `scripts/check-public-origins.mjs` runs as a **`prebuild`** hook. It has
+  to run before `astro build`, not after: Astro inlines `PUBLIC_*` into the
+  client bundle, so a value carrying credentials is written into `dist/`
+  before any post-build check could object. Refusing afterwards failed the
+  build but left the compromised artifact on disk.
+- `scripts/sync-headers-csp.mjs` runs as a **`postbuild`** hook. Its
+  committed output (`public/_headers`) names the production API origin,
+  which covers every deploy that uses it — but a Cloudflare Pages or
+  Netlify preview pointed at a *different* `PUBLIC_API_URL` cannot be
+  covered by a committed file, because that origin is not known at commit
+  time, and those hosts run a plain `npm run build` rather than the GitHub
+  Pages workflow.
+
+Everything else in `scripts/` remains a generator whose output is
+committed.
+
 - Sector photography (duotone): `scripts/naics/sectors.mjs` is the
   single source for the 20 NAICS sectors + the Tribal Government
   category, their descriptions and wash colors; `/naics` and the
