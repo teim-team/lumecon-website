@@ -26,13 +26,32 @@ const REQUIRED = ["PUBLIC_APP_URL", "PUBLIC_API_URL"];
 
 // https://fetch.spec.whatwg.org/#bad-port -- ports Fetch blocks outright.
 const BLOCKED_PORTS = new Set([
-  1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 69, 77, 79,
+  // 0 is reserved and can never identify a listening service.
+  0, 1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 69, 77, 79,
   87, 95, 101, 102, 103, 104, 109, 110, 111, 113, 115, 117, 119, 123, 135, 137,
   139, 143, 161, 179, 389, 427, 465, 512, 513, 514, 515, 526, 530, 531, 532,
   540, 548, 554, 556, 563, 587, 601, 636, 989, 990, 993, 995, 1719, 1720, 1723,
   2049, 3659, 4045, 4190, 5060, 5061, 6000, 6566, 6665, 6666, 6667, 6668, 6669,
   6679, 6697, 10080,
 ]);
+
+/** A value safe to print: any userinfo replaced, whatever else is wrong with it.
+ *
+ * Applied to every message rather than relying on the credential check
+ * running first. It did not: a single leading space routed the value to the
+ * whitespace complaint, which printed the password into the Actions log
+ * before the credential check was ever reached. Ordering would fix that one
+ * path and leave the next message added above it leaking again.
+ *
+ * Repository variables are not masked the way secrets are, so anything this
+ * file prints is visible in the log to everyone who can read the run.
+ */
+export function redactCredentials(value) {
+  return String(value).replace(
+    /(\/\/)[^/@\s]*@/g,
+    (_match, slashes) => `${slashes}<redacted>@`,
+  );
+}
 
 /** Why `value` is not usable as a production origin, or null when it is. */
 export function originProblem(name, value) {
@@ -44,13 +63,13 @@ export function originProblem(name, value) {
   // every check here and after the build trims or re-parses it back to
   // something that looks correct.
   if (original !== raw) {
-    return `${name} has leading or trailing whitespace: ${JSON.stringify(original)}`;
+    return `${name} has leading or trailing whitespace: ${JSON.stringify(redactCredentials(original))}`;
   }
   let url;
   try {
     url = new URL(raw);
   } catch {
-    return `${name} is not a URL: ${JSON.stringify(raw)}`;
+    return `${name} is not a URL: ${JSON.stringify(redactCredentials(raw))}`;
   }
   // http:// would publish a site whose auth posts credentials in clear, and
   // the CSP's upgrade-insecure-requests would break the call rather than
@@ -73,7 +92,7 @@ export function originProblem(name, value) {
   // network. An IPv6 literal is exempt: it has no dots and is not a name.
   const isIpv6Literal = url.hostname.includes(":");
   if (!url.hostname || (!isIpv6Literal && !url.hostname.includes("."))) {
-    return `${name} has no public hostname: ${JSON.stringify(raw)}`;
+    return `${name} has no public hostname: ${JSON.stringify(redactCredentials(raw))}`;
   }
   // `new URL` is far more permissive than DNS: it happily parses
   // `https://*.lumecon.ai` (a wildcard copied out of an allowlist) and
@@ -125,15 +144,15 @@ export function originProblem(name, value) {
   // replaced caught that case; the component rewrite that fixed the :443
   // over-rejection lost it, so both are checked now.
   if (raw.includes("?") || raw.includes("#")) {
-    return `${name} must be a bare origin with no query or fragment marker, got ${JSON.stringify(raw)}`;
+    return `${name} must be a bare origin with no query or fragment marker, got ${JSON.stringify(redactCredentials(raw))}`;
   }
   if (url.pathname !== "/") {
-    return `${name} must be a bare origin (${url.origin}), got ${JSON.stringify(raw)}`;
+    return `${name} must be a bare origin (${url.origin}), got ${JSON.stringify(redactCredentials(raw))}`;
   }
   // The API base is the only one where a trailing slash is fatal, because it
   // is concatenated raw; welcome.astro and login.astro both strip it.
   if (name === "PUBLIC_API_URL" && /\/$/.test(raw)) {
-    return `${name} must not end in a slash (it is concatenated with the path), got ${JSON.stringify(raw)}`;
+    return `${name} must not end in a slash (it is concatenated with the path), got ${JSON.stringify(redactCredentials(raw))}`;
   }
   return null;
 }
@@ -151,9 +170,9 @@ export function invalidDnsLabel(hostname) {
   }
   const labels = name.split(".");
   for (const label of labels) {
-    if (label === "") return `empty label in ${JSON.stringify(hostname)}`;
-    if (label.includes("*")) return `wildcard in ${JSON.stringify(hostname)}`;
-    if (label.length > 63) return `label longer than 63 characters in ${JSON.stringify(hostname)}`;
+    if (label === "") return `empty label in ${JSON.stringify(redactCredentials(hostname))}`;
+    if (label.includes("*")) return `wildcard in ${JSON.stringify(redactCredentials(hostname))}`;
+    if (label.length > 63) return `label longer than 63 characters in ${JSON.stringify(redactCredentials(hostname))}`;
     if (label.startsWith("-") || label.endsWith("-")) {
       return `label ${JSON.stringify(label)} starts or ends with a hyphen`;
     }
@@ -248,6 +267,9 @@ function isNonPublicIpv6(hostname) {
   // 2001:db8::/32, the IPv6 documentation range: the same trap as the IPv4
   // TEST-NET blocks, and just as likely to be copied out of an example.
   if (groups[0] === 0x2001 && groups[1] === 0x0db8) return true;
+  // 2001:2::/48, the IPv6 benchmarking range (RFC 5180) -- the counterpart
+  // of IPv4's 198.18.0.0/15, which is already refused.
+  if (groups[0] === 0x2001 && groups[1] === 0x0002 && groups[2] === 0) return true;
   // 3fff::/20, the second documentation range (RFC 9637). Matched as the
   // exact /20 rather than the whole 3fff::/16, so neighbouring space is not
   // rejected along with it.

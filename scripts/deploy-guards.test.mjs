@@ -6,6 +6,7 @@ import {
   isNonPublicHost,
   expandIpv6,
   invalidDnsLabel,
+  redactCredentials,
 } from "./check-public-origins.mjs";
 import {
   withConnectSrc,
@@ -491,4 +492,46 @@ test("credentials in an origin are refused, and not echoed back", () => {
   // Ordinary origins are untouched.
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:443"), null);
+});
+
+test("no message leaks a credential, whatever else is wrong with the value", () => {
+  // The credential check was not first: a single leading space routed the
+  // value to the whitespace complaint, which printed the password into the
+  // Actions log before the credential check ran. Repository variables are
+  // not masked the way secrets are, so that log is readable by anyone who
+  // can see the run.
+  //
+  // Fixed by redacting in every message rather than by reordering, which
+  // would fix one path and leave the next message added above it leaking.
+  // This test walks the paths rather than the one that was reported.
+  const withSecret = [
+    " https://user:hunter2@app.lumecon.ai",      // whitespace
+    "https://user:hunter2@app.lumecon.ai",       // credentials
+    "https://user:hunter2@app.lumecon.ai/v1",    // path
+    "https://user:hunter2@app.lumecon.ai?",      // empty query marker
+    "https://user:hunter2@*.lumecon.ai",         // unresolvable hostname
+    "https://user:hunter2@api.lumecon.ai/",      // trailing slash
+  ];
+  for (const value of withSecret) {
+    for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
+      const problem = originProblem(name, value);
+      assert.ok(problem, `${value} should be refused`);
+      assert.ok(!problem.includes("hunter2"), `leaked via ${name}: ${problem}`);
+    }
+  }
+  assert.equal(
+    redactCredentials(" https://user:hunter2@app.lumecon.ai"),
+    " https://<redacted>@app.lumecon.ai",
+  );
+  // A value with no userinfo is printed unchanged.
+  assert.equal(redactCredentials("https://api.lumecon.ai/v1"), "https://api.lumecon.ai/v1");
+});
+
+test("port 0 and the IPv6 benchmarking range are refused", () => {
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:0") ?? "", /refuse to fetch/);
+  // 2001:2::/48 is IPv4 198.18.0.0/15's counterpart, which was already out.
+  assert.match(originProblem("PUBLIC_API_URL", "https://[2001:2::1]") ?? "", /non-public/);
+  // Matched as the /48, not a wider prefix: these neighbours stay allowed.
+  assert.equal(isNonPublicHost("[2001:3::1]"), false);
+  assert.equal(isNonPublicHost("[2001:2:1::1]"), false);
 });
