@@ -199,6 +199,23 @@ export function redactCredentials(value) {
 
 /** Why `value` is not usable as a production origin, or null when it is. */
 export function originProblem(name, value) {
+  const problem = describeOriginProblem(name, value);
+  if (problem === null) return null;
+  // One scrub at the exit, not one per message. Eight credential findings on
+  // this file went to individual diagnostics -- and the one that caught this
+  // was a message whose own comment claimed it "deliberately does not include
+  // the value" while interpolating `url.host`. Several others interpolate
+  // `url.origin`, `url.hostname` or `url.port`, any of which can repeat the
+  // credential. Whatever is returned from here is checked against what the
+  // parser says the secret is, so a message added later inherits it.
+  const found = parsedCredential(String(value ?? "").trim());
+  if (!found) return problem;
+  return [...found.secrets]
+    .sort((a, b) => b.length - a.length)
+    .reduce((message, secret) => message.split(secret).join("<redacted>"), problem);
+}
+
+function describeOriginProblem(name, value) {
   const original = value ?? "";
   const raw = original.trim();
   if (!raw) return `${name} is not set`;
@@ -237,6 +254,17 @@ export function originProblem(name, value) {
   const isIpv6Literal = url.hostname.includes(":");
   if (!url.hostname || (!isIpv6Literal && !url.hostname.includes("."))) {
     return `${name} has no public hostname: ${JSON.stringify(redactCredentials(raw))}`;
+  }
+  // ...but only PUBLIC_APP_URL may actually be one. PUBLIC_API_URL becomes a
+  // `connect-src` host-source, and CSP's host-source grammar has no form for
+  // an IPv6 literal -- no brackets, no colons in the host part -- so the
+  // browser discards that source and `connect-src` falls back to `'self'`
+  // alone. Every cross-origin API call is then blocked while both this guard
+  // and the post-build check pass, because the check looks for the same
+  // literal text in the directive and finds it. PUBLIC_APP_URL is only a link
+  // target and never reaches a policy, so it stays exempt.
+  if (isIpv6Literal && name === "PUBLIC_API_URL") {
+    return `${name} cannot be an IPv6 literal: CSP host-source syntax has no form for one, so connect-src would silently drop it and keep only 'self', blocking every API call`;
   }
   // `new URL` is far more permissive than DNS: it happily parses
   // `https://*.lumecon.ai` (a wildcard copied out of an allowlist) and
@@ -278,7 +306,7 @@ export function originProblem(name, value) {
   // here quotes what it got, and doing that with a password would copy it into
   // the CI log this guard's failure is read from.
   if (url.username !== "" || url.password !== "") {
-    return `${name} must not embed credentials (found userinfo before ${url.host}); browsers refuse to fetch such a URL, and the value is inlined into the published bundle`;
+    return `${name} must not embed credentials; browsers refuse to fetch such a URL, and the value is inlined into the published bundle`;
   }
   // The raw delimiters, not just their parsed contents. `https://api.lumecon.ai?`
   // has an empty `search` and an empty `hash`, so a component check alone
@@ -345,7 +373,9 @@ export function isNonPublicHost(hostname) {
 
   // Reserved and special-use names (RFC 6761, RFC 8375). `.local` is mDNS;
   // `foo.localhost` is still loopback however many labels precede it.
-  if (/(^|\.)(localhost|local|internal|intranet|home\.arpa|test|invalid|example)$/.test(host)) {
+  // `alt` is RFC 9476: reserved for non-DNS naming systems, so it never
+  // resolves for an ordinary visitor however well-formed it looks.
+  if (/(^|\.)(localhost|local|internal|intranet|home\.arpa|test|invalid|example|alt)$/.test(host)) {
     return true;
   }
 

@@ -212,11 +212,30 @@ test("the committed _headers names the production API origin", () => {
   );
 });
 
-test("a public IPv6 literal is allowed, despite containing no dot", () => {
+test("a public IPv6 literal is allowed where a policy never sees it", () => {
   // The dot rule is there to catch single-label names like https://intranet.
   // An IPv6 literal is not a name and has no dots, so it must be exempt or
-  // the guard rejects a legitimate origin.
-  assert.equal(originProblem("PUBLIC_API_URL", "https://[2606:4700::1111]"), null);
+  // the guard rejects a legitimate origin. Still true -- but only for
+  // PUBLIC_APP_URL, which is a link target.
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://[2606:4700::1111]"), null);
+
+  // PUBLIC_API_URL is different, and this assertion is the reverse of what it
+  // was: that value becomes a `connect-src` host-source, and CSP's grammar
+  // has no form for an IPv6 literal -- no brackets, no colons in the host
+  // part. The browser discards the source and keeps only `'self'`, so every
+  // cross-origin call is blocked while this guard and the post-build check
+  // both pass, the latter because it finds the same literal text in the
+  // directive it just wrote.
+  assert.match(
+    originProblem("PUBLIC_API_URL", "https://[2606:4700::1111]") ?? "",
+    /IPv6 literal/,
+  );
+  // A non-public v6 address is still reported as non-public, not as this --
+  // the more specific diagnosis comes first.
+  assert.match(
+    originProblem("PUBLIC_API_URL", "https://[fe80::1]") ?? "",
+    /non-public address/,
+  );
 });
 
 test("the whole of fe80::/10 is link-local, not just the fe80 prefix", () => {
@@ -923,23 +942,95 @@ test("ORCHID address space is not public", () => {
   }
 });
 
-test("no diagnostic prints one of these variables unredacted", () => {
-  // The generator leak was the seventh credential finding on this PR and the
-  // first outside check-public-origins.mjs -- six rounds went into one
-  // function while a sibling file printed the same variable raw. So this
-  // asserts the property across both files rather than on the line reported.
-  for (const file of ["scripts/check-public-origins.mjs", "scripts/sync-headers-csp.mjs"]) {
-    const source = readFileSync(file, "utf8");
-    const prints = source
-      .split("\n")
-      .filter((line) => /console\.(log|error|warn)/.test(line) || /^\s*`.*\$\{/.test(line))
-      .filter((line) => /\$\{(origin|apiOrigin|appOrigin|shown|value|v)\b/.test(line));
-    for (const line of prints) {
-      assert.match(
-        line,
-        /redactCredentials|shown/,
-        `${file} interpolates an origin without redacting it: ${line.trim()}`,
+test("no message from originProblem can contain the credential", () => {
+  // Replaces a source grep. That version listed the variable names it
+  // expected to see interpolated -- `origin`, `apiOrigin`, `appOrigin` -- and
+  // so was blind to `${url.host}`, which is exactly what leaked next: the
+  // eighth credential finding on this file, in a message whose own comment
+  // claimed it "deliberately does not include the value".
+  //
+  // A property expressed over source text can be defeated by a naming choice.
+  // This one is expressed over behaviour: plant the secret in every position
+  // a URL has, walk every refusal branch, and assert no returned message
+  // contains it.
+  const SECRET = "hunter2";
+  const VALUES = [
+    `https://user:${SECRET}@api.lumecon.ai`,                 // credentials
+    `https://user:${SECRET}@${SECRET}.lumecon.ai`,           // repeated in the host
+    `https://${SECRET}:pw@${SECRET}.lumecon.ai`,             // username in the host
+    `https://user:${SECRET}@${SECRET}.localhost`,            // non-public host
+    `https://user:${SECRET}@${SECRET}.alt`,                  // reserved namespace
+    `https://user:${SECRET}@*.${SECRET}.ai`,                 // unresolvable label
+    `https://user:${SECRET}@${SECRET}`,                      // single label
+    `https://user:${SECRET}@api.lumecon.ai:22`,              // blocked port
+    `http://user:${SECRET}@api.lumecon.ai`,                  // wrong scheme
+    `https://user:${SECRET}@api.lumecon.ai/${SECRET}`,       // path
+    `https://user:${SECRET}@api.lumecon.ai?t=${SECRET}`,     // query
+    `https://user:${SECRET}@api.lumecon.ai#${SECRET}`,       // fragment
+    `https://user:${SECRET}@api.lumecon.ai/`,                // trailing slash
+    ` https://user:${SECRET}@api.lumecon.ai`,                // leading whitespace
+    `https://user:${SECRET}@api.lumecon.ai\\`,               // trailing backslash
+    `https:\\\\user:${SECRET}@api.lumecon.ai`,               // backslash separator
+    ` https:\n//user:${SECRET}@api.lumecon.ai`,              // ignored whitespace
+    `https://user:${SECRET}@[2606:4700::1111]`,              // IPv6 literal
+    `https://user:${SECRET}@[not-an-ipv6]`,                  // unparseable
+    `user:${SECRET}@api.lumecon.ai`,                         // no scheme of its own
+    `ftp://user:${SECRET}@api.lumecon.ai`,                   // wrong scheme entirely
+  ];
+
+  let refusals = 0;
+  for (const value of VALUES) {
+    for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
+      const problem = originProblem(name, value);
+      if (problem === null) continue;
+      refusals += 1;
+      assert.ok(
+        !problem.includes(SECRET),
+        `${name} leaked from ${JSON.stringify(value)}: ${problem}`,
       );
+      // And once decoded, repeatedly -- a single decode passes the
+      // double-encoded case for the wrong reason.
+      let decoded = problem;
+      for (let i = 0; i < 5; i += 1) {
+        try {
+          decoded = decodeURIComponent(decoded);
+        } catch {
+          break;
+        }
+      }
+      assert.ok(!decoded.includes(SECRET), `${name} leaked once decoded: ${problem}`);
     }
+  }
+  // A silent zero would make every assertion above vacuous.
+  assert.ok(refusals > 30, `only ${refusals} refusals were exercised`);
+
+  // The boundary, pinned deliberately. A value with no colon cannot carry
+  // userinfo in any URL sense, so there is no credential to hide and the
+  // diagnostic echoes it whole -- which is what makes these messages useful.
+  // An unparseable value that *does* carry userinfo is still redacted, by the
+  // scan rather than by the parser. My first version of this sweep listed a
+  // prose fixture containing the word "hunter2" and read the echo as a leak;
+  // the difference is worth a test rather than a memory.
+  assert.equal(
+    originProblem("PUBLIC_API_URL", "not a url at all"),
+    'PUBLIC_API_URL is not a URL: "not a url at all"',
+  );
+  assert.match(
+    originProblem("PUBLIC_API_URL", `https://user:${SECRET}@[not-an-ipv6]`) ?? "",
+    /<redacted>@/,
+  );
+});
+
+test("the reserved .alt namespace is not public", () => {
+  // RFC 9476 reserves it for non-DNS naming, so it never resolves for an
+  // ordinary visitor however well-formed the name looks.
+  for (const host of ["api.alt", "a.b.alt", "alt"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+  }
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.alt") ?? "", /non-public/);
+  // Anchored on a label boundary, so an ordinary name ending in those three
+  // letters is untouched.
+  for (const host of ["salt.lumecon.ai", "api.altitude.com", "basalt.io"]) {
+    assert.equal(isNonPublicHost(host), false, host);
   }
 });
