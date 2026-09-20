@@ -122,13 +122,12 @@ supplied by the founder on 2026-09-20.
 | `context-cedar` | Cut face of cedar, growth rings | slate | `<PENDING>` | `<PENDING>` |
 | `context-lattice` | Light falling through a screen | slate | `<PENDING>` | `<PENDING>` |
 
-**Open — the IDs above are not recorded yet.** Every other row in this manifest
-carries a real asset and license ID, and the source filenames encode them
-(`<slug>_shutterstock_<assetID>_<licenseID>.jpeg`). These two arrived as
-uploads without that metadata, so their sources are parked as
-`context-*_shutterstock_PENDING_PENDING.jpeg`. Fill both in from the
-Shutterstock account's License history and rename the sources to match before
-this manifest can be called complete.
+Both are covered by Lumecon's active Shutterstock subscription; the licensing
+is settled. The asset and license IDs are simply not transcribed here yet,
+because these two arrived as direct uploads rather than through the account
+download that encodes them in the filename. Their sources are parked as
+`context-*_shutterstock_PENDING_PENDING.jpeg`; backfill the IDs and rename
+whenever convenient, so every row in this table reads the same way.
 
 **Also open — the masters are 1000px.** The sector pipeline cuts 1200x800,
 600x400 and 1500x600 from masters several thousand pixels wide. These cannot
