@@ -455,12 +455,62 @@ test("the remaining reserved IPv6 prefixes are refused, to the bit", () => {
   assert.match(originProblem("PUBLIC_API_URL", "https://[3fff:0800::1]") ?? "", /non-public/);
   assert.match(originProblem("PUBLIC_API_URL", "https://[100::1]") ?? "", /non-public/);
 
-  // The boundaries matter: these sit just outside each prefix and are
-  // ordinary space. Matching 3fff::/16 or 100::/16 would swallow them.
+  // The boundaries matter: these sit just outside 3fff::/20, inside global
+  // unicast, and are ordinary space. Matching 3fff::/16 would swallow them.
   assert.equal(isNonPublicHost("[3fff:1000::1]"), false);
   assert.equal(isNonPublicHost("[3ffe::1]"), false);
-  assert.equal(isNonPublicHost("[101::1]"), false);
-  assert.equal(isNonPublicHost("[100::1:0:0:0:1]"), false);
+
+  // 100::/64's neighbours are a different case, and two assertions here used
+  // to claim they were public. They are not: `101::1` and `100::1:0:0:0:1`
+  // sit outside 2000::/3 entirely, which is unallocated space, so the scope
+  // rule refuses them regardless of any prefix. The old expectation encoded
+  // the belief this round removed -- that only a listed prefix is non-public.
+  assert.equal(isNonPublicHost("[101::1]"), true);
+  assert.equal(isNonPublicHost("[100::1:0:0:0:1]"), true);
+});
+
+test("only global unicast is treated as public IPv6 space", () => {
+  // Every earlier IPv6 fix enumerated another non-public prefix, which means
+  // anything nobody listed read as public -- `4000::1`, `8000::1` and
+  // `c000::1` all did. IANA has allocated exactly one block for global
+  // unicast, 2000::/3; every other top-level block is reserved.
+  for (const host of [
+    "[1000::1]", "[1fff:ffff::1]",              // below 2000::/3
+    "[4000::1]", "[6000::1]", "[8000::1]",      // the large reserved blocks
+    "[c000::1]", "[e000::1]", "[f000::1]",
+  ]) {
+    assert.equal(isNonPublicHost(host), true, host);
+    assert.match(originProblem("PUBLIC_APP_URL", `https://${host}`) ?? "", /non-public/, host);
+  }
+
+  // The allocated block itself, at both edges, stays usable.
+  for (const host of ["[2000::1]", "[2606:4700::1111]", "[2a00:1450::1]", "[3fff:ffff::1]"]) {
+    assert.equal(isNonPublicHost(host), false, host);
+  }
+
+  // And the carve-outs *inside* 2000::/3 are the ones the scope rule cannot
+  // reach, so they are still doing work.
+  for (const host of ["[2001:db8::1]", "[2001:2::1]", "[2001:10::1]", "[2001:20::1]", "[3fff::1]"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+  }
+
+  // An IPv4-mapped address sits at ::/96, outside 2000::/3, and must still be
+  // judged as the IPv4 address it carries rather than swept up by scope.
+  assert.equal(isNonPublicHost("[::ffff:1.1.1.1]"), false);
+  assert.equal(isNonPublicHost("[::ffff:127.0.0.1]"), true);
+});
+
+test("the reserved .onion namespace is not public", () => {
+  // RFC 7686: resolved through Tor, not public DNS.
+  for (const host of ["api.onion", "abc.onion", "onion"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+  }
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.onion") ?? "", /non-public/);
+  // Label-anchored, so an ordinary name merely containing those letters is
+  // untouched.
+  for (const host of ["onion.lumecon.ai", "myonion.io", "onions.example.com"]) {
+    assert.equal(isNonPublicHost(host), false, host);
+  }
 });
 
 test("an empty query or fragment marker is refused", () => {

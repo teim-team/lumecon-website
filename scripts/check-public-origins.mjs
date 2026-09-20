@@ -373,9 +373,10 @@ export function isNonPublicHost(hostname) {
 
   // Reserved and special-use names (RFC 6761, RFC 8375). `.local` is mDNS;
   // `foo.localhost` is still loopback however many labels precede it.
-  // `alt` is RFC 9476: reserved for non-DNS naming systems, so it never
-  // resolves for an ordinary visitor however well-formed it looks.
-  if (/(^|\.)(localhost|local|internal|intranet|home\.arpa|test|invalid|example|alt)$/.test(host)) {
+  // `alt` is RFC 9476 and `onion` is RFC 7686: both reserved for naming
+  // systems that are not public DNS, so neither resolves for an ordinary
+  // visitor however well-formed it looks.
+  if (/(^|\.)(localhost|local|internal|intranet|home\.arpa|test|invalid|example|alt|onion)$/.test(host)) {
     return true;
   }
 
@@ -475,7 +476,9 @@ function isNonPublicIpv6(hostname) {
 
   // IPv4-mapped (::ffff:a.b.c.d) and the deprecated IPv4-compatible form
   // both carry a v4 address that has to be judged on its own terms --
-  // ::ffff:7f00:1 is 127.0.0.1 wearing a hat.
+  // ::ffff:7f00:1 is 127.0.0.1 wearing a hat. Checked before the scope rule
+  // below, since these sit at ::/96 and would otherwise all be refused,
+  // including the ones wrapping a perfectly public address.
   const zeroPrefix = groups.slice(0, 5).every((g) => g === 0);
   if (zeroPrefix && (groups[5] === 0xffff || groups[5] === 0)) {
     const a = groups[6] >> 8, b = groups[6] & 0xff;
@@ -483,6 +486,23 @@ function isNonPublicIpv6(hostname) {
     if (groups[6] === 0 && groups[7] === 0) return true;
     return isNonPublicIpv4(`${a}.${b}.${c}.${d}`);
   }
+
+  // Everything above enumerates what is *not* public, which means anything
+  // nobody has thought to list reads as public -- and `4000::1`, `8000::1`
+  // and `c000::1` all did. IANA has allocated exactly one block for global
+  // unicast, 2000::/3 (RFC 4291 §2.4, IANA IPv6 Address Space registry);
+  // every other top-level block is reserved. So the default is inverted:
+  // outside 2000::/3 an address is not globally routable, full stop, and a
+  // future reservation needs no change here.
+  //
+  // The listed prefixes stay. Those inside 2000::/3 -- 2001:db8::/32,
+  // 2001:2::/48, the two ORCHID /28s and 3fff::/20 -- are the only ones this
+  // rule cannot reach, so they remain load-bearing; the ones outside it
+  // (fe80::/10, fc00::/7, fec0::/10, ff00::/8, 100::/64, ::1) are now
+  // redundant, and are kept because they name the RFC that makes each one
+  // unreachable, which a range check alone does not.
+  if (groups[0] < 0x2000 || groups[0] > 0x3fff) return true;
+
   return false;
 }
 
