@@ -23,7 +23,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 745 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/` | 746 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/why-lumecon` | 1187 | Why Lumecon \| Lumecon | 239 |
 | `/pricing` | 1302 | Pricing \| Lumecon | 155 |
 | `/cedar` | 471 | Cedar, the AI economic analyst \| Lumecon | 151 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15211** | | |
+| **Total** | **15212** | | |
 
 ## Crawler metadata audit
 
@@ -70,7 +70,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 745
+- **Visible words:** 746
 
 ### Architecture (heading outline)
 
@@ -83,7 +83,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
     - **H3** One connected economic view
     - **H3** Designed for recurring work
     - **H3** Review inputs before they run
-    - **H3** Made for the way you work
+    - **H3** One workflow across every kind of organization
   - **H2** Review the evidence behind every result.
     - **H3** Trace a reported result to its components
     - **H3** Compare analyses over time
@@ -226,7 +226,7 @@ Cedar organizes documents, proposes mappings and flags unresolved questions befo
 ORGANIZATIONAL CONTEXT
 
 
-**H3: Made for the way you work**
+**H3: One workflow across every kind of organization**
 
 Use one reviewable workflow across governments, universities, nonprofits, businesses, Tribal Nations and client work.
 
