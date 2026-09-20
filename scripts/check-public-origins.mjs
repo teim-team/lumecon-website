@@ -47,15 +47,34 @@ const BLOCKED_PORTS = new Set([
  * file prints is visible in the log to everyone who can read the run.
  */
 export function redactCredentials(value) {
-  // Greedy up to the FINAL `@` of the authority, not the first. A password
-  // may contain a literal `@` -- WHATWG splits userinfo at the last one --
-  // and a non-greedy match left everything after the first delimiter in the
-  // log. `[^/]*` cannot cross a path separator, so an `@` in a path is not
-  // touched.
-  return String(value).replace(
-    /(\/\/)[^/]*@/g,
-    (_match, slashes) => `${slashes}<redacted>@`,
-  );
+  // Located structurally rather than matched by pattern. Three rounds of
+  // review went to regexes that each handled the spelling of credential I
+  // happened to have in mind -- first `@`, then last `@`, then `//` but not
+  // `\\`, which WHATWG also accepts as an authority separator for a special
+  // scheme. The authority has a definition; using it is what stops the next
+  // spelling from being a fourth finding.
+  //
+  // scheme ":" then any run of "/" or "\\"; the authority ends at the first
+  // "/", "\\", "?" or "#"; userinfo is everything up to its LAST "@".
+  const raw = String(value);
+  const schemeEnd = raw.indexOf(":");
+  if (schemeEnd === -1) return raw;
+
+  let start = schemeEnd + 1;
+  while (start < raw.length && (raw[start] === "/" || raw[start] === "\\")) start += 1;
+
+  let end = raw.length;
+  for (let i = start; i < raw.length; i += 1) {
+    if ("/\\?#".includes(raw[i])) {
+      end = i;
+      break;
+    }
+  }
+
+  const authority = raw.slice(start, end);
+  const lastAt = authority.lastIndexOf("@");
+  if (lastAt === -1) return raw;
+  return `${raw.slice(0, start)}<redacted>@${authority.slice(lastAt + 1)}${raw.slice(end)}`;
 }
 
 /** Why `value` is not usable as a production origin, or null when it is. */

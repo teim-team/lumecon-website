@@ -573,3 +573,50 @@ test("a trailing backslash is refused on the API base, like a slash", () => {
   // slash: its consumers strip it and it is not concatenated.
   assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai\\"), null);
 });
+
+test("a backslash authority separator is redacted too, and benign values survive", () => {
+  // Fourth round on one leak. Each previous fix matched the spelling of
+  // credential I had in mind -- first `@`, then last `@`, then `//` but not
+  // `\\`, which WHATWG accepts as an authority separator for a special
+  // scheme. So the guard is no longer a pattern: it locates the authority
+  // by its definition and redacts up to its last `@`.
+  assert.equal(
+    new URL("https:\\\\user:hunter2@app.lumecon.ai").password,
+    "hunter2",
+    "premise: a backslash separator parses as userinfo",
+  );
+  assert.equal(new URL("https:/\\user:hunter2@app.lumecon.ai").password, "hunter2");
+
+  for (const value of [
+    "https:\\\\user:hunter2@app.lumecon.ai",
+    "https:\\/user:hunter2@app.lumecon.ai",
+    "https:/\\user:hunter2@app.lumecon.ai/v1",
+    "https:\\\\user:hunter2@app.lumecon.ai?x=1",
+    "https:\\\\user:hunter2@app.lumecon.ai#f",
+    "https:\\\\a:b@c@app.lumecon.ai",
+    " https:\\\\user:hunter2@app.lumecon.ai",
+  ]) {
+    const redacted = redactCredentials(value);
+    assert.ok(!redacted.includes("hunter2"), `leaked: ${redacted}`);
+    assert.ok(!/@c@/.test(redacted), `leaked: ${redacted}`);
+    assert.match(redacted, /<redacted>@app\.lumecon\.ai/, value);
+    // Redaction is not truncation: whatever follows the authority is kept,
+    // because these messages are read to work out what was misconfigured.
+    for (const tail of ["/v1", "?x=1", "#f"]) {
+      if (value.endsWith(tail)) assert.ok(redacted.endsWith(tail), redacted);
+    }
+  }
+
+  // Structural parsing must not start rewriting values that carry no
+  // userinfo at all. The rewrite in this round was the risk: the previous
+  // one lost a case it had already handled.
+  for (const value of [
+    "https://api.lumecon.ai",
+    "https://api.lumecon.ai:8443/path?q=1",
+    "https://api.lumecon.ai/a@b",
+    "https://api.lumecon.ai#a@b",
+    "not a url at all",
+  ]) {
+    assert.equal(redactCredentials(value), value, `rewrote a benign value: ${value}`);
+  }
+});
