@@ -100,10 +100,18 @@ export function originProblem(name, value) {
   // //auth/login. Both PUBLIC_APP_URL consumers -- welcome.astro:19 and
   // login.astro:309 -- strip it before use, so refusing it there would block
   // a deploy that demonstrably works.
-  const normalized = name === "PUBLIC_APP_URL" ? raw.replace(/\/+$/, "") : raw;
-  if (normalized !== url.origin) {
-    const allowance = name === "PUBLIC_APP_URL" ? " (a trailing slash is fine)" : "";
-    return `${name} must be a bare origin (${url.origin})${allowance}, got ${JSON.stringify(raw)}`;
+  // Compared by component rather than against `url.origin` as a string.
+  // `origin` drops an explicit default port, so a string comparison rejected
+  // `https://api.lumecon.ai:443` -- a perfectly deployable value that creates
+  // no path, concatenates correctly, and matches a CSP source that omits the
+  // port, since 443 is the default for https.
+  if (url.pathname !== "/" || url.search !== "" || url.hash !== "") {
+    return `${name} must be a bare origin (${url.origin}), got ${JSON.stringify(raw)}`;
+  }
+  // The API base is the only one where a trailing slash is fatal, because it
+  // is concatenated raw; welcome.astro and login.astro both strip it.
+  if (name === "PUBLIC_API_URL" && /\/$/.test(raw)) {
+    return `${name} must not end in a slash (it is concatenated with the path), got ${JSON.stringify(raw)}`;
   }
   return null;
 }
@@ -113,7 +121,13 @@ export function invalidDnsLabel(hostname) {
   // One trailing dot is a root-anchored FQDN -- unusual in config, but it
   // resolves, so stripping it is right where refusing it would block a
   // working deploy.
-  const labels = hostname.replace(/\.$/, "").split(".");
+  const name = hostname.replace(/\.$/, "");
+  // A name is capped at 253 characters as well as 63 per label: four maximal
+  // labels are each individually legal and together unresolvable.
+  if (name.length > 253) {
+    return `hostname is ${name.length} characters, past DNS's 253 limit`;
+  }
+  const labels = name.split(".");
   for (const label of labels) {
     if (label === "") return `empty label in ${JSON.stringify(hostname)}`;
     if (label.includes("*")) return `wildcard in ${JSON.stringify(hostname)}`;
@@ -212,6 +226,15 @@ function isNonPublicIpv6(hostname) {
   // 2001:db8::/32, the IPv6 documentation range: the same trap as the IPv4
   // TEST-NET blocks, and just as likely to be copied out of an example.
   if (groups[0] === 0x2001 && groups[1] === 0x0db8) return true;
+  // 3fff::/20, the second documentation range (RFC 9637). Matched as the
+  // exact /20 rather than the whole 3fff::/16, so neighbouring space is not
+  // rejected along with it.
+  if (groups[0] === 0x3fff && (groups[1] & 0xf000) === 0) return true;
+  // 100::/64, the discard-only prefix (RFC 6666): traffic to it is dropped
+  // by design, which is the most thorough way to be unreachable.
+  if (groups[0] === 0x0100 && groups[1] === 0 && groups[2] === 0 && groups[3] === 0) {
+    return true;
+  }
 
   // IPv4-mapped (::ffff:a.b.c.d) and the deprecated IPv4-compatible form
   // both carry a v4 address that has to be judged on its own terms --

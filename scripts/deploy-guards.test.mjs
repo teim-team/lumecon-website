@@ -133,11 +133,10 @@ test("the API base must be a bare origin, because it is concatenated raw", () =>
   // src/lib/api.ts builds `${API_BASE}${path}`, so a trailing slash yields
   // https://api.lumecon.ai//auth/login. Comparing origins post-build cannot
   // see it: the origin of the bad value is correct.
-  for (const value of [
-    "https://api.lumecon.ai/",
-    "https://api.lumecon.ai/v1",
-    "https://api.lumecon.ai?x=1",
-  ]) {
+  // A trailing slash now reports the specific problem rather than the general
+  // rule -- same refusal, a message that names what is wrong.
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/") ?? "", /must not end in a slash/);
+  for (const value of ["https://api.lumecon.ai/v1", "https://api.lumecon.ai?x=1"]) {
     assert.match(originProblem("PUBLIC_API_URL", value) ?? "", /must be a bare origin/);
   }
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
@@ -160,7 +159,7 @@ test("the app URL must also be a bare origin, but tolerates a trailing slash", (
   // a good deploy. PUBLIC_API_URL is concatenated raw, so there it is fatal.
   assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai/"), null);
   assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai"), null);
-  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/") ?? "", /bare origin/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/") ?? "", /must not end in a slash/);
 });
 
 test("a _headers file with no CSP line fails instead of passing silently", () => {
@@ -391,4 +390,53 @@ test("ports the browser refuses to fetch from are rejected", () => {
   }
   // A non-standard but perfectly fetchable port stays allowed.
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:8443"), null);
+});
+
+// ---------------------------------------------------------------------------
+// Sixth review round. The first is an over-rejection I had explicitly
+// examined and called correct -- worth its own test for that reason.
+// ---------------------------------------------------------------------------
+
+test("an explicit default port is allowed, on both variables", () => {
+  // `url.origin` drops :443, so comparing raw against it rejected a value
+  // that deploys fine: no path, concatenates correctly, and matches a CSP
+  // source written without the port, 443 being the https default. I reasoned
+  // about this case last round and called the rejection correct. It wasn't.
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:443"), null);
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai:443"), null);
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:8443"), null);
+});
+
+test("the bare-origin rule still refuses what it was written for", () => {
+  // Restated in components rather than by string comparison, so this pins
+  // that nothing was loosened along with the port fix.
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/") ?? "", /slash/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/v1") ?? "", /bare origin/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai?x=1") ?? "", /bare origin/);
+  assert.match(originProblem("PUBLIC_APP_URL", "https://lumecon.ai/app") ?? "", /bare origin/);
+  // ...and the app variable still tolerates the slash its consumers strip.
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai/"), null);
+});
+
+test("a hostname over DNS's 253-character limit is refused", () => {
+  // Four labels, each individually legal at 63 characters or fewer, together
+  // unresolvable. Per-label validation alone cannot see it.
+  const tooLong = `${"a".repeat(63)}.${"b".repeat(63)}.${"c".repeat(63)}.${"d".repeat(59)}.com`;
+  assert.equal(tooLong.length, 255);
+  assert.match(invalidDnsLabel(tooLong) ?? "", /253/);
+  assert.equal(invalidDnsLabel(`${"a".repeat(63)}.${"b".repeat(63)}.example.com`), null);
+});
+
+test("the remaining reserved IPv6 prefixes are refused, to the bit", () => {
+  // 3fff::/20 (RFC 9637 documentation) and 100::/64 (RFC 6666 discard).
+  assert.match(originProblem("PUBLIC_API_URL", "https://[3fff::1]") ?? "", /non-public/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://[3fff:0800::1]") ?? "", /non-public/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://[100::1]") ?? "", /non-public/);
+
+  // The boundaries matter: these sit just outside each prefix and are
+  // ordinary space. Matching 3fff::/16 or 100::/16 would swallow them.
+  assert.equal(isNonPublicHost("[3fff:1000::1]"), false);
+  assert.equal(isNonPublicHost("[3ffe::1]"), false);
+  assert.equal(isNonPublicHost("[101::1]"), false);
+  assert.equal(isNonPublicHost("[100::1:0:0:0:1]"), false);
 });
