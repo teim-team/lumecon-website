@@ -50,7 +50,20 @@ export function withConnectSrc(policy, apiOrigin) {
 
 // HTTP header names are case-insensitive, so `content-security-policy:` is a
 // valid spelling of the line we have to rewrite.
-const CSP_LINE = /content-security-policy:/i;
+//
+// Anchored to an actual `_headers` field: leading whitespace, then the name,
+// then the colon. Unanchored, the regex counted a *comment* -- and this file
+// opens with a long one that mentions the directive by name. With the real
+// header removed and the comment left behind, the count came to exactly one,
+// the comment got rewritten, and the run exited 0: a header-capable deploy
+// with no HTTP CSP at all, and no `frame-ancestors`, which a meta policy
+// cannot enforce. The later verification never catches it because it inspects
+// the HTML meta tag instead.
+//
+// The indentation requirement also excludes a prefixed name such as
+// `X-Content-Security-Policy:`, since the field name must begin immediately
+// after the indent.
+const CSP_LINE = /^[ \t]+content-security-policy[ \t]*:/i;
 
 export function syncHeaders(contents, apiOrigin) {
   const lines = contents.split("\n");

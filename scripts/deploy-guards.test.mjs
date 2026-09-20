@@ -1326,8 +1326,11 @@ test("an encoded copy of the credential in the host cannot survive either", () =
     }
     assert.ok(!redacted.includes("hunter2"), `leaked literally: ${redacted}`);
     assert.ok(!decoded.includes("hunter2"), `leaked once decoded: ${redacted}`);
-    // Uniform now: scheme, marker, ellipsis. Nothing of the authority.
-    assert.match(redacted, /^\s*https:[/\\]*<redacted>@…$/, redacted);
+    // Marker and ellipsis, with the scheme kept only when the value parses.
+    // A double-encoded host does not parse -- `%25` decodes to a literal `%`
+    // in the hostname -- and nothing of an unreadable value is printed,
+    // because nothing knows what its secret is.
+    assert.match(redacted, /^(\s*https:[/\\]*)?<redacted>@…$/, redacted);
 
     for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
       const problem = originProblem(name, value);
@@ -1337,4 +1340,74 @@ test("an encoded copy of the credential in the host cannot survive either", () =
       assert.ok(problem.includes(name), problem);
     }
   }
+});
+
+test("an unreadable value keeps nothing, not even its scheme", () => {
+  // Eleventh credential finding. Dropping the authority and the tail still
+  // left the *prefix*, and the prefix was only ever scrubbed against what the
+  // parser found -- which is nothing when the parser rejects the value. A
+  // password repeated in a malformed scheme printed intact.
+  assert.throws(() => new URL("hunter2://user:hunter2@bad host"),
+    "premise: the space makes it unparseable");
+
+  for (const value of [
+    "hunter2://user:hunter2@bad host",
+    "hunter2://user:hunter2@app.lumecon.ai:hunter2",
+    " hunter2://user:hunter2@bad host",
+  ]) {
+    const redacted = redactCredentials(value);
+    assert.ok(!redacted.includes("hunter2"), `leaked: ${redacted}`);
+    assert.equal(redacted, "<redacted>@…");
+  }
+
+  // A value that *does* parse keeps its scheme, and the scheme is scrubbed
+  // when the secret is repeated there. Safe because a scheme token is
+  // letters, digits and `+-.` only, so it can carry the secret solely as a
+  // literal -- an encoded spelling is not a valid scheme and takes the branch
+  // above. Verified, not assumed:
+  assert.equal(new URL("hunter2://user:hunter2@app.lumecon.ai").password, "hunter2");
+  assert.throws(() => new URL("%68%75%6e%74%65%72%32://user:hunter2@app.lumecon.ai"));
+  assert.equal(
+    redactCredentials("hunter2://user:hunter2@app.lumecon.ai"),
+    "<redacted>://<redacted>@…",
+  );
+  assert.equal(
+    redactCredentials("https://user:hunter2@app.lumecon.ai"),
+    "https://<redacted>@…",
+  );
+});
+
+test("only a real header field counts as the CSP line", () => {
+  // The regex was unanchored, and this file opens with a long comment that
+  // names the directive. With the real header removed and the comment left
+  // behind, the count came to exactly one, the comment was rewritten, and the
+  // run exited 0 -- a header-capable deploy with no HTTP CSP at all, and no
+  // `frame-ancestors`, which a meta policy cannot enforce. Nothing downstream
+  // catches it: the later verification inspects the HTML meta tag.
+  const commentOnly = "# Content-Security-Policy: connect-src 'self'\n/*\n  X-Frame-Options: DENY\n";
+  assert.throws(() => syncHeaders(commentOnly, "https://api.lumecon.ai"), /exactly one/);
+
+  // A prefixed name is not the field either: the name must begin immediately
+  // after the indent.
+  const prefixed = "/*\n  X-Content-Security-Policy: connect-src 'self'\n";
+  assert.throws(() => syncHeaders(prefixed, "https://api.lumecon.ai"), /exactly one/);
+
+  // The real field is still matched, at either spelling of the name.
+  for (const body of [
+    "/*\n  Content-Security-Policy: connect-src 'self'\n",
+    "/*\n  content-security-policy: connect-src 'self'\n",
+  ]) {
+    assert.match(syncHeaders(body, "https://api.lumecon.ai"), /connect-src 'self' https:\/\/api\.lumecon\.ai/);
+  }
+
+  // A comment mentioning the directive alongside the real field is no longer
+  // a second match -- that pair is exactly what the committed file looks like.
+  const both = "# Content-Security-Policy: see below\n/*\n  Content-Security-Policy: connect-src 'self'\n";
+  const synced = syncHeaders(both, "https://api.lumecon.ai");
+  assert.match(synced, /^# Content-Security-Policy: see below$/m, "the comment was rewritten");
+  assert.match(synced, /^ {2}Content-Security-Policy: connect-src 'self' https:\/\/api\.lumecon\.ai$/m);
+
+  // And the committed file itself still syncs, which is the case that ships.
+  const committed = readFileSync(PUBLIC_HEADERS_PATH, "utf8");
+  assert.match(syncHeaders(committed, PRODUCTION_API_ORIGIN), /connect-src 'self' https:\/\/api\.lumecon\.ai/);
 });

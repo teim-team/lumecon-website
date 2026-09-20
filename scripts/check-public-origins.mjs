@@ -206,7 +206,20 @@ export function redactCredentials(value) {
   // So the rule is now uniform and total: a credential-bearing value prints
   // its scheme, the marker, and an ellipsis. The host is what is lost, and
   // the message still names the variable, which is the actionable half.
-  if (bounds.lastAt !== null) return `${head}<redacted>@\u2026`;
+  if (bounds.lastAt !== null) {
+    // The parser could not read the value, so `secrets` is empty and `head`
+    // was never actually scrubbed -- `hunter2://user:hunter2@bad host`
+    // printed its scheme intact. The prefix goes too: nothing of an
+    // unreadable value is printed except the marker.
+    if (!found) return `<redacted>@\u2026`;
+    // When the value *does* parse, the scheme is safe to keep. A scheme token
+    // is letters, digits and `+-.` only, so it can carry the secret solely as
+    // a literal, which the scrub above catches -- an encoded spelling like
+    // `%68%75...://` is not a valid scheme and lands in the branch above.
+    // Verified rather than assumed: `new URL` accepts `hunter2://...` and
+    // rejects `%68%75%6e%74%65%72%32://...`.
+    return `${head}<redacted>@\u2026`;
+  }
 
   const host = scrub(raw.slice(bounds.start, bounds.end));
   // The tail is dropped, not scrubbed. See the note above for why.
