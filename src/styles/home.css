@@ -930,8 +930,7 @@
   right: 1.25rem;
   bottom: 1.15rem;
   margin: 0;
-  padding: 0.46rem 0.62rem 0.46rem 0.82rem;
-  border-left: 2px solid rgba(95, 217, 204, 0.9);
+  padding: 0.46rem 0.7rem;
   background: rgba(6, 18, 40, 0.84);
   box-shadow: 0 8px 18px -14px rgba(3, 10, 25, 0.92);
   color: rgba(255, 255, 255, 0.94);
