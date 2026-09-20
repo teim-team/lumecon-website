@@ -134,21 +134,28 @@ if (process.argv[1] && process.argv[1].endsWith("sync-headers-csp.mjs")) {
   // while the button itself still reads /login -- the exact fallback this is
   // here to catch. Compare the href to the configured URL, normalized the way
   // welcome.astro normalizes it.
+  // Absent is a failure, not a skip. /welcome is the post-purchase
+  // destination; a build that stopped emitting it has lost the page this
+  // whole handoff exists to reach, and the deploy job uploads straight from
+  // here without waiting on the smoke job that walks the page inventory.
+  // Skipping also made the success line below claim a handoff it never saw.
   const welcome = join(dist, "welcome", "index.html");
-  if (existsSync(welcome)) {
-    const expected = process.env.PUBLIC_APP_URL.replace(/\/+$/, "");
-    const href = welcomeButtonHref(readFileSync(welcome, "utf8"));
-    if (href === null) {
-      console.error("dist/welcome/index.html has no .welc-btn link to verify.");
-      process.exit(1);
-    }
-    if (href !== expected) {
-      console.error(
-        `dist/welcome/index.html's Open Lumecon points at ${JSON.stringify(href)}, ` +
-          `not ${JSON.stringify(expected)}; PUBLIC_APP_URL did not reach the build.`,
-      );
-      process.exit(1);
-    }
+  if (!existsSync(welcome)) {
+    console.error(`No ${welcome}; the build emitted no /welcome page to hand off to.`);
+    process.exit(1);
+  }
+  const expected = process.env.PUBLIC_APP_URL.replace(/\/+$/, "");
+  const href = welcomeButtonHref(readFileSync(welcome, "utf8"));
+  if (href === null) {
+    console.error("dist/welcome/index.html has no .welc-btn link to verify.");
+    process.exit(1);
+  }
+  if (href !== expected) {
+    console.error(
+      `dist/welcome/index.html's Open Lumecon points at ${JSON.stringify(href)}, ` +
+        `not ${JSON.stringify(expected)}; PUBLIC_APP_URL did not reach the build.`,
+    );
+    process.exit(1);
   }
   console.log(`CSP synced: connect-src 'self' ${apiOrigin}; app handoff ${appOrigin} present.`);
 }

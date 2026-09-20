@@ -55,8 +55,20 @@ export function originProblem(name, value) {
   // the bad value is still correct. PUBLIC_APP_URL is exempt: it is a link
   // target, legitimately a path (`https://lumecon.ai/app`), and welcome.astro
   // normalizes it.
-  if (name === "PUBLIC_API_URL" && raw !== url.origin) {
-    return `${name} must be a bare origin (${url.origin}), got ${JSON.stringify(raw)}`;
+  // Both values name an origin (AGENTS.md: "product origin" / "product API
+  // base"), so a path, query or fragment on either is a misconfiguration --
+  // PUBLIC_APP_URL with a path silently lands every logged-in visitor on the
+  // wrong page, which no later check can see.
+  //
+  // They differ only on a trailing slash. PUBLIC_API_URL is concatenated raw
+  // (`${API_BASE}${path}`), so a slash there really does produce
+  // //auth/login. Both PUBLIC_APP_URL consumers -- welcome.astro:19 and
+  // login.astro:309 -- strip it before use, so refusing it there would block
+  // a deploy that demonstrably works.
+  const normalized = name === "PUBLIC_APP_URL" ? raw.replace(/\/+$/, "") : raw;
+  if (normalized !== url.origin) {
+    const allowance = name === "PUBLIC_APP_URL" ? " (a trailing slash is fine)" : "";
+    return `${name} must be a bare origin (${url.origin})${allowance}, got ${JSON.stringify(raw)}`;
   }
   return null;
 }
@@ -71,21 +83,77 @@ export function isNonPublicHost(hostname) {
     return true;
   }
 
-  // IPv6 loopback, link-local (fe80::/10) and unique-local (fc00::/7).
-  if (host === "::1" || /^fe80:/.test(host) || /^f[cd][0-9a-f]{2}:/.test(host)) {
-    return true;
+  if (host.includes(":")) return isNonPublicIpv6(host);
+  return isNonPublicIpv4(host);
+}
+
+function isNonPublicIpv4(hostname) {
+  const v4 = hostname.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (!v4) return false;
+  const [a, b] = v4.slice(1).map(Number);
+  if (a === 0 || a === 127) return true;                 // this-host, loopback
+  if (a === 10) return true;                             // RFC 1918
+  if (a === 172 && b >= 16 && b <= 31) return true;      // RFC 1918
+  if (a === 192 && b === 168) return true;               // RFC 1918
+  if (a === 169 && b === 254) return true;               // link-local
+  if (a === 100 && b >= 64 && b <= 127) return true;     // CGNAT, RFC 6598
+  return false;
+}
+
+/** The eight 16-bit groups of an IPv6 address, or null if it is not one. */
+export function expandIpv6(hostname) {
+  let text = hostname;
+
+  // A dotted-quad tail (::ffff:127.0.0.1) is the same address as ::ffff:7f00:1.
+  // Rewriting it to hex means one code path decides, rather than two.
+  const tail = text.match(/^(.*:)(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (tail) {
+    const [a, b, c, d] = tail.slice(2).map(Number);
+    if ([a, b, c, d].some((n) => n > 255)) return null;
+    text = `${tail[1]}${((a << 8) | b).toString(16)}:${((c << 8) | d).toString(16)}`;
   }
 
-  const v4 = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (v4) {
-    const [a, b] = v4.slice(1).map(Number);
-    if (a === 0 || a === 127) return true;                 // this-host, loopback
-    if (a === 10) return true;                             // RFC 1918
-    if (a === 172 && b >= 16 && b <= 31) return true;      // RFC 1918
-    if (a === 192 && b === 168) return true;               // RFC 1918
-    if (a === 169 && b === 254) return true;               // link-local
-    if (a === 100 && b >= 64 && b <= 127) return true;     // CGNAT, RFC 6598
-    return false;
+  const halves = text.split("::");
+  if (halves.length > 2) return null;
+  const parse = (part) =>
+    part === "" ? [] : part.split(":").map((g) => (/^[0-9a-f]{1,4}$/.test(g) ? parseInt(g, 16) : NaN));
+
+  const head = parse(halves[0]);
+  const tailGroups = halves.length === 2 ? parse(halves[1]) : [];
+  if ([...head, ...tailGroups].some(Number.isNaN)) return null;
+
+  if (halves.length === 1) return head.length === 8 ? head : null;
+  const gap = 8 - head.length - tailGroups.length;
+  if (gap < 1) return null;
+  return [...head, ...Array(gap).fill(0), ...tailGroups];
+}
+
+function isNonPublicIpv6(hostname) {
+  const groups = expandIpv6(hostname);
+  if (!groups) return false;
+
+  // ::1 loopback and :: unspecified.
+  if (groups.slice(0, 7).every((g) => g === 0) && (groups[7] === 1 || groups[7] === 0)) {
+    return true;
+  }
+  // fe80::/10 is fe80 through febf -- a `^fe80:` prefix test misses fe90::1
+  // and febf::1, which are every bit as link-local.
+  if (groups[0] >= 0xfe80 && groups[0] <= 0xfebf) return true;
+  // fc00::/7 unique-local.
+  if (groups[0] >= 0xfc00 && groups[0] <= 0xfdff) return true;
+  // fec0::/10 site-local: deprecated by RFC 3879 and never reallocated, so
+  // nothing legitimate uses it and it routes nowhere.
+  if (groups[0] >= 0xfec0 && groups[0] <= 0xfeff) return true;
+
+  // IPv4-mapped (::ffff:a.b.c.d) and the deprecated IPv4-compatible form
+  // both carry a v4 address that has to be judged on its own terms --
+  // ::ffff:7f00:1 is 127.0.0.1 wearing a hat.
+  const zeroPrefix = groups.slice(0, 5).every((g) => g === 0);
+  if (zeroPrefix && (groups[5] === 0xffff || groups[5] === 0)) {
+    const a = groups[6] >> 8, b = groups[6] & 0xff;
+    const c = groups[7] >> 8, d = groups[7] & 0xff;
+    if (groups[6] === 0 && groups[7] === 0) return true;
+    return isNonPublicIpv4(`${a}.${b}.${c}.${d}`);
   }
   return false;
 }

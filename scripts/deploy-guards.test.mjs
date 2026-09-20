@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { originProblem, collectOriginProblems } from "./check-public-origins.mjs";
+import {
+  originProblem,
+  collectOriginProblems,
+  isNonPublicHost,
+  expandIpv6,
+} from "./check-public-origins.mjs";
 import {
   withConnectSrc,
   syncHeaders,
@@ -136,8 +141,24 @@ test("the API base must be a bare origin, because it is concatenated raw", () =>
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
 });
 
-test("the app URL may carry a path, since it is a link target rather than a base", () => {
-  assert.equal(originProblem("PUBLIC_APP_URL", "https://lumecon.ai/app"), null);
+test("the app URL must also be a bare origin, but tolerates a trailing slash", () => {
+  // Corrected after the second review round. The first cut allowed a path
+  // here on the reasoning that PUBLIC_APP_URL is a link target rather than a
+  // concatenation base. True, but beside the point: AGENTS.md:458 defines it
+  // as the product origin, and both consumers -- welcome.astro:19 and
+  // login.astro:309 -- assign it straight to an href / location.href, so a
+  // path lands every logged-in visitor on the wrong page with nothing
+  // downstream able to notice.
+  assert.match(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai/login") ?? "", /bare origin/);
+  assert.match(originProblem("PUBLIC_APP_URL", "https://lumecon.ai/app") ?? "", /bare origin/);
+  assert.match(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai?x=1") ?? "", /bare origin/);
+
+  // A trailing slash is the one difference from PUBLIC_API_URL: both
+  // consumers strip it, so it demonstrably works and refusing it would block
+  // a good deploy. PUBLIC_API_URL is concatenated raw, so there it is fatal.
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai/"), null);
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai"), null);
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/") ?? "", /bare origin/);
 });
 
 test("a _headers file with no CSP line fails instead of passing silently", () => {
@@ -192,4 +213,45 @@ test("a public IPv6 literal is allowed, despite containing no dot", () => {
   // An IPv6 literal is not a name and has no dots, so it must be exempt or
   // the guard rejects a legitimate origin.
   assert.equal(originProblem("PUBLIC_API_URL", "https://[2606:4700::1111]"), null);
+});
+
+test("the whole of fe80::/10 is link-local, not just the fe80 prefix", () => {
+  // The first cut tested `^fe80:` textually, so fe90::1 and febf::1 -- the
+  // rest of the same /10 -- passed as public.
+  for (const host of ["https://[fe80::1]", "https://[fe90::1]", "https://[febf::1]"]) {
+    assert.match(originProblem("PUBLIC_API_URL", host) ?? "", /non-public address/, host);
+  }
+});
+
+test("an IPv4 address wearing an IPv6 hat is judged as the IPv4 address", () => {
+  // ::ffff:7f00:1 and ::ffff:127.0.0.1 are both 127.0.0.1. A textual prefix
+  // test sees neither.
+  for (const host of [
+    "https://[::ffff:7f00:1]",
+    "https://[::ffff:127.0.0.1]",
+    "https://[::ffff:10.0.0.1]",
+    "https://[::ffff:192.168.1.5]",
+    "https://[::1]",
+    "https://[::]",
+    "https://[fc00::1]",
+    "https://[fd00::1]",
+    "https://[fec0::1]",
+  ]) {
+    assert.match(originProblem("PUBLIC_API_URL", host) ?? "", /non-public address/, host);
+  }
+});
+
+test("a public IPv6 address, mapped or native, is still allowed", () => {
+  assert.equal(isNonPublicHost("[2606:4700::1111]"), false);
+  assert.equal(isNonPublicHost("[::ffff:8.8.8.8]"), false);
+  assert.equal(isNonPublicHost("[2001:4860:4860::8888]"), false);
+});
+
+test("expandIpv6 returns null for things that are not addresses", () => {
+  // The range checks must not fire on a parse failure, or a hostname that
+  // merely contains a colon would be judged as an address.
+  for (const bad of ["not:an:address:at:all:x:y:z", "1::2::3", "12345::1", ""]) {
+    assert.equal(expandIpv6(bad), null, bad);
+  }
+  assert.deepEqual(expandIpv6("::1"), [0, 0, 0, 0, 0, 0, 0, 1]);
 });
