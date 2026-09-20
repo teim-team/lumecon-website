@@ -11,3 +11,7 @@ playwright-report/
 .env
 .env.local
 .env.*.local
+
+# Raw Cedar Commons captures. `npm run shots:commons` writes the PNGs here
+# and commits only the optimized webp files under public/app/.
+.shots-commons/

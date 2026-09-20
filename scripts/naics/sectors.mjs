@@ -31,6 +31,12 @@ export const WASHES = {
   bronze: ramp2([49, 32, 34], [170, 151, 142]), // #312022 -> #AA978E
   gold: ramp2([117, 87, 34], [241, 210, 147]), // #755722 -> #F1D293
   green: ramp2([31, 60, 54], [133, 160, 146]), // #1F3C36 -> #85A092
+  // Deliberately NOT a sector wash. The four above are sector identity: bronze
+  // means Wholesale or Real Estate, gold means Professional Services. A cover
+  // for a record with no resolvable sector must not borrow one of them, or the
+  // colour asserts an industry the data does not contain. Slate is drawn from
+  // the brand navy instead, so "no sector known" reads as its own state.
+  slate: ramp2([23, 38, 48], [150, 163, 170]), // #172630 -> #96A3AA
 };
 
 // Descriptions are the hover text on /naics: plain language about what an
@@ -202,3 +208,38 @@ export const TRIBAL_GOVERNMENT = {
     'A Lumecon category for tribal nations as operating governments: administration, public services, housing programs, health, education and cultural programs. Tribal enterprises are classified in their own industry sectors; this category covers the government itself.',
   wash: 'teal',
 };
+
+// Contextual fallbacks: covers for a record that has no defensible primary
+// sector. They are NOT sectors and are exported separately so nothing that
+// resolves a NAICS code can ever reach them.
+//
+// Both are textures rather than scenes, and that is the whole selection rule.
+// A photograph of a warehouse, a trading floor or a desk names an industry to
+// anyone looking at it, so on a card whose sector is unknown it states
+// something the data does not say — the failure the sector system exists to
+// avoid. A cut of cedar or light through a screen carries no such claim.
+//
+// `cedar` leads because the product family is named for it. Note it is a
+// licensed photograph of a cut face, not drawn ring linework: AGENTS.md
+// removed decorative contour rings from the site in 2026-08, and this must not
+// be read as reintroducing them.
+export const CONTEXT_FALLBACKS = [
+  {
+    code: 'FB',
+    slug: 'context-cedar',
+    title: 'Cedar',
+    description:
+      'A cut face of cedar. Used when an analysis has no resolvable primary sector; it is illustrative and carries no analytic meaning.',
+    wash: 'slate',
+    illustrative: true,
+  },
+  {
+    code: 'FB',
+    slug: 'context-lattice',
+    title: 'Light through a screen',
+    description:
+      'Light falling through a screen. Used when an analysis has no resolvable primary sector; it is illustrative and carries no analytic meaning.',
+    wash: 'slate',
+    illustrative: true,
+  },
+];

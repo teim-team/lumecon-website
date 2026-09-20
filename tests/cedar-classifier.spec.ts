@@ -70,6 +70,65 @@ test('cedar routes representative questions to the right intent', async ({ page 
   }
 });
 
+test('a page Cedar names in an answer is a link, not inert text', async ({ page }) => {
+  const panel = await openCedar(page);
+  /* Seven answers point somewhere as `lumecon.ai/<path>`, and every one of
+     them rendered as plain text: renderRich's URL rule needs a scheme and
+     its internal-path rule needs whitespace before the slash, which
+     "lumecon.ai/" does not have. A destination a visitor cannot click is a
+     destination the answer did not give them. */
+  const bubble = await ask(panel, 'what is cedar commons');
+  await expect(bubble).toContainText('shared project workspace');
+  const link = bubble.locator('a[href="/cedar-commons"]');
+  await expect(link, 'the named page is clickable').toHaveCount(1);
+  await expect(link).toHaveText(/lumecon\.ai\/cedar-commons/);
+
+  // And the same treatment reaches the answers that were already written
+  // this way before the fix.
+  const grove = await ask(panel, 'what is cedar grove');
+  await expect(grove.locator('a[href="/cedar-grove"]')).toHaveCount(1);
+});
+
+test('a link Cedar writes is one anchor, however the URL was written', async ({ page }) => {
+  const panel = await openCedar(page);
+  /* renderRich used to linkify in four sequential passes, each re-scanning
+     what the last had written. A fully-qualified same-site URL —
+     "https://lumecon.ai/cedar", which is how the API writes them — came
+     out as an anchor nested inside its own href attribute. One pass now,
+     so nothing it emits is looked at again. */
+  const shapes: Array<{ q: string; href: string }> = [
+    { q: 'what is cedar commons', href: '/cedar-commons' },
+    { q: 'what is cedar grove', href: '/cedar-grove' },
+  ];
+  for (const { q, href } of shapes) {
+    const bubble = await ask(panel, q);
+    await expect(bubble.locator(`a[href="${href}"]`)).toHaveCount(1);
+    const html = await bubble.innerHTML();
+    expect(html, `${q}: no anchor inside an href`).not.toMatch(/href="[^"]*<a /);
+    expect(html, `${q}: no anchor inside an anchor`).not.toMatch(/<a [^>]*>(?:(?!<\/a>)[\s\S])*<a /);
+  }
+});
+
+test('cedar answers about the team size and about joining are not the same answer', async ({
+  page,
+}) => {
+  const panel = await openCedar(page);
+  // "I want to work at Lumecon" is an application; "how many employees" is
+  // a question about size. One trigger used to take both to the founder's
+  // biography.
+  const joining = await ask(panel, 'i want to work at lumecon');
+  await expect(joining).toContainText('interest is always welcome');
+  const size = await ask(panel, 'how many employees');
+  await expect(size).toContainText('does not publish a headcount');
+
+  /* And the two do not contradict each other. They did: one said nine and
+     the other said no headcount is published, from the same surface. */
+  const both = `${await joining.innerText()} ${await size.innerText()}`;
+  expect(both, 'no headcount is asserted in either answer').not.toMatch(
+    /team of (nine|eight|ten|\d+)/i,
+  );
+});
+
 test('cedar sends an off-topic question to the out-of-scope reply', async ({ page }) => {
   const panel = await openCedar(page);
   const bubble = await ask(panel, 'who is the president of mexico');

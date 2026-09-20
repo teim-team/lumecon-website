@@ -1,0 +1,237 @@
+/* ---------------------------------------------------------------
+   /contact
+
+   A short page, so it borrows the methodology hero and adds only the
+   form and the routes beside it. The form's fields carry borders
+   because a field is a control; nothing else here gains one.
+   --------------------------------------------------------------- */
+
+.contact-sec {
+  border-top: 1px solid var(--rule);
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 1fr);
+  gap: clamp(2.4rem, 5vw, 5rem);
+  align-items: start;
+}
+.contact-h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  letter-spacing: -0.015em;
+  color: var(--navy);
+}
+.contact-sub {
+  margin: 0.5rem 0 1.4rem;
+  font-size: var(--fs-sm-2);
+  color: var(--ink-3);
+}
+.contact-req {
+  color: var(--terra-dark);
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 34rem;
+}
+.contact-field {
+  display: grid;
+  gap: 0.35rem;
+}
+.contact-field > span {
+  font-size: var(--fs-sm-2);
+  font-weight: 600;
+  color: var(--navy);
+}
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  font: inherit;
+  font-size: var(--fs-base);
+  color: var(--ink);
+  transition:
+    border-color 0.16s var(--ease),
+    box-shadow 0.16s var(--ease);
+}
+.contact-field textarea {
+  resize: vertical;
+  min-height: 8rem;
+  line-height: 1.6;
+}
+.contact-field input:focus-visible,
+.contact-field textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent-chip);
+  box-shadow: 0 0 0 3px var(--accent-rgba-08);
+}
+
+/* Off-screen rather than display:none, so a bot filling every field
+   still trips it. Never announced, never focusable in sequence. */
+.contact-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-status {
+  margin: 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.contact-status--ok {
+  color: var(--cedar-text);
+}
+.contact-status--err {
+  color: var(--terra-dark);
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.4rem;
+  margin-top: 0.4rem;
+}
+.contact-note {
+  margin: 0;
+  font-size: var(--fs-3xs);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 24rem;
+}
+
+.contact-routes ul {
+  list-style: none;
+  margin: 1.4rem 0 0;
+  padding: 0;
+}
+.contact-routes li {
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--rule);
+}
+.contact-routes li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.contact-routes__k {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  font-weight: 600;
+  color: var(--navy);
+}
+.contact-routes__b {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+/* WCAG 2.5.8 target size: 24px minimum for a standalone target. Measured
+   at 375px this link was 21px tall, so the hit area is grown rather than
+   the type — the line looks the same and the target clears the floor. */
+.contact-routes__a {
+  min-height: 24px;
+  align-items: center;
+  display: inline-flex;
+  margin-top: 0.45rem;
+  font-size: var(--fs-sm-2);
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+.contact-routes__a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contact-routes__foot {
+  margin: 1.2rem 0 0;
+  font-size: var(--fs-3xs);
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+@media (max-width: 860px) {
+  .contact-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .contact-form {
+    max-width: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Who you are writing to
+
+   The house hero band is sized for a page that carries something
+   under its lede, and this one carried nothing: two lines of text
+   and roughly 200px of empty ground beneath a headline that
+   promises a person. These are /team's own portraits, from the same
+   record, staff only — an advisor does not read this inbox. No ring,
+   no overlap, no count: a row of the people, and the line that says
+   where to read about them.
+   --------------------------------------------------------------- */
+.contact-who {
+  margin-top: clamp(1.8rem, 3.5vw, 2.6rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1.4rem;
+}
+.contact-faces {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.55rem;
+}
+.contact-faces img {
+  display: block;
+  width: clamp(2.6rem, 4.4vw, 3.25rem);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+.contact-who__line {
+  margin: 0;
+  max-width: 26rem;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.contact-who__a {
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.contact-who__a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Name and Email share a row above 720px. Below it they stack, because
+   two 8rem fields side by side are worse than two full-width ones. */
+.contact-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+@media (max-width: 720px) {
+  .contact-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The sidebar is a shortcut, not the second half of a pair. At the same
+   size as "Send a message" the two headings read as equal choices and the
+   form stopped being the thing this page is for. */
+.contact-h2--aside {
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  color: var(--ink-2);
+}

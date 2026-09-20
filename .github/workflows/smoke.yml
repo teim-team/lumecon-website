@@ -21,6 +21,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # The deploy guards are plain functions, so they are checked here rather
+      # than only exercised in the deploy workflow, where a mistake would
+      # surface as a failed release.
+      - run: npm run test:scripts
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium webkit
       - run: npm run build

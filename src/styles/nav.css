@@ -200,8 +200,28 @@ html.navm-open {
 .navm-list a[aria-current='page'] {
   color: var(--accent-text);
 }
+/* The CTA is a button, not another line in the list. It is the same action
+   the header's filled button asks for, so it carries the same weight and the
+   same visual language: the approved two-stop gradient and `--action-ink`,
+   which is theme-aware. An earlier version filled it with `--navy` and
+   hardcoded white text; `--navy` flips to #f1f3fa in dark mode, so that was
+   near-white on near-white. */
 .navm-list__cta {
-  color: var(--accent-text) !important;
+  margin-top: 1.1rem;
+  padding: 0.95rem 1.25rem !important;
+  border-bottom: 0 !important;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--action-top) 0%, var(--action-bottom) 100%);
+  color: var(--action-ink) !important;
+  font-size: clamp(1.05rem, 3vw, 1.25rem) !important;
+  text-align: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    var(--shadow-control);
+}
+.navm-list__cta:hover {
+  background: linear-gradient(180deg, var(--action-hover-top) 0%, var(--action-hover-bottom) 100%);
+  color: var(--action-ink) !important;
 }
 .navm-contact {
   font-family: var(--font-mono);
@@ -222,12 +242,15 @@ html.navm-open {
    and Methodology from being two clicks behind a button. */
 /* The gaps are fluid, and every label is nowrap.
    --------------------------------------------------------------------
-   With six destinations the row no longer fits between 1000px — where
+   With six destinations the row no longer fit between 1000px — where
    it replaces the Menu button — and about 1200px. Fixed gaps meant it
    dealt with that by wrapping "Cedar Impact" and "Request access" onto
    two lines each, which is the worst of the options available: the bar
    grew taller and the labels stopped reading as single destinations.
-   Closing the gaps first, and never breaking a label, keeps one line. */
+   Closing the gaps first, and never breaking a label, keeps one line.
+   The destinations are now grouped into four items, which is what took
+   the pressure off the row for good; the fluid gaps stay because a group
+   label can still grow. */
 .nav-right {
   display: flex;
   align-items: center;
@@ -336,5 +359,232 @@ html.navm-open {
       var(--action-hover-top) 0%,
       var(--action-hover-bottom) 100%
     );
+  }
+}
+
+/* ---------------------------------------------------------------
+   Grouped destinations.
+
+   Four top-level items where there were six links, three of them
+   opening a short panel. The panel is a real assembled surface, so it
+   carries the panel radius and one neutral shadow; nothing else here
+   gains a border. A group holding the current page marks its button
+   the same way a current link marks itself, so the bar still says
+   where you are.
+   --------------------------------------------------------------- */
+
+.nav-item {
+  position: relative;
+}
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  border: 0;
+  background: none;
+  padding: 0.35rem 0 0.3rem;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--navy);
+  white-space: nowrap;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+.nav-toggle:hover,
+.nav-item.on .nav-toggle {
+  color: var(--accent-text);
+}
+.nav-toggle[data-current='true'] {
+  color: var(--accent-text);
+  border-bottom-color: var(--accent-text);
+}
+.nav-toggle__chev {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-0.12em) rotate(45deg);
+  transition: transform 0.18s var(--ease);
+}
+.nav-item.on .nav-toggle__chev {
+  transform: translateY(0.04em) rotate(-135deg);
+}
+
+.nav-panel {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: -1rem;
+  z-index: 10;
+  /* Wide enough that a product description sits on one line. At 16.5rem
+     every one of them wrapped to two or three, which made the panel read
+     as less considered than the rest of the site. */
+  min-width: 22rem;
+  padding: 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 24px 48px -30px rgba(10, 28, 52, 0.42);
+}
+/* The gap between the button and the panel would drop a hovering pointer
+   out of the group, so the group's own box is extended to cover it. */
+.nav-panel::before {
+  content: '';
+  position: absolute;
+  inset: -0.85rem 0 100% 0;
+}
+.nav-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-panel a {
+  display: block;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-control);
+  border-bottom: 0;
+  text-decoration: none;
+  transition: background 0.14s var(--ease);
+}
+.nav-panel a:hover {
+  background: var(--accent-rgba-08);
+  border-bottom: 0;
+}
+.nav-panel__text {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--navy);
+}
+.nav-panel a:hover .nav-panel__text,
+.nav-panel a[aria-current='page'] .nav-panel__text {
+  color: var(--accent-text);
+}
+.nav-panel__desc {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+  white-space: normal;
+  max-width: 24rem;
+}
+/* A group with no descriptions needs no width beyond its labels. */
+.nav-panel--plain {
+  min-width: 12rem;
+}
+/* One quiet way into the starting guide from the product group, where
+   somebody deciding what Lumecon is would look for it. */
+.nav-panel__foot {
+  margin: 0.35rem 0 0;
+  padding: 0.55rem 0.65rem 0.15rem;
+  border-top: 1px solid var(--rule);
+}
+.nav-panel__foot a {
+  font-size: 0.82rem;
+  color: var(--accent-text);
+  text-decoration: none;
+  border-bottom: 0;
+}
+.nav-panel__foot a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  border-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-toggle,
+  .nav-toggle__chev,
+  .nav-panel a {
+    transition: none;
+  }
+}
+
+/* A group is its toggle plus its panel; the panel below carries the list. */
+.navm-group {
+  display: block;
+}
+
+/* ---------------- overlay accordion ----------------
+   Folded, each group is one full-size row, so the top level fits without
+   scrolling and the reader opens only the branch they want. */
+.navm-t {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: none;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  text-align: left;
+  cursor: pointer;
+}
+.navm-t:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+/* The group holding the current page is marked on the row that opens it,
+   the same way the desktop bar marks it on the parent. */
+.navm-t[aria-expanded='true'] {
+  color: var(--accent-text);
+}
+.navm-t__chev {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  transition: transform 0.18s var(--ease);
+}
+.navm-t__chev svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.navm-t[aria-expanded='true'] .navm-t__chev {
+  transform: rotate(180deg);
+}
+.navm-p > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem 0 0.75rem;
+  display: grid;
+}
+.navm-p a {
+  display: block;
+  padding: 0.55rem 0;
+  border-bottom: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3.2vw, 1.35rem);
+  letter-spacing: -0.01em;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.navm-p a[aria-current='page'] {
+  color: var(--accent-text);
+}
+.navm-p__foot {
+  font-size: 0.95rem !important;
+  color: var(--ink-3) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navm-t__chev {
+    transition: none;
   }
 }

@@ -1,0 +1,592 @@
+---
+/**
+ * /why-lumecon — the buyer's page.
+ *
+ * WHAT THIS PAGE IS FOR
+ * Four pages answer four different questions and this one had no home:
+ *
+ *   Why Lumecon   Why should our organization choose this?
+ *   Product       What can we do with it?
+ *   Methodology   How are the estimates built, and what are their limits?
+ *   /start        What does getting started involve?
+ *
+ * The argument is access to serious economic analysis. Price, preparation
+ * work, traceability and the team's experience are the evidence for it,
+ * not four separate arguments. "Cheaper" is not the story: the story is
+ * that an organization should be able to understand and explain its own
+ * economic contribution, including one that could not previously afford
+ * the software or coordinate a study.
+ *
+ * WHAT THIS PAGE MAY CLAIM
+ * Every number here is read from a source in the repo rather than typed:
+ * the price from src/data/pricing.ts, the people from src/data/team.ts,
+ * the lineage figures from the same sample analysis the screenshot in the
+ * hero shows. The security status is the one /security publishes, with
+ * its limits intact — no SOC 2 examination has been completed and no
+ * report exists.
+ *
+ * WHAT IT MAY NOT
+ * No time saved, no percentage faster, no accuracy claim against another
+ * platform. There is no measurement behind any of those. The speed
+ * section therefore names the work the product does and says plainly that
+ * approvals and coordination still take time, because that is what the
+ * customer conversation showed.
+ *
+ * SECTION -> VISUAL, decided before it was built
+ *   hero      trace.webp: a result and its lineage in one frame
+ *   price     typography, not cards: one numeral, three hairline lines
+ *   speed     two tour-rows, real captures of intake review and comparison
+ *   trace     NOT a screenshot — the decomposition rebuilt as readable
+ *             markup, because a 1920px capture at 358px is unreadable and
+ *             this is the one part a reader should be able to check
+ *   complex   tour-row, the whole-nation frame with its State/Homelands
+ *             control and its subset warning both visible
+ *   people    real portraits, one line of real experience each
+ *   check     three hairline rows
+ *   close     one band, two routes
+ *
+ * ON PAGE OWNERSHIP (AGENTS.md)
+ * That rule gives the homepage "why Lumecon matters". This page now owns
+ * the buyer-facing argument and the homepage keeps the shorter version
+ * above the product tour; the comparison against established platforms
+ * moves here from /methodology, which keeps the technical detail and a
+ * cross-link. AGENTS.md is updated in the same change.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config';
+import { PLANS, CLIENT_WORK } from '../data/pricing';
+import { TEAM_ROSTER } from '../data/team';
+import { RESULTS } from '../../scripts/screenshots/examples-data.mjs';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
+import '../styles/tour.css';
+import '../styles/why-page.css';
+
+const description =
+  'Why organizations choose Lumecon: published pricing from $1,000 a year, less preparation work before an analysis, every figure traceable to what produced it, and an economics team with direct experience of complex and tribal organizations.';
+
+/* The entry price is read, never typed. A number restated in prose is a
+   number that drifts from /pricing the first time one of them changes. */
+const ENTRY = PLANS[0];
+const SAPLING = PLANS.find((p) => p.clientWork) ?? PLANS[1];
+
+const INCLUDED = [
+  {
+    k: 'The same model on every paid plan',
+    b: 'The plans differ in how many people use them and what they share, never in the economics. Nobody buys a better multiplier.',
+  },
+  {
+    k: 'Unlimited analyses',
+    b: 'Analyses are not metered, so a second look at a scenario costs nothing and a yearly update is not a new purchase.',
+  },
+  {
+    k: 'Every supported U.S. geography',
+    b: 'Counties, states, the nation, reservations and trust lands. Geography is not sold as an add-on.',
+  },
+];
+
+/* The lineage written out below is READ from the same fixture the hero
+   screenshot is captured from — `r-nation-b`, state scope, in
+   scripts/screenshots/examples-data.mjs. Hard-coding it meant the prose
+   could silently come to describe a different run than the picture above
+   it the next time that fixture moved and the capture was retaken. This
+   import runs in the frontmatter, so it is build-time only; nothing from
+   the screenshot tooling reaches the browser. */
+/* The fixture is a plain .mjs with no types of its own, so the shape is
+   declared here, at the boundary, rather than asserted away. If the
+   fixture drops one of these fields the build fails rather than
+   rendering `undefined` into the page. */
+interface EffectRow {
+  scope: string;
+  effect_type: string;
+  output_impact: number;
+}
+interface EntityRow {
+  scope: string;
+  entity_name: string;
+  output_impact: number;
+}
+interface FixtureRun {
+  outputs: Record<string, { output: number }>;
+  tables: { by_effect: EffectRow[]; by_entity: EntityRow[] };
+}
+const TRACE_RUN = (RESULTS as unknown as Record<string, FixtureRun>)['r-nation-b'];
+const inState = <T extends { scope: string }>(rows: T[]): T[] =>
+  rows.filter((r) => r.scope === 'state');
+const TRACE_TOTAL: number = TRACE_RUN.outputs.state.output;
+const LAYER_NOTE: Record<string, string> = {
+  direct: 'The activity itself.',
+  indirect: 'The suppliers it buys from.',
+  induced: 'Household spending its wages support.',
+};
+const BY_LAYER = inState(TRACE_RUN.tables.by_effect).map((r) => ({
+  k: r.effect_type.charAt(0).toUpperCase() + r.effect_type.slice(1),
+  v: r.output_impact,
+  b: LAYER_NOTE[r.effect_type],
+}));
+const BY_OPERATION = inState(TRACE_RUN.tables.by_entity).map((r) => ({
+  k: r.entity_name,
+  v: r.output_impact,
+}));
+const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+const pct = (n: number) => `${Math.round((n / TRACE_TOTAL) * 100)}%`;
+
+/* What makes an organization hard to model, in the words of the thing
+   that makes it hard rather than in the words of a feature. */
+const COMPLEX = [
+  {
+    k: 'More than one entity',
+    b: 'A government, its enterprises and its programs are one economy and several sets of books. An analysis can hold them together and still report them apart.',
+  },
+  {
+    k: 'Government and enterprise activity together',
+    b: 'Tribal governments are their own category in the classification rather than one line inside Public Administration, because a nation running administration, housing, health and education is understated by that line.',
+  },
+  {
+    k: 'Reservation and trust-land geographies',
+    b: 'Homelands are modeled regions with their own characteristics, not a share of a county. Where an analysis covers a state and its homelands, both are reported with the subset relationship stated, so nothing is added twice.',
+  },
+];
+
+/* The line under each portrait is READ from the roster, not written here.
+   A second hand-written set of experience claims is a second thing to keep
+   true: the canonical record would move and this page would quietly keep
+   the old sentence, and a new person with a photograph would render
+   nothing at all. `experience[0]` is already the one-line form — it is
+   what /team shows first for each person. */
+const whyThem = (p: (typeof TEAM_ROSTER)[number]): string => p.experience?.[0] ?? p.title;
+
+const CHECKS = [
+  {
+    label: 'Method',
+    t: 'The economics, with the equations',
+    b: 'Regionalization, the effect layers, the public sources and their vintages, and a labeled section on what the model assumes and where it stops.',
+    href: '/methodology',
+    cta: 'Read the methodology',
+  },
+  {
+    label: 'Comparison',
+    t: 'How Lumecon differs from established platforms',
+    b: 'Input-output analysis is an openly published field, and established platforms and Lumecon draw on the same national statistical system. The differences are the data architecture, the regionalization, the per-figure lineage, reservation and trust-land modeling, the workflow and the price. Lumecon is not affiliated with or endorsed by IMPLAN, REMI or any other platform.',
+    href: '/methodology#m-core',
+    cta: 'See the model itself',
+  },
+  {
+    label: 'Security',
+    t: 'How organizational information is handled',
+    b: 'Lumecon is formalizing its security program against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. No SOC 2 examination has been completed and no report is available today. The page states which controls are in place, which are in progress and which are not.',
+    href: '/security',
+    cta: 'Read the current status',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Why Lumecon',
+    url: `${site.url}/why-lumecon`,
+    description,
+    isPartOf: { '@id': `${site.url}#website` },
+    publisher: { '@id': `${site.url}#org` },
+    inLanguage: 'en-US',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Why Lumecon', item: `${site.url}/why-lumecon` },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Why Lumecon | Lumecon"
+  description={description}
+  canonical="https://lumecon.ai/why-lumecon"
+  jsonLd={jsonLd}
+>
+  <Nav isHome={false} />
+  <main class="meth why" id="top" tabindex="-1">
+    {/* The dark cover hero, same family as Methodology, Cedar and Grove,
+        so this page reads as one of the arguments rather than a landing
+        page bolted on. The figure is the whole case in one frame: a
+        result, and underneath it the evidence for the result. */}
+    <header class="meth-hero meth-hero--cover section--dark">
+      <div class="meth-w">
+        <p class="h-kicker reveal-soft">Why Lumecon</p>
+        <h1 class="meth-hero__title reveal-soft" data-stagger="1">
+          Serious economic analysis should be within reach.
+        </h1>
+        <p class="meth-hero__lede reveal-soft" data-stagger="2">
+          <span class="brand-em">Every organization has an economic impact.</span> Far fewer can
+          describe it. The software has been expensive, the study has meant a consultant and a
+          calendar, and the result has often arrived as a number with nothing behind it. Lumecon
+          exists so that an organization can understand and explain its own economic contribution,
+          and keep the evidence for it.
+        </p>
+        <div class="why-hero__cta reveal-soft" data-stagger="3">
+          <a class="btn2 btn2--primary" href="/signup?tier=free">
+            Request free access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn2 btn2--card" href="/start">Plan your first analysis</a>
+        </div>
+        <figure class="meth-hero__screen reveal-soft" data-stagger="3" data-zoom>
+          <img
+            src="/app/trace.webp"
+            alt="A completed Lumecon analysis reporting jobs, GDP contribution, labor income and economic output, with the lineage panel open beneath it breaking economic output into direct, indirect and induced layers and into the operations and industries that produce them. Shown with illustrative sample data."
+            width="1920"
+            height="1004"
+            decoding="async"
+          />
+          <figcaption>
+            A result, and the evidence for it, in the same view. Illustrative sample data.
+          </figcaption>
+        </figure>
+      </div>
+    </header>
+
+    {/* 01 · Price. Typography rather than a card grid: the number is the
+        argument, and three cards would make the number one of four
+        equal things. */}
+    <section class="meth-sec why-plane" aria-labelledby="w-price">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="w-price">A price you can plan around.</h2>
+          <p class="meth-sec__lede">
+            The prices are published on the site, not quoted per organization, so a budget can be
+            written before a conversation happens.
+          </p>
+        </div>
+        <div class="why-price">
+          <p class="why-price__fig reveal-soft">
+            <span class="why-price__amt">{ENTRY.price}</span>
+            <span class="why-price__per">a year</span>
+          </p>
+          <p class="why-price__sub reveal-soft">
+            {ENTRY.name}, for one analyst. Paid plans start here.
+          </p>
+          <ul class="why-price__list" role="list">
+            {
+              INCLUDED.map((i) => (
+                <li class="reveal-soft">
+                  <p class="why-price__k">{i.k}</p>
+                  <p class="why-price__b">{i.b}</p>
+                </li>
+              ))
+            }
+          </ul>
+          {/* The client-work rule is read from the same source /pricing
+              shows it from; only the price is added, because the note
+              names the plan but not what it costs. */}
+          <p class="why-price__foot reveal-soft">
+            {CLIENT_WORK.note.replace(/\.$/, '')}, at {SAPLING.price} a year.{' '}
+            <a class="inline-link" href="/pricing">See every plan and what it includes</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* 02 · The work before the analysis. Two real captures; no figure
+        for time saved, because none has been measured. */}
+    <section class="meth-sec why-plane why-acts" aria-labelledby="w-work">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="w-work">Spend more time on the economic questions.</h2>
+          <p class="meth-sec__lede">
+            Most of the effort in an impact study is not the economics. It is finding the records,
+            deciding what each figure means, and rebuilding an analysis that already existed once.
+            That is the part Lumecon takes on.
+          </p>
+        </div>
+
+        <article class="tour-row" aria-labelledby="w-work-intake">
+          <div class="tour-row__text reveal-left">
+            <h3 class="tour-row__title" id="w-work-intake">
+              Bring the records you already have.
+            </h3>
+            {/* One pointer, no second explanation of Cedar: /cedar owns
+                that argument (AGENTS.md, page ownership). What belongs
+                here is the preparation work this page is about. */}
+            <p class="tour-row__body">
+              Budgets, audited statements, payroll summaries and program reports go in as they are,
+              rather than being retyped into a template first. Nothing is calculated until a person
+              has reviewed the inputs and the assumptions.{' '}
+              <a class="inline-link" href="/cedar">How Cedar works</a>.
+            </p>
+          </div>
+          <figure class="tour-row__shot reveal-right" data-zoom>
+            <img
+              src="/app/cedar-wind-entities.webp"
+              alt="The intake step of a Lumecon analysis with three operations set up from uploaded documents, and Cedar reporting that two are ready while one is missing a sales figure, asking the person to confirm before anything runs. Shown with illustrative sample data."
+              width="1920"
+              height="1200"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption class="why-cap">
+              Cedar checks the operations against the documents and waits. Illustrative sample data.
+            </figcaption>
+          </figure>
+        </article>
+
+        <article class="tour-row tour-row--flip" aria-labelledby="w-work-again">
+          <div class="tour-row__text reveal-right">
+            <h3 class="tour-row__title" id="w-work-again">
+              The second analysis is not the first one again.
+            </h3>
+            <p class="tour-row__body">
+              A completed analysis stays with its inputs, assumptions and sources. Next budget
+              cycle you update what changed rather than reassembling the whole thing, and two years
+              or two scenarios can be put side by side in jobs, labor income, GDP contribution,
+              economic output and tax impacts.
+            </p>
+            <p class="tour-row__body why-note">
+              The product cannot make other people faster. Approvals, a council agenda and the
+              wait for a figure only one department holds still take the time they take. We have
+              not measured a time saving and do not claim one.
+            </p>
+          </div>
+          <figure class="tour-row__shot reveal-left" data-zoom>
+            <img
+              src="/app/compare.webp"
+              alt="Two fiscal years of a sample analysis side by side, showing the change in jobs, GDP contribution, labor income, economic output and tax impacts between them. Shown with illustrative sample data."
+              width="1920"
+              height="1200"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption class="why-cap">
+              Two years of the same footprint, compared. Illustrative sample data.
+            </figcaption>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    {/* 03 · Traceability, shown rather than asserted. Deliberately not a
+        screenshot: this is the one part of the page a reader should be
+        able to check, and a 1920px capture at phone width cannot be
+        read. The figures are the sample run in the hero. */}
+    <section class="meth-sec why-plane" aria-labelledby="w-trace">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="w-trace">See what supports the result.</h2>
+          <p class="meth-sec__lede">
+            Every headline figure carries a trace. Here is the one from the analysis at the top of
+            this page, written out: the same total, decomposed two ways, each of which adds up.
+          </p>
+        </div>
+
+        <div class="why-trace reveal-soft">
+          <p class="why-trace__head">
+            <span class="why-trace__label">Economic output</span>
+            <span class="why-trace__total">{usd(TRACE_TOTAL)}</span>
+          </p>
+
+          <div class="why-trace__cols">
+            <div class="why-trace__col">
+              <p class="why-trace__k">By effect layer</p>
+              <ul role="list">
+                {
+                  BY_LAYER.map((r) => (
+                    <li>
+                      <p class="why-trace__row">
+                        <span class="why-trace__n">{r.k}</span>
+                        <span class="why-trace__v">{usd(r.v)}</span>
+                      </p>
+                      <span
+                        class="why-trace__bar"
+                        style={`--share:${(r.v / TRACE_TOTAL) * 100}%`}
+                        aria-hidden="true"></span>
+                      <p class="why-trace__note">
+                        <span class="why-trace__pct">{pct(r.v)}</span> {r.b}
+                      </p>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+
+            <div class="why-trace__col">
+              <p class="why-trace__k">By operation</p>
+              <ul role="list">
+                {
+                  BY_OPERATION.map((r) => (
+                    <li>
+                      <p class="why-trace__row">
+                        <span class="why-trace__n">{r.k}</span>
+                        <span class="why-trace__v">{usd(r.v)}</span>
+                      </p>
+                      <span
+                        class="why-trace__bar"
+                        style={`--share:${(r.v / TRACE_TOTAL) * 100}%`}
+                        aria-hidden="true"></span>
+                      <p class="why-trace__note">
+                        <span class="why-trace__pct">{pct(r.v)}</span> of the total
+                      </p>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+
+          <p class="why-trace__foot">
+            The inputs carry the same treatment: each one is tagged as reported, apportioned or
+            estimated, so a reviewer can see which figures came from a document and which the model
+            supplied. Exports carry the sources, the assumptions and the full tables.{' '}
+            <a class="inline-link" href="/methodology#m-lineage">How lineage is constructed</a>.
+          </p>
+          <p class="why-trace__sample">Illustrative sample analysis, not a customer.</p>
+        </div>
+      </div>
+    </section>
+
+    {/* 04 · Complexity. One capture, because the frame happens to show
+        both the thing being described and the guardrail around it. */}
+    <section class="meth-sec why-acts" aria-labelledby="w-complex">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="w-complex">Built with complex organizations in mind.</h2>
+          <p class="meth-sec__lede">
+            The organizations that most need an economic account of themselves are often the ones a
+            standard model handles worst: several entities, a government that is also an employer,
+            and a geography that is not a county.
+          </p>
+        </div>
+
+        <article class="tour-row" aria-labelledby="w-complex-row">
+          <div class="tour-row__text reveal-left">
+            <h3 class="tour-row__title" id="w-complex-row">One economy, several sets of books.</h3>
+            <ul class="why-points" role="list">
+              {
+                COMPLEX.map((c) => (
+                  <li>
+                    <p class="why-points__k">{c.k}</p>
+                    <p class="why-points__b">{c.b}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <figure class="tour-row__shot reveal-right" data-zoom>
+            <img
+              src="/app/ex-nation-results.webp"
+              alt="A whole-nation economic footprint reporting jobs, GDP contribution, labor income and economic output, with a control switching between the state scope and the homelands scope and a notice that homelands results are a subset of the state results and must not be added to them. Shown with illustrative sample data."
+              width="1920"
+              height="1312"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption class="why-cap">
+              State and homelands, switchable, with the subset relationship stated on the page.
+              Illustrative sample data.
+            </figcaption>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    {/* 05 · The people. Real portraits and one line each of real
+        experience from the same record /team runs on. */}
+    <section class="meth-sec" aria-labelledby="w-people">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="w-people">Meet the people doing the work.</h2>
+          <p class="meth-sec__lede">
+            The model, the data and the software are built by people who did this work somewhere
+            else first, mostly inside the institutions that publish the data the model runs on.
+          </p>
+        </div>
+        <ul class="why-people" role="list">
+          {
+            TEAM_ROSTER.map((p) => (
+              <li class="reveal-soft">
+                {/* `/team` — there is no per-person route. `/team/<slug>`
+                    was a link to a page that does not exist: the build
+                    emits dist/team/index.html and the portraits, nothing
+                    else. The roster page shows every one of them. */}
+                <a class="why-person" href="/team">
+                  <img
+                    class="why-person__photo"
+                    src={p.photo}
+                    alt=""
+                    width="480"
+                    height="480"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <p class="why-person__n">{p.name}</p>
+                  <p class="why-person__t">{p.title}</p>
+                  <p class="why-person__b">{whyThem(p)}</p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="why-people__foot reveal-soft">
+          <a class="inline-link" href="/team">
+            Degrees, prior posts and published work for everyone here
+          </a>.
+        </p>
+      </div>
+    </section>
+
+    {/* 06 · Where to check us. Hairline rows, no cards: these are three
+        destinations, not three features. */}
+    <section class="meth-sec" aria-labelledby="w-check">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="w-check">Check any of this yourself.</h2>
+        </div>
+        <ul class="why-checks" role="list">
+          {
+            CHECKS.map((c) => (
+              <li class="reveal-soft">
+                <p class="why-checks__label">{c.label}</p>
+                <div>
+                  <p class="why-checks__t">{c.t}</p>
+                  <p class="why-checks__b">{c.b}</p>
+                  <a class="why-checks__a" href={c.href}>
+                    {c.cta} <span aria-hidden="true">&rarr;</span>
+                  </a>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    {/* 07 · Close. */}
+    <section class="meth-sec why-close section--dark" aria-labelledby="w-close">
+      <div class="meth-w">
+        <h2 id="w-close" class="why-close__t reveal-soft">
+          Start with a question worth answering.
+        </h2>
+        <p class="why-close__b reveal-soft" data-stagger="1">
+          What does this organization contribute to the economy around it, and what is the evidence?
+          Seed access is free during the private beta: bring your documents, build an analysis and
+          see the direct effects. If you are not sure what to ask for yet, the starting guide
+          proposes a scope you can actually run.
+        </p>
+        <div class="why-close__cta reveal-soft" data-stagger="2">
+          <a class="btn2 btn2--primary" href="/signup?tier=free">
+            Request free access <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn2 btn2--card" href="/start">Plan your first analysis</a>
+          <a class="why-close__link" href="/contact">Or talk to a person</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

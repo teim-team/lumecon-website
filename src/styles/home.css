@@ -1209,6 +1209,16 @@
   background: var(--surface-2);
   border-top: 0;
 }
+/* The watermark is a 608px ghost at 2.5-3.5% opacity, and it was being
+   drawn from a 616 KB PNG that every page in the site downloaded for the
+   purpose. Same artwork as WebP is 64 KB. The PNG stays in the repo
+   because the structured data points at it as the organization's logo,
+   where a crawler may fetch it once; no page pulls it on load any more.
+   Written as two declarations rather than one. A browser that does not
+   understand `image-set()` discards that line as invalid and keeps the
+   plain `url()` above it, which is the PNG; one that does understand it
+   takes the WebP. Either way exactly one file is fetched, and a browser
+   without WebP is not left with a rule it cannot parse. */
 .edge::before {
   content: '';
   position: absolute;
@@ -1218,6 +1228,10 @@
   width: 28rem;
   height: 28rem;
   background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
+  background-image: image-set(
+    url('/brand/lumecon-logo-mark-transparent.webp') type('image/webp'),
+    url('/brand/lumecon-logo-mark-transparent.png') type('image/png')
+  );
   filter: none;
   opacity: 0.025;
   pointer-events: none;

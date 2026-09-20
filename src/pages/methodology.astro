@@ -33,7 +33,11 @@ const FAQ = [
   },
   {
     q: 'Is Lumecon an alternative to IMPLAN or REMI?',
-    a: 'Organizations evaluate Lumecon as an alternative to IMPLAN, RIMS II and REMI. The input-output foundation is shared across the field; Lumecon differs in its fully public, citable data foundation, the per-figure lineage with source tags, reservation and trust-land modeling and flat subscription pricing. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
+    /* The comparison itself lives on /why-lumecon, which owns the buyer's
+       argument. What stays here is the part that is methodological — the
+       foundation is shared — and the disclaimer, which has to travel with
+       the names wherever they appear. */
+    a: 'Organizations evaluate Lumecon as an alternative to IMPLAN, RIMS II and REMI. The input-output foundation is shared across the field, so the differences are not in the economics: they are in the data architecture, the workflow and the price, and they are set out on the Why Lumecon page at lumecon.ai/why-lumecon. Lumecon is not affiliated with or endorsed by IMPLAN or REMI.',
   },
   {
     q: 'How does Lumecon handle suppressed government data?',
@@ -582,7 +586,7 @@ const jsonLd = [
           <h2 id="m-deeper">The commitments behind every analysis</h2>
         </div>
         <p class="meth-sec__lede">
-          These five commitments apply to every analysis; open each section for methodology detail.
+          These four commitments apply to every analysis; open each section for methodology detail.
         </p>
         <FoldAll selector=".mcards > .mcard" noun="commitments" />
         <div class="mcards">
@@ -703,28 +707,65 @@ const jsonLd = [
               </p>
             </div>
           </details>
+        </div>
+        <p class="meth-crosslink">
+          Wondering how this compares with IMPLAN, RIMS II or REMI, or what it costs?{' '}
+          <a class="inline-link" href="/why-lumecon">That is on Why Lumecon</a>.
+        </p>
+      </div>
+    </section>
 
-          <details class="mcard" id="m-compare">
-            <summary class="mcard__face">
-              <span class="mcard__kicker">Comparison</span>
-              <span class="mcard__title">How Lumecon differs from established platforms</span>
-              <span class="mcard__hook">
-                Established platforms and Lumecon draw on the same national statistical system; the
-                differences are architecture, workflow and price.
-              </span>
-              <span class="mcard__plus" aria-hidden="true"></span>
-            </summary>
-            <div class="mcard__body">
-              <p>
-                Input-output analysis is an established, openly published field. Established
-                platforms and Lumecon draw on the same national statistical system and decades of
-                economic research. Lumecon differentiates through its data architecture,
-                regionalization, traceability, reservation and trust-land modeling, modern workflow
-                and pricing. Lumecon is not affiliated with or endorsed by IMPLAN, REMI or any other
-                platform named here.
-              </p>
-            </div>
-          </details>
+    {/* 07b · Assumptions and limits, as its own labeled section rather
+        than a fold inside the commitments. A reviewer looking for what
+        the model cannot do should not have to open four disclosures to
+        find out, and the material is not a commitment: it is the shape
+        of the framework and the edge of what is reported today.
+
+        This replaced the old sixth commitment card, the comparison
+        against established platforms, which is a buyer's question and
+        now lives on /why-lumecon with a cross-link above. */}
+    <section class="meth-sec meth-limits" aria-labelledby="m-limits">
+      <div class="meth-w">
+        <div class="meth-sec__head reveal-soft">
+          <h2 id="m-limits">What this model assumes, and where it stops</h2>
+          <p class="meth-sec__lede">
+            Every model is a set of assumptions with a boundary around it. These are ours, stated
+            plainly rather than left to be inferred from the equations.
+          </p>
+        </div>
+        <div class="meth-limits__body">
+          <p>
+            <strong>The model's own assumptions.</strong> An input-output model assumes fixed
+            production relationships: an industry buys its inputs in the same proportions
+            whatever the scale of the change, and supply expands to meet demand without prices
+            moving. It has no capacity constraint and no counterfactual. That is why results
+            are stated as activity supported rather than jobs created, and why a very large
+            hypothetical shock is outside what the framework can answer.
+          </p>
+          <p>
+            <strong>Industry resolution.</strong> Classification is at the two-digit NAICS
+            level. Where an organization's activity is unusual within its sector, the sector
+            average is what the multipliers carry, and the analysis says so. See the industries
+            commitment above for why the model works at this level.
+          </p>
+          <p>
+            <strong>Suppressed and estimated values.</strong> Federal series withhold cells
+            that would identify an establishment, and in a small county that can be a whole
+            sector. Those values are estimated rather than read, every estimated input is
+            tagged as such, and a figure that rests on one is visible as an estimate in the
+            lineage rather than presented as reported.
+          </p>
+          <p>
+            <strong>Vintage.</strong> Results are in nominal dollars of the analysis year, and
+            the national and regional tables behind them carry their own release dates. Two
+            analyses from different years are not on a common real-dollar basis unless they are
+            put on one deliberately.
+          </p>
+          <p>
+            <strong>Active work.</strong> Tribal government modeling and the treatment of
+            homelands geographies are areas we are still developing, and this page grows as
+            that work does.
+          </p>
         </div>
       </div>
     </section>

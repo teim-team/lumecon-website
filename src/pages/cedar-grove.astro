@@ -31,11 +31,22 @@
  * here, written by scripts/build-grove-map-geometry.mjs in the app repository,
  * unreferenced by any page until the map earns a place again.
  *
- * NO SCRIPT ON THIS PAGE
- * It carried one picker helper wired twice, for the map's topic selector and
- * the collection registry's detail panel. The map moved and the registry
- * became a static atlas, so both went, and with them the last reason this page
- * shipped JavaScript. Three compositions are captures; the atlas is marks.
+ * THE SCRIPT ON THIS PAGE
+ * One picker, for the atlas. This page was script-free for a while: the
+ * helper was wired twice, for the map's topic selector and the collection
+ * registry's detail panel, and when the map moved and the registry flattened
+ * to marks both went. The registry is back by request, so the picker is too,
+ * and this note replaces the one that said otherwise.
+ *
+ * The flattening lost something real. Each collection carries what it
+ * contributes, what Lumecon resolved in it, its coverage floor, its sources
+ * and its terms, and the atlas showed a mark and six characters of name. The
+ * detail is the argument the page is making, so it is readable again.
+ *
+ * Progressive enhancement, the same shape as /start's capability panels:
+ * every panel ships open and the script collapses them into a picker. With no
+ * script the section is a long, complete, readable list rather than twelve
+ * unlabelled icons. Three compositions are captures; the atlas is marks.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -182,32 +193,21 @@ const jsonLd = [
         </div>
 
         {
-          /* Two captures of the same screen, one per theme.
-            The capture step shoots every surface twice because the product has
-            a dark theme and this page has dark sections; a 1920px sheet of
-            white product on a page that has gone dark is the one thing on it
-            that did not get the message. Lightbox resolves the enlarged file
-            through the matching <source>, so the zoom follows the theme too.
-            Left unwired, the dark halves ship in public/app and do nothing. */
+          /* Dark product captures belong on this persistent dark field. This
+            is deliberately independent of OS color preference: the page
+            material stays dark in both themes, and a bright app frame here
+            breaks the composition. */
         }
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
-          <picture>
-            <source
-              srcset={heroShot.imgDark}
-              media="(prefers-color-scheme: dark)"
-              width={FRAME.width}
-              height={FRAME.height}
-            />
-            <img
-              src={heroShot.img}
-              alt={heroShot.alt}
-              width={FRAME.width}
-              height={FRAME.height}
-              sizes="(max-width: 980px) 100vw, 58vw"
-              fetchpriority="high"
-              decoding="async"
-            />
-          </picture>
+          <img
+            src={heroShot.imgDark}
+            alt={heroShot.alt}
+            width={FRAME.width}
+            height={FRAME.height}
+            sizes="(max-width: 980px) 100vw, 58vw"
+            fetchpriority="high"
+            decoding="async"
+          />
         </figure>
       </div>
     </header>
@@ -227,23 +227,15 @@ const jsonLd = [
                   class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
                   data-zoom
                 >
-                  <picture>
-                    <source
-                      srcset={row.imgDark}
-                      media="(prefers-color-scheme: dark)"
-                      width={FRAME.width}
-                      height={FRAME.height}
-                    />
-                    <img
-                      src={row.img}
-                      alt={row.alt}
-                      width={FRAME.width}
-                      height={FRAME.height}
-                      sizes="(max-width: 900px) 100vw, 55vw"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </picture>
+                  <img
+                    src={row.imgDark}
+                    alt={row.alt}
+                    width={FRAME.width}
+                    height={FRAME.height}
+                    sizes="(max-width: 900px) 100vw, 55vw"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </figure>
               </article>
             ))
@@ -275,26 +267,80 @@ const jsonLd = [
             The collections behind the evidence.
           </h2>
         </div>
-        <ol class="grovepg-atlas__grid" data-reveal-group>
-          {
-            GROVE_COLLECTIONS.map((collection) => (
-              <li class="grovepg-atlas__cell">
-                <svg
-                  class="grovepg-atlas__mark"
-                  viewBox="0 0 28 28"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.9"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                  set:html={collection.mark}
-                />
-                <span class="grovepg-atlas__name">{collection.short}</span>
-              </li>
-            ))
-          }
-        </ol>
+        <p class="grovepg-atlas__lede">
+          Twelve collections. Open one to see what it contributes, what Lumecon resolved in it,
+          how far back it reaches and what its records permit.
+        </p>
+
+        <div class="grovepg-atlas__reg" data-atlas>
+          <ol class="grovepg-atlas__grid" data-reveal-group>
+            {
+              GROVE_COLLECTIONS.map((collection) => (
+                /* `aria-expanded="true"` on every control: with no script
+                   every panel is open, and saying otherwise tells a screen
+                   reader that visible content is collapsed. The script sets
+                   the real state as it enables them. */
+                <li class="grovepg-atlas__cell">
+                  <button
+                    type="button"
+                    class="grovepg-atlas__btn"
+                    disabled
+                    data-atlas-tab={collection.id}
+                    aria-expanded="true"
+                    aria-controls={`atlas-${collection.id}`}
+                  >
+                    <svg
+                      class="grovepg-atlas__mark"
+                      viewBox="0 0 28 28"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      set:html={collection.mark}
+                    />
+                    <span class="grovepg-atlas__name">{collection.short}</span>
+                  </button>
+                </li>
+              ))
+            }
+          </ol>
+
+          <div class="grovepg-atlas__panels">
+            {
+              GROVE_COLLECTIONS.map((collection) => (
+                <article
+                  class="grovepg-atlas__panel"
+                  id={`atlas-${collection.id}`}
+                  data-atlas-panel={collection.id}
+                  aria-live="polite"
+                >
+                  <h3 class="grovepg-atlas__pname">{collection.name}</h3>
+                  <p class="grovepg-atlas__contributes">{collection.contributes}</p>
+                  <dl class="grovepg-atlas__facts">
+                    <div>
+                      <dt>What Lumecon resolved</dt>
+                      <dd>{collection.resolved}</dd>
+                    </div>
+                    <div>
+                      <dt>Coverage</dt>
+                      <dd>{collection.coverage}</dd>
+                    </div>
+                    <div>
+                      <dt>Sources</dt>
+                      <dd>{collection.sources}</dd>
+                    </div>
+                    <div>
+                      <dt>Terms</dt>
+                      <dd>{collection.terms}</dd>
+                    </div>
+                  </dl>
+                </article>
+              ))
+            }
+          </div>
+        </div>
       </div>
     </section>
 
@@ -353,4 +399,70 @@ const jsonLd = [
     </section>
   </main>
   <Footer />
+
+  <script>
+    /* The atlas picker. Everything ships open, so with no script the section
+       reads as a complete list rather than twelve unlabelled icons; the class
+       added here is what collapses it into a picker. Same shape as /start's
+       capability panels: a disclosure set, one open at a time, with
+       `aria-expanded` maintained on the control. */
+    const atlas = document.querySelector<HTMLElement>('[data-atlas]');
+    if (atlas) {
+      atlas.classList.add('grovepg-atlas__reg--js');
+      const tabs = Array.from(atlas.querySelectorAll<HTMLButtonElement>('[data-atlas-tab]'));
+      /* The tiles ship disabled. Without this script every panel is open and
+         the tiles have nothing to do, so offering twelve focusable controls
+         that answer nothing would just be twelve dead tab stops. */
+      for (const tab of tabs) tab.removeAttribute('disabled');
+      const panels = Array.from(atlas.querySelectorAll<HTMLElement>('[data-atlas-panel]'));
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      const show = (id: string) => {
+        for (const tab of tabs) {
+          tab.setAttribute('aria-expanded', String(tab.dataset.atlasTab === id));
+        }
+        for (const panel of panels) {
+          panel.hidden = panel.dataset.atlasPanel !== id;
+        }
+
+        /* On a phone the grid is six rows tall, so the answer to a tap lands
+           below the fold and the page looks like it did nothing. `nearest`
+           only scrolls when the panel is actually out of view, so this is a
+           no-op on a desktop where the panel is already on screen. */
+        const open = panels.find((panel) => !panel.hidden);
+        open?.scrollIntoView({
+          block: 'nearest',
+          behavior: reduced.matches ? 'auto' : 'smooth',
+        });
+      };
+
+      for (const [i, tab] of tabs.entries()) {
+        tab.addEventListener('click', () => show(tab.dataset.atlasTab as string));
+        /* Arrow keys move along the row the way a reader expects of a strip of
+           related controls, and wrap so neither end is a dead stop. */
+        tab.addEventListener('keydown', (event: KeyboardEvent) => {
+          const step =
+            event.key === 'ArrowRight' || event.key === 'ArrowDown'
+              ? 1
+              : event.key === 'ArrowLeft' || event.key === 'ArrowUp'
+                ? -1
+                : 0;
+          if (!step) return;
+          event.preventDefault();
+          const next = tabs[(i + step + tabs.length) % tabs.length];
+          next.focus();
+          show(next.dataset.atlasTab as string);
+        });
+      }
+
+      /* The initial state is set directly rather than through `show`, which
+         scrolls. Landing on the page should not move it. */
+      if (tabs[0]) {
+        const first = tabs[0].dataset.atlasTab;
+        for (const tab of tabs) tab.setAttribute('aria-expanded', String(tab.dataset.atlasTab === first));
+        for (const panel of panels) panel.hidden = panel.dataset.atlasPanel !== first;
+      }
+    }
+  </script>
 </BaseLayout>

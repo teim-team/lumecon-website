@@ -12,6 +12,9 @@
   background: #071126;
 }
 .grovepg-hero .meth-w {
+  /* Above the corner mark the hero now carries, same as Cedar's. */
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 4.5fr) minmax(28rem, 7.5fr);
   gap: clamp(3rem, 6vw, 6rem);
@@ -206,9 +209,68 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-@media (max-width: 520px) {
+
+/* Stacked, two buttons sized to their own labels sit at two different
+   widths against a full-bleed column, which reads as a mistake rather than
+   as a hierarchy. One column, both stretched. */
+@media (max-width: 560px) {
+  .grovepg-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .grovepg-cta .btn2 {
+    justify-content: center;
+  }
+}
+/* At phone width twelve tiles in a grid are a wall: two columns by six rows
+   is roughly 770px of picker standing between the section's own sentence
+   and the panel that answers it, and a reader has to scroll past all of it
+   to find out what any of them say.
+
+   A single swipeable row instead. The picker keeps its shape as one
+   horizontal object, the panel sits directly under it, and snapping makes
+   the swipe land on a tile rather than between two. Arrow keys already move
+   focus along the strip, and a focused control is scrolled into view by the
+   browser, so keyboard movement follows the swipe for free.
+
+   `mask-image` fades the right edge, which is what says there is more. It
+   degrades to no fade where it is unsupported, never to a hidden tile. */
+@media (max-width: 620px) {
   .grovepg-atlas__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+  }
+  .grovepg-atlas__grid::-webkit-scrollbar {
+    display: none;
+  }
+  .grovepg-atlas__cell {
+    flex: 0 0 auto;
+    width: 8.25rem;
+    scroll-snap-align: start;
+  }
+  /* The tile's width is already fixed by `flex: 0 0 auto`, so nothing here
+     needed `nowrap` to hold it — and with it, the one label wider than a
+     tile ("Native-Owned Businesses", 170px against 132px) spilled 19px into
+     its neighbour. Measured at 390px: every other label fits on one line
+     and is unaffected. */
+  .grovepg-atlas__name {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  /* --- #4: trailing room so the last tile clears the fade ---
+     The mask fades the rightmost 12% of the scroller at every scroll
+     position, so at maximum scroll the final tile sat half-faded and the
+     row still read as "there is more to the right". A scroll-padding
+     item after the last tile gives it somewhere to go. */
+  .grovepg-atlas__grid::after {
+    content: '';
+    flex: 0 0 auto;
+    width: 15%;
   }
 }
 
@@ -252,6 +314,23 @@
 .grovepg-price__period {
   color: var(--ink-3);
   font-size: 0.95rem;
+}
+
+/* "per organization, per year" beside a 2.6rem numeral wraps to a second
+   line halfway up the price. Under it, it reads as one figure.
+
+   This block lives HERE, after the two rules it overrides, and not up in
+   the other ≤560px section above: both selectors are single classes, so at
+   equal specificity source order decides, and from up there the base
+   `display: flex` won and the override did nothing at all. */
+@media (max-width: 560px) {
+  .grovepg-price {
+    display: block;
+  }
+  .grovepg-price__period {
+    display: block;
+    margin-top: 0.1rem;
+  }
 }
 .grovepg-license ul {
   display: grid;
@@ -435,11 +514,138 @@
   .grovetour .tour-row__kicker,
   .grovepg-atlas .h-kicker,
   .grovepg-atlas__title,
+  .grovepg-atlas__lede,
   .grovepg-atlas__cell,
-  .grovepg-atlas__name {
+  .grovepg-atlas__btn,
+  .grovepg-atlas__name,
+  .grovepg-atlas__pname,
+  .grovepg-atlas__contributes,
+  .grovepg-atlas__facts dt,
+  .grovepg-atlas__facts dd {
     color: var(--ink) !important;
   }
-  .grovepg-atlas__cell {
+  .grovepg-atlas__cell,
+  .grovepg-atlas__btn {
     border-color: var(--rule) !important;
+    background: #fff !important;
+  }
+  /* On paper there is no picker, so every collection prints. A reader with
+     the page in their hand cannot click to see the other eleven. */
+  .grovepg-atlas__panel[hidden] {
+    display: block !important;
+  }
+  .grovepg-atlas__panel {
+    padding-top: 1rem !important;
+    border-top: 1px solid var(--rule) !important;
+    break-inside: avoid;
+  }
+}
+
+/* ---------------- the collection registry ---------------- */
+
+.grovepg-atlas__lede {
+  max-width: 60ch;
+  margin: -1.4rem 0 clamp(1.6rem, 3vw, 2.2rem);
+  color: rgba(233, 242, 250, 0.72);
+  line-height: 1.6;
+}
+/* The cell is the button now, so the padding moves onto the control and the
+   whole tile is the target rather than the label inside it. */
+.grovepg-atlas__cell {
+  padding: 0;
+}
+.grovepg-atlas__btn {
+  display: flex;
+  width: 100%;
+  min-height: 104px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.3rem 0.75rem;
+  border: 0;
+  background: #081329;
+  color: #73e2d6;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background 0.18s var(--ease, ease),
+    color 0.18s var(--ease, ease);
+}
+.grovepg-atlas__btn:hover {
+  background: #0c1b36;
+}
+.grovepg-atlas__btn:focus-visible {
+  outline: 2px solid #73e2d6;
+  outline-offset: -3px;
+}
+/* The open collection. Teal is doing interactive work here, which is the one
+   thing it is for. */
+.grovepg-atlas__reg--js .grovepg-atlas__btn[aria-expanded='true'] {
+  background: #0f2745;
+  color: #9defe2;
+}
+.grovepg-atlas__reg--js .grovepg-atlas__btn[aria-expanded='true'] .grovepg-atlas__name {
+  color: #fff;
+}
+.grovepg-atlas__panels {
+  margin-top: 1.5rem;
+}
+/* No script: every panel is open, separated by a hairline, and the section is
+   a long readable list. The script hides all but one. */
+.grovepg-atlas__panel {
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(115, 226, 214, 0.18);
+}
+.grovepg-atlas__reg--js .grovepg-atlas__panel {
+  border-top: 0;
+  padding-top: 0;
+}
+.grovepg-atlas__pname {
+  margin: 0 0 0.6rem;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.grovepg-atlas__contributes {
+  max-width: 72ch;
+  margin: 0 0 1.4rem;
+  color: rgba(233, 242, 250, 0.86);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+.grovepg-atlas__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem clamp(2rem, 4vw, 3rem);
+  margin: 0;
+}
+.grovepg-atlas__facts dt {
+  margin-bottom: 0.3rem;
+  color: #73e2d6;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.grovepg-atlas__facts dd {
+  margin: 0;
+  color: rgba(233, 242, 250, 0.74);
+  line-height: 1.55;
+}
+
+@media (max-width: 720px) {
+  .grovepg-atlas__facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grovepg-atlas__btn {
+    transition: none;
   }
 }

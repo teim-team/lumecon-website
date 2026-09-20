@@ -12,7 +12,35 @@ Economic impact analysis software and an alternative to established modeling too
 
 ## One platform
 
-There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the living evidence base for your organization's economy; and Cedar, the AI economic analyst, in every plan. The product supports documented workflows for cities, counties, state agencies, universities, nonprofits, businesses, economic development organizations, Tribal Nations, tribal enterprises and consulting firms. Tree includes hands-on Cedar calibration to an organization's terminology and workflows.
+There is one Lumecon application, offering the Cedar product family: Cedar Impact, where you run economic impact analysis; Cedar Commons, the shared project workspace; Cedar Grove, the living evidence base for your organization's economy; and Cedar, the AI economic analyst, in every plan. The product supports documented workflows for cities, counties, state agencies, universities, nonprofits, businesses, economic development organizations, Tribal Nations, tribal enterprises and consulting firms. The case for choosing Lumecon — pricing, the preparation work it removes, the lineage behind each figure and the team's background — is set out at https://lumecon.ai/why-lumecon. Tree includes hands-on Cedar calibration to an organization's terminology and workflows.
+
+## Pages
+
+Every page below answers one question. The question is what the page is for,
+not a description of its layout. Paths are stable; the list is generated from
+the site's own page inventory, so it does not fall behind the site.
+
+- https://lumecon.ai/ — What is Lumecon, and why does it matter?
+- https://lumecon.ai/why-lumecon — Why should our organization choose this?
+- https://lumecon.ai/pricing — What does it cost, and why is the pricing shaped this way?
+- https://lumecon.ai/cedar — What is Cedar, the AI economic analyst, and what does it do?
+- https://lumecon.ai/cedar-commons — How do several people finish one analysis together?
+- https://lumecon.ai/cedar-grove — What is the evidence base for an organization's economy?
+- https://lumecon.ai/methodology — How are the estimates constructed, and where do they stop?
+- https://lumecon.ai/start — What does getting started involve, and what do we need to bring?
+- https://lumecon.ai/naics — What does the industry classification cover?
+- https://lumecon.ai/glossary — What do the terms mean?
+- https://lumecon.ai/team — Who builds the models, the data and the software?
+- https://lumecon.ai/security — How is organizational information handled, and what is assured today?
+- https://lumecon.ai/ai-and-data-use — How is AI used, and what happens to the data it touches?
+- https://lumecon.ai/contact — How do we reach a person, and where does each kind of message go?
+- https://lumecon.ai/accessibility — What is conformant, and what is known to be unresolved?
+- https://lumecon.ai/privacy — What is collected, and what is done with it?
+- https://lumecon.ai/terms — What are the terms of use?
+
+Sign-up, log-in, plan selection, checkout and the post-purchase welcome are
+steps in a flow rather than destinations. They are excluded here and marked
+noindex on the site.
 
 ## Pricing (public)
 
@@ -39,6 +67,10 @@ Cloud product, with nothing to install. Cedar is built into intake, analysis and
 
 Security: Lumecon is formalizing its security program against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. Lumecon has not completed a SOC 2 examination and does not currently have a SOC 2 report. Current hosting, access-control, encryption, retention, subprocessor and AI-provider arrangements are documented during procurement before sensitive records move. See https://lumecon.ai/security.
 
+## Getting started
+
+A first analysis needs a defined activity, a reporting year, a geography and an operating measure in dollars, normally from a financial statement or an adopted budget, together with payroll and a headcount. Other records refine the analysis rather than gate it. One analysis covers one region and one reporting year; more geographies or years run as a series of analyses. A short set of questions at https://lumecon.ai/start proposes a starting scope, the records to begin with, who usually holds each one and what to settle on a scoping call with an economist. Organizational complexity and the reachability of records are assessed separately, because a complex organization often has excellent records and a single-location organization often cannot reach its own. Lumecon does not publish confidence scores or percentage improvements from additional data; coverage is reported as counts and shares with a stated denominator.
+
 ## Audience
 
 Governments and mission-driven organizations: cities, counties, state agencies, federal programs, universities and research labs, foundations, nonprofits, businesses, CDFIs, economic development organizations, ports and transit agencies, Tribal Nations and tribal enterprises, and consulting firms serving all of the above.
@@ -56,7 +88,7 @@ are listed highest attainment first.
 ### Team
 
 - Elijah Moreno, Founder and CEO. Education: PhD candidate, Public Policy, Cornell University; MPP, Cornell University; BA, Economics, modified with Native American Studies, Dartmouth College. Eight years producing tribal economic-impact studies and related public-policy research. Senior Research Assistant at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis. There he led the construction of the Native Entity Enterprise Dataset, the first comprehensive dataset of Native entity enterprises, and launched and led research on Native federal contracting. Research Fellow at the Project on Indigenous Governance and Development at the Harvard Kennedy School, and a co-author of the third edition of Social and Economic Changes in American Indian Reservations. Previously a research analyst at the Taylor Policy Group and a Wilma Mankiller Fellow at the National Congress of American Indians. Enrolled member of the Coastal Band of the Chumash Nation, a non-federally recognized tribe in California. elijah.moreno@lumecon.ai · https://www.linkedin.com/in/elijahmoreno · https://scholar.google.com/citations?hl=en&user=mYpXeHYAAAAJ
-- Laurel Wheeler, Economics Lead. Education: PhD, Economics, Duke University; MA, Economics, Duke University; MSc, Economics for Development, University of Oxford; BA, Political Science, University of Florida. Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon. Previously a tenure-track economics professor at the University of Alberta. laurel.wheeler@lumecon.ai · https://www.linkedin.com/in/laurel-wheeler · https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ
+- Laurel Wheeler, Principal Economist. Education: PhD, Economics, Duke University; MA, Economics, Duke University; MSc, Economics for Development, University of Oxford; BA, Political Science, University of Florida. Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon. Previously a tenure-track economics professor at the University of Alberta. laurel.wheeler@lumecon.ai · https://www.linkedin.com/in/laurel-wheeler · https://scholar.google.com/citations?hl=en&user=oV06J_wAAAAJ
 - Isabella Agnes, Input-Output Modeling Lead. Education: Doctoral research in Economics, University of Maryland, College Park; BS, Mathematics, University of Wisconsin-Madison; BS, Economics, University of Wisconsin-Madison. Data scientist at the Library of Congress. Her prior work includes economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia. isabella.agnes@lumecon.ai · https://www.linkedin.com/in/maria-isabella-agnes-741569b7
 - Francesca Agnes, Cedar Systems Lead. Education: BS, Biology, University of Illinois Urbana-Champaign. Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis. Also contributes to Lira, an AI wearable company. francesca.agnes@lumecon.ai · https://www.linkedin.com/in/francesca-agnes-a8106722b · https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ
 - Kaylyn Lee, Platform Lead. Education: BS, Computer Science, minor in Business, Cornell University. Builds the platform organizations use to scope, run and revisit analyses. Also contributes to Lira, an AI wearable company. kaylyn.lee@lumecon.ai · https://www.linkedin.com/in/kaylynlee
@@ -76,5 +108,3 @@ Built by Cornell, Dartmouth, MIT, Yale, Brown, Duke and Oxford-trained researche
 - Email: contact@lumecon.ai
 - LinkedIn: https://www.linkedin.com/company/lumecon-ai
 - Web: https://lumecon.ai
-
-## Optional

@@ -44,43 +44,19 @@ function chromiumExecutable() {
 }
 
 /**
- * Every public page, in the order a reader would meet them. A third
- * element is the URL to actually visit when it differs from the path we
- * file the page under: /checkout redirects to /choose-plan unless it is
- * handed a valid paid tier, so without the query it exported choose-plan
- * twice and checkout not at all.
+ * The page inventory is READ from src/data/siteMap.ts, not kept here.
+ * It used to be a second array with its own order, its own labels and
+ * its own noindex set, and it fell behind the site the first time a page
+ * was added: /why-lumecon appeared in the sitemap automatically and was
+ * silently missing from this document until the array was edited by hand.
  */
-const PAGES = [
-  ['/', 'Homepage'],
-  ['/pricing', 'Pricing'],
-  ['/methodology', 'Methodology'],
-  ['/team', 'Team'],
-  ['/cedar', 'Cedar'],
-  ['/cedar-grove', 'Cedar Grove'],
-  ['/glossary', 'Glossary'],
-  ['/naics', 'NAICS sectors'],
-  ['/signup', 'Sign up'],
-  ['/login', 'Log in'],
-  ['/choose-plan', 'Choose plan'],
-  ['/checkout', 'Checkout', '/checkout?tier=sprout'],
-  ['/welcome', 'Welcome'],
-  ['/accessibility', 'Accessibility'],
-  ['/ai-and-data-use', 'AI and data use'],
-  ['/security', 'Security'],
-  ['/privacy', 'Privacy'],
-  ['/terms', 'Terms'],
-  ['/404', 'Not found'],
-];
+const { SITE_PAGES } = await import(resolve(ROOT, 'src/data/siteMap.ts'));
+const PAGES = SITE_PAGES.map((p) => [p.path, p.label, p.visit ?? p.path]);
 
 const CANONICAL_ORIGIN = 'https://lumecon.ai';
-const NOINDEX_PATHS = new Set([
-  '/signup',
-  '/login',
-  '/choose-plan',
-  '/checkout',
-  '/welcome',
-  '/404',
-]);
+const NOINDEX_PATHS = new Set(
+  SITE_PAGES.filter((p) => p.indexing === 'noindex').map((p) => p.path),
+);
 
 // Browsers normalize an origin-only URL to include a trailing slash when
 // reading link.href, while Astro's sitemap intentionally serializes the root
@@ -91,16 +67,12 @@ function canonicalKey(url) {
   return `${parsed.origin}${parsed.pathname === '/' ? '' : parsed.pathname}`;
 }
 
-/** The one-line job each page is supposed to do (AGENTS.md, "Page ownership"). */
-const OWNERSHIP = {
-  '/': 'Why Lumecon matters.',
-  '/pricing': 'What it costs and why the pricing is different.',
-  '/methodology': 'Why the economics are credible.',
-  '/cedar': "Why Lumecon's use of AI is different.",
-  '/security': 'Current product controls and security-program status.',
-  '/glossary': 'Defines terms and nothing more.',
-  '/naics': 'What the sector classification covers.',
-};
+/**
+ * The one-line job each page is supposed to do (AGENTS.md, "Page
+ * ownership"), read from the same inventory. It was a second hand-kept
+ * map that listed eleven of the site's pages and omitted the rest.
+ */
+const OWNERSHIP = Object.fromEntries(SITE_PAGES.map((p) => [p.path, p.question]));
 
 /** Claims worth counting because they are the ones that recur. */
 const CLAIMS = {
@@ -181,8 +153,18 @@ function scrape() {
   // marked for what it is.
   const isConditional = (el) => el.hasAttribute('hidden') || el.closest('[hidden]') !== null;
 
+  /* Present in the DOM, deliberately not copy. A spam honeypot has to stay
+     reachable to a form-filling bot, so it cannot be `hidden` or removed,
+     but it is not something a visitor reads and it must not be counted or
+     reviewed as a real field. Opt-in rather than a blanket `aria-hidden`
+     rule, which would also strip the decorative arrows out of every button
+     label across the site. */
+  const isIgnored = (el) =>
+    el.hasAttribute('data-copy-ignore') || el.closest('[data-copy-ignore]') !== null;
+
   const walk = (node, conditional = false) => {
     for (const el of node.children) {
+      if (isIgnored(el)) continue;
       const tag = el.tagName;
       if (SKIP.has(tag)) continue;
       // Native dialogs are closed without a `hidden` attribute. Their
@@ -272,7 +254,25 @@ function scrape() {
     twitterImageAlt: meta('twitter:image:alt'),
     jsonld: [...new Set(jsonld.flat())],
     jsonldErrors,
-    wordCount: clean(root.innerText).split(/\s+/).filter(Boolean).length,
+    /* Counted with the ignored subtrees hidden. Skipping them in the block
+       walker alone left the honeypot out of the listing but still inside
+       this total, which is read as the page's visible words.
+
+       Hidden in place and restored, NOT counted on a detached clone:
+       `innerText` is layout-dependent, so on a node outside the document it
+       degrades to something closer to `textContent` and starts counting copy
+       no visitor sees. Measured: that mistake took the homepage from 740
+       words to 2947. */
+    wordCount: (() => {
+      const ignored = [...root.querySelectorAll('[data-copy-ignore]')];
+      const prior = ignored.map((el) => el.style.display);
+      for (const el of ignored) el.style.display = 'none';
+      const n = clean(root.innerText).split(/\s+/).filter(Boolean).length;
+      ignored.forEach((el, i) => {
+        el.style.display = prior[i];
+      });
+      return n;
+    })(),
     blocks,
   };
 }

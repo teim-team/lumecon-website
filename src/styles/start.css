@@ -1,0 +1,1388 @@
+/* ---------------------------------------------------------------
+   /start - Plan your first analysis.
+
+   The page borrows methodology.css for its hero, section heads and
+   hairline rows; this file adds what the flow and the plan need.
+   Boundaries here do real work: an option row is selectable and a
+   panel is an assembled surface. Nothing else is boxed.
+   --------------------------------------------------------------- */
+
+/* ---------------- the cover ----------------
+   Same composition as /methodology and /cedar-grove: a dark band, the
+   argument on the left, a working surface on the right. Those pages
+   stage a capture of the product; this page's product is the flow, so
+   the flow is what gets staged, live. */
+
+.start-hero .meth-w {
+  grid-template-rows: auto;
+  align-items: start;
+}
+.start-hero__copy {
+  grid-column: 1;
+}
+.start-hero .h-kicker {
+  margin-bottom: 0.9rem;
+}
+.start-hero .meth-hero__title {
+  max-width: 11ch;
+}
+.start-hero .meth-hero__lede {
+  max-width: 44ch;
+  margin-bottom: 0;
+}
+.start-hero {
+  padding-top: clamp(5rem, 9vh, 7.5rem);
+}
+
+/* The answers so far, beside the flow. It replaces standing explanation
+   rather than adding a second panel to read, and each line goes back to
+   the question that set it. */
+.start-sum {
+  margin-top: clamp(1.8rem, 3vw, 2.6rem);
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+  max-width: 30rem;
+}
+.start-sum__k {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.start-sum__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.1rem;
+}
+.start-sum__list button {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.start-sum__list button:hover,
+.start-sum__list button:focus-visible {
+  border-bottom-color: var(--rule);
+}
+.start-sum__list button:hover .start-sum__rv {
+  color: var(--accent-text);
+}
+.start-sum__rk {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding-top: 0.2em;
+}
+.start-sum__rv {
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.start-stage {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+}
+.start-stage__inner {
+  /* A white surface inside the inverted band, so the tokens go back to
+     their light values rather than every control inside having to know
+     where it is. These are the :root values, not new ones. */
+  --white: #f3f6f8;
+  --surface: #ffffff;
+  --cream: #edf2f4;
+  --paper: #e5ebee;
+  --ink: #071824;
+  --ink-2: #33434a;
+  --ink-3: #647279;
+  --ink-4: #93a0a5;
+  --navy: #071824;
+  --rule: rgba(10, 28, 52, 0.1);
+  --rule-strong: rgba(10, 28, 52, 0.2);
+  --accent-text: #0a7f74;
+
+  padding: clamp(1.5rem, 2.4vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 34px 84px -38px rgba(0, 0, 0, 0.82);
+}
+.start-stage__foot {
+  margin: 0.85rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+.start-promise {
+  list-style: none;
+  margin: clamp(2.4rem, 5vw, 3.6rem) 0 0;
+  padding: 1.6rem 0 0;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.2rem, 2.6vw, 2.6rem);
+  grid-column: 1 / -1;
+}
+.start-promise__k {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.start-promise__b {
+  margin: 0.45rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* ---------------- the flow ----------------
+   Without JavaScript this is every question stacked, which works. With
+   it, one question at a time inside a frame that keeps its top edge
+   still. The stage set is fixed, so the end never moves while somebody
+   is working. */
+
+.pf {
+  margin: 0;
+  max-width: none;
+}
+.pf--stepped {
+  display: grid;
+  grid-template-rows: auto minmax(13rem, auto) auto;
+  gap: 1.35rem;
+}
+.pf--stepped.pf--done {
+  grid-template-rows: auto auto;
+}
+.pf [hidden] {
+  display: none !important;
+}
+
+.pf-rail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.5rem;
+}
+.pf-rail__item {
+  display: grid;
+  gap: 0.4rem;
+}
+.pf-rail__bar {
+  height: 2px;
+  background: var(--rule);
+}
+.pf-rail__item.on .pf-rail__bar,
+.pf-rail__item.past .pf-rail__bar {
+  background: var(--accent-chip);
+}
+.pf-rail__item.past .pf-rail__bar {
+  opacity: 0.45;
+}
+.pf-rail__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.pf-rail__item.on .pf-rail__label {
+  color: var(--accent-text);
+}
+
+.pf-q {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.pf-q:focus {
+  outline: none;
+}
+.pf--stepped .pf-q {
+  align-self: start;
+}
+.pf-q__legend {
+  display: block;
+  padding: 0;
+  margin-bottom: 0.9rem;
+}
+.pf-q__label {
+  display: block;
+  font-size: clamp(1.3rem, 1.9vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+}
+.pf-q--follow .pf-q__label {
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+}
+.pf-q__help {
+  margin: -0.5rem 0 0.9rem;
+  font-size: var(--fs-md);
+  color: var(--ink-3);
+  max-width: 52ch;
+}
+
+.pf-opts {
+  display: grid;
+  gap: 0.4rem;
+}
+.pf-opts--tight {
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+.pf-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color 0.16s var(--ease),
+    background 0.16s var(--ease);
+}
+.pf-opt:hover {
+  border-color: var(--accent-light);
+}
+.pf-opt input {
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent-chip);
+  flex: none;
+}
+/* A control centred against a two-line option floats between the lines.
+   Where an option carries a note, it aligns to the label instead. */
+.pf-opt:has(.pf-opt__note) {
+  align-items: flex-start;
+}
+.pf-opt:has(.pf-opt__note) input {
+  margin-top: 0.2rem;
+}
+.pf-opt:has(input:checked) {
+  border-color: var(--accent-chip);
+  box-shadow: inset 0 0 0 1px var(--accent-chip);
+  background: var(--accent-rgba-08);
+}
+.pf-opt:has(input:focus-visible) {
+  outline: 2px solid var(--accent-chip);
+  outline-offset: 2px;
+}
+.pf-opt__body {
+  display: block;
+  min-width: 0;
+}
+.pf-opt__label {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--navy);
+}
+.pf-opt__note {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.pf-part + .pf-part {
+  margin-top: 1.15rem;
+  padding-top: 1.05rem;
+  border-top: 1px solid var(--rule);
+}
+
+.pf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.1rem;
+}
+.pf--stepped .pf-actions {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-actions .btn2--primary[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.pf-back {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--fs-md);
+  color: var(--ink-3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.pf-back:hover {
+  color: var(--accent-text);
+}
+.pf-done {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+.pf-noscript {
+  margin: 1.1rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+/* ---------------- the plan ----------------
+   The recommendation and the next step come first, on their own
+   surface. Everything that qualifies them follows, in the order
+   somebody would ask for it. */
+
+.start-sec--plan {
+  border-top: 1px solid var(--rule-strong);
+}
+.pf-plan {
+  max-width: none;
+}
+.pf-plan:focus {
+  outline: none;
+}
+.pf-printhead {
+  display: none;
+}
+
+.pf-lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(17rem, 1fr);
+  gap: clamp(1.6rem, 3vw, 3rem);
+  align-items: start;
+  padding: clamp(1.6rem, 2.6vw, 2.2rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
+}
+.pf-lead__title {
+  margin: 0.6rem 0 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--navy);
+  max-width: 22ch;
+}
+.pf-facts {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+}
+.pf-facts li {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-md-2);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.pf-facts__k {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding-top: 0.25em;
+}
+.pf-callout,
+.pf-caveat {
+  margin: 1.1rem 0 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--accent-chip);
+  font-size: var(--fs-md-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 54ch;
+}
+
+.pf-lead__act {
+  padding: clamp(1.1rem, 2vw, 1.4rem);
+  border-radius: var(--radius-frame);
+  background: var(--accent-rgba-08);
+}
+.pf-act__k {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.pf-act__title {
+  margin: 0.5rem 0 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--navy);
+}
+.pf-act__detail {
+  margin: 0.4rem 0 1rem;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.pf-act__note,
+.pf-act__caveat {
+  margin: 0.55rem 0 0;
+  font-size: var(--fs-3xs);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.pf-act__minor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-act__minor button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--fs-sm-2);
+  color: var(--ink-3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.pf-act__minor button:hover {
+  color: var(--accent-text);
+}
+
+.pf-block {
+  margin-top: clamp(1.9rem, 3vw, 2.5rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+.pf-block h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+.pf-block__note {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 58ch;
+}
+.pf-list {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.pf-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: var(--fs-md-2);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+.pf-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 0.4rem;
+  height: 1px;
+  background: var(--accent-text);
+}
+.pf-list--not li::before {
+  background: var(--ink-4);
+}
+
+.pf-checks {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+.pf-check {
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.pf-check:first-child {
+  border-top: 1px solid var(--rule);
+}
+.pf-check__what {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--navy);
+  max-width: 60ch;
+}
+.pf-check__have {
+  display: inline-block;
+  margin-right: 0.55rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  background: var(--accent-chip);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: 0.12em;
+}
+.pf-check__why {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+.pf-check__more,
+.start-core__more {
+  margin-top: 0.4rem;
+}
+.pf-check__more summary,
+.start-core__more summary {
+  font-size: var(--fs-sm-2);
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.pf-check__more summary:hover,
+.start-core__more summary:hover {
+  color: var(--accent-text);
+}
+.pf-check__more div,
+.start-core__more div {
+  padding-top: 0.35rem;
+}
+.pf-check__more p,
+.start-core__more p {
+  margin: 0.2rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 68ch;
+}
+.pf-check__holder,
+.start-core__holder {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.pf-more {
+  margin-top: clamp(1.9rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--rule);
+}
+.pf-more > summary {
+  padding: 1rem 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.pf-more > summary::-webkit-details-marker {
+  display: none;
+}
+.pf-more > summary::after {
+  content: '+';
+  font-family: var(--font-mono);
+  color: var(--accent-text);
+}
+.pf-more[open] > summary::after {
+  content: '\2212';
+}
+.pf-more__inner > .pf-block:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.pf-reads {
+  display: grid;
+  gap: 1.4rem 2.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  margin-top: 1rem;
+}
+.pf-read__k {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.pf-read__v {
+  margin: 0.3rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.pf-read ul {
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+.pf-read li,
+.pf-read__d {
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.pf-read__d {
+  margin: 0.55rem 0 0;
+}
+.pf-reads__note {
+  margin: 0.9rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-4);
+  max-width: 58ch;
+}
+.pf-people {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.pf-people li {
+  font-size: var(--fs-md-2);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 68ch;
+}
+.pf-people__role {
+  color: var(--navy);
+  font-weight: 600;
+}
+.pf-plan__foot {
+  margin: 1.2rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-4);
+  max-width: 62ch;
+}
+
+/* ---------------- what a first analysis can show ---------------- */
+
+.start-sec {
+  border-top: 1px solid var(--rule);
+}
+.start-sec--surface {
+  background: var(--surface);
+}
+.start-sec--quiet {
+  background: var(--surface-2);
+}
+.start-output {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(15rem, 3fr);
+  gap: clamp(2rem, 4vw, 3.4rem);
+  align-items: start;
+  margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+}
+.start-output__shot {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
+}
+/* The capture carries the product's own left navigation, which is not
+   what this section is about. Cropped in CSS rather than as a second
+   committed asset, so the screenshot pipeline stays the only source. */
+.start-output__crop {
+  overflow: hidden;
+}
+.start-output__crop img {
+  display: block;
+  width: 108%;
+  margin-left: -8%;
+  height: auto;
+}
+.start-output__shot figcaption {
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+.start-output__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.start-output__list li {
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--rule);
+}
+.start-output__list li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-output__k {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+.start-output__b {
+  margin: 0.2rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.start-foot {
+  margin: 1.2rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 72ch;
+}
+
+/* ---------------- what more records would let you ask ----------------
+   Led by the question a record answers, because that is what somebody
+   is deciding. The status line is one sentence, not a column of
+   internal review states. */
+
+.start-cap {
+  display: grid;
+  grid-template-columns: minmax(16rem, 2fr) minmax(0, 3fr);
+  gap: clamp(1.6rem, 3vw, 3rem);
+  align-items: start;
+  margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+}
+.start-cap__tabs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.start-cap__tab {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  background: none;
+  font: inherit;
+  font-size: var(--fs-md-2);
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.16s var(--ease);
+}
+.start-cap__tabs li:last-child .start-cap__tab {
+  border-bottom: 1px solid var(--rule);
+}
+.start-cap__tab:hover {
+  color: var(--accent-text);
+}
+.start-cap__tab[aria-expanded='true'] {
+  color: var(--navy);
+  font-weight: 600;
+}
+.start-cap--js .start-cap__tab[aria-expanded='true'] {
+  box-shadow: inset 2px 0 0 var(--accent-chip);
+  padding-left: 0.9rem;
+}
+.start-cap__panels {
+  display: grid;
+  gap: 1.4rem;
+}
+.start-cap__panel {
+  padding: clamp(1.2rem, 2.2vw, 1.7rem);
+  border-radius: var(--radius-panel);
+  background: var(--accent-rgba-08);
+}
+.start-cap--js .start-cap__q {
+  display: none;
+}
+.start-cap__q {
+  margin: 0 0 0.6rem;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--navy);
+}
+.start-cap__record {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--navy);
+}
+.start-cap__rk {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-right: 0.4rem;
+}
+.start-cap__benefit {
+  margin: 0.5rem 0 0;
+  font-size: var(--fs-md-2);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+.start-cap__note {
+  margin: 0.5rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 60ch;
+}
+.start-cap__status {
+  margin: 0.9rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-sm-2);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.start-cap__status--available {
+  color: var(--accent-text);
+}
+.start-cap__status--research,
+.start-cap__status--proposed {
+  color: var(--terra-dark);
+}
+
+/* ---------------- start with what you have ---------------- */
+
+.start-core {
+  list-style: none;
+  margin: clamp(1.6rem, 2.6vw, 2.2rem) 0 0;
+  padding: 0;
+}
+.start-core li {
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--rule);
+}
+.start-core li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-core__what {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--navy);
+}
+.start-core__why {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+.start-core__note {
+  margin: 1.1rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 72ch;
+}
+
+/* ---------------- help getting started ---------------- */
+
+.start-call {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+.start-call h2 {
+  margin: 0.5rem 0 0;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  max-width: 18ch;
+}
+.start-call__lede {
+  margin: 1rem 0 1.6rem;
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 48ch;
+}
+.start-call__note {
+  margin: 0.8rem 0 0;
+  font-size: var(--fs-sm-2);
+  color: var(--ink-3);
+}
+.start-call__out {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: outcome;
+}
+.start-call__out li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+  counter-increment: outcome;
+}
+.start-call__out li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.start-call__outk {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--navy);
+}
+.start-call__outk::before {
+  content: counter(outcome, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  letter-spacing: 0.1em;
+  color: var(--accent-text);
+  margin-right: 0.7rem;
+  vertical-align: 0.12em;
+}
+.start-call__outb {
+  margin: 0.25rem 0 0 2.1rem;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* ---------------- coverage, as reference ---------------- */
+
+.start-cov {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+.start-cov h2 {
+  margin: 0.5rem 0 0;
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  letter-spacing: -0.015em;
+  color: var(--navy);
+}
+.start-cov__lede {
+  margin: 0.9rem 0 0;
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 52ch;
+}
+.start-cov__more {
+  margin: 0.9rem 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+.start-cov__eg {
+  margin: 0;
+  padding: clamp(1.2rem, 2.2vw, 1.6rem);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+.start-cov__eg figcaption {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.start-cov__egline {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0.9rem 0 0;
+}
+.start-cov__marks {
+  display: flex;
+  gap: 0.28rem;
+}
+.start-cov__marks span {
+  width: 0.7rem;
+  height: 1.5rem;
+  border-radius: 2px;
+  background: var(--surface-inset);
+}
+.start-cov__marks span.on {
+  background: var(--accent-chip);
+}
+.start-cov__egnum {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.start-cov__egtext {
+  margin: 0.7rem 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+.start-cta {
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------------- narrower ---------------- */
+
+@media (max-width: 980px) {
+  .start-hero .meth-w {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .start-hero .meth-hero__title,
+  .start-hero .meth-hero__lede {
+    max-width: none;
+  }
+  .start-hero {
+    padding-top: clamp(4.2rem, 7vh, 5.5rem);
+  }
+  .start-stage {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 1.6rem;
+  }
+  .start-sum {
+    max-width: none;
+  }
+  .start-promise {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pf-lead,
+  .start-output,
+  .start-cap,
+  .start-call,
+  .start-cov {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* The action is what somebody came for, so on a narrow screen it goes
+     above the detail that qualifies it rather than below the checklist. */
+  .pf-lead__act {
+    order: -1;
+  }
+  .start-cap__panels {
+    order: -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .pf--stepped {
+    grid-template-rows: auto auto auto;
+  }
+  .pf-opts--tight {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .start-promise {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
+  }
+  .pf-rail__label {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+  .start-sum__list button,
+  .pf-facts li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-opt,
+  .start-cap__tab {
+    transition: none;
+  }
+}
+
+/* ---------------- print ----------------
+   The plan is the document. Everything else on the page is for the
+   screen: the questions, the reference sections, the promotional
+   close and the page chrome. */
+
+@media print {
+  .start-hero,
+  .start-sec--surface,
+  .start-sec--quiet,
+  .start-cta,
+  .start-sec[aria-labelledby='s-output'],
+  .start-sec[aria-labelledby='s-more'],
+  .start-sec[aria-labelledby='s-ready'],
+  .start-sec[aria-labelledby='s-records'],
+  .start-sec[aria-labelledby='s-call'],
+  .start-sec[aria-labelledby='s-coverage'],
+  .pf-act__minor {
+    display: none !important;
+  }
+  .start-sec--plan {
+    border-top: 0;
+    padding: 0;
+  }
+  .pf-printhead {
+    display: block;
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1pt solid #999;
+    font-family: var(--font-mono);
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #111;
+  }
+  .pf-printhead span {
+    font-weight: 500;
+    color: #444;
+  }
+  .pf-printhead span::before {
+    content: ' · ';
+  }
+  .start-sec--plan .meth-w {
+    max-width: none;
+    padding: 0;
+  }
+  .pf-plan {
+    margin: 0;
+    max-width: none;
+  }
+  /* The page is the width available, not a column inside it. */
+  .pf-lead {
+    display: block;
+    padding: 0 0 1rem;
+    border: 0;
+    border-bottom: 1pt solid #999;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .pf-lead__act {
+    margin-top: 1rem;
+    padding: 0.6rem 0 0;
+    border-top: 1pt solid #ccc;
+    border-radius: 0;
+    background: none;
+  }
+  .pf-lead__act .btn2 {
+    display: none;
+  }
+  .pf-facts li,
+  .pf-check__what,
+  .pf-check__why,
+  .pf-list li,
+  .pf-people li {
+    max-width: none;
+  }
+  /* A record and its reason belong on the same page. */
+  .pf-check,
+  .pf-block,
+  .pf-reads,
+  .pf-facts li {
+    break-inside: avoid;
+  }
+  /* Detail that is folded on screen prints open: on paper there is no
+     way to open it. */
+  .pf-more,
+  .pf-check__more,
+  .start-core__more {
+    display: block;
+  }
+  .pf-more > summary,
+  .pf-check__more summary,
+  .start-core__more summary {
+    display: none;
+  }
+  .pf-more__inner,
+  .pf-check__more div {
+    display: block !important;
+  }
+}
+
+
+/* ---------------- prepare your organization ---------------- */
+
+/* Four numbered essentials, then the team guide folded away. The fold is
+   the point: the four are the message, and a visitor who wants the full
+   arrangement can open it without the page becoming an audit. */
+.ready-four {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3vw, 2.75rem) clamp(2rem, 4vw, 3.5rem);
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ready-four__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 1rem;
+  align-items: start;
+}
+/* Replaces the 01-04 numbering. Sized and baseline-nudged to sit with the
+   first line of the label rather than floating above it.
+   Not teal: AGENTS.md reserves teal for links and actions, economic
+   concepts and the approved brand phrases, and a decorative mark beside a
+   heading is none of those. It carries the same weight the numerals had. */
+.ready-four__mark {
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-top: 0.05rem;
+  color: var(--ink-3, var(--ink-2));
+  flex: none;
+}
+.ready-four__label {
+  margin: 0 0 0.4rem;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+}
+.ready-four__body {
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.ready-four__note {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink-3, var(--ink-2));
+}
+.ready-floor {
+  margin: clamp(2rem, 4vw, 2.75rem) 0 0;
+  padding: 0 0 0 1.15rem;
+  border-left: 2px solid var(--rule);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+.ready-more {
+  margin: 1.5rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+.ready-more > summary {
+  padding: 1rem 0 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ready-more__lede,
+.ready-more__foot {
+  margin: 1rem 0 0;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.ready-team {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ready-team__row {
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+.ready-team__row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.ready-team__role {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: baseline;
+  margin: 0 0 0.3rem;
+  font-weight: 600;
+}
+/* What they bring, not a rank. Four values repeat across six rows, so the
+   shape of the team is legible at a glance. */
+/* Plain mono typography, no pill: a radius communicates one assembled
+   object, and this is a label on a row rather than a control. Hierarchy
+   does the separating, which is what the eyebrow style is for. */
+.ready-team__holds {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3, var(--ink-2));
+}
+.ready-team__body {
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.ready-gov {
+  margin: 1.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  line-height: 1.6;
+}
+
+@media (max-width: 860px) {
+  .ready-four {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ready-consultant {
+  margin: 1.25rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.ready-consultant strong {
+  color: var(--ink);
+}

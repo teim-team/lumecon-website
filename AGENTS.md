@@ -163,19 +163,99 @@ carries the idea. Review test: if someone remembers only the teal
 phrases, do they understand what makes Lumecon different?
 
 Page ownership (keep each page making one argument): the homepage
-says why Lumecon matters; /pricing says what it costs and why the
-pricing is different; /methodology says why the economics are
-credible; /cedar says why Lumecon's use of AI is different; the
-glossary defines terms and nothing more. Do not re-explain Cedar on
-other pages beyond a one-line pointer to /cedar.
+says why Lumecon matters and hands off; **/why-lumecon (2026-09) owns
+the buyer's argument** — why an organization should choose this, with
+price, preparation work, traceability and the team as its evidence;
+/pricing says what it costs and why the pricing is different;
+/methodology says why the economics are credible and where they stop,
+and sends the comparison against established platforms to
+/why-lumecon rather than answering it; /start says what getting
+started involves; /cedar says why Lumecon's use of AI is different;
+the glossary defines terms and nothing more. Do not re-explain Cedar
+on other pages beyond a one-line pointer to /cedar.
+
+The four questions, so a new page knows which one it is answering:
+Why Lumecon — why should our organization choose this? · the product
+pages — what can we do with it? · Methodology — how are the estimates
+built, and what are their limits? · Plan your first analysis — what
+does getting started involve?
+
+## Standing instruction: the copy document is a CI gate (2026-09)
+
+The smoke workflow's last step regenerates
+`docs/site-copy-and-architecture.md` from the built site and runs
+`git diff --exit-code` on it. Change any visible copy and that file is
+stale, so the job fails even when every test passed, which is how it
+reads in the log: 63 chromium and 63 webkit green, then a failure.
+
+Regenerate and commit it in the same change:
+
+```
+npm run build && npm run preview -- --host 127.0.0.1 &
+DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
+```
+
+`astro preview` is a singleton, so stop an existing one first
+(`npx astro preview stop`) or the second call silently serves nothing.
+
+## Standing instruction: verify with `npm run build` (2026-09)
+
+`npm run build` is `astro check && astro build`, and it is what all three
+workflows run. Run it before pushing, and read the whole result.
+
+`astro check` prints errors first and finishes with the warning and hint
+counts, so `astro check | tail -3` shows `0 warnings / 0 hints` on a run
+that failed. That exact mistake shipped a type error to `main`, where it
+broke the Pages deploy, the smoke job and Lighthouse at once, because each
+of them starts with the same build.
+
+The error itself is worth knowing too: indexing a keyed object with a
+`string[]`'s element type fails, because `string` has no index signature on
+it. Use `as const` on the id list so each element is a literal key.
 
 ## No ampersands in displayed copy (2026-07)
 
 Write "and", never "&", anywhere a visitor can read it (founder
 rule; ampersands read as unprofessional). Code identifiers and TS
-types are exempt. Same rule applies in teim-app.
+types are exempt. The same rule applies in every sibling repository,
+not only teim-app.
 
-## Vocabulary standard (2026-07, both repos)
+**Grep for both forms, because each one misses the other.** Searching
+for a bare `&` does not match `&amp;`, and searching for `&amp;` does
+not match a plain `&` inside a string literal. Both were live on
+2026-09-18: `Help &amp; support` in teim-app's footer and
+`Requests &amp; support` in Cedar Press's settings, then, after a sweep
+that only looked for the entity, `"Access & workspace"` and
+`"Data & privacy"` in teim-app's `Settings.jsx`. One regex catches
+both:
+
+```
+&amp;|[A-Za-z0-9] & [A-Za-z0-9]
+```
+
+Two things worth knowing beyond the grep. The Cedar Press occurrence had
+a correct `aria-label` two lines above it, so a screen reader was given
+the right wording and the screen was not: check the visible label
+against its own label attribute. And an ampersand inside a URL query
+string is a separator, not copy — the only ones in this site's `dist`
+are in Google Scholar hrefs on `/team`.
+
+**Not every ampersand can simply be fixed.** Cedar Press's collection
+`Native Federal Advocacy & Engagement` is embedded verbatim in the
+citation written into every downloaded CSV, so renaming it changes how
+files subscribers already hold cite themselves. It waits for a version
+bump on that collection, tracked as item 11 in that repository's
+`docs/TERMINAL_HANDOFF.md`.
+
+## Vocabulary standard (2026-07; all five repositories)
+
+This site is the **North Star**: where a sibling repository and this file
+disagree about what something is called, this file wins and the sibling is the
+one to correct. As of 2026-09-18 each sibling carries the relevant part of this
+standard in its own `AGENTS.md`, so a contributor who never opens this file
+still meets it. `cedar` is the one to watch, because its product copy is written
+as Markdown agent prompts and therefore reads as configuration rather than as
+voice.
 
 User-facing word choices, everywhere a customer reads:
 - "analysis / analyses", not "study/studies" ("project" is the
@@ -231,6 +311,15 @@ User-facing word choices, everywhere a customer reads:
   comments and CSS comments, both of which ship in the built
   output. It was found in `dist/methodology/index.html` that way in
   2026-08. Grep `dist/`, not just `src/`.
+  **Open, founder call (raised 2026-09-18):** the rule as written says
+  "anywhere a crawler can reach", and a public GitHub repository is
+  crawler-reachable. `cedar-press`'s own public `README.md` names the
+  product and links this site, and `teim-app`'s and `cedar`'s do too.
+  Either the rule means "nothing in the built site", in which case it
+  should say so, or it means what it says, in which case those READMEs
+  are out of bounds. The two readings are currently inconsistent.
+  Pending that call, nothing was changed in either direction and no
+  reference to Cedar Press was added to this repository.
 - There is deliberately no platform page. The five product names are
   introduced where they do work on the pages that already exist, not
   gathered onto a page of their own.
@@ -253,6 +342,27 @@ docs/reconciliation-roadmap.md.
 
 Nothing in `scripts/` runs at build time; each is a generator whose
 output is committed. Run them when their inputs change.
+
+Two exceptions, both deliberate, both about deploy safety rather than
+generated content. Each takes `--skip-if-unset`, so a contributor's build
+with no production origins is a no-op, and the deploy workflow calls both
+scripts *without* that flag, so a deploy can never skip them.
+
+- `scripts/check-public-origins.mjs` runs as a **`prebuild`** hook. It has
+  to run before `astro build`, not after: Astro inlines `PUBLIC_*` into the
+  client bundle, so a value carrying credentials is written into `dist/`
+  before any post-build check could object. Refusing afterwards failed the
+  build but left the compromised artifact on disk.
+- `scripts/sync-headers-csp.mjs` runs as a **`postbuild`** hook. Its
+  committed output (`public/_headers`) names the production API origin,
+  which covers every deploy that uses it — but a Cloudflare Pages or
+  Netlify preview pointed at a *different* `PUBLIC_API_URL` cannot be
+  covered by a committed file, because that origin is not known at commit
+  time, and those hosts run a plain `npm run build` rather than the GitHub
+  Pages workflow.
+
+Everything else in `scripts/` remains a generator whose output is
+committed.
 
 - Sector photography (duotone): `scripts/naics/sectors.mjs` is the
   single source for the 20 NAICS sectors + the Tribal Government
@@ -288,19 +398,69 @@ output is committed. Run them when their inputs change.
   appears nowhere a visitor can read. Anything that should be public
   about a person goes on `/team` first and arrives in llms.txt because
   it is there.
+- Page inventory for crawlers and assistants: `src/data/siteMap.ts` is
+  the single record of what pages exist, the question each one answers
+  and whether it is indexed. `npm run llms:pages` rewrites the
+  `## Pages` block of `public/llms.txt` from it (no browser, no running
+  site), and `npm run docs:copy` and `npm run stress` read it too.
+  **Adding a page is two edits**: a line in `Nav.astro`'s `NAV` array so
+  a reader can reach it, and an entry here so the copy document, llms.txt
+  and the stress walk know it exists. A smoke test compares the inventory
+  against the generated sitemap and fails when they disagree — that check
+  exists because /why-lumecon shipped into the sitemap automatically,
+  was silently skipped by the copy export until its array was edited by
+  hand, and was named nowhere at all in llms.txt.
+- Stress: `npm run stress` against a running preview. Not a generator and
+  not in CI. A dozen concurrent clients walk every page several rounds
+  each, half on a phone viewport, then one client drives Cedar and the
+  disclosure sets hard and reports node counts before and after, so a
+  leak is a number rather than a hunch. It distinguishes a request
+  cancelled by navigating away from one that failed — the first version
+  did not, and reported 115 failures that were all cancellations.
 - App handoff: `node scripts/naics/export-app.mjs >
   ../teim-app/src/data/naicsSectors.js` regenerates the app's sector
   data, and the full-size + `-wide` webps in `public/naics/` exist
   for the app to copy. Edit
   sectors.mjs, never naicsSectors.js directly.
 - Hero example screenshots: `scripts/screenshots/capture-examples.mjs`
-  captures the 60 `public/app/ex-*.webp` hero images from a running
+  captures the 30 `public/app/ex-*.webp` example images (ten examples,
+  each as results, map and compare) from a running
   teim-app dev server; `optimize-examples.mjs` compresses them.
+- Cedar Commons frames: `npm run shots:commons` captures both variants
+  (an organization and a consultancy) against a mocked API and then cuts
+  the `-narrow` phone crops. It refuses to write a frame whose board did
+  not load, that contains a broken image, or whose seat meter fell back
+  to counting members alone, so a retry state or a wrong seat count
+  cannot reach the page. Run the whole script: re-capturing the raw PNGs
+  without re-running the optimizer leaves a stale webp under a fresh
+  caption.
 - Smoke tests: `npm run build` first (Playwright serves `dist/`), then
   `npm run test:smoke` (CI runs chromium + webkit). The site makes no
   third-party requests since the typefaces were self-hosted, so there is
-  no longer an environmental failure mode to discount: every failure is
-  real.
+  no network failure mode to discount.
+- **Build the way CI does, or two tests fail for no reason.** The smoke
+  workflow builds with `PUBLIC_APP_URL=https://app.lumecon.ai` and
+  `PUBLIC_API_URL=https://api.lumecon.ai`; Astro inlines both at build
+  time. There is no tracked `.env`, so a plain `npm run build` produces
+  the login-only fallback and these two fail:
+  *the production build preserves the app handoff and API CSP* and
+  *welcome closes the flow in full teal with one action*. Locally:
+
+  ```sh
+  PUBLIC_APP_URL=https://app.lumecon.ai PUBLIC_API_URL=https://api.lumecon.ai npm run build
+  ```
+
+  Those two are the only known environmental failures. Anything else is
+  real: check before discounting it, never the other way round.
+- **`astro check` passing is not the build passing.** `npm run build` is
+  `astro check && astro build`, and the two fail in different places. A
+  grep for the check's `Result / 0 errors` summary reports green while
+  `astro build` is failing underneath it: a malformed stylesheet gives
+  `[lightningcss minify] Invalid empty selector` and writes **no `dist/`
+  at all**, which looks like success to any filter watching the top of the
+  output. Read to the end and confirm the last line is `[build] Complete!`
+  with a page count. `ls dist/<route>/index.html` settles it in one
+  command.
 
 Known heavy directory: `scripts/naics/sources/` (~250 MB of licensed
 originals) is tracked in git. Moving it to external storage is a

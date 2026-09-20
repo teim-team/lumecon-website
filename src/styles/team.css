@@ -94,6 +94,11 @@
   opacity: 1;
   box-shadow: 0 0 0 2px var(--accent);
 }
+/* Hover brings the portrait up to full, and nothing more. There is no
+   separate hovered-but-unpicked state to dress: above 900px hovering a
+   face selects it, so the ring above is already the hover feedback, and
+   below 900px there is no hover to give. A softer ring for this state
+   was written and removed — it could not be seen at any width. */
 .face:hover .face__photo {
   opacity: 1;
 }
@@ -170,6 +175,17 @@
   display: block;
   visibility: hidden;
 }
+@keyframes pcard-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.pcard:not([hidden]) {
+  animation: pcard-in 0.16s var(--ease) both;
+}
 .pcard__name {
   font-size: clamp(1.25rem, 1.8vw, 1.55rem);
   font-weight: 650;
@@ -233,7 +249,11 @@
   padding-top: 1rem;
   border-top: 1px solid var(--rule);
 }
+/* WCAG 2.5.8 target size: 24px minimum for a standalone target. Measured
+   at 375px this link was 21px tall, so the hit area is grown rather than
+   the type — the line looks the same and the target clears the floor. */
 .pcard__link {
+  min-height: 24px;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -349,5 +369,8 @@
   .face__name,
   .face__role {
     transition: none;
+  }
+  .pcard:not([hidden]) {
+    animation: none;
   }
 }

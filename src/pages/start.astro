@@ -1,0 +1,1104 @@
+---
+/**
+ * /start - Plan your first analysis.
+ *
+ * The site's answer to the question an interested organization actually
+ * has, which is not "what does the model do" but "what can we start with".
+ * A short scoping flow, a proposed starting scope, and a checklist of
+ * records the organization already owns. The question count is not
+ * promised anywhere: follow-ups change it, and a total that grows while
+ * somebody works makes the finish line recede.
+ *
+ * Everything on this page comes from src/data/planFirstAnalysis.js, which
+ * the onboarding call outline and the internal coordinator brief read as
+ * well (npm run docs:plan). One edit changes every surface.
+ *
+ * Progressive by design. Every question, the capability panels, the
+ * records and the call all render as static HTML, so the page is useful
+ * with no JavaScript at all. The script adds the
+ * tailored plan: it imports the same module, evaluates it in the browser
+ * and renders the result. No request is made and nothing is stored.
+ *
+ * Nothing sensitive is collected here. Records move through the
+ * authenticated product, which is what the checklist says.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site as siteConfig } from '../config';
+import {
+  STAGES,
+  SCREENS,
+  CAPABILITY_MATRIX,
+  RECORDS,
+  CALL_PUBLIC_OUTCOMES,
+  READINESS_ESSENTIALS,
+  READINESS_TEAM,
+  READINESS_GOVERNANCE,
+  READINESS_FLOOR,
+  READINESS_CONSULTANT,
+} from '../data/planFirstAnalysis.js';
+import '../styles/global.css';
+import '../styles/nav.css';
+import '../styles/footer.css';
+import '../styles/home.css';
+import '../styles/methodology.css';
+import '../styles/start.css';
+
+const site = siteConfig.url;
+const description =
+  'Start with the records you already have. A few questions find a scope you can actually run, the records to bring first and what more information would make possible.';
+
+/* A literal tuple, so each id indexes RECORDS as a known key. A plain
+   string[] infers `string`, which has no index signature on that object and
+   fails `astro check` (it did, and it broke a deploy). */
+const CORE_RECORD_IDS = ['financials', 'payroll', 'headcount'] as const;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+      { '@type': 'ListItem', position: 2, name: 'Plan your first analysis', item: `${site}/start` },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Plan your first analysis | Lumecon"
+  description={description}
+  canonical="https://lumecon.ai/start"
+  jsonLd={jsonLd}
+>
+  <Nav isHome={false} />
+  <main class="meth start" id="top" tabindex="-1">
+    <header class="meth-hero meth-hero--cover start-hero section--dark">
+      <div class="meth-w">
+        <div class="start-hero__copy">
+          <p class="h-kicker reveal-soft">Getting started</p>
+          <h1 class="meth-hero__title reveal-soft" data-stagger="1">
+            Plan your <span class="brand-em">first analysis</span>.
+          </h1>
+          <p class="meth-hero__lede reveal-soft" data-stagger="2">
+            Start with the records you already have. Answer a few questions to find a scope you can
+            run and see what to bring.
+          </p>
+
+          {/* Fills in as answers accumulate, and each line goes back to the
+              question that set it. It replaces the standing explanation
+              rather than adding a second panel to read. */}
+          <div class="start-sum" data-sum hidden>
+            <p class="start-sum__k">Your answers so far</p>
+            <ul class="start-sum__list" data-sum-list role="list"></ul>
+          </div>
+        </div>
+
+        {/* The flow is this page's product, so it is staged the way a product
+            screen is staged on the other pages: a working surface on the dark
+            ground, with a caption under it. */}
+        <div class="start-stage reveal-soft" data-stagger="3">
+          <div class="start-stage__inner">
+            <form class="pf" id="pf-form" novalidate>
+              <ol class="pf-rail" data-pf-rail hidden aria-label="Progress">
+                {
+                  STAGES.map((stage) => (
+                    <li class="pf-rail__item" data-rail={stage.id}>
+                      <span class="pf-rail__bar"></span>
+                      <span class="pf-rail__label">{stage.label}</span>
+                    </li>
+                  ))
+                }
+              </ol>
+
+              {
+                SCREENS.map((screen) => {
+                  const follow = screen.follow;
+                  return (
+                  <fieldset
+                    class={`pf-q${screen.follow ? ' pf-q--follow' : ''}`}
+                    data-step={screen.id}
+                    data-stage={screen.stage}
+                    data-follow={follow ? screen.id : undefined}
+                    tabindex="-1"
+                  >
+                    {follow ? (
+                      <>
+                        <legend class="pf-q__legend">
+                          <span class="pf-q__label">{follow.label}</span>
+                        </legend>
+                        <div class="pf-opts pf-opts--tight">
+                          {follow.options.map((o) => (
+                            <label class="pf-opt">
+                              <input type="radio" name={follow.id} value={o.value} />
+                              <span class="pf-opt__body">
+                                <span class="pf-opt__label">{o.label}</span>
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      screen.questions.map((q) => (
+                        <>
+                          <legend class="pf-q__legend">
+                            <span class="pf-q__label">{q.label}</span>
+                          </legend>
+                          {q.help ? <p class="pf-q__help">{q.help}</p> : null}
+                          <div
+                            class={`pf-opts${q.options.some((o) => o.note) ? '' : ' pf-opts--tight'}`}
+                          >
+                            {q.options.map((o) => (
+                              <label class="pf-opt">
+                                <input
+                                  type={q.kind === 'multi' ? 'checkbox' : 'radio'}
+                                  name={q.id}
+                                  value={o.value}
+                                />
+                                <span class="pf-opt__body">
+                                  <span class="pf-opt__label">{o.label}</span>
+                                  {o.note ? <span class="pf-opt__note">{o.note}</span> : null}
+                                </span>
+                              </label>
+                            ))}
+                          </div>
+                        </>
+                      ))
+                    )}
+                  </fieldset>
+                  );
+                })
+              }
+
+              <p class="pf-done" data-pf-done hidden>
+                Your plan is below. Change an answer and it rebuilds.
+              </p>
+
+              <div class="pf-actions" hidden data-pf-actions>
+                <button class="btn2 btn2--primary" type="submit" data-pf-next>
+                  <span data-pf-next-label>Continue</span>
+                  <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+                </button>
+                <button class="pf-back" type="button" data-pf-back hidden>Back</button>
+                <button class="pf-back" type="button" data-pf-reset hidden>Start over</button>
+              </div>
+              <p class="pf-noscript">
+                The tailored plan needs JavaScript. Everything it draws on is on this page: the
+                records to bring, what more information makes possible and how the first call works.
+                Or write to <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> and an
+                economist will work through it with you.
+              </p>
+            </form>
+          </div>
+          <p class="start-stage__foot">
+            Nothing is uploaded here and no answer is stored. Not sure is a real answer.
+          </p>
+        </div>
+
+        <ol class="start-promise" aria-label="What this gives you">
+          <li class="reveal-soft" data-stagger="1">
+            <p class="start-promise__k">What you can learn now</p>
+            <p class="start-promise__b">
+              What the records you already hold support, before anyone gathers anything new.
+            </p>
+          </li>
+          <li class="reveal-soft" data-stagger="2">
+            <p class="start-promise__k">The minimum for your question</p>
+            <p class="start-promise__b">
+              A short list, tied to the scope you chose rather than to everything we can read.
+            </p>
+          </li>
+          <li class="reveal-soft" data-stagger="3">
+            <p class="start-promise__k">What more would make possible</p>
+            <p class="start-promise__b">
+              What each further record changes about the method, and what it does not.
+            </p>
+          </li>
+          <li class="reveal-soft" data-stagger="4">
+            <p class="start-promise__k">Who has to help</p>
+            <p class="start-promise__b">
+              The two or three people the scope needs, and who approves sharing records.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </header>
+
+    <section
+      class="meth-sec start-sec start-sec--plan"
+      aria-labelledby="s-plan"
+      hidden
+      data-plan-sec
+    >
+      <div class="meth-w">
+        <h2 id="s-plan" class="visually-hidden">Your starting plan</h2>
+        {/* Print only: a sheet that leaves the building should say where
+            it came from and when it was made. */}
+        <p class="pf-printhead" aria-hidden="true">
+          Lumecon <span>Plan your first analysis</span>
+          <span class="pf-printhead__date" data-print-date></span>
+        </p>
+        <div class="pf-plan" id="pf-plan" tabindex="-1" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="meth-sec start-sec start-sec--surface" aria-labelledby="s-output">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="s-output">What a first analysis can show</h2>
+          <p class="meth-sec__lede">
+            Typical results include the four measures below, separated into the activity itself,
+            the suppliers it buys from and the household spending its wages support. Which of them
+            an analysis can report depends on the scope and the records behind it.
+          </p>
+        </div>
+        <div class="start-output">
+          <figure class="start-output__shot" data-zoom>
+            <div class="start-output__crop">
+              <picture>
+                <img
+                  src="/app/ex-nation-results.webp"
+                  alt="A completed Lumecon analysis showing jobs supported, GDP contribution, labor income and economic output, with the direct, indirect and induced split beneath. Shown with illustrative sample data."
+                  width="1920"
+                  height="1312"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            </div>
+            <figcaption>A completed analysis. Illustrative sample data, not a customer.</figcaption>
+          </figure>
+          <ol class="start-output__list" role="list">
+            <li>
+              <p class="start-output__k">Jobs supported</p>
+              <p class="start-output__b">Never jobs created: a contribution analysis has no counterfactual.</p>
+            </li>
+            <li>
+              <p class="start-output__k">Labor income</p>
+              <p class="start-output__b">Wages, salaries and proprietor income.</p>
+            </li>
+            <li>
+              <p class="start-output__k">Value added</p>
+              <p class="start-output__b">The contribution to regional GDP.</p>
+            </li>
+            <li>
+              <p class="start-output__k">Economic output</p>
+              <p class="start-output__b">Total production supported in the region.</p>
+            </li>
+          </ol>
+        </div>
+        <p class="start-foot">
+          Labor income is a component of value added, which is a component of economic output.
+          They are layers of the same activity, so they are never added together.{' '}
+          <a class="gloss-link" href="/glossary">See the glossary</a> for each term in full.
+        </p>
+      </div>
+    </section>
+
+    <section class="meth-sec start-sec" aria-labelledby="s-more">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="s-more">What more records would let you ask</h2>
+          <p class="meth-sec__lede">
+            Each of these answers a question the analysis cannot otherwise reach. Choose one to see
+            what it supports. More information can move an estimate in either direction, narrow
+            what the analysis can support, or surface double counting.
+          </p>
+        </div>
+
+        <div class="start-cap" data-cap>
+          <ul class="start-cap__tabs" role="list">
+            {
+              CAPABILITY_MATRIX.filter((row) => row.id !== 'baseline').map((row, i) => (
+                <li>
+                  <button
+                    type="button"
+                    class="start-cap__tab"
+                    data-cap-tab={row.id}
+                    aria-expanded={i === 0 ? 'true' : 'false'}
+                    aria-controls={`cap-${row.id}`}
+                  >
+                    {row.question}
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+          <div class="start-cap__panels">
+            {
+              CAPABILITY_MATRIX.filter((row) => row.id !== 'baseline').map((row) => (
+                <div class="start-cap__panel" id={`cap-${row.id}`} data-cap-panel={row.id}>
+                  <p class="start-cap__q">{row.question}</p>
+                  <p class="start-cap__record">
+                    <span class="start-cap__rk">Bring</span> {row.information}
+                  </p>
+                  <p class="start-cap__benefit">{row.benefit}</p>
+                  {row.note ? <p class="start-cap__note">{row.note}</p> : null}
+                  <p class={`start-cap__status start-cap__status--${row.status}`}>
+                    {row.availability}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Analysis readiness, which is not data readiness. The flow above
+        reads the organization and the records as two independent things;
+        this is the third, and the one that most often stalls a project.
+        Deliberately a short primer and not an audit: a public page that
+        interrogates an organization about its internal authority before
+        it has seen anything of value is the thing to avoid. */}
+    <section class="meth-sec start-sec start-sec--quiet" aria-labelledby="s-ready">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="s-ready">Prepare your organization for an analysis</h2>
+          <p class="meth-sec__lede">
+            The work stalls on coordination more often than on data. Four things make it go
+            smoothly, and none of them has to be settled before you start.
+          </p>
+        </div>
+
+        <ol class="ready-four" role="list">
+          {
+            READINESS_ESSENTIALS.map((item) => (
+              <li class="ready-four__item">
+                {/* Decorative: the heading beside it carries the meaning, and
+                    the numbering these replaced implied an order the section's
+                    own lede denies. */}
+                <svg
+                  class="ready-four__mark"
+                  viewBox="0 0 28 28"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  set:html={item.mark}
+                />
+                <div>
+                  <h3 class="ready-four__label">{item.label}</h3>
+                  <p class="ready-four__body">{item.body}</p>
+                  <p class="ready-four__note">{item.note}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="ready-floor">{READINESS_FLOOR}</p>
+
+        <details class="ready-more">
+          <summary>What a project team looks like</summary>
+          <div class="ready-more__body">
+            <p class="ready-more__lede">
+              A composite of how organizations that run these analyses well are arranged. One
+              person may hold several of these, and a small organization often has three people
+              rather than six.
+            </p>
+            <ul class="ready-team" role="list">
+              {
+                READINESS_TEAM.map((m) => (
+                  <li class="ready-team__row">
+                    <p class="ready-team__role">
+                      {m.role} <span class="ready-team__holds">{m.holds}</span>
+                    </p>
+                    <p class="ready-team__body">{m.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="ready-gov">{READINESS_GOVERNANCE}</p>
+            <p class="ready-more__foot">
+              The onboarding call works through whichever of these is unsettled.{' '}
+              <a class="gloss-link" href="#s-call">What the call covers</a>.
+            </p>
+            {/* One line, not a section. Consultant-led work is the same
+                analysis with the coordination arranged differently, so it
+                gets a redirection rather than a second audience the page
+                has to serve in full. */}
+            <p class="ready-consultant">
+              <strong>{READINESS_CONSULTANT.lede}</strong> {READINESS_CONSULTANT.body}
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="meth-sec start-sec start-sec--surface" aria-labelledby="s-records">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="s-records">Start with the records you already have</h2>
+          <p class="meth-sec__lede">
+            Bring what exists. We would rather read the report you already produce than have you
+            build a spreadsheet for us, and we will tell you what it supports before you spend time
+            reformatting anything.
+          </p>
+        </div>
+        <ul class="start-core" role="list">
+          {
+            CORE_RECORD_IDS.map((id) => (
+              <li>
+                <div>
+                  <p class="start-core__what">{RECORDS[id].what}</p>
+                  <p class="start-core__why">{RECORDS[id].why}</p>
+                </div>
+                <details class="start-core__more">
+                  <summary>Alternatives, and who usually holds it</summary>
+                  <div>
+                    {RECORDS[id].alternative ? <p>{RECORDS[id].alternative}</p> : null}
+                    <p class="start-core__holder">{RECORDS[id].holder}</p>
+                  </div>
+                </details>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="start-core__note">
+          These three, for one year, cover the common case. What else a particular analysis needs
+          depends on its scope, which is what the questions above work out. Some of what looks like
+          a separate request is often already inside a record you hold.
+        </p>
+        <p class="start-foot">
+          Nothing is uploaded here. Records are shared inside the product, where access is
+          controlled and every file stays connected to the analysis it supports.
+        </p>
+      </div>
+    </section>
+
+    <section class="meth-sec start-sec" aria-labelledby="s-call">
+      <div class="meth-w">
+        <div class="start-call">
+          <div class="start-call__copy">
+            <p class="h-kicker">Help getting started</p>
+            <h2 id="s-call">We can help you choose a starting point.</h2>
+            <p class="start-call__lede">
+              Bring one report you already have. An economist will tell you what it supports, which
+              gaps matter for your question and which do not.
+            </p>
+            <a class="btn2 btn2--primary" href="/signup?intent=scoping">
+              Arrange an onboarding call <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+            <p class="start-call__note">
+              Goes to a short form. The team replies by email to arrange a time.
+            </p>
+          </div>
+          <ol class="start-call__out" role="list">
+            {
+              CALL_PUBLIC_OUTCOMES.map((o) => (
+                <li>
+                  <p class="start-call__outk">{o.label}</p>
+                  <p class="start-call__outb">{o.detail}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="meth-sec start-sec start-sec--quiet" aria-labelledby="s-coverage">
+      <div class="meth-w">
+        <div class="start-cov">
+          <div>
+            <p class="h-kicker">Reference</p>
+            <h2 id="s-coverage">How coverage is reported</h2>
+            <p class="start-cov__lede">
+              An analysis reports what it observed and what it assumed. Coverage tells you which
+              records are represented. It does not measure overall model accuracy, and it is never
+              a confidence score.
+            </p>
+            <p class="start-cov__more">
+              The indicators, their denominators and how estimation is flagged are set out in the{' '}
+              <a class="gloss-link" href="/methodology">methodology</a>.
+            </p>
+          </div>
+          <figure class="start-cov__eg">
+            <figcaption>An illustrative example, not your figures</figcaption>
+            <p class="start-cov__egline">
+              <span class="start-cov__marks" aria-hidden="true">
+                {[...Array(10)].map((_, i) => (
+                  <span class={i < 8 ? 'on' : undefined}></span>
+                ))}
+              </span>
+              <span class="start-cov__egnum">8 of 10</span>
+            </p>
+            <p class="start-cov__egtext">
+              selected operations have records in hand. The denominator is the agreed list of
+              operations, so the figure changes when the scope does.
+            </p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="fcta start-cta" aria-labelledby="start-cta-title">
+      <div class="fcta-inner">
+        <p class="h-kicker">Next step</p>
+        <h2 class="fcta-title" id="start-cta-title">
+          Start with one question, <span class="brand-em">not everything at once</span>.
+        </h2>
+        <p class="fcta-lede">
+          Send one report you already have. An economist will tell you what it supports, which gaps
+          matter for your question and which do not.
+        </p>
+        <div class="hero2-cta">
+          <a class="btn2 btn2--primary" href="/signup?intent=scoping">
+            Arrange an onboarding call <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn2 btn2--card" href="/methodology">
+            Read the methodology <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+        <p class="fcta-contact">
+          Or write to <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+
+  <script>
+    import {
+      QUESTIONS,
+      STAGES,
+      SCREENS,
+      FOLLOW_UPS,
+      EXCLUSIVE_VALUE,
+      derivePlan,
+    } from '../data/planFirstAnalysis.js';
+
+    const form = document.getElementById('pf-form') as HTMLFormElement | null;
+    const panel = document.getElementById('pf-plan') as HTMLElement | null;
+
+    if (form && panel) {
+      /* Progressive enhancement. The markup ships every question visible and
+         stacked, which is the version that works with no JavaScript. From
+         here it becomes one question at a time. */
+      const rail = form.querySelector<HTMLElement>('[data-pf-rail]');
+      const actions = form.querySelector<HTMLElement>('[data-pf-actions]');
+      const nextBtn = form.querySelector<HTMLButtonElement>('[data-pf-next]');
+      const nextLabel = form.querySelector<HTMLElement>('[data-pf-next-label]');
+      const backBtn = form.querySelector<HTMLButtonElement>('[data-pf-back]');
+      const resetBtn = form.querySelector<HTMLButtonElement>('[data-pf-reset]');
+      const doneNote = form.querySelector<HTMLElement>('[data-pf-done]');
+      const noscript = form.querySelector<HTMLElement>('.pf-noscript');
+      const planSec = document.querySelector<HTMLElement>('[data-plan-sec]');
+      const summary = document.querySelector<HTMLElement>('[data-sum]');
+      const summaryList = document.querySelector<HTMLElement>('[data-sum-list]');
+      if (rail) rail.hidden = false;
+      if (actions) actions.hidden = false;
+      if (noscript) noscript.remove();
+      form.classList.add('pf--stepped');
+
+      const MULTI = new Set(QUESTIONS.filter((q) => q.kind === 'multi').map((q) => q.id));
+      const FOLLOW = new Map(FOLLOW_UPS.map((f) => [f.id, f]));
+
+      type Step = { id: string; el: HTMLElement; stage: string; names: string[] };
+      const steps: Step[] = SCREENS.map((screen) => ({
+        id: screen.id,
+        el: form.querySelector<HTMLElement>(`[data-step="${screen.id}"]`) as HTMLElement,
+        stage: screen.stage,
+        names: screen.follow ? [screen.follow.id] : screen.questions.map((q) => q.id),
+      })).filter((step) => step.el);
+
+      let cursor = 0;
+      let done = false;
+
+      function readAnswers(): Record<string, string | string[]> {
+        const data = new FormData(form as HTMLFormElement);
+        const out: Record<string, string | string[]> = {};
+        for (const key of new Set(Array.from(data.keys()))) {
+          const values = data.getAll(key).map(String);
+          out[key] = MULTI.has(key) ? values : values[0];
+        }
+        return out;
+      }
+
+      /* A follow-up is a step only where its answer would change the scope or
+         the records requested. Anything that drops out of the path has its
+         answer cleared, so a question the person never saw cannot reach the
+         plan. Answers on steps that stay in the path are preserved. */
+      function livePath(): Step[] {
+        const answers = readAnswers();
+        return steps.filter((step) => {
+          const follow = FOLLOW.get(step.id);
+          if (!follow) return true;
+          if (follow.showWhen(answers)) return true;
+          for (const input of step.el.querySelectorAll<HTMLInputElement>('input')) {
+            input.checked = false;
+          }
+          return false;
+        });
+      }
+
+      function answered(step: Step) {
+        return step.names.every((name) =>
+          Boolean(step.el.querySelector(`input[name="${CSS.escape(name)}"]:checked`)),
+        );
+      }
+
+      /* The stage set is fixed, so the end never moves while somebody works.
+         A stage reads as done once the path has carried them past it. */
+      function paintRail(path: Step[]) {
+        const current = path[cursor];
+        const order = STAGES.map((s) => s.id);
+        const here = done ? order.length - 1 : order.indexOf(current?.stage ?? 'goal');
+        for (const [i, stage] of STAGES.entries()) {
+          const el = rail?.querySelector<HTMLElement>(`[data-rail="${stage.id}"]`);
+          if (!el) continue;
+          el.classList.toggle('on', i === here);
+          el.classList.toggle('past', i < here);
+          if (i === here) el.setAttribute('aria-current', 'step');
+          else el.removeAttribute('aria-current');
+        }
+      }
+
+      const LABELS = new Map<string, string>();
+      for (const q of QUESTIONS) for (const o of q.options) LABELS.set(`${q.id}:${o.value}`, o.label);
+
+      /** The summary beside the flow: what has been said, and a way back. */
+      function paintSummary() {
+        if (!summary || !summaryList) return;
+        const answers = readAnswers();
+        const rows: { step: string; k: string; v: string }[] = [];
+        const pick = (name: string, k: string) => {
+          const v = answers[name];
+          if (!v || (Array.isArray(v) && !v.length)) return;
+          const text = (Array.isArray(v) ? v : [v])
+            .map((one) => LABELS.get(`${name}:${one}`) || one)
+            .join(', ');
+          const step = steps.find((s) => s.names.includes(name));
+          rows.push({ step: step ? step.id : name, k, v: text });
+        };
+        pick('goal', 'Purpose');
+        pick('audience', 'For');
+        pick('boundary', 'Covers');
+        pick('where', 'Where');
+        pick('activities', 'Activities');
+        pick('available', 'In hand');
+
+        summary.hidden = rows.length === 0;
+        summaryList.innerHTML = rows
+          .map(
+            (r) => `<li><button type="button" data-sum-jump="${r.step}">
+              <span class="start-sum__rk">${esc(r.k)}</span>
+              <span class="start-sum__rv">${esc(r.v)}</span>
+            </button></li>`,
+          )
+          .join('');
+        for (const btn of summaryList.querySelectorAll<HTMLButtonElement>('[data-sum-jump]')) {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.sumJump as string;
+            const path = livePath();
+            const index = path.findIndex((s) => s.id === id);
+            if (index < 0) return;
+            if (done) leavePlan();
+            cursor = index;
+            render(true);
+            form!.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+        }
+      }
+
+      function render(focus = false) {
+        const path = livePath();
+        if (cursor >= path.length) cursor = path.length - 1;
+        if (cursor < 0) cursor = 0;
+        for (const step of steps) step.el.hidden = true;
+        const step = path[cursor];
+        step.el.hidden = false;
+        paintRail(path);
+        paintSummary();
+        const last = cursor === path.length - 1;
+        if (nextLabel) nextLabel.textContent = last ? 'Show my starting plan' : 'Continue';
+        if (nextBtn) {
+          nextBtn.hidden = false;
+          nextBtn.disabled = !answered(step);
+        }
+        if (backBtn) backBtn.hidden = cursor === 0;
+        if (actions) {
+          actions.hidden =
+            Boolean(nextBtn?.hidden) && Boolean(backBtn?.hidden) && Boolean(resetBtn?.hidden);
+        }
+        /* Focus the screen, not its first option: a fieldset announces its
+           legend, so somebody using a screen reader hears the question that
+           just replaced the one they answered. */
+        if (focus) step.el.focus({ preventScroll: true });
+      }
+
+      function advance() {
+        const path = livePath();
+        if (cursor >= path.length - 1) return false;
+        cursor += 1;
+        render(true);
+        return true;
+      }
+
+      function writeHash() {
+        const qs = new URLSearchParams();
+        for (const [k, v] of Object.entries(readAnswers())) {
+          if (Array.isArray(v)) {
+            if (v.length) qs.set(k, v.join(','));
+          } else if (v) {
+            qs.set(k, String(v));
+          }
+        }
+        const hash = qs.toString();
+        history.replaceState(null, '', hash ? `#${hash}` : window.location.pathname);
+      }
+
+      function esc(value: unknown) {
+        return String(value).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
+        );
+      }
+
+      const TIERS = [
+        {
+          key: 'begin',
+          label: 'Needed to complete this analysis',
+          note: 'A first conversation needs none of these. Running the analysis above does.',
+        },
+        {
+          key: 'refine',
+          label: 'Sharpens the result',
+          note: 'Each one replaces an assumption with something observed.',
+        },
+        {
+          key: 'later',
+          label: 'For later questions',
+          note: 'Not needed now. Worth knowing they exist.',
+        },
+      ];
+
+      function checkRow(r: any) {
+        return `<li class="pf-check${r.have ? ' pf-check--have' : ''}">
+          <p class="pf-check__what">
+            ${r.have ? '<span class="pf-check__have">In hand</span>' : ''}${esc(r.what)}
+          </p>
+          <p class="pf-check__why">${esc(r.why)}</p>
+          ${
+            r.alternative || r.holder
+              ? `<details class="pf-check__more"><summary>Alternatives, and who usually holds it</summary>
+                 <div>${r.alternative ? `<p>${esc(r.alternative)}</p>` : ''}
+                 <p class="pf-check__holder">${esc(r.holder)}</p></div></details>`
+              : ''
+          }
+        </li>`;
+      }
+
+      function renderPlan(answers: Record<string, unknown>) {
+        const plan = derivePlan(answers);
+        const scopeLine = plan.scope.settled
+          ? plan.scope.sentence
+          : 'We would like help scoping a first analysis.';
+
+        /* The recommendation and the next step first, on their own surface.
+           Everything that qualifies them follows, in the order somebody
+           would ask for it. */
+        const head = `<div class="pf-lead">
+          <div class="pf-lead__main">
+            <p class="h-kicker">Your starting plan</p>
+            <h3 class="pf-lead__title">${esc(plan.scope.title)}</h3>
+            ${
+              plan.scope.facts.length
+                ? `<ul class="pf-facts" role="list">${plan.scope.facts
+                    .map(
+                      (f) =>
+                        `<li><span class="pf-facts__k">${esc(f.k)}</span><span>${esc(f.v)}</span></li>`,
+                    )
+                    .join('')}</ul>`
+                : ''
+            }
+            ${
+              !plan.confidence.sufficient
+                ? `<p class="pf-callout">${esc(plan.confidence.reason)}</p>`
+                : plan.confidence.caveat
+                  ? `<p class="pf-caveat">${esc(plan.confidence.caveat)}</p>`
+                  : ''
+            }
+          </div>
+          <aside class="pf-lead__act">
+            <p class="pf-act__k">Do this next</p>
+            <p class="pf-act__title">${esc(plan.nextAction.title)}</p>
+            <p class="pf-act__detail">${esc(plan.nextAction.detail)}</p>
+            <a class="btn2 btn2--primary" href="/signup?intent=scoping&interest=${encodeURIComponent(
+              scopeLine,
+            )}">Arrange an onboarding call <span class="btn2-arrow" aria-hidden="true">&rarr;</span></a>
+            <p class="pf-act__note">Goes to a short form. The team replies by email.</p>
+            ${plan.nextAction.caveat ? `<p class="pf-act__caveat">${esc(plan.nextAction.caveat)}</p>` : ''}
+            <div class="pf-act__minor">
+              <button type="button" data-pf-print>Print this plan</button>
+              <button type="button" data-pf-copy>Copy a link to it</button>
+            </div>
+          </aside>
+        </div>`;
+
+        const parts: string[] = [head];
+
+        const inHand = plan.checklist.filter((r) => r.have);
+        if (inHand.length) {
+          parts.push(
+            `<section class="pf-block"><h3>Already available</h3>
+             <p class="pf-block__note">From what you told us you can reach. Worth bringing to the
+             first conversation as it is, without reformatting.</p>
+             <ul class="pf-checks" role="list">${inHand.map(checkRow).join('')}</ul></section>`,
+          );
+        }
+
+        for (const tier of TIERS) {
+          const rows = plan.checklist.filter((r) => r.tier === tier.key && !r.have);
+          if (!rows.length) continue;
+          parts.push(
+            `<section class="pf-block"><h3>${esc(tier.label)}</h3>
+             <p class="pf-block__note">${esc(tier.note)}</p>
+             <ul class="pf-checks" role="list">${rows.map(checkRow).join('')}</ul></section>`,
+          );
+        }
+
+        parts.push(
+          `<details class="pf-more">
+            <summary>What this will and will not show, and who has to help</summary>
+            <div class="pf-more__inner">
+              ${
+                plan.firstOutput.can.length
+                  ? `<section class="pf-block"><h3>What it reports</h3>
+                     <ul class="pf-list" role="list">${plan.firstOutput.can
+                       .map((c) => `<li>${esc(c)}</li>`)
+                       .join('')}</ul></section>`
+                  : ''
+              }
+              ${
+                plan.firstOutput.notYet.length
+                  ? `<section class="pf-block"><h3>What it will not show yet</h3>
+                     <ul class="pf-list pf-list--not" role="list">${plan.firstOutput.notYet
+                       .map((c) => `<li>${esc(c)}</li>`)
+                       .join('')}</ul></section>`
+                  : ''
+              }
+              <section class="pf-block"><h3>How this reads</h3>
+                <div class="pf-reads">
+                  <div class="pf-read">
+                    <p class="pf-read__k">Structure</p>
+                    <p class="pf-read__v">${esc(plan.structure.label)}</p>
+                    ${
+                      plan.structure.signals.length
+                        ? `<ul role="list">${plan.structure.signals
+                            .map((x) => `<li>${esc(x)}</li>`)
+                            .join('')}</ul>`
+                        : ''
+                    }
+                    <p class="pf-read__d">${esc(plan.structure.detail)}</p>
+                  </div>
+                  <div class="pf-read">
+                    <p class="pf-read__k">Records</p>
+                    <p class="pf-read__v">${esc(plan.records.label)}</p>
+                    ${
+                      plan.records.notes.length
+                        ? `<ul role="list">${plan.records.notes
+                            .map((n) => `<li>${esc(n)}</li>`)
+                            .join('')}</ul>`
+                        : ''
+                    }
+                  </div>
+                </div>
+                <p class="pf-reads__note">These are read separately. A complex organization often
+                has excellent records, and a single operation often cannot reach its own.</p>
+              </section>
+              <section class="pf-block"><h3>Who can help</h3>
+                <p class="pf-block__note">Roles, not seats at a meeting. One person often covers
+                several of them.</p>
+                <ul class="pf-people" role="list">${plan.participants
+                  .map(
+                    (p) => `<li><span class="pf-people__role">${esc(p.role)}.</span> ${esc(p.why)}</li>`,
+                  )
+                  .join('')}</ul></section>
+              ${
+                plan.openQuestions.length
+                  ? `<section class="pf-block"><h3>To settle on the call</h3>
+                     <ul class="pf-list" role="list">${plan.openQuestions
+                       .map((q) => `<li>${esc(q)}</li>`)
+                       .join('')}</ul></section>`
+                  : ''
+              }
+            </div>
+          </details>
+          <p class="pf-plan__foot">Provisional, and the point of the call is to correct it. The
+          records above are the ones this scope needs, not everything Lumecon can read.</p>`,
+        );
+
+        panel!.innerHTML = parts.join('');
+        if (planSec) planSec.hidden = false;
+        if (doneNote) doneNote.hidden = false;
+        done = true;
+        form!.classList.add('pf--done');
+        for (const step of steps) step.el.hidden = true;
+        paintRail(livePath());
+        paintSummary();
+        if (nextBtn) nextBtn.hidden = true;
+        if (backBtn) {
+          backBtn.hidden = false;
+          backBtn.textContent = 'Change an answer';
+        }
+        if (resetBtn) resetBtn.hidden = false;
+        if (actions) actions.hidden = false;
+
+        panel!
+          .querySelector<HTMLButtonElement>('[data-pf-print]')
+          ?.addEventListener('click', () => window.print());
+        const copyBtn = panel!.querySelector<HTMLButtonElement>('[data-pf-copy]');
+        copyBtn?.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            copyBtn.textContent = 'Link copied';
+          } catch {
+            copyBtn.textContent = 'Copy the address bar';
+          }
+        });
+      }
+
+      function leavePlan() {
+        done = false;
+        form!.classList.remove('pf--done');
+        if (planSec) planSec.hidden = true;
+        if (doneNote) doneNote.hidden = true;
+        panel!.innerHTML = '';
+        if (nextBtn) nextBtn.hidden = false;
+        if (backBtn) backBtn.textContent = 'Back';
+      }
+
+      form.addEventListener('change', (event) => {
+        const input = event.target as HTMLInputElement;
+        /* "Not sure" is the opposite of every other answer on its screen, so
+           it cannot sit beside them. Choosing it clears the rest; choosing
+           anything else clears it. */
+        const exclusive = EXCLUSIVE_VALUE[input?.name as keyof typeof EXCLUSIVE_VALUE];
+        if (exclusive && input?.type === 'checkbox') {
+          const group = Array.from(
+            form.querySelectorAll<HTMLInputElement>(`input[name="${CSS.escape(input.name)}"]`),
+          );
+          if (input.value === exclusive && input.checked) {
+            for (const other of group) if (other !== input) other.checked = false;
+          } else if (input.checked) {
+            for (const other of group) if (other.value === exclusive) other.checked = false;
+          }
+        }
+        writeHash();
+        const step = livePath()[cursor];
+        if (step && nextBtn) nextBtn.disabled = !answered(step);
+        paintSummary();
+        if (done) renderPlan(readAnswers());
+      });
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (advance()) return;
+        renderPlan(readAnswers());
+        panel.focus({ preventScroll: true });
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      backBtn?.addEventListener('click', () => {
+        if (done) {
+          leavePlan();
+          render(true);
+          form!.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+        cursor = Math.max(0, cursor - 1);
+        render(true);
+      });
+
+      resetBtn?.addEventListener('click', () => {
+        form.reset();
+        cursor = 0;
+        leavePlan();
+        resetBtn.hidden = true;
+        history.replaceState(null, '', window.location.pathname);
+        render(true);
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      /* A shared link carries the answers, so it opens on the plan itself. */
+      function readHash() {
+        const raw = window.location.hash.replace(/^#/, '');
+        if (!raw) return false;
+        const qs = new URLSearchParams(raw);
+        let matched = false;
+        for (const [key, value] of qs.entries()) {
+          for (const part of value.split(',')) {
+            const input = form!.querySelector<HTMLInputElement>(
+              `input[name="${CSS.escape(key)}"][value="${CSS.escape(part)}"]`,
+            );
+            if (input) {
+              input.checked = true;
+              matched = true;
+            }
+          }
+        }
+        return matched;
+      }
+
+      if (readHash()) {
+        cursor = Math.max(0, livePath().length - 1);
+        renderPlan(readAnswers());
+      } else {
+        render();
+      }
+    }
+  </script>
+
+  <script>
+    /* Printing. A closed <details> prints closed, and on paper there is no
+       way to open one, so the folded detail is opened for the print and put
+       back afterwards. The date is stamped at print time rather than at
+       build time, so a sheet says when it was produced. */
+    (function () {
+      let opened: HTMLDetailsElement[] = [];
+      window.addEventListener('beforeprint', () => {
+        const stamp = document.querySelector<HTMLElement>('[data-print-date]');
+        if (stamp) {
+          stamp.textContent = new Date().toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          });
+        }
+        opened = Array.from(
+          document.querySelectorAll<HTMLDetailsElement>('#pf-plan details:not([open])'),
+        );
+        for (const d of opened) d.open = true;
+      });
+      window.addEventListener('afterprint', () => {
+        for (const d of opened) d.open = false;
+        opened = [];
+      });
+    })();
+  </script>
+
+  <script>
+    /* The capability panels: one question open at a time. Without
+       JavaScript every panel is visible, which is the readable fallback. */
+    const cap = document.querySelector<HTMLElement>('[data-cap]');
+    if (cap) {
+      cap.classList.add('start-cap--js');
+      const tabs = Array.from(cap.querySelectorAll<HTMLButtonElement>('[data-cap-tab]'));
+      const panels = Array.from(cap.querySelectorAll<HTMLElement>('[data-cap-panel]'));
+      const show = (id: string) => {
+        for (const tab of tabs) tab.setAttribute('aria-expanded', String(tab.dataset.capTab === id));
+        for (const p of panels) p.hidden = p.dataset.capPanel !== id;
+      };
+      for (const tab of tabs) {
+        tab.addEventListener('click', () => show(tab.dataset.capTab as string));
+      }
+      if (tabs[0]) show(tabs[0].dataset.capTab as string);
+    }
+  </script>
+</BaseLayout>

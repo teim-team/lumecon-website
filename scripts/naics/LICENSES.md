@@ -104,3 +104,35 @@ additional source used by a current public-page crop.
 All 21 public sector tiles (20 NAICS sectors plus the Tribal Government
 category), along with the public-page v2 variants, carry licensed
 photography.
+
+## Contextual fallback covers
+
+Two photographs that are **not** sector imagery. They cover an analysis with
+no resolvable primary sector, in the app's Cedar Impact and Cedar Commons
+boards. Processed by `scripts/naics/fallbacks.mjs` (not `duotone.mjs`, which
+resolves a sector from the filename and would refuse these), and washed in
+`slate` — a ramp deliberately outside the four sector washes, so the colour
+does not assert an industry.
+
+Both are licensed to Lumecon Inc. under the Shutterstock **Standard license**,
+supplied by the founder on 2026-09-20.
+
+| Slug | Subject | Wash | Shutterstock asset ID | License ID |
+| --- | --- | --- | --- | --- |
+| `context-cedar` | Cut face of cedar, growth rings | slate | `<PENDING>` | `<PENDING>` |
+| `context-lattice` | Light falling through a screen | slate | `<PENDING>` | `<PENDING>` |
+
+Both are covered by Lumecon's active Shutterstock subscription; the licensing
+is settled. The asset and license IDs are simply not transcribed here yet,
+because these two arrived as direct uploads rather than through the account
+download that encodes them in the filename. Their sources are parked as
+`context-*_shutterstock_PENDING_PENDING.jpeg`; backfill the IDs and rename
+whenever convenient, so every row in this table reads the same way.
+
+**Also open — the masters are 1000px.** The sector pipeline cuts 1200x800,
+600x400 and 1500x600 from masters several thousand pixels wide. These cannot
+reach the large two without upscaling, which the pipeline does not do, so
+`fallbacks.mjs` cuts 840x560, 600x400 and 1000x400 at the same aspect ratios.
+That is ample for the board cards, which render at 270 CSS px, and soft on a
+full-width header. Re-download at full resolution and raise the sizes in
+`fallbacks.mjs`; nothing else needs to change.

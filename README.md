@@ -8,7 +8,7 @@ your organization’s economy; and **Cedar**, the AI economic analyst, in
 every plan. Built as a static
 [Astro](https://astro.build) site and deployed to GitHub Pages at
 [lumecon.ai](https://lumecon.ai). Lumecon is a standalone brand; the
-authenticated product and its data layer live in sibling repositories (see
+authenticated product, the model engine and Cedar live in sibling repositories (see
 [The product ecosystem](#where-this-fits-the-product-ecosystem)).
 
 The site follows a one-argument-per-page architecture: the homepage says
@@ -24,7 +24,11 @@ Nation, Cedar Commons, Cedar Grove on its own, and consultant
 licensing; prices include taxes and fees); **/methodology** argues the economics are credible (equations,
 the six-stage flow, the data manifest, validation, lineage and comparisons);
 the glossary defines terms and
-nothing more. Around those: a sign-up page that takes private-beta
+nothing more; **/start** answers the question a reader has before any of
+those, which is what their own organization could begin with (a short
+scoping flow, a proposed starting scope, a printable checklist of records
+they already own, and what more information would make possible).
+Around those: a sign-up page that takes private-beta
 requests through the contact endpoint, log-in, choose-plan and checkout
 pages that post to the product API when a backend is configured, /naics
 (deliberately
@@ -38,9 +42,9 @@ organization type instead. On the static deploy (no backend configured),
 Cedar's chat is answered entirely by a local keyword classifier and
 calls no upstream provider; when `PUBLIC_API_URL` is set it calls the
 Cedar backend and falls back to the local classifier on any error. The
-Cedar launcher opens a chat docked to the bottom edge of the viewport (a
-full-width bottom sheet on phones), matching the product's pinned
-widget.
+Cedar launcher opens a chat docked to the bottom edge of the viewport,
+matching the product's pinned widget; on a phone it takes the whole
+screen instead.
 
 ## Tech stack
 
@@ -78,14 +82,35 @@ npm run dev        # local dev server at http://localhost:4321
 | `npm run format`           | Prettier write across `src/`                             |
 | `npm run format:check`     | Prettier check, no writes                                |
 | `npm run test:smoke`       | Playwright smoke tests — **build first**, see below      |
+| `npm run stress`           | Concurrency and leak stress against a running preview    |
 | `npm run docs:copy`        | Regenerate `docs/site-copy-and-architecture.md`          |
+| `npm run docs:plan`        | Regenerate the onboarding resources in `docs/onboarding/`|
+| `npm run docs:questions`   | Regenerate the methodology open-questions PDF            |
+| `npm run llms:pages`       | Rewrite the `## Pages` block in `public/llms.txt`        |
+| `npm run llms:roster`      | Rewrite the roster block in `public/llms.txt` from /team |
 | `npm run naics:duotone`    | Regenerate the sector thumbnails                         |
 | `npm run naics:export-app` | Regenerate the app's sector data                         |
+| `npm run team:headshots`   | Regenerate the team portraits                            |
 | `npm run shots:examples`   | Recapture the hero example screenshots                   |
+| `npm run shots:commons`    | Recapture the Cedar Commons frames, both variants        |
 
-The last three are generators whose output is committed. Nothing in
-`scripts/` runs at build time; run them when their inputs change. See
-[AGENTS.md](./AGENTS.md) for what each one owns.
+Everything below `test:smoke` except `stress` is a generator whose output is
+committed. Nothing in `scripts/` runs at build time; run them when their inputs
+change. See [AGENTS.md](./AGENTS.md) for what each one owns.
+
+`docs:copy`, `llms:pages` and `stress` read `src/data/siteMap.ts` and so run
+under `node --experimental-strip-types`. `docs:copy` and `llms:roster` also need
+the built site being served — see Testing below for the preview command.
+
+`npm run stress` walks every page with a dozen concurrent clients, half of them
+on a phone viewport, several rounds each, then drives Cedar and the disclosure
+sets hard and reports node counts before and after. It is not part of CI: run it
+against a preview when touching anything that holds state.
+
+```bash
+npm run build && npm run preview &
+STRESS_BASE_URL=http://127.0.0.1:4321 npm run stress
+```
 
 ## Testing
 
@@ -102,12 +127,25 @@ run against your last build**. Forgetting `npm run build` means testing
 stale output, which usually looks like a test failing for a change you
 already made.
 
-`tests/` holds four specs: `smoke.spec.ts` (routes, hero rotation, pricing,
-auth flows, heading and asset checks, `security.txt` expiry) plus three
-covering the Cedar chat classifier, its focus trap, and the nudge. CI runs
-Chromium and WebKit as required gates; a failure in either browser blocks
-the smoke job. In sandboxes without the pinned browser, the config falls
-back to a system Chromium — `PW_CHROMIUM_EXECUTABLE` overrides it.
+`tests/` holds six specs: `smoke.spec.ts` (routes, hero rotation, pricing,
+auth flows, heading and asset checks, `security.txt` expiry, the crawl
+surface, and a per-width pass over the product pages on a phone), three
+covering the Cedar chat — classifier, focus trap and nudge — one for the
+plan flow, and `rich-text.spec.ts`, which is a pure unit spec with no
+browser navigation at all.
+
+CI runs Chromium and WebKit as required gates; a failure in either browser
+blocks the smoke job. In sandboxes without the pinned browser, the config
+falls back to a system Chromium — `PW_CHROMIUM_EXECUTABLE` overrides it.
+
+**WebKit is not optional, and it has caught what Chromium could not.** The
+two engines disagree about a lazy `<picture>` image inside a `display: none`
+element: Chromium leaves `currentSrc` empty, WebKit populates it and then
+never loads the image. A test that keyed off `currentSrc` passed on one and
+hung for fifteen seconds on the other. If WebKit will not install in your
+environment, say so rather than treating a Chromium-only run as a pass.
+
+`npm run stress` is separate and is not in CI. See Scripts above.
 
 There is no lint step beyond `astro check` and Prettier. `format:check` is
 **not** wired into CI today; run it before pushing.
@@ -120,21 +158,36 @@ src/
                   FinalCta, Nav, Footer, CedarFAB, CedarChat,
                   Lightbox, ConsentBanner, Contours, AuthBrandPanel,
                   MarkArt, BrandWordmark)
-  pages/        One file per route: index, cedar, pricing, methodology,
-                  glossary, naics, signup, login, choose-plan, checkout,
-                  welcome, accessibility, ai-and-data-use, security,
-                  terms, privacy and 404
+  pages/        One file per route. Marketing: index, why-lumecon,
+                  pricing, cedar, cedar-commons, cedar-grove, methodology,
+                  start, naics, glossary, team, contact. Reference and
+                  legal: security, ai-and-data-use, accessibility, privacy,
+                  terms. Flow: signup, login, choose-plan, checkout,
+                  welcome. Plus 404.
+                The inventory of all of them, with the question each one
+                  answers, is src/data/siteMap.ts — see below.
   layouts/      BaseLayout.astro — <head>, meta, OG/Twitter, JSON-LD, CSP;
                 LegalLayout.astro — legal/reference wrapper (methodology,
                 glossary, terms, privacy, ai-and-data-use)
   data/         Single sources of truth:
+                  siteMap.ts      every page, the question it answers and
+                                  whether it is indexed. Read by the copy
+                                  export, the llms.txt page list and the
+                                  stress script; checked against the
+                                  sitemap by the smoke suite
                   pricing.ts      plans, comparison rows, Cedar Grove
                                   standalone, consultant licensing
-                  team.ts         team + advisors (feeds founder JSON-LD)
+                  team.ts         team + advisors (feeds founder JSON-LD,
+                                  the /team page, the llms.txt roster and
+                                  the staff row on /why-lumecon)
                   cedarIntents.ts Cedar chat intent bank
-  assets/       Build-time inlined assets (the AI assistant brand marks)
+                  groveCollections.ts  the Cedar Grove atlas
+                  planFirstAnalysis.js the /start scoping model
+  assets/       Build-time inlined assets (the Cedar brand marks)
   lib/          api.ts (ApiResult fallback), cedarChat.ts (chat runtime),
-                consent.ts, observability.ts (consent-gated analytics shim),
+                richText.ts (the reply linkifier, its own module so a test
+                can import it without booting the chat), consent.ts,
+                observability.ts (consent-gated analytics shim),
                 flowState.ts (signup/checkout hand-off), passwordRules.ts
   styles/       global.css + per-section stylesheets
 public/         Static assets: brand marks, app screenshots (light + dark),
@@ -143,12 +196,17 @@ public/         Static assets: brand marks, app screenshots (light + dark),
                 .well-known/security.txt
 scripts/        Generators whose output is committed, never run at build
                 time: naics/ (sector data + duotone thumbnails + app
-                export), screenshots/ (hero examples), docs/ (the copy and
-                architecture export)
+                export), screenshots/ (hero examples, the Cedar Commons
+                frames), team/ (portraits), docs/ (the copy and
+                architecture export, the onboarding resources, the
+                llms.txt roster and page list). Plus test/stress.mjs,
+                which generates nothing and is run by hand.
 docs/           Brand brief, legal review, the reconciliation roadmap
                 (the cross-repo tracker AGENTS.md refers to), and the
                 generated copy/architecture export
-tests/          Playwright specs (smoke, Cedar classifier, focus trap, nudge)
+tests/          Playwright specs: smoke (the bulk), Cedar classifier,
+                Cedar focus trap, Cedar nudge, the plan flow, and
+                rich-text (a pure unit spec for the reply linkifier)
 ```
 
 ### Where content lives
@@ -158,6 +216,34 @@ reused data is centralized in `src/data/` so a change lands in one place and
 flows to the page, the footer, the JSON-LD, and the sitemap. Changing a
 plan, a product one-liner, or a Cedar chat answer is a single edit in the
 relevant data file.
+
+Navigation is grouped rather than flat: `Nav.astro` holds a `NAV` array of
+four top-level items, three of which open a short panel — Product (where the
+Cedar family lives), Why Lumecon (the buyer's argument, the team, security
+and contact), and Resources (the starting guide, methodology, sectors and
+glossary), with Pricing on its own. The same array renders the phone overlay
+as headed sections.
+
+Adding a page is two edits, and both matter: a line in that `NAV` array so a
+reader can reach it, and an entry in `src/data/siteMap.ts` so the copy
+export, `llms.txt` and the stress walk all know it exists. A smoke test
+compares the inventory against the generated sitemap, so a page added to the
+site and forgotten in the inventory fails CI rather than going quietly
+missing from what crawlers and assistants are given.
+
+`src/data/planFirstAnalysis.js` goes one step further and is worth knowing
+about before editing anything onboarding-related. It holds the scoping
+questions, the branching rules, the records catalog, the capability matrix
+and the onboarding call outline, plus the pure functions that turn a set of
+answers into a proposed scope and a checklist. `/start` renders it, the
+browser evaluates the same functions to build a tailored plan, and
+`npm run docs:plan` writes the internal guide and the coordinator brief
+from it. The website, the economist-led call and the material a coordinator
+circulates inside their organization therefore cannot say different things.
+Two rules are load-bearing in that file: organizational complexity and data
+readiness are scored separately and never merged, and every capability
+carries a status (`available`, `proposed`, `research`) so nothing on the
+public page promises an output the product does not produce.
 
 ## SEO & crawlers
 
@@ -171,9 +257,19 @@ relevant data file.
   assistants' crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot,
   Google-Extended and peers) so the product is discoverable through AI
   search.
-- `public/llms.txt` provides an AI-readable site summary kept consistent
-  with the on-page copy; the generated sitemap is `sitemap-index.xml`
-  (there is no hand-maintained sitemap file).
+- `public/llms.txt` is the AI-readable site summary. Two of its blocks are
+  generated rather than written: `## Pages`, from `src/data/siteMap.ts`
+  (`npm run llms:pages`), and the roster, from the rendered `/team` page
+  (`npm run llms:roster`). The rest is prose kept consistent with the
+  on-page copy by hand. A smoke test requires the page list to match the
+  inventory, and every `lumecon.ai` URL anywhere in the file to resolve.
+- The generated sitemap is `sitemap-index.xml` (there is no hand-maintained
+  sitemap file), and a smoke test requires it to name exactly the pages
+  `siteMap.ts` marks as indexed.
+- `robots.txt` has no inheritance: a crawler matches one group and ignores
+  every other, so each group repeats its `Disallow` lines rather than
+  stating them once. A smoke test checks each group still carries them —
+  a group that lost them would quietly expose what the others withhold.
 - A light/dark `theme-color` and `prefers-color-scheme` support adapt the
   site to the visitor's OS appearance without a manual toggle.
 
@@ -182,10 +278,14 @@ relevant data file.
 GitHub Actions workflows in `.github/workflows/`:
 
 - **deploy.yml** — builds and deploys to GitHub Pages on push to `main`.
-- **smoke.yml** — installs Chromium and runs the Playwright smoke test on PRs
-  and pushes to `main`.
+- **smoke.yml** — installs Chromium and WebKit and runs the Playwright suite
+  on PRs and pushes to `main`. It also regenerates
+  `docs/site-copy-and-architecture.md` and `git diff --exit-code`s it, so a
+  copy change pushed without re-running `npm run docs:copy` fails the job.
 - **lighthouse.yml** — runs Lighthouse CI against the build (budgets in
   `lighthouserc.json`).
+- **codex-polish-qa.yml** and **regenerate-approved-review-documents.yml** —
+  review automation; both regenerate the copy document the same way.
 
 The custom domain is set via `CNAME`. `public/.nojekyll` ships so the site
 is still correct if anyone ever switches Pages to "deploy from a branch" —
@@ -302,41 +402,73 @@ ladder (rem):
 | `--type-display` | `clamp(2.8rem, 7.5vw, 6rem)` | display / hero                   |
 
 Headlines are fluid: the homepage hero (`.hero2-title`) is
-`clamp(2.3rem, 5.6vw, 4.3rem)` at weight 700. Eyebrows / kickers are mono,
-uppercase, ~0.64–0.82rem with wide letter-spacing.
+`clamp(3.25rem, 4.8vw, 4.8rem)` at `--weight-hero` (675). Section headings use
+`--weight-display` (600), not 700 — a page where every heading sits at the
+heaviest weight has hierarchy of size but none of voice. Tracking tightens as
+size grows: `--track-display -0.032em` (hero h1), `--track-title -0.024em`
+(section h2), `--track-sub -0.015em` (card h3).
+
+Eyebrows / kickers are mono, uppercase, letter-spaced. The canonical values are
+the product's section-band tokens: **0.62rem at 0.14em tracking**.
 Weights: `--weight-regular 400` · `--weight-medium 500` · `--weight-semi 600`
 · `--weight-bold 700` · `--weight-black 800`.
 
 ### Color scheme
 
-Cool, modern palette: white/near-black-navy surfaces with a **teal** UI accent
-and **gold** reserved for the brand wordmark.
+Cool, modern palette: near-white surfaces with a **teal** UI accent, **gold**
+reserved for the brand wordmark, and **amber** as the one data color.
 
-| Token                             | Hex                          | Role                                                                    |
-| --------------------------------- | ---------------------------- | ----------------------------------------------------------------------- |
-| `--white`                         | `#FFFFFF`                    | primary surface                                                         |
-| `--paper`                         | `#F7F7F8`                    | rare soft surface (forms/panels)                                        |
-| `--navy` / `--ink`                | `#0A0F26`                    | primary text / darkest surface                                          |
-| `--ink-2`                         | `#353B5C`                    | body text                                                               |
-| `--ink-3`                         | `#6B6F8A`                    | muted text, eyebrows                                                    |
-| `--ink-4`                         | `#9DA1B5`                    | faint dividers/dots                                                     |
-| `--accent`                        | `#0FB5A5`                    | **teal UI accent** — eyebrows, focus rings, hovers, dividers            |
-| `--accent-deep`                   | `#0A8A7E`                    | accent text/links, hovers                                               |
-| `--accent-chip`                   | `#0A7F74`                    | white-on-teal surfaces (chips/bubbles/send) — deepened to clear WCAG AA |
-| `--accent-light` / `--accent-bar` | `#5FD9CC` / `#B8EDE6`        | teal tints (highlights, bands)                                          |
-| `--gold`                          | `#F0A91A`                    | **reserved for the wordmark / "luminate" emphasis — not a UI accent**   |
-| `--green`                         | `#0E8B4F`                    | highlight tint / "complete" status                                      |
-| `--terra`                         | `#E04A2A`                    | warm highlight tint                                                     |
-| `--blue` / `--purple`             | `#2E5BD6` / `#6E3DD8`        | highlight tints                                                         |
-| `--rule` / `--rule-strong`        | `rgba(10,15,38,.12)` / `.24` | hairline borders                                                        |
-| `--error-color`                   | `#DC2626`                    | error / validation                                                      |
-| `--map-tribal`                    | `#C77A18`                    | map: tribal-lands layer                                                 |
+The page ground is not pure white. It sits two cool steps off, so a genuinely
+white surface can rise off it without every card proving its depth with a heavy
+shadow.
 
-Notes: corner radii are deliberately tight — a two-step scale of **8px**
-(cards, frames, panels) and **6px** (buttons, chips, small elements);
-headline highlights use the `.hl-block` smear system with rotating tints; a
-`prefers-color-scheme: dark` block in `global.css` flips the surface/ink
-tokens (teal/gold stay put).
+| Token                      | Value                        | Role                                                                    |
+| -------------------------- | ---------------------------- | ----------------------------------------------------------------------- |
+| `--ground`                 | `#F3F6F8`                    | the page ground                                                         |
+| `--ground-bright`          | `#FAFCFD`                    | lifted ground                                                           |
+| `--surface`                | `#FFFFFF`                    | raised white: product frames, plans, forms, overlays                    |
+| `--surface-2`              | `#EDF2F4`                    | filled panels and callouts                                              |
+| `--surface-inset`          | `#E5EBEE`                    | inset wells, chart tracks                                               |
+| `--navy` / `--ink`         | `#071824`                    | primary text                                                            |
+| `--ink-2`                  | `#33434A`                    | body text                                                               |
+| `--ink-3`                  | `#647279`                    | muted text, captions                                                    |
+| `--ink-4`                  | `#93A0A5`                    | faintest text, dots, ticks                                              |
+| `--accent`                 | `#0FB5A5`                    | **teal accent.** Fills, rules, focus rings (2.6:1 on white, so not text) |
+| `--accent-text`            | `#0A7F74`                    | **teal text and links.** 4.88:1 on white (AA)                           |
+| `--accent-chip`            | `#0A7F74`                    | surfaces carrying white text (chips / bubbles / send)                   |
+| `--accent-deep`            | `#0A8A7E`                    | button hover                                                            |
+| `--accent-light` / `--accent-bar` | `#5FD9CC` / `#B8EDE6` | teal tints; `--accent-bar` is the 1px link underline                    |
+| `--gold`                   | `#F0A91A`                    | **wordmark and "luminate" only. Not UI, not charts**                    |
+| `--cedar` / `--cedar-text` | `#0E8B4F` / `#0B5E36`        | Cedar AI fills, and cedar-green **text** (`--cedar` fails AA for body)  |
+| `--map-tribal`             | `#C77A18`                    | map tribal-lands layer, the same hue as the product's `--amber`, **the data color** |
+| `--terra`                  | `#E04A2A`                    | warm highlight, used sparingly                                          |
+| `--blue` / `--purple`      | `#2E5BD6` / `#6E3DD8`        | highlight tints                                                         |
+| `--rule` / `--rule-strong` | `rgba(10,28,52,.1)` / `.2`   | hairline borders                                                        |
+| `--error-color`            | `#DC2626`                    | error / validation                                                      |
+
+`--white`, `--cream` and `--paper` remain as legacy aliases of `--ground`,
+`--surface-2` and `--surface-inset`. New work names the material it needs.
+
+**Contrast rule.** Anything a reader has to read uses `--accent-text` or
+`--cedar-text`; `--accent` and `--cedar` are fill colors and both fail AA as
+body text. Dark mode flips them to their lighter steps.
+
+**Gold is not a chart color.** For data, teal is series one and amber
+`#C77A18` is series two — the same ruling the product's design system states
+explicitly. Gold appears only in the wordmark and the word *luminate*.
+
+Notes: corner radii are a three-step scale. `--radius-control` is **8px**
+(buttons, small controls), `--radius-frame` is **14px** (cards, frames, tables,
+panels, the default) and `--radius-panel` is **20px** (large panels). Shadows are
+**neutral, never tinted**: `--lift -3px` with `--lift-shadow`, `--shadow-frame`
+and `--shadow-control` is the whole vocabulary. A `prefers-color-scheme: dark`
+block in `global.css` selects dark steps for the surface and ink tokens — it
+does not simply invert them.
+
+> The `.hl-block` marker-smear system behind headlines **no longer exists**. A
+> standalone heading is a mono kicker over a bare Inter headline, with the
+> section opening on a hairline rule. See `docs/brand/brand-aesthetic.md` §4.
+> Do not reintroduce it from an old deck or an exported PDF.
 
 ## Where this fits: the product ecosystem
 
@@ -347,9 +479,28 @@ product and the data it runs on live in sibling `teim-team` repositories:
 
 | Repo              | What it is                                                                                                                                                                                                                                                                                                                                                          | Relationship to this site                                                                                                                                                                                                                                                                         |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`teim-app`**    | The authenticated product where the Cedar family lives — Cedar Impact, Cedar Commons and Cedar Grove in one React 19 + Vite SPA with a Fastify backend. ("TEIM" survives only in repo/DB/resource names, never as user-facing branding.) It also carries its own in-app marketing surface under a separate visual brand (warm-paper/forest palette, Fraunces type). | This site sends visitors into the product (sign-up / "open workspace"). The two marketing surfaces are **deliberately separate visual brands** — do not cross-import styles or tokens.                                                                                                            |
-| **`cedar`**       | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents and keeps only compressed chat memory; it never stores project data, files, or results.                                                                                                                                                  | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a _separate_, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
-| **`teim-engine`** | The economic-accounts data layer: EPA `stateior` StateIO supply/use tables shipped as CSV.                                                                                                                                                                                                                                                                          | Upstream of the impact math the site describes. Keep the homepage "foundational data" strip consistent with the public sources the engine actually draws on.                                                                                                                                      |
+| **`teim-app`**    | The authenticated product where the Cedar family lives — Cedar Impact, Cedar Commons and Cedar Grove in one React 19 + Vite SPA with a Fastify backend. ("TEIM" is intended to survive only in repo/DB/resource names; **it has not yet, see the note below the table.**) Its public routes are sign-in, /terms, /privacy, /methodology and /verify; it carries **no** in-app marketing surface today. | This site sends visitors into the product (sign-up / "open workspace"). The two keep separate code and CSS implementations: do not cross-import source styles or generated tokens. The website is still the shared visual contract. Product work should reproduce its typography, navy/mineral hierarchy, disciplined teal and progressive disclosure in its own system. The app self-hosts Inter, JetBrains Mono and Spectral italic; the DM Sans / Nunito / **Fraunces** / DM Mono / Crimson faces it once used are retired as off-brand and no longer loaded (`src/index.css`). |
+| **`cedar`**       | A standalone FastAPI conversational-AI service (Python 3.13, OpenAI Agents SDK, Postgres). It orchestrates analysis agents. What it persists: compressed chat memory, raw agent conversation items, and document extraction jobs including cached per-file digests. Runs, numerical results and the economics stay in the product. **The digests are the nuance** — they are compact summaries and candidate values derived from a customer's uploaded documents, so "Cedar stores nothing of the project" is too strong a claim to make on a customer-facing page. Deriving the exact wording from a real data-flow spec is P0 item 9 in `docs/reconciliation-roadmap.md`. | The **`teim-app` backend** calls Cedar server-to-server. This site's Cedar chat is a _separate_, lightweight, anonymous keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the Cedar service. The contract is documented below for whenever a server-side caller is added. |
+| **`teim-engine`** | The model engine behind Cedar Impact: a Python service that takes an analysis and a geography, fetches Census, BLS and BEA data, regionalizes a state input-output table, closes it as a social accounting matrix and returns direct, indirect and induced effects. It vendors the EPA `stateior` StateIO supply/use tables as CSV as its base structure. ("TEIM" is the model's and the repository's name only.) | The `teim-app` backend submits runs to it over an authenticated HTTP API. Every number the site's /methodology page describes is computed here, so keep that page, and the homepage "foundational data" strip, consistent with what the engine actually implements and draws on. |
+
+Two notes on the table, both as of the 2026-09-18 cross-repository audit:
+
+- **The naming rule is a rule, not a description of today.** "TEIM" is meant to
+  live only in repository, database and resource names, and the app has not got
+  there: **"Tribal Economic Impact" is still its visible brand**, in the
+  side-rail wordmark, the public shell, the wizard cover, the Terms, Privacy and
+  Methodology page titles, the email sender and subject lines, and the export
+  filename prefix. That is the entry-point taxonomy this site retired. It is a
+  founder and counsel decision rather than a copy sweep, because Terms §9 still
+  claims those names as marks and the export filename is a data contract
+  customers already hold. Inventory in `teim-app/AGENTS.md` §9, tracked as item
+  9 in `docs/reconciliation-roadmap.md`.
+- **Every sibling now publishes a `SECURITY.md` and an `AGENTS.md`.** Until this
+  audit, `cedar` and `teim-engine` published neither, while `teim-app`'s policy
+  put both out of its own scope and told researchers to report issues there "to
+  their owners". Each repository's `AGENTS.md` carries a reviewer checklist;
+  `docs/reconciliation-roadmap.md` indexes them and lists the two checks that
+  belong to whoever reviews across repositories.
 
 ### Cedar service contract (server-to-server)
 
@@ -358,9 +509,12 @@ shape. The **authenticated app — not this marketing site — is the intended
 caller**, because Cedar needs the `user` + `project` context an anonymous
 visitor here doesn't have.
 
-- **Endpoint:** `POST /api/v1/messages` (the only public endpoint today).
+- **Endpoint:** `POST /api/v1/messages` for conversation. Document extraction is a separate asynchronous pair, `POST /api/v1/documents/extract` and `GET /api/v1/documents/extract/{jobId}`, which the app backend calls for the intake documents step. The document routes are mounted a second time without the version prefix, at `/documents/extract`, because that is the app's default `CEDAR_DOCUMENT_API_PATH`; both paths are the same handlers behind the same auth.
 - **Auth:** `Authorization: Bearer <CEDAR_INTERNAL_API_KEY>` (shared secret).
-  Missing/bad token → 401.
+  Missing or bad token → 401. Cedar **fails closed**, so an unset
+  `CEDAR_INTERNAL_API_KEY` on Cedar's side → **503** on every protected route,
+  with no opt-out. Treat 503 as "Cedar is misconfigured", not as "Cedar is
+  down". `teim-engine` answers 503 for the same condition.
 - **Health:** `GET /ready` → 200 (503 if Postgres is down). Point uptime
   checks here, not at `/health`.
 - **Wire format:** **camelCase** in both directions (snake_case tolerated,
@@ -380,7 +534,7 @@ visitor here doesn't have.
 
 ### Underlying data (teim-engine)
 
-teim-engine assembles EPA `stateior` StateIO accounts as CSV: years
+teim-engine's base structure is the EPA `stateior` StateIO accounts, vendored as CSV: years
 **2015–2023**, **50 states + DC**, **71 BEA Summary sectors**, five tables per
 region (`Industry_Output`, `Make`, `Use`, `Domestic_Use`, `Import`) with the
 identity `Use = Domestic_Use + Import` (the in-region vs. rest-of-US split).
@@ -412,12 +566,19 @@ page-ownership rule); this list records the product/brand calls.
 - **Numbers are used sparingly.** No mono section numbering; equations
   (Eq. 01…) and ordered flow steps keep their numbers because order is
   the content.
-- **Screenshots are real captures at a uniform 1600x1000** from teim-app
+- **Screenshots are real captures, 1920px wide** (heights vary by surface: 1004 for the lineage panel, 1200 for the workspace, comparison and Cedar captures, 1080 for Grove, 1170 for the hero results page) from teim-app
   (1440px shell, demo user Wassily Leontief), taken via the mock-route
   pipeline in the session scratchpad; the hero trio never shuffles
   positions, only the center frame advances in order.
 - **Cedar chat docks to the bottom edge** when open, on the site and in
-  the product; it is never a floating window.
+  the product; it is never a floating window. **On a phone (2026-09) it is
+  full-screen instead** — `inset: 0`, `100dvh`, above the site nav, with the
+  safe-area insets on the dialog's own edges. The docked sheet gave the
+  transcript about half a screen and clipped the last starter prompt
+  mid-word. The launcher there is a 60px circle with the brand mark, and a
+  greeting bubble appears once per visit, phone only, after the opening
+  composition has been read past; it yields to the same protected content
+  the launcher avoids, and tapping it opens Cedar.
 - **Auth pages are mirrored counterparts** built on the product's
   sign-in screen (teim-app AuthGate): /login puts the teal brand panel
   left and the form right (continuity: pick up where you left off);

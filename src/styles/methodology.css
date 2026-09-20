@@ -549,11 +549,30 @@
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  .meth-sec__head {
-    gap: 0.8rem;
-  }
   .eq {
     font-size: 1.05rem;
+  }
+}
+
+/* The section head is a heading beside its deck. The two share one flex
+   row with nothing sizing them, so the heading keeps whatever the deck
+   leaves — which is fine at 1440 and degrades steadily below it. Measured
+   before this rule: a sentence heading wrapped over three to five lines
+   in an 80-150px column at 768, and five to seven lines at 390. It shows
+   up on /start, where every head has a deck, and on /why-lumecon;
+   /methodology mostly escaped it because several of its sections have no
+   deck at all, so the heading took the whole row anyway.
+
+   1100px is where the flex row stops having the width for both, measured
+   rather than picked: at 1024 the worst heading still ran to four lines.
+   Above it the pairing reads as intended; below it they stack, which costs
+   a line of height and returns the heading its own measure. */
+@media (max-width: 1100px) {
+  .meth-sec__head {
+    display: block;
+  }
+  .meth-sec__head > * + * {
+    margin-top: 0.7rem;
   }
 }
 
@@ -768,8 +787,23 @@
     linear-gradient(128deg, rgba(15, 181, 165, 0.13), transparent 42%),
     linear-gradient(145deg, #0d1933 0%, #091126 62%, #082631 100%);
 }
+/* The mark, bled off the top-right corner of a dark cover hero. Every
+   dark cover carries it, so the family reads as one surface: methodology,
+   the starting guide, Cedar and Cedar Grove. Security carries the same
+   thing from its own stylesheet, since it does not load this one. */
 .meth-hero--cover::after,
-.cedarpg-hero::after {
+.cedarpg-hero::after,
+/* The watermark is a 608px ghost at 2.5-3.5% opacity, and it was being
+   drawn from a 616 KB PNG that every page in the site downloaded for the
+   purpose. Same artwork as WebP is 64 KB. The PNG stays in the repo
+   because the structured data points at it as the organization's logo,
+   where a crawler may fetch it once; no page pulls it on load any more.
+   Written as two declarations rather than one. A browser that does not
+   understand `image-set()` discards that line as invalid and keeps the
+   plain `url()` above it, which is the PNG; one that does understand it
+   takes the WebP. Either way exactly one file is fetched, and a browser
+   without WebP is not left with a rule it cannot parse. */
+.grovepg-hero::after {
   content: '';
   position: absolute;
   top: -8rem;
@@ -777,6 +811,10 @@
   width: clamp(24rem, 38vw, 38rem);
   height: clamp(24rem, 38vw, 38rem);
   background: url('/brand/lumecon-logo-mark-transparent.png') center / contain no-repeat;
+  background-image: image-set(
+    url('/brand/lumecon-logo-mark-transparent.webp') type('image/webp'),
+    url('/brand/lumecon-logo-mark-transparent.png') type('image/png')
+  );
   filter: brightness(0) invert(1);
   opacity: 0.035;
   pointer-events: none;
@@ -907,4 +945,33 @@
     border-left: 0;
     padding-left: 0;
   }
+}
+
+/* The one line pointing a methodology reader at the buyer's page. It sits
+   under the commitments rather than among them: those are five things the
+   model does, and this is a different page. */
+.meth-crosslink {
+  margin: clamp(1.4rem, 2.6vw, 2rem) 0 0;
+  font-size: var(--fs-sm-2);
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+/* Assumptions and limits. Plain prose on the page rather than inside a
+   fold: the point of the section is that a reviewer finds it without
+   being told where to look. */
+.meth-limits__body {
+  max-width: 58rem;
+  display: grid;
+  gap: 1rem;
+}
+.meth-limits__body p {
+  margin: 0;
+  font-size: var(--fs-md-2);
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+.meth-limits__body strong {
+  color: var(--navy);
+  font-weight: 650;
 }
