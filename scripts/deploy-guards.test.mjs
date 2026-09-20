@@ -638,8 +638,14 @@ test("port 0 and the IPv6 benchmarking range are refused", () => {
   // 2001:2::/48 is IPv4 198.18.0.0/15's counterpart, which was already out.
   assert.match(originProblem("PUBLIC_API_URL", "https://[2001:2::1]") ?? "", /non-public/);
   // Matched as the /48, not a wider prefix: these neighbours stay allowed.
-  assert.equal(isNonPublicHost("[2001:3::1]"), false);
-  assert.equal(isNonPublicHost("[2001:2:1::1]"), false);
+  // These two were pinned as public to prove 2001:2::/48 is matched as a /48
+  // and not something wider. They are not public: both sit inside 2001::/23,
+  // the IETF Protocol Assignments aggregate, which is refused wholesale now.
+  // The prefix-precision property moved to the /23 boundary below, where the
+  // neighbour is ordinary global unicast and cannot be carved out later.
+  assert.equal(isNonPublicHost("[2001:3::1]"), true);
+  assert.equal(isNonPublicHost("[2001:2:1::1]"), true);
+  assert.equal(isNonPublicHost("[2001:200::1]"), false, "just past 2001::/23");
 });
 
 test("redaction reaches the final userinfo delimiter, not the first", () => {
@@ -1022,10 +1028,16 @@ test("ORCHID address space is not public", () => {
   }
   // Matched as the two /28s, so the neighbouring space stays usable -- the
   // same discipline as the 3fff::/20 and 2001:2::/48 entries.
-  // `[2001:30::1]` used to sit here as the neighbour just past ORCHIDv2. It is
-  // DET space and non-public in its own right now, so the /28 boundary is
-  // asserted at 2001:40:: instead -- the fixture moved, the property did not.
-  for (const host of ["[2001:40::1]", "[2001:f::1]", "[2001:0::1]", "[2606:4700::1111]"]) {
+  // This list has now been wrong twice, and the second time is the useful one.
+  // `[2001:30::1]` went first (DET), then `[2001:40::1]`, `[2001:f::1]` and
+  // `[2001:0::1]` (2001::/23 wholesale). Every replacement I picked was a
+  // *near* neighbour, which is precisely what keeps getting carved out.
+  //
+  // So the neighbour is now taken from ordinary global unicast, well clear of
+  // any special-use block. That weakens the tightness of the boundary check --
+  // which is why the exact /28 edges are asserted against the mask directly,
+  // above and below -- but it cannot be invalidated by the next reservation.
+  for (const host of ["[2001:200::1]", "[2606:4700::1111]", "[2a00:1450::1]"]) {
     assert.equal(isNonPublicHost(host), false, host);
   }
 });
@@ -1147,8 +1159,11 @@ test("2001:30::/28 is identifiers, not destinations", () => {
   for (const host of ["[2001:30::1]", "[2001:3f:ffff::1]"]) {
     assert.equal(isNonPublicHost(host), true, host);
   }
-  // The /28 boundary: 2001:40:: is ordinary space and must stay usable.
-  assert.equal(isNonPublicHost("[2001:40::1]"), false);
+  // The /28 boundary used to be asserted at 2001:40::, on the grounds that it
+  // is ordinary space. It is not -- 2001::/23 covers it -- so the assertion
+  // would now pass for the wrong reason. The first address genuinely past the
+  // protocol-assignments block is 2001:200::.
+  assert.equal(isNonPublicHost("[2001:200::1]"), false);
 });
 
 test("the deprecated 6to4 anycast block is not public", () => {
@@ -1208,10 +1223,13 @@ test("6to4 transition space is not an ordinary destination", () => {
     assert.equal(isNonPublicHost(host), true, host);
     assert.match(originProblem("PUBLIC_APP_URL", `https://${host}`) ?? "", /non-public/, host);
   }
-  // Matched as the /16, so its neighbours stay usable.
-  for (const host of ["[2001::1]", "[2003::1]", "[2606:4700::1111]"]) {
+  // Matched as the /16, so its neighbours stay usable -- but `[2001::1]` is
+  // not one of them any more: it is the base of 2001::/23. `2003::` is the
+  // real neighbour on that side.
+  for (const host of ["[2003::1]", "[2606:4700::1111]"]) {
     assert.equal(isNonPublicHost(host), false, host);
   }
+  assert.equal(isNonPublicHost("[2001::1]"), true, "2001::/23, not a 6to4 neighbour");
 });
 
 test("the value must carry a real authority, not just a scheme", () => {
@@ -1242,4 +1260,30 @@ test("the value must carry a real authority, not just a scheme", () => {
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
   assert.equal(originProblem("PUBLIC_API_URL", "HTTPS://api.lumecon.ai"), null);
   assert.match(originProblem("PUBLIC_API_URL", "http://api.lumecon.ai") ?? "", /must be https/);
+});
+
+test("the IETF protocol-assignments block is not ordinary space", () => {
+  // 2001::/23 spans 2001:0000:: through 2001:01ff::. Everything it is carved
+  // into is a protocol mechanism rather than space anyone is assigned a server
+  // in, and the unassigned remainder is not routed. `2001:40::1` and
+  // `2001:50::1` both read as ordinary global unicast before this.
+  for (const host of [
+    "[2001::1]", "[2001:40::1]", "[2001:50::1]", "[2001:1ff:ffff::1]",
+  ]) {
+    assert.equal(isNonPublicHost(host), true, host);
+    assert.match(originProblem("PUBLIC_APP_URL", `https://${host}`) ?? "", /non-public/, host);
+  }
+
+  // The /23 edge, checked to the bit: 0x01ff is the last group inside, 0x0200
+  // the first outside.
+  assert.equal(isNonPublicHost("[2001:1ff::1]"), true);
+  assert.equal(isNonPublicHost("[2001:200::1]"), false);
+  assert.equal(isNonPublicHost("[2001:250::1]"), false);
+  assert.equal(isNonPublicHost("[2001:4860::1]"), false);
+
+  // 2001:db8::/32 is NOT inside the /23 -- 0xdb8 is well past 0x01ff -- so the
+  // documentation carve-out is still doing its own work rather than being
+  // subsumed. Checked because the arithmetic is easy to get wrong by eye.
+  assert.ok(0x0db8 > 0x01ff, "premise: db8 is outside the /23");
+  assert.equal(isNonPublicHost("[2001:db8::1]"), true);
 });

@@ -501,6 +501,26 @@ function isNonPublicIpv6(hostname) {
   if (groups[0] >= 0xfec0 && groups[0] <= 0xfeff) return true;
   // ff00::/8 multicast -- never a unicast origin a browser can fetch from.
   if (groups[0] >= 0xff00) return true;
+  // 2001::/23, the IETF Protocol Assignments aggregate (2001:0000:: through
+  // 2001:01ff::). Everything the block is carved into is a protocol
+  // mechanism -- Teredo, benchmarking, ORCHID, DET, AMT, AS112 -- rather than
+  // space anyone is assigned a server in, and the unassigned remainder is not
+  // routed at all. `2001:40::1` and `2001:50::1` both read as ordinary global
+  // unicast before this.
+  //
+  // Refused wholesale rather than with an exception list. A couple of
+  // suballocations in here really are globally reachable, and none of them is
+  // a plausible product origin -- they are anycast protocol endpoints and DNS
+  // blackhole infrastructure -- so over-rejecting costs nothing real, where
+  // guessing at a registry list I cannot verify from here would risk being
+  // confidently wrong. That trade only works because the block is this
+  // specific; it is the opposite of the reasoning for 2000::/3.
+  //
+  // This subsumes the 2001:2::/48, 2001:10::/28, 2001:20::/28 and 2001:30::/28
+  // entries above, which are kept because each names why its own range is
+  // unreachable. 2001:db8::/32 is *not* inside it -- 0xdb8 is past 0x01ff --
+  // so the documentation carve-out is still doing its own work.
+  if (groups[0] === 0x2001 && (groups[1] & 0xfe00) === 0x0000) return true;
   // 2002::/16, 6to4 transition space. It sits inside 2000::/3, so the scope
   // rule cannot reach it, and it encodes an IPv4 address rather than naming an
   // ordinarily reachable destination -- the v6 counterpart of the 192.88.99.0/24
