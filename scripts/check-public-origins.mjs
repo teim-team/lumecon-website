@@ -47,8 +47,13 @@ const BLOCKED_PORTS = new Set([
  * file prints is visible in the log to everyone who can read the run.
  */
 export function redactCredentials(value) {
+  // Greedy up to the FINAL `@` of the authority, not the first. A password
+  // may contain a literal `@` -- WHATWG splits userinfo at the last one --
+  // and a non-greedy match left everything after the first delimiter in the
+  // log. `[^/]*` cannot cross a path separator, so an `@` in a path is not
+  // touched.
   return String(value).replace(
-    /(\/\/)[^/@\s]*@/g,
+    /(\/\/)[^/]*@/g,
     (_match, slashes) => `${slashes}<redacted>@`,
   );
 }
@@ -151,8 +156,12 @@ export function originProblem(name, value) {
   }
   // The API base is the only one where a trailing slash is fatal, because it
   // is concatenated raw; welcome.astro and login.astro both strip it.
-  if (name === "PUBLIC_API_URL" && /\/$/.test(raw)) {
-    return `${name} must not end in a slash (it is concatenated with the path), got ${JSON.stringify(redactCredentials(raw))}`;
+  // A backslash too: WHATWG canonicalizes a trailing `\` to `/`, so the
+  // parsed pathname is "/" and the component check sees nothing wrong, while
+  // the raw value concatenates into `https://api.lumecon.ai\/auth/login` --
+  // path `//auth/login`, which need not match the backend route.
+  if (name === "PUBLIC_API_URL" && /[\\/]$/.test(raw)) {
+    return `${name} must not end in a slash or backslash (it is concatenated with the path), got ${JSON.stringify(redactCredentials(raw))}`;
   }
   return null;
 }

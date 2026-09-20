@@ -535,3 +535,41 @@ test("port 0 and the IPv6 benchmarking range are refused", () => {
   assert.equal(isNonPublicHost("[2001:3::1]"), false);
   assert.equal(isNonPublicHost("[2001:2:1::1]"), false);
 });
+
+test("redaction reaches the final userinfo delimiter, not the first", () => {
+  // WHATWG splits userinfo at the LAST `@`, so a password may contain one.
+  // A non-greedy match redacted up to the first and printed the rest.
+  const parsed = new URL("https://user:first@second@app.lumecon.ai");
+  assert.equal(parsed.password, "first%40second", "premise: the @ is in the password");
+
+  for (const value of [
+    " https://user:first@second@app.lumecon.ai",
+    "https://a:b@c@d@app.lumecon.ai",
+  ]) {
+    const redacted = redactCredentials(value);
+    assert.ok(!/second|@c@|@d@/.test(redacted), `leaked: ${redacted}`);
+    assert.match(redacted, /<redacted>@app\.lumecon\.ai|<redacted>@app/);
+  }
+
+  // An `@` in a path is not userinfo and must survive: `[^/]*` cannot cross
+  // a separator, so ordinary diagnostics keep their detail.
+  assert.equal(redactCredentials("https://api.lumecon.ai/a@b"), "https://api.lumecon.ai/a@b");
+  assert.equal(redactCredentials("https://api.lumecon.ai"), "https://api.lumecon.ai");
+});
+
+test("a trailing backslash is refused on the API base, like a slash", () => {
+  // WHATWG canonicalizes a trailing `\` to `/`, so `pathname` is "/" and the
+  // component check sees nothing wrong -- while the raw value concatenates
+  // into `https://api.lumecon.ai\/auth/login`, path `//auth/login`.
+  assert.equal(new URL("https://api.lumecon.ai\\").pathname, "/", "premise: canonicalized");
+  assert.equal(new URL("https://api.lumecon.ai\\" + "/auth/login").pathname, "//auth/login");
+
+  assert.match(
+    originProblem("PUBLIC_API_URL", "https://api.lumecon.ai\\") ?? "",
+    /slash or backslash/,
+  );
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
+  // PUBLIC_APP_URL tolerates it for the same reason it tolerates a trailing
+  // slash: its consumers strip it and it is not concatenated.
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai\\"), null);
+});
