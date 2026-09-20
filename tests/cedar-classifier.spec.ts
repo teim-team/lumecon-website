@@ -52,7 +52,14 @@ test('cedar routes representative questions to the right intent', async ({ page 
     { q: 'does this work for tribal nations', expect: 'Whole Nation' },
     { q: 'EPA grant', expect: 'Grant preparation is a strong use case' },
     { q: 'how long does it take', expect: 'Turnaround depends' },
-    { q: 'can I see a demo', expect: 'Happy to set one up' },
+    // Anchored on the question the demo intent closes with, which is
+    // unique to it. This case used to assert 'Happy to set one up' --
+    // a stock opener, not something that identifies the intent, and the
+    // only case in this list that pinned a pleasantry rather than
+    // substance. Removing that opener from the answer (it was one of
+    // four 'Happy to's in the file) failed a routing test without
+    // routing having changed.
+    { q: 'can I see a demo', expect: 'What kind of impact are you hoping to measure?' },
     { q: 'what is cedar', expect: 'help process documents' },
     { q: 'how is this different from implan', expect: 'established input-output methods' },
     { q: 'what is indian country', expect: '18 U.S.C.' },
