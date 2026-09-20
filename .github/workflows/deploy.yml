@@ -36,26 +36,34 @@ jobs:
       # builds "login-only": Open Lumecon falls back to /login, the
       # auth/checkout forms degrade to the contact-email path, and the CSP
       # loses the API origin. None of that fails anything, so the workflow
-      # went green and published a quietly degraded site. These two steps
-      # make that a failed deploy instead.
+      # went green and published a quietly degraded site.
+      #
+      # Resolved once, here, into the job environment, rather than each step
+      # evaluating `vars.*` for itself. Two reasons. The origins are already
+      # the documented values in AGENTS.md and are hardcoded in four sibling
+      # workflows, so an unset repository variable should build the site the
+      # rest of CI already tests -- not fail the deploy, which is what it did
+      # from the moment the guard landed and is why nothing has published
+      # since. And resolving once means the check, the build and the CSP sync
+      # cannot be handed three different values; the failure this guards
+      # against is precisely a value that reached one step and not another.
+      #
+      # A variable that is SET but malformed still fails the job: the fallback
+      # covers "unset", never "wrong".
+      - name: Resolve the public origins
+        run: node scripts/check-public-origins.mjs --resolve >> "$GITHUB_ENV"
+        env:
+          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
+          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
       - name: Check the public origins are deployable
         run: node scripts/check-public-origins.mjs
-        env:
-          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
-          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
       - run: npm run build
-        env:
-          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
-          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
       # Derives _headers' connect-src from the same PUBLIC_API_URL the meta
       # CSP uses, then asserts dist really carries both origins rather than
       # the fallbacks. A variable that was set but never reached Astro looks
       # identical to one that was never set, in the only place it matters.
       - name: Sync the header CSP and verify the build
         run: node scripts/sync-headers-csp.mjs dist
-        env:
-          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
-          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

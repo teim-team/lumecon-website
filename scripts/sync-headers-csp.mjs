@@ -37,7 +37,12 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { isCI, originProblem, redactCredentials } from "./check-public-origins.mjs";
+import {
+  isCI,
+  originProblem,
+  redactCredentials,
+  PRODUCTION_API_ORIGIN,
+} from "./check-public-origins.mjs";
 
 /** Replace connect-src in one CSP header line, keeping every other directive. */
 export function withConnectSrc(policy, apiOrigin) {
@@ -110,7 +115,7 @@ export function welcomeButtonHref(html) {
 // committed") requires and which a deploy-workflow-only rewrite could not
 // give: a host that honours _headers and runs a plain `npm run build` -- the
 // only host on which this file does anything -- never saw the deploy step.
-export const PRODUCTION_API_ORIGIN = "https://api.lumecon.ai";
+export { PRODUCTION_API_ORIGIN };
 
 export const PUBLIC_HEADERS_PATH = "public/_headers";
 

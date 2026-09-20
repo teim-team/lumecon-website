@@ -611,6 +611,37 @@ function isNonPublicIpv6(hostname) {
   return false;
 }
 
+// The origins this site is deployed to. Not new configuration: both are the
+// documented values in AGENTS.md and are hardcoded identically in four other
+// workflows (smoke, lighthouse, codex-polish-qa,
+// regenerate-approved-review-documents). Naming them once here is what stops a
+// fifth and sixth spelling from drifting apart -- the deploy workflow was the
+// only job that did NOT know them, reading repository variables that were
+// never set, which is why it published a login-only site and then, once this
+// guard landed, failed outright.
+export const PRODUCTION_APP_ORIGIN = "https://app.lumecon.ai";
+export const PRODUCTION_API_ORIGIN = "https://api.lumecon.ai";
+
+/**
+ * The origins a deploy should build with: a repository variable when one is
+ * set, the documented production origin otherwise.
+ *
+ * Deliberately falls back ONLY on an absent or blank value. A variable that is
+ * set but malformed is a typo, and a typo must still fail the build -- this
+ * returns it unchanged so `collectOriginProblems` refuses it. Silently
+ * replacing a bad value with a good one would defeat the guard it feeds.
+ */
+export function resolveOrigins(env = process.env) {
+  const pick = (name, fallback) => {
+    const raw = env[name];
+    return raw === undefined || String(raw).trim() === "" ? fallback : raw;
+  };
+  return {
+    PUBLIC_APP_URL: pick("PUBLIC_APP_URL", PRODUCTION_APP_ORIGIN),
+    PUBLIC_API_URL: pick("PUBLIC_API_URL", PRODUCTION_API_ORIGIN),
+  };
+}
+
 export function collectOriginProblems(env) {
   return REQUIRED.map((name) => originProblem(name, env[name])).filter(Boolean);
 }
@@ -626,6 +657,31 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
   // skip only when BOTH are absent and we are not in CI, since a hosted build
   // with nothing set is a misconfigured deploy, not a laptop. The deploy
   // workflow calls this without the flag, so it can never skip there.
+  // `--resolve` is for the deploy workflow: print the origins the build should
+  // use, as KEY=value lines for $GITHUB_ENV, so every later step reads one
+  // resolved pair rather than each re-evaluating `vars.*` separately. It
+  // validates first and exits non-zero on a bad value, so this mode can never
+  // hand a degraded origin to the build -- the fallback covers "unset", never
+  // "wrong". Values are printed unredacted on purpose: they are going into the
+  // environment, and `originProblem` has already refused anything
+  // credential-bearing. The log line below stays redacted.
+  if (process.argv.includes("--resolve")) {
+    const resolved = resolveOrigins(process.env);
+    const problems = collectOriginProblems(resolved);
+    if (problems.length > 0) {
+      console.error("Refusing to build: the deploy would publish a degraded site.\n");
+      for (const problem of problems) console.error(`  - ${problem}`);
+      console.error(
+        "\nA repository variable is set to an unusable value. Fix or clear it " +
+          "(Settings > Secrets and variables > Actions > Variables); cleared, " +
+          "the documented production origin is used.",
+      );
+      process.exit(1);
+    }
+    for (const [name, value] of Object.entries(resolved)) console.log(`${name}=${value}`);
+    process.exit(0);
+  }
+
   const bothUnset = !process.env.PUBLIC_API_URL && !process.env.PUBLIC_APP_URL;
   if (process.argv.includes("--skip-if-unset") && bothUnset && !isCI()) {
     console.log(

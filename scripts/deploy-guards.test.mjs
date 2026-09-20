@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import {
   originProblem,
   collectOriginProblems,
+  resolveOrigins,
+  PRODUCTION_APP_ORIGIN,
   isNonPublicHost,
   expandIpv6,
   invalidDnsLabel,
@@ -1410,4 +1412,112 @@ test("only a real header field counts as the CSP line", () => {
   // And the committed file itself still syncs, which is the case that ships.
   const committed = readFileSync(PUBLIC_HEADERS_PATH, "utf8");
   assert.match(syncHeaders(committed, PRODUCTION_API_ORIGIN), /connect-src 'self' https:\/\/api\.lumecon\.ai/);
+});
+
+// --- Resolved origins -------------------------------------------------------
+//
+// The deploy workflow read `vars.PUBLIC_APP_URL`/`vars.PUBLIC_API_URL`, which
+// were never set, while four sibling workflows hardcoded the same two values.
+// Before the origin guard existed that published a login-only site; after it,
+// the deploy failed outright and nothing shipped. Falling back to the
+// documented origins fixes both, but only if "unset" and "wrong" stay
+// different cases -- a typo must still fail.
+
+test("unset origins resolve to the documented production values", () => {
+  const resolved = resolveOrigins({});
+  assert.equal(resolved.PUBLIC_APP_URL, PRODUCTION_APP_ORIGIN);
+  assert.equal(resolved.PUBLIC_API_URL, PRODUCTION_API_ORIGIN);
+  // The fallback is only worth having if what it produces would itself pass.
+  assert.deepEqual(collectOriginProblems(resolved), []);
+});
+
+test("a blank variable is treated as unset, not as a value", () => {
+  // An empty repository variable and a deleted one are indistinguishable in
+  // intent, and `originProblem` rejects "" with "is not set" -- so passing it
+  // through would fail the deploy over a variable someone had cleared.
+  for (const blank of ["", "   ", "\t"]) {
+    assert.equal(resolveOrigins({ PUBLIC_APP_URL: blank }).PUBLIC_APP_URL, PRODUCTION_APP_ORIGIN);
+  }
+});
+
+test("a variable that is set wins over the fallback", () => {
+  const resolved = resolveOrigins({ PUBLIC_APP_URL: "https://staging.lumecon.ai" });
+  assert.equal(resolved.PUBLIC_APP_URL, "https://staging.lumecon.ai");
+  // ...and only that one. The other still falls back.
+  assert.equal(resolved.PUBLIC_API_URL, PRODUCTION_API_ORIGIN);
+});
+
+test("a malformed variable is kept, so the guard still refuses it", () => {
+  // The whole point. Substituting a good origin for a bad one would turn the
+  // guard into a rubber stamp: a typo would deploy production silently.
+  for (const bad of ["htp://api.lumecon.ai", "http://api.lumecon.ai", "not a url"]) {
+    const resolved = resolveOrigins({ PUBLIC_API_URL: bad });
+    assert.equal(resolved.PUBLIC_API_URL, bad);
+    assert.notDeepEqual(collectOriginProblems(resolved), []);
+  }
+});
+
+test("--resolve prints KEY=value for $GITHUB_ENV and exits 0 when unset", () => {
+  const out = execFileSync(process.execPath, ["scripts/check-public-origins.mjs", "--resolve"], {
+    encoding: "utf8",
+    env: { ...process.env, PUBLIC_APP_URL: "", PUBLIC_API_URL: "" },
+  });
+  const lines = out.trim().split("\n");
+  assert.deepEqual(lines, [
+    `PUBLIC_APP_URL=${PRODUCTION_APP_ORIGIN}`,
+    `PUBLIC_API_URL=${PRODUCTION_API_ORIGIN}`,
+  ]);
+  // Each line must be a single KEY=value pair: anything else appended to
+  // $GITHUB_ENV either defines the wrong variable or injects an extra one.
+  for (const line of lines) assert.match(line, /^[A-Z_]+=\S+$/);
+});
+
+test("--resolve exits non-zero on a set-but-malformed variable", () => {
+  assert.throws(
+    () =>
+      execFileSync(process.execPath, ["scripts/check-public-origins.mjs", "--resolve"], {
+        encoding: "utf8",
+        env: { ...process.env, PUBLIC_API_URL: "htp://api.lumecon.ai" },
+        stdio: "pipe",
+      }),
+    (err) => {
+      assert.equal(err.status, 1);
+      // Nothing may reach stdout: the workflow redirects it into $GITHUB_ENV,
+      // so a printed value on a failing run would be appended regardless.
+      assert.equal(err.stdout, "");
+      assert.match(err.stderr, /must be https/);
+      return true;
+    },
+  );
+});
+
+test("the two production origins are the ones the sibling workflows build with", () => {
+  // Four workflows hardcode these. If one is edited and this constant is not,
+  // the deploy publishes a site no other job ever tested.
+  for (const wf of [
+    ".github/workflows/smoke.yml",
+    ".github/workflows/lighthouse.yml",
+    ".github/workflows/codex-polish-qa.yml",
+    ".github/workflows/regenerate-approved-review-documents.yml",
+  ]) {
+    const text = readFileSync(wf, "utf8");
+    assert.ok(
+      text.includes(`PUBLIC_APP_URL: ${PRODUCTION_APP_ORIGIN}`),
+      `${wf} builds with a different PUBLIC_APP_URL than the deploy fallback`,
+    );
+    assert.ok(
+      text.includes(`PUBLIC_API_URL: ${PRODUCTION_API_ORIGIN}`),
+      `${wf} builds with a different PUBLIC_API_URL than the deploy fallback`,
+    );
+  }
+});
+
+test("the deploy workflow resolves origins before it checks or builds", () => {
+  const wf = readFileSync(".github/workflows/deploy.yml", "utf8");
+  const resolve = wf.indexOf("--resolve");
+  const check = wf.indexOf("run: node scripts/check-public-origins.mjs\n");
+  const build = wf.indexOf("run: npm run build");
+  assert.ok(resolve > -1, "deploy.yml no longer resolves the origins");
+  assert.ok(check > resolve, "the origin check must run after the resolve step");
+  assert.ok(build > check, "the build must run after the origin check");
 });
