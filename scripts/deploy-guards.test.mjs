@@ -466,3 +466,29 @@ test("an empty query or fragment marker is refused", () => {
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:443"), null);
   assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai/"), null);
 });
+
+test("credentials in an origin are refused, and not echoed back", () => {
+  // Worse than a broken deploy. Astro inlines PUBLIC_* into the client
+  // bundle, so a userinfo-bearing origin is published to every visitor:
+  // measured against a real build, the password appeared in three files
+  // under dist/_astro/ while the build exited 0 and the postbuild guard
+  // printed success. `fetch` also refuses to construct a request from such
+  // a URL, so every API call fails too.
+  for (const value of [
+    "https://user:hunter2@api.lumecon.ai",
+    "https://user@api.lumecon.ai",
+    "https://:hunter2@api.lumecon.ai",
+  ]) {
+    const problem = originProblem("PUBLIC_API_URL", value);
+    assert.match(problem ?? "", /must not embed credentials/, value);
+    // The message must not carry the secret into the CI log that this
+    // guard's failure is read from. Every other refusal here quotes the
+    // value it got; this one deliberately does not.
+    assert.ok(!problem.includes("hunter2"), `message leaked the password: ${problem}`);
+  }
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://user:hunter2@app.lumecon.ai") === null, false);
+
+  // Ordinary origins are untouched.
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai"), null);
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:443"), null);
+});

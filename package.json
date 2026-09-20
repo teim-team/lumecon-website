@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/check-public-origins.mjs --skip-if-unset",
     "build": "astro check && astro build",
     "postbuild": "node scripts/sync-headers-csp.mjs dist --skip-if-unset",
     "preview": "astro preview",

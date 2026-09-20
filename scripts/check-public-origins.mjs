@@ -105,6 +105,18 @@ export function originProblem(name, value) {
   // `https://api.lumecon.ai:443` -- a perfectly deployable value that creates
   // no path, concatenates correctly, and matches a CSP source that omits the
   // port, since 443 is the default for https.
+  // Credentials, checked before anything that echoes the value. Astro inlines
+  // PUBLIC_* into the client bundle, so a userinfo-bearing origin is published
+  // to every visitor -- measured: the password appeared in three files under
+  // dist/_astro/ while the build exited 0. `fetch` also refuses to construct a
+  // request from such a URL, so the deploy is broken *and* the secret is out.
+  //
+  // The message deliberately does not include the value: every other refusal
+  // here quotes what it got, and doing that with a password would copy it into
+  // the CI log this guard's failure is read from.
+  if (url.username !== "" || url.password !== "") {
+    return `${name} must not embed credentials (found userinfo before ${url.host}); browsers refuse to fetch such a URL, and the value is inlined into the published bundle`;
+  }
   // The raw delimiters, not just their parsed contents. `https://api.lumecon.ai?`
   // has an empty `search` and an empty `hash`, so a component check alone
   // passes it -- while the concatenation produces
@@ -269,6 +281,19 @@ export function collectOriginProblems(env) {
 // comparison was always false -- this guard would have printed nothing and
 // exited 0, which is the one thing a guard must never do.
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  // `--skip-if-unset` is for the prebuild hook: a contributor's build has no
+  // production origins and must still work. Same rule as sync-headers-csp --
+  // skip only when BOTH are absent and we are not in CI, since a hosted build
+  // with nothing set is a misconfigured deploy, not a laptop. The deploy
+  // workflow calls this without the flag, so it can never skip there.
+  const bothUnset = !process.env.PUBLIC_API_URL && !process.env.PUBLIC_APP_URL;
+  if (process.argv.includes("--skip-if-unset") && bothUnset && !process.env.CI) {
+    console.log(
+      "PUBLIC_APP_URL/PUBLIC_API_URL unset: skipping the origin check. " +
+        "This build is local-only and will be login-only.",
+    );
+    process.exit(0);
+  }
   const problems = collectOriginProblems(process.env);
   if (problems.length > 0) {
     console.error("Refusing to build: the deploy would publish a degraded site.\n");
