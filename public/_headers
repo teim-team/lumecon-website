@@ -8,15 +8,20 @@
 # - Add HSTS, Strict-Referrer-Policy, X-Frame-Options.
 # - Long-cache static assets with content hashes; never-cache HTML.
 
-# connect-src is REWRITTEN AT DEPLOY TIME by scripts/sync-headers-csp.mjs,
-# from the same PUBLIC_API_URL that BaseLayout.astro's meta CSP uses. Editing
-# the value here has no effect on what ships; change the repository variable.
-# It is 'self' in the committed file because this file cannot read build-time
-# env, and a committed origin would rot the moment the API moved.
-# NOTE: connect-src here must ALSO name the app backend origin
-# (the deploy's PUBLIC_API_URL origin) once this file becomes active,
-# mirroring the build-time CSP in src/layouts/BaseLayout.astro —
-# otherwise auth/checkout calls from the site are blocked.
+# connect-src below is GENERATED. Do not hand-edit it:
+#   node scripts/sync-headers-csp.mjs --write-public
+# It names the production API origin so this file is correct as committed,
+# which is what matters for the only hosts that read it — Cloudflare Pages and
+# Netlify run a plain `npm run build` and copy this file through, never seeing
+# the GitHub Pages deploy workflow. It was previously left at 'self' on the
+# theory that a committed origin would rot; the deploy rewrite that was
+# supposed to compensate runs in a workflow those hosts do not use, so the
+# result was a file that named no API origin on precisely the deploys where it
+# is enforced. Rot is handled instead by scripts/deploy-guards.test.mjs, which
+# fails when this file and the production origin disagree.
+#
+# A deploy whose PUBLIC_API_URL differs from production (a preview) still gets
+# the right header: the workflow re-derives dist/_headers from that value.
 #
 # This policy and the meta CSP in src/layouts/BaseLayout.astro are two
 # copies of one intent and must be kept in step. They had already drifted
@@ -25,7 +30,7 @@
 # the policy the site enforces today, silently, because fonts would still
 # have worked.
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' mailto:; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.lumecon.ai; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()
   X-Content-Type-Options: nosniff

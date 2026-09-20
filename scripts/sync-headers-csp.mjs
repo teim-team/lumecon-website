@@ -18,10 +18,21 @@
  * it, and dist is checked afterwards to confirm the build really inlined the
  * origins instead of falling back.
  *
- * Runs against `dist/` after the build, in the deploy workflow.
+ * WHY THE COMMITTED FILE CARRIES THE ORIGIN TOO
+ * Deriving it only in the deploy workflow fixed the wrong deploy. GitHub
+ * Pages, which that workflow drives, ignores `_headers` entirely; the hosts
+ * that honour it -- Cloudflare Pages, Netlify -- run a plain `npm run build`
+ * and never execute that step. So the rewrite landed exclusively where the
+ * file is inert, and the committed `connect-src 'self'` shipped verbatim
+ * wherever it is enforced. `--write-public` makes the committed copy correct,
+ * per AGENTS.md's rule that a generator's output is committed rather than run
+ * at build time, and deploy-guards.test.mjs fails if the two disagree. The
+ * deploy still re-derives dist/_headers, so a preview on a different API
+ * origin is right as well.
  *
  * Usage:
- *   node scripts/sync-headers-csp.mjs [dist-dir]
+ *   node scripts/sync-headers-csp.mjs --write-public   # regenerate + commit
+ *   node scripts/sync-headers-csp.mjs [dist-dir]       # deploy: sync + verify
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
@@ -36,16 +47,61 @@ export function withConnectSrc(policy, apiOrigin) {
   return policy.replace(/connect-src\s+[^;]*/, `connect-src ${sources}`);
 }
 
+// HTTP header names are case-insensitive, so `content-security-policy:` is a
+// valid spelling of the line we have to rewrite.
+const CSP_LINE = /content-security-policy:/i;
+
 export function syncHeaders(contents, apiOrigin) {
-  return contents
-    .split("\n")
-    .map((line) =>
-      /Content-Security-Policy:/.test(line) ? withConnectSrc(line, apiOrigin) : line,
-    )
+  const lines = contents.split("\n");
+  const matches = lines.filter((line) => CSP_LINE.test(line)).length;
+  // Silence here was the failure mode: with no matching line this returned the
+  // file untouched and exited 0, and because every later assertion inspects
+  // HTML rather than the header, a header-capable host would serve a stale
+  // connect-src -- or none -- behind a green deploy.
+  if (matches !== 1) {
+    throw new Error(
+      `_headers must contain exactly one Content-Security-Policy line, found ${matches}. ` +
+        "Nothing was written; the CSP the deploy would serve is not the one this build derived.",
+    );
+  }
+  return lines
+    .map((line) => (CSP_LINE.test(line) ? withConnectSrc(line, apiOrigin) : line))
     .join("\n");
 }
 
+/** The href the welcome page's single call-to-action actually carries. */
+export function welcomeButtonHref(html) {
+  const match = html.match(/<a[^>]*class="[^"]*\bwelc-btn\b[^"]*"[^>]*href="([^"]*)"/i)
+    || html.match(/<a[^>]*href="([^"]*)"[^>]*class="[^"]*\bwelc-btn\b[^"]*"/i);
+  return match ? match[1] : null;
+}
+
+// The origin the production API is served from. Already the documented value
+// in AGENTS.md and in four workflows, so naming it here invents no config --
+// it makes `public/_headers` correct as committed, which AGENTS.md ("Nothing
+// in scripts/ runs at build time; each is a generator whose output is
+// committed") requires and which a deploy-workflow-only rewrite could not
+// give: a host that honours _headers and runs a plain `npm run build` -- the
+// only host on which this file does anything -- never saw the deploy step.
+export const PRODUCTION_API_ORIGIN = "https://api.lumecon.ai";
+
+export const PUBLIC_HEADERS_PATH = "public/_headers";
+
 if (process.argv[1] && process.argv[1].endsWith("sync-headers-csp.mjs")) {
+  // Generator mode: regenerate the committed source file, then commit it.
+  if (process.argv[2] === "--write-public") {
+    const origin = process.env.PUBLIC_API_URL || PRODUCTION_API_ORIGIN;
+    const before = readFileSync(PUBLIC_HEADERS_PATH, "utf8");
+    const after = syncHeaders(before, new URL(origin).origin);
+    if (before === after) {
+      console.log(`${PUBLIC_HEADERS_PATH} already names ${origin}`);
+    } else {
+      writeFileSync(PUBLIC_HEADERS_PATH, after);
+      console.log(`${PUBLIC_HEADERS_PATH} connect-src set to 'self' ${origin}`);
+    }
+    process.exit(0);
+  }
+
   const dist = process.argv[2] || "dist";
   const problem =
     originProblem("PUBLIC_API_URL", process.env.PUBLIC_API_URL) ||
@@ -72,10 +128,27 @@ if (process.argv[1] && process.argv[1].endsWith("sync-headers-csp.mjs")) {
     console.error(`dist/index.html does not name ${apiOrigin}; the CSP fell back to 'self'.`);
     process.exit(1);
   }
+  // Check the button, not the page. welcome.astro hardcodes
+  // canonical="https://lumecon.ai/welcome", so for an app URL on that same
+  // host a substring search for the origin succeeds against the canonical tag
+  // while the button itself still reads /login -- the exact fallback this is
+  // here to catch. Compare the href to the configured URL, normalized the way
+  // welcome.astro normalizes it.
   const welcome = join(dist, "welcome", "index.html");
-  if (existsSync(welcome) && !readFileSync(welcome, "utf8").includes(appOrigin)) {
-    console.error(`dist/welcome/index.html does not name ${appOrigin}; it fell back to /login.`);
-    process.exit(1);
+  if (existsSync(welcome)) {
+    const expected = process.env.PUBLIC_APP_URL.replace(/\/+$/, "");
+    const href = welcomeButtonHref(readFileSync(welcome, "utf8"));
+    if (href === null) {
+      console.error("dist/welcome/index.html has no .welc-btn link to verify.");
+      process.exit(1);
+    }
+    if (href !== expected) {
+      console.error(
+        `dist/welcome/index.html's Open Lumecon points at ${JSON.stringify(href)}, ` +
+          `not ${JSON.stringify(expected)}; PUBLIC_APP_URL did not reach the build.`,
+      );
+      process.exit(1);
+    }
   }
   console.log(`CSP synced: connect-src 'self' ${apiOrigin}; app handoff ${appOrigin} present.`);
 }

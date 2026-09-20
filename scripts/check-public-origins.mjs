@@ -37,14 +37,57 @@ export function originProblem(name, value) {
   if (url.protocol !== "https:") {
     return `${name} must be https, got ${url.protocol}//`;
   }
-  if (!url.hostname || !url.hostname.includes(".")) {
+  // Checked before the dot rule below so an unreachable address is named as
+  // such. Enumerating a few spellings is not enough: `https://10.0.0.1` and
+  // `https://foo.localhost` both contain a dot and both reach no visitor.
+  if (isNonPublicHost(url.hostname)) {
+    return `${name} points at a non-public address: ${url.hostname}`;
+  }
+  // A single-label name like `https://intranet` resolves only on some private
+  // network. An IPv6 literal is exempt: it has no dots and is not a name.
+  const isIpv6Literal = url.hostname.includes(":");
+  if (!url.hostname || (!isIpv6Literal && !url.hostname.includes("."))) {
     return `${name} has no public hostname: ${JSON.stringify(raw)}`;
   }
-  // localhost and friends build fine and then point real visitors at nothing.
-  if (/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(url.hostname)) {
-    return `${name} points at a local address: ${url.hostname}`;
+  // The API base is concatenated raw -- `${API_BASE}${path}` in src/lib/api.ts
+  // -- so a trailing slash silently produces `https://api.lumecon.ai//auth/login`.
+  // A post-build check comparing origins cannot see that, because the origin of
+  // the bad value is still correct. PUBLIC_APP_URL is exempt: it is a link
+  // target, legitimately a path (`https://lumecon.ai/app`), and welcome.astro
+  // normalizes it.
+  if (name === "PUBLIC_API_URL" && raw !== url.origin) {
+    return `${name} must be a bare origin (${url.origin}), got ${JSON.stringify(raw)}`;
   }
   return null;
+}
+
+/** True for any host a public visitor cannot reach. */
+export function isNonPublicHost(hostname) {
+  const host = hostname.toLowerCase().replace(/^\[|\]$/g, "");
+
+  // Reserved and special-use names (RFC 6761, RFC 8375). `.local` is mDNS;
+  // `foo.localhost` is still loopback however many labels precede it.
+  if (/(^|\.)(localhost|local|internal|intranet|home\.arpa|test|invalid|example)$/.test(host)) {
+    return true;
+  }
+
+  // IPv6 loopback, link-local (fe80::/10) and unique-local (fc00::/7).
+  if (host === "::1" || /^fe80:/.test(host) || /^f[cd][0-9a-f]{2}:/.test(host)) {
+    return true;
+  }
+
+  const v4 = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (v4) {
+    const [a, b] = v4.slice(1).map(Number);
+    if (a === 0 || a === 127) return true;                 // this-host, loopback
+    if (a === 10) return true;                             // RFC 1918
+    if (a === 172 && b >= 16 && b <= 31) return true;      // RFC 1918
+    if (a === 192 && b === 168) return true;               // RFC 1918
+    if (a === 169 && b === 254) return true;               // link-local
+    if (a === 100 && b >= 64 && b <= 127) return true;     // CGNAT, RFC 6598
+    return false;
+  }
+  return false;
 }
 
 export function collectOriginProblems(env) {
