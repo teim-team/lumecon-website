@@ -193,32 +193,21 @@ const jsonLd = [
         </div>
 
         {
-          /* Two captures of the same screen, one per theme.
-            The capture step shoots every surface twice because the product has
-            a dark theme and this page has dark sections; a 1920px sheet of
-            white product on a page that has gone dark is the one thing on it
-            that did not get the message. Lightbox resolves the enlarged file
-            through the matching <source>, so the zoom follows the theme too.
-            Left unwired, the dark halves ship in public/app and do nothing. */
+          /* Dark product captures belong on this persistent dark field. This
+            is deliberately independent of OS color preference: the page
+            material stays dark in both themes, and a bright app frame here
+            breaks the composition. */
         }
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
-          <picture>
-            <source
-              srcset={heroShot.imgDark}
-              media="(prefers-color-scheme: dark)"
-              width={FRAME.width}
-              height={FRAME.height}
-            />
-            <img
-              src={heroShot.img}
-              alt={heroShot.alt}
-              width={FRAME.width}
-              height={FRAME.height}
-              sizes="(max-width: 980px) 100vw, 58vw"
-              fetchpriority="high"
-              decoding="async"
-            />
-          </picture>
+          <img
+            src={heroShot.imgDark}
+            alt={heroShot.alt}
+            width={FRAME.width}
+            height={FRAME.height}
+            sizes="(max-width: 980px) 100vw, 58vw"
+            fetchpriority="high"
+            decoding="async"
+          />
         </figure>
       </div>
     </header>
@@ -238,23 +227,15 @@ const jsonLd = [
                   class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
                   data-zoom
                 >
-                  <picture>
-                    <source
-                      srcset={row.imgDark}
-                      media="(prefers-color-scheme: dark)"
-                      width={FRAME.width}
-                      height={FRAME.height}
-                    />
-                    <img
-                      src={row.img}
-                      alt={row.alt}
-                      width={FRAME.width}
-                      height={FRAME.height}
-                      sizes="(max-width: 900px) 100vw, 55vw"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </picture>
+                  <img
+                    src={row.imgDark}
+                    alt={row.alt}
+                    width={FRAME.width}
+                    height={FRAME.height}
+                    sizes="(max-width: 900px) 100vw, 55vw"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </figure>
               </article>
             ))
