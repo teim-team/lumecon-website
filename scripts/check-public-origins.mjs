@@ -52,12 +52,15 @@ const BLOCKED_PORTS = new Set([
 // produced the fifth round of this fix.
 const URL_IGNORED = "\t\n\r";
 
-/** The authority's bounds in `raw`, or null when it carries no userinfo.
+/** Where the authority sits in `raw`, and where its userinfo ends.
  *
  * scheme ":" then any run of "/", "\" or an ignored character; the authority
  * ends at the first "/", "\", "?" or "#"; userinfo runs to its LAST "@".
+ * `lastAt` is null when the authority carries no userinfo; `end` is returned
+ * either way, because everything past it is dropped from a diagnostic whether
+ * this function found the credential or the parser did.
  */
-function userinfoBounds(raw) {
+function authorityBounds(raw) {
   const schemeEnd = raw.indexOf(":");
   if (schemeEnd === -1) return null;
 
@@ -78,7 +81,7 @@ function userinfoBounds(raw) {
   }
 
   const lastAt = raw.lastIndexOf("@", end - 1);
-  return lastAt >= start ? { start, lastAt, end } : null;
+  return { start, end, lastAt: lastAt >= start ? lastAt : null };
 }
 
 /** The credential `new URL` finds in `value`, or null. */
@@ -128,40 +131,58 @@ function parsedCredential(raw) {
  * what makes these diagnostics worth reading; it is simply no longer the
  * last word.
  *
- * The scrub is a blunt global replace rather than a rebuild from the parsed
- * components, and that is the correction to the previous attempt. Rebuilding
- * put back `pathname`, `search` and `hash` unchanged, so a value that
- * repeated its own password later in the URL --
- * `https://user:hunter2@app.lumecon.ai/hunter2` -- had the secret restored by
- * the very branch that existed to remove it. A global replace has no such
- * hole: the credential cannot survive in a component the rebuild would have
- * copied, and the raw spelling is kept as well.
+ * AND THE TAIL IS NOT PRINTED AT ALL
+ * Everything from the first "/", "\", "?" or "#" after the authority is
+ * dropped, replaced by a single ellipsis, whenever the value carries a
+ * credential. Two previous rounds went to that tail: first a rebuild that
+ * copied `pathname`, `search` and `hash` through unchanged, restoring a
+ * password the value repeated later in itself; then a literal scrub, which
+ * `.../%68%75%6e%74%65%72%32` walks straight past. Decoding before comparing
+ * only moves the question -- `%2568%2575...` survives one decode, and there
+ * is no last decode.
+ *
+ * So the tail is not normalized, it is removed. It is the one region of the
+ * value that is unbounded and attacker-shaped, and a credential-bearing value
+ * is refused whatever its path, so the path was never what the reader needed.
+ * What is left -- scheme, host, port, in their raw spelling -- is short,
+ * bounded, and still carries the diagnostic that matters: which variable, and
+ * that it embeds a credential.
  *
  * Two consequences worth naming rather than discovering later. A one- or
- * two-character credential matches all over an ordinary URL and the output
+ * two-character credential matches all over the remaining text and the output
  * becomes mostly `<redacted>` -- unhelpful, never unsafe. And a value
  * `new URL` refuses (`https://u:p@*.lumecon.ai`) has no second opinion
  * available, so there the scan stands alone, which is why it is written to
- * the authority's definition rather than to a pattern.
+ * the authority's definition rather than to a pattern -- and why the tail is
+ * dropped on the scan's own reading too, not only on the parser's.
  */
 export function redactCredentials(value) {
   const raw = String(value);
+  const bounds = authorityBounds(raw);
   const found = parsedCredential(raw);
+
+  // No credential by either reading: print the value as it was given.
+  if (!found && (!bounds || bounds.lastAt === null)) return raw;
 
   // Longest first, so a secret nested inside another is not fragmented by the
   // replacement of the shorter one.
   const secrets = found
     ? [...found.secrets].sort((a, b) => b.length - a.length)
     : [];
-  const scrub = (text) =>
-    secrets.reduce((acc, secret) => acc.split(secret).join("<redacted>"), text);
-
   // Scrub the surviving slices, never the assembled string: a one-character
   // credential otherwise matches inside the marker this function just wrote
   // and produces `<red<redacted>cted>`.
-  const bounds = userinfoBounds(raw);
-  if (!bounds) return scrub(raw);
-  return `${scrub(raw.slice(0, bounds.start))}<redacted>@${scrub(raw.slice(bounds.lastAt + 1))}`;
+  const scrub = (text) =>
+    secrets.reduce((acc, secret) => acc.split(secret).join("<redacted>"), text);
+
+  if (!bounds) return `${scrub(raw)}`;
+
+  const head = scrub(raw.slice(0, bounds.start));
+  const marker = bounds.lastAt === null ? "" : "<redacted>@";
+  const hostStart = bounds.lastAt === null ? bounds.start : bounds.lastAt + 1;
+  const host = scrub(raw.slice(hostStart, bounds.end));
+  // The tail is dropped, not scrubbed. See the note above for why.
+  return `${head}${marker}${host}${bounds.end < raw.length ? "\u2026" : ""}`;
 }
 
 /** Why `value` is not usable as a production origin, or null when it is. */

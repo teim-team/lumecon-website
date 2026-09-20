@@ -600,10 +600,15 @@ test("a backslash authority separator is redacted too, and benign values survive
     assert.ok(!redacted.includes("hunter2"), `leaked: ${redacted}`);
     assert.ok(!/aaa9|bbb9/.test(redacted), `leaked: ${redacted}`);
     assert.match(redacted, /<redacted>@app\.lumecon\.ai/, value);
-    // Redaction is not truncation: whatever follows the authority is kept,
-    // because these messages are read to work out what was misconfigured.
+    // Redaction IS truncation, as of the encoded-copy round: everything past
+    // the authority is dropped rather than cleaned, because the tail is the
+    // one unbounded region and `%68%75%6e%74%65%72%32` walks past any literal
+    // comparison. An ellipsis marks that something was there.
     for (const tail of ["/v1", "?x=1", "#f"]) {
-      if (value.endsWith(tail)) assert.ok(redacted.endsWith(tail), redacted);
+      if (value.endsWith(tail)) {
+        assert.ok(!redacted.endsWith(tail), `tail survived: ${redacted}`);
+        assert.ok(redacted.endsWith("\u2026"), `no truncation marker: ${redacted}`);
+      }
     }
   }
 
@@ -780,4 +785,70 @@ test("a root-anchored special-use name is still non-public", () => {
   // away before this sees it. Pinned so a future refactor cannot introduce it.
   assert.equal(new URL("https://10.0.0.1.").hostname, "10.0.0.1");
   assert.match(originProblem("PUBLIC_API_URL", "https://10.0.0.1.") ?? "", /non-public/);
+});
+
+test("an encoded copy of the credential cannot survive in the tail", () => {
+  // Sixth round on this function, and the third on the tail specifically: a
+  // rebuild copied it through, then a literal scrub missed
+  // `%68%75%6e%74%65%72%32`. Decoding before comparing only moves the
+  // question -- `%2568%2575...` survives one decode, and there is no last
+  // decode. So the tail is no longer normalized, it is removed.
+  const ENCODED = [
+    "/%68%75%6e%74%65%72%32",              // fully percent-encoded
+    "/%2568%2575%256e%2574%2565%2572%2532", // double-encoded
+    "?t=%68unter2",                         // partially encoded
+    "#%68%75%6e%74%65%72%32",
+    "/hunter2",                             // the literal case, still covered
+    "/a/hunter2/b?x=hunter2#hunter2",
+  ];
+  for (const tail of ENCODED) {
+    const redacted = redactCredentials(`https://user:hunter2@app.lumecon.ai${tail}`);
+    // Decode repeatedly: a single check would pass on the double-encoded case
+    // for the wrong reason, which is exactly how the last fix looked correct.
+    let decoded = redacted;
+    for (let i = 0; i < 5; i += 1) {
+      try {
+        decoded = decodeURIComponent(decoded);
+      } catch {
+        break;
+      }
+    }
+    assert.ok(!redacted.includes("hunter2"), `leaked literally: ${redacted}`);
+    assert.ok(!decoded.includes("hunter2"), `leaked once decoded: ${redacted}`);
+    assert.equal(redacted, "https://<redacted>@app.lumecon.ai…");
+  }
+
+  // The diagnostic that matters survives: which variable, and that it embeds
+  // a credential. The message says the rest.
+  for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
+    const problem = originProblem(name, "https://user:hunter2@app.lumecon.ai/%68%75%6e%74%65%72%32");
+    assert.ok(problem.includes(name), problem);
+    assert.ok(!problem.includes("hunter2"), problem);
+  }
+
+  // No tail, no ellipsis -- the marker means something was dropped.
+  assert.equal(
+    redactCredentials(" https://user:hunter2@app.lumecon.ai"),
+    " https://<redacted>@app.lumecon.ai",
+  );
+  // A port is part of the authority and is kept.
+  assert.equal(
+    redactCredentials("https://user:hunter2@app.lumecon.ai:8443/x"),
+    "https://<redacted>@app.lumecon.ai:8443…",
+  );
+});
+
+test("a value with no credential keeps its whole path", () => {
+  // Truncation is scoped to credential-bearing values. Every other refusal --
+  // a trailing slash, a non-public host, a blocked port -- still prints what
+  // it was given, which is the whole point of those messages.
+  for (const value of [
+    "https://api.lumecon.ai/v1",
+    "https://api.lumecon.ai/v1?x=1#f",
+    "https://api.lumecon.ai/a@b",
+    "https://10.0.0.1/internal/path",
+  ]) {
+    assert.equal(redactCredentials(value), value, `rewrote ${value}`);
+  }
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/v1") ?? "", /\/v1/);
 });
