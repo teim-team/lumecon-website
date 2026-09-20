@@ -46,22 +46,28 @@ const BLOCKED_PORTS = new Set([
  * Repository variables are not masked the way secrets are, so anything this
  * file prints is visible in the log to everyone who can read the run.
  */
-export function redactCredentials(value) {
-  // Located structurally rather than matched by pattern. Three rounds of
-  // review went to regexes that each handled the spelling of credential I
-  // happened to have in mind -- first `@`, then last `@`, then `//` but not
-  // `\\`, which WHATWG also accepts as an authority separator for a special
-  // scheme. The authority has a definition; using it is what stops the next
-  // spelling from being a fourth finding.
-  //
-  // scheme ":" then any run of "/" or "\\"; the authority ends at the first
-  // "/", "\\", "?" or "#"; userinfo is everything up to its LAST "@".
-  const raw = String(value);
+// WHATWG strips every ASCII tab, LF and CR from a URL -- anywhere in it,
+// before anything else is parsed. They are therefore invisible to `new URL`
+// and fully visible to any scan of the raw string, which is the gap that
+// produced the fifth round of this fix.
+const URL_IGNORED = "\t\n\r";
+
+/** The authority's bounds in `raw`, or null when it carries no userinfo.
+ *
+ * scheme ":" then any run of "/", "\" or an ignored character; the authority
+ * ends at the first "/", "\", "?" or "#"; userinfo runs to its LAST "@".
+ */
+function userinfoBounds(raw) {
   const schemeEnd = raw.indexOf(":");
-  if (schemeEnd === -1) return raw;
+  if (schemeEnd === -1) return null;
 
   let start = schemeEnd + 1;
-  while (start < raw.length && (raw[start] === "/" || raw[start] === "\\")) start += 1;
+  while (
+    start < raw.length &&
+    (raw[start] === "/" || raw[start] === "\\" || URL_IGNORED.includes(raw[start]))
+  ) {
+    start += 1;
+  }
 
   let end = raw.length;
   for (let i = start; i < raw.length; i += 1) {
@@ -71,10 +77,84 @@ export function redactCredentials(value) {
     }
   }
 
-  const authority = raw.slice(start, end);
-  const lastAt = authority.lastIndexOf("@");
-  if (lastAt === -1) return raw;
-  return `${raw.slice(0, start)}<redacted>@${authority.slice(lastAt + 1)}${raw.slice(end)}`;
+  const lastAt = raw.lastIndexOf("@", end - 1);
+  return lastAt >= start ? { start, lastAt, end } : null;
+}
+
+/** The credential `new URL` finds in `value`, or null. */
+function parsedCredential(raw) {
+  let parsed;
+  try {
+    parsed = new URL(raw.trim());
+  } catch {
+    return null;
+  }
+  if (!parsed.username && !parsed.password) return null;
+  const secrets = [parsed.username, parsed.password].filter(Boolean);
+  for (const secret of [...secrets]) {
+    try {
+      const decoded = decodeURIComponent(secret);
+      if (decoded !== secret) secrets.push(decoded);
+    } catch {
+      // A malformed percent sequence is not a second spelling to check.
+    }
+  }
+  return { parsed, secrets };
+}
+
+/** A value safe to print: any userinfo replaced, whatever else is wrong with it.
+ *
+ * Applied to every message rather than relying on the credential check
+ * running first. It did not: a single leading space routed the value to the
+ * whitespace complaint, which printed the password into the Actions log
+ * before the credential check was ever reached. Ordering would fix that one
+ * path and leave the next message added above it leaking again.
+ *
+ * Repository variables are not masked the way secrets are, so anything this
+ * file prints is visible in the log to everyone who can read the run.
+ *
+ * TWO MECHANISMS, NOT ONE
+ * Five review rounds went to this function, and four of them were the same
+ * mistake: I hand-wrote a URL parser, a spelling I had not thought of got
+ * through, and I added that spelling. `@` then the last `@`; `//` then `\`;
+ * and then tab, LF and CR, which WHATWG deletes outright. Extending the scan
+ * a sixth time would be the same bet.
+ *
+ * So the scan is no longer trusted on its own. `new URL` -- the same parser
+ * the rest of this file validates with, and the authority on what the
+ * credential actually *is* -- reads the value independently, and if any
+ * character of what it found survives into the scan's output, that output is
+ * thrown away and the value is rebuilt from the parser's own components,
+ * where the credential cannot appear at all. The scan still runs first
+ * because it preserves the raw spelling, which is what makes these
+ * diagnostics worth reading; it is simply no longer the last word.
+ *
+ * A value `new URL` refuses (`https://u:p@*.lumecon.ai`) has no second
+ * opinion available, so there the scan stands alone -- that is the residual
+ * limit, and it is why the scan is written to the authority's definition
+ * rather than to a pattern.
+ *
+ * The survival test is a substring match, so a one-character credential is
+ * found in almost any host and the value is rebuilt even though the scan was
+ * right. That is the harmless direction: a canonical URL instead of the raw
+ * spelling, never a printed secret.
+ */
+export function redactCredentials(value) {
+  const raw = String(value);
+  const bounds = userinfoBounds(raw);
+  const scanned = bounds
+    ? `${raw.slice(0, bounds.start)}<redacted>@${raw.slice(bounds.lastAt + 1)}`
+    : raw;
+
+  const found = parsedCredential(raw);
+  if (!found) return scanned;
+  if (!found.secrets.some((secret) => scanned.includes(secret))) return scanned;
+
+  // The scan missed it. Rebuild from the parsed parts, which never contain
+  // the credential, and accept losing the raw spelling: the accompanying
+  // message already names what is wrong with the value.
+  const { parsed } = found;
+  return `${parsed.protocol}//<redacted>@${parsed.host}${parsed.pathname}${parsed.search}${parsed.hash}`;
 }
 
 /** Why `value` is not usable as a production origin, or null when it is. */

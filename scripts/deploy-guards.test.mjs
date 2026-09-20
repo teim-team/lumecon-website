@@ -620,3 +620,97 @@ test("a backslash authority separator is redacted too, and benign values survive
     assert.equal(redactCredentials(value), value, `rewrote a benign value: ${value}`);
   }
 });
+
+test("no spelling of a URL leaks its credential, checked against the parser", () => {
+  // Fifth round on one leak, and the fourth with the same shape: I hand-wrote
+  // a URL parser, a spelling I had not thought of got through, and I added
+  // that spelling. `@` then the last `@`; `//` then `\`; and now tab, LF and
+  // CR, which WHATWG deletes from a URL outright -- invisible to `new URL`,
+  // fully visible to a scan of the raw string.
+  //
+  // So this is a property, not a list. Every combination below is generated
+  // and checked against what `new URL` says the credential actually is,
+  // rather than against a regex I would have to be right about.
+  const SEPARATORS = ["//", "\\\\", "/\\", "\\/", "\n//", "\t//", "\r\n//", "//\t"];
+  // Distinctive tokens on purpose. A one-character username is a substring of
+  // any host, so `includes` would report a leak for every output -- and the
+  // implementation's own verification step has the same blind spot, where it
+  // errs toward rebuilding the value rather than printing it.
+  const USERINFO = [
+    "usr9:hunter2",
+    "usr9:first@second",
+    "aaa9:bbb9@ccc9@ddd9",
+    ":hunter2",
+    "usr9",
+  ];
+  const TAILS = ["", "/", "/v1", "?x=1", "#f", "/v1?x=1#f"];
+  const LEADS = ["", " ", "\n"];
+
+  let checked = 0;
+  for (const lead of LEADS) {
+    for (const sep of SEPARATORS) {
+      for (const info of USERINFO) {
+        for (const tail of TAILS) {
+          const value = `${lead}https:${sep}${info}@app.lumecon.ai${tail}`;
+          let parsed;
+          try {
+            parsed = new URL(value.trim());
+          } catch {
+            continue; // No second opinion available; covered by the cases above.
+          }
+          const secrets = [parsed.username, parsed.password].filter(Boolean);
+          if (secrets.length === 0) continue; // Not a credential-bearing spelling.
+
+          const redacted = redactCredentials(value);
+          for (const secret of secrets) {
+            assert.ok(
+              !redacted.includes(secret),
+              `leaked ${JSON.stringify(secret)} from ${JSON.stringify(value)}: ${JSON.stringify(redacted)}`,
+            );
+            let decoded = secret;
+            try {
+              decoded = decodeURIComponent(secret);
+            } catch {
+              /* malformed escape; nothing further to check */
+            }
+            assert.ok(
+              !redacted.includes(decoded),
+              `leaked decoded ${JSON.stringify(decoded)}: ${JSON.stringify(redacted)}`,
+            );
+          }
+          assert.match(redacted, /<redacted>@/, value);
+          checked += 1;
+        }
+      }
+    }
+  }
+  // A silent zero would make every assertion above vacuous.
+  assert.ok(checked > 300, `only ${checked} spellings were checked`);
+});
+
+test("ignored whitespace inside a URL does not hide a credential", () => {
+  // The reported case, kept as a named example of the class above.
+  assert.equal(
+    new URL(" https:\n//user:hunter2@app.lumecon.ai".trim()).password,
+    "hunter2",
+    "premise: WHATWG strips the LF and parses the userinfo",
+  );
+  for (const value of [
+    " https:\n//user:hunter2@app.lumecon.ai",
+    "https:/\t/user:hunter2@app.lumecon.ai",
+    "https:\r\n//user:hunter2@app.lumecon.ai",
+    "https://user:hun\nter2@app.lumecon.ai",
+    "ht\ntps://user:hunter2@app.lumecon.ai",
+  ]) {
+    const redacted = redactCredentials(value);
+    assert.ok(!redacted.includes("hunter2"), `leaked: ${JSON.stringify(redacted)}`);
+    assert.match(redacted, /<redacted>@app\.lumecon\.ai/);
+  }
+
+  // And no message reaches the log unredacted, whichever complaint fires.
+  for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
+    const problem = originProblem(name, " https:\n//user:hunter2@app.lumecon.ai");
+    assert.ok(problem, "should be refused");
+    assert.ok(!problem.includes("hunter2"), `leaked via ${name}: ${problem}`);
+  }
+});
