@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
+    "postbuild": "node scripts/sync-headers-csp.mjs dist --skip-if-unset",
     "preview": "astro preview",
     "check": "astro check",
     "format": "prettier --write 'src/**/*.{astro,ts,css,json}'",

@@ -5,6 +5,7 @@ import {
   collectOriginProblems,
   isNonPublicHost,
   expandIpv6,
+  invalidDnsLabel,
 } from "./check-public-origins.mjs";
 import {
   withConnectSrc,
@@ -254,4 +255,59 @@ test("expandIpv6 returns null for things that are not addresses", () => {
     assert.equal(expandIpv6(bad), null, bad);
   }
   assert.deepEqual(expandIpv6("::1"), [0, 0, 0, 0, 0, 0, 0, 1]);
+});
+
+// ---------------------------------------------------------------------------
+// Third review round: three more ways a value passes every check and still
+// cannot serve a request. Each of these was measured passing first.
+// ---------------------------------------------------------------------------
+
+test("whitespace is refused, because the build inlines the untrimmed value", () => {
+  // Every check here trimmed, and the post-build check re-parses, so both saw
+  // a correct origin -- while src/lib/api.ts concatenated the raw value into
+  // "https://api.lumecon.ai /auth/login".
+  for (const value of ["https://api.lumecon.ai ", " https://api.lumecon.ai", "https://api.lumecon.ai\t"]) {
+    assert.match(originProblem("PUBLIC_API_URL", value) ?? "", /whitespace/);
+  }
+  // Whitespace-only is still "not set" rather than a whitespace complaint --
+  // the more useful message for the commonest mistake.
+  assert.match(originProblem("PUBLIC_API_URL", "   ") ?? "", /is not set/);
+});
+
+test("special-use IPv4 ranges are refused, not just the private ones", () => {
+  for (const host of [
+    "https://192.0.2.1",      // TEST-NET-1, the documentation range
+    "https://198.51.100.1",   // TEST-NET-2
+    "https://203.0.113.1",    // TEST-NET-3
+    "https://198.18.0.1",     // benchmarking
+    "https://224.0.0.1",      // multicast
+    "https://240.0.0.1",      // reserved
+    "https://255.255.255.255" // broadcast
+  ]) {
+    assert.match(originProblem("PUBLIC_API_URL", host) ?? "", /non-public address/, host);
+  }
+});
+
+test("neighbouring public addresses are still allowed", () => {
+  // The ranges above are narrow. 192.1.x, 198.20.x and 203.1.x sit just
+  // outside them and are ordinary public space.
+  for (const host of ["https://192.1.2.3", "https://198.20.0.1", "https://203.1.113.1", "https://8.8.8.8"]) {
+    assert.equal(originProblem("PUBLIC_API_URL", host), null, host);
+  }
+});
+
+test("a hostname DNS cannot resolve is refused, however happily URL parses it", () => {
+  assert.match(originProblem("PUBLIC_API_URL", "https://*.lumecon.ai") ?? "", /wildcard/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://api..lumecon.ai") ?? "", /empty label/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://-api.lumecon.ai") ?? "", /hyphen/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://api-.lumecon.ai") ?? "", /hyphen/);
+});
+
+test("a root-anchored hostname is allowed, since it actually resolves", () => {
+  // One trailing dot is unusual in configuration but valid DNS. Refusing it
+  // would block a deploy that works, which is the failure this guard has in
+  // the other direction.
+  assert.equal(invalidDnsLabel("api.lumecon.ai."), null);
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai."), null);
+  assert.equal(invalidDnsLabel("my-api.lumecon.ai"), null);
 });

@@ -102,7 +102,21 @@ if (process.argv[1] && process.argv[1].endsWith("sync-headers-csp.mjs")) {
     process.exit(0);
   }
 
-  const dist = process.argv[2] || "dist";
+  const args = process.argv.slice(2);
+  // Used by the postbuild hook only. A contributor's `npm run build` has no
+  // production origins and must keep working; a deploy's must not be allowed
+  // to skip, which is why the deploy step does not pass this.
+  const skipIfUnset = args.includes("--skip-if-unset");
+  const dist = args.find((a) => !a.startsWith("--")) || "dist";
+
+  if (skipIfUnset && !(process.env.PUBLIC_API_URL && process.env.PUBLIC_APP_URL)) {
+    console.log(
+      "PUBLIC_APP_URL/PUBLIC_API_URL unset: leaving dist/_headers as committed " +
+        "(it names the production API). This build is local-only.",
+    );
+    process.exit(0);
+  }
+
   const problem =
     originProblem("PUBLIC_API_URL", process.env.PUBLIC_API_URL) ||
     originProblem("PUBLIC_APP_URL", process.env.PUBLIC_APP_URL);

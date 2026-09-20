@@ -23,8 +23,16 @@ const REQUIRED = ["PUBLIC_APP_URL", "PUBLIC_API_URL"];
 
 /** Why `value` is not usable as a production origin, or null when it is. */
 export function originProblem(name, value) {
-  const raw = (value ?? "").trim();
+  const original = value ?? "";
+  const raw = original.trim();
   if (!raw) return `${name} is not set`;
+  // Astro inlines the value as given, and src/lib/api.ts concatenates it raw,
+  // so a stray space survives into `https://api.lumecon.ai /auth/login` while
+  // every check here and after the build trims or re-parses it back to
+  // something that looks correct.
+  if (original !== raw) {
+    return `${name} has leading or trailing whitespace: ${JSON.stringify(original)}`;
+  }
   let url;
   try {
     url = new URL(raw);
@@ -49,6 +57,15 @@ export function originProblem(name, value) {
   if (!url.hostname || (!isIpv6Literal && !url.hostname.includes("."))) {
     return `${name} has no public hostname: ${JSON.stringify(raw)}`;
   }
+  // `new URL` is far more permissive than DNS: it happily parses
+  // `https://*.lumecon.ai` (a wildcard copied out of an allowlist) and
+  // `https://api..lumecon.ai` (a doubled-dot typo). Both then satisfy the
+  // has-a-dot rule and the bare-origin comparison, and fail only at
+  // resolution time, in the browser, on the published site.
+  if (!isIpv6Literal) {
+    const badLabel = invalidDnsLabel(url.hostname);
+    if (badLabel) return `${name} is not a resolvable hostname: ${badLabel}`;
+  }
   // The API base is concatenated raw -- `${API_BASE}${path}` in src/lib/api.ts
   // -- so a trailing slash silently produces `https://api.lumecon.ai//auth/login`.
   // A post-build check comparing origins cannot see that, because the origin of
@@ -69,6 +86,26 @@ export function originProblem(name, value) {
   if (normalized !== url.origin) {
     const allowance = name === "PUBLIC_APP_URL" ? " (a trailing slash is fine)" : "";
     return `${name} must be a bare origin (${url.origin})${allowance}, got ${JSON.stringify(raw)}`;
+  }
+  return null;
+}
+
+/** Why `hostname` cannot resolve, or null when its labels are all well-formed. */
+export function invalidDnsLabel(hostname) {
+  // One trailing dot is a root-anchored FQDN -- unusual in config, but it
+  // resolves, so stripping it is right where refusing it would block a
+  // working deploy.
+  const labels = hostname.replace(/\.$/, "").split(".");
+  for (const label of labels) {
+    if (label === "") return `empty label in ${JSON.stringify(hostname)}`;
+    if (label.includes("*")) return `wildcard in ${JSON.stringify(hostname)}`;
+    if (label.length > 63) return `label longer than 63 characters in ${JSON.stringify(hostname)}`;
+    if (label.startsWith("-") || label.endsWith("-")) {
+      return `label ${JSON.stringify(label)} starts or ends with a hyphen`;
+    }
+    if (!/^[a-z0-9-]+$/i.test(label)) {
+      return `label ${JSON.stringify(label)} has characters DNS will not resolve`;
+    }
   }
   return null;
 }
@@ -97,6 +134,14 @@ function isNonPublicIpv4(hostname) {
   if (a === 192 && b === 168) return true;               // RFC 1918
   if (a === 169 && b === 254) return true;               // link-local
   if (a === 100 && b >= 64 && b <= 127) return true;     // CGNAT, RFC 6598
+  // Special-use ranges that are not globally routable either. None can serve
+  // a product origin, and each is a plausible typo or copied example.
+  if (a === 192 && b === 0 && v4[3] === "0") return true;          // 192.0.0.0/24 IETF protocol
+  if (a === 192 && b === 0 && v4[3] === "2") return true;          // 192.0.2.0/24 TEST-NET-1
+  if (a === 198 && (b === 18 || b === 19)) return true;            // 198.18.0.0/15 benchmarking
+  if (a === 198 && b === 51 && v4[3] === "100") return true;       // 198.51.100.0/24 TEST-NET-2
+  if (a === 203 && b === 0 && v4[3] === "113") return true;        // 203.0.113.0/24 TEST-NET-3
+  if (a >= 224) return true;                                       // multicast, reserved, broadcast
   return false;
 }
 

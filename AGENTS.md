@@ -343,6 +343,17 @@ docs/reconciliation-roadmap.md.
 Nothing in `scripts/` runs at build time; each is a generator whose
 output is committed. Run them when their inputs change.
 
+One exception, added deliberately: `scripts/sync-headers-csp.mjs` runs as
+a `postbuild` hook. Its committed output (`public/_headers`) names the
+production API origin, which covers every deploy that uses it — but a
+Cloudflare Pages or Netlify preview pointed at a *different*
+`PUBLIC_API_URL` cannot be covered by a committed file, because that
+origin is not known at commit time, and those hosts run a plain
+`npm run build` rather than the GitHub Pages workflow. The hook takes
+`--skip-if-unset`, so a contributor's build with no production origins is
+a no-op; the deploy workflow calls the script without that flag, so a
+deploy can never skip it.
+
 - Sector photography (duotone): `scripts/naics/sectors.mjs` is the
   single source for the 20 NAICS sectors + the Tribal Government
   category, their descriptions and wash colors; `/naics` and the
