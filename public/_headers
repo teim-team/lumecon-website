@@ -8,6 +8,11 @@
 # - Add HSTS, Strict-Referrer-Policy, X-Frame-Options.
 # - Long-cache static assets with content hashes; never-cache HTML.
 
+# connect-src is REWRITTEN AT DEPLOY TIME by scripts/sync-headers-csp.mjs,
+# from the same PUBLIC_API_URL that BaseLayout.astro's meta CSP uses. Editing
+# the value here has no effect on what ships; change the repository variable.
+# It is 'self' in the committed file because this file cannot read build-time
+# env, and a committed origin would rot the moment the API moved.
 # NOTE: connect-src here must ALSO name the app backend origin
 # (the deploy's PUBLIC_API_URL origin) once this file becomes active,
 # mirroring the build-time CSP in src/layouts/BaseLayout.astro —
