@@ -440,3 +440,29 @@ test("the remaining reserved IPv6 prefixes are refused, to the bit", () => {
   assert.equal(isNonPublicHost("[101::1]"), false);
   assert.equal(isNonPublicHost("[100::1:0:0:0:1]"), false);
 });
+
+test("an empty query or fragment marker is refused", () => {
+  // A regression from the previous round: `https://api.lumecon.ai?` has an
+  // empty `search` AND an empty `hash`, so checking parsed components alone
+  // passes it, while `${API_BASE}${path}` yields
+  // "https://api.lumecon.ai?/auth/login" -- which the browser resolves to
+  // path "/". Every API call would reach the root.
+  //
+  // The string comparison this replaced caught it. The rewrite that fixed
+  // the :443 over-rejection lost it, so the raw delimiters are checked too.
+  assert.equal(new URL("https://api.lumecon.ai?").search, "", "premise: search is empty");
+  for (const value of [
+    "https://api.lumecon.ai?",
+    "https://api.lumecon.ai#",
+    "https://api.lumecon.ai?#",
+  ]) {
+    assert.match(originProblem("PUBLIC_API_URL", value) ?? "", /query or fragment/, value);
+    assert.match(originProblem("PUBLIC_APP_URL", value) ?? "", /query or fragment/, value);
+  }
+  // Non-empty ones were already refused and still are.
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai?x=1") ?? "", /query or fragment/);
+  assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai#frag") ?? "", /query or fragment/);
+  // ...and the round-6 allowances survive.
+  assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai:443"), null);
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai/"), null);
+});

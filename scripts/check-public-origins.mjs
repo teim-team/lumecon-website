@@ -105,7 +105,17 @@ export function originProblem(name, value) {
   // `https://api.lumecon.ai:443` -- a perfectly deployable value that creates
   // no path, concatenates correctly, and matches a CSP source that omits the
   // port, since 443 is the default for https.
-  if (url.pathname !== "/" || url.search !== "" || url.hash !== "") {
+  // The raw delimiters, not just their parsed contents. `https://api.lumecon.ai?`
+  // has an empty `search` and an empty `hash`, so a component check alone
+  // passes it -- while the concatenation produces
+  // `https://api.lumecon.ai?/auth/login`, which the browser resolves to path
+  // `/`. Every API call would reach the root. The string comparison this
+  // replaced caught that case; the component rewrite that fixed the :443
+  // over-rejection lost it, so both are checked now.
+  if (raw.includes("?") || raw.includes("#")) {
+    return `${name} must be a bare origin with no query or fragment marker, got ${JSON.stringify(raw)}`;
+  }
+  if (url.pathname !== "/") {
     return `${name} must be a bare origin (${url.origin}), got ${JSON.stringify(raw)}`;
   }
   // The API base is the only one where a trailing slash is fatal, because it
