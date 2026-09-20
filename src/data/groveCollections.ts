@@ -2,13 +2,11 @@
  * The twelve Lumecon collections a Cedar Grove carries, for the registry on
  * /cedar-grove and the fold on /pricing.
  *
- * The collections are Lumecon's. Cedar Press and Cedar Grove are two channels
- * that carry them, not their origin, so nothing here names a channel as the
- * source of a record.
+ * The collections are Lumecon's. This public registry describes the catalog
+ * rather than any delivery surface or internal implementation path.
  *
- * Every line is read from the Lumecon collection catalog and its dataset
- * documentation (`src/features/grove/pressCatalog.js` and `docs/datasets/*`),
- * never written fresh for the website:
+ * Every line is derived from the canonical collection catalog and its dataset
+ * documentation, never written fresh for the website:
  *
  * - `name` and `short` are the catalog's, with the one ampersand spelled out
  *   for displayed copy.
@@ -22,14 +20,13 @@
  *   relying on: whether they are public, who did the resolution work, and the
  *   condition a listing carries where the documentation states one. It names
  *   no shelf and no channel, because a reader of this page is not buying a
- *   shelf and the shelf names are not announced.
+ *   delivery surface, because this page describes the collections themselves.
  *
  * No update cadence is stated per collection. The documentation records a
  * cadence for prime contracting only (quarterly), and a cadence typed here
  * for the others would be a promise nobody has measured.
  *
- * The marks are the collection icons, transcribed from
- * `src/pages/grove/pressCollectionIcons.jsx`: a 28-unit box, 1.9 stroke,
+ * The marks are the catalog's collection icons: a 28-unit box, 1.9 stroke,
  * two or three large shapes each, drawn as one family.
  */
 
