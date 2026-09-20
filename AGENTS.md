@@ -220,12 +220,32 @@ rule; ampersands read as unprofessional). Code identifiers and TS
 types are exempt. The same rule applies in every sibling repository,
 not only teim-app.
 
-Grep for the HTML entity as well as the character. Checking for a bare
-`&` is what let `Help &amp; support` sit in teim-app's footer and
-`Requests &amp; support` in Cedar Press's settings, both found on
-2026-09-18. The Cedar Press one had a correct `aria-label` two lines
-above it, so a screen reader was given the right wording and the
-screen was not.
+**Grep for both forms, because each one misses the other.** Searching
+for a bare `&` does not match `&amp;`, and searching for `&amp;` does
+not match a plain `&` inside a string literal. Both were live on
+2026-09-18: `Help &amp; support` in teim-app's footer and
+`Requests &amp; support` in Cedar Press's settings, then, after a sweep
+that only looked for the entity, `"Access & workspace"` and
+`"Data & privacy"` in teim-app's `Settings.jsx`. One regex catches
+both:
+
+```
+&amp;|[A-Za-z0-9] & [A-Za-z0-9]
+```
+
+Two things worth knowing beyond the grep. The Cedar Press occurrence had
+a correct `aria-label` two lines above it, so a screen reader was given
+the right wording and the screen was not: check the visible label
+against its own label attribute. And an ampersand inside a URL query
+string is a separator, not copy — the only ones in this site's `dist`
+are in Google Scholar hrefs on `/team`.
+
+**Not every ampersand can simply be fixed.** Cedar Press's collection
+`Native Federal Advocacy & Engagement` is embedded verbatim in the
+citation written into every downloaded CSV, so renaming it changes how
+files subscribers already hold cite themselves. It waits for a version
+bump on that collection, tracked as item 11 in that repository's
+`docs/TERMINAL_HANDOFF.md`.
 
 ## Vocabulary standard (2026-07; all five repositories)
 
