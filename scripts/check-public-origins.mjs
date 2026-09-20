@@ -122,39 +122,46 @@ function parsedCredential(raw) {
  *
  * So the scan is no longer trusted on its own. `new URL` -- the same parser
  * the rest of this file validates with, and the authority on what the
- * credential actually *is* -- reads the value independently, and if any
- * character of what it found survives into the scan's output, that output is
- * thrown away and the value is rebuilt from the parser's own components,
- * where the credential cannot appear at all. The scan still runs first
- * because it preserves the raw spelling, which is what makes these
- * diagnostics worth reading; it is simply no longer the last word.
+ * credential actually *is* -- reads the value independently, and every
+ * occurrence of what it found is struck from the output, wherever it sits.
+ * The scan still runs first because it preserves the raw spelling, which is
+ * what makes these diagnostics worth reading; it is simply no longer the
+ * last word.
  *
- * A value `new URL` refuses (`https://u:p@*.lumecon.ai`) has no second
- * opinion available, so there the scan stands alone -- that is the residual
- * limit, and it is why the scan is written to the authority's definition
- * rather than to a pattern.
+ * The scrub is a blunt global replace rather than a rebuild from the parsed
+ * components, and that is the correction to the previous attempt. Rebuilding
+ * put back `pathname`, `search` and `hash` unchanged, so a value that
+ * repeated its own password later in the URL --
+ * `https://user:hunter2@app.lumecon.ai/hunter2` -- had the secret restored by
+ * the very branch that existed to remove it. A global replace has no such
+ * hole: the credential cannot survive in a component the rebuild would have
+ * copied, and the raw spelling is kept as well.
  *
- * The survival test is a substring match, so a one-character credential is
- * found in almost any host and the value is rebuilt even though the scan was
- * right. That is the harmless direction: a canonical URL instead of the raw
- * spelling, never a printed secret.
+ * Two consequences worth naming rather than discovering later. A one- or
+ * two-character credential matches all over an ordinary URL and the output
+ * becomes mostly `<redacted>` -- unhelpful, never unsafe. And a value
+ * `new URL` refuses (`https://u:p@*.lumecon.ai`) has no second opinion
+ * available, so there the scan stands alone, which is why it is written to
+ * the authority's definition rather than to a pattern.
  */
 export function redactCredentials(value) {
   const raw = String(value);
-  const bounds = userinfoBounds(raw);
-  const scanned = bounds
-    ? `${raw.slice(0, bounds.start)}<redacted>@${raw.slice(bounds.lastAt + 1)}`
-    : raw;
-
   const found = parsedCredential(raw);
-  if (!found) return scanned;
-  if (!found.secrets.some((secret) => scanned.includes(secret))) return scanned;
 
-  // The scan missed it. Rebuild from the parsed parts, which never contain
-  // the credential, and accept losing the raw spelling: the accompanying
-  // message already names what is wrong with the value.
-  const { parsed } = found;
-  return `${parsed.protocol}//<redacted>@${parsed.host}${parsed.pathname}${parsed.search}${parsed.hash}`;
+  // Longest first, so a secret nested inside another is not fragmented by the
+  // replacement of the shorter one.
+  const secrets = found
+    ? [...found.secrets].sort((a, b) => b.length - a.length)
+    : [];
+  const scrub = (text) =>
+    secrets.reduce((acc, secret) => acc.split(secret).join("<redacted>"), text);
+
+  // Scrub the surviving slices, never the assembled string: a one-character
+  // credential otherwise matches inside the marker this function just wrote
+  // and produces `<red<redacted>cted>`.
+  const bounds = userinfoBounds(raw);
+  if (!bounds) return scrub(raw);
+  return `${scrub(raw.slice(0, bounds.start))}<redacted>@${scrub(raw.slice(bounds.lastAt + 1))}`;
 }
 
 /** Why `value` is not usable as a production origin, or null when it is. */
@@ -293,7 +300,15 @@ export function invalidDnsLabel(hostname) {
 
 /** True for any host a public visitor cannot reach. */
 export function isNonPublicHost(hostname) {
-  const host = hostname.toLowerCase().replace(/^\[|\]$/g, "");
+  // The terminal root dot goes first, and it has to. `URL.hostname` keeps it,
+  // so `localhost.` -- an ordinary absolute DNS spelling that resolves exactly
+  // like `localhost` -- slipped past the end-anchored test below, while
+  // `invalidDnsLabel` deliberately strips the same dot and let the value
+  // through. Two functions disagreeing about one character, and the deploy
+  // stayed green pointing visitors at their own loopback. The IPv4 path was
+  // never affected: WHATWG canonicalises `10.0.0.1.` to `10.0.0.1` before
+  // this sees it, which is exactly why the gap was name-only and easy to miss.
+  const host = hostname.toLowerCase().replace(/^\[|\]$/g, "").replace(/\.$/, "");
 
   // Reserved and special-use names (RFC 6761, RFC 8375). `.local` is mDNS;
   // `foo.localhost` is still loopback however many labels precede it.

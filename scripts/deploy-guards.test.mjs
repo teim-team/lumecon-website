@@ -544,10 +544,10 @@ test("redaction reaches the final userinfo delimiter, not the first", () => {
 
   for (const value of [
     " https://user:first@second@app.lumecon.ai",
-    "https://a:b@c@d@app.lumecon.ai",
+    "https://usr9:aaa9@bbb9@ccc9@app.lumecon.ai",
   ]) {
     const redacted = redactCredentials(value);
-    assert.ok(!/second|@c@|@d@/.test(redacted), `leaked: ${redacted}`);
+    assert.ok(!/second|aaa9|bbb9|ccc9/.test(redacted), `leaked: ${redacted}`);
     assert.match(redacted, /<redacted>@app\.lumecon\.ai|<redacted>@app/);
   }
 
@@ -593,12 +593,12 @@ test("a backslash authority separator is redacted too, and benign values survive
     "https:/\\user:hunter2@app.lumecon.ai/v1",
     "https:\\\\user:hunter2@app.lumecon.ai?x=1",
     "https:\\\\user:hunter2@app.lumecon.ai#f",
-    "https:\\\\a:b@c@app.lumecon.ai",
+    "https:\\\\usr9:aaa9@bbb9@app.lumecon.ai",
     " https:\\\\user:hunter2@app.lumecon.ai",
   ]) {
     const redacted = redactCredentials(value);
     assert.ok(!redacted.includes("hunter2"), `leaked: ${redacted}`);
-    assert.ok(!/@c@/.test(redacted), `leaked: ${redacted}`);
+    assert.ok(!/aaa9|bbb9/.test(redacted), `leaked: ${redacted}`);
     assert.match(redacted, /<redacted>@app\.lumecon\.ai/, value);
     // Redaction is not truncation: whatever follows the authority is kept,
     // because these messages are read to work out what was misconfigured.
@@ -713,4 +713,71 @@ test("ignored whitespace inside a URL does not hide a credential", () => {
     assert.ok(problem, "should be refused");
     assert.ok(!problem.includes("hunter2"), `leaked via ${name}: ${problem}`);
   }
+});
+
+test("a credential repeated in the tail is struck there too", () => {
+  // The previous round's fix reintroduced the leak it was written to close.
+  // On a survival hit it rebuilt the value from the parsed components -- and
+  // copied `pathname`, `search` and `hash` through unchanged, so a value that
+  // repeated its own password later in the URL had the secret restored by the
+  // very branch that existed to remove it.
+  for (const value of [
+    "https://user:hunter2@app.lumecon.ai/hunter2",
+    "https://user:hunter2@app.lumecon.ai?token=hunter2",
+    "https://user:hunter2@app.lumecon.ai#hunter2",
+    "https://user:hunter2@app.lumecon.ai/a/hunter2/b?x=hunter2#hunter2",
+    // The host itself is no exception: a match there is struck as well.
+    "https://user:hunter2@hunter2.lumecon.ai",
+  ]) {
+    const redacted = redactCredentials(value);
+    assert.ok(!redacted.includes("hunter2"), `leaked: ${JSON.stringify(redacted)}`);
+  }
+
+  // The username is a secret too, not just the password.
+  const named = redactCredentials("https://svcaccount:pw@app.lumecon.ai/svcaccount");
+  assert.ok(!named.includes("svcaccount"), named);
+
+  // And the raw spelling survives, which the rebuild destroyed: a leading
+  // space and an ignored newline are the thing the message is complaining
+  // about, so printing a canonicalized URL hid the evidence.
+  assert.equal(
+    redactCredentials(" https://user:hunter2@app.lumecon.ai"),
+    " https://<redacted>@app.lumecon.ai",
+  );
+
+  // A one-character credential matches all over an ordinary URL. The output
+  // is noisy, never unsafe -- and in particular the scrub must not eat into
+  // the marker this function itself wrote (`<red<redacted>cted>`).
+  const noisy = redactCredentials("https://a:b@app.lumecon.ai");
+  assert.ok(!/<red<redacted>/.test(noisy), `marker corrupted: ${noisy}`);
+  assert.match(noisy, /<redacted>@/);
+});
+
+test("a root-anchored special-use name is still non-public", () => {
+  // `URL.hostname` keeps the terminal dot, so an end-anchored suffix test
+  // missed `localhost.` while `invalidDnsLabel` deliberately stripped the
+  // same dot and accepted the value -- two functions disagreeing about one
+  // character, and the deploy stayed green pointing visitors at their own
+  // loopback.
+  assert.equal(new URL("https://localhost.").hostname, "localhost.", "premise: dot kept");
+
+  for (const host of ["localhost.", "foo.localhost.", "svc.internal.", "box.local.", "a.test."]) {
+    assert.equal(isNonPublicHost(host), true, host);
+    assert.match(
+      originProblem("PUBLIC_API_URL", `https://${host}`) ?? "",
+      /non-public/,
+      host,
+    );
+  }
+
+  // A root-anchored *public* FQDN resolves and must keep working -- the fix
+  // is to normalize the dot, not to refuse it. `invalidDnsLabel` already
+  // strips it for exactly that reason.
+  assert.equal(isNonPublicHost("app.lumecon.ai."), false);
+  assert.equal(originProblem("PUBLIC_APP_URL", "https://app.lumecon.ai."), null);
+
+  // The IPv4 path never had the gap: WHATWG canonicalizes the trailing dot
+  // away before this sees it. Pinned so a future refactor cannot introduce it.
+  assert.equal(new URL("https://10.0.0.1.").hostname, "10.0.0.1");
+  assert.match(originProblem("PUBLIC_API_URL", "https://10.0.0.1.") ?? "", /non-public/);
 });
