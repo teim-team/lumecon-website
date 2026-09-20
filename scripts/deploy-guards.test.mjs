@@ -7,6 +7,7 @@ import {
   expandIpv6,
   invalidDnsLabel,
   redactCredentials,
+  isCI,
 } from "./check-public-origins.mjs";
 import {
   withConnectSrc,
@@ -17,6 +18,7 @@ import {
   PUBLIC_HEADERS_PATH,
 } from "./sync-headers-csp.mjs";
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 
 // A missing or malformed origin used to build a perfectly valid, quietly
 // degraded site: Open Lumecon falling back to /login, auth and checkout on
@@ -851,4 +853,93 @@ test("a value with no credential keeps its whole path", () => {
     assert.equal(redactCredentials(value), value, `rewrote ${value}`);
   }
   assert.match(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai/v1") ?? "", /\/v1/);
+});
+
+test("CI is read by its value, not its presence", () => {
+  // `CI=false` is conventional in shells and tooling that want to force a
+  // local build. A bare truthiness test read that nonempty string as CI, so
+  // both lifecycle hooks refused an ordinary `npm run build` with no origins
+  // set -- the exact case the skip exists for.
+  for (const value of ["false", "FALSE", " false ", "0", "no", "off", ""]) {
+    assert.equal(isCI({ CI: value }), false, JSON.stringify(value));
+  }
+  assert.equal(isCI({}), false, "unset is not CI");
+  for (const value of ["true", "1", "yes", "on", "github"]) {
+    assert.equal(isCI({ CI: value }), true, JSON.stringify(value));
+  }
+});
+
+test("both lifecycle hooks take the local path under CI=false", () => {
+  // The property that matters is the process's behaviour, not the predicate:
+  // the finding was that `npm run build` exited 1. Exercised end to end.
+  const env = { ...process.env, CI: "false" };
+  delete env.PUBLIC_API_URL;
+  delete env.PUBLIC_APP_URL;
+  for (const [script, args] of [
+    ["scripts/check-public-origins.mjs", ["--skip-if-unset"]],
+    ["scripts/sync-headers-csp.mjs", ["dist", "--skip-if-unset"]],
+  ]) {
+    const out = execFileSync("node", [script, ...args], { env, encoding: "utf8" });
+    assert.match(out, /local-only/, script);
+  }
+});
+
+test("the generator refuses a credential-bearing origin instead of logging it", () => {
+  // `--write-public` went straight to `new URL(origin).origin`, which strips
+  // userinfo -- so the generated header looked correct while the log line
+  // carried the password. A clean output file is not the same as an
+  // acceptable input.
+  const env = { ...process.env, PUBLIC_API_URL: "https://user:hunter2@api.lumecon.ai" };
+  let failed = false;
+  let output = "";
+  try {
+    execFileSync("node", ["scripts/sync-headers-csp.mjs", "--write-public"],
+      { env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  } catch (error) {
+    failed = true;
+    output = `${error.stdout ?? ""}${error.stderr ?? ""}`;
+  }
+  assert.ok(failed, "the generator accepted a credential-bearing origin");
+  assert.ok(!output.includes("hunter2"), `leaked: ${output}`);
+  assert.match(output, /must not embed credentials/);
+
+  // And the committed file is untouched by the refusal.
+  const committed = readFileSync(PUBLIC_HEADERS_PATH, "utf8");
+  assert.ok(committed.includes(PRODUCTION_API_ORIGIN), "the generator rewrote the file anyway");
+});
+
+test("ORCHID address space is not public", () => {
+  // 2001:10::/28 (RFC 4843) and 2001:20::/28 (RFC 7343) are overlay routable
+  // cryptographic hash identifiers: they look like ordinary global unicast
+  // and are not routed at all.
+  for (const host of ["[2001:10::1]", "[2001:1f::1]", "[2001:20::1]", "[2001:2f:ffff::1]"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+    assert.match(originProblem("PUBLIC_API_URL", `https://${host}`) ?? "", /non-public/, host);
+  }
+  // Matched as the two /28s, so the neighbouring space stays usable -- the
+  // same discipline as the 3fff::/20 and 2001:2::/48 entries.
+  for (const host of ["[2001:30::1]", "[2001:f::1]", "[2001:0::1]", "[2606:4700::1111]"]) {
+    assert.equal(isNonPublicHost(host), false, host);
+  }
+});
+
+test("no diagnostic prints one of these variables unredacted", () => {
+  // The generator leak was the seventh credential finding on this PR and the
+  // first outside check-public-origins.mjs -- six rounds went into one
+  // function while a sibling file printed the same variable raw. So this
+  // asserts the property across both files rather than on the line reported.
+  for (const file of ["scripts/check-public-origins.mjs", "scripts/sync-headers-csp.mjs"]) {
+    const source = readFileSync(file, "utf8");
+    const prints = source
+      .split("\n")
+      .filter((line) => /console\.(log|error|warn)/.test(line) || /^\s*`.*\$\{/.test(line))
+      .filter((line) => /\$\{(origin|apiOrigin|appOrigin|shown|value|v)\b/.test(line));
+    for (const line of prints) {
+      assert.match(
+        line,
+        /redactCredentials|shown/,
+        `${file} interpolates an origin without redacting it: ${line.trim()}`,
+      );
+    }
+  }
 });

@@ -37,7 +37,7 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { originProblem } from "./check-public-origins.mjs";
+import { isCI, originProblem, redactCredentials } from "./check-public-origins.mjs";
 
 /** Replace connect-src in one CSP header line, keeping every other directive. */
 export function withConnectSrc(policy, apiOrigin) {
@@ -108,13 +108,24 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
   // Generator mode: regenerate the committed source file, then commit it.
   if (process.argv[2] === "--write-public") {
     const origin = process.env.PUBLIC_API_URL || PRODUCTION_API_ORIGIN;
+    // Validate before doing anything with it. This branch used to go straight
+    // to `new URL(origin).origin`, which silently strips userinfo -- so a
+    // credential-bearing PUBLIC_API_URL produced a correct-looking header and
+    // a log line carrying the password. The generated file being clean is not
+    // the same as the input being acceptable.
+    const problem = originProblem("PUBLIC_API_URL", origin);
+    if (problem) {
+      console.error(`Cannot regenerate ${PUBLIC_HEADERS_PATH}: ${problem}`);
+      process.exit(1);
+    }
+    const shown = redactCredentials(origin);
     const before = readFileSync(PUBLIC_HEADERS_PATH, "utf8");
     const after = syncHeaders(before, new URL(origin).origin);
     if (before === after) {
-      console.log(`${PUBLIC_HEADERS_PATH} already names ${origin}`);
+      console.log(`${PUBLIC_HEADERS_PATH} already names ${shown}`);
     } else {
       writeFileSync(PUBLIC_HEADERS_PATH, after);
-      console.log(`${PUBLIC_HEADERS_PATH} connect-src set to 'self' ${origin}`);
+      console.log(`${PUBLIC_HEADERS_PATH} connect-src set to 'self' ${shown}`);
     }
     process.exit(0);
   }
@@ -137,7 +148,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
   // exactly what a newly created or accidentally cleared hosted deploy looks
   // like, with Astro's login-only fallbacks already emitted.
   const noneSet = !process.env.PUBLIC_API_URL && !process.env.PUBLIC_APP_URL;
-  if (skipIfUnset && noneSet && !process.env.CI) {
+  if (skipIfUnset && noneSet && !isCI()) {
     console.log(
       "PUBLIC_APP_URL/PUBLIC_API_URL unset: leaving dist/_headers as committed " +
         "(it names the production API). This build is local-only.",
@@ -180,7 +191,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
   if (!connectSrc.includes(apiOrigin)) {
     console.error(
       `dist/index.html's connect-src is ${JSON.stringify(connectSrc.join(" "))}, ` +
-        `which does not name ${apiOrigin}; the CSP fell back.`,
+        `which does not name ${redactCredentials(apiOrigin)}; the CSP fell back.`,
     );
     process.exit(1);
   }
@@ -213,5 +224,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
     );
     process.exit(1);
   }
-  console.log(`CSP synced: connect-src 'self' ${apiOrigin}; app handoff ${appOrigin} present.`);
+  // `new URL(...).origin` already drops userinfo and `originProblem` has
+  // refused it above, so neither of these can carry a credential today. They
+  // are redacted anyway, because every message in this pair of files that
+  // prints one of these variables now goes through one function -- six review
+  // rounds went to the ones that did not.
+  console.log(
+    `CSP synced: connect-src 'self' ${redactCredentials(apiOrigin)}; ` +
+      `app handoff ${redactCredentials(appOrigin)} present.`,
+  );
 }

@@ -24,6 +24,18 @@ import { resolve } from "node:path";
 
 const REQUIRED = ["PUBLIC_APP_URL", "PUBLIC_API_URL"];
 
+// Values that mean "not CI" when CI is nonetheless set. `CI=false` is
+// conventional in shells and tooling that want to force a local build, and a
+// bare truthiness test read that nonempty string as CI -- so both lifecycle
+// hooks refused an ordinary `npm run build` with no origins set, which is the
+// exact case the skip exists for.
+const CI_FALSEY = new Set(["", "0", "false", "no", "off"]);
+
+/** Whether this is a CI build, by the value of `CI` rather than its presence. */
+export function isCI(env = process.env) {
+  return !CI_FALSEY.has(String(env.CI ?? "").trim().toLowerCase());
+}
+
 // https://fetch.spec.whatwg.org/#bad-port -- ports Fetch blocks outright.
 const BLOCKED_PORTS = new Set([
   // 0 is reserved and can never identify a listening service.
@@ -414,6 +426,13 @@ function isNonPublicIpv6(hostname) {
   // 2001:2::/48, the IPv6 benchmarking range (RFC 5180) -- the counterpart
   // of IPv4's 198.18.0.0/15, which is already refused.
   if (groups[0] === 0x2001 && groups[1] === 0x0002 && groups[2] === 0) return true;
+  // 2001:10::/28 (ORCHIDv1, RFC 4843) and 2001:20::/28 (ORCHIDv2, RFC 7343):
+  // overlay routable cryptographic hash identifiers. They look like ordinary
+  // global unicast and are not routed at all. Matched as the two /28s, so
+  // 2001:30:: and the rest of 2001::/16 stay public.
+  if (groups[0] === 0x2001 && ((groups[1] & 0xfff0) === 0x0010 || (groups[1] & 0xfff0) === 0x0020)) {
+    return true;
+  }
   // 3fff::/20, the second documentation range (RFC 9637). Matched as the
   // exact /20 rather than the whole 3fff::/16, so neighbouring space is not
   // rejected along with it.
@@ -453,7 +472,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
   // with nothing set is a misconfigured deploy, not a laptop. The deploy
   // workflow calls this without the flag, so it can never skip there.
   const bothUnset = !process.env.PUBLIC_API_URL && !process.env.PUBLIC_APP_URL;
-  if (process.argv.includes("--skip-if-unset") && bothUnset && !process.env.CI) {
+  if (process.argv.includes("--skip-if-unset") && bothUnset && !isCI()) {
     console.log(
       "PUBLIC_APP_URL/PUBLIC_API_URL unset: skipping the origin check. " +
         "This build is local-only and will be login-only.",
@@ -469,5 +488,12 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
     );
     process.exit(1);
   }
-  console.log(`Public origins look deployable: ${REQUIRED.map((n) => `${n}=${process.env[n]}`).join(", ")}`);
+  // Redacted even here. Nothing credential-bearing reaches this line today --
+  // `originProblem` refuses it above -- but six rounds of review went to
+  // messages that leaked, and every one of them was a line somebody was sure
+  // could not be reached with a secret in it.
+  console.log(
+    "Public origins look deployable: " +
+      REQUIRED.map((n) => `${n}=${redactCredentials(process.env[n])}`).join(", "),
+  );
 }
