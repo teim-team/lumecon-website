@@ -627,7 +627,7 @@ test("no message leaks a credential, whatever else is wrong with the value", () 
   }
   assert.equal(
     redactCredentials(" https://user:hunter2@app.lumecon.ai"),
-    " https://<redacted>@app.lumecon.ai",
+    " https://<redacted>@\u2026",
   );
   // A value with no userinfo is printed unchanged.
   assert.equal(redactCredentials("https://api.lumecon.ai/v1"), "https://api.lumecon.ai/v1");
@@ -660,7 +660,7 @@ test("redaction reaches the final userinfo delimiter, not the first", () => {
   ]) {
     const redacted = redactCredentials(value);
     assert.ok(!/second|aaa9|bbb9|ccc9/.test(redacted), `leaked: ${redacted}`);
-    assert.match(redacted, /<redacted>@app\.lumecon\.ai|<redacted>@app/);
+    assert.match(redacted, /<redacted>@\u2026$/);
   }
 
   // An `@` in a path is not userinfo and must survive: `[^/]*` cannot cross
@@ -711,7 +711,7 @@ test("a backslash authority separator is redacted too, and benign values survive
     const redacted = redactCredentials(value);
     assert.ok(!redacted.includes("hunter2"), `leaked: ${redacted}`);
     assert.ok(!/aaa9|bbb9/.test(redacted), `leaked: ${redacted}`);
-    assert.match(redacted, /<redacted>@app\.lumecon\.ai/, value);
+    assert.match(redacted, /<redacted>@\u2026$/, value);
     // Redaction IS truncation, as of the encoded-copy round: everything past
     // the authority is dropped rather than cleaned, because the tail is the
     // one unbounded region and `%68%75%6e%74%65%72%32` walks past any literal
@@ -821,7 +821,7 @@ test("ignored whitespace inside a URL does not hide a credential", () => {
   ]) {
     const redacted = redactCredentials(value);
     assert.ok(!redacted.includes("hunter2"), `leaked: ${JSON.stringify(redacted)}`);
-    assert.match(redacted, /<redacted>@app\.lumecon\.ai/);
+    assert.match(redacted, /<redacted>@\u2026$/);
   }
 
   // And no message reaches the log unredacted, whichever complaint fires.
@@ -859,7 +859,7 @@ test("a credential repeated in the tail is struck there too", () => {
   // about, so printing a canonicalized URL hid the evidence.
   assert.equal(
     redactCredentials(" https://user:hunter2@app.lumecon.ai"),
-    " https://<redacted>@app.lumecon.ai",
+    " https://<redacted>@\u2026",
   );
 
   // A one-character credential matches all over an ordinary URL. The output
@@ -927,7 +927,7 @@ test("an encoded copy of the credential cannot survive in the tail", () => {
     }
     assert.ok(!redacted.includes("hunter2"), `leaked literally: ${redacted}`);
     assert.ok(!decoded.includes("hunter2"), `leaked once decoded: ${redacted}`);
-    assert.equal(redacted, "https://<redacted>@app.lumecon.ai…");
+    assert.equal(redacted, "https://<redacted>@…");
   }
 
   // The diagnostic that matters survives: which variable, and that it embeds
@@ -941,12 +941,22 @@ test("an encoded copy of the credential cannot survive in the tail", () => {
   // No tail, no ellipsis -- the marker means something was dropped.
   assert.equal(
     redactCredentials(" https://user:hunter2@app.lumecon.ai"),
-    " https://<redacted>@app.lumecon.ai",
+    " https://<redacted>@\u2026",
   );
-  // A port is part of the authority and is kept.
+  // The port used to be kept, on the grounds that it is part of the authority
+  // and cannot hide a secret. It goes with the host now: the host itself can
+  // carry an encoded copy of the password, so a credential-bearing value
+  // prints nothing past the marker. The scheme is all that survives, and the
+  // *message* still names the variable, which is the half that is actionable.
   assert.equal(
     redactCredentials("https://user:hunter2@app.lumecon.ai:8443/x"),
-    "https://<redacted>@app.lumecon.ai:8443…",
+    "https://<redacted>@…",
+  );
+  // A value with no credential still prints its port, path and query -- the
+  // truncation is scoped to the case that has something to hide.
+  assert.equal(
+    redactCredentials("https://api.lumecon.ai:8443/path?q=1"),
+    "https://api.lumecon.ai:8443/path?q=1",
   );
 });
 
@@ -1211,7 +1221,7 @@ test("an unreadable value never has its authority printed", () => {
   // would throw away the diagnostic for the common case.
   assert.equal(
     redactCredentials("https://user:hunter2@app.lumecon.ai"),
-    "https://<redacted>@app.lumecon.ai",
+    "https://<redacted>@\u2026",
   );
 });
 
@@ -1286,4 +1296,45 @@ test("the IETF protocol-assignments block is not ordinary space", () => {
   // subsumed. Checked because the arithmetic is easy to get wrong by eye.
   assert.ok(0x0db8 > 0x01ff, "premise: db8 is outside the /23");
   assert.equal(isNonPublicHost("[2001:db8::1]"), true);
+});
+
+test("an encoded copy of the credential in the host cannot survive either", () => {
+  // Tenth credential finding, and the last place the secret could still hide.
+  // The host was kept on the reasoning that a *parsed* credential is a known
+  // string, so scrubbing it is exact. It is not: the scrub is literal, and
+  // the host can spell the same secret another way.
+  assert.equal(
+    new URL("https://user:hunter2@%68%75%6e%74%65%72%32.lumecon.ai").hostname,
+    "hunter2.lumecon.ai",
+    "premise: the host is an encoded copy of the password",
+  );
+
+  for (const value of [
+    "https://user:hunter2@%68%75%6e%74%65%72%32.lumecon.ai",
+    " https://user:hunter2@%68%75%6e%74%65%72%32.lumecon.ai",
+    "https://user:hunter2@%2568%2575%256e%2574%2565%2572%2532.lumecon.ai",
+    "https://user:hunter2@hunter2.lumecon.ai",
+  ]) {
+    const redacted = redactCredentials(value);
+    let decoded = redacted;
+    for (let i = 0; i < 5; i += 1) {
+      try {
+        decoded = decodeURIComponent(decoded);
+      } catch {
+        break;
+      }
+    }
+    assert.ok(!redacted.includes("hunter2"), `leaked literally: ${redacted}`);
+    assert.ok(!decoded.includes("hunter2"), `leaked once decoded: ${redacted}`);
+    // Uniform now: scheme, marker, ellipsis. Nothing of the authority.
+    assert.match(redacted, /^\s*https:[/\\]*<redacted>@…$/, redacted);
+
+    for (const name of ["PUBLIC_API_URL", "PUBLIC_APP_URL"]) {
+      const problem = originProblem(name, value);
+      assert.ok(problem, `${name} should refuse ${value}`);
+      assert.ok(!problem.includes("hunter2"), `${name}: ${problem}`);
+      // The actionable half survives: the reader learns which variable.
+      assert.ok(problem.includes(name), problem);
+    }
+  }
 });

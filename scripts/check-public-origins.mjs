@@ -190,22 +190,27 @@ export function redactCredentials(value) {
   if (!bounds) return `${scrub(raw)}`;
 
   const head = scrub(raw.slice(0, bounds.start));
-  const marker = bounds.lastAt === null ? "" : "<redacted>@";
 
-  // The scan says there is userinfo and the parser could not read the value,
-  // so nothing knows what the secret *is* and `secrets` is empty -- the scrub
-  // below would be a no-op over whatever follows. A malformed port is enough
-  // to get here: `new URL` rejects `https://user:hunter2@app.lumecon.ai:hunter2`
-  // outright, and the password sits in the port. So the authority goes the
-  // way the tail already went: not cleaned, omitted.
-  if (bounds.lastAt !== null && !found) {
-    return `${head}${marker}\u2026`;
-  }
+  // Credentials present, by either reading: nothing past the marker is
+  // printed. Two rounds got here one piece at a time -- the tail went first
+  // because it is unbounded, then the authority when the parser could not
+  // read the value -- and the host was kept on the reasoning that a parsed
+  // credential is a *known* string, so scrubbing it is exact.
+  //
+  // It is not. The scrub is literal, and the host can carry the same secret
+  // in another spelling: `https://user:hunter2@%68%75%6e%74%65%72%32.lumecon.ai`
+  // parses to host `hunter2.lumecon.ai` and prints the encoded copy intact.
+  // Scrubbing equivalent encodings is the game already declined for the tail,
+  // since `%2568%2575...` survives a decode and there is no last decode.
+  //
+  // So the rule is now uniform and total: a credential-bearing value prints
+  // its scheme, the marker, and an ellipsis. The host is what is lost, and
+  // the message still names the variable, which is the actionable half.
+  if (bounds.lastAt !== null) return `${head}<redacted>@\u2026`;
 
-  const hostStart = bounds.lastAt === null ? bounds.start : bounds.lastAt + 1;
-  const host = scrub(raw.slice(hostStart, bounds.end));
+  const host = scrub(raw.slice(bounds.start, bounds.end));
   // The tail is dropped, not scrubbed. See the note above for why.
-  return `${head}${marker}${host}${bounds.end < raw.length ? "\u2026" : ""}`;
+  return `${head}${host}${bounds.end < raw.length ? "\u2026" : ""}`;
 }
 
 /** Why `value` is not usable as a production origin, or null when it is. */
