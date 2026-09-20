@@ -80,13 +80,22 @@ this as a standing prerequisite. (This only bites once signup is actually
 wired — see the first section — but it is the kind of thing found at the worst
 possible moment.)
 
-**4. Google OAuth needs its origin configured, or the button is dead.**
+**4. Google OAuth needs its *callback* registered, or the button is dead.**
 `/login` links "Continue with Google" to `${PUBLIC_API_URL}/auth/google`, and
-that button is now unconditionally visible. `README.md` still lists "Google
-OAuth origin for the website signup" among the founder-owned launch blockers.
-Verify `GET /auth/google` answers and the OAuth origin includes
-`https://lumecon.ai` — otherwise the most prominent control on the sign-in
-page leads nowhere.
+that button is now unconditionally visible.
+
+Register the **callback URI the API generates**, not this site's origin. The
+button performs a top-level navigation away to the API, so Google never sees
+`lumecon.ai` — it sees whatever `teim-app` sends as `redirect_uri`. That value
+comes from `GOOGLE_REDIRECT_URI` (`teim-app/server/auth.js`) and the route that
+receives it is `/auth/google/callback` (`teim-app/server/index.js`). So the
+authorized redirect URI in the Google console must be that exact callback, e.g.
+`https://api.lumecon.ai/auth/google/callback`.
+
+Read the deployed `GOOGLE_REDIRECT_URI` and register precisely that string.
+Registering `https://lumecon.ai` instead leaves the button dead while looking
+configured. `README.md` still lists the Google OAuth origin among the
+founder-owned launch blockers.
 
 ## One thing not to "fix"
 
@@ -104,20 +113,50 @@ ever moves, the cookie needs `SameSite=None; Secure`.
 
 ## Order of operations
 
-**To make sign-in work** (no website change needed):
+**To make sign-in work.** Needs no website change, and none of it exposes
+account creation:
 
 1. Land `teim-app`'s production deploy so `api.lumecon.ai` answers.
 2. Set `ALLOWED_ORIGINS` on that server to include `https://lumecon.ai`.
-3. Configure the Google OAuth origin, or the SSO button is a dead path.
-4. Sign in at lumecon.ai/login and confirm the browser keeps `teim_session`
-   and the redirect to app.lumecon.ai lands signed in.
+3. Register the Google callback URI (item 4 above) — the API's
+   `/auth/google/callback`, not this site's origin.
+4. Sign in at lumecon.ai/login and confirm the browser keeps `teim_session` and
+   the redirect to app.lumecon.ai lands signed in.
 
-**To make sign-up work** (this *does* need a website change):
+**To make sign-up work.** This is *not* a form swap, and the sequence matters.
 
-5. Clear `AUTH_ALLOWLIST_EMAILS` on the app server.
-6. Rewire `/signup` to `submitSignup`, or replace both pages with teim-app's
-   `AuthGate`. The fields here already mirror the product's registration
-   profile, so it is a swap rather than a rewrite.
+`AUTH_ALLOWLIST_EMAILS` is the only thing currently stopping public account
+creation, and CORS does not help here — CORS constrains browsers, not a direct
+API client. So clearing it opens `/auth/register` to the whole internet the
+moment it is cleared, whatever this website is showing. **Clear it last, at
+cutover, coordinated with the website deploy — never as a preparatory step.**
+
+Before that cutover, three things have to exist:
+
+5. **Acceptance mechanics. This is a launch blocker, not a detail.**
+   `docs/reconciliation-roadmap.md` records real Terms and Privacy as a P0
+   blocked on counsel, and item 2 of its legal list spells out what activates
+   with registration: an attestation checkbox (18+, authority to bind the
+   organization), the agree/acknowledge clause, and **server-side version,
+   timestamp and method records** stored by the register endpoint. The signup
+   form carries none of these today, because it is a beta-access request.
+   Rewiring to `/auth/register` without them creates customer accounts with no
+   acceptance record. Item 9 of the same list (the 18+ representation) rides on
+   the same checkbox.
+6. **The post-registration flow, not just the API call.** The current handler,
+   on success, shows *"Thanks, you are on the list. Someone from the team will
+   reach out with your access."*, calls `form.reset()` and `resetConditionalUi()`,
+   and returns. Swap only the call and a real account gets created while the
+   visitor is told to wait for outreach and left on a blank `/signup`. The
+   success copy has to be replaced and the visitor routed by tier — signup →
+   checkout → welcome, per `AGENTS.md`. (Note that signup does not transmit the
+   tier to the server: every self-serve account starts Free and paid tiers land
+   with billing. The tier only routes the visitor.)
+7. **Then** the form itself: point it at `submitSignup`, add the password field,
+   or take the hand-off the page already queues and embed teim-app's `AuthGate`
+   so there is one account surface, one password policy and one session.
+8. **Only now** clear `AUTH_ALLOWLIST_EMAILS`, released together with the
+   website deploy that ships 5–7.
 
 ## What could not be verified
 
