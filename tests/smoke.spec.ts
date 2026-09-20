@@ -1408,26 +1408,21 @@ test('cedar grove shows three captures of the product, in one frame, per theme',
   await expect(page.locator('.grovepg-hero__shot img')).toHaveCount(1);
   await expect(page.locator('.grovetour .tour-row__shot img')).toHaveCount(2);
 
-  // Every capture is offered in both themes. The capture step shoots each
-  // surface twice; the dark halves used to ship in public/app unreferenced,
-  // which left a sheet of white product on a page that had gone dark.
-  const sources = page.locator('.grovepg-hero__shot source, .grovetour .tour-row__shot source');
-  await expect(sources).toHaveCount(3);
-  for (const attr of await sources.evaluateAll((nodes) =>
-    nodes.map((node) => ({
-      media: node.getAttribute('media'),
-      srcset: node.getAttribute('srcset'),
-    })),
+  // These captures sit on a persistent dark field regardless of OS theme, so
+  // the page must always select the dark product surface rather than merely
+  // offering it to dark-mode visitors.
+  const captures = page.locator('.grovepg-hero__shot img, .grovetour .tour-row__shot img');
+  for (const src of await captures.evaluateAll((nodes) =>
+    nodes.map((node) => node.getAttribute('src')),
   )) {
-    expect(attr.media).toBe('(prefers-color-scheme: dark)');
-    expect(attr.srcset).toMatch(/-dark\.webp$/);
+    expect(src).toMatch(/-dark\.webp$/);
   }
 
   // One frame, stated by the file rather than typed into the page: every
   // capture declares the same intrinsic box, so no row shifts as it lands.
   const boxes = await page
     .locator(
-      '.grovepg-hero__shot img, .grovetour .tour-row__shot img, .grovepg-hero__shot source, .grovetour .tour-row__shot source',
+      '.grovepg-hero__shot img, .grovetour .tour-row__shot img',
     )
     .evaluateAll((nodes) =>
       nodes.map((node) => `${node.getAttribute('width')}x${node.getAttribute('height')}`),
