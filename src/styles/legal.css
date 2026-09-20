@@ -105,16 +105,12 @@ body.legal-page main a:hover {
   margin: 1.9rem 0 0.6rem;
 }
 .note {
-  margin-top: 2rem;
-  padding: 1.3rem;
-  background: var(--surface-2);
-  border: 1px solid var(--rule);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius-control);
+  margin-top: 2.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
   font-size: 0.95rem;
   color: var(--ink-2);
   line-height: 1.65;
-  font-weight: 500;
 }
 .note strong {
   color: var(--navy);
