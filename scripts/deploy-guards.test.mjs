@@ -508,7 +508,9 @@ test("the reserved .onion namespace is not public", () => {
   assert.match(originProblem("PUBLIC_API_URL", "https://api.onion") ?? "", /non-public/);
   // Label-anchored, so an ordinary name merely containing those letters is
   // untouched.
-  for (const host of ["onion.lumecon.ai", "myonion.io", "onions.example.com"]) {
+  // Not `onions.example.com`: that is now reserved on other grounds (RFC 2606),
+  // so it would pass this assertion for the wrong reason.
+  for (const host of ["onion.lumecon.ai", "myonion.io", "onions.lumecon.ai"]) {
     assert.equal(isNonPublicHost(host), false, host);
   }
 });
@@ -987,7 +989,10 @@ test("ORCHID address space is not public", () => {
   }
   // Matched as the two /28s, so the neighbouring space stays usable -- the
   // same discipline as the 3fff::/20 and 2001:2::/48 entries.
-  for (const host of ["[2001:30::1]", "[2001:f::1]", "[2001:0::1]", "[2606:4700::1111]"]) {
+  // `[2001:30::1]` used to sit here as the neighbour just past ORCHIDv2. It is
+  // DET space and non-public in its own right now, so the /28 boundary is
+  // asserted at 2001:40:: instead -- the fixture moved, the property did not.
+  for (const host of ["[2001:40::1]", "[2001:f::1]", "[2001:0::1]", "[2606:4700::1111]"]) {
     assert.equal(isNonPublicHost(host), false, host);
   }
 });
@@ -1081,6 +1086,49 @@ test("the reserved .alt namespace is not public", () => {
   // Anchored on a label boundary, so an ordinary name ending in those three
   // letters is untouched.
   for (const host of ["salt.lumecon.ai", "api.altitude.com", "basalt.io"]) {
+    assert.equal(isNonPublicHost(host), false, host);
+  }
+});
+
+test("the reserved example second-level domains are not public", () => {
+  // RFC 2606 reserves `example.com/.net/.org` as well as the `.example` TLD,
+  // and the suffix rule above covers only the latter -- `example` matches
+  // `.example`, not `api.example.com`. These are the likeliest placeholder in
+  // the whole list, since they appear in every API tutorial, and unlike the
+  // rest they actually resolve, so nothing later catches them.
+  for (const host of ["example.com", "api.example.com", "a.b.example.org", "example.net"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+    assert.match(originProblem("PUBLIC_API_URL", `https://${host}`) ?? "", /non-public/, host);
+  }
+  // Anchored on a label boundary and on the exact TLD, so ordinary names are
+  // untouched -- including ones that merely contain or extend the word.
+  for (const host of ["example.io", "myexample.com", "notexample.com", "example.company.com"]) {
+    assert.equal(isNonPublicHost(host), false, host);
+  }
+});
+
+test("2001:30::/28 is identifiers, not destinations", () => {
+  // DRIP Entity Tags, per IANA's IPv6 Special-Purpose Address Registry. Same
+  // shape as the two ORCHID /28s beside it: inside global unicast, where the
+  // 2000::/3 scope rule cannot reach it.
+  for (const host of ["[2001:30::1]", "[2001:3f:ffff::1]"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+  }
+  // The /28 boundary: 2001:40:: is ordinary space and must stay usable.
+  assert.equal(isNonPublicHost("[2001:40::1]"), false);
+});
+
+test("the deprecated 6to4 anycast block is not public", () => {
+  // 192.88.99.0/24, deprecated by RFC 7526 and not globally reachable.
+  for (const host of ["192.88.99.1", "192.88.99.255"]) {
+    assert.equal(isNonPublicHost(host), true, host);
+    assert.match(originProblem("PUBLIC_APP_URL", `https://${host}`) ?? "", /non-public/, host);
+  }
+  // Matched as the /24. IPv4 has no single global-unicast block to check
+  // against the way IPv6 has 2000::/3 -- allocations are scattered -- so an
+  // explicit registry list is the right shape here, and its neighbours are
+  // ordinary space.
+  for (const host of ["192.88.98.1", "192.88.100.1", "192.89.99.1"]) {
     assert.equal(isNonPublicHost(host), false, host);
   }
 });

@@ -380,6 +380,13 @@ export function isNonPublicHost(hostname) {
     return true;
   }
 
+  // RFC 2606 also reserves three second-level names for documentation, which
+  // the TLD rule above does not cover: `example` matches the `.example` TLD,
+  // not `api.example.com`. These are the likeliest placeholder of the lot --
+  // they appear in every API tutorial -- and they resolve, so nothing later
+  // catches them either.
+  if (/(^|\.)example\.(com|net|org)$/.test(host)) return true;
+
   if (host.includes(":")) return isNonPublicIpv6(host);
   return isNonPublicIpv4(host);
 }
@@ -401,6 +408,13 @@ function isNonPublicIpv4(hostname) {
   if (a === 198 && (b === 18 || b === 19)) return true;            // 198.18.0.0/15 benchmarking
   if (a === 198 && b === 51 && v4[3] === "100") return true;       // 198.51.100.0/24 TEST-NET-2
   if (a === 203 && b === 0 && v4[3] === "113") return true;        // 203.0.113.0/24 TEST-NET-3
+  // 192.88.99.0/24 was the 6to4 relay anycast prefix, deprecated by RFC 7526
+  // and not globally reachable. Unlike IPv6, IPv4 has no single global-unicast
+  // block to check against -- allocations are scattered across the space -- so
+  // this list is the right shape here even though enumerating was the wrong
+  // shape for IPv6. It is IANA's IPv4 Special-Purpose Address Registry, not a
+  // guess at what might be unreachable.
+  if (a === 192 && b === 88 && v4[3] === "99") return true;        // 192.88.99.0/24 6to4 anycast
   if (a >= 224) return true;                                       // multicast, reserved, broadcast
   return false;
 }
@@ -461,7 +475,14 @@ function isNonPublicIpv6(hostname) {
   // overlay routable cryptographic hash identifiers. They look like ordinary
   // global unicast and are not routed at all. Matched as the two /28s, so
   // 2001:30:: and the rest of 2001::/16 stay public.
-  if (groups[0] === 0x2001 && ((groups[1] & 0xfff0) === 0x0010 || (groups[1] & 0xfff0) === 0x0020)) {
+  // ...and 2001:30::/28, reserved for DRIP Entity Tags (DET). Same shape as
+  // the two ORCHID /28s beside it: identifiers, not destinations, inside
+  // global unicast where the scope rule cannot reach them. Listed in IANA's
+  // IPv6 Special-Purpose Address Registry.
+  if (
+    groups[0] === 0x2001 &&
+    [0x0010, 0x0020, 0x0030].includes(groups[1] & 0xfff0)
+  ) {
     return true;
   }
   // 3fff::/20, the second documentation range (RFC 9637). Matched as the
