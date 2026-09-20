@@ -35,7 +35,8 @@
  *   node scripts/sync-headers-csp.mjs [dist-dir]       # deploy: sync + verify
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { originProblem } from "./check-public-origins.mjs";
 
 /** Replace connect-src in one CSP header line, keeping every other directive. */
@@ -87,7 +88,10 @@ export const PRODUCTION_API_ORIGIN = "https://api.lumecon.ai";
 
 export const PUBLIC_HEADERS_PATH = "public/_headers";
 
-if (process.argv[1] && process.argv[1].endsWith("sync-headers-csp.mjs")) {
+// Resolved-path comparison rather than a filename suffix, matching
+// check-public-origins.mjs. This spelling happened to be Windows-safe, but
+// two different ways of answering one question is how the other one drifted.
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
   // Generator mode: regenerate the committed source file, then commit it.
   if (process.argv[2] === "--write-public") {
     const origin = process.env.PUBLIC_API_URL || PRODUCTION_API_ORIGIN;
@@ -109,7 +113,13 @@ if (process.argv[1] && process.argv[1].endsWith("sync-headers-csp.mjs")) {
   const skipIfUnset = args.includes("--skip-if-unset");
   const dist = args.find((a) => !a.startsWith("--")) || "dist";
 
-  if (skipIfUnset && !(process.env.PUBLIC_API_URL && process.env.PUBLIC_APP_URL)) {
+  // Skip only when BOTH are absent -- that is a contributor's local build.
+  // One set and one missing is a misconfigured deploy: Astro has already
+  // emitted a fallback for the missing one, and on a host that runs only
+  // `npm run build` nothing downstream would ever catch it. So a partial
+  // configuration falls through and fails on the missing value below.
+  const noneSet = !process.env.PUBLIC_API_URL && !process.env.PUBLIC_APP_URL;
+  if (skipIfUnset && noneSet) {
     console.log(
       "PUBLIC_APP_URL/PUBLIC_API_URL unset: leaving dist/_headers as committed " +
         "(it names the production API). This build is local-only.",

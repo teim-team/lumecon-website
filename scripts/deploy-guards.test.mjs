@@ -311,3 +311,31 @@ test("a root-anchored hostname is allowed, since it actually resolves", () => {
   assert.equal(originProblem("PUBLIC_API_URL", "https://api.lumecon.ai."), null);
   assert.equal(invalidDnsLabel("my-api.lumecon.ai"), null);
 });
+
+// ---------------------------------------------------------------------------
+// Fourth review round. Two of these are defects in the previous round's own
+// fixes, which is the more useful kind to catch.
+// ---------------------------------------------------------------------------
+
+test("IPv6 multicast and the documentation range are refused", () => {
+  // The IPv4 pass covered TEST-NET; its IPv6 counterpart, 2001:db8::/32, is
+  // the same trap and was left open. ff00::/8 is multicast and can never be
+  // a unicast origin a browser fetches from.
+  for (const host of [
+    "https://[ff02::1]",
+    "https://[ff00::1]",
+    "https://[ff05::2]",
+    "https://[2001:db8::1]",
+    "https://[2001:db8:dead:beef::1]",
+  ]) {
+    assert.match(originProblem("PUBLIC_API_URL", host) ?? "", /non-public address/, host);
+  }
+});
+
+test("addresses adjacent to the IPv6 documentation range stay allowed", () => {
+  // 2001:db8::/32 is one /32. 2001:db7:: and 2001:db9:: are ordinary space,
+  // and Google's and Cloudflare's resolvers both live in 2001::/16.
+  for (const host of ["[2001:db7::1]", "[2001:db9::1]", "[2001:4860:4860::8888]", "[2606:4700::1111]"]) {
+    assert.equal(isNonPublicHost(host), false, host);
+  }
+});

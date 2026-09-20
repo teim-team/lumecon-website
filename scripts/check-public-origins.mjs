@@ -19,6 +19,9 @@
  * Usage:
  *   node scripts/check-public-origins.mjs
  */
+import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
+
 const REQUIRED = ["PUBLIC_APP_URL", "PUBLIC_API_URL"];
 
 /** Why `value` is not usable as a production origin, or null when it is. */
@@ -189,6 +192,11 @@ function isNonPublicIpv6(hostname) {
   // fec0::/10 site-local: deprecated by RFC 3879 and never reallocated, so
   // nothing legitimate uses it and it routes nowhere.
   if (groups[0] >= 0xfec0 && groups[0] <= 0xfeff) return true;
+  // ff00::/8 multicast -- never a unicast origin a browser can fetch from.
+  if (groups[0] >= 0xff00) return true;
+  // 2001:db8::/32, the IPv6 documentation range: the same trap as the IPv4
+  // TEST-NET blocks, and just as likely to be copied out of an example.
+  if (groups[0] === 0x2001 && groups[1] === 0x0db8) return true;
 
   // IPv4-mapped (::ffff:a.b.c.d) and the deprecated IPv4-compatible form
   // both carry a v4 address that has to be judged on its own terms --
@@ -207,8 +215,12 @@ export function collectOriginProblems(env) {
   return REQUIRED.map((name) => originProblem(name, env[name])).filter(Boolean);
 }
 
-// Only act when run directly, so the tests can import the checks.
-if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split("/").pop())) {
+// Only act when run directly, so the tests can import the checks. Compared as
+// resolved filesystem paths rather than by splitting on "/": on Windows
+// process.argv[1] uses backslashes, so the split left the whole path and the
+// comparison was always false -- this guard would have printed nothing and
+// exited 0, which is the one thing a guard must never do.
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
   const problems = collectOriginProblems(process.env);
   if (problems.length > 0) {
     console.error("Refusing to build: the deploy would publish a degraded site.\n");
