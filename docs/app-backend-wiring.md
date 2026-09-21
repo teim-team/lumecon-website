@@ -162,11 +162,34 @@ Before that cutover, three things have to exist:
    and then dead-end one screen later. **The Stripe checkout endpoint and its
    webhook are a pre-cutover prerequisite, not a follow-up**, unless the
    cutover ships Free-only and routes every paid tier somewhere honest.
-7. **Then** the form itself: point it at `submitSignup`, add the password field,
+7. **Decide what email verification does, and wire it before the cutover.**
+   `teim-app` currently runs with verification **off**, and the code says why:
+
+   ```js
+   // Mailer not configured for pilot — re-enable when EMAIL_* secrets are set.
+   const requireEmailVerification = options.requireEmailVerification === true;
+   ```
+
+   That is a strict `=== true`, so unset means off. Both ways of leaving it are
+   wrong for a public cutover:
+
+   - **Left off**, anyone can register under an address they do not control, and
+     every account is unverified.
+   - **Turned on without working delivery**, registration completes and the
+     visitor waits for mail that was never sent. Both ways that fails are
+     silent: an unset `EMAIL_DELIVERY` makes the mailer build the link and do
+     nothing, and a missing `ses:SendEmail` on the task role throws, is caught,
+     and **still returns 200**.
+
+   So the SES provisioning is a *signup* prerequisite, not an email nicety, and
+   one real send to a real inbox is the only acceptable proof — a green deploy
+   is not evidence that mail left the building.
+
+8. **Then** the form itself: point it at `submitSignup`, add the password field,
    or take the hand-off the page already queues and embed teim-app's `AuthGate`
    so there is one account surface, one password policy and one session.
-8. **Only now** clear `AUTH_ALLOWLIST_EMAILS`, released together with the
-   website deploy that ships 5–7.
+9. **Only now** clear `AUTH_ALLOWLIST_EMAILS`, released together with the
+   website deploy that ships 5–8.
 
 ## What could not be verified
 
