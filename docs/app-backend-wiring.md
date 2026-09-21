@@ -56,8 +56,8 @@ once, ever — run 1, attempt 3, 2026-08-28, branch `v1.0.1`, merging #143
 ("Put the app on app.lumecon.ai") — and it failed. `deploy-dev.yml` succeeds
 on every push to main, so dev is current and prod has never shipped.
 
-**2. `ALLOWED_ORIGINS` must name this site exactly.** The CORS check is an
-exact string match:
+**2. `ALLOWED_ORIGINS` must name every calling origin exactly.** The CORS
+check is an exact string match:
 
 ```js
 callback(null, ALLOWED_ORIGINS.has(origin));   // teim-app server/index.js
@@ -65,6 +65,18 @@ callback(null, ALLOWED_ORIGINS.has(origin));   // teim-app server/index.js
 
 It needs `https://lumecon.ai` verbatim, plus `https://www.lumecon.ai` if the
 www host serves rather than redirects. No trailing slash, no wildcard.
+
+**And it needs `https://app.lumecon.ai`.** The set has no defaults —
+`(process.env.ALLOWED_ORIGINS || "").split(",")` — so it contains exactly what
+is configured and nothing else. After the redirect, the browser sitting on
+`app.lumecon.ai` makes its own credentialed requests to `api.lumecon.ai`, under
+its own `Origin`, through the same exact-match check. An allowlist naming only
+this site lets the marketing-site login succeed and then blocks the product's
+first request, and the visitor arrives *signed out* — which reads as a broken
+session and sends troubleshooting to the cookie, not the allowlist. Harmless to
+include if the app turns out to be same-origin with the API: teim-app's client
+defaults `VITE_API_URL` to `""`, and a same-origin request sends no `Origin` at
+all.
 
 *How this fails, precisely:* the fetch sends `credentials: 'include'`, so a
 rejected preflight — or a credentialed response without
@@ -117,11 +129,32 @@ ever moves, the cookie needs `SameSite=None; Secure`.
 account creation:
 
 1. Land `teim-app`'s production deploy so `api.lumecon.ai` answers.
-2. Set `ALLOWED_ORIGINS` on that server to include `https://lumecon.ai`.
-3. Register the Google callback URI (item 4 above) — the API's
+2. Set `ALLOWED_ORIGINS` on that server to **every browser origin that will
+   call it** — `https://lumecon.ai` *and* `https://app.lumecon.ai`, per the
+   section above. Not just this site.
+3. Register the Google callback URI (outstanding item 4) — the API's
    `/auth/google/callback`, not this site's origin.
-4. Sign in at lumecon.ai/login and confirm the browser keeps `teim_session` and
-   the redirect to app.lumecon.ai lands signed in.
+4. **Provision mail here, not in the sign-up checklist.** "Forgot password?" is
+   part of signing in, and it runs on the delivery path that step 8 describes.
+   `/auth/password-reset-request` calls `mailer.sendPasswordResetEmail` and then
+   returns
+
+   ```js
+   { ok: true, message: "If that email has an account, a reset link is on its way." }
+   ```
+
+   **unconditionally** — the response is identical whether or not the address
+   exists, deliberately, so the endpoint cannot be used to probe for accounts.
+   The mailer no-ops when `EMAIL_DELIVERY` is unset. So `/login` tells the
+   visitor a link is on its way the moment that 200 lands, and steps 1-3 can all
+   pass while password recovery is dead for every locked-out subscriber, with
+   nothing anywhere reporting it. Needs `EMAIL_DELIVERY=ses`,
+   `PASSWORD_RESET_BASE_URL`, a sender verified in SES, and `ses:SendEmail` on
+   the task role.
+5. Sign in at lumecon.ai/login and confirm the browser keeps `teim_session` and
+   the redirect to app.lumecon.ai lands signed in — **then run one real
+   forgot-password round trip to an inbox you control.** A 200 from the endpoint
+   is not evidence; the endpoint returns 200 when nothing was sent.
 
 **To make sign-up work.** This is *not* a form swap, and the sequence matters.
 
@@ -133,7 +166,7 @@ cutover, coordinated with the website deploy — never as a preparatory step.**
 
 Before that cutover, three things have to exist:
 
-5. **Acceptance mechanics. This is a launch blocker, not a detail.**
+6. **Acceptance mechanics. This is a launch blocker, not a detail.**
    `docs/reconciliation-roadmap.md` records real Terms and Privacy as a P0
    blocked on counsel, and item 2 of its legal list spells out what activates
    with registration: an attestation checkbox (18+, authority to bind the
@@ -143,7 +176,7 @@ Before that cutover, three things have to exist:
    Rewiring to `/auth/register` without them creates customer accounts with no
    acceptance record. Item 9 of the same list (the 18+ representation) rides on
    the same checkbox.
-6. **The post-registration flow, not just the API call.** The current handler,
+7. **The post-registration flow, not just the API call.** The current handler,
    on success, shows *"Thanks, you are on the list. Someone from the team will
    reach out with your access."*, calls `form.reset()` and `resetConditionalUi()`,
    and returns. Swap only the call and a real account gets created while the
@@ -152,6 +185,14 @@ Before that cutover, three things have to exist:
    checkout → welcome, per `AGENTS.md`. (Note that signup does not transmit the
    tier to the server: every self-serve account starts Free and paid tiers land
    with billing. The tier only routes the visitor.)
+
+   **The destination needs the same treatment as the origin.** `welcome.astro`
+   closes with *"Use the account credentials provided with your access
+   invitation."* — written for an invited pilot user. A self-serve registrant
+   chose their own password thirty seconds earlier and has no invitation, so
+   fixing only the signup handler's wait-list message leaves the last screen of
+   the flow telling every new customer to go looking for credentials that do not
+   exist. Replace both, in the same change.
 
    **And the middle of that route does not exist yet.**
    `docs/reconciliation-roadmap.md` carries `POST /billing/checkout-session` as
@@ -162,7 +203,34 @@ Before that cutover, three things have to exist:
    and then dead-end one screen later. **The Stripe checkout endpoint and its
    webhook are a pre-cutover prerequisite, not a follow-up**, unless the
    cutover ships Free-only and routes every paid tier somewhere honest.
-7. **Decide what email verification does, and wire it before the cutover.**
+
+   **And the endpoint alone is still not enough to take money.** Three more
+   items in the same roadmap are the difference between a charge that works and
+   a charge that is defensible, and each one is already promised in live copy:
+
+   - **Canonical server-side pricing** (roadmap item 8). The deterministic
+     resolver — standard price → qualifying programs → lowest applicable price,
+     plus server-side proration and **discount validation at payment** — is
+     unimplemented backend work. `checkout.astro` already tells the buyer
+     *"We will verify code X at payment."* A session created without that
+     resolver can charge the wrong amount, or take a code and silently ignore
+     it. The price has to be settled on the server, never from what the page
+     posted.
+   - **The tax decision** (roadmap item 4, *Founder*). The pricing page and
+     checkout both state the amount includes taxes and fees; the roadmap still
+     carries Stripe Tax and nexus as an unresolved accounting decision. Enabling
+     Stripe without settling it either adds tax on top of an advertised
+     "Due today" or absorbs tax nobody accounted for. This one is not
+     engineering work and cannot be unblocked by engineering.
+   - **Auto-renew control and the notice scheduler** (roadmap items 13 and 5).
+     Checkout promises the customer can disable auto-renew in Settings and will
+     be told 90 and 30 days before a renewal. `POST /billing/auto-renew` and the
+     scheduler are both Backend and both unbuilt. Selling on that promise means
+     renewing cards with neither the control nor the warning. The roadmap names
+     the alternative itself — *"If the Stripe round slips past launch, soften
+     the copy."* Ship the services, or remove the promises and turn automatic
+     renewal off. Not the third option.
+8. **Decide what email verification does, and wire it before the cutover.**
    `teim-app` currently runs with verification **off**, and the code says why:
 
    ```js
@@ -183,13 +251,40 @@ Before that cutover, three things have to exist:
 
    So the SES provisioning is a *signup* prerequisite, not an email nicety, and
    one real send to a real inbox is the only acceptable proof — a green deploy
-   is not evidence that mail left the building.
+   is not evidence that mail left the building. (Step 4 already required it for
+   password reset; this is the same delivery path, and turning verification on
+   without it fails the same silent way.)
 
-8. **Then** the form itself: point it at `submitSignup`, add the password field,
+   **Provisioning SES does not finish this item, because verification needs a
+   front end.** Turn it on and registration can complete *before* the visitor
+   clicks the link — while step 7 sends every successful signup straight to
+   checkout or welcome, and the form work in step 9 has nowhere to handle a
+   verification-required response. That leaves two outcomes and no third: the
+   registrant proceeds to checkout unverified, or lands on a screen that does
+   not explain what it is waiting for. Before the cutover, specify the
+   pending-verification state — what the visitor sees, what the tier routing
+   does while the account is unverified, and how the verification callback
+   resumes the tier they selected rather than dropping them at a bare signed-in
+   page.
+
+9. **Then** the form itself: point it at `submitSignup`, add the password field,
    or take the hand-off the page already queues and embed teim-app's `AuthGate`
    so there is one account surface, one password policy and one session.
-9. **Only now** clear `AUTH_ALLOWLIST_EMAILS`, released together with the
-   website deploy that ships 5–8.
+
+   **Carry the referral code through, or take the referral surface down.**
+   `404.astro` already resolves `/r/<code>` and redirects to
+   `/signup?ref=<code>`, so the codes are live and being handed out. The signup
+   script reads `interest`, `tier` and `product` from the query — and not `ref`
+   — and `SignupRequest` has no referral field, so `/auth/register` never sees
+   it. Rewiring the form as written therefore creates the account and drops the
+   attribution on the floor: the referrer cannot be credited afterwards, because
+   nothing recorded who they were. The roadmap has this as item 13 — referral
+   persistence, attribution, reward after a qualifying payment, cap and fraud
+   checks are all Backend and unbuilt. Either carry the code from query to form
+   to endpoint as part of this step, or stop serving `/r/:code` until the
+   backend exists. A referral link that quietly forgets is worse than no link.
+10. **Only now** clear `AUTH_ALLOWLIST_EMAILS`, released together with the
+    website deploy that ships 6-9.
 
 ## What could not be verified
 
