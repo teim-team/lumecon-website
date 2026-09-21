@@ -152,6 +152,16 @@ Before that cutover, three things have to exist:
    checkout → welcome, per `AGENTS.md`. (Note that signup does not transmit the
    tier to the server: every self-serve account starts Free and paid tiers land
    with billing. The tier only routes the visitor.)
+
+   **And the middle of that route does not exist yet.**
+   `docs/reconciliation-roadmap.md` carries `POST /billing/checkout-session` as
+   an unimplemented backend P0 — *"Frontend posts and fails soft today. Success
+   URL should land on /welcome."* Today `checkout.astro` renders
+   *"Could not open secure payment. Try again in a moment."* on that failure.
+   So a registrant who picked Sprout, Sapling or Tree would get a real account
+   and then dead-end one screen later. **The Stripe checkout endpoint and its
+   webhook are a pre-cutover prerequisite, not a follow-up**, unless the
+   cutover ships Free-only and routes every paid tier somewhere honest.
 7. **Then** the form itself: point it at `submitSignup`, add the password field,
    or take the hand-off the page already queues and embed teim-app's `AuthGate`
    so there is one account surface, one password policy and one session.
