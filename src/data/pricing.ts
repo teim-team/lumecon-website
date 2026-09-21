@@ -113,7 +113,7 @@ export const PLANS: Plan[] = [
     priceAnnual: 7500,
     price: '$7,500',
     period: '/ year',
-    audience: 'For a whole institution.',
+    audience: 'For a whole organization.',
     tagline:
       'Everything in Sapling, plus Cedar Grove, the evidence base for your organization’s economy, organizational context and Cedar calibration across the organization.',
     users: 'Unlimited users in one organization',
@@ -141,7 +141,21 @@ export const PLANS: Plan[] = [
  */
 export const CLIENT_WORK = {
   chip: 'Client work',
-  note: 'Client work is licensed at two levels: Sapling for a consultancy working within ten seats, reassigned as engagements change, and Tree for one past ten. An institutional license — a university, bank, CDFI or agency — is Tree, where seats are unlimited across the organization.',
+  /**
+   * Price-neutral, and it has to stay that way.
+   *
+   * Codex, on this pull request: `/why-lumecon` renders this note and then
+   * appends `at {SAPLING.price} a year`. When the note was one sentence about
+   * Sapling that read correctly. Once it grew a second sentence ending on
+   * **Tree**, the page rendered "...is Tree, where seats are unlimited across
+   * the organization, at $2,500 a year" — Sapling's price attached to Tree's
+   * sentence, and Tree is $7,500. A materially wrong price on a live page,
+   * from a copy edit two files away.
+   *
+   * So no price belongs in this string. A consumer that wants prices reads
+   * them off the plans, per tier, which is what `/why-lumecon` now does.
+   */
+  note: 'Client work is licensed at two levels: Sapling for a consultancy working within ten seats, reassigned as engagements change, and Tree for one past ten. An organization-wide license — a university, bank, CDFI or agency — is Tree, where seats are unlimited across the organization.',
 };
 
 /**
@@ -316,8 +330,8 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'Do you license Lumecon to universities, banks and CDFIs?',
     a: [
-      'Yes, and an institutional license is Tree. A university, a bank, a CDFI or a public agency is past ten people before it begins, so counting seats is theoretical — Tree makes them unlimited across the organization and adds Cedar Grove and Cedar calibration.',
-      'One group inside an institution is a different purchase from the institution. A single faculty member or analyst is a Sprout; a department, research group or lending team that needs shared projects is a Sapling. Tree is for when the license belongs to the organization rather than to the people currently using it.',
+      'Yes, and it is Tree — the same organization-wide license every other Tree customer takes, not a separate license type. A university, a bank, a CDFI or a public agency is past ten people before it begins, so counting seats is theoretical — Tree makes them unlimited across the organization and adds Cedar Grove and Cedar calibration.',
+      'One group inside an organization is a different purchase from the organization itself. A single faculty member or analyst is a Sprout; a department, research group or lending team that needs shared projects is a Sapling. Tree is for when the license belongs to the organization rather than to the people currently using it.',
     ],
   },
   {

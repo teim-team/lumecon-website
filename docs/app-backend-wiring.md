@@ -66,9 +66,21 @@ callback(null, ALLOWED_ORIGINS.has(origin));   // teim-app server/index.js
 It needs `https://lumecon.ai` verbatim, plus `https://www.lumecon.ai` if the
 www host serves rather than redirects. No trailing slash, no wildcard.
 
-**And it needs `https://app.lumecon.ai`.** The set has no defaults —
-`(process.env.ALLOWED_ORIGINS || "").split(",")` — so it contains exactly what
-is configured and nothing else. After the redirect, the browser sitting on
+**And it needs `https://app.lumecon.ai`.** The set has no defaults, and the
+whole expression matters:
+
+```js
+// teim-app server/index.js:152
+const ALLOWED_ORIGINS = new Set(
+  (process.env.ALLOWED_ORIGINS || "").split(",").map((o) => o.trim()).filter(Boolean),
+);
+```
+
+It contains exactly what is configured and nothing else — but it **does** trim,
+so `https://lumecon.ai, https://app.lumecon.ai` with a space after the comma is
+fine. (An earlier draft of this note quoted only the `.split(",")` and a review
+reasonably read that as "no trimming", which would have made the spaced value
+look broken. The abbreviation was the fault, not the guidance.) After the redirect, the browser sitting on
 `app.lumecon.ai` makes its own credentialed requests to `api.lumecon.ai`, under
 its own `Origin`, through the same exact-match check. An allowlist naming only
 this site lets the marketing-site login succeed and then blocks the product's
@@ -133,7 +145,16 @@ account creation:
    call it** — `https://lumecon.ai` *and* `https://app.lumecon.ai`, per the
    section above. Not just this site.
 3. Register the Google callback URI (outstanding item 4) — the API's
-   `/auth/google/callback`, not this site's origin.
+   `/auth/google/callback`, not this site's origin. **And restrict it to
+   existing accounts until the sign-up cutover.** A new Google identity going
+   through that callback *creates an account*, and it creates one that never
+   passed the attestation checkbox or the acceptance record in step 6 — which
+   does not exist yet at this point in the sequence. `README.md:633-636`
+   classifies Google OAuth as a website-signup launch blocker for this reason.
+   So either the callback refuses unknown identities until step 10, or new
+   Google users are routed through the same acceptance flow before it is
+   enabled. Enabling it here as a convenience for sign-in quietly opens
+   account creation without the record.
 4. **Provision mail here, not in the sign-up checklist.** "Forgot password?" is
    part of signing in, and it runs on the delivery path that step 8 describes.
    `/auth/password-reset-request` calls `mailer.sendPasswordResetEmail` and then
@@ -186,6 +207,24 @@ Before that cutover, three things have to exist:
    tier to the server: every self-serve account starts Free and paid tiers land
    with billing. The tier only routes the visitor.)
 
+   **Replace the failure path, not only the success one.** The handler
+   special-cases success and lets *everything else* fall through to the
+   beta-request `mailto:` at `signup.astro:463-469`. Point it at
+   `/auth/register` and an ordinary rejection — email already registered, a
+   password that fails policy — opens the visitor's email client and tells them
+   a beta-access request is on its way. They would be left believing they had
+   applied for something while no account was created and no error was shown.
+   The step has to include parsing the API response well enough to tell a
+   registration error from an outage, and saying which.
+
+   **And record the completed signup before navigating.** `choose-plan.astro:95-102`
+   only rewrites "Start free" to `/welcome?plan=free` when `hasSignedUp()` is
+   true; otherwise it sends the visitor to `/signup?tier=free`. A bare `/signup`
+   registrant has no tier yet, so the next page *is* `/choose-plan` — and
+   without `flowState.markSignedUp()` they land there, click the free option,
+   and are handed a second registration form for the account they just created.
+   Call it on success, before routing.
+
    **The destination needs the same treatment as the origin.** `welcome.astro`
    closes with *"Use the account credentials provided with your access
    invitation."* — written for an invited pilot user. A self-serve registrant
@@ -222,6 +261,12 @@ Before that cutover, three things have to exist:
      Stripe without settling it either adds tax on top of an advertised
      "Due today" or absorbs tax nobody accounted for. This one is not
      engineering work and cannot be unblocked by engineering.
+   - **Plan upgrades** (roadmap item 3). `/choose-plan` tells buyers they can
+     change plans later, and `POST /billing/plan-upgrades` is an unimplemented
+     backend P0. Selling on that promise means a customer who wants to move
+     from Sprout to Sapling has no path and a page that said there would be
+     one. Build it or take the promise off the page before the cutover, the
+     same choice as the renewal controls below.
    - **Auto-renew control and the notice scheduler** (roadmap items 13 and 5).
      Checkout promises the customer can disable auto-renew in Settings and will
      be told 90 and 30 days before a renewal. `POST /billing/auto-renew` and the
@@ -270,6 +315,17 @@ Before that cutover, three things have to exist:
 9. **Then** the form itself: point it at `submitSignup`, add the password field,
    or take the hand-off the page already queues and embed teim-app's `AuthGate`
    so there is one account surface, one password policy and one session.
+
+   **Grove is not a tier, and tier routing drops it.** The standalone Cedar
+   Grove CTA arrives as `/signup?product=cedar-grove`, and the signup script
+   already reads it into a hidden field. But `submitSignup` carries no product
+   selection, and `checkout.astro` accepts only `sprout`, `sapling` or `tree` —
+   so "route by tier" either loses the Grove request or sends it to
+   `/checkout?tier=cedar-grove`, which bounces to the plan picker the visitor
+   did not ask for. Decide the Grove path before replacing the contact
+   submission: either keep Grove as a sales request (it is the one product
+   sold on its own, so this is defensible) or add standalone Grove checkout.
+   Whichever, it is a separate branch from the three tiers.
 
    **Carry the referral code through, or take the referral surface down.**
    `404.astro` already resolves `/r/<code>` and redirects to

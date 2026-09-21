@@ -203,11 +203,11 @@ const SECTIONS = [
       {
         q: 'What price year do results carry?',
         kind: 'quote',
-        said: 'Historical analyses run from 2015 to present where the data support it.',
+        said: 'Historical analyses run from 2009 to 2025 where the data support it.',
         where: '/methodology, data vintages',
         needs: [
           'Whether results are in current or constant dollars, and which deflator.',
-          'Which year&rsquo;s industrial structure a 2015 analysis uses: 2015&rsquo;s or today&rsquo;s.',
+          'Which year&rsquo;s industrial structure a 2009 analysis uses. teim-engine holds EPA StateIO vintages for 2015&ndash;2023 only, so 2009&ndash;2014 and 2024&ndash;2025 borrow the nearest published structure while their levels stay year-specific. That is a defensible choice and it is not a silent one &mdash; but the public methodology page does not yet say it.',
           'How changing county and reservation boundaries are handled across that span.',
           'A historical comparison that silently mixes a past activity year with present-day relationships is the kind of error that ends a credibility argument.',
         ],

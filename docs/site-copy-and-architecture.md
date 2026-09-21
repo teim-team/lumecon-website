@@ -24,8 +24,8 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
 | `/` | 746 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/why-lumecon` | 1187 | Why Lumecon \| Lumecon | 239 |
-| `/pricing` | 1302 | Pricing \| Lumecon | 155 |
+| `/why-lumecon` | 1224 | Why Lumecon \| Lumecon | 239 |
+| `/pricing` | 1495 | Pricing \| Lumecon | 155 |
 | `/cedar` | 471 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
 | `/cedar-grove` | 566 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
@@ -41,12 +41,12 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 674 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1042 | Terms of Service \| Lumecon | 146 |
 | `/signup` | 248 | Request beta access \| Lumecon | 118 |
-| `/login` | 117 | Log in \| Lumecon | 31 |
-| `/choose-plan` | 228 | Choose your plan \| Lumecon | 103 |
+| `/login` | 113 | Log in \| Lumecon | 31 |
+| `/choose-plan` | 233 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15212** | | |
+| **Total** | **15443** | | |
 
 ## Crawler metadata audit
 
@@ -393,7 +393,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/why-lumecon
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1187
+- **Visible words:** 1224
 
 ### Architecture (heading outline)
 
@@ -463,7 +463,7 @@ Sprout, for one analyst. Paid plans start here.
 - The same model on every paid plan The plans differ in how many people use them and what they share, never in the economics. Nobody buys a better multiplier.
 - Unlimited analyses Analyses are not metered, so a second look at a scenario costs nothing and a yearly update is not a new purchase.
 - Every supported U.S. geography Counties, states, the nation, reservations and trust lands. Geography is not sold as an add-on.
-Consultancies and partner organizations delivering analysis to someone else start at Sapling, at $2,500 a year. See every plan and what it includes.
+Client work is licensed at two levels: Sapling for a consultancy working within ten seats, reassigned as engagements change, and Tree for one past ten. An organization-wide license — a university, bank, CDFI or agency — is Tree, where seats are unlimited across the organization. Sapling is $2,500 a year, Tree is $7,500. See every plan and what it includes.
 
 
 **H2: Spend more time on the economic questions.**
@@ -642,7 +642,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1302
+- **Visible words:** 1495
 
 ### Architecture (heading outline)
 
@@ -761,7 +761,7 @@ RECOMMENDED
 
 CLIENT WORK
 
-For teams and client work.
+For a team, or a consultancy serving clients.
 
 $2,500 / YEAR
 
@@ -778,7 +778,7 @@ Everything in Sprout, plus Cedar Commons, the shared project workspace: project 
 
 CLIENT WORK
 
-For organization-wide use.
+For a whole organization.
 
 $7,500 / YEAR
 
@@ -787,7 +787,7 @@ UNLIMITED USERS IN ONE ORGANIZATION
 Everything in Sapling, plus Cedar Grove, the evidence base for your organization’s economy, organizational context and Cedar calibration across the organization.
 
 - _link:_ [Request Tree access →](/signup?tier=tree)
-Consultancies and partner organizations delivering analysis to someone else start at Sapling.
+Client work is licensed at two levels: Sapling for a consultancy working within ten seats, reassigned as engagements change, and Tree for one past ten. An organization-wide license — a university, bank, CDFI or agency — is Tree, where seats are unlimited across the organization.
 
 
 > _section: `cedar-grove`_
@@ -887,8 +887,8 @@ Slide to compare plans →
 - _label:_ CLIENT WORK
 - _label:_ Evaluation only
 - _label:_ Your own organization
-- _label:_ Included
-- _label:_ Included
+- _label:_ Included, up to 10 seats
+- _label:_ Included, unlimited seats
 Every paid plan includes Cedar Impact in full, on the same data foundation; Seed shows your direct effects. Prices include taxes and fees. Learn what Cedar does.
 
 
@@ -920,9 +920,11 @@ Yes. Request Seed access during the private beta. When your place is ready, you 
 Access opens in waves. There is no credit card or obligation.
 
 - _disclosure:_ Can I use Lumecon for client work?
-Yes, starting with Sapling. Cedar Commons doubles as a client intake and project workspace: invite clients and collaborators to supply what an analysis needs, keep the project data together and manage the work in one place, with ten seats you can reassign as engagements change.
+Yes, at two levels, and the only question is how many of you there are.
 
-Tree serves larger consulting and partner organizations with unlimited organizational users, Cedar calibration and Cedar Grove.
+Sapling is the consultancy that fits inside ten seats. Cedar Commons doubles as a client intake and project workspace: invite clients and collaborators to supply what an analysis needs, keep the project data together and manage the work in one place, and reassign the ten seats as engagements change.
+
+Tree is the consultancy past ten. Seats are unlimited across the firm, and it adds Cedar calibration and Cedar Grove — the same license an institution takes.
 
 - _disclosure:_ What is Cedar Grove, and why is it sold separately?
 Cedar Grove is the living evidence base for your organization’s economy: maintained public data, Lumecon collections and the records you govern, with every finding connected to its source, geography, method, vintage and limits. It is useful without Cedar Impact, so you can license it on its own for $2,500 a year per organization with unlimited teammates, and it comes with Tree.
@@ -931,6 +933,11 @@ Cedar Grove is the living evidence base for your organization’s economy: maint
 Yes. Experienced economists can perform many of these calculations themselves, and the arithmetic is rarely the hardest part.
 
 Lumecon handles the surrounding data engineering, regionalization, validation, documentation, maintenance and workflow, so economists spend more time exercising economic judgment.
+
+- _disclosure:_ Do you license Lumecon to universities, banks and CDFIs?
+Yes, and it is Tree — the same organization-wide license every other Tree customer takes, not a separate license type. A university, a bank, a CDFI or a public agency is past ten people before it begins, so counting seats is theoretical — Tree makes them unlimited across the organization and adds Cedar Grove and Cedar calibration.
+
+One group inside an organization is a different purchase from the organization itself. A single faculty member or analyst is a Sprout; a department, research group or lending team that needs shared projects is a Sapling. Tree is for when the license belongs to the organization rather than to the people currently using it.
 
 - _disclosure:_ Can an individual researcher or faculty member buy Lumecon?
 Yes. Sprout is priced so an individual analyst, faculty member or researcher can subscribe without an institutional procurement process. When a department or research group needs shared projects, Sapling adds Cedar Commons.
@@ -4095,7 +4102,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 117
+- **Visible words:** 113
 
 ### Architecture (heading outline)
 
@@ -4153,8 +4160,8 @@ Enter your work email and password to continue.
 - _link:_ [Forgot password?](/login?reset=1)
 - _button:_ Log in
 - _button:_ Back to sign in
-- _label:_ OR
-- _link:_ [Continue with Google](https://api.lumecon.ai/auth/google)
+- _label:_ **[conditional]** or
+- _link:_ [Continue with Google](/login?google=1)
 New to Lumecon? Request beta access
 
 
@@ -4184,7 +4191,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/choose-plan
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 228
+- **Visible words:** 233
 
 ### Architecture (heading outline)
 
@@ -4224,10 +4231,10 @@ CHOOSE A PLAN
 Every paid plan runs the same economic model on the same data foundation. Choose the collaboration and data capabilities your team needs; you can change plans later.
 
 - _link:_ [Sprout For an individual analyst. $1,000 / year 1 USER Cedar Impact in full, Cedar and every supported geography Continue with Sprout →](/checkout?tier=sprout)
-- _link:_ [Sapling RECOMMENDED For teams and client work. $2,500 / year UP TO 10 USERS Adds Cedar Commons, the shared project workspace, with external collaborators Continue with Sapling →](/checkout?tier=sapling)
-- _link:_ [Tree For organization-wide use. $7,500 / year UNLIMITED USERS IN ONE ORGANIZATION Adds Cedar Grove, the evidence base for your organization’s economy, and Cedar calibration Continue with Tree →](/checkout?tier=tree)
+- _link:_ [Sapling RECOMMENDED For a team, or a consultancy serving clients. $2,500 / year UP TO 10 USERS Adds Cedar Commons, the shared project workspace, with external collaborators Continue with Sapling →](/checkout?tier=sapling)
+- _link:_ [Tree For a whole organization. $7,500 / year UNLIMITED USERS IN ONE ORGANIZATION Adds Cedar Grove, the evidence base for your organization’s economy, and Cedar calibration Continue with Tree →](/checkout?tier=tree)
 - _link:_ [Start free with Seed → See your direct effects free; full results unlock on any paid plan.](/signup?tier=free)
-Want the detail first? Compare plans. Using Lumecon for client work? Commercial use starts with Sapling.
+Want the detail first? Compare plans. Buying for a firm or an institution? Client and institutional licensing.
 
 
 > _section: `footer`_
@@ -4473,7 +4480,7 @@ SUBSCRIPTION CONFIRMED
 
 Open Lumecon to review your workspace and begin your first analysis.
 
-- _link:_ [Open Lumecon →](https://app.lumecon.ai)
+- _link:_ [Open Lumecon →](/login)
 Use the account credentials provided with your access invitation.
 
 - _image alt:_ The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data.
@@ -4590,6 +4597,8 @@ _Computed from the copy above, not from memory. A sentence here is six words or 
 
 - **On `/` and `/why-lumecon` and `/pricing` and `/cedar` and `/cedar-commons` and `/cedar-grove` and `/methodology` and `/start` and `/naics` and `/glossary` and `/team` and `/security` and `/ai-and-data-use` and `/contact` and `/accessibility` and `/privacy` and `/terms` and `/signup` and `/login` and `/choose-plan` and `/checkout` and `/welcome` and `/404`:** "We use optional analytics to improve Lumecon."
 - **On `/` and `/why-lumecon`:** "Every organization has an economic impact."
+- **On `/why-lumecon` and `/pricing`:** "Client work is licensed at two levels: Sapling for a consultancy working within ten seats, reassigned as engagements change, and Tree for one past ten."
+- **On `/why-lumecon` and `/pricing`:** "An organization-wide license — a university, bank, CDFI or agency — is Tree, where seats are unlimited across the organization."
 - **On `/methodology` and `/glossary`:** "The value added by the analyzed activity: the measure that corresponds to a region’s contribution to GDP."
 - **On `/methodology` and `/glossary`:** "Lumecon uses GDP contribution as the plain-language label for value added."
 - **On `/methodology` and `/glossary`:** "The total value of production the activity supports: value added plus intermediate purchases."

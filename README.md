@@ -540,19 +540,31 @@ five tables per region (`Industry_Output`, `Make`, `Use`, `Domestic_Use`,
 `Import`) with the identity `Use = Domestic_Use + Import` (the in-region vs.
 rest-of-US split).
 
-> **The year range on this site says 2009–2025; the engine holds 2015–2023.**
-> That is the owner's decision about what the product covers, and the gap is a
-> data-vendoring task tracked in teim-engine's README — 2009–2014 and 2024–2025
-> are not on disk. Do not treat the number in this paragraph as the authority
-> either way: teim-engine serves `GET /coverage`, which reads the vendored
-> directory on every call, and that is the only statement of coverage that
-> cannot go stale. A year outside it now fails as a typed
-> `YearNotCoveredError` naming the real span rather than as an internal error.
+> **The site says 2009–2025 and the engine now serves it — but not every year
+> the same way.** teim-engine answers for 2009 through the current year. Inside
+> 2015–2023 a year is *observed*: EPA published that vintage. Outside it the
+> year is *extended* — production structure comes from the nearest observed
+> vintage while every level is fetched for the requested year. The engine
+> reports which (`io_basis.kind`, and `GET /coverage`), and refuses only years
+> outside 2009–current, where ACS cannot reach or nothing exists to project
+> from.
 >
-> Before the range is promoted anywhere new, the methodology page needs a
-> sentence on how years outside the benchmark are constructed. An economist
+> An earlier version of this note said the engine held 2015–2023 and rejected
+> anything else. That was true when written and is no longer; a review caught
+> the site advertising what the backend could not run, which was the right
+> catch and is what prompted the engine change.
+>
+> **Do not treat this paragraph as the authority.** `GET /coverage` reads the
+> vendored directory on every call and is the only statement that cannot go
+> stale. The better long-term shape, suggested in that review and worth doing:
+> derive the published range from `/coverage` rather than restating it in copy,
+> so the two cannot disagree again.
+>
+> Still owed before the range is promoted anywhere new: the methodology page
+> needs a sentence on how pre-benchmark years are constructed. An economist
 > evaluating "2009–2025" against a 2015-based structural table will ask, and
-> the site should answer before they do.
+> the site should answer before they do. That sentence is Isabella's
+> (`@magnes1`) — see teim-engine `docs/NOTE_FOR_ISABELLA_AND_HAVA_2026-09-21.md`.
 Values are nominal USD. This supply/use base is what the impact multipliers
 the site describes are built on, so the homepage data-sources strip should
 stay consistent with the public sources behind it (Census ACS/LODES/QWI/CBP/
