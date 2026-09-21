@@ -98,7 +98,7 @@ export const PLANS: Plan[] = [
     priceAnnual: 2500,
     price: '$2,500',
     period: '/ year',
-    audience: 'For teams and client work.',
+    audience: 'For a team, or a consultancy serving clients.',
     tagline:
       'Everything in Sprout, plus Cedar Commons, the shared project workspace: project notes, data collection and outside collaborators.',
     users: 'Up to 10 users',
@@ -113,7 +113,7 @@ export const PLANS: Plan[] = [
     priceAnnual: 7500,
     price: '$7,500',
     period: '/ year',
-    audience: 'For organization-wide use.',
+    audience: 'For a whole institution.',
     tagline:
       'Everything in Sapling, plus Cedar Grove, the evidence base for your organization’s economy, organizational context and Cedar calibration across the organization.',
     users: 'Unlimited users in one organization',
@@ -123,10 +123,25 @@ export const PLANS: Plan[] = [
   },
 ];
 
-/** The marker the cards show, and the one line that explains it. */
+/**
+ * The marker the cards show, and the lines that explain it.
+ *
+ * Two levels, not one entry point. A consultancy that fits inside ten
+ * seats is a Sapling; one past ten is a Tree. Naming both on the page
+ * matters because the old single sentence ("start at Sapling") read as
+ * a floor with nothing above it, and a forty-person firm had to infer
+ * the rest from the users row.
+ *
+ * Institutions are the same size argument reached from the other side.
+ * A university, a bank, a CDFI or an agency is over ten people before
+ * it starts, so the seat-counting is theoretical and the license is
+ * Tree. They are named rather than covered by "organization-wide use",
+ * because a customer should be able to find themselves on the page
+ * instead of working out which abstraction they fall under.
+ */
 export const CLIENT_WORK = {
   chip: 'Client work',
-  note: 'Consultancies and partner organizations delivering analysis to someone else start at Sapling.',
+  note: 'Client work is licensed at two levels: Sapling for a consultancy working within ten seats, reassigned as engagements change, and Tree for one past ten. An institutional license — a university, bank, CDFI or agency — is Tree, where seats are unlimited across the organization.',
 };
 
 /**
@@ -225,7 +240,12 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   },
   {
     label: 'Client work',
-    values: ['Evaluation only', 'Your own organization', 'Included', 'Included'],
+    values: [
+      'Evaluation only',
+      'Your own organization',
+      'Included, up to 10 seats',
+      'Included, unlimited seats',
+    ],
   },
 ];
 
@@ -275,8 +295,9 @@ export const PRICING_FAQ: PricingFaq[] = [
   {
     q: 'Can I use Lumecon for client work?',
     a: [
-      'Yes, starting with Sapling. Cedar Commons doubles as a client intake and project workspace: invite clients and collaborators to supply what an analysis needs, keep the project data together and manage the work in one place, with ten seats you can reassign as engagements change.',
-      'Tree serves larger consulting and partner organizations with unlimited organizational users, Cedar calibration and Cedar Grove.',
+      'Yes, at two levels, and the only question is how many of you there are.',
+      'Sapling is the consultancy that fits inside ten seats. Cedar Commons doubles as a client intake and project workspace: invite clients and collaborators to supply what an analysis needs, keep the project data together and manage the work in one place, and reassign the ten seats as engagements change.',
+      'Tree is the consultancy past ten. Seats are unlimited across the firm, and it adds Cedar calibration and Cedar Grove — the same license an institution takes.',
     ],
   },
   {
@@ -290,6 +311,13 @@ export const PRICING_FAQ: PricingFaq[] = [
     a: [
       'Yes. Experienced economists can perform many of these calculations themselves, and the arithmetic is rarely the hardest part.',
       'Lumecon handles the surrounding data engineering, regionalization, validation, documentation, maintenance and workflow, so economists spend more time exercising economic judgment.',
+    ],
+  },
+  {
+    q: 'Do you license Lumecon to universities, banks and CDFIs?',
+    a: [
+      'Yes, and an institutional license is Tree. A university, a bank, a CDFI or a public agency is past ten people before it begins, so counting seats is theoretical — Tree makes them unlimited across the organization and adds Cedar Grove and Cedar calibration.',
+      'One group inside an institution is a different purchase from the institution. A single faculty member or analyst is a Sprout; a department, research group or lending team that needs shared projects is a Sapling. Tree is for when the license belongs to the organization rather than to the people currently using it.',
     ],
   },
   {

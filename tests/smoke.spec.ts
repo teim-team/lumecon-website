@@ -173,7 +173,9 @@ test('homepage uses clear free-access language and Cedar starts on demand', asyn
   ]);
 });
 
-test('pricing leads with the free account and routes consultants to Sapling', async ({ page }) => {
+test('pricing leads with the free account and licenses client work at two levels', async ({
+  page,
+}) => {
   await page.goto('/pricing', { waitUntil: 'networkidle' });
   // The free CTA leads, above the plans, with the no-card line beside it.
   const hero = page.locator('.pr-hero');
@@ -184,14 +186,27 @@ test('pricing leads with the free account and routes consultants to Sapling', as
   await expect(free).toContainText('Request Seed access');
   await expect(free).toContainText('No credit card');
   await expect(free.locator('a[href="/signup?tier=free"]')).toBeVisible();
-  // Consultants use the public plans. The signal is one line under the
-  // cards, not a band and not a separate edition.
-  await expect(page.locator('.pr-plans__clientnote')).toContainText('start at Sapling');
+  // Consultants use the public plans, and there are TWO of them: a
+  // consultancy inside ten seats is a Sapling, one past ten is a Tree, and an
+  // institution is a Tree because it is past ten before it starts. The signal
+  // is one line under the cards, not a band and not a separate edition.
+  //
+  // This used to assert 'start at Sapling', which passed while the page named
+  // a floor with nothing above it — a forty-person firm had to infer the rest
+  // from the users row. Both levels are asserted so neither can be dropped.
+  const clientNote = page.locator('.pr-plans__clientnote');
+  await expect(clientNote).toContainText('Sapling for a consultancy working within ten seats');
+  await expect(clientNote).toContainText('Tree for one past ten');
+  await expect(clientNote).toContainText('university, bank, CDFI or agency');
   // Cedar Grove is sold on its own, after the plans rather than as a fourth card.
   await expect(page.locator('#cedar-grove')).toBeVisible();
   // The FAQ carries the skepticism the table cannot. Each row is a details
   // element the reader opens.
-  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(11);
+  await expect(page.locator('.pr-faq__list .pr-more--faq')).toHaveCount(12);
+  // An institution should find itself in a question without opening it.
+  await expect(page.locator('.pr-faq__list')).toContainText(
+    'Do you license Lumecon to universities, banks and CDFIs?',
+  );
 });
 
 test('signup reflects a plan carried over from pricing', async ({ page }) => {
