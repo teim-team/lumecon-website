@@ -535,9 +535,24 @@ visitor here doesn't have.
 ### Underlying data (teim-engine)
 
 teim-engine's base structure is the EPA `stateior` StateIO accounts, vendored as CSV: years
-**2015–2023**, **50 states + DC**, **71 BEA Summary sectors**, five tables per
-region (`Industry_Output`, `Make`, `Use`, `Domestic_Use`, `Import`) with the
-identity `Use = Domestic_Use + Import` (the in-region vs. rest-of-US split).
+**2015–2023** as installed today, **50 states + DC**, **71 BEA Summary sectors**,
+five tables per region (`Industry_Output`, `Make`, `Use`, `Domestic_Use`,
+`Import`) with the identity `Use = Domestic_Use + Import` (the in-region vs.
+rest-of-US split).
+
+> **The year range on this site says 2009–2025; the engine holds 2015–2023.**
+> That is the owner's decision about what the product covers, and the gap is a
+> data-vendoring task tracked in teim-engine's README — 2009–2014 and 2024–2025
+> are not on disk. Do not treat the number in this paragraph as the authority
+> either way: teim-engine serves `GET /coverage`, which reads the vendored
+> directory on every call, and that is the only statement of coverage that
+> cannot go stale. A year outside it now fails as a typed
+> `YearNotCoveredError` naming the real span rather than as an internal error.
+>
+> Before the range is promoted anywhere new, the methodology page needs a
+> sentence on how years outside the benchmark are constructed. An economist
+> evaluating "2009–2025" against a 2015-based structural table will ask, and
+> the site should answer before they do.
 Values are nominal USD. This supply/use base is what the impact multipliers
 the site describes are built on, so the homepage data-sources strip should
 stay consistent with the public sources behind it (Census ACS/LODES/QWI/CBP/
