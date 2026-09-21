@@ -865,7 +865,7 @@ Slide to compare plans →
 - _label:_ Same
 - _label:_ Same
 - _label:_ HISTORICAL ANALYSIS
-- _label:_ 2015 to present, where the underlying data support it
+- _label:_ 2009 to present, where the underlying data support it
 - _label:_ Same
 - _label:_ Same
 - _label:_ Same
@@ -1960,7 +1960,7 @@ Lumecon draws from authoritative public datasets widely used in economic and reg
 
 **H3: Data vintages**
 
-Every analysis states the data year it runs against, and that year is shown with the results (for example, 2025 data). Historical analyses run from 2015 to present where the underlying data support it. Where source datasets carry different vintages, the analysis uses the most recent vintage available for each source at the stated data year.
+Every analysis states the data year it runs against, and that year is shown with the results (for example, 2025 data). Historical analyses run from 2009 to present where the underlying data support it. Where source datasets carry different vintages, the analysis uses the most recent vintage available for each source at the stated data year.
 
 
 **H3: Between benchmarks**

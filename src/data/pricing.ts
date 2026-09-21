@@ -209,7 +209,7 @@ export const PLAN_TABLE_ROWS: PlanRow[] = [
   },
   {
     label: 'Historical analysis',
-    values: ['2015 to present, where the underlying data support it', 'Same', 'Same', 'Same'],
+    values: ['2009 to present, where the underlying data support it', 'Same', 'Same', 'Same'],
   },
   {
     label: 'Cedar',
