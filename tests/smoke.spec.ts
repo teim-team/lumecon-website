@@ -1411,6 +1411,44 @@ test('cedar commons sits between Cedar and Cedar Grove in the product menu', asy
   ]);
 });
 
+test('cedar grove is named on the homepage, /cedar and /pricing beside its siblings', async ({
+  page,
+}) => {
+  // The product has its own page; these are the three shared pages that had
+  // not caught up to it. Each names it exactly, in the place the sibling
+  // products already appear, with the sibling's own treatment.
+
+  // Homepage: a tour row carrying the product label, the same row and label
+  // the Cedar Impact rows use, with one of Grove's own captures.
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  const groveRow = page.locator('#tour-grove');
+  await expect(groveRow).toHaveCount(1);
+  await expect(groveRow.locator('.tour-row__product')).toHaveText('Cedar Grove');
+  await expect(groveRow.locator('img')).toHaveAttribute('src', '/app/grove-evidence.webp');
+  await expect(page.locator('.tour-row .tour-row__product')).toHaveText([
+    'Cedar Impact',
+    'Cedar Impact',
+    'Cedar Impact',
+    'Cedar Grove',
+  ]);
+
+  // /cedar: the act that names the surfaces Cedar works across names Grove
+  // beside Commons, and only for what Cedar does there: read the three
+  // evidence layers with their provenance.
+  await page.goto('/cedar', { waitUntil: 'domcontentloaded' });
+  const orgAct = page.locator('article[aria-labelledby="c-org"] .tour-row__body');
+  await expect(orgAct).toContainText('Cedar Commons');
+  await expect(orgAct).toContainText('Cedar Grove');
+  await expect(orgAct).toContainText('maintained public data');
+
+  // /pricing: sold on its own, after the plans, and priced from the same
+  // source /cedar-grove reads.
+  await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#cedar-grove #grove-title')).toContainText('Cedar Grove');
+  await expect(page.locator('#cedar-grove .pr-plan__amount')).toHaveText('$2,500');
+  await expect(page.locator('#cedar-grove a[href="/cedar-grove"]')).toHaveCount(1);
+});
+
 test('cedar grove shows four landscape captures, each stating its own box', async ({ page }) => {
   await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('defensible case');

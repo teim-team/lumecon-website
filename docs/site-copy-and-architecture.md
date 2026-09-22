@@ -23,10 +23,10 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 746 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/` | 798 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/why-lumecon` | 1224 | Why Lumecon \| Lumecon | 239 |
 | `/pricing` | 1495 | Pricing \| Lumecon | 155 |
-| `/cedar` | 471 | Cedar, the AI economic analyst \| Lumecon | 151 |
+| `/cedar` | 498 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
 | `/cedar-grove` | 920 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/methodology` | 2782 | Methodology \| Lumecon | 167 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15801** | | |
+| **Total** | **15880** | | |
 
 ## Crawler metadata audit
 
@@ -70,7 +70,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 746
+- **Visible words:** 798
 
 ### Architecture (heading outline)
 
@@ -88,6 +88,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
     - **H3** Trace a reported result to its components
     - **H3** Compare analyses over time
     - **H3** Return to prior analyses without rebuilding them
+    - **H3** Cite the evidence a figure rests on
   - **H2** Economic analysis built to withstand review.
   - **H2** Every organization has an economic impact. Make yours visible.
 
@@ -278,6 +279,17 @@ CEDAR IMPACTANALYSIS HISTORY
 Drafts, completed analyses, comparisons and exports stay together in your Workspace, ready to reopen, compare or export as a workbook, CSV tables or a printable summary.
 
 - _image alt:_ Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.
+
+> _section: `tour-grove`_
+
+CEDAR GROVEEVIDENCE BASE
+
+
+**H3: Cite the evidence a figure rests on**
+
+Cedar Grove brings maintained public data, Cedar collections and the records your organization governs into one place, so a place file, a figure or a briefing can cite all three with the source, vintage, geography, definition and limits of each still attached.
+
+- _image alt:_ The lower half of a Cedar Grove analysis. A per capita income figure is labelled with its period, geography, universe and basis. Below it a box invites the paragraph the report will carry, with controls to inspect the rows and save the figure to the record, and a sources band naming the maintained public data and the organization record behind it.
 
 > _section: `edge`_
 
@@ -1035,7 +1047,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 471
+- **Visible words:** 498
 
 ### Architecture (heading outline)
 
@@ -1110,7 +1122,7 @@ _caption:_ The same documents turned into operations. Cedar reports what is mode
 
 **H2: Keep organizational context with the project.**
 
-Cedar works from the source material and notes available within a project. Cedar Commons keeps projects, notes and collaborators together, while project permissions define who can open and change each analysis. Larger organizations can calibrate Cedar around their terminology and reporting needs.
+Cedar works from the source material and notes available within a project. Cedar Commons keeps projects, notes and collaborators together, while project permissions define who can open and change each analysis. In Cedar Grove, Cedar reads the same three layers of evidence with the provenance each carries: maintained public data, Cedar collections and the records your organization governs. Larger organizations can calibrate Cedar around their terminology and reporting needs.
 
 - _image alt:_ The Cedar Commons board, with completed analyses across an organization and the comment and Cedar activity on each.
 _caption:_ Cedar answers from inside any project on the board: who re-ran what, how the figures moved, what a reviewer flagged. Shown with sample data.
