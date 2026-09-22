@@ -5,11 +5,53 @@
     "height": 1080
   },
   "shots": [
-    "grove-home",
-    "grove-home-dark",
-    "grove-outputs",
-    "grove-outputs-dark",
-    "grove-workspace",
-    "grove-workspace-dark"
+    {
+      "name": "grove-data",
+      "width": 1920,
+      "height": 1080,
+      "tall": true
+    },
+    {
+      "name": "grove-data-dark",
+      "width": 1920,
+      "height": 1080,
+      "tall": true
+    },
+    {
+      "name": "grove-home",
+      "width": 1920,
+      "height": 1080,
+      "tall": false
+    },
+    {
+      "name": "grove-home-dark",
+      "width": 1920,
+      "height": 1080,
+      "tall": false
+    },
+    {
+      "name": "grove-map",
+      "width": 1920,
+      "height": 1236,
+      "tall": true
+    },
+    {
+      "name": "grove-map-dark",
+      "width": 1920,
+      "height": 1236,
+      "tall": true
+    },
+    {
+      "name": "grove-workspace",
+      "width": 1920,
+      "height": 1634,
+      "tall": true
+    },
+    {
+      "name": "grove-workspace-dark",
+      "width": 1920,
+      "height": 1634,
+      "tall": true
+    }
   ]
 }

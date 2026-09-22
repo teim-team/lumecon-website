@@ -75,40 +75,66 @@ import '../styles/grove-page.css';
  * The frame is 1920x1080, the frame every other product shot on this site
  * already uses; see the three acts on /cedar.
  */
-const FRAME = GROVE_SHOTS.frame;
+
+/**
+ * One captured app frame, with the size it was actually photographed at.
+ *
+ * The manifest used to be a list of names and every frame was assumed to be
+ * 16:9. Three of the four surfaces are not: a worktable holds a question, a
+ * case structure, a figure and a brief, and the capture refuses to crop them.
+ * So the manifest carries each frame's real pixel size and the page lays out
+ * from that rather than from an assumption, which is also what lets a tall
+ * frame be presented as something the reader scrolls.
+ */
 const shot = (name: string) => {
-  if (!GROVE_SHOTS.shots.includes(name)) {
+  const found = GROVE_SHOTS.shots.find((entry) => entry.name === name);
+  if (!found) {
     throw new Error(
       `cedar-grove: no capture named ${name}; re-run capture-grove-marketing.mjs in the app repository`,
     );
   }
-  return `/app/${name}.webp`;
+  // Taller than the 16:9 window the rows share, measured rather than
+  // declared. The capture marks a surface `tall` when it knows the surface
+  // overflows, but a surface can overflow inside its own scrolling pane and
+  // still be photographed at 16:9 — the data ledger is exactly that. Asking
+  // the image's real proportions is the question the layout actually has.
+  const tall = found.height / found.width > 9 / 16 + 0.001;
+  return { src: `/app/${name}.webp`, width: found.width, height: found.height, tall };
 };
 
 const heroShot = {
   img: shot('grove-home'),
   imgDark: shot('grove-home-dark'),
-  alt: 'Cedar Grove Home, asking what are you preparing, with five illustrated purpose plates on an arc. The plate at the front reads Grant case or application and names what it produces: a need statement, cited figures and an evidence appendix.',
+  alt: 'Cedar Grove Home. A top bar names Home, Analyses, Data, Map and Cedar Impact. The open analyses list holds one feasibility study, and beside it a panel asks what you are preparing and offers five kinds of analysis: a grant case, an SBA 8(a) benefits report, a feasibility study, an economic-impact study, and evidence exploration.',
 };
 
 const tour = [
   {
-    id: 'workspace',
-    kicker: 'Curated workspace',
-    title: 'Choose the work. Grove changes with it.',
-    body: 'A grant case, benefits report, feasibility analysis, economic impact analysis or evidence exploration starts with its own task menu, evidence lenses and save action, so the workspace stays focused on the work at hand.',
+    id: 'analysis',
+    kicker: 'One analysis, whole',
+    title: 'The case structure is the screen.',
+    body: 'An analysis opens on its question and the parts of the case that answer it, each one naming the evidence it still needs. The working figure carries its period, geography, universe and basis on the figure itself, and the paragraph the report will use is written beside it, not after it.',
     img: shot('grove-workspace'),
     imgDark: shot('grove-workspace-dark'),
-    alt: 'A Cedar Grove Grant project with a purpose-specific task menu, evidence source shelf, figure and actions to download, inspect or save evidence.',
+    alt: 'A Cedar Grove analysis. The question reads: what evidence establishes the need for a community workforce program. A case structure lists need and baseline, who is underserved, funding and peer context, project readiness and local effects, each marked ready for evidence or needing a record. The figure beside it shows per capita income from 1990 to 2024 against the national line, labelled with its period, geography, universe and basis.',
   },
   {
-    id: 'outputs',
-    kicker: 'Evidence that travels',
-    title: 'A figure should not leave its evidence behind.',
-    body: 'Download the figure and the rows beneath it, open its evidence record or reproduce it in code. Source, vintage, geography and limitations stay attached.',
-    img: shot('grove-outputs'),
-    imgDark: shot('grove-outputs-dark'),
-    alt: 'Cedar Grove Outputs showing an evidence figure, provenance and export actions.',
+    id: 'data',
+    kicker: 'One ledger, three layers',
+    title: 'Public data, Cedar collections and your own records, side by side.',
+    body: 'Every measure in view sits in one table with the source that publishes it and the geography it is published for. Where a measure is not published for your area, Grove says so in the row rather than filling the gap, because a case is only as strong as the reader\u2019s ability to check it.',
+    img: shot('grove-data'),
+    imgDark: shot('grove-data-dark'),
+    alt: 'The Cedar Grove data catalogue. Twenty measures in one ledger, drawn from the Census Bureau, Cedar Press collections and the Bureau of Labor Statistics, each row naming its source and the geography it is published for.',
+  },
+  {
+    id: 'map',
+    kicker: 'Geography as evidence',
+    title: 'The map is its own workspace, not a panel.',
+    body: 'Where a place sits, who its regional peers are, where the people working there live. Each is a measure with a source and a vintage, read on the map and carried into the analysis with the same provenance as any other figure.',
+    img: shot('grove-map'),
+    imgDark: shot('grove-map-dark'),
+    alt: 'The Cedar Grove map workspace. Research lenses and measures run down the left, each naming its source and year, and the map marks the project geography in national context against every published tribal area.',
   },
 ];
 
@@ -200,10 +226,10 @@ const jsonLd = [
         }
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
           <img
-            src={heroShot.imgDark}
+            src={heroShot.imgDark.src}
             alt={heroShot.alt}
-            width={FRAME.width}
-            height={FRAME.height}
+            width={heroShot.imgDark.width}
+            height={heroShot.imgDark.height}
             sizes="(max-width: 980px) 100vw, 58vw"
             fetchpriority="high"
             decoding="async"
@@ -223,19 +249,53 @@ const jsonLd = [
                   <h2 class="tour-row__title">{row.title}</h2>
                   <p class="tour-row__body">{row.body}</p>
                 </div>
+                {/* A frame taller than the window it sits in is shown whole
+                    and scrolled, rather than cropped or shrunk to nothing. The
+                    window is 16:9 so the rows stay a consistent shape down the
+                    page; the image inside keeps its captured proportions, so
+                    what the reader scrolls through is the surface at the size
+                    it was photographed. A frame that already fits is not given
+                    a scrollbar it does not need. */}
                 <figure
                   class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
-                  data-zoom
+                  data-zoom={row.imgDark.tall ? undefined : true}
                 >
-                  <img
-                    src={row.imgDark}
-                    alt={row.alt}
-                    width={FRAME.width}
-                    height={FRAME.height}
-                    sizes="(max-width: 900px) 100vw, 55vw"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {
+                    row.imgDark.tall ? (
+                      <div
+                        class="grovepg-scroller"
+                        tabindex="0"
+                        role="group"
+                        aria-label={`${row.title} Scroll to see the whole surface.`}
+                      >
+                        <img
+                          src={row.imgDark.src}
+                          alt={row.alt}
+                          width={row.imgDark.width}
+                          height={row.imgDark.height}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={row.imgDark.src}
+                        alt={row.alt}
+                        width={row.imgDark.width}
+                        height={row.imgDark.height}
+                        sizes="(max-width: 900px) 100vw, 55vw"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )
+                  }
+                  {
+                    row.imgDark.tall ? (
+                      <figcaption class="grovepg-scroller__hint">
+                        Scroll the frame to see the whole surface.
+                      </figcaption>
+                    ) : null
+                  }
                 </figure>
               </article>
             ))

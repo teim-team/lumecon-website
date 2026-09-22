@@ -649,3 +649,57 @@
     transition: none;
   }
 }
+
+/* A frame taller than 16:9, shown whole.
+ *
+ * Three of the four app surfaces are taller than the window they are
+ * presented in: an analysis worktable holds a question, a case structure, a
+ * figure and the paragraph the report will use; the ledger is a table of
+ * every measure in view. The capture refuses to crop them, so the page
+ * refuses to crop them either. The window keeps the 16:9 shape the rows share
+ * and the image keeps the proportions it was photographed at, which makes the
+ * surplus height something the reader scrolls rather than something nobody
+ * ever sees.
+ *
+ * `overscroll-behavior: contain` so reaching the bottom of the frame does not
+ * then carry the page away underneath the pointer. */
+.grovetour .tour-row__shot .grovepg-scroller {
+  aspect-ratio: 16 / 9;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(115, 226, 214, 0.5) transparent;
+}
+.grovetour .tour-row__shot .grovepg-scroller::-webkit-scrollbar {
+  width: 10px;
+}
+.grovetour .tour-row__shot .grovepg-scroller::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(115, 226, 214, 0.45);
+}
+.grovetour .tour-row__shot .grovepg-scroller img {
+  width: 100%;
+  height: auto;
+}
+/* Keyboard reach: the frame is focusable so it can be scrolled without a
+   pointer, and the focus ring has to be visible against the dark field. */
+.grovetour .tour-row__shot .grovepg-scroller:focus-visible {
+  outline: 2px solid rgba(115, 226, 214, 0.9);
+  outline-offset: -2px;
+}
+.grovepg-scroller__hint {
+  padding: 0.5rem 0.75rem 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: rgba(226, 244, 241, 0.62);
+}
+/* The hint names a gesture a pointer user makes. Someone who reached the
+   frame by keyboard scrolls it with the arrow keys instead, and someone using
+   a screen reader has the whole surface described in the alt text either way:
+   the group's own label already says the frame scrolls. */
+@media (hover: none) {
+  .grovepg-scroller__hint::after {
+    content: ' Drag inside it.';
+  }
+}
