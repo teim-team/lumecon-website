@@ -7,19 +7,18 @@
   /* 13vh of top padding is generous on a tall monitor and expensive on a
      laptop, where it is the difference between the CTA being visible and not.
      It costs more here than it did over the map: the hero now carries a
-     1920x1080 capture in the wider column, so the fold is lower to begin with. */
+     1920x1200 capture in the wider column, so the fold is lower to begin with. */
   padding: clamp(5rem, 9vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
-  /* Light. The page used to run three dark bands, and the app frames on it
-     were dark captures, which stacked into a heavy low-contrast block and
-     buried the product. The captures are light now and so is the field they
-     sit on; the deep colour is kept for the two places that carry weight
-     rather than for whole sections. */
-  /* A solid colour under the gradient. A gradient alone leaves
-     `background-color` transparent, so anything asking what surface this text
-     is read against — a contrast check, a reader tool, a print stylesheet —
-     walks past the hero and finds whatever is behind it. */
-  background-color: #f2f7f7;
-  background-image: linear-gradient(180deg, #f2f7f7 0%, #ffffff 100%);
+  /* The house product-page hero, the same material /cedar and /cedar-commons
+     open on: navy, with a teal wash off the top left. This is brand surface,
+     not a dark theme -- it does not follow OS colour preference, and the
+     bands below it are light and stay light. A pass that flattened this to a
+     pale field took the page out of the set it belongs to, which is the one
+     thing about the hero nobody had asked to change. */
+  background-color: #071126;
+  background-image:
+    linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
+    linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
 }
 .grovepg-hero .meth-w {
   /* Above the corner mark the hero now carries, same as Cedar's. */
@@ -34,10 +33,10 @@
   min-width: 0;
 }
 .grovepg-hero .meth-hero__title {
-  color: #071126;
+  color: #ffffff;
 }
 .grovepg-hero .h-kicker {
-  color: #0a6a63;
+  color: #5fd9cc;
 }
 .grovepg-hero .meth-hero__title {
   max-width: 15ch;
@@ -47,7 +46,7 @@
 .grovepg-hero .meth-hero__lede {
   max-width: 54ch;
   margin-bottom: 1.6rem;
-  color: rgba(7, 17, 38, 0.78);
+  color: rgba(233, 242, 250, 0.82);
 }
 .grovepg-cta {
   display: flex;
@@ -55,9 +54,9 @@
   gap: 0.75rem;
 }
 .grovepg-hero .btn2--card {
-  border-color: rgba(6, 54, 55, 0.24);
-  color: #063637;
-  background: rgba(115, 226, 214, 0.14);
+  border-color: rgba(95, 217, 204, 0.38);
+  color: #d7f5f0;
+  background: rgba(15, 181, 165, 0.14);
 }
 /* The secondary hero action is re-skinned for the navy band, so its hover
    has to be re-stated here too — and with it the focus twin, because a
@@ -71,12 +70,32 @@
 .grovepg-hero__shot {
   overflow: hidden;
   margin: 0;
-  border: 1px solid rgba(6, 54, 55, 0.16);
+  border: 1px solid rgba(95, 217, 204, 0.38);
   border-radius: var(--radius-frame);
   background: #f8fbfb;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 28px 60px -34px rgba(6, 54, 55, 0.42);
+    0 0 0 1px rgba(15, 181, 165, 0.08),
+    0 40px 96px -38px rgba(0, 0, 0, 0.9);
+}
+/* The caption rides inside the frame rather than under it, so the capture
+   reads as one object and the sample-data disclosure cannot be separated
+   from the picture it is disclosing. Same construction as /cedar-commons. */
+.grovepg-hero__shot figcaption {
+  padding: 0.78rem 1rem;
+  border-top: 1px solid rgba(233, 242, 250, 0.14);
+  background: rgba(8, 17, 38, 0.94);
+  color: rgba(233, 242, 250, 0.72);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.grovetour .tour-row__shot figcaption {
+  padding: 0.72rem 0.95rem;
+  border-top: 1px solid var(--rule);
+  background: rgba(7, 17, 38, 0.035);
+  color: var(--ink-3);
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 .grovepg-hero__shot img,
 .grovetour .tour-row__shot img {
@@ -116,6 +135,55 @@
   border-color: rgba(6, 54, 55, 0.14);
   background: #ffffff;
   box-shadow: 0 22px 44px -30px rgba(6, 54, 55, 0.46);
+}
+
+/* The definition beat. Three columns of plain type, no picture and no card,
+   in the place /cedar-commons puts its own two-column equivalent. It is the
+   same furniture on purpose: a reader moving between the product pages should
+   recognise the beat. What differs is the question it answers, which is the
+   only differentiation a shared skeleton needs. */
+.grovepg-layers {
+  background: var(--surface, #fff);
+  border-bottom: 1px solid var(--rule);
+}
+.grovepg-layers__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.6rem, 3.4vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.grovepg-layers__item {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+.grovepg-layers__field {
+  margin: 0 0 0.5rem;
+  color: #0a5f59;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.grovepg-layers__term {
+  margin: 0 0 0.45rem;
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+.grovepg-layers__gloss {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+@media (max-width: 900px) {
+  .grovepg-layers__list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 /* A compact specification under the screenshots, not another card deck. */
@@ -543,13 +611,6 @@
      cropping this scroller exists to avoid — so on print the box gives up
      its fixed shape and the whole capture prints. The hint goes with it: it
      names a gesture nobody can make on paper. */
-  .grovetour .tour-row__shot .grovepg-scroller {
-    aspect-ratio: auto !important;
-    overflow: visible !important;
-  }
-  .grovepg-scroller__hint {
-    display: none !important;
-  }
   /* On paper there is no picker, so every collection prints. A reader with
      the page in their hand cannot click to see the other eleven. */
   .grovepg-atlas__panel[hidden] {
@@ -684,45 +745,13 @@
  *
  * `overscroll-behavior: contain` so reaching the bottom of the frame does not
  * then carry the page away underneath the pointer. */
-.grovetour .tour-row__shot .grovepg-scroller {
-  aspect-ratio: 16 / 9;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(10, 106, 99, 0.45) transparent;
-}
-.grovetour .tour-row__shot .grovepg-scroller::-webkit-scrollbar {
-  width: 10px;
-}
-.grovetour .tour-row__shot .grovepg-scroller::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(10, 106, 99, 0.4);
-}
-.grovetour .tour-row__shot .grovepg-scroller img {
-  width: 100%;
-  height: auto;
-}
 /* Keyboard reach: the frame is focusable so it can be scrolled without a
    pointer, and the focus ring has to be visible against the dark field. */
-.grovetour .tour-row__shot .grovepg-scroller:focus-visible {
-  outline: 2px solid rgba(10, 106, 99, 0.85);
-  outline-offset: -2px;
-}
-.grovepg-scroller__hint {
-  padding: 0.5rem 0.75rem 0;
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-  color: rgba(6, 54, 55, 0.6);
-}
 /* The hint names a gesture a pointer user makes. Someone who reached the
    frame by keyboard scrolls it with the arrow keys instead, and someone using
    a screen reader has the whole surface described in the alt text either way:
    the group's own label already says the frame scrolls. */
 @media (hover: none) {
-  .grovepg-scroller__hint::after {
-    content: ' Drag inside it.';
-  }
 }
 
 /* The Grove page is light in both colour schemes.

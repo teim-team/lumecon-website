@@ -1411,53 +1411,85 @@ test('cedar commons sits between Cedar and Cedar Grove in the product menu', asy
   ]);
 });
 
-test('cedar grove shows three captures of the product, in one frame, per theme', async ({
-  page,
-}) => {
+test('cedar grove shows four landscape captures, each stating its own box', async ({ page }) => {
   await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('defensible case');
 
-  // Three compositions: Home in the hero, then two tour rows. Four would mean
-  // the page had drifted back into being a tour of the navigation, which is
-  // what it was cut down from.
+  // Four compositions: the analysis worktable in the hero, then three acts.
+  // The count is the discipline. Five would mean the page had drifted back
+  // into being a tour of the navigation, which is what it was cut down from.
   await expect(page.locator('.grovepg-hero__shot img')).toHaveCount(1);
-  await expect(page.locator('.grovetour .tour-row__shot img')).toHaveCount(2);
+  await expect(page.locator('.grovetour .tour-row__shot img')).toHaveCount(3);
 
-  // The captures are the light set. The page used to run dark bands and pick
-  // the dark surface to sit on them; it is a light page now, and a dark frame
-  // on it would be the heavy low-contrast block that change removed.
   const captures = page.locator('.grovepg-hero__shot img, .grovetour .tour-row__shot img');
-  for (const src of await captures.evaluateAll((nodes) =>
-    nodes.map((node) => node.getAttribute('src')),
-  )) {
-    expect(src).not.toMatch(/-dark\.webp$/);
-  }
-
-  // Every capture states its own intrinsic box, so no row shifts as it lands.
-  // They are no longer all the same box: an analysis worktable and the map are
-  // taller than 16:9, and the capture refuses to crop them. What has to hold
-  // is that each is 1920 wide and declares a real height, and that anything
-  // taller than the window it sits in is inside a scrollport rather than
-  // squashed into one.
-  const boxes = await captures.evaluateAll((nodes) =>
+  const frames = await captures.evaluateAll((nodes) =>
     nodes.map((node) => ({
+      src: node.getAttribute('src'),
       width: Number(node.getAttribute('width')),
       height: Number(node.getAttribute('height')),
-      scrolled: Boolean(node.closest('.grovepg-scroller')),
+      // No frame may be inside a scrollport any more. The worktable used to
+      // be one 1634px surface shown through a window a reader had to operate;
+      // it is cut into its two halves at capture time instead.
+      scrolled: Boolean(node.closest('[class*="scroller"]')),
+      captioned: Boolean(node.closest('figure')?.querySelector('figcaption')),
     })),
   );
-  expect(boxes).toHaveLength(3);
-  for (const box of boxes) {
-    expect(box.width).toBe(1920);
-    expect(box.height).toBeGreaterThanOrEqual(1080);
-    expect(box.scrolled).toBe(box.height > 1080);
+  expect(frames).toHaveLength(4);
+  for (const frame of frames) {
+    // The light set. The dark variants were captured for a dark field that no
+    // longer exists below the hero, and nothing published them.
+    expect(frame.src).not.toMatch(/-dark\.webp$/);
+    // Each states its own intrinsic box, so no row shifts as it lands.
+    expect(frame.width).toBe(1920);
+    // Landscape, and close to it: a frame taller than 4:3 is a surface that
+    // was not cut, and it will either be scrolled or squashed.
+    expect(frame.height).toBeGreaterThanOrEqual(1080);
+    expect(frame.height / frame.width).toBeLessThan(3 / 4);
+    expect(frame.scrolled).toBe(false);
+    // Every capture discloses that it is sample data, inside the frame.
+    expect(frame.captioned).toBe(true);
   }
-  // At least one, or the scrollport has quietly stopped being exercised.
-  expect(boxes.some((box) => box.scrolled)).toBe(true);
 
-  // A tall frame still reaches full resolution: it is shrunk hardest, so it
-  // needs the lightbox most.
-  await expect(page.locator('.grovetour .tour-row__shot[data-zoom]')).toHaveCount(2);
+  // Full resolution stays reachable. A 1920px capture on a phone is about a
+  // fifth of its authored size, and the lightbox is the only route back.
+  await expect(page.locator('.grovepg-hero__shot[data-zoom]')).toHaveCount(1);
+  await expect(page.locator('.grovetour .tour-row__shot[data-zoom]')).toHaveCount(3);
+});
+
+test('cedar grove opens on the house product hero, like the other product pages', async ({
+  page,
+}) => {
+  // The hero band is brand surface, not a theme: /cedar and /cedar-commons
+  // open on the same navy field with copy at the left and one capture at the
+  // right. A pass that flattened this page's hero to a pale field took it out
+  // of that set, which is the regression this pins.
+  await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
+  const hero = page.locator('.grovepg-hero');
+  await expect(hero).toHaveClass(/section--dark/);
+
+  // Sequential, not Promise.all: the second half navigates, and a navigation
+  // racing the first half's evaluate detaches the node it is reading.
+  const grove = await hero.evaluate((node) => {
+    const style = getComputedStyle(node);
+    return { image: style.backgroundImage, color: style.backgroundColor };
+  });
+  await page.goto('/cedar-commons', { waitUntil: 'domcontentloaded' });
+  const commons = await page.locator('.cedarpg-hero').evaluate((node) => {
+    const style = getComputedStyle(node);
+    return { image: style.backgroundImage, color: style.backgroundColor };
+  });
+
+  // Not merely dark: the same material, gradient for gradient.
+  expect(grove.image).toBe(commons.image);
+
+  // One deliberate difference, asserted so it is not read as drift. Grove also
+  // declares a solid colour under the gradient. A gradient alone leaves
+  // `background-color` transparent, so anything asking what surface this text
+  // is read against -- a contrast check, a reader tool, a print stylesheet --
+  // walks past the hero and finds whatever is behind it. /cedar-commons and
+  // /cedar still have the transparent one; worth fixing there too.
+  expect(grove.color).toBe('rgb(7, 17, 38)');
+  expect(commons.color).toBe('rgba(0, 0, 0, 0)');
 });
 
 test('the grove collections open one at a time, by click and by keyboard', async ({ page }) => {
