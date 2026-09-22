@@ -41,12 +41,12 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 674 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1042 | Terms of Service \| Lumecon | 146 |
 | `/signup` | 248 | Request beta access \| Lumecon | 118 |
-| `/login` | 113 | Log in \| Lumecon | 31 |
+| `/login` | 117 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 233 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15797** | | |
+| **Total** | **15801** | | |
 
 ## Crawler metadata audit
 
@@ -4127,7 +4127,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 113
+- **Visible words:** 117
 
 ### Architecture (heading outline)
 
@@ -4185,8 +4185,8 @@ Enter your work email and password to continue.
 - _link:_ [Forgot password?](/login?reset=1)
 - _button:_ Log in
 - _button:_ Back to sign in
-- _label:_ **[conditional]** or
-- _link:_ [Continue with Google](/login?google=1)
+- _label:_ OR
+- _link:_ [Continue with Google](https://api.lumecon.ai/auth/google)
 New to Lumecon? Request beta access
 
 
@@ -4505,7 +4505,7 @@ SUBSCRIPTION CONFIRMED
 
 Open Lumecon to review your workspace and begin your first analysis.
 
-- _link:_ [Open Lumecon →](/login)
+- _link:_ [Open Lumecon →](https://app.lumecon.ai)
 Use the account credentials provided with your access invitation.
 
 - _image alt:_ The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data.
