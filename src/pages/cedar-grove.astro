@@ -117,14 +117,6 @@ const tour = [
     alt: 'A Cedar Grove analysis. The question reads: what evidence establishes the need for a community workforce program. A case structure lists need and baseline, who is underserved, funding and peer context, project readiness and local effects, each marked ready for evidence or needing a record. The figure beside it shows per capita income from 1990 to 2024 against the national line, labelled with its period, geography, universe and basis.',
   },
   {
-    id: 'data',
-    kicker: 'One ledger, three layers',
-    title: 'Public data, Cedar collections and your own records, side by side.',
-    body: 'Every measure in view sits in one table with the source that publishes it and the geography it is published for. Where a measure is not published for your area, Grove says so in the row rather than filling the gap, because a case is only as strong as the reader\u2019s ability to check it.',
-    img: shot('grove-data'),
-    alt: 'The Cedar Grove data catalogue. Twenty measures in one ledger, drawn from the Census Bureau, Cedar Press collections and the Bureau of Labor Statistics, each row naming its source and the geography it is published for.',
-  },
-  {
     id: 'map',
     kicker: 'Geography as evidence',
     title: 'The map is its own workspace, not a panel.',
@@ -251,10 +243,18 @@ const jsonLd = [
                     page; the image inside keeps its captured proportions, so
                     what the reader scrolls through is the surface at the size
                     it was photographed. A frame that already fits is not given
-                    a scrollbar it does not need. */}
+                    a scrollbar it does not need.
+
+                    `data-zoom` on both kinds. Scrolling a 1920px capture down
+                    to a 375px phone leaves the application text at about a
+                    fifth of its authored size, and no amount of vertical
+                    scrolling enlarges it — so the tall frames need the route
+                    to full resolution more than the short ones, not less. The
+                    two gestures do not collide: the lightbox opens on a click,
+                    and dragging or wheeling inside the scrollport is neither. */}
                 <figure
                   class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
-                  data-zoom={row.img.tall ? undefined : true}
+                  data-zoom
                 >
                   {
                     row.img.tall ? (

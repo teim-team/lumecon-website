@@ -28,7 +28,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/pricing` | 1495 | Pricing \| Lumecon | 155 |
 | `/cedar` | 471 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
-| `/cedar-grove` | 566 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/cedar-grove` | 618 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/methodology` | 2782 | Methodology \| Lumecon | 167 |
 | `/start` | 1422 | Plan your first analysis \| Lumecon | 165 |
 | `/naics` | 663 | Industry sectors \| Lumecon | 146 |
@@ -41,12 +41,12 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/privacy` | 674 | Privacy Policy \| Lumecon | 99 |
 | `/terms` | 1042 | Terms of Service \| Lumecon | 146 |
 | `/signup` | 248 | Request beta access \| Lumecon | 118 |
-| `/login` | 117 | Log in \| Lumecon | 31 |
+| `/login` | 113 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 233 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15447** | | |
+| **Total** | **15495** | | |
 
 ## Crawler metadata audit
 
@@ -1434,13 +1434,13 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 566
+- **Visible words:** 618
 
 ### Architecture (heading outline)
 
 - **H1** Turn a local question into a defensible case.
-  - **H2** Choose the work. Grove changes with it.
-  - **H2** A figure should not leave its evidence behind.
+  - **H2** The case structure is the screen.
+  - **H2** The map is its own workspace, not a panel.
   - **H2** The collections behind the evidence.
     - **H3** Federal Funding to Indian Country
     - **H3** Federal Register
@@ -1493,29 +1493,31 @@ Cedar Grove connects maintained public data, Lumecon collections and the records
 
 - _link:_ [Request Grove →](#license)
 - _link:_ [See how it works →](#tour)
-- _image alt:_ Cedar Grove Home, asking what are you preparing, with five illustrated purpose plates on an arc. The plate at the front reads Grant case or application and names what it produces: a need statement, cited figures and an evidence appendix.
+- _image alt:_ Cedar Grove Home. A top bar names Home, Analyses, Data, Map and Cedar Impact. The open analyses list holds one feasibility study, and beside it a panel asks what you are preparing and offers five kinds of analysis: a grant case, an SBA 8(a) benefits report, a feasibility study, an economic-impact study, and evidence exploration.
 
 > _section: `Cedar Grove in the product`_
 
 
 > _section: `tour-row`_
 
-CURATED WORKSPACE
+ONE ANALYSIS, WHOLE
 
 
-**H2: Choose the work. Grove changes with it.**
+**H2: The case structure is the screen.**
 
-A grant case, benefits report, feasibility analysis, economic impact analysis or evidence exploration starts with its own task menu, evidence lenses and save action, so the workspace stays focused on the work at hand.
+An analysis opens on its question and the parts of the case that answer it, each one naming the evidence it still needs. The working figure carries its period, geography, universe and basis on the figure itself, and the paragraph the report will use is written beside it, not after it.
 
-- _image alt:_ A Cedar Grove Grant project with a purpose-specific task menu, evidence source shelf, figure and actions to download, inspect or save evidence.
-EVIDENCE THAT TRAVELS
+- _image alt:_ A Cedar Grove analysis. The question reads: what evidence establishes the need for a community workforce program. A case structure lists need and baseline, who is underserved, funding and peer context, project readiness and local effects, each marked ready for evidence or needing a record. The figure beside it shows per capita income from 1990 to 2024 against the national line, labelled with its period, geography, universe and basis.
+_caption:_ Scroll the frame to see the whole surface.
+GEOGRAPHY AS EVIDENCE
 
 
-**H2: A figure should not leave its evidence behind.**
+**H2: The map is its own workspace, not a panel.**
 
-Download the figure and the rows beneath it, open its evidence record or reproduce it in code. Source, vintage, geography and limitations stay attached.
+Where a place sits, who its regional peers are, where the people working there live. Each is a measure with a source and a vintage, read on the map and carried into the analysis with the same provenance as any other figure.
 
-- _image alt:_ Cedar Grove Outputs showing an evidence figure, provenance and export actions.
+- _image alt:_ The Cedar Grove map workspace. Research lenses and measures run down the left, each naming its source and year, and the map marks the project geography in national context against every published tribal area.
+_caption:_ Scroll the frame to see the whole surface.
 
 > _section: `What travels with every number`_
 
@@ -4102,7 +4104,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/login
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 117
+- **Visible words:** 113
 
 ### Architecture (heading outline)
 
@@ -4160,8 +4162,8 @@ Enter your work email and password to continue.
 - _link:_ [Forgot password?](/login?reset=1)
 - _button:_ Log in
 - _button:_ Back to sign in
-- _label:_ OR
-- _link:_ [Continue with Google](https://api.lumecon.ai/auth/google)
+- _label:_ **[conditional]** or
+- _link:_ [Continue with Google](/login?google=1)
 New to Lumecon? Request beta access
 
 
@@ -4480,7 +4482,7 @@ SUBSCRIPTION CONFIRMED
 
 Open Lumecon to review your workspace and begin your first analysis.
 
-- _link:_ [Open Lumecon →](https://app.lumecon.ai)
+- _link:_ [Open Lumecon →](/login)
 Use the account credentials provided with your access invitation.
 
 - _image alt:_ The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data.

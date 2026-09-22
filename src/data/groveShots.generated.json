@@ -6,12 +6,6 @@
   },
   "shots": [
     {
-      "name": "grove-data",
-      "width": 1920,
-      "height": 1080,
-      "tall": true
-    },
-    {
       "name": "grove-home",
       "width": 1920,
       "height": 1080,

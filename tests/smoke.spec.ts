@@ -1417,32 +1417,47 @@ test('cedar grove shows three captures of the product, in one frame, per theme',
   await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('h1')).toContainText('defensible case');
 
-  // Three compositions: the Home carousel in the hero, then two tour rows.
-  // Four would mean the page had drifted back into being a tour of the
-  // navigation, which is what it was cut down from.
+  // Three compositions: Home in the hero, then two tour rows. Four would mean
+  // the page had drifted back into being a tour of the navigation, which is
+  // what it was cut down from.
   await expect(page.locator('.grovepg-hero__shot img')).toHaveCount(1);
   await expect(page.locator('.grovetour .tour-row__shot img')).toHaveCount(2);
 
-  // These captures sit on a persistent dark field regardless of OS theme, so
-  // the page must always select the dark product surface rather than merely
-  // offering it to dark-mode visitors.
+  // The captures are the light set. The page used to run dark bands and pick
+  // the dark surface to sit on them; it is a light page now, and a dark frame
+  // on it would be the heavy low-contrast block that change removed.
   const captures = page.locator('.grovepg-hero__shot img, .grovetour .tour-row__shot img');
   for (const src of await captures.evaluateAll((nodes) =>
     nodes.map((node) => node.getAttribute('src')),
   )) {
-    expect(src).toMatch(/-dark\.webp$/);
+    expect(src).not.toMatch(/-dark\.webp$/);
   }
 
-  // One frame, stated by the file rather than typed into the page: every
-  // capture declares the same intrinsic box, so no row shifts as it lands.
-  const boxes = await page
-    .locator(
-      '.grovepg-hero__shot img, .grovetour .tour-row__shot img',
-    )
-    .evaluateAll((nodes) =>
-      nodes.map((node) => `${node.getAttribute('width')}x${node.getAttribute('height')}`),
-    );
-  expect(new Set(boxes)).toEqual(new Set(['1920x1080']));
+  // Every capture states its own intrinsic box, so no row shifts as it lands.
+  // They are no longer all the same box: an analysis worktable and the map are
+  // taller than 16:9, and the capture refuses to crop them. What has to hold
+  // is that each is 1920 wide and declares a real height, and that anything
+  // taller than the window it sits in is inside a scrollport rather than
+  // squashed into one.
+  const boxes = await captures.evaluateAll((nodes) =>
+    nodes.map((node) => ({
+      width: Number(node.getAttribute('width')),
+      height: Number(node.getAttribute('height')),
+      scrolled: Boolean(node.closest('.grovepg-scroller')),
+    })),
+  );
+  expect(boxes).toHaveLength(3);
+  for (const box of boxes) {
+    expect(box.width).toBe(1920);
+    expect(box.height).toBeGreaterThanOrEqual(1080);
+    expect(box.scrolled).toBe(box.height > 1080);
+  }
+  // At least one, or the scrollport has quietly stopped being exercised.
+  expect(boxes.some((box) => box.scrolled)).toBe(true);
+
+  // A tall frame still reaches full resolution: it is shrunk hardest, so it
+  // needs the lightbox most.
+  await expect(page.locator('.grovetour .tour-row__shot[data-zoom]')).toHaveCount(2);
 });
 
 test('the grove collections open one at a time, by click and by keyboard', async ({ page }) => {
@@ -1517,7 +1532,10 @@ test('cedar grove never names a real place beside a fixture', async ({ page }) =
   }
 });
 
-for (const route of ['/methodology', '/cedar', '/cedar-grove']) {
+// /cedar-grove is not in this loop any more: it has no dark section to print
+// white, because the page is light. Its own contrast test is below, and it
+// covers more than this one did.
+for (const route of ['/methodology', '/cedar']) {
   test(`${route} dark sections retain readable text when printing without backgrounds`, async ({
     page,
   }) => {
@@ -1551,6 +1569,70 @@ for (const route of ['/methodology', '/cedar', '/cedar-grove']) {
     }
   });
 }
+
+test('/cedar-grove reads at 4.5:1 across the page, on screen and in print', async ({ page }) => {
+  // This page used to run three dark bands and was covered by the loop above,
+  // which checked that those bands printed white with legible text. It is a
+  // light page now, so there is no dark section to check — and every colour on
+  // it was restated by hand when the bands went, which is exactly the change
+  // that can leave a heading white on white or a label too pale to read. So
+  // the check widens rather than disappearing: every piece of text on the
+  // page, against the surface actually behind it.
+  for (const media of ['screen', 'print'] as const) {
+    await page.emulateMedia({ media, colorScheme: 'dark', reducedMotion: 'reduce' });
+    await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
+    // The consent banner is its own surface outside main and is hidden in
+    // print anyway, so it is out of scope rather than something to wait out.
+    const failures = await page
+      .locator('main h1, main h2, main h3, main p, main figcaption, main dt, main dd')
+      .evaluateAll((nodes) => {
+        const luminance = (color: string) => {
+          const channels = color
+            .match(/[\d.]+/g)
+            ?.slice(0, 3)
+            .map(Number);
+          if (!channels || channels.length < 3) return null;
+          const linear = channels.map((value) => {
+            const channel = value / 255;
+            return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+          });
+          return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+        };
+        // The nearest ancestor that actually paints, which is the surface the
+        // text is read against. Walking up is what catches a card whose own
+        // background is the thing providing the contrast.
+        const surfaceOf = (node: Element) => {
+          let current: Element | null = node;
+          while (current) {
+            const background = getComputedStyle(current).backgroundColor;
+            const alpha = Number(background.match(/[\d.]+/g)?.[3] ?? 1);
+            if (background && background !== 'transparent' && alpha > 0.5) return background;
+            current = current.parentElement;
+          }
+          return 'rgb(255, 255, 255)';
+        };
+        const bad: string[] = [];
+        for (const node of nodes) {
+          if (!node.textContent?.trim()) continue;
+          const rect = node.getBoundingClientRect();
+          if (!rect.width || !rect.height) continue;
+          const ink = luminance(getComputedStyle(node).color);
+          const paper = luminance(surfaceOf(node));
+          if (ink === null || paper === null) continue;
+          const ratio =
+            (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05);
+          if (ratio < 4.5) {
+            bad.push(
+              `${node.tagName.toLowerCase()} "${node.textContent.trim().slice(0, 48)}" at ${ratio.toFixed(2)}:1`,
+            );
+          }
+        }
+        return bad;
+      });
+
+    expect(failures, `${media}: text below 4.5:1`).toEqual([]);
+  }
+});
 
 test('team page picks a person and shows that person', async ({ page }) => {
   await page.goto('/team', { waitUntil: 'networkidle' });

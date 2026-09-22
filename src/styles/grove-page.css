@@ -14,7 +14,12 @@
      buried the product. The captures are light now and so is the field they
      sit on; the deep colour is kept for the two places that carry weight
      rather than for whole sections. */
-  background: linear-gradient(180deg, #f2f7f7 0%, #ffffff 100%);
+  /* A solid colour under the gradient. A gradient alone leaves
+     `background-color` transparent, so anything asking what surface this text
+     is read against — a contrast check, a reader tool, a print stylesheet —
+     walks past the hero and finds whatever is behind it. */
+  background-color: #f2f7f7;
+  background-image: linear-gradient(180deg, #f2f7f7 0%, #ffffff 100%);
 }
 .grovepg-hero .meth-w {
   /* Above the corner mark the hero now carries, same as Cedar's. */
@@ -533,6 +538,18 @@
     border-color: var(--rule) !important;
     background: #fff !important;
   }
+  /* A printed page cannot operate a scrollport. The frame below the fold of
+     the box would simply be missing from the paper, which is the same
+     cropping this scroller exists to avoid — so on print the box gives up
+     its fixed shape and the whole capture prints. The hint goes with it: it
+     names a gesture nobody can make on paper. */
+  .grovetour .tour-row__shot .grovepg-scroller {
+    aspect-ratio: auto !important;
+    overflow: visible !important;
+  }
+  .grovepg-scroller__hint {
+    display: none !important;
+  }
   /* On paper there is no picker, so every collection prints. A reader with
      the page in their hand cannot click to see the other eleven. */
   .grovepg-atlas__panel[hidden] {
@@ -706,4 +723,56 @@
   .grovepg-scroller__hint::after {
     content: ' Drag inside it.';
   }
+}
+
+/* The Grove page is light in both colour schemes.
+ *
+ * It used to run three dark bands, and `section--dark` pinned dark ink on
+ * them so they read the same whether or not the visitor's OS asked for dark
+ * mode. The bands are light now and that pin came off with them — which left
+ * the mirror-image fault: a visitor with dark mode set got the site's dark
+ * ink tokens on a background that no longer follows them, so the hero
+ * headline measured 1.05:1 against its own field. White on white.
+ *
+ * So the page pins the other way, at `main.grovepg` rather than band by
+ * band: pinning three sections left the closing note below them following the
+ * scheme on its own, at 1.57:1. These are the light values of the same
+ * tokens `section--dark` overrides, stated here rather than left to the media
+ * query, because the page's surfaces are fixed and its text has to be fixed
+ * with them. The screenshots are light captures for the same reason: one
+ * page, one appearance, and a reader who prefers dark elsewhere is not shown
+ * a broken version of this one.
+ */
+.grovepg {
+  --white: #ffffff;
+  --surface: #ffffff;
+  --cream: #f4f8f8;
+  --paper: #eef5f4;
+  --ink: #071126;
+  --ink-2: rgba(7, 17, 38, 0.78);
+  --ink-3: rgba(7, 17, 38, 0.66);
+  --ink-4: rgba(7, 17, 38, 0.54);
+  --navy: #071126;
+  --navy2: rgba(7, 17, 38, 0.72);
+  --navy-soft: rgba(7, 17, 38, 0.64);
+  --rule: rgba(7, 17, 38, 0.12);
+  --rule-strong: rgba(7, 17, 38, 0.22);
+  --surface-edge: rgba(7, 17, 38, 0.08);
+  --surface-glass: rgba(255, 255, 255, 0.86);
+  --surface-glass-strong: rgba(255, 255, 255, 0.95);
+  --ground: #f3f6f8;
+  --ground-bright: #fafcfd;
+  /* The bands below paint their own backgrounds; the gaps between them --
+     the licence section and the bridge under it -- do not, and fell through
+     to `body`, which does follow the scheme. Pinning the tokens above made
+     the ink dark; without this the dark page ground stayed underneath it and
+     the closing note measured 1.05:1. */
+  background-color: #f3f6f8;
+}
+/* The provenance strip sits between two of those bands and is the site's own
+   surface, so it follows the scheme like the rest of the site — except that
+   its labels are small uppercase type, which is where a token tuned for body
+   copy stops being enough. */
+.grovepg-prov__term {
+  color: #0a5f59;
 }
