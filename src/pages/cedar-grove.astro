@@ -104,7 +104,6 @@ const shot = (name: string) => {
 
 const heroShot = {
   img: shot('grove-home'),
-  imgDark: shot('grove-home-dark'),
   alt: 'Cedar Grove Home. A top bar names Home, Analyses, Data, Map and Cedar Impact. The open analyses list holds one feasibility study, and beside it a panel asks what you are preparing and offers five kinds of analysis: a grant case, an SBA 8(a) benefits report, a feasibility study, an economic-impact study, and evidence exploration.',
 };
 
@@ -115,7 +114,6 @@ const tour = [
     title: 'The case structure is the screen.',
     body: 'An analysis opens on its question and the parts of the case that answer it, each one naming the evidence it still needs. The working figure carries its period, geography, universe and basis on the figure itself, and the paragraph the report will use is written beside it, not after it.',
     img: shot('grove-workspace'),
-    imgDark: shot('grove-workspace-dark'),
     alt: 'A Cedar Grove analysis. The question reads: what evidence establishes the need for a community workforce program. A case structure lists need and baseline, who is underserved, funding and peer context, project readiness and local effects, each marked ready for evidence or needing a record. The figure beside it shows per capita income from 1990 to 2024 against the national line, labelled with its period, geography, universe and basis.',
   },
   {
@@ -124,7 +122,6 @@ const tour = [
     title: 'Public data, Cedar collections and your own records, side by side.',
     body: 'Every measure in view sits in one table with the source that publishes it and the geography it is published for. Where a measure is not published for your area, Grove says so in the row rather than filling the gap, because a case is only as strong as the reader\u2019s ability to check it.',
     img: shot('grove-data'),
-    imgDark: shot('grove-data-dark'),
     alt: 'The Cedar Grove data catalogue. Twenty measures in one ledger, drawn from the Census Bureau, Cedar Press collections and the Bureau of Labor Statistics, each row naming its source and the geography it is published for.',
   },
   {
@@ -133,7 +130,6 @@ const tour = [
     title: 'The map is its own workspace, not a panel.',
     body: 'Where a place sits, who its regional peers are, where the people working there live. Each is a measure with a source and a vintage, read on the map and carried into the analysis with the same provenance as any other figure.',
     img: shot('grove-map'),
-    imgDark: shot('grove-map-dark'),
     alt: 'The Cedar Grove map workspace. Research lenses and measures run down the left, each naming its source and year, and the map marks the project geography in national context against every published tribal area.',
   },
 ];
@@ -188,7 +184,7 @@ const jsonLd = [
 >
   <Nav isHome={false} />
   <main class="meth grovepg" id="top" tabindex="-1">
-    <header class="meth-hero grovepg-hero section--dark">
+    <header class="meth-hero grovepg-hero">
       <div class="meth-w">
         {
           /* `data-reveal-group` rather than a `reveal-soft` and a hand-counted
@@ -226,10 +222,10 @@ const jsonLd = [
         }
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
           <img
-            src={heroShot.imgDark.src}
+            src={heroShot.img.src}
             alt={heroShot.alt}
-            width={heroShot.imgDark.width}
-            height={heroShot.imgDark.height}
+            width={heroShot.img.width}
+            height={heroShot.img.height}
             sizes="(max-width: 980px) 100vw, 58vw"
             fetchpriority="high"
             decoding="async"
@@ -238,7 +234,7 @@ const jsonLd = [
       </div>
     </header>
 
-    <section class="grovetour section--dark" id="tour" aria-label="Cedar Grove in the product">
+    <section class="grovetour" id="tour" aria-label="Cedar Grove in the product">
       <div class="meth-w">
         <div class="tour-rows">
           {
@@ -258,10 +254,10 @@ const jsonLd = [
                     a scrollbar it does not need. */}
                 <figure
                   class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
-                  data-zoom={row.imgDark.tall ? undefined : true}
+                  data-zoom={row.img.tall ? undefined : true}
                 >
                   {
-                    row.imgDark.tall ? (
+                    row.img.tall ? (
                       <div
                         class="grovepg-scroller"
                         tabindex="0"
@@ -269,20 +265,20 @@ const jsonLd = [
                         aria-label={`${row.title} Scroll to see the whole surface.`}
                       >
                         <img
-                          src={row.imgDark.src}
+                          src={row.img.src}
                           alt={row.alt}
-                          width={row.imgDark.width}
-                          height={row.imgDark.height}
+                          width={row.img.width}
+                          height={row.img.height}
                           loading="lazy"
                           decoding="async"
                         />
                       </div>
                     ) : (
                       <img
-                        src={row.imgDark.src}
+                        src={row.img.src}
                         alt={row.alt}
-                        width={row.imgDark.width}
-                        height={row.imgDark.height}
+                        width={row.img.width}
+                        height={row.img.height}
                         sizes="(max-width: 900px) 100vw, 55vw"
                         loading="lazy"
                         decoding="async"
@@ -290,7 +286,7 @@ const jsonLd = [
                     )
                   }
                   {
-                    row.imgDark.tall ? (
+                    row.img.tall ? (
                       <figcaption class="grovepg-scroller__hint">
                         Scroll the frame to see the whole surface.
                       </figcaption>
@@ -319,7 +315,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <section class="grovepg-atlas section--dark" id="collections" aria-labelledby="g-collections">
+    <section class="grovepg-atlas" id="collections" aria-labelledby="g-collections">
       <div class="meth-w">
         <div class="grovepg-atlas__head" data-reveal-group>
           <p class="h-kicker">Evidence infrastructure</p>
