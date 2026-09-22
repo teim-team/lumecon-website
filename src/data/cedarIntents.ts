@@ -1157,7 +1157,7 @@ export const INTENTS: CedarIntent[] = [
     answer:
       'Every plan includes the supported U.S. geographies: counties, states, the nation, reservations and trust lands, with no per-geography charge. If your analysis spans multiple or overlapping regions, share the exact boundary with the team so they can confirm how it should be represented.',
     expanded:
-      'Going deeper: counties, states, the nation, reservations and trust lands are included across the plan family. Historical analysis runs from 2015 to the present where the underlying data support it. Multi-region, custom-boundary and overlap questions should be confirmed against the geography and data available for that analysis.',
+      'Going deeper: counties, states, the nation, reservations and trust lands are included across the plan family. Historical analysis runs from 2009 to 2025 where the underlying data support it. Multi-region, custom-boundary and overlap questions should be confirmed against the geography and data available for that analysis.',
   },
   {
     id: 'historical_forward',
@@ -1198,7 +1198,7 @@ export const INTENTS: CedarIntent[] = [
       'pro forma projection',
     ],
     answer:
-      'Historical analysis runs from 2015 to the present where the underlying data support it. For a future project, you can model a stated spending or employment scenario, but the result is a conditional impact estimate rather than a forecast. Keep the period, inputs and assumptions explicit so readers know which kind of analysis they are seeing.',
+      'Historical analysis runs from 2009 to 2025 where the underlying data support it. For a future project, you can model a stated spending or employment scenario, but the result is a conditional impact estimate rather than a forecast. Keep the period, inputs and assumptions explicit so readers know which kind of analysis they are seeing.',
   },
   {
     id: 'where_built',

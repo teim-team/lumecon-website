@@ -63,7 +63,7 @@ Input-output modeling on authoritative public data: U.S. Census (ACS, LODES, QWI
 
 ## Capabilities
 
-Cloud product, with nothing to install. Cedar is built into intake, analysis and reporting. Analysis types include industry, organization, Tribal government, Tribal enterprise and Whole Nation analysis. Historical analysis covers 2015 to present where the underlying data support it. Exports include workbook (XLSX), CSV tables and a printable summary.
+Cloud product, with nothing to install. Cedar is built into intake, analysis and reporting. Analysis types include industry, organization, Tribal government, Tribal enterprise and Whole Nation analysis. Historical analysis covers 2009 to 2025 where the underlying data support it. Exports include workbook (XLSX), CSV tables and a printable summary.
 
 Security: Lumecon is formalizing its security program against the AICPA Trust Services Criteria, with a future SOC 2 Type II examination as the target. Lumecon has not completed a SOC 2 examination and does not currently have a SOC 2 report. Current hosting, access-control, encryption, retention, subprocessor and AI-provider arrangements are documented during procurement before sensitive records move. See https://lumecon.ai/security.
 

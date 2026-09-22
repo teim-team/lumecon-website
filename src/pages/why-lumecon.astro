@@ -73,7 +73,12 @@ const description =
 /* The entry price is read, never typed. A number restated in prose is a
    number that drifts from /pricing the first time one of them changes. */
 const ENTRY = PLANS[0];
-const SAPLING = PLANS.find((p) => p.clientWork) ?? PLANS[1];
+/* Both client-work tiers, because the note names two and a page that prices
+   only one misprices the other. Codex on this pull request: appending a single
+   `at {price} a year` put Sapling's $2,500 on a sentence about Tree. */
+const CLIENT_TIERS = PLANS.filter((p) => p.clientWork);
+const SAPLING = CLIENT_TIERS[0] ?? PLANS[1];
+const TREE = CLIENT_TIERS[CLIENT_TIERS.length - 1] ?? PLANS[PLANS.length - 1];
 
 const INCLUDED = [
   {
@@ -287,7 +292,8 @@ const jsonLd = [
               shows it from; only the price is added, because the note
               names the plan but not what it costs. */}
           <p class="why-price__foot reveal-soft">
-            {CLIENT_WORK.note.replace(/\.$/, '')}, at {SAPLING.price} a year.{' '}
+            {CLIENT_WORK.note} {SAPLING.name} is {SAPLING.price} a year, {TREE.name} is{' '}
+            {TREE.price}.{' '}
             <a class="inline-link" href="/pricing">See every plan and what it includes</a>.
           </p>
         </div>
