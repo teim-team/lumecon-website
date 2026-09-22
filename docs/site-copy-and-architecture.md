@@ -28,7 +28,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/pricing` | 1495 | Pricing \| Lumecon | 155 |
 | `/cedar` | 471 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
-| `/cedar-grove` | 566 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/cedar-grove` | 920 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/methodology` | 2782 | Methodology \| Lumecon | 167 |
 | `/start` | 1422 | Plan your first analysis \| Lumecon | 165 |
 | `/naics` | 663 | Industry sectors \| Lumecon | 146 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15447** | | |
+| **Total** | **15801** | | |
 
 ## Crawler metadata audit
 
@@ -1434,13 +1434,15 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 566
+- **Visible words:** 920
 
 ### Architecture (heading outline)
 
 - **H1** Turn a local question into a defensible case.
-  - **H2** Choose the work. Grove changes with it.
-  - **H2** A figure should not leave its evidence behind.
+  - **H2** Three kinds of evidence, kept apart
+  - **H2** Every case your organization has open.
+  - **H2** See the geography before you generalize it.
+  - **H2** Give reviewers the figure and the record behind it.
   - **H2** The collections behind the evidence.
     - **H3** Federal Funding to Indian Country
     - **H3** Federal Register
@@ -1489,33 +1491,56 @@ CEDAR GROVE
 
 **H1: Turn a local question into a defensible case.**
 
-Cedar Grove connects maintained public data, Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, so a number can be checked, cited and reproduced by the people who have to stand behind it.
+Cedar Grove brings maintained public data, Lumecon collections and the records your organization governs into one project workspace. Build the evidence a grant, benefits report, feasibility study or economic impact analysis needs, then keep the source, release, geography, definition and limits attached to every figure.
 
 - _link:_ [Request Grove →](#license)
-- _link:_ [See how it works →](#tour)
-- _image alt:_ Cedar Grove Home, asking what are you preparing, with five illustrated purpose plates on an arc. The plate at the front reads Grant case or application and names what it produces: a need statement, cited figures and an evidence appendix.
+- _link:_ [See the workspace →](#tour)
+- _image alt:_ A Cedar Grove analysis. The question reads: what evidence establishes the need for a community workforce program. A case structure lists need and baseline, who is underserved, funding and peer context, project readiness and local effects, each marked ready for evidence or needing a record. The figure beside it shows per capita income from 1990 to 2024 against the national line, labelled with its period, geography, universe and basis.
+_caption:_ One analysis, open on its question and the parts of the case that answer it. Shown with sample data.
+
+> _section: `meth-sec`_
+
+
+**H2: Three kinds of evidence, kept apart**
+
+A case fails review when a number is asked to prove something its source cannot support. Grove keeps the three layers distinct on the figure, in the evidence log and in every export, so what a sentence rests on travels with it.
+
+- PUBLISHED, HARMONIZED Maintained public data Baselines, denominators, trends and geography, read the same way across places and years so a comparison is a comparison. It establishes public conditions for a published geography, and nothing about your organization.
+- MAINTAINED CONTEXT Cedar collections Comparable organizations, awards, entities, policy and events that public tables do not carry on their own, each arriving with its own source and terms. It establishes what is true around you, not what is true inside you.
+- YOURS, AND ONLY YOURS TO RELEASE The records you govern Program, operating, budget and qualitative evidence your organization holds. It is the only layer that can settle a local fact about you, which is why Grove asks for it by name instead of letting a public average stand in.
 
 > _section: `Cedar Grove in the product`_
 
 
 > _section: `tour-row`_
 
-CURATED WORKSPACE
+PROJECT WORKSPACE
 
 
-**H2: Choose the work. Grove changes with it.**
+**H2: Every case your organization has open.**
 
-A grant case, benefits report, feasibility analysis, economic impact analysis or evidence exploration starts with its own task menu, evidence lenses and save action, so the workspace stays focused on the work at hand.
+Grove opens on the work in progress rather than on an empty page. Each analysis keeps its purpose, its place and the point it reached, so picking one up again does not start with working out what it was for.
 
-- _image alt:_ A Cedar Grove Grant project with a purpose-specific task menu, evidence source shelf, figure and actions to download, inspect or save evidence.
+- _image alt:_ Cedar Grove Home. A top bar names Home, Analyses, Data, Map and Cedar Impact. The open analyses list holds one feasibility study, and beside it a panel asks what you are preparing and offers five kinds of analysis: a grant case, an SBA 8(a) benefits report, a feasibility study, an economic-impact study, and evidence exploration.
+_caption:_ The work already under way, and the five kinds of case Grove can open. Shown with sample data.
+GEOGRAPHY AS EVIDENCE
+
+
+**H2: See the geography before you generalize it.**
+
+Where a place sits, who its regional peers are, where the people working there live. Each is a measure with its own source and vintage, read at the scale the evidence supports and carried into the analysis with the provenance it already had.
+
+- _image alt:_ The Cedar Grove map workspace. Research lenses and measures run down the left, each naming its source and year, and the map marks the project geography in national context against every published tribal area.
+_caption:_ A dedicated map workspace, not a panel beside a chart. Shown with an invented boundary.
 EVIDENCE THAT TRAVELS
 
 
-**H2: A figure should not leave its evidence behind.**
+**H2: Give reviewers the figure and the record behind it.**
 
-Download the figure and the rows beneath it, open its evidence record or reproduce it in code. Source, vintage, geography and limitations stay attached.
+The figure carries its period, geography, universe and basis on its face. The paragraph the report will use is written beside it, in your words, and saving it files the figure in the evidence log with its source and its limitation still attached, so a colleague, funder or board can read the case rather than rebuild it.
 
-- _image alt:_ Cedar Grove Outputs showing an evidence figure, provenance and export actions.
+- _image alt:_ The lower half of a Cedar Grove analysis. A per capita income figure is labelled with its period, geography, universe and basis. Below it a box invites the paragraph the report will carry, with controls to inspect the rows and save the figure to the record, and a sources band naming the maintained public data and the organization record behind it.
+_caption:_ The paragraph is written against the figure, and files with it. Shown with sample data.
 
 > _section: `What travels with every number`_
 
@@ -1533,7 +1558,7 @@ EVIDENCE INFRASTRUCTURE
 
 **H2: The collections behind the evidence.**
 
-Twelve collections. Open one to see what it contributes, what Lumecon resolved in it, how far back it reaches and what its records permit.
+Cedar collections add maintained context that public tables do not provide on their own. Open one to see what it contributes, how Lumecon has resolved it, its coverage and the terms that govern the records.
 
 - Federal Funding
 - Federal Register
@@ -1751,7 +1776,7 @@ A Grove belongs to the organization, not to a seat. Everyone works from the same
 
 Onboarding is done with you. We anchor Grove to the places that matter, connect the public programs that publish them and set up the records you want layered over the gaps.
 
-Grove stands on its own. Tree adds Cedar Impact and Cedar Commons beside the same evidence base. Compare plans.
+Grove stands on its own. In a Tree account, Cedar Impact and Cedar Commons work beside the same evidence base. Compare plans.
 
 $2,500 per organization, per year
 
@@ -1763,7 +1788,7 @@ $2,500 per organization, per year
 - _link:_ [Request Grove →](/signup?product=cedar-grove)
 Prefer to talk first? contact@lumecon.ai
 
-Also from Lumecon. Use Grove to prepare evidence for Cedar Impact, then carry the modeled result back with its assumptions and sources intact.
+Also from Lumecon. Use Grove to prepare evidence for Cedar Impact, then attach a completed impact result to the same project with its approved assumptions and source trail intact.
 
 - _link:_ [See Cedar Impact →](/#product)
 

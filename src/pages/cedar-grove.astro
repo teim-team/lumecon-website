@@ -2,10 +2,22 @@
 /**
  * /cedar-grove — Cedar Grove by Lumecon.
  *
- * Section rhythm: navy hero with the product's Home carousel; deep teal band
- * carrying two more compositions of the running application, all three in one
- * 1920x1080 frame; pale provenance strip; deep ink atlas of the collections;
- * pale licence panel with the bridge to Cedar Impact.
+ * SECTION RHYTHM, AND WHOSE IT IS
+ * This page is built on /cedar-commons's skeleton on purpose: navy hero with
+ * copy left and one capture right, then a definition beat with no picture,
+ * then alternating acts, then a reference band, then the licence. A reader
+ * moving between the product pages should recognise the furniture; the
+ * differentiation is what each beat says, not that each page invents its own
+ * shape. Commons defines who may see what. Grove defines which of three kinds
+ * of evidence a sentence is resting on.
+ *
+ * THE HERO IS BRAND SURFACE, NOT A THEME
+ * The navy field is the material /cedar and /cedar-commons open on, and it is
+ * deliberately independent of OS colour preference. That is a different thing
+ * from the page having a dark theme, and conflating the two cost a pass: the
+ * hero was flattened to a pale field, which took the page out of the set it
+ * belongs to. The bands below the hero are light and stay light. A smoke test
+ * pins the hero to Commons' own gradient so this cannot drift back quietly.
  *
  * THE SHOTS ARE CAPTURES, AND THE WORKSPACE IN THEM IS FICTIONAL
  * Every product shot here is a screenshot of the running app, on the same
@@ -17,36 +29,50 @@
  * real nations under numbers that are fixtures. The capture script now refuses
  * to shoot a surface whose text names a real place.
  *
+ * FOUR FRAMES, AND WHY THE WORKTABLE IS TWO OF THEM
+ * The analysis worktable is 1634px tall at capture width, and the page used to
+ * show it through a 16:9 window that scrolled. That asked a reader to operate
+ * a control before they could see the product, and printed as its own top
+ * third. It is also two arguments stacked, so it is cut into two landscape
+ * frames at capture time: the top poses the case, and it is the hero; the
+ * bottom is the figure with the paragraph a report will carry, and it is the
+ * last act. Every frame here is now an ordinary figure at its own measured
+ * size, and every one carries its sample-data disclosure inside the frame.
+ *
+ * THE LEDGER THAT IS NOT HERE
+ * The data workspace is the surface that best shows the three evidence layers
+ * in one table, and it cannot be photographed: its source column names an
+ * unannounced product thirteen times, and the name ships in an image a crawler
+ * reads. The definition beat tells that story in prose instead, which is also
+ * why this page has a no-picture section where Commons has one. See the note
+ * in the app repository's capture script for the two ways that frame becomes
+ * publishable.
+ *
  * WHERE THE PIPELINE LIVES
  * In the app repository, at scripts/screenshots/capture-grove-marketing.mjs,
  * because it drives the running product and its guards have to read the
  * product's own data. It writes public/app/*.webp and the manifest below. It
  * was in this repository and could not see what it was photographing.
  *
- * THE MAP THAT IS NOT HERE
+ * THE MAP GEOMETRY THAT IS NOT HERE
  * A dense evidence map of the Navajo Nation held the hero, drawn from Census
  * TIGER/Line geometry, correct in every particular, answering a question
- * nobody had asked yet. The Home carousel holds it now. The geometry was never
- * the problem, so it is kept rather than deleted: src/data/groveMap.generated.json
- * here, written by scripts/build-grove-map-geometry.mjs in the app repository,
- * unreferenced by any page until the map earns a place again.
+ * nobody had asked yet. The product's own map workspace holds that beat now.
+ * The geometry was never the problem, so it is kept rather than deleted:
+ * src/data/groveMap.generated.json here, written by
+ * scripts/build-grove-map-geometry.mjs in the app repository, unreferenced by
+ * any page until it earns a place again.
  *
  * THE SCRIPT ON THIS PAGE
- * One picker, for the atlas. This page was script-free for a while: the
- * helper was wired twice, for the map's topic selector and the collection
- * registry's detail panel, and when the map moved and the registry flattened
- * to marks both went. The registry is back by request, so the picker is too,
- * and this note replaces the one that said otherwise.
+ * One picker, for the atlas. Progressive enhancement, the same shape as
+ * /start's capability panels: every panel ships open and the script collapses
+ * them into a picker. With no script the section is a long, complete, readable
+ * list rather than twelve unlabelled icons.
  *
- * The flattening lost something real. Each collection carries what it
- * contributes, what Lumecon resolved in it, its coverage floor, its sources
- * and its terms, and the atlas showed a mark and six characters of name. The
- * detail is the argument the page is making, so it is readable again.
- *
- * Progressive enhancement, the same shape as /start's capability panels:
- * every panel ships open and the script collapses them into a picker. With no
- * script the section is a long, complete, readable list rather than twelve
- * unlabelled icons. Three compositions are captures; the atlas is marks.
+ * The earlier flattening of that section lost something real. Each collection
+ * carries what it contributes, what Lumecon resolved in it, its coverage floor,
+ * its sources and its terms, and the atlas showed a mark and six characters of
+ * name. The detail is the argument the page is making, so it is readable again.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -75,40 +101,85 @@ import '../styles/grove-page.css';
  * The frame is 1920x1080, the frame every other product shot on this site
  * already uses; see the three acts on /cedar.
  */
-const FRAME = GROVE_SHOTS.frame;
+
+/**
+ * One captured app frame, with the size it was actually photographed at.
+ *
+ * The manifest used to be a list of names and every frame was assumed to be
+ * 16:9. Three of the four surfaces are not: a worktable holds a question, a
+ * case structure, a figure and a brief, and the capture refuses to crop them.
+ * So the manifest carries each frame's real pixel size and the page lays out
+ * from that rather than from an assumption, which is also what lets a tall
+ * frame be presented as something the reader scrolls.
+ */
 const shot = (name: string) => {
-  if (!GROVE_SHOTS.shots.includes(name)) {
+  const found = GROVE_SHOTS.shots.find((entry) => entry.name === name);
+  if (!found) {
     throw new Error(
       `cedar-grove: no capture named ${name}; re-run capture-grove-marketing.mjs in the app repository`,
     );
   }
-  return `/app/${name}.webp`;
+  return { src: `/app/${name}.webp`, width: found.width, height: found.height };
 };
 
 const heroShot = {
-  img: shot('grove-home'),
-  imgDark: shot('grove-home-dark'),
-  alt: 'Cedar Grove Home, asking what are you preparing, with five illustrated purpose plates on an arc. The plate at the front reads Grant case or application and names what it produces: a need statement, cited figures and an evidence appendix.',
+  img: shot('grove-analysis'),
+  alt: 'A Cedar Grove analysis. The question reads: what evidence establishes the need for a community workforce program. A case structure lists need and baseline, who is underserved, funding and peer context, project readiness and local effects, each marked ready for evidence or needing a record. The figure beside it shows per capita income from 1990 to 2024 against the national line, labelled with its period, geography, universe and basis.',
+  caption: 'One analysis, open on its question and the parts of the case that answer it. Shown with sample data.',
 };
+
+/* The definition beat, and the one section on this page with no picture.
+   Cedar Commons earns its equivalent section by defining who may see what;
+   Grove's question is different and so is the answer: not who, but which of
+   three kinds of evidence a sentence is resting on, and what each kind is
+   entitled to settle. This is also where the connected-data story is told,
+   because the surface that shows it best cannot be photographed yet. See the
+   note in the app repository's capture script. */
+const LAYERS = [
+  {
+    k: 'Maintained public data',
+    field: 'Published, harmonized',
+    b: 'Baselines, denominators, trends and geography, read the same way across places and years so a comparison is a comparison. It establishes public conditions for a published geography, and nothing about your organization.',
+  },
+  {
+    k: 'Cedar collections',
+    field: 'Maintained context',
+    b: 'Comparable organizations, awards, entities, policy and events that public tables do not carry on their own, each arriving with its own source and terms. It establishes what is true around you, not what is true inside you.',
+  },
+  {
+    k: 'The records you govern',
+    field: 'Yours, and only yours to release',
+    b: 'Program, operating, budget and qualitative evidence your organization holds. It is the only layer that can settle a local fact about you, which is why Grove asks for it by name instead of letting a public average stand in.',
+  },
+];
 
 const tour = [
   {
-    id: 'workspace',
-    kicker: 'Curated workspace',
-    title: 'Choose the work. Grove changes with it.',
-    body: 'A grant case, benefits report, feasibility analysis, economic impact analysis or evidence exploration starts with its own task menu, evidence lenses and save action, so the workspace stays focused on the work at hand.',
-    img: shot('grove-workspace'),
-    imgDark: shot('grove-workspace-dark'),
-    alt: 'A Cedar Grove Grant project with a purpose-specific task menu, evidence source shelf, figure and actions to download, inspect or save evidence.',
+    id: 'home',
+    kicker: 'Project workspace',
+    title: 'Every case your organization has open.',
+    body: 'Grove opens on the work in progress rather than on an empty page. Each analysis keeps its purpose, its place and the point it reached, so picking one up again does not start with working out what it was for.',
+    img: shot('grove-home'),
+    alt: 'Cedar Grove Home. A top bar names Home, Analyses, Data, Map and Cedar Impact. The open analyses list holds one feasibility study, and beside it a panel asks what you are preparing and offers five kinds of analysis: a grant case, an SBA 8(a) benefits report, a feasibility study, an economic-impact study, and evidence exploration.',
+    caption: 'The work already under way, and the five kinds of case Grove can open. Shown with sample data.',
   },
   {
-    id: 'outputs',
+    id: 'map',
+    kicker: 'Geography as evidence',
+    title: 'See the geography before you generalize it.',
+    body: 'Where a place sits, who its regional peers are, where the people working there live. Each is a measure with its own source and vintage, read at the scale the evidence supports and carried into the analysis with the provenance it already had.',
+    img: shot('grove-map'),
+    alt: 'The Cedar Grove map workspace. Research lenses and measures run down the left, each naming its source and year, and the map marks the project geography in national context against every published tribal area.',
+    caption: 'A dedicated map workspace, not a panel beside a chart. Shown with an invented boundary.',
+  },
+  {
+    id: 'evidence',
     kicker: 'Evidence that travels',
-    title: 'A figure should not leave its evidence behind.',
-    body: 'Download the figure and the rows beneath it, open its evidence record or reproduce it in code. Source, vintage, geography and limitations stay attached.',
-    img: shot('grove-outputs'),
-    imgDark: shot('grove-outputs-dark'),
-    alt: 'Cedar Grove Outputs showing an evidence figure, provenance and export actions.',
+    title: 'Give reviewers the figure and the record behind it.',
+    body: 'The figure carries its period, geography, universe and basis on its face. The paragraph the report will use is written beside it, in your words, and saving it files the figure in the evidence log with its source and its limitation still attached, so a colleague, funder or board can read the case rather than rebuild it.',
+    img: shot('grove-evidence'),
+    alt: 'The lower half of a Cedar Grove analysis. A per capita income figure is labelled with its period, geography, universe and basis. Below it a box invites the paragraph the report will carry, with controls to inspect the rows and save the figure to the record, and a sources band naming the maintained public data and the organization record behind it.',
+    caption: 'The paragraph is written against the figure, and files with it. Shown with sample data.',
   },
 ];
 
@@ -177,42 +248,77 @@ const jsonLd = [
           <p class="h-kicker">Cedar Grove</p>
           <h1 class="meth-hero__title">Turn a local question into a defensible case.</h1>
           <p class="meth-hero__lede">
-            Cedar Grove connects maintained public data, Lumecon collections and the records your
-            organization governs. Every finding stays connected to its source, geography, method,
-            vintage and limits, so a number can be checked, cited and reproduced by the people who
-            have to stand behind it.
+            Cedar Grove brings maintained public data, Lumecon collections and the records your
+            organization governs into one project workspace. Build the evidence a grant, benefits
+            report, feasibility study or economic impact analysis needs, then keep the source,
+            release, geography, definition and limits attached to every figure.
           </p>
           <div class="grovepg-cta">
             <a class="btn2 btn2--primary" href="#license">
               Request Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
             </a>
             <a class="btn2 btn2--card" href="#tour">
-              See how it works <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+              See the workspace <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </div>
 
         {
-          /* Dark product captures belong on this persistent dark field. This
-            is deliberately independent of OS color preference: the page
-            material stays dark in both themes, and a bright app frame here
-            breaks the composition. */
+          /* The hero band is the house surface every product page opens on:
+            navy, copy at the left, one substantial capture at the right. It
+            is deliberately independent of OS color preference, which is a
+            different thing from the page having a dark theme. The bands below
+            are light and stay light; this one is brand material, and a light
+            field here would take the page out of the set /cedar and
+            /cedar-commons belong to. */
         }
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
           <img
-            src={heroShot.imgDark}
+            src={heroShot.img.src}
             alt={heroShot.alt}
-            width={FRAME.width}
-            height={FRAME.height}
+            width={heroShot.img.width}
+            height={heroShot.img.height}
             sizes="(max-width: 980px) 100vw, 58vw"
             fetchpriority="high"
             decoding="async"
           />
+          <figcaption>{heroShot.caption}</figcaption>
         </figure>
       </div>
     </header>
 
-    <section class="grovetour section--dark" id="tour" aria-label="Cedar Grove in the product">
+    {
+      /* The definition beat, the one section here with no picture, in the
+        place /cedar-commons puts its own. Commons defines who may see what;
+        Grove's question is which of three kinds of evidence a sentence is
+        resting on, and what each kind is entitled to settle. Short enough to
+        read before the page asks anyone to look at anything. */
+    }
+    <section class="meth-sec grovepg-layers" aria-labelledby="g-layers">
+      <div class="meth-w">
+        <div class="meth-sec__head">
+          <h2 id="g-layers">Three kinds of evidence, kept apart</h2>
+          <p class="meth-sec__lede">
+            A case fails review when a number is asked to prove something its source cannot
+            support. Grove keeps the three layers distinct on the figure, in the evidence log and
+            in every export, so what a sentence rests on travels with it.
+          </p>
+        </div>
+        <ul class="grovepg-layers__list" data-reveal-group>
+          {
+            LAYERS.map((layer) => (
+              <li class="grovepg-layers__item">
+                <p class="grovepg-layers__field">{layer.field}</p>
+                <p class="grovepg-layers__term">{layer.k}</p>
+                <p class="grovepg-layers__gloss">{layer.b}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="grovetour" id="tour" aria-label="Cedar Grove in the product">
       <div class="meth-w">
         <div class="tour-rows">
           {
@@ -223,19 +329,28 @@ const jsonLd = [
                   <h2 class="tour-row__title">{row.title}</h2>
                   <p class="tour-row__body">{row.body}</p>
                 </div>
+                {/* Every frame is a landscape capture now, so each one is
+                    an ordinary figure: no scrollport, no instruction to
+                    operate it, nothing clipped in print. The worktable used to
+                    be one 1634px surface shown through a 16:9 window that
+                    scrolled; it is cut into its two real halves at capture
+                    time instead, and they are the hero and the last act here.
+                    `data-zoom` still opens the full 1920px file, which is the
+                    only route to readable application text on a phone. */}
                 <figure
                   class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
                   data-zoom
                 >
                   <img
-                    src={row.imgDark}
+                    src={row.img.src}
                     alt={row.alt}
-                    width={FRAME.width}
-                    height={FRAME.height}
+                    width={row.img.width}
+                    height={row.img.height}
                     sizes="(max-width: 900px) 100vw, 55vw"
                     loading="lazy"
                     decoding="async"
                   />
+                  <figcaption>{row.caption}</figcaption>
                 </figure>
               </article>
             ))
@@ -259,7 +374,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <section class="grovepg-atlas section--dark" id="collections" aria-labelledby="g-collections">
+    <section class="grovepg-atlas" id="collections" aria-labelledby="g-collections">
       <div class="meth-w">
         <div class="grovepg-atlas__head" data-reveal-group>
           <p class="h-kicker">Evidence infrastructure</p>
@@ -268,8 +383,9 @@ const jsonLd = [
           </h2>
         </div>
         <p class="grovepg-atlas__lede">
-          Twelve collections. Open one to see what it contributes, what Lumecon resolved in it,
-          how far back it reaches and what its records permit.
+          Cedar collections add maintained context that public tables do not provide on their
+          own. Open one to see what it contributes, how Lumecon has resolved it, its coverage and
+          the terms that govern the records.
         </p>
 
         <div class="grovepg-atlas__reg" data-atlas>
@@ -360,8 +476,8 @@ const jsonLd = [
               gaps.
             </p>
             <p class="grovepg-license__note">
-              Grove stands on its own. Tree adds Cedar Impact and Cedar Commons beside the same
-              evidence base. <a class="inline-link" href="/pricing">Compare plans.</a>
+              Grove stands on its own. In a Tree account, Cedar Impact and Cedar Commons work
+              beside the same evidence base. <a class="inline-link" href="/pricing">Compare plans.</a>
             </p>
           </div>
           <div>
@@ -388,8 +504,9 @@ const jsonLd = [
 
         <div class="grovepg-bridge reveal-soft">
           <p>
-            <strong>Also from Lumecon.</strong> Use Grove to prepare evidence for Cedar Impact, then carry
-            the modeled result back with its assumptions and sources intact.
+            <strong>Also from Lumecon.</strong> Use Grove to prepare evidence for Cedar Impact, then
+            attach a completed impact result to the same project with its approved assumptions and
+            source trail intact.
           </p>
           <a class="btn2 btn2--card" href="/#product">
             See Cedar Impact <span class="btn2-arrow" aria-hidden="true">&rarr;</span>

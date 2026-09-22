@@ -7,9 +7,18 @@
   /* 13vh of top padding is generous on a tall monitor and expensive on a
      laptop, where it is the difference between the CTA being visible and not.
      It costs more here than it did over the map: the hero now carries a
-     1920x1080 capture in the wider column, so the fold is lower to begin with. */
+     1920x1200 capture in the wider column, so the fold is lower to begin with. */
   padding: clamp(5rem, 9vh, 10rem) 0 clamp(4rem, 8vw, 6rem);
-  background: #071126;
+  /* The house product-page hero, the same material /cedar and /cedar-commons
+     open on: navy, with a teal wash off the top left. This is brand surface,
+     not a dark theme -- it does not follow OS colour preference, and the
+     bands below it are light and stay light. A pass that flattened this to a
+     pale field took the page out of the set it belongs to, which is the one
+     thing about the hero nobody had asked to change. */
+  background-color: #071126;
+  background-image:
+    linear-gradient(125deg, rgba(15, 181, 165, 0.16), transparent 42%),
+    linear-gradient(145deg, #0b1730 0%, #071126 62%, #07353b 100%);
 }
 .grovepg-hero .meth-w {
   /* Above the corner mark the hero now carries, same as Cedar's. */
@@ -23,12 +32,11 @@
 .grovepg-hero__copy {
   min-width: 0;
 }
-.grovepg-hero .h-kicker,
 .grovepg-hero .meth-hero__title {
-  color: #fff;
+  color: #ffffff;
 }
 .grovepg-hero .h-kicker {
-  color: #73e2d6;
+  color: #5fd9cc;
 }
 .grovepg-hero .meth-hero__title {
   max-width: 15ch;
@@ -46,9 +54,9 @@
   gap: 0.75rem;
 }
 .grovepg-hero .btn2--card {
-  border-color: rgba(115, 226, 214, 0.34);
-  color: #d9f4f0;
-  background: rgba(7, 60, 59, 0.5);
+  border-color: rgba(95, 217, 204, 0.38);
+  color: #d7f5f0;
+  background: rgba(15, 181, 165, 0.14);
 }
 /* The secondary hero action is re-skinned for the navy band, so its hover
    has to be re-stated here too — and with it the focus twin, because a
@@ -56,18 +64,38 @@
    transition is inherited from .btn2 in home.css. */
 .grovepg-hero .btn2--card:hover,
 .grovepg-hero .btn2--card:focus-visible {
-  border-color: rgba(115, 226, 214, 0.64);
-  background: rgba(7, 60, 59, 0.76);
+  border-color: rgba(6, 54, 55, 0.46);
+  background: rgba(115, 226, 214, 0.26);
 }
 .grovepg-hero__shot {
   overflow: hidden;
   margin: 0;
-  border: 1px solid rgba(115, 226, 214, 0.38);
+  border: 1px solid rgba(95, 217, 204, 0.38);
   border-radius: var(--radius-frame);
   background: #f8fbfb;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.82),
-    0 32px 72px -34px rgba(0, 0, 0, 0.92);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(15, 181, 165, 0.08),
+    0 40px 96px -38px rgba(0, 0, 0, 0.9);
+}
+/* The caption rides inside the frame rather than under it, so the capture
+   reads as one object and the sample-data disclosure cannot be separated
+   from the picture it is disclosing. Same construction as /cedar-commons. */
+.grovepg-hero__shot figcaption {
+  padding: 0.78rem 1rem;
+  border-top: 1px solid rgba(233, 242, 250, 0.14);
+  background: rgba(8, 17, 38, 0.94);
+  color: rgba(233, 242, 250, 0.72);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.grovetour .tour-row__shot figcaption {
+  padding: 0.72rem 0.95rem;
+  border-top: 1px solid var(--rule);
+  background: rgba(7, 17, 38, 0.035);
+  color: var(--ink-3);
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 .grovepg-hero__shot img,
 .grovetour .tour-row__shot img {
@@ -89,24 +117,73 @@
    beside a paragraph. */
 .grovetour {
   padding: clamp(3.25rem, 6vw, 4.75rem) 0 clamp(3.75rem, 7vw, 5.75rem);
-  background: #063637;
+  background: #eef5f4;
 }
 .grovetour .tour-row__text {
   padding: clamp(1.6rem, 2.6vw, 2.2rem);
-  background: #052022;
-  border-color: rgba(115, 226, 214, 0.28);
+  background: #ffffff;
+  border-color: rgba(6, 54, 55, 0.14);
   box-shadow:
-    inset 0 1px 0 rgba(160, 240, 230, 0.13),
-    0 20px 48px -28px rgba(0, 0, 0, 0.76);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 20px 44px -30px rgba(6, 54, 55, 0.46);
 }
 .grovetour .tour-row__kicker {
-  color: #73e2d6;
+  color: #0a6a63;
 }
 .grovetour .tour-row__shot {
   overflow: hidden;
-  border-color: rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 22px 48px -28px rgba(0, 0, 0, 0.72);
+  border-color: rgba(6, 54, 55, 0.14);
+  background: #ffffff;
+  box-shadow: 0 22px 44px -30px rgba(6, 54, 55, 0.46);
+}
+
+/* The definition beat. Three columns of plain type, no picture and no card,
+   in the place /cedar-commons puts its own two-column equivalent. It is the
+   same furniture on purpose: a reader moving between the product pages should
+   recognise the beat. What differs is the question it answers, which is the
+   only differentiation a shared skeleton needs. */
+.grovepg-layers {
+  background: var(--surface, #fff);
+  border-bottom: 1px solid var(--rule);
+}
+.grovepg-layers__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.6rem, 3.4vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.grovepg-layers__item {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+.grovepg-layers__field {
+  margin: 0 0 0.5rem;
+  color: #0a5f59;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.grovepg-layers__term {
+  margin: 0 0 0.45rem;
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+.grovepg-layers__gloss {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+@media (max-width: 900px) {
+  .grovepg-layers__list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 /* A compact specification under the screenshots, not another card deck. */
@@ -153,15 +230,15 @@
    second browse interface. */
 .grovepg-atlas {
   padding: clamp(3rem, 6vw, 4.5rem) 0;
-  background: #081329;
+  background: #f4f8f8;
 }
 .grovepg-atlas .h-kicker {
-  color: #73e2d6;
+  color: #0a6a63;
 }
 .grovepg-atlas__title {
   max-width: 26ch;
   margin: 0 0 clamp(2rem, 4vw, 2.8rem);
-  color: #fff;
+  color: #071126;
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 2.8vw, 2.2rem);
   font-weight: 600;
@@ -176,9 +253,9 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  border: 1px solid rgba(115, 226, 214, 0.18);
+  border: 1px solid rgba(6, 54, 55, 0.14);
   border-radius: var(--radius-frame);
-  background: rgba(115, 226, 214, 0.18);
+  background: rgba(6, 54, 55, 0.12);
 }
 .grovepg-atlas__cell {
   display: flex;
@@ -188,8 +265,8 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 1.3rem 0.75rem;
-  background: #081329;
-  color: #73e2d6;
+  background: #ffffff;
+  color: #0a6a63;
   text-align: center;
 }
 .grovepg-atlas__mark {
@@ -198,7 +275,7 @@
   flex: none;
 }
 .grovepg-atlas__name {
-  color: rgba(233, 242, 250, 0.74);
+  color: rgba(7, 17, 38, 0.72);
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
@@ -529,6 +606,11 @@
     border-color: var(--rule) !important;
     background: #fff !important;
   }
+  /* A printed page cannot operate a scrollport. The frame below the fold of
+     the box would simply be missing from the paper, which is the same
+     cropping this scroller exists to avoid — so on print the box gives up
+     its fixed shape and the whole capture prints. The hint goes with it: it
+     names a gesture nobody can make on paper. */
   /* On paper there is no picker, so every collection prints. A reader with
      the page in their hand cannot click to see the other eleven. */
   .grovepg-atlas__panel[hidden] {
@@ -546,7 +628,7 @@
 .grovepg-atlas__lede {
   max-width: 60ch;
   margin: -1.4rem 0 clamp(1.6rem, 3vw, 2.2rem);
-  color: rgba(233, 242, 250, 0.72);
+  color: rgba(7, 17, 38, 0.72);
   line-height: 1.6;
 }
 /* The cell is the button now, so the padding moves onto the control and the
@@ -564,8 +646,8 @@
   gap: 0.75rem;
   padding: 1.3rem 0.75rem;
   border: 0;
-  background: #081329;
-  color: #73e2d6;
+  background: #ffffff;
+  color: #0a6a63;
   font: inherit;
   text-align: center;
   cursor: pointer;
@@ -574,16 +656,16 @@
     color 0.18s var(--ease, ease);
 }
 .grovepg-atlas__btn:hover {
-  background: #0c1b36;
+  background: #e6f2f0;
 }
 .grovepg-atlas__btn:focus-visible {
-  outline: 2px solid #73e2d6;
+  outline: 2px solid #0a6a63;
   outline-offset: -3px;
 }
 /* The open collection. Teal is doing interactive work here, which is the one
    thing it is for. */
 .grovepg-atlas__reg--js .grovepg-atlas__btn[aria-expanded='true'] {
-  background: #0f2745;
+  background: #063637;
   color: #9defe2;
 }
 .grovepg-atlas__reg--js .grovepg-atlas__btn[aria-expanded='true'] .grovepg-atlas__name {
@@ -604,7 +686,7 @@
 }
 .grovepg-atlas__pname {
   margin: 0 0 0.6rem;
-  color: #fff;
+  color: #071126;
   font-family: var(--font-display);
   font-size: clamp(1.15rem, 2vw, 1.4rem);
   font-weight: 600;
@@ -614,7 +696,7 @@
 .grovepg-atlas__contributes {
   max-width: 72ch;
   margin: 0 0 1.4rem;
-  color: rgba(233, 242, 250, 0.86);
+  color: rgba(7, 17, 38, 0.82);
   font-size: 1.0625rem;
   line-height: 1.6;
 }
@@ -626,7 +708,7 @@
 }
 .grovepg-atlas__facts dt {
   margin-bottom: 0.3rem;
-  color: #73e2d6;
+  color: #0a6a63;
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
@@ -634,7 +716,7 @@
 }
 .grovepg-atlas__facts dd {
   margin: 0;
-  color: rgba(233, 242, 250, 0.74);
+  color: rgba(7, 17, 38, 0.72);
   line-height: 1.55;
 }
 
@@ -648,4 +730,78 @@
   .grovepg-atlas__btn {
     transition: none;
   }
+}
+
+/* A frame taller than 16:9, shown whole.
+ *
+ * Three of the four app surfaces are taller than the window they are
+ * presented in: an analysis worktable holds a question, a case structure, a
+ * figure and the paragraph the report will use; the ledger is a table of
+ * every measure in view. The capture refuses to crop them, so the page
+ * refuses to crop them either. The window keeps the 16:9 shape the rows share
+ * and the image keeps the proportions it was photographed at, which makes the
+ * surplus height something the reader scrolls rather than something nobody
+ * ever sees.
+ *
+ * `overscroll-behavior: contain` so reaching the bottom of the frame does not
+ * then carry the page away underneath the pointer. */
+/* Keyboard reach: the frame is focusable so it can be scrolled without a
+   pointer, and the focus ring has to be visible against the dark field. */
+/* The hint names a gesture a pointer user makes. Someone who reached the
+   frame by keyboard scrolls it with the arrow keys instead, and someone using
+   a screen reader has the whole surface described in the alt text either way:
+   the group's own label already says the frame scrolls. */
+@media (hover: none) {
+}
+
+/* The Grove page is light in both colour schemes.
+ *
+ * It used to run three dark bands, and `section--dark` pinned dark ink on
+ * them so they read the same whether or not the visitor's OS asked for dark
+ * mode. The bands are light now and that pin came off with them — which left
+ * the mirror-image fault: a visitor with dark mode set got the site's dark
+ * ink tokens on a background that no longer follows them, so the hero
+ * headline measured 1.05:1 against its own field. White on white.
+ *
+ * So the page pins the other way, at `main.grovepg` rather than band by
+ * band: pinning three sections left the closing note below them following the
+ * scheme on its own, at 1.57:1. These are the light values of the same
+ * tokens `section--dark` overrides, stated here rather than left to the media
+ * query, because the page's surfaces are fixed and its text has to be fixed
+ * with them. The screenshots are light captures for the same reason: one
+ * page, one appearance, and a reader who prefers dark elsewhere is not shown
+ * a broken version of this one.
+ */
+.grovepg {
+  --white: #ffffff;
+  --surface: #ffffff;
+  --cream: #f4f8f8;
+  --paper: #eef5f4;
+  --ink: #071126;
+  --ink-2: rgba(7, 17, 38, 0.78);
+  --ink-3: rgba(7, 17, 38, 0.66);
+  --ink-4: rgba(7, 17, 38, 0.54);
+  --navy: #071126;
+  --navy2: rgba(7, 17, 38, 0.72);
+  --navy-soft: rgba(7, 17, 38, 0.64);
+  --rule: rgba(7, 17, 38, 0.12);
+  --rule-strong: rgba(7, 17, 38, 0.22);
+  --surface-edge: rgba(7, 17, 38, 0.08);
+  --surface-glass: rgba(255, 255, 255, 0.86);
+  --surface-glass-strong: rgba(255, 255, 255, 0.95);
+  --ground: #f3f6f8;
+  --ground-bright: #fafcfd;
+  /* The bands below paint their own backgrounds; the gaps between them --
+     the licence section and the bridge under it -- do not, and fell through
+     to `body`, which does follow the scheme. Pinning the tokens above made
+     the ink dark; without this the dark page ground stayed underneath it and
+     the closing note measured 1.05:1. */
+  background-color: #f3f6f8;
+}
+/* The provenance strip sits between two of those bands and is the site's own
+   surface, so it follows the scheme like the rest of the site — except that
+   its labels are small uppercase type, which is where a token tuned for body
+   copy stops being enough. */
+.grovepg-prov__term {
+  color: #0a5f59;
 }
