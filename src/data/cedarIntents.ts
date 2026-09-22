@@ -281,7 +281,7 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['data_sovereignty', 'grant_applications', 'pricing'],
     chip: 'Does this work for tribal nations?',
     triggers: [
-      'tribal economic impact',
+      'tribal economic analysis',
       'tribal platform',
       'tribal government',
       'tribal nation',
