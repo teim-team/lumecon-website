@@ -77,6 +77,24 @@ test('cedar routes representative questions to the right intent', async ({ page 
   }
 });
 
+test('the bare phrase a customer searches for reaches an answer, not the fallback', async ({
+  page,
+}) => {
+  // "economic impact analysis" had no trigger anywhere and scored zero, so the
+  // single most likely thing anyone types fell through to the generic
+  // fallback. This gets its own test rather than a row in the sequential loop
+  // above: that loop shares one conversation, every row there is a different
+  // intent on purpose, and asking a second question that routes to
+  // company_overview makes Cedar answer with its "let me go a level deeper"
+  // variant -- the behaviour the repeat-question test further down protects.
+  const panel = await openCedar(page);
+  const bubble = await ask(panel, 'economic impact analysis');
+  await expect(bubble, 'the searched phrase should reach company_overview').toContainText(
+    'structured economic impact analysis',
+    { timeout: 6000 },
+  );
+});
+
 test('a page Cedar names in an answer is a link, not inert text', async ({ page }) => {
   const panel = await openCedar(page);
   /* Seven answers point somewhere as `lumecon.ai/<path>`, and every one of

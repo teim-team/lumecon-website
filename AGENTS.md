@@ -2,9 +2,252 @@
 
 Astro static marketing site for Lumecon (economic impact analysis
 software), deployed to GitHub Pages at lumecon.ai. Brand rules live
-with the founder; the standing engineering rule is below. Verify
+with the founder; the standing engineering rules are below. Verify
 every rendering change by building, screenshotting the affected
 output and visually inspecting it.
+
+Sections 1-8 are the eight-section shape shared by every `teim-team`
+repository, so the same questions are answered in the same order
+everywhere. Everything after them is this repository's own standing
+instructions, kept as written — including the vocabulary standard
+that the sibling repositories follow.
+
+## 1. What this repo owns
+
+**Owns:** the public marketing site at lumecon.ai — every page a visitor can
+reach, the brand and copy standard behind them, and the generators whose
+committed output those pages read.
+
+It also owns something the other repositories depend on: **this site is the
+North Star for product vocabulary.** Where a sibling repository and this one
+disagree about what something is called, this one wins and the sibling is the
+one to correct. The standard itself is the *Vocabulary standard* section below;
+sections 1-8 here do not restate it.
+
+**Does not own:**
+
+- The authenticated product — projects, runs, results, exports, entitlement.
+  That is `teim-app`. This site sends visitors into it and never imports its
+  code or styles.
+- The economics. That is `teim-engine`. Keep `/methodology` and the homepage
+  data-sources strip consistent with what that engine actually implements, but
+  do not restate its numbers here.
+- Conversational AI. The site's Cedar chat is a separate, lightweight, anonymous
+  keyword-classifier surface (`src/lib/cedarChat.ts`) and does **not** call the
+  Cedar service.
+
+There is deliberately no platform page: the product names are introduced where
+they do work on the pages that already exist, not gathered onto a page of their
+own.
+
+## 2. Stack and entry points
+
+Astro static site, TypeScript, deployed to GitHub Pages at lumecon.ai. Node
+`>=22` (`package.json` engines); every workflow pins `22`.
+
+| Path | What it is |
+|---|---|
+| `src/pages/` | The pages. Adding one is **two** edits: a line in `Nav.astro`'s `NAV` array and an entry in `src/data/siteMap.ts` |
+| `src/data/siteMap.ts` | The single record of what pages exist, the question each answers, and whether it is indexed |
+| `src/styles/` | The design system. `global.css` holds the tokens |
+| `scripts/` | Generators whose output is committed — **nothing here runs at build time**, with two deliberate exceptions (below) |
+| `docs/` | Generated and hand-written references, including the reconciliation tracker |
+
+The two build-time exceptions, both about deploy safety rather than content:
+`scripts/check-public-origins.mjs` is a **`prebuild`** hook (it has to run before
+`astro build`, because Astro inlines `PUBLIC_*` into the client bundle and a
+post-build refusal would leave the compromised artifact on disk), and
+`scripts/sync-headers-csp.mjs` is a **`postbuild`** hook. Each takes
+`--skip-if-unset`, so a local build with no production origins is a no-op; the
+deploy workflow calls both **without** that flag so a deploy cannot skip them.
+
+## 3. Setup and checks
+
+```bash
+npm ci
+```
+
+The two checks to run before every commit:
+
+```bash
+npm run test:scripts
+npm run build
+```
+
+**Verified 2026-09-22:** `test:scripts` reports `77 pass, 0 fail` · `npm run
+build` finishes `[build] Complete!` with 23 pages, then the `postbuild` hook
+reports it left `dist/_headers` as committed because the public origins are
+unset locally.
+
+`npm run build` is `astro check && astro build`, and **the two fail in different
+places.** Read the whole result, to the end. `astro check | tail -3` prints
+`0 warnings / 0 hints` on a run that failed, and a malformed stylesheet gives
+`[lightningcss minify] Invalid empty selector` and writes **no `dist/` at all**,
+which looks like success to any filter watching the top of the output. The last
+line must be `[build] Complete!` with a page count; `ls dist/<route>/index.html`
+settles it in one command.
+
+**Build the way CI does, or two smoke tests fail for no reason.** The smoke
+workflow builds with both public origins set and Astro inlines them:
+
+```bash
+PUBLIC_APP_URL=https://app.lumecon.ai PUBLIC_API_URL=https://api.lumecon.ai npm run build
+```
+
+Those two are the only known environmental failures. Anything else is real:
+check before discounting it, never the other way round.
+
+**Not verified in this environment, and why:**
+
+- `npm run test:smoke` — Playwright browsers are not installed here. It needs
+  `npx playwright install --with-deps chromium webkit` once, and a **fresh**
+  `npm run build` every time, because `playwright.config.ts` serves `dist/`
+  rather than the dev server. CI runs chromium and webkit.
+- `npm run docs:copy`, `npm run llms:roster`, `npm run stress` — each needs a
+  running preview server. `astro preview` is a singleton, so stop an existing one
+  first (`npx astro preview stop`) or the second call silently serves nothing.
+- The generators (`naics:duotone`, `team:headshots`, `shots:examples`,
+  `shots:commons`) — they write committed binary assets and take licensed source
+  material as input. Run them only when their inputs change.
+
+**The copy document is a CI gate.** The smoke workflow's last step regenerates
+`docs/site-copy-and-architecture.md` from the built site and runs
+`git diff --exit-code` on it. Change any visible copy and that file is stale, so
+the job fails even when every test passed — which reads in the log as 63 chromium
+and 63 webkit green, then a failure. Regenerate and commit it in the same change:
+
+```bash
+npm run build && npm run preview -- --host 127.0.0.1 &
+DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
+```
+
+## 4. Branch, commit and review conventions
+
+- **Branch from `main`** (this repo's default). Agent work goes on
+  `claude/<slug>-<id>` or `codex/<slug>`; human work uses `feat/` or `fix/`.
+- Never reset or force-push a shared branch. If the branch already exists on the
+  remote, check it out and build on it.
+- Every commit ends with exactly this trailer, and no model identifier appears
+  anywhere else in the message, in a PR title or body, or in a code comment:
+
+  ```
+  Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+  Claude-Session: https://claude.ai/code/session_<id>
+  ```
+
+- Push with `git push -u origin <branch>`. Do not open or merge pull requests
+  unless you were asked to.
+- A visible-copy change carries its regenerated copy document in the same commit
+  (see §3). A new page carries both of its two edits in the same commit (see §2).
+
+## 5. Who reviews what
+
+| Area | Reviewer |
+|---|---|
+| teim-engine, and the Cedar service | Francesca Agnes (@mafranagn) |
+| **Frontend** | Isabella Agnes (@magnes1) |
+| Identity, entitlement, billing | Brian Kim (@bkim28964) |
+| **Product behaviour** | Kaylyn Lee (@kaylynhl) |
+| **Cedar Grove**, and the unannounced subscriber service | Havala Hanson (@Havala-Hanson) |
+
+This site is frontend, so most of it is Isabella's. Two routing notes the repo
+already relies on: a change to what a product *is* or what a plan *does* is
+product behaviour and goes to Kaylyn even when it is only copy, and the sentence
+`/methodology` still owes on how pre-benchmark years are constructed is
+Isabella's, per `teim-engine/docs/NOTE_FOR_ISABELLA_AND_HAVA_2026-09-21.md`.
+Brand values, pricing policy and anything marked "founder decision" are not a
+reviewer's call at all — ask rather than guessing.
+
+## 6. Invariants
+
+The standing-instruction sections below carry these in full. The short list:
+
+- **The vocabulary standard is binding on every sibling.** This file is where it
+  is defined; a sibling that disagrees is the one to correct.
+- **The unannounced subscriber service must not appear anywhere in this
+  repository's output** — including HTML comments and CSS comments, both of which
+  ship in the built artifact. It was once found in `dist/methodology/index.html`
+  exactly that way. Grep `dist/`, not just `src/`. Whether the rule also reaches
+  this repository's own Markdown is an open founder call, recorded in the
+  *Vocabulary standard* section; pending it, nothing new is added in either
+  direction.
+- **No ampersands in displayed copy.** Write "and". Grep for both forms, because
+  each misses the other: `&amp;|[A-Za-z0-9] & [A-Za-z0-9]`.
+- **Teal is semantic**, not decoration, and the approved brand phrases are
+  verbatim. Do not invent a new teal slogan per section.
+- **Nothing in `scripts/` runs at build time** except the two deploy-safety hooks
+  named in §2. Everything else is a generator whose output is committed.
+- **Do not hand-edit generated blocks** — the `## Team and advisors` and
+  `## Pages` blocks of `public/llms.txt`, `docs/site-copy-and-architecture.md`,
+  or `teim-app/src/data/naicsSectors.js`. The roster block drifted into a public
+  record mismatch the last time it was maintained by hand.
+- **Plan ids are `free | sprout | sapling | tree`.** Never reintroduce the old
+  `starter/standard/leader` aliases; the server silently normalizes unknown tiers
+  to sprout, which would hand a Tree buyer a Sprout account.
+- **Verify by looking.** Compare before/after screenshots at roughly 1440, 1024,
+  768, 430 and 375px, and revert any technically elegant change that makes the
+  composition worse. Cleaner code is not evidence of better design.
+
+## 7. How this doc gets updated
+
+Agents update this file as part of the work, in the same commit as the change.
+If you add an entry point, change a check command, move ownership, or discover
+that something here is wrong, fix it here — a stale operating doc is worse than
+no operating doc, because it is trusted.
+
+This file carries a second duty the others do not: **it is the North Star.** A
+vocabulary decision recorded here propagates outward, so when the standard
+changes, say so in the *Vocabulary standard* section and open the corresponding
+correction in the sibling repositories rather than leaving them to drift. The
+cross-repository tracker is `docs/reconciliation-roadmap.md`; an item there is
+not closed until the code says so, and a row that claims "done" when the code
+disagrees is worse than an open row.
+
+Sections 1-8 are the shape shared across every `teim-team` repository and should
+stay in that order. The standing-instruction sections below are this
+repository's own and grow as the site does; add to them rather than compressing
+them.
+
+## 8. Cross-repo links and status
+
+*Section current as of 2026-09-22.*
+
+| Repo | What it is | Relationship to this site |
+|---|---|---|
+| [`teim-app`](https://github.com/teim-team/teim-app) | The authenticated product where the Cedar family lives — Cedar Impact, Cedar Commons and Cedar Grove, in a React 19 + Vite SPA with a Fastify backend | This site sends visitors into it. Separate code and CSS: do not cross-import source styles or generated tokens. This site remains the shared visual contract |
+| [`teim-engine`](https://github.com/teim-team/teim-engine) | The model engine behind Cedar Impact | Every number `/methodology` describes is computed there. Derive the published coverage range from its `/coverage` endpoint rather than restating it in copy |
+| [`cedar`](https://github.com/teim-team/cedar) | Cedar, the AI economic analyst, as a FastAPI service | The `teim-app` backend calls it. This site's chat does not |
+
+A **fifth** sibling repository exists and is deliberately not named here, because
+the product it serves is unannounced and this repository's own rule keeps the
+name out of anything a visitor or a crawler can reach. See the *Vocabulary
+standard* section for the rule and for the open founder call about how far it
+reaches.
+
+**Naming**, as this file defines it and the siblings follow: the impact product
+is **Cedar Impact**; "TEIM" is meant to survive only in repository, database and
+resource names; and "tribal economic impact" is retired as a product name. Cedar
+is "the AI economic analyst" and is never "an AI assistant".
+
+**Open, needing a human decision:**
+
+1. **The rename in `teim-app` is incomplete, and the two records of it
+   disagree.** `docs/reconciliation-roadmap.md` item 9 records the migration as
+   done, including `public/site.webmanifest` and the export filename prefix;
+   neither moved, and the mail sender and subjects still carry the retired name
+   too. Meanwhile the repository table in this repo's `README.md` says the
+   side-rail wordmark still carries it — it does not, the rail renders "Cedar
+   Impact". Both records also cite an inventory at `teim-app/AGENTS.md` §9,
+   which does not exist — that file has no §9. The export filename is a data
+   contract customers already hold and Terms §9 still claims the retired names as
+   marks (item 14), so this is a founder and counsel call, not a copy sweep.
+   Neither record was rewritten to match the other; both are now described
+   accurately in the sibling `AGENTS.md` files.
+2. **The visibility boundary** — whether "anywhere a crawler can reach" includes
+   a public GitHub repository's own README. Unchanged in either direction,
+   pending the founder call already recorded below.
+
+---
 
 ## Standing instruction: the AI-frontend-tell audit
 

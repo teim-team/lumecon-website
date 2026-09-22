@@ -47,6 +47,12 @@ export const INTENTS: CedarIntent[] = [
     chip: 'What is Lumecon?',
     triggers: [
       'what is lumecon',
+      // The phrase customers actually search. Without it, the single most
+      // likely thing anyone types into Cedar scored zero and fell through to
+      // the generic fallback. It lives on company_overview rather than on
+      // explain_simple because someone typing it wants to know whether we do
+      // this, not to have the concept explained to them.
+      'economic impact analysis',
       'what does lumecon do',
       'what does lumecon',
       'explain lumecon',
@@ -281,7 +287,7 @@ export const INTENTS: CedarIntent[] = [
     followUps: ['data_sovereignty', 'grant_applications', 'pricing'],
     chip: 'Does this work for tribal nations?',
     triggers: [
-      'tribal economic impact',
+      'tribal economic analysis',
       'tribal platform',
       'tribal government',
       'tribal nation',
