@@ -74,7 +74,7 @@ npm run test:scripts
 npm run build
 ```
 
-**Verified 2026-09-22:** `test:scripts` reports `77 pass, 0 fail` · `npm run
+**Verified 2026-09-22:** `test:scripts` reports `80 pass, 0 fail` · `npm run
 build` finishes `[build] Complete!` with 23 pages, then the `postbuild` hook
 reports it left `dist/_headers` as committed because the public origins are
 unset locally.
