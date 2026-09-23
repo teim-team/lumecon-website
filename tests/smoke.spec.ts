@@ -2685,7 +2685,8 @@ test('the Why Lumecon illustrations float on hover at 1440', async ({ page }) =>
   await cards.first().scrollIntoViewIfNeeded();
   // The scroll-reveal moves the cards, not the images; wait for it to settle
   // anyway so a mid-reveal frame cannot confuse the box comparisons below.
-  await page.waitForTimeout(1200);
+  await expect(cards.first()).toHaveCSS('opacity', '1');
+  await page.waitForTimeout(800);
 
   for (let i = 0; i < 4; i++) {
     const card = cards.nth(i);
@@ -2716,11 +2717,16 @@ test('the Why Lumecon illustrations float on hover at 1440', async ({ page }) =>
     expect(await card.boundingBox()).toEqual(cardBefore);
     expect(await card.locator('.whyw-card__t').boundingBox()).toEqual(copyBefore);
 
-    await page.mouse.move(2, 2);
+    // The move is re-issued on every sample: WebKit has been seen to keep
+    // the hover state through a single mousemove to an empty spot.
     await expect
-      .poll(async () => (await img.evaluate(whyArtStyle)).transform, {
-        message: `card ${i} settles back on leave`,
-      })
+      .poll(
+        async () => {
+          await page.mouse.move(2, 2);
+          return (await img.evaluate(whyArtStyle)).transform;
+        },
+        { message: `card ${i} settles back on leave` },
+      )
       .toBe('none');
   }
 
@@ -2732,40 +2738,31 @@ test('the Why Lumecon illustrations float on hover at 1440', async ({ page }) =>
       message: 'the Cedar illustration lifts when its link is focused',
     })
     .toBeLessThanOrEqual(-6.5);
-});
+  await cedar.locator('a').blur();
 
-test('the Why Lumecon float is a still lift under reduced motion', async ({ page }) => {
+  // Reduced motion keeps the still lift and the shadow and drops the travel:
+  // no transition, so the lift is there on the next style read, and no bob.
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/', { waitUntil: 'networkidle' });
-  const card = page.locator('.whyw-card').nth(1);
-  const img = card.locator('.whyw-art img');
-  await card.scrollIntoViewIfNeeded();
-  await card.hover();
-  // No transition, so the lift is there on the next style read, and no bob.
-  const lifted = await img.evaluate(whyArtStyle);
+  const second = cards.nth(1);
+  const secondImg = second.locator('.whyw-art img');
+  await second.hover();
+  const lifted = await secondImg.evaluate(whyArtStyle);
   expect(lifted.transform).toBe('matrix(1, 0, 0, 1, 0, -7)');
   expect(lifted.filter).toContain('drop-shadow(');
   expect(lifted.animation).toBe('none');
   expect(lifted.transition).toBe('0s');
-  await page.waitForTimeout(1700); // past the bob's half period
-  expect((await img.evaluate(whyArtStyle)).transform, 'no bob').toBe('matrix(1, 0, 0, 1, 0, -7)');
-});
+  // Past the point where a running bob would have left the lift height.
+  await page.waitForTimeout(700);
+  expect((await secondImg.evaluate(whyArtStyle)).transform, 'no bob').toBe(
+    'matrix(1, 0, 0, 1, 0, -7)',
+  );
 
-test.describe('the Why Lumecon float in the dark colour scheme', () => {
-  test.use({ colorScheme: 'dark' });
-
-  test('the shadow is cast dark enough to read on the navy surface', async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('/', { waitUntil: 'networkidle' });
-    const card = page.locator('.whyw-card').nth(1);
-    await card.scrollIntoViewIfNeeded();
-    await card.hover();
-    const img = card.locator('.whyw-art img');
-    await expect
-      .poll(async () => (await img.evaluate(whyArtStyle)).filter)
-      .toMatch(/drop-shadow\(rgba\(0, 0, 0, 0\.6\d*\)/);
-  });
+  // In the dark scheme the shadow is cast dark enough to read on the navy
+  // surface, where the navy-tinted one vanished.
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await expect
+    .poll(async () => (await secondImg.evaluate(whyArtStyle)).filter)
+    .toMatch(/drop-shadow\(rgba\(0, 0, 0, 0\.6\d*\)/);
 });
 
 test.describe('the Why Lumecon float on a touch screen', () => {
