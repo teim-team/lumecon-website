@@ -198,12 +198,21 @@
   /* The picture rounds its own corners as well as being clipped by the frame:
      a frame that lifts on hover is transformed, and WebKit has been known to
      drop `overflow: hidden` clipping for the duration of a transform, which
-     showed these captures square. The frame is clipped by a clip-path too,
-     which survives a transform in every engine. */
+     showed these captures square. Rounding the picture itself survives that,
+     and unlike a clip-path on the frame it leaves the frame's shadow alone:
+     a clip-path cuts everything the element paints, shadow included, and the
+     shadow is what lifts the screenshot off the ground. */
   border-radius: var(--shot-radius);
 }
-.tour-row__shot {
-  clip-path: inset(0 round var(--shot-radius));
+/* Under a caption the picture rounds its top corners only, or the seam where
+   the caption joins it shows two wedges of frame background. The caption
+   takes the bottom corners instead, so the two read as one assembled
+   surface with the frame's radius at every outer corner. */
+.tour-row__shot:has(figcaption) img {
+  border-radius: var(--shot-radius) var(--shot-radius) 0 0;
+}
+.tour-row__shot figcaption {
+  border-radius: 0 0 var(--shot-radius) var(--shot-radius);
 }
 
 @media (max-width: 880px) {

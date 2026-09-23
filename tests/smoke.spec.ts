@@ -1501,17 +1501,20 @@ test('cedar grove shows four landscape captures, each stating its own box', asyn
   expect(frames.map((frame) => frame.src)).not.toContain('/app/grove-evidence.webp');
 });
 
-test('every screenshot frame is cut with rounded corners, on every page that shows one', async ({
+test('every screenshot frame is rounded at its outer corners, keeps its shadow and meets its caption flush', async ({
   page,
 }) => {
   // The owner saw square corners on the Cedar Grove captures. `overflow:
   // hidden` with a border radius rounds a frame in most engines and not in
   // every state: a frame that lifts on hover is transformed, and WebKit has
-  // been known to drop the clipping for the duration. So the frames are cut
-  // with a clip-path as well, which survives a transform everywhere, and
-  // the picture inside carries the radius on its own corners. This reads
-  // the computed styles, which is what a screenshot cannot see.
-  for (const path of ['/cedar-grove', '/', '/cedar']) {
+  // been known to drop the clipping for the duration. So the picture inside
+  // carries the frame's radius on its own outer corners, which survives a
+  // transform and, unlike a clip-path on the frame, leaves the frame's
+  // shadow alone. Under a caption the picture rounds its top corners only
+  // and the caption takes the bottom ones, so the seam between them shows
+  // no wedge of frame. This reads the computed styles, which is what a
+  // screenshot cannot see.
+  for (const path of ['/cedar-grove', '/', '/cedar', '/cedar-commons']) {
     await page.goto(path, { waitUntil: 'domcontentloaded' });
     const frames = page.locator('.tour-row__shot, .grovepg-hero__shot');
     const count = await frames.count();
@@ -1520,24 +1523,33 @@ test('every screenshot frame is cut with rounded corners, on every page that sho
       nodes.map((node) => {
         const frame = getComputedStyle(node);
         const img = node.querySelector('img');
+        const caption = node.querySelector('figcaption');
         return {
           radius: frame.borderRadius,
           overflow: frame.overflow,
           clip: frame.clipPath,
+          shadow: frame.boxShadow,
           img: img ? getComputedStyle(img).borderRadius : null,
+          caption: caption ? getComputedStyle(caption).borderRadius : null,
         };
       }),
     );
     for (const frame of cut) {
+      const r = frame.radius;
       // The product frame radius, or larger where a page rounds its own
       // frames more (/cedar uses its panel radius); never square.
-      expect(parseFloat(frame.radius), path).toBeGreaterThanOrEqual(14);
+      expect(parseFloat(r), path).toBeGreaterThanOrEqual(14);
       expect(frame.overflow, path).toBe('hidden');
-      // The clip and the picture follow the frame's own radius exactly. A
-      // picture with a caption under it rounds its top corners only, so the
-      // caption meets it without a sliver of frame between the two.
-      expect(frame.clip, path).toBe(`inset(0px round ${frame.radius})`);
-      expect(frame.img, path).toMatch(new RegExp(`^${frame.radius}( ${frame.radius} 0px 0px)?$`));
+      // Nothing clips the frame's own paint: the shadow that lifts the
+      // screenshot off the ground has to survive.
+      expect(frame.clip, path).toBe('none');
+      expect(frame.shadow, path).not.toBe('none');
+      if (frame.caption === null) {
+        expect(frame.img, path).toBe(r);
+      } else {
+        expect(frame.img, path).toBe(`${r} ${r} 0px 0px`);
+        expect(frame.caption, path).toBe(`0px 0px ${r} ${r}`);
+      }
     }
   }
 });
