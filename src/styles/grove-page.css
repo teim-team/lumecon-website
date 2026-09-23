@@ -103,6 +103,22 @@
   width: 100%;
   height: auto;
 }
+/* The corners, twice over, so the hero frame is rounded whatever the browser
+   makes of it. `overflow: hidden` on a frame that also lifts on hover (a
+   transform) is the one combination WebKit has been known to render square:
+   the clipping is dropped while the transform is live. So the picture and
+   the caption carry the frame's radius on their own outer corners as well,
+   which needs no clipping at all and leaves the frame's shadow alone (a
+   clip-path on the frame would cut the shadow off with everything else it
+   paints). The picture keeps square bottom corners while the caption sits
+   under it, or a sliver of frame shows at the seam. The tour rows get the
+   same treatment from tour.css. */
+.grovepg-hero__shot > img {
+  border-radius: var(--radius-frame) var(--radius-frame) 0 0;
+}
+.grovepg-hero__shot figcaption {
+  border-radius: 0 0 var(--radius-frame) var(--radius-frame);
+}
 @media (max-width: 980px) {
   .grovepg-hero .meth-w {
     grid-template-columns: 1fr;

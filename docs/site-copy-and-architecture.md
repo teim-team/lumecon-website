@@ -23,12 +23,12 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 798 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/` | 746 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/why-lumecon` | 1224 | Why Lumecon \| Lumecon | 239 |
 | `/pricing` | 1495 | Pricing \| Lumecon | 155 |
 | `/cedar` | 498 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
-| `/cedar-grove` | 920 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/cedar-grove` | 947 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/methodology` | 2782 | Methodology \| Lumecon | 167 |
 | `/start` | 1422 | Plan your first analysis \| Lumecon | 165 |
 | `/naics` | 663 | Industry sectors \| Lumecon | 146 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15880** | | |
+| **Total** | **15855** | | |
 
 ## Crawler metadata audit
 
@@ -70,7 +70,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 798
+- **Visible words:** 746
 
 ### Architecture (heading outline)
 
@@ -88,7 +88,6 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
     - **H3** Trace a reported result to its components
     - **H3** Compare analyses over time
     - **H3** Return to prior analyses without rebuilding them
-    - **H3** Cite the evidence a figure rests on
   - **H2** Economic analysis built to withstand review.
   - **H2** Every organization has an economic impact. Make yours visible.
 
@@ -279,17 +278,6 @@ CEDAR IMPACTANALYSIS HISTORY
 Drafts, completed analyses, comparisons and exports stay together in your Workspace, ready to reopen, compare or export as a workbook, CSV tables or a printable summary.
 
 - _image alt:_ Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.
-
-> _section: `tour-grove`_
-
-CEDAR GROVEEVIDENCE BASE
-
-
-**H3: Cite the evidence a figure rests on**
-
-Cedar Grove brings maintained public data, Cedar collections and the records your organization governs into one place, so a place file, a figure or a briefing can cite all three with the source, vintage, geography, definition and limits of each still attached.
-
-- _image alt:_ The lower half of a Cedar Grove analysis. A per capita income figure is labelled with its period, geography, universe and basis. Below it a box invites the paragraph the report will carry, with controls to inspect the rows and save the figure to the record, and a sources band naming the maintained public data and the organization record behind it.
 
 > _section: `edge`_
 
@@ -1446,15 +1434,15 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 920
+- **Visible words:** 947
 
 ### Architecture (heading outline)
 
 - **H1** Turn a local question into a defensible case.
   - **H2** Three kinds of evidence, kept apart
   - **H2** Every case your organization has open.
-  - **H2** See the geography before you generalize it.
-  - **H2** Give reviewers the figure and the record behind it.
+  - **H2** Read a measure off the map, geography by geography.
+  - **H2** Give reviewers the record behind the case.
   - **H2** The collections behind the evidence.
     - **H3** Federal Funding to Indian Country
     - **H3** Federal Register
@@ -1538,21 +1526,21 @@ _caption:_ The work already under way, and the five kinds of case Grove can open
 GEOGRAPHY AS EVIDENCE
 
 
-**H2: See the geography before you generalize it.**
+**H2: Read a measure off the map, geography by geography.**
 
-Where a place sits, who its regional peers are, where the people working there live. Each is a measure with its own source and vintage, read at the scale the evidence supports and carried into the analysis with the provenance it already had.
+Choose a measure and the map fills every geography the record names with its value, on one scale with real breakpoints, and leaves plain what the record does not cover. Point at any geography, or reach it from the keyboard, and it reads out its value with the population, period and source attached, so the number and its provenance arrive together.
 
-- _image alt:_ The Cedar Grove map workspace. Research lenses and measures run down the left, each naming its source and year, and the map marks the project geography in national context against every published tribal area.
-_caption:_ A dedicated map workspace, not a panel beside a chart. Shown with an invented boundary.
+- _image alt:_ The Cedar Grove map workspace with labor force participation selected. The map is filled by the measure, one state tinted on a teal scale and every other geography left plain, and a readout anchored to the national outline reads 60.1 percent for the nation, AIAN alone, ACS 2020 to 2024. The same reading sits in the context card at the lower left, and a legend at the lower right names the class with its breakpoint, counts one of 186 geographies with a value, and lists the national figure.
+_caption:_ One measure, filled and read out with its source and period. Shown with sample data.
 EVIDENCE THAT TRAVELS
 
 
-**H2: Give reviewers the figure and the record behind it.**
+**H2: Give reviewers the record behind the case.**
 
-The figure carries its period, geography, universe and basis on its face. The paragraph the report will use is written beside it, in your words, and saving it files the figure in the evidence log with its source and its limitation still attached, so a colleague, funder or board can read the case rather than rebuild it.
+Every figure filed into an analysis lands in its evidence log with the layer it came from, its source, the period observed, the geography, its role in the case and the limitation it carries. Pin a record and place it under the report requirement it supports, and a colleague, funder or board can read what the case rests on rather than rebuild it.
 
-- _image alt:_ The lower half of a Cedar Grove analysis. A per capita income figure is labelled with its period, geography, universe and basis. Below it a box invites the paragraph the report will carry, with controls to inspect the rows and save the figure to the record, and a sources band naming the maintained public data and the organization record behind it.
-_caption:_ The paragraph is written against the figure, and files with it. Shown with sample data.
+- _image alt:_ The evidence log of a Cedar Grove analysis, its header reading 3 records filed. A table lists four records: per capita income against the national figure, labor force participation, employment over time, and where the people working here live. Each row names its layer, source, period observed, geography, role and claim class, carries its stated limitation under the record name, and offers Inspect data beside a pin control. The first three are pinned, their control reading Unpin, and filed under report requirements, need and beneficiaries and measures, reporting and attachments; the fourth is not yet pinned, its control reading Pin. The first record carries the report wording already written.
+_caption:_ The evidence log: each record with its source, limitation and place in the report. Shown with sample data.
 
 > _section: `What travels with every number`_
 

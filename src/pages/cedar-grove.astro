@@ -29,15 +29,18 @@
  * real nations under numbers that are fixtures. The capture script now refuses
  * to shoot a surface whose text names a real place.
  *
- * FOUR FRAMES, AND WHY THE WORKTABLE IS TWO OF THEM
- * The analysis worktable is 1634px tall at capture width, and the page used to
- * show it through a 16:9 window that scrolled. That asked a reader to operate
- * a control before they could see the product, and printed as its own top
- * third. It is also two arguments stacked, so it is cut into two landscape
- * frames at capture time: the top poses the case, and it is the hero; the
- * bottom is the figure with the paragraph a report will carry, and it is the
- * last act. Every frame here is now an ordinary figure at its own measured
- * size, and every one carries its sample-data disclosure inside the frame.
+ * FOUR FRAMES, FOUR SURFACES
+ * The analysis worktable is taller than a landscape frame, and the page used
+ * to show it through a 16:9 window that scrolled. That asked a reader to
+ * operate a control before they could see the product, and printed as its
+ * own top third. So it is cut at capture time, and its top, which poses the
+ * case, is the hero. For a while the bottom of the same surface was the last
+ * act too, which put the one per-capita-income chart on the page twice as
+ * if it were two products. The last act is the evidence log now, a different
+ * surface: the records a case has filed, with their source, limitation and
+ * place in the report. Every frame here is an ordinary figure at its own
+ * measured size, and every one carries its sample-data disclosure inside the
+ * frame.
  *
  * THE LEDGER THAT IS NOT HERE
  * The data workspace is the surface that best shows the three evidence layers
@@ -166,20 +169,20 @@ const tour = [
   {
     id: 'map',
     kicker: 'Geography as evidence',
-    title: 'See the geography before you generalize it.',
-    body: 'Where a place sits, who its regional peers are, where the people working there live. Each is a measure with its own source and vintage, read at the scale the evidence supports and carried into the analysis with the provenance it already had.',
+    title: 'Read a measure off the map, geography by geography.',
+    body: 'Choose a measure and the map fills every geography the record names with its value, on one scale with real breakpoints, and leaves plain what the record does not cover. Point at any geography, or reach it from the keyboard, and it reads out its value with the population, period and source attached, so the number and its provenance arrive together.',
     img: shot('grove-map'),
-    alt: 'The Cedar Grove map workspace. Research lenses and measures run down the left, each naming its source and year, and the map marks the project geography in national context against every published tribal area.',
-    caption: 'A dedicated map workspace, not a panel beside a chart. Shown with an invented boundary.',
+    alt: 'The Cedar Grove map workspace with labor force participation selected. The map is filled by the measure, one state tinted on a teal scale and every other geography left plain, and a readout anchored to the national outline reads 60.1 percent for the nation, AIAN alone, ACS 2020 to 2024. The same reading sits in the context card at the lower left, and a legend at the lower right names the class with its breakpoint, counts one of 186 geographies with a value, and lists the national figure.',
+    caption: 'One measure, filled and read out with its source and period. Shown with sample data.',
   },
   {
-    id: 'evidence',
+    id: 'record',
     kicker: 'Evidence that travels',
-    title: 'Give reviewers the figure and the record behind it.',
-    body: 'The figure carries its period, geography, universe and basis on its face. The paragraph the report will use is written beside it, in your words, and saving it files the figure in the evidence log with its source and its limitation still attached, so a colleague, funder or board can read the case rather than rebuild it.',
-    img: shot('grove-evidence'),
-    alt: 'The lower half of a Cedar Grove analysis. A per capita income figure is labelled with its period, geography, universe and basis. Below it a box invites the paragraph the report will carry, with controls to inspect the rows and save the figure to the record, and a sources band naming the maintained public data and the organization record behind it.',
-    caption: 'The paragraph is written against the figure, and files with it. Shown with sample data.',
+    title: 'Give reviewers the record behind the case.',
+    body: 'Every figure filed into an analysis lands in its evidence log with the layer it came from, its source, the period observed, the geography, its role in the case and the limitation it carries. Pin a record and place it under the report requirement it supports, and a colleague, funder or board can read what the case rests on rather than rebuild it.',
+    img: shot('grove-record'),
+    alt: 'The evidence log of a Cedar Grove analysis, its header reading 3 records filed. A table lists four records: per capita income against the national figure, labor force participation, employment over time, and where the people working here live. Each row names its layer, source, period observed, geography, role and claim class, carries its stated limitation under the record name, and offers Inspect data beside a pin control. The first three are pinned, their control reading Unpin, and filed under report requirements, need and beneficiaries and measures, reporting and attachments; the fourth is not yet pinned, its control reading Pin. The first record carries the report wording already written.',
+    caption: 'The evidence log: each record with its source, limitation and place in the report. Shown with sample data.',
   },
 ];
 

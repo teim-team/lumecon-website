@@ -1418,19 +1418,19 @@ test('cedar grove is named on the homepage, /cedar and /pricing beside its sibli
   // not caught up to it. Each names it exactly, in the place the sibling
   // products already appear, with the sibling's own treatment.
 
-  // Homepage: a tour row carrying the product label, the same row and label
-  // the Cedar Impact rows use, with one of Grove's own captures.
+  // Homepage: the product tour is Cedar Impact's, and Grove is not a row in
+  // it. It was, for a while, and a Grove frame under a heading about Impact's
+  // results read as a fourth Impact surface. Grove is named on the homepage
+  // by the nav and the footer, which the product-family test below covers.
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  const groveRow = page.locator('#tour-grove');
-  await expect(groveRow).toHaveCount(1);
-  await expect(groveRow.locator('.tour-row__product')).toHaveText('Cedar Grove');
-  await expect(groveRow.locator('img')).toHaveAttribute('src', '/app/grove-evidence.webp');
+  await expect(page.locator('#tour-grove')).toHaveCount(0);
   await expect(page.locator('.tour-row .tour-row__product')).toHaveText([
     'Cedar Impact',
     'Cedar Impact',
     'Cedar Impact',
-    'Cedar Grove',
   ]);
+  await expect(page.locator('.tour-row img[src^="/app/grove-"]')).toHaveCount(0);
+  await expect(page.locator('nav a[href="/cedar-grove"]').first()).toBeAttached();
 
   // /cedar: the act that names the surfaces Cedar works across names Grove
   // beside Commons, and only for what Cedar does there: read the three
@@ -1492,6 +1492,66 @@ test('cedar grove shows four landscape captures, each stating its own box', asyn
   // fifth of its authored size, and the lightbox is the only route back.
   await expect(page.locator('.grovepg-hero__shot[data-zoom]')).toHaveCount(1);
   await expect(page.locator('.grovetour .tour-row__shot[data-zoom]')).toHaveCount(3);
+
+  // Four different surfaces. For a while two of them were the top and the
+  // bottom of one worktable, which put the same per-capita-income chart on
+  // the page twice; the last act is the evidence log now.
+  expect(new Set(frames.map((frame) => frame.src)).size).toBe(4);
+  expect(frames.map((frame) => frame.src)).toContain('/app/grove-record.webp');
+  expect(frames.map((frame) => frame.src)).not.toContain('/app/grove-evidence.webp');
+});
+
+test('every screenshot frame is rounded at its outer corners, keeps its shadow and meets its caption flush', async ({
+  page,
+}) => {
+  // The owner saw square corners on the Cedar Grove captures. `overflow:
+  // hidden` with a border radius rounds a frame in most engines and not in
+  // every state: a frame that lifts on hover is transformed, and WebKit has
+  // been known to drop the clipping for the duration. So the picture inside
+  // carries the frame's radius on its own outer corners, which survives a
+  // transform and, unlike a clip-path on the frame, leaves the frame's
+  // shadow alone. Under a caption the picture rounds its top corners only
+  // and the caption takes the bottom ones, so the seam between them shows
+  // no wedge of frame. This reads the computed styles, which is what a
+  // screenshot cannot see.
+  for (const path of ['/cedar-grove', '/', '/cedar', '/cedar-commons']) {
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
+    const frames = page.locator('.tour-row__shot, .grovepg-hero__shot');
+    const count = await frames.count();
+    expect(count, `${path} shows frames`).toBeGreaterThan(0);
+    const cut = await frames.evaluateAll((nodes) =>
+      nodes.map((node) => {
+        const frame = getComputedStyle(node);
+        const img = node.querySelector('img');
+        const caption = node.querySelector('figcaption');
+        return {
+          radius: frame.borderRadius,
+          overflow: frame.overflow,
+          clip: frame.clipPath,
+          shadow: frame.boxShadow,
+          img: img ? getComputedStyle(img).borderRadius : null,
+          caption: caption ? getComputedStyle(caption).borderRadius : null,
+        };
+      }),
+    );
+    for (const frame of cut) {
+      const r = frame.radius;
+      // The product frame radius, or larger where a page rounds its own
+      // frames more (/cedar uses its panel radius); never square.
+      expect(parseFloat(r), path).toBeGreaterThanOrEqual(14);
+      expect(frame.overflow, path).toBe('hidden');
+      // Nothing clips the frame's own paint: the shadow that lifts the
+      // screenshot off the ground has to survive.
+      expect(frame.clip, path).toBe('none');
+      expect(frame.shadow, path).not.toBe('none');
+      if (frame.caption === null) {
+        expect(frame.img, path).toBe(r);
+      } else {
+        expect(frame.img, path).toBe(`${r} ${r} 0px 0px`);
+        expect(frame.caption, path).toBe(`0px 0px ${r} ${r}`);
+      }
+    }
+  }
 });
 
 test('cedar grove opens on the house product hero, like the other product pages', async ({
