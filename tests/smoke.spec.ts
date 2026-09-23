@@ -2555,3 +2555,48 @@ test.describe('the product pages on a phone', () => {
     expect(new Set(widths).size, 'both buttons the same width').toBe(1);
   });
 });
+
+/* The consent banner covers the bottom of the viewport until the visitor
+   answers it. On a phone it was a 75px card floating 14px above the edge,
+   over the hero and the /start choices; and at every width the page ended
+   underneath it, so the last footer links could not be reached or seen
+   when focused. */
+test('the consent banner is a thin docked bar on a phone and never hides the end of a page', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/start', { waitUntil: 'networkidle' });
+  const banner = page.locator('#consentBanner');
+  await expect(banner).toBeVisible();
+  // Past the entrance animation, so the box is where it rests.
+  await expect(banner).toHaveCSS('opacity', '1');
+  const bar = (await banner.boundingBox())!;
+  expect(bar.x, 'docked to the left edge').toBe(0);
+  expect(bar.width, 'full width').toBe(390);
+  expect(Math.round(bar.y + bar.height), 'docked to the bottom edge').toBe(844);
+  expect(bar.height, 'one compact row').toBeLessThanOrEqual(64);
+
+  for (const size of [
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(size);
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    const clear = await page.evaluate(() => {
+      const top = document.getElementById('consentBanner')!.getBoundingClientRect().top;
+      const links = [...document.querySelectorAll('.footer a, .footer button')].filter(
+        (el) => el.getBoundingClientRect().height > 0,
+      );
+      return links.every((el) => el.getBoundingClientRect().bottom <= top);
+    });
+    expect(clear, `every footer link clears the banner at ${size.width}px`).toBe(true);
+  }
+
+  await page.locator('[data-consent="denied"]').click();
+  await expect(banner).toBeHidden();
+  const reserved = await page.evaluate(() =>
+    document.documentElement.style.getPropertyValue('--consent-space'),
+  );
+  expect(reserved, 'the reserved space goes with the banner').toBe('');
+});
