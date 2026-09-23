@@ -67,6 +67,17 @@ test('cedar routes representative questions to the right intent', async ({ page 
     { q: 'tell me about the dawes act', expect: 'patchwork of ownership' },
     { q: 'how do alaska native corporations work', expect: 'Alaska Native Claims Settlement Act' },
     { q: 'what is a CEDS', expect: 'Comprehensive Economic Development Strategy' },
+    // Visitor phrasings that used to misroute: the product name to Cedar's
+    // self-introduction, "who built this" to grants, a multi-county region
+    // to the contact reply, and the AI-training and data-years questions to
+    // the fallback.
+    // company_overview was already answered above, so the repeat serves its
+    // deeper answer.
+    { q: 'What is Cedar Impact?', expect: 'guided data and review workflow' },
+    { q: 'Who built this?', expect: 'Oxford-trained researchers' },
+    { q: 'Do you support multi-county regions?', expect: 'overlapping regions' },
+    { q: 'Is my data used to train AI?', expect: 'We do not sell personal information' },
+    { q: 'What years of data are available?', expect: 'source vintage or base year' },
   ];
 
   for (const c of cases) {
