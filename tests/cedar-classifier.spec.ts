@@ -91,6 +91,39 @@ test('cedar routes representative questions to the right intent', async ({ page 
   }
 });
 
+test('"support" as a verb is not a request to contact the team', async ({ page }) => {
+  // The contact intent used to trigger on the bare word "support", so any
+  // "Do you support X?" question that matched nothing longer got the contact
+  // reply. Only support-as-a-service phrasings reach contact now.
+  const panel = await openCedar(page);
+  const contactReply = 'the team reads everything';
+  const verbQuestions: Array<{ q: string; expect?: string }> = [
+    { q: 'Do you support multi-county regions?', expect: 'overlapping regions' },
+    // Tied 1-1 with geographies on "reservations" and lost on declaration order.
+    { q: 'Do you support reservations and trust lands?', expect: 'reservations and trust lands' },
+    // Matches no topic; it must not fall to contact by default.
+    { q: 'Do you support Excel uploads?' },
+  ];
+  for (const c of verbQuestions) {
+    const bubble = await ask(panel, c.q);
+    await expect(bubble).toHaveText(/\S/, { timeout: 6000 });
+    if (c.expect) {
+      await expect(bubble, `"${c.q}" should reach its topic`).toContainText(c.expect);
+    }
+    expect(await bubble.innerText(), `"${c.q}" must not get the contact reply`).not.toContain(
+      contactReply,
+    );
+  }
+  // Each support request lands on contact; the second can only match through
+  // the support-as-a-service phrasings, not through "contact".
+  for (const q of ['How do I contact support?', 'Where can I get tech support?']) {
+    const bubble = await ask(panel, q);
+    await expect(bubble, `"${q}" still reaches contact`).toContainText(contactReply, {
+      timeout: 6000,
+    });
+  }
+});
+
 test('the bare phrase a customer searches for reaches an answer, not the fallback', async ({
   page,
 }) => {
