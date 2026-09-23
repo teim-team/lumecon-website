@@ -2660,3 +2660,131 @@ test('the consent banner is a thin docked bar on a phone and never hides the end
   );
   expect(reserved, 'the reserved space goes with the banner').toBe('');
 });
+
+/* The Why Lumecon illustrations float under a fine pointer: the image lifts
+   7px on the shared curve with a drop-shadow beneath it, then bobs 2.5px on
+   a 3s loop while the pointer stays, and comes back on leave. Transform and
+   filter only, on the image, so the card and its copy never move. */
+const whyArtStyle = (img: HTMLImageElement) => {
+  const cs = getComputedStyle(img);
+  const m = cs.transform.match(/matrix\(1, 0, 0, 1, 0, (-?[\d.]+)\)/);
+  return {
+    transform: cs.transform,
+    translateY: m ? Number(m[1]) : null,
+    filter: cs.filter,
+    animation: cs.animationName,
+    transition: cs.transitionDuration,
+  };
+};
+
+test('the Why Lumecon illustrations float on hover at 1440', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const cards = page.locator('.whyw-card');
+  await expect(cards).toHaveCount(4);
+  await cards.first().scrollIntoViewIfNeeded();
+  // The scroll-reveal moves the cards, not the images; wait for it to settle
+  // anyway so a mid-reveal frame cannot confuse the box comparisons below.
+  await page.waitForTimeout(1200);
+
+  for (let i = 0; i < 4; i++) {
+    const card = cards.nth(i);
+    const img = card.locator('.whyw-art img');
+    const cardBefore = (await card.boundingBox())!;
+    const copyBefore = (await card.locator('.whyw-card__t').boundingBox())!;
+    expect((await img.evaluate(whyArtStyle)).transform, `card ${i} rests untransformed`).toBe(
+      'none',
+    );
+
+    await card.hover();
+    // The lift lands within the 260ms transition; the bob then keeps the
+    // image between 7 and 9.5px up, so any later sample is also above 6.5.
+    await expect
+      .poll(async () => (await img.evaluate(whyArtStyle)).translateY, {
+        message: `card ${i} lifts on hover`,
+      })
+      .toBeLessThanOrEqual(-6.5);
+    const hovered = await img.evaluate(whyArtStyle);
+    expect(
+      hovered.translateY!,
+      `card ${i} lifts no further than the bob's top`,
+    ).toBeGreaterThanOrEqual(-9.6);
+    expect(hovered.filter, `card ${i} casts a drop-shadow while lifted`).toContain('drop-shadow(');
+    expect(hovered.animation, `card ${i} bobs while the pointer stays`).toBe('whyw-float');
+
+    // Transform and filter only: the card and its heading stay exactly put.
+    expect(await card.boundingBox()).toEqual(cardBefore);
+    expect(await card.locator('.whyw-card__t').boundingBox()).toEqual(copyBefore);
+
+    await page.mouse.move(2, 2);
+    await expect
+      .poll(async () => (await img.evaluate(whyArtStyle)).transform, {
+        message: `card ${i} settles back on leave`,
+      })
+      .toBe('none');
+  }
+
+  // The Cedar card carries a link, so keyboard focus lifts it the same way.
+  const cedar = page.locator('.whyw-card[data-art="cedar"]');
+  await cedar.locator('a').focus();
+  await expect
+    .poll(async () => (await cedar.locator('.whyw-art img').evaluate(whyArtStyle)).translateY, {
+      message: 'the Cedar illustration lifts when its link is focused',
+    })
+    .toBeLessThanOrEqual(-6.5);
+});
+
+test('the Why Lumecon float is a still lift under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const card = page.locator('.whyw-card').nth(1);
+  const img = card.locator('.whyw-art img');
+  await card.scrollIntoViewIfNeeded();
+  await card.hover();
+  // No transition, so the lift is there on the next style read, and no bob.
+  const lifted = await img.evaluate(whyArtStyle);
+  expect(lifted.transform).toBe('matrix(1, 0, 0, 1, 0, -7)');
+  expect(lifted.filter).toContain('drop-shadow(');
+  expect(lifted.animation).toBe('none');
+  expect(lifted.transition).toBe('0s');
+  await page.waitForTimeout(1700); // past the bob's half period
+  expect((await img.evaluate(whyArtStyle)).transform, 'no bob').toBe('matrix(1, 0, 0, 1, 0, -7)');
+});
+
+test.describe('the Why Lumecon float in the dark colour scheme', () => {
+  test.use({ colorScheme: 'dark' });
+
+  test('the shadow is cast dark enough to read on the navy surface', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const card = page.locator('.whyw-card').nth(1);
+    await card.scrollIntoViewIfNeeded();
+    await card.hover();
+    const img = card.locator('.whyw-art img');
+    await expect
+      .poll(async () => (await img.evaluate(whyArtStyle)).filter)
+      .toMatch(/drop-shadow\(rgba\(0, 0, 0, 0\.6\d*\)/);
+  });
+});
+
+test.describe('the Why Lumecon float on a touch screen', () => {
+  test.use({ hasTouch: true });
+
+  test('a finger gets no hover state', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const emulated = await page.evaluate(() => matchMedia('(hover: none)').matches);
+    test.skip(!emulated, 'this engine does not emulate a hoverless pointer from hasTouch');
+    const card = page.locator('.whyw-card').nth(1);
+    await card.scrollIntoViewIfNeeded();
+    await card.hover();
+    await page.waitForTimeout(400);
+    const img = card.locator('.whyw-art img');
+    expect(await img.evaluate(whyArtStyle)).toMatchObject({
+      transform: 'none',
+      filter: 'none',
+      animation: 'none',
+    });
+  });
+});
