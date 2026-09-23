@@ -186,6 +186,7 @@
 }
 .cedarpg-acts .tour-row .tour-row__shot,
 .cedarpg-acts .tour-row--flip .tour-row__shot {
+  --shot-radius: var(--radius-panel);
   margin-inline: 0;
   border: 1px solid var(--rule);
   border-radius: var(--radius-panel);

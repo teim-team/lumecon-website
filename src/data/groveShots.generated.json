@@ -12,12 +12,6 @@
       "tall": false
     },
     {
-      "name": "grove-evidence",
-      "width": 1920,
-      "height": 1200,
-      "tall": false
-    },
-    {
       "name": "grove-home",
       "width": 1920,
       "height": 1080,
@@ -26,8 +20,14 @@
     {
       "name": "grove-map",
       "width": 1920,
-      "height": 1236,
+      "height": 1249,
       "tall": true
+    },
+    {
+      "name": "grove-record",
+      "width": 1920,
+      "height": 1080,
+      "tall": false
     }
   ]
 }

@@ -174,9 +174,13 @@
   max-width: 72ch;
 }
 .tour-row__shot {
+  /* One radius for the frame, its clip and the picture inside it. A page
+     that rounds its frames differently (/cedar uses the panel radius) sets
+     this variable, and the three stay in step. */
+  --shot-radius: var(--radius-frame);
   margin: 0;
   border: 1px solid var(--rule);
-  border-radius: var(--radius-frame);
+  border-radius: var(--shot-radius);
   overflow: hidden;
   background: var(--white);
   box-shadow: var(--shadow-frame);
@@ -191,6 +195,15 @@
   width: 100%;
   aspect-ratio: auto;
   height: auto;
+  /* The picture rounds its own corners as well as being clipped by the frame:
+     a frame that lifts on hover is transformed, and WebKit has been known to
+     drop `overflow: hidden` clipping for the duration of a transform, which
+     showed these captures square. The frame is clipped by a clip-path too,
+     which survives a transform in every engine. */
+  border-radius: var(--shot-radius);
+}
+.tour-row__shot {
+  clip-path: inset(0 round var(--shot-radius));
 }
 
 @media (max-width: 880px) {

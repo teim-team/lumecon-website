@@ -103,6 +103,31 @@
   width: 100%;
   height: auto;
 }
+/* The corners, three ways, so the frame is rounded whatever the browser makes
+   of it. `overflow: hidden` on a frame that also lifts on hover (a transform)
+   is the one combination WebKit has been known to render square: the
+   clipping is dropped while the transform is live. So the frame is also cut
+   with a clip-path, which every engine honours through a transform, and the
+   picture and caption carry the frame's radius on their own outer corners
+   besides, so the corner is round even where no clipping applies at all. The
+   picture keeps square bottom corners while a caption sits under it, or a
+   sliver of frame shows between the two. */
+.grovepg-hero__shot,
+.grovetour .tour-row__shot {
+  clip-path: inset(0 round var(--radius-frame));
+}
+.grovepg-hero__shot > img,
+.grovetour .tour-row__shot > img {
+  border-radius: var(--radius-frame);
+}
+.grovepg-hero__shot:has(figcaption) > img,
+.grovetour .tour-row__shot:has(figcaption) > img {
+  border-radius: var(--radius-frame) var(--radius-frame) 0 0;
+}
+.grovepg-hero__shot figcaption,
+.grovetour .tour-row__shot figcaption {
+  border-radius: 0 0 var(--radius-frame) var(--radius-frame);
+}
 @media (max-width: 980px) {
   .grovepg-hero .meth-w {
     grid-template-columns: 1fr;
