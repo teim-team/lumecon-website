@@ -5,7 +5,8 @@
  * Shown only when the visitor hasn't chosen yet (consent === 'unset').
  * Until they Accept, analytics stays off (see src/lib/consent.ts and the
  * gated observability boot in BaseLayout). Anchored bottom-left so it
- * doesn't collide with the Cedar FAB on the bottom-right.
+ * doesn't collide with the Cedar FAB on the bottom-right; on phones it is a
+ * bar docked to the bottom edge (the FAB is hidden while it shows).
  */
 ---
 
@@ -33,6 +34,29 @@
 <script>
   import { getConsent, setConsent } from '../lib/consent';
 
+  /* While the banner shows, publish how much of the viewport's bottom edge it
+     covers. The page reserves that much space (see the styles below), so a
+     visitor can always scroll content, and keyboard focus, clear of it. */
+  let footprint: ResizeObserver | null = null;
+  function reserve(banner: HTMLElement): void {
+    const root = document.documentElement;
+    const measure = (): void => {
+      // Layout box, not getBoundingClientRect: the entrance animation
+      // translates the banner, and the reservation must not follow it.
+      const covered = banner.hidden
+        ? 0
+        : banner.offsetHeight + (parseFloat(getComputedStyle(banner).bottom) || 0);
+      root.style.setProperty('--consent-space', `${Math.max(0, Math.round(covered))}px`);
+    };
+    measure();
+    footprint ??= new ResizeObserver(measure);
+    footprint.observe(banner);
+  }
+  function release(): void {
+    footprint?.disconnect();
+    document.documentElement.style.removeProperty('--consent-space');
+  }
+
   function setup(): void {
     const banner = document.getElementById('consentBanner');
     if (!banner) return;
@@ -40,16 +64,19 @@
     if (getConsent() !== 'unset') {
       banner.hidden = true;
       document.body.classList.remove('consent-pending');
+      release();
       return;
     }
     if ((banner as HTMLElement & { __bound?: boolean }).__bound) {
       banner.hidden = false;
       document.body.classList.add('consent-pending');
+      reserve(banner);
       return;
     }
     (banner as HTMLElement & { __bound?: boolean }).__bound = true;
     banner.hidden = false;
     document.body.classList.add('consent-pending');
+    reserve(banner);
     banner.addEventListener('click', (e) => {
       const btn = (e.target as Element | null)?.closest<HTMLElement>('[data-consent]');
       if (!btn) return;
@@ -58,6 +85,7 @@
         setConsent(choice);
         banner.hidden = true;
         document.body.classList.remove('consent-pending');
+        release();
       }
     });
   }
@@ -84,7 +112,10 @@
     color: #fff;
     border-radius: 6px;
     padding: 1rem 1.1rem 1.05rem;
+    /* The hairline keeps its edge where it sits over the footer's own navy
+       bar at the end of a page. */
     box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1),
       0 2px 8px -3px rgba(10, 15, 38, 0.14),
       0 20px 44px -22px rgba(10, 15, 38, 0.34);
     display: flex;
@@ -150,6 +181,20 @@
     outline: 2px solid var(--accent-light);
     outline-offset: 2px;
   }
+  /* While the banner shows, the page ends that much later, so its last
+     links can be scrolled clear of it, and scrolling to a focused control
+     or an anchor stops short of it (WCAG 2.4.11, focus not obscured). The
+     footer's closing bar grows on its own ground (0.55rem is its own
+     padding, footer.css); pages without it pad the body. */
+  :global(html:has(body.consent-pending)) {
+    scroll-padding-bottom: var(--consent-space, 0px);
+  }
+  :global(body.consent-pending .footer-bar) {
+    padding-bottom: calc(0.55rem + var(--consent-space, 0px));
+  }
+  :global(body.consent-pending:not(:has(.footer-bar))) {
+    padding-bottom: var(--consent-space, 0px);
+  }
   @keyframes consent-in {
     from {
       opacity: 0;
@@ -160,26 +205,35 @@
       transform: none;
     }
   }
-  /* On phones the banner sits over the page's opening proposition, so
-     it stays one compact row: text left, buttons right. */
+  /* On phones the banner is a thin bar docked to the bottom edge rather than
+     a card floating over the page: one row, text left and buttons right,
+     clear of the home indicator and side notches. */
   @media (max-width: 640px) {
     .consent {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: auto;
       flex-direction: row;
       align-items: center;
-      gap: 0.7rem;
-      padding: 0.7rem 0.8rem;
-      width: calc(100vw - 1.8rem);
+      gap: 0.75rem;
+      border-radius: 0;
+      padding: 0.5rem calc(16px + env(safe-area-inset-right, 0px))
+        calc(0.5rem + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 -14px 32px -22px rgba(10, 15, 38, 0.5);
     }
     .consent__text {
-      font-size: 0.78rem;
-      line-height: 1.4;
+      font-size: 0.75rem;
+      line-height: 1.35;
     }
     .consent__actions {
       flex-shrink: 0;
     }
     .consent__btn {
       font-size: 0.78rem;
-      padding: 0.4rem 0.7rem;
+      padding: 0 0.75rem;
       min-height: 44px;
     }
   }

@@ -47,6 +47,7 @@ export const INTENTS: CedarIntent[] = [
     chip: 'What is Lumecon?',
     triggers: [
       'what is lumecon',
+      'what is cedar impact',
       // The phrase customers actually search. Without it, the single most
       // likely thing anyone types into Cedar scored zero and fell through to
       // the generic fallback. It lives on company_overview rather than on
@@ -849,8 +850,18 @@ export const INTENTS: CedarIntent[] = [
       'real human',
       'live person',
       'live agent',
-      'support',
+      // Support as in "reach someone", never the bare verb: "Do you support
+      // multi-county regions?" is a coverage question, not a contact one.
       'customer support',
+      'contact support',
+      'support team',
+      'support email',
+      'email support',
+      'reach support',
+      'tech support',
+      'technical support',
+      'help desk',
+      'helpdesk',
       'who do i talk to',
       'get a hold of',
       'connect with you',
@@ -1159,6 +1170,10 @@ export const INTENTS: CedarIntent[] = [
       'ancsa',
       'reservations',
       'reservation level',
+      'multi-county region',
+      'multi-county regions',
+      'multi county region',
+      'multi county regions',
     ],
     answer:
       'Every plan includes the supported U.S. geographies: counties, states, the nation, reservations and trust lands, with no per-geography charge. If your analysis spans multiple or overlapping regions, share the exact boundary with the team so they can confirm how it should be represented.',
@@ -1222,6 +1237,9 @@ export const INTENTS: CedarIntent[] = [
       "lumecon's background",
       'team background',
       'who built lumecon',
+      'who built this',
+      'who made this',
+      'who made lumecon',
       'who founded',
       'founded by',
       'cornell',
@@ -1944,6 +1962,11 @@ export const INTENTS: CedarIntent[] = [
       'train on our data',
       'train on my data',
       'train your models',
+      'data used to train',
+      'used to train ai',
+      'train ai',
+      'train the ai',
+      'train your ai',
       'use our data to train',
       'sell our data',
       'do you sell our data',
@@ -2450,6 +2473,9 @@ export const INTENTS: CedarIntent[] = [
       'how recent is the data',
       'data freshness',
       'what year is the data',
+      'what years of data',
+      'which years of data',
+      'years of data',
     ],
     answer:
       'BEA, ACS, LODES, QCEW and County Business Patterns each publish on their own release cycle and often with a lag. An analysis should identify the source vintage or base year it uses rather than present older data as current. Ask the team to confirm which releases are available for your geography and period.',

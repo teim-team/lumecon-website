@@ -67,11 +67,58 @@ test('cedar routes representative questions to the right intent', async ({ page 
     { q: 'tell me about the dawes act', expect: 'patchwork of ownership' },
     { q: 'how do alaska native corporations work', expect: 'Alaska Native Claims Settlement Act' },
     { q: 'what is a CEDS', expect: 'Comprehensive Economic Development Strategy' },
+    // Visitor phrasings that used to misroute: the product name to Cedar's
+    // self-introduction, "who built this" to grants, a multi-county region
+    // to the contact reply, and the AI-training and data-years questions to
+    // the fallback.
+    // company_overview was already answered above, so the repeat serves its
+    // deeper answer.
+    { q: 'What is Cedar Impact?', expect: 'guided data and review workflow' },
+    { q: 'Who built this?', expect: 'Oxford-trained researchers' },
+    { q: 'Do you support multi-county regions?', expect: 'overlapping regions' },
+    { q: 'Is my data used to train AI?', expect: 'We do not sell personal information' },
+    { q: 'What years of data are available?', expect: 'source vintage or base year' },
+    // ...without the year triggers taking historical-range questions from
+    // the intent that answers them.
+    { q: 'What years does historical analysis cover?', expect: 'Historical analysis runs from' },
   ];
 
   for (const c of cases) {
     const bubble = await ask(panel, c.q);
     await expect(bubble, `"${c.q}" should route to its intent`).toContainText(c.expect, {
+      timeout: 6000,
+    });
+  }
+});
+
+test('"support" as a verb is not a request to contact the team', async ({ page }) => {
+  // The contact intent used to trigger on the bare word "support", so any
+  // "Do you support X?" question that matched nothing longer got the contact
+  // reply. Only support-as-a-service phrasings reach contact now.
+  const panel = await openCedar(page);
+  const contactReply = 'the team reads everything';
+  const verbQuestions: Array<{ q: string; expect?: string }> = [
+    { q: 'Do you support multi-county regions?', expect: 'overlapping regions' },
+    // Tied 1-1 with geographies on "reservations" and lost on declaration order.
+    { q: 'Do you support reservations and trust lands?', expect: 'reservations and trust lands' },
+    // Matches no topic; it must not fall to contact by default.
+    { q: 'Do you support Excel uploads?' },
+  ];
+  for (const c of verbQuestions) {
+    const bubble = await ask(panel, c.q);
+    await expect(bubble).toHaveText(/\S/, { timeout: 6000 });
+    if (c.expect) {
+      await expect(bubble, `"${c.q}" should reach its topic`).toContainText(c.expect);
+    }
+    expect(await bubble.innerText(), `"${c.q}" must not get the contact reply`).not.toContain(
+      contactReply,
+    );
+  }
+  // Each support request lands on contact; the second can only match through
+  // the support-as-a-service phrasings, not through "contact".
+  for (const q of ['How do I contact support?', 'Where can I get tech support?']) {
+    const bubble = await ask(panel, q);
+    await expect(bubble, `"${q}" still reaches contact`).toContainText(contactReply, {
       timeout: 6000,
     });
   }
