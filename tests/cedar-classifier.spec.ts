@@ -78,6 +78,9 @@ test('cedar routes representative questions to the right intent', async ({ page 
     { q: 'Do you support multi-county regions?', expect: 'overlapping regions' },
     { q: 'Is my data used to train AI?', expect: 'We do not sell personal information' },
     { q: 'What years of data are available?', expect: 'source vintage or base year' },
+    // ...without the year triggers taking historical-range questions from
+    // the intent that answers them.
+    { q: 'What years does historical analysis cover?', expect: 'Historical analysis runs from' },
   ];
 
   for (const c of cases) {

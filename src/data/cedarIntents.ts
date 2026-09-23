@@ -48,7 +48,6 @@ export const INTENTS: CedarIntent[] = [
     triggers: [
       'what is lumecon',
       'what is cedar impact',
-      'cedar impact',
       // The phrase customers actually search. Without it, the single most
       // likely thing anyone types into Cedar scored zero and fell through to
       // the generic fallback. It lives on company_overview rather than on
@@ -1955,7 +1954,8 @@ export const INTENTS: CedarIntent[] = [
       'train on our data',
       'train on my data',
       'train your models',
-      'used to train',
+      'data used to train',
+      'used to train ai',
       'train ai',
       'train the ai',
       'train your ai',
@@ -2465,8 +2465,8 @@ export const INTENTS: CedarIntent[] = [
       'how recent is the data',
       'data freshness',
       'what year is the data',
-      'what years',
-      'which years',
+      'what years of data',
+      'which years of data',
       'years of data',
       'years are available',
     ],
