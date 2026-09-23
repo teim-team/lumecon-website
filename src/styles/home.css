@@ -1081,6 +1081,11 @@
      collapse the copy, not to set the height. */
   aspect-ratio: 16 / 9;
   min-height: 15rem;
+  /* An explicit width makes it the ratio-determining axis. Left auto, the
+     min-height is transferred through the ratio into a minimum width
+     (17rem becomes ~484px), which pushed the panels past the grid and
+     clipped their headlines at every width below about 1120px. */
+  width: 100%;
   overflow: hidden;
   background: #0a4750;
   color: #fff;
