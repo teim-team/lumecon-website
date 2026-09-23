@@ -1164,8 +1164,6 @@ export const INTENTS: CedarIntent[] = [
       'multi-county regions',
       'multi county region',
       'multi county regions',
-      'multiple counties',
-      'several counties',
     ],
     answer:
       'Every plan includes the supported U.S. geographies: counties, states, the nation, reservations and trust lands, with no per-geography charge. If your analysis spans multiple or overlapping regions, share the exact boundary with the team so they can confirm how it should be represented.',
@@ -2468,7 +2466,6 @@ export const INTENTS: CedarIntent[] = [
       'what years of data',
       'which years of data',
       'years of data',
-      'years are available',
     ],
     answer:
       'BEA, ACS, LODES, QCEW and County Business Patterns each publish on their own release cycle and often with a lag. An analysis should identify the source vintage or base year it uses rather than present older data as current. Ask the team to confirm which releases are available for your geography and period.',
