@@ -725,6 +725,77 @@
   }
 }
 
+/* Pointer over a card: the illustration floats. One lift of 7px on the
+   shared curve, then a slow 2.5px bob on a 3s loop for as long as the
+   pointer stays, so it reads as hovering rather than as a one-shot jump.
+   The bob animates a registered length, --whyw-bob, that the hover
+   transform adds to its lift, rather than animating transform itself: a
+   property under a running animation gets no transition when that
+   animation is cancelled, so a bob written straight into transform made
+   the image snap home on leave. Animating the offset instead keeps
+   transform free to carry the lift out and back on the shared curve. The
+   bob starts after exactly the lift's duration and its first keyframe is
+   zero offset, so the two hand over without a step. The shadow is a
+   drop-shadow on the image itself (the art is one transparent PNG, so the
+   whole drawing casts it), never a box on the card, and it is neutral,
+   darker on the navy surface where a navy-tinted shadow would vanish.
+   Transform and filter only, so nothing around the image moves;
+   will-change is set for the hover only. Fine pointers only: a finger has
+   no hover, and a tap keeps its behaviour. Keyboard focus on the Cedar
+   card's link lifts that card too. */
+@property --whyw-bob {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+.whyw {
+  --whyw-float-shadow: drop-shadow(0 10px 8px rgba(10, 15, 38, 0.18));
+}
+@media (prefers-color-scheme: dark) {
+  .whyw {
+    --whyw-float-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.62));
+  }
+}
+.whyw-art img {
+  transition:
+    transform 0.26s var(--ease),
+    filter 0.26s var(--ease);
+}
+.whyw-card:focus-within .whyw-art img {
+  transform: translateY(calc(-7px + var(--whyw-bob)));
+  filter: var(--whyw-float-shadow);
+  will-change: transform, filter;
+  animation: whyw-float 3s var(--ease) 0.26s infinite;
+}
+@media (hover: hover) and (pointer: fine) {
+  .whyw-card:hover .whyw-art img {
+    transform: translateY(calc(-7px + var(--whyw-bob)));
+    filter: var(--whyw-float-shadow);
+    will-change: transform, filter;
+    animation: whyw-float 3s var(--ease) 0.26s infinite;
+  }
+}
+@keyframes whyw-float {
+  0%,
+  100% {
+    --whyw-bob: 0px;
+  }
+  50% {
+    --whyw-bob: -2.5px;
+  }
+}
+/* Reduced motion keeps the lift and the shadow (the hover still says
+   "this responds") and drops the travel: no transition, no bob. */
+@media (prefers-reduced-motion: reduce) {
+  .whyw-art img {
+    transition: none;
+  }
+  .whyw-card:hover .whyw-art img,
+  .whyw-card:focus-within .whyw-art img {
+    animation: none;
+  }
+}
+
 /* ---------- final CTA (sign-up close) ---------- */
 .fcta {
   position: relative;
