@@ -92,8 +92,13 @@ const CLAIMS = {
 
 async function readPages() {
   const browser = await chromium.launch({ executablePath: chromiumExecutable() });
+  // This reader never scrolls, so anything a page animates in on scroll
+  // would be read mid-flight or not at all: the lineage on /why-lumecon
+  // counts its figures up from zero the first time it is seen. The site
+  // renders its final state at once under reduced motion, which is what a
+  // copy audit is after (the screenshot generators ask for the same).
   const page = await browser
-    .newContext({ viewport: { width: 1440, height: 900 } })
+    .newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })
     .then((c) => c.newPage());
   const out = [];
 
