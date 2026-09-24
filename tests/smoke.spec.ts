@@ -2665,17 +2665,34 @@ test('the consent banner is a thin docked bar on a phone and never hides the end
    7px on the shared curve with a drop-shadow beneath it, then bobs 2.5px on
    a 3s loop while the pointer stays, and comes back on leave. Transform and
    filter only, on the image, so the card and its copy never move. */
-const whyArtStyle = (img: HTMLImageElement) => {
-  const cs = getComputedStyle(img);
-  const m = cs.transform.match(/matrix\(1, 0, 0, 1, 0, (-?[\d.]+)\)/);
-  return {
-    transform: cs.transform,
-    translateY: m ? Number(m[1]) : null,
-    filter: cs.filter,
-    animation: cs.animationName,
-    transition: cs.transitionDuration,
-  };
-};
+const whyArtStyle = (img: HTMLImageElement) =>
+  new Promise<{
+    transform: string;
+    translateY: number | null;
+    filter: string;
+    animation: string;
+    transition: string;
+  }>((resolve) => {
+    let done = false;
+    const read = () => {
+      if (done) return;
+      done = true;
+      const cs = getComputedStyle(img);
+      const m = cs.transform.match(/matrix\(1, 0, 0, 1, 0, (-?[\d.]+)\)/);
+      resolve({
+        transform: cs.transform,
+        translateY: m ? Number(m[1]) : null,
+        filter: cs.filter,
+        animation: cs.animationName,
+        transition: cs.transitionDuration,
+      });
+    };
+    // Sample after a rendering update: the animation clock only advances
+    // with one, and headless WebKit has reported a transition frozen
+    // mid-flight for seconds when nothing else asked it to render.
+    requestAnimationFrame(() => requestAnimationFrame(read));
+    setTimeout(read, 250);
+  });
 
 test('the Why Lumecon illustrations float on hover at 1440', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -2717,15 +2734,18 @@ test('the Why Lumecon illustrations float on hover at 1440', async ({ page }) =>
     expect(await card.boundingBox()).toEqual(cardBefore);
     expect(await card.locator('.whyw-card__t').boundingBox()).toEqual(copyBefore);
 
-    // The move is re-issued on every sample: WebKit has been seen to keep
-    // the hover state through a single mousemove to an empty spot.
+    // The pointer moves on every sample, to a different empty spot each
+    // time: WebKit has been seen to keep the hover state through a single
+    // mousemove, and a repeated identical one does not make it render.
+    let nudge = 0;
     await expect
       .poll(
         async () => {
-          await page.mouse.move(2, 2);
+          nudge = (nudge + 1) % 4;
+          await page.mouse.move(2 + nudge, 2 + nudge);
           return (await img.evaluate(whyArtStyle)).transform;
         },
-        { message: `card ${i} settles back on leave` },
+        { message: `card ${i} settles back on leave`, timeout: 8000 },
       )
       .toBe('none');
   }
