@@ -521,6 +521,10 @@ test('why lumecon reads its lineage from the screenshot fixture', async ({ page 
   const inState = (rows: any[]) => rows.filter((r) => r.scope === 'state');
   const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
 
+  // The figures count up from zero the first time the block is scrolled
+  // into view; this test is about what they count up TO, so it reads the
+  // served state, which reduced motion shows at once.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
   await expect(page.locator('.why-trace__total')).toHaveText(usd(run.outputs.state.output));
 
@@ -2803,5 +2807,283 @@ test.describe('the Why Lumecon float on a touch screen', () => {
       filter: 'none',
       animation: 'none',
     });
+  });
+});
+
+/* ---------- the written-out lineage comes alive ---------- */
+
+/* The trace on /why-lumecon: every figure and every share, as the page
+   serves them, so a test can say what "final" means without restating a
+   number. The fixture is the same one the page reads. */
+async function traceReference() {
+  const { RESULTS } = (await import('../scripts/screenshots/examples-data.mjs')) as {
+    RESULTS: Record<string, any>;
+  };
+  const run = RESULTS['r-nation-b'];
+  const total: number = run.outputs.state.output;
+  const inState = (rows: any[]) => rows.filter((r) => r.scope === 'state');
+  const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+  const rows = [
+    ...inState(run.tables.by_effect).map((r: any) => r.output_impact as number),
+    ...inState(run.tables.by_entity).map((r: any) => r.output_impact as number),
+  ];
+  return {
+    total: usd(total),
+    values: rows.map(usd),
+    pcts: rows.map((v) => `${Math.round((v / total) * 100)}%`),
+    shares: rows.map((v) => v / total),
+  };
+}
+
+/* What the bars are doing, read from the pseudo-element that draws the
+   fill: its transform (scaleX(0) while waiting, none once filled) and its
+   width against the track's, which is the share the server wrote. */
+const traceBars = () =>
+  [...document.querySelectorAll<HTMLElement>('.why-trace__bar')].map((bar) => {
+    const cs = getComputedStyle(bar, '::before');
+    return {
+      transform: cs.transform,
+      transition: cs.transitionDuration,
+      share: parseFloat(cs.width) / bar.getBoundingClientRect().width,
+    };
+  });
+
+test('the trace ships its final figures in the markup and counts up to them once, in view', async ({
+  page,
+}) => {
+  const ref = await traceReference();
+
+  // Server-rendered: the real numbers and the real shares are in the HTML,
+  // for crawlers, print and anyone without scripting, before any script
+  // has run. Read the document itself, not the DOM a script has touched.
+  const html = await (await page.request.get('/why-lumecon')).text();
+  expect(html).toContain(`data-count-lead>${ref.total}<`);
+  for (const v of ref.values) expect(html).toContain(`>${v}</span`);
+  for (const p of ref.pcts) expect(html).toContain(`>${p}</span`);
+
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  const trace = page.locator('.why-trace[data-trace]');
+  const total = trace.locator('.why-trace__total');
+  const values = trace.locator('.why-trace__v');
+  const pcts = trace.locator('.why-trace__pct');
+
+  // Below the fold and not yet seen: the script has zeroed the figures and
+  // the stylesheet holds every fill at nothing, waiting for the class.
+  await expect(trace).not.toHaveClass(/is-live/);
+  await expect(total).toHaveText('$0');
+  await expect(values).toHaveText(ref.values.map(() => '$0'));
+  await expect(pcts).toHaveText(ref.pcts.map(() => '0%'));
+  for (const bar of await page.evaluate(traceBars)) {
+    expect(bar.transform).toBe('matrix(0, 0, 0, 1, 0, 0)');
+  }
+
+  // Scrolled into view: the class goes on, the fills grow to the share the
+  // server wrote, the figures land on the served text — total included.
+  await trace.scrollIntoViewIfNeeded();
+  await expect(trace).toHaveClass(/is-live/);
+  await expect(total).toHaveText(ref.total);
+  await expect(values).toHaveText(ref.values);
+  await expect(pcts).toHaveText(ref.pcts);
+  await expect.poll(() => page.evaluate(traceBars).then((b) => b.map((x) => x.transform))).toEqual(
+    ref.shares.map(() => 'none'),
+  );
+  const bars = await page.evaluate(traceBars);
+  bars.forEach((bar, i) => expect(bar.share).toBeCloseTo(ref.shares[i], 2));
+
+  // Rows step in: each fill waits 100ms longer than the one above it, on
+  // the site's one curve, and the figures beside it wait the same.
+  const delays = await page.evaluate(() =>
+    [...document.querySelectorAll('.why-trace__col')].map((col) =>
+      [...col.querySelectorAll('.why-trace__bar')].map(
+        (bar) => getComputedStyle(bar, '::before').transitionDelay,
+      ),
+    ),
+  );
+  for (const col of delays) expect(col).toEqual(['0s', '0.1s', '0.2s']);
+  expect(await values.evaluateAll((els) => els.map((e) => e.getAttribute('data-count-delay')))).toEqual(
+    ['0', '100', '200', '0', '100', '200'],
+  );
+  // The site's one curve. The minifier writes `.22` where the computed
+  // style says `0.22`, so the four control points are compared as numbers.
+  const curve = (s: string) => s.match(/-?[\d.]+/g)!.map(Number);
+  const timing = await page.evaluate(() =>
+    getComputedStyle(document.querySelector('.why-trace__bar')!, '::before').transitionTimingFunction,
+  );
+  const ease = await page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--ease').trim(),
+  );
+  expect(timing).toMatch(/^cubic-bezier\(/);
+  expect(curve(timing)).toEqual(curve(ease));
+
+  // Once. Scroll away and back: nothing resets, nothing replays.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(300);
+  await trace.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+  await expect(total).toHaveText(ref.total);
+  await expect(trace).toHaveClass(/is-live/);
+
+  // Widths do not jitter while the digits change: tabular numerals on
+  // every counter, the percentages included.
+  for (const sel of ['.why-trace__total', '.why-trace__v', '.why-trace__pct']) {
+    await expect(page.locator(sel).first()).toHaveCSS('font-variant-numeric', 'tabular-nums');
+  }
+});
+
+test('the trace shows its final state at once under reduced motion', async ({ page }) => {
+  const ref = await traceReference();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/why-lumecon', { waitUntil: 'networkidle' });
+  const trace = page.locator('.why-trace[data-trace]');
+  // Not scrolled to, and complete: the figures were never zeroed, the class
+  // is on already, and the fills sit at their share with no transition.
+  await expect(trace).toHaveClass(/is-live/);
+  await expect(trace.locator('.why-trace__total')).toHaveText(ref.total);
+  await expect(trace.locator('.why-trace__v')).toHaveText(ref.values);
+  await expect(trace.locator('.why-trace__pct')).toHaveText(ref.pcts);
+  const bars = await page.evaluate(traceBars);
+  bars.forEach((bar, i) => {
+    expect(bar.transform).toBe('none');
+    expect(bar.transition).toBe('0s');
+    expect(bar.share).toBeCloseTo(ref.shares[i], 2);
+  });
+});
+
+test.describe('the trace with no working script', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('is complete: the figures are served and the bars are full', async ({ page }) => {
+    const ref = await traceReference();
+    await page.goto('/why-lumecon', { waitUntil: 'domcontentloaded' });
+    const trace = page.locator('.why-trace[data-trace]');
+    await expect(trace.locator('.why-trace__total')).toHaveText(ref.total);
+    await expect(trace.locator('.why-trace__v')).toHaveText(ref.values);
+    await expect(trace.locator('.why-trace__pct')).toHaveText(ref.pcts);
+    const bars = await page.evaluate(traceBars);
+    bars.forEach((bar, i) => {
+      expect(bar.transform).toBe('none');
+      expect(bar.share).toBeCloseTo(ref.shares[i], 2);
+    });
+  });
+});
+
+/* ---------- lists step in, and nothing is stranded ---------- */
+
+/* The rows that now arrive one at a time, and the delay each child is
+   given once its group is seen: 90ms per row, capped at the sixth. */
+const STEPPED = [
+  { path: '/', groups: ['.edge-ledger', '.places-intro ul'] },
+  {
+    path: '/why-lumecon',
+    groups: ['.why-price__list', '.why-points', '.why-people', '.why-checks'],
+  },
+];
+for (const { path, groups } of STEPPED) {
+  test(`${path} steps its lists in one row at a time and never strands one`, async ({ page }) => {
+    const stillFaded = () =>
+      page.evaluate(() =>
+        [...document.querySelectorAll('.reveal-soft, [data-reveal-group] > *')]
+          .filter((el) => parseFloat(getComputedStyle(el).opacity) < 0.99)
+          .map((el) => el.className || el.tagName),
+      );
+
+    // Reduced motion: nothing faded, nothing delayed.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(path, { waitUntil: 'networkidle' });
+    for (const g of groups) await expect(page.locator(g)).toHaveAttribute('data-reveal-group', '');
+    expect(await stillFaded()).toEqual([]);
+
+    // With motion, the group's children carry a stepped delay once seen,
+    // and everything has landed after one pass down the page.
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto(path, { waitUntil: 'networkidle' });
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 400) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 80));
+      }
+    });
+    await expect.poll(stillFaded, { timeout: 5000 }).toEqual([]);
+    for (const g of groups) {
+      const delays = await page.locator(`${g} > *`).evaluateAll((els) =>
+        els.map((el) => getComputedStyle(el).transitionDelay),
+      );
+      expect(delays.length, `${g} has rows`).toBeGreaterThanOrEqual(3);
+      delays.forEach((d, i) => expect(d, `${g} row ${i + 1}`).toBe(`${Math.min(i, 5) * 0.09}s`));
+    }
+  });
+}
+
+/* ---------- the Cedar facts answer the pointer ---------- */
+
+const cedarIconStyle = (icon: Element) => {
+  const cs = getComputedStyle(icon);
+  return { transform: cs.transform, color: cs.color, transition: cs.transitionDuration };
+};
+
+test('the Cedar facts lift their line icon on hover, and only the icon', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/cedar', { waitUntil: 'networkidle' });
+  const facts = page.locator('.cedarpg-fact');
+  await expect(facts).toHaveCount(3);
+  await facts.first().scrollIntoViewIfNeeded();
+  await expect(facts.first()).toHaveCSS('opacity', '1');
+  await page.waitForTimeout(600);
+
+  const fact = facts.nth(1);
+  const icon = fact.locator('.cedarpg-fact__icon');
+  const titleBefore = (await fact.locator('.cedarpg-fact__t').boundingBox())!;
+  const rest = await icon.evaluate(cedarIconStyle);
+  expect(rest.transform).toBe('none');
+
+  await fact.hover();
+  await expect
+    .poll(async () => (await icon.evaluate(cedarIconStyle)).transform, {
+      message: 'the icon lifts 4px',
+    })
+    .toBe('matrix(1, 0, 0, 1, 0, -4)');
+  expect((await icon.evaluate(cedarIconStyle)).color).not.toBe(rest.color);
+  // Transform and color only: the headline under it does not move.
+  expect(await fact.locator('.cedarpg-fact__t').boundingBox()).toEqual(titleBefore);
+
+  let nudge = 0;
+  await expect
+    .poll(
+      async () => {
+        nudge = (nudge + 1) % 4;
+        await page.mouse.move(2 + nudge, 2 + nudge);
+        return (await icon.evaluate(cedarIconStyle)).transform;
+      },
+      { message: 'the icon settles back on leave', timeout: 8000 },
+    )
+    .toBe('none');
+
+  // Reduced motion keeps the colour change and drops the travel.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await facts.nth(2).hover();
+  const reduced = await facts.nth(2).locator('.cedarpg-fact__icon').evaluate(cedarIconStyle);
+  expect(reduced.transform).toBe('none');
+  expect(reduced.transition).toBe('0s');
+  expect(reduced.color).not.toBe(rest.color);
+});
+
+test.describe('the Cedar facts on a touch screen', () => {
+  test.use({ hasTouch: true });
+
+  test('a finger gets no hover state', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/cedar', { waitUntil: 'networkidle' });
+    const emulated = await page.evaluate(() => matchMedia('(hover: none)').matches);
+    test.skip(!emulated, 'this engine does not emulate a hoverless pointer from hasTouch');
+    const fact = page.locator('.cedarpg-fact').nth(1);
+    await fact.scrollIntoViewIfNeeded();
+    await fact.hover();
+    await page.waitForTimeout(400);
+    expect((await fact.locator('.cedarpg-fact__icon').evaluate(cedarIconStyle)).transform).toBe(
+      'none',
+    );
   });
 });

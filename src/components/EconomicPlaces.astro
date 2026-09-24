@@ -49,7 +49,9 @@ const MEASURES = [
       <p class="h-kicker">Built for the real economy</p>
       <h2 id="places-title">Follow spending through the places and industries it reaches.</h2>
     </div>
-    <ul aria-label="Measures reported by Lumecon">
+    {/* Five measures, stepped in 90ms apart as the intro comes into view
+        (global.css, data-reveal-group); the heading beside them is static. */}
+    <ul aria-label="Measures reported by Lumecon" data-reveal-group>
       {MEASURES.map((measure) => <li>{measure}</li>)}
     </ul>
   </header>

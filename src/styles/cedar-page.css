@@ -86,6 +86,30 @@
 .cedarpg-fact .h-kicker {
   margin-bottom: 0;
 }
+/* Pointer over a fact: its line icon lifts 4px on the shared curve and
+   takes the interactive teal, the same answer the homepage's Why cards give
+   (home.css, illustrated card art), scaled to a line drawing. Transform
+   and color only, so nothing around it moves. Fine pointers only: a finger
+   has no hover. Reduced motion keeps the color change and drops the travel. */
+.cedarpg-fact__icon {
+  transition:
+    transform 0.26s var(--ease),
+    color 0.26s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cedarpg-fact:hover .cedarpg-fact__icon {
+    transform: translateY(-4px);
+    color: var(--accent-text);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cedarpg-fact__icon {
+    transition: none;
+  }
+  .cedarpg-fact:hover .cedarpg-fact__icon {
+    transform: none;
+  }
+}
 @media (max-width: 900px) {
   .cedarpg-facts {
     grid-template-columns: 1fr;

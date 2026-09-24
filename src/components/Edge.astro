@@ -57,7 +57,10 @@ const ROWS = [
       </a>
     </header>
 
-    <div class="edge-ledger reveal-soft">
+    {/* The four rows step in 90ms apart (global.css, data-reveal-group)
+        rather than arriving as one block, so the ledger reads as four
+        rows the first time as it does on every look after. */}
+    <div class="edge-ledger" data-reveal-group>
       {
         ROWS.map((row) => (
           <a class="edge-row" href={row.href}>

@@ -139,7 +139,13 @@ const BY_OPERATION = inState(TRACE_RUN.tables.by_entity).map((r) => ({
   v: r.output_impact,
 }));
 const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
-const pct = (n: number) => `${Math.round((n / TRACE_TOTAL) * 100)}%`;
+const pctOf = (n: number) => Math.round((n / TRACE_TOTAL) * 100);
+const pct = (n: number) => `${pctOf(n)}%`;
+/* Milliseconds between one row's fill starting and the next one's. The
+   stylesheet reads the same figure through `--row` (why-page.css, the
+   `.why-trace__bar::before` delay), so the bar and the figures beside it
+   step together. */
+const TRACE_ROWS_STAGGER = 100;
 
 /* What makes an organization hard to model, in the words of the thing
    that makes it hard rather than in the words of a feature. */
@@ -278,10 +284,12 @@ const jsonLd = [
           <p class="why-price__sub reveal-soft">
             {ENTRY.name}, for one analyst. Paid plans start here.
           </p>
-          <ul class="why-price__list" role="list">
+          {/* One attribute on the list steps the three in, rather than
+              three rows fading up at once (global.css, data-reveal-group). */}
+          <ul class="why-price__list" role="list" data-reveal-group>
             {
               INCLUDED.map((i) => (
-                <li class="reveal-soft">
+                <li>
                   <p class="why-price__k">{i.k}</p>
                   <p class="why-price__b">{i.b}</p>
                 </li>
@@ -391,10 +399,20 @@ const jsonLd = [
           </p>
         </div>
 
-        <div class="why-trace reveal-soft">
+        {/* The markup carries the final figures and the bars their final
+            width: a crawler, a print and a reader without scripting see the
+            decomposition complete. When the block first scrolls into view,
+            the bars fill and the figures count up to what is already
+            written (the script below); after that it never plays again. */}
+        <div class="why-trace reveal-soft" data-trace>
           <p class="why-trace__head">
             <span class="why-trace__label">Economic output</span>
-            <span class="why-trace__total">{usd(TRACE_TOTAL)}</span>
+            <span
+              class="why-trace__total"
+              data-count={TRACE_TOTAL}
+              data-count-delay={TRACE_ROWS_STAGGER * (BY_LAYER.length - 1)}
+              data-count-lead>{usd(TRACE_TOTAL)}</span
+            >
           </p>
 
           <div class="why-trace__cols">
@@ -402,18 +420,28 @@ const jsonLd = [
               <p class="why-trace__k">By effect layer</p>
               <ul role="list">
                 {
-                  BY_LAYER.map((r) => (
+                  BY_LAYER.map((r, i) => (
                     <li>
                       <p class="why-trace__row">
                         <span class="why-trace__n">{r.k}</span>
-                        <span class="why-trace__v">{usd(r.v)}</span>
+                        <span
+                          class="why-trace__v"
+                          data-count={r.v}
+                          data-count-delay={i * TRACE_ROWS_STAGGER}>{usd(r.v)}</span
+                        >
                       </p>
                       <span
                         class="why-trace__bar"
-                        style={`--share:${(r.v / TRACE_TOTAL) * 100}%`}
+                        style={`--share:${(r.v / TRACE_TOTAL) * 100}%;--row:${i}`}
                         aria-hidden="true"></span>
                       <p class="why-trace__note">
-                        <span class="why-trace__pct">{pct(r.v)}</span> {r.b}
+                        <span
+                          class="why-trace__pct"
+                          data-count={pctOf(r.v)}
+                          data-count-fmt="pct"
+                          data-count-delay={i * TRACE_ROWS_STAGGER}>{pct(r.v)}</span
+                        >{' '}
+                        {r.b}
                       </p>
                     </li>
                   ))
@@ -425,18 +453,28 @@ const jsonLd = [
               <p class="why-trace__k">By operation</p>
               <ul role="list">
                 {
-                  BY_OPERATION.map((r) => (
+                  BY_OPERATION.map((r, i) => (
                     <li>
                       <p class="why-trace__row">
                         <span class="why-trace__n">{r.k}</span>
-                        <span class="why-trace__v">{usd(r.v)}</span>
+                        <span
+                          class="why-trace__v"
+                          data-count={r.v}
+                          data-count-delay={i * TRACE_ROWS_STAGGER}>{usd(r.v)}</span
+                        >
                       </p>
                       <span
                         class="why-trace__bar"
-                        style={`--share:${(r.v / TRACE_TOTAL) * 100}%`}
+                        style={`--share:${(r.v / TRACE_TOTAL) * 100}%;--row:${i}`}
                         aria-hidden="true"></span>
                       <p class="why-trace__note">
-                        <span class="why-trace__pct">{pct(r.v)}</span> of the total
+                        <span
+                          class="why-trace__pct"
+                          data-count={pctOf(r.v)}
+                          data-count-fmt="pct"
+                          data-count-delay={i * TRACE_ROWS_STAGGER}>{pct(r.v)}</span
+                        >{' '}
+                        of the total
                       </p>
                     </li>
                   ))
@@ -455,6 +493,128 @@ const jsonLd = [
         </div>
       </div>
     </section>
+    {/* The count-up. Inline and synchronous so the figures are zeroed
+        before this part of the page can paint; the fill itself is a CSS
+        transition the `is-live` class releases (why-page.css). Reduced
+        motion, no IntersectionObserver, print and a block already scrolled
+        past all land on the server-rendered final state at once. The
+        numbers run on the same curve the stylesheet uses, read from
+        `--ease` rather than copied. */}
+    <script is:inline>
+      (function () {
+        var root = document.querySelector('.why-trace[data-trace]');
+        if (!root || root.hasAttribute('data-trace-bound')) return;
+        root.setAttribute('data-trace-bound', '');
+        var reduced =
+          window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var nodes = root.querySelectorAll('[data-count]');
+        var live = function () {
+          root.classList.add('is-live');
+        };
+        if (reduced || !('IntersectionObserver' in window) || !window.requestAnimationFrame) {
+          live();
+          return;
+        }
+        var DURATION = 900;
+        var fmt = function (n, kind) {
+          var r = Math.round(n);
+          if (kind === 'pct') return r + '%';
+          return '$' + r.toLocaleString('en-US');
+        };
+        /* The stylesheet's cubic-bezier, solved on x by Newton's method so
+           the count follows the bar it sits beside. */
+        var ease = (function () {
+          var m = /cubic-bezier\(([^)]+)\)/.exec(
+            getComputedStyle(document.documentElement).getPropertyValue('--ease'),
+          );
+          var c = m ? m[1].split(',').map(parseFloat) : [0.22, 1, 0.36, 1];
+          var at = function (t, p1, p2) {
+            var u = 1 - t;
+            return 3 * p1 * u * u * t + 3 * p2 * u * t * t + t * t * t;
+          };
+          return function (x) {
+            if (x <= 0) return 0;
+            if (x >= 1) return 1;
+            var t = x;
+            for (var k = 0; k < 8; k++) {
+              var u = 1 - t;
+              var slope = 3 * c[0] * u * u + 6 * (c[2] - c[0]) * u * t + 3 * (1 - c[2]) * t * t;
+              if (Math.abs(slope) < 1e-6) break;
+              t -= (at(t, c[0], c[2]) - x) / slope;
+            }
+            return at(t, c[1], c[3]);
+          };
+        })();
+        var items = [];
+        for (var i = 0; i < nodes.length; i++) {
+          var el = nodes[i];
+          var lead = el.hasAttribute('data-count-lead');
+          var delay = parseInt(el.getAttribute('data-count-delay') || '0', 10);
+          items.push({
+            el: el,
+            end: parseFloat(el.getAttribute('data-count')),
+            kind: el.getAttribute('data-count-fmt'),
+            text: el.textContent,
+            /* The total runs from the first bar's start to the last bar's
+               end, so it lands in step with the decomposition beneath it. */
+            start: lead ? 0 : delay,
+            duration: lead ? DURATION + delay : DURATION,
+          });
+          el.textContent = fmt(0, items[i].kind);
+        }
+        var done = false;
+        var finish = function () {
+          done = true;
+          for (var j = 0; j < items.length; j++) items[j].el.textContent = items[j].text;
+          live();
+        };
+        var play = function () {
+          if (done) return;
+          done = true;
+          live();
+          var t0 = performance.now();
+          var frame = function (now) {
+            var pending = false;
+            for (var j = 0; j < items.length; j++) {
+              var it = items[j];
+              var p = (now - t0 - it.start) / it.duration;
+              if (p >= 1) {
+                it.el.textContent = it.text;
+                continue;
+              }
+              pending = true;
+              it.el.textContent = fmt(it.end * ease(p), it.kind);
+            }
+            if (pending) requestAnimationFrame(frame);
+          };
+          requestAnimationFrame(frame);
+        };
+        window.addEventListener('beforeprint', finish);
+        /* Already scrolled past (deep link, restored scroll): show it done
+           rather than leave a row of zeros above the reader. */
+        if (root.getBoundingClientRect().bottom < 0) {
+          finish();
+          return;
+        }
+        /* A block taller than the viewport can never show 35% of itself at
+           once, so the threshold gives way to what a short screen can hold. */
+        var threshold = Math.min(
+          0.35,
+          (window.innerHeight * 0.5) / Math.max(root.offsetHeight, 1),
+        );
+        var io = new IntersectionObserver(
+          function (entries) {
+            for (var k = 0; k < entries.length; k++) {
+              if (!entries[k].isIntersecting) continue;
+              io.disconnect();
+              play();
+            }
+          },
+          { threshold: threshold },
+        );
+        io.observe(root);
+      })();
+    </script>
 
     {/* 04 · Complexity. One capture, because the frame happens to show
         both the thing being described and the guardrail around it. */}
@@ -472,7 +632,7 @@ const jsonLd = [
         <article class="tour-row" aria-labelledby="w-complex-row">
           <div class="tour-row__text reveal-left">
             <h3 class="tour-row__title" id="w-complex-row">One economy, several sets of books.</h3>
-            <ul class="why-points" role="list">
+            <ul class="why-points" role="list" data-reveal-group>
               {
                 COMPLEX.map((c) => (
                   <li>
@@ -512,10 +672,10 @@ const jsonLd = [
             else first, mostly inside the institutions that publish the data the model runs on.
           </p>
         </div>
-        <ul class="why-people" role="list">
+        <ul class="why-people" role="list" data-reveal-group>
           {
             TEAM_ROSTER.map((p) => (
-              <li class="reveal-soft">
+              <li>
                 {/* `/team` — there is no per-person route. `/team/<slug>`
                     was a link to a page that does not exist: the build
                     emits dist/team/index.html and the portraits, nothing
@@ -553,10 +713,10 @@ const jsonLd = [
         <div class="meth-sec__head reveal-soft">
           <h2 id="w-check">Check any of this yourself.</h2>
         </div>
-        <ul class="why-checks" role="list">
+        <ul class="why-checks" role="list" data-reveal-group>
           {
             CHECKS.map((c) => (
-              <li class="reveal-soft">
+              <li>
                 <p class="why-checks__label">{c.label}</p>
                 <div>
                   <p class="why-checks__t">{c.t}</p>

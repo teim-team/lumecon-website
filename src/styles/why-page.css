@@ -234,6 +234,28 @@
   width: var(--share, 0%);
   background: var(--accent);
   border-radius: 2px;
+  /* The fill. The server draws the bar at its share; with scripting
+     present it starts scaled to nothing and grows on the shared curve once
+     the block goes live (`is-live`, set by the page's script the first time
+     the block is 35% in view), each row 100ms after the one above it —
+     `--row` is set beside `--share`, and the figures beside the bar count
+     on the same delay. A transform, not a width, so nothing reflows while
+     it runs. Scoped to html.js: without scripting the bar is simply full. */
+  transform-origin: 0 50%;
+  transition: transform 0.9s var(--ease);
+  transition-delay: calc(var(--row, 0) * 100ms);
+}
+.js .why-trace[data-trace]:not(.is-live) .why-trace__bar::before {
+  transform: scaleX(0);
+}
+/* Reduced motion and print see the share at once, as a reader without
+   scripting does; the script lands on the final figures the same way. */
+@media (prefers-reduced-motion: reduce), print {
+  .why-trace__bar::before,
+  .js .why-trace[data-trace]:not(.is-live) .why-trace__bar::before {
+    transform: none;
+    transition: none;
+  }
 }
 .why-trace__note {
   margin: 0.4rem 0 0;
@@ -245,6 +267,8 @@
   font-family: var(--font-mono);
   color: var(--accent-text);
   font-weight: 600;
+  /* Counted up by the script, so the digits must not jitter as they change. */
+  font-variant-numeric: tabular-nums;
 }
 .why-trace__foot {
   margin: clamp(1.8rem, 3.5vw, 2.6rem) 0 0;
