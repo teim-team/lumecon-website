@@ -1386,3 +1386,176 @@
 .ready-consultant strong {
   color: var(--ink);
 }
+
+/* ---------------- the four stages, drawn ----------------
+   Fills the hero's left column, which sat empty below the lede, with the
+   flow's own structure. Static without JavaScript (a plain list of the
+   four stages); the script lights the current one and turns a finished
+   one into a way back. */
+
+.start-guide {
+  list-style: none;
+  margin: clamp(1.8rem, 3vw, 2.4rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  max-width: 30rem;
+}
+.start-guide__btn {
+  display: grid;
+  grid-template-columns: 4.25rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: default;
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+.start-guide__btn:not(:disabled) {
+  cursor: pointer;
+}
+.start-guide__btn:not(:disabled):hover,
+.start-guide__btn:focus-visible {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.start-guide__art {
+  display: grid;
+  place-items: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  border-radius: 10px;
+  background: rgba(243, 246, 248, 0.94);
+  box-shadow: 0 6px 18px rgba(3, 14, 22, 0.28);
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
+}
+.start-guide__art img {
+  display: block;
+  width: 86%;
+  height: auto;
+}
+.start-guide__text {
+  display: grid;
+  gap: 0.1rem;
+}
+.start-guide__n {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ink-4);
+}
+.start-guide__label {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.start-guide__line {
+  font-size: var(--fs-sm-2);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+/* Once the script runs, upcoming stages recede and the current one leads. */
+.start-guide.is-live .start-guide__item:not(.on):not(.past) .start-guide__btn {
+  opacity: 0.55;
+}
+.start-guide__item.on .start-guide__btn {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.start-guide__item.on .start-guide__art {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 10px 26px rgba(3, 14, 22, 0.38);
+}
+.start-guide__item.on .start-guide__n,
+.start-guide__item.past .start-guide__n {
+  color: var(--accent-text);
+}
+.start-guide__item.past .start-guide__n::after {
+  content: ' \2713';
+}
+.start-guide__btn:not(:disabled):hover .start-guide__art {
+  transform: translateY(-2px);
+}
+
+/* The results figure: the note about the measures sits under the list it
+   explains, in the right column, rather than alone under the figure. */
+.start-output__side {
+  display: grid;
+  align-content: start;
+}
+.start-output__foot {
+  margin-top: 1.1rem;
+}
+
+/* The three core records read side by side on a wide screen, and the two
+   notes under them share the width instead of stacking down the left. */
+@media (min-width: 981px) {
+  .start-core {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 clamp(1.4rem, 2.6vw, 2.2rem);
+  }
+  .start-core li,
+  .start-core li:last-child {
+    display: grid;
+    align-content: space-between;
+    gap: 0.8rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .start-core__after {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.4rem, 2.6vw, 2.2rem);
+    align-items: start;
+  }
+  .start-core__after .start-foot {
+    margin-top: 1.1rem;
+  }
+}
+
+@media (max-width: 980px) {
+  /* Stacked, the flow comes first: the guide becomes a compact row of the
+     four marks above the form rather than four rows that push it down. */
+  .start-guide {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: none;
+    gap: 0.5rem;
+  }
+  .start-guide__btn {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.2rem;
+    text-align: center;
+  }
+  .start-guide__art {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+  .start-guide__line,
+  .start-guide__n {
+    display: none;
+  }
+  .start-guide__label {
+    font-size: var(--fs-sm-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-guide__btn,
+  .start-guide__art {
+    transition: none;
+  }
+  .start-guide__item.on .start-guide__art,
+  .start-guide__btn:not(:disabled):hover .start-guide__art {
+    transform: none;
+  }
+}

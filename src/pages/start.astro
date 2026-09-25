@@ -54,6 +54,17 @@ const description =
    fails `astro check` (it did, and it broke a deploy). */
 const CORE_RECORD_IDS = ['financials', 'payroll', 'headcount'] as const;
 
+/* The four stages of the flow, drawn. The labels are STAGES' own; the art
+   and the one line under each are this page's. The guide sits in the
+   hero's left column, which was empty below the lede, and follows the
+   flow: the current stage is lit and a finished one goes back to it. */
+const STAGE_ART: Record<string, { src: string; line: string }> = {
+  goal: { src: '/art/start/stage-goal.webp', line: 'What you want to understand, and who it is for.' },
+  scope: { src: '/art/start/stage-scope.webp', line: 'What is analyzed, where it happens and what it involves.' },
+  records: { src: '/art/start/stage-records.webp', line: 'Which records exist and who holds them.' },
+  plan: { src: '/art/start/stage-plan.webp', line: 'A scope you can run and the records to bring first.' },
+};
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -85,6 +96,25 @@ const jsonLd = [
             Start with the records you already have. Answer a few questions to find a scope you can
             run and see what to bring.
           </p>
+
+          <ol class="start-guide reveal-soft" data-stagger="2" data-guide aria-label="The four stages">
+            {
+              STAGES.map((stage, i) => (
+                <li class="start-guide__item" data-guide-stage={stage.id}>
+                  <button type="button" class="start-guide__btn" data-guide-jump={stage.id} disabled>
+                    <span class="start-guide__art" aria-hidden="true">
+                      <img src={STAGE_ART[stage.id]?.src} alt="" width="160" height="160" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                    </span>
+                    <span class="start-guide__text">
+                      <span class="start-guide__n">{String(i + 1).padStart(2, '0')}</span>
+                      <span class="start-guide__label">{stage.label}</span>
+                      <span class="start-guide__line">{STAGE_ART[stage.id]?.line}</span>
+                    </span>
+                  </button>
+                </li>
+              ))
+            }
+          </ol>
 
           {/* Fills in as answers accumulate, and each line goes back to the
               question that set it. It replaces the standing explanation
@@ -269,6 +299,7 @@ const jsonLd = [
             </div>
             <figcaption>A completed analysis. Illustrative sample data, not a customer.</figcaption>
           </figure>
+          <div class="start-output__side">
           <ol class="start-output__list" role="list">
             <li>
               <p class="start-output__k">Jobs supported</p>
@@ -287,12 +318,14 @@ const jsonLd = [
               <p class="start-output__b">Total production supported in the region.</p>
             </li>
           </ol>
-        </div>
-        <p class="start-foot">
+          <p class="start-foot start-output__foot">
           Labor income is a component of value added, which is a component of economic output.
           They are layers of the same activity, so they are never added together.{' '}
           <a class="gloss-link" href="/glossary">See the glossary</a> for each term in full.
         </p>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -458,7 +491,8 @@ const jsonLd = [
             ))
           }
         </ul>
-        <p class="start-core__note">
+        <div class="start-core__after">
+          <p class="start-core__note">
           These three, for one year, cover the common case. What else a particular analysis needs
           depends on its scope, which is what the questions above work out. Some of what looks like
           a separate request is often already inside a record you hold.
@@ -467,6 +501,7 @@ const jsonLd = [
           Nothing is uploaded here. Records are shared inside the product, where access is
           controlled and every file stays connected to the analysis it supports.
         </p>
+        </div>
       </div>
     </section>
 
@@ -580,6 +615,19 @@ const jsonLd = [
          stacked, which is the version that works with no JavaScript. From
          here it becomes one question at a time. */
       const rail = form.querySelector<HTMLElement>('[data-pf-rail]');
+      const guide = document.querySelector<HTMLElement>('[data-guide]');
+      guide?.classList.add('is-live');
+      for (const btn of guide?.querySelectorAll<HTMLButtonElement>('[data-guide-jump]') ?? []) {
+        btn.addEventListener('click', () => {
+          const path = livePath();
+          const index = path.findIndex((s) => s.stage === btn.dataset.guideJump);
+          if (index < 0) return;
+          if (done) leavePlan();
+          cursor = index;
+          render(true);
+          form!.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
       const actions = form.querySelector<HTMLElement>('[data-pf-actions]');
       const nextBtn = form.querySelector<HTMLButtonElement>('[data-pf-next]');
       const nextLabel = form.querySelector<HTMLElement>('[data-pf-next-label]');
@@ -655,6 +703,20 @@ const jsonLd = [
           el.classList.toggle('past', i < here);
           if (i === here) el.setAttribute('aria-current', 'step');
           else el.removeAttribute('aria-current');
+        }
+        /* The guide in the left column follows the rail. A finished stage
+           is a button back to its first question; the current and later
+           ones are not, because a stage cannot be entered before the
+           questions ahead of it are answered. */
+        for (const [i, stage] of STAGES.entries()) {
+          const item = guide?.querySelector<HTMLElement>(`[data-guide-stage="${stage.id}"]`);
+          const btn = item?.querySelector<HTMLButtonElement>('[data-guide-jump]');
+          if (!item || !btn) continue;
+          item.classList.toggle('on', i === here);
+          item.classList.toggle('past', i < here);
+          btn.disabled = !(i < here && path.some((s) => s.stage === stage.id));
+          if (i === here) btn.setAttribute('aria-current', 'step');
+          else btn.removeAttribute('aria-current');
         }
       }
 
