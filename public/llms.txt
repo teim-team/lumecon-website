@@ -59,7 +59,7 @@ Cedar is Lumecon's AI economic analyst and is included in every plan. It works a
 
 ## Methodology
 
-Input-output modeling on authoritative public data: U.S. Census (ACS, LODES, QWI, CBP, TIGER/Line), BEA Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA, supplemented with higher-frequency public indicators so analyses can better reflect current economic conditions where the data support it. Regionalization, reservation and trust-land construction, data vintages, measure definitions and validation are documented at https://lumecon.ai/methodology
+Input-output modeling on trusted public data: U.S. Census (ACS, LODES, QWI, CBP, TIGER/Line), BEA Input-Output Accounts, BLS QCEW, USDA NASS, USAspending, FRED and NOAA, supplemented with higher-frequency public indicators so analyses can better reflect current economic conditions where the data support it. Regionalization, reservation and trust-land construction, data vintages, measure definitions and validation are documented at https://lumecon.ai/methodology
 
 ## Capabilities
 

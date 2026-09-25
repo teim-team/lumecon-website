@@ -124,7 +124,7 @@ THE INTELLIGENT ECONOMIC ANALYSIS PLATFORM
 
 **H1: Economic analysis that holds up.**
 
-Lumecon brings your organization’s records, authoritative public data and a regional economic model into one reviewable workflow. Cedar structures the inputs and flags uncertainty; you approve the assumptions, Cedar Impact calculates the results and every estimate keeps its source trail.
+Lumecon brings your organization’s records, trusted public data and a regional economic model into one reviewable workflow. Cedar structures the inputs and flags uncertainty; you approve the assumptions, Cedar Impact calculates the results and every estimate keeps its source trail.
 
 - _link:_ [Request free access →](/signup?tier=free)
 - _link:_ [See plans and pricing →](/pricing)
@@ -1972,7 +1972,7 @@ Lumecon reports the layers themselves rather than leading with a single multipli
 
 **H2: Public data foundation**
 
-Lumecon draws from authoritative public datasets widely used in economic and regional analysis. The sources used depend on the geography and analysis. Where applicable, benchmark sources set model structure and higher-frequency series help update levels; sources used in a result are citable.
+Lumecon draws from trusted public datasets widely used in economic and regional analysis. The sources used depend on the geography and analysis. Where applicable, benchmark sources set model structure and higher-frequency series help update levels; sources used in a result are citable.
 
 - BEA Input-Output Accounts The national industry-to-industry benchmark tables the model is built from. BENCHMARK
 - BLS QCEW Employment and wages by county and industry, the backbone of regionalization. BENCHMARK
