@@ -187,6 +187,13 @@ The standing-instruction sections below carry these in full. The short list:
 - **Verify by looking.** Compare before/after screenshots at roughly 1440, 1024,
   768, 430 and 375px, and revert any technically elegant change that makes the
   composition worse. Cleaner code is not evidence of better design.
+- **Build and write it as the shipped product.** No page, component or copy
+  describes Lumecon as a prototype or a pilot. Pilots run on the real product:
+  a free account, a plan granted by invitation, or a promotion code at
+  checkout, never a separate page or code path. Payments go through Lumecon's
+  own Stripe account (Brian Kim and Kaylyn Lee are admins), and the checkout
+  work in `docs/app-backend-wiring.md` (Order of operations, item 7) is what
+  stands between the site and a paid plan: teim-team/teim-app#186.
 
 ## 7. How this doc gets updated
 
