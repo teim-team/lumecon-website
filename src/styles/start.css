@@ -590,6 +590,7 @@
   font-size: var(--fs-sm-2);
   color: var(--ink-3);
   cursor: pointer;
+  text-wrap: balance;
 }
 .pf-check__more summary:hover,
 .start-core__more summary:hover {
