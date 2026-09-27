@@ -539,7 +539,7 @@ The model, the data and the software are built by people who did this work somew
 
 - Elijah Moreno FOUNDER AND CEO Eight years producing tribal economic-impact studies and related public-policy research.
 - Laurel Wheeler PRINCIPAL ECONOMIST Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon.
-- Isabella Agnes INPUT-OUTPUT MODELING LEAD Data scientist at the Library of Congress.
+- Isabella Agnes PRINCIPAL DATA SCIENTIST Data scientist at the Library of Congress.
 - Francesca Agnes CEDAR SYSTEMS LEAD Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.
 - Kaylyn Lee PLATFORM LEAD Builds the platform organizations use to scope, run and revisit analyses.
 Degrees, prior posts and published work for everyone here.
@@ -1807,14 +1807,14 @@ Federal assistance transactions reported for Native nations, organizations, ente
 
 **H3: Gaming Intelligence**
 
-**[conditional]** Facilities, ownership and affiliation over time, declination letters, environmental reviews, expansions, employment estimates and transaction history, cross-validated against Deals.
+**[conditional]** Tribal gaming across the whole operation: facilities, ownership and affiliation over time, compacts, licenses, slot machine and table counts where published, sports wagering, payouts, employment and labor records, marketing, expansions, environmental reviews, declination letters, litigation and transaction history, cross-validated against Deals.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Facilities matched to their operators and their owners. This is the one collection where the counterparties are not all Native: management companies and outside operators are resolved and labeled as such.
 - **[conditional]** Coverage
 - **[conditional]** Records from 1979, the first documented year of high-stakes tribal gaming
 - **[conditional]** Sources
-- **[conditional]** Facility directories, NIGC records, federal gaming and land decisions, and NEPA environmental reviews
+- **[conditional]** NIGC reports and opinions, BIA gaming compacts, state gaming licenses and payment records, casino websites and marketing material, sports-wagering disclosures, labor and employment records, facility directories, NEPA environmental reviews and gaming litigation
 - **[conditional]** Terms
 - **[conditional]** Public records. The resolution to operators and owners is Lumecon’s work.
 
@@ -2962,7 +2962,7 @@ TEAM
 
 - Elijah FOUNDER AND CEO
 - Laurel PRINCIPAL ECONOMIST
-- Isabella INPUT-OUTPUT MODELING LEAD
+- Isabella PRINCIPAL DATA SCIENTIST
 - Francesca CEDAR SYSTEMS LEAD
 - Kaylyn PLATFORM LEAD
 ADVISORS
