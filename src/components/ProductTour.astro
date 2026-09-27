@@ -14,6 +14,9 @@
  * under them read as a fourth Impact surface. Grove keeps the nav, the
  * footer, the product-family mentions on /cedar and /pricing, and its
  * own page at /cedar-grove.
+ *
+ * Each screenshot carries a caption under it, the same band /cedar,
+ * /cedar-commons and /cedar-grove use, saying what the frame shows.
  */
 import '../styles/tour.css';
 
@@ -28,6 +31,7 @@ const ROWS = [
     width: 1920,
     height: 1004,
     alt: 'Lumecon lineage panel titled Where $1,240,500,000 comes from for a sample Tribal Nation analysis, breaking economic output into direct, indirect and induced layers, by operation and industry.',
+    cap: 'The lineage panel for a sample nation’s $1,240,500,000 in economic output, split into direct, indirect and induced effects and traced to the operations and industries behind each.',
   },
   {
     id: 'compare',
@@ -39,6 +43,7 @@ const ROWS = [
     width: 1920,
     height: 1200,
     alt: 'Lumecon comparison of a sample Tribal Nation economic footprint in fiscal years 2023 and 2025, showing changes in jobs, GDP contribution, labor income, economic output and tax impacts.',
+    cap: 'A sample nation’s FY2023 and FY2025 footprints side by side, with the change in jobs, GDP contribution, labor income, economic output and tax impacts.',
   },
   {
     id: 'workspace',
@@ -53,6 +58,7 @@ const ROWS = [
     width: 1920,
     height: 1200,
     alt: 'Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.',
+    cap: 'The Workspace home, with analyses to start, in progress and completed, and each completed analysis showing its jobs and output headlines.',
   },
 ];
 ---
@@ -74,42 +80,41 @@ const ROWS = [
     </header>
 
     <div class="tour-rows">
-      {
-        ROWS.map((row, i) => (
-          <article class={`tour-row${i % 2 === 1 ? ' tour-row--flip' : ''}`} id={`tour-${row.id}`}>
-            <div class={`tour-row__text ${i % 2 === 1 ? 'reveal-right' : 'reveal-left'}`}>
-              <p class="tour-row__kicker">
-                <span class="tour-row__product">{row.product}</span>
-                {row.kicker}
-              </p>
-              <h3 class="tour-row__title">{row.title}</h3>
-              <p class="tour-row__body">{row.body}</p>
-            </div>
-            {/* data-zoom: these are 1920px renders shown at a third of that,
+      {ROWS.map((row, i) => (
+        <article class={`tour-row${i % 2 === 1 ? ' tour-row--flip' : ''}`} id={`tour-${row.id}`}>
+          <div class={`tour-row__text ${i % 2 === 1 ? 'reveal-right' : 'reveal-left'}`}>
+            <p class="tour-row__kicker">
+              <span class="tour-row__product">{row.product}</span>
+              {row.kicker}
+            </p>
+            <h3 class="tour-row__title">{row.title}</h3>
+            <p class="tour-row__body">{row.body}</p>
+          </div>
+          {/* data-zoom: these are 1920px renders shown at a third of that,
                 so clicking one opens it full size. See Lightbox.astro. */}
-            <figure
-              class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
-              data-zoom
-            >
-              <picture>
-                {/* width/height are the intrinsic ratio, kept so the browser
+          <figure
+            class={`tour-row__shot ${i % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
+            data-zoom
+          >
+            <picture>
+              {/* width/height are the intrinsic ratio, kept so the browser
                      reserves the box before the file arrives. The rendered size
                      is CSS-driven (`.tour-row__shot img`), so the shot scales
                      with its column instead of sitting at a fixed 1920x1080. */}
-                <img
-                  src={row.img}
-                  alt={row.alt}
-                  width={row.width}
-                  height={row.height}
-                  sizes="(max-width: 900px) 100vw, 50vw"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-            </figure>
-          </article>
-        ))
-      }
+              <img
+                src={row.img}
+                alt={row.alt}
+                width={row.width}
+                height={row.height}
+                sizes="(max-width: 900px) 100vw, 50vw"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <figcaption class="tour-row__cap">{row.cap} Shown with sample data.</figcaption>
+          </figure>
+        </article>
+      ))}
     </div>
   </div>
 </section>

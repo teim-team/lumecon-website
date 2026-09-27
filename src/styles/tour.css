@@ -208,6 +208,16 @@
    the caption joins it shows two wedges of frame background. The caption
    takes the bottom corners instead, so the two read as one assembled
    surface with the frame's radius at every outer corner. */
+/* The caption band under a screenshot, matching `.cedarpg-cap` on the
+   product pages so every screenshot on the site reads the same way. */
+.tour-row__cap {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+  padding: 0.85rem 1.1rem 0.95rem;
+  border-top: 1px solid var(--rule);
+  background: var(--surface-glass-strong);
+}
 .tour-row__shot:has(figcaption) img {
   border-radius: var(--shot-radius) var(--shot-radius) 0 0;
 }

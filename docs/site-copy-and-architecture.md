@@ -23,7 +23,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 746 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/` | 830 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/why-lumecon` | 1224 | Why Lumecon \| Lumecon | 239 |
 | `/pricing` | 1502 | Pricing \| Lumecon | 155 |
 | `/cedar` | 498 | Cedar, the AI economic analyst \| Lumecon | 151 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15923** | | |
+| **Total** | **16007** | | |
 
 ## Crawler metadata audit
 
@@ -70,7 +70,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 746
+- **Visible words:** 830
 
 ### Architecture (heading outline)
 
@@ -256,6 +256,7 @@ CEDAR IMPACTRESULT LINEAGE
 Each headline figure includes a “Trace this number” control. Follow a result through direct, indirect and induced effects, the operations that generate them and the industries where they land.
 
 - _image alt:_ Lumecon lineage panel titled Where $1,240,500,000 comes from for a sample Tribal Nation analysis, breaking economic output into direct, indirect and induced layers, by operation and industry.
+_caption:_ The lineage panel for a sample nation’s $1,240,500,000 in economic output, split into direct, indirect and induced effects and traced to the operations and industries behind each. Shown with sample data.
 
 > _section: `tour-compare`_
 
@@ -267,6 +268,7 @@ CEDAR IMPACTANALYSIS COMPARISON
 Put years or scenarios side by side and see the change in jobs, labor income, GDP contribution, economic output and tax impacts. When the next budget cycle begins, the comparison is already there.
 
 - _image alt:_ Lumecon comparison of a sample Tribal Nation economic footprint in fiscal years 2023 and 2025, showing changes in jobs, GDP contribution, labor income, economic output and tax impacts.
+_caption:_ A sample nation’s FY2023 and FY2025 footprints side by side, with the change in jobs, GDP contribution, labor income, economic output and tax impacts. Shown with sample data.
 
 > _section: `tour-workspace`_
 
@@ -278,6 +280,7 @@ CEDAR IMPACTANALYSIS HISTORY
 Drafts, completed analyses, comparisons and exports stay together in your Workspace, ready to reopen, compare or export as a workbook, CSV tables or a printable summary.
 
 - _image alt:_ Lumecon workspace home with lanes for starting, in-progress and completed analyses, including completed analyses with jobs and output headlines.
+_caption:_ The Workspace home, with analyses to start, in progress and completed, and each completed analysis showing its jobs and output headlines. Shown with sample data.
 
 > _section: `edge`_
 
