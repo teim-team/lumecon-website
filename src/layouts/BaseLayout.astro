@@ -15,10 +15,11 @@ interface Props {
   jsonLd?: object;
   /** Set true on admin/info/error pages we don't want in search. */
   noindex?: boolean;
-  /** The acquisition flow (signup, choose-plan, checkout, welcome)
-      hides the Ask Cedar launcher: one obvious next action, no
-      escape hatches over transactional UI. Cedar greets people
-      inside the product instead. */
+  /** Ask Cedar is on every page (owner, 2026-09-27) except two kinds:
+      the acquisition flow (login, signup, choose-plan, checkout,
+      welcome), which keeps one obvious next action and no escape hatch
+      over transactional UI, and /cedar, which answers in its own inline
+      chat. */
   cedar?: boolean;
 }
 

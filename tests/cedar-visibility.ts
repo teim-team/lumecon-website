@@ -1,9 +1,9 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 /**
- * The launcher intentionally stays out of the opening composition and
- * yields to protected content. Move through the real page until its
- * visibility controller finds a clear resting place.
+ * The launcher is visible from the first frame now (owner, 2026-09-27), so
+ * this returns at the first position. It still scrolls into the page,
+ * because callers rely on that scroll to raise the greeting note.
  */
 export async function scrollUntilCedarVisible(page: Page): Promise<Locator> {
   const fab = page.locator('#cedarFab');

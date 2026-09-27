@@ -2425,14 +2425,18 @@ test.describe('the product pages on a phone', () => {
      with the consent banner. These four cover the shape that was agreed
      for it, and each one has a real failure behind it. */
 
-  test('the launcher is a round mark on a phone, not a text pill', async ({ page }) => {
+  test('the launcher is the Ask Cedar pill on a phone, with no logo', async ({ page }) => {
+    // Owner, 2026-09-27: the same pill as Cedar Press at every width, the
+    // teal status dot and the name, and no Lumecon mark.
     await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
+    await page.locator('[data-consent="denied"]').click();
     const fab = page.locator('#cedarFab');
+    await expect(fab).toBeVisible();
+    await expect(fab).toContainText('Ask Cedar');
+    await expect(fab.locator('img')).toHaveCount(0);
+    await expect(fab.locator('.cedar-fab__dot')).toBeVisible();
     const box = (await fab.boundingBox())!;
-    // 44px is the accessible minimum; a tap target carrying no label
-    // beside it should be comfortably past it.
-    expect(Math.round(box.width), 'square').toBe(Math.round(box.height));
-    expect(box.width, 'a real thumb target').toBeGreaterThanOrEqual(56);
+    expect(box.height, 'a real thumb target').toBeGreaterThanOrEqual(44);
   });
 
   test('the welcome bubble greets once the launcher settles', async ({ page }) => {
@@ -2466,45 +2470,19 @@ test.describe('the product pages on a phone', () => {
     await expect(panel).toBeVisible();
   });
 
-  test('the welcome bubble steps aside from protected content, not only the launcher', async ({
-    page,
-  }) => {
+  test('the welcome bubble stays over content until it is answered', async ({ page }) => {
+    // Owner, 2026-09-27: it persists, the way IMPLAN's does. It used to
+    // yield to tables and the footer, which on a phone meant it vanished
+    // within a scroll of appearing.
     await page.goto('/cedar-commons', { waitUntil: 'networkidle' });
     await page.locator('[data-consent="denied"]').click();
     await scrollUntilCedarVisible(page);
     const nudge = page.locator('#cedarNudge');
     await expect(nudge).toBeVisible({ timeout: 25000 });
-
-    /* Walking the real pages does not produce this collision — checked on
-       eight of them with the guard removed, and the bubble never lands on
-       a protected zone the 60px launcher has not already stepped around.
-       So the collision is built here rather than hunted for: put a zone
-       from the avoid list exactly where the bubble is and let the
-       launcher's own controller run.
-
-       The reveal already tested the bubble's rectangle. What this pins is
-       that it keeps being tested AFTER the bubble is up, which is what
-       polling stopping had quietly ended. */
-    const box = (await nudge.boundingBox())!;
-    await page.evaluate(({ x, y, width, height }) => {
-      const zone = document.createElement('div');
-      // `.naics-tile` is on the launcher's avoid list; any of them works.
-      zone.className = 'naics-tile';
-      Object.assign(zone.style, {
-        position: 'fixed',
-        left: `${x}px`,
-        top: `${y}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-        zIndex: '1',
-      });
-      document.body.append(zone);
-      window.dispatchEvent(new Event('scroll'));
-    }, box);
-
-    await expect(nudge, 'the bubble yields to what it would have covered').toBeHidden({
-      timeout: 4000,
-    });
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(400);
+    await expect(nudge).toBeVisible();
+    await expect(page.locator('#cedarFab')).toBeVisible();
   });
 
   test('Cedar fills the screen on a phone', async ({ page }) => {

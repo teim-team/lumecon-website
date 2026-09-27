@@ -23,30 +23,30 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
-| `/` | 830 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/why-lumecon` | 1224 | Why Lumecon \| Lumecon | 239 |
-| `/pricing` | 1502 | Pricing \| Lumecon | 155 |
+| `/` | 833 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
+| `/why-lumecon` | 1227 | Why Lumecon \| Lumecon | 239 |
+| `/pricing` | 1505 | Pricing \| Lumecon | 155 |
 | `/cedar` | 498 | Cedar, the AI economic analyst \| Lumecon | 151 |
-| `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
-| `/cedar-grove` | 962 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
-| `/methodology` | 2782 | Methodology \| Lumecon | 167 |
-| `/start` | 1468 | Plan your first analysis \| Lumecon | 165 |
-| `/naics` | 663 | Industry sectors \| Lumecon | 146 |
-| `/glossary` | 554 | Glossary \| Lumecon | 142 |
-| `/team` | 372 | Team \| Lumecon | 115 |
-| `/security` | 440 | Security \| Lumecon | 118 |
-| `/ai-and-data-use` | 611 | AI and Data Use \| Lumecon | 133 |
-| `/contact` | 304 | Contact \| Lumecon | 145 |
-| `/accessibility` | 389 | Accessibility \| Lumecon | 141 |
-| `/privacy` | 674 | Privacy Policy \| Lumecon | 99 |
-| `/terms` | 1042 | Terms of Service \| Lumecon | 146 |
+| `/cedar-commons` | 724 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
+| `/cedar-grove` | 965 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/methodology` | 2785 | Methodology \| Lumecon | 167 |
+| `/start` | 1471 | Plan your first analysis \| Lumecon | 165 |
+| `/naics` | 666 | Industry sectors \| Lumecon | 146 |
+| `/glossary` | 557 | Glossary \| Lumecon | 142 |
+| `/team` | 375 | Team \| Lumecon | 115 |
+| `/security` | 443 | Security \| Lumecon | 118 |
+| `/ai-and-data-use` | 614 | AI and Data Use \| Lumecon | 133 |
+| `/contact` | 307 | Contact \| Lumecon | 145 |
+| `/accessibility` | 392 | Accessibility \| Lumecon | 141 |
+| `/privacy` | 677 | Privacy Policy \| Lumecon | 99 |
+| `/terms` | 1045 | Terms of Service \| Lumecon | 146 |
 | `/signup` | 248 | Request beta access \| Lumecon | 118 |
 | `/login` | 117 | Log in \| Lumecon | 31 |
 | `/choose-plan` | 233 | Choose your plan \| Lumecon | 103 |
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
-| `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **16007** | | |
+| `/404` | 103 | Page Not Found \| Lumecon | 141 |
+| **Total** | **16058** | | |
 
 ## Crawler metadata audit
 
@@ -70,7 +70,7 @@ This checks canonical consistency, sitemap membership, robots directives, Open G
 - **Canonical:** https://lumecon.ai/
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, Service, BreadcrumbList
-- **Visible words:** 830
+- **Visible words:** 833
 
 ### Architecture (heading outline)
 
@@ -349,7 +349,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -396,7 +397,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/why-lumecon
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1224
+- **Visible words:** 1227
 
 ### Architecture (heading outline)
 
@@ -597,7 +598,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -645,7 +647,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1502
+- **Visible words:** 1505
 
 ### Architecture (heading outline)
 
@@ -994,7 +996,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -1213,7 +1216,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-commons
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 721
+- **Visible words:** 724
 
 ### Architecture (heading outline)
 
@@ -1393,7 +1396,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -1440,7 +1444,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 962
+- **Visible words:** 965
 
 ### Architecture (heading outline)
 
@@ -1883,6 +1887,34 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -1903,7 +1935,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/methodology
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, FAQPage
-- **Visible words:** 2782
+- **Visible words:** 2785
 
 ### Architecture (heading outline)
 
@@ -2203,7 +2235,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2250,7 +2283,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1468
+- **Visible words:** 1471
 
 ### Architecture (heading outline)
 
@@ -2543,7 +2576,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2590,7 +2624,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/naics
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, DefinedTermSet
-- **Visible words:** 663
+- **Visible words:** 666
 
 ### Architecture (heading outline)
 
@@ -2695,7 +2729,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2742,7 +2777,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/glossary
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList, DefinedTermSet
-- **Visible words:** 554
+- **Visible words:** 557
 
 ### Architecture (heading outline)
 
@@ -2857,7 +2892,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -2904,7 +2940,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/team
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, AboutPage, BreadcrumbList
-- **Visible words:** 372
+- **Visible words:** 375
 
 ### Architecture (heading outline)
 
@@ -3103,7 +3139,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -3150,7 +3187,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/security
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage
-- **Visible words:** 440
+- **Visible words:** 443
 
 ### Architecture (heading outline)
 
@@ -3307,6 +3344,34 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -3327,7 +3392,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/ai-and-data-use
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 611
+- **Visible words:** 614
 
 ### Architecture (heading outline)
 
@@ -3452,6 +3517,34 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -3472,7 +3565,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/contact
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList, ContactPage
-- **Visible words:** 304
+- **Visible words:** 307
 
 ### Architecture (heading outline)
 
@@ -3579,7 +3672,8 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
-**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon or economic impact analysis.
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
 
 
 > _section: `cedar-chat__header`_
@@ -3626,7 +3720,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/accessibility
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 389
+- **Visible words:** 392
 
 ### Architecture (heading outline)
 
@@ -3733,6 +3827,34 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -3753,7 +3875,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/privacy
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 674
+- **Visible words:** 677
 
 ### Architecture (heading outline)
 
@@ -3872,6 +3994,34 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -3892,7 +4042,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/terms
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1042
+- **Visible words:** 1045
 
 ### Architecture (heading outline)
 
@@ -4051,6 +4201,34 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
@@ -4589,7 +4767,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/404
 - **Robots:** noindex, nofollow
 - **Structured data:** Organization, WebSite, SoftwareApplication
-- **Visible words:** 100
+- **Visible words:** 103
 
 ### Architecture (heading outline)
 
@@ -4667,6 +4845,34 @@ LEGAL
 - _button:_ Privacy choices
 - _link:_ [LinkedIn](https://www.linkedin.com/company/lumecon-ai)
 - _link:_ [contact@lumecon.ai](mailto:contact@lumecon.ai)
+- _button:_ Ask Cedar Lumecon
+**[conditional]** Hi, I'm Cedar. I'm here to help with anything about Lumecon or economic impact analysis.
+
+
+> _section: `cedar-chat__header`_
+
+- _label:_ **[conditional]** Ask CedarOnlineLumecon site · Questions about Lumecon
+- _image alt:_ (no alt)
+**[conditional]** Hi, I'm Cedar. Ask me anything about Lumecon, or tap a prompt to start.
+
+- _button:_ What is Lumecon?
+- _button:_ What is Cedar?
+- _button:_ How much does it cost?
+- _button:_ How is this different from IMPLAN?
+- _button:_ How long does an analysis take?
+- _button:_ Can I see a demo?
+- _button:_ Who is Lumecon for?
+- _button:_ What is Cedar Commons?
+- _button:_ What is Cedar Grove?
+- _button:_ Is my data safe?
+- _button:_ Can it support grant applications?
+- _button:_ How do cities and counties use it?
+- _button:_ How do state agencies use it?
+- _button:_ Free vs paid Cedar?
+- _button:_ See more options
+- _label:_ **[conditional]** Ask Cedar
+**[conditional]** Cedar can make mistakes. Verify important details against linked pages or with our team. This site chat does not run analyses.
+
 We use optional analytics to improve Lumecon. Privacy Policy
 
 - _button:_ Decline
