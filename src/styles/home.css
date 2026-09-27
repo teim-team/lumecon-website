@@ -963,22 +963,8 @@
   margin: 0;
   isolation: isolate;
 }
-.hero2-stage::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  inset: 12% -5% 4% 6%;
-  background: linear-gradient(
-    145deg,
-    rgba(15, 181, 165, 0.2),
-    rgba(15, 181, 165, 0.04) 44%,
-    rgba(196, 151, 68, 0.12) 76%,
-    transparent
-  );
-  filter: blur(38px);
-  transform: skewY(-3deg);
-  pointer-events: none;
-}
+/* No coloured glow behind the product shot (owner, 2026-09-27): the shot's
+   own frame shadow is the only lift, matching Cedar Press. */
 .hero2-photo {
   position: absolute;
   inset: 0 0 2.5rem 17%;
