@@ -321,7 +321,7 @@ const TEAM: Person[] = [
     name: 'Isabella Agnes',
     initials: 'IA',
     group: 'team',
-    title: 'Input-Output Modeling Lead',
+    title: 'Principal Data Scientist',
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
     photo: '/team/isabella-agnes.webp',
