@@ -187,13 +187,24 @@ The standing-instruction sections below carry these in full. The short list:
 - **Verify by looking.** Compare before/after screenshots at roughly 1440, 1024,
   768, 430 and 375px, and revert any technically elegant change that makes the
   composition worse. Cleaner code is not evidence of better design.
-- **Build and write it as the shipped product.** No page, component or copy
-  describes Lumecon as a prototype or a pilot. Pilots run on the real product:
-  a free account, a plan granted by invitation, or a promotion code at
-  checkout, never a separate page or code path. Payments go through Lumecon's
-  own Stripe account (Brian Kim and Kaylyn Lee are admins), and the checkout
-  work in `docs/app-backend-wiring.md` (Order of operations, item 7) is what
-  stands between the site and a paid plan: teim-team/teim-app#186.
+- **Build and write it as the shipped product.** No new page, component or
+  copy describes Lumecon as a prototype, a pilot or a beta. Pilots run on the
+  real product: a free account or a plan granted by invitation, never a
+  separate page or code path. A promotion code at checkout joins that list
+  once checkout exists; today it does not, because `docs/app-backend-wiring.md`
+  (Order of operations, item 7) still lists the checkout endpoint, server-side
+  discount validation, tax, upgrades and renewals as unbuilt, so no copy or
+  onboarding may send a pilot to `/checkout`. Payments will go through
+  Lumecon's own Stripe account (Brian Kim and Kaylyn Lee are admins); that
+  work is tracked in teim-team/teim-app#186.
+- **Known gaps against that rule.** These shipped strings predate it and still
+  present a beta path; they are tracked for Kaylyn to reword, and new work must
+  not copy them: the "Request beta access" flow in `src/pages/signup.astro`
+  (title, success state and the `mailto` fallback), the "Request beta access"
+  links in `src/pages/login.astro` and `src/pages/methodology.astro`, the beta
+  wording in `src/pages/contact.astro`, and section 2 of `src/pages/terms.astro`
+  (legal text, so Brian reviews it too). Remove an entry here in the same
+  commit that rewords it.
 
 ## 7. How this doc gets updated
 
