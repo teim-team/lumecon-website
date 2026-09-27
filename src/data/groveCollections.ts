@@ -239,13 +239,13 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Gaming',
     name: 'Gaming Intelligence',
     contributes:
-      'Facilities, ownership and affiliation over time, declination letters, environmental reviews, expansions, employment estimates and transaction history, cross-validated against Deals.',
+      'Tribal gaming across the whole operation: facilities, ownership and affiliation over time, compacts, licenses, slot machine and table counts where published, sports wagering, payouts, employment and labor records, marketing, expansions, environmental reviews, declination letters, litigation and transaction history, cross-validated against Deals.',
     resolved:
       'Facilities matched to their operators and their owners. This is the one collection where the counterparties are not all Native: management companies and outside operators are resolved and labeled as such.',
     coverage: 'Records from 1979, the first documented year of high-stakes tribal gaming',
     sources:
-      'Facility directories, NIGC records, federal gaming and land decisions, and NEPA environmental reviews',
+      'NIGC reports and opinions, BIA gaming compacts, state gaming licenses and payment records, casino websites and marketing material, sports-wagering disclosures, labor and employment records, facility directories, NEPA environmental reviews and gaming litigation',
     terms: 'Public records. The resolution to operators and owners is Lumecon’s work.',
-    mark: '<ellipse cx="14" cy="8" rx="9" ry="3.6"/><path d="M5 8v5c0 2 4 3.6 9 3.6s9-1.6 9-3.6V8"/><path d="M5 13v5c0 2 4 3.6 9 3.6s9-1.6 9-3.6v-5"/>',
+    mark: '<path d="M4.5 9.5a2.5 2.5 0 0 1 2.5-2.5h10a2.5 2.5 0 0 1 2.5 2.5V24h-15z"/><path d="M9 7V4h6v3"/><path d="M7.5 11h9v6h-9z"/><path d="M10.5 11v6M13.5 11v6"/><path d="M8.5 20.5h7"/><path d="M19.5 16h2.5V9"/><circle cx="22" cy="7" r="1.7"/>',
   },
 ];
