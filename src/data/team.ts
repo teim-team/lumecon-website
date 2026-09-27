@@ -324,7 +324,7 @@ const TEAM: Person[] = [
     title: 'Principal Data Scientist',
     email: 'isabella.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/maria-isabella-agnes-741569b7',
-    photo: '/team/isabella-agnes.webp',
+    photo: '/team/isabella-agnes.webp?v=2026-09-27',
     education: [
       'Doctoral research in Economics, University of Maryland, College Park',
       'BS, Mathematics, University of Wisconsin-Madison',
@@ -368,7 +368,7 @@ const TEAM: Person[] = [
     email: 'francesca.agnes@lumecon.ai',
     linkedin: 'https://www.linkedin.com/in/francesca-agnes-a8106722b',
     scholar: 'https://scholar.google.com/citations?hl=en&user=o4brEBEAAAAJ',
-    photo: '/team/francesca-agnes.webp',
+    photo: '/team/francesca-agnes.webp?v=2026-09-27',
     education: ['BS, Biology, University of Illinois Urbana-Champaign'],
     experience: [
       'Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.',
