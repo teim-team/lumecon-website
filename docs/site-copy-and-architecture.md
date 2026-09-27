@@ -30,7 +30,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
 | `/cedar-grove` | 947 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/methodology` | 2782 | Methodology \| Lumecon | 167 |
-| `/start` | 1422 | Plan your first analysis \| Lumecon | 165 |
+| `/start` | 1468 | Plan your first analysis \| Lumecon | 165 |
 | `/naics` | 663 | Industry sectors \| Lumecon | 146 |
 | `/glossary` | 554 | Glossary \| Lumecon | 142 |
 | `/team` | 372 | Team \| Lumecon | 115 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15855** | | |
+| **Total** | **15901** | | |
 
 ## Crawler metadata audit
 
@@ -2194,7 +2194,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/start
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, BreadcrumbList
-- **Visible words:** 1422
+- **Visible words:** 1468
 
 ### Architecture (heading outline)
 
@@ -2243,6 +2243,10 @@ GETTING STARTED
 
 Start with the records you already have. Answer a few questions to find a scope you can run and see what to bring.
 
+- 01 Goal What you want to understand, and who it is for.
+- 02 Scope What is analyzed, where it happens and what it involves.
+- 03 Records Which records exist and who holds them.
+- 04 Plan A scope you can run and the records to bring first.
 **[conditional]** Your answers so far
 
 - GOAL

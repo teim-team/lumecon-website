@@ -187,6 +187,28 @@ The standing-instruction sections below carry these in full. The short list:
 - **Verify by looking.** Compare before/after screenshots at roughly 1440, 1024,
   768, 430 and 375px, and revert any technically elegant change that makes the
   composition worse. Cleaner code is not evidence of better design.
+- **Build and write it as the shipped product.** No new page, component or
+  copy describes Lumecon as a prototype, a pilot or a beta. Pilots run on the
+  real product: a free account or a plan granted by invitation, never a
+  separate page or code path. A promotion code at checkout joins that list
+  once checkout exists; today it does not, because `docs/app-backend-wiring.md`
+  (Order of operations, item 7) still lists the checkout endpoint, server-side
+  discount validation, tax, upgrades and renewals as unbuilt, so no copy or
+  onboarding may send a pilot to `/checkout`. Payments will go through
+  Lumecon's own Stripe account (Brian Kim and Kaylyn Lee are admins); that
+  work is tracked in teim-team/teim-app#186.
+- **Known gaps against that rule.** Every shipped string that presents
+  Lumecon as a beta or a private beta predates the rule and is tracked for
+  Kaylyn to reword; new work must not copy them. The category is the gap, not
+  a list of files: `git grep -in "beta" -- src` finds every one. Today that is
+  the `/signup` request flow (title, success state and `mailto` fallback), the
+  homepage call to action (`src/components/FinalCta.astro`), the plan data
+  (`src/data/pricing.ts`), Cedar's site answers (`src/data/cedarIntents.ts`),
+  the "Request beta access" links on `/login` and `/methodology`, and the
+  beta wording on `/why-lumecon`, `/contact`, `/cedar`, `/security`,
+  `/ai-and-data-use`, `/privacy` and section 2 of `/terms` (legal text, so
+  Brian reviews those two as well). The gap closes when that search finds no
+  visible copy.
 
 ## 7. How this doc gets updated
 
