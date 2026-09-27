@@ -197,14 +197,18 @@ The standing-instruction sections below carry these in full. The short list:
   onboarding may send a pilot to `/checkout`. Payments will go through
   Lumecon's own Stripe account (Brian Kim and Kaylyn Lee are admins); that
   work is tracked in teim-team/teim-app#186.
-- **Known gaps against that rule.** These shipped strings predate it and still
-  present a beta path; they are tracked for Kaylyn to reword, and new work must
-  not copy them: the "Request beta access" flow in `src/pages/signup.astro`
-  (title, success state and the `mailto` fallback), the "Request beta access"
-  links in `src/pages/login.astro` and `src/pages/methodology.astro`, the beta
-  wording in `src/pages/contact.astro`, and section 2 of `src/pages/terms.astro`
-  (legal text, so Brian reviews it too). Remove an entry here in the same
-  commit that rewords it.
+- **Known gaps against that rule.** Every shipped string that presents
+  Lumecon as a beta or a private beta predates the rule and is tracked for
+  Kaylyn to reword; new work must not copy them. The category is the gap, not
+  a list of files: `git grep -in "beta" -- src` finds every one. Today that is
+  the `/signup` request flow (title, success state and `mailto` fallback), the
+  homepage call to action (`src/components/FinalCta.astro`), the plan data
+  (`src/data/pricing.ts`), Cedar's site answers (`src/data/cedarIntents.ts`),
+  the "Request beta access" links on `/login` and `/methodology`, and the
+  beta wording on `/why-lumecon`, `/contact`, `/cedar`, `/security`,
+  `/ai-and-data-use`, `/privacy` and section 2 of `/terms` (legal text, so
+  Brian reviews those two as well). The gap closes when that search finds no
+  visible copy.
 
 ## 7. How this doc gets updated
 
