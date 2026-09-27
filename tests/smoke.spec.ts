@@ -1597,9 +1597,9 @@ test('cedar grove opens on the house product hero, like the other product pages'
 test('the grove collections open one at a time, by click and by keyboard', async ({ page }) => {
   await page.goto('/cedar-grove', { waitUntil: 'networkidle' });
   const tabs = page.locator('[data-atlas-tab]');
-  await expect(tabs).toHaveCount(12);
+  await expect(tabs).toHaveCount(15);
 
-  // A picker, not twelve open panels: one collection at a time, and the
+  // A picker, not fifteen open panels: one collection at a time, and the
   // control says which.
   await expect(page.locator('[data-atlas-panel]:visible')).toHaveCount(1);
   await expect(tabs.first()).toHaveAttribute('aria-expanded', 'true');
@@ -1637,13 +1637,13 @@ test.describe('grove collections with no working script', () => {
   test('every collection is readable, and no tile is a dead control', async ({ page }) => {
     await page.goto('/cedar-grove', { waitUntil: 'domcontentloaded' });
     // The panels ship open, so the section is a complete list rather than
-    // twelve unlabelled icons.
-    await expect(page.locator('[data-atlas-panel]:visible')).toHaveCount(12);
-    // And the tiles are inert, so a keyboard user does not tab through twelve
+    // fifteen unlabelled icons.
+    await expect(page.locator('[data-atlas-panel]:visible')).toHaveCount(15);
+    // And the tiles are inert, so a keyboard user does not tab through fifteen
     // controls that cannot answer.
     await expect(page.locator('[data-atlas-tab]:not([disabled])')).toHaveCount(0);
-    // All twelve are expanded and all twelve say so.
-    await expect(page.locator('[data-atlas-tab][aria-expanded="true"]')).toHaveCount(12);
+    // All fifteen are expanded and all fifteen say so.
+    await expect(page.locator('[data-atlas-tab][aria-expanded="true"]')).toHaveCount(15);
   });
 });
 
@@ -2416,7 +2416,7 @@ test.describe('the product pages on a phone', () => {
     // And it actually scrolls, rather than clipping eleven tiles away.
     const [scrollWidth, clientWidth] = await grid.evaluate((el) => [el.scrollWidth, el.clientWidth]);
     expect(scrollWidth).toBeGreaterThan(clientWidth);
-    await expect(page.locator('.grovepg-atlas__cell')).toHaveCount(12);
+    await expect(page.locator('.grovepg-atlas__cell')).toHaveCount(15);
   });
 
   /* ---- Cedar on a phone ----
