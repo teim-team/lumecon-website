@@ -25,10 +25,10 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 |---|---:|---|---:|
 | `/` | 746 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/why-lumecon` | 1224 | Why Lumecon \| Lumecon | 239 |
-| `/pricing` | 1495 | Pricing \| Lumecon | 155 |
+| `/pricing` | 1502 | Pricing \| Lumecon | 155 |
 | `/cedar` | 498 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 721 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
-| `/cedar-grove` | 947 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/cedar-grove` | 962 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/methodology` | 2782 | Methodology \| Lumecon | 167 |
 | `/start` | 1468 | Plan your first analysis \| Lumecon | 165 |
 | `/naics` | 663 | Industry sectors \| Lumecon | 146 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 100 | Page Not Found \| Lumecon | 141 |
-| **Total** | **15901** | | |
+| **Total** | **15923** | | |
 
 ## Crawler metadata audit
 
@@ -642,7 +642,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1495
+- **Visible words:** 1502
 
 ### Architecture (heading outline)
 
@@ -797,7 +797,7 @@ STANDALONE SUBSCRIPTION
 
 **H2: Cedar Grove. The living evidence base for your organization’s economy.**
 
-Cedar Grove connects maintained public data, the twelve Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own with unlimited users, or receive the same Grove with Tree, which adds Cedar Impact and Cedar Commons; that is the whole difference between the two prices.
+Cedar Grove connects maintained public data, the fifteen Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own with unlimited users, or receive the same Grove with Tree, which adds Cedar Impact and Cedar Commons; that is the whole difference between the two prices.
 
 - Evidence coverage: direct, proxy, organization data, missing
 - Evidence records, evidence sheets and reproducibility bundles
@@ -811,12 +811,15 @@ Your subscription includes every Lumecon collection available in Cedar Grove dur
 - Indian Country Deals
 - NAGPRA
 - Native Federal Advocacy and Engagement
+- Foundation and Corporate Giving
 - Federal Prime Contracting
 - Federal Subcontracting
 - Natural Resource Revenues
 - Individually Owned Native Businesses
 - Native Nonprofits
 - Cedar Native Entity Enterprise Dataset (Cedar NEED)
+- PLOT
+- Gaming Intelligence
 What each collection contains
 
 $2,500 / YEAR
@@ -1434,7 +1437,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 947
+- **Visible words:** 962
 
 ### Architecture (heading outline)
 
@@ -1450,12 +1453,15 @@ We use optional analytics to improve Lumecon. Privacy Policy
     - **H3** Indian Country Deals
     - **H3** NAGPRA
     - **H3** Native Federal Advocacy and Engagement
+    - **H3** Foundation and Corporate Giving
     - **H3** Federal Prime Contracting
     - **H3** Federal Subcontracting
     - **H3** Natural Resource Revenues
     - **H3** Individually Owned Native Businesses
     - **H3** Native Nonprofits
     - **H3** Cedar Native Entity Enterprise Dataset (Cedar NEED)
+    - **H3** PLOT
+    - **H3** Gaming Intelligence
   - **H2** Cedar Grove, for your whole organization.
 
 ### Copy, in document order
@@ -1566,19 +1572,22 @@ Cedar collections add maintained context that public tables do not provide on th
 - Deals
 - NAGPRA
 - Advocacy
+- Foundation and Corporate Giving
 - Prime Contracting
 - Subcontracting
 - Natural Resources
 - Native-Owned Businesses
 - Native Nonprofits
 - Cedar NEED
+- PLOT
+- Gaming
 
 > _section: `atlas-funding`_
 
 
 **H3: Federal Funding to Indian Country**
 
-Every award the federal government reports sending into Indian Country: grants, loans, direct payments and insurance, award by award.
+Federal assistance transactions reported for Native nations, organizations, enterprises and other identified recipients, including grants, loans and direct payments. Follow funding by recipient, program, agency, amount and year.
 
 - WHAT LUMECON RESOLVED
 - Recipients resolved to the Native entity behind them, so an award to a subsidiary, a housing authority or a consortium is attributed to the nation or organization it belongs to.
@@ -1594,7 +1603,7 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Federal Register**
 
-**[conditional]** Every notice, rule and comment window touching tribes, lands, water or recognition, caught while there is still time to respond.
+**[conditional]** Federal Register notices and agency actions concerning tribes, Native organizations, lands, resources, recognition and other Indian Country matters. Follow published actions, consultations and comment periods across agencies and time.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Notices matched to the tribes, lands and organizations they name, including entities that appear under former or variant names.
@@ -1610,7 +1619,7 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Congressional Votes and Proposed Legislation**
 
-**[conditional]** Bills, resolutions and roll-call votes from both chambers, followed from introduction to the floor: who sponsored, who voted and how.
+**[conditional]** Bills, resolutions, sponsorship and roll-call votes concerning tribes and Indian Country. Follow legislation from introduction through congressional action and examine sponsorship and voting records.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Bills and votes tied to the tribes and Native organizations they affect, not only to the sponsors who filed them.
@@ -1626,7 +1635,7 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Indian Country Deals**
 
-**[conditional]** Material transactions and capital commitments involving Native nations, organizations and enterprises: acquisitions, financing, joint ventures and major projects, with participants, announced value, status and timing.
+**[conditional]** Material transactions and capital commitments involving Native nations, organizations and enterprises, including acquisitions, divestitures, property purchases, investments, financing agreements, bond issuances, joint ventures and major capital projects. Track who participated, the Native entity involved, announced value, status and timing, and compare activity across periods.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Buyers, sellers, borrowers and issuers resolved to tribal governments, tribally owned enterprises, ANCs and NHOs.
@@ -1642,7 +1651,7 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: NAGPRA**
 
-**[conditional]** Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.
+**[conditional]** Public records of activity under the Native American Graves Protection and Repatriation Act, including notices, inventories and repatriation-related actions. Follow records by institution, Native entity, notice type and date.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Notices matched to the tribes and Native Hawaiian organizations named in them, across the naming changes of three decades.
@@ -1658,10 +1667,10 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Native Federal Advocacy and Engagement**
 
-**[conditional]** Registered lobbying, agency meetings, tribal consultations, regulatory comments, congressional testimony and nonprofit lobbying disclosures, one entity-linked activity per row.
+**[conditional]** Documented federal advocacy and engagement involving Native nations and organizations, including registered lobbying, agency meetings, tribal consultations, regulatory comments, congressional testimony and nonprofit lobbying disclosures. Each row represents one entity-linked activity or source record.
 
 - **[conditional]** What Lumecon resolved
-- **[conditional]** Each activity resolved to the tribe or Native organization behind it where the record supports the link; a row the record cannot place keeps its printed party name and a blank key rather than a guess.
+- **[conditional]** Each activity, from a lobbying registration to a consultation, a docket filing or testimony, resolved to the tribe or Native organization behind it where the record supports the link; a row the record cannot place keeps its printed party name and a blank key rather than a guess.
 - **[conditional]** Coverage
 - **[conditional]** Records from 1999
 - **[conditional]** Sources
@@ -1669,12 +1678,26 @@ Every award the federal government reports sending into Indian Country: grants, 
 - **[conditional]** Terms
 - **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
 
+> _section: `atlas-foundation-corporate-giving`_
+
+
+**H3: Foundation and Corporate Giving**
+
+**[conditional]** Foundation, corporate and bank funding publicly disclosed for Native nations, organizations and initiatives. Follow the funder, legal recipient, purpose, geography, amount and timing while keeping commitments, payments, authorizations and other reported financial statuses distinct.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Philanthropic, corporate and bank giving, each disclosure kept as its own record: commitments and payments are separate facts, and the legal recipient is kept distinct from the Native beneficiary.
+- **[conditional]** Sources
+- **[conditional]** Public filings and funders’ own published announcements, each disclosure cited to the document it came from
+- **[conditional]** Terms
+- **[conditional]** Disclosures are a view of funding, not a ledger to total; overlapping reports of the same award are reviewed rather than added.
+
 > _section: `atlas-contractors`_
 
 
 **H3: Federal Prime Contracting**
 
-**[conditional]** Every prime award to a firm, a tribal enterprise or a tribal government, with the agency, the dollars, the industry and the set-aside path it came through.
+**[conditional]** Federal contract transactions awarded directly to Native governments, enterprises, organizations and identified Native-owned businesses. Examine awarding agencies, recipients, industries, obligations, procurement mechanisms and set-asides.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Vendors resolved to tribally owned firms, ANC and NHO subsidiaries and 8(a) participants, then rolled up to the parent nation or corporation.
@@ -1690,7 +1713,7 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Federal Subcontracting**
 
-**[conditional]** The dollars below the prime layer: which vendors do the work, under whom and in which sectors.
+**[conditional]** Reported federal subawards to Native entities and businesses beneath prime contracts. Follow the prime relationship, subrecipient, amount, industry and timing of reported subcontracting activity.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Subawards matched to the same resolved entities as the prime contracts above them.
@@ -1706,7 +1729,7 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Natural Resource Revenues**
 
-**[conditional]** Energy and mineral activity on trust and restricted lands: production volumes, the royalties it owes and the disbursements that follow.
+**[conditional]** Public records of energy and mineral production, revenues, royalties and related disbursements associated with tribal trust and restricted lands. Compare reported activity by commodity, Native entity, location and period.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Production and disbursements matched to the nations and allottees they belong to.
@@ -1722,10 +1745,10 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Individually Owned Native Businesses**
 
-**[conditional]** Individually owned Native businesses, certified by their own nations’ TERO and commerce offices: who they are, what trades they work and what preference status their nation certifies.
+**[conditional]** Individually owned Native businesses identified through tribal TERO offices, commerce programs and other documented Native-business registries. Records preserve the issuing source, reported affiliation or certification, location and industry where available.
 
 - **[conditional]** What Lumecon resolved
-- **[conditional]** Every listing carries the nation whose office certified it and is credited to the issuing TERO or commerce office.
+- **[conditional]** Every listing carries the nation whose office certified it, appears only under that nation’s stated terms, and is credited to the issuing TERO or commerce office.
 - **[conditional]** Coverage
 - **[conditional]** A roster as captured on 2026-09-01; certifying offices archive no superseded lists
 - **[conditional]** Sources
@@ -1738,7 +1761,7 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Native Nonprofits**
 
-**[conditional]** Native-led and Native-serving nonprofits with their federal filings: budgets, revenue mixes and program spending.
+**[conditional]** A maintained roster of Native-led, Native-serving and Native-focused nonprofit organizations, with EINs and available federal filing information kept distinct by organization type. Identify organizations and connect them to other Cedar records without treating Native-led and Native-serving as the same thing.
 
 - **[conditional]** What Lumecon resolved
 - **[conditional]** Filers classified as Native-led, Native-serving or Native-focused, which are three different things and are labeled separately.
@@ -1754,16 +1777,46 @@ Every award the federal government reports sending into Indian Country: grants, 
 
 **H3: Cedar Native Entity Enterprise Dataset (Cedar NEED)**
 
-**[conditional]** Who owns whom across Indian Country’s enterprises: parent nations and corporations, their subsidiaries, holding companies and joint ventures, and how those ties change.
+**[conditional]** Enterprises owned or controlled by Native nations, Alaska Native corporations and other Native entities, including subsidiaries, holding companies and joint ventures. Follow parent relationships and organizational changes over time. Where records are available, profiles also carry patents, assigned or later acquired, and dated credit ratings, each kept with the entity it concerns.
 
 - **[conditional]** What Lumecon resolved
-- **[conditional]** The structure the rest of the record resolves against, published as a collection in its own right: every tie names the nation or corporation behind it.
+- **[conditional]** This is the structure the rest of the record resolves against, published as a collection in its own right: every tie names the nation or corporation behind it.
 - **[conditional]** Coverage
 - **[conditional]** Observations from 2016, the earliest year any source named an enterprise or a tie
 - **[conditional]** Sources
 - **[conditional]** Entity records, enterprise registers and filings, reconciled edition by edition
 - **[conditional]** Terms
 - **[conditional]** Unresolved ties stay unresolved. A provisional match is labeled provisional.
+
+> _section: `atlas-plot`_
+
+
+**H3: PLOT**
+
+**[conditional]** Parcel-level ownership and development records associated with Native nations, organizations and enterprises. Follow ownership, transfers, parcel characteristics, geometry, permits and other recorded property activity over time.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Land ownership, transfers, permitting and development, followed parcel by parcel: each parcel and the recorded events attached to it, linked to the Native entity that holds it.
+- **[conditional]** Sources
+- **[conditional]** Statewide and county parcel GIS, county assessor and property-tax records, building permit and inspection records, and environmental permits and reviews
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to Native entities is Lumecon’s work.
+
+> _section: `atlas-gaming`_
+
+
+**H3: Gaming Intelligence**
+
+**[conditional]** Facilities, ownership and affiliation over time, declination letters, environmental reviews, expansions, employment estimates and transaction history, cross-validated against Deals.
+
+- **[conditional]** What Lumecon resolved
+- **[conditional]** Facilities matched to their operators and their owners. This is the one collection where the counterparties are not all Native: management companies and outside operators are resolved and labeled as such.
+- **[conditional]** Coverage
+- **[conditional]** Records from 1979, the first documented year of high-stakes tribal gaming
+- **[conditional]** Sources
+- **[conditional]** Facility directories, NIGC records, federal gaming and land decisions, and NEPA environmental reviews
+- **[conditional]** Terms
+- **[conditional]** Public records. The resolution to operators and owners is Lumecon’s work.
 
 > _section: `license`_
 

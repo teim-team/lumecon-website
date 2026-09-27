@@ -170,7 +170,7 @@ export const CEDAR_GROVE = {
   period: '/ year',
   users: 'Unlimited users in one organization',
   headline: 'The living evidence base for your organization’s economy.',
-  body: 'Cedar Grove connects maintained public data, the twelve Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own with unlimited users, or receive the same Grove with Tree, which adds Cedar Impact and Cedar Commons; that is the whole difference between the two prices.',
+  body: 'Cedar Grove connects maintained public data, the fifteen Lumecon collections and the records your organization governs. Every finding stays connected to its source, geography, method, vintage and limits, and every figure can be checked, cited and reproduced. License it on its own with unlimited users, or receive the same Grove with Tree, which adds Cedar Impact and Cedar Commons; that is the whole difference between the two prices.',
   bullets: [
     'Evidence coverage: direct, proxy, organization data, missing',
     'Evidence records, evidence sheets and reproducibility bundles',
@@ -180,7 +180,7 @@ export const CEDAR_GROVE = {
   ctaHref: '/signup?product=cedar-grove',
   pageHref: '/cedar-grove',
   /**
-   * The Lumecon collections a Grove carries: the twelve Lumecon
+   * The Lumecon collections a Grove carries: the fifteen Lumecon
    * collections, read from the registry in `groveCollections.ts`, which
    * names them as the Lumecon catalog does. A collection is added
    * there when the Cedar workspace rules it ready; the note covers what

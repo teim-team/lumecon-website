@@ -1,5 +1,5 @@
 /**
- * The twelve Lumecon collections a Cedar Grove carries, for the registry on
+ * The fifteen Lumecon collections a Cedar Grove carries, for the registry on
  * /cedar-grove and the fold on /pricing.
  *
  * The collections are Lumecon's. This public registry describes the catalog
@@ -36,7 +36,8 @@ export type GroveCollection = {
   name: string;
   contributes: string;
   resolved: string;
-  coverage: string;
+  /** Absent where the collection is presented by its record structure and no span is stated. */
+  coverage?: string;
   sources: string;
   terms: string;
   /** Inner SVG markup for a 28×28 viewBox, stroked in currentColor. */
@@ -49,7 +50,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Federal Funding',
     name: 'Federal Funding to Indian Country',
     contributes:
-      'Every award the federal government reports sending into Indian Country: grants, loans, direct payments and insurance, award by award.',
+      'Federal assistance transactions reported for Native nations, organizations, enterprises and other identified recipients, including grants, loans and direct payments. Follow funding by recipient, program, agency, amount and year.',
     resolved:
       'Recipients resolved to the Native entity behind them, so an award to a subsidiary, a housing authority or a consortium is attributed to the nation or organization it belongs to.',
     coverage: 'Records from fiscal year 2007',
@@ -62,7 +63,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Federal Register',
     name: 'Federal Register',
     contributes:
-      'Every notice, rule and comment window touching tribes, lands, water or recognition, caught while there is still time to respond.',
+      'Federal Register notices and agency actions concerning tribes, Native organizations, lands, resources, recognition and other Indian Country matters. Follow published actions, consultations and comment periods across agencies and time.',
     resolved:
       'Notices matched to the tribes, lands and organizations they name, including entities that appear under former or variant names.',
     coverage: 'Records from 1994',
@@ -75,7 +76,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Legislation',
     name: 'Congressional Votes and Proposed Legislation',
     contributes:
-      'Bills, resolutions and roll-call votes from both chambers, followed from introduction to the floor: who sponsored, who voted and how.',
+      'Bills, resolutions, sponsorship and roll-call votes concerning tribes and Indian Country. Follow legislation from introduction through congressional action and examine sponsorship and voting records.',
     resolved:
       'Bills and votes tied to the tribes and Native organizations they affect, not only to the sponsors who filed them.',
     coverage: 'Records from 1973, thin and gapped through the 1980s',
@@ -89,7 +90,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Deals',
     name: 'Indian Country Deals',
     contributes:
-      'Material transactions and capital commitments involving Native nations, organizations and enterprises: acquisitions, financing, joint ventures and major projects, with participants, announced value, status and timing.',
+      'Material transactions and capital commitments involving Native nations, organizations and enterprises, including acquisitions, divestitures, property purchases, investments, financing agreements, bond issuances, joint ventures and major capital projects. Track who participated, the Native entity involved, announced value, status and timing, and compare activity across periods.',
     resolved:
       'Buyers, sellers, borrowers and issuers resolved to tribal governments, tribally owned enterprises, ANCs and NHOs.',
     coverage: 'Records from 2000',
@@ -103,7 +104,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'NAGPRA',
     name: 'NAGPRA',
     contributes:
-      'Notices, inventories and completed repatriations under the Native American Graves Protection and Repatriation Act, item by item.',
+      'Public records of activity under the Native American Graves Protection and Repatriation Act, including notices, inventories and repatriation-related actions. Follow records by institution, Native entity, notice type and date.',
     resolved:
       'Notices matched to the tribes and Native Hawaiian organizations named in them, across the naming changes of three decades.',
     coverage: 'Records from 1994, the first notice published under the Act',
@@ -116,9 +117,9 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Advocacy',
     name: 'Native Federal Advocacy and Engagement',
     contributes:
-      'Registered lobbying, agency meetings, tribal consultations, regulatory comments, congressional testimony and nonprofit lobbying disclosures, one entity-linked activity per row.',
+      'Documented federal advocacy and engagement involving Native nations and organizations, including registered lobbying, agency meetings, tribal consultations, regulatory comments, congressional testimony and nonprofit lobbying disclosures. Each row represents one entity-linked activity or source record.',
     resolved:
-      'Each activity resolved to the tribe or Native organization behind it where the record supports the link; a row the record cannot place keeps its printed party name and a blank key rather than a guess.',
+      'Each activity, from a lobbying registration to a consultation, a docket filing or testimony, resolved to the tribe or Native organization behind it where the record supports the link; a row the record cannot place keeps its printed party name and a blank key rather than a guess.',
     coverage: 'Records from 1999',
     sources:
       'Senate Lobbying Disclosure Act filings, tribal consultation notices, congressional hearing records and Federal Register ex parte notices',
@@ -126,11 +127,25 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     mark: '<path d="M3.5 11.5v5h4l8 5.5V6l-8 5.5z"/><path d="M20 9.5a6.5 6.5 0 0 1 0 9.5"/><path d="M24 6a12 12 0 0 1 0 16.5"/>',
   },
   {
+    id: 'foundation-corporate-giving',
+    short: 'Foundation and Corporate Giving',
+    name: 'Foundation and Corporate Giving',
+    contributes:
+      'Foundation, corporate and bank funding publicly disclosed for Native nations, organizations and initiatives. Follow the funder, legal recipient, purpose, geography, amount and timing while keeping commitments, payments, authorizations and other reported financial statuses distinct.',
+    resolved:
+      'Philanthropic, corporate and bank giving, each disclosure kept as its own record: commitments and payments are separate facts, and the legal recipient is kept distinct from the Native beneficiary.',
+    sources:
+      'Public filings and funders’ own published announcements, each disclosure cited to the document it came from',
+    terms:
+      'Disclosures are a view of funding, not a ledger to total; overlapping reports of the same award are reviewed rather than added.',
+    mark: '<path d="M5.5 13.5h17v10.5h-17z"/><path d="M3.8 9.5h20.4v4H3.8z"/><path d="M14 9.5V24"/><path d="M14 9.5c-1.4-3.8-6.6-4.6-6-1.6.3 1.6 3.6 1.6 6 1.6zM14 9.5c1.4-3.8 6.6-4.6 6-1.6-.3 1.6-3.6 1.6-6 1.6z"/>',
+  },
+  {
     id: 'contractors',
     short: 'Prime Contracting',
     name: 'Federal Prime Contracting',
     contributes:
-      'Every prime award to a firm, a tribal enterprise or a tribal government, with the agency, the dollars, the industry and the set-aside path it came through.',
+      'Federal contract transactions awarded directly to Native governments, enterprises, organizations and identified Native-owned businesses. Examine awarding agencies, recipients, industries, obligations, procurement mechanisms and set-asides.',
     resolved:
       'Vendors resolved to tribally owned firms, ANC and NHO subsidiaries and 8(a) participants, then rolled up to the parent nation or corporation.',
     coverage:
@@ -144,7 +159,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Subcontracting',
     name: 'Federal Subcontracting',
     contributes:
-      'The dollars below the prime layer: which vendors do the work, under whom and in which sectors.',
+      'Reported federal subawards to Native entities and businesses beneath prime contracts. Follow the prime relationship, subrecipient, amount, industry and timing of reported subcontracting activity.',
     resolved: 'Subawards matched to the same resolved entities as the prime contracts above them.',
     coverage: 'Records from fiscal year 2010, the statutory reporting floor',
     sources: 'USAspending FSRS subaward data',
@@ -156,7 +171,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Natural Resources',
     name: 'Natural Resource Revenues',
     contributes:
-      'Energy and mineral activity on trust and restricted lands: production volumes, the royalties it owes and the disbursements that follow.',
+      'Public records of energy and mineral production, revenues, royalties and related disbursements associated with tribal trust and restricted lands. Compare reported activity by commodity, Native entity, location and period.',
     resolved: 'Production and disbursements matched to the nations and allottees they belong to.',
     coverage: 'Records from 1880, through retrospectively published headright payments',
     sources:
@@ -169,9 +184,9 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Native-Owned Businesses',
     name: 'Individually Owned Native Businesses',
     contributes:
-      'Individually owned Native businesses, certified by their own nations’ TERO and commerce offices: who they are, what trades they work and what preference status their nation certifies.',
+      'Individually owned Native businesses identified through tribal TERO offices, commerce programs and other documented Native-business registries. Records preserve the issuing source, reported affiliation or certification, location and industry where available.',
     resolved:
-      'Every listing carries the nation whose office certified it and is credited to the issuing TERO or commerce office.',
+      'Every listing carries the nation whose office certified it, appears only under that nation’s stated terms, and is credited to the issuing TERO or commerce office.',
     coverage: 'A roster as captured on 2026-09-01; certifying offices archive no superseded lists',
     sources: 'Nations’ TERO and commerce offices, shared with the project office by office',
     terms: 'A listing appears only under its nation’s stated terms.',
@@ -182,13 +197,12 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Native Nonprofits',
     name: 'Native Nonprofits',
     contributes:
-      'Native-led and Native-serving nonprofits with their federal filings: budgets, revenue mixes and program spending.',
+      'A maintained roster of Native-led, Native-serving and Native-focused nonprofit organizations, with EINs and available federal filing information kept distinct by organization type. Identify organizations and connect them to other Cedar records without treating Native-led and Native-serving as the same thing.',
     resolved:
       'Filers classified as Native-led, Native-serving or Native-focused, which are three different things and are labeled separately.',
     coverage: 'A register as captured on 2026-04-29, one row per filer with its latest period',
     sources: 'IRS Business Master File monthly extracts',
-    terms:
-      'Public records. The classification is Lumecon’s work and stays reviewable.',
+    terms: 'Public records. The classification is Lumecon’s work and stays reviewable.',
     mark: '<path d="M14 24s-8.5-5.2-8.5-11.2A4.7 4.7 0 0 1 14 9.4a4.7 4.7 0 0 1 8.5 3.4C22.5 18.8 14 24 14 24z"/><path d="M14 12.5v5M11.5 15h5"/>',
   },
   {
@@ -199,13 +213,39 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
     short: 'Cedar NEED',
     name: 'Cedar Native Entity Enterprise Dataset (Cedar NEED)',
     contributes:
-      'Who owns whom across Indian Country’s enterprises: parent nations and corporations, their subsidiaries, holding companies and joint ventures, and how those ties change.',
+      'Enterprises owned or controlled by Native nations, Alaska Native corporations and other Native entities, including subsidiaries, holding companies and joint ventures. Follow parent relationships and organizational changes over time. Where records are available, profiles also carry patents, assigned or later acquired, and dated credit ratings, each kept with the entity it concerns.',
     resolved:
-      'The structure the rest of the record resolves against, published as a collection in its own right: every tie names the nation or corporation behind it.',
+      'This is the structure the rest of the record resolves against, published as a collection in its own right: every tie names the nation or corporation behind it.',
     coverage: 'Observations from 2016, the earliest year any source named an enterprise or a tie',
     sources: 'Entity records, enterprise registers and filings, reconciled edition by edition',
-    terms:
-      'Unresolved ties stay unresolved. A provisional match is labeled provisional.',
+    terms: 'Unresolved ties stay unresolved. A provisional match is labeled provisional.',
     mark: '<circle cx="14" cy="7" r="3.6"/><circle cx="6.5" cy="21" r="3.1"/><circle cx="21.5" cy="21" r="3.1"/><path d="M12.3 10.2 8 18.2M15.7 10.2 20 18.2M9.6 21h8.8"/>',
+  },
+  {
+    id: 'plot',
+    short: 'PLOT',
+    name: 'PLOT',
+    contributes:
+      'Parcel-level ownership and development records associated with Native nations, organizations and enterprises. Follow ownership, transfers, parcel characteristics, geometry, permits and other recorded property activity over time.',
+    resolved:
+      'Land ownership, transfers, permitting and development, followed parcel by parcel: each parcel and the recorded events attached to it, linked to the Native entity that holds it.',
+    sources:
+      'Statewide and county parcel GIS, county assessor and property-tax records, building permit and inspection records, and environmental permits and reviews',
+    terms: 'Public records. The resolution to Native entities is Lumecon’s work.',
+    mark: '<path d="M2.5 7h5.7v5.3a1.7 1.7 0 1 1 0 3.4V21H2.5z"/><path d="M11 7h5.7v5.3a1.7 1.7 0 1 1 0 3.4V21H11v-5.3a1.7 1.7 0 1 0 0-3.4z"/><path d="M19.5 7H25.5v14h-6v-5.3a1.7 1.7 0 1 0 0-3.4z"/>',
+  },
+  {
+    id: 'gaming',
+    short: 'Gaming',
+    name: 'Gaming Intelligence',
+    contributes:
+      'Facilities, ownership and affiliation over time, declination letters, environmental reviews, expansions, employment estimates and transaction history, cross-validated against Deals.',
+    resolved:
+      'Facilities matched to their operators and their owners. This is the one collection where the counterparties are not all Native: management companies and outside operators are resolved and labeled as such.',
+    coverage: 'Records from 1979, the first documented year of high-stakes tribal gaming',
+    sources:
+      'Facility directories, NIGC records, federal gaming and land decisions, and NEPA environmental reviews',
+    terms: 'Public records. The resolution to operators and owners is Lumecon’s work.',
+    mark: '<ellipse cx="14" cy="8" rx="9" ry="3.6"/><path d="M5 8v5c0 2 4 3.6 9 3.6s9-1.6 9-3.6V8"/><path d="M5 13v5c0 2 4 3.6 9 3.6s9-1.6 9-3.6v-5"/>',
   },
 ];

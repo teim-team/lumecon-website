@@ -128,7 +128,8 @@ const shot = (name: string) => {
 const heroShot = {
   img: shot('grove-analysis'),
   alt: 'A Cedar Grove analysis. The question reads: what evidence establishes the need for a community workforce program. A case structure lists need and baseline, who is underserved, funding and peer context, project readiness and local effects, each marked ready for evidence or needing a record. The figure beside it shows per capita income from 1990 to 2024 against the national line, labelled with its period, geography, universe and basis.',
-  caption: 'One analysis, open on its question and the parts of the case that answer it. Shown with sample data.',
+  caption:
+    'One analysis, open on its question and the parts of the case that answer it. Shown with sample data.',
 };
 
 /* The definition beat, and the one section on this page with no picture.
@@ -164,7 +165,8 @@ const tour = [
     body: 'Grove opens on the work in progress rather than on an empty page. Each analysis keeps its purpose, its place and the point it reached, so picking one up again does not start with working out what it was for.',
     img: shot('grove-home'),
     alt: 'Cedar Grove Home. A top bar names Home, Analyses, Data, Map and Cedar Impact. The open analyses list holds one feasibility study, and beside it a panel asks what you are preparing and offers five kinds of analysis: a grant case, an SBA 8(a) benefits report, a feasibility study, an economic-impact study, and evidence exploration.',
-    caption: 'The work already under way, and the five kinds of case Grove can open. Shown with sample data.',
+    caption:
+      'The work already under way, and the five kinds of case Grove can open. Shown with sample data.',
   },
   {
     id: 'map',
@@ -182,7 +184,8 @@ const tour = [
     body: 'Every figure filed into an analysis lands in its evidence log with the layer it came from, its source, the period observed, the geography, its role in the case and the limitation it carries. Pin a record and place it under the report requirement it supports, and a colleague, funder or board can read what the case rests on rather than rebuild it.',
     img: shot('grove-record'),
     alt: 'The evidence log of a Cedar Grove analysis, its header reading 3 records filed. A table lists four records: per capita income against the national figure, labor force participation, employment over time, and where the people working here live. Each row names its layer, source, period observed, geography, role and claim class, carries its stated limitation under the record name, and offers Inspect data beside a pin control. The first three are pinned, their control reading Unpin, and filed under report requirements, need and beneficiaries and measures, reporting and attachments; the fourth is not yet pinned, its control reading Pin. The first record carries the report wording already written.',
-    caption: 'The evidence log: each record with its source, limitation and place in the report. Shown with sample data.',
+    caption:
+      'The evidence log: each record with its source, limitation and place in the report. Shown with sample data.',
   },
 ];
 
@@ -238,15 +241,13 @@ const jsonLd = [
   <main class="meth grovepg" id="top" tabindex="-1">
     <header class="meth-hero grovepg-hero section--dark">
       <div class="meth-w">
-        {
-          /* `data-reveal-group` rather than a `reveal-soft` and a hand-counted
+        {/* `data-reveal-group` rather than a `reveal-soft` and a hand-counted
             `data-stagger` on each line. The container gives every direct child
             the soft reveal and steps it by 90ms from :nth-child, so the order
             is the document's and a line can move without renumbering the ones
             below it. See global.css. The capture beside this block is a
             sibling rather than a child, so it keeps its explicit stagger in
-            order to land with the buttons. */
-        }
+            order to land with the buttons. */}
         <div class="grovepg-hero__copy" data-reveal-group>
           <p class="h-kicker">Cedar Grove</p>
           <h1 class="meth-hero__title">Turn a local question into a defensible case.</h1>
@@ -258,23 +259,27 @@ const jsonLd = [
           </p>
           <div class="grovepg-cta">
             <a class="btn2 btn2--primary" href="#license">
-              Request Grove <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+              Request Grove{' '}
+              <span class="btn2-arrow" aria-hidden="true">
+                &rarr;
+              </span>
             </a>
             <a class="btn2 btn2--card" href="#tour">
-              See the workspace <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+              See the workspace{' '}
+              <span class="btn2-arrow" aria-hidden="true">
+                &rarr;
+              </span>
             </a>
           </div>
         </div>
 
-        {
-          /* The hero band is the house surface every product page opens on:
+        {/* The hero band is the house surface every product page opens on:
             navy, copy at the left, one substantial capture at the right. It
             is deliberately independent of OS color preference, which is a
             different thing from the page having a dark theme. The bands below
             are light and stay light; this one is brand material, and a light
             field here would take the page out of the set /cedar and
-            /cedar-commons belong to. */
-        }
+            /cedar-commons belong to. */}
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
           <img
             src={heroShot.img.src}
@@ -290,33 +295,29 @@ const jsonLd = [
       </div>
     </header>
 
-    {
-      /* The definition beat, the one section here with no picture, in the
+    {/* The definition beat, the one section here with no picture, in the
         place /cedar-commons puts its own. Commons defines who may see what;
         Grove's question is which of three kinds of evidence a sentence is
         resting on, and what each kind is entitled to settle. Short enough to
-        read before the page asks anyone to look at anything. */
-    }
+        read before the page asks anyone to look at anything. */}
     <section class="meth-sec grovepg-layers" aria-labelledby="g-layers">
       <div class="meth-w">
         <div class="meth-sec__head">
           <h2 id="g-layers">Three kinds of evidence, kept apart</h2>
           <p class="meth-sec__lede">
-            A case fails review when a number is asked to prove something its source cannot
-            support. Grove keeps the three layers distinct on the figure, in the evidence log and
-            in every export, so what a sentence rests on travels with it.
+            A case fails review when a number is asked to prove something its source cannot support.
+            Grove keeps the three layers distinct on the figure, in the evidence log and in every
+            export, so what a sentence rests on travels with it.
           </p>
         </div>
         <ul class="grovepg-layers__list" data-reveal-group>
-          {
-            LAYERS.map((layer) => (
-              <li class="grovepg-layers__item">
-                <p class="grovepg-layers__field">{layer.field}</p>
-                <p class="grovepg-layers__term">{layer.k}</p>
-                <p class="grovepg-layers__gloss">{layer.b}</p>
-              </li>
-            ))
-          }
+          {LAYERS.map((layer) => (
+            <li class="grovepg-layers__item">
+              <p class="grovepg-layers__field">{layer.field}</p>
+              <p class="grovepg-layers__term">{layer.k}</p>
+              <p class="grovepg-layers__gloss">{layer.b}</p>
+            </li>
+          ))}
         </ul>
       </div>
     </section>
@@ -324,15 +325,14 @@ const jsonLd = [
     <section class="grovetour" id="tour" aria-label="Cedar Grove in the product">
       <div class="meth-w">
         <div class="tour-rows">
-          {
-            tour.map((row, index) => (
-              <article class={`tour-row${index % 2 === 1 ? ' tour-row--flip' : ''}`}>
-                <div class={`tour-row__text ${index % 2 === 1 ? 'reveal-right' : 'reveal-left'}`}>
-                  <p class="tour-row__kicker">{row.kicker}</p>
-                  <h2 class="tour-row__title">{row.title}</h2>
-                  <p class="tour-row__body">{row.body}</p>
-                </div>
-                {/* Every frame is a landscape capture now, so each one is
+          {tour.map((row, index) => (
+            <article class={`tour-row${index % 2 === 1 ? ' tour-row--flip' : ''}`}>
+              <div class={`tour-row__text ${index % 2 === 1 ? 'reveal-right' : 'reveal-left'}`}>
+                <p class="tour-row__kicker">{row.kicker}</p>
+                <h2 class="tour-row__title">{row.title}</h2>
+                <p class="tour-row__body">{row.body}</p>
+              </div>
+              {/* Every frame is a landscape capture now, so each one is
                     an ordinary figure: no scrollport, no instruction to
                     operate it, nothing clipped in print. The worktable used to
                     be one 1634px surface shown through a 16:9 window that
@@ -340,24 +340,23 @@ const jsonLd = [
                     time instead, and they are the hero and the last act here.
                     `data-zoom` still opens the full 1920px file, which is the
                     only route to readable application text on a phone. */}
-                <figure
-                  class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
-                  data-zoom
-                >
-                  <img
-                    src={row.img.src}
-                    alt={row.alt}
-                    width={row.img.width}
-                    height={row.img.height}
-                    sizes="(max-width: 900px) 100vw, 55vw"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <figcaption>{row.caption}</figcaption>
-                </figure>
-              </article>
-            ))
-          }
+              <figure
+                class={`tour-row__shot ${index % 2 === 1 ? 'reveal-left' : 'reveal-right'}`}
+                data-zoom
+              >
+                <img
+                  src={row.img.src}
+                  alt={row.alt}
+                  width={row.img.width}
+                  height={row.img.height}
+                  sizes="(max-width: 900px) 100vw, 55vw"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>{row.caption}</figcaption>
+              </figure>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -365,14 +364,12 @@ const jsonLd = [
     <section class="grovepg-prov" aria-label="What travels with every number">
       <div class="meth-w">
         <ul class="grovepg-prov__list" data-reveal-group>
-          {
-            provenance.map(([term, gloss]) => (
-              <li>
-                <p class="grovepg-prov__term">{term}</p>
-                <p class="grovepg-prov__gloss">{gloss}</p>
-              </li>
-            ))
-          }
+          {provenance.map(([term, gloss]) => (
+            <li>
+              <p class="grovepg-prov__term">{term}</p>
+              <p class="grovepg-prov__gloss">{gloss}</p>
+            </li>
+          ))}
         </ul>
       </div>
     </section>
@@ -386,78 +383,76 @@ const jsonLd = [
           </h2>
         </div>
         <p class="grovepg-atlas__lede">
-          Cedar collections add maintained context that public tables do not provide on their
-          own. Open one to see what it contributes, how Lumecon has resolved it, its coverage and
-          the terms that govern the records.
+          Cedar collections add maintained context that public tables do not provide on their own.
+          Open one to see what it contributes, how Lumecon has resolved it, its coverage and the
+          terms that govern the records.
         </p>
 
         <div class="grovepg-atlas__reg" data-atlas>
           <ol class="grovepg-atlas__grid" data-reveal-group>
-            {
-              GROVE_COLLECTIONS.map((collection) => (
-                /* `aria-expanded="true"` on every control: with no script
+            {GROVE_COLLECTIONS.map((collection) => (
+              /* `aria-expanded="true"` on every control: with no script
                    every panel is open, and saying otherwise tells a screen
                    reader that visible content is collapsed. The script sets
                    the real state as it enables them. */
-                <li class="grovepg-atlas__cell">
-                  <button
-                    type="button"
-                    class="grovepg-atlas__btn"
-                    disabled
-                    data-atlas-tab={collection.id}
-                    aria-expanded="true"
-                    aria-controls={`atlas-${collection.id}`}
-                  >
-                    <svg
-                      class="grovepg-atlas__mark"
-                      viewBox="0 0 28 28"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.9"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                      set:html={collection.mark}
-                    />
-                    <span class="grovepg-atlas__name">{collection.short}</span>
-                  </button>
-                </li>
-              ))
-            }
+              <li class="grovepg-atlas__cell">
+                <button
+                  type="button"
+                  class="grovepg-atlas__btn"
+                  disabled
+                  data-atlas-tab={collection.id}
+                  aria-expanded="true"
+                  aria-controls={`atlas-${collection.id}`}
+                >
+                  <svg
+                    class="grovepg-atlas__mark"
+                    viewBox="0 0 28 28"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    set:html={collection.mark}
+                  />
+                  <span class="grovepg-atlas__name">{collection.short}</span>
+                </button>
+              </li>
+            ))}
           </ol>
 
           <div class="grovepg-atlas__panels">
-            {
-              GROVE_COLLECTIONS.map((collection) => (
-                <article
-                  class="grovepg-atlas__panel"
-                  id={`atlas-${collection.id}`}
-                  data-atlas-panel={collection.id}
-                  aria-live="polite"
-                >
-                  <h3 class="grovepg-atlas__pname">{collection.name}</h3>
-                  <p class="grovepg-atlas__contributes">{collection.contributes}</p>
-                  <dl class="grovepg-atlas__facts">
-                    <div>
-                      <dt>What Lumecon resolved</dt>
-                      <dd>{collection.resolved}</dd>
-                    </div>
+            {GROVE_COLLECTIONS.map((collection) => (
+              <article
+                class="grovepg-atlas__panel"
+                id={`atlas-${collection.id}`}
+                data-atlas-panel={collection.id}
+                aria-live="polite"
+              >
+                <h3 class="grovepg-atlas__pname">{collection.name}</h3>
+                <p class="grovepg-atlas__contributes">{collection.contributes}</p>
+                <dl class="grovepg-atlas__facts">
+                  <div>
+                    <dt>What Lumecon resolved</dt>
+                    <dd>{collection.resolved}</dd>
+                  </div>
+                  {collection.coverage ? (
                     <div>
                       <dt>Coverage</dt>
                       <dd>{collection.coverage}</dd>
                     </div>
-                    <div>
-                      <dt>Sources</dt>
-                      <dd>{collection.sources}</dd>
-                    </div>
-                    <div>
-                      <dt>Terms</dt>
-                      <dd>{collection.terms}</dd>
-                    </div>
-                  </dl>
-                </article>
-              ))
-            }
+                  ) : null}
+                  <div>
+                    <dt>Sources</dt>
+                    <dd>{collection.sources}</dd>
+                  </div>
+                  <div>
+                    <dt>Terms</dt>
+                    <dd>{collection.terms}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
           </div>
         </div>
       </div>
@@ -479,8 +474,11 @@ const jsonLd = [
               gaps.
             </p>
             <p class="grovepg-license__note">
-              Grove stands on its own. In a Tree account, Cedar Impact and Cedar Commons work
-              beside the same evidence base. <a class="inline-link" href="/pricing">Compare plans.</a>
+              Grove stands on its own. In a Tree account, Cedar Impact and Cedar Commons work beside
+              the same evidence base.{' '}
+              <a class="inline-link" href="/pricing">
+                Compare plans.
+              </a>
             </p>
           </div>
           <div>
@@ -497,10 +495,15 @@ const jsonLd = [
             </ul>
             <a class="btn2 btn2--primary" href={CEDAR_GROVE.ctaHref}>
               {CEDAR_GROVE.ctaLabel}
-              <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+              <span class="btn2-arrow" aria-hidden="true">
+                &rarr;
+              </span>
             </a>
             <p class="grovepg-license__note grovepg-license__note--contact">
-              Prefer to talk first? <a class="inline-link" href={`mailto:${site.email}`}>{site.email}</a>
+              Prefer to talk first?{' '}
+              <a class="inline-link" href={`mailto:${site.email}`}>
+                {site.email}
+              </a>
             </p>
           </div>
         </div>
@@ -512,7 +515,10 @@ const jsonLd = [
             source trail intact.
           </p>
           <a class="btn2 btn2--card" href="/#product">
-            See Cedar Impact <span class="btn2-arrow" aria-hidden="true">&rarr;</span>
+            See Cedar Impact{' '}
+            <span class="btn2-arrow" aria-hidden="true">
+              &rarr;
+            </span>
           </a>
         </div>
       </div>
@@ -580,7 +586,8 @@ const jsonLd = [
          scrolls. Landing on the page should not move it. */
       if (tabs[0]) {
         const first = tabs[0].dataset.atlasTab;
-        for (const tab of tabs) tab.setAttribute('aria-expanded', String(tab.dataset.atlasTab === first));
+        for (const tab of tabs)
+          tab.setAttribute('aria-expanded', String(tab.dataset.atlasTab === first));
         for (const panel of panels) panel.hidden = panel.dataset.atlasPanel !== first;
       }
     }
