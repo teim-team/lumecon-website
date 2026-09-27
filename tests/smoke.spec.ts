@@ -2646,15 +2646,23 @@ test('the consent banner is a thin docked bar on a phone and never hides the end
     { width: 1440, height: 900 },
   ]) {
     await page.setViewportSize(size);
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    const clear = await page.evaluate(() => {
-      const top = document.getElementById('consentBanner')!.getBoundingClientRect().top;
-      const links = [...document.querySelectorAll('.footer a, .footer button')].filter(
-        (el) => el.getBoundingClientRect().height > 0,
-      );
-      return links.every((el) => el.getBoundingClientRect().bottom <= top);
-    });
-    expect(clear, `every footer link clears the banner at ${size.width}px`).toBe(true);
+    // The page re-measures the banner and re-reserves its space after a
+    // resize, a frame or two later on WebKit. Scroll and measure again until
+    // the layout has settled rather than reading the first frame after it.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(() => {
+            window.scrollTo(0, document.documentElement.scrollHeight);
+            const top = document.getElementById('consentBanner')!.getBoundingClientRect().top;
+            const links = [...document.querySelectorAll('.footer a, .footer button')].filter(
+              (el) => el.getBoundingClientRect().height > 0,
+            );
+            return links.every((el) => el.getBoundingClientRect().bottom <= top);
+          }),
+        { message: `every footer link clears the banner at ${size.width}px`, timeout: 5000 },
+      )
+      .toBe(true);
   }
 
   await page.locator('[data-consent="denied"]').click();
