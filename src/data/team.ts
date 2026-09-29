@@ -331,14 +331,14 @@ const TEAM: Person[] = [
       'BS, Economics, University of Wisconsin-Madison',
     ],
     experience: [
-      'Data scientist at the Library of Congress.',
-      'Her prior work includes economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.',
+      "Builds Lumecon's regional input-output models and multiplier system, connecting source data to reviewable economic impact estimates.",
+      'Previously worked on economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.'
     ],
     summary:
-      "Leads the multiplier system and input/output models. Holds bachelor's degrees in Mathematics and Economics from Wisconsin-Madison and completed doctoral training in Economics at Maryland. Before Lumecon, she was at the Federal Reserve Bank of Philadelphia and the Federal Reserve Board of Governors.",
+      "Builds Lumecon's regional input-output models and multiplier system. Holds bachelor's degrees in Mathematics and Economics from Wisconsin-Madison and pursued doctoral research in Economics at Maryland. Her earlier work includes the Federal Reserve Bank of Philadelphia and the Federal Reserve Board.",
     bio: [
-      "Isabella Agnes leads work on Lumecon's multiplier system and input/output models, including the tools that translate source data into economic impact estimates and connect the models to the website. She holds bachelor's degrees in Mathematics and Economics from the University of Wisconsin-Madison and completed doctoral training in Economics at the University of Maryland, College Park.",
-      'Before Lumecon, Isabella was a research assistant at the Federal Reserve Bank of Philadelphia and a data scientist at the Board of Governors of the Federal Reserve System.',
+      "Isabella Agnes builds the regional input-output models and multiplier system behind Lumecon's economic impact estimates. Her work connects source data, modeling assumptions and results so analysts can inspect how an estimate was produced. She studied Economics at the doctoral level at the University of Maryland, College Park, and holds bachelor's degrees in Mathematics and Economics from the University of Wisconsin-Madison.",
+      'Her earlier work includes economic modeling and data science for the District of Columbia government, the Federal Reserve Board and the Federal Reserve Bank of Philadelphia.'
     ],
     alumniOf: ['University of Wisconsin-Madison', 'University of Maryland, College Park'],
     prevAffiliations: [
@@ -346,7 +346,6 @@ const TEAM: Person[] = [
       'Federal Reserve Bank of Philadelphia',
       'Board of Governors of the Federal Reserve System',
     ],
-    currentAffiliations: ['Library of Congress'],
     publications: [
       {
         title: 'Place-Based Labor Market Inequality',
