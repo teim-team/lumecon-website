@@ -24,7 +24,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | Page | Words | Title | Meta description length |
 |---|---:|---|---:|
 | `/` | 833 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
-| `/why-lumecon` | 1227 | Why Lumecon \| Lumecon | 239 |
+| `/why-lumecon` | 1236 | Why Lumecon \| Lumecon | 239 |
 | `/pricing` | 1505 | Pricing \| Lumecon | 155 |
 | `/cedar` | 498 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 724 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
@@ -46,7 +46,7 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 | `/checkout` | 212 | Checkout \| Lumecon | 81 |
 | `/welcome` | 61 | Welcome to Lumecon | 32 |
 | `/404` | 103 | Page Not Found \| Lumecon | 141 |
-| **Total** | **16058** | | |
+| **Total** | **16067** | | |
 
 ## Crawler metadata audit
 
@@ -397,7 +397,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/why-lumecon
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, BreadcrumbList
-- **Visible words:** 1227
+- **Visible words:** 1236
 
 ### Architecture (heading outline)
 
