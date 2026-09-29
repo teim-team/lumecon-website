@@ -13,8 +13,6 @@ updates:
         update-types:
           - minor
           - patch
-    labels:
-      - dependencies
 
   # GitHub Actions used by the smoke, lighthouse, and deploy workflows.
   - package-ecosystem: github-actions
@@ -23,6 +21,3 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 5
-    labels:
-      - dependencies
-      - github-actions
