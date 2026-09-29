@@ -332,13 +332,13 @@ const TEAM: Person[] = [
     ],
     experience: [
       "Builds Lumecon's regional input-output models and multiplier system, connecting source data to reviewable economic impact estimates.",
-      'Previously worked on economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.'
+      'Previously worked on economic modeling and public-sector data science for the District of Columbia government, the Board of Governors of the Federal Reserve System and the Federal Reserve Bank of Philadelphia.',
     ],
     summary:
       "Builds Lumecon's regional input-output models and multiplier system. Holds bachelor's degrees in Mathematics and Economics from Wisconsin-Madison and pursued doctoral research in Economics at Maryland. Her earlier work includes the Federal Reserve Bank of Philadelphia and the Federal Reserve Board.",
     bio: [
       "Isabella Agnes builds the regional input-output models and multiplier system behind Lumecon's economic impact estimates. Her work connects source data, modeling assumptions and results so analysts can inspect how an estimate was produced. She studied Economics at the doctoral level at the University of Maryland, College Park, and holds bachelor's degrees in Mathematics and Economics from the University of Wisconsin-Madison.",
-      'Her earlier work includes economic modeling and data science for the District of Columbia government, the Federal Reserve Board and the Federal Reserve Bank of Philadelphia.'
+      'Her earlier work includes economic modeling and data science for the District of Columbia government, the Federal Reserve Board and the Federal Reserve Bank of Philadelphia.',
     ],
     alumniOf: ['University of Wisconsin-Madison', 'University of Maryland, College Park'],
     prevAffiliations: [
