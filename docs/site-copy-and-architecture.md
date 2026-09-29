@@ -543,7 +543,7 @@ The model, the data and the software are built by people who did this work somew
 
 - Elijah Moreno FOUNDER AND CEO Eight years producing tribal economic-impact studies and related public-policy research.
 - Laurel Wheeler PRINCIPAL ECONOMIST Economist at the Center for Indian Country Development at the Federal Reserve Bank of Minneapolis before joining Lumecon.
-- Isabella Agnes PRINCIPAL DATA SCIENTIST Data scientist at the Library of Congress.
+- Isabella Agnes PRINCIPAL DATA SCIENTIST Builds Lumecon's regional input-output models and multiplier system, connecting source data to reviewable economic impact estimates.
 - Francesca Agnes CEDAR SYSTEMS LEAD Builds the intake and assumption-review systems that help Cedar turn organizational records into structured, reviewable analysis.
 - Kaylyn Lee PLATFORM LEAD Builds the platform organizations use to scope, run and revisit analyses.
 Degrees, prior posts and published work for everyone here.
