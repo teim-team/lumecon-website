@@ -348,7 +348,7 @@
   }
   /* The tile's width is already fixed by `flex: 0 0 auto`, so nothing here
      needed `nowrap` to hold it — and with it, the one label wider than a
-     tile ("Native-Owned Businesses", 170px against 132px) spilled 19px into
+     tile (then "Native-Owned Businesses", 170px against 132px) spilled 19px into
      its neighbour. Measured at 390px: every other label fits on one line
      and is unaffected. */
   .grovepg-atlas__name {
