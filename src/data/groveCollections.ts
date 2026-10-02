@@ -181,7 +181,7 @@ export const GROVE_COLLECTIONS: GroveCollection[] = [
   },
   {
     id: 'owned',
-    short: 'Native-Owned Businesses',
+    short: 'Individually Owned Businesses',
     name: 'Individually Owned Native Businesses',
     contributes:
       'Individually owned Native businesses identified through tribal TERO offices, commerce programs and other documented Native-business registries. Records preserve the issuing source, reported affiliation or certification, location and industry where available.',
