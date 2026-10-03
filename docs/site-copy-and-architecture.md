@@ -25,10 +25,10 @@ House rules the copy must keep: no ampersands in visible copy; "analysis" not "s
 |---|---:|---|---:|
 | `/` | 833 | Lumecon \| The Intelligent Economic Analysis Platform | 157 |
 | `/why-lumecon` | 1236 | Why Lumecon \| Lumecon | 239 |
-| `/pricing` | 1505 | Pricing \| Lumecon | 155 |
+| `/pricing` | 1504 | Pricing \| Lumecon | 155 |
 | `/cedar` | 498 | Cedar, the AI economic analyst \| Lumecon | 151 |
 | `/cedar-commons` | 724 | Cedar Commons, the shared project workspace \| Lumecon | 237 |
-| `/cedar-grove` | 965 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
+| `/cedar-grove` | 966 | Cedar Grove, the living evidence base for your organization’s economy \| Lumecon | 140 |
 | `/methodology` | 2785 | Methodology \| Lumecon | 167 |
 | `/start` | 1471 | Plan your first analysis \| Lumecon | 165 |
 | `/naics` | 666 | Industry sectors \| Lumecon | 146 |
@@ -647,7 +647,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/pricing
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product, FAQPage
-- **Visible words:** 1505
+- **Visible words:** 1504
 
 ### Architecture (heading outline)
 
@@ -820,7 +820,7 @@ Your subscription includes every Lumecon collection available in Cedar Grove dur
 - Federal Prime Contracting
 - Federal Subcontracting
 - Natural Resource Revenues
-- Individually Owned Native Businesses
+- Individual Native-Owned Businesses
 - Native Nonprofits
 - Cedar Native Entity Enterprise Dataset (Cedar NEED)
 - PLOT
@@ -1444,7 +1444,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
 - **Canonical:** https://lumecon.ai/cedar-grove
 - **Robots:** index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
 - **Structured data:** Organization, WebSite, SoftwareApplication, WebPage, Product
-- **Visible words:** 965
+- **Visible words:** 966
 
 ### Architecture (heading outline)
 
@@ -1464,7 +1464,7 @@ We use optional analytics to improve Lumecon. Privacy Policy
     - **H3** Federal Prime Contracting
     - **H3** Federal Subcontracting
     - **H3** Natural Resource Revenues
-    - **H3** Individually Owned Native Businesses
+    - **H3** Individual Native-Owned Businesses
     - **H3** Native Nonprofits
     - **H3** Cedar Native Entity Enterprise Dataset (Cedar NEED)
     - **H3** PLOT
@@ -1583,7 +1583,7 @@ Cedar collections add maintained context that public tables do not provide on th
 - Prime Contracting
 - Subcontracting
 - Natural Resources
-- Native-Owned Businesses
+- Individual Native-Owned Businesses
 - Native Nonprofits
 - Cedar NEED
 - PLOT
@@ -1750,7 +1750,7 @@ Federal assistance transactions reported for Native nations, organizations, ente
 > _section: `atlas-owned`_
 
 
-**H3: Individually Owned Native Businesses**
+**H3: Individual Native-Owned Businesses**
 
 **[conditional]** Individually owned Native businesses identified through tribal TERO offices, commerce programs and other documented Native-business registries. Records preserve the issuing source, reported affiliation or certification, location and industry where available.
 
