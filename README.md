@@ -501,6 +501,11 @@ Two notes on the table, both as of the 2026-09-18 cross-repository audit:
   their owners". Each repository's `AGENTS.md` carries a reviewer checklist;
   `docs/reconciliation-roadmap.md` indexes them and lists the two checks that
   belong to whoever reviews across repositories.
+- **Correction, 2026-10-03:** every sibling's `SECURITY.md` is on its default
+  branch, but two `AGENTS.md` files are not yet. `cedar`'s is on its open
+  pull request #33 (its default branch is `develop`), and `teim-engine`'s is
+  on its open pull requests #20 and #25; until one of those merges, those two
+  repositories' default branches carry no `AGENTS.md`.
 
 ### Cedar service contract (server-to-server)
 
