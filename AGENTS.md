@@ -142,21 +142,25 @@ DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
 
 ## 5. Who reviews what
 
-| Area | Reviewer |
-|---|---|
-| teim-engine, and the Cedar service | Francesca Agnes (@mafranagn) |
-| **Frontend** | Isabella Agnes (@magnes1) |
-| Identity, entitlement, billing | Brian Kim (@bkim28964) |
-| **Product behaviour** | Kaylyn Lee (@kaylynhl) |
-| **Cedar Grove**, and the unannounced subscriber service | Havala Hanson (@Havala-Hanson) |
+*Ownership as set by Elijah Moreno, 2026-10-04. It supersedes the earlier table, which routed frontend to Isabella and teim-engine to Francesca.*
 
-This site is frontend, so most of it is Isabella's. Two routing notes the repo
+| Area | Owner |
+|---|---|
+| Team lead; Cedar Press and Cedar Grove, including their data | Havala Hanson (@Havala-Hanson) |
+| **The app users see: teim-app's interface, product behaviour and customer-facing copy** | Kaylyn Lee (@kaylynhl) |
+| Backend and ML: servers, APIs, pipelines, dependencies | Ari (@ArihantSwainLumecon) |
+| Account access, payments, the database, Datadog | Brian Kim (@bkim28964) |
+| Cedar, the AI economic analyst (the `cedar` service) | Francesca Agnes (@mafranagn) |
+| teim-engine | Isabella Agnes (@magnes1) |
+
+Kaylyn reviews this site's interface and copy. Two routing notes the repo
 already relies on: a change to what a product *is* or what a plan *does* is
 product behaviour and goes to Kaylyn even when it is only copy, and the sentence
 `/methodology` still owes on how pre-benchmark years are constructed is
-Isabella's, per `teim-engine/docs/NOTE_FOR_ISABELLA_AND_HAVA_2026-09-21.md`.
-Brand values, pricing policy and anything marked "founder decision" are not a
-reviewer's call at all — ask rather than guessing.
+Isabella's, as the teim-engine owner, per
+`teim-engine/docs/NOTE_FOR_ISABELLA_AND_HAVA_2026-09-21.md`. Brand values,
+pricing policy and anything marked "founder decision" are not a reviewer's call
+at all — ask rather than guessing.
 
 ## 6. Invariants
 
