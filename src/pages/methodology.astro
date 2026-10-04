@@ -22,6 +22,7 @@ import '../styles/footer.css';
 import '../styles/home.css';
 import '../styles/methodology.css';
 import FoldAll from '../components/FoldAll.astro';
+import { shotSrcset } from '../lib/screenshots';
 
 const description =
   'Lumecon is the intelligent economic analysis platform. Cedar Impact is its economic impact analysis software, using regionalized input-output modeling on federal data.';
@@ -223,6 +224,8 @@ const jsonLd = [
           <picture>
             <img
               src="/app/trace.webp"
+              srcset={shotSrcset('/app/trace.webp')}
+              sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 52vw, 760px"
               alt="Lumecon number lineage tracing economic output through direct, indirect and induced model layers. Shown with illustrative sample data."
               width="1920"
               height="1004"

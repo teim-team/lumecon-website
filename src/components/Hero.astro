@@ -9,6 +9,7 @@
  * the broader workflow.
  */
 import '../styles/home.css';
+import { shotSrcset } from '../lib/screenshots';
 ---
 
 <section class="hero2">
@@ -59,6 +60,8 @@ import '../styles/home.css';
         <picture>
           <img
             src="/app/ex-wind-results.webp"
+            srcset={shotSrcset('/app/ex-wind-results.webp')}
+            sizes="(max-width: 1023px) 100vw, (max-width: 1440px) 50vw, 720px"
             alt="Lumecon results page for a wind farm buildout in Iowa, showing an estimated 2,600 jobs and $830,000,000 in economic output with key figures and the county map. Shown with illustrative sample data."
             width="1920"
             height="1170"

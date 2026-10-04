@@ -91,6 +91,7 @@ import '../styles/methodology.css';
 import '../styles/tour.css';
 import '../styles/cedar-page.css';
 import '../styles/commons-page.css';
+import { shotSrcset } from '../lib/screenshots';
 
 const description =
   'Cedar Commons is the shared project workspace in Lumecon. Bring the people who hold the records into the analysis that needs them, each with access suited to their part, and keep the records, the questions and the notes with the project.';
@@ -242,6 +243,8 @@ const jsonLd = [
         <figure class="cedarpg-hero__screen reveal-soft" data-stagger="3" data-zoom>
           <img
             src="/app/commons-board-org.webp"
+            srcset={shotSrcset('/app/commons-board-org.webp')}
+            sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 55vw, 800px"
             alt="The Cedar Commons board: three shared analyses, each carrying its status, the people on it and the records and notes it holds. Shown with sample data."
             width="1920"
             height="1200"
@@ -342,7 +345,16 @@ const jsonLd = [
                     width={x.narrowW}
                     height={x.narrowH}
                   />
-                  <img src={x.shot} alt={x.alt} width="1920" height="1200" loading="lazy" decoding="async" />
+                  <img
+                    src={x.shot}
+                    srcset={shotSrcset(x.shot)}
+                    sizes="(max-width: 1023px) 100vw, (max-width: 1560px) 68vw, 1060px"
+                    alt={x.alt}
+                    width="1920"
+                    height="1200"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </picture>
                 <figcaption class="cedarpg-cap">{x.cap} Shown with sample data.</figcaption>
               </figure>
@@ -372,6 +384,8 @@ const jsonLd = [
               />
               <img
                 src="/app/commons-documents.webp"
+                srcset={shotSrcset('/app/commons-documents.webp')}
+                sizes="(max-width: 1023px) 100vw, (max-width: 1560px) 68vw, 1060px"
                 alt="The records panel on a shared analysis, listing four spreadsheets contributed by three different people, each with the contributor, the date, the size and its state. Shown with sample data."
                 width="1920"
                 height="1200"

@@ -13,6 +13,7 @@ import Contours from '../components/Contours.astro';
 import '../styles/global.css';
 import '../styles/nav.css';
 import '../styles/flow.css';
+import { shotSrcset } from '../lib/screenshots';
 
 /* Once the production app origin is configured, Open Lumecon goes
    straight into the product; until then, /login is the door. */
@@ -48,6 +49,8 @@ const appUrl = (import.meta.env.PUBLIC_APP_URL || '').replace(/\/+$/, '') || '/l
         <picture>
           <img
             src="/app/dashboard.webp"
+            srcset={shotSrcset('/app/dashboard.webp')}
+            sizes="(max-width: 1023px) 100vw, (max-width: 1360px) 53vw, 720px"
             alt="The Lumecon workspace with analyses ready to open, compare and export. Shown with illustrative sample data."
             width="1920"
             height="1200"

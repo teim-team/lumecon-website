@@ -1,0 +1,5 @@
+{
+  "//": "The widths a product screenshot is published at. Read by scripts/screenshots/responsive-variants.mjs (which writes the files), scripts/responsive-images.test.mjs and src/lib/screenshots.ts (which writes the srcset), so the three cannot disagree about which files exist.",
+  "source": 1920,
+  "variants": [640, 960, 1280]
+}

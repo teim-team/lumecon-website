@@ -91,6 +91,7 @@ import '../styles/home.css';
 import '../styles/methodology.css';
 import '../styles/tour.css';
 import '../styles/grove-page.css';
+import { shotSrcset } from '../lib/screenshots';
 
 /**
  * One frame for every product shot, read from the manifest rather than typed.
@@ -282,10 +283,11 @@ const jsonLd = [
         <figure class="grovepg-hero__shot reveal-soft" data-stagger="3" data-zoom>
           <img
             src={heroShot.img.src}
+            srcset={shotSrcset(heroShot.img.src)}
             alt={heroShot.alt}
             width={heroShot.img.width}
             height={heroShot.img.height}
-            sizes="(max-width: 980px) 100vw, 58vw"
+            sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 55vw, 800px"
             fetchpriority="high"
             decoding="async"
           />
@@ -345,10 +347,11 @@ const jsonLd = [
               >
                 <img
                   src={row.img.src}
+                  srcset={shotSrcset(row.img.src)}
                   alt={row.alt}
                   width={row.img.width}
                   height={row.img.height}
-                  sizes="(max-width: 900px) 100vw, 55vw"
+                  sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 60vw, 880px"
                   loading="lazy"
                   decoding="async"
                 />

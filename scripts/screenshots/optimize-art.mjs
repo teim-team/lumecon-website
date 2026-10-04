@@ -1,4 +1,4 @@
-// Turn the raw why-card illustrations into the PNGs the homepage serves.
+// Turn the raw why-card illustrations into the images the homepage serves.
 //
 // The source art arrives at 1536x1024 with a lot of transparent margin around
 // the drawing, and the margin differs per image, so dropping the sources in
@@ -21,14 +21,21 @@ const out = join(here, '..', '..', 'public', 'art');
 const TRIM_THRESHOLD = 2;
 const WIDTH = 600;
 
+// WebP rather than the palette PNGs this used to write (2026-10), at the same
+// 600px from the same trimmed source. Measured on why-geo: palette PNG 133KB,
+// WebP q90 with lossless-grade alpha 120KB, WebP q85 with alphaQuality 90
+// 99KB, lossless WebP 309KB. These are painted illustrations, so a palette
+// costs more than it does on flat art, and lossy WebP is the smallest that
+// still holds the soft edge against the card.
+
 for (const f of readdirSync(src).filter((f) => f.endsWith('-source.png'))) {
   const name = basename(f, '-source.png');
-  const target = join(out, `${name}.png`);
+  const target = join(out, `${name}.webp`);
   await sharp(join(src, f))
     .trim({ threshold: TRIM_THRESHOLD })
     .resize({ width: WIDTH })
-    .png({ compressionLevel: 9, palette: true, quality: 92 })
+    .webp({ quality: 85, alphaQuality: 90, effort: 6 })
     .toFile(target);
   const { width, height } = await sharp(target).metadata();
-  console.log(`${name}.png  ${width}x${height}  ${Math.round(statSync(target).size / 1024)}KB`);
+  console.log(`${name}.webp  ${width}x${height}  ${Math.round(statSync(target).size / 1024)}KB`);
 }
