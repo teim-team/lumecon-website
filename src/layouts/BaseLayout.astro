@@ -252,6 +252,22 @@ const ogIA =
         },
       ])}
     />
+    {
+      /* Prefetch the next page while the pointer rests on its link
+         ("moderate" is roughly a 200ms hover, or pointerdown on touch), so
+         the full-page navigation the site deliberately uses (no
+         ClientRouter, see above) starts with its HTML already in hand. A
+         speculation rule, not Astro's prefetch: it ships no JavaScript and
+         browsers without support ignore it. Prefetch only fetches the
+         document; nothing on it runs until the visitor actually clicks. */
+    }
+    <script
+      is:inline
+      type="speculationrules"
+      set:html={JSON.stringify({
+        prefetch: [{ where: { href_matches: '/*' }, eagerness: 'moderate' }],
+      })}
+    />
     {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body class={bodyClass}>

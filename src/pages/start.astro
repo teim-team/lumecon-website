@@ -44,6 +44,7 @@ import '../styles/footer.css';
 import '../styles/home.css';
 import '../styles/methodology.css';
 import '../styles/start.css';
+import { shotSrcset } from '../lib/screenshots';
 
 const site = siteConfig.url;
 const description =
@@ -289,6 +290,8 @@ const jsonLd = [
               <picture>
                 <img
                   src="/app/ex-nation-results.webp"
+                  srcset={shotSrcset('/app/ex-nation-results.webp')}
+                  sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 68vw, 1000px"
                   alt="A completed Lumecon analysis showing jobs supported, GDP contribution, labor income and economic output, with the direct, indirect and induced split beneath. Shown with illustrative sample data."
                   width="1920"
                   height="1312"

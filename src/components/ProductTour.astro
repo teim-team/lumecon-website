@@ -19,6 +19,7 @@
  * /cedar-commons and /cedar-grove use, saying what the frame shows.
  */
 import '../styles/tour.css';
+import { shotSrcset } from '../lib/screenshots';
 
 const ROWS = [
   {
@@ -103,10 +104,11 @@ const ROWS = [
                      with its column instead of sitting at a fixed 1920x1080. */}
               <img
                 src={row.img}
+                srcset={shotSrcset(row.img)}
                 alt={row.alt}
                 width={row.width}
                 height={row.height}
-                sizes="(max-width: 900px) 100vw, 50vw"
+                sizes="(max-width: 1023px) 100vw, (max-width: 1560px) 60vw, 940px"
                 loading="lazy"
                 decoding="async"
               />

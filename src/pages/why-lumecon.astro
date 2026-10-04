@@ -66,6 +66,7 @@ import '../styles/home.css';
 import '../styles/methodology.css';
 import '../styles/tour.css';
 import '../styles/why-page.css';
+import { shotSrcset } from '../lib/screenshots';
 
 const description =
   'Why organizations choose Lumecon: published pricing from $1,000 a year, less preparation work before an analysis, every figure traceable to what produced it, and an economics team with direct experience of complex and tribal organizations.';
@@ -252,6 +253,8 @@ const jsonLd = [
         <figure class="meth-hero__screen reveal-soft" data-stagger="3" data-zoom>
           <img
             src="/app/trace.webp"
+            srcset={shotSrcset('/app/trace.webp')}
+            sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 52vw, 760px"
             alt="A completed Lumecon analysis reporting jobs, GDP contribution, labor income and economic output, with the lineage panel open beneath it breaking economic output into direct, indirect and induced layers and into the operations and industries that produce them. Shown with illustrative sample data."
             width="1920"
             height="1004"
@@ -339,6 +342,8 @@ const jsonLd = [
           <figure class="tour-row__shot reveal-right" data-zoom>
             <img
               src="/app/cedar-wind-entities.webp"
+              srcset={shotSrcset('/app/cedar-wind-entities.webp')}
+              sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 60vw, 880px"
               alt="The intake step of a Lumecon analysis with three operations set up from uploaded documents, and Cedar reporting that two are ready while one is missing a sales figure, asking the person to confirm before anything runs. Shown with illustrative sample data."
               width="1920"
               height="1200"
@@ -371,6 +376,8 @@ const jsonLd = [
           <figure class="tour-row__shot reveal-left" data-zoom>
             <img
               src="/app/compare.webp"
+              srcset={shotSrcset('/app/compare.webp')}
+              sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 60vw, 880px"
               alt="Two fiscal years of a sample analysis side by side, showing the change in jobs, GDP contribution, labor income, economic output and tax impacts between them. Shown with illustrative sample data."
               width="1920"
               height="1200"
@@ -646,6 +653,8 @@ const jsonLd = [
           <figure class="tour-row__shot reveal-right" data-zoom>
             <img
               src="/app/ex-nation-results.webp"
+              srcset={shotSrcset('/app/ex-nation-results.webp')}
+              sizes="(max-width: 1023px) 100vw, (max-width: 1460px) 60vw, 880px"
               alt="A whole-nation economic footprint reporting jobs, GDP contribution, labor income and economic output, with a control switching between the state scope and the homelands scope and a notice that homelands results are a subset of the state results and must not be added to them. Shown with illustrative sample data."
               width="1920"
               height="1312"

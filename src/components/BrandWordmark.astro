@@ -43,13 +43,27 @@ const classes = [
 ]
   .filter(Boolean)
   .join(' ');
-const markSrc = teal
-  ? '/brand/lumecon-logo-mark-teal.png'
-  : '/brand/lumecon-logo-mark-transparent.png';
+const markBase = teal ? '/brand/lumecon-logo-mark-teal' : '/brand/lumecon-logo-mark-transparent';
+const markSrc = `${markBase}.png`;
+/* The seal is drawn at 2.5em of the wrapper (2em at sm), so at most ~34 CSS
+   pixels in the nav, 60 in the footer size and 144 at hero scale. The
+   display-size copies come from `npm run brand:marks`; the 895px master is
+   the last resort, not what every page downloads. */
+const markSrcset = `${markBase}-128.png 128w, ${markBase}-256.png 256w, ${markBase}-480.png 480w, ${markSrc} 895w`;
+const markSizes = { sm: '34px', md: '60px', lg: '144px' }[size];
 ---
 
 <a class={classes} href={href} aria-label={ariaLabel}>
-  <img class="brandmark__seal" src={markSrc} alt="" aria-hidden="true" width="64" height="64" />
+  <img
+    class="brandmark__seal"
+    src={markSrc}
+    srcset={markSrcset}
+    sizes={markSizes}
+    alt=""
+    aria-hidden="true"
+    width="64"
+    height="64"
+  />
   <span class="brandmark__text">
     <span class="brandmark__name">Lumecon</span>
     {

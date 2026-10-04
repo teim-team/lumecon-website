@@ -560,7 +560,7 @@ function takeLastTopic(): CedarIntent | null {
    it on the same root is a no-op — guarded by data-cedar-booted. */
 
 const BOTAVATAR_SVG =
-  '<img src="/brand/lumecon-logo-mark-teal.png" alt="" width="30" height="30" />';
+  '<img src="/brand/lumecon-logo-mark-teal-128.png" alt="" width="30" height="30" />';
 
 function appendMessage(
   transcript: HTMLElement,

@@ -49,6 +49,7 @@ used on the home page, `/cedar` and the example pages, in both light and dark.
 Run it when a product surface changes visibly, otherwise the marketing site
 shows an interface that no longer exists. It needs the app running locally and
 it writes into `public/`.
+Follow it with `npm run shots:variants`.
 
 ## `npm run shots:commons`
 
@@ -64,6 +65,36 @@ screenshot and its own caption once came to disagree.
 It refuses to write a frame whose board did not load, one containing a broken
 image, or one whose seat meter fell back to counting members alone. Those
 three guards exist because each of them shipped once.
+
+## `npm run shots:variants`
+
+`scripts/screenshots/responsive-variants.mjs`
+
+Writes copies near 640, 960 and 1280px (`<name>-<w>w.webp`) of every 1920px
+product screenshot a page shows, each width rounded up to one that keeps the
+frame's proportions exact (a loaded image sizes its box from the file, so an
+inexact copy would move the page below it by a fraction of a pixel), so the `srcset` that `shotSrcset()` in
+`src/lib/screenshots.ts` writes lets a browser download the size it will draw.
+`src` stays the 1920px file, because the lightbox enlarges `src`. The widths
+live in `src/data/screenshotWidths.json`, read by the generator, the helper and
+the test alike.
+
+Run it after **any** capture that rewrites a screenshot (`shots:examples`,
+`shots:commons`, the Cedar Grove capture) and commit the copies with it. It
+rewrites every copy, not only missing ones, because a stale copy would show the
+old interface at some widths and the new one at others.
+`scripts/responsive-images.test.mjs` fails when a shown screenshot has no
+copies, or a copy's proportions no longer match its source.
+
+## `npm run brand:marks`
+
+`scripts/brand/marks.mjs`
+
+Writes display-size copies of the two Lumecon mark masters in `public/brand/`
+(128, 256 and 480px palette PNGs, plus a full-size WebP where one is missing).
+The nav seal, Cedar's avatar and the sign-in panels' faint mark use these
+through `srcset`; the masters stay for structured data and Open Graph. Run it
+only when a master changes.
 
 ## `npm run team:headshots`
 

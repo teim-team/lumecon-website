@@ -79,6 +79,16 @@ build` finishes `[build] Complete!` with 23 pages, then the `postbuild` hook
 reports it left `dist/_headers` as committed because the public origins are
 unset locally.
 
+**Verified 2026-10-04** (CI-style build with both public origins set):
+`test:scripts` reports `82 pass, 0 fail` · `npm run build` finishes with 23
+pages · `npx playwright test --project=chromium` reports `141 passed` against
+the container's `/opt/pw-browsers/chromium` · `docs:copy` leaves
+`docs/site-copy-and-architecture.md` unchanged · `lhci autorun` passes every
+assertion in `lighthouserc.json` (run with `CHROME_PATH` pointed at that
+Chromium and `--upload.target=filesystem`, since temporary public storage is
+unreachable here). WebKit was not run: its pinned build is not installed in
+this container.
+
 `npm run build` is `astro check && astro build`, and **the two fail in different
 places.** Read the whole result, to the end. `astro check | tail -3` prints
 `0 warnings / 0 hints` on a run that failed, and a malformed stylesheet gives
@@ -142,21 +152,25 @@ DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
 
 ## 5. Who reviews what
 
-| Area | Reviewer |
-|---|---|
-| teim-engine, and the Cedar service | Francesca Agnes (@mafranagn) |
-| **Frontend** | Isabella Agnes (@magnes1) |
-| Identity, entitlement, billing | Brian Kim (@bkim28964) |
-| **Product behaviour** | Kaylyn Lee (@kaylynhl) |
-| **Cedar Grove**, and the unannounced subscriber service | Havala Hanson (@Havala-Hanson) |
+*Ownership as set by Elijah Moreno, 2026-10-04. It supersedes the earlier table, which routed frontend to Isabella and teim-engine to Francesca.*
 
-This site is frontend, so most of it is Isabella's. Two routing notes the repo
+| Area | Owner |
+|---|---|
+| Team lead; Cedar Press and Cedar Grove, including their data | Havala Hanson (@Havala-Hanson) |
+| **The app users see: teim-app's interface, product behaviour and customer-facing copy** | Kaylyn Lee (@kaylynhl) |
+| Backend and ML outside the existing teim-app: Cedar Grove's server side, data pipelines, ML | Ari (@ArihantSwainLumecon) |
+| The existing teim-app's backend: account access, payments, the database, dependencies, Datadog | Brian Kim (@bkim28964) |
+| Cedar, the AI economic analyst (the `cedar` service) | Francesca Agnes (@mafranagn) |
+| teim-engine | Isabella Agnes (@magnes1) |
+
+Kaylyn reviews this site's interface and copy. Two routing notes the repo
 already relies on: a change to what a product *is* or what a plan *does* is
 product behaviour and goes to Kaylyn even when it is only copy, and the sentence
 `/methodology` still owes on how pre-benchmark years are constructed is
-Isabella's, per `teim-engine/docs/NOTE_FOR_ISABELLA_AND_HAVA_2026-09-21.md`.
-Brand values, pricing policy and anything marked "founder decision" are not a
-reviewer's call at all — ask rather than guessing.
+Isabella's, as the teim-engine owner, per
+`teim-engine/docs/NOTE_FOR_ISABELLA_AND_HAVA_2026-09-21.md`. Brand values,
+pricing policy and anything marked "founder decision" are not a reviewer's call
+at all — ask rather than guessing.
 
 ## 6. Invariants
 
@@ -691,6 +705,31 @@ committed.
   captures the 30 `public/app/ex-*.webp` example images (ten examples,
   each as results, map and compare) from a running
   teim-app dev server; `optimize-examples.mjs` compresses them.
+- Screenshot sizes (2026-10): every product screenshot `<img>` keeps
+  `src` on the 1920px file (the lightbox enlarges `src`) and gets a
+  `srcset` from `shotSrcset()` in `src/lib/screenshots.ts`, with a
+  `sizes` measured from the rendered layout. `npm run shots:variants`
+  writes copies near 640/960/1280px, each rounded to a width that keeps
+  the frame's proportions exact; run it after **any** capture and
+  commit the copies with it. `scripts/responsive-images.test.mjs` fails
+  on a missing or stale copy. When a layout change alters how wide a
+  screenshot renders, re-derive its `sizes`: a `sizes` smaller than the
+  rendered width makes the browser pick a copy that is too small, which
+  is a softer picture with nothing failing.
+- Brand mark sizes: `npm run brand:marks` writes the 128/256/480px
+  copies of the two marks in `public/brand/` that the nav seal, Cedar's
+  avatar and the sign-in panels use. The masters stay for structured
+  data and Open Graph; nothing on a page should download the 895px
+  master just to draw 34 pixels of it.
+- Inlining every stylesheet (`build.inlineStylesheets: 'always'`) was
+  measured and rejected (2026-10-04). Under Fast 3G with 4x CPU on a
+  phone it moved first paint from about 1.8s to 1.1s, but that earlier
+  paint lands before the preloaded Inter does, so headlines paint in
+  the fallback face and reflow: exactly the flash the self-hosted fonts
+  were adopted to remove (see the `@font-face` note in global.css). It
+  also adds 13-18KB gzipped to every page's HTML that the shared
+  stylesheet otherwise caches once. Revisit only together with a
+  font-matched fallback (`size-adjust` and friends).
 - Cedar Commons frames: `npm run shots:commons` captures both variants
   (an organization and a consultancy) against a mocked API and then cuts
   the `-narrow` phone crops. It refuses to write a frame whose board did

@@ -10,12 +10,20 @@ interface Props {
   teal?: boolean;
 }
 const { class: className = 'markart', size = 680, teal = false } = Astro.props;
-const src = teal ? '/brand/lumecon-logo-mark-teal.png' : '/brand/lumecon-logo-mark-transparent.png';
+const base = teal ? '/brand/lumecon-logo-mark-teal' : '/brand/lumecon-logo-mark-transparent';
+const src = `${base}.png`;
+/* Every caller caps the mark at 30rem (480 CSS px), so a 480px copy covers
+   1x and the full-size WebP covers 2x; the full-colour PNG master is 631KB
+   and was being downloaded to paint an 8%-opacity silhouette. Copies from
+   `npm run brand:marks`. */
+const srcset = `${base}-480.png 480w, ${base}.webp 895w`;
 ---
 
 <img
   class={className}
   src={src}
+  srcset={srcset}
+  sizes={`min(${size}px, 30rem)`}
   alt=""
   width={size}
   height={Math.round((size * 866) / 895)}
