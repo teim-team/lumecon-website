@@ -148,8 +148,8 @@ DOCS_BASE_URL=http://127.0.0.1:4321 npm run docs:copy
 |---|---|
 | Team lead; Cedar Press and Cedar Grove, including their data | Havala Hanson (@Havala-Hanson) |
 | **The app users see: teim-app's interface, product behaviour and customer-facing copy** | Kaylyn Lee (@kaylynhl) |
-| Backend and ML: servers, APIs, pipelines, dependencies | Ari (@ArihantSwainLumecon) |
-| Account access, payments, the database, Datadog | Brian Kim (@bkim28964) |
+| Backend and ML outside the existing teim-app: Cedar Grove's server side, data pipelines, ML | Ari (@ArihantSwainLumecon) |
+| The existing teim-app's backend: account access, payments, the database, dependencies, Datadog | Brian Kim (@bkim28964) |
 | Cedar, the AI economic analyst (the `cedar` service) | Francesca Agnes (@mafranagn) |
 | teim-engine | Isabella Agnes (@magnes1) |
 
